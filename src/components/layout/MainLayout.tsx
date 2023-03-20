@@ -1,5 +1,6 @@
+/* eslint-disable prettier/prettier */
 import { Outlet } from 'react-router-dom';
-import { Box } from '@mui/material';
+import Box from '@mui/material/Box';
 import Sidebar from '../common/Sidebar';
 import TopBar from '../common/TopBar';
 
@@ -7,7 +8,7 @@ function MainLayout() {
   return (
     <Box className="flex">
       <TopBar />
-      <Box component="nav" className="w-80 flex-shrink-0">
+      <Box component="nav" className="w-64 flex-shrink-0">
         <Sidebar />
       </Box>
       <Box

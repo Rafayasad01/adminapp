@@ -1,49 +1,59 @@
+/* eslint-disable prettier/prettier */
 /* eslint-disable import/prefer-default-export */
 import { RouteObject, Navigate } from 'react-router-dom';
 import MainLayout from '../components/layout/MainLayout';
-import AccountPage from '../pages/account/AccountPage';
-import DeliveryAddressPage from '../pages/delivery-address/DeliveryAddressPage';
-import FAQSPage from '../pages/faqs/FAQSPage';
+import ChangePasswordPage from '../pages/auth/change-password/ChangePasswordPage';
+import ForgotPasswordPage from '../pages/auth/forgot-password/ForgotPasswordPage';
+import LoginPage from '../pages/auth/login/LoginPage';
+import OtpVerificationPage from '../pages/auth/otp-verification/OtpVerificationPage';
 import HomePage from '../pages/home/HomePage';
-import OrdersPage from '../pages/orders/OrdersPage';
-import PaymentSettingPage from '../pages/payment-setting/PaymentSettingPage';
+import ReportsPage from '../pages/reports/ReportsPage';
 
 export const routeObjects: RouteObject[] = [
   {
     index: true,
-    element: <Navigate to="dashboard" replace />,
+    element: <Navigate to="auth" replace />,
+  },
+  {
+    path: '/auth',
+    children: [
+      {
+        index: true,
+        element: <Navigate to="login" replace />,
+      },
+      {
+        path: 'verification',
+        element: <OtpVerificationPage />,
+      },
+      {
+        path: 'changepassword',
+        element: <ChangePasswordPage />,
+      },
+      {
+        path: 'forgotpassword',
+        element: <ForgotPasswordPage />,
+      },
+      {
+        path: 'login',
+        element: <LoginPage />,
+      },
+    ],
   },
   {
     path: '/dashboard',
     element: <MainLayout />,
     children: [
-      {
-        index: true,
-        element: <Navigate to="home" replace />,
-      },
+      // {
+      //   index: true,
+      //   element: <Navigate to="" replace />,
+      // },
       {
         path: 'home',
         element: <HomePage />,
       },
       {
-        path: 'orders',
-        element: <OrdersPage />,
-      },
-      {
-        path: 'payment-setting',
-        element: <PaymentSettingPage />,
-      },
-      {
-        path: 'delivery-address',
-        element: <DeliveryAddressPage />,
-      },
-      {
-        path: 'account',
-        element: <AccountPage />,
-      },
-      {
-        path: 'faqs',
-        element: <FAQSPage />,
+        path: 'reports',
+        element: <ReportsPage />,
       },
     ],
   },

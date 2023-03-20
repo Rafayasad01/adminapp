@@ -1,0 +1,65 @@
+.bg {
+  background-image: url('/src/assets/images/BG.png');
+  background-repeat: no-repeat;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  height: 100vh;
+}
+.centerBox {
+  position: relative;
+  top: 50%;
+  left: 50%;
+  margin-right: -50%;
+  transform: translate(-50%, -50%);
+  background: #ffffff;
+  box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.06);
+  border-radius: 10px;
+  width: 403px;
+  height: 494px;
+}
+.logo {
+  position: relative;
+  top: 50px;
+  left: 92px;
+}
+.midBox {
+  position: relative;
+  top: 100px;
+}
+.forgotPassword {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 19px;
+  text-align: right;
+  color: #1a1a1a;
+  float: right;
+}
+.submitBtn {
+  position: absolute !important;
+  bottom: 20px;
+  width: 100%;
+}
+
+.txtBox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.txtBox .txt {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 17px;
+  color: #6a6a6a;
+}
+.verificationBox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
