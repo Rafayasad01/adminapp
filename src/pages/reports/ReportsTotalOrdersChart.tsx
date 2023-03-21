@@ -23,19 +23,19 @@ type OptionType =
     >
   | undefined;
 
-function OrderItemsChart() {
+function ReportsTotalOrdersChart() {
   const data = {
-    labels: ['', '', ''],
+    labels: ['M', 'T', 'W', 'T', 'F', 'S', 'S'],
     datasets: [
       {
         barPercentage: 0.5,
-        barThickness: 20,
-        maxBarThickness: 20,
+        barThickness: 14,
+        maxBarThickness: 14,
         minBarLength: 2,
-        backgroundColor: ['#29CC97', '#4283F4', '#C367F1'],
+        backgroundColor: 'rgba(66, 131, 244, 0.3)',
         hoverBackgroundColor: '#4283F4',
-        borderRadius: 4,
-        data: [20, 24, 18],
+        borderRadius: 6,
+        data: [5, 6, 7, 20, 24, 18, 14],
       },
     ],
   };
@@ -74,7 +74,7 @@ function OrderItemsChart() {
     },
   };
 
-  return <Bar data={data} options={options} height={180} />;
+  return <Bar data={data} options={options} height={220} />;
 }
 
-export default OrderItemsChart;
+export default ReportsTotalOrdersChart;

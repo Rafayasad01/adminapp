@@ -248,9 +248,9 @@ table .avatar img {
 }
 .divider {
   background: #e4e4e4;
-  width: 98%;
+  width: 97%;
   height: 1px;
-  margin: 10px 5px;
+  margin: 10px 10px;
 }
 .divider-height {
   background: #c5c7cd;
@@ -288,7 +288,45 @@ button.css-78trlr-MuiButtonBase-root-MuiIconButton-root {
   font-weight: 600;
   color: #1a1a1a;
   display: flex;
+  outline: none !important;
 }
 button.css-78trlr-MuiButtonBase-root-MuiIconButton-root:hover {
   background: transparent !important;
+  outline: none !important;
+}
+button .css-8je8zh-MuiTouchRipple-root:focus {
+  background: transparent !important;
+  outline: none !important;
+}
+.report-page .MuiButton-contained {
+  border-radius: 10px !important;
+  font-family: 'Open Sans' !important;
+  font-style: normal !important;
+  font-weight: 400 !important;
+  font-size: 12px !important;
+  line-height: 16px !important;
+  text-align: center !important;
+  background-color: rgba(29, 29, 29, 0.05) !important;
+  color: rgba(26, 26, 26, 1) !important;
+  padding: 10px 10px !important;
+  box-shadow: none !important;
+}
+.css-1yk1gt9-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root {
+  background: rgba(29, 29, 29, 0.05);
+  border-radius: 10px;
+  border-radius: 10px !important;
+}
+.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input {
+  padding: 10px 15px !important;
+  margin-right: 15px !important;
+  font-family: 'Open Sans' !important;
+  font-style: normal !important;
+  font-weight: 400 !important;
+  font-size: 12px !important;
+  line-height: 16px !important;
+  text-align: center;
+  color: #1a1a1a !important;
+}
+.css-1d3z3hw-MuiOutlinedInput-notchedOutline {
+  border: 0 none !important;
 }

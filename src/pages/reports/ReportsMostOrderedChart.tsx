@@ -23,19 +23,19 @@ type OptionType =
     >
   | undefined;
 
-function OrderItemsChart() {
+function ReportsMostOrderedChart() {
   const data = {
-    labels: ['', '', ''],
+    labels: ['Pants', 'Frocks', 'Jeans', 'Shirts'],
     datasets: [
       {
         barPercentage: 0.5,
-        barThickness: 20,
-        maxBarThickness: 20,
+        barThickness: 10,
+        maxBarThickness: 10,
         minBarLength: 2,
-        backgroundColor: ['#29CC97', '#4283F4', '#C367F1'],
-        hoverBackgroundColor: '#4283F4',
-        borderRadius: 4,
-        data: [20, 24, 18],
+        backgroundColor: ['#F1D8FD', '#F1D8FD', '#F1D8FD', '#F1D8FD'],
+        hoverBackgroundColor: '#F1D8FD',
+        borderRadius: 12,
+        data: [180, 400, 120, 200],
       },
     ],
   };
@@ -74,7 +74,7 @@ function OrderItemsChart() {
     },
   };
 
-  return <Bar data={data} options={options} height={180} />;
+  return <Bar data={data} options={options} height={220} />;
 }
 
-export default OrderItemsChart;
+export default ReportsMostOrderedChart;
