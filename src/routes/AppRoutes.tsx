@@ -7,6 +7,10 @@ import ForgotPasswordPage from '../pages/auth/forgot-password/ForgotPasswordPage
 import LoginPage from '../pages/auth/login/LoginPage';
 import OtpVerificationPage from '../pages/auth/otp-verification/OtpVerificationPage';
 import HomePage from '../pages/home/HomePage';
+import OrderDetailsPage from '../pages/orders/OrderDetailsPage';
+import OrdersCreatePage from '../pages/orders/OrdersCreatePage';
+import OrdersEditPage from '../pages/orders/OrdersEditPage';
+import OrdersPage from '../pages/orders/OrdersPage';
 import ReportsPage from '../pages/reports/ReportsPage';
 
 export const routeObjects: RouteObject[] = [
@@ -45,7 +49,7 @@ export const routeObjects: RouteObject[] = [
     children: [
       // {
       //   index: true,
-      //   element: <Navigate to="" replace />,
+      //   element: <Navigate to="home" replace />,
       // },
       {
         path: 'home',
@@ -54,6 +58,27 @@ export const routeObjects: RouteObject[] = [
       {
         path: 'reports',
         element: <ReportsPage />,
+      },
+      {
+        path: 'orders',
+        children: [
+          {
+            index: true,
+            element: <OrdersPage />,
+          },
+          {
+            path: 'create',
+            element: <OrdersCreatePage />,
+          },
+          {
+            path: 'view/:orderId',
+            element: <OrderDetailsPage />,
+          },
+          {
+            path: 'edit/:orderId',
+            element: <OrdersEditPage />,
+          },
+        ],
       },
     ],
   },

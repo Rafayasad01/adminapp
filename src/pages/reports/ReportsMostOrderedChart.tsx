@@ -41,11 +41,13 @@ function ReportsMostOrderedChart() {
   };
   const options: OptionType = {
     responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       legend: {
         display: false,
       },
     },
+
     scales: {
       x: {
         angleLines: {

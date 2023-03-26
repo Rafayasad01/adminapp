@@ -7,7 +7,6 @@ import TopBar from '../common/TopBar';
 function MainLayout() {
   return (
     <Box className="flex">
-      <TopBar />
       <Box component="nav" className="w-64 flex-shrink-0">
         <Sidebar />
       </Box>
@@ -15,7 +14,7 @@ function MainLayout() {
         component="main"
         className="min-h-screen w-full flex-grow bg-gray-50 p-3"
       >
-        <div className="mt-16"> </div>
+        {/* <div className="mt-16"> </div> */}
         <Outlet />
       </Box>
     </Box>

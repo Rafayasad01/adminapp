@@ -9,6 +9,7 @@ module.exports = {
       },
       fontFamily: {
         'open-sans': ['Open Sans'],
+        'dm-sans': ['DM Sans'],
       },
       fontSize: {
         'text-10xl': '0.70rem',

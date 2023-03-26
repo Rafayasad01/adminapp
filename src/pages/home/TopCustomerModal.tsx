@@ -34,7 +34,7 @@ function TopCustomerModal({ open, setOpen }: Props) {
         <div className="divider">&nbsp;</div>
         <div className="modal-body">
           <div className="custom-box">
-            <table className="avatat-table mt-3 w-full table-auto">
+            <table className="avatar-table mt-3 w-full table-auto">
               <thead>
                 <tr>
                   <th>Customers</th>

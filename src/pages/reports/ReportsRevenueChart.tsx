@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import {
   Chart as ChartJS,
   CoreChartOptions,
@@ -22,6 +23,8 @@ type OptionType =
         LineControllerChartOptions
     >
   | undefined;
+
+type pluginType = Plugin<'line', AnyObject>[] | undefined;
 
 function ReportsRevenueChart() {
   const data = {
@@ -72,6 +75,7 @@ function ReportsRevenueChart() {
   };
   const options: OptionType = {
     responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       legend: {
         display: false,
@@ -79,6 +83,9 @@ function ReportsRevenueChart() {
     },
     scales: {
       x: {
+        ticks: {
+          padding: 10,
+        },
         border: { dash: [8, 8] },
         grid: {
           drawTicks: false,
@@ -92,6 +99,9 @@ function ReportsRevenueChart() {
         },
       },
       y: {
+        ticks: {
+          padding: 10,
+        },
         beginAtZero: true,
         grid: {
           drawTicks: false,
@@ -107,9 +117,34 @@ function ReportsRevenueChart() {
     },
     interaction: {
       intersect: false,
+      mode: 'index',
     },
   };
-  return <Line data={data} options={options} height={130} />;
+  const plugins: pluginType = [
+    {
+      afterDraw: (chart: any) => {
+        if (chart.tooltip?._active?.length) {
+          const { x } = chart.tooltip._active[0].element;
+          const yAxis = chart.scales.y;
+          const { ctx } = chart;
+          ctx.save();
+          ctx.beginPath();
+          ctx.setLineDash([5, 7]);
+          ctx.moveTo(x, yAxis.top);
+          ctx.lineTo(x, yAxis.bottom);
+          ctx.lineWidth = 1;
+          ctx.strokeStyle = '#C367F1';
+          ctx.stroke();
+          ctx.restore();
+        }
+      },
+    },
+  ];
+  return (
+    <div className="flex h-[280px] w-full">
+      <Line data={data} options={options} plugins={plugins} />
+    </div>
+  );
 }
 
 export default ReportsRevenueChart;

@@ -7,6 +7,9 @@ import iconPickup from './images/icon-pickup.svg';
 import iconOverDue from './images/icon-overdue.svg';
 import avatarUser from './images/avatar-user.svg';
 import avatarUser2 from './images/avatar-user2.svg';
+import wash from './images/wash.svg';
+import shirt from './images/shirt.svg';
+import pants from './images/pants.svg';
 
 const assets = {
   images: {
@@ -18,6 +21,11 @@ const assets = {
     iconOverDue,
     avatarUser,
     avatarUser2,
+  },
+  tempImages: {
+    wash,
+    shirt,
+    pants,
   },
 };
 

@@ -26,10 +26,15 @@ type DoughnutOptions =
   | undefined;
 Chart.register(DoughnutController, ArcElement, Legend);
 const options: DoughnutOptions = {
+  responsive: true,
+  maintainAspectRatio: false,
   circumference: 180,
   rotation: 270,
   plugins: {
     legend: {
+      display: true,
+      position: 'top',
+      align: 'start',
       labels: {
         pointStyle: 'circle',
         usePointStyle: true,
@@ -53,7 +58,7 @@ const data: ChartData<'doughnut', number[], unknown> = {
   ],
 };
 function ReportsCustomersChart() {
-  return <Doughnut options={options} data={data} height={210} />;
+  return <Doughnut options={options} data={data} height={280} />;
 }
 
 export default ReportsCustomersChart;

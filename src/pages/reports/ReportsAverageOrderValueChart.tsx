@@ -34,7 +34,7 @@ function ReportsAverageOrderValueChart() {
         backgroundColor: (context: ScriptableContext<'line'>) => {
           const ctx = context.chart.ctx;
           const gradient = ctx.createLinearGradient(0, 0, 0, 200);
-          gradient.addColorStop(0, 'rgba(85, 225, 180,1)');
+          gradient.addColorStop(0, 'rgba(85, 225, 180,0.4)');
           gradient.addColorStop(1, 'rgba(173, 252, 226,0)');
           gradient.addColorStop(1, 'rgba(227, 254, 245,0)');
           return gradient;
@@ -46,6 +46,7 @@ function ReportsAverageOrderValueChart() {
   };
   const options: OptionType = {
     responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       legend: {
         display: false,
@@ -57,10 +58,12 @@ function ReportsAverageOrderValueChart() {
         hoverRadius: 8,
       },
     },
-    maintainAspectRatio: false,
     indexAxis: 'x',
     scales: {
       x: {
+        ticks: {
+          padding: 10,
+        },
         grid: {
           display: true,
           drawTicks: false,
@@ -73,6 +76,9 @@ function ReportsAverageOrderValueChart() {
         },
       },
       y: {
+        ticks: {
+          padding: 10,
+        },
         border: { dash: [8, 8] },
         grid: {
           drawTicks: false,
@@ -92,7 +98,7 @@ function ReportsAverageOrderValueChart() {
       axis: 'x',
     },
   };
-  return <Line data={data} options={options} height={210} />;
+  return <Line data={data} options={options} height={225} />;
 }
 
 export default ReportsAverageOrderValueChart;

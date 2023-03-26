@@ -23,6 +23,8 @@ type OptionType =
     >
   | undefined;
 
+// type pluginType = Plugin<'line', AnyObject>[] | undefined;
+
 function ReportsTotalOrdersChart() {
   const data = {
     labels: ['M', 'T', 'W', 'T', 'F', 'S', 'S'],
@@ -41,6 +43,7 @@ function ReportsTotalOrdersChart() {
   };
   const options: OptionType = {
     responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       legend: {
         display: false,
@@ -48,17 +51,11 @@ function ReportsTotalOrdersChart() {
     },
     scales: {
       x: {
-        angleLines: {
-          display: false,
-        },
         grid: {
           display: false,
         },
       },
       y: {
-        angleLines: {
-          display: false,
-        },
         border: { dash: [8, 8] },
         grid: {
           drawTicks: false,
@@ -74,7 +71,28 @@ function ReportsTotalOrdersChart() {
     },
   };
 
-  return <Bar data={data} options={options} height={220} />;
+  // const plugins: pluginType = [
+  //   {
+  //     afterDraw: (chart: any, args: any, options: any) => {
+  //       if (chart.tooltip?._active?.length) {
+  //         console.log(chart, args, options);
+  //         let lineAt = chart.config.options.lineAt;
+  //         let ctxPlugin = chart.ctx;
+  //         let xAxe = chart.tooltip.x;
+  //         let yAxe = chart.tooltip.y;
+  //         let y = chart.scales.y;
+  //         ctxPlugin.strokeStyle = 'red';
+  //         ctxPlugin.beginPath();
+  //         lineAt = y.getPixelForValue(lineAt);
+  //         ctxPlugin.moveTo(xAxe.left, lineAt);
+  //         ctxPlugin.lineTo(xAxe.right, lineAt);
+  //         ctxPlugin.stroke();
+  //       }
+  //     },
+  //   },
+  // ];
+
+  return <Bar data={data} options={options} height={225} />;
 }
 
 export default ReportsTotalOrdersChart;
