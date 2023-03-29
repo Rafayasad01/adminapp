@@ -1,7 +1,10 @@
 import IconButton from '@mui/material/IconButton';
 import OutboundIcon from '@mui/icons-material/Outbound';
 
-import { Select, MenuItem, SelectChangeEvent, Button } from '@mui/material';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import { SelectChangeEvent } from '@mui/material';
+import Button from '@mui/material/Button';
 import { useState } from 'react';
 import ReportsRevenueChart from './ReportsRevenueChart';
 import ReportsCustomersChart from './ReportsCustomersChart';

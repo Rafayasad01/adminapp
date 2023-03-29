@@ -9,8 +9,6 @@ import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
 import Button from '@mui/material/Button';
-import Select from '@mui/material/Select';
-import { SelectChangeEvent } from '@mui/material';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -20,39 +18,39 @@ import SearchIcon from '@mui/icons-material/Search';
 import Checkbox from '@mui/material/Checkbox';
 import CheckBoxOutlineBlankOutlinedIcon from '@mui/icons-material/CheckBoxOutlineBlankOutlined';
 import CheckBoxOutlinedIcon from '@mui/icons-material/CheckBoxOutlined';
-
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import TopBar from '../../components/common/TopBar';
+import DriversCreatePopup from './DriversCreatePopup';
+
+import assets from '../../assets';
+import DriversEditPopup from './DriversEditPopup';
 
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
-const options = ['View', 'Edit', 'Download PDF'];
+const options = ['View', 'Edit', 'Delete'];
 const ITEM_HEIGHT = 48;
-function OrdersPage() {
+function DriversPage() {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [search, setSearch] = useState('');
-  const [status, setStatus] = useState('status');
-  const [time, setTime] = useState('time');
   const [openDialog, setOpenDialog] = useState(false);
   const [isCheckedAll, setIsCheckedAll] = useState(false);
 
+  const [openFormDialog, setOpenFormDialog] = useState(false);
+  const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
+
   const open = Boolean(anchorEl);
+
+  const handleFormClickOpen = () => {
+    setOpenFormDialog(true);
+  };
 
   const handleCheckAllChange = (event: any) => {
     setIsCheckedAll(event.target.checked);
   };
 
-  const handleDialogClickOpen = () => {
-    setOpenDialog(true);
-  };
-
   const handleDialogClose = () => {
     setOpenDialog(false);
-  };
-
-  const addRouteHandler = () => {
-    navigate('create');
   };
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -62,44 +60,40 @@ function OrdersPage() {
     setAnchorEl(null);
   };
   const handleSelectedMenuClose = (option: string) => {
-    let doOption = '';
-    if (option === 'Edit') {
-      doOption = 'edit';
-    } else if (option === 'View') {
-      doOption = 'view';
-    } else {
-      doOption = 'download';
-    }
     setAnchorEl(null);
-    navigate(`${doOption}/123`);
+    if (option === 'View') {
+      navigate(`view/123`);
+    } else if (option === 'Edit') {
+      setOpenEditFormDialog(true);
+    } else {
+      setOpenDialog(true);
+    }
   };
   const handleClickSearch = (event: any) => {
     setSearch(event.target.value as string);
   };
 
-  const handleStatusChange = (event: SelectChangeEvent) => {
-    setStatus(event.target.value as string);
-  };
-
-  const handleTimeChange = (event: SelectChangeEvent) => {
-    setTime(event.target.value as string);
-  };
-  const changeStatusHandler = (event: any) => {
-    setStatus(event.target.value as string);
-  };
   return (
-    <div>
-      <TopBar title="Orders" />
+    <>
+      <DriversCreatePopup
+        openFormDialog={openFormDialog}
+        setOpenFormDialog={setOpenFormDialog}
+      />
+      <DriversEditPopup
+        openEditFormDialog={openEditFormDialog}
+        setOpenEditFormDialog={setOpenEditFormDialog}
+      />
+      <TopBar title="Drivers" />
       <div className="container">
         <div className="w-full rounded-lg bg-white shadow-lg">
           <div className="grid grid-cols-12 px-4 py-5">
-            <div className="col-span-3">
+            <div className="col-span-7">
               <span className="font-open-sans text-xl font-semibold text-[#252733]">
-                All Orders
+                All Drivers
               </span>
             </div>
-            <div className="col-span-6">
-              <div className="flex flex-row gap-3">
+            <div className="col-span-5">
+              <div className="flex flex-row justify-end gap-3">
                 <FormControl
                   className="search-grey-outline placeholder-grey w-60"
                   variant="filled"
@@ -130,35 +124,10 @@ function OrdersPage() {
                     disableUnderline
                   />
                 </FormControl>
-                <Select
-                  className="select-grey-outline h-10 w-36"
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  value={status}
-                  onChange={handleStatusChange}
-                >
-                  <MenuItem value="status">Status</MenuItem>
-                </Select>
-                <Select
-                  className=" select-grey-outline mr-3 h-10 w-36"
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  value={time}
-                  onChange={handleTimeChange}
-                >
-                  <MenuItem value="time">Time</MenuItem>
-                </Select>
-              </div>
-            </div>
-            <div className="col-span-3">
-              <div className="flex flex-row">
-                <Button variant="contained" className="btn-black-outline mr-3">
-                  Export to CSV
-                </Button>
                 <Button
                   variant="contained"
                   className="btn-black-fill btn-icon"
-                  onClick={addRouteHandler}
+                  onClick={handleFormClickOpen}
                 >
                   <AddOutlinedIcon /> Add New
                 </Button>
@@ -185,10 +154,10 @@ function OrdersPage() {
                       }}
                     />
                   </th>
-                  <th>Customers</th>
-                  <th>Pickup Time</th>
-                  <th>Drop-off Time</th>
-                  <th>Amount</th>
+                  <th>Drivers</th>
+                  <th>Phone</th>
+                  <th>Email</th>
+                  <th>License Number</th>
                   <th>Status</th>
                   <th>&nbsp;</th>
                 </tr>
@@ -208,54 +177,23 @@ function OrdersPage() {
                     />
                   </td>
                   <td>
-                    <div className="flex flex-col">
-                      <span className="text-sm font-semibold text-[#1A1A1A]">
-                        Megan Chang
-                      </span>
-                      <span className="text-xs font-normal text-[#6A6A6A]">
-                        greenwilliam@yahoo.com
-                      </span>
-                      <span className="text-xs font-normal text-[#6A6A6A]">
-                        278 Amy View Suite 011 Lawsonshire, MA 50054
-                      </span>
+                    <div className="avatar flex flex-row items-center">
+                      <img src={assets.images.avatarUser} alt="" />
+                      <div className="flex flex-col items-start justify-start">
+                        <span className="text-sm font-semibold">
+                          John Martin
+                        </span>
+                        <span className="text-xs font-normal text-[#6A6A6A]">
+                          February 02, 2023
+                        </span>
+                      </div>
                     </div>
                   </td>
+                  <td>+1 1234 5678 900</td>
+                  <td>martin.john@email.com</td>
+                  <td>03 141 633</td>
                   <td>
-                    <div className="flex flex-col">
-                      <span className="text-sm font-normal text-[#1A1A1A]">
-                        06:00 PM - 05:00 PM
-                      </span>
-                      <span className="text-xs font-normal text-[#6A6A6A]">
-                        February 02, 2023
-                      </span>
-                    </div>
-                  </td>
-                  <td>
-                    <div className="flex flex-col">
-                      <span className="text-sm font-normal text-[#1A1A1A]">
-                        04:00 AM - 05:00 AM
-                      </span>
-                      <span className="text-xs font-normal text-[#6A6A6A]">
-                        February 02, 2023
-                      </span>
-                    </div>
-                  </td>
-                  <td className="text-sm font-semibold text-[#1A1A1A]">
-                    $14.69
-                  </td>
-                  <td>
-                    <Select
-                      className="select-black-outline mr-3 h-7 w-36"
-                      labelId="demo-simple-select-label"
-                      value="Ready for Pick up"
-                      onChange={(event) => {
-                        changeStatusHandler(event);
-                      }}
-                    >
-                      <MenuItem value="Ready for Pick up">
-                        Ready for Pick up
-                      </MenuItem>
-                    </Select>
+                    <span className="badge badge-success">ACTIVE</span>
                   </td>
                   <td>
                     <IconButton
@@ -285,55 +223,23 @@ function OrdersPage() {
                     />
                   </td>
                   <td>
-                    <div className="flex flex-col">
-                      <span className="text-sm font-semibold text-[#1A1A1A]">
-                        Megan Chang
-                      </span>
-                      <span className="text-xs font-normal text-[#6A6A6A]">
-                        greenwilliam@yahoo.com
-                      </span>
-                      <span className="text-xs font-normal text-[#6A6A6A]">
-                        278 Amy View Suite 011 Lawsonshire, MA 50054
-                      </span>
+                    <div className="avatar flex flex-row items-center">
+                      <img src={assets.images.avatarUser} alt="" />
+                      <div className="flex flex-col items-start justify-start">
+                        <span className="text-sm font-semibold">
+                          John Martin
+                        </span>
+                        <span className="text-xs font-normal text-[#6A6A6A]">
+                          February 02, 2023
+                        </span>
+                      </div>
                     </div>
                   </td>
+                  <td>+1 1234 5678 900</td>
+                  <td>martin.john@email.com</td>
+                  <td>03 141 633</td>
                   <td>
-                    <div className="flex flex-col">
-                      <span className="text-sm font-normal text-[#1A1A1A]">
-                        06:00 PM - 05:00 PM
-                      </span>
-                      <span className="text-xs font-normal text-[#6A6A6A]">
-                        February 02, 2023
-                      </span>
-                    </div>
-                  </td>
-                  <td>
-                    <div className="flex flex-col">
-                      <span className="text-sm font-normal text-[#1A1A1A]">
-                        04:00 AM - 05:00 AM
-                      </span>
-                      <span className="text-xs font-normal text-[#6A6A6A]">
-                        February 02, 2023
-                      </span>
-                    </div>
-                  </td>
-                  <td className="text-sm font-semibold text-[#1A1A1A]">
-                    $14.69
-                  </td>
-                  <td>
-                    <Select
-                      className="select-black-outline mr-3 h-7 w-36"
-                      labelId="demo-simple-select-label"
-                      value="Order Placed"
-                      onChange={(event) => {
-                        changeStatusHandler(event);
-                      }}
-                    >
-                      <MenuItem value="Order Placed">Order Placed</MenuItem>
-                      <MenuItem value="Ready for Pick up">
-                        Ready for Pick up
-                      </MenuItem>
-                    </Select>
+                    <span className="badge badge-danger">Inactive</span>
                   </td>
                   <td>
                     <IconButton
@@ -398,7 +304,7 @@ function OrdersPage() {
             alignItems: 'center',
           }}
         >
-          Cancel Order?
+          Delete Driver?
         </DialogTitle>
         <DialogContent
           sx={{
@@ -413,7 +319,7 @@ function OrdersPage() {
           }}
         >
           <DialogContentText id="alert-dialog-description">
-            Do you really want to cancel this order?
+            Do you really want to delete this Driver?
           </DialogContentText>
         </DialogContent>
         <DialogActions
@@ -437,8 +343,8 @@ function OrdersPage() {
           </Button>
         </DialogActions>
       </Dialog>
-    </div>
+    </>
   );
 }
 
-export default OrdersPage;
+export default DriversPage;

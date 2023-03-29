@@ -82,12 +82,15 @@ table.table-border > tbody > tr:nth-child(odd) {
 table.no-border-table > tbody > tr:nth-child(odd) {
   @apply bg-transparent;
 }
+table > tbody > tr:last-child {
+  border-bottom: none !important;
+}
 .btn-dot {
   @apply text-[#c5c7cd] !important;
 }
 
 .badge {
-  @apply rounded-[100px] py-0.5 px-2.5 text-center font-open-sans text-[10px] font-semibold text-[#fff];
+  @apply rounded-[100px] py-0.5 px-2.5 text-center font-open-sans text-[10px] font-semibold uppercase text-[#fff];
 }
 .badge-primary {
   @apply bg-[#4283f4];

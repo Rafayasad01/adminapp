@@ -1,0 +1,48 @@
+.Dialog {
+  @apply relative m-0  w-[40%] overflow-hidden bg-transparent shadow-none  !important;
+}
+.Content {
+  @apply flex h-full w-full flex-col justify-evenly rounded-lg bg-gray-50 px-4 py-5 shadow-lg !important;
+}
+.FormHeader {
+  @apply flex w-full !important;
+}
+.Title {
+  @apply font-open-sans text-xl font-semibold text-[#1A1A1A] !important;
+}
+.FormBody {
+  @apply flex w-full flex-col justify-evenly !important;
+}
+.FormFields {
+  @apply mt-3 grid grid-cols-2 gap-3 !important;
+}
+.FormField {
+  @apply mt-3 grid !important;
+}
+.FormControl {
+  @apply m-0 w-full !important;
+}
+.FormLabel {
+  @apply font-open-sans text-sm font-normal text-[#1A1A1A] !important;
+}
+.FormInput {
+  @apply mt-1 rounded-md border border-solid border-[#C9C9C9] px-3 font-open-sans text-sm font-normal text-[#1A1A1A] opacity-[0.7] after:border-b-neutral-900 !important;
+}
+.ImageBox {
+  @apply mt-1 flex w-full flex-col !important;
+}
+.ImageLabel {
+  @apply flex w-full rounded-lg border border-dashed border-[#0D54C9] !important;
+}
+.ImageBtn {
+  @apply flex w-full items-center justify-center font-open-sans text-sm font-normal normal-case text-[#0D54C9] hover:bg-transparent !important;
+}
+.ShowImageBox {
+  @apply mt-3 flex w-fit items-center justify-start rounded-md border border-solid border-[#E4E4E4] px-2 !important;
+}
+.ShowImageLabel {
+  @apply mr-4 font-open-sans text-xs font-normal text-[#1A1A1A] !important;
+}
+.FormFooter {
+  @apply mt-5 flex items-center justify-end;
+}

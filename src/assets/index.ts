@@ -10,6 +10,8 @@ import avatarUser2 from './images/avatar-user2.svg';
 import wash from './images/wash.svg';
 import shirt from './images/shirt.svg';
 import pants from './images/pants.svg';
+import avatarUser3 from './images/user3.svg';
+import gmap from './images/gmap.png';
 
 const assets = {
   images: {
@@ -26,6 +28,8 @@ const assets = {
     wash,
     shirt,
     pants,
+    avatarUser3,
+    gmap,
   },
 };
 

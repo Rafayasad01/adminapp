@@ -1,19 +1,20 @@
 import { useState } from 'react';
-import {
-  FormControl,
-  Input,
-  InputAdornment,
-  Divider,
-  IconButton,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
-  Button,
-  TextField,
-} from '@mui/material';
+import FormControl from '@mui/material/FormControl';
+import Input from '@mui/material/Input';
+import InputAdornment from '@mui/material/InputAdornment';
+import Divider from '@mui/material/Divider';
+import IconButton from '@mui/material/IconButton';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
+import { SelectChangeEvent } from '@mui/material';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import dayjs from 'dayjs';
 
 import SearchIcon from '@mui/icons-material/Search';
-import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
 import RemoveCircleOutlineOutlinedIcon from '@mui/icons-material/RemoveCircleOutlineOutlined';
 import CalendarTodayOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined';
@@ -22,6 +23,9 @@ import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormLabel from '@mui/material/FormLabel';
+import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined';
+import RadioButtonUncheckedOutlinedIcon from '@mui/icons-material/RadioButtonUncheckedOutlined';
+import DatePickerButton from './DatePickerButton';
 
 import TopBar from '../../components/common/TopBar';
 import DeleteIcon from '../../components/icons/DeleteIcon';
@@ -33,6 +37,15 @@ function OrdersCreatePage() {
   const [service, setService] = useState('services');
   const [quantity, setQuantity] = useState(0);
   const [paymentMethod, setPaymentMethod] = useState('CASH_ON_DELIVERY');
+  const [pickUpTime, setPickUpTime] = useState<dayjs.Dayjs | null>(null);
+  const [dropOffTime, setDropOffTime] = useState<dayjs.Dayjs | null>(null);
+
+  const handlePickUpTimeChange = (value: dayjs.Dayjs | null) => {
+    setPickUpTime(value);
+  };
+  const handleDropOffTimeChange = (value: dayjs.Dayjs | null) => {
+    setDropOffTime(value);
+  };
 
   const handlePaymentChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPaymentMethod((event.target as HTMLInputElement).value);
@@ -60,7 +73,7 @@ function OrdersCreatePage() {
   };
 
   return (
-    <div>
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
       <TopBar isNestedRoute title="Edit Order" />
       <div className="container mt-3">
         <div className="grid grid-cols-12 gap-3 py-5">
@@ -183,7 +196,9 @@ function OrdersCreatePage() {
                         </IconButton>
                       </span>
                     </td>
-                    <td>$150.00</td>
+                    <td className="text-sm font-semibold text-[#1A1A1A]">
+                      $150.00
+                    </td>
                   </tr>
                   <tr>
                     <td>
@@ -227,7 +242,9 @@ function OrdersCreatePage() {
                         </IconButton>
                       </span>
                     </td>
-                    <td>$150.00</td>
+                    <td className="text-sm font-semibold text-[#1A1A1A]">
+                      $150.00
+                    </td>
                   </tr>
                   <tr>
                     <td>
@@ -271,7 +288,9 @@ function OrdersCreatePage() {
                         </IconButton>
                       </span>
                     </td>
-                    <td>$150.00</td>
+                    <td className="text-sm font-semibold text-[#1A1A1A]">
+                      $150.00
+                    </td>
                   </tr>
                 </tbody>
               </table>
@@ -289,23 +308,53 @@ function OrdersCreatePage() {
           </div>
           <div className="col-span-5 rounded-lg bg-white py-5 shadow-lg">
             <div className="flex w-full flex-row items-center justify-center gap-5">
-              <IconButton
-                className="p-0 font-open-sans text-xs font-semibold text-neutral-900"
-                onClick={addQuantity}
-              >
-                <CalendarTodayOutlinedIcon className="mr-2 text-lg" /> Sep 02,
-                2023 <br />
-                10:00 - 11:00 PM
-              </IconButton>
+              <div className="flex flex-row items-center justify-center">
+                <DatePickerButton
+                  onChange={handlePickUpTimeChange}
+                  id="pick-up-date-time-picker"
+                  icon={<CalendarTodayOutlinedIcon />}
+                />
+                <span className="font-open-sans text-sm font-semibold text-[#1A1A1A]">
+                  {pickUpTime ? (
+                    <>
+                      <div className="font-open-sans text-sm font-semibold text-[#1A1A1A]">
+                        {pickUpTime.format('MMM MM, YYYY')}
+                      </div>
+                      <div className="font-open-sans text-xs font-normal text-[#6A6A6A]">
+                        {pickUpTime.format('HH:mm')} -{' '}
+                        {pickUpTime.add(1, 'hours').format('HH:mm')}{' '}
+                        {pickUpTime.format('A')}
+                      </div>
+                    </>
+                  ) : (
+                    'Pick up time'
+                  )}
+                </span>
+              </div>
               <Divider orientation="vertical" flexItem />
-              <IconButton
-                className="p-0 font-open-sans text-xs font-semibold text-neutral-900"
-                onClick={addQuantity}
-              >
-                <CalendarTodayOutlinedIcon className="mr-2 text-lg" /> Sep 03,
-                2023 <br />
-                04:00 - 05:00 AM
-              </IconButton>
+              <div className="flex flex-row items-center justify-center">
+                <DatePickerButton
+                  onChange={handleDropOffTimeChange}
+                  id="drop-off-date-time-picker"
+                  icon={<CalendarTodayOutlinedIcon />}
+                />
+                <span className="font-open-sans text-sm font-semibold text-[#1A1A1A]">
+                  {dropOffTime ? (
+                    <>
+                      <div className="font-open-sans text-sm font-semibold text-[#1A1A1A]">
+                        {dropOffTime.format('MMM MM, YYYY')}
+                      </div>
+                      <div className="font-open-sans text-xs font-normal text-[#6A6A6A]">
+                        {dropOffTime.format('HH:mm')} -{' '}
+                        {dropOffTime.add(1, 'hours').format('HH:mm')}{' '}
+                        {dropOffTime.format('A')}
+                      </div>
+                    </>
+                  ) : (
+                    'Drop off time'
+                  )}
+                </span>
+              </div>
             </div>
             <Divider flexItem className="my-5" />
             <div className="w-full px-4">
@@ -359,7 +408,13 @@ function OrdersCreatePage() {
                       fonSize: '14px',
                     }}
                     value="CASH_ON_DELIVERY"
-                    control={<Radio />}
+                    control={
+                      <Radio
+                        className="text-sm text-[#1D1D1D]"
+                        icon={<RadioButtonUncheckedOutlinedIcon />}
+                        checkedIcon={<CheckCircleOutlinedIcon />}
+                      />
+                    }
                     label="Cash on delivery"
                   />
                   <FormControlLabel
@@ -370,7 +425,13 @@ function OrdersCreatePage() {
                       fonSize: '14px',
                     }}
                     value="SEND_LINK"
-                    control={<Radio />}
+                    control={
+                      <Radio
+                        className="text-sm text-[#1D1D1D]"
+                        icon={<RadioButtonUncheckedOutlinedIcon />}
+                        checkedIcon={<CheckCircleOutlinedIcon />}
+                      />
+                    }
                     label="Send link"
                   />
                 </RadioGroup>
@@ -426,7 +487,7 @@ function OrdersCreatePage() {
           </div>
         </div>
       </div>
-    </div>
+    </LocalizationProvider>
   );
 }
 

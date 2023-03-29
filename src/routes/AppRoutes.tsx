@@ -6,6 +6,8 @@ import ChangePasswordPage from '../pages/auth/change-password/ChangePasswordPage
 import ForgotPasswordPage from '../pages/auth/forgot-password/ForgotPasswordPage';
 import LoginPage from '../pages/auth/login/LoginPage';
 import OtpVerificationPage from '../pages/auth/otp-verification/OtpVerificationPage';
+import DriversPage from '../pages/drivers/DriversPage';
+import DriversViewPage from '../pages/drivers/DriversViewPage';
 import HomePage from '../pages/home/HomePage';
 import OrderDetailsPage from '../pages/orders/OrderDetailsPage';
 import OrdersCreatePage from '../pages/orders/OrdersCreatePage';
@@ -77,6 +79,19 @@ export const routeObjects: RouteObject[] = [
           {
             path: 'edit/:orderId',
             element: <OrdersEditPage />,
+          },
+        ],
+      },
+      {
+        path: 'drivers',
+        children: [
+          {
+            index: true,
+            element: <DriversPage />,
+          },
+          {
+            path: 'view/:driverId',
+            element: <DriversViewPage />,
           },
         ],
       },
