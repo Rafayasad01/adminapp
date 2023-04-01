@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import IconButton from '@mui/material/IconButton';
@@ -9,8 +8,6 @@ import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
 import Button from '@mui/material/Button';
-import Select from '@mui/material/Select';
-import { SelectChangeEvent } from '@mui/material';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -20,39 +17,47 @@ import SearchIcon from '@mui/icons-material/Search';
 import Checkbox from '@mui/material/Checkbox';
 import CheckBoxOutlineBlankOutlinedIcon from '@mui/icons-material/CheckBoxOutlineBlankOutlined';
 import CheckBoxOutlinedIcon from '@mui/icons-material/CheckBoxOutlined';
-
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import TopBar from '../../components/common/TopBar';
 
+import assets from '../../assets';
+import ChatIcon from '../../components/icons/ChatIcon';
+import ComplainsCreatePopup from './ComplainsCreatePopup';
+import ComplainsEditPopup from './ComplainsEditPopup';
+import ComplainsChatPopup from './ComplainsChatPopup';
+
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
-const options = ['View', 'Edit', 'Download PDF'];
+const options = ['View', 'Edit', 'Delete'];
 const ITEM_HEIGHT = 48;
-function OrdersPage() {
+
+function ComplainsPage() {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [search, setSearch] = useState('');
-  const [status, setStatus] = useState('status');
-  const [time, setTime] = useState('time');
   const [openDialog, setOpenDialog] = useState(false);
   const [isCheckedAll, setIsCheckedAll] = useState(false);
 
+  const [openFormDialog, setOpenFormDialog] = useState(false);
+  const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
+  const [openChatPopup, setOpenChatPopup] = useState(false);
+
   const open = Boolean(anchorEl);
+
+  const handleChatPopupOpen = () => {
+    setOpenChatPopup(true);
+  };
+
+  const handleFormClickOpen = () => {
+    setOpenFormDialog(true);
+  };
 
   const handleCheckAllChange = (event: any) => {
     setIsCheckedAll(event.target.checked);
   };
 
-  const handleDialogClickOpen = () => {
-    setOpenDialog(true);
-  };
-
   const handleDialogClose = () => {
     setOpenDialog(false);
-  };
-
-  const addRouteHandler = () => {
-    navigate('create');
   };
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -62,44 +67,44 @@ function OrdersPage() {
     setAnchorEl(null);
   };
   const handleSelectedMenuClose = (option: string) => {
-    let doOption = '';
-    if (option === 'Edit') {
-      doOption = 'edit';
-    } else if (option === 'View') {
-      doOption = 'view';
-    } else {
-      doOption = 'download';
-    }
     setAnchorEl(null);
-    navigate(`${doOption}/123`);
+    if (option === 'View') {
+      navigate(`view/123`);
+    } else if (option === 'Edit') {
+      setOpenEditFormDialog(true);
+    } else {
+      setOpenDialog(true);
+    }
   };
   const handleClickSearch = (event: any) => {
     setSearch(event.target.value as string);
   };
 
-  const handleStatusChange = (event: SelectChangeEvent) => {
-    setStatus(event.target.value as string);
-  };
-
-  const handleTimeChange = (event: SelectChangeEvent) => {
-    setTime(event.target.value as string);
-  };
-  const changeStatusHandler = (event: any) => {
-    setStatus(event.target.value as string);
-  };
   return (
-    <div>
-      <TopBar title="Orders" />
+    <>
+      <ComplainsCreatePopup
+        openFormDialog={openFormDialog}
+        setOpenFormDialog={setOpenFormDialog}
+      />
+      <ComplainsEditPopup
+        openEditFormDialog={openEditFormDialog}
+        setOpenEditFormDialog={setOpenEditFormDialog}
+      />
+      <ComplainsChatPopup
+        openChatPopup={openChatPopup}
+        setOpenChatPopup={setOpenChatPopup}
+      />
+      <TopBar title="Complain List" />
       <div className="container mt-5">
         <div className="w-full rounded-lg bg-white shadow-lg">
           <div className="grid grid-cols-12 px-4 py-5">
-            <div className="col-span-3">
+            <div className="col-span-7">
               <span className="font-open-sans text-xl font-semibold text-[#252733]">
-                All Orders
+                All Complains
               </span>
             </div>
-            <div className="col-span-6">
-              <div className="flex flex-row gap-3">
+            <div className="col-span-5">
+              <div className="flex flex-row justify-end gap-3">
                 <FormControl
                   className="search-grey-outline placeholder-grey w-60"
                   variant="filled"
@@ -130,37 +135,12 @@ function OrdersPage() {
                     disableUnderline
                   />
                 </FormControl>
-                <Select
-                  className="select-grey-outline h-10 w-36"
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  value={status}
-                  onChange={handleStatusChange}
-                >
-                  <MenuItem value="status">Status</MenuItem>
-                </Select>
-                <Select
-                  className=" select-grey-outline mr-3 h-10 w-36"
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  value={time}
-                  onChange={handleTimeChange}
-                >
-                  <MenuItem value="time">Time</MenuItem>
-                </Select>
-              </div>
-            </div>
-            <div className="col-span-3">
-              <div className="flex flex-row">
-                <Button variant="contained" className="btn-black-outline mr-3">
-                  Export to CSV
-                </Button>
                 <Button
                   variant="contained"
                   className="btn-black-fill btn-icon"
-                  onClick={addRouteHandler}
+                  onClick={handleFormClickOpen}
                 >
-                  <AddOutlinedIcon /> Add New
+                  <AddOutlinedIcon /> Add Complain
                 </Button>
               </div>
             </div>
@@ -185,10 +165,11 @@ function OrdersPage() {
                       }}
                     />
                   </th>
-                  <th>Customers</th>
-                  <th>Pickup Time</th>
-                  <th>Drop-off Time</th>
-                  <th>Amount</th>
+                  <th>Logo</th>
+                  <th>Shop Name</th>
+                  <th>Complain ID</th>
+                  <th>Date</th>
+                  <th>Complain</th>
                   <th>Status</th>
                   <th>&nbsp;</th>
                 </tr>
@@ -208,56 +189,26 @@ function OrdersPage() {
                     />
                   </td>
                   <td>
-                    <div className="flex flex-col">
-                      <span className="text-sm font-semibold text-[#1A1A1A]">
-                        Megan Chang
-                      </span>
-                      <span className="text-xs font-normal text-[#6A6A6A]">
-                        greenwilliam@yahoo.com
-                      </span>
-                      <span className="text-xs font-normal text-[#6A6A6A]">
-                        278 Amy View Suite 011 Lawsonshire, MA 50054
-                      </span>
+                    <div className="avatar flex flex-row items-center">
+                      <img src={assets.images.avatarUser} alt="" />
                     </div>
                   </td>
                   <td>
-                    <div className="flex flex-col">
-                      <span className="text-sm font-normal text-[#1A1A1A]">
-                        06:00 PM - 05:00 PM
-                      </span>
-                      <span className="text-xs font-normal text-[#6A6A6A]">
-                        February 02, 2023
-                      </span>
-                    </div>
+                    <span className="text-sm font-semibold">UrLaundry</span>
+                  </td>
+                  <td>UL56981269</td>
+                  <td>01 Apr, 2023</td>
+                  <td>Lorem Ipsum is simply dummy text</td>
+                  <td>
+                    <span className="badge badge-success">Complete</span>
                   </td>
                   <td>
-                    <div className="flex flex-col">
-                      <span className="text-sm font-normal text-[#1A1A1A]">
-                        04:00 AM - 05:00 AM
-                      </span>
-                      <span className="text-xs font-normal text-[#6A6A6A]">
-                        February 02, 2023
-                      </span>
-                    </div>
-                  </td>
-                  <td className="text-sm font-semibold text-[#1A1A1A]">
-                    $14.69
-                  </td>
-                  <td>
-                    <Select
-                      className="select-black-outline mr-3 h-7 w-36"
-                      labelId="demo-simple-select-label"
-                      value="Ready for Pick up"
-                      onChange={(event) => {
-                        changeStatusHandler(event);
-                      }}
+                    <IconButton
+                      aria-label="toggle visibility"
+                      onClick={handleChatPopupOpen}
                     >
-                      <MenuItem value="Ready for Pick up">
-                        Ready for Pick up
-                      </MenuItem>
-                    </Select>
-                  </td>
-                  <td>
+                      <ChatIcon />
+                    </IconButton>
                     <IconButton
                       className="btn-dot"
                       aria-label="more"
@@ -285,57 +236,23 @@ function OrdersPage() {
                     />
                   </td>
                   <td>
-                    <div className="flex flex-col">
-                      <span className="text-sm font-semibold text-[#1A1A1A]">
-                        Megan Chang
-                      </span>
-                      <span className="text-xs font-normal text-[#6A6A6A]">
-                        greenwilliam@yahoo.com
-                      </span>
-                      <span className="text-xs font-normal text-[#6A6A6A]">
-                        278 Amy View Suite 011 Lawsonshire, MA 50054
-                      </span>
+                    <div className="avatar flex flex-row items-center">
+                      <img src={assets.images.avatarUser} alt="" />
                     </div>
                   </td>
                   <td>
-                    <div className="flex flex-col">
-                      <span className="text-sm font-normal text-[#1A1A1A]">
-                        06:00 PM - 05:00 PM
-                      </span>
-                      <span className="text-xs font-normal text-[#6A6A6A]">
-                        February 02, 2023
-                      </span>
-                    </div>
+                    <span className="text-sm font-semibold">UrLaundry</span>
+                  </td>
+                  <td>UL56981269</td>
+                  <td>01 Apr, 2023</td>
+                  <td>Lorem Ipsum is simply dummy text</td>
+                  <td>
+                    <span className="badge badge-danger">pending</span>
                   </td>
                   <td>
-                    <div className="flex flex-col">
-                      <span className="text-sm font-normal text-[#1A1A1A]">
-                        04:00 AM - 05:00 AM
-                      </span>
-                      <span className="text-xs font-normal text-[#6A6A6A]">
-                        February 02, 2023
-                      </span>
-                    </div>
-                  </td>
-                  <td className="text-sm font-semibold text-[#1A1A1A]">
-                    $14.69
-                  </td>
-                  <td>
-                    <Select
-                      className="select-black-outline mr-3 h-7 w-36"
-                      labelId="demo-simple-select-label"
-                      value="Order Placed"
-                      onChange={(event) => {
-                        changeStatusHandler(event);
-                      }}
-                    >
-                      <MenuItem value="Order Placed">Order Placed</MenuItem>
-                      <MenuItem value="Ready for Pick up">
-                        Ready for Pick up
-                      </MenuItem>
-                    </Select>
-                  </td>
-                  <td>
+                    <IconButton aria-label="toggle visibility">
+                      <ChatIcon />
+                    </IconButton>
                     <IconButton
                       className="btn-dot"
                       aria-label="more"
@@ -398,7 +315,7 @@ function OrdersPage() {
             alignItems: 'center',
           }}
         >
-          Cancel Order?
+          Delete Complain?
         </DialogTitle>
         <DialogContent
           sx={{
@@ -413,7 +330,7 @@ function OrdersPage() {
           }}
         >
           <DialogContentText id="alert-dialog-description">
-            Do you really want to cancel this order?
+            Do you really want to delete this Complain?
           </DialogContentText>
         </DialogContent>
         <DialogActions
@@ -437,8 +354,8 @@ function OrdersPage() {
           </Button>
         </DialogActions>
       </Dialog>
-    </div>
+    </>
   );
 }
 
-export default OrdersPage;
+export default ComplainsPage;

@@ -32,7 +32,7 @@ function OverdueModal({ open, setOpen }: Props) {
             </IconButton>
           </div>
         </div>
-        <div className="divider">&nbsp;</div>
+        <hr className="divider horizontal" style={{ margin: '0.625rem 0' }} />
         <div className="modal-body">
           <div className="custom-box">
             <table className="mt-3 w-full table-auto">

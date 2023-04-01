@@ -11,19 +11,24 @@
     "lint": "prettier src/. -w && eslint src/. --fix"
   },
   "dependencies": {
-    "@emotion/react": "^11.10.6",
-    "@emotion/styled": "^11.10.6",
     "@mui/base": "^5.0.0-alpha.120",
     "@mui/icons-material": "^5.11.11",
-    "@mui/material": "^5.11.12",
+    "@mui/material": "^5.11.14",
+    "@mui/styled-engine-sc": "^5.11.11",
+    "@mui/x-date-pickers": "^6.0.3",
     "@reduxjs/toolkit": "^1.9.3",
+    "@types/google-map-react": "^2.1.7",
+    "@types/googlemaps": "^3.43.3",
     "chart.js": "^4.2.1",
+    "dayjs": "^1.11.7",
+    "google-map-react": "^2.2.0",
     "react": "^18.2.0",
     "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.2.0",
     "react-redux": "^8.0.5",
     "react-router-dom": "^6.8.2",
-    "react18-otp-input": "^1.0.3"
+    "react18-otp-input": "^1.0.3",
+    "styled-components": "^5.3.9"
   },
   "devDependencies": {
     "@types/react": "^18.0.27",

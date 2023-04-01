@@ -55,7 +55,7 @@ function DriversViewPage() {
               <img
                 src={assets.tempImages.avatarUser3}
                 alt=""
-                className="mr-4 w-[100px] rounded-full"
+                className="mr-4 w-[100px] w-[100px] rounded-full"
               />
               <div className="flex flex-col justify-start justify-items-center">
                 <span className="font-open-sans text-xl font-semibold text-[#1A1A1A]">

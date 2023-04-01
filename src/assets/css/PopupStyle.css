@@ -1,0 +1,206 @@
+.Dialog {
+  @apply relative m-0  w-[40%] overflow-hidden bg-transparent shadow-none  !important;
+}
+.Dialog .Content {
+  @apply flex h-full w-full flex-col justify-evenly rounded-lg bg-[#fff] px-4 py-5 shadow-lg !important;
+}
+.Content .css-dpjnhs-MuiInputBase-root-MuiOutlinedInput-root {
+  @apply border-0 border-transparent bg-transparent px-0 !important;
+}
+.Content .MuiOutlinedInput-notchedOutline {
+  @apply border-0 border-transparent bg-transparent px-0 !important;
+}
+.Content .css-1rxz5jq-MuiSelect-select-MuiInputBase-input-MuiInput-input:focus {
+  @apply border-0 border-transparent bg-transparent !important;
+}
+.Content .FormInput input::placeholder,
+.Content .FormTextarea textarea::placeholder {
+  /* Chrome, Firefox, Opera, Safari 10.1+ */
+  @apply font-open-sans text-sm font-normal text-[#1A1A1A] opacity-[0.7] !important;
+}
+
+.Content .FormInput input:-ms-input-placeholder,
+.Content .FormTextarea textarea:-ms-input-placeholder {
+  /* Internet Explorer 10-11 */
+  @apply font-open-sans text-sm text-[#6a6a6a] opacity-100 !important;
+}
+.Content .FormInput input::-ms-input-placeholder,
+.Content .FormTextarea textarea::-ms-input-placeholder {
+  /* Microsoft Edge */
+  @apply font-open-sans text-sm text-[#6a6a6a] opacity-100 !important;
+}
+
+.Content .FormHeader {
+  @apply flex w-full !important;
+}
+.Content .Title {
+  @apply font-open-sans text-xl font-semibold text-[#1A1A1A] !important;
+}
+.Content .FormBody {
+  @apply flex w-full flex-col justify-evenly !important;
+}
+.Content .FormFields {
+  @apply mt-3 grid grid-cols-2 gap-3 !important;
+}
+.Content .FormField {
+  @apply mt-3 grid !important;
+}
+.Content .FormControl {
+  @apply m-0 w-full !important;
+}
+.Content .FormLabel {
+  @apply font-open-sans text-sm font-normal text-[#1A1A1A] !important;
+}
+.Content .FormLabel .SubLabel {
+  @apply ml-2 font-open-sans text-xs font-normal text-[#6A6A6A] !important;
+}
+.Content .FormInput,
+.Content .FormTextarea,
+.Content .FormSelect {
+  @apply mt-1 rounded-md border border-solid border-[#C9C9C9] px-3 font-open-sans text-sm font-normal text-[#1A1A1A] opacity-[0.7] after:border-b-neutral-900 !important;
+}
+.Content .ImageBox {
+  @apply mt-1 flex w-full flex-col !important;
+}
+.Content .ImageLabel {
+  @apply flex w-full rounded-lg border border-dashed border-[#0D54C9] !important;
+}
+.Content .ImageBtn {
+  @apply flex w-full items-center justify-center font-open-sans text-sm font-normal normal-case text-[#0D54C9] hover:bg-transparent !important;
+}
+.Content .ShowImageBox {
+  @apply mt-3 flex w-fit items-center justify-start rounded-md border border-solid border-[#E4E4E4] px-2 !important;
+}
+.Content .ShowImageLabel {
+  @apply mr-4 font-open-sans text-xs font-normal text-[#1A1A1A] !important;
+}
+.Content .FormFooter {
+  @apply mt-5 flex items-center justify-end;
+}
+
+.Chat .ChatHeader {
+  @apply flex w-full flex-row items-center !important;
+}
+.Chat .BackBtn svg {
+  @apply w-[25px] text-[#1D1D1D] !important;
+}
+.Chat .HeaderInfoBox {
+  @apply flex w-full flex-row items-start justify-start  !important;
+}
+.Chat .HeaderLogo {
+  @apply ml-1 h-[44px] w-[44px] rounded-full !important;
+}
+.Chat .HeaderInfo {
+  @apply flex flex-row items-start justify-start !important;
+}
+.Chat .HeaderDetails {
+  @apply ml-2 flex flex-col items-start justify-start !important;
+}
+.Chat .HeaderHeading {
+  @apply font-open-sans text-xl font-semibold text-[#1A1A1A] !important;
+}
+.Chat .HeaderCurrentTxt {
+  @apply font-open-sans text-sm font-normal text-[#6A6A6A] !important;
+}
+.Chat .HeaderStatusCircle {
+  @apply ml-2 mt-2 h-[10px] w-[10px] rounded-full !important;
+}
+.HeaderStatusCircle.GreenColor {
+  @apply bg-[#29CC97] !important;
+}
+.Chat .ChatContent {
+  @apply flex flex-col !important;
+}
+.ChatContent .DateStyle {
+  @apply flex items-center justify-center font-open-sans text-xs font-normal text-[#6A6A6A] !important;
+}
+.Chat .ChatHeader {
+  @apply flex w-full flex-row items-center !important;
+}
+.Chat .BackBtn svg {
+  @apply w-[25px] text-[#1D1D1D] !important;
+}
+.Chat .HeaderInfoBox {
+  @apply flex w-full flex-row items-start justify-start  !important;
+}
+.Chat .HeaderLogo {
+  @apply ml-1 h-[44px] w-[44px] rounded-full !important;
+}
+.Chat .HeaderInfo {
+  @apply flex flex-row items-start justify-start !important;
+}
+.Chat .HeaderDetails {
+  @apply ml-2 flex flex-col items-start justify-start !important;
+}
+.Chat .HeaderHeading {
+  @apply font-open-sans text-xl font-semibold text-[#1A1A1A] !important;
+}
+.Chat .HeaderCurrentTxt {
+  @apply font-open-sans text-sm font-normal text-[#6A6A6A] !important;
+}
+.Chat .HeaderStatusCircle {
+  @apply ml-2 mt-2 h-[10px] w-[10px] rounded-full !important;
+}
+.HeaderStatusCircle.GreenColor {
+  @apply bg-[#29CC97] !important;
+}
+.Chat .ChatContent {
+  @apply flex flex-col !important;
+}
+.ChatContent .DateStyle {
+  @apply flex items-center justify-center font-open-sans text-xs font-normal text-[#6A6A6A] !important;
+}
+.ChatContent .ChatLeftBox {
+  @apply mr-28 flex flex-row items-end justify-start  !important;
+}
+.ChatContent .ChatRightBox {
+  @apply ml-28 flex flex-row-reverse items-end justify-start !important;
+}
+.ChatContent .ChatLogo {
+  @apply mr-2 h-[44px] w-[44px] rounded-full !important;
+}
+.ChatDetails {
+  @apply mt-4 border border-solid border-[#C9C9C9] py-3 px-3 shadow-md !important;
+}
+.ChatLeftBox .ChatDetails {
+  @apply rounded-tl-lg rounded-tr-lg rounded-br-lg !important;
+}
+.ChatRightBox .ChatDetails {
+  @apply rounded-tl-lg rounded-tr-lg rounded-bl-lg bg-[#1D1D1D] !important;
+}
+.ChatContent .ChatTxt {
+  @apply flex items-center justify-center font-open-sans text-xs font-normal !important;
+}
+.ChatLeftBox .ChatTxt {
+  @apply text-[#1A1A1A] !important;
+}
+.ChatRightBox .ChatTxt {
+  @apply text-[#fff] !important;
+}
+.ChatContent .ChatTime {
+  @apply mt-4 flex items-center justify-end font-open-sans text-xs font-normal !important;
+}
+.ChatLeftBox .ChatTime {
+  @apply text-[#6A6A6A] !important;
+}
+.ChatRightBox .ChatTime {
+  @apply text-[#C9C9C9] !important;
+}
+
+.ChatFooter {
+  @apply mt-4 rounded-lg border border-[#E4E4E4] p-2 !important;
+}
+.FormTextarea.NoBorder {
+  @apply m-0 border-0 p-0 !important;
+}
+.ChatFooter .css-dpjnhs-MuiInputBase-root-MuiOutlinedInput-root {
+  @apply p-0 !important;
+}
+.ChatBtnBox {
+  @apply mt-2 flex w-full items-center justify-between justify-items-center !important;
+}
+.ChatBtnLeftBox {
+}
+.ChatBtnRightBox {
+  @apply flex flex-row items-center justify-items-center !important;
+}

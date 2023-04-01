@@ -6,6 +6,10 @@ import Input from '@mui/material/Input';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
 import IconButton from '@mui/material/IconButton';
+import TextField from '@mui/material/TextField';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+
 import '../../assets/css/PopupStyle.css';
 
 type Props = {
@@ -13,7 +17,8 @@ type Props = {
   setOpenFormDialog: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-function DriversCreatePopup({ openFormDialog, setOpenFormDialog }: Props) {
+function ComplainsCreatePopup({ openFormDialog, setOpenFormDialog }: Props) {
+  const [selectShop, setSelectShop] = useState('status');
   const [isImage, setIsImage] = useState('');
   const handleFormClose = () => setOpenFormDialog(false);
   const handleRemoveImage = () => {
@@ -22,6 +27,10 @@ function DriversCreatePopup({ openFormDialog, setOpenFormDialog }: Props) {
 
   const handleFileChange = (event: any) => {
     setIsImage(event.target.files[0].name);
+  };
+
+  const handleChange = (event: SelectChangeEvent) => {
+    setSelectShop(event.target.value as string);
   };
 
   return (
@@ -35,70 +44,53 @@ function DriversCreatePopup({ openFormDialog, setOpenFormDialog }: Props) {
     >
       <div className="Content">
         <div className="FormHeader">
-          <span className="Title">Add Drivers</span>
+          <span className="Title">Add New Complain</span>
         </div>
         <div className="FormBody">
-          <div className="FormFields">
+          <div className="FormField">
             <FormControl className="FormControl" variant="standard">
-              <label className="FormLabel">Name</label>
-              <Input
-                className="FormInput"
-                id="name"
-                value=""
-                name="name"
+              <label className="FormLabel">Select Shop</label>
+              <Select
+                className="FormSelect"
+                labelId="demo-simple-select-label"
+                value="UrLaundry"
                 disableUnderline
-              />
-            </FormControl>
-            <FormControl className="FormControl" variant="standard">
-              <label className="FormLabel">Email Address</label>
-              <Input
-                className="FormInput"
-                id="email"
-                value=""
-                name="email"
-                disableUnderline
-              />
-            </FormControl>
-          </div>
-          <div className="FormFields">
-            <FormControl className="FormControl" variant="standard">
-              <label className="FormLabel">Contact Number</label>
-              <Input
-                className="FormInput"
-                id="phone"
-                value=""
-                name="phone"
-                disableUnderline
-              />
-            </FormControl>
-            <FormControl className="FormControl" variant="standard">
-              <label className="FormLabel">
-                License Number{' '}
-                <span className="SubLabel">Use This Number To Login</span>
-              </label>
-              <Input
-                className="FormInput"
-                id="license"
-                value=""
-                name="license"
-                disableUnderline
-              />
+                onChange={(event) => {
+                  handleChange(event);
+                }}
+              >
+                <MenuItem value="UrLaundry">UrLaundry</MenuItem>
+              </Select>
             </FormControl>
           </div>
           <div className="FormField">
             <FormControl className="FormControl" variant="standard">
-              <label className="FormLabel">Address</label>
+              <label className="FormLabel">Shop Name</label>
               <Input
                 className="FormInput"
                 id="address"
                 value=""
                 name="address"
+                placeholder="UrLaundry"
                 disableUnderline
               />
             </FormControl>
           </div>
           <div className="FormField">
-            <label className="FormLabel">Upload Image</label>
+            <FormControl className="FormControl" variant="standard">
+              <label className="FormLabel">Complain</label>
+              <TextField
+                className="FormTextarea"
+                id="outlined-multiline-static"
+                multiline
+                rows={1}
+                defaultValue=""
+                placeholder="Write Here"
+              />
+            </FormControl>
+          </div>
+          <div className="FormField">
+            <label className="FormLabel">Upload Evidence</label>
             <div className="ImageBox">
               <input
                 accept="image/*"
@@ -154,7 +146,7 @@ function DriversCreatePopup({ openFormDialog, setOpenFormDialog }: Props) {
               padding: '0.375rem 2rem !important',
             }}
           >
-            Add
+            Submit
           </Button>
         </div>
       </div>
@@ -162,4 +154,4 @@ function DriversCreatePopup({ openFormDialog, setOpenFormDialog }: Props) {
   );
 }
 
-export default DriversCreatePopup;
+export default ComplainsCreatePopup;

@@ -28,7 +28,7 @@ function ReportsPage() {
   return (
     <div>
       <TopBar title="Reports" />
-      <div className="report-page container mt-3">
+      <div className="report-page container mt-5">
         <div className="grid grid-cols-3 gap-3">
           <div className="col-span-2 h-96 rounded-lg bg-white shadow-lg">
             <div className="mt-4 flex flex-row items-center justify-between justify-items-center px-3">
@@ -65,7 +65,10 @@ function ReportsPage() {
                 <MenuItem value="12 months">12 months</MenuItem>
               </Select>
             </div>
-            <div className="divider">&nbsp;</div>
+            <hr
+              className="divider horizontal"
+              style={{ margin: '0.625rem 0' }}
+            />
             <div className="mt-3 mb-5 flex w-full px-3">
               <ReportsRevenueChart />
             </div>
@@ -92,7 +95,10 @@ function ReportsPage() {
                   </div>
                 </div>
               </div>
-              <div className="divider">&nbsp;</div>
+              <hr
+                className="divider horizontal"
+                style={{ margin: '0.625rem 0' }}
+              />
               <div className="mt-3 flex px-3">
                 <ReportsCustomersChart />
               </div>
@@ -115,7 +121,10 @@ function ReportsPage() {
                   <MenuItem value="Month">Month</MenuItem>
                 </Select>
               </div>
-              <div className="divider">&nbsp;</div>
+              <hr
+                className="divider horizontal"
+                style={{ margin: '0.625rem 0' }}
+              />
               <div className="mt-2 flex w-full px-3">
                 <ReportsMostOrderedChart />
               </div>
@@ -131,7 +140,10 @@ function ReportsPage() {
                   Download
                 </Button>
               </div>
-              <div className="divider">&nbsp;</div>
+              <hr
+                className="divider horizontal"
+                style={{ margin: '0.625rem 0' }}
+              />
               <div className="mt-2 flex w-full px-3">
                 <ReportsAverageOrderValueChart />
               </div>
@@ -147,7 +159,10 @@ function ReportsPage() {
                   Download
                 </Button>
               </div>
-              <div className="divider">&nbsp;</div>
+              <hr
+                className="divider horizontal"
+                style={{ margin: '0.625rem 0' }}
+              />
               <div className="mt-2 flex w-full px-3">
                 <ReportsTotalOrdersChart />
               </div>

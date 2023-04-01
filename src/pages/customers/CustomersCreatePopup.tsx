@@ -3,9 +3,11 @@ import Dialog from '@mui/material/Dialog';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
-import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
-import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
+import InputAdornment from '@mui/material/InputAdornment';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import Visibility from '@mui/icons-material/Visibility';
 import IconButton from '@mui/material/IconButton';
+
 import '../../assets/css/PopupStyle.css';
 
 type Props = {
@@ -13,15 +15,14 @@ type Props = {
   setOpenFormDialog: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-function DriversCreatePopup({ openFormDialog, setOpenFormDialog }: Props) {
-  const [isImage, setIsImage] = useState('');
+function CustomersCreatePopup({ openFormDialog, setOpenFormDialog }: Props) {
+  const [showPassword, setShowPassword] = useState(false);
   const handleFormClose = () => setOpenFormDialog(false);
-  const handleRemoveImage = () => {
-    setIsImage('');
-  };
-
-  const handleFileChange = (event: any) => {
-    setIsImage(event.target.files[0].name);
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+  const handleMouseDownPassword = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    event.preventDefault();
   };
 
   return (
@@ -35,17 +36,42 @@ function DriversCreatePopup({ openFormDialog, setOpenFormDialog }: Props) {
     >
       <div className="Content">
         <div className="FormHeader">
-          <span className="Title">Add Drivers</span>
+          <span className="Title">Add Customer</span>
         </div>
         <div className="FormBody">
           <div className="FormFields">
             <FormControl className="FormControl" variant="standard">
-              <label className="FormLabel">Name</label>
+              <label className="FormLabel">First Name</label>
               <Input
                 className="FormInput"
                 id="name"
                 value=""
                 name="name"
+                placeholder="Vincent"
+                disableUnderline
+              />
+            </FormControl>
+            <FormControl className="FormControl" variant="standard">
+              <label className="FormLabel">Last Name</label>
+              <Input
+                className="FormInput"
+                id="name"
+                value=""
+                name="name"
+                placeholder="Boyd"
+                disableUnderline
+              />
+            </FormControl>
+          </div>
+          <div className="FormFields">
+            <FormControl className="FormControl" variant="standard">
+              <label className="FormLabel">Phone Number</label>
+              <Input
+                className="FormInput"
+                id="name"
+                value=""
+                name="name"
+                placeholder="+1 536 569"
                 disableUnderline
               />
             </FormControl>
@@ -53,87 +79,49 @@ function DriversCreatePopup({ openFormDialog, setOpenFormDialog }: Props) {
               <label className="FormLabel">Email Address</label>
               <Input
                 className="FormInput"
-                id="email"
+                id="name"
                 value=""
-                name="email"
+                name="name"
+                placeholder="Vincent.96@gmail.com"
                 disableUnderline
               />
             </FormControl>
           </div>
           <div className="FormFields">
             <FormControl className="FormControl" variant="standard">
-              <label className="FormLabel">Contact Number</label>
+              <label className="FormLabel">Password</label>
               <Input
+                style={{ paddingRight: '0' }}
                 className="FormInput"
-                id="phone"
-                value=""
-                name="phone"
+                id="password"
+                placeholder="**********"
+                type={showPassword ? 'text' : 'password'}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      style={{ padding: 0 }}
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                      onMouseDown={handleMouseDownPassword}
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                }
                 disableUnderline
               />
             </FormControl>
             <FormControl className="FormControl" variant="standard">
-              <label className="FormLabel">
-                License Number{' '}
-                <span className="SubLabel">Use This Number To Login</span>
-              </label>
+              <label className="FormLabel">Postal Code</label>
               <Input
                 className="FormInput"
-                id="license"
+                id="name"
                 value=""
-                name="license"
+                name="name"
+                placeholder="M6G 596"
                 disableUnderline
               />
             </FormControl>
-          </div>
-          <div className="FormField">
-            <FormControl className="FormControl" variant="standard">
-              <label className="FormLabel">Address</label>
-              <Input
-                className="FormInput"
-                id="address"
-                value=""
-                name="address"
-                disableUnderline
-              />
-            </FormControl>
-          </div>
-          <div className="FormField">
-            <label className="FormLabel">Upload Image</label>
-            <div className="ImageBox">
-              <input
-                accept="image/*"
-                style={{ display: 'none' }}
-                id="raised-button-file"
-                type="file"
-                onChange={(
-                  event: React.InputHTMLAttributes<HTMLInputElement>
-                ) => {
-                  handleFileChange(event);
-                }}
-              />
-              <label htmlFor="raised-button-file" className="ImageLabel">
-                <Button variant="raised" component="span" className="ImageBtn">
-                  <FileUploadOutlinedIcon sx={{ marginRight: '0.5rem' }} />
-                  Upload image
-                </Button>
-              </label>
-              {isImage ? (
-                <div className="ShowImageBox">
-                  <label className="ShowImageLabel">{isImage}</label>
-                  <IconButton className="btn-dot" onClick={handleRemoveImage}>
-                    <CloseOutlinedIcon
-                      sx={{
-                        color: '#1D1D1D',
-                        fontSize: '1rem',
-                        lineHeight: '1.5rem',
-                      }}
-                    />
-                  </IconButton>
-                </div>
-              ) : (
-                ''
-              )}
-            </div>
           </div>
         </div>
         <div className="FormFooter">
@@ -162,4 +150,4 @@ function DriversCreatePopup({ openFormDialog, setOpenFormDialog }: Props) {
   );
 }
 
-export default DriversCreatePopup;
+export default CustomersCreatePopup;

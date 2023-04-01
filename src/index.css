@@ -181,10 +181,30 @@ table > tbody > tr:last-child {
   @apply bg-[#000];
 }
 .divider {
-  @apply my-2 w-full border-t border-solid border-[#e4e4e4];
+  margin: 0;
+  -webkit-flex-shrink: 0;
+  -ms-flex-negative: 0;
+  flex-shrink: 0;
+  border-width: 0;
+  border-style: solid;
+  border-color: rgb(201, 201, 201);
 }
-.divider-height {
-  @apply mx-2 h-full border-r border-solid border-[#c5c7cd];
+.vertical {
+  border-bottom-width: 0;
+  height: auto;
+  border-right-width: thin;
+  -webkit-align-self: stretch;
+  -ms-flex-item-align: stretch;
+  align-self: stretch;
+  width: 0;
+}
+.horizontal {
+  border-bottom-width: thin;
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+}
+.my10 {
+  @apply my-2.5 !important;
 }
 .title {
   @apply flex text-2xl font-semibold text-[#1A1A1A];

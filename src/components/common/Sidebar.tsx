@@ -40,8 +40,8 @@ const links = [
     icon: <DriverIcon />,
   },
   {
-    name: 'Complain',
-    path: 'complain',
+    name: 'Complains',
+    path: 'complains',
     icon: <DescriptionOutlinedIcon fontSize="inherit" />,
   },
   {

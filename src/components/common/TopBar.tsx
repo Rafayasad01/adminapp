@@ -4,8 +4,9 @@ import AppBar from '@mui/material/AppBar';
 import IconButton from '@mui/material/IconButton';
 import SearchIcon from '@mui/icons-material/Search';
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
-import ArrowBackOutlinedIcon from '@mui/icons-material/ArrowBackOutlined';
 import { useNavigate } from 'react-router-dom';
+
+import BackArrowIcon from '../icons/BackArrowIcon';
 
 import assets from '../../assets';
 
@@ -26,11 +27,9 @@ function TopBar({ title, isNestedRoute = false }: Props) {
     >
       <Toolbar className="toolbar-style flex">
         {isNestedRoute ? (
-          <div className="">
-            <IconButton className="back-btn p-0" onClick={backHandler}>
-              <ArrowBackOutlinedIcon />
-            </IconButton>
-          </div>
+          <IconButton className="back-btn mr-2 p-0" onClick={backHandler}>
+            <BackArrowIcon />
+          </IconButton>
         ) : null}
         <div className="title ml-1">{title}</div>
         <div className="flex-grow">&nbsp;</div>
@@ -41,7 +40,7 @@ function TopBar({ title, isNestedRoute = false }: Props) {
           <IconButton className="icon-btn mr-3.5 p-0">
             <NotificationsNoneIcon />
           </IconButton>
-          <div className="divider-height">&nbsp;</div>
+          <hr className="divider vertical my-2" />
           <div className="header-user-box ml-3.5">
             <span>Jones Ferdinand</span>
             <img src={assets.images.avatarUser} alt="" />

@@ -11,7 +11,11 @@ import wash from './images/wash.svg';
 import shirt from './images/shirt.svg';
 import pants from './images/pants.svg';
 import avatarUser3 from './images/user3.svg';
-import gmap from './images/gmap.png';
+import avatarUrLaundry from './images/avatar-ur-laundry.png';
+import avatarDryCLean from './images/dryclean.svg';
+import avatarBaseballJacket from './images/baseball-jacket.svg';
+import avatarCustomer from './images/avatar-customer.png';
+import iconMap from './images/icon-map.png';
 
 const assets = {
   images: {
@@ -23,13 +27,17 @@ const assets = {
     iconOverDue,
     avatarUser,
     avatarUser2,
+    iconMap,
   },
   tempImages: {
     wash,
     shirt,
     pants,
     avatarUser3,
-    gmap,
+    avatarUrLaundry,
+    avatarDryCLean,
+    avatarBaseballJacket,
+    avatarCustomer,
   },
 };
 

@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import IconButton from '@mui/material/IconButton';
@@ -21,15 +20,13 @@ import CheckBoxOutlinedIcon from '@mui/icons-material/CheckBoxOutlined';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import TopBar from '../../components/common/TopBar';
-import DriversCreatePopup from './DriversCreatePopup';
-import DriversEditPopup from './DriversEditPopup';
-
-import assets from '../../assets';
+import CustomersCreatePopup from './CustomersCreatePopup';
+import CustomersEditPopup from './CustomersEditPopup';
 
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 const options = ['View', 'Edit', 'Delete'];
 const ITEM_HEIGHT = 48;
-function DriversPage() {
+function CustomersPage() {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [search, setSearch] = useState('');
@@ -62,7 +59,7 @@ function DriversPage() {
   const handleSelectedMenuClose = (option: string) => {
     setAnchorEl(null);
     if (option === 'View') {
-      navigate(`view/123`);
+      navigate(`detail/123`);
     } else if (option === 'Edit') {
       setOpenEditFormDialog(true);
     } else {
@@ -72,24 +69,23 @@ function DriversPage() {
   const handleClickSearch = (event: any) => {
     setSearch(event.target.value as string);
   };
-
   return (
     <>
-      <DriversCreatePopup
+      <CustomersCreatePopup
         openFormDialog={openFormDialog}
         setOpenFormDialog={setOpenFormDialog}
       />
-      <DriversEditPopup
+      <CustomersEditPopup
         openEditFormDialog={openEditFormDialog}
         setOpenEditFormDialog={setOpenEditFormDialog}
       />
-      <TopBar title="Drivers" />
+      <TopBar title="Customers" />
       <div className="container mt-5">
         <div className="w-full rounded-lg bg-white shadow-lg">
           <div className="grid grid-cols-12 px-4 py-5">
             <div className="col-span-7">
               <span className="font-open-sans text-xl font-semibold text-[#252733]">
-                All Drivers
+                All Customers
               </span>
             </div>
             <div className="col-span-5">
@@ -138,7 +134,7 @@ function DriversPage() {
             <table className="table-border table-auto">
               <thead>
                 <tr>
-                  <th>
+                  <th className="w-5">
                     <Checkbox
                       {...label}
                       icon={
@@ -154,11 +150,11 @@ function DriversPage() {
                       }}
                     />
                   </th>
-                  <th>Drivers</th>
-                  <th>Phone</th>
+                  <th>Name</th>
                   <th>Email</th>
-                  <th>License Number</th>
-                  <th>Status</th>
+                  <th>Phone</th>
+                  <th>Postal Code</th>
+                  <th className="w-60">Address</th>
                   <th>&nbsp;</th>
                 </tr>
               </thead>
@@ -178,81 +174,32 @@ function DriversPage() {
                   </td>
                   <td>
                     <div className="avatar flex flex-row items-center">
-                      <img src={assets.images.avatarUser} alt="" />
                       <div className="flex flex-col items-start justify-start">
-                        <span className="text-sm font-semibold">
-                          John Martin
-                        </span>
+                        <span className="text-sm font-semibold">Thomas</span>
                         <span className="text-xs font-normal text-[#6A6A6A]">
-                          February 02, 2023
+                          015264
                         </span>
                       </div>
                     </div>
                   </td>
-                  <td>+1 1234 5678 900</td>
-                  <td>martin.john@email.com</td>
-                  <td>03 141 633</td>
+                  <td>Thomas.albert@gmail.com</td>
+                  <td>034 443 632</td>
+                  <td>0115</td>
+                  <td>2100 W Cleveland Ave, Madera, CA 93637, United States</td>
                   <td>
-                    <span className="badge badge-success">ACTIVE</span>
-                  </td>
-                  <td>
-                    <IconButton
-                      className="btn-dot"
-                      aria-label="more"
-                      id="long-button"
-                      aria-controls={open ? 'long-menu' : undefined}
-                      aria-expanded={open ? 'true' : undefined}
-                      aria-haspopup="true"
-                      onClick={handleClick}
-                    >
-                      <MoreVertIcon />
-                    </IconButton>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <Checkbox
-                      {...label}
-                      icon={
-                        <CheckBoxOutlineBlankOutlinedIcon className=" text-[#E4E4E4]" />
-                      }
-                      checkedIcon={
-                        <CheckBoxOutlinedIcon className="text-[#1D1D1D]" />
-                      }
-                      checked={isCheckedAll}
-                    />
-                  </td>
-                  <td>
-                    <div className="avatar flex flex-row items-center">
-                      <img src={assets.images.avatarUser} alt="" />
-                      <div className="flex flex-col items-start justify-start">
-                        <span className="text-sm font-semibold">
-                          John Martin
-                        </span>
-                        <span className="text-xs font-normal text-[#6A6A6A]">
-                          February 02, 2023
-                        </span>
-                      </div>
+                    <div className="flex flex-row-reverse">
+                      <IconButton
+                        className="btn-dot"
+                        aria-label="more"
+                        id="long-button"
+                        aria-controls={open ? 'long-menu' : undefined}
+                        aria-expanded={open ? 'true' : undefined}
+                        aria-haspopup="true"
+                        onClick={handleClick}
+                      >
+                        <MoreVertIcon />
+                      </IconButton>
                     </div>
-                  </td>
-                  <td>+1 1234 5678 900</td>
-                  <td>martin.john@email.com</td>
-                  <td>03 141 633</td>
-                  <td>
-                    <span className="badge badge-danger">Inactive</span>
-                  </td>
-                  <td>
-                    <IconButton
-                      className="btn-dot"
-                      aria-label="more"
-                      id="long-button"
-                      aria-controls={open ? 'long-menu' : undefined}
-                      aria-expanded={open ? 'true' : undefined}
-                      aria-haspopup="true"
-                      onClick={handleClick}
-                    >
-                      <MoreVertIcon />
-                    </IconButton>
                   </td>
                 </tr>
               </tbody>
@@ -304,7 +251,7 @@ function DriversPage() {
             alignItems: 'center',
           }}
         >
-          Delete Driver?
+          Delete Customer?
         </DialogTitle>
         <DialogContent
           sx={{
@@ -319,7 +266,7 @@ function DriversPage() {
           }}
         >
           <DialogContentText id="alert-dialog-description">
-            Do you really want to delete this Driver?
+            Do you really want to delete this Customer?
           </DialogContentText>
         </DialogContent>
         <DialogActions
@@ -343,8 +290,9 @@ function DriversPage() {
           </Button>
         </DialogActions>
       </Dialog>
+      ;
     </>
   );
 }
 
-export default DriversPage;
+export default CustomersPage;

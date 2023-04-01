@@ -6,6 +6,10 @@ import Input from '@mui/material/Input';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
 import IconButton from '@mui/material/IconButton';
+import TextField from '@mui/material/TextField';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+
 import '../../assets/css/PopupStyle.css';
 
 type Props = {
@@ -13,7 +17,10 @@ type Props = {
   setOpenFormDialog: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-function DriversCreatePopup({ openFormDialog, setOpenFormDialog }: Props) {
+function ServicesCreatePopup({ openFormDialog, setOpenFormDialog }: Props) {
+  const [category, setCategory] = useState('status');
+  const [quantity, setQuantity] = useState('status');
+  const [price, setPrice] = useState('status');
   const [isImage, setIsImage] = useState('');
   const handleFormClose = () => setOpenFormDialog(false);
   const handleRemoveImage = () => {
@@ -22,6 +29,18 @@ function DriversCreatePopup({ openFormDialog, setOpenFormDialog }: Props) {
 
   const handleFileChange = (event: any) => {
     setIsImage(event.target.files[0].name);
+  };
+
+  const handleCategoryChange = (event: SelectChangeEvent) => {
+    setCategory(event.target.value as string);
+  };
+
+  const handleQuantityChange = (event: SelectChangeEvent) => {
+    setQuantity(event.target.value as string);
+  };
+
+  const handlePriceChange = (event: SelectChangeEvent) => {
+    setPrice(event.target.value as string);
   };
 
   return (
@@ -35,65 +54,95 @@ function DriversCreatePopup({ openFormDialog, setOpenFormDialog }: Props) {
     >
       <div className="Content">
         <div className="FormHeader">
-          <span className="Title">Add Drivers</span>
+          <span className="Title">Add Services</span>
         </div>
         <div className="FormBody">
           <div className="FormFields">
             <FormControl className="FormControl" variant="standard">
-              <label className="FormLabel">Name</label>
+              <label className="FormLabel">Service Name</label>
               <Input
                 className="FormInput"
                 id="name"
                 value=""
                 name="name"
+                placeholder="Pants"
                 disableUnderline
               />
             </FormControl>
             <FormControl className="FormControl" variant="standard">
-              <label className="FormLabel">Email Address</label>
-              <Input
-                className="FormInput"
-                id="email"
-                value=""
-                name="email"
+              <label className="FormLabel">Categories</label>
+              <Select
+                className="FormSelect"
+                labelId="demo-simple-select-label"
+                value="Wash & Folds"
                 disableUnderline
-              />
+                onChange={(event) => {
+                  handleCategoryChange(event);
+                }}
+              >
+                <MenuItem value="Wash & Folds">Wash & Folds</MenuItem>
+              </Select>
             </FormControl>
           </div>
           <div className="FormFields">
             <FormControl className="FormControl" variant="standard">
-              <label className="FormLabel">Contact Number</label>
-              <Input
-                className="FormInput"
-                id="phone"
-                value=""
-                name="phone"
+              <label className="FormLabel">Min Order Quantity</label>
+              <Select
+                className="FormSelect"
+                labelId="demo-simple-select-label"
+                value="05"
                 disableUnderline
-              />
+                onChange={(event) => {
+                  handleQuantityChange(event);
+                }}
+              >
+                <MenuItem value="05">05</MenuItem>
+              </Select>
             </FormControl>
             <FormControl className="FormControl" variant="standard">
+              <label className="FormLabel">Price</label>
+              <Select
+                className="FormSelect"
+                labelId="demo-simple-select-label"
+                value="$6.99"
+                disableUnderline
+                onChange={(event) => {
+                  handlePriceChange(event);
+                }}
+              >
+                <MenuItem value="$6.99">$6.99</MenuItem>
+              </Select>
+            </FormControl>
+          </div>
+          <div className="FormField">
+            <FormControl className="FormControl" variant="standard">
               <label className="FormLabel">
-                License Number{' '}
-                <span className="SubLabel">Use This Number To Login</span>
+                Short Description{' '}
+                <span className="SubLabel">Write 15-20 Characters</span>
               </label>
               <Input
                 className="FormInput"
-                id="license"
+                id="address"
                 value=""
-                name="license"
+                name="address"
+                placeholder="Write Description"
                 disableUnderline
               />
             </FormControl>
           </div>
           <div className="FormField">
             <FormControl className="FormControl" variant="standard">
-              <label className="FormLabel">Address</label>
-              <Input
-                className="FormInput"
-                id="address"
-                value=""
-                name="address"
-                disableUnderline
+              <label className="FormLabel">
+                Description{' '}
+                <span className="SubLabel">Write 25-250 Characters</span>
+              </label>
+              <TextField
+                className="FormTextarea"
+                id="outlined-multiline-static"
+                multiline
+                rows={2}
+                defaultValue=""
+                placeholder="Write Description"
               />
             </FormControl>
           </div>
@@ -162,4 +211,4 @@ function DriversCreatePopup({ openFormDialog, setOpenFormDialog }: Props) {
   );
 }
 
-export default DriversCreatePopup;
+export default ServicesCreatePopup;

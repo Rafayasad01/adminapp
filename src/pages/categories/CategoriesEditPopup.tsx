@@ -6,16 +6,20 @@ import Input from '@mui/material/Input';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
 import IconButton from '@mui/material/IconButton';
+
 import '../../assets/css/PopupStyle.css';
 
 type Props = {
-  openFormDialog: boolean;
-  setOpenFormDialog: React.Dispatch<React.SetStateAction<boolean>>;
+  openEditFormDialog: boolean;
+  setOpenEditFormDialog: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-function DriversCreatePopup({ openFormDialog, setOpenFormDialog }: Props) {
+function CategoriesEditPopup({
+  openEditFormDialog,
+  setOpenEditFormDialog,
+}: Props) {
   const [isImage, setIsImage] = useState('');
-  const handleFormClose = () => setOpenFormDialog(false);
+  const handleFormClose = () => setOpenEditFormDialog(false);
   const handleRemoveImage = () => {
     setIsImage('');
   };
@@ -26,7 +30,7 @@ function DriversCreatePopup({ openFormDialog, setOpenFormDialog }: Props) {
 
   return (
     <Dialog
-      open={openFormDialog}
+      open={openEditFormDialog}
       onClose={handleFormClose}
       PaperProps={{
         className: 'Dialog',
@@ -35,68 +39,23 @@ function DriversCreatePopup({ openFormDialog, setOpenFormDialog }: Props) {
     >
       <div className="Content">
         <div className="FormHeader">
-          <span className="Title">Add Drivers</span>
+          <span className="Title">Edit Category</span>
         </div>
         <div className="FormBody">
-          <div className="FormFields">
-            <FormControl className="FormControl" variant="standard">
-              <label className="FormLabel">Name</label>
-              <Input
-                className="FormInput"
-                id="name"
-                value=""
-                name="name"
-                disableUnderline
-              />
-            </FormControl>
-            <FormControl className="FormControl" variant="standard">
-              <label className="FormLabel">Email Address</label>
-              <Input
-                className="FormInput"
-                id="email"
-                value=""
-                name="email"
-                disableUnderline
-              />
-            </FormControl>
-          </div>
-          <div className="FormFields">
-            <FormControl className="FormControl" variant="standard">
-              <label className="FormLabel">Contact Number</label>
-              <Input
-                className="FormInput"
-                id="phone"
-                value=""
-                name="phone"
-                disableUnderline
-              />
-            </FormControl>
-            <FormControl className="FormControl" variant="standard">
-              <label className="FormLabel">
-                License Number{' '}
-                <span className="SubLabel">Use This Number To Login</span>
-              </label>
-              <Input
-                className="FormInput"
-                id="license"
-                value=""
-                name="license"
-                disableUnderline
-              />
-            </FormControl>
-          </div>
           <div className="FormField">
             <FormControl className="FormControl" variant="standard">
-              <label className="FormLabel">Address</label>
+              <label className="FormLabel">Category Name</label>
               <Input
                 className="FormInput"
                 id="address"
                 value=""
                 name="address"
+                placeholder="Dry Cleaning"
                 disableUnderline
               />
             </FormControl>
           </div>
+
           <div className="FormField">
             <label className="FormLabel">Upload Image</label>
             <div className="ImageBox">
@@ -162,4 +121,4 @@ function DriversCreatePopup({ openFormDialog, setOpenFormDialog }: Props) {
   );
 }
 
-export default DriversCreatePopup;
+export default CategoriesEditPopup;

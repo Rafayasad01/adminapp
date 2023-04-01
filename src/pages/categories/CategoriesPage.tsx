@@ -1,6 +1,4 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import IconButton from '@mui/material/IconButton';
 import Divider from '@mui/material/Divider';
 import Menu from '@mui/material/Menu';
@@ -9,8 +7,6 @@ import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
 import Button from '@mui/material/Button';
-import Select from '@mui/material/Select';
-import { SelectChangeEvent } from '@mui/material';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -20,39 +16,38 @@ import SearchIcon from '@mui/icons-material/Search';
 import Checkbox from '@mui/material/Checkbox';
 import CheckBoxOutlineBlankOutlinedIcon from '@mui/icons-material/CheckBoxOutlineBlankOutlined';
 import CheckBoxOutlinedIcon from '@mui/icons-material/CheckBoxOutlined';
-
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import TopBar from '../../components/common/TopBar';
+import CategoriesCreatePopup from './CategoriesCreatePopup';
+import assets from '../../assets';
+import CategoriesEditPopup from './CategoriesEditPopup';
 
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
-const options = ['View', 'Edit', 'Download PDF'];
+const options = ['Edit', 'Delete'];
 const ITEM_HEIGHT = 48;
-function OrdersPage() {
-  const navigate = useNavigate();
+
+function CategoriesPage() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [search, setSearch] = useState('');
-  const [status, setStatus] = useState('status');
-  const [time, setTime] = useState('time');
   const [openDialog, setOpenDialog] = useState(false);
   const [isCheckedAll, setIsCheckedAll] = useState(false);
 
+  const [openFormDialog, setOpenFormDialog] = useState(false);
+  const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
+
   const open = Boolean(anchorEl);
+
+  const handleFormClickOpen = () => {
+    setOpenFormDialog(true);
+  };
 
   const handleCheckAllChange = (event: any) => {
     setIsCheckedAll(event.target.checked);
   };
 
-  const handleDialogClickOpen = () => {
-    setOpenDialog(true);
-  };
-
   const handleDialogClose = () => {
     setOpenDialog(false);
-  };
-
-  const addRouteHandler = () => {
-    navigate('create');
   };
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -62,44 +57,37 @@ function OrdersPage() {
     setAnchorEl(null);
   };
   const handleSelectedMenuClose = (option: string) => {
-    let doOption = '';
-    if (option === 'Edit') {
-      doOption = 'edit';
-    } else if (option === 'View') {
-      doOption = 'view';
-    } else {
-      doOption = 'download';
-    }
     setAnchorEl(null);
-    navigate(`${doOption}/123`);
+    if (option === 'Edit') {
+      setOpenEditFormDialog(true);
+    } else {
+      setOpenDialog(true);
+    }
   };
   const handleClickSearch = (event: any) => {
     setSearch(event.target.value as string);
   };
-
-  const handleStatusChange = (event: SelectChangeEvent) => {
-    setStatus(event.target.value as string);
-  };
-
-  const handleTimeChange = (event: SelectChangeEvent) => {
-    setTime(event.target.value as string);
-  };
-  const changeStatusHandler = (event: any) => {
-    setStatus(event.target.value as string);
-  };
   return (
-    <div>
-      <TopBar title="Orders" />
+    <>
+      <CategoriesCreatePopup
+        openFormDialog={openFormDialog}
+        setOpenFormDialog={setOpenFormDialog}
+      />
+      <CategoriesEditPopup
+        openEditFormDialog={openEditFormDialog}
+        setOpenEditFormDialog={setOpenEditFormDialog}
+      />
+      <TopBar title="Categories" />
       <div className="container mt-5">
         <div className="w-full rounded-lg bg-white shadow-lg">
           <div className="grid grid-cols-12 px-4 py-5">
-            <div className="col-span-3">
+            <div className="col-span-7">
               <span className="font-open-sans text-xl font-semibold text-[#252733]">
-                All Orders
+                All Categories
               </span>
             </div>
-            <div className="col-span-6">
-              <div className="flex flex-row gap-3">
+            <div className="col-span-5">
+              <div className="flex flex-row justify-end gap-3">
                 <FormControl
                   className="search-grey-outline placeholder-grey w-60"
                   variant="filled"
@@ -130,35 +118,10 @@ function OrdersPage() {
                     disableUnderline
                   />
                 </FormControl>
-                <Select
-                  className="select-grey-outline h-10 w-36"
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  value={status}
-                  onChange={handleStatusChange}
-                >
-                  <MenuItem value="status">Status</MenuItem>
-                </Select>
-                <Select
-                  className=" select-grey-outline mr-3 h-10 w-36"
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  value={time}
-                  onChange={handleTimeChange}
-                >
-                  <MenuItem value="time">Time</MenuItem>
-                </Select>
-              </div>
-            </div>
-            <div className="col-span-3">
-              <div className="flex flex-row">
-                <Button variant="contained" className="btn-black-outline mr-3">
-                  Export to CSV
-                </Button>
                 <Button
                   variant="contained"
                   className="btn-black-fill btn-icon"
-                  onClick={addRouteHandler}
+                  onClick={handleFormClickOpen}
                 >
                   <AddOutlinedIcon /> Add New
                 </Button>
@@ -185,11 +148,8 @@ function OrdersPage() {
                       }}
                     />
                   </th>
-                  <th>Customers</th>
-                  <th>Pickup Time</th>
-                  <th>Drop-off Time</th>
-                  <th>Amount</th>
-                  <th>Status</th>
+                  <th>Category Name</th>
+                  <th>Created Date</th>
                   <th>&nbsp;</th>
                 </tr>
               </thead>
@@ -208,67 +168,30 @@ function OrdersPage() {
                     />
                   </td>
                   <td>
-                    <div className="flex flex-col">
-                      <span className="text-sm font-semibold text-[#1A1A1A]">
-                        Megan Chang
-                      </span>
-                      <span className="text-xs font-normal text-[#6A6A6A]">
-                        greenwilliam@yahoo.com
-                      </span>
-                      <span className="text-xs font-normal text-[#6A6A6A]">
-                        278 Amy View Suite 011 Lawsonshire, MA 50054
-                      </span>
+                    <div className="avatar flex flex-row items-center">
+                      <img src={assets.tempImages.avatarDryCLean} alt="" />
+                      <div className="flex flex-col items-start justify-start">
+                        <span className="text-sm font-semibold">
+                          Dry Cleaning
+                        </span>
+                      </div>
                     </div>
                   </td>
+                  <td>02 Sep, 2023</td>
                   <td>
-                    <div className="flex flex-col">
-                      <span className="text-sm font-normal text-[#1A1A1A]">
-                        06:00 PM - 05:00 PM
-                      </span>
-                      <span className="text-xs font-normal text-[#6A6A6A]">
-                        February 02, 2023
-                      </span>
+                    <div className="flex flex-row-reverse">
+                      <IconButton
+                        className="btn-dot"
+                        aria-label="more"
+                        id="long-button"
+                        aria-controls={open ? 'long-menu' : undefined}
+                        aria-expanded={open ? 'true' : undefined}
+                        aria-haspopup="true"
+                        onClick={handleClick}
+                      >
+                        <MoreVertIcon />
+                      </IconButton>
                     </div>
-                  </td>
-                  <td>
-                    <div className="flex flex-col">
-                      <span className="text-sm font-normal text-[#1A1A1A]">
-                        04:00 AM - 05:00 AM
-                      </span>
-                      <span className="text-xs font-normal text-[#6A6A6A]">
-                        February 02, 2023
-                      </span>
-                    </div>
-                  </td>
-                  <td className="text-sm font-semibold text-[#1A1A1A]">
-                    $14.69
-                  </td>
-                  <td>
-                    <Select
-                      className="select-black-outline mr-3 h-7 w-36"
-                      labelId="demo-simple-select-label"
-                      value="Ready for Pick up"
-                      onChange={(event) => {
-                        changeStatusHandler(event);
-                      }}
-                    >
-                      <MenuItem value="Ready for Pick up">
-                        Ready for Pick up
-                      </MenuItem>
-                    </Select>
-                  </td>
-                  <td>
-                    <IconButton
-                      className="btn-dot"
-                      aria-label="more"
-                      id="long-button"
-                      aria-controls={open ? 'long-menu' : undefined}
-                      aria-expanded={open ? 'true' : undefined}
-                      aria-haspopup="true"
-                      onClick={handleClick}
-                    >
-                      <MoreVertIcon />
-                    </IconButton>
                   </td>
                 </tr>
                 <tr>
@@ -285,68 +208,30 @@ function OrdersPage() {
                     />
                   </td>
                   <td>
-                    <div className="flex flex-col">
-                      <span className="text-sm font-semibold text-[#1A1A1A]">
-                        Megan Chang
-                      </span>
-                      <span className="text-xs font-normal text-[#6A6A6A]">
-                        greenwilliam@yahoo.com
-                      </span>
-                      <span className="text-xs font-normal text-[#6A6A6A]">
-                        278 Amy View Suite 011 Lawsonshire, MA 50054
-                      </span>
+                    <div className="avatar flex flex-row items-center">
+                      <img src={assets.tempImages.avatarDryCLean} alt="" />
+                      <div className="flex flex-col items-start justify-start">
+                        <span className="text-sm font-semibold">
+                          Dry Cleaning
+                        </span>
+                      </div>
                     </div>
                   </td>
+                  <td>02 Sep, 2023</td>
                   <td>
-                    <div className="flex flex-col">
-                      <span className="text-sm font-normal text-[#1A1A1A]">
-                        06:00 PM - 05:00 PM
-                      </span>
-                      <span className="text-xs font-normal text-[#6A6A6A]">
-                        February 02, 2023
-                      </span>
+                    <div className="flex flex-row-reverse">
+                      <IconButton
+                        className="btn-dot"
+                        aria-label="more"
+                        id="long-button"
+                        aria-controls={open ? 'long-menu' : undefined}
+                        aria-expanded={open ? 'true' : undefined}
+                        aria-haspopup="true"
+                        onClick={handleClick}
+                      >
+                        <MoreVertIcon />
+                      </IconButton>
                     </div>
-                  </td>
-                  <td>
-                    <div className="flex flex-col">
-                      <span className="text-sm font-normal text-[#1A1A1A]">
-                        04:00 AM - 05:00 AM
-                      </span>
-                      <span className="text-xs font-normal text-[#6A6A6A]">
-                        February 02, 2023
-                      </span>
-                    </div>
-                  </td>
-                  <td className="text-sm font-semibold text-[#1A1A1A]">
-                    $14.69
-                  </td>
-                  <td>
-                    <Select
-                      className="select-black-outline mr-3 h-7 w-36"
-                      labelId="demo-simple-select-label"
-                      value="Order Placed"
-                      onChange={(event) => {
-                        changeStatusHandler(event);
-                      }}
-                    >
-                      <MenuItem value="Order Placed">Order Placed</MenuItem>
-                      <MenuItem value="Ready for Pick up">
-                        Ready for Pick up
-                      </MenuItem>
-                    </Select>
-                  </td>
-                  <td>
-                    <IconButton
-                      className="btn-dot"
-                      aria-label="more"
-                      id="long-button"
-                      aria-controls={open ? 'long-menu' : undefined}
-                      aria-expanded={open ? 'true' : undefined}
-                      aria-haspopup="true"
-                      onClick={handleClick}
-                    >
-                      <MoreVertIcon />
-                    </IconButton>
                   </td>
                 </tr>
               </tbody>
@@ -398,7 +283,7 @@ function OrdersPage() {
             alignItems: 'center',
           }}
         >
-          Cancel Order?
+          Delete Category?
         </DialogTitle>
         <DialogContent
           sx={{
@@ -413,7 +298,7 @@ function OrdersPage() {
           }}
         >
           <DialogContentText id="alert-dialog-description">
-            Do you really want to cancel this order?
+            Do you really want to delete this category?
           </DialogContentText>
         </DialogContent>
         <DialogActions
@@ -437,8 +322,8 @@ function OrdersPage() {
           </Button>
         </DialogActions>
       </Dialog>
-    </div>
+    </>
   );
 }
 
-export default OrdersPage;
+export default CategoriesPage;
