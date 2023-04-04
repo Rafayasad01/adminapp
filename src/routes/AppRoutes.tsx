@@ -13,12 +13,17 @@ import CustomersPage from '../pages/customers/CustomersPage';
 import DriversPage from '../pages/drivers/DriversPage';
 import DriversViewPage from '../pages/drivers/DriversViewPage';
 import HomePage from '../pages/home/HomePage';
+import LocationsPage from '../pages/locations/LocationsPage';
 import OrderDetailsPage from '../pages/orders/OrderDetailsPage';
 import OrdersCreatePage from '../pages/orders/OrdersCreatePage';
 import OrdersEditPage from '../pages/orders/OrdersEditPage';
 import OrdersPage from '../pages/orders/OrdersPage';
 import ReportsPage from '../pages/reports/ReportsPage';
 import ServicesPage from '../pages/services/ServicesPage';
+import VouchersPage from '../pages/vouchers/VouchersPage';
+import FAQSPage from '../pages/faqs/FAQSPage';
+import SettingsPage from '../pages/settings/SettingsPage';
+import ProfilePage from '../pages/profile/ProfilePage';
 
 export const routeObjects: RouteObject[] = [
   {
@@ -128,6 +133,15 @@ export const routeObjects: RouteObject[] = [
         ],
       },
       {
+        path: 'locations',
+        children: [
+          {
+            index: true,
+            element: <LocationsPage />,
+          },
+        ],
+      },
+      {
         path: 'customers',
         children: [
           {
@@ -137,6 +151,42 @@ export const routeObjects: RouteObject[] = [
           {
             path: 'detail/:customerId',
             element: <CustomersDetailPage />,
+          },
+        ],
+      },
+      {
+        path: 'vouchers',
+        children: [
+          {
+            index: true,
+            element: <VouchersPage />,
+          },
+        ],
+      },
+      {
+        path: 'faqs',
+        children: [
+          {
+            index: true,
+            element: <FAQSPage />,
+          },
+        ],
+      },
+      {
+        path: 'settings',
+        children: [
+          {
+            index: true,
+            element: <SettingsPage />,
+          },
+        ],
+      },
+      {
+        path: 'profile',
+        children: [
+          {
+            index: true,
+            element: <ProfilePage />,
           },
         ],
       },

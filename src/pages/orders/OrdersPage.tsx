@@ -88,7 +88,7 @@ function OrdersPage() {
     setStatus(event.target.value as string);
   };
   return (
-    <div>
+    <>
       <TopBar title="Orders" />
       <div className="container mt-5">
         <div className="w-full rounded-lg bg-white shadow-lg">
@@ -437,7 +437,7 @@ function OrdersPage() {
           </Button>
         </DialogActions>
       </Dialog>
-    </div>
+    </>
   );
 }
 

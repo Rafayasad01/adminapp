@@ -20,24 +20,28 @@ import CheckBoxOutlinedIcon from '@mui/icons-material/CheckBoxOutlined';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import TopBar from '../../components/common/TopBar';
-import FAQSCreatePopup from './FAQSCreatePopup';
-import FAQSEditPopup from './FAQSEditPopup';
+import LocationsAddPopup from './LocationsAddPopup';
+import LocationsEditPopup from './LocationsEditPopup';
 
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 const options = ['Edit', 'Delete'];
 const ITEM_HEIGHT = 48;
 
-function FAQSPage() {
+function LocationsPage() {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [search, setSearch] = useState('');
   const [openDialog, setOpenDialog] = useState(false);
   const [isCheckedAll, setIsCheckedAll] = useState(false);
 
-  const [faqsAddForm, setFaqsAddForm] = useState(false);
-  const [faqsEditForm, setFaqsEditForm] = useState(false);
+  const [locationAddDialog, setLocationAddDialog] = useState(false);
+  const [locationEditDialog, setLocationEditDialog] = useState(false);
 
   const open = Boolean(anchorEl);
+
+  const handleFormClickOpen = () => {
+    setLocationAddDialog(true);
+  };
 
   const handleCheckAllChange = (event: any) => {
     setIsCheckedAll(event.target.checked);
@@ -56,7 +60,7 @@ function FAQSPage() {
   const handleSelectedMenuClose = (option: string) => {
     setAnchorEl(null);
     if (option === 'Edit') {
-      setFaqsEditForm(true);
+      setLocationEditDialog(true);
     } else {
       setOpenDialog(true);
     }
@@ -66,21 +70,21 @@ function FAQSPage() {
   };
   return (
     <>
-      <FAQSCreatePopup
-        faqsAddForm={faqsAddForm}
-        setFaqsAddForm={setFaqsAddForm}
+      <LocationsAddPopup
+        locationAddDialog={locationAddDialog}
+        setLocationAddDialog={setLocationAddDialog}
       />
-      <FAQSEditPopup
-        faqsEditForm={faqsEditForm}
-        setFaqsEditForm={setFaqsEditForm}
+      <LocationsEditPopup
+        locationEditDialog={locationEditDialog}
+        setLocationEditDialog={setLocationEditDialog}
       />
-      <TopBar title="FAQ’s" />
+      <TopBar title="Locations" />
       <div className="container mt-5">
         <div className="w-full rounded-lg bg-white shadow-lg">
           <div className="grid grid-cols-12 px-4 py-5">
             <div className="col-span-7">
               <span className="font-open-sans text-xl font-semibold text-[#252733]">
-                All FAQ’s
+                All Locations
               </span>
             </div>
             <div className="col-span-5">
@@ -118,7 +122,7 @@ function FAQSPage() {
                 <Button
                   variant="contained"
                   className="btn-black-fill btn-icon"
-                  onClick={() => setFaqsAddForm(true)}
+                  onClick={handleFormClickOpen}
                 >
                   <AddOutlinedIcon /> Add New
                 </Button>
@@ -145,9 +149,10 @@ function FAQSPage() {
                       }}
                     />
                   </th>
-                  <th className="w-[20rem]">Questions</th>
-                  <th>Last Updated Date</th>
-                  <th className="w-[24rem]">Description</th>
+                  <th className="w-44">Location Name</th>
+                  <th className="w-[28rem]">Address</th>
+                  <th>Radius</th>
+                  <th>Postal Code</th>
                   <th>&nbsp;</th>
                 </tr>
               </thead>
@@ -169,17 +174,14 @@ function FAQSPage() {
                     <div className="avatar flex flex-row items-center">
                       <div className="flex flex-col items-start justify-start">
                         <span className="text-sm font-semibold">
-                          Can you clean items with leather, velvet, suede or
-                          fur?
+                          California
                         </span>
                       </div>
                     </div>
                   </td>
-                  <td>02 Mar, 2023</td>
-                  <td>
-                    Lorem Ipsum is simply dummy text of the printing and
-                    typesetting industry. Lorem Ipsum has been the...
-                  </td>
+                  <td>2100 W Cleveland Ave, Madera, CA 93637, United States</td>
+                  <td>45 km</td>
+                  <td>00501</td>
                   <td>
                     <div className="flex flex-row-reverse">
                       <IconButton
@@ -245,7 +247,7 @@ function FAQSPage() {
             alignItems: 'center',
           }}
         >
-          Delete FAQ?
+          Delete Location?
         </DialogTitle>
         <DialogContent
           sx={{
@@ -260,7 +262,7 @@ function FAQSPage() {
           }}
         >
           <DialogContentText id="alert-dialog-description">
-            Do you really want to delete this FAQ?
+            Do you really want to delete this location?
           </DialogContentText>
         </DialogContent>
         <DialogActions
@@ -289,4 +291,4 @@ function FAQSPage() {
   );
 }
 
-export default FAQSPage;
+export default LocationsPage;

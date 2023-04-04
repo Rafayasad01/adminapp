@@ -1,8 +1,26 @@
 .Dialog {
   @apply relative m-0  w-[40%] overflow-hidden bg-transparent shadow-none  !important;
 }
+.Dialog.Width-60 {
+  @apply w-[60%]  !important;
+}
+.Dialog.Width-30 {
+  @apply w-[30%]  !important;
+}
 .Dialog .Content {
   @apply flex h-full w-full flex-col justify-evenly rounded-lg bg-[#fff] px-4 py-5 shadow-lg !important;
+}
+.Dialog .Content.NoPadding {
+  @apply p-0 !important;
+}
+.Content .Row {
+  @apply grid grid-cols-12;
+}
+.Content .Column-5 {
+  @apply col-span-5;
+}
+.Content .Column-7 {
+  @apply col-span-7;
 }
 .Content .css-dpjnhs-MuiInputBase-root-MuiOutlinedInput-root {
   @apply border-0 border-transparent bg-transparent px-0 !important;
@@ -52,7 +70,7 @@
   @apply font-open-sans text-sm font-normal text-[#1A1A1A] !important;
 }
 .Content .FormLabel .SubLabel {
-  @apply ml-2 font-open-sans text-xs font-normal text-[#6A6A6A] !important;
+  @apply ml-2 font-open-sans text-[0.60rem] font-normal text-[#6A6A6A] !important;
 }
 .Content .FormInput,
 .Content .FormTextarea,
@@ -204,3 +222,103 @@
 .ChatBtnRightBox {
   @apply flex flex-row items-center justify-items-center !important;
 }
+
+.FormControl .css-julti5-MuiSwitch-root {
+  width: 50px !important;
+  height: 26px !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border-radius: 26px !important;
+}
+.FormControl .MuiSwitch-switchBase {
+  padding: 0 !important;
+  margin: 0 !important;
+  transition-duration: 300ms !important;
+  margin-top: 2px !important;
+}
+.FormControl .MuiSwitch-switchBase.Mui-checked {
+  transform: translateX(27px) !important;
+  color: #fff !important;
+  margin-top: 2px;
+}
+.FormControl .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track {
+  background-color: #51b541 !important;
+  opacity: 1 !important;
+  border: 0 !important;
+}
+.FormControl .MuiSwitch-switchBase.Mui-checked.Mui-disabled + .MuiSwitch-track {
+  opacity: 0.5 !important;
+}
+.FormControl .MuiSwitch-switchBase.Mui-focusVisible .MuiSwitch-thumb {
+  color: #51b541 !important;
+  border: 6px solid #fff !important;
+}
+.FormControl .MuiSwitch-switchBase.Mui-disabled .MuiSwitch-thumb {
+  color: #fff;
+}
+.FormControl .MuiSwitch-switchBase.Mui-disabled + .MuiSwitch-track {
+  opacity: 0.3 !important;
+}
+.FormControl .MuiSwitch-thumb {
+  box-sizing: border-box !important;
+  width: 22px !important;
+  height: 22px !important;
+}
+.FormControl .MuiSwitch-track {
+  border-radius: 26 !important;
+  background-color: #e9e9ea !important;
+  opacity: 1 !important;
+  transition-duration: 500ms;
+}
+.FormControl .DatePicker {
+  @apply mt-1 rounded-md border border-solid border-[#C9C9C9] px-3 font-open-sans text-sm font-normal text-[#1A1A1A] opacity-[0.7] after:border-b-neutral-900 !important;
+}
+.FormControl .DatePicker input {
+  @apply py-[4px] px-0 font-open-sans text-sm font-normal text-[#1A1A1A] opacity-[0.7] !important;
+}
+.FormControl .DatePicker button {
+  padding: 0 !important;
+}
+
+.FormControl .css-187mznn-MuiSlider-root {
+  color: #1d1d1d !important;
+  height: 8px !important;
+}
+.FormControl .css-187mznn-MuiSlider-root .css-14pt78w-MuiSlider-rail {
+  background-color: #c9c9c9 !important;
+}
+.FormControl .css-1vj64c4-MuiSlider-root .MuiSlider-track {
+  border: none !important;
+}
+.FormControl .MuiSlider-thumb {
+  height: 24px !important;
+  width: 24px !important;
+  background-color: #fff !important;
+  border: 6px solid currentColor !important;
+}
+.FormControl .MuiSlider-thumb:focus,
+.FormControl .MuiSlider-thumb:hover,
+.FormControl .MuiSlider-thumb.Mui-active,
+.FormControl .MuiSlider-thumb.Mui-focusVisible {
+  box-shadow: inherit !important;
+}
+.FormControl .MuiSlider-thumb:before {
+  display: none !important;
+}
+.FormControl .MuiSlider-valueLabel {
+  line-height: 1.2px !important;
+  font-size: 12px !important;
+  background: unset !important;
+  height: 25px !important;
+  background-color: #c9c9c9 !important;
+  color: #1a1a1a !important;
+}
+/*.FormControl .MuiSlider-valueLabel:before {
+  display: none !important;
+}
+.FormControl .MuiSlider-valueLabel.MuiSlider-valueLabelOpen {
+  transform: translate(50%, -100%) rotate(-45deg) scale(1) !important;
+}
+.FormControl .MuiSlider-valueLabel > * {
+  transform: rotate(45deg) !important;
+} */

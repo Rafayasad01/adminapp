@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import IconButton from '@mui/material/IconButton';
 import Divider from '@mui/material/Divider';
 import Menu from '@mui/material/Menu';
@@ -20,24 +19,28 @@ import CheckBoxOutlinedIcon from '@mui/icons-material/CheckBoxOutlined';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import TopBar from '../../components/common/TopBar';
-import FAQSCreatePopup from './FAQSCreatePopup';
-import FAQSEditPopup from './FAQSEditPopup';
+import VouchersPromoCreatePopup from './VouchersPromoCreatePopup';
+import VouchersReferralCreatePopup from './VouchersReferralCreatePopup';
+import VouchersPromoEditPopup from './VouchersPromoEditPopup';
 
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 const options = ['Edit', 'Delete'];
 const ITEM_HEIGHT = 48;
-
-function FAQSPage() {
-  const navigate = useNavigate();
+function VouchersPage() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [search, setSearch] = useState('');
   const [openDialog, setOpenDialog] = useState(false);
   const [isCheckedAll, setIsCheckedAll] = useState(false);
 
-  const [faqsAddForm, setFaqsAddForm] = useState(false);
-  const [faqsEditForm, setFaqsEditForm] = useState(false);
+  const [vouchersPromoDialog, setVouchersPromoDialog] = useState(false);
+  const [vouchersPromoEditDialog, setVouchersPromoEditDialog] = useState(false);
+  const [vouchersReferralDialog, setVouchersReferralDialog] = useState(false);
 
   const open = Boolean(anchorEl);
+
+  const handleFormClickOpen = () => {
+    setVouchersReferralDialog(true);
+  };
 
   const handleCheckAllChange = (event: any) => {
     setIsCheckedAll(event.target.checked);
@@ -56,7 +59,7 @@ function FAQSPage() {
   const handleSelectedMenuClose = (option: string) => {
     setAnchorEl(null);
     if (option === 'Edit') {
-      setFaqsEditForm(true);
+      setVouchersPromoEditDialog(true);
     } else {
       setOpenDialog(true);
     }
@@ -66,21 +69,25 @@ function FAQSPage() {
   };
   return (
     <>
-      <FAQSCreatePopup
-        faqsAddForm={faqsAddForm}
-        setFaqsAddForm={setFaqsAddForm}
+      <VouchersPromoCreatePopup
+        vouchersPromoDialog={vouchersPromoDialog}
+        setVouchersPromoDialog={setVouchersPromoDialog}
       />
-      <FAQSEditPopup
-        faqsEditForm={faqsEditForm}
-        setFaqsEditForm={setFaqsEditForm}
+      <VouchersPromoEditPopup
+        vouchersPromoEditDialog={vouchersPromoEditDialog}
+        setVouchersPromoEditDialog={setVouchersPromoEditDialog}
       />
-      <TopBar title="FAQ’s" />
+      <VouchersReferralCreatePopup
+        vouchersReferralDialog={vouchersReferralDialog}
+        setVouchersReferralDialog={setVouchersReferralDialog}
+      />
+      <TopBar title="Vouchers" />
       <div className="container mt-5">
         <div className="w-full rounded-lg bg-white shadow-lg">
           <div className="grid grid-cols-12 px-4 py-5">
             <div className="col-span-7">
               <span className="font-open-sans text-xl font-semibold text-[#252733]">
-                All FAQ’s
+                All Vouchers
               </span>
             </div>
             <div className="col-span-5">
@@ -118,7 +125,7 @@ function FAQSPage() {
                 <Button
                   variant="contained"
                   className="btn-black-fill btn-icon"
-                  onClick={() => setFaqsAddForm(true)}
+                  onClick={handleFormClickOpen}
                 >
                   <AddOutlinedIcon /> Add New
                 </Button>
@@ -145,9 +152,28 @@ function FAQSPage() {
                       }}
                     />
                   </th>
-                  <th className="w-[20rem]">Questions</th>
-                  <th>Last Updated Date</th>
-                  <th className="w-[24rem]">Description</th>
+                  <th>Vouchers</th>
+                  <th>Valid From</th>
+                  <th>Valid Till</th>
+                  <th>Value</th>
+                  <th>
+                    Min
+                    <br />
+                    Products
+                  </th>
+                  <th>
+                    Min
+                    <br />
+                    Amount
+                  </th>
+                  <th>Type</th>
+                  <th>Redeem</th>
+                  <th>
+                    Max
+                    <br />
+                    Redeem
+                  </th>
+                  <th>Status</th>
                   <th>&nbsp;</th>
                 </tr>
               </thead>
@@ -168,17 +194,73 @@ function FAQSPage() {
                   <td>
                     <div className="avatar flex flex-row items-center">
                       <div className="flex flex-col items-start justify-start">
-                        <span className="text-sm font-semibold">
-                          Can you clean items with leather, velvet, suede or
-                          fur?
+                        <span className="text-sm font-semibold">WEEK18</span>
+                        <span className="text-xs font-normal text-[#6A6A6A]">
+                          Referral
                         </span>
                       </div>
                     </div>
                   </td>
                   <td>02 Mar, 2023</td>
+                  <td>02 Apr, 2023</td>
+                  <td>$18</td>
+                  <td>08</td>
+                  <td>$50</td>
+                  <td>Amount</td>
+                  <td>05</td>
+                  <td>30</td>
                   <td>
-                    Lorem Ipsum is simply dummy text of the printing and
-                    typesetting industry. Lorem Ipsum has been the...
+                    <span className="badge badge-success">ACTIVE</span>
+                  </td>
+                  <td>
+                    <div className="flex flex-row-reverse">
+                      <IconButton
+                        className="btn-dot"
+                        aria-label="more"
+                        id="long-button"
+                        aria-controls={open ? 'long-menu' : undefined}
+                        aria-expanded={open ? 'true' : undefined}
+                        aria-haspopup="true"
+                        onClick={handleClick}
+                      >
+                        <MoreVertIcon />
+                      </IconButton>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <Checkbox
+                      {...label}
+                      icon={
+                        <CheckBoxOutlineBlankOutlinedIcon className=" text-[#E4E4E4]" />
+                      }
+                      checkedIcon={
+                        <CheckBoxOutlinedIcon className="text-[#1D1D1D]" />
+                      }
+                      checked={isCheckedAll}
+                    />
+                  </td>
+                  <td>
+                    <div className="avatar flex flex-row items-center">
+                      <div className="flex flex-col items-start justify-start">
+                        <span className="text-sm font-semibold">HAPPY10</span>
+                        <span className="text-xs font-normal text-[#6A6A6A]">
+                          Promo
+                        </span>
+                      </div>
+                    </div>
+                  </td>
+                  <td>02 Mar, 2023</td>
+                  <td>02 Apr, 2023</td>
+                  <td>$10</td>
+                  <td>10</td>
+                  <td>$30</td>
+                  <td>Amount</td>
+                  <td>01</td>
+                  <td>01</td>
+                  <td>
+                    <span className="badge badge-danger">Inactive</span>
                   </td>
                   <td>
                     <div className="flex flex-row-reverse">
@@ -245,7 +327,7 @@ function FAQSPage() {
             alignItems: 'center',
           }}
         >
-          Delete FAQ?
+          Delete Voucher?
         </DialogTitle>
         <DialogContent
           sx={{
@@ -260,7 +342,7 @@ function FAQSPage() {
           }}
         >
           <DialogContentText id="alert-dialog-description">
-            Do you really want to delete this FAQ?
+            Do you really want to delete this voucher?
           </DialogContentText>
         </DialogContent>
         <DialogActions
@@ -289,4 +371,4 @@ function FAQSPage() {
   );
 }
 
-export default FAQSPage;
+export default VouchersPage;

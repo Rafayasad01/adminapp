@@ -1,11 +1,38 @@
+import { useEffect, useState } from 'react';
 import Divider from '@mui/material/Divider';
-import Map from '../../components/common/Map';
+import Button from '@mui/material/Button';
 import TopBar from '../../components/common/TopBar';
 import assets from '../../assets';
+import ProfileChangePasswordPopup from './ProfileChangePasswordPopup';
+import MarkersMap from '../../components/common/MarkersMap';
+import { Marker } from '../../interfaces/map.interface';
 
-function CustomersDetailPage() {
+const data = [
+  { name: 'Address1', lat: -33.890542, lng: 151.274856 },
+  { name: 'Address2', lat: -33.923036, lng: 151.259052 },
+  { name: 'Address3', lat: -34.028249, lng: 151.157507 },
+  {
+    name: 'Address4',
+    lat: -33.80010128657071,
+    lng: 151.28747820854187,
+  },
+  { name: 'Address5', lat: -33.950198, lng: 151.259302 },
+];
+
+function ProfilePage() {
+  const [changePassword, setChangePassword] = useState(false);
+  const [markers, setMarkers] = useState<Marker[]>([]);
+
+  useEffect(() => {
+    setMarkers(data);
+  }, []);
+
   return (
     <>
+      <ProfileChangePasswordPopup
+        changePassword={changePassword}
+        setChangePassword={setChangePassword}
+      />
       <TopBar isNestedRoute title="Customer Detail" />
       <div className="container mt-5">
         <div className="grid w-full grid-cols-12 gap-3">
@@ -23,6 +50,13 @@ function CustomersDetailPage() {
                 <span className="font-sm font-open-sans text-sm text-[#6A6A6A]">
                   481872
                 </span>
+                <Button
+                  variant="text"
+                  className="font-sm justify-start bg-transparent p-0 font-open-sans text-sm capitalize text-[#1A1A1A]"
+                  onClick={() => setChangePassword(true)}
+                >
+                  Change Password
+                </Button>
               </div>
             </div>
             <Divider className="my-4" />
@@ -53,35 +87,48 @@ function CustomersDetailPage() {
               </div>
               <div className="flex w-full flex-col">
                 <span className="mt-4 font-open-sans text-base font-semibold text-[#1A1A1A]">
-                  Address
+                  Address1
+                </span>
+                <span className="font-open-sans text-sm font-normal text-[#6A6A6A]">
+                  1192 Ashmor DriveWadena, MN 56482
+                </span>
+              </div>
+              <div className="flex w-full flex-col">
+                <span className="mt-4 font-open-sans text-base font-semibold text-[#1A1A1A]">
+                  Address2
+                </span>
+                <span className="font-open-sans text-sm font-normal text-[#6A6A6A]">
+                  1192 Ashmor DriveWadena, MN 56482
+                </span>
+              </div>
+              <div className="flex w-full flex-col">
+                <span className="mt-4 font-open-sans text-base font-semibold text-[#1A1A1A]">
+                  Address3
+                </span>
+                <span className="font-open-sans text-sm font-normal text-[#6A6A6A]">
+                  1192 Ashmor DriveWadena, MN 56482
+                </span>
+              </div>
+              <div className="flex w-full flex-col">
+                <span className="mt-4 font-open-sans text-base font-semibold text-[#1A1A1A]">
+                  Address4
+                </span>
+                <span className="font-open-sans text-sm font-normal text-[#6A6A6A]">
+                  1192 Ashmor DriveWadena, MN 56482
+                </span>
+              </div>
+              <div className="flex w-full flex-col">
+                <span className="mt-4 font-open-sans text-base font-semibold text-[#1A1A1A]">
+                  Address5
                 </span>
                 <span className="font-open-sans text-sm font-normal text-[#6A6A6A]">
                   1192 Ashmor DriveWadena, MN 56482
                 </span>
               </div>
             </div>
-            <Divider className="my-4" />
-            <div className="flex w-full flex-col">
-              <div className="flex w-full flex-col">
-                <span className="mt-2 font-open-sans text-base font-semibold text-[#1A1A1A]">
-                  Total Orders
-                </span>
-                <span className="font-open-sans text-sm font-normal text-[#6A6A6A]">
-                  28
-                </span>
-              </div>
-              <div className="flex w-full flex-col">
-                <span className="mt-4 font-open-sans text-base font-semibold text-[#1A1A1A]">
-                  Amount Spent
-                </span>
-                <span className="font-open-sans text-sm font-normal text-[#6A6A6A]">
-                  $7540.61
-                </span>
-              </div>
-            </div>
           </div>
           <div className="col-span-8 min-h-[640px] rounded-lg bg-white shadow-lg">
-            <Map center={{ lat: 38.8936708, lng: -77.1546612 }} zoom={17} />
+            <MarkersMap markers={markers} zoom={10} />
           </div>
         </div>
       </div>
@@ -89,4 +136,4 @@ function CustomersDetailPage() {
   );
 }
 
-export default CustomersDetailPage;
+export default ProfilePage;
