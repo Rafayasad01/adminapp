@@ -3,7 +3,7 @@ import ThemeProvider from '@mui/material/styles/ThemeProvider';
 import createTheme from '@mui/material/styles/createTheme';
 import Button from '@mui/material/Button';
 import Popover from '@mui/material/Popover';
-import { StaticDateTimePicker } from '@mui/x-date-pickers';
+import { StaticTimePicker } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
 
 const darkTheme = createTheme({
@@ -59,7 +59,7 @@ function DatePickerButton({ onChange, id, icon }: Props) {
         }}
       >
         <ThemeProvider theme={darkTheme}>
-          <StaticDateTimePicker
+          <StaticTimePicker
             displayStaticWrapperAs="desktop"
             defaultValue={dayjs('2022-04-17T15:30')}
             onAccept={handleChange}

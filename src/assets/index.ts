@@ -16,6 +16,11 @@ import avatarDryCLean from './images/dryclean.svg';
 import avatarBaseballJacket from './images/baseball-jacket.svg';
 import avatarCustomer from './images/avatar-customer.png';
 import iconMap from './images/icon-map.png';
+import fileUpload from './images/file-upload.svg';
+import facebook from './images/Facebook.svg';
+import instagram from './images/Instagram.svg';
+import twitter from './images/Twitter.svg';
+import whatsApp from './images/Whatsapp.svg';
 
 const assets = {
   images: {
@@ -28,6 +33,11 @@ const assets = {
     avatarUser,
     avatarUser2,
     iconMap,
+    fileUpload,
+    facebook,
+    instagram,
+    twitter,
+    whatsApp,
   },
   tempImages: {
     wash,

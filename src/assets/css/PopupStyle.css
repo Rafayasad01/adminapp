@@ -7,6 +7,12 @@
 .Dialog.Width-30 {
   @apply w-[30%]  !important;
 }
+.Dialog.Width-55 {
+  @apply w-[55%]  !important;
+}
+.height-230 {
+  height: 230px;
+}
 .Dialog .Content {
   @apply flex h-full w-full flex-col justify-evenly rounded-lg bg-[#fff] px-4 py-5 shadow-lg !important;
 }
@@ -15,6 +21,12 @@
 }
 .Content .Row {
   @apply grid grid-cols-12;
+}
+.gap-x3 {
+  @apply gap-x-3;
+}
+.Content .Column-6 {
+  @apply col-span-6;
 }
 .Content .Column-5 {
   @apply col-span-5;
@@ -322,3 +334,89 @@
 .FormControl .MuiSlider-valueLabel > * {
   transform: rotate(45deg) !important;
 } */
+
+.FormControl #LabelFileUpload {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background: #ffffff;
+  border: 1px dashed #0d54c9;
+  border-radius: 10px;
+  cursor: pointer;
+  padding: 15px;
+}
+.FormControl .FileUploadText,
+.FormControl .FileUploadText span {
+  font-family: 'Open Sans' !important;
+  font-style: normal !important;
+  font-weight: 400 !important;
+  font-size: 14px !important;
+  line-height: 24px;
+  color: #0f0f0f !important;
+  background: transparent !important;
+}
+.FormControl .UploadButton {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 24px;
+}
+.FormControl #InputFileUpload {
+  display: none;
+}
+.FormControl #LabelFileUpload.DragActive {
+  background-color: #ffffff;
+}
+.FormControl .UploadButton {
+  cursor: pointer;
+  padding: 0.25rem;
+  font-size: 1rem;
+  border: none;
+  font-family: 'Oswald', sans-serif;
+  background-color: transparent;
+  text-decoration-line: underline;
+}
+.FormControl .UploadButton:hover {
+  text-decoration-line: underline;
+  background: none !important;
+}
+.FormControl #DragFileElement {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 1rem;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  left: 0px;
+}
+.CustomToggleBtn {
+  border: none !important;
+  border-radius: 6px !important;
+  height: 30px !important;
+  font-family: 'Open Sans' !important;
+  font-style: normal !important;
+  font-weight: 600 !important;
+  font-size: 12px !important;
+  line-height: 16px !important;
+  text-align: center !important;
+  text-transform: capitalize !important;
+  margin-right: 5px !important;
+  padding: 10px 10px !important;
+  border: 1px solid #c9c9c9 !important;
+  background: #ffffff !important;
+  color: #1a1a1a !important;
+  outline: 0 none !important;
+  margin-left: 0px !important;
+}
+.CustomToggleBtn.Mui-selected {
+  background: #1d1d1d !important;
+  color: #ffffff !important;
+  border: 1px solid #1d1d1d !important;
+}
+.css-wclgr9-MuiButtonBase-root-MuiTab-root {
+  padding: 0;
+}

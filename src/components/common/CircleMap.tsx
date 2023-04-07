@@ -40,6 +40,7 @@ function CircleMap({ center, zoom, radius }: Props) {
         map,
         title: 'Location',
         icon: assets.images.iconMap,
+        animation: google.maps.Animation.DROP,
       });
 
       const circle = new google.maps.Circle({

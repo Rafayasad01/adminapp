@@ -24,6 +24,8 @@ import VouchersPage from '../pages/vouchers/VouchersPage';
 import FAQSPage from '../pages/faqs/FAQSPage';
 import SettingsPage from '../pages/settings/SettingsPage';
 import ProfilePage from '../pages/profile/ProfilePage';
+import SettingsApp from '../pages/settings/SettingsApp';
+import SettingsShopScheduling from '../pages/settings/SettingsShopScheduling';
 
 export const routeObjects: RouteObject[] = [
   {
@@ -176,8 +178,22 @@ export const routeObjects: RouteObject[] = [
         path: 'settings',
         children: [
           {
-            index: true,
+            path: '',
             element: <SettingsPage />,
+            children: [
+              {
+                index: true,
+                element: <Navigate to="app" replace />,
+              },
+              {
+                path: 'app',
+                element: <SettingsApp />,
+              },
+              {
+                path: 'shop',
+                element: <SettingsShopScheduling />,
+              },
+            ],
           },
         ],
       },
