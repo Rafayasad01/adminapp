@@ -10,10 +10,10 @@ import Switch from '@mui/material/Switch';
 
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import dayjs, { Dayjs } from 'dayjs';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { Dayjs } from 'dayjs';
 
 import '../../assets/css/PopupStyle.css';
+import DatePickerField from './DatePickerField';
 
 type Props = {
   vouchersPromoDialog: boolean;
@@ -28,12 +28,8 @@ function VouchersPromoCreatePopup({
   const handleFormClose = () => setVouchersPromoDialog(false);
   const [checked, setChecked] = React.useState(true);
 
-  const [validFromDate, setValidFromDate] = React.useState<Dayjs | null>(
-    dayjs('2023-01-01')
-  );
-  const [validTillDate, setValidTillDate] = React.useState<Dayjs | null>(
-    dayjs('2023-01-01')
-  );
+  const [validFromDate, setValidFromDate] = useState<Dayjs | null>(null);
+  const [validTillDate, setValidTillDate] = useState<Dayjs | null>(null);
 
   const handleChange = (event: SelectChangeEvent) => {
     setSelectShop(event.target.value as string);
@@ -41,18 +37,6 @@ function VouchersPromoCreatePopup({
 
   const handleSwitchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setChecked(event.target.checked);
-  };
-
-  const validFromDataChange = (date: dayjs.Dayjs | null) => {
-    setValidFromDate(date);
-    console.log(date);
-    console.log(validFromDate);
-  };
-
-  const validTillDataChange = (date: dayjs.Dayjs | null) => {
-    setValidTillDate(date);
-    console.log(date);
-    console.log(validTillDate);
   };
 
   return (
@@ -114,28 +98,18 @@ function VouchersPromoCreatePopup({
               </FormControl>
             </div>
             <div className="FormFields">
-              <FormControl className="FormControl" variant="standard">
-                <label className="FormLabel">Valid From</label>
-                <DatePicker
-                  className="DatePicker"
-                  value={validFromDate}
-                  onChange={(newValue: dayjs.Dayjs | null) =>
-                    validFromDataChange(newValue)
-                  }
-                  defaultValue={dayjs('2022-04-17T15:30')}
-                />
-              </FormControl>
-              <FormControl className="FormControl" variant="standard">
-                <label className="FormLabel">Valid Till</label>
-                <DatePicker
-                  className="DatePicker"
-                  value={validTillDate}
-                  onChange={(newValue: dayjs.Dayjs | null) =>
-                    validTillDataChange(newValue)
-                  }
-                  defaultValue={dayjs('2022-04-17T15:30')}
-                />
-              </FormControl>
+              <DatePickerField
+                datePickerLabel="Valid From"
+                datePickerValue={validFromDate}
+                setDatePickerValue={setValidFromDate}
+                id="validFromDatePicker"
+              />
+              <DatePickerField
+                datePickerLabel="Valid Till"
+                datePickerValue={validTillDate}
+                setDatePickerValue={setValidTillDate}
+                id="validTillDatePicker"
+              />
             </div>
             <div className="FormFields">
               <FormControl className="FormControl" variant="standard">

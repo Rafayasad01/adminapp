@@ -4,18 +4,18 @@ import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import { useNavigate } from 'react-router-dom';
-import SettingsDateRangePicker from './SettingsDateRangePicker';
-import SettingsCreateSchedulePopup from './SettingsCreateSchedulePopup';
 
-import DeleteIcon from '../../components/icons/DeleteIcon';
 import CreateOutlinedIcon from '@mui/icons-material/CreateOutlined';
 import IconButton from '@mui/material/IconButton';
-import SettingsEditSchedulePopup from './SettingsEditSchedulePopup';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import SettingsEditSchedulePopup from './SettingsEditSchedulePopup';
+import DeleteIcon from '../../components/icons/DeleteIcon';
+import SettingsCreateSchedulePopup from './SettingsCreateSchedulePopup';
+import SettingsDateRangePicker from './SettingsDateRangePicker';
 
 function SettingsShopScheduling() {
   const navigate = useNavigate();

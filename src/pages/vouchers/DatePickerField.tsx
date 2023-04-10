@@ -1,14 +1,14 @@
-import { useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import ThemeProvider from '@mui/material/styles/ThemeProvider';
 import createTheme from '@mui/material/styles/createTheme';
 import Popover from '@mui/material/Popover';
-import { StaticTimePicker } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
-import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
+import CalendarTodayOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined';
 import FormControl from '@mui/material/FormControl';
+import { StaticDatePicker } from '@mui/x-date-pickers/StaticDatePicker';
 
 import '../../assets/css/PopupStyle.css';
 
@@ -21,44 +21,45 @@ const darkTheme = createTheme({
 });
 
 type Props = {
-  timePickerLabel: string;
-  timePickerValue: dayjs.Dayjs | null;
-  setTimePickerValue: React.Dispatch<React.SetStateAction<dayjs.Dayjs | null>>;
+  datePickerLabel: string;
+  datePickerValue: dayjs.Dayjs | null;
+  setDatePickerValue: React.Dispatch<React.SetStateAction<dayjs.Dayjs | null>>;
   id: string;
 };
-function TimePickerField({
-  timePickerLabel,
-  timePickerValue,
-  setTimePickerValue,
+
+function DatePickerField({
+  datePickerLabel,
+  datePickerValue,
+  setDatePickerValue,
   id,
 }: Props) {
-  const [timePicker, setTimePicker] = useState<HTMLButtonElement | null>(null);
+  const [datePicker, setDatePicker] = useState<HTMLButtonElement | null>(null);
   const buttonElement = useRef(null);
   const handleClick = () => {
-    setTimePicker(buttonElement.current);
+    setDatePicker(buttonElement.current);
   };
   const handleClose = () => {
-    setTimePicker(null);
+    setDatePicker(null);
   };
 
-  const open = Boolean(timePicker);
+  const open = Boolean(datePicker);
   const idProp = open ? id : undefined;
 
   const handleChange = (value: dayjs.Dayjs | null) => {
-    setTimePickerValue(value);
+    setDatePickerValue(value);
     handleClose();
   };
 
   return (
     <>
       <FormControl className="FormControl" variant="standard">
-        <label className="FormLabel">{timePickerLabel}</label>
+        <label className="FormLabel">{datePickerLabel}</label>
         <Input
           ref={buttonElement}
           className="FormInput"
           type="text"
-          placeholder="HH:MM A"
-          value={timePickerValue?.format('HH:MM A') ?? ''}
+          placeholder="MM/DD/YYYY"
+          value={datePickerValue?.format('MM/DD/YYYY') ?? ''}
           onChange={() => null}
           endAdornment={
             <InputAdornment position="end">
@@ -67,7 +68,7 @@ function TimePickerField({
                 onClick={handleClick}
                 style={{ padding: 0 }}
               >
-                <AccessTimeOutlinedIcon style={{ color: '#1D1D1D' }} />
+                <CalendarTodayOutlinedIcon sx={{ color: '#1D1D1D' }} />
               </IconButton>
             </InputAdornment>
           }
@@ -78,7 +79,7 @@ function TimePickerField({
       <Popover
         id={idProp}
         open={open}
-        anchorEl={timePicker}
+        anchorEl={datePicker}
         onClose={handleClose}
         anchorOrigin={{
           vertical: 'bottom',
@@ -86,9 +87,9 @@ function TimePickerField({
         }}
       >
         <ThemeProvider theme={darkTheme}>
-          <StaticTimePicker
+          <StaticDatePicker
             displayStaticWrapperAs="desktop"
-            defaultValue={dayjs('2022-04-17T15:30')}
+            defaultValue={dayjs('2022-04-17')}
             onAccept={handleChange}
           />
         </ThemeProvider>
@@ -97,4 +98,4 @@ function TimePickerField({
   );
 }
 
-export default TimePickerField;
+export default DatePickerField;

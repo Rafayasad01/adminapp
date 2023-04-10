@@ -23,7 +23,6 @@ import VouchersPromoCreatePopup from './VouchersPromoCreatePopup';
 import VouchersReferralCreatePopup from './VouchersReferralCreatePopup';
 import VouchersPromoEditPopup from './VouchersPromoEditPopup';
 
-const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 const options = ['Edit', 'Delete'];
 const ITEM_HEIGHT = 48;
 function VouchersPage() {
@@ -37,10 +36,6 @@ function VouchersPage() {
   const [vouchersReferralDialog, setVouchersReferralDialog] = useState(false);
 
   const open = Boolean(anchorEl);
-
-  const handleFormClickOpen = () => {
-    setVouchersReferralDialog(true);
-  };
 
   const handleCheckAllChange = (event: any) => {
     setIsCheckedAll(event.target.checked);
@@ -125,7 +120,7 @@ function VouchersPage() {
                 <Button
                   variant="contained"
                   className="btn-black-fill btn-icon"
-                  onClick={handleFormClickOpen}
+                  onClick={() => setVouchersPromoDialog(true)}
                 >
                   <AddOutlinedIcon /> Add New
                 </Button>
@@ -138,7 +133,6 @@ function VouchersPage() {
                 <tr>
                   <th className="w-5">
                     <Checkbox
-                      {...label}
                       icon={
                         <CheckBoxOutlineBlankOutlinedIcon className=" text-[#E4E4E4]" />
                       }
@@ -181,7 +175,6 @@ function VouchersPage() {
                 <tr>
                   <td>
                     <Checkbox
-                      {...label}
                       icon={
                         <CheckBoxOutlineBlankOutlinedIcon className=" text-[#E4E4E4]" />
                       }
@@ -231,7 +224,6 @@ function VouchersPage() {
                 <tr>
                   <td>
                     <Checkbox
-                      {...label}
                       icon={
                         <CheckBoxOutlineBlankOutlinedIcon className=" text-[#E4E4E4]" />
                       }
