@@ -42,7 +42,7 @@ function Map({ center, zoom }: Props) {
       });
       markerRef.current = marker;
     });
-  }, [center, zoom]);
+  }, []);
 
   return (
     <div

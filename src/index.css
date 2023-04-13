@@ -532,83 +532,11 @@ table > tbody > tr:last-child {
   color: #fff !important;
 }
 
-.rdrDayActive .rdrStartEdge.rdrEndEdge {
-  color: #1d1d1d !important;
-  border-radius: 5px;
-}
-.rdrDayActive.rdrDay:not(.rdrDayPassive)
-  .rdrStartEdge.rdrEndEdge
-  ~ .rdrDayNumber
-  span {
-  color: #fff !important;
-}
-.rdrDayActive .rdrStartEdge {
-  color: #1d1d1d !important;
-}
-
-.rdrDayActive.rdrDay:not(.rdrDayPassive) .rdrStartEdge ~ .rdrDayNumber span {
-  color: #fff !important;
-}
-.rdrDayHovered .rdrEndEdge {
-  color: #1d1d1d !important;
-}
-.rdrDayHovered.rdrDay:not(.rdrDayPassive) .rdrEndEdge ~ .rdrDayNumber span {
-  color: #fff !important;
-}
-.rdrDayHovered .rdrStartEdge {
-  color: #1d1d1d !important;
-}
-.rdrDayHovered.rdrDay:not(.rdrDayPassive) .rdrStartEdge ~ .rdrDayNumber span {
-  color: #fff !important;
-}
-.rdrDay .rdrEndEdge {
-  color: #1d1d1d !important;
-}
-.rdrDay.rdrDay:not(.rdrDayPassive) .rdrEndEdge ~ .rdrDayNumber span {
-  color: #fff !important;
-}
-.rdrDayEndOfMonth .rdrStartEdge {
-  color: #1d1d1d !important;
-  border-radius: 10px;
-}
-.rdrDayEndOfMonth.rdrDay:not(.rdrDayPassive)
-  .rdrStartEdge
-  ~ .rdrDayNumber
-  span {
-  color: #fff !important;
-}
-.rdrDayStartOfMonth .rdrEndEdge {
-  border-radius: 10px;
-}
-.rdrDayWeekend .rdrStartEdge {
-  color: rgba(29, 29, 29, 0.1) !important;
-  border-top-left-radius: 10px;
-  border-bottom-left-radius: 10px;
-}
-.rdrDayWeekend .rdrEndEdge {
-  color: rgba(29, 29, 29, 0.1) !important;
-  border-top-right-radius: 10px;
-  border-bottom-right-radius: 10px;
-}
-.rdrDayWeekend.rdrDay:not(.rdrDayPassive) .rdrStartEdge ~ .rdrDayNumber span,
-.rdrDayWeekend.rdrDay:not(.rdrDayPassive) .rdrEndEdge ~ .rdrDayNumber span {
-  color: #1a1a1a !important;
-}
 .rdrDay:not(.rdrDayPassive) .rdrInRange ~ .rdrDayNumber span,
 .rdrDay:not(.rdrDayPassive) .rdrStartEdge ~ .rdrDayNumber span,
 .rdrDay:not(.rdrDayPassive) .rdrEndEdge ~ .rdrDayNumber span,
 .rdrDay:not(.rdrDayPassive) .rdrSelected ~ .rdrDayNumber span {
   color: #1a1a1a !important;
-}
-.rdrDayToday:not(.rdrDayPassive) .rdrInRange ~ .rdrDayNumber span:after,
-.rdrDayToday:not(.rdrDayPassive) .rdrStartEdge ~ .rdrDayNumber span:after,
-.rdrDayToday:not(.rdrDayPassive) .rdrEndEdge ~ .rdrDayNumber span:after,
-.rdrDayToday:not(.rdrDayPassive) .rdrSelected ~ .rdrDayNumber span:after {
-  background: transparent !important;
-}
-
-.rdrDayToday.rdrDay:not(.rdrDayPassive) .rdrEndEdge ~ .rdrDayNumber span {
-  color: #fff !important;
 }
 
 /* End of Calendar Styling*/

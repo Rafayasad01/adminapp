@@ -26,6 +26,7 @@ import SettingsPage from '../pages/settings/SettingsPage';
 import ProfilePage from '../pages/profile/ProfilePage';
 import SettingsApp from '../pages/settings/SettingsApp';
 import SettingsShopScheduling from '../pages/settings/SettingsShopScheduling';
+import AuthLayout from '../components/layout/AuthLayout';
 
 export const routeObjects: RouteObject[] = [
   {
@@ -34,6 +35,7 @@ export const routeObjects: RouteObject[] = [
   },
   {
     path: '/auth',
+    element: <AuthLayout />,
     children: [
       {
         index: true,
@@ -61,10 +63,10 @@ export const routeObjects: RouteObject[] = [
     path: '/dashboard',
     element: <MainLayout />,
     children: [
-      // {
-      //   index: true,
-      //   element: <Navigate to="home" replace />,
-      // },
+      {
+        index: true,
+        element: <Navigate to="home" replace />,
+      },
       {
         path: 'home',
         element: <HomePage />,

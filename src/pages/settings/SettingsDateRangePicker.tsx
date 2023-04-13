@@ -59,6 +59,8 @@ function SettingsDateRangePicker({ calendarStyle }: Props) {
       inputRanges={[]}
       showDateDisplay={false}
       className={calendarStyle}
+      color="#fff"
+      dragSelectionEnabled={false}
     />
   );
 }

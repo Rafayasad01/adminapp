@@ -1,10 +1,12 @@
 /* eslint-disable prettier/prettier */
-import { Outlet } from 'react-router-dom';
+import { Outlet, Navigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Sidebar from '../common/Sidebar';
+import { useAppSelector } from '../../redux/redux-hooks';
 
 function MainLayout() {
-  return (
+  const authState = useAppSelector((state) => state.authState);
+  return authState.isLoggedIn ? (
     <Box className="flex">
       <Box component="nav" className="w-64 flex-shrink-0">
         <Sidebar />
@@ -17,6 +19,8 @@ function MainLayout() {
         <Outlet />
       </Box>
     </Box>
+  ) : (
+    <Navigate to="/auth/login" />
   );
 }
 

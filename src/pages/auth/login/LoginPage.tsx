@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
 import IconButton from '@mui/material/IconButton';
@@ -9,9 +9,16 @@ import Visibility from '@mui/icons-material/Visibility';
 import { NavLink, useNavigate } from 'react-router-dom';
 import assets from '../../../assets';
 import styles from '../../../assets/css/AuthPage.module.css';
+import { useAppDispatch } from '../../../redux/redux-hooks';
+import { login } from '../../../redux/features/authStateSlice';
 
 function LoginPage() {
+  const dispatch = useAppDispatch();
+
   const [showPassword, setShowPassword] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
   const navigate = useNavigate();
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const handleMouseDownPassword = (
@@ -20,8 +27,12 @@ function LoginPage() {
     event.preventDefault();
   };
   const loginHandler = () => {
-    navigate('/dashboard/home');
+    if (email === 'maq@gmail.com' && password === '123') {
+      dispatch(login({ name: 'Syed Taqiuddin', email: 'maq@gmail.com' }));
+      navigate('/dashboard/home');
+    }
   };
+
   return (
     <div className={styles.bg}>
       <div className={styles.centerBox}>
@@ -36,6 +47,8 @@ function LoginPage() {
                 className="after:border-b-neutral-900"
                 id="email"
                 type="email"
+                name="email"
+                onChange={(event) => setEmail(event.target.value)}
                 disableUnderline
               />
             </FormControl>
@@ -47,6 +60,8 @@ function LoginPage() {
                 className="input-with-icon after:border-b-neutral-900"
                 id="password"
                 type={showPassword ? 'text' : 'password'}
+                name="password"
+                onChange={(event) => setPassword(event.target.value)}
                 endAdornment={
                   <InputAdornment position="end">
                     <IconButton
