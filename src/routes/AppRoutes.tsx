@@ -27,6 +27,10 @@ import ProfilePage from '../pages/profile/ProfilePage';
 import SettingsApp from '../pages/settings/SettingsApp';
 import SettingsShopScheduling from '../pages/settings/SettingsShopScheduling';
 import AuthLayout from '../components/layout/AuthLayout';
+import SuperAdminLayout from '../components/layout/super-admin/SuperAdminLayout';
+import SuperAdminAuthLayout from '../components/layout/super-admin/SuperAdminAuthLayout';
+import SuperAdminMainLayout from '../components/layout/super-admin/SuperAdminMainLayout';
+import SuperAdminLoginPage from '../pages/super-admin/auth/SuperAdminLoginPage';
 
 export const routeObjects: RouteObject[] = [
   {
@@ -207,6 +211,34 @@ export const routeObjects: RouteObject[] = [
             element: <ProfilePage />,
           },
         ],
+      },
+    ],
+  },
+  {
+    path: '/admin',
+    element: <SuperAdminLayout />,
+    children: [
+      {
+        index: true,
+        element: <Navigate to="auth" replace />,
+      },
+      {
+        path: 'auth',
+        element: <SuperAdminAuthLayout />,
+        children: [
+          {
+            index: true,
+            element: <Navigate to="login" replace />,
+          },
+          {
+            path: 'login',
+            element: <SuperAdminLoginPage />,
+          },
+        ],
+      },
+      {
+        path: 'main',
+        element: <SuperAdminMainLayout />,
       },
     ],
   },
