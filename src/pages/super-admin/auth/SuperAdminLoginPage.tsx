@@ -1,0 +1,91 @@
+import { useState } from 'react';
+import { NavLink } from 'react-router-dom';
+import Button from '@mui/material/Button';
+import FormControl from '@mui/material/FormControl';
+import IconButton from '@mui/material/IconButton';
+import Input from '@mui/material/Input';
+import InputAdornment from '@mui/material/InputAdornment';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+
+import assets from '../../../assets';
+
+function SuperAdminLoginPage() {
+  const [showPassword, setShowPassword] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+  const handleMouseDownPassword = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    event.preventDefault();
+  };
+  const loginHandler = () => {};
+
+  return (
+    <div className="flex h-full w-full items-center justify-center">
+      <div className="flex flex-col items-center justify-center rounded-xl bg-gray-50 p-5">
+        <img className="my-4" src={assets.images.logoBlack} alt="" />
+        <div className="form-group w-full">
+          <label htmlFor="email" className="font-sans">
+            Email
+          </label>
+          <FormControl className="m-1 w-full" variant="standard">
+            <Input
+              className="after:border-b-neutral-900"
+              id="email"
+              type="email"
+              name="email"
+              onChange={(event) => setEmail(event.target.value)}
+              disableUnderline
+            />
+          </FormControl>
+        </div>
+        <div className="form-group w-full">
+          <label htmlFor="password">Password</label>
+          <FormControl className="m-1 w-full" variant="filled">
+            <Input
+              className="input-with-icon after:border-b-neutral-900"
+              id="password"
+              type={showPassword ? 'text' : 'password'}
+              name="password"
+              onChange={(event) => setPassword(event.target.value)}
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={handleClickShowPassword}
+                    onMouseDown={handleMouseDownPassword}
+                  >
+                    {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                  </IconButton>
+                </InputAdornment>
+              }
+              disableUnderline
+            />
+          </FormControl>
+        </div>
+        <div className="form-group self-end">
+          <NavLink
+            className="font-open-sans text-sm font-normal text-neutral-900"
+            to="#"
+          >
+            Forget Password?
+          </NavLink>
+        </div>
+        <div className="mt-8 w-full px-4">
+          <Button
+            className=" w-full bg-neutral-900 px-16 text-gray-50"
+            variant="contained"
+            color="inherit"
+            onClick={loginHandler}
+          >
+            Login
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default SuperAdminLoginPage;
