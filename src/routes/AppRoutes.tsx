@@ -1,17 +1,68 @@
+/* eslint-disable prettier/prettier */
 /* eslint-disable import/prefer-default-export */
 import { RouteObject, Navigate } from 'react-router-dom';
 import MainLayout from '../components/layout/MainLayout';
-import AccountPage from '../pages/account/AccountPage';
-import DeliveryAddressPage from '../pages/delivery-address/DeliveryAddressPage';
-import FAQSPage from '../pages/faqs/FAQSPage';
+import ChangePasswordPage from '../pages/auth/change-password/ChangePasswordPage';
+import ForgotPasswordPage from '../pages/auth/forgot-password/ForgotPasswordPage';
+import LoginPage from '../pages/auth/login/LoginPage';
+import OtpVerificationPage from '../pages/auth/otp-verification/OtpVerificationPage';
+import CategoriesPage from '../pages/categories/CategoriesPage';
+import ComplainsPage from '../pages/complain/ComplainsPage';
+import CustomersDetailPage from '../pages/customers/CustomersDetailPage';
+import CustomersPage from '../pages/customers/CustomersPage';
+import DriversPage from '../pages/drivers/DriversPage';
+import DriversViewPage from '../pages/drivers/DriversViewPage';
 import HomePage from '../pages/home/HomePage';
+import LocationsPage from '../pages/locations/LocationsPage';
+import OrderDetailsPage from '../pages/orders/OrderDetailsPage';
+import OrdersCreatePage from '../pages/orders/OrdersCreatePage';
+import OrdersEditPage from '../pages/orders/OrdersEditPage';
 import OrdersPage from '../pages/orders/OrdersPage';
-import PaymentSettingPage from '../pages/payment-setting/PaymentSettingPage';
+import ReportsPage from '../pages/reports/ReportsPage';
+import ServicesPage from '../pages/services/ServicesPage';
+import VouchersPage from '../pages/vouchers/VouchersPage';
+import FAQSPage from '../pages/faqs/FAQSPage';
+import SettingsPage from '../pages/settings/SettingsPage';
+import ProfilePage from '../pages/profile/ProfilePage';
+import SettingsApp from '../pages/settings/SettingsApp';
+import SettingsShopScheduling from '../pages/settings/SettingsShopScheduling';
+import AuthLayout from '../components/layout/AuthLayout';
+import SuperAdminLayout from '../components/layout/super-admin/SuperAdminLayout';
+import SuperAdminAuthLayout from '../components/layout/super-admin/SuperAdminAuthLayout';
+import SuperAdminMainLayout from '../components/layout/super-admin/SuperAdminMainLayout';
+import SuperAdminLoginPage from '../pages/super-admin/auth/login/SuperAdminLoginPage';
+import SuperAdminForgotPasswordPage from '../pages/super-admin/auth/forgot-password/SuperAdminForgotPasswordPage';
 
 export const routeObjects: RouteObject[] = [
   {
     index: true,
-    element: <Navigate to="dashboard" replace />,
+    element: <Navigate to="auth" replace />,
+  },
+  {
+    path: '/auth',
+    element: <AuthLayout />,
+    children: [
+      {
+        index: true,
+        element: <Navigate to="login" replace />,
+      },
+      {
+        path: 'verification',
+        element: <OtpVerificationPage />,
+      },
+      {
+        path: 'changepassword',
+        element: <ChangePasswordPage />,
+      },
+      {
+        path: 'forgotpassword',
+        element: <ForgotPasswordPage />,
+      },
+      {
+        path: 'login',
+        element: <LoginPage />,
+      },
+    ],
   },
   {
     path: '/dashboard',
@@ -26,24 +77,173 @@ export const routeObjects: RouteObject[] = [
         element: <HomePage />,
       },
       {
+        path: 'reports',
+        element: <ReportsPage />,
+      },
+      {
         path: 'orders',
-        element: <OrdersPage />,
+        children: [
+          {
+            index: true,
+            element: <OrdersPage />,
+          },
+          {
+            path: 'create',
+            element: <OrdersCreatePage />,
+          },
+          {
+            path: 'view/:orderId',
+            element: <OrderDetailsPage />,
+          },
+          {
+            path: 'edit/:orderId',
+            element: <OrdersEditPage />,
+          },
+        ],
       },
       {
-        path: 'payment-setting',
-        element: <PaymentSettingPage />,
+        path: 'drivers',
+        children: [
+          {
+            index: true,
+            element: <DriversPage />,
+          },
+          {
+            path: 'view/:driverId',
+            element: <DriversViewPage />,
+          },
+        ],
       },
       {
-        path: 'delivery-address',
-        element: <DeliveryAddressPage />,
+        path: 'complains',
+        children: [
+          {
+            index: true,
+            element: <ComplainsPage />,
+          },
+        ],
       },
       {
-        path: 'account',
-        element: <AccountPage />,
+        path: 'categories',
+        children: [
+          {
+            index: true,
+            element: <CategoriesPage />,
+          },
+        ],
+      },
+      {
+        path: 'services',
+        children: [
+          {
+            index: true,
+            element: <ServicesPage />,
+          },
+        ],
+      },
+      {
+        path: 'locations',
+        children: [
+          {
+            index: true,
+            element: <LocationsPage />,
+          },
+        ],
+      },
+      {
+        path: 'customers',
+        children: [
+          {
+            index: true,
+            element: <CustomersPage />,
+          },
+          {
+            path: 'detail/:customerId',
+            element: <CustomersDetailPage />,
+          },
+        ],
+      },
+      {
+        path: 'vouchers',
+        children: [
+          {
+            index: true,
+            element: <VouchersPage />,
+          },
+        ],
       },
       {
         path: 'faqs',
-        element: <FAQSPage />,
+        children: [
+          {
+            index: true,
+            element: <FAQSPage />,
+          },
+        ],
+      },
+      {
+        path: 'settings',
+        children: [
+          {
+            path: '',
+            element: <SettingsPage />,
+            children: [
+              {
+                index: true,
+                element: <Navigate to="app" replace />,
+              },
+              {
+                path: 'app',
+                element: <SettingsApp />,
+              },
+              {
+                path: 'shop',
+                element: <SettingsShopScheduling />,
+              },
+            ],
+          },
+        ],
+      },
+      {
+        path: 'profile',
+        children: [
+          {
+            index: true,
+            element: <ProfilePage />,
+          },
+        ],
+      },
+    ],
+  },
+  {
+    path: '/admin',
+    element: <SuperAdminLayout />,
+    children: [
+      {
+        index: true,
+        element: <Navigate to="auth" replace />,
+      },
+      {
+        path: 'auth',
+        element: <SuperAdminAuthLayout />,
+        children: [
+          {
+            index: true,
+            element: <Navigate to="login" replace />,
+          },
+          {
+            path: 'login',
+            element: <SuperAdminLoginPage />,
+          },
+          {
+            path: 'forgot-password',
+            element: <SuperAdminForgotPasswordPage />,
+          },
+        ],
+      },
+      {
+        path: 'main',
+        element: <SuperAdminMainLayout />,
       },
     ],
   },

@@ -1,13 +1,51 @@
-import { AppBar, Toolbar } from '@mui/material';
+/* eslint-disable prettier/prettier */
+import Toolbar from '@mui/material/Toolbar';
+import AppBar from '@mui/material/AppBar';
+import IconButton from '@mui/material/IconButton';
+import SearchIcon from '@mui/icons-material/Search';
+import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
+import { useNavigate } from 'react-router-dom';
 
-function TopBar() {
+import BackArrowIcon from '../icons/BackArrowIcon';
+
+import assets from '../../assets';
+
+type Props = {
+  title: string;
+  isNestedRoute?: boolean;
+};
+
+function TopBar({ title, isNestedRoute = false }: Props) {
+  const navigate = useNavigate();
+  const backHandler = () => {
+    navigate(-1);
+  };
   return (
     <AppBar
-      position="fixed"
-      className="w-full bg-stone-900 text-gray-50 shadow-none"
+      position="relative"
+      className="w-full bg-gray-50 text-gray-50 shadow-none"
     >
-      <Toolbar className="ml-80">
-        <div className=""> </div>
+      <Toolbar className="toolbar-style flex">
+        {isNestedRoute ? (
+          <IconButton className="back-btn mr-2 p-0" onClick={backHandler}>
+            <BackArrowIcon />
+          </IconButton>
+        ) : null}
+        <div className="title ml-1">{title}</div>
+        <div className="flex-grow">&nbsp;</div>
+        <div className="flex items-center text-cyan-900">
+          <IconButton className="icon-btn mr-3.5 p-0">
+            <SearchIcon />
+          </IconButton>
+          <IconButton className="icon-btn mr-3.5 p-0">
+            <NotificationsNoneIcon />
+          </IconButton>
+          <hr className="divider vertical my-2" />
+          <div className="header-user-box ml-3.5">
+            <span>Jones Ferdinand</span>
+            <img src={assets.images.avatarUser} alt="" />
+          </div>
+        </div>
       </Toolbar>
     </AppBar>
   );
