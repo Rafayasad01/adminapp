@@ -30,7 +30,8 @@ import AuthLayout from '../components/layout/AuthLayout';
 import SuperAdminLayout from '../components/layout/super-admin/SuperAdminLayout';
 import SuperAdminAuthLayout from '../components/layout/super-admin/SuperAdminAuthLayout';
 import SuperAdminMainLayout from '../components/layout/super-admin/SuperAdminMainLayout';
-import SuperAdminLoginPage from '../pages/super-admin/auth/SuperAdminLoginPage';
+import SuperAdminLoginPage from '../pages/super-admin/auth/login/SuperAdminLoginPage';
+import SuperAdminForgotPasswordPage from '../pages/super-admin/auth/forgot-password/SuperAdminForgotPasswordPage';
 
 export const routeObjects: RouteObject[] = [
   {
@@ -233,6 +234,10 @@ export const routeObjects: RouteObject[] = [
           {
             path: 'login',
             element: <SuperAdminLoginPage />,
+          },
+          {
+            path: 'forgot-password',
+            element: <SuperAdminForgotPasswordPage />,
           },
         ],
       },

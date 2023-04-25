@@ -7,8 +7,7 @@ import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-
-import assets from '../../../assets';
+import assets from '../../../../assets';
 
 function SuperAdminLoginPage() {
   const [showPassword, setShowPassword] = useState(false);
@@ -24,7 +23,7 @@ function SuperAdminLoginPage() {
 
   return (
     <div className="flex h-full w-full items-center justify-center">
-      <div className="flex flex-col items-center justify-center rounded-xl bg-gray-50 p-5">
+      <div className="flex w-96 flex-col items-center justify-center rounded-xl bg-gray-50 p-5">
         <img className="my-4" src={assets.images.logoBlack} alt="" />
         <div className="form-group w-full">
           <label htmlFor="email" className="font-sans">
@@ -57,7 +56,7 @@ function SuperAdminLoginPage() {
                     onClick={handleClickShowPassword}
                     onMouseDown={handleMouseDownPassword}
                   >
-                    {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                    {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
                   </IconButton>
                 </InputAdornment>
               }
@@ -68,7 +67,7 @@ function SuperAdminLoginPage() {
         <div className="form-group self-end">
           <NavLink
             className="font-open-sans text-sm font-normal text-neutral-900"
-            to="#"
+            to="../forgot-password"
           >
             Forget Password?
           </NavLink>
