@@ -33,6 +33,7 @@ import SuperAdminMainLayout from '../components/layout/super-admin/SuperAdminMai
 import SuperAdminLoginPage from '../pages/super-admin/auth/login/SuperAdminLoginPage';
 import SuperAdminForgotPasswordPage from '../pages/super-admin/auth/forgot-password/SuperAdminForgotPasswordPage';
 import SuperAdminOTPVerificationPage from '../pages/super-admin/auth/otp-verification/SuperAdminOTPVerificationPage';
+import SuperAdminNewPasswordPage from '../pages/super-admin/auth/new-password/SuperAdminNewPasswordPage';
 
 export const routeObjects: RouteObject[] = [
   {
@@ -243,6 +244,10 @@ export const routeObjects: RouteObject[] = [
           {
             path: 'otp-verification',
             element: <SuperAdminOTPVerificationPage />,
+          },
+          {
+            path: 'new-password',
+            element: <SuperAdminNewPasswordPage />,
           },
         ],
       },
