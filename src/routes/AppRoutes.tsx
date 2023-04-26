@@ -34,6 +34,7 @@ import SuperAdminLoginPage from '../pages/super-admin/auth/login/SuperAdminLogin
 import SuperAdminForgotPasswordPage from '../pages/super-admin/auth/forgot-password/SuperAdminForgotPasswordPage';
 import SuperAdminOTPVerificationPage from '../pages/super-admin/auth/otp-verification/SuperAdminOTPVerificationPage';
 import SuperAdminNewPasswordPage from '../pages/super-admin/auth/new-password/SuperAdminNewPasswordPage';
+import SuperAdminDashboardPage from '../pages/super-admin/main/dashboard/SuperAdminDashboardPage';
 
 export const routeObjects: RouteObject[] = [
   {
@@ -254,6 +255,13 @@ export const routeObjects: RouteObject[] = [
       {
         path: 'main',
         element: <SuperAdminMainLayout />,
+        children: [
+          { index: true, element: <Navigate to="dashboard" replace /> },
+          {
+            path: 'dashboard',
+            element: <SuperAdminDashboardPage />,
+          },
+        ],
       },
     ],
   },
