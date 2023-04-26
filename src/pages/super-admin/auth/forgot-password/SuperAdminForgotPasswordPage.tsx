@@ -10,7 +10,7 @@ function SuperAdminForgotPasswordPage() {
   const [email, setEmail] = useState('');
 
   const getCodeHandler = () => {
-    // navigate('./otp')
+    navigate('../otp-verification');
   };
 
   return (
