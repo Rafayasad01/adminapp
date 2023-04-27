@@ -40,7 +40,7 @@ function SuperAdminShopsListPage() {
   };
 
   const addRouteHandler = () => {
-    navigate('create');
+    navigate('../add-new');
   };
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {

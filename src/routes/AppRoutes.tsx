@@ -36,6 +36,7 @@ import SuperAdminOTPVerificationPage from '../pages/super-admin/auth/otp-verific
 import SuperAdminNewPasswordPage from '../pages/super-admin/auth/new-password/SuperAdminNewPasswordPage';
 import SuperAdminDashboardPage from '../pages/super-admin/main/dashboard/SuperAdminDashboardPage';
 import SuperAdminShopsListPage from '../pages/super-admin/main/shops/SuperAdminShopsListPage';
+import SuperAdminAddNewShopPage from '../pages/super-admin/main/shops/SuperAdminAddNewShopPage';
 
 export const routeObjects: RouteObject[] = [
   {
@@ -263,8 +264,18 @@ export const routeObjects: RouteObject[] = [
             element: <SuperAdminDashboardPage />,
           },
           {
-            path: 'shops',
-            element: <SuperAdminShopsListPage />,
+            path: 'shop',
+            children: [
+              { index: true, element: <Navigate to="list" replace /> },
+              {
+                path: 'list',
+                element: <SuperAdminShopsListPage />,
+              },
+              {
+                path: 'add-new',
+                element: <SuperAdminAddNewShopPage />,
+              },
+            ],
           },
         ],
       },

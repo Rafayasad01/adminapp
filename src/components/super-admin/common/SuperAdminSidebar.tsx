@@ -19,7 +19,7 @@ const links = [
   },
   {
     name: 'Shops',
-    path: 'shops',
+    path: 'shop',
     icon: <DescriptionOutlinedIcon fontSize="inherit" />,
   },
   {
