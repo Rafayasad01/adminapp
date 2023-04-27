@@ -586,10 +586,112 @@ function SuperAdminAddNewShopPage() {
               </div>
             </TabPanel>
             <TabPanel value={tab} index={2}>
-              Item Three
+              <div className="w-full p-4">
+                <div className="mt-4 grid grid-cols-12 gap-1">
+                  <div className="col-span-12">
+                    <div className="w-full">
+                      <label
+                        htmlFor="userLimit"
+                        className="ml-1.5 flex items-center justify-between opacity-70"
+                      >
+                        User Limit
+                      </label>
+                      <FormControl
+                        sx={{
+                          '&.MuiFormControl-root': {
+                            margin: '0px',
+                            padding: '0px',
+                          },
+                        }}
+                        className="m-1 w-full"
+                        variant="standard"
+                      >
+                        <Input
+                          sx={{
+                            '&.MuiInputBase-root': {
+                              padding: '0px',
+                              margin: '0px',
+                              borderRadius: '0.5rem',
+                              borderWidth: '1px',
+                              borderStyle: 'solid',
+                              borderColor: '#E5E5E5',
+                              backgroundColor: 'transparent',
+                            },
+                          }}
+                          placeholder="Amount"
+                          className="mx-0 rounded-xl border-2 bg-gray-50 py-1.5 px-2 font-open-sans text-sm font-normal  text-neutral-900  after:border-b-neutral-900"
+                          id="userLimit"
+                          type="number"
+                          inputMode="numeric"
+                          name="userLimit"
+                          disableUnderline
+                        />
+                      </FormControl>
+                    </div>
+                  </div>
+                  <div className="col-span-12">
+                    <div className="w-full">
+                      <label
+                        htmlFor="status"
+                        className="ml-1.5 flex items-center justify-between  opacity-70"
+                      >
+                        Status
+                      </label>
+                      <FormControl
+                        sx={{
+                          '&.MuiFormControl-root': {
+                            margin: '0px',
+                            padding: '0px',
+                          },
+                        }}
+                        className="m-1 w-full"
+                        variant="standard"
+                      >
+                        <Input
+                          sx={{
+                            '&.MuiInputBase-root': {
+                              padding: '0px',
+                              margin: '0px',
+                              borderRadius: '0.5rem',
+                              borderWidth: '1px',
+                              borderStyle: 'solid',
+                              borderColor: '#E5E5E5',
+                              backgroundColor: 'transparent',
+                            },
+                          }}
+                          placeholder="URL"
+                          className="mx-0 rounded-xl border-2 bg-gray-50 py-1.5 px-2 font-open-sans text-sm font-normal  text-neutral-900  after:border-b-neutral-900"
+                          id="status"
+                          type="text"
+                          name="status"
+                          disableUnderline
+                        />
+                      </FormControl>
+                    </div>
+                  </div>
+                  <div className="col-span-12">
+                    <div className="ml-1.5">
+                      <div className="opacity-70">Theme Color</div>
+                      <div className="aspect-square w-10 rounded-full bg-neutral-900" />
+                    </div>
+                  </div>
+                </div>
+                <div className="pb-3 pt-32" />
+                <div className="flex items-center justify-end gap-4">
+                  <Button
+                    variant="outlined"
+                    className="w-28 border-neutral-900 text-neutral-900"
+                  >
+                    Cancel
+                  </Button>
+                  <Button className="w-28 bg-neutral-900 text-gray-50">
+                    Next
+                  </Button>
+                </div>
+              </div>
             </TabPanel>
           </div>
-          <div className="col-span-6 min-h-[500px] rounded-lg bg-white shadow-lg">
+          <div className="col-span-6 min-h-[32rem] rounded-lg bg-white shadow-lg">
             <SuperAdminMarkersMap markers={markers} zoom={15} />
           </div>
         </div>
