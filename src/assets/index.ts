@@ -22,6 +22,16 @@ import instagram from './images/Instagram.svg';
 import twitter from './images/Twitter.svg';
 import whatsApp from './images/Whatsapp.svg';
 
+import activeShopsIcon from './images/active-shops-icon.svg';
+import inactiveShopsIcon from './images/inactive-shops-icon.svg';
+import totalShopsIcon from './images/total-shops-icon.svg';
+import totalDriversIcon from './images/total-drivers-icon.svg';
+
+import sudsLaundry from './images/suds-laundry.png';
+import soapyLaundry from './images/soapy-laundry.png';
+import spotlessLaundry from './images/spotless-laundry.png';
+import freshCleanLaundry from './images/fresh-clean-laundry.png';
+
 const assets = {
   images: {
     logo,
@@ -38,6 +48,10 @@ const assets = {
     instagram,
     twitter,
     whatsApp,
+    activeShopsIcon,
+    inactiveShopsIcon,
+    totalShopsIcon,
+    totalDriversIcon,
   },
   tempImages: {
     wash,
@@ -48,6 +62,10 @@ const assets = {
     avatarDryCLean,
     avatarBaseballJacket,
     avatarCustomer,
+    sudsLaundry,
+    soapyLaundry,
+    spotlessLaundry,
+    freshCleanLaundry,
   },
 };
 
