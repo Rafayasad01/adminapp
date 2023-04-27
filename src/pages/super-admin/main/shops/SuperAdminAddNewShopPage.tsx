@@ -137,7 +137,7 @@ function SuperAdminAddNewShopPage() {
                               backgroundColor: 'transparent',
                             },
                           }}
-                          className="mx-0 rounded-xl border-2 bg-gray-50 py-1.5 font-open-sans text-sm font-normal text-neutral-900  after:border-b-neutral-900"
+                          className="mx-0 rounded-xl border-2 bg-gray-50 py-1.5 px-2 font-open-sans text-sm font-normal  text-neutral-900  after:border-b-neutral-900"
                           id="shopName"
                           type="text"
                           name="shopName"
@@ -176,7 +176,7 @@ function SuperAdminAddNewShopPage() {
                               backgroundColor: 'transparent',
                             },
                           }}
-                          className="mx-0 rounded-xl border-2 bg-gray-50 py-1.5 font-open-sans text-sm font-normal text-neutral-900  after:border-b-neutral-900"
+                          className="mx-0 rounded-xl border-2 bg-gray-50 py-1.5 px-2 font-open-sans text-sm font-normal  text-neutral-900  after:border-b-neutral-900"
                           id="email"
                           type="email"
                           name="email"
@@ -215,7 +215,7 @@ function SuperAdminAddNewShopPage() {
                               backgroundColor: 'transparent',
                             },
                           }}
-                          className="mx-0 rounded-xl border-2 bg-gray-50 py-1.5 font-open-sans text-sm font-normal text-neutral-900  after:border-b-neutral-900"
+                          className="mx-0 rounded-xl border-2 bg-gray-50 py-1.5 px-2 font-open-sans text-sm font-normal  text-neutral-900  after:border-b-neutral-900"
                           id="phone"
                           type="text"
                           name="phone"
@@ -259,7 +259,7 @@ function SuperAdminAddNewShopPage() {
                               backgroundColor: 'transparent',
                             },
                           }}
-                          className="mx-0 rounded-xl border-2 bg-gray-50 py-1.5 font-open-sans text-sm font-normal text-neutral-900  after:border-b-neutral-900"
+                          className="mx-0 rounded-xl border-2 bg-gray-50 py-1.5 px-2 font-open-sans text-sm font-normal  text-neutral-900  after:border-b-neutral-900"
                           id="location1"
                           type="text"
                           name="location1"
@@ -303,7 +303,7 @@ function SuperAdminAddNewShopPage() {
                               backgroundColor: 'transparent',
                             },
                           }}
-                          className="mx-0 rounded-xl border-2 bg-gray-50 py-1.5 font-open-sans text-sm font-normal text-neutral-900  after:border-b-neutral-900"
+                          className="mx-0 rounded-xl border-2 bg-gray-50 py-1.5 px-2 font-open-sans text-sm font-normal  text-neutral-900  after:border-b-neutral-900"
                           id="location2"
                           type="text"
                           name="location2"
@@ -328,7 +328,262 @@ function SuperAdminAddNewShopPage() {
               </div>
             </TabPanel>
             <TabPanel value={tab} index={1}>
-              Item Two
+              <div className="w-full p-4">
+                <div className="mt-4 grid grid-cols-12 gap-1">
+                  <div className="col-span-12">
+                    <div className="w-full">
+                      <label
+                        htmlFor="facebookURL"
+                        className="ml-1.5 flex items-center justify-between  opacity-70"
+                      >
+                        Facebook
+                      </label>
+                      <FormControl
+                        sx={{
+                          '&.MuiFormControl-root': {
+                            margin: '0px',
+                            padding: '0px',
+                          },
+                        }}
+                        className="m-1 w-full"
+                        variant="standard"
+                      >
+                        <Input
+                          sx={{
+                            '&.MuiInputBase-root': {
+                              padding: '0px',
+                              margin: '0px',
+                              borderRadius: '0.5rem',
+                              borderWidth: '1px',
+                              borderStyle: 'solid',
+                              borderColor: '#E5E5E5',
+                              backgroundColor: 'transparent',
+                            },
+                          }}
+                          placeholder="URL"
+                          className="mx-0 rounded-xl border-2 bg-gray-50 py-1.5 px-2 font-open-sans text-sm font-normal  text-neutral-900  after:border-b-neutral-900"
+                          id="facebookURL"
+                          type="text"
+                          name="facebookURL"
+                          disableUnderline
+                        />
+                      </FormControl>
+                    </div>
+                  </div>
+                  <div className="col-span-12">
+                    <div className="w-full">
+                      <label
+                        htmlFor="instagramURL"
+                        className="ml-1.5 flex items-center justify-between  opacity-70"
+                      >
+                        Instagram
+                      </label>
+                      <FormControl
+                        sx={{
+                          '&.MuiFormControl-root': {
+                            margin: '0px',
+                            padding: '0px',
+                          },
+                        }}
+                        className="m-1 w-full"
+                        variant="standard"
+                      >
+                        <Input
+                          sx={{
+                            '&.MuiInputBase-root': {
+                              padding: '0px',
+                              margin: '0px',
+                              borderRadius: '0.5rem',
+                              borderWidth: '1px',
+                              borderStyle: 'solid',
+                              borderColor: '#E5E5E5',
+                              backgroundColor: 'transparent',
+                            },
+                          }}
+                          placeholder="URL"
+                          className="mx-0 rounded-xl border-2 bg-gray-50 py-1.5 px-2 font-open-sans text-sm font-normal  text-neutral-900  after:border-b-neutral-900"
+                          id="instagramURL"
+                          type="text"
+                          name="instagramURL"
+                          disableUnderline
+                        />
+                      </FormControl>
+                    </div>
+                  </div>
+                  <div className="col-span-12">
+                    <div className="w-full">
+                      <label
+                        htmlFor="linkedInURL"
+                        className="ml-1.5 flex items-center justify-between  opacity-70"
+                      >
+                        LinkedIn
+                      </label>
+                      <FormControl
+                        sx={{
+                          '&.MuiFormControl-root': {
+                            margin: '0px',
+                            padding: '0px',
+                          },
+                        }}
+                        className="m-1 w-full"
+                        variant="standard"
+                      >
+                        <Input
+                          sx={{
+                            '&.MuiInputBase-root': {
+                              padding: '0px',
+                              margin: '0px',
+                              borderRadius: '0.5rem',
+                              borderWidth: '1px',
+                              borderStyle: 'solid',
+                              borderColor: '#E5E5E5',
+                              backgroundColor: 'transparent',
+                            },
+                          }}
+                          placeholder="URL"
+                          className="mx-0 rounded-xl border-2 bg-gray-50 py-1.5 px-2 font-open-sans text-sm font-normal  text-neutral-900  after:border-b-neutral-900"
+                          id="linkedInURL"
+                          type="text"
+                          name="linkedInURL"
+                          disableUnderline
+                        />
+                      </FormControl>
+                    </div>
+                  </div>
+                  <div className="col-span-12">
+                    <div className="w-full">
+                      <label
+                        htmlFor="twitterURL"
+                        className="ml-1.5 flex items-center justify-between  opacity-70"
+                      >
+                        Twitter
+                      </label>
+                      <FormControl
+                        sx={{
+                          '&.MuiFormControl-root': {
+                            margin: '0px',
+                            padding: '0px',
+                          },
+                        }}
+                        className="m-1 w-full"
+                        variant="standard"
+                      >
+                        <Input
+                          sx={{
+                            '&.MuiInputBase-root': {
+                              padding: '0px',
+                              margin: '0px',
+                              borderRadius: '0.5rem',
+                              borderWidth: '1px',
+                              borderStyle: 'solid',
+                              borderColor: '#E5E5E5',
+                              backgroundColor: 'transparent',
+                            },
+                          }}
+                          placeholder="URL"
+                          className="mx-0 rounded-xl border-2 bg-gray-50 py-1.5 px-2 font-open-sans text-sm font-normal  text-neutral-900  after:border-b-neutral-900"
+                          id="twitterURL"
+                          type="text"
+                          name="twitterURL"
+                          disableUnderline
+                        />
+                      </FormControl>
+                    </div>
+                  </div>
+                  <div className="col-span-12">
+                    <div className="w-full">
+                      <label
+                        htmlFor="youTubeURL"
+                        className="ml-1.5 flex items-center justify-between  opacity-70"
+                      >
+                        YouTube
+                      </label>
+                      <FormControl
+                        sx={{
+                          '&.MuiFormControl-root': {
+                            margin: '0px',
+                            padding: '0px',
+                          },
+                        }}
+                        className="m-1 w-full"
+                        variant="standard"
+                      >
+                        <Input
+                          sx={{
+                            '&.MuiInputBase-root': {
+                              padding: '0px',
+                              margin: '0px',
+                              borderRadius: '0.5rem',
+                              borderWidth: '1px',
+                              borderStyle: 'solid',
+                              borderColor: '#E5E5E5',
+                              backgroundColor: 'transparent',
+                            },
+                          }}
+                          placeholder="URL"
+                          className="mx-0 rounded-xl border-2 bg-gray-50 py-1.5 px-2 font-open-sans text-sm font-normal  text-neutral-900  after:border-b-neutral-900"
+                          id="youTubeURL"
+                          type="text"
+                          name="youTubeURL"
+                          disableUnderline
+                        />
+                      </FormControl>
+                    </div>
+                  </div>
+                  <div className="col-span-12">
+                    <div className="w-full">
+                      <label
+                        htmlFor="whatsAppURL"
+                        className="ml-1.5 flex items-center justify-between  opacity-70"
+                      >
+                        WhatsApp
+                      </label>
+                      <FormControl
+                        sx={{
+                          '&.MuiFormControl-root': {
+                            margin: '0px',
+                            padding: '0px',
+                          },
+                        }}
+                        className="m-1 w-full"
+                        variant="standard"
+                      >
+                        <Input
+                          sx={{
+                            '&.MuiInputBase-root': {
+                              padding: '0px',
+                              margin: '0px',
+                              borderRadius: '0.5rem',
+                              borderWidth: '1px',
+                              borderStyle: 'solid',
+                              borderColor: '#E5E5E5',
+                              backgroundColor: 'transparent',
+                            },
+                          }}
+                          placeholder="URL"
+                          className="mx-0 rounded-xl border-2 bg-gray-50 py-1.5 px-2 font-open-sans text-sm font-normal  text-neutral-900  after:border-b-neutral-900"
+                          id="whatsAppURL"
+                          type="text"
+                          name="whatsAppURL"
+                          disableUnderline
+                        />
+                      </FormControl>
+                    </div>
+                  </div>
+                </div>
+                <div className="py-3" />
+                <div className="flex items-center justify-end gap-4">
+                  <Button
+                    variant="outlined"
+                    className="w-28 border-neutral-900 text-neutral-900"
+                  >
+                    Cancel
+                  </Button>
+                  <Button className="w-28 bg-neutral-900 text-gray-50">
+                    Next
+                  </Button>
+                </div>
+              </div>
             </TabPanel>
             <TabPanel value={tab} index={2}>
               Item Three
