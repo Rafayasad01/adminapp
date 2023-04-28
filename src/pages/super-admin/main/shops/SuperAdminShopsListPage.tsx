@@ -49,7 +49,9 @@ function SuperAdminShopsListPage() {
   const handleClose = () => {
     setAnchorEl(null);
   };
-
+  const handleShopView = (id: number) => {
+    navigate(['../', id].join(''));
+  };
   const handleClickSearch = (event: any) => {
     setSearch(event.target.value as string);
   };
@@ -378,7 +380,7 @@ function SuperAdminShopsListPage() {
           },
         }}
       >
-        <MenuItem>View</MenuItem>
+        <MenuItem onClick={() => handleShopView(42)}>View</MenuItem>
         <MenuItem>Inactive</MenuItem>
         <MenuItem>Edit</MenuItem>
         <MenuItem>Delete</MenuItem>
