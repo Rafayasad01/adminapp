@@ -51,7 +51,7 @@ function SuperAdminDashboardRevenueLineChart() {
         pointHoverRadius: 8,
         tension: 0.1,
         data: Array.from(Array(12).keys()).map(() =>
-          Math.floor(Math.random() * (600 - 20 + 1) + 20)
+          Math.floor(20 + Math.random() * (600 - 20))
         ),
       },
       {
@@ -62,7 +62,7 @@ function SuperAdminDashboardRevenueLineChart() {
         pointRadius: 6,
         pointHoverRadius: 8,
         data: Array.from(Array(12).keys()).map(() =>
-          Math.floor(Math.random() * (600 - 20 + 1) + 20)
+          Math.floor(20 + Math.random() * (600 - 20))
         ),
       },
       {
@@ -73,7 +73,7 @@ function SuperAdminDashboardRevenueLineChart() {
         pointRadius: 6,
         pointHoverRadius: 8,
         data: Array.from(Array(12).keys()).map(() =>
-          Math.floor(Math.random() * (600 - 20 + 1) + 20)
+          Math.floor(20 + Math.random() * (600 - 20))
         ),
       },
     ],

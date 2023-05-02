@@ -37,6 +37,7 @@ import SuperAdminNewPasswordPage from '../pages/super-admin/auth/new-password/Su
 import SuperAdminDashboardPage from '../pages/super-admin/main/dashboard/SuperAdminDashboardPage';
 import SuperAdminShopsListPage from '../pages/super-admin/main/shops/SuperAdminShopsListPage';
 import SuperAdminAddNewShopPage from '../pages/super-admin/main/shops/SuperAdminAddNewShopPage';
+import SuperAdminShopDetailsPage from '../pages/super-admin/main/shops/SuperAdminShopDetailsPage';
 
 export const routeObjects: RouteObject[] = [
   {
@@ -274,6 +275,10 @@ export const routeObjects: RouteObject[] = [
               {
                 path: 'add-new',
                 element: <SuperAdminAddNewShopPage />,
+              },
+              {
+                path: ':id',
+                element: <SuperAdminShopDetailsPage />,
               },
             ],
           },
