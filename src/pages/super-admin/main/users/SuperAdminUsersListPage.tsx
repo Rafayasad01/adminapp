@@ -17,6 +17,7 @@ import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import dayjs from 'dayjs';
 import SuperAdminTopBar from '../../../../components/super-admin/common/SuperAdminTopbar';
 import assets from '../../../../assets';
+import SuperAdminAddNewUserDialog from './SuperAdminAddNewUserDialog';
 
 const ITEM_HEIGHT = 48;
 function SuperAdminUsersListPage() {
@@ -24,6 +25,7 @@ function SuperAdminUsersListPage() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [search, setSearch] = useState('');
   const [isCheckedAll, setIsCheckedAll] = useState(false);
+  const [addNewUserDialogOpen, setAddNewUserDialogOpen] = useState(false);
 
   const open = Boolean(anchorEl);
 
@@ -50,6 +52,10 @@ function SuperAdminUsersListPage() {
 
   return (
     <>
+      <SuperAdminAddNewUserDialog
+        openDialog={addNewUserDialogOpen}
+        setOpenDialog={setAddNewUserDialogOpen}
+      />
       <SuperAdminTopBar title="Users" />
       <div className="container mt-5">
         <div className="w-full rounded-lg bg-white shadow-lg">
@@ -91,7 +97,7 @@ function SuperAdminUsersListPage() {
             <Button
               variant="contained"
               className="rounded-xl bg-neutral-900 text-gray-50"
-              onClick={addRouteHandler}
+              onClick={() => setAddNewUserDialogOpen(true)}
               startIcon={<AddOutlinedIcon />}
             >
               Add New
