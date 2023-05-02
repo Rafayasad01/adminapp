@@ -18,6 +18,7 @@ import dayjs from 'dayjs';
 import SuperAdminTopBar from '../../../../components/super-admin/common/SuperAdminTopbar';
 import assets from '../../../../assets';
 import SuperAdminAddNewUserDialog from './SuperAdminAddNewUserDialog';
+import SuperAdminEditUserDialog from './SuperAdminEditUserDialog';
 
 const ITEM_HEIGHT = 48;
 function SuperAdminUsersListPage() {
@@ -26,6 +27,7 @@ function SuperAdminUsersListPage() {
   const [search, setSearch] = useState('');
   const [isCheckedAll, setIsCheckedAll] = useState(false);
   const [addNewUserDialogOpen, setAddNewUserDialogOpen] = useState(false);
+  const [editUserDialogOpen, setEditUserDialogOpen] = useState(false);
 
   const open = Boolean(anchorEl);
 
@@ -55,6 +57,10 @@ function SuperAdminUsersListPage() {
       <SuperAdminAddNewUserDialog
         openDialog={addNewUserDialogOpen}
         setOpenDialog={setAddNewUserDialogOpen}
+      />
+      <SuperAdminEditUserDialog
+        openDialog={editUserDialogOpen}
+        setOpenDialog={setEditUserDialogOpen}
       />
       <SuperAdminTopBar title="Users" />
       <div className="container mt-5">
@@ -303,7 +309,7 @@ function SuperAdminUsersListPage() {
           },
         }}
       >
-        <MenuItem>Edit</MenuItem>
+        <MenuItem onClick={() => setEditUserDialogOpen(true)}>Edit</MenuItem>
         <MenuItem>Delete</MenuItem>
       </Menu>
     </>
