@@ -189,7 +189,7 @@ export const routeObjects: RouteObject[] = [
         ],
       },
       {
-        path: 'settings',
+        path: 'profile',
         children: [
           {
             path: '',
@@ -212,7 +212,7 @@ export const routeObjects: RouteObject[] = [
         ],
       },
       {
-        path: 'profile',
+        path: 'settings',
         children: [
           {
             index: true,
