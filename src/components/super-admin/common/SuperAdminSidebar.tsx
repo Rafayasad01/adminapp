@@ -24,7 +24,7 @@ const links = [
   },
   {
     name: 'Users',
-    path: 'users',
+    path: 'user',
     icon: <GroupsOutlinedIcon fontSize="inherit" />,
   },
   {
