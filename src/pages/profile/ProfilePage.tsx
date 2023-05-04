@@ -29,10 +29,10 @@ function ProfilePage() {
 
   return (
     <>
-      {/* <ProfileChangePasswordPopup
+      <ProfileChangePasswordPopup
         changePassword={changePassword}
         setChangePassword={setChangePassword}
-      /> */}
+      />
       <TopBar isNestedRoute title="Customer Detail" />
       <div className="container mt-5">
         <div className="grid w-full grid-cols-12 gap-3">
@@ -128,7 +128,7 @@ function ProfilePage() {
             </div>
           </div>
           <div className="col-span-8 min-h-[640px] rounded-lg bg-white shadow-lg">
-            {/* <MarkersMap markers={markers} zoom={10} /> */}
+            <MarkersMap markers={markers} zoom={10} />
           </div>
         </div>
       </div>
