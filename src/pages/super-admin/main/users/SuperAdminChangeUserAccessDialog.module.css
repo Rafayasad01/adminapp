@@ -1,0 +1,22 @@
+.Dialog {
+  @apply relative m-0 w-2/6 overflow-hidden bg-transparent shadow-none  !important;
+}
+
+.Dialog__Content {
+  @apply flex h-full w-full flex-col justify-evenly rounded-lg bg-gray-50 px-4 py-5 shadow-lg !important;
+}
+.Dialog__Content__Title {
+  @apply text-center font-open-sans text-xl font-semibold text-neutral-900 !important;
+}
+.Dialog__Content__Description {
+  @apply text-center font-open-sans text-sm font-normal text-neutral-500 !important;
+}
+.Dialog__Content__Action {
+  @apply flex w-full justify-evenly gap-5 pt-4;
+}
+.Dialog__Content__ButtonOutlineBlack {
+  @apply w-full rounded-lg border border-solid border-neutral-900 bg-transparent px-3 text-sm font-normal capitalize text-neutral-900 shadow-none !important;
+}
+.Dialog__Content__ButtonFillBlack {
+  @apply w-full rounded-lg border border-solid border-neutral-900 bg-neutral-900 px-4 text-sm font-normal capitalize text-gray-50 shadow-none !important;
+}
