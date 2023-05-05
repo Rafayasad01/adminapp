@@ -9,7 +9,7 @@ type Props = {
 };
 
 const loader = new Loader({
-  apiKey: 'AIzaSyCQ_g14OfzLkLOD6MGp4iJPuau2mbnjwvw',
+  apiKey: 'AIzaSyBp7k8-SYDkEkhcGbXQ9f_fAXPXmwmlvUQ',
   version: 'weekly',
 });
 const googleMapsStyles: google.maps.MapTypeStyle[] = [
