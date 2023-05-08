@@ -19,6 +19,7 @@ import SuperAdminTopBar from '../../../../components/super-admin/common/SuperAdm
 import assets from '../../../../assets';
 import SuperAdminAddNewUserDialog from './SuperAdminAddNewUserDialog';
 import SuperAdminEditUserDialog from './SuperAdminEditUserDialog';
+import SuperAdminChangeUserAccessDialog from './SuperAdminChangeUserAccessDialog';
 
 const ITEM_HEIGHT = 48;
 function SuperAdminUsersListPage() {
@@ -28,6 +29,8 @@ function SuperAdminUsersListPage() {
   const [isCheckedAll, setIsCheckedAll] = useState(false);
   const [addNewUserDialogOpen, setAddNewUserDialogOpen] = useState(false);
   const [editUserDialogOpen, setEditUserDialogOpen] = useState(false);
+  const [changeUserAccessDialogOpen, setChangeUserAccessDialogOpen] =
+    useState(true);
 
   const open = Boolean(anchorEl);
 
@@ -61,6 +64,10 @@ function SuperAdminUsersListPage() {
       <SuperAdminEditUserDialog
         openDialog={editUserDialogOpen}
         setOpenDialog={setEditUserDialogOpen}
+      />
+      <SuperAdminChangeUserAccessDialog
+        openDialog={changeUserAccessDialogOpen}
+        setOpenDialog={setChangeUserAccessDialogOpen}
       />
       <SuperAdminTopBar title="Users" />
       <div className="container mt-5">
