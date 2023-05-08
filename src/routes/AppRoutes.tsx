@@ -39,6 +39,7 @@ import SuperAdminShopsListPage from '../pages/super-admin/main/shops/SuperAdminS
 import SuperAdminAddNewShopPage from '../pages/super-admin/main/shops/SuperAdminAddNewShopPage';
 import SuperAdminShopDetailsPage from '../pages/super-admin/main/shops/SuperAdminShopDetailsPage';
 import SuperAdminUsersListPage from '../pages/super-admin/main/users/SuperAdminUsersListPage';
+import SuperAdminSupportPage from '../pages/super-admin/main/support/SuperAdminSupportPage';
 
 export const routeObjects: RouteObject[] = [
   {
@@ -292,6 +293,10 @@ export const routeObjects: RouteObject[] = [
                 element: <SuperAdminUsersListPage />,
               },
             ],
+          },
+          {
+            path: 'support',
+            element: <SuperAdminSupportPage />,
           },
         ],
       },

@@ -21,6 +21,7 @@ import facebook from './images/Facebook.svg';
 import instagram from './images/Instagram.svg';
 import twitter from './images/Twitter.svg';
 import whatsApp from './images/Whatsapp.svg';
+import imageIcon from './images/image-icon.png';
 
 import activeShopsIcon from './images/active-shops-icon.svg';
 import inactiveShopsIcon from './images/inactive-shops-icon.svg';
@@ -52,6 +53,7 @@ const assets = {
     inactiveShopsIcon,
     totalShopsIcon,
     totalDriversIcon,
+    imageIcon,
   },
   tempImages: {
     wash,
