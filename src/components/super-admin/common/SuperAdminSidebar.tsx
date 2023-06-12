@@ -14,7 +14,7 @@ import assets from '../../../assets';
 const links = [
   {
     name: 'Dashboard',
-    path: 'home',
+    path: 'dashboard',
     icon: <GridViewOutlinedIcon fontSize="inherit" />,
   },
   {
@@ -32,11 +32,11 @@ const links = [
     path: 'support',
     icon: <HeadphonesOutlinedIcon fontSize="inherit" />,
   },
-  {
-    name: 'Settings',
-    path: 'settings',
-    icon: <SettingsOutlinedIcon fontSize="inherit" />,
-  },
+  // {
+  //   name: 'Settings',
+  //   path: 'settings',
+  //   icon: <SettingsOutlinedIcon fontSize="inherit" />,
+  // },
 ];
 
 function SuperAdminSidebar() {
