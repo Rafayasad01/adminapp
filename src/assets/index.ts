@@ -69,6 +69,6 @@ const assets = {
     spotlessLaundry,
     freshCleanLaundry,
   },
-};
+} as const;
 
 export default assets;

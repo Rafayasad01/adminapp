@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
 import IconButton from '@mui/material/IconButton';
@@ -10,6 +10,7 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import assets from '../../../../assets';
 
 function SuperAdminLoginPage() {
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -19,7 +20,9 @@ function SuperAdminLoginPage() {
   ) => {
     event.preventDefault();
   };
-  const loginHandler = () => {};
+  const loginHandler = () => {
+    navigate('../../main')
+  };
 
   return (
     <div className="flex h-full w-full items-center justify-center">

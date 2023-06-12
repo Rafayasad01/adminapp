@@ -24,7 +24,7 @@ type OptionType =
     >
   | undefined;
 
-type pluginType = Plugin<'line', AnyObject>[] | undefined;
+type pluginType = any | undefined;
 
 function ReportsRevenueChart() {
   const data = {
