@@ -7,24 +7,45 @@ import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import auth from '../../../../services/superadmin/superadmin.auth.service';
 import assets from '../../../../assets';
+import { SuperadminUserLogin } from '../../../../interfaces/superadmin/auth.interface';
+import AlertBox from '../../../../utils/Alert';
+
 
 function SuperAdminLoginPage() {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [alertMsg, setAlertMsg] = useState("");
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertSeverity, setAlertSeverity] = useState("")
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const handleMouseDownPassword = (
     event: React.MouseEvent<HTMLButtonElement>
   ) => {
     event.preventDefault();
   };
-  const loginHandler = () => {
-    navigate('../../main')
+  const loginHandler = async () => {
+    const userData:SuperadminUserLogin = {
+      username:email, password:password
+    }
+    const login:any = await auth.loginService(userData);
+    if(login && login.data.success){
+      navigate('../../main')
+    }else{
+      setAlertMsg(login.data.message);
+      setAlertSeverity("error");
+      setShowAlert(true);
+    }
   };
 
   return (
+    <>
+    {showAlert && (
+      <AlertBox msg={alertMsg} setSeverty={alertSeverity} alertOpen={showAlert} setAlertOpen={setShowAlert} />
+    )}
     <div className="flex h-full w-full items-center justify-center">
       <div className="flex w-96 flex-col items-center justify-center rounded-xl bg-gray-50 p-5">
         <img className="my-4" src={assets.images.logoBlack} alt="" />
@@ -87,6 +108,7 @@ function SuperAdminLoginPage() {
         </div>
       </div>
     </div>
+    </>
   );
 }
 
