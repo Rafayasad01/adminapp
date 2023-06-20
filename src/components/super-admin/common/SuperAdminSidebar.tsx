@@ -18,20 +18,31 @@ const links = [
     icon: <GridViewOutlinedIcon fontSize="inherit" />,
   },
   {
+    name: 'Orders',
+    path: 'orders',
+    icon: <DescriptionOutlinedIcon fontSize="inherit" />,
+  },
+  {
     name: 'Shops',
     path: 'shop',
     icon: <DescriptionOutlinedIcon fontSize="inherit" />,
   },
-  {
-    name: 'Users',
-    path: 'user',
-    icon: <GroupsOutlinedIcon fontSize="inherit" />,
-  },
+
   {
     name: 'Support',
     path: 'support',
     icon: <HeadphonesOutlinedIcon fontSize="inherit" />,
   },
+  // {
+  //   name: 'Users',
+  //   path: 'user',
+  //   icon: <GroupsOutlinedIcon fontSize="inherit" />,
+  // },
+  // {
+  //   name: 'Role',
+  //   path: 'role/permission',
+  //   icon: <HeadphonesOutlinedIcon fontSize="inherit" />,
+  // },
   // {
   //   name: 'Settings',
   //   path: 'settings',

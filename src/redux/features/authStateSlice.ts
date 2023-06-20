@@ -1,18 +1,21 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 type User = {
-  name: string;
-  email: string;
+  id: string;
+  firstName: string;
+  lastName: string;
+  username: string;
+  isActive: boolean;
+  isSuperAdmin: boolean;
+  token: string;
 };
 
 type AuthState = {
   user: User | null;
-  isLoggedIn: boolean;
 };
 
 const initialState: AuthState = {
   user: null,
-  isLoggedIn: false,
 };
 
 export const authStateSlice = createSlice({
@@ -21,19 +24,16 @@ export const authStateSlice = createSlice({
   reducers: {
     login: (state, action: PayloadAction<User>) => {
       state.user = action.payload;
-      state.isLoggedIn = true;
       localStorage.setItem('user', JSON.stringify(action.payload));
     },
     logout: (state) => {
       state.user = null;
-      state.isLoggedIn = false;
       localStorage.removeItem('user');
     },
     authLogin: (state) => {
       const user = localStorage.getItem('user');
       if (user) {
         state.user = JSON.parse(user);
-        state.isLoggedIn = true;
       }
     },
   },

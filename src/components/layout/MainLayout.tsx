@@ -1,12 +1,21 @@
 /* eslint-disable prettier/prettier */
-import { Outlet, Navigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { Outlet, useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Sidebar from '../common/Sidebar';
 import { useAppSelector } from '../../redux/redux-hooks';
 
 function MainLayout() {
+  const navigate = useNavigate();
   const authState = useAppSelector((state) => state.authState);
-  return authState.isLoggedIn ? (
+  useEffect(() => {
+    if (authState.user && authState.user?.isSuperAdmin) {
+      navigate("../admin/auth/login");
+    } else if (authState.user == null) {
+      navigate("../admin/auth/login");
+    }
+  }, []);
+  return (
     <Box className="flex">
       <Box component="nav" className="w-64 flex-shrink-0">
         <Sidebar />
@@ -19,8 +28,6 @@ function MainLayout() {
         <Outlet />
       </Box>
     </Box>
-  ) : (
-    <Navigate to="/auth/login" />
   );
 }
 
