@@ -6,13 +6,13 @@ import Button from '@mui/material/Button';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import { useNavigate } from 'react-router-dom';
+import Link from '@mui/material/Link';
 import DragDropFile from './DragDropFile';
 import MarkersMap from '../../components/common/MarkersMap';
 import { Marker } from '../../interfaces/map.interface';
 import PlusIcon from '../../components/icons/PlusIcon';
 import { SocialMedia } from '../../interfaces/app.interface';
 import SocialLinksPopup from './SocialLinksPopup';
-import Link from '@mui/material/Link';
 
 import '../../assets/css/PopupStyle.css';
 import assets from '../../assets';
@@ -37,7 +37,10 @@ const socialIconList = {
   youTube: '',
   whatsApp: 'https://whatsapp.com',
 };
-function Item(props: any) {
+
+type AssetsImages = keyof typeof assets.images;
+
+function Item(props: { value: any; name: AssetsImages }) {
   return (
     <Link href={props.value} underline="none" target="_blank">
       <img src={assets.images[props.name]} alt="" />
@@ -48,7 +51,7 @@ function Item(props: any) {
 function SettingsApp() {
   const navigate = useNavigate();
   const [markers, setMarkers] = useState<Marker[]>(data);
-  const [socialIcons, setSocialIcons] = useState<SocialMedia>({});
+  const [socialIcons, setSocialIcons] = useState<SocialMedia | any>({});
   const [socialLinks, setSocialLinks] = useState(false);
   useEffect(() => {
     setSocialIcons(socialIconList);
@@ -145,7 +148,15 @@ function SettingsApp() {
                 <label className="FormLabel">Social Links</label>
                 <div className="mt-2 flex flex-row items-center gap-3">
                   {Object.entries(socialIcons).map(([key, value]) =>
-                    value ? <Item key={key} value={value} name={key} /> : ''
+                    value ? (
+                      <Item
+                        key={key}
+                        value={value}
+                        name={key as AssetsImages}
+                      />
+                    ) : (
+                      ''
+                    )
                   )}
                   <IconButton
                     className="p-0 text-[1.675rem]"

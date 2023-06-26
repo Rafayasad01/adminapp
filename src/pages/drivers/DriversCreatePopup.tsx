@@ -112,7 +112,7 @@ function DriversCreatePopup({ openFormDialog, setOpenFormDialog }: Props) {
                 }}
               />
               <label htmlFor="raised-button-file" className="ImageLabel">
-                <Button variant="raised" component="span" className="ImageBtn">
+                <Button component="span" className="ImageBtn">
                   <FileUploadOutlinedIcon sx={{ marginRight: '0.5rem' }} />
                   Upload image
                 </Button>

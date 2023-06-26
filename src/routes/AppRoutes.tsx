@@ -32,38 +32,158 @@ import SuperAdminAuthLayout from '../components/layout/super-admin/SuperAdminAut
 import SuperAdminMainLayout from '../components/layout/super-admin/SuperAdminMainLayout';
 import SuperAdminLoginPage from '../pages/super-admin/auth/login/SuperAdminLoginPage';
 import SuperAdminForgotPasswordPage from '../pages/super-admin/auth/forgot-password/SuperAdminForgotPasswordPage';
+import SuperAdminOTPVerificationPage from '../pages/super-admin/auth/otp-verification/SuperAdminOTPVerificationPage';
+import SuperAdminNewPasswordPage from '../pages/super-admin/auth/new-password/SuperAdminNewPasswordPage';
+import SuperAdminDashboardPage from '../pages/super-admin/main/dashboard/SuperAdminDashboardPage';
+import SuperAdminShopsListPage from '../pages/super-admin/main/shops/SuperAdminShopsListPage';
+import SuperAdminAddNewShopPage from '../pages/super-admin/main/shops/SuperAdminAddNewShopPage';
+import SuperAdminShopDetailsPage from '../pages/super-admin/main/shops/SuperAdminShopDetailsPage';
+import SuperAdminUsersListPage from '../pages/super-admin/main/users/SuperAdminUsersListPage';
+import SuperAdminSupportPage from '../pages/super-admin/main/support/SuperAdminSupportPage';
+import RolePermissions from '../pages/super-admin/main/role/RolePermissions';
+import SuperAdminOrdersPage from '../pages/super-admin/main/orders/SuperadminOrdersPage';
+import SuperAdminLogout from '../pages/super-admin/auth/logout/SuperAdminLogout';
+
 
 export const routeObjects: RouteObject[] = [
   {
     index: true,
-    element: <Navigate to="auth" replace />,
+    element: <Navigate to="admin" replace />,
   },
   {
-    path: '/auth',
-    element: <AuthLayout />,
+    path: '/admin',
+    element: <SuperAdminLayout />,
     children: [
       {
         index: true,
-        element: <Navigate to="login" replace />,
+        element: <Navigate to="auth" replace />,
       },
       {
-        path: 'verification',
-        element: <OtpVerificationPage />,
+        path: 'auth',
+        element: <SuperAdminAuthLayout />,
+        children: [
+          {
+            index: true,
+            element: <Navigate to="login" replace />,
+          },
+          {
+            path: 'login',
+            element: <SuperAdminLoginPage />,
+          },
+          {
+            path: 'forgot-password',
+            element: <SuperAdminForgotPasswordPage />,
+          },
+          {
+            path: 'otp-verification',
+            element: <SuperAdminOTPVerificationPage />,
+          },
+          {
+            path: 'new-password',
+            element: <SuperAdminNewPasswordPage />,
+          },
+        ],
       },
       {
-        path: 'changepassword',
-        element: <ChangePasswordPage />,
-      },
-      {
-        path: 'forgotpassword',
-        element: <ForgotPasswordPage />,
-      },
-      {
-        path: 'login',
-        element: <LoginPage />,
+        path: 'main',
+        element: <SuperAdminMainLayout />,
+        children: [
+          { index: true, element: <Navigate to="dashboard" replace /> },
+          {
+            path: 'dashboard',
+            element: <SuperAdminDashboardPage />,
+          },
+          {
+            path: 'orders',
+            children: [
+              {
+                index: true,
+                element: <SuperAdminOrdersPage />,
+              },
+              {
+                path: 'create',
+                element: <OrdersCreatePage />,
+              },
+              {
+                path: 'view/:orderId',
+                element: <OrderDetailsPage />,
+              },
+              {
+                path: 'edit/:orderId',
+                element: <OrdersEditPage />,
+              },
+            ],
+          },
+          {
+            path: 'shop',
+            children: [
+              { index: true, element: <Navigate to="list" replace /> },
+              {
+                path: 'list',
+                element: <SuperAdminShopsListPage />,
+              },
+              {
+                path: 'add-new',
+                element: <SuperAdminAddNewShopPage />,
+              },
+              {
+                path: ':id',
+                element: <SuperAdminShopDetailsPage />,
+              },
+            ],
+          },
+          {
+            path: 'support',
+            element: <SuperAdminSupportPage />,
+          },
+          {
+            path: 'user',
+            children: [
+              { index: true, element: <Navigate to="list" replace /> },
+              {
+                path: 'list',
+                element: <SuperAdminUsersListPage />,
+              },
+            ],
+          },
+          {
+            path: 'role/permission',
+            element: <RolePermissions />,
+          },
+          {
+            path: 'logout',
+            element: <SuperAdminLogout />,
+          },
+        ],
       },
     ],
   },
+  // {
+  //   path: '/auth',
+  //   element: <AuthLayout />,
+  //   children: [
+  //     {
+  //       index: true,
+  //       element: <Navigate to="login" replace />,
+  //     },
+  //     {
+  //       path: 'verification',
+  //       element: <OtpVerificationPage />,
+  //     },
+  //     {
+  //       path: 'changepassword',
+  //       element: <ChangePasswordPage />,
+  //     },
+  //     {
+  //       path: 'forgotpassword',
+  //       element: <ForgotPasswordPage />,
+  //     },
+  //     {
+  //       path: 'login',
+  //       element: <LoginPage />,
+  //     },
+  //   ],
+  // },
   {
     path: '/dashboard',
     element: <MainLayout />,
@@ -215,36 +335,5 @@ export const routeObjects: RouteObject[] = [
       },
     ],
   },
-  {
-    path: '/admin',
-    element: <SuperAdminLayout />,
-    children: [
-      {
-        index: true,
-        element: <Navigate to="auth" replace />,
-      },
-      {
-        path: 'auth',
-        element: <SuperAdminAuthLayout />,
-        children: [
-          {
-            index: true,
-            element: <Navigate to="login" replace />,
-          },
-          {
-            path: 'login',
-            element: <SuperAdminLoginPage />,
-          },
-          {
-            path: 'forgot-password',
-            element: <SuperAdminForgotPasswordPage />,
-          },
-        ],
-      },
-      {
-        path: 'main',
-        element: <SuperAdminMainLayout />,
-      },
-    ],
-  },
+
 ];

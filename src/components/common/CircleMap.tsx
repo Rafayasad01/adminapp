@@ -10,13 +10,13 @@ type Props = {
 };
 
 const loader = new Loader({
-  apiKey: 'AIzaSyCQ_g14OfzLkLOD6MGp4iJPuau2mbnjwvw',
+  apiKey: 'AIzaSyBp7k8-SYDkEkhcGbXQ9f_fAXPXmwmlvUQ',
   version: 'weekly',
 });
 
 function CircleMap({ center, zoom, radius }: Props) {
-  const [map, setMap] = useState(null); // reference to the Google Map object
-  const [circle, setCircle] = useState(null); // reference to the Circle marker object
+  const [map, setMap] = useState<any>(null); // reference to the Google Map object
+  const [circle, setCircle] = useState<any>(null); // reference to the Circle marker object
 
   const mapRef = useRef(null);
 
