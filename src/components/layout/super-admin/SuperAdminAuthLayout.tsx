@@ -1,17 +1,16 @@
-import { useEffect } from 'react';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Navigate, Outlet } from 'react-router-dom';
 import { useAppSelector } from '../../../redux/redux-hooks';
 
 function SuperAdminAuthLayout() {
-  const navigate = useNavigate();
-  const authState = useAppSelector((state) => state.authState);
-  useEffect(() => {
-    if (authState.user && authState.user?.isSuperAdmin) {
-      navigate("../../../admin/main/dashboard");
-    } else if (authState.user && !authState.user?.isSuperAdmin) {
-      navigate("../../../dashboard/home");
+  const authState: any = useAppSelector((state) => state.authState);
+  if (authState.user) {
+    if (
+      authState.user.isSuperAdmin
+    ) {
+      return <Navigate to="../../../admin/main/dashboard" replace />
     }
-  }, []);
+    return <Navigate to="../../../dashboard/home" replace />
+  }
   return (
     <div className="h-screen bg-super-admin-auth-background bg-cover bg-no-repeat">
       <Outlet />

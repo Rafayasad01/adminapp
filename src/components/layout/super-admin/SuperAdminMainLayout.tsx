@@ -1,18 +1,15 @@
-import { useEffect } from 'react';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Navigate, Outlet } from 'react-router-dom';
 import SuperAdminSidebar from '../../super-admin/common/SuperAdminSidebar';
 import { useAppSelector } from '../../../redux/redux-hooks';
 
 function SuperAdminMainLayout() {
-  const navigate = useNavigate();
   const authState = useAppSelector((state: any) => state.authState);
-  useEffect(() => {
-    if (authState.user && !authState.user?.isSuperAdmin) {
-      navigate("../../../admin/auth/login");
-    } else if (authState.user == null) {
-      navigate("../../../admin/auth/login");
-    }
-  }, []);
+  if (!authState.user) {
+    return <Navigate to="../../../admin/auth/login" replace />
+  }
+  if (authState.user && !authState.user.isSuperAdmin) {
+    return <Navigate to="../../../admin/auth/login" replace />
+  }
 
   return (
     <div className="flex">

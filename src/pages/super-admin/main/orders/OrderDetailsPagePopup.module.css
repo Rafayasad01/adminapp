@@ -1,0 +1,24 @@
+.Dialog {
+  @apply relative m-0 aspect-[7/6] w-80 overflow-hidden bg-transparent shadow-none  !important;
+}
+.Content {
+  @apply flex h-full w-full flex-col items-center justify-evenly rounded-xl bg-gray-50 px-4 shadow-md !important;
+}
+.Icon {
+  @apply text-6xl text-neutral-900 !important;
+}
+.Title {
+  @apply text-center font-open-sans text-3xl font-semibold text-neutral-900 !important;
+}
+.Message {
+  @apply w-3/4 text-center font-open-sans text-base font-semibold text-neutral-900 !important;
+}
+.Actions {
+  @apply flex w-full items-center gap-2 !important;
+}
+.ButtonOutlined {
+  @apply flex-grow rounded-xl bg-transparent text-center font-open-sans text-base font-semibold text-neutral-900 outline outline-1 outline-neutral-900 !important;
+}
+.ButtonFilled {
+  @apply flex-grow rounded-xl bg-neutral-900 text-center font-open-sans text-base font-semibold text-gray-50 !important;
+}

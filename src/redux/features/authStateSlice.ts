@@ -14,8 +14,16 @@ type AuthState = {
   user: User | null;
 };
 
+function getUser() {
+  const user = localStorage.getItem('user');
+  if (user) {
+    return JSON.parse(user);
+  }
+  return null;
+}
+
 const initialState: AuthState = {
-  user: null,
+  user: getUser(),
 };
 
 export const authStateSlice = createSlice({
@@ -29,16 +37,10 @@ export const authStateSlice = createSlice({
     logout: (state) => {
       state.user = null;
       localStorage.removeItem('user');
-    },
-    authLogin: (state) => {
-      const user = localStorage.getItem('user');
-      if (user) {
-        state.user = JSON.parse(user);
-      }
-    },
+    }
   },
 });
 
-export const { login, logout, authLogin } = authStateSlice.actions;
+export const { login, logout } = authStateSlice.actions;
 
 export default authStateSlice.reducer;

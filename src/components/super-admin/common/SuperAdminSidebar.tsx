@@ -4,11 +4,13 @@ import HeadphonesOutlinedIcon from '@mui/icons-material/HeadphonesOutlined';
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
+import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
 import Stack from '@mui/material/Stack';
 import Toolbar from '@mui/material/Toolbar';
 import { NavLink } from 'react-router-dom';
+
 import assets from '../../../assets';
 
 const links = [
@@ -32,6 +34,11 @@ const links = [
     name: 'Support',
     path: 'support',
     icon: <HeadphonesOutlinedIcon fontSize="inherit" />,
+  },
+  {
+    name: 'Logout',
+    path: 'logout',
+    icon: <LogoutOutlinedIcon fontSize="inherit" />,
   },
   // {
   //   name: 'Users',

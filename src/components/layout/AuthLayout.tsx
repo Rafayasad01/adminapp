@@ -4,7 +4,7 @@ import { useAppSelector } from '../../redux/redux-hooks';
 
 function AuthLayout() {
   const authState = useAppSelector((state) => state.authState);
-  return !authState.user?.is_super_admin ? <Outlet /> : <Navigate to="/dashboard" />;
+  return !authState.user?.isSuperAdmin ? <Outlet /> : <Navigate to="/dashboard" />;
 }
 
 export default AuthLayout;
