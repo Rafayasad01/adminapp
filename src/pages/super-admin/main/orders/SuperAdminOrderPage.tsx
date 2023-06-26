@@ -33,7 +33,7 @@ import TablePagination from '@mui/material/TablePagination';
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 const options = ['View', 'Edit', 'Download PDF'];
 const ITEM_HEIGHT = 48;
-function SuperAdminOrdersPage() {
+function SuperAdminOrderPage() {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [search, setSearch] = useState('');
@@ -53,7 +53,7 @@ function SuperAdminOrdersPage() {
     setPage(newPage);
     //offset? ,limit rowsperpage hoga ofset page * rowsperPage
     order.searchService(search, newPage, rowsPerPage).then(item => {
-      setOrderList(item.data.data.list.map((item: any) => ({ ...item, isSelected: false })));
+      setOrderList(item.data.data.list.map((item: any) => ({ ...item, isSelected: false, orderStatus: item.status })));
       setTotal(item.data.data.total);
     });
   };
@@ -64,7 +64,7 @@ function SuperAdminOrdersPage() {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
     order.searchService(search, page, rowsPerPage).then(item => {
-      setOrderList(item.data.data.list.map((item: any) => ({ ...item, isSelected: false })));
+      setOrderList(item.data.data.list.map((item: any) => ({ ...item, isSelected: false, orderStatus: item.status })));
       setTotal(item.data.data.total);
     });
   };
@@ -72,7 +72,7 @@ function SuperAdminOrdersPage() {
   const open = Boolean(anchorEl);
 
   const handleCheckAllChange = (event: any) => {
-    setOrderList((newlist: any) => newlist.map((item: any) => ({ ...item, isSelected: event.target.checked })));
+    setOrderList((newlist: any) => newlist.map((item: any) => ({ ...item, orderStatus: item.status, isSelected: event.target.checked })));
   };
 
   const handleDialogClickOpen = () => {
@@ -110,7 +110,7 @@ function SuperAdminOrdersPage() {
     setSearch(searchTxt);
     setPage(0);
     order.searchService(searchTxt, page, rowsPerPage).then(item => {
-      setOrderList(item.data.data.list.map((item: any) => ({ ...item, isSelected: false })));
+      setOrderList(item.data.data.list.map((item: any) => ({ ...item, isSelected: false, orderStatus: item.status })));
       setTotal(item.data.data.total);
     })
   };
@@ -455,4 +455,4 @@ function SuperAdminOrdersPage() {
   );
 }
 
-export default SuperAdminOrdersPage;
+export default SuperAdminOrderPage;

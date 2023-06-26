@@ -40,8 +40,7 @@ import SuperAdminAddNewShopPage from '../pages/super-admin/main/shops/SuperAdmin
 import SuperAdminShopDetailsPage from '../pages/super-admin/main/shops/SuperAdminShopDetailsPage';
 import SuperAdminUsersListPage from '../pages/super-admin/main/users/SuperAdminUsersListPage';
 import SuperAdminSupportPage from '../pages/super-admin/main/support/SuperAdminSupportPage';
-import RolePermissions from '../pages/super-admin/main/role/RolePermissions';
-import SuperAdminOrdersPage from '../pages/super-admin/main/orders/SuperadminOrdersPage';
+import SuperAdminOrdersPage from '../pages/super-admin/main/orders/SuperAdminOrderPage';
 import SuperAdminLogout from '../pages/super-admin/auth/logout/SuperAdminLogout';
 
 
@@ -146,10 +145,10 @@ export const routeObjects: RouteObject[] = [
               },
             ],
           },
-          {
-            path: 'role/permission',
-            element: <RolePermissions />,
-          },
+          // {
+          //   path: 'role/permission',
+          //   element: <RolePermissions />,
+          // },
           {
             path: 'logout',
             element: <SuperAdminLogout />,

@@ -13,9 +13,10 @@ import CircleOutlinedIcon from '@mui/icons-material/CircleOutlined';
 import DomainVerificationOutlinedIcon from '@mui/icons-material/DomainVerificationOutlined';
 import Button from '@mui/material/Button';
 import dayjs from 'dayjs';
-import assets from '../../assets';
 import OrderDetailsPagePopup from './OrderDetailsPagePopup';
-import TopBar from '../../components/common/TopBar';
+import TopBar from '../../../../components/common/TopBar';
+import assets from '../../../../assets';
+
 
 function OrderDetailsPage() {
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);

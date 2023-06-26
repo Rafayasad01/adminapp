@@ -9,11 +9,8 @@ import Visibility from '@mui/icons-material/Visibility';
 import { NavLink, useNavigate } from 'react-router-dom';
 import assets from '../../../assets';
 import styles from '../../../assets/css/AuthPage.module.css';
-import { useAppDispatch } from '../../../redux/redux-hooks';
-import { login } from '../../../redux/features/authStateSlice';
 
 function LoginPage() {
-  const dispatch = useAppDispatch();
 
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
@@ -27,10 +24,7 @@ function LoginPage() {
     event.preventDefault();
   };
   const loginHandler = () => {
-    if (email === 'maq@gmail.com' && password === '123') {
-      dispatch(login({ name: 'Syed Taqiuddin', email: 'maq@gmail.com' }));
-      navigate('/dashboard/home');
-    }
+    navigate('/dashboard/home');
   };
 
   return (
