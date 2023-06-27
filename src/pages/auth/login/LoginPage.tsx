@@ -27,10 +27,7 @@ function LoginPage() {
     event.preventDefault();
   };
   const loginHandler = () => {
-    if (email === 'maq@gmail.com' && password === '123') {
-      dispatch(login({ name: 'Syed Taqiuddin', email: 'maq@gmail.com' }));
-      navigate('/dashboard/home');
-    }
+    navigate('/dashboard/home');
   };
 
   return (

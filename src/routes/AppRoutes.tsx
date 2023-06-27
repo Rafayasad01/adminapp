@@ -40,9 +40,9 @@ import SuperAdminAddNewShopPage from '../pages/super-admin/main/shops/SuperAdmin
 import SuperAdminShopDetailsPage from '../pages/super-admin/main/shops/SuperAdminShopDetailsPage';
 import SuperAdminUsersListPage from '../pages/super-admin/main/users/SuperAdminUsersListPage';
 import SuperAdminSupportPage from '../pages/super-admin/main/support/SuperAdminSupportPage';
-import RolePermissions from '../pages/super-admin/main/role/RolePermissions';
-import SuperAdminOrdersPage from '../pages/super-admin/main/orders/SuperadminOrdersPage';
+import SuperAdminOrderPage from '../pages/super-admin/main/orders/SuperAdminOrdersPage';
 import SuperAdminLogout from '../pages/super-admin/auth/logout/SuperAdminLogout';
+import SuperAdminCartPage from '../pages/super-admin/main/cart/SuperAdminCartPage';
 
 
 export const routeObjects: RouteObject[] = [
@@ -98,7 +98,28 @@ export const routeObjects: RouteObject[] = [
             children: [
               {
                 index: true,
-                element: <SuperAdminOrdersPage />,
+                element: <SuperAdminOrderPage />,
+              },
+              {
+                path: 'create',
+                element: <OrdersCreatePage />,
+              },
+              {
+                path: 'view/:orderId',
+                element: <OrderDetailsPage />,
+              },
+              {
+                path: 'edit/:orderId',
+                element: <OrdersEditPage />,
+              },
+            ],
+          },
+          {
+            path: 'carts',
+            children: [
+              {
+                index: true,
+                element: <SuperAdminCartPage />,
               },
               {
                 path: 'create',
@@ -146,10 +167,10 @@ export const routeObjects: RouteObject[] = [
               },
             ],
           },
-          {
-            path: 'role/permission',
-            element: <RolePermissions />,
-          },
+          // {
+          //   path: 'role/permission',
+          //   element: <RolePermissions />,
+          // },
           {
             path: 'logout',
             element: <SuperAdminLogout />,

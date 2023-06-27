@@ -14,7 +14,7 @@ import DomainVerificationOutlinedIcon from '@mui/icons-material/DomainVerificati
 import Button from '@mui/material/Button';
 import dayjs from 'dayjs';
 import assets from '../../../../assets';
-import OrderDetailsPagePopup from './OrderDetailsPagePopup';
+import OrderDetailsPagePopup from './CartDetailsPagePopup';
 import TopBar from '../../../../components/common/TopBar';
 
 function OrderDetailsPage() {

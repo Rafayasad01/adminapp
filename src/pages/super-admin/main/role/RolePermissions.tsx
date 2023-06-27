@@ -67,7 +67,6 @@ function RolePermissions() {
                   <CheckBoxOutlinedIcon className="text-neutral-900" />
                 }
                 checked={isPrentCheck}
-                onClick={(item: React.MouseEvent<HTMLButtonElement, MouseEvent>) => { setIsPrentCheck(item.target.checked) }}
                 disableRipple={false}
 
               />
