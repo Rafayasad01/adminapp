@@ -42,6 +42,7 @@ import SuperAdminUsersListPage from '../pages/super-admin/main/users/SuperAdminU
 import SuperAdminSupportPage from '../pages/super-admin/main/support/SuperAdminSupportPage';
 import SuperAdminOrdersPage from '../pages/super-admin/main/orders/SuperAdminOrderPage';
 import SuperAdminLogout from '../pages/super-admin/auth/logout/SuperAdminLogout';
+import SuperAdminCartPage from '../pages/super-admin/main/cart/SuperAdminCartPage';
 
 
 export const routeObjects: RouteObject[] = [
@@ -98,6 +99,27 @@ export const routeObjects: RouteObject[] = [
               {
                 index: true,
                 element: <SuperAdminOrdersPage />,
+              },
+              {
+                path: 'create',
+                element: <OrdersCreatePage />,
+              },
+              {
+                path: 'view/:orderId',
+                element: <OrderDetailsPage />,
+              },
+              {
+                path: 'edit/:orderId',
+                element: <OrdersEditPage />,
+              },
+            ],
+          },
+          {
+            path: 'carts',
+            children: [
+              {
+                index: true,
+                element: <SuperAdminCartPage />,
               },
               {
                 path: 'create',

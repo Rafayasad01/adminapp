@@ -4,7 +4,7 @@ export const GOOGLE_MAP_KEY = import.meta.env.VITE_GOOGLE_MAP_KEY;
 export const BACKOFFICE_PREFIX = 'backofficeUser';
 export const PERMISSION_PREFIX = 'permission'
 export const ORDER_PREFIX = 'order'
-
+export const CART_PREFIX = 'cart'
 export let token = "";
 export const setToken = (data: string) => {
     token = data;
