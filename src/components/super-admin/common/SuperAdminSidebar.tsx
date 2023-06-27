@@ -25,16 +25,21 @@ const links = [
     icon: <DescriptionOutlinedIcon fontSize="inherit" />,
   },
   {
-    name: 'Shops',
-    path: 'shop',
+    name: 'Carts',
+    path: 'carts',
     icon: <DescriptionOutlinedIcon fontSize="inherit" />,
   },
+  // {
+  //   name: 'Shops',
+  //   path: 'shop',
+  //   icon: <DescriptionOutlinedIcon fontSize="inherit" />,
+  // },
 
-  {
-    name: 'Support',
-    path: 'support',
-    icon: <HeadphonesOutlinedIcon fontSize="inherit" />,
-  },
+  // {
+  //   name: 'Support',
+  //   path: 'support',
+  //   icon: <HeadphonesOutlinedIcon fontSize="inherit" />,
+  // },
   {
     name: 'Logout',
     path: 'logout',

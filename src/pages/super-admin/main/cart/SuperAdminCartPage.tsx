@@ -26,14 +26,14 @@ import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import SuperAdminTopBar from '../../../../components/super-admin/common/SuperAdminTopbar';
 //import Pagination from '@mui/material/Pagination';
 //import Stack from '@mui/material/Stack';
-import order from '../../../../services/superadmin/SuperAdminOrders';
+import cart from '../../../../services/superadmin/SuperAdminCarts';
 import dayjs from 'dayjs';
 import TablePagination from '@mui/material/TablePagination';
 
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 const options = ['View', 'Edit', 'Download PDF'];
 const ITEM_HEIGHT = 48;
-function SuperAdminOrderPage() {
+function SuperAdminCartPage() {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [search, setSearch] = useState('');
@@ -43,7 +43,7 @@ function SuperAdminOrderPage() {
   const [isCheckedAll, setIsCheckedAll] = useState(false);
   const [page, setPage] = useState(0);
   const [total, setTotal] = useState(0);
-  const [orderList, setOrderList] = useState<any>([]);
+  const [list, setList] = useState<any>([]);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
   const handleChangePage = (
@@ -52,8 +52,9 @@ function SuperAdminOrderPage() {
   ) => {
     setPage(newPage);
     //offset? ,limit rowsperpage hoga ofset page * rowsperPage
-    order.searchService(search, newPage, rowsPerPage).then(item => {
-      setOrderList(item.data.data.list.map((item: any) => ({ ...item, isSelected: false, orderStatus: item.status })));
+    cart.searchService(search, newPage, rowsPerPage).then(item => {
+      console.log(item)
+      setList(item.data.data.list.map((item: any) => ({ ...item })));
       setTotal(item.data.data.total);
     });
   };
@@ -63,8 +64,8 @@ function SuperAdminOrderPage() {
   ) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
-    order.searchService(search, page, rowsPerPage).then(item => {
-      setOrderList(item.data.data.list.map((item: any) => ({ ...item, isSelected: false, orderStatus: item.status })));
+    cart.searchService(search, page, rowsPerPage).then(item => {
+      setList(item.data.data.list.map((item: any) => ({ ...item })));
       setTotal(item.data.data.total);
     });
   };
@@ -72,7 +73,7 @@ function SuperAdminOrderPage() {
   const open = Boolean(anchorEl);
 
   const handleCheckAllChange = (event: any) => {
-    setOrderList((newlist: any) => newlist.map((item: any) => ({ ...item, orderStatus: item.status, isSelected: event.target.checked })));
+    setList((newlist: any) => newlist.map((item: any) => ({ ...item })));
   };
 
   const handleDialogClickOpen = () => {
@@ -109,8 +110,8 @@ function SuperAdminOrderPage() {
     const searchTxt = event.target.value as string;
     setSearch(searchTxt);
     setPage(0);
-    order.searchService(searchTxt, page, rowsPerPage).then(item => {
-      setOrderList(item.data.data.list.map((item: any) => ({ ...item, isSelected: false, orderStatus: item.status })));
+    cart.searchService(searchTxt, page, rowsPerPage).then(item => {
+      setList(item.data.data.list.map((item: any) => ({ ...item })));
       setTotal(item.data.data.total);
     })
   };
@@ -125,22 +126,21 @@ function SuperAdminOrderPage() {
 
 
   useEffect(() => {
-    order.getListService((page), rowsPerPage).then(item => {
-      //console.log(item);
-      setOrderList(item.data.data.list.map((item: any) => ({ ...item, isSelected: false, orderStatus: item.status })));
+    cart.getListService(page, rowsPerPage).then(item => {
+      setList(item.data.data.list.map((item: any) => ({ ...item })));
       setTotal(item.data.data.total);
     });
   }, []);
 
   return (
     <>
-      <SuperAdminTopBar title="Orders" />
+      <SuperAdminTopBar title="Carts" />
       <div className="container mt-5">
         <div className="w-full rounded-lg bg-white shadow-lg">
           <div className="grid grid-cols-12 px-4 py-5">
             <div className="col-span-3">
               <span className="font-open-sans text-xl font-semibold text-[#252733]">
-                All Orders
+                All Carts
               </span>
             </div>
             <div className="col-span-6">
@@ -219,123 +219,54 @@ function SuperAdminOrderPage() {
             <table className="table-border table-auto">
               <thead>
                 <tr>
-                  <th>
-                    <Checkbox
-                      {...label}
-                      icon={
-                        <CheckBoxOutlineBlankOutlinedIcon className=" text-[#E4E4E4]" />
-                      }
-                      checkedIcon={
-                        <CheckBoxOutlinedIcon className="text-[#1D1D1D]" />
-                      }
-                      onChange={(
-                        event: React.ChangeEvent<HTMLInputElement>
-                      ) => {
-                        handleCheckAllChange(event);
-                      }}
-                    />
-                  </th>
                   <th>Customers</th>
                   <th>Pickup Time</th>
                   <th>Drop-off Time</th>
                   <th>Amount</th>
-                  <th>Status</th>
+                  {/* <th>Status</th> */}
                   <th>&nbsp;</th>
                 </tr>
               </thead>
               <tbody>
-                {orderList && orderList.map((order: any, index: number) => {
+                {list && list.map((cart: any, index: number) => {
                   //console.log(order);
                   return (
-                    <tr key={order.id}>
-                      <td>
-                        <Checkbox
-                          {...label}
-                          icon={
-                            <CheckBoxOutlineBlankOutlinedIcon className=" text-[#E4E4E4]" />
-                          }
-                          checkedIcon={
-                            <CheckBoxOutlinedIcon className="text-[#1D1D1D]" />
-                          }
-                          value={order.id}
-                          checked={order.isSelected}
-                          onChange={(event: any) => {
-                            let filteredItem: any;
-                            const newList = orderList.filter((item: any) => {
-                              if (item.id === order.id) {
-                                filteredItem = item;
-                                return false;
-                              }
-                              return true;
-                            })
-                            setOrderList([...newList, { ...filteredItem, isSelected: event.target.checked }])
-                          }}
-                        />
-                      </td>
+                    <tr key={cart.id}>
                       <td>
                         <div className="flex flex-col">
                           <span className="text-sm font-semibold text-[#1A1A1A]">
-                            {order.user.firstName} {order.user.lastName}
+                            {cart.user.firstName} {cart.user.lastName}
                           </span>
                           <span className="text-xs font-normal text-[#6A6A6A]">
-                            {order.user.email}
+                            {cart.user.email}
                           </span>
                           <span className="text-xs font-normal text-[#6A6A6A]">
-                            {order.userAddress.address}
+                            {cart.userAddress.address}
                           </span>
                         </div>
                       </td>
                       <td>
                         <div className="flex flex-col">
                           <span className="text-sm font-normal text-[#1A1A1A]">
-                            {dayjs(order.appUserCart.pickupDateTime)?.format('hh:mm A')} - {dayjs(order.appUserCart.pickupDateTime).add(1, 'hour').format('hh:mm A')}
+                            {dayjs(cart.pickupDateTime)?.format('hh:mm A')} - {dayjs(cart.pickupDateTime).add(1, 'hour').format('hh:mm A')}
                           </span>
                           <span className="text-xs font-normal text-[#6A6A6A]">
-                            {dayjs(order.appUserCart.pickupDateTime)?.format('MMMM DD, YYYY')}
+                            {dayjs(cart.pickupDateTime)?.format('MMMM DD, YYYY')}
                           </span>
                         </div>
                       </td>
                       <td>
                         <div className="flex flex-col">
                           <span className="text-sm font-normal text-[#1A1A1A]">
-                            {dayjs(order.appUserCart.dropDateTime)?.format('hh:mm A')} - {dayjs(order.appUserCart.dropDateTime).add(1, 'hour').format('hh:mm A')}
+                            {dayjs(cart.dropDateTime)?.format('hh:mm A')} - {dayjs(cart.dropDateTime).add(1, 'hour').format('hh:mm A')}
                           </span>
                           <span className="text-xs font-normal text-[#6A6A6A]">
-                            {dayjs(order.appUserCart.dropDateTime)?.format('MMMM DD, YYYY')}
+                            {dayjs(cart.dropDateTime)?.format('MMMM DD, YYYY')}
                           </span>
                         </div>
                       </td>
                       <td className="text-sm font-semibold text-[#1A1A1A]">
-                        ${order.appUserCart.grandTotal}
-                      </td>
-                      <td>
-                        <Select
-                          className="select-black-outline mr-3 h-7 w-36"
-                          labelId="demo-simple-select-label"
-                          value={order.orderStatus}
-                          onChange={(event: any) => {
-                            let filteredItem: any;
-                            const newList = orderList.filter((item: any) => {
-                              if (item.id === order.id) {
-                                filteredItem = item;
-                                return false;
-                              }
-                              return true;
-                            })
-                            setOrderList([...newList, { ...filteredItem, orderStatus: event.target.value }])
-
-                          }}
-                        >
-                          <MenuItem value="New">
-                            New
-                          </MenuItem>
-                          <MenuItem value="OrderPlaced">
-                            Order Placed
-                          </MenuItem>
-                          <MenuItem value="ReadyForPickUp">
-                            Ready for Pick up
-                          </MenuItem>
-                        </Select>
+                        ${cart.grandTotal}
                       </td>
                       <td>
                         {/* <IconButton
@@ -455,4 +386,4 @@ function SuperAdminOrderPage() {
   );
 }
 
-export default SuperAdminOrderPage;
+export default SuperAdminCartPage;
