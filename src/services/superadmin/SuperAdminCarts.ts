@@ -8,8 +8,13 @@ const searchService = (search: string, page: number, size: number) => {
     return network.getSearch(CART_PREFIX + '/list', search, page, size);
 }
 
+const viewService = (id: string) => {
+    return network.getView(CART_PREFIX + '/view', id);
+}
+
 
 export default {
     getListService,
-    searchService
+    searchService,
+    viewService
 }
