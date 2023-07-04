@@ -28,8 +28,18 @@ const getSearch = (endPoint: string, search: string, page: number, size: number)
     });
 }
 
+const getView = (endPoint: string, id: string) => {
+    return axios.get(`${BASE_URL}${endPoint}/${id}`, {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': token
+        }
+    });
+}
+
 export default {
     post,
     get,
-    getSearch
+    getSearch,
+    getView
 }

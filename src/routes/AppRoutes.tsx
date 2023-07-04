@@ -43,6 +43,10 @@ import SuperAdminSupportPage from '../pages/super-admin/main/support/SuperAdminS
 import SuperAdminOrdersPage from '../pages/super-admin/main/orders/SuperAdminOrderPage';
 import SuperAdminLogout from '../pages/super-admin/auth/logout/SuperAdminLogout';
 import SuperAdminCartPage from '../pages/super-admin/main/cart/SuperAdminCartPage';
+import CartDetailsPage from '../pages/super-admin/main/cart/CartDetailsPage';
+import SuperAdminOrderDetailsPage from '../pages/super-admin/main/orders/SuperAdminOrderDetailsPage';
+import SuperAdminOrdersCreatePage from '../pages/super-admin/main/orders/SuperAdminOrdersCreatePage';
+import SuperAdminOrdersEditPage from '../pages/super-admin/main/orders/SuperAdminOrdersEditPage';
 
 
 export const routeObjects: RouteObject[] = [
@@ -102,15 +106,15 @@ export const routeObjects: RouteObject[] = [
               },
               {
                 path: 'create',
-                element: <OrdersCreatePage />,
+                element: <SuperAdminOrdersCreatePage />,
               },
               {
                 path: 'view/:orderId',
-                element: <OrderDetailsPage />,
+                element: <SuperAdminOrderDetailsPage />,
               },
               {
                 path: 'edit/:orderId',
-                element: <OrdersEditPage />,
+                element: <SuperAdminOrdersEditPage />,
               },
             ],
           },
@@ -122,16 +126,8 @@ export const routeObjects: RouteObject[] = [
                 element: <SuperAdminCartPage />,
               },
               {
-                path: 'create',
-                element: <OrdersCreatePage />,
-              },
-              {
-                path: 'view/:orderId',
-                element: <OrderDetailsPage />,
-              },
-              {
-                path: 'edit/:orderId',
-                element: <OrdersEditPage />,
+                path: 'view/:cartId',
+                element: <CartDetailsPage />,
               },
             ],
           },

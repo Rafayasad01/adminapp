@@ -8,7 +8,7 @@ type Props = {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-function OrderDetailsPagePopup({ open, setOpen }: Props) {
+function CartDetailsPagePopup({ open, setOpen }: Props) {
   const onCloseHandler = (event: object, reason: string) => {
     if (reason === 'backdropClick') {
       setOpen(false);
@@ -54,4 +54,4 @@ function OrderDetailsPagePopup({ open, setOpen }: Props) {
   );
 }
 
-export default OrderDetailsPagePopup;
+export default CartDetailsPagePopup;
