@@ -1,5 +1,4 @@
 import network from '../../utils/network';
-import { SuperadminUserLogin } from '../../interfaces/superadmin/auth.interface';
 import { ORDER_PREFIX } from '../../utils/constants';
 
 const getListService = (page: number, size: number) => {
@@ -9,8 +8,13 @@ const searchService = (search: string, page: number, size: number) => {
     return network.getSearch(ORDER_PREFIX + '/list', search, page, size);
 }
 
+const viewService = (id: string) => {
+    return network.getView(ORDER_PREFIX + '/view', id);
+}
+
 
 export default {
     getListService,
-    searchService
+    searchService,
+    viewService
 }
