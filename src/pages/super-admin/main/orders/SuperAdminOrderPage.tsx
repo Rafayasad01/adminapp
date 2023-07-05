@@ -29,22 +29,29 @@ import SuperAdminTopBar from '../../../../components/super-admin/common/SuperAdm
 import order from '../../../../services/superadmin/SuperAdminOrders';
 import dayjs from 'dayjs';
 import TablePagination from '@mui/material/TablePagination';
+import ActionMenu from '../../../../components/common/ActionMenu';
 
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
-const options = ['View', 'Edit', 'Download PDF'];
-const ITEM_HEIGHT = 48;
+const actionMenuOptions = ['View'];
 function SuperAdminOrderPage() {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [search, setSearch] = useState('');
   const [status, setStatus] = useState('status');
   const [time, setTime] = useState('time');
-  const [openDialog, setOpenDialog] = useState(false);
   const [isCheckedAll, setIsCheckedAll] = useState(false);
   const [page, setPage] = useState(0);
   const [total, setTotal] = useState(0);
-  const [orderList, setOrderList] = useState<any>([]);
+  const [list, setList] = useState<any>([]);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [actionMenuItemid, setActionMenuItemid] = React.useState("");
+  const [actionMenuAnchorEl, setActionMenuAnchorEl] = useState<null | HTMLElement>(null);
+  const actionMenuOpen = Boolean(actionMenuAnchorEl);
+
+  const actionMenuHandler = (event: any, index: number) => {
+    setActionMenuItemid(list[index].id)
+    setActionMenuAnchorEl(event.currentTarget);
+  };
 
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
@@ -53,7 +60,7 @@ function SuperAdminOrderPage() {
     setPage(newPage);
     //offset? ,limit rowsperpage hoga ofset page * rowsperPage
     order.searchService(search, newPage, rowsPerPage).then(item => {
-      setOrderList(item.data.data.list.map((item: any) => ({ ...item, isSelected: false, orderStatus: item.status })));
+      setList(item.data.data.list.map((item: any) => ({ ...item, isSelected: false, orderStatus: item.status })));
       setTotal(item.data.data.total);
     });
   };
@@ -64,7 +71,7 @@ function SuperAdminOrderPage() {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
     order.searchService(search, page, rowsPerPage).then(item => {
-      setOrderList(item.data.data.list.map((item: any) => ({ ...item, isSelected: false, orderStatus: item.status })));
+      setList(item.data.data.list.map((item: any) => ({ ...item, isSelected: false, orderStatus: item.status })));
       setTotal(item.data.data.total);
     });
   };
@@ -72,45 +79,19 @@ function SuperAdminOrderPage() {
   const open = Boolean(anchorEl);
 
   const handleCheckAllChange = (event: any) => {
-    setOrderList((newlist: any) => newlist.map((item: any) => ({ ...item, orderStatus: item.status, isSelected: event.target.checked })));
-  };
-
-  const handleDialogClickOpen = () => {
-    setOpenDialog(true);
-  };
-
-  const handleDialogClose = () => {
-    setOpenDialog(false);
+    setList((newlist: any) => newlist.map((item: any) => ({ ...item, orderStatus: item.status, isSelected: event.target.checked })));
   };
 
   const addRouteHandler = () => {
     navigate('create');
   };
 
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-  const handleSelectedMenuClose = (option: string) => {
-    let doOption = '';
-    if (option === 'Edit') {
-      doOption = 'edit';
-    } else if (option === 'View') {
-      doOption = 'view';
-    } else {
-      doOption = 'download';
-    }
-    setAnchorEl(null);
-    navigate(`${doOption}/123`);
-  };
   const handleClickSearch = (event: any) => {
     const searchTxt = event.target.value as string;
     setSearch(searchTxt);
     setPage(0);
     order.searchService(searchTxt, page, rowsPerPage).then(item => {
-      setOrderList(item.data.data.list.map((item: any) => ({ ...item, isSelected: false, orderStatus: item.status })));
+      setList(item.data.data.list.map((item: any) => ({ ...item, isSelected: false, orderStatus: item.status })));
       setTotal(item.data.data.total);
     })
   };
@@ -126,14 +107,17 @@ function SuperAdminOrderPage() {
 
   useEffect(() => {
     order.getListService((page), rowsPerPage).then(item => {
-      //console.log(item);
-      setOrderList(item.data.data.list.map((item: any) => ({ ...item, isSelected: false, orderStatus: item.status })));
+      //console.log(item.data.data);
+      setList(item.data.data.list.map((item: any) => ({ ...item, isSelected: false, orderStatus: item.status })));
       setTotal(item.data.data.total);
     });
   }, []);
 
   return (
     <>
+      {actionMenuAnchorEl && (
+        <ActionMenu open={actionMenuOpen} anchorEl={actionMenuAnchorEl} setAnchorEl={setActionMenuAnchorEl} options={actionMenuOptions} itemId={actionMenuItemid} />
+      )}
       <SuperAdminTopBar title="Orders" />
       <div className="container mt-5">
         <div className="w-full rounded-lg bg-white shadow-lg">
@@ -244,7 +228,7 @@ function SuperAdminOrderPage() {
                 </tr>
               </thead>
               <tbody>
-                {orderList && orderList.map((order: any, index: number) => {
+                {list && list.map((order: any, index: number) => {
                   //console.log(order);
                   return (
                     <tr key={order.id}>
@@ -261,14 +245,14 @@ function SuperAdminOrderPage() {
                           checked={order.isSelected}
                           onChange={(event: any) => {
                             let filteredItem: any;
-                            const newList = orderList.filter((item: any) => {
+                            const newList = list.filter((item: any) => {
                               if (item.id === order.id) {
                                 filteredItem = item;
                                 return false;
                               }
                               return true;
                             })
-                            setOrderList([...newList, { ...filteredItem, isSelected: event.target.checked }])
+                            setList([...newList, { ...filteredItem, isSelected: event.target.checked }])
                           }}
                         />
                       </td>
@@ -306,7 +290,7 @@ function SuperAdminOrderPage() {
                         </div>
                       </td>
                       <td className="text-sm font-semibold text-[#1A1A1A]">
-                        ${order.appUserCart.grandTotal}
+                        ${order.grandTotal}
                       </td>
                       <td>
                         <Select
@@ -315,14 +299,14 @@ function SuperAdminOrderPage() {
                           value={order.orderStatus}
                           onChange={(event: any) => {
                             let filteredItem: any;
-                            const newList = orderList.filter((item: any) => {
+                            const newList = list.filter((item: any) => {
                               if (item.id === order.id) {
                                 filteredItem = item;
                                 return false;
                               }
                               return true;
                             })
-                            setOrderList([...newList, { ...filteredItem, orderStatus: event.target.value }])
+                            setList([...newList, { ...filteredItem, orderStatus: event.target.value }])
 
                           }}
                         >
@@ -338,17 +322,17 @@ function SuperAdminOrderPage() {
                         </Select>
                       </td>
                       <td>
-                        {/* <IconButton
+                        <IconButton
                           className="btn-dot"
                           aria-label="more"
                           id="long-button"
-                          aria-controls={open ? 'long-menu' : undefined}
-                          aria-expanded={open ? 'true' : undefined}
+                          aria-controls={actionMenuOpen ? 'long-menu' : undefined}
+                          aria-expanded={actionMenuOpen ? 'true' : undefined}
                           aria-haspopup="true"
-                          onClick={handleClick}
+                          onClick={(event: React.MouseEvent<HTMLElement>) => { actionMenuHandler(event, index) }}
                         >
                           <MoreVertIcon />
-                        </IconButton> */}
+                        </IconButton>
                       </td>
                     </tr>
                   )
@@ -368,31 +352,6 @@ function SuperAdminOrderPage() {
           </div>
         </div>
       </div>
-      <Menu
-        id="long-menu"
-        MenuListProps={{
-          'aria-labelledby': 'long-button',
-        }}
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleClose}
-        PaperProps={{
-          style: {
-            maxHeight: ITEM_HEIGHT * 4.5,
-            width: '11ch',
-          },
-        }}
-      >
-        {options.map((option) => (
-          <MenuItem
-            key={option}
-            selected={option === 'Pyxis'}
-            onClick={() => handleSelectedMenuClose(option)}
-          >
-            {option}
-          </MenuItem>
-        ))}
-      </Menu>
       {/* <Dialog
         open={openDialog}
         onClose={handleDialogClose}
