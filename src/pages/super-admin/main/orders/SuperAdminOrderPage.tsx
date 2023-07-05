@@ -203,59 +203,19 @@ function SuperAdminOrderPage() {
             <table className="table-border table-auto">
               <thead>
                 <tr>
-                  <th>
-                    <Checkbox
-                      {...label}
-                      icon={
-                        <CheckBoxOutlineBlankOutlinedIcon className=" text-[#E4E4E4]" />
-                      }
-                      checkedIcon={
-                        <CheckBoxOutlinedIcon className="text-[#1D1D1D]" />
-                      }
-                      onChange={(
-                        event: React.ChangeEvent<HTMLInputElement>
-                      ) => {
-                        handleCheckAllChange(event);
-                      }}
-                    />
-                  </th>
                   <th>Customers</th>
                   <th>Pickup Time</th>
                   <th>Drop-off Time</th>
                   <th>Amount</th>
                   <th>Status</th>
+                  <th>Order ID</th>
                   <th>&nbsp;</th>
                 </tr>
               </thead>
               <tbody>
                 {list && list.map((order: any, index: number) => {
-                  //console.log(order);
                   return (
                     <tr key={order.id}>
-                      <td>
-                        <Checkbox
-                          {...label}
-                          icon={
-                            <CheckBoxOutlineBlankOutlinedIcon className=" text-[#E4E4E4]" />
-                          }
-                          checkedIcon={
-                            <CheckBoxOutlinedIcon className="text-[#1D1D1D]" />
-                          }
-                          value={order.id}
-                          checked={order.isSelected}
-                          onChange={(event: any) => {
-                            let filteredItem: any;
-                            const newList = list.filter((item: any) => {
-                              if (item.id === order.id) {
-                                filteredItem = item;
-                                return false;
-                              }
-                              return true;
-                            })
-                            setList([...newList, { ...filteredItem, isSelected: event.target.checked }])
-                          }}
-                        />
-                      </td>
                       <td>
                         <div className="flex flex-col">
                           <span className="text-sm font-semibold text-[#1A1A1A]">
@@ -292,35 +252,8 @@ function SuperAdminOrderPage() {
                       <td className="text-sm font-semibold text-[#1A1A1A]">
                         ${order.grandTotal}
                       </td>
-                      <td>
-                        <Select
-                          className="select-black-outline mr-3 h-7 w-36"
-                          labelId="demo-simple-select-label"
-                          value={order.orderStatus}
-                          onChange={(event: any) => {
-                            let filteredItem: any;
-                            const newList = list.filter((item: any) => {
-                              if (item.id === order.id) {
-                                filteredItem = item;
-                                return false;
-                              }
-                              return true;
-                            })
-                            setList([...newList, { ...filteredItem, orderStatus: event.target.value }])
-
-                          }}
-                        >
-                          <MenuItem value="New">
-                            New
-                          </MenuItem>
-                          <MenuItem value="OrderPlaced">
-                            Order Placed
-                          </MenuItem>
-                          <MenuItem value="ReadyForPickUp">
-                            Ready for Pick up
-                          </MenuItem>
-                        </Select>
-                      </td>
+                      <td>{order.status}</td>
+                      <td>{order.orderNumber}</td>
                       <td>
                         <IconButton
                           className="btn-dot"
