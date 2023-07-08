@@ -205,6 +205,7 @@ function SuperAdminCartPage() {
                         <div className="flex flex-col">
                           <span className="text-sm font-normal text-[#1A1A1A]">
                             {dayjs(cart.pickupDateTime)?.format('hh:mm A')} - {dayjs(cart.pickupDateTime).add(1, 'hour').format('hh:mm A')}
+
                           </span>
                           <span className="text-xs font-normal text-[#6A6A6A]">
                             {dayjs(cart.pickupDateTime)?.format('MMMM DD, YYYY')}
@@ -214,7 +215,8 @@ function SuperAdminCartPage() {
                       <td>
                         <div className="flex flex-col">
                           <span className="text-sm font-normal text-[#1A1A1A]">
-                            - {dayjs(cart.dropDateTime).add(1, 'hour').format('hh:mm A')}
+                            {dayjs(cart.dropDateTime)?.format('hh:mm A')} - {dayjs(cart.dropDateTime).add(1, 'hour').format('hh:mm A')}
+
                           </span>
                           <span className="text-xs font-normal text-[#6A6A6A]">
                             {dayjs(cart.dropDateTime)?.format('MMMM DD, YYYY')}
