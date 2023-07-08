@@ -30,11 +30,6 @@ function SuperAdminCartPage() {
   const [actionMenuAnchorEl, setActionMenuAnchorEl] = useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
 
-  const actionMenuHandler = (event: any, index: number) => {
-    setActionMenuItemid(list[index].id)
-    setActionMenuAnchorEl(event.currentTarget);
-  };
-
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number,
@@ -77,10 +72,23 @@ function SuperAdminCartPage() {
     });
   }, []);
 
+  const manuHandler = (option: string) => {
+    let doOption = '';
+    if (option === 'Edit') {
+      doOption = 'edit';
+    } else if (option === 'View') {
+      doOption = 'view';
+    } else {
+      doOption = 'download';
+    }
+    navigate(`${doOption}/${actionMenuItemid}`);
+    //console.log('actionMenuItemid', actionMenuItemid)
+  }
+
   return (
     <>
       {actionMenuAnchorEl && (
-        <ActionMenu open={actionMenuOpen} anchorEl={actionMenuAnchorEl} setAnchorEl={setActionMenuAnchorEl} options={actionMenuOptions} itemId={actionMenuItemid} />
+        <ActionMenu open={actionMenuOpen} anchorEl={actionMenuAnchorEl} setAnchorEl={setActionMenuAnchorEl} options={actionMenuOptions} callback={manuHandler} />
       )}
       <SuperAdminTopBar title="Carts" />
       <div className="container mt-5">
@@ -224,7 +232,10 @@ function SuperAdminCartPage() {
                           aria-controls={actionMenuOpen ? 'long-menu' : undefined}
                           aria-expanded={actionMenuOpen ? 'true' : undefined}
                           aria-haspopup="true"
-                          onClick={(event: React.MouseEvent<HTMLElement>) => { actionMenuHandler(event, index) }}
+                          onClick={(event: React.MouseEvent<HTMLElement>) => {
+                            setActionMenuItemid(list[index].id)
+                            setActionMenuAnchorEl(event.currentTarget);
+                          }}
                         >
                           <MoreVertIcon />
                         </IconButton>
