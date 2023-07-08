@@ -6,11 +6,12 @@ export const PERMISSION_PREFIX = 'permission'
 export const ORDER_PREFIX = 'order'
 export const CART_PREFIX = 'cart'
 export const ORDER_STATUS_NEW = "New";
-export const ORDER_STATUS_PENDING = "Pending";
+export const ORDER_STATUS_PICKED_UP = "PickedUp";
 export const ORDER_STATUS_PROCESSING = "Processing";
 export const ORDER_STATUS_IN_DELIVERY = "In-Delivery";
 export const ORDER_STATUS_IN_DELIVERED = "Delivered";
 export const ORDER_STATUS_IN_CANCELLED = "Cancelled";
+export const ORDER_STATUS_PENDING = "Pending";
 export let token = "";
 export const setToken = (data: string) => {
     token = data;
@@ -23,7 +24,7 @@ ORDER_STATUSES.set(ORDER_STATUS_NEW, {
     'text': 'We have received your order',
     'iconText': 'AssignmentTurnedInOutlinedIcon'
 });
-ORDER_STATUSES.set(ORDER_STATUS_PENDING, {
+ORDER_STATUSES.set(ORDER_STATUS_PICKED_UP, {
     'title': 'Order Picked Up',
     'color': 'text-purple-500',
     'text': 'Your order has been collected',

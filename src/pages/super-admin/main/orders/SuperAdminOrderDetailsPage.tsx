@@ -13,33 +13,34 @@ import CircleOutlinedIcon from '@mui/icons-material/CircleOutlined';
 import DomainVerificationOutlinedIcon from '@mui/icons-material/DomainVerificationOutlined';
 import Button from '@mui/material/Button';
 import dayjs from 'dayjs';
-import SuperAdminOrderDetailsPagePopup from './SuperAdminOrderDetailsPagePopup';
+
 import TopBar from '../../../../components/common/TopBar';
 import orderService from '../../../../services/superadmin/SuperAdminOrders';
 
-import { ORDER_STATUSES } from '../../../../utils/constants';
+import { ORDER_STATUS_IN_CANCELLED, ORDER_STATUS_IN_DELIVERED, ORDER_STATUS_IN_DELIVERY, ORDER_STATUSES } from '../../../../utils/constants';
+import PermissionPopup from '../../../../utils/PermissionPopup';
 
 
 function SuperAdminOrderDetailsPage() {
-  const [dialogOpen, setDialogOpen] = useState<boolean>(false);
   const navigate = useNavigate();
+  const [dialogOpen, setDialogOpen] = useState<boolean>(false);
+  const [cancelDialogOpen, setCancelDialogOpen] = useState<boolean>(false);
+  const [dialogText, setDialogText] = useState<any>("")
   const [viewData, setViewData] = useState<any>({});
   const [totalQuantity, setTotalQuantity] = useState(0);
   const [orderStatuses, setOrderStatuses] = useState<any>([]);
+  const [isCancelled, setIsCancelled] = useState<boolean>(false);
+  const [cancelled, setCancelled] = useState<boolean>(false);
+  const [nextBtn, setNextBtn] = useState<any>(null);
   const params = useParams();
   const id: any = params.orderId;
   useEffect(() => {
     orderService.viewService(id).then((item) => {
       if (item) {
-        setViewData(item.data.data);
-        let quantity: number = 0;
-        item.data.data.orderItems.forEach((item: any) => {
-          quantity += item.quantity;
-        });
-        setTotalQuantity(quantity);
+        setData(item.data.data);
       }
     })
-    setOrderStatuses([...ORDER_STATUSES].map(([key, value]) => ({ key, value })));
+
   }, []);
 
   const getIcon = (string: string) => {
@@ -64,14 +65,88 @@ function SuperAdminOrderDetailsPage() {
         icon = <DomainVerificationOutlinedIcon className="text-xl" />;
         break;
       default:
-        icon = null;
+        icon = "";
     }
     return icon;
   }
 
+  const statusUpdateHandler = () => {
+    let newIndex = 0;
+    orderStatuses.forEach((item: any, index: number) => {
+      if (typeof viewData.appOrderStatuses[index] !== 'undefined') {
+        newIndex = index;
+      }
+    })
+    const data = {
+      app_order: id,
+      status: orderStatuses[newIndex + 1].key
+    }
+    createOrderStatusesService(data, orderStatuses[newIndex].key);
+  }
+
+  const statusCancelHandler = () => {
+    const data = {
+      app_order: id,
+      status: ORDER_STATUS_IN_CANCELLED
+    }
+    createOrderStatusesService(data, ORDER_STATUS_IN_CANCELLED);
+
+  }
+
+  const createOrderStatusesService = (data: any, key: string) => {
+    orderService.createStatusesService(data).then((item) => {
+      if (item) {
+        let tempData = viewData;
+        tempData.appOrderStatuses.push(item.data.data);
+        if (key === ORDER_STATUS_IN_CANCELLED) {
+          setCancelled(true);
+        } else {
+          if (data.status === ORDER_STATUS_IN_CANCELLED) {
+            setCancelled(true);
+          } else {
+            setIsCancelled(true);
+          }
+        }
+        setViewData(tempData);
+        setData(tempData);
+      }
+    })
+  }
+
+  const setData = (item: any) => {
+    setViewData(item);
+    let quantity: number = 0;
+    item.orderItems.forEach((item: any) => {
+      quantity += item.quantity;
+    });
+    setTotalQuantity(quantity);
+    const newStatuses = [...ORDER_STATUSES].map(([key, value]) => ({ key, value }));
+    const newResult = newStatuses.map((statusItem, index) => {
+      let result = item.appOrderStatuses.find((matchItem: any) => matchItem.status.includes(statusItem.key));
+      if (result) {
+        if (result.status === ORDER_STATUS_IN_DELIVERY || result.status === ORDER_STATUS_IN_DELIVERED) {
+          setIsCancelled(true);
+        }
+        if (result.status === ORDER_STATUS_IN_CANCELLED) {
+          setCancelled(true);
+        }
+        if (typeof newStatuses[index + 1] !== 'undefined') {
+          setNextBtn(newStatuses[index + 1])
+        }
+        return { ...statusItem, isStatus: true }
+      } else {
+        return { ...statusItem, isStatus: false }
+      }
+    });
+    setOrderStatuses(newResult);
+  }
+
+
+
   return (
     <>
-      <SuperAdminOrderDetailsPagePopup open={dialogOpen} setOpen={setDialogOpen} />
+      {dialogOpen && (<PermissionPopup open={dialogOpen} setOpen={setDialogOpen} dialogText={dialogText} callback={statusUpdateHandler} />)}
+      {cancelDialogOpen && (<PermissionPopup open={cancelDialogOpen} setOpen={setCancelDialogOpen} dialogText={dialogText} callback={statusCancelHandler} />)}
       <TopBar isNestedRoute title="View Order" />
       <div className="container py-3">
         <div className="grid w-full grid-cols-2 gap-3">
@@ -118,9 +193,10 @@ function SuperAdminOrderDetailsPage() {
                 <div className="flex-grow" />
                 <Button
                   type="button"
-                  onClick={() => setDialogOpen(true)}
+                  onClick={() => { setDialogText("Are you sure you want to cancel this Order"); setCancelDialogOpen(true) }}
                   className="rounded-xl bg-neutral-900 py-2 px-12 font-open-sans text-sm font-semibold text-gray-50"
                   color="inherit"
+                  disabled={cancelled ? true : false}
                 >
                   Cancel Order
                 </Button>
@@ -235,206 +311,73 @@ function SuperAdminOrderDetailsPage() {
           </div>
           <div className="mb-auto min-h-[600px] rounded-lg bg-[#fff] shadow-lg">
             <div className="rounded-t-xl bg-neutral-300 py-2 px-4">
-              <div className="flex items-center">
-                <div className="mr-2 flex aspect-square w-9 items-center justify-center rounded-full bg-neutral-400 text-gray-50">
-                  <LocalShippingOutlinedIcon className="text-xl" />
+              <div className="flex items-center justify-between">
+                <div className="flex items-center">
+                  <div className="mr-2 flex aspect-square w-9 items-center justify-center rounded-full bg-neutral-400 text-gray-50">
+                    <LocalShippingOutlinedIcon className="text-xl" />
+                  </div>
+                  <div className="font-open-sans text-base font-semibold text-neutral-900">
+                    Your order is {viewData.status}
+                  </div>
                 </div>
-                <div className="font-open-sans text-base font-semibold text-neutral-900">
-                  Your order is {viewData.status}
+                <div className='items-center justify-center'>
+                  {nextBtn && (
+                    <Button
+                      type="button"
+                      onClick={() => { setDialogText("Are you sure you want to update status this Order"); setDialogOpen(true) }}
+                      className="rounded-xl bg-neutral-900 py-2 px-12 font-open-sans text-sm font-semibold text-gray-50 "
+                      color="inherit"
+                      disabled={cancelled || (isCancelled && nextBtn.key === ORDER_STATUS_IN_CANCELLED) ? true : false}
+                    >
+                      {nextBtn.value.title}
+                    </Button>
+                  )}
                 </div>
               </div>
             </div>
             <div className="flex flex-col gap-4 px-4 py-4">
-              {viewData.appOrderStatuses && orderStatuses.map((item: any, index: number) => {
-                let isExist = false;
-                let color = 'text-neutral-500';
-                const Icon: any = item.value.iconText;
+              {orderStatuses && orderStatuses.map((item: any) => {
+                if (item.key === ORDER_STATUS_IN_CANCELLED && isCancelled) {
+                  return null;
+                } else {
+                  return (
+                    <div key={item.key} className={`flex items-center ${item.isStatus ? "" : "opacity-25"}`}>
+                      {item.isStatus ? (
+                        <CheckCircleOutlineOutlinedIcon />
 
-                if (typeof viewData.appOrderStatuses[index] !== 'undefined') {
-                  isExist = true;
-                }
+                      ) : (
+                        <CircleOutlinedIcon className="text-neutral-500" />
+                      )}
 
-                return (
-                  <div key={item.key} className={`flex items-center ${isExist && viewData.appOrderStatuses[index].status === item.key ? "" : "opacity-25"}`}>
-                    {isExist && viewData.appOrderStatuses[index].status === item.key ? (
-                      <CheckCircleOutlineOutlinedIcon />
-                    ) : (
-                      <CircleOutlinedIcon className="text-neutral-500" />
-                    )}
-
-                    <div className={`relative mx-2 inline-flex ${isExist ? item.value.color : color}`}>
-                      <CircularProgress
-                        thickness={1.5}
-                        className="z-10"
-                        size="3rem"
-                        variant="determinate"
-                        value={100}
-                        color="inherit"
-                      />
-                      <div className="absolute top-0 left-0 bottom-0 right-0 flex items-center justify-center">
-                        {getIcon(item.value.iconText)}
+                      <div className={`relative mx-2 inline-flex ${item.isStatus ? item.value.color : "text-neutral-500"}`}>
+                        <CircularProgress
+                          thickness={1.5}
+                          className="z-10"
+                          size="3rem"
+                          variant="determinate"
+                          value={100}
+                          color="inherit"
+                        />
+                        <div className="absolute top-0 left-0 bottom-0 right-0 flex items-center justify-center">
+                          {getIcon(item.value.iconText)}
+                        </div>
                       </div>
-                    </div>
-                    <div>
-                      <div className={`font-open-sans text-base font-semibold ${isExist ? item.value.color : color}`}>
-                        {item.value.title}
+                      <div>
+                        <div className={`font-open-sans text-base font-semibold ${item.isStatus ? item.value.color : "text-neutral-500"}`}>
+                          {item.value.title}
+                        </div>
+                        <div className="font-open-sans text-sm font-normal text-neutral-500">
+                          {item.value.text}
+                        </div>
                       </div>
+                      <div className="flex-grow" />
                       <div className="font-open-sans text-sm font-normal text-neutral-500">
-                        {item.value.text}
+                        {dayjs(item.createdDate).format('HH:mm, MMM DD, YY')}
                       </div>
                     </div>
-                    <div className="flex-grow" />
-                    <div className="font-open-sans text-sm font-normal text-neutral-500">
-                      {dayjs(item.createdDate).format('HH:mm, MMM DD, YY')}
-                    </div>
-                  </div>
-                )
+                  )
+                }
               })}
-
-
-
-              {/* <div className="flex items-center">
-                <CheckCircleOutlineOutlinedIcon />
-                <div className="relative mx-2 inline-flex text-purple-500">
-                  <CircularProgress
-                    thickness={1.5}
-                    className="z-10"
-                    size="3rem"
-                    variant="determinate"
-                    value={100}
-                    color="inherit"
-                  />
-                  <div className="absolute top-0 left-0 bottom-0 right-0 flex items-center justify-center">
-                    <FilterNoneOutlinedIcon className="text-xl" />
-                  </div>
-                </div>
-                <div>
-                  <div className="font-open-sans text-base font-semibold text-purple-500">
-                    Order Picked Up
-                  </div>
-                  <div className="font-open-sans text-sm font-normal text-neutral-500">
-                    Your order has been collected
-                  </div>
-                </div>
-                <div className="flex-grow" />
-                <div className="font-open-sans text-sm font-normal text-neutral-500">
-                  {dayjs().format('HH:mm, MMM DD, YY')}
-                </div>
-              </div>
-              <div className="flex items-center">
-                <CheckCircleOutlineOutlinedIcon />
-                <div className="relative mx-2 inline-flex text-green-500">
-                  <CircularProgress
-                    thickness={1.5}
-                    className="z-10"
-                    size="3rem"
-                    variant="determinate"
-                    value={100}
-                    color="inherit"
-                  />
-                  <div className="absolute top-0 left-0 bottom-0 right-0 flex items-center justify-center">
-                    <LocationOnOutlinedIcon className="text-xl" />
-                  </div>
-                </div>
-                <div>
-                  <div className="font-open-sans text-base font-semibold text-green-500">
-                    Order In Progress
-                  </div>
-                  <div className="font-open-sans text-sm font-normal text-neutral-500">
-                    Your order is in progress
-                  </div>
-                </div>
-                <div className="flex-grow" />
-                <div className="font-open-sans text-sm font-normal text-neutral-500">
-                  {dayjs().format('HH:mm, MMM DD, YY')}
-                </div>
-              </div>
-              <div className="flex items-center opacity-25">
-                <CircleOutlinedIcon className="text-neutral-500" />
-                <div className="relative mx-2 inline-flex text-neutral-500">
-                  <CircularProgress
-                    thickness={1.5}
-                    className="z-10"
-                    size="3rem"
-                    variant="determinate"
-                    value={100}
-                    color="inherit"
-                  />
-                  <div className="absolute top-0 left-0 bottom-0 right-0 flex items-center justify-center">
-                    <DomainVerificationOutlinedIcon className="text-xl" />
-                  </div>
-                </div>
-                <div>
-                  <div className="font-open-sans text-base font-semibold text-neutral-500">
-                    Order Drop Off
-                  </div>
-                  <div className="font-open-sans text-sm font-normal text-neutral-500">
-                    Your order has been dropped
-                  </div>
-                </div>
-                <div className="flex-grow" />
-                <div className="font-open-sans text-sm font-normal text-neutral-500">
-                  {dayjs().format('HH:mm, MMM DD, YY')}
-                </div>
-              </div>
-              <div className="flex items-center opacity-25">
-                <CircleOutlinedIcon className="text-neutral-500" />
-                <div className="relative mx-2 inline-flex text-neutral-500">
-                  <CircularProgress
-                    thickness={1.5}
-                    className="z-10"
-                    size="3rem"
-                    variant="determinate"
-                    value={100}
-                    color="inherit"
-                  />
-                  <div className="absolute top-0 left-0 bottom-0 right-0 flex items-center justify-center">
-                    <AccessTimeIcon className="text-xl" />
-                  </div>
-                </div>
-                <div>
-                  <div className="font-open-sans text-base font-semibold text-neutral-500">
-                    Order Delivered
-                  </div>
-                  <div className="font-open-sans text-sm font-normal text-neutral-500">
-                    Your order has been delivered
-                  </div>
-                </div>
-                <div className="flex-grow" />
-                <div className="font-open-sans text-sm font-normal text-neutral-500">
-                  {dayjs().format('HH:mm, MMM DD, YY')}
-                </div>
-              </div>
-              <div className="flex items-center opacity-25">
-                <CircleOutlinedIcon className="text-neutral-500" />
-                <div className="relative mx-2 inline-flex text-neutral-500">
-                  <CircularProgress
-                    thickness={1.5}
-                    className="z-10"
-                    size="3rem"
-                    variant="determinate"
-                    value={100}
-                    color="inherit"
-                  />
-                  <div className="absolute top-0 left-0 bottom-0 right-0 flex items-center justify-center">
-                    <DomainVerificationOutlinedIcon className="text-xl" />
-                  </div>
-                </div>
-                <div>
-                  <div className="font-open-sans text-base font-semibold text-neutral-500">
-                    Order Cancelled
-                  </div>
-                  <div className="font-open-sans text-sm font-normal text-neutral-500">
-                    Your order has been cancelled
-                  </div>
-                </div>
-                <div className="flex-grow" />
-                <div className="font-open-sans text-sm font-normal text-neutral-500">
-                  {dayjs().format('HH:mm, MMM DD, YY')}
-                </div>
-              </div> */}
-
-
             </div>
           </div>
         </div>
