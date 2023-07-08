@@ -30,11 +30,6 @@ function SuperAdminCartPage() {
   const [actionMenuAnchorEl, setActionMenuAnchorEl] = useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
 
-  const actionMenuHandler = (event: any, index: number) => {
-    setActionMenuItemid(list[index].id)
-    setActionMenuAnchorEl(event.currentTarget);
-  };
-
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number,
@@ -77,10 +72,23 @@ function SuperAdminCartPage() {
     });
   }, []);
 
+  const manuHandler = (option: string) => {
+    let doOption = '';
+    if (option === 'Edit') {
+      doOption = 'edit';
+    } else if (option === 'View') {
+      doOption = 'view';
+    } else {
+      doOption = 'download';
+    }
+    navigate(`${doOption}/${actionMenuItemid}`);
+    //console.log('actionMenuItemid', actionMenuItemid)
+  }
+
   return (
     <>
       {actionMenuAnchorEl && (
-        <ActionMenu open={actionMenuOpen} anchorEl={actionMenuAnchorEl} setAnchorEl={setActionMenuAnchorEl} options={actionMenuOptions} itemId={actionMenuItemid} />
+        <ActionMenu open={actionMenuOpen} anchorEl={actionMenuAnchorEl} setAnchorEl={setActionMenuAnchorEl} options={actionMenuOptions} callback={manuHandler} />
       )}
       <SuperAdminTopBar title="Carts" />
       <div className="container mt-5">
@@ -197,6 +205,7 @@ function SuperAdminCartPage() {
                         <div className="flex flex-col">
                           <span className="text-sm font-normal text-[#1A1A1A]">
                             {dayjs(cart.pickupDateTime)?.format('hh:mm A')} - {dayjs(cart.pickupDateTime).add(1, 'hour').format('hh:mm A')}
+
                           </span>
                           <span className="text-xs font-normal text-[#6A6A6A]">
                             {dayjs(cart.pickupDateTime)?.format('MMMM DD, YYYY')}
@@ -206,7 +215,8 @@ function SuperAdminCartPage() {
                       <td>
                         <div className="flex flex-col">
                           <span className="text-sm font-normal text-[#1A1A1A]">
-                            - {dayjs(cart.dropDateTime).add(1, 'hour').format('hh:mm A')}
+                            {dayjs(cart.dropDateTime)?.format('hh:mm A')} - {dayjs(cart.dropDateTime).add(1, 'hour').format('hh:mm A')}
+
                           </span>
                           <span className="text-xs font-normal text-[#6A6A6A]">
                             {dayjs(cart.dropDateTime)?.format('MMMM DD, YYYY')}
@@ -224,7 +234,10 @@ function SuperAdminCartPage() {
                           aria-controls={actionMenuOpen ? 'long-menu' : undefined}
                           aria-expanded={actionMenuOpen ? 'true' : undefined}
                           aria-haspopup="true"
-                          onClick={(event: React.MouseEvent<HTMLElement>) => { actionMenuHandler(event, index) }}
+                          onClick={(event: React.MouseEvent<HTMLElement>) => {
+                            setActionMenuItemid(list[index].id)
+                            setActionMenuAnchorEl(event.currentTarget);
+                          }}
                         >
                           <MoreVertIcon />
                         </IconButton>
