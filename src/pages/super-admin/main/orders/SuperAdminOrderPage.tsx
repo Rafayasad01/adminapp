@@ -3,19 +3,10 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import IconButton from '@mui/material/IconButton';
 import Divider from '@mui/material/Divider';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
-import Button from '@mui/material/Button';
-import Select from '@mui/material/Select';
 import { SelectChangeEvent } from '@mui/material';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
 import SearchIcon from '@mui/icons-material/Search';
 import Checkbox from '@mui/material/Checkbox';
 import CheckBoxOutlineBlankOutlinedIcon from '@mui/icons-material/CheckBoxOutlineBlankOutlined';
@@ -31,15 +22,14 @@ import dayjs from 'dayjs';
 import TablePagination from '@mui/material/TablePagination';
 import ActionMenu from '../../../../components/common/ActionMenu';
 
-const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
+
 const actionMenuOptions = ['View'];
 function SuperAdminOrderPage() {
   const navigate = useNavigate();
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
   const [search, setSearch] = useState('');
   const [status, setStatus] = useState('status');
   const [time, setTime] = useState('time');
-  const [isCheckedAll, setIsCheckedAll] = useState(false);
   const [page, setPage] = useState(0);
   const [total, setTotal] = useState(0);
   const [list, setList] = useState<any>([]);
@@ -48,10 +38,7 @@ function SuperAdminOrderPage() {
   const [actionMenuAnchorEl, setActionMenuAnchorEl] = useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
 
-  const actionMenuHandler = (event: any, index: number) => {
-    setActionMenuItemid(list[index].id)
-    setActionMenuAnchorEl(event.currentTarget);
-  };
+
 
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
@@ -76,7 +63,6 @@ function SuperAdminOrderPage() {
     });
   };
 
-  const open = Boolean(anchorEl);
 
   const handleCheckAllChange = (event: any) => {
     setList((newlist: any) => newlist.map((item: any) => ({ ...item, orderStatus: item.status, isSelected: event.target.checked })));
@@ -113,10 +99,23 @@ function SuperAdminOrderPage() {
     });
   }, []);
 
+  const manuHandler = (option: string) => {
+    let doOption = '';
+    if (option === 'Edit') {
+      doOption = 'edit';
+    } else if (option === 'View') {
+      doOption = 'view';
+    } else {
+      doOption = 'download';
+    }
+    navigate(`${doOption}/${actionMenuItemid}`);
+    //console.log('actionMenuItemid', actionMenuItemid)
+  }
+
   return (
     <>
       {actionMenuAnchorEl && (
-        <ActionMenu open={actionMenuOpen} anchorEl={actionMenuAnchorEl} setAnchorEl={setActionMenuAnchorEl} options={actionMenuOptions} itemId={actionMenuItemid} />
+        <ActionMenu open={actionMenuOpen} anchorEl={actionMenuAnchorEl} setAnchorEl={setActionMenuAnchorEl} options={actionMenuOptions} callback={manuHandler} />
       )}
       <SuperAdminTopBar title="Orders" />
       <div className="container mt-5">
@@ -262,7 +261,10 @@ function SuperAdminOrderPage() {
                           aria-controls={actionMenuOpen ? 'long-menu' : undefined}
                           aria-expanded={actionMenuOpen ? 'true' : undefined}
                           aria-haspopup="true"
-                          onClick={(event: React.MouseEvent<HTMLElement>) => { actionMenuHandler(event, index) }}
+                          onClick={(event: React.MouseEvent<HTMLElement>) => {
+                            setActionMenuItemid(list[index].id)
+                            setActionMenuAnchorEl(event.currentTarget);
+                          }}
                         >
                           <MoreVertIcon />
                         </IconButton>
@@ -285,64 +287,6 @@ function SuperAdminOrderPage() {
           </div>
         </div>
       </div>
-      {/* <Dialog
-        open={openDialog}
-        onClose={handleDialogClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle
-          id="alert-dialog-title"
-          sx={{
-            color: '#1A1A1A',
-            fontFamily: 'Inter',
-            fonWeight: 600,
-            fonSize: '20px',
-            padding: '10px 15px 0 15px',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          Cancel Order?
-        </DialogTitle>
-        <DialogContent
-          sx={{
-            color: '#6A6A6A',
-            fontFamily: 'Inter',
-            fonWeight: 400,
-            fonSize: '14px',
-            padding: '10px 15px 0 15px',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          <DialogContentText id="alert-dialog-description">
-            Do you really want to cancel this order?
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions
-          sx={{ justifyContent: 'space-between', margin: '15px 5px 10px 5px' }}
-        >
-          <Button
-            sx={{ width: '140px' }}
-            variant="contained"
-            className="btn-black-outline mr-3"
-            onClick={handleDialogClose}
-          >
-            Yes, Confirm
-          </Button>
-          <Button
-            sx={{ width: '140px' }}
-            variant="contained"
-            className="btn-black-fill btn-icon"
-            onClick={handleDialogClose}
-          >
-            No, Cancel
-          </Button>
-        </DialogActions>
-      </Dialog> */}
     </>
   );
 }
