@@ -10,26 +10,8 @@ const post = (endPoint: string, data: any) => {
     });
 }
 
-const get = (endPoint: string, page: number, size: number) => {
-    return axios.get(`${BASE_URL}${endPoint}/${page}/${size}`, {
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': token
-        }
-    });
-}
-
-const getSearch = (endPoint: string, search: string, page: number, size: number) => {
-    return axios.get(`${BASE_URL}${endPoint}/${search}/${page}/${size}`, {
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': token
-        }
-    });
-}
-
-const getView = (endPoint: string, id: string) => {
-    return axios.get(`${BASE_URL}${endPoint}/${id}`, {
+const get = (endPoint: string) => {
+    return axios.get(`${BASE_URL}${endPoint}`, {
         headers: {
             'Content-Type': 'application/json',
             'Authorization': token
@@ -39,7 +21,5 @@ const getView = (endPoint: string, id: string) => {
 
 export default {
     post,
-    get,
-    getSearch,
-    getView
+    get
 }
