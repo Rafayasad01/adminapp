@@ -7,25 +7,16 @@ type Props = {
     anchorEl: any;
     setAnchorEl: React.Dispatch<React.SetStateAction<null | HTMLElement>>;
     options: string[];
-    itemId: string;
+    callback: Function;
 };
 const ITEM_HEIGHT = 48;
-function ActionMenu({ open, anchorEl, setAnchorEl, options, itemId }: Props) {
-    const navigate = useNavigate();
+function ActionMenu({ open, anchorEl, setAnchorEl, options, callback }: Props) {
     const handleClose = () => {
         setAnchorEl(null);
     };
     const handleSelectedMenuClose = (option: string) => {
-        let doOption = '';
-        if (option === 'Edit') {
-            doOption = 'edit';
-        } else if (option === 'View') {
-            doOption = 'view';
-        } else {
-            doOption = 'download';
-        }
         setAnchorEl(null);
-        navigate(`${doOption}/${itemId}`);
+        callback(option);
     };
     return (
         <Menu
