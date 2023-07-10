@@ -38,19 +38,19 @@ ORDER_STATUSES.set(ORDER_STATUS_PROCESSING, {
 });
 ORDER_STATUSES.set(ORDER_STATUS_IN_DELIVERY, {
     'title': 'Order Drop Off',
-    'color': 'text-neutral-500',
+    'color': 'text-orange-500',
     'text': 'Your order has been dropped',
     'iconText': 'DomainVerificationOutlinedIcon'
 });
 ORDER_STATUSES.set(ORDER_STATUS_IN_DELIVERED, {
     'title': 'Order Delivered',
-    'color': 'text-neutral-500',
+    'color': 'text-yellow-500',
     'text': 'Your order has been delivered',
     'iconText': 'AccessTimeIcon'
 });
 ORDER_STATUSES.set(ORDER_STATUS_IN_CANCELLED, {
     'title': 'Order Cancelled',
-    'color': 'text-neutral-500',
+    'color': 'text-red-500',
     'text': 'Your order has been cancelled',
     'iconText': 'DomainVerificationOutlinedIcon'
 });

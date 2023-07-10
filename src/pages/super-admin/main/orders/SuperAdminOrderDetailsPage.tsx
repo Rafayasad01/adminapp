@@ -32,6 +32,7 @@ function SuperAdminOrderDetailsPage() {
   const [isCancelled, setIsCancelled] = useState<boolean>(false);
   const [cancelled, setCancelled] = useState<boolean>(false);
   const [nextBtn, setNextBtn] = useState<any>(null);
+  const [currentStatus, setCurrentStatus] = useState<any>(null)
   const params = useParams();
   const id: any = params.orderId;
   useEffect(() => {
@@ -45,27 +46,20 @@ function SuperAdminOrderDetailsPage() {
 
   const getIcon = (string: string) => {
     let icon;
-    switch (string) {
-      case 'AssignmentTurnedInOutlinedIcon':
-        icon = <AssignmentTurnedInOutlinedIcon className="text-xl" />;
-        break;
-      case 'FilterNoneOutlinedIcon':
-        icon = <FilterNoneOutlinedIcon className="text-xl" />;
-        break;
-      case 'LocationOnOutlinedIcon':
-        icon = <LocationOnOutlinedIcon className="text-xl" />;
-        break;
-      case 'DomainVerificationOutlinedIcon':
-        icon = <DomainVerificationOutlinedIcon className="text-xl" />;
-        break;
-      case 'AccessTimeIcon':
-        icon = <AccessTimeIcon className="text-xl" />;
-        break;
-      case 'DomainVerificationOutlinedIcon':
-        icon = <DomainVerificationOutlinedIcon className="text-xl" />;
-        break;
-      default:
-        icon = "";
+    if (string === 'AssignmentTurnedInOutlinedIcon') {
+      icon = <AssignmentTurnedInOutlinedIcon className="text-xl" />;
+    } else if (string === 'FilterNoneOutlinedIcon') {
+      icon = <FilterNoneOutlinedIcon className="text-xl" />;
+    } else if (string === 'LocationOnOutlinedIcon') {
+      icon = <LocationOnOutlinedIcon className="text-xl" />;
+    } else if (string === 'DomainVerificationOutlinedIcon') {
+      icon = <DomainVerificationOutlinedIcon className="text-xl" />;
+    } else if (string === 'AccessTimeIcon') {
+      icon = <AccessTimeIcon className="text-xl" />;
+    } else if (string === 'DomainVerificationOutlinedIcon') {
+      icon = <DomainVerificationOutlinedIcon className="text-xl" />;
+    } else {
+      icon = "";
     }
     return icon;
   }
@@ -94,19 +88,13 @@ function SuperAdminOrderDetailsPage() {
   }
 
   const createOrderStatusesService = (data: any, key: string) => {
+    if (key === ORDER_STATUS_IN_CANCELLED && (cancelled || isCancelled)) {
+      return null;
+    }
     orderService.createStatusesService(data).then((item) => {
       if (item) {
         let tempData = viewData;
         tempData.appOrderStatuses.push(item.data.data);
-        if (key === ORDER_STATUS_IN_CANCELLED) {
-          setCancelled(true);
-        } else {
-          if (data.status === ORDER_STATUS_IN_CANCELLED) {
-            setCancelled(true);
-          } else {
-            setIsCancelled(true);
-          }
-        }
         setViewData(tempData);
         setData(tempData);
       }
@@ -116,16 +104,23 @@ function SuperAdminOrderDetailsPage() {
   const setData = (item: any) => {
     setViewData(item);
     let quantity: number = 0;
-    item.orderItems.forEach((item: any) => {
-      quantity += item.quantity;
-    });
+    item.appOrderStatuses.forEach((item: any, index: number) => {
+      if (item.status !== ORDER_STATUS_IN_CANCELLED) {
+        quantity = (index + 1) * 20;
+      }
+    })
     setTotalQuantity(quantity);
+    let laststatus = {};
     const newStatuses = [...ORDER_STATUSES].map(([key, value]) => ({ key, value }));
     const newResult = newStatuses.map((statusItem, index) => {
       let result = item.appOrderStatuses.find((matchItem: any) => matchItem.status.includes(statusItem.key));
       if (result) {
+        laststatus = statusItem;
         if (result.status === ORDER_STATUS_IN_DELIVERY || result.status === ORDER_STATUS_IN_DELIVERED) {
           setIsCancelled(true);
+          if (result.status === ORDER_STATUS_IN_DELIVERED) {
+            setCancelled(true);
+          }
         }
         if (result.status === ORDER_STATUS_IN_CANCELLED) {
           setCancelled(true);
@@ -138,6 +133,7 @@ function SuperAdminOrderDetailsPage() {
         return { ...statusItem, isStatus: false }
       }
     });
+    setCurrentStatus(laststatus);
     setOrderStatuses(newResult);
   }
 
@@ -153,7 +149,7 @@ function SuperAdminOrderDetailsPage() {
           <div className="mb-auto min-h-[600px] rounded-lg bg-[#fff] shadow-lg">
             <div className="p-4">
               <div className="flex items-center">
-                <div className="relative mr-2 inline-flex text-green-500">
+                <div className={`relative mr-2 inline-flex text-green-500 ${currentStatus && currentStatus.key === ORDER_STATUS_IN_CANCELLED ? 'text-red-500' : 'text-green-500'}`}>
                   <CircularProgress
                     thickness={1.5}
                     className="z-10"
@@ -171,7 +167,9 @@ function SuperAdminOrderDetailsPage() {
                     color="inherit"
                   />
                   <div className="absolute top-0 left-0 bottom-0 right-0 flex items-center justify-center">
-                    <LocationOnOutlinedIcon className="text-3xl" />
+                    {currentStatus &&
+                      getIcon(currentStatus.value.iconText)
+                    }
                   </div>
                 </div>
                 <div className="flex flex-col gap-1">
@@ -186,17 +184,17 @@ function SuperAdminOrderDetailsPage() {
                   <div className="font-open-sans text-xs font-normal text-neutral-500">
                     {dayjs(viewData.updatedDate)?.format('hh:mm')}, {dayjs(viewData.updatedDate)?.format('DD-MM-YYYY')}
                   </div>
-                  <div className="font-open-sans text-sm font-semibold text-green-500">
-                    Out For Delivery
+                  <div className={`font-open-sans text-sm font-semibold  ${currentStatus && currentStatus.key === ORDER_STATUS_IN_CANCELLED ? 'text-red-500' : 'text-green-500'}`}>
+                    {currentStatus && `${currentStatus.key === ORDER_STATUS_IN_CANCELLED ? currentStatus.key : `Out For ${currentStatus.key}`}`}
                   </div>
                 </div>
                 <div className="flex-grow" />
                 <Button
                   type="button"
                   onClick={() => { setDialogText("Are you sure you want to cancel this Order"); setCancelDialogOpen(true) }}
-                  className="rounded-xl bg-neutral-900 py-2 px-12 font-open-sans text-sm font-semibold text-gray-50"
+                  className={`rounded-xl py-2 px-12 font-open-sans text-sm font-semibold ${cancelled || isCancelled ? 'bg-neutral-400 text-neutral-900' : 'bg-neutral-900 text-gray-50'}`}
                   color="inherit"
-                  disabled={cancelled ? true : false}
+                  disabled={cancelled || isCancelled ? true : false}
                 >
                   Cancel Order
                 </Button>
@@ -325,7 +323,7 @@ function SuperAdminOrderDetailsPage() {
                     <Button
                       type="button"
                       onClick={() => { setDialogText("Are you sure you want to update status this Order"); setDialogOpen(true) }}
-                      className="rounded-xl bg-neutral-900 py-2 px-12 font-open-sans text-sm font-semibold text-gray-50 "
+                      className={`rounded-xl py-2 px-12 font-open-sans text-sm font-semibold ${cancelled || (isCancelled && nextBtn.key === ORDER_STATUS_IN_CANCELLED) ? 'bg-neutral-400 text-neutral-900' : 'bg-neutral-900 text-gray-50'}`}
                       color="inherit"
                       disabled={cancelled || (isCancelled && nextBtn.key === ORDER_STATUS_IN_CANCELLED) ? true : false}
                     >
