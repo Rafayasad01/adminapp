@@ -21,6 +21,7 @@ import order from '../../../../services/superadmin/SuperAdminOrders';
 import dayjs from 'dayjs';
 import TablePagination from '@mui/material/TablePagination';
 import ActionMenu from '../../../../components/common/ActionMenu';
+import { ORDER_STATUS_IN_CANCELLED, ORDER_STATUS_IN_DELIVERED, ORDER_STATUS_IN_DELIVERY, ORDER_STATUS_NEW, ORDER_STATUS_PICKED_UP, ORDER_STATUS_PROCESSING } from '../../../../utils/constants';
 
 
 const actionMenuOptions = ['View'];
@@ -110,6 +111,25 @@ function SuperAdminOrderPage() {
     }
     navigate(`${doOption}/${actionMenuItemid}`);
     //console.log('actionMenuItemid', actionMenuItemid)
+  }
+
+  const getStatusTag = (status: string) => {
+
+    let tag = "";
+    if (status === ORDER_STATUS_NEW) {
+      tag = "blue";
+    } else if (status === ORDER_STATUS_PICKED_UP) {
+      tag = "purple";
+    } else if (status === ORDER_STATUS_PROCESSING) {
+      tag = "green";
+    } else if (status === ORDER_STATUS_IN_DELIVERY) {
+      tag = "orange";
+    } else if (status === ORDER_STATUS_IN_DELIVERED) {
+      tag = "yellow";
+    } else if (status === ORDER_STATUS_IN_CANCELLED) {
+      tag = "red";
+    }
+    return tag;
   }
 
   return (
@@ -231,27 +251,29 @@ function SuperAdminOrderPage() {
                       <td>
                         <div className="flex flex-col">
                           <span className="text-sm font-normal text-[#1A1A1A]">
-                            {dayjs(order.appUserCart.pickupDateTime)?.format('hh:mm A')} - {dayjs(order.appUserCart.pickupDateTime).add(1, 'hour').format('hh:mm A')}
+                            {dayjs(order.pickupDateTime)?.format('hh:mm A')} - {dayjs(order.pickupDateTime).add(1, 'hour').format('hh:mm A')}
                           </span>
                           <span className="text-xs font-normal text-[#6A6A6A]">
-                            {dayjs(order.appUserCart.pickupDateTime)?.format('MMMM DD, YYYY')}
+                            {dayjs(order.pickupDateTime)?.format('MMMM DD, YYYY')}
                           </span>
                         </div>
                       </td>
                       <td>
                         <div className="flex flex-col">
                           <span className="text-sm font-normal text-[#1A1A1A]">
-                            {dayjs(order.appUserCart.dropDateTime)?.format('hh:mm A')} - {dayjs(order.appUserCart.dropDateTime).add(1, 'hour').format('hh:mm A')}
+                            {dayjs(order.dropDateTime)?.format('hh:mm A')} - {dayjs(order.dropDateTime).add(1, 'hour').format('hh:mm A')}
                           </span>
                           <span className="text-xs font-normal text-[#6A6A6A]">
-                            {dayjs(order.appUserCart.dropDateTime)?.format('MMMM DD, YYYY')}
+                            {dayjs(order.dropDateTime)?.format('MMMM DD, YYYY')}
                           </span>
                         </div>
                       </td>
                       <td className="text-sm font-semibold text-[#1A1A1A]">
                         ${order.grandTotal}
                       </td>
-                      <td>{order.status}</td>
+                      <td>
+                        <span className={`bg-${getStatusTag(order.status)}-100 text-${getStatusTag(order.status)}-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-${getStatusTag(order.status)}-900 dark:text-${getStatusTag(order.status)}-300`}>{order.status}</span>
+                      </td>
                       <td>{order.orderNumber}</td>
                       <td>
                         <IconButton

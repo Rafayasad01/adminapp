@@ -16,6 +16,7 @@ import cart from '../../../../services/superadmin/SuperAdminCarts';
 import dayjs from 'dayjs';
 import TablePagination from '@mui/material/TablePagination';
 import ActionMenu from '../../../../components/common/ActionMenu';
+import { CART_STATUS_NEW, CART_STATUS_PROCESSING } from '../../../../utils/constants';
 
 const actionMenuOptions = ['View'];
 function SuperAdminCartPage() {
@@ -77,10 +78,33 @@ function SuperAdminCartPage() {
     });
   }, []);
 
+  const manuHandler = (option: string) => {
+    let doOption = '';
+    if (option === 'Edit') {
+      doOption = 'edit';
+    } else if (option === 'View') {
+      doOption = 'view';
+    } else {
+      doOption = 'download';
+    }
+    navigate(`${doOption}/${actionMenuItemid}`);
+    //console.log('actionMenuItemid', actionMenuItemid)
+  }
+
+  const getStatusTag = (status: string) => {
+    let tag = "";
+    if (status === CART_STATUS_NEW) {
+      tag = "blue";
+    } else if (status === CART_STATUS_PROCESSING) {
+      tag = "gray";
+    }
+    return tag;
+  }
+
   return (
     <>
       {actionMenuAnchorEl && (
-        <ActionMenu open={actionMenuOpen} anchorEl={actionMenuAnchorEl} setAnchorEl={setActionMenuAnchorEl} options={actionMenuOptions} itemId={actionMenuItemid} />
+        <ActionMenu open={actionMenuOpen} anchorEl={actionMenuAnchorEl} setAnchorEl={setActionMenuAnchorEl} options={actionMenuOptions} callback={manuHandler} />
       )}
       <SuperAdminTopBar title="Carts" />
       <div className="container mt-5">
@@ -171,7 +195,7 @@ function SuperAdminCartPage() {
                   <th>Pickup Time</th>
                   <th>Drop-off Time</th>
                   <th>Amount</th>
-                  {/* <th>Status</th> */}
+                  <th>Status</th>
                   <th>&nbsp;</th>
                 </tr>
               </thead>
@@ -206,7 +230,7 @@ function SuperAdminCartPage() {
                       <td>
                         <div className="flex flex-col">
                           <span className="text-sm font-normal text-[#1A1A1A]">
-                            - {dayjs(cart.dropDateTime).add(1, 'hour').format('hh:mm A')}
+                            {dayjs(cart.dropDateTime)?.format('hh:mm A')} - {dayjs(cart.dropDateTime).add(1, 'hour').format('hh:mm A')}
                           </span>
                           <span className="text-xs font-normal text-[#6A6A6A]">
                             {dayjs(cart.dropDateTime)?.format('MMMM DD, YYYY')}
@@ -215,6 +239,9 @@ function SuperAdminCartPage() {
                       </td>
                       <td className="text-sm font-semibold text-[#1A1A1A]">
                         ${cart.grandTotal}
+                      </td>
+                      <td>
+                        <span className={`bg-${getStatusTag(cart.status)}-100 text-${getStatusTag(cart.status)}-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-${getStatusTag(cart.status)}-900 dark:text-${getStatusTag(cart.status)}-300`}>{cart.status}</span>
                       </td>
                       <td>
                         <IconButton

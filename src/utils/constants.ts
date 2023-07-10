@@ -12,6 +12,8 @@ export const ORDER_STATUS_IN_DELIVERY = "In-Delivery";
 export const ORDER_STATUS_IN_DELIVERED = "Delivered";
 export const ORDER_STATUS_IN_CANCELLED = "Cancelled";
 export const ORDER_STATUS_PENDING = "Pending";
+export const CART_STATUS_NEW = "New";
+export const CART_STATUS_PROCESSING = "Processing";
 export let token = "";
 export const setToken = (data: string) => {
     token = data;
@@ -38,19 +40,19 @@ ORDER_STATUSES.set(ORDER_STATUS_PROCESSING, {
 });
 ORDER_STATUSES.set(ORDER_STATUS_IN_DELIVERY, {
     'title': 'Order Drop Off',
-    'color': 'text-neutral-500',
+    'color': 'text-orange-500',
     'text': 'Your order has been dropped',
     'iconText': 'DomainVerificationOutlinedIcon'
 });
 ORDER_STATUSES.set(ORDER_STATUS_IN_DELIVERED, {
     'title': 'Order Delivered',
-    'color': 'text-neutral-500',
+    'color': 'text-yellow-500',
     'text': 'Your order has been delivered',
     'iconText': 'AccessTimeIcon'
 });
 ORDER_STATUSES.set(ORDER_STATUS_IN_CANCELLED, {
     'title': 'Order Cancelled',
-    'color': 'text-neutral-500',
+    'color': 'text-red-500',
     'text': 'Your order has been cancelled',
     'iconText': 'DomainVerificationOutlinedIcon'
 });
