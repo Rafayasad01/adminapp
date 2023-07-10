@@ -12,6 +12,8 @@ export const ORDER_STATUS_IN_DELIVERY = "In-Delivery";
 export const ORDER_STATUS_IN_DELIVERED = "Delivered";
 export const ORDER_STATUS_IN_CANCELLED = "Cancelled";
 export const ORDER_STATUS_PENDING = "Pending";
+export const CART_STATUS_NEW = "New";
+export const CART_STATUS_PROCESSING = "Processing";
 export let token = "";
 export const setToken = (data: string) => {
     token = data;
