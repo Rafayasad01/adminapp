@@ -87,8 +87,7 @@ function CartDetailsPage() {
                     </span>
                   </div>
                   <div className="font-open-sans text-xs font-normal text-neutral-500">
-                    {/* 08:35 , 05-01-2020 */}
-                    {dayjs(viewData.updatedDate)?.format('hh:mm')}, {dayjs(viewData.updatedDate)?.format('DD-MM-YYYY')}
+                    {dayjs(viewData.updatedDate).isValid() ? (`${dayjs(viewData.updatedDate)?.format('ddd, MMM DD, YYYY | hh:mm:ssA')}`) : "----"}
                   </div>
                   <div className={`font-open-sans text-sm font-semibold ${viewData.status === CART_STATUS_NEW ? 'text-blue-500' : 'text-green-500'}`}>
                     {viewData.status}
@@ -104,14 +103,19 @@ function CartDetailsPage() {
                   <div className="mt-2 flex items-center gap-2">
                     <DateRangeIcon className="mr-2 text-xl text-neutral-900" />
                     <div className="font-open-sans text-xs font-normal text-neutral-500">
-                      {dayjs(viewData.pickupDateTime)?.format('ddd, MMM MM, YYYY')}
+                      {dayjs(viewData.pickupDateTime).isValid() ? dayjs(viewData.pickupDateTime)?.format('ddd, MMM DD, YYYY') : "----"}
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
                     <AccessTimeIcon className="mr-2 text-xl text-neutral-900" />
                     <div className="font-open-sans text-xs font-normal text-neutral-500">
-                      {dayjs(viewData.pickupDateTime)?.format('HH:mm')} -
-                      {dayjs(viewData.pickupDateTime)?.add(1, 'hours').format('HH:mm')}
+                      {dayjs(viewData.pickupDateTime).isValid() ?
+                        `
+                      ${dayjs(viewData.pickupDateTime)?.format('HH:mm:ssA')} -
+                      ${dayjs(viewData.pickupDateTime)?.add(1, 'hours').format('HH:mm:ssA')}
+                      `
+                        : "----"}
+
                     </div>
                   </div>
                 </div>
@@ -122,14 +126,18 @@ function CartDetailsPage() {
                   <div className="mt-2 flex items-center gap-2">
                     <DateRangeIcon className="mr-2 text-xl text-neutral-900" />
                     <div className="font-open-sans text-xs font-normal text-neutral-500">
-                      {dayjs(viewData.dropDateTime)?.format('ddd, MMM MM, YYYY')}
+                      {dayjs(viewData.dropDateTime).isValid() ? dayjs(viewData.dropDateTime)?.format('ddd, MMM DD, YYYY') : "----"}
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
                     <AccessTimeIcon className="mr-2 text-xl text-neutral-900" />
                     <div className="font-open-sans text-xs font-normal text-neutral-500">
-                      {dayjs(viewData.dropDateTime)?.format('HH:mm')} -
-                      {dayjs(viewData.dropDateTime)?.add(1, 'hours').format('HH:mm')}
+                      {dayjs(viewData.dropDateTime).isValid() ?
+                        `
+                      ${dayjs(viewData.dropDateTime)?.format('HH:mm:ssA')} -
+                      ${dayjs(viewData.dropDateTime)?.add(1, 'hours').format('HH:mm:ssA')}
+                      `
+                        : "----"}
                     </div>
                   </div>
                 </div>

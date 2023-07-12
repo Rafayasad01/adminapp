@@ -182,10 +182,10 @@ function SuperAdminOrderDetailsPage() {
                     </span>
                   </div>
                   <div className="font-open-sans text-xs font-normal text-neutral-500">
-                    {dayjs(viewData.updatedDate)?.format('hh:mm')}, {dayjs(viewData.updatedDate)?.format('DD-MM-YYYY')}
+                    {dayjs(viewData.updatedDate)?.format('ddd, MMM DD, YYYY | hh:mm:ssA')}
                   </div>
                   <div className={`font-open-sans text-sm font-semibold  ${currentStatus && currentStatus.key === ORDER_STATUS_IN_CANCELLED ? 'text-red-500' : 'text-green-500'}`}>
-                    {currentStatus && `${currentStatus.key === ORDER_STATUS_IN_CANCELLED ? currentStatus.key : `Out For ${currentStatus.key}`}`}
+                    {currentStatus && `${currentStatus.value.title}`}
                   </div>
                 </div>
                 <div className="flex-grow" />
@@ -208,14 +208,14 @@ function SuperAdminOrderDetailsPage() {
                   <div className="mt-2 flex items-center gap-2">
                     <DateRangeIcon className="mr-2 text-xl text-neutral-900" />
                     <div className="font-open-sans text-xs font-normal text-neutral-500">
-                      {dayjs(viewData.pickupDateTime)?.format('ddd, MMM MM, YYYY')}
+                      {dayjs(viewData.pickupDateTime)?.format('ddd, MMM DD, YYYY')}
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
                     <AccessTimeIcon className="mr-2 text-xl text-neutral-900" />
                     <div className="font-open-sans text-xs font-normal text-neutral-500">
-                      {dayjs(viewData.pickupDateTime)?.format('HH:mm')} -
-                      {dayjs(viewData.pickupDateTime)?.add(1, 'hours').format('HH:mm')}
+                      {dayjs(viewData.pickupDateTime)?.format('HH:mm:ssA')} -
+                      {dayjs(viewData.pickupDateTime)?.add(1, 'hours').format('HH:mm:ssA')}
                     </div>
                   </div>
                 </div>
@@ -226,14 +226,14 @@ function SuperAdminOrderDetailsPage() {
                   <div className="mt-2 flex items-center gap-2">
                     <DateRangeIcon className="mr-2 text-xl text-neutral-900" />
                     <div className="font-open-sans text-xs font-normal text-neutral-500">
-                      {dayjs(viewData.dropDateTime)?.format('ddd, MMM MM, YYYY')}
+                      {dayjs(viewData.dropDateTime)?.format('ddd, MMM DD, YYYY')}
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
                     <AccessTimeIcon className="mr-2 text-xl text-neutral-900" />
                     <div className="font-open-sans text-xs font-normal text-neutral-500">
-                      {dayjs(viewData.dropDateTime)?.format('HH:mm')} -
-                      {dayjs(viewData.dropDateTime)?.add(1, 'hours').format('HH:mm')}
+                      {dayjs(viewData.dropDateTime)?.format('HH:mm:ssA')} -
+                      {dayjs(viewData.dropDateTime)?.add(1, 'hours').format('HH:mm:ssA')}
                     </div>
                   </div>
                 </div>
@@ -370,7 +370,7 @@ function SuperAdminOrderDetailsPage() {
                       </div>
                       <div className="flex-grow" />
                       <div className="font-open-sans text-sm font-normal text-neutral-500">
-                        {dayjs(item.createdDate).format('HH:mm, MMM DD, YY')}
+                        {dayjs(item.createdDate).format('MMM DD, YY | HH:mm:ssA')}
                       </div>
                     </div>
                   )
