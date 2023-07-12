@@ -200,38 +200,46 @@ function SuperAdminCartPage() {
                   return (
                     <tr key={cart.id}>
                       <td>
-                        <div className="flex flex-col">
-                          <span className="text-sm font-semibold text-[#1A1A1A]">
-                            {cart.user.firstName} {cart.user.lastName}
-                          </span>
-                          <span className="text-xs font-normal text-[#6A6A6A]">
-                            {cart.user.email}
-                          </span>
-                          <span className="text-xs font-normal text-[#6A6A6A]">
-                            {cart.userAddress.address}
-                          </span>
-                        </div>
+                        {cart.user.firstName ? (
+                          <div className="flex flex-col">
+                            <span className="text-sm font-semibold text-[#1A1A1A]">
+                              {cart.user.firstName} {cart.user.lastName}
+                            </span>
+                            <span className="text-xs font-normal text-[#6A6A6A]">
+                              {cart.user.email}
+                            </span>
+                            <span className="text-xs font-normal text-[#6A6A6A]">
+                              {cart.userAddress.address}
+                            </span>
+                          </div>
+                        ) : "----"}
                       </td>
                       <td>
-                        <div className="flex flex-col">
-                          <span className="text-sm font-normal text-[#1A1A1A]">
-                            {dayjs(cart.pickupDateTime)?.format('hh:mm A')} - {dayjs(cart.pickupDateTime).add(1, 'hour').format('hh:mm A')}
+                        {dayjs(cart.pickupDateTime).isValid() ? (
+                          <div className="flex flex-col">
+                            <span className="text-sm font-normal text-[#1A1A1A]">
+                              {dayjs(cart.pickupDateTime)?.format('hh:mm:ssA')} - {dayjs(cart.pickupDateTime).add(1, 'hour').format('hh:mm:ssA')}
 
-                          </span>
-                          <span className="text-xs font-normal text-[#6A6A6A]">
-                            {dayjs(cart.pickupDateTime)?.format('MMMM DD, YYYY')}
-                          </span>
-                        </div>
+                            </span>
+                            <span className="text-xs font-normal text-[#6A6A6A]">
+                              {dayjs(cart.pickupDateTime)?.format('ddd, MMM DD, YYYY')}
+                            </span>
+                          </div>
+                        ) : "----"}
+
                       </td>
                       <td>
-                        <div className="flex flex-col">
-                          <span className="text-sm font-normal text-[#1A1A1A]">
-                            {dayjs(cart.dropDateTime)?.format('hh:mm A')} - {dayjs(cart.dropDateTime).add(1, 'hour').format('hh:mm A')}
-                          </span>
-                          <span className="text-xs font-normal text-[#6A6A6A]">
-                            {dayjs(cart.dropDateTime)?.format('MMMM DD, YYYY')}
-                          </span>
-                        </div>
+                        {dayjs(cart.dropDateTime).isValid() ? (
+                          <div className="flex flex-col">
+                            <span className="text-sm font-normal text-[#1A1A1A]">
+                              {dayjs(cart.dropDateTime)?.format('hh:mm:ssA')} - {dayjs(cart.dropDateTime).add(1, 'hour').format('hh:mm:ssA')}
+                            </span>
+                            <span className="text-xs font-normal text-[#6A6A6A]">
+                              {dayjs(cart.dropDateTime)?.format('ddd, MMM DD, YYYY')}
+                            </span>
+                          </div>
+                        ) : "----"}
+
                       </td>
                       <td className="text-sm font-semibold text-[#1A1A1A]">
                         ${cart.grandTotal}

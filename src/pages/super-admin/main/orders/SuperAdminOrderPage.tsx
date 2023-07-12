@@ -251,20 +251,20 @@ function SuperAdminOrderPage() {
                       <td>
                         <div className="flex flex-col">
                           <span className="text-sm font-normal text-[#1A1A1A]">
-                            {dayjs(order.pickupDateTime)?.format('hh:mm A')} - {dayjs(order.pickupDateTime).add(1, 'hour').format('hh:mm A')}
+                            {dayjs(order.pickupDateTime)?.format('hh:mm:ssA')} - {dayjs(order.pickupDateTime).add(1, 'hour').format('hh:mm:ssA')}
                           </span>
                           <span className="text-xs font-normal text-[#6A6A6A]">
-                            {dayjs(order.pickupDateTime)?.format('MMMM DD, YYYY')}
+                            {dayjs(order.pickupDateTime)?.format('ddd, MMM DD, YYYY')}
                           </span>
                         </div>
                       </td>
                       <td>
                         <div className="flex flex-col">
                           <span className="text-sm font-normal text-[#1A1A1A]">
-                            {dayjs(order.dropDateTime)?.format('hh:mm A')} - {dayjs(order.dropDateTime).add(1, 'hour').format('hh:mm A')}
+                            {dayjs(order.dropDateTime)?.format('hh:mm:ssA')} - {dayjs(order.dropDateTime).add(1, 'hour').format('hh:mm:ssA')}
                           </span>
                           <span className="text-xs font-normal text-[#6A6A6A]">
-                            {dayjs(order.dropDateTime)?.format('MMMM DD, YYYY')}
+                            {dayjs(order.dropDateTime)?.format('ddd, MMM DD, YYYY')}
                           </span>
                         </div>
                       </td>
