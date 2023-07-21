@@ -40,13 +40,9 @@ import SuperAdminAddNewShopPage from '../pages/super-admin/main/shops/SuperAdmin
 import SuperAdminShopDetailsPage from '../pages/super-admin/main/shops/SuperAdminShopDetailsPage';
 import SuperAdminUsersListPage from '../pages/super-admin/main/users/SuperAdminUsersListPage';
 import SuperAdminSupportPage from '../pages/super-admin/main/support/SuperAdminSupportPage';
-import SuperAdminOrdersPage from '../pages/super-admin/main/orders/SuperAdminOrderPage';
 import SuperAdminLogout from '../pages/super-admin/auth/logout/SuperAdminLogout';
-import SuperAdminCartPage from '../pages/super-admin/main/cart/SuperAdminCartPage';
-import CartDetailsPage from '../pages/super-admin/main/cart/CartDetailsPage';
-import SuperAdminOrderDetailsPage from '../pages/super-admin/main/orders/SuperAdminOrderDetailsPage';
-import SuperAdminOrdersCreatePage from '../pages/super-admin/main/orders/SuperAdminOrdersCreatePage';
-import SuperAdminOrdersEditPage from '../pages/super-admin/main/orders/SuperAdminOrdersEditPage';
+import CartsPage from '../pages/carts/CartsPage';
+import CartDetailsPage from '../pages/carts/CartDetailsPage';
 
 
 export const routeObjects: RouteObject[] = [
@@ -96,40 +92,6 @@ export const routeObjects: RouteObject[] = [
           {
             path: 'dashboard',
             element: <SuperAdminDashboardPage />,
-          },
-          {
-            path: 'orders',
-            children: [
-              {
-                index: true,
-                element: <SuperAdminOrdersPage />,
-              },
-              {
-                path: 'create',
-                element: <SuperAdminOrdersCreatePage />,
-              },
-              {
-                path: 'view/:orderId',
-                element: <SuperAdminOrderDetailsPage />,
-              },
-              {
-                path: 'edit/:orderId',
-                element: <SuperAdminOrdersEditPage />,
-              },
-            ],
-          },
-          {
-            path: 'carts',
-            children: [
-              {
-                index: true,
-                element: <SuperAdminCartPage />,
-              },
-              {
-                path: 'view/:cartId',
-                element: <CartDetailsPage />,
-              },
-            ],
           },
           {
             path: 'shop',
@@ -216,6 +178,19 @@ export const routeObjects: RouteObject[] = [
       {
         path: 'reports',
         element: <ReportsPage />,
+      },
+      {
+        path: 'carts',
+        children: [
+          {
+            index: true,
+            element: <CartsPage />,
+          },
+          {
+            path: 'view/:cartId',
+            element: <CartDetailsPage />,
+          },
+        ],
       },
       {
         path: 'orders',

@@ -30,6 +30,11 @@ const links = [
     icon: <DescriptionOutlinedIcon fontSize="inherit" />,
   },
   {
+    name: 'Carts',
+    path: 'carts',
+    icon: <OrderIcon />,
+  },
+  {
     name: 'Orders',
     path: 'orders',
     icon: <OrderIcon />,
