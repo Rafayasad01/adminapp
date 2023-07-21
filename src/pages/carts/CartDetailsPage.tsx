@@ -6,10 +6,10 @@ import DateRangeIcon from '@mui/icons-material/DateRange';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import AssignmentTurnedInOutlinedIcon from '@mui/icons-material/AssignmentTurnedInOutlined';
 import dayjs from 'dayjs';
-import TopBar from '../../../../components/common/TopBar';
-import cartService from '../../../../services/superadmin/SuperAdminCarts';
-import { CART_STATUS_NEW } from '../../../../utils/constants';
-import ProcessingIcon from '../../../../components/icons/ProcessingIcon';
+import TopBar from '../../components/common/TopBar';
+import cartService from '../../services/adminapp/adminCarts';
+import { CART_STATUS_NEW } from '../../utils/constants';
+import ProcessingIcon from '../../components/icons/ProcessingIcon';
 
 function CartDetailsPage() {
   const [viewData, setViewData] = useState<any>({});

@@ -1,21 +1,12 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import IconButton from '@mui/material/IconButton';
 import Divider from '@mui/material/Divider';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
-import Button from '@mui/material/Button';
-import Select from '@mui/material/Select';
 import { SelectChangeEvent } from '@mui/material';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
 import SearchIcon from '@mui/icons-material/Search';
 import Checkbox from '@mui/material/Checkbox';
 import CheckBoxOutlineBlankOutlinedIcon from '@mui/icons-material/CheckBoxOutlineBlankOutlined';
@@ -23,45 +14,113 @@ import CheckBoxOutlinedIcon from '@mui/icons-material/CheckBoxOutlined';
 
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
+//import Pagination from '@mui/material/Pagination';
+//import Stack from '@mui/material/Stack';
+import order from '../../services/adminapp/adminOrders';
+import dayjs from 'dayjs';
+import TablePagination from '@mui/material/TablePagination';
+import ActionMenu from '../../components/common/ActionMenu';
+import { ORDER_STATUS_IN_CANCELLED, ORDER_STATUS_IN_DELIVERED, ORDER_STATUS_IN_DELIVERY, ORDER_STATUS_NEW, ORDER_STATUS_PICKED_UP, ORDER_STATUS_PROCESSING } from '../../utils/constants';
 import TopBar from '../../components/common/TopBar';
+import { useAppSelector } from '../../redux/redux-hooks';
 
-const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
-const options = ['View', 'Edit', 'Download PDF'];
-const ITEM_HEIGHT = 48;
+
+
+const actionMenuOptions = ['View'];
 function OrdersPage() {
+  const authState: any = useAppSelector((state) => state.authState);
   const navigate = useNavigate();
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [search, setSearch] = useState('');
   const [status, setStatus] = useState('status');
   const [time, setTime] = useState('time');
-  const [openDialog, setOpenDialog] = useState(false);
-  const [isCheckedAll, setIsCheckedAll] = useState(false);
+  const [page, setPage] = useState(0);
+  const [total, setTotal] = useState(0);
+  const [list, setList] = useState<any>([]);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [actionMenuItemid, setActionMenuItemid] = React.useState("");
+  const [actionMenuAnchorEl, setActionMenuAnchorEl] = useState<null | HTMLElement>(null);
+  const actionMenuOpen = Boolean(actionMenuAnchorEl);
 
-  const open = Boolean(anchorEl);
 
-  const handleCheckAllChange = (event: any) => {
-    setIsCheckedAll(event.target.checked);
+  const handleChangePage = (
+    event: React.MouseEvent<HTMLButtonElement> | null,
+    newPage: number,
+  ) => {
+    setPage(newPage);
+    //offset? ,limit rowsperpage hoga ofset page * rowsperPage
+    if (search === "" || search === null || search === undefined) {
+      order.getListService(authState.user.tenant, newPage, rowsPerPage).then(item => {
+        setList(item.data.data.list.map((item: any) => ({ ...item, isSelected: false, orderStatus: item.status })));
+        setTotal(item.data.data.total);
+      });
+    } else {
+      order.searchService(authState.user.tenant, search, newPage, rowsPerPage).then(item => {
+        setList(item.data.data.list.map((item: any) => ({ ...item, isSelected: false, orderStatus: item.status })));
+        setTotal(item.data.data.total);
+      });
+    }
+    // order.searchService(search, newPage, rowsPerPage).then(item => {
+    //   setList(item.data.data.list.map((item: any) => ({ ...item, isSelected: false, orderStatus: item.status })));
+    //   setTotal(item.data.data.total);
+    // });
   };
-
-  const handleDialogClickOpen = () => {
-    setOpenDialog(true);
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    const newRowperPage = parseInt(event.target.value, 10);
+    const newPage = 0;
+    setRowsPerPage(newRowperPage);
+    setPage(newPage);
+    if (search === "" || search === null || search === undefined) {
+      order.getListService(authState.user.tenant, newPage, rowsPerPage).then(item => {
+        setList(item.data.data.list.map((item: any) => ({ ...item, isSelected: false, orderStatus: item.status })));
+        setTotal(item.data.data.total);
+      });
+    } else {
+      order.searchService(authState.user.tenant, search, newPage, rowsPerPage).then(item => {
+        setList(item.data.data.list.map((item: any) => ({ ...item, isSelected: false, orderStatus: item.status })));
+        setTotal(item.data.data.total);
+      });
+    }
+    // order.searchService(search, page, rowsPerPage).then(item => {
+    //   setList(item.data.data.list.map((item: any) => ({ ...item, isSelected: false, orderStatus: item.status })));
+    //   setTotal(item.data.data.total);
+    // });
   };
-
-  const handleDialogClose = () => {
-    setOpenDialog(false);
-  };
-
   const addRouteHandler = () => {
     navigate('create');
   };
 
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
+  const handleClickSearch = (event: any) => {
+    const searchTxt = event.target.value as string;
+    setSearch(searchTxt);
+    setPage(0);
+    order.searchService(authState.user.tenant, searchTxt, page, rowsPerPage).then(item => {
+      setList(item.data.data.list.map((item: any) => ({ ...item, isSelected: false, orderStatus: item.status })));
+      setTotal(item.data.data.total);
+    })
   };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-  const handleSelectedMenuClose = (option: string) => {
+
+  // const handleStatusChange = (event: SelectChangeEvent) => {
+  //   setStatus(event.target.value as string);
+  // };
+
+  // const handleTimeChange = (event: SelectChangeEvent) => {
+  //   setTime(event.target.value as string);
+  // };
+  // const changeStatusHandler = (event: any) => {
+  //   setStatus(event.target.value as string);
+  // };
+
+  useEffect(() => {
+    order.getListService(authState.user.tenant, page, rowsPerPage).then(item => {
+      //console.log(item.data.data);
+      setList(item.data.data.list.map((item: any) => ({ ...item, isSelected: false, orderStatus: item.status })));
+      setTotal(item.data.data.total);
+    });
+  }, []);
+
+  const manuHandler = (option: string) => {
     let doOption = '';
     if (option === 'Edit') {
       doOption = 'edit';
@@ -70,25 +129,32 @@ function OrdersPage() {
     } else {
       doOption = 'download';
     }
-    setAnchorEl(null);
-    navigate(`${doOption}/123`);
-  };
-  const handleClickSearch = (event: any) => {
-    setSearch(event.target.value as string);
-  };
+    navigate(`${doOption}/${actionMenuItemid}`);
+    //console.log('actionMenuItemid', actionMenuItemid)
+  }
 
-  const handleStatusChange = (event: SelectChangeEvent) => {
-    setStatus(event.target.value as string);
-  };
-
-  const handleTimeChange = (event: SelectChangeEvent) => {
-    setTime(event.target.value as string);
-  };
-  const changeStatusHandler = (event: any) => {
-    setStatus(event.target.value as string);
-  };
+  const getStatusTag = (status: string) => {
+    let tag = "";
+    if (status === ORDER_STATUS_NEW) {
+      tag = "blue";
+    } else if (status === ORDER_STATUS_PICKED_UP) {
+      tag = "purple";
+    } else if (status === ORDER_STATUS_PROCESSING) {
+      tag = "green";
+    } else if (status === ORDER_STATUS_IN_DELIVERY) {
+      tag = "orange";
+    } else if (status === ORDER_STATUS_IN_DELIVERED) {
+      tag = "yellow";
+    } else if (status === ORDER_STATUS_IN_CANCELLED) {
+      tag = "red";
+    }
+    return tag;
+  }
   return (
     <>
+      {actionMenuAnchorEl && (
+        <ActionMenu open={actionMenuOpen} anchorEl={actionMenuAnchorEl} setAnchorEl={setActionMenuAnchorEl} options={actionMenuOptions} callback={manuHandler} />
+      )}
       <TopBar title="Orders" />
       <div className="container mt-5">
         <div className="w-full rounded-lg bg-white shadow-lg">
@@ -114,7 +180,10 @@ function OrdersPage() {
                         HTMLInputElement | HTMLTextAreaElement
                       >
                     ) => {
-                      handleClickSearch(event);
+                      if (event.key === 'Enter') {
+                        handleClickSearch(event);
+                      }
+
                     }}
                     endAdornment={
                       <InputAdornment position="end">
@@ -130,7 +199,7 @@ function OrdersPage() {
                     disableUnderline
                   />
                 </FormControl>
-                <Select
+                {/* <Select
                   className="select-grey-outline h-10 w-36"
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
@@ -147,12 +216,12 @@ function OrdersPage() {
                   onChange={handleTimeChange}
                 >
                   <MenuItem value="time">Time</MenuItem>
-                </Select>
+                </Select> */}
               </div>
             </div>
             <div className="col-span-3">
               <div className="flex flex-row">
-                <Button variant="contained" className="btn-black-outline mr-3">
+                {/* <Button variant="contained" className="btn-black-outline mr-3">
                   Export to CSV
                 </Button>
                 <Button
@@ -161,7 +230,7 @@ function OrdersPage() {
                   onClick={addRouteHandler}
                 >
                   <AddOutlinedIcon /> Add New
-                </Button>
+                </Button> */}
               </div>
             </div>
           </div>
@@ -169,274 +238,93 @@ function OrdersPage() {
             <table className="table-border table-auto">
               <thead>
                 <tr>
-                  <th>
-                    <Checkbox
-                      {...label}
-                      icon={
-                        <CheckBoxOutlineBlankOutlinedIcon className=" text-[#E4E4E4]" />
-                      }
-                      checkedIcon={
-                        <CheckBoxOutlinedIcon className="text-[#1D1D1D]" />
-                      }
-                      onChange={(
-                        event: React.ChangeEvent<HTMLInputElement>
-                      ) => {
-                        handleCheckAllChange(event);
-                      }}
-                    />
-                  </th>
                   <th>Customers</th>
                   <th>Pickup Time</th>
                   <th>Drop-off Time</th>
                   <th>Amount</th>
                   <th>Status</th>
+                  <th>Order ID</th>
                   <th>&nbsp;</th>
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>
-                    <Checkbox
-                      {...label}
-                      icon={
-                        <CheckBoxOutlineBlankOutlinedIcon className=" text-[#E4E4E4]" />
-                      }
-                      checkedIcon={
-                        <CheckBoxOutlinedIcon className="text-[#1D1D1D]" />
-                      }
-                      checked={isCheckedAll}
-                    />
-                  </td>
-                  <td>
-                    <div className="flex flex-col">
-                      <span className="text-sm font-semibold text-[#1A1A1A]">
-                        Megan Chang
-                      </span>
-                      <span className="text-xs font-normal text-[#6A6A6A]">
-                        greenwilliam@yahoo.com
-                      </span>
-                      <span className="text-xs font-normal text-[#6A6A6A]">
-                        278 Amy View Suite 011 Lawsonshire, MA 50054
-                      </span>
-                    </div>
-                  </td>
-                  <td>
-                    <div className="flex flex-col">
-                      <span className="text-sm font-normal text-[#1A1A1A]">
-                        06:00 PM - 05:00 PM
-                      </span>
-                      <span className="text-xs font-normal text-[#6A6A6A]">
-                        February 02, 2023
-                      </span>
-                    </div>
-                  </td>
-                  <td>
-                    <div className="flex flex-col">
-                      <span className="text-sm font-normal text-[#1A1A1A]">
-                        04:00 AM - 05:00 AM
-                      </span>
-                      <span className="text-xs font-normal text-[#6A6A6A]">
-                        February 02, 2023
-                      </span>
-                    </div>
-                  </td>
-                  <td className="text-sm font-semibold text-[#1A1A1A]">
-                    $14.69
-                  </td>
-                  <td>
-                    <Select
-                      className="select-black-outline mr-3 h-7 w-36"
-                      labelId="demo-simple-select-label"
-                      value="Ready for Pick up"
-                      onChange={(event) => {
-                        changeStatusHandler(event);
-                      }}
-                    >
-                      <MenuItem value="Ready for Pick up">
-                        Ready for Pick up
-                      </MenuItem>
-                    </Select>
-                  </td>
-                  <td>
-                    <IconButton
-                      className="btn-dot"
-                      aria-label="more"
-                      id="long-button"
-                      aria-controls={open ? 'long-menu' : undefined}
-                      aria-expanded={open ? 'true' : undefined}
-                      aria-haspopup="true"
-                      onClick={handleClick}
-                    >
-                      <MoreVertIcon />
-                    </IconButton>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <Checkbox
-                      {...label}
-                      icon={
-                        <CheckBoxOutlineBlankOutlinedIcon className=" text-[#E4E4E4]" />
-                      }
-                      checkedIcon={
-                        <CheckBoxOutlinedIcon className="text-[#1D1D1D]" />
-                      }
-                      checked={isCheckedAll}
-                    />
-                  </td>
-                  <td>
-                    <div className="flex flex-col">
-                      <span className="text-sm font-semibold text-[#1A1A1A]">
-                        Megan Chang
-                      </span>
-                      <span className="text-xs font-normal text-[#6A6A6A]">
-                        greenwilliam@yahoo.com
-                      </span>
-                      <span className="text-xs font-normal text-[#6A6A6A]">
-                        278 Amy View Suite 011 Lawsonshire, MA 50054
-                      </span>
-                    </div>
-                  </td>
-                  <td>
-                    <div className="flex flex-col">
-                      <span className="text-sm font-normal text-[#1A1A1A]">
-                        06:00 PM - 05:00 PM
-                      </span>
-                      <span className="text-xs font-normal text-[#6A6A6A]">
-                        February 02, 2023
-                      </span>
-                    </div>
-                  </td>
-                  <td>
-                    <div className="flex flex-col">
-                      <span className="text-sm font-normal text-[#1A1A1A]">
-                        04:00 AM - 05:00 AM
-                      </span>
-                      <span className="text-xs font-normal text-[#6A6A6A]">
-                        February 02, 2023
-                      </span>
-                    </div>
-                  </td>
-                  <td className="text-sm font-semibold text-[#1A1A1A]">
-                    $14.69
-                  </td>
-                  <td>
-                    <Select
-                      className="select-black-outline mr-3 h-7 w-36"
-                      labelId="demo-simple-select-label"
-                      value="Order Placed"
-                      onChange={(event) => {
-                        changeStatusHandler(event);
-                      }}
-                    >
-                      <MenuItem value="Order Placed">Order Placed</MenuItem>
-                      <MenuItem value="Ready for Pick up">
-                        Ready for Pick up
-                      </MenuItem>
-                    </Select>
-                  </td>
-                  <td>
-                    <IconButton
-                      className="btn-dot"
-                      aria-label="more"
-                      id="long-button"
-                      aria-controls={open ? 'long-menu' : undefined}
-                      aria-expanded={open ? 'true' : undefined}
-                      aria-haspopup="true"
-                      onClick={handleClick}
-                    >
-                      <MoreVertIcon />
-                    </IconButton>
-                  </td>
-                </tr>
+                {list && list.map((order: any, index: number) => {
+                  return (
+                    <tr key={order.id}>
+                      <td>
+                        <div className="flex flex-col">
+                          <span className="text-sm font-semibold text-[#1A1A1A]">
+                            {order.user.firstName} {order.user.lastName}
+                          </span>
+                          <span className="text-xs font-normal text-[#6A6A6A]">
+                            {order.user.email}
+                          </span>
+                          <span className="text-xs font-normal text-[#6A6A6A]">
+                            {order.userAddress.address}
+                          </span>
+                        </div>
+                      </td>
+                      <td>
+                        <div className="flex flex-col">
+                          <span className="text-sm font-normal text-[#1A1A1A]">
+                            {dayjs(order.pickupDateTime)?.format('hh:mm:ssA')} - {dayjs(order.pickupDateTime).add(1, 'hour').format('hh:mm:ssA')}
+                          </span>
+                          <span className="text-xs font-normal text-[#6A6A6A]">
+                            {dayjs(order.pickupDateTime)?.format('ddd, MMM DD, YYYY')}
+                          </span>
+                        </div>
+                      </td>
+                      <td>
+                        <div className="flex flex-col">
+                          <span className="text-sm font-normal text-[#1A1A1A]">
+                            {dayjs(order.dropDateTime)?.format('hh:mm:ssA')} - {dayjs(order.dropDateTime).add(1, 'hour').format('hh:mm:ssA')}
+                          </span>
+                          <span className="text-xs font-normal text-[#6A6A6A]">
+                            {dayjs(order.dropDateTime)?.format('ddd, MMM DD, YYYY')}
+                          </span>
+                        </div>
+                      </td>
+                      <td className="text-sm font-semibold text-[#1A1A1A]">
+                        ${order.grandTotal}
+                      </td>
+                      <td>
+                        <span className={`bg-${getStatusTag(order.status)}-100 text-${getStatusTag(order.status)}-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-${getStatusTag(order.status)}-900 dark:text-${getStatusTag(order.status)}-300`}>{order.status}</span>
+                      </td>
+                      <td>{order.orderNumber}</td>
+                      <td>
+                        <IconButton
+                          className="btn-dot"
+                          aria-label="more"
+                          id="long-button"
+                          aria-controls={actionMenuOpen ? 'long-menu' : undefined}
+                          aria-expanded={actionMenuOpen ? 'true' : undefined}
+                          aria-haspopup="true"
+                          onClick={(event: React.MouseEvent<HTMLElement>) => {
+                            setActionMenuItemid(list[index].id)
+                            setActionMenuAnchorEl(event.currentTarget);
+                          }}
+                        >
+                          <MoreVertIcon />
+                        </IconButton>
+                      </td>
+                    </tr>
+                  )
+                })}
               </tbody>
             </table>
           </div>
+          <div className='w-[100%] mt-3 flex justify-center py-3'>
+            <TablePagination
+              component="div"
+              count={total}
+              page={page}
+              onPageChange={handleChangePage}
+              rowsPerPage={rowsPerPage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+            />
+          </div>
         </div>
       </div>
-      <Menu
-        id="long-menu"
-        MenuListProps={{
-          'aria-labelledby': 'long-button',
-        }}
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleClose}
-        PaperProps={{
-          style: {
-            maxHeight: ITEM_HEIGHT * 4.5,
-            width: '11ch',
-          },
-        }}
-      >
-        {options.map((option) => (
-          <MenuItem
-            key={option}
-            selected={option === 'Pyxis'}
-            onClick={() => handleSelectedMenuClose(option)}
-          >
-            {option}
-          </MenuItem>
-        ))}
-      </Menu>
-      <Dialog
-        open={openDialog}
-        onClose={handleDialogClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle
-          id="alert-dialog-title"
-          sx={{
-            color: '#1A1A1A',
-            fontFamily: 'Inter',
-            fonWeight: 600,
-            fonSize: '20px',
-            padding: '10px 15px 0 15px',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          Cancel Order?
-        </DialogTitle>
-        <DialogContent
-          sx={{
-            color: '#6A6A6A',
-            fontFamily: 'Inter',
-            fonWeight: 400,
-            fonSize: '14px',
-            padding: '10px 15px 0 15px',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          <DialogContentText id="alert-dialog-description">
-            Do you really want to cancel this order?
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions
-          sx={{ justifyContent: 'space-between', margin: '15px 5px 10px 5px' }}
-        >
-          <Button
-            sx={{ width: '140px' }}
-            variant="contained"
-            className="btn-black-outline mr-3"
-            onClick={handleDialogClose}
-          >
-            Yes, Confirm
-          </Button>
-          <Button
-            sx={{ width: '140px' }}
-            variant="contained"
-            className="btn-black-fill btn-icon"
-            onClick={handleDialogClose}
-          >
-            No, Cancel
-          </Button>
-        </DialogActions>
-      </Dialog>
     </>
   );
 }

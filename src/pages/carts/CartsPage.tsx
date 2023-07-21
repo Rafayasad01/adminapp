@@ -11,15 +11,17 @@ import { SelectChangeEvent } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import SuperAdminTopBar from '../../../../components/super-admin/common/SuperAdminTopbar';
-import cart from '../../../../services/superadmin/SuperAdminCarts';
+import cart from '../../services/adminapp/adminCarts';
 import dayjs from 'dayjs';
 import TablePagination from '@mui/material/TablePagination';
-import ActionMenu from '../../../../components/common/ActionMenu';
-import { CART_STATUS_NEW, CART_STATUS_PROCESSING } from '../../../../utils/constants';
+import ActionMenu from '../../components/common/ActionMenu';
+import { CART_STATUS_NEW, CART_STATUS_PROCESSING } from '../../utils/constants';
+import TopBar from '../../components/common/TopBar';
+import { useAppSelector } from '../../redux/redux-hooks';
 
 const actionMenuOptions = ['View'];
-function SuperAdminCartPage() {
+function CartsPage() {
+  const authState: any = useAppSelector((state) => state.authState);
   const navigate = useNavigate();
 
   const [search, setSearch] = useState('');
@@ -37,36 +39,55 @@ function SuperAdminCartPage() {
   ) => {
     setPage(newPage);
     //offset? ,limit rowsperpage hoga ofset page * rowsperPage
-    cart.searchService(search, newPage, rowsPerPage).then(item => {
-      //console.log(item)
-      setList(item.data.data.list.map((item: any) => ({ ...item })));
-      setTotal(item.data.data.total);
-    });
+    if (search === "" || search === null || search === undefined) {
+      cart.getListService(authState.user.tenant, newPage, rowsPerPage).then(item => {
+        setList(item.data.data.list.map((item: any) => ({ ...item })));
+        setTotal(item.data.data.total);
+      });
+    } else {
+      cart.searchService(authState.user.tenant, search, newPage, rowsPerPage).then(item => {
+        setList(item.data.data.list.map((item: any) => ({ ...item })));
+        setTotal(item.data.data.total);
+      });
+    }
+
   };
 
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-    cart.searchService(search, page, rowsPerPage).then(item => {
-      setList(item.data.data.list.map((item: any) => ({ ...item })));
-      setTotal(item.data.data.total);
-    });
+    const newRowperPage = parseInt(event.target.value, 10);
+    const newPage = 0;
+    setRowsPerPage(newRowperPage);
+    setPage(newPage);
+    if (search === "" || search === null || search === undefined) {
+      cart.getListService(authState.user.tenant, newPage, newRowperPage).then(item => {
+        //console.log(item.data.data)
+        setList(item.data.data.list.map((item: any) => ({ ...item })));
+        setTotal(item.data.data.total);
+      });
+    } else {
+      cart.searchService(authState.user.tenant, search, newPage, newRowperPage).then(item => {
+        console.log('item::::::', item)
+        setList(item.data.data.list.map((item: any) => ({ ...item })));
+        setTotal(item.data.data.total);
+      });
+    }
   };
 
   const handleClickSearch = (event: any) => {
     const searchTxt = event.target.value as string;
+    const newPage = 0;
     setSearch(searchTxt);
-    setPage(0);
-    cart.searchService(searchTxt, page, rowsPerPage).then(item => {
+    setPage(newPage);
+    cart.searchService(authState.user.tenant, searchTxt, newPage, rowsPerPage).then(item => {
       setList(item.data.data.list.map((item: any) => ({ ...item })));
       setTotal(item.data.data.total);
     })
   };
 
   useEffect(() => {
-    cart.getListService(page, rowsPerPage).then(item => {
+    cart.getListService(authState.user.tenant, page, rowsPerPage).then(item => {
       //console.log(item.data.data)
       setList(item.data.data.list.map((item: any) => ({ ...item })));
       setTotal(item.data.data.total);
@@ -101,7 +122,7 @@ function SuperAdminCartPage() {
       {actionMenuAnchorEl && (
         <ActionMenu open={actionMenuOpen} anchorEl={actionMenuAnchorEl} setAnchorEl={setActionMenuAnchorEl} options={actionMenuOptions} callback={manuHandler} />
       )}
-      <SuperAdminTopBar title="Carts" />
+      <TopBar title="Carts" />
       <div className="container mt-5">
         <div className="w-full rounded-lg bg-white shadow-lg">
           <div className="grid grid-cols-12 px-4 py-5">
@@ -285,4 +306,4 @@ function SuperAdminCartPage() {
   );
 }
 
-export default SuperAdminCartPage;
+export default CartsPage;

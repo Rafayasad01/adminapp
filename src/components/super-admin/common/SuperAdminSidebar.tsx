@@ -19,17 +19,6 @@ const links = [
     path: 'dashboard',
     icon: <GridViewOutlinedIcon fontSize="inherit" />,
   },
-  {
-    name: 'Carts',
-    path: 'carts',
-    icon: <DescriptionOutlinedIcon fontSize="inherit" />,
-  },
-  {
-    name: 'Orders',
-    path: 'orders',
-    icon: <DescriptionOutlinedIcon fontSize="inherit" />,
-  },
-
   // {
   //   name: 'Shops',
   //   path: 'shop',
