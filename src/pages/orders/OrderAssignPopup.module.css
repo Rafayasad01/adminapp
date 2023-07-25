@@ -1,0 +1,23 @@
+.Dialog {
+  @apply relative m-0 aspect-[7/6] w-[95%] overflow-hidden bg-transparent shadow-none !important;
+}
+
+.Dialog .Content {
+  @apply h-full w-full rounded-lg bg-[#fff] px-4 py-5 shadow-lg !important;
+}
+
+.Content .Row {
+  @apply grid grid-cols-12;
+}
+
+.gap-x3 {
+  @apply gap-x-3;
+}
+
+.Content .Column8 {
+  @apply col-span-8;
+}
+
+.Content .Column4 {
+  @apply col-span-4;
+}

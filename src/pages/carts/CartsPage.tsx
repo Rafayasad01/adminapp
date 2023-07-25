@@ -112,7 +112,7 @@ function CartsPage() {
     if (status === CART_STATUS_NEW) {
       tag = "blue";
     } else if (status === CART_STATUS_PROCESSING) {
-      tag = "gray";
+      tag = "green";
     }
     return tag;
   }
@@ -207,7 +207,7 @@ function CartsPage() {
             <table className="table-border table-auto">
               <thead>
                 <tr>
-                  <th>Customers</th>
+                  <th className="w-[22%]">Customers</th>
                   <th>Pickup Time</th>
                   <th>Drop-off Time</th>
                   <th>Amount</th>
@@ -266,7 +266,7 @@ function CartsPage() {
                         ${cart.grandTotal}
                       </td>
                       <td>
-                        <span className={`bg-${getStatusTag(cart.status)}-100 text-${getStatusTag(cart.status)}-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-${getStatusTag(cart.status)}-900 dark:text-${getStatusTag(cart.status)}-300`}>{cart.status}</span>
+                        <span className={`badge badge-${getStatusTag(cart.status)}`}>{cart.status}</span>
                       </td>
                       <td>
                         <IconButton

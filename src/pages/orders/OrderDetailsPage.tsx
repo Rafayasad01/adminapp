@@ -18,11 +18,16 @@ import orderService from '../../services/adminapp/adminOrders';
 
 import { ORDER_STATUS_IN_CANCELLED, ORDER_STATUS_IN_DELIVERED, ORDER_STATUS_IN_DELIVERY, ORDER_STATUSES } from '../../utils/constants';
 import PermissionPopup from '../../utils/PermissionPopup';
+import Avatar from '@mui/material/Avatar';
+import assets from '../../assets';
+import IconButton from '@mui/material/IconButton';
+import OrderAssignPopup from './OrderAssignPopup';
 
 function OrderDetailsPage() {
   const navigate = useNavigate();
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
   const [cancelDialogOpen, setCancelDialogOpen] = useState<boolean>(false);
+  const [orderAssign, setOrderAssign] = useState<boolean>(false);
   const [dialogText, setDialogText] = useState<any>("")
   const [viewData, setViewData] = useState<any>({});
   const [totalQuantity, setTotalQuantity] = useState(0);
@@ -33,6 +38,8 @@ function OrderDetailsPage() {
   const [currentStatus, setCurrentStatus] = useState<any>(null)
   const params = useParams();
   const id: any = params.orderId;
+
+
 
   useEffect(() => {
     orderService.viewService(id).then((item) => {
@@ -136,17 +143,24 @@ function OrderDetailsPage() {
     setOrderStatuses(newResult);
   }
 
+  const assignOrder = (appUser: any) => {
+    console.log('driversAssign')
+    console.log('id:::::::', appUser)
+  }
+
+
   return (
     <>
       {dialogOpen && (<PermissionPopup open={dialogOpen} setOpen={setDialogOpen} dialogText={dialogText} callback={statusUpdateHandler} />)}
       {cancelDialogOpen && (<PermissionPopup open={cancelDialogOpen} setOpen={setCancelDialogOpen} dialogText={dialogText} callback={statusCancelHandler} />)}
+      {orderAssign && (<OrderAssignPopup open={orderAssign} setOpen={setOrderAssign} callback={assignOrder} />)}
       <TopBar isNestedRoute title="View Order" />
       <div className="container py-3">
         <div className="grid w-full grid-cols-2 gap-3">
           <div className="mb-auto min-h-[600px] rounded-lg bg-[#fff] shadow-lg">
             <div className="p-4">
               <div className="flex items-center">
-                <div className={`relative mr-2 inline-flex text-green-500 ${currentStatus && currentStatus.key === ORDER_STATUS_IN_CANCELLED ? 'text-red-500' : 'text-green-500'}`}>
+                <div className={`relative mr-2 inline - flex ${currentStatus && currentStatus.key === ORDER_STATUS_IN_CANCELLED ? 'text-red-500' : 'text-green-500'}`}>
                   <CircularProgress
                     thickness={1.5}
                     className="z-10"
@@ -181,15 +195,15 @@ function OrderDetailsPage() {
                   <div className="font-open-sans text-xs font-normal text-neutral-500">
                     {dayjs(viewData.updatedDate)?.format('ddd, MMM DD, YYYY | hh:mm:ssA')}
                   </div>
-                  <div className={`font-open-sans text-sm font-semibold  ${currentStatus && currentStatus.key === ORDER_STATUS_IN_CANCELLED ? 'text-red-500' : 'text-green-500'}`}>
-                    {currentStatus && `${currentStatus.value.title}`}
+                  <div className={`font - open - sans text - sm font - semibold  ${currentStatus && currentStatus.key === ORDER_STATUS_IN_CANCELLED ? 'text-red-500' : 'text-green-500'} `}>
+                    {currentStatus && `${currentStatus.value.title} `}
                   </div>
                 </div>
                 <div className="flex-grow" />
                 <Button
                   type="button"
                   onClick={() => { setDialogText("Are you sure you want to cancel this Order"); setCancelDialogOpen(true) }}
-                  className={`rounded-xl py-2 px-12 font-open-sans text-sm font-semibold ${cancelled || isCancelled ? 'bg-neutral-400 text-neutral-900' : 'bg-neutral-900 text-gray-50'}`}
+                  className={`rounded - xl py - 2 px - 12 font - open - sans text - sm font - semibold ${cancelled || isCancelled ? 'bg-neutral-400 text-neutral-900' : 'bg-neutral-900 text-gray-50'} `}
                   color="inherit"
                   disabled={cancelled || isCancelled ? true : false}
                 >
@@ -241,6 +255,19 @@ function OrderDetailsPage() {
                 <div className="font-open-sans text-sm font-normal text-neutral-500">
                   {viewData.userAddress && viewData.userAddress.address ? viewData.userAddress.address : "No Address"}
                 </div>
+              </div>
+              <hr className="my-3 h-[1px] w-full bg-neutral-200" />
+              <div className="flex items-center">
+                <IconButton aria-label="delete" className='p-0' disableRipple onClick={() => setOrderAssign(true)}>
+                  <Avatar
+                    alt="Truck Driver Icon"
+                    src={assets.images.truckDriverIcon}
+                    sx={{ width: 24, height: 24, marginRight: '5px' }}
+                  />
+                  <div className="font-open-sans text-sm font-normal text-neutral-500">
+                    Choose a driver
+                  </div>
+                </IconButton>
               </div>
               <hr className="my-3 h-[1px] w-full bg-neutral-200" />
               {viewData.orderItems && viewData.orderItems.map((item: any, index: number) => {
@@ -320,7 +347,7 @@ function OrderDetailsPage() {
                     <Button
                       type="button"
                       onClick={() => { setDialogText("Are you sure you want to update status this Order"); setDialogOpen(true) }}
-                      className={`rounded-xl py-2 px-12 font-open-sans text-sm font-semibold ${cancelled || (isCancelled && nextBtn.key === ORDER_STATUS_IN_CANCELLED) ? 'bg-neutral-400 text-neutral-900' : 'bg-neutral-900 text-gray-50'}`}
+                      className={`rounded - xl py - 2 px - 12 font - open - sans text - sm font - semibold ${cancelled || (isCancelled && nextBtn.key === ORDER_STATUS_IN_CANCELLED) ? 'bg-neutral-400 text-neutral-900' : 'bg-neutral-900 text-gray-50'} `}
                       color="inherit"
                       disabled={cancelled || (isCancelled && nextBtn.key === ORDER_STATUS_IN_CANCELLED) ? true : false}
                     >
@@ -336,7 +363,7 @@ function OrderDetailsPage() {
                   return null;
                 } else {
                   return (
-                    <div key={item.key} className={`flex items-center ${item.isStatus ? "" : "opacity-25"}`}>
+                    <div key={item.key} className={`flex items - center ${item.isStatus ? "" : "opacity-25"} `}>
                       {item.isStatus ? (
                         <CheckCircleOutlineOutlinedIcon />
 
@@ -344,7 +371,7 @@ function OrderDetailsPage() {
                         <CircleOutlinedIcon className="text-neutral-500" />
                       )}
 
-                      <div className={`relative mx-2 inline-flex ${item.isStatus ? item.value.color : "text-neutral-500"}`}>
+                      <div className={`relative mx - 2 inline - flex ${item.isStatus ? item.value.color : "text-neutral-500"} `}>
                         <CircularProgress
                           thickness={1.5}
                           className="z-10"
@@ -358,7 +385,7 @@ function OrderDetailsPage() {
                         </div>
                       </div>
                       <div>
-                        <div className={`font-open-sans text-base font-semibold ${item.isStatus ? item.value.color : "text-neutral-500"}`}>
+                        <div className={`font - open - sans text - base font - semibold ${item.isStatus ? item.value.color : "text-neutral-500"} `}>
                           {item.value.title}
                         </div>
                         <div className="font-open-sans text-sm font-normal text-neutral-500">

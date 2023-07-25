@@ -5,6 +5,7 @@ export const BACKOFFICE_PREFIX = 'backofficeUser';
 export const PERMISSION_PREFIX = 'permission'
 export const ORDER_PREFIX = 'order'
 export const CART_PREFIX = 'cart'
+export const DRIVER_PREFIX = 'driver'
 export const ORDER_STATUS_NEW = "New";
 export const ORDER_STATUS_PICKED_UP = "PickedUp";
 export const ORDER_STATUS_PROCESSING = "Processing";

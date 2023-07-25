@@ -20,7 +20,7 @@ import order from '../../services/adminapp/adminOrders';
 import dayjs from 'dayjs';
 import TablePagination from '@mui/material/TablePagination';
 import ActionMenu from '../../components/common/ActionMenu';
-import { ORDER_STATUS_IN_CANCELLED, ORDER_STATUS_IN_DELIVERED, ORDER_STATUS_IN_DELIVERY, ORDER_STATUS_NEW, ORDER_STATUS_PICKED_UP, ORDER_STATUS_PROCESSING } from '../../utils/constants';
+import { ORDER_STATUSES, ORDER_STATUS_IN_CANCELLED, ORDER_STATUS_IN_DELIVERED, ORDER_STATUS_IN_DELIVERY, ORDER_STATUS_NEW, ORDER_STATUS_PICKED_UP, ORDER_STATUS_PROCESSING } from '../../utils/constants';
 import TopBar from '../../components/common/TopBar';
 import { useAppSelector } from '../../redux/redux-hooks';
 
@@ -150,6 +150,11 @@ function OrdersPage() {
     }
     return tag;
   }
+  const setOrderStatus = (status: string) => {
+    const newStatuses = [...ORDER_STATUSES].map(([key, value]) => ({ key, value }));
+    const newStatus = newStatuses.filter(s => s.key === status);
+    return newStatus[0].value.title;
+  }
   return (
     <>
       {actionMenuAnchorEl && (
@@ -238,11 +243,11 @@ function OrdersPage() {
             <table className="table-border table-auto">
               <thead>
                 <tr>
-                  <th>Customers</th>
+                  <th className="w-[22%]">Customers</th>
                   <th>Pickup Time</th>
                   <th>Drop-off Time</th>
                   <th>Amount</th>
-                  <th>Status</th>
+                  <th >Status</th>
                   <th>Order ID</th>
                   <th>&nbsp;</th>
                 </tr>
@@ -288,7 +293,7 @@ function OrdersPage() {
                         ${order.grandTotal}
                       </td>
                       <td>
-                        <span className={`bg-${getStatusTag(order.status)}-100 text-${getStatusTag(order.status)}-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-${getStatusTag(order.status)}-900 dark:text-${getStatusTag(order.status)}-300`}>{order.status}</span>
+                        <span className={`badge badge-${getStatusTag(order.status)}`}>{setOrderStatus(order.status)}</span>
                       </td>
                       <td>{order.orderNumber}</td>
                       <td>
