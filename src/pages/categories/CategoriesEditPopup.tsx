@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Dialog from '@mui/material/Dialog';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
@@ -6,31 +6,61 @@ import Input from '@mui/material/Input';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
 import IconButton from '@mui/material/IconButton';
+import { useForm } from "react-hook-form";
+import { Category } from '../../interfaces/category.interface';
+import category from '../../services/adminapp/adminCategory';
 
 import '../../assets/css/PopupStyle.css';
 
 type Props = {
-  openEditFormDialog: boolean;
-  setOpenEditFormDialog: React.Dispatch<React.SetStateAction<boolean>>;
+  openFormDialog: boolean;
+  setOpenFormDialog: React.Dispatch<React.SetStateAction<boolean>>;
+  formData: any;
+  callback: Function;
 };
 
 function CategoriesEditPopup({
-  openEditFormDialog,
-  setOpenEditFormDialog,
+  openFormDialog,
+  setOpenFormDialog,
+  formData,
+  callback
 }: Props) {
-  const [isImage, setIsImage] = useState('');
-  const handleFormClose = () => setOpenEditFormDialog(false);
+  const [image, setImage] = useState<any>(null);
+  const [imageName, setImageName] = useState<string>('');
+
+  const { register, handleSubmit, watch, formState: { errors }, control } = useForm<Category>();
+  const onSubmit = (data: Category) => {
+    data.icon = image;
+    setOpenFormDialog(false);
+    callback(data);
+
+  };
+
+  const handleFormClose = () => {
+    setOpenFormDialog(false)
+  };
   const handleRemoveImage = () => {
-    setIsImage('');
+    setImage('');
+    setImageName('');
   };
 
   const handleFileChange = (event: any) => {
-    setIsImage(event.target.files[0].name);
+    setImage(event.target.files[0]);
+    setImageName(event.target.files[0].name);
   };
+
+  useEffect(() => {
+    let icon = formData.icon.split("/").slice(-1)[0];
+    const regexExp = /[a-z,0-9,-]{36}/;
+    if (regexExp.test(icon)) {
+      icon = icon.split("-").splice(5)[0];
+    }
+    setImageName(icon);
+  }, []);
 
   return (
     <Dialog
-      open={openEditFormDialog}
+      open={openFormDialog}
       onClose={handleFormClose}
       PaperProps={{
         className: 'Dialog',
@@ -38,84 +68,93 @@ function CategoriesEditPopup({
       }}
     >
       <div className="Content">
-        <div className="FormHeader">
-          <span className="Title">Edit Category</span>
-        </div>
-        <div className="FormBody">
-          <div className="FormField">
-            <FormControl className="FormControl" variant="standard">
-              <label className="FormLabel">Category Name</label>
-              <Input
-                className="FormInput"
-                id="address"
-                value=""
-                name="address"
-                placeholder="Dry Cleaning"
-                disableUnderline
-              />
-            </FormControl>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div className="FormHeader">
+            <span className="Title">Edit Category</span>
           </div>
-
-          <div className="FormField">
-            <label className="FormLabel">Upload Image</label>
-            <div className="ImageBox">
-              <input
-                accept="image/*"
-                style={{ display: 'none' }}
-                id="raised-button-file"
-                type="file"
-                onChange={(
-                  event: React.InputHTMLAttributes<HTMLInputElement>
-                ) => {
-                  handleFileChange(event);
-                }}
-              />
-              <label htmlFor="raised-button-file" className="ImageLabel">
-                <Button component="span" className="ImageBtn">
-                  <FileUploadOutlinedIcon sx={{ marginRight: '0.5rem' }} />
-                  Upload image
-                </Button>
-              </label>
-              {isImage ? (
-                <div className="ShowImageBox">
-                  <label className="ShowImageLabel">{isImage}</label>
-                  <IconButton className="btn-dot" onClick={handleRemoveImage}>
-                    <CloseOutlinedIcon
-                      sx={{
-                        color: '#1D1D1D',
-                        fontSize: '1rem',
-                        lineHeight: '1.5rem',
+          {formData && (
+            <>
+              <div className="FormBody">
+                <div className="FormField">
+                  <FormControl className="FormControl" variant="standard">
+                    <label className="FormLabel">Category Name</label>
+                    <Input
+                      className="FormInput"
+                      type="text"
+                      id="name"
+                      disableUnderline
+                      {...register("name", { required: true, value: formData.name })}
+                    />
+                    {errors.name?.type === 'required' && <span role="alert">Category name is required</span>}
+                  </FormControl>
+                </div>
+                <div className="FormField">
+                  <label className="FormLabel">Upload Image</label>
+                  <div className="ImageBox">
+                    <input
+                      accept="image/*"
+                      style={{ display: 'none' }}
+                      {...register("icon", { required: false })}
+                      id="raised-button-file"
+                      type="file"
+                      onChange={(
+                        event: React.InputHTMLAttributes<HTMLInputElement>
+                      ) => {
+                        handleFileChange(event);
+                        //setIsImage(event.nativeEventtarget.files[0])
                       }}
                     />
-                  </IconButton>
+                    <label htmlFor="raised-button-file" className="ImageLabel">
+                      <Button component="span" className="ImageBtn">
+                        <FileUploadOutlinedIcon sx={{ marginRight: '0.5rem' }} />
+                        Upload image
+                      </Button>
+                    </label>
+
+                    {imageName ? (
+                      <div className="ShowImageBox">
+                        <label className="ShowImageLabel">{imageName}</label>
+                        <IconButton className="btn-dot" onClick={handleRemoveImage}>
+                          <CloseOutlinedIcon
+                            sx={{
+                              color: '#1D1D1D',
+                              fontSize: '1rem',
+                              lineHeight: '1.5rem',
+                            }}
+                          />
+                        </IconButton>
+                      </div>
+                    ) : (
+                      ''
+                    )}
+                  </div>
                 </div>
-              ) : (
-                ''
-              )}
-            </div>
-          </div>
-        </div>
-        <div className="FormFooter">
-          <Button
-            className="btn-black-outline"
-            onClick={handleFormClose}
-            sx={{
-              marginRight: '0.5rem',
-              padding: '0.375rem 1.5rem !important',
-            }}
-          >
-            Cancel
-          </Button>
-          <Button
-            className="btn-black-fill"
-            onClick={handleFormClose}
-            sx={{
-              padding: '0.375rem 2rem !important',
-            }}
-          >
-            Add
-          </Button>
-        </div>
+              </div>
+              <div className="FormFooter">
+                <Button
+                  className="btn-black-outline"
+                  type="submit"
+                  onClick={handleFormClose}
+                  sx={{
+                    marginRight: '0.5rem',
+                    padding: '0.375rem 1.5rem !important',
+                  }}
+                >
+                  Cancel
+                </Button>
+                <Input
+                  type="submit"
+                  value="Update"
+                  className="btn-black-fill"
+                  sx={{
+                    padding: '0.375rem 2rem !important',
+                  }}
+                />
+
+              </div>
+            </>
+          )}
+        </form>
       </div>
     </Dialog>
   );
