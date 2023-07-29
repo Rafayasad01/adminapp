@@ -6,6 +6,7 @@ import FormatListBulletedOutlinedIcon from '@mui/icons-material/FormatListBullet
 import PlaceOutlinedIcon from '@mui/icons-material/PlaceOutlined';
 import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
+import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
 import Stack from '@mui/material/Stack';
@@ -24,15 +25,15 @@ const links = [
     path: 'home',
     icon: <GridViewOutlinedIcon fontSize="inherit" />,
   },
-  {
-    name: 'Reports',
-    path: 'reports',
-    icon: <DescriptionOutlinedIcon fontSize="inherit" />,
-  },
+  // {
+  //   name: 'Reports',
+  //   path: 'reports',
+  //   icon: <DescriptionOutlinedIcon fontSize="inherit" />,
+  // },
   {
     name: 'Carts',
     path: 'carts',
-    icon: <OrderIcon />,
+    icon: <ShoppingCartOutlinedIcon fontSize="inherit" />,
   },
   {
     name: 'Orders',
@@ -44,46 +45,46 @@ const links = [
     path: 'drivers',
     icon: <DriverIcon />,
   },
-  {
-    name: 'Complains',
-    path: 'complains',
-    icon: <DescriptionOutlinedIcon fontSize="inherit" />,
-  },
+  // {
+  //   name: 'Complains',
+  //   path: 'complains',
+  //   icon: <DescriptionOutlinedIcon fontSize="inherit" />,
+  // },
   {
     name: 'Categories',
     path: 'categories',
     icon: <CategoryIcon />,
   },
-  {
-    name: 'Services',
-    path: 'services',
-    icon: <FormatListBulletedOutlinedIcon fontSize="inherit" />,
-  },
-  {
-    name: 'Locations',
-    path: 'locations',
-    icon: <PlaceOutlinedIcon fontSize="inherit" />,
-  },
-  {
-    name: 'Customers',
-    path: 'customers',
-    icon: <PersonOutlineOutlinedIcon fontSize="inherit" />,
-  },
-  {
-    name: 'Vouchers',
-    path: 'vouchers',
-    icon: <VoucherIcon />,
-  },
-  {
-    name: 'FAQ’s',
-    path: 'faqs',
-    icon: <HelpOutlineOutlinedIcon fontSize="inherit" />,
-  },
-  {
-    name: 'Settings',
-    path: 'settings',
-    icon: <SettingsOutlinedIcon fontSize="inherit" />,
-  },
+  // {
+  //   name: 'Services',
+  //   path: 'services',
+  //   icon: <FormatListBulletedOutlinedIcon fontSize="inherit" />,
+  // },
+  // {
+  //   name: 'Locations',
+  //   path: 'locations',
+  //   icon: <PlaceOutlinedIcon fontSize="inherit" />,
+  // },
+  // {
+  //   name: 'Customers',
+  //   path: 'customers',
+  //   icon: <PersonOutlineOutlinedIcon fontSize="inherit" />,
+  // },
+  // {
+  //   name: 'Vouchers',
+  //   path: 'vouchers',
+  //   icon: <VoucherIcon />,
+  // },
+  // {
+  //   name: 'FAQ’s',
+  //   path: 'faqs',
+  //   icon: <HelpOutlineOutlinedIcon fontSize="inherit" />,
+  // },
+  // {
+  //   name: 'Settings',
+  //   path: 'settings',
+  //   icon: <SettingsOutlinedIcon fontSize="inherit" />,
+  // },
 ];
 
 function Sidebar() {

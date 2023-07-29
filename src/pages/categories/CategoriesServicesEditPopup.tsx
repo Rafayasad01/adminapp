@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Dialog from '@mui/material/Dialog';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
@@ -6,32 +6,36 @@ import Input from '@mui/material/Input';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
 import IconButton from '@mui/material/IconButton';
+import TextField from '@mui/material/TextField';
 import { useForm } from "react-hook-form";
 
 import '../../assets/css/PopupStyle.css';
-import { Category } from '../../interfaces/category.interface';
+import { CategoryService } from '../../interfaces/category.interface';
 
 type Props = {
   openFormDialog: boolean;
   setOpenFormDialog: React.Dispatch<React.SetStateAction<boolean>>;
+  formData: any;
   callback: Function;
 };
 
-function CategoriesCreatePopup({ openFormDialog, setOpenFormDialog, callback }: Props) {
+function CategoriesServicesEditPopup({
+  openFormDialog,
+  setOpenFormDialog,
+  formData,
+  callback
+}: Props) {
   const [image, setImage] = useState<any>(null);
   const [imageName, setImageName] = useState<string>('');
 
-  const { register, handleSubmit, watch, formState: { errors }, control } = useForm<Category>();
-  const onSubmit = (data: Category) => {
+  const { register, handleSubmit, watch, formState: { errors }, control } = useForm<CategoryService>();
+  const onSubmit = (data: CategoryService) => {
     data.icon = image;
     setOpenFormDialog(false);
     callback(data);
-
   };
 
-  const handleFormClose = () => {
-    setOpenFormDialog(false)
-  };
+  const handleFormClose = () => setOpenFormDialog(false);
   const handleRemoveImage = () => {
     setImage('');
     setImageName('');
@@ -41,6 +45,15 @@ function CategoriesCreatePopup({ openFormDialog, setOpenFormDialog, callback }: 
     setImage(event.target.files[0]);
     setImageName(event.target.files[0].name);
   };
+
+  useEffect(() => {
+    let icon = formData.icon.split("/").slice(-1)[0];
+    const regexExp = /[a-z,0-9,-]{36}/;
+    if (regexExp.test(icon)) {
+      icon = icon.split("-").splice(5)[0];
+    }
+    setImageName(icon);
+  }, []);
 
   return (
     <Dialog
@@ -54,20 +67,60 @@ function CategoriesCreatePopup({ openFormDialog, setOpenFormDialog, callback }: 
       <div className="Content">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="FormHeader">
-            <span className="Title">Add Category</span>
+            <span className="Title">Edit Services</span>
           </div>
           <div className="FormBody">
             <div className="FormField">
               <FormControl className="FormControl" variant="standard">
-                <label className="FormLabel">Category Name</label>
+                <label className="FormLabel">Service Name</label>
                 <Input
                   className="FormInput"
-                  {...register("name", { required: true })}
-                  type="text"
                   id="name"
+                  {...register("name", { required: "Name is required", value: formData.name })}
                   disableUnderline
                 />
-                {errors.name?.type === 'required' && <span role="alert">Category name is required</span>}
+                {errors.name && <span role="alert">{errors.name?.message}</span>}
+              </FormControl>
+            </div>
+            <div className="FormFields">
+              <FormControl className="FormControl" variant="standard">
+                <label className="FormLabel">Min Order Quantity</label>
+                <Input
+                  className="FormInput"
+                  id="name"
+                  type="number"
+                  {...register("quantity", { required: "Quantity is required", value: formData.quantity })}
+                  disableUnderline
+                />
+                {errors.quantity && <span role="alert">{errors.quantity?.message}</span>}
+              </FormControl>
+              <FormControl className="FormControl" variant="standard">
+                <label className="FormLabel">Price</label>
+                <Input
+                  className="FormInput"
+                  id="name"
+                  type="number"
+                  {...register("price", { required: "Price is required", value: formData.price })}
+                  disableUnderline
+                />
+                {errors.price && <span role="alert">{errors.price?.message}</span>}
+              </FormControl>
+            </div>
+            <div className="FormField">
+              <FormControl className="FormControl" variant="standard">
+                <label className="FormLabel">
+                  Description{' '}
+                  <span className="SubLabel">Write 25-250 Characters</span>
+                </label>
+                <TextField
+                  className="FormTextarea"
+                  id="outlined-multiline-static"
+                  multiline
+                  rows={2}
+                  defaultValue=""
+                  placeholder="Write Description"
+                  {...register("desc", { value: formData.desc })}
+                />
               </FormControl>
             </div>
             <div className="FormField">
@@ -76,14 +129,12 @@ function CategoriesCreatePopup({ openFormDialog, setOpenFormDialog, callback }: 
                 <input
                   accept="image/*"
                   style={{ display: 'none' }}
-                  {...register("icon", { required: "Icon is required" })}
                   id="raised-button-file"
                   type="file"
                   onChange={(
                     event: React.InputHTMLAttributes<HTMLInputElement>
                   ) => {
                     handleFileChange(event);
-                    //setIsImage(event.nativeEventtarget.files[0])
                   }}
                 />
                 <label htmlFor="raised-button-file" className="ImageLabel">
@@ -92,7 +143,6 @@ function CategoriesCreatePopup({ openFormDialog, setOpenFormDialog, callback }: 
                     Upload image
                   </Button>
                 </label>
-
                 {imageName ? (
                   <div className="ShowImageBox">
                     <label className="ShowImageLabel">{imageName}</label>
@@ -110,13 +160,11 @@ function CategoriesCreatePopup({ openFormDialog, setOpenFormDialog, callback }: 
                   ''
                 )}
               </div>
-              {errors.icon && <span role="alert">{errors.icon?.message}</span>}
             </div>
           </div>
           <div className="FormFooter">
             <Button
               className="btn-black-outline"
-              type="submit"
               onClick={handleFormClose}
               sx={{
                 marginRight: '0.5rem',
@@ -127,13 +175,12 @@ function CategoriesCreatePopup({ openFormDialog, setOpenFormDialog, callback }: 
             </Button>
             <Input
               type="submit"
-              value="Add"
+              value="Update"
               className="btn-black-fill"
               sx={{
                 padding: '0.375rem 2rem !important',
               }}
             />
-
           </div>
         </form>
       </div>
@@ -141,4 +188,4 @@ function CategoriesCreatePopup({ openFormDialog, setOpenFormDialog, callback }: 
   );
 }
 
-export default CategoriesCreatePopup;
+export default CategoriesServicesEditPopup;

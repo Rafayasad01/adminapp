@@ -43,6 +43,8 @@ import SuperAdminSupportPage from '../pages/super-admin/main/support/SuperAdminS
 import SuperAdminLogout from '../pages/super-admin/auth/logout/SuperAdminLogout';
 import CartsPage from '../pages/carts/CartsPage';
 import CartDetailsPage from '../pages/carts/CartDetailsPage';
+import CategoriesServicesPage from '../pages/categories/CategoriesServicesPage';
+import CategoriesServicesFaqPage from '../pages/categories/CategoriesServicesFaqPage';
 
 
 export const routeObjects: RouteObject[] = [
@@ -241,6 +243,14 @@ export const routeObjects: RouteObject[] = [
           {
             index: true,
             element: <CategoriesPage />,
+          },
+          {
+            path: 'service/:categoryId',
+            element: <CategoriesServicesPage />,
+          },
+          {
+            path: 'service/faq/:categoryServiceId',
+            element: <CategoriesServicesFaqPage />,
           },
         ],
       },

@@ -1,0 +1,102 @@
+import React from 'react';
+import Dialog from '@mui/material/Dialog';
+import Button from '@mui/material/Button';
+import FormControl from '@mui/material/FormControl';
+import Input from '@mui/material/Input';
+import { useForm } from "react-hook-form";
+
+import '../../assets/css/PopupStyle.css';
+import { CategoryServiceFaq } from '../../interfaces/category.interface';
+import TextareaAutosize from '@mui/base/TextareaAutosize';
+
+type Props = {
+  openFormDialog: boolean;
+  setOpenFormDialog: React.Dispatch<React.SetStateAction<boolean>>;
+  callback: Function;
+};
+
+function CategoriesServicesFaqCreatePopup({ openFormDialog, setOpenFormDialog, callback }: Props) {
+  const { register, handleSubmit, watch, formState: { errors }, control } = useForm<CategoryServiceFaq>();
+  const onSubmit = (data: CategoryServiceFaq) => {
+    setOpenFormDialog(false);
+    callback(data);
+
+  };
+
+  const handleFormClose = () => {
+    setOpenFormDialog(false)
+  };
+
+  return (
+    <Dialog
+      open={openFormDialog}
+      onClose={handleFormClose}
+      PaperProps={{
+        className: 'Dialog',
+        style: { maxWidth: '100%', maxHeight: 'auto' },
+      }}
+    >
+      <div className="Content">
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div className="FormHeader">
+            <span className="Title">Add FAQ</span>
+          </div>
+          <div className="FormBody">
+            <div className="FormField">
+              <FormControl className="FormControl" variant="standard">
+                <label className="FormLabel">Question</label>
+                <Input
+                  className="FormInput"
+                  id="question"
+                  placeholder="Question"
+                  disableUnderline
+                  {...register("question", { required: "Question is required" })}
+                />
+                {errors.question && <span role="alert">{errors.question?.message}</span>}
+              </FormControl>
+            </div>
+            <div className="FormField">
+              <FormControl className="FormControl" variant="standard">
+                <label className="FormLabel">Answer</label>
+                <TextareaAutosize
+                  className="FormTextarea"
+                  id="outlined-multiline-static"
+                  minRows={5}
+                  maxRows={15}
+                  defaultValue=""
+                  placeholder="Write answer here..."
+                  {...register("answer", { required: "Answer is required" })}
+                />
+                {errors.answer && <span role="alert">{errors.answer?.message}</span>}
+              </FormControl>
+            </div>
+          </div>
+          <div className="FormFooter">
+            <Button
+              className="btn-black-outline"
+              type="submit"
+              onClick={handleFormClose}
+              sx={{
+                marginRight: '0.5rem',
+                padding: '0.375rem 1.5rem !important',
+              }}
+            >
+              Cancel
+            </Button>
+            <Input
+              type="submit"
+              value="Add"
+              className="btn-black-fill"
+              sx={{
+                padding: '0.375rem 2rem !important',
+              }}
+            />
+
+          </div>
+        </form>
+      </div>
+    </Dialog>
+  );
+}
+
+export default CategoriesServicesFaqCreatePopup;
