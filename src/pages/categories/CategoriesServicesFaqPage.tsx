@@ -18,7 +18,6 @@ import dayjs from 'dayjs';
 import CategoriesServicesFaqCreatePopup from './CategoriesServicesFaqCreatePopup';
 import CategoriesServicesFaqEditPopup from './CategoriesServicesFaqEditPopup';
 import Switch from '@mui/material/Switch';
-import DeleteIcon from '../../components/icons/DeleteIcon';
 
 function CategoriesServicesFaqPage() {
   const params = useParams();
@@ -32,7 +31,7 @@ function CategoriesServicesFaqPage() {
   const [actionMenuItemid, setActionMenuItemid] = React.useState("");
   const [actionMenuAnchorEl, setActionMenuAnchorEl] = useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
-  const actionMenuOptions = ["Edit"];
+  const actionMenuOptions = ["Edit", "Delete"];
 
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
@@ -106,6 +105,8 @@ function CategoriesServicesFaqPage() {
           setOpenEditFormDialog(true);
         }
       })
+    } else if (option === 'Delete') {
+      deleteHandler(actionMenuItemid);
     }
   }
 
@@ -155,7 +156,7 @@ function CategoriesServicesFaqPage() {
     })
   };
 
-  const deleteCategoryHandler = (id: string) => {
+  const deleteHandler = (id: string) => {
     const data = {
       is_active: false,
       is_deleted: true,
@@ -267,12 +268,6 @@ function CategoriesServicesFaqPage() {
                             }}
                           >
                             <MoreVertIcon />
-                          </IconButton>
-                          <IconButton
-                            className="p-0 text-[#1D1D1D]"
-                            onClick={() => deleteCategoryHandler(list[index].id)}
-                          >
-                            <DeleteIcon />
                           </IconButton>
                           <Switch
                             checked={item.isActive ? true : false}

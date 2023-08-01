@@ -19,7 +19,6 @@ import dayjs from 'dayjs';
 import ActionMenu from '../../components/common/ActionMenu';
 import TablePagination from '@mui/material/TablePagination';
 import Switch from '@mui/material/Switch';
-import DeleteIcon from '../../components/icons/DeleteIcon';
 
 function CategoriesPage() {
   const authState: any = useAppSelector((state) => state.authState);
@@ -33,7 +32,7 @@ function CategoriesPage() {
   const [actionMenuItemid, setActionMenuItemid] = React.useState("");
   const [actionMenuAnchorEl, setActionMenuAnchorEl] = useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
-  const actionMenuOptions = ['Service', 'Edit'];
+  const actionMenuOptions = ['Service', 'Edit', 'Delete'];
 
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
@@ -109,6 +108,8 @@ function CategoriesPage() {
       })
     } else if (option === 'Service') {
       navigate(`service/${actionMenuItemid}`);
+    } else if (option === 'Delete') {
+      deleteHandler(actionMenuItemid);
     }
   }
   const createFormHandler = (data: any) => {
@@ -165,7 +166,7 @@ function CategoriesPage() {
     })
   };
 
-  const deleteCategoryHandler = (id: string) => {
+  const deleteHandler = (id: string) => {
     const data = {
       is_active: false,
       is_deleted: true,
@@ -279,12 +280,6 @@ function CategoriesPage() {
                             }}
                           >
                             <MoreVertIcon />
-                          </IconButton>
-                          <IconButton
-                            className="p-0 text-[#1D1D1D]"
-                            onClick={() => deleteCategoryHandler(list[index].id)}
-                          >
-                            <DeleteIcon />
                           </IconButton>
                           <Switch
                             checked={item.isActive}

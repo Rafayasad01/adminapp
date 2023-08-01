@@ -45,6 +45,7 @@ import CartsPage from '../pages/carts/CartsPage';
 import CartDetailsPage from '../pages/carts/CartDetailsPage';
 import CategoriesServicesPage from '../pages/categories/CategoriesServicesPage';
 import CategoriesServicesFaqPage from '../pages/categories/CategoriesServicesFaqPage';
+import OrdersAssignPage from '../pages/orders/OrdersAssignPage';
 
 
 export const routeObjects: RouteObject[] = [
@@ -212,6 +213,10 @@ export const routeObjects: RouteObject[] = [
           {
             path: 'edit/:orderId',
             element: <OrdersEditPage />,
+          },
+          {
+            path: 'assign/:orderId',
+            element: <OrdersAssignPage />,
           },
         ],
       },

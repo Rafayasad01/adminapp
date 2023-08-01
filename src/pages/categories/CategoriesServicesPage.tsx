@@ -17,7 +17,6 @@ import ActionMenu from '../../components/common/ActionMenu';
 import TablePagination from '@mui/material/TablePagination';
 import category from '../../services/adminapp/adminCategory';
 import Switch from '@mui/material/Switch';
-import DeleteIcon from '../../components/icons/DeleteIcon';
 
 function CategoriesServicesPage() {
   const params = useParams();
@@ -32,7 +31,7 @@ function CategoriesServicesPage() {
   const [actionMenuItemid, setActionMenuItemid] = React.useState("");
   const [actionMenuAnchorEl, setActionMenuAnchorEl] = useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
-  const actionMenuOptions = ["Faq's", "Edit"];
+  const actionMenuOptions = ["Faq's", "Edit", "Delete"];
 
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
@@ -109,6 +108,8 @@ function CategoriesServicesPage() {
     } else if (option === "Faq's") {
       console.log('actionMenuItemid::::::', actionMenuItemid)
       navigate(`../service/faq/${actionMenuItemid}`);
+    } else if (option === 'Delete') {
+      deleteHandler(actionMenuItemid);
     }
   }
 
@@ -173,7 +174,7 @@ function CategoriesServicesPage() {
     })
   };
 
-  const deleteCategoryHandler = (id: string) => {
+  const deleteHandler = (id: string) => {
     const data = {
       is_active: false,
       is_deleted: true,
@@ -291,12 +292,6 @@ function CategoriesServicesPage() {
                             }}
                           >
                             <MoreVertIcon />
-                          </IconButton>
-                          <IconButton
-                            className="p-0 text-[#1D1D1D]"
-                            onClick={() => deleteCategoryHandler(list[index].id)}
-                          >
-                            <DeleteIcon />
                           </IconButton>
                           <Switch
                             checked={item.isActive ? true : false}
