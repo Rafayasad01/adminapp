@@ -19,7 +19,17 @@ const get = (endPoint: string) => {
     });
 }
 
+const postMultipart = (endPoint: string, data: any) => {
+    return axios.post(`${BASE_URL}${endPoint}`, data, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+            'Authorization': token
+        }
+    });
+}
+
 export default {
     post,
-    get
+    get,
+    postMultipart
 }

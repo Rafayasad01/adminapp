@@ -15,11 +15,15 @@ const viewService = (id: string) => {
 const createStatusesService = (data: any) => {
     return network.post(`${ORDER_PREFIX}/statuses/create`, data);
 }
+const createAppOrderDelivery = (data: any) => {
+    return network.post(`${ORDER_PREFIX}/delivery/create`, data);
+}
 
 
 export default {
     getListService,
     searchService,
     viewService,
-    createStatusesService
+    createStatusesService,
+    createAppOrderDelivery
 }

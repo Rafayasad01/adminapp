@@ -12,6 +12,7 @@ import CircleOutlinedIcon from '@mui/icons-material/CircleOutlined';
 import DomainVerificationOutlinedIcon from '@mui/icons-material/DomainVerificationOutlined';
 import Button from '@mui/material/Button';
 import dayjs from 'dayjs';
+import { useAppSelector } from '../../redux/redux-hooks';
 
 import TopBar from '../../components/common/TopBar';
 import orderService from '../../services/adminapp/adminOrders';
@@ -21,9 +22,9 @@ import PermissionPopup from '../../utils/PermissionPopup';
 import Avatar from '@mui/material/Avatar';
 import assets from '../../assets';
 import IconButton from '@mui/material/IconButton';
-import OrderAssignPopup from './OrderAssignPopup';
 
 function OrderDetailsPage() {
+  const driverState: any = useAppSelector((state) => state.driverState);
   const navigate = useNavigate();
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
   const [cancelDialogOpen, setCancelDialogOpen] = useState<boolean>(false);
@@ -47,6 +48,8 @@ function OrderDetailsPage() {
         setData(item.data.data);
       }
     })
+
+    console.log('driverState:::::', driverState)
 
   }, []);
 
@@ -143,17 +146,10 @@ function OrderDetailsPage() {
     setOrderStatuses(newResult);
   }
 
-  const assignOrder = (appUser: any) => {
-    console.log('driversAssign')
-    console.log('id:::::::', appUser)
-  }
-
-
   return (
     <>
       {dialogOpen && (<PermissionPopup open={dialogOpen} setOpen={setDialogOpen} dialogText={dialogText} callback={statusUpdateHandler} />)}
       {cancelDialogOpen && (<PermissionPopup open={cancelDialogOpen} setOpen={setCancelDialogOpen} dialogText={dialogText} callback={statusCancelHandler} />)}
-      {orderAssign && (<OrderAssignPopup open={orderAssign} setOpen={setOrderAssign} callback={assignOrder} />)}
       <TopBar isNestedRoute title="View Order" />
       <div className="container py-3">
         <div className="grid w-full grid-cols-2 gap-3">
@@ -257,17 +253,33 @@ function OrderDetailsPage() {
                 </div>
               </div>
               <hr className="my-3 h-[1px] w-full bg-neutral-200" />
-              <div className="flex items-center">
-                <IconButton aria-label="delete" className='p-0' disableRipple onClick={() => setOrderAssign(true)}>
+              <div className="flex items-center w-full flex-shrink-0">
+                <IconButton aria-label="delete" className='p-0' disableRipple onClick={() => navigate('../assign/' + id)}>
                   <Avatar
                     alt="Truck Driver Icon"
                     src={assets.images.truckDriverIcon}
                     sx={{ width: 24, height: 24, marginRight: '5px' }}
                   />
-                  <div className="font-open-sans text-sm font-normal text-neutral-500">
-                    Choose a driver
-                  </div>
+                  {(driverState.driver && driverState.driver.app_order !== id) && (
+                    <div className="font-open-sans text-sm font-normal text-neutral-500">
+                      Choose a driver
+                    </div>
+                  )}
+
                 </IconButton>
+                {(driverState.driver && driverState.driver.app_order === id) && (
+                  <div className="flex items-center justify-between font-open-sans text-sm font-normal text-neutral-500">
+                    <div className="avatar flex items-center ">
+                      {driverState.driver.avatar ? (
+                        <img src={driverState.driver.avatar} alt="" />
+                      ) : (
+                        <Avatar className="avatar flex items-center" sx={{ bgcolor: '#1D1D1D', width: 25, height: 25, textTransform: 'uppercase', fontSize: '11px', marginRight: '10px' }}>{driverState.driver.firstName.charAt(0)}{driverState.driver.lastName.charAt(0)}</Avatar>
+                      )}
+                    </div>
+                    <span>{driverState.driver.phone}</span>
+                    <span>{driverState.driver.licenseNumber}</span>
+                  </div>
+                )}
               </div>
               <hr className="my-3 h-[1px] w-full bg-neutral-200" />
               {viewData.orderItems && viewData.orderItems.map((item: any, index: number) => {

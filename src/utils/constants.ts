@@ -1,11 +1,12 @@
-export const BASE_URL = import.meta.env.VITE_SERVICE_BASE_URL;
-//export const BASE_URL = "https://dev.urapptech.com/api/v1/admin/";
+//export const BASE_URL = import.meta.env.VITE_SERVICE_BASE_URL;
+export const BASE_URL = "https://dev.urapptech.com/api/v1/admin/";
 export const GOOGLE_MAP_KEY = import.meta.env.VITE_GOOGLE_MAP_KEY;
 export const BACKOFFICE_PREFIX = 'backofficeUser';
 export const PERMISSION_PREFIX = 'permission'
 export const ORDER_PREFIX = 'order'
 export const CART_PREFIX = 'cart'
 export const DRIVER_PREFIX = 'driver'
+export const CATEGORY_PREFIX = 'category'
 export const ORDER_STATUS_NEW = "New";
 export const ORDER_STATUS_PICKED_UP = "PickedUp";
 export const ORDER_STATUS_PROCESSING = "Processing";
@@ -15,6 +16,18 @@ export const ORDER_STATUS_IN_CANCELLED = "Cancelled";
 export const ORDER_STATUS_PENDING = "Pending";
 export const CART_STATUS_NEW = "New";
 export const CART_STATUS_PROCESSING = "Processing";
+export const ORDER_DELIVERY_STATUS_NOT_ASSIGN = "Not Assign";
+export const ORDER_DELIVERY_STATUS_NEW = "New";
+export const ORDER_DELIVERY_STATUS_PICKED_UP = "PickedUp";
+export const ORDER_DELIVERY_STATUS_IN_DELIVERY = "In-Delivery";
+export const ORDER_DELIVERY_STATUS_DELIVERED = "Delivered";
+export const ORDER_DELIVERY_STATUS_CANCELLED = "Cancelled";
+export const ORDER_DELIVERY_STATUS_ACCEPTED = "Accepted";
+export const APP_USER_STATUS_OFFLINE = "Offline";
+export const APP_USER_STATUS_ONLINE = "Online";
+
+
+//[New, PickedUp, In-Delivery, Delivered, Cancelled, Accepted]
 export let token = "";
 export const setToken = (data: string) => {
     token = data;

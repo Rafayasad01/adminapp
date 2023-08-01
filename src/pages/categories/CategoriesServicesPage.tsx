@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import IconButton from '@mui/material/IconButton';
 import Divider from '@mui/material/Divider';
 import FormControl from '@mui/material/FormControl';
@@ -10,17 +10,16 @@ import SearchIcon from '@mui/icons-material/Search';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import TopBar from '../../components/common/TopBar';
-import CategoriesCreatePopup from './CategoriesCreatePopup';
-import assets from '../../assets';
-import CategoriesEditPopup from './CategoriesEditPopup';
-import category from '../../services/adminapp/adminCategory';
+import ServicesCreatePopup from './CategoriesServicesCreatePopup';
+import ServicesEditPopup from './CategoriesServicesEditPopup';
 import { useAppSelector } from '../../redux/redux-hooks';
-import dayjs from 'dayjs';
 import ActionMenu from '../../components/common/ActionMenu';
 import TablePagination from '@mui/material/TablePagination';
+import category from '../../services/adminapp/adminCategory';
 import Switch from '@mui/material/Switch';
 
-function CategoriesPage() {
+function CategoriesServicesPage() {
+  const params = useParams();
   const authState: any = useAppSelector((state) => state.authState);
   const navigate = useNavigate();
   const [search, setSearch] = useState('');
@@ -32,21 +31,20 @@ function CategoriesPage() {
   const [actionMenuItemid, setActionMenuItemid] = React.useState("");
   const [actionMenuAnchorEl, setActionMenuAnchorEl] = useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
-  const actionMenuOptions = ['Service', 'Edit', 'Delete'];
+  const actionMenuOptions = ["Faq's", "Edit", "Delete"];
 
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
 
-  const handleFormClickOpen = () => {
-    setOpenFormDialog(true);
-  };
+
+  const categoryId: any = params.categoryId;
 
   const handleClickSearch = (event: any) => {
     const searchTxt = event.target.value as string;
     const newPage = 0;
     setSearch(searchTxt);
     setPage(newPage);
-    category.searchService(authState.user.tenant, searchTxt, newPage, rowsPerPage).then(item => {
+    category.searchCategoryService(categoryId, searchTxt, newPage, rowsPerPage).then(item => {
       setList(item.data.data.list);
       setTotal(item.data.data.total);
     })
@@ -59,12 +57,12 @@ function CategoriesPage() {
     setPage(newPage);
     //offset? ,limit rowsperpage hoga ofset page * rowsperPage
     if (search === "" || search === null || search === undefined) {
-      category.getListService(authState.user.tenant, newPage, rowsPerPage).then(item => {
+      category.getCategoryServiceList(categoryId, newPage, rowsPerPage).then(item => {
         setList(item.data.data.list);
         setTotal(item.data.data.total);
       });
     } else {
-      category.searchService(authState.user.tenant, search, newPage, rowsPerPage).then(item => {
+      category.searchCategoryService(categoryId, search, newPage, rowsPerPage).then(item => {
         setList(item.data.data.list);
         setTotal(item.data.data.total);
       });
@@ -78,12 +76,12 @@ function CategoriesPage() {
     setRowsPerPage(newRowperPage);
     setPage(newPage);
     if (search === "" || search === null || search === undefined) {
-      category.getListService(authState.user.tenant, newPage, rowsPerPage).then(item => {
+      category.getCategoryServiceList(categoryId, newPage, rowsPerPage).then(item => {
         setList(item.data.data.list);
         setTotal(item.data.data.total);
       });
     } else {
-      category.searchService(authState.user.tenant, search, newPage, rowsPerPage).then(item => {
+      category.searchCategoryService(categoryId, search, newPage, rowsPerPage).then(item => {
         setList(item.data.data.list);
         setTotal(item.data.data.total);
       });
@@ -91,53 +89,63 @@ function CategoriesPage() {
   };
 
   useEffect(() => {
-    category.getListService(authState.user.tenant, page, rowsPerPage).then((item: any) => {
+    category.getCategoryServiceList(categoryId, page, rowsPerPage).then((item: any) => {
       setList(item.data.data.list);
       setTotal(item.data.data.total);
     }).catch(error => {
       console.log('error::::::::', error)
     })
   }, []);
+
   const manuHandler = (option: string) => {
     if (option === 'Edit') {
-      category.getCategory(actionMenuItemid).then((item: any) => {
+      category.getCategoryService(actionMenuItemid).then((item: any) => {
         if (item.data.success) {
           setEditFormData(item.data.data);
           setOpenEditFormDialog(true);
         }
       })
-    } else if (option === 'Service') {
-      navigate(`service/${actionMenuItemid}`);
+    } else if (option === "Faq's") {
+      console.log('actionMenuItemid::::::', actionMenuItemid)
+      navigate(`../service/faq/${actionMenuItemid}`);
     } else if (option === 'Delete') {
       deleteHandler(actionMenuItemid);
     }
   }
+
   const createFormHandler = (data: any) => {
     const formData = new FormData();
     formData.append("name", data.name);
     formData.append("icon", data.icon);
-    formData.append("tenant", authState.user.tenant);
+    formData.append("quantity", data.quantity);
+    formData.append("price", data.price);
+    formData.append("desc", data.desc);
     formData.append("created_by", authState.user.id);
     formData.append("updated_by", authState.user.id);
-    category.create(formData).then((item) => {
+    category.categoryServiceCreate(categoryId, formData).then((item) => {
       if (item.data.success) {
         list.push(item.data.data);
         setList(list);
       }
     })
   }
-
   const updateFormHandler = (data: any) => {
     const formData = new FormData();
     formData.append("name", data.name);
+    formData.append("quantity", data.quantity);
+    formData.append("price", data.price);
+    formData.append("desc", data.desc);
     formData.append("updated_by", authState.user.id);
     if (data.icon !== null) formData.append("icon", data.icon);
-    category.updateCategory(actionMenuItemid, formData).then((updateItem: any) => {
+    category.updateCategoryService(actionMenuItemid, formData).then((updateItem: any) => {
       if (updateItem.data.success) {
         setList((newArr: any) => {
           return newArr.map((item: any) => {
             if (item.id === updateItem.data.data.id) {
               item.name = updateItem.data.data.name;
+              item.quantity = updateItem.data.data.quantity;
+              item.price = updateItem.data.data.price;
+              item.desc = updateItem.data.data.desc;
               if (updateItem.data.data.hasOwnProperty('icon')) item.icon = updateItem.data.data.icon;
             }
             return { ...item };
@@ -152,7 +160,7 @@ function CategoriesPage() {
       is_active: event.target.checked,
       updated_by: authState.user.id
     }
-    category.updateStatus(id, data).then((updateItem) => {
+    category.updateCategoryServiceStatus(id, data).then((updateItem) => {
       if (updateItem.data.success) {
         setList((newArr: any) => {
           return newArr.map((item: any) => {
@@ -172,7 +180,7 @@ function CategoriesPage() {
       is_deleted: true,
       updated_by: authState.user.id
     }
-    category.deleteCategory(id, data).then((updateItem) => {
+    category.deleteCategoryService(id, data).then((updateItem) => {
       if (updateItem.data.success) {
         setList((newArr: any) => {
           return newArr.filter((item: any) => item.id !== id);
@@ -185,13 +193,13 @@ function CategoriesPage() {
 
   return (
     <>
-      <TopBar title="Categories" />
+      <TopBar isNestedRoute={true} title="Services" />
       <div className="container mt-5">
         <div className="w-full rounded-lg bg-white shadow-lg">
           <div className="grid grid-cols-12 px-4 py-5">
             <div className="col-span-7">
               <span className="font-open-sans text-xl font-semibold text-[#252733]">
-                All Categories
+                All Services
               </span>
             </div>
             <div className="col-span-5">
@@ -229,7 +237,7 @@ function CategoriesPage() {
                 <Button
                   variant="contained"
                   className="btn-black-fill btn-icon"
-                  onClick={handleFormClickOpen}
+                  onClick={() => setOpenFormDialog(true)}
                 >
                   <AddOutlinedIcon /> Add New
                 </Button>
@@ -240,8 +248,10 @@ function CategoriesPage() {
             <table className="table-border table-auto">
               <thead>
                 <tr>
-                  <th>Category Name</th>
-                  <th>Created Date</th>
+                  <th className="w-56">Service Name</th>
+                  <th className="w-80">Description</th>
+                  <th>Min Quantity</th>
+                  <th>Price</th>
                   <th>Status</th>
                   <th>&nbsp;</th>
                 </tr>
@@ -249,12 +259,13 @@ function CategoriesPage() {
               <tbody>
                 {list && list.map((item: any, index: number) => {
                   return (
-                    <tr key={index}>
+                    <tr key={item.id}>
                       <td>
                         <div className="avatar flex flex-row items-center">
-                          {item.icon ? (
-                            <img src={item.icon} alt="" />
-                          ) : (<img src={assets.tempImages.avatarDryCLean} alt="" />)}
+                          <img
+                            src={item.icon}
+                            alt=""
+                          />
                           <div className="flex flex-col items-start justify-start">
                             <span className="text-sm font-semibold">
                               {item.name}
@@ -262,9 +273,10 @@ function CategoriesPage() {
                           </div>
                         </div>
                       </td>
-                      <td>{dayjs(item.createdDate).isValid() ? dayjs(item.createdDate)?.format('ddd, MMM DD, YYYY hh:mm:ssA') : '--'}</td>
+                      <td>{item.desc ? item.desc : "--"}</td>
+                      <td>{item.quantity}</td>
+                      <td>{item.price}</td>
                       <td>{item.isActive ? (<span className="badge badge-success">Enabled</span>) : (<span className="badge badge-danger">Disabled</span>)}</td>
-
                       <td>
                         <div className="flex flex-row-reverse">
                           <IconButton
@@ -282,15 +294,16 @@ function CategoriesPage() {
                             <MoreVertIcon />
                           </IconButton>
                           <Switch
-                            checked={item.isActive}
+                            checked={item.isActive ? true : false}
                             onChange={(event: React.ChangeEvent<HTMLInputElement>) => handleSwitchChange(event, list[index].id)}
                             inputProps={{ 'aria-label': 'controlled' }}
                           />
                         </div>
                       </td>
                     </tr>
-                  )
+                  );
                 })}
+
               </tbody>
             </table>
           </div>
@@ -310,17 +323,17 @@ function CategoriesPage() {
         <ActionMenu open={actionMenuOpen} anchorEl={actionMenuAnchorEl} setAnchorEl={setActionMenuAnchorEl} options={actionMenuOptions} callback={manuHandler} />
       )}
       {openFormDialog && (
-        <CategoriesCreatePopup
+        <ServicesCreatePopup
           openFormDialog={openFormDialog}
           setOpenFormDialog={setOpenFormDialog}
           callback={createFormHandler}
         />
       )}
       {openEditFormDialog && (
-        <CategoriesEditPopup
+        <ServicesEditPopup
           openFormDialog={openEditFormDialog}
-          setOpenFormDialog={setOpenEditFormDialog}
           formData={editFormData}
+          setOpenFormDialog={setOpenEditFormDialog}
           callback={updateFormHandler}
         />
       )}
@@ -328,4 +341,4 @@ function CategoriesPage() {
   );
 }
 
-export default CategoriesPage;
+export default CategoriesServicesPage;
