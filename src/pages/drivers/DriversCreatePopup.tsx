@@ -40,8 +40,6 @@ function DriversCreatePopup({ openFormDialog, setOpenFormDialog, callback }: Pro
   const onSubmit = (data: AppUserDriverExt) => {
     const licenseNumber = data.license_number.replace(/\s+/g, '');
     data.avatar = avatar;
-    data.start_time = dayjs(startTime).format('HH:mm:ss');
-    data.end_time = dayjs(endTime).format('HH:mm:ss');
     data.license_number = licenseNumber;
     setOpenFormDialog(false);
     callback(data);
@@ -121,22 +119,6 @@ function DriversCreatePopup({ openFormDialog, setOpenFormDialog, callback }: Pro
                 />
                 {errors.license_number && <span role="alert">{errors.license_number?.message}</span>}
               </FormControl>
-            </div>
-            <div className="FormFields">
-              <TimePicker
-                timePickerLabel="Start Time"
-                timePickerSubLabel="Office in time"
-                timePickerValue={startTime}
-                setTimePickerValue={setStartTime}
-                id="start_time"
-              />
-              <TimePicker
-                timePickerLabel="End Time"
-                timePickerSubLabel="Office out time"
-                timePickerValue={endTime}
-                setTimePickerValue={setEndTime}
-                id="end_time"
-              />
             </div>
             <div className="FormField">
               <FormControl className="FormControl" variant="standard">

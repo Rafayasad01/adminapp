@@ -41,6 +41,16 @@ const links = [
     icon: <OrderIcon />,
   },
   {
+    name: 'Categories',
+    path: 'categories',
+    icon: <CategoryIcon />,
+  },
+  {
+    name: 'Customers',
+    path: 'customers',
+    icon: <PersonOutlineOutlinedIcon fontSize="inherit" />,
+  },
+  {
     name: 'Drivers',
     path: 'drivers',
     icon: <DriverIcon />,
@@ -50,35 +60,17 @@ const links = [
   //   path: 'complains',
   //   icon: <DescriptionOutlinedIcon fontSize="inherit" />,
   // },
-  {
-    name: 'Categories',
-    path: 'categories',
-    icon: <CategoryIcon />,
-  },
-  // {
-  //   name: 'Services',
-  //   path: 'services',
-  //   icon: <FormatListBulletedOutlinedIcon fontSize="inherit" />,
-  // },
+
   // {
   //   name: 'Locations',
   //   path: 'locations',
   //   icon: <PlaceOutlinedIcon fontSize="inherit" />,
   // },
-  // {
-  //   name: 'Customers',
-  //   path: 'customers',
-  //   icon: <PersonOutlineOutlinedIcon fontSize="inherit" />,
-  // },
+
   // {
   //   name: 'Vouchers',
   //   path: 'vouchers',
   //   icon: <VoucherIcon />,
-  // },
-  // {
-  //   name: 'FAQ’s',
-  //   path: 'faqs',
-  //   icon: <HelpOutlineOutlinedIcon fontSize="inherit" />,
   // },
   // {
   //   name: 'Settings',

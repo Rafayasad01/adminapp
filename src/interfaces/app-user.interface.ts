@@ -9,3 +9,22 @@ export interface AppUserDriverExt {
     address: string;
     avatar: string;
 }
+
+export interface AppUser {
+    first_name: string;
+    last_name: string;
+    password: string;
+    email: string;
+    phone: number;
+    postal_code: string;
+    address: string;
+    avatar: string;
+}
+
+export interface AppUserAddress {
+    name: string;
+    address: string;
+    latitude: number;
+    longitude: number;
+    type: string;
+}

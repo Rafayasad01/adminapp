@@ -12,7 +12,6 @@ import CircleOutlinedIcon from '@mui/icons-material/CircleOutlined';
 import DomainVerificationOutlinedIcon from '@mui/icons-material/DomainVerificationOutlined';
 import Button from '@mui/material/Button';
 import dayjs from 'dayjs';
-import { useAppSelector } from '../../redux/redux-hooks';
 
 import TopBar from '../../components/common/TopBar';
 import orderService from '../../services/adminapp/adminOrders';
@@ -24,7 +23,6 @@ import assets from '../../assets';
 import IconButton from '@mui/material/IconButton';
 
 function OrderDetailsPage() {
-  const driverState: any = useAppSelector((state) => state.driverState);
   const navigate = useNavigate();
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
   const [cancelDialogOpen, setCancelDialogOpen] = useState<boolean>(false);
@@ -48,8 +46,6 @@ function OrderDetailsPage() {
         setData(item.data.data);
       }
     })
-
-    console.log('driverState:::::', driverState)
 
   }, []);
 
@@ -260,15 +256,15 @@ function OrderDetailsPage() {
                     src={assets.images.truckDriverIcon}
                     sx={{ width: 24, height: 24, marginRight: '5px' }}
                   />
-                  {(driverState.driver && driverState.driver.app_order !== id) && (
-                    <div className="font-open-sans text-sm font-normal text-neutral-500">
-                      Choose a driver
-                    </div>
-                  )}
+
+                  <div className="font-open-sans text-sm font-normal text-neutral-500">
+                    Choose a driver
+                  </div>
+
 
                 </IconButton>
-                {(driverState.driver && driverState.driver.app_order === id) && (
-                  <div className="flex items-center justify-between font-open-sans text-sm font-normal text-neutral-500">
+
+                {/* <div className="flex items-center justify-between font-open-sans text-sm font-normal text-neutral-500">
                     <div className="avatar flex items-center ">
                       {driverState.driver.avatar ? (
                         <img src={driverState.driver.avatar} alt="" />
@@ -278,8 +274,8 @@ function OrderDetailsPage() {
                     </div>
                     <span>{driverState.driver.phone}</span>
                     <span>{driverState.driver.licenseNumber}</span>
-                  </div>
-                )}
+                  </div> */}
+
               </div>
               <hr className="my-3 h-[1px] w-full bg-neutral-200" />
               {viewData.orderItems && viewData.orderItems.map((item: any, index: number) => {

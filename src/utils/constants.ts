@@ -1,11 +1,12 @@
-//export const BASE_URL = import.meta.env.VITE_SERVICE_BASE_URL;
-export const BASE_URL = "https://dev.urapptech.com/api/v1/admin/";
+export const BASE_URL = import.meta.env.VITE_SERVICE_BASE_URL;
+//export const BASE_URL = "https://dev.urapptech.com/api/v1/admin/";
 export const GOOGLE_MAP_KEY = import.meta.env.VITE_GOOGLE_MAP_KEY;
 export const BACKOFFICE_PREFIX = 'backofficeUser';
 export const PERMISSION_PREFIX = 'permission'
 export const ORDER_PREFIX = 'order'
 export const CART_PREFIX = 'cart'
 export const DRIVER_PREFIX = 'driver'
+export const CUSTOMER_PREFIX = 'customer'
 export const CATEGORY_PREFIX = 'category'
 export const ORDER_STATUS_NEW = "New";
 export const ORDER_STATUS_PICKED_UP = "PickedUp";
@@ -25,6 +26,10 @@ export const ORDER_DELIVERY_STATUS_CANCELLED = "Cancelled";
 export const ORDER_DELIVERY_STATUS_ACCEPTED = "Accepted";
 export const APP_USER_STATUS_OFFLINE = "Offline";
 export const APP_USER_STATUS_ONLINE = "Online";
+export const OFFICE_MAP_LAT = 24.8758795;
+export const OFFICE_MAP_LNG = 67.0878445;
+export const OFFICE_MAP_LABEL = 'UrApp Technologies';
+export const OFFICE_MAP_ADDRESS = 'Sumya Business Avenue, 9 B, Mohammad Ali Society Muhammad Ali Chs (Machs), Karachi, Karachi City, Sindh, Pakistan';
 
 
 //[New, PickedUp, In-Delivery, Delivered, Cancelled, Accepted]

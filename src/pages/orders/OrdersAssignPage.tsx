@@ -9,28 +9,24 @@ import InputAdornment from '@mui/material/InputAdornment';
 import Button from '@mui/material/Button';
 import SearchIcon from '@mui/icons-material/Search';
 import TopBar from '../../components/common/TopBar';
-import driver from '../../services/adminapp/adminDriver';
 import { useAppSelector } from '../../redux/redux-hooks';
 import dayjs from 'dayjs';
 
 import Avatar from '@mui/material/Avatar';
 import TablePagination from '@mui/material/TablePagination';
-import { APP_USER_STATUS_OFFLINE, ORDER_DELIVERY_STATUS_NEW, ORDER_DELIVERY_STATUS_NOT_ASSIGN } from '../../utils/constants';
-import order from '../../services/adminapp/adminOrders';
-import { useAppDispatch } from '../../redux/redux-hooks';
-import { addDriver } from '../../redux/features/driverStateSlice';
+import { APP_USER_STATUS_OFFLINE, ORDER_DELIVERY_STATUS_CANCELLED, ORDER_DELIVERY_STATUS_NEW, ORDER_DELIVERY_STATUS_NOT_ASSIGN } from '../../utils/constants';
+import Service from '../../services/adminapp/adminOrders';
 
 
 
 function OrdersAssignPage() {
-  const dispatch = useAppDispatch();
   const authState: any = useAppSelector((state) => state.authState);
   const navigate = useNavigate();
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(0);
   const [total, setTotal] = useState(0);
   const [list, setList] = useState<any>([]);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
 
   const params = useParams();
   const orderId: any = params.orderId;
@@ -41,10 +37,17 @@ function OrdersAssignPage() {
       const newPage = 0;
       setSearch(searchTxt);
       setPage(newPage);
-      driver.searchService(authState.user.tenant, searchTxt, newPage, rowsPerPage).then(item => {
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      })
+      if (searchTxt === "" || searchTxt === null || searchTxt === undefined) {
+        Service.getListAssignService(authState.user.tenant, newPage, rowsPerPage).then(item => {
+          setList(item.data.data.list);
+          setTotal(item.data.data.total);
+        });
+      } else {
+        Service.searchAssignService(authState.user.tenant, search, newPage, rowsPerPage).then(item => {
+          setList(item.data.data.list);
+          setTotal(item.data.data.total);
+        });
+      }
     }
   };
 
@@ -55,12 +58,12 @@ function OrdersAssignPage() {
     setPage(newPage);
     //offset? ,limit rowsperpage hoga ofset page * rowsperPage
     if (search === "" || search === null || search === undefined) {
-      driver.getListService(authState.user.tenant, newPage, rowsPerPage).then(item => {
+      Service.getListAssignService(authState.user.tenant, newPage, rowsPerPage).then(item => {
         setList(item.data.data.list);
         setTotal(item.data.data.total);
       });
     } else {
-      driver.searchService(authState.user.tenant, search, newPage, rowsPerPage).then(item => {
+      Service.searchAssignService(authState.user.tenant, search, newPage, rowsPerPage).then(item => {
         setList(item.data.data.list);
         setTotal(item.data.data.total);
       });
@@ -74,12 +77,12 @@ function OrdersAssignPage() {
     setRowsPerPage(newRowperPage);
     setPage(newPage);
     if (search === "" || search === null || search === undefined) {
-      driver.getListService(authState.user.tenant, newPage, rowsPerPage).then(item => {
+      Service.getListAssignService(authState.user.tenant, newPage, rowsPerPage).then(item => {
         setList(item.data.data.list);
         setTotal(item.data.data.total);
       });
     } else {
-      driver.searchService(authState.user.tenant, search, newPage, rowsPerPage).then(item => {
+      Service.searchAssignService(authState.user.tenant, search, newPage, rowsPerPage).then(item => {
         setList(item.data.data.list);
         setTotal(item.data.data.total);
       });
@@ -88,9 +91,9 @@ function OrdersAssignPage() {
 
   useEffect(() => {
 
-    driver.getListService(authState.user.tenant, page, rowsPerPage).then((item: any) => {
+    Service.getListAssignService(authState.user.tenant, page, rowsPerPage).then((item: any) => {
       if (item.data.success) {
-        console.log('item.data.data', item.data.data)
+        console.log('item.data.data', item.data)
         setList(item.data.data.list);
         setTotal(item.data.data.total);
       }
@@ -104,20 +107,16 @@ function OrdersAssignPage() {
       created_by: authState.user.id,
       status: ORDER_DELIVERY_STATUS_NEW
     }
-    order.createAppOrderDelivery(data).then((item: any) => {
+    Service.createAssignService(data).then((item: any) => {
       if (item.data.success) {
-        let driverData: any = null;
         setList((newArr: any) => {
           return newArr.map((newItem: any) => {
             if (newItem.id === userId) {
               newItem.appOrderDeliveryStatus = item.data.data.status
-              driverData = newItem;
             }
             return { ...newItem };
           });
         });
-        driverData.app_order = orderId;
-        dispatch(addDriver(driverData));
         navigate(`../view/${orderId}`);
       }
     })
@@ -178,7 +177,6 @@ function OrdersAssignPage() {
                   <th>Working Hours</th>
                   <th>License Number</th>
                   <th>Delivery Status</th>
-                  <th>Status</th>
                   <th>&nbsp;</th>
                 </tr>
               </thead>
@@ -209,34 +207,56 @@ function OrdersAssignPage() {
                         <span className={`badge badge-${item.status == APP_USER_STATUS_OFFLINE ? 'danger' : 'success'}`}>{item.status}</span>
                       </td>
                       <td>
-                        {item.appDriverWorkingSchedule.length > 0 ? item.appDriverWorkingSchedule.map((scheduleItem: any) => {
-                          const newStartTime = dayjs().format('YYYY MM DD') + ", " + scheduleItem.startTime;
-                          const newEndTime = dayjs().format('YYYY MM DD') + ", " + scheduleItem.endTime;
-                          return <span style={{ display: 'block' }} key={scheduleItem.id}>{dayjs(newStartTime)?.format('HH:mm')} to {dayjs(newEndTime)?.format('HH:mm A')}</span>
-                        }) : '--'}
+                        {item.appDriverWorkingSchedule ? (
+                          <span>{dayjs(item.appDriverWorkingSchedule[0].startTime)?.format('HH:mm')} to {dayjs(item.appDriverWorkingSchedule[0].endTime)?.format('HH:mm A')}</span>
+                        ) : '--'}
+
                       </td>
                       <td>{item.licenseNumber ? item.licenseNumber : '--'}</td>
-                      <td>{item.appOrderDeliveryStatus === null || item.appOrderDeliveryStatus === ORDER_DELIVERY_STATUS_NOT_ASSIGN ? (
-                        <span className="badge badge-danger">{item.appOrderDeliveryStatus ? item.appOrderDeliveryStatus : ORDER_DELIVERY_STATUS_NOT_ASSIGN}</span>
+                      <td>{item.appOrderDelivery ? (
+                        <span className="badge badge-success">{item.appOrderDelivery.status}</span>
                       ) : (
-                        <span className="badge badge-success">{item.appOrderDeliveryStatus}</span>
+                        <span className="badge badge-danger">{ORDER_DELIVERY_STATUS_NOT_ASSIGN}</span>
                       )}</td>
                       <td>
-                        {item.isActive ? (
-                          <span className="badge badge-success">ACTIVE</span>
+                        {!item.appOrderDelivery ? (
+                          <Button
+                            variant="contained"
+                            className="btn-black-fill btn-icon"
+                            onClick={() => assignHandler(item.id)}
+                            disabled={false}
+                          >
+                            Assign
+                          </Button>
+                        ) : item.appOrderDelivery.appOrder === orderId && item.appOrderDelivery.status !== ORDER_DELIVERY_STATUS_CANCELLED ? (
+                          <Button
+                            variant="contained"
+                            className="btn-black-fill btn-icon"
+                            onClick={() => assignHandler(item.id)}
+                            disabled={true}
+                          >
+                            Assign
+                          </Button>
+                        ) : item.appOrderDelivery && item.appOrderDelivery.status === ORDER_DELIVERY_STATUS_CANCELLED ? (
+                          <Button
+                            variant="contained"
+                            className="btn-black-fill btn-icon"
+                            onClick={() => assignHandler(item.id)}
+                            disabled={false}
+                          >
+                            Assign
+                          </Button>
                         ) : (
-                          <span className="badge badge-danger">INACTIVE</span>
+                          <Button
+                            variant="contained"
+                            className="btn-black-fill btn-icon"
+                            onClick={() => assignHandler(item.id)}
+                            disabled={true}
+                          >
+                            Assign
+                          </Button>
                         )}
-                      </td>
-                      <td>
-                        <Button
-                          variant="contained"
-                          className="btn-black-fill btn-icon"
-                          disabled={item.isActive && (item.status == APP_USER_STATUS_OFFLINE && item.appOrderDeliveryStatus == null || item.appOrderDeliveryStatus != ORDER_DELIVERY_STATUS_NOT_ASSIGN) ? true : false}
-                          onClick={() => assignHandler(item.id)}
-                        >
-                          Assign
-                        </Button>
+
                       </td>
                     </tr>
                   )

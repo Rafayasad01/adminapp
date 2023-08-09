@@ -11,7 +11,6 @@ import ComplainsPage from '../pages/complain/ComplainsPage';
 import CustomersDetailPage from '../pages/customers/CustomersDetailPage';
 import CustomersPage from '../pages/customers/CustomersPage';
 import DriversPage from '../pages/drivers/DriversPage';
-import DriversViewPage from '../pages/drivers/DriversViewPage';
 import HomePage from '../pages/home/HomePage';
 import LocationsPage from '../pages/locations/LocationsPage';
 import OrderDetailsPage from '../pages/orders/OrderDetailsPage';
@@ -46,6 +45,10 @@ import CartDetailsPage from '../pages/carts/CartDetailsPage';
 import CategoriesServicesPage from '../pages/categories/CategoriesServicesPage';
 import CategoriesServicesFaqPage from '../pages/categories/CategoriesServicesFaqPage';
 import OrdersAssignPage from '../pages/orders/OrdersAssignPage';
+import DriversAddressPage from '../pages/drivers/DriversAddressPage';
+import DriversSchedulePage from '../pages/drivers/DriversSchedulePage';
+import CustomersAddressPage from '../pages/customers/CustomersAddressPage';
+import DriversDetailPage from '../pages/drivers/DriversDetailPage';
 
 
 export const routeObjects: RouteObject[] = [
@@ -228,8 +231,16 @@ export const routeObjects: RouteObject[] = [
             element: <DriversPage />,
           },
           {
-            path: 'view/:driverId',
-            element: <DriversViewPage />,
+            path: 'detail/:driverId',
+            element: <DriversDetailPage />,
+          },
+          {
+            path: 'address/:driverId',
+            element: <DriversAddressPage />,
+          },
+          {
+            path: 'schedule/:driverId',
+            element: <DriversSchedulePage />,
           },
         ],
       },
@@ -287,6 +298,10 @@ export const routeObjects: RouteObject[] = [
           {
             path: 'detail/:customerId',
             element: <CustomersDetailPage />,
+          },
+          {
+            path: 'address/:customerId',
+            element: <CustomersAddressPage />,
           },
         ],
       },

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Dialog from '@mui/material/Dialog';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
@@ -7,30 +7,65 @@ import InputAdornment from '@mui/material/InputAdornment';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Visibility from '@mui/icons-material/Visibility';
 import IconButton from '@mui/material/IconButton';
+import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
+import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
 
 import '../../assets/css/PopupStyle.css';
+import { useForm } from "react-hook-form";
+import { AppUser } from '../../interfaces/app-user.interface';
 
 type Props = {
-  openEditFormDialog: boolean;
-  setOpenEditFormDialog: React.Dispatch<React.SetStateAction<boolean>>;
+  openFormDialog: boolean;
+  setOpenFormDialog: React.Dispatch<React.SetStateAction<boolean>>;
+  formData: any;
+  callback: Function;
 };
 
 function CustomersEditPopup({
-  openEditFormDialog,
-  setOpenEditFormDialog,
+  openFormDialog,
+  setOpenFormDialog,
+  formData,
+  callback
 }: Props) {
   const [showPassword, setShowPassword] = useState(false);
-  const handleFormClose = () => setOpenEditFormDialog(false);
+  const [avatar, setAvatar] = useState<any>(null);
+  const [avatarName, setAvatarName] = useState<string>('');
+
   const handleClickShowPassword = () => setShowPassword((show) => !show);
-  const handleMouseDownPassword = (
-    event: React.MouseEvent<HTMLButtonElement>
-  ) => {
-    event.preventDefault();
+  const { register, handleSubmit, watch, formState: { errors }, control } = useForm<AppUser>();
+
+  const handleFormClose = () => setOpenFormDialog(false);
+  const handleRemoveImage = () => {
+    setAvatar('');
+    setAvatarName('');
   };
+
+  const handleFileChange = (event: any) => {
+    setAvatar(event.target.files[0]);
+    setAvatarName(event.target.files[0].name);
+  };
+
+  const onSubmit = (data: AppUser) => {
+    data.avatar = avatar;
+    setOpenFormDialog(false);
+    callback(data);
+  };
+
+  useEffect(() => {
+    if (formData && formData.avatar !== null) {
+      let avatar = formData.avatar.split("/").slice(-1)[0];
+      const regexExp = /[a-z,0-9,-]{36}/;
+      if (regexExp.test(avatar)) {
+        avatar = avatar.split("-").splice(5)[0];
+      }
+      setAvatarName(avatar);
+    }
+
+  }, []);
 
   return (
     <Dialog
-      open={openEditFormDialog}
+      open={openFormDialog}
       onClose={handleFormClose}
       PaperProps={{
         className: 'Dialog',
@@ -38,116 +73,137 @@ function CustomersEditPopup({
       }}
     >
       <div className="Content">
-        <div className="FormHeader">
-          <span className="Title">Edit Customer</span>
-        </div>
-        <div className="FormBody">
-          <div className="FormFields">
-            <FormControl className="FormControl" variant="standard">
-              <label className="FormLabel">First Name</label>
-              <Input
-                className="FormInput"
-                id="name"
-                value=""
-                name="name"
-                placeholder="Vincent"
-                disableUnderline
-              />
-            </FormControl>
-            <FormControl className="FormControl" variant="standard">
-              <label className="FormLabel">Last Name</label>
-              <Input
-                className="FormInput"
-                id="name"
-                value=""
-                name="name"
-                placeholder="Boyd"
-                disableUnderline
-              />
-            </FormControl>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div className="FormHeader">
+            <span className="Title">Edit Customer</span>
           </div>
-          <div className="FormFields">
-            <FormControl className="FormControl" variant="standard">
-              <label className="FormLabel">Phone Number</label>
-              <Input
-                className="FormInput"
-                id="name"
-                value=""
-                name="name"
-                placeholder="+1 536 569"
-                disableUnderline
-              />
-            </FormControl>
-            <FormControl className="FormControl" variant="standard">
-              <label className="FormLabel">Email Address</label>
-              <Input
-                className="FormInput"
-                id="name"
-                value=""
-                name="name"
-                placeholder="Vincent.96@gmail.com"
-                disableUnderline
-              />
-            </FormControl>
-          </div>
-          <div className="FormFields">
-            <FormControl className="FormControl" variant="standard">
-              <label className="FormLabel">Password</label>
-              <Input
-                style={{ paddingRight: '0' }}
-                className="FormInput"
-                id="password"
-                placeholder="**********"
-                type={showPassword ? 'text' : 'password'}
-                endAdornment={
-                  <InputAdornment position="end">
-                    <IconButton
-                      style={{ padding: 0 }}
-                      aria-label="toggle password visibility"
-                      onClick={handleClickShowPassword}
-                      onMouseDown={handleMouseDownPassword}
-                    >
-                      {showPassword ? <VisibilityOff /> : <Visibility />}
-                    </IconButton>
-                  </InputAdornment>
-                }
-                disableUnderline
-              />
-            </FormControl>
-            <FormControl className="FormControl" variant="standard">
-              <label className="FormLabel">Postal Code</label>
-              <Input
-                className="FormInput"
-                id="name"
-                value=""
-                name="name"
-                placeholder="M6G 596"
-                disableUnderline
-              />
-            </FormControl>
-          </div>
-        </div>
-        <div className="FormFooter">
-          <Button
-            className="btn-black-outline"
-            onClick={handleFormClose}
-            sx={{
-              marginRight: '0.5rem',
-              padding: '0.375rem 1.5rem !important',
-            }}
-          >
-            Cancel
-          </Button>
-          <Button
-            className="btn-black-fill"
-            onClick={handleFormClose}
-            sx={{
-              padding: '0.375rem 2rem !important',
-            }}
-          >
-            Update
-          </Button>
-        </div>
+          {formData && (
+            <>
+              <div className="FormBody">
+                <div className="FormFields">
+                  <FormControl className="FormControl" variant="standard">
+                    <label className="FormLabel">First Name</label>
+                    <Input
+                      className="FormInput"
+                      id="first_name"
+                      placeholder="Vincent"
+                      disableUnderline
+                      {...register("first_name", { required: "First name is required", value: formData.firstName })}
+                    />
+                    {errors.first_name && <span role="alert">{errors.first_name?.message}</span>}
+                  </FormControl>
+                  <FormControl className="FormControl" variant="standard">
+                    <label className="FormLabel">Last Name</label>
+                    <Input
+                      className="FormInput"
+                      id="last_name"
+                      placeholder="Boyd"
+                      disableUnderline
+                      {...register("last_name", { required: "Last name is required", value: formData.lastName })}
+                    />
+                    {errors.last_name && <span role="alert">{errors.last_name?.message}</span>}
+                  </FormControl>
+                </div>
+                <div className="FormFields">
+                  <FormControl className="FormControl" variant="standard">
+                    <label className="FormLabel">Phone Number</label>
+                    <Input
+                      className="FormInput"
+                      id="phone"
+                      placeholder="+1 536 569"
+                      disableUnderline
+                      {...register("phone", { required: "Phone number is required", value: formData.phone })}
+                    />
+                    {errors.phone && <span role="alert">{errors.phone?.message}</span>}
+                  </FormControl>
+                  <FormControl className="FormControl" variant="standard">
+                    <label className="FormLabel">Email Address</label>
+                    <Input
+                      className="FormInput"
+                      id="name"
+                      placeholder="Vincent.96@gmail.com"
+                      disableUnderline
+                      disabled
+                      {...register("email", { value: formData.email })}
+                    />
+                  </FormControl>
+                </div>
+                <div className="FormFields">
+                  <FormControl className="FormControl" variant="standard">
+                    <label className="FormLabel">Postal Code</label>
+                    <Input
+                      className="FormInput"
+                      id="postal_code"
+                      placeholder="M6G 596"
+                      disableUnderline
+                      {...register("postal_code", { value: formData.postalCode })}
+                    />
+                  </FormControl>
+                </div>
+                <div className="FormField">
+                  <label className="FormLabel">Upload Image</label>
+                  <div className="ImageBox">
+                    <input
+                      accept="image/*"
+                      style={{ display: 'none' }}
+                      id="raised-button-file"
+                      type="file"
+                      {...register("avatar")}
+                      onChange={(
+                        event: React.InputHTMLAttributes<HTMLInputElement>
+                      ) => {
+                        handleFileChange(event);
+                      }}
+
+                    />
+                    <label htmlFor="raised-button-file" className="ImageLabel">
+                      <Button component="span" className="ImageBtn">
+                        <FileUploadOutlinedIcon sx={{ marginRight: '0.5rem' }} />
+                        Upload image
+                      </Button>
+                    </label>
+                    {avatarName ? (
+                      <div className="ShowImageBox">
+                        <label className="ShowImageLabel">{avatarName}</label>
+                        <IconButton className="btn-dot" onClick={handleRemoveImage}>
+                          <CloseOutlinedIcon
+                            sx={{
+                              color: '#1D1D1D',
+                              fontSize: '1rem',
+                              lineHeight: '1.5rem',
+                            }}
+                          />
+                        </IconButton>
+                      </div>
+                    ) : (
+                      ''
+                    )}
+                  </div>
+                </div>
+              </div>
+              <div className="FormFooter">
+                <Button
+                  className="btn-black-outline"
+                  onClick={handleFormClose}
+                  sx={{
+                    marginRight: '0.5rem',
+                    padding: '0.375rem 1.5rem !important',
+                  }}
+                >
+                  Cancel
+                </Button>
+                <Input
+                  type="submit"
+                  value="Update"
+                  className="btn-black-fill"
+                  sx={{
+                    padding: '0.375rem 2rem !important',
+                  }}
+                />
+              </div>
+            </>
+          )}
+        </form>
       </div>
     </Dialog>
   );

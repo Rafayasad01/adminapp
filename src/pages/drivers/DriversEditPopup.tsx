@@ -41,8 +41,6 @@ function DriversEditPopup({ openFormDialog, setOpenFormDialog, formData, callbac
   const onSubmit = (data: AppUserDriverExt) => {
     const licenseNumber = data.license_number.replace(/\s+/g, '');
     data.avatar = avatar;
-    data.start_time = dayjs(startTime).format('HH:mm:ss');
-    data.end_time = dayjs(endTime).format('HH:mm:ss');
     data.license_number = licenseNumber;
     //setOpenFormDialog(false);
     callback(data);
