@@ -1,83 +1,215 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import IconButton from '@mui/material/IconButton';
 import Divider from '@mui/material/Divider';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
 import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
 import SearchIcon from '@mui/icons-material/Search';
-import Checkbox from '@mui/material/Checkbox';
-import CheckBoxOutlineBlankOutlinedIcon from '@mui/icons-material/CheckBoxOutlineBlankOutlined';
-import CheckBoxOutlinedIcon from '@mui/icons-material/CheckBoxOutlined';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import TopBar from '../../components/common/TopBar';
 import CustomersCreatePopup from './CustomersCreatePopup';
 import CustomersEditPopup from './CustomersEditPopup';
+import TablePagination from '@mui/material/TablePagination';
+import { useAppSelector } from '../../redux/redux-hooks';
+import ActionMenu from '../../components/common/ActionMenu';
+import Switch from '@mui/material/Switch';
+import dayjs from 'dayjs';
+import Avatar from '@mui/material/Avatar';
+import Service from '../../services/adminapp/adminCustomer';
 
-const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
-const options = ['View', 'Edit', 'Delete'];
-const ITEM_HEIGHT = 48;
 function CustomersPage() {
+  const authState: any = useAppSelector((state) => state.authState);
   const navigate = useNavigate();
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [search, setSearch] = useState('');
-  const [openDialog, setOpenDialog] = useState(false);
-  const [isCheckedAll, setIsCheckedAll] = useState(false);
+  const [page, setPage] = useState(0);
+  const [total, setTotal] = useState(0);
+  const [list, setList] = useState<any>([]);
+  const [editFormData, setEditFormData] = useState<any>(null);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [actionMenuItemid, setActionMenuItemid] = React.useState("");
+  const [actionMenuAnchorEl, setActionMenuAnchorEl] = useState<null | HTMLElement>(null);
+  const actionMenuOpen = Boolean(actionMenuAnchorEl);
+  const actionMenuOptions = ['Detail', 'Address', 'Edit', 'Delete'];
 
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
-
-  const open = Boolean(anchorEl);
 
   const handleFormClickOpen = () => {
     setOpenFormDialog(true);
   };
 
-  const handleCheckAllChange = (event: any) => {
-    setIsCheckedAll(event.target.checked);
-  };
-
-  const handleDialogClose = () => {
-    setOpenDialog(false);
-  };
-
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-  const handleSelectedMenuClose = (option: string) => {
-    setAnchorEl(null);
-    if (option === 'View') {
-      navigate(`detail/123`);
-    } else if (option === 'Edit') {
-      setOpenEditFormDialog(true);
-    } else {
-      setOpenDialog(true);
+  const handleClickSearch = (event: any) => {
+    if (event.key === 'Enter') {
+      const searchTxt = event.target.value as string;
+      const newPage = 0;
+      setSearch(searchTxt);
+      setPage(newPage);
+      Service.searchService(authState.user.tenant, searchTxt, newPage, rowsPerPage).then(item => {
+        setList(item.data.data.list);
+        setTotal(item.data.data.total);
+      })
     }
   };
-  const handleClickSearch = (event: any) => {
-    setSearch(event.target.value as string);
+
+  const handleChangePage = (
+    event: React.MouseEvent<HTMLButtonElement> | null,
+    newPage: number,
+  ) => {
+    setPage(newPage);
+    //offset? ,limit rowsperpage hoga ofset page * rowsperPage
+    if (search === "" || search === null || search === undefined) {
+      Service.getListService(authState.user.tenant, newPage, rowsPerPage).then(item => {
+        setList(item.data.data.list);
+        setTotal(item.data.data.total);
+      });
+    } else {
+      Service.searchService(authState.user.tenant, search, newPage, rowsPerPage).then(item => {
+        setList(item.data.data.list);
+        setTotal(item.data.data.total);
+      });
+    }
   };
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    const newRowperPage = parseInt(event.target.value, 10);
+    const newPage = 0;
+    setRowsPerPage(newRowperPage);
+    setPage(newPage);
+    if (search === "" || search === null || search === undefined) {
+      Service.getListService(authState.user.tenant, newPage, rowsPerPage).then(item => {
+        setList(item.data.data.list);
+        setTotal(item.data.data.total);
+      });
+    } else {
+      Service.searchService(authState.user.tenant, search, newPage, rowsPerPage).then(item => {
+        setList(item.data.data.list);
+        setTotal(item.data.data.total);
+      });
+    }
+  };
+
+  const manuHandler = (option: string) => {
+    if (option === 'Edit') {
+      Service.getService(actionMenuItemid).then((item: any) => {
+        if (item.data.success) {
+          setEditFormData(item.data.data);
+          setOpenEditFormDialog(true);
+        }
+      })
+    } else if (option === 'Address') {
+      navigate(`address/${actionMenuItemid}`);
+    } else if (option === 'Delete') {
+      const data = {
+        is_active: false,
+        is_deleted: true,
+        updated_by: authState.user.id
+      }
+      Service.deleteService(actionMenuItemid, data).then((item: any) => {
+        if (item.data.success) {
+          setList((newArr: any) => {
+            console.log('newArr:::::', newArr)
+            return newArr.filter((newItem: any) => newItem.id !== item.data.data.id);
+          });
+        }
+      })
+    } else if (option === 'Detail') {
+      navigate(`detail/${actionMenuItemid}`);
+    }
+  }
+
+  useEffect(() => {
+    Service.getListService(authState.user.tenant, page, rowsPerPage).then((item: any) => {
+      if (item.data.success) {
+        setList(item.data.data.list);
+        setTotal(item.data.data.total);
+      }
+    });
+  }, []);
+
+  const createFormHandler = (data: any) => {
+    const formData = new FormData();
+    formData.append("first_name", data.first_name);
+    formData.append("last_name", data.last_name);
+    formData.append("password", data.password);
+    formData.append("email", data.email);
+    formData.append("phone", data.phone);
+    formData.append("address", data.address);
+    formData.append("tenant", authState.user.tenant);
+    formData.append("created_by", authState.user.id);
+    formData.append("updated_by", authState.user.id);
+    if (data.avatar !== null) formData.append("avatar", data.avatar);
+    Service.create(formData).then((item) => {
+      if (item.data.success) {
+        list.unshift(item.data.data);
+        setList(list);
+      }
+    })
+  }
+
+  const updateFormHandler = (data: any) => {
+    const formData = new FormData();
+    formData.append("first_name", data.first_name);
+    formData.append("last_name", data.last_name);
+    formData.append("phone", data.phone);
+    formData.append("postal_code", data.postal_code);
+    formData.append("updated_by", authState.user.id);
+    if (data.avatar !== null) formData.append("avatar", data.avatar);
+    Service.updateService(actionMenuItemid, formData).then((item) => {
+      if (item.data.success) {
+        setList((newArr: any) => {
+          return newArr.map((newItem: any) => {
+            if (newItem.id === actionMenuItemid) {
+              newItem.firstName = item.data.data.firstName;
+              newItem.lastName = item.data.data.lastName;
+              newItem.phone = item.data.data.phone;
+              newItem.postalCode = item.data.data.postalCode;
+              if (data.avatar !== null) newItem.phone = item.data.data.avatar;
+              return { ...newItem }
+            }
+          });
+        });
+      }
+    })
+  }
+
+  const handleSwitchChange = (event: any, id: string) => {
+    const data = {
+      is_active: event.target.checked,
+      updated_by: authState.user.id
+    }
+    Service.updateStatus(id, data).then((updateItem) => {
+      if (updateItem.data.success) {
+        setList((newArr: any) => {
+          return newArr.map((item: any) => {
+            if (item.id === updateItem.data.data.id) {
+              item.isActive = updateItem.data.data.isActive;
+            }
+            return { ...item };
+          })
+        })
+      }
+    })
+  };
+
   return (
     <>
+      {actionMenuAnchorEl && (
+        <ActionMenu open={actionMenuOpen} anchorEl={actionMenuAnchorEl} setAnchorEl={setActionMenuAnchorEl} options={actionMenuOptions} callback={manuHandler} />
+      )}
       <CustomersCreatePopup
         openFormDialog={openFormDialog}
         setOpenFormDialog={setOpenFormDialog}
+        callback={createFormHandler}
       />
       <CustomersEditPopup
-        openEditFormDialog={openEditFormDialog}
-        setOpenEditFormDialog={setOpenEditFormDialog}
+        openFormDialog={openEditFormDialog}
+        setOpenFormDialog={setOpenEditFormDialog}
+        formData={editFormData}
+        callback={updateFormHandler}
       />
       <TopBar title="Customers" />
       <div className="container mt-5">
@@ -134,163 +266,87 @@ function CustomersPage() {
             <table className="table-border table-auto">
               <thead>
                 <tr>
-                  <th className="w-5">
-                    <Checkbox
-                      {...label}
-                      icon={
-                        <CheckBoxOutlineBlankOutlinedIcon className=" text-[#E4E4E4]" />
-                      }
-                      checkedIcon={
-                        <CheckBoxOutlinedIcon className="text-[#1D1D1D]" />
-                      }
-                      onChange={(
-                        event: React.ChangeEvent<HTMLInputElement>
-                      ) => {
-                        handleCheckAllChange(event);
-                      }}
-                    />
-                  </th>
-                  <th>Name</th>
+                  <th>Customer</th>
                   <th>Email</th>
                   <th>Phone</th>
                   <th>Postal Code</th>
-                  <th className="w-60">Address</th>
+                  <th>Status</th>
                   <th>&nbsp;</th>
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>
-                    <Checkbox
-                      {...label}
-                      icon={
-                        <CheckBoxOutlineBlankOutlinedIcon className=" text-[#E4E4E4]" />
-                      }
-                      checkedIcon={
-                        <CheckBoxOutlinedIcon className="text-[#1D1D1D]" />
-                      }
-                      checked={isCheckedAll}
-                    />
-                  </td>
-                  <td>
-                    <div className="avatar flex flex-row items-center">
-                      <div className="flex flex-col items-start justify-start">
-                        <span className="text-sm font-semibold">Thomas</span>
-                        <span className="text-xs font-normal text-[#6A6A6A]">
-                          015264
-                        </span>
-                      </div>
-                    </div>
-                  </td>
-                  <td>Thomas.albert@gmail.com</td>
-                  <td>034 443 632</td>
-                  <td>0115</td>
-                  <td>2100 W Cleveland Ave, Madera, CA 93637, United States</td>
-                  <td>
-                    <div className="flex flex-row-reverse">
-                      <IconButton
-                        className="btn-dot"
-                        aria-label="more"
-                        id="long-button"
-                        aria-controls={open ? 'long-menu' : undefined}
-                        aria-expanded={open ? 'true' : undefined}
-                        aria-haspopup="true"
-                        onClick={handleClick}
-                      >
-                        <MoreVertIcon />
-                      </IconButton>
-                    </div>
-                  </td>
-                </tr>
+                {list && list.map((item: any, index: number) => {
+                  return (
+                    <tr key={item.id}>
+                      <td>
+                        <div className="avatar flex flex-row items-center">
+                          {item.avatar ? (
+                            <img src={item.avatar} alt="" />
+                          ) : (
+                            <Avatar className="avatar flex flex-row items-center" sx={{ bgcolor: '#1D1D1D', width: 35, height: 35, textTransform: 'uppercase', fontSize: '14px', marginRight: '10px' }}>{item.firstName.charAt(0)}{item.lastName.charAt(0)}</Avatar>
+                          )}
+
+                          <div className="flex flex-col items-start justify-start">
+                            <span className="text-sm font-semibold">
+                              {`${item.firstName} ${item.lastName}`}
+                            </span>
+                            <span className="text-xs font-normal text-[#6A6A6A]">
+                              {dayjs(item.createdDate).isValid() ? dayjs(item.createdDate)?.format('MMMM DD, YYYY') : '--'}
+                            </span>
+                          </div>
+                        </div>
+                      </td>
+                      <td>{item.email}</td>
+                      <td>{item.phone}</td>
+                      <td>{item.postalCode}</td>
+                      <td>
+                        {item.isActive ? (
+                          <span className="badge badge-success">ACTIVE</span>
+                        ) : (
+                          <span className="badge badge-danger">INACTIVE</span>
+                        )}
+
+                      </td>
+                      <td>
+                        <div className="flex flex-row-reverse">
+                          <IconButton
+                            className="btn-dot"
+                            aria-label="more"
+                            id="long-button"
+                            aria-controls={actionMenuOpen ? 'long-menu' : undefined}
+                            aria-expanded={actionMenuOpen ? 'true' : undefined}
+                            aria-haspopup="true"
+                            onClick={(event: React.MouseEvent<HTMLElement>) => {
+                              setActionMenuItemid(list[index].id)
+                              setActionMenuAnchorEl(event.currentTarget);
+                            }}
+                          >
+                            <MoreVertIcon />
+                          </IconButton>
+                          <Switch
+                            checked={item.isActive}
+                            onChange={(event: React.ChangeEvent<HTMLInputElement>) => handleSwitchChange(event, list[index].id)}
+                            inputProps={{ 'aria-label': 'controlled' }}
+                          />
+                        </div>
+                      </td>
+                    </tr>
+                  )
+                })}
+
               </tbody>
             </table>
           </div>
+          <TablePagination
+            component="div"
+            count={total}
+            page={page}
+            onPageChange={handleChangePage}
+            rowsPerPage={rowsPerPage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
         </div>
       </div>
-      <Menu
-        id="long-menu"
-        MenuListProps={{
-          'aria-labelledby': 'long-button',
-        }}
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleClose}
-        PaperProps={{
-          style: {
-            maxHeight: ITEM_HEIGHT * 4.5,
-            width: '11ch',
-          },
-        }}
-      >
-        {options.map((option) => (
-          <MenuItem
-            key={option}
-            selected={option === 'Pyxis'}
-            onClick={() => handleSelectedMenuClose(option)}
-          >
-            {option}
-          </MenuItem>
-        ))}
-      </Menu>
-      <Dialog
-        open={openDialog}
-        onClose={handleDialogClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle
-          id="alert-dialog-title"
-          sx={{
-            color: '#1A1A1A',
-            fontFamily: 'Inter',
-            fonWeight: 600,
-            fonSize: '20px',
-            padding: '10px 15px 0 15px',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          Delete Customer?
-        </DialogTitle>
-        <DialogContent
-          sx={{
-            color: '#6A6A6A',
-            fontFamily: 'Inter',
-            fonWeight: 400,
-            fonSize: '14px',
-            padding: '10px 15px 0 15px',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          <DialogContentText id="alert-dialog-description">
-            Do you really want to delete this Customer?
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions
-          sx={{ justifyContent: 'space-between', margin: '15px 5px 10px 5px' }}
-        >
-          <Button
-            sx={{ width: '140px' }}
-            variant="contained"
-            className="btn-black-outline mr-3"
-            onClick={handleDialogClose}
-          >
-            Yes, Confirm
-          </Button>
-          <Button
-            sx={{ width: '140px' }}
-            variant="contained"
-            className="btn-black-fill btn-icon"
-            onClick={handleDialogClose}
-          >
-            No, Cancel
-          </Button>
-        </DialogActions>
-      </Dialog>
-      ;
     </>
   );
 }

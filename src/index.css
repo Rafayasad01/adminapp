@@ -727,4 +727,12 @@ table.schedule-table>tbody>tr.days-off>td {
   @apply bg-red-400 rounded border border-red-700;
 }
 
+.map-label-styling {
+  font-size: '0.8rem';
+  font-weight: bold;
+  z-index: 5;
+  bottom: 5px;
+  margin-top: 60px;
+}
+
 /* End Schedulling Table Style*/

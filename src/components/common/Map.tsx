@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Loader } from '@googlemaps/js-api-loader';
 
 import assets from '../../assets';
+import { OFFICE_MAP_LABEL, OFFICE_MAP_LAT, OFFICE_MAP_LNG } from '../../utils/constants';
 
 type Props = {
   center: google.maps.LatLngLiteral;
@@ -20,6 +21,16 @@ function Map({ center, zoom }: Props) {
 
   useEffect(() => {
     loader.load().then(async (e) => {
+      let label: any = null;
+      if (center.lat === 0 && center.lng === 0) {
+        center.lat = OFFICE_MAP_LAT;
+        center.lng = OFFICE_MAP_LNG;
+        label = {
+          text: OFFICE_MAP_LABEL,
+          color: '#1A1A1A',
+          className: 'map-label-styling'
+        }
+      }
       const options: google.maps.MapOptions = {
         center,
         zoom,
@@ -28,18 +39,20 @@ function Map({ center, zoom }: Props) {
         streetViewControl: false,
         zoomControl: false,
         fullscreenControl: false,
-        scaleControl: false,
+        scaleControl: true,
       };
       const map = new google.maps.Map(mapRef.current!, options);
       setMap(map);
       const marker = new google.maps.Marker({
         position: center,
         map,
+        label: label,
         title: 'Location',
         icon: assets.images.iconMap,
         draggable: false,
         animation: google.maps.Animation.DROP,
       });
+
       markerRef.current = marker;
     });
   }, []);

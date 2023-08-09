@@ -1,5 +1,7 @@
 import network from '../../utils/network';
 import { DRIVER_PREFIX } from '../../utils/constants';
+const DRIVER_SCHEDULE_PREFIX = 'schedule';
+const DRIVER_ADDRESS_PREFIX = 'address';
 
 const getListService = (tenant: string, page: number, size: number) => {
     return network.get(`${DRIVER_PREFIX}/list/${tenant}/${page}/${size}`);
@@ -28,6 +30,63 @@ const deleteService = (id: string, data: any) => {
     return network.post(`${DRIVER_PREFIX}/delete/${id}`, data);
 }
 
+const getDetailService = (id: string) => {
+    return network.get(`${DRIVER_PREFIX}/detail/${id}`);
+}
+
+const getScheduleService = (id: string) => {
+    return network.get(`${DRIVER_PREFIX}/${DRIVER_SCHEDULE_PREFIX}/detail/${id}`);
+}
+
+const createSchedule = (id: string, data: any) => {
+    return network.post(`${DRIVER_PREFIX}/${DRIVER_SCHEDULE_PREFIX}/create/${id}`, data);
+}
+
+const getSchedule = (id: string) => {
+    return network.get(`${DRIVER_PREFIX}/${DRIVER_SCHEDULE_PREFIX}/get/${id}`);
+}
+const updateSchedule = (id: string, data: any) => {
+    return network.post(`${DRIVER_PREFIX}/${DRIVER_SCHEDULE_PREFIX}/update/${id}`, data);
+}
+
+const getListScheduleService = (id: string, page: number, size: number) => {
+    return network.get(`${DRIVER_PREFIX}/${DRIVER_SCHEDULE_PREFIX}/list/${id}/${page}/${size}`);
+}
+const searchScheduleService = (id: string, search: string, page: number, size: number) => {
+    return network.get(`${DRIVER_PREFIX}/${DRIVER_SCHEDULE_PREFIX}/list/${id}/${search}/${page}/${size}`);
+}
+
+const deleteScheduleService = (id: string, data: any) => {
+    return network.post(`${DRIVER_PREFIX}/${DRIVER_SCHEDULE_PREFIX}/delete/${id}`, data);
+}
+
+const getAddressService = (id: string) => {
+    return network.get(`${DRIVER_PREFIX}/${DRIVER_ADDRESS_PREFIX}/detail/${id}`);
+}
+
+const createAddress = (id: string, data: any) => {
+    return network.post(`${DRIVER_PREFIX}/${DRIVER_ADDRESS_PREFIX}/create/${id}`, data);
+}
+
+const getAddress = (id: string) => {
+    return network.get(`${DRIVER_PREFIX}/${DRIVER_ADDRESS_PREFIX}/get/${id}`);
+}
+const updateAddress = (id: string, data: any) => {
+    return network.post(`${DRIVER_PREFIX}/${DRIVER_ADDRESS_PREFIX}/update/${id}`, data);
+}
+
+const getListAddressService = (id: string, page: number, size: number) => {
+    return network.get(`${DRIVER_PREFIX}/${DRIVER_ADDRESS_PREFIX}/list/${id}/${page}/${size}`);
+}
+const searchAddressService = (id: string, search: string, page: number, size: number) => {
+    return network.get(`${DRIVER_PREFIX}/${DRIVER_ADDRESS_PREFIX}/list/${id}/${search}/${page}/${size}`);
+}
+
+const deleteAddressService = (id: string, data: any) => {
+    return network.post(`${DRIVER_PREFIX}/${DRIVER_ADDRESS_PREFIX}/delete/${id}`, data);
+}
+
+
 export default {
     getListService,
     searchService,
@@ -35,5 +94,20 @@ export default {
     getService,
     updateService,
     updateStatus,
-    deleteService
+    deleteService,
+    getScheduleService,
+    createSchedule,
+    getSchedule,
+    updateSchedule,
+    getListScheduleService,
+    searchScheduleService,
+    deleteScheduleService,
+    getAddressService,
+    createAddress,
+    getAddress,
+    updateAddress,
+    getListAddressService,
+    searchAddressService,
+    deleteAddressService,
+    getDetailService
 }

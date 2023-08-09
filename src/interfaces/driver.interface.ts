@@ -10,3 +10,8 @@ export interface Driver {
   avatar: any;
 }
 
+export interface DriverSchedule {
+  start_time: string;
+  end_time: string;
+}
+

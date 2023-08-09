@@ -36,13 +36,48 @@ function DriversPage() {
   const [actionMenuItemid, setActionMenuItemid] = React.useState("");
   const [actionMenuAnchorEl, setActionMenuAnchorEl] = useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
-  const actionMenuOptions = ['Edit', 'Delete'];
+  const actionMenuOptions = ['Detail', 'Address', 'Schedule', 'Edit', 'Delete'];
 
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
-  const handleFormClickOpen = () => {
-    setOpenFormDialog(true);
-  };
+
+  const manuHandler = (option: string) => {
+    if (option === 'Edit') {
+      edit(actionMenuItemid);
+    } else if (option === 'Delete') {
+      deleteEntity(actionMenuItemid);
+    } else if (option === 'Address') {
+      navigate(`address/${actionMenuItemid}`)
+    } else if (option === 'Schedule') {
+      navigate(`schedule/${actionMenuItemid}`)
+    } else if (option === 'Detail') {
+      navigate(`detail/${actionMenuItemid}`)
+    }
+  }
+
+  const deleteEntity = (id: string) => {
+    const data = {
+      is_active: false,
+      is_deleted: true,
+      updated_by: authState.user.id
+    }
+    driver.deleteService(id, data).then((item: any) => {
+      if (item.data.success) {
+        setList((newArr: any) => {
+          return newArr.filter((newItem: any) => newItem.id !== id);
+        });
+      }
+    })
+  }
+
+  const edit = (id: string) => {
+    driver.getService(id).then((item: any) => {
+      if (item.data.success) {
+        setEditFormData(item.data.data);
+        setOpenEditFormDialog(true);
+      }
+    })
+  }
 
   const handleClickSearch = (event: any) => {
     if (event.key === 'Enter') {
@@ -95,36 +130,6 @@ function DriversPage() {
     }
   };
 
-  const manuHandler = (option: string) => {
-    if (option === 'Edit') {
-      driver.getService(actionMenuItemid).then((item: any) => {
-        if (item.data.success) {
-          setEditFormData(item.data.data);
-          setOpenEditFormDialog(true);
-        }
-      })
-    } else if (option === 'Delete') {
-      const data = {
-        is_active: false,
-        is_deleted: true,
-        updated_by: authState.user.id
-      }
-      driver.deleteService(actionMenuItemid, data).then((item: any) => {
-        if (item.data.success) {
-          setList((newArr: any) => {
-            return newArr.map((newItem: any) => {
-              if (newItem.id === actionMenuItemid) {
-                newItem.isActive = item.data.data.isActive;
-                newItem.isDeleted = item.data.data.isDeleted;
-                return { ...newItem }
-              }
-            });
-          });
-        }
-      })
-    }
-  }
-
   useEffect(() => {
     driver.getListService(authState.user.tenant, page, rowsPerPage).then((item: any) => {
       if (item.data.success) {
@@ -141,8 +146,6 @@ function DriversPage() {
     formData.append("email", data.email);
     formData.append("phone", data.phone);
     formData.append("license_number", data.license_number);
-    formData.append("start_time", data.start_time);
-    formData.append("end_time", data.end_time);
     formData.append("address", data.address);
     formData.append("tenant", authState.user.tenant);
     formData.append("created_by", authState.user.id);
@@ -204,20 +207,6 @@ function DriversPage() {
   return (
 
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      {actionMenuAnchorEl && (
-        <ActionMenu open={actionMenuOpen} anchorEl={actionMenuAnchorEl} setAnchorEl={setActionMenuAnchorEl} options={actionMenuOptions} callback={manuHandler} />
-      )}
-      <DriversCreatePopup
-        openFormDialog={openFormDialog}
-        setOpenFormDialog={setOpenFormDialog}
-        callback={createFormHandler}
-      />
-      <DriversEditPopup
-        openFormDialog={openEditFormDialog}
-        setOpenFormDialog={setOpenEditFormDialog}
-        formData={editFormData}
-        callback={updateFormHandler}
-      />
       <TopBar title="Drivers" />
       <div className="container mt-5">
         <div className="w-full rounded-lg bg-white shadow-lg">
@@ -262,7 +251,7 @@ function DriversPage() {
                 <Button
                   variant="contained"
                   className="btn-black-fill btn-icon"
-                  onClick={handleFormClickOpen}
+                  onClick={() => setOpenFormDialog(true)}
                 >
                   <AddOutlinedIcon /> Add New
                 </Button>
@@ -277,7 +266,6 @@ function DriversPage() {
                   <th>Phone</th>
                   <th>Email</th>
                   <th>Availability</th>
-                  <th>Working Hours</th>
                   <th>License Number</th>
                   <th>Status</th>
                   <th>&nbsp;</th>
@@ -311,13 +299,13 @@ function DriversPage() {
                         <td>
                           <span className={`badge badge-${item.status == 'Offline' ? 'danger' : 'success'}`}>{item.status}</span>
                         </td>
-                        <td>
+                        {/* <td>
                           {item.appDriverWorkingSchedule.length > 0 ? item.appDriverWorkingSchedule.map((scheduleItem: any) => {
                             const newStartTime = dayjs().format('YYYY MM DD') + ", " + scheduleItem.startTime;
                             const newEndTime = dayjs().format('YYYY MM DD') + ", " + scheduleItem.endTime;
                             return <span style={{ display: 'block' }} key={scheduleItem.id}>{dayjs(newStartTime)?.format('HH:mm')} to {dayjs(newEndTime)?.format('HH:mm A')}</span>
                           }) : '--'}
-                        </td>
+                        </td> */}
                         <td>{item.licenseNumber ? item.licenseNumber : '--'}</td>
                         <td>
                           {item.isActive ? (
@@ -368,6 +356,20 @@ function DriversPage() {
           </div>
         </div>
       </div>
+      {actionMenuAnchorEl && (
+        <ActionMenu open={actionMenuOpen} anchorEl={actionMenuAnchorEl} setAnchorEl={setActionMenuAnchorEl} options={actionMenuOptions} callback={manuHandler} />
+      )}
+      <DriversCreatePopup
+        openFormDialog={openFormDialog}
+        setOpenFormDialog={setOpenFormDialog}
+        callback={createFormHandler}
+      />
+      <DriversEditPopup
+        openFormDialog={openEditFormDialog}
+        setOpenFormDialog={setOpenEditFormDialog}
+        formData={editFormData}
+        callback={updateFormHandler}
+      />
     </LocalizationProvider>
 
   );

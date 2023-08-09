@@ -34,7 +34,6 @@ function TimePicker({
     setTimePickerValue,
     id,
 }: Props) {
-    console.log('timePickerSubLabel::::', timePickerSubLabel)
     const [timePicker, setTimePicker] = useState<HTMLButtonElement | null>(null);
     const buttonElement = useRef(null);
     const handleClick = () => {
