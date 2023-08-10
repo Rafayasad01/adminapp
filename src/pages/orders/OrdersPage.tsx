@@ -25,8 +25,6 @@ import TopBar from '../../components/common/TopBar';
 import { useAppSelector } from '../../redux/redux-hooks';
 
 
-
-const actionMenuOptions = ['View'];
 function OrdersPage() {
   const authState: any = useAppSelector((state) => state.authState);
   const navigate = useNavigate();
@@ -40,6 +38,7 @@ function OrdersPage() {
   const [actionMenuItemid, setActionMenuItemid] = React.useState("");
   const [actionMenuAnchorEl, setActionMenuAnchorEl] = useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
+  const actionMenuOptions = ['Detail'];
 
 
   const handleChangePage = (
@@ -124,7 +123,7 @@ function OrdersPage() {
     let doOption = '';
     if (option === 'Edit') {
       doOption = 'edit';
-    } else if (option === 'View') {
+    } else if (option === 'Detail') {
       doOption = 'view';
     } else {
       doOption = 'download';

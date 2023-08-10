@@ -34,6 +34,10 @@ const getDetailService = (id: string) => {
     return network.get(`${DRIVER_PREFIX}/detail/${id}`);
 }
 
+const getDeliveryListService = (orderId: string, page: number, size: number) => {
+    return network.get(`${DRIVER_PREFIX}/delivery/list/${orderId}/${page}/${size}`);
+}
+
 const getScheduleService = (id: string) => {
     return network.get(`${DRIVER_PREFIX}/${DRIVER_SCHEDULE_PREFIX}/detail/${id}`);
 }
@@ -109,5 +113,6 @@ export default {
     getListAddressService,
     searchAddressService,
     deleteAddressService,
-    getDetailService
+    getDetailService,
+    getDeliveryListService
 }
