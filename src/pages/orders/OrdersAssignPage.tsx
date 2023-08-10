@@ -14,8 +14,9 @@ import dayjs from 'dayjs';
 
 import Avatar from '@mui/material/Avatar';
 import TablePagination from '@mui/material/TablePagination';
-import { APP_USER_STATUS_OFFLINE, ORDER_DELIVERY_STATUS_CANCELLED, ORDER_DELIVERY_STATUS_NEW, ORDER_DELIVERY_STATUS_NOT_ASSIGN } from '../../utils/constants';
+import { APP_USER_STATUS_OFFLINE, APP_USER_STATUS_ONLINE, ORDER_DELIVERY_STATUS_CANCELLED, ORDER_DELIVERY_STATUS_NEW, ORDER_DELIVERY_STATUS_NOT_ASSIGN } from '../../utils/constants';
 import Service from '../../services/adminapp/adminOrders';
+import AlertBox from '../../utils/Alert';
 
 
 
@@ -27,6 +28,9 @@ function OrdersAssignPage() {
   const [total, setTotal] = useState(0);
   const [list, setList] = useState<any>([]);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [alertMsg, setAlertMsg] = useState<string>("");
+  const [alertSeverty, setAlertSeverty] = useState<string>("");
+  const [alertOpen, setAlertOpen] = useState<boolean>(false);
 
   const params = useParams();
   const orderId: any = params.orderId;
@@ -108,21 +112,22 @@ function OrdersAssignPage() {
       status: ORDER_DELIVERY_STATUS_NEW
     }
     Service.createAssignService(data).then((item: any) => {
+      console.log('Create item.data ', item.data)
       if (item.data.success) {
-        setList((newArr: any) => {
-          return newArr.map((newItem: any) => {
-            if (newItem.id === userId) {
-              newItem.appOrderDeliveryStatus = item.data.data.status
-            }
-            return { ...newItem };
-          });
-        });
         navigate(`../view/${orderId}`);
+      } else {
+        setAlertMsg('Not Assign');
+        setAlertSeverty('error');
+        setAlertOpen(true);
       }
     })
   }
   return (
     <>
+      {alertOpen && (
+        <AlertBox msg={alertMsg} setSeverty={alertSeverty} alertOpen={alertOpen} setAlertOpen={setAlertOpen} />
+      )}
+
       <TopBar isNestedRoute={true} title="Order Assign" />
       <div className="container mt-5">
         <div className="w-full rounded-lg bg-white shadow-lg">
@@ -213,13 +218,13 @@ function OrdersAssignPage() {
 
                       </td>
                       <td>{item.licenseNumber ? item.licenseNumber : '--'}</td>
-                      <td>{item.appOrderDelivery ? (
+                      <td>{item.appOrderDelivery.status ? (
                         <span className="badge badge-success">{item.appOrderDelivery.status}</span>
                       ) : (
                         <span className="badge badge-danger">{ORDER_DELIVERY_STATUS_NOT_ASSIGN}</span>
                       )}</td>
                       <td>
-                        {!item.appOrderDelivery ? (
+                        {!item.appOrderDelivery.appOrder && item.status === APP_USER_STATUS_ONLINE ? (
                           <Button
                             variant="contained"
                             className="btn-black-fill btn-icon"
@@ -237,7 +242,7 @@ function OrdersAssignPage() {
                           >
                             Assign
                           </Button>
-                        ) : item.appOrderDelivery && item.appOrderDelivery.status === ORDER_DELIVERY_STATUS_CANCELLED ? (
+                        ) : item.appOrderDelivery.appOrder && item.appOrderDelivery.status === ORDER_DELIVERY_STATUS_CANCELLED ? (
                           <Button
                             variant="contained"
                             className="btn-black-fill btn-icon"

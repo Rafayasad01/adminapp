@@ -152,7 +152,7 @@ function OrderDetailsPage() {
           <div className="mb-auto min-h-[600px] rounded-lg bg-[#fff] shadow-lg">
             <div className="p-4">
               <div className="flex items-center">
-                <div className={`relative mr-2 inline - flex ${currentStatus && currentStatus.key === ORDER_STATUS_IN_CANCELLED ? 'text-red-500' : 'text-green-500'}`}>
+                <div className={`relative mr-2 inline-flex ${currentStatus && currentStatus.key === ORDER_STATUS_IN_CANCELLED ? 'text-red-500' : 'text-green-500'}`}>
                   <CircularProgress
                     thickness={1.5}
                     className="z-10"
@@ -187,7 +187,7 @@ function OrderDetailsPage() {
                   <div className="font-open-sans text-xs font-normal text-neutral-500">
                     {dayjs(viewData.updatedDate)?.format('ddd, MMM DD, YYYY | hh:mm:ssA')}
                   </div>
-                  <div className={`font - open - sans text - sm font - semibold  ${currentStatus && currentStatus.key === ORDER_STATUS_IN_CANCELLED ? 'text-red-500' : 'text-green-500'} `}>
+                  <div className={`font-open-sans text-sm font-semibold  ${currentStatus && currentStatus.key === ORDER_STATUS_IN_CANCELLED ? 'text-red-500' : 'text-green-500'} `}>
                     {currentStatus && `${currentStatus.value.title} `}
                   </div>
                 </div>
@@ -195,7 +195,7 @@ function OrderDetailsPage() {
                 <Button
                   type="button"
                   onClick={() => { setDialogText("Are you sure you want to cancel this Order"); setCancelDialogOpen(true) }}
-                  className={`rounded - xl py - 2 px - 12 font - open - sans text - sm font - semibold ${cancelled || isCancelled ? 'bg-neutral-400 text-neutral-900' : 'bg-neutral-900 text-gray-50'} `}
+                  className={`rounded-xl py-2 px-12 font-open-sans text-sm font-semibold ${cancelled || isCancelled ? 'bg-neutral-400 text-neutral-900' : 'bg-neutral-900 text-gray-50'} `}
                   color="inherit"
                   disabled={cancelled || isCancelled ? true : false}
                 >
@@ -249,33 +249,45 @@ function OrderDetailsPage() {
                 </div>
               </div>
               <hr className="my-3 h-[1px] w-full bg-neutral-200" />
-              <div className="flex items-center w-full flex-shrink-0">
-                <IconButton aria-label="delete" className='p-0' disableRipple onClick={() => navigate('../assign/' + id)}>
-                  <Avatar
-                    alt="Truck Driver Icon"
-                    src={assets.images.truckDriverIcon}
-                    sx={{ width: 24, height: 24, marginRight: '5px' }}
-                  />
-
-                  <div className="font-open-sans text-sm font-normal text-neutral-500">
-                    Choose a driver
-                  </div>
-
-
-                </IconButton>
-
-                {/* <div className="flex items-center justify-between font-open-sans text-sm font-normal text-neutral-500">
-                    <div className="avatar flex items-center ">
-                      {driverState.driver.avatar ? (
-                        <img src={driverState.driver.avatar} alt="" />
-                      ) : (
-                        <Avatar className="avatar flex items-center" sx={{ bgcolor: '#1D1D1D', width: 25, height: 25, textTransform: 'uppercase', fontSize: '11px', marginRight: '10px' }}>{driverState.driver.firstName.charAt(0)}{driverState.driver.lastName.charAt(0)}</Avatar>
-                      )}
+              <div className="flex items-center w-full flex-shrink-0 gap-x-3">
+                {viewData.driver ? (
+                  <>
+                    <IconButton aria-label="delete" className='p-0' disableRipple disabled>
+                      <Avatar
+                        alt="Truck Driver Icon"
+                        src={assets.images.truckDriverIcon}
+                        sx={{ width: 24, height: 24, marginRight: '5px' }}
+                      />
+                    </IconButton>
+                    <div className="flex items-center justify-between w-full flex-grow-1 font-open-sans text-sm font-normal text-neutral-500">
+                      <div className="flex items-center gap-x-1">
+                        <div className="avatar">
+                          {viewData.driver.avatar ? (
+                            <img src={viewData.driver.avatar} alt="" />
+                          ) : (
+                            <Avatar className="avatar flex items-center" sx={{ bgcolor: '#1D1D1D', width: 25, height: 25, textTransform: 'uppercase', fontSize: '11px', marginRight: '10px' }}>{viewData.driver.firstName.charAt(0)}{viewData.driver.lastName.charAt(0)}</Avatar>
+                          )}
+                        </div>
+                        <div>
+                          <span>{`${viewData.driver.firstName} ${viewData.driver.lastName}`}</span>
+                        </div>
+                      </div>
+                      <span>{viewData.driver.phone}</span>
+                      <span>{viewData.driver.licenseNumber}</span>
                     </div>
-                    <span>{driverState.driver.phone}</span>
-                    <span>{driverState.driver.licenseNumber}</span>
-                  </div> */}
-
+                  </>
+                ) : (
+                  <IconButton aria-label="delete" className='p-0' disableRipple onClick={() => navigate('../assign/' + id)}>
+                    <Avatar
+                      alt="Truck Driver Icon"
+                      src={assets.images.truckDriverIcon}
+                      sx={{ width: 24, height: 24, marginRight: '5px' }}
+                    />
+                    <div className="font-open-sans text-sm font-normal text-neutral-500">
+                      Choose a driver
+                    </div>
+                  </IconButton>
+                )}
               </div>
               <hr className="my-3 h-[1px] w-full bg-neutral-200" />
               {viewData.orderItems && viewData.orderItems.map((item: any, index: number) => {
@@ -411,7 +423,7 @@ function OrderDetailsPage() {
             </div>
           </div>
         </div>
-      </div>
+      </div >
     </>
   );
 }

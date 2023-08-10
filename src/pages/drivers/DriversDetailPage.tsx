@@ -21,6 +21,7 @@ import TablePagination from '@mui/material/TablePagination';
 import Switch from '@mui/material/Switch';
 import DriversAddressCreatePopup from './DriversAddressCreatePopup';
 import DriversAddressEditPopup from './DriversAddressEditPopup';
+import { ORDER_DELIVERY_STATUS_ACCEPTED, ORDER_DELIVERY_STATUS_CANCELLED, ORDER_DELIVERY_STATUS_DELIVERED, ORDER_DELIVERY_STATUS_IN_DELIVERY, ORDER_DELIVERY_STATUS_NEW, ORDER_DELIVERY_STATUS_PICKED_UP } from '../../utils/constants';
 
 function DriversDetailPage() {
   const authState: any = useAppSelector((state) => state.authState);
@@ -32,59 +33,31 @@ function DriversDetailPage() {
   const [total, setTotal] = useState(0);
   const [list, setList] = useState<any>([]);
   const [addresses, setAddresses] = useState<any>([]);
-  const [editFormData, setEditFormData] = useState<any>(null);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [actionMenuItemid, setActionMenuItemid] = React.useState("");
   const [actionMenuAnchorEl, setActionMenuAnchorEl] = useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
   const actionMenuOptions = ['Edit', 'Delete'];
 
-  const [openFormDialog, setOpenFormDialog] = useState(false);
-  const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
-
   const id: any = params.driverId;
 
   const manuHandler = (option: string) => {
     if (option === 'Edit') {
-      getData(actionMenuItemid);
     } else if (option === 'Delete') {
-      deleteEntity(actionMenuItemid);
     }
-  }
-
-  const deleteEntity = (id: string) => {
-    const data = {
-      is_deleted: true,
-    }
-    Service.deleteAddressService(id, data).then((item: any) => {
-      if (item.data.success) {
-        setList((newArr: any) => {
-          return newArr.filter((newItem: any) => newItem.id !== item.data.data.id);
-        });
-      }
-    })
-  }
-
-  const getData = (id: string) => {
-    Service.getAddress(id).then((item: any) => {
-      if (item.data.success) {
-        setEditFormData(item.data.data);
-        setOpenEditFormDialog(true);
-      }
-    })
   }
 
   const handleClickSearch = (event: any) => {
-    if (event.key === 'Enter') {
-      const searchTxt = event.target.value as string;
-      const newPage = 0;
-      setSearch(searchTxt);
-      setPage(newPage);
-      Service.searchAddressService(id, searchTxt, newPage, rowsPerPage).then(item => {
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      })
-    }
+    // if (event.key === 'Enter') {
+    //   const searchTxt = event.target.value as string;
+    //   const newPage = 0;
+    //   setSearch(searchTxt);
+    //   setPage(newPage);
+    //   Service.searchAddressService(id, searchTxt, newPage, rowsPerPage).then(item => {
+    //     setList(item.data.data.list);
+    //     setTotal(item.data.data.total);
+    //   })
+    // }
   };
 
   const handleChangePage = (
@@ -94,16 +67,15 @@ function DriversDetailPage() {
     setPage(newPage);
     //offset? ,limit rowsperpage hoga ofset page * rowsperPage
     if (search === "" || search === null || search === undefined) {
-      Service.getListAddressService(id, newPage, rowsPerPage).then(item => {
-        console.log('item::::::::', item)
+      Service.getDeliveryListService(id, newPage, rowsPerPage).then(item => {
         setList(item.data.data.list);
         setTotal(item.data.data.total);
       });
     } else {
-      Service.searchAddressService(id, search, newPage, rowsPerPage).then(item => {
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      });
+      // Service.searchAddressService(id, search, newPage, rowsPerPage).then(item => {
+      //   setList(item.data.data.list);
+      //   setTotal(item.data.data.total);
+      // });
     }
   };
   const handleChangeRowsPerPage = (
@@ -114,16 +86,15 @@ function DriversDetailPage() {
     setRowsPerPage(newRowperPage);
     setPage(newPage);
     if (search === "" || search === null || search === undefined) {
-      Service.getListAddressService(id, newPage, rowsPerPage).then(item => {
-        console.log('item::::::::', item)
+      Service.getDeliveryListService(id, newPage, rowsPerPage).then(item => {
         setList(item.data.data.list);
         setTotal(item.data.data.total);
       });
     } else {
-      Service.searchAddressService(id, search, newPage, rowsPerPage).then(item => {
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      });
+      // Service.searchAddressService(id, search, newPage, rowsPerPage).then(item => {
+      //   setList(item.data.data.list);
+      //   setTotal(item.data.data.total);
+      // });
     }
   };
 
@@ -131,59 +102,35 @@ function DriversDetailPage() {
   useEffect(() => {
     Service.getDetailService(id).then((item: any) => {
       if (item.data.success) {
+        console.log('item::::::::', item.data)
         const newAddresses: string[] = [];
         item.data.data.appUserAddress.forEach((addressItem: any) => {
           newAddresses.push(addressItem.address)
         })
         setAddresses(newAddresses);
         setDetail(item.data.data);
-        setList(item.data.data.appUserAddress.reverse());
+        setList(item.data.data.appOrderDelivery.reverse());
         setTotal(Number(item.data.data.total));
       }
     })
   }, []);
 
-  const createFormHandler = (data: any) => {
-    const formData = new FormData();
-    formData.append("name", data.name);
-    formData.append("latitude", data.latitude);
-    formData.append("longitude", data.longitude);
-    formData.append("type", data.type);
-    formData.append("address", data.address);
-    formData.append("app_user", id);
-    formData.append("tenant", authState.user.tenant);
-    Service.createAddress(actionMenuItemid, formData).then((item) => {
-      if (item.data.success) {
-        list.unshift(item.data.data);
-        setList(list);
-      }
-    })
-  }
-
-  const updateFormHandler = (data: any) => {
-    const formData = new FormData();
-    formData.append("name", data.name);
-    formData.append("latitude", data.latitude);
-    formData.append("longitude", data.longitude);
-    formData.append("type", data.type);
-    formData.append("address", data.address);
-    Service.updateAddress(actionMenuItemid, formData).then((item) => {
-      if (item.data.success) {
-        console.log('item.data::::::', item.data.data)
-        setList((newArr: any) => {
-          return newArr.map((newItem: any) => {
-            if (newItem.id === actionMenuItemid) {
-              newItem.name = item.data.data.name;
-              newItem.type = item.data.data.type;
-              newItem.latitude = item.data.data.latitude;
-              newItem.longitude = item.data.data.longitude;
-              newItem.address = item.data.data.address;
-              return { ...newItem }
-            }
-          });
-        });
-      }
-    })
+  const getStatusTag = (status: string) => {
+    let tag = "";
+    if (status === ORDER_DELIVERY_STATUS_NEW) {
+      tag = "blue";
+    } else if (status === ORDER_DELIVERY_STATUS_ACCEPTED) {
+      tag = "blue";
+    } else if (status === ORDER_DELIVERY_STATUS_PICKED_UP) {
+      tag = "purple";
+    } else if (status === ORDER_DELIVERY_STATUS_IN_DELIVERY) {
+      tag = "orange";
+    } else if (status === ORDER_DELIVERY_STATUS_DELIVERED) {
+      tag = "yellow";
+    } else if (status === ORDER_DELIVERY_STATUS_CANCELLED) {
+      tag = "red";
+    }
+    return tag;
   }
 
   return (
@@ -293,14 +240,13 @@ function DriversDetailPage() {
                     />
                   </FormControl> */}
                 </div>
-                {/* <div className="mt-3 grid grid-cols-none">
+                <div className="mt-3 grid grid-cols-none">
                   <table className="table-border table-auto">
                     <thead>
                       <tr>
-                        <th className="w-[28%]">address</th>
-                        <th>latitude</th>
-                        <th>longitude</th>
-                        <th>type</th>
+                        <th>Pickup Time</th>
+                        <th>Drop Time</th>
+                        <th>Status</th>
                         <th>&nbsp;</th>
                       </tr>
                     </thead>
@@ -308,12 +254,33 @@ function DriversDetailPage() {
                       {list.map((item: any, index: number) => {
                         return (
                           <tr key={item.id}>
-                            <td>{item.address}</td>
-                            <td>{item.latitude}</td>
-                            <td>{item.longitude}</td>
-                            <td>{item.type}</td>
                             <td>
-                              <IconButton
+                              {dayjs(item.pickupDateTime).isValid() ? (
+                                <div className="flex flex-col">
+                                  <span className="text-sm font-normal text-[#1A1A1A]">
+                                    {dayjs(item.pickupDateTime)?.format('hh:mm:ssA')} - {dayjs(item.pickupDateTime).add(1, 'hour').format('hh:mm:ssA')}
+                                  </span>
+                                  <span className="text-xs font-normal text-[#6A6A6A]">
+                                    {dayjs(item.pickupDateTime)?.format('ddd, MMM DD, YYYY')}
+                                  </span>
+                                </div>
+                              ) : "----"}
+                            </td>
+                            <td>
+                              {dayjs(item.dropDateTime).isValid() ? (
+                                <div className="flex flex-col">
+                                  <span className="text-sm font-normal text-[#1A1A1A]">
+                                    {dayjs(item.dropDateTime)?.format('hh:mm:ssA')} - {dayjs(item.dropDateTime).add(1, 'hour').format('hh:mm:ssA')}
+                                  </span>
+                                  <span className="text-xs font-normal text-[#6A6A6A]">
+                                    {dayjs(item.dropDateTime)?.format('ddd, MMM DD, YYYY')}
+                                  </span>
+                                </div>
+                              ) : "----"}
+                            </td>
+                            <td><span className={`badge badge-${getStatusTag(item.status)}`}>{item.status}</span></td>
+                            <td>
+                              {/* <IconButton
                                 className="btn-dot"
                                 aria-label="more"
                                 id="long-button"
@@ -326,15 +293,15 @@ function DriversDetailPage() {
                                 }}
                               >
                                 <MoreVertIcon />
-                              </IconButton>
+                              </IconButton> */}
                             </td>
                           </tr>
                         );
                       })}
                     </tbody>
                   </table>
-                </div> */}
-                {/* <div className='w-[100%] mt-3 flex justify-center py-3'>
+                </div>
+                <div className='w-[100%] mt-3 flex justify-center py-3'>
                   <TablePagination
                     component="div"
                     count={total}
@@ -343,7 +310,7 @@ function DriversDetailPage() {
                     rowsPerPage={rowsPerPage}
                     onRowsPerPageChange={handleChangeRowsPerPage}
                   />
-                </div> */}
+                </div>
               </div>
             </div>
           )}
@@ -352,17 +319,6 @@ function DriversDetailPage() {
       {actionMenuAnchorEl && (
         <ActionMenu open={actionMenuOpen} anchorEl={actionMenuAnchorEl} setAnchorEl={setActionMenuAnchorEl} options={actionMenuOptions} callback={manuHandler} />
       )}
-      <DriversAddressCreatePopup
-        openFormDialog={openFormDialog}
-        setOpenFormDialog={setOpenFormDialog}
-        callback={createFormHandler}
-      />
-      <DriversAddressEditPopup
-        openFormDialog={openEditFormDialog}
-        setOpenFormDialog={setOpenEditFormDialog}
-        formData={editFormData}
-        callback={updateFormHandler}
-      />
     </>
   );
 }
