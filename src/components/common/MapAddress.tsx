@@ -70,32 +70,32 @@ function MapAddress({ addresses, zoom }: Props) {
           else {
             addressCount++;
             if (addresses.length === addressCount) {
-              geocoder.geocode({ 'address': OFFICE_MAP_ADDRESS }, (results, status: any) => {
-                if (status === 'OK' && status !== 'ZERO_RESULTS') {
-                  const location = results[0].geometry.location;
-                  if (location && location.lat() && location.lng()) {
-                    const label = {
-                      text: OFFICE_MAP_LABEL,
-                      color: '#1A1A1A',
-                      className: 'map-label-styling'
-                    }
-                    const marker = new google.maps.Marker({
-                      position: location,
-                      map,
-                      title: address,
-                      label: label,
-                      icon: assets.images.iconMap,
-                      draggable: false,
-                      animation: google.maps.Animation.DROP,
-                    });
-                    newMarkers.push(marker);
-                    map.setCenter(location);
-                    addressCount++;
-                  } else {
-                    console.error('Invalid geocoder response for address:', address);
-                  }
-                }
-              });
+              // geocoder.geocode({ 'address': OFFICE_MAP_ADDRESS }, (results, status: any) => {
+              //   if (status === 'OK' && status !== 'ZERO_RESULTS') {
+              //     const location = results[0].geometry.location;
+              //     if (location && location.lat() && location.lng()) {
+              //       const label = {
+              //         text: OFFICE_MAP_LABEL,
+              //         color: '#1A1A1A',
+              //         className: 'map-label-styling'
+              //       }
+              //       const marker = new google.maps.Marker({
+              //         position: location,
+              //         map,
+              //         title: address,
+              //         label: label,
+              //         icon: assets.images.iconMap,
+              //         draggable: false,
+              //         animation: google.maps.Animation.DROP,
+              //       });
+              //       newMarkers.push(marker);
+              //       map.setCenter(location);
+              //       addressCount++;
+              //     } else {
+              //       console.error('Invalid geocoder response for address:', address);
+              //     }
+              //   }
+              // });
             };
             //console.error('Geocode was not successful for the following reason:', status);
           }

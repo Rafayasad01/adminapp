@@ -49,6 +49,7 @@ import DriversAddressPage from '../pages/drivers/DriversAddressPage';
 import DriversSchedulePage from '../pages/drivers/DriversSchedulePage';
 import CustomersAddressPage from '../pages/customers/CustomersAddressPage';
 import DriversDetailPage from '../pages/drivers/DriversDetailPage';
+import NotificationPage from '../pages/notification/NotificationPage';
 
 
 export const routeObjects: RouteObject[] = [
@@ -352,6 +353,15 @@ export const routeObjects: RouteObject[] = [
           {
             index: true,
             element: <ProfilePage />,
+          },
+        ],
+      },
+      {
+        path: 'notification',
+        children: [
+          {
+            index: true,
+            element: <NotificationPage />,
           },
         ],
       },
