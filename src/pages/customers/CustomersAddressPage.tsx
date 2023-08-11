@@ -127,11 +127,13 @@ function CustomersAddressPage() {
   useEffect(() => {
     Service.getAddressService(id).then((item: any) => {
       if (item.data.success) {
-        const newAddresses: string[] = [];
-        item.data.data.appUserAddress.forEach((addressItem: any) => {
-          newAddresses.push(addressItem.address)
-        })
-        setAddresses(newAddresses);
+        if (item.data.data.appUserAddress) {
+          const newAddresses: string[] = [];
+          item.data.data.appUserAddress.forEach((addressItem: any) => {
+            newAddresses.push(addressItem.address)
+          })
+          setAddresses(newAddresses);
+        }
         setDetail(item.data.data);
         setList(item.data.data.appUserAddress.reverse());
         setTotal(Number(item.data.data.total));
@@ -150,7 +152,7 @@ function CustomersAddressPage() {
     formData.append("tenant", authState.user.tenant);
     Service.createAddress(actionMenuItemid, formData).then((item) => {
       if (item.data.success) {
-        list.unshift(item.data.data);
+        list.push(item.data.data);
         setList(list);
       }
     })
@@ -242,7 +244,7 @@ function CustomersAddressPage() {
             </div>
             <div className="col-span-8 rounded-lg bg-[#fff] shadow-lg">
               <div className="flex h-[318px] w-full">
-                {detail.appUserAddress.length > 0 ? (
+                {detail.appUserAddress && detail.appUserAddress.length > 0 ? (
                   <MapAddress addresses={addresses} zoom={15} />
                 ) : (
                   <Map center={{ lat: 0, lng: 0 }} zoom={15} />

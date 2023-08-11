@@ -7,6 +7,7 @@ import PlaceOutlinedIcon from '@mui/icons-material/PlaceOutlined';
 import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
+import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
 import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
 import Stack from '@mui/material/Stack';
@@ -25,11 +26,6 @@ const links = [
     path: 'home',
     icon: <GridViewOutlinedIcon fontSize="inherit" />,
   },
-  // {
-  //   name: 'Reports',
-  //   path: 'reports',
-  //   icon: <DescriptionOutlinedIcon fontSize="inherit" />,
-  // },
   {
     name: 'Carts',
     path: 'carts',
@@ -55,6 +51,16 @@ const links = [
     path: 'drivers',
     icon: <DriverIcon />,
   },
+  {
+    name: 'Notifications',
+    path: 'notification',
+    icon: <NotificationsOutlinedIcon fontSize="inherit" />,
+  },
+  // {
+  //   name: 'Reports',
+  //   path: 'reports',
+  //   icon: <DescriptionOutlinedIcon fontSize="inherit" />,
+  // },
   // {
   //   name: 'Complains',
   //   path: 'complains',

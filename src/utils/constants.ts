@@ -8,6 +8,7 @@ export const CART_PREFIX = 'cart'
 export const DRIVER_PREFIX = 'driver'
 export const CUSTOMER_PREFIX = 'customer'
 export const CATEGORY_PREFIX = 'category'
+export const NOTIFICATION_PREFIX = 'notification'
 export const ORDER_STATUS_NEW = "New";
 export const ORDER_STATUS_PICKED_UP = "PickedUp";
 export const ORDER_STATUS_PROCESSING = "Processing";
@@ -30,9 +31,13 @@ export const OFFICE_MAP_LAT = 24.8758795;
 export const OFFICE_MAP_LNG = 67.0878445;
 export const OFFICE_MAP_LABEL = 'UrApp Technologies';
 export const OFFICE_MAP_ADDRESS = 'Sumya Business Avenue, 9 B, Mohammad Ali Society Muhammad Ali Chs (Machs), Karachi, Karachi City, Sindh, Pakistan';
+export const NOTIFICATION_STATUS_NEW = 'New';
+export const NOTIFICATION_STATUS_SENDING = 'Sending';
+export const NOTIFICATION_STATUS_FAILED = 'Failed';
+export const NOTIFICATION_STATUS_COMPLETED = 'Completed';
+export const NOTIFICATION_STATUS_CANCELLED = 'Cancelled';
 
 
-//[New, PickedUp, In-Delivery, Delivered, Cancelled, Accepted]
 export let token = "";
 export const setToken = (data: string) => {
     token = data;
