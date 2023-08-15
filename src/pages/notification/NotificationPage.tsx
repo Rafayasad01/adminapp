@@ -15,7 +15,13 @@ import dayjs from 'dayjs';
 import TablePagination from '@mui/material/TablePagination';
 import NotificationCreatePopup from './NotificationCreatePopup';
 import WysiwygOutlinedIcon from '@mui/icons-material/WysiwygOutlined';
-import { NOTIFICATION_STATUS_CANCELLED, NOTIFICATION_STATUS_COMPLETED, NOTIFICATION_STATUS_FAILED, NOTIFICATION_STATUS_NEW, NOTIFICATION_STATUS_SENDING } from '../../utils/constants';
+import {
+  NOTIFICATION_STATUS_CANCELLED,
+  NOTIFICATION_STATUS_COMPLETED,
+  NOTIFICATION_STATUS_FAILED,
+  NOTIFICATION_STATUS_NEW,
+  NOTIFICATION_STATUS_SENDING,
+} from '../../utils/constants';
 import NotificationDetailPopup from './NotificationDetailPopup';
 import AlertBox from '../../utils/Alert';
 
@@ -31,8 +37,8 @@ function NotificationPage() {
   const [detailPopup, setDetailPopup] = useState<boolean>(false);
   const [batchDetail, setBatchDetail] = useState<any>(null);
   const [alertPopup, setAlertPopup] = useState<boolean>(false);
-  const [alertSeverty, setAlertSeverty] = useState<string>("");
-  const [alertMsg, setAlertMsg] = useState<string>("");
+  const [alertSeverty, setAlertSeverty] = useState<string>('');
+  const [alertMsg, setAlertMsg] = useState<string>('');
 
   const handleFormClickOpen = () => {
     setOpenFormDialog(true);
@@ -44,45 +50,64 @@ function NotificationPage() {
       const newPage = 0;
       setSearch(searchTxt);
       setPage(newPage);
-      Service.searchService(authState.user.tenant, searchTxt, newPage, rowsPerPage).then(item => {
+      Service.searchService(
+        authState.user.tenant,
+        searchTxt,
+        newPage,
+        rowsPerPage
+      ).then((item) => {
         setList(item.data.data.list);
         setTotal(item.data.data.total);
-      })
+      });
     }
   };
 
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
-    newPage: number,
+    newPage: number
   ) => {
     setPage(newPage);
     //offset? ,limit rowsperpage hoga ofset page * rowsperPage
-    if (search === "" || search === null || search === undefined) {
-      Service.getListService(authState.user.tenant, newPage, rowsPerPage).then(item => {
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      });
+    if (search === '' || search === null || search === undefined) {
+      Service.getListService(authState.user.tenant, newPage, rowsPerPage).then(
+        (item) => {
+          setList(item.data.data.list);
+          setTotal(item.data.data.total);
+        }
+      );
     } else {
-      Service.searchService(authState.user.tenant, search, newPage, rowsPerPage).then(item => {
+      Service.searchService(
+        authState.user.tenant,
+        search,
+        newPage,
+        rowsPerPage
+      ).then((item) => {
         setList(item.data.data.list);
         setTotal(item.data.data.total);
       });
     }
   };
   const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const newRowperPage = parseInt(event.target.value, 10);
     const newPage = 0;
     setRowsPerPage(newRowperPage);
     setPage(newPage);
-    if (search === "" || search === null || search === undefined) {
-      Service.getListService(authState.user.tenant, newPage, rowsPerPage).then(item => {
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      });
+    if (search === '' || search === null || search === undefined) {
+      Service.getListService(authState.user.tenant, newPage, rowsPerPage).then(
+        (item) => {
+          setList(item.data.data.list);
+          setTotal(item.data.data.total);
+        }
+      );
     } else {
-      Service.searchService(authState.user.tenant, search, newPage, rowsPerPage).then(item => {
+      Service.searchService(
+        authState.user.tenant,
+        search,
+        newPage,
+        rowsPerPage
+      ).then((item) => {
         setList(item.data.data.list);
         setTotal(item.data.data.total);
       });
@@ -90,41 +115,46 @@ function NotificationPage() {
   };
 
   useEffect(() => {
-    Service.getListService(authState.user.tenant, page, rowsPerPage).then((item: any) => {
-      setList(item.data.data.list);
-      setTotal(item.data.data.total);
-    }).catch(error => {
-      console.log('error::::::::', error)
-    })
+    Service.getListService(authState.user.tenant, page, rowsPerPage)
+      .then((item: any) => {
+        setList(item.data.data.list);
+        setTotal(item.data.data.total);
+      })
+      .catch((error) => {
+        console.log('error::::::::', error);
+      });
   }, []);
 
   const createFormHandler = (data: any) => {
     const formData = new FormData();
-    formData.append("title", data.title);
-    formData.append("message", data.message);
-    formData.append("tenant", authState.user.tenant);
-    formData.append("userId", authState.user.id);
+    formData.append('title', data.title);
+    formData.append('message', data.message);
+    formData.append('tenant', authState.user.tenant);
+    formData.append('userId', authState.user.id);
     Service.sentService(formData).then((item) => {
       if (item.data.success) {
         // list.push(item.data.data);
         // setList(list);
       }
-    })
-  }
+    });
+  };
 
   const getStatusTag = (status: string) => {
-    let tag = "";
+    let tag = '';
     if (status === NOTIFICATION_STATUS_NEW) {
-      tag = "blue";
+      tag = 'blue';
     } else if (status === NOTIFICATION_STATUS_SENDING) {
-      tag = "purple";
+      tag = 'purple';
     } else if (status === NOTIFICATION_STATUS_COMPLETED) {
-      tag = "green";
-    } else if (status === NOTIFICATION_STATUS_FAILED || status === NOTIFICATION_STATUS_CANCELLED) {
-      tag = "red";
+      tag = 'green';
+    } else if (
+      status === NOTIFICATION_STATUS_FAILED ||
+      status === NOTIFICATION_STATUS_CANCELLED
+    ) {
+      tag = 'red';
     }
     return tag;
-  }
+  };
 
   const detailButtonHandler = (index: number) => {
     Service.batchDetailService(list[index].id).then((item) => {
@@ -136,8 +166,8 @@ function NotificationPage() {
         setAlertSeverty('error');
         setAlertPopup(true);
       }
-    })
-  }
+    });
+  };
 
   return (
     <>
@@ -204,35 +234,48 @@ function NotificationPage() {
                 </tr>
               </thead>
               <tbody>
-                {list && list.map((item: any, index: number) => {
-                  return (
-                    <tr key={item.id}>
-                      <td>{item.title}</td>
-                      <td>{item.description}</td>
-                      <td><span className={`badge badge-${getStatusTag(item.status)}`}>{item.status}</span></td>
-                      <td>
-                        <div className="flex flex-col">
-                          <span className="text-sm font-normal text-[#1A1A1A]">
-                            {dayjs(item.createdDate)?.format('hh:mm:ssA')}
+                {list &&
+                  list.map((item: any, index: number) => {
+                    return (
+                      <tr key={item.id}>
+                        <td>{item.title}</td>
+                        <td>{item.description}</td>
+                        <td>
+                          <span
+                            className={`badge badge-${getStatusTag(
+                              item.status
+                            )}`}
+                          >
+                            {item.status}
                           </span>
-                          <span className="text-xs font-normal text-[#6A6A6A]">
-                            {dayjs(item.createdDate)?.format('ddd, MMM DD, YYYY')}
-                          </span>
-                        </div>
-                      </td>
-                      <td>
-                        <IconButton className="icon-btn mr-3.5 p-0" onClick={() => detailButtonHandler(index)}>
-                          <WysiwygOutlinedIcon />
-                        </IconButton>
-                      </td>
-                    </tr>
-                  );
-                })}
-
+                        </td>
+                        <td>
+                          <div className="flex flex-col">
+                            <span className="text-sm font-normal text-[#1A1A1A]">
+                              {dayjs(item.createdDate)?.format('hh:mm:ssA')}
+                            </span>
+                            <span className="text-xs font-normal text-[#6A6A6A]">
+                              {dayjs(item.createdDate)?.format(
+                                'ddd, MMM DD, YYYY'
+                              )}
+                            </span>
+                          </div>
+                        </td>
+                        <td>
+                          <IconButton
+                            className="icon-btn mr-3.5 p-0"
+                            onClick={() => detailButtonHandler(index)}
+                          >
+                            <WysiwygOutlinedIcon />
+                          </IconButton>
+                        </td>
+                      </tr>
+                    );
+                  })}
               </tbody>
             </table>
           </div>
-          <div className='w-[100%] mt-3 flex justify-center py-3'>
+          <div className="mt-3 flex w-[100%] justify-center py-3">
             <TablePagination
               component="div"
               count={total}
@@ -266,7 +309,6 @@ function NotificationPage() {
           setAlertOpen={setAlertPopup}
         />
       )}
-
     </>
   );
 }

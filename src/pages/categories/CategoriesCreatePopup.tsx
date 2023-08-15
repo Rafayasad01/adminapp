@@ -6,7 +6,7 @@ import Input from '@mui/material/Input';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
 import IconButton from '@mui/material/IconButton';
-import { useForm } from "react-hook-form";
+import { useForm } from 'react-hook-form';
 
 import '../../assets/css/PopupStyle.css';
 import { Category } from '../../interfaces/category.interface';
@@ -17,20 +17,29 @@ type Props = {
   callback: Function;
 };
 
-function CategoriesCreatePopup({ openFormDialog, setOpenFormDialog, callback }: Props) {
+function CategoriesCreatePopup({
+  openFormDialog,
+  setOpenFormDialog,
+  callback,
+}: Props) {
   const [image, setImage] = useState<any>(null);
   const [imageName, setImageName] = useState<string>('');
 
-  const { register, handleSubmit, watch, formState: { errors }, control } = useForm<Category>();
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+    control,
+  } = useForm<Category>();
   const onSubmit = (data: Category) => {
     data.icon = image;
     setOpenFormDialog(false);
     callback(data);
-
   };
 
   const handleFormClose = () => {
-    setOpenFormDialog(false)
+    setOpenFormDialog(false);
   };
   const handleRemoveImage = () => {
     setImage('');
@@ -62,12 +71,14 @@ function CategoriesCreatePopup({ openFormDialog, setOpenFormDialog, callback }: 
                 <label className="FormLabel">Category Name</label>
                 <Input
                   className="FormInput"
-                  {...register("name", { required: true })}
+                  {...register('name', { required: true })}
                   type="text"
                   id="name"
                   disableUnderline
                 />
-                {errors.name?.type === 'required' && <span role="alert">Category name is required</span>}
+                {errors.name?.type === 'required' && (
+                  <span role="alert">Category name is required</span>
+                )}
               </FormControl>
             </div>
             <div className="FormField">
@@ -76,7 +87,7 @@ function CategoriesCreatePopup({ openFormDialog, setOpenFormDialog, callback }: 
                 <input
                   accept="image/*"
                   style={{ display: 'none' }}
-                  {...register("icon", { required: "Icon is required" })}
+                  {...register('icon', { required: 'Icon is required' })}
                   id="raised-button-file"
                   type="file"
                   onChange={(
@@ -133,7 +144,6 @@ function CategoriesCreatePopup({ openFormDialog, setOpenFormDialog, callback }: 
                 padding: '0.375rem 2rem !important',
               }}
             />
-
           </div>
         </form>
       </div>

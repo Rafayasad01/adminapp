@@ -1,4 +1,4 @@
-export interface SuperadminUserLogin{
-    username: string,
-    password:string
+export interface SuperadminUserLogin {
+  username: string;
+  password: string;
 }

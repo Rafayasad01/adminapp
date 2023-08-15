@@ -10,12 +10,11 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import auth from '../../../../services/superadmin/SuperAdminAuth';
 import { SuperadminUserLogin } from '../../../../interfaces/superadmin/auth.interface';
 import AlertBox from '../../../../utils/Alert';
-import { setToken } from "../../../../utils/constants"
+import { setToken } from '../../../../utils/constants';
 import { useAppDispatch } from '../../../../redux/redux-hooks';
 import { login } from '../../../../redux/features/authStateSlice';
 
 import assets from '../../../../assets';
-
 
 function SuperAdminLoginPage() {
   const dispatch = useAppDispatch();
@@ -23,9 +22,9 @@ function SuperAdminLoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [alertMsg, setAlertMsg] = useState("");
+  const [alertMsg, setAlertMsg] = useState('');
   const [showAlert, setShowAlert] = useState(false);
-  const [alertSeverity, setAlertSeverity] = useState("")
+  const [alertSeverity, setAlertSeverity] = useState('');
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const handleMouseDownPassword = (
     event: React.MouseEvent<HTMLButtonElement>
@@ -34,8 +33,9 @@ function SuperAdminLoginPage() {
   };
   const loginHandler = async () => {
     const userData: SuperadminUserLogin = {
-      username: email, password: password
-    }
+      username: email,
+      password: password,
+    };
     const user: any = await auth.loginService(userData);
     if (user && user.data.success) {
       const userData = user.data.data;
@@ -46,10 +46,9 @@ function SuperAdminLoginPage() {
       } else {
         navigate('../../../dashboard/home');
       }
-
     } else {
       setAlertMsg(user.data.message);
-      setAlertSeverity("error");
+      setAlertSeverity('error');
       setShowAlert(true);
     }
   };
@@ -57,7 +56,12 @@ function SuperAdminLoginPage() {
   return (
     <>
       {showAlert && (
-        <AlertBox msg={alertMsg} setSeverty={alertSeverity} alertOpen={showAlert} setAlertOpen={setShowAlert} />
+        <AlertBox
+          msg={alertMsg}
+          setSeverty={alertSeverity}
+          alertOpen={showAlert}
+          setAlertOpen={setShowAlert}
+        />
       )}
       <div className="flex h-full w-full items-center justify-center">
         <div className="flex w-96 flex-col items-center justify-center rounded-xl bg-gray-50 p-5">
@@ -93,7 +97,11 @@ function SuperAdminLoginPage() {
                       onClick={handleClickShowPassword}
                       onMouseDown={handleMouseDownPassword}
                     >
-                      {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                      {showPassword ? (
+                        <VisibilityIcon />
+                      ) : (
+                        <VisibilityOffIcon />
+                      )}
                     </IconButton>
                   </InputAdornment>
                 }

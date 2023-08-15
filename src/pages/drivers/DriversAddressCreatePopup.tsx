@@ -3,7 +3,7 @@ import Dialog from '@mui/material/Dialog';
 import Button from '@mui/material/Button';
 import Input from '@mui/material/Input';
 import '../../assets/css/PopupStyle.css';
-import { useForm } from "react-hook-form";
+import { useForm } from 'react-hook-form';
 import { AppUserAddress } from '../../interfaces/app-user.interface';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
@@ -15,9 +15,19 @@ type Props = {
   callback: Function;
 };
 
-function DriversAddressCreatePopup({ openFormDialog, setOpenFormDialog, callback }: Props) {
-  const [formType, setFormType] = useState<any>('Home')
-  const { register, handleSubmit, watch, formState: { errors }, control } = useForm<AppUserAddress>();
+function DriversAddressCreatePopup({
+  openFormDialog,
+  setOpenFormDialog,
+  callback,
+}: Props) {
+  const [formType, setFormType] = useState<any>('Home');
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+    control,
+  } = useForm<AppUserAddress>();
 
   const handleFormClose = () => setOpenFormDialog(false);
 
@@ -50,9 +60,11 @@ function DriversAddressCreatePopup({ openFormDialog, setOpenFormDialog, callback
                   className="FormInput"
                   id="name"
                   disableUnderline
-                  {...register("name", { required: "Name is required" })}
+                  {...register('name', { required: 'Name is required' })}
                 />
-                {errors.name && <span role="alert">{errors.name?.message}</span>}
+                {errors.name && (
+                  <span role="alert">{errors.name?.message}</span>
+                )}
               </FormControl>
               <FormControl className="FormControl" variant="standard">
                 <label className="FormLabel">Type</label>
@@ -62,19 +74,22 @@ function DriversAddressCreatePopup({ openFormDialog, setOpenFormDialog, callback
                   labelId="demo-simple-select-label"
                   disableUnderline
                   value={formType}
-                  {...register("type", { required: "type is required", value: "Home" })}
+                  {...register('type', {
+                    required: 'type is required',
+                    value: 'Home',
+                  })}
                   onChange={(event) => {
                     setFormType(event.target.value);
                   }}
-
                 >
                   <MenuItem value="Home">Home</MenuItem>
                   <MenuItem value="Office">Office</MenuItem>
                   <MenuItem value="Other">Other</MenuItem>
                 </Select>
-                {errors.type && <span role="alert">{errors.type?.message}</span>}
+                {errors.type && (
+                  <span role="alert">{errors.type?.message}</span>
+                )}
               </FormControl>
-
             </div>
             <div className="FormFields">
               <FormControl className="FormControl" variant="standard">
@@ -84,7 +99,7 @@ function DriversAddressCreatePopup({ openFormDialog, setOpenFormDialog, callback
                   className="FormInput"
                   id="latitude"
                   disableUnderline
-                  {...register("latitude", { value: 0 })}
+                  {...register('latitude', { value: 0 })}
                 />
               </FormControl>
               <FormControl className="FormControl" variant="standard">
@@ -94,7 +109,7 @@ function DriversAddressCreatePopup({ openFormDialog, setOpenFormDialog, callback
                   className="FormInput"
                   id="longitude"
                   disableUnderline
-                  {...register("longitude", { value: 0 })}
+                  {...register('longitude', { value: 0 })}
                 />
               </FormControl>
             </div>
@@ -105,9 +120,11 @@ function DriversAddressCreatePopup({ openFormDialog, setOpenFormDialog, callback
                   className="FormInput"
                   id="address"
                   disableUnderline
-                  {...register("address", { required: "Address is required" })}
+                  {...register('address', { required: 'Address is required' })}
                 />
-                {errors.address && <span role="alert">{errors.address?.message}</span>}
+                {errors.address && (
+                  <span role="alert">{errors.address?.message}</span>
+                )}
               </FormControl>
             </div>
           </div>

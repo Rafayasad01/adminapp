@@ -56,6 +56,11 @@ const links = [
     path: 'notification',
     icon: <NotificationsOutlinedIcon fontSize="inherit" />,
   },
+  {
+    name: 'Vouchers',
+    path: 'vouchers',
+    icon: <VoucherIcon />,
+  },
   // {
   //   name: 'Reports',
   //   path: 'reports',

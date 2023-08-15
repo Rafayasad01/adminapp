@@ -7,10 +7,10 @@ import { useAppSelector } from '../../redux/redux-hooks';
 function MainLayout() {
   const authState = useAppSelector((state) => state.authState);
   if (authState.user && authState.user.isSuperAdmin) {
-    return <Navigate to="../admin/auth/login" />
+    return <Navigate to="../admin/auth/login" />;
   }
   if (!authState.user) {
-    return <Navigate to="../admin/auth/login" />
+    return <Navigate to="../admin/auth/login" />;
   }
 
   return (

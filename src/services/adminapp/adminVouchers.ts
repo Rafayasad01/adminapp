@@ -1,0 +1,26 @@
+import network from '../../utils/network';
+
+const listVouchers = (tenant: string, page: number, size: number) => {
+  const searchParams = new URLSearchParams({
+    limit: size.toString(),
+    offset: (page * size).toString(),
+  });
+  return network.get(`voucher/list/${tenant}?${searchParams}`);
+};
+
+const createVoucher = (tenant: string, data: any) => {
+  return network.post(`voucher/create/${tenant}`, data);
+};
+const updateVoucher = (tenant: string, id: string, data: any) => {
+  return network.post(`voucher/update/${tenant}/${id}`, data);
+};
+const deleteVoucher = (tenant: string, id: string) => {
+  return network.post(`voucher/delete/${tenant}/${id}`, {});
+};
+
+export default {
+  listVouchers,
+  createVoucher,
+  updateVoucher,
+  deleteVoucher,
+};

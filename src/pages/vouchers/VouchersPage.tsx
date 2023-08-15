@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import dayjs from 'dayjs';
+import TablePagination from '@mui/material/TablePagination';
 import IconButton from '@mui/material/IconButton';
 import Divider from '@mui/material/Divider';
 import Menu from '@mui/material/Menu';
@@ -22,18 +24,26 @@ import TopBar from '../../components/common/TopBar';
 import VouchersPromoCreatePopup from './VouchersPromoCreatePopup';
 import VouchersReferralCreatePopup from './VouchersReferralCreatePopup';
 import VouchersPromoEditPopup from './VouchersPromoEditPopup';
+import Service from '../../services/adminapp/adminVouchers';
+import { useAppSelector } from '../../redux/redux-hooks';
 
 const options = ['Edit', 'Delete'];
 const ITEM_HEIGHT = 48;
 function VouchersPage() {
+  const authState: any = useAppSelector((state) => state.authState);
+  const [list, setList] = useState<any>([]);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [search, setSearch] = useState('');
   const [openDialog, setOpenDialog] = useState(false);
   const [isCheckedAll, setIsCheckedAll] = useState(false);
-
+  const [page, setPage] = useState<number>(0);
+  const [total, setTotal] = useState<number>(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState<number>(10);
   const [vouchersPromoDialog, setVouchersPromoDialog] = useState(false);
   const [vouchersPromoEditDialog, setVouchersPromoEditDialog] = useState(false);
   const [vouchersReferralDialog, setVouchersReferralDialog] = useState(false);
+  const [editItem, setEditItem] = useState<any>(null);
+  const [deleteItemId, setDeleteItemId] = useState<string>('');
 
   const open = Boolean(anchorEl);
 
@@ -41,12 +51,29 @@ function VouchersPage() {
     setIsCheckedAll(event.target.checked);
   };
 
-  const handleDialogClose = () => {
+  const handleDialogClose = (deleteVoucher: boolean) => {
+    if (deleteVoucher) {
+      if (deleteItemId) {
+        Service.deleteVoucher(authState.user.tenant, deleteItemId).then(
+          (response) => {
+            if (response.data.success) {
+              const newList = list.filter(
+                (item: any) => item.id !== deleteItemId
+              );
+              setList(newList);
+            }
+          }
+        );
+      }
+    }
+    setDeleteItemId('');
     setOpenDialog(false);
   };
 
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+  const handleClick = (event: React.MouseEvent<HTMLElement>, id: string) => {
     setAnchorEl(event.currentTarget);
+    setEditItem(list.find((item: any) => item.id === id));
+    setDeleteItemId(id);
   };
   const handleClose = () => {
     setAnchorEl(null);
@@ -55,23 +82,95 @@ function VouchersPage() {
     setAnchorEl(null);
     if (option === 'Edit') {
       setVouchersPromoEditDialog(true);
-    } else {
+    }
+    if (option === 'Delete') {
       setOpenDialog(true);
     }
   };
   const handleClickSearch = (event: any) => {
     setSearch(event.target.value as string);
   };
+
+  const handleChangePage = (
+    event: React.MouseEvent<HTMLButtonElement> | null,
+    newPage: number
+  ) => {
+    setPage(newPage);
+    // offset? ,limit rowsperpage hoga ofset page * rowsperPage
+    if (search === '' || search === null || search === undefined) {
+      Service.listVouchers(authState.user.tenant, newPage, rowsPerPage).then(
+        (response) => {
+          setList(response.data.data.result);
+          setTotal(response.data.data.totalResults);
+        }
+      );
+    }
+  };
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const newRowPerPage = parseInt(event.target.value, 10);
+    const newPage = 0;
+    setRowsPerPage(newRowPerPage);
+    setPage(newPage);
+    if (search === '' || search === null || search === undefined) {
+      Service.listVouchers(authState.user.tenant, newPage, rowsPerPage).then(
+        (response) => {
+          setList(response.data.data.result);
+          setTotal(response.data.data.totalResults);
+        }
+      );
+    }
+  };
+
+  useEffect(() => {
+    Service.listVouchers(authState.user.tenant, page, rowsPerPage)
+      .then((response: any) => {
+        setList(response.data.data.result);
+        setTotal(response.data.data.totalResults);
+      })
+      .catch((error) => {
+        console.log('error::::::::', error);
+      });
+  }, [authState.user.tenant, page, rowsPerPage]);
+
+  const createFormHandler = (data: any) => {
+    Service.createVoucher(authState.user.tenant, data).then((response) => {
+      if (response.data.success) {
+        const newList = [...list, response.data.data];
+        setList(newList);
+      }
+    });
+  };
+
+  const updateFormHandler = (id: string, data: any) => {
+    Service.updateVoucher(authState.user.tenant, id, data).then(
+      (response: any) => {
+        if (response.data.success) {
+          const newList = [
+            ...list.filter((item: any) => item.id !== response.data.data.id),
+            response.data.data,
+          ];
+          setList(newList);
+        }
+      }
+    );
+  };
   return (
     <>
       <VouchersPromoCreatePopup
         vouchersPromoDialog={vouchersPromoDialog}
         setVouchersPromoDialog={setVouchersPromoDialog}
+        callback={createFormHandler}
       />
-      <VouchersPromoEditPopup
-        vouchersPromoEditDialog={vouchersPromoEditDialog}
-        setVouchersPromoEditDialog={setVouchersPromoEditDialog}
-      />
+      {editItem ? (
+        <VouchersPromoEditPopup
+          vouchersPromoEditDialog={vouchersPromoEditDialog}
+          setVouchersPromoEditDialog={setVouchersPromoEditDialog}
+          item={editItem}
+          callback={updateFormHandler}
+        />
+      ) : null}
       <VouchersReferralCreatePopup
         vouchersReferralDialog={vouchersReferralDialog}
         setVouchersReferralDialog={setVouchersReferralDialog}
@@ -172,106 +271,78 @@ function VouchersPage() {
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>
-                    <Checkbox
-                      icon={
-                        <CheckBoxOutlineBlankOutlinedIcon className=" text-[#E4E4E4]" />
-                      }
-                      checkedIcon={
-                        <CheckBoxOutlinedIcon className="text-[#1D1D1D]" />
-                      }
-                      checked={isCheckedAll}
-                    />
-                  </td>
-                  <td>
-                    <div className="avatar flex flex-row items-center">
-                      <div className="flex flex-col items-start justify-start">
-                        <span className="text-sm font-semibold">WEEK18</span>
-                        <span className="text-xs font-normal text-[#6A6A6A]">
-                          Referral
-                        </span>
-                      </div>
-                    </div>
-                  </td>
-                  <td>02 Mar, 2023</td>
-                  <td>02 Apr, 2023</td>
-                  <td>$18</td>
-                  <td>08</td>
-                  <td>$50</td>
-                  <td>Amount</td>
-                  <td>05</td>
-                  <td>30</td>
-                  <td>
-                    <span className="badge badge-success">ACTIVE</span>
-                  </td>
-                  <td>
-                    <div className="flex flex-row-reverse">
-                      <IconButton
-                        className="btn-dot"
-                        aria-label="more"
-                        id="long-button"
-                        aria-controls={open ? 'long-menu' : undefined}
-                        aria-expanded={open ? 'true' : undefined}
-                        aria-haspopup="true"
-                        onClick={handleClick}
-                      >
-                        <MoreVertIcon />
-                      </IconButton>
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <Checkbox
-                      icon={
-                        <CheckBoxOutlineBlankOutlinedIcon className=" text-[#E4E4E4]" />
-                      }
-                      checkedIcon={
-                        <CheckBoxOutlinedIcon className="text-[#1D1D1D]" />
-                      }
-                      checked={isCheckedAll}
-                    />
-                  </td>
-                  <td>
-                    <div className="avatar flex flex-row items-center">
-                      <div className="flex flex-col items-start justify-start">
-                        <span className="text-sm font-semibold">HAPPY10</span>
-                        <span className="text-xs font-normal text-[#6A6A6A]">
-                          Promo
-                        </span>
-                      </div>
-                    </div>
-                  </td>
-                  <td>02 Mar, 2023</td>
-                  <td>02 Apr, 2023</td>
-                  <td>$10</td>
-                  <td>10</td>
-                  <td>$30</td>
-                  <td>Amount</td>
-                  <td>01</td>
-                  <td>01</td>
-                  <td>
-                    <span className="badge badge-danger">Inactive</span>
-                  </td>
-                  <td>
-                    <div className="flex flex-row-reverse">
-                      <IconButton
-                        className="btn-dot"
-                        aria-label="more"
-                        id="long-button"
-                        aria-controls={open ? 'long-menu' : undefined}
-                        aria-expanded={open ? 'true' : undefined}
-                        aria-haspopup="true"
-                        onClick={handleClick}
-                      >
-                        <MoreVertIcon />
-                      </IconButton>
-                    </div>
-                  </td>
-                </tr>
+                {list &&
+                  list.map((item: any) => {
+                    return (
+                      <tr key={item.id}>
+                        <td>
+                          <Checkbox
+                            icon={
+                              <CheckBoxOutlineBlankOutlinedIcon className=" text-[#E4E4E4]" />
+                            }
+                            checkedIcon={
+                              <CheckBoxOutlinedIcon className="text-[#1D1D1D]" />
+                            }
+                            checked={isCheckedAll}
+                          />
+                        </td>
+                        <td>
+                          <div className="avatar flex flex-row items-center">
+                            <div className="flex flex-col items-start justify-start">
+                              <span className="text-sm font-semibold">
+                                {item.name}
+                              </span>
+                              <span className="text-xs font-normal text-[#6A6A6A]">
+                                {item.type}
+                              </span>
+                            </div>
+                          </div>
+                        </td>
+                        <td>{dayjs(item.validFrom).format('DD MMM, YYYY')}</td>
+                        <td>{dayjs(item.validTill).format('DD MMM, YYYY')}</td>
+                        <td>${item.value}</td>
+                        <td>{item.minProduct}</td>
+                        <td>${item.minAmount}</td>
+                        <td>{item.discountType}</td>
+                        <td>{item.redeemCount}</td>
+                        <td>{item.maxRedeem}</td>
+                        <td>
+                          {item.status === 'Active' ? (
+                            <span className="badge badge-success">ACTIVE</span>
+                          ) : (
+                            <span className="badge badge-danger">INACTIVE</span>
+                          )}
+                        </td>
+                        <td>
+                          <div className="flex flex-row-reverse">
+                            <IconButton
+                              className="btn-dot"
+                              aria-label="more"
+                              id="long-button"
+                              aria-controls={open ? 'long-menu' : undefined}
+                              aria-expanded={open ? 'true' : undefined}
+                              aria-haspopup="true"
+                              onClick={(event) => handleClick(event, item.id)}
+                            >
+                              <MoreVertIcon />
+                            </IconButton>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
               </tbody>
             </table>
+          </div>
+          <div className="mt-3 flex w-[100%] justify-center py-3">
+            <TablePagination
+              component="div"
+              count={total}
+              page={page}
+              onPageChange={handleChangePage}
+              rowsPerPage={rowsPerPage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+            />
           </div>
         </div>
       </div>
@@ -302,7 +373,7 @@ function VouchersPage() {
       </Menu>
       <Dialog
         open={openDialog}
-        onClose={handleDialogClose}
+        onClose={() => handleDialogClose(false)}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
@@ -344,7 +415,7 @@ function VouchersPage() {
             sx={{ width: '140px' }}
             variant="contained"
             className="btn-black-outline mr-3"
-            onClick={handleDialogClose}
+            onClick={() => handleDialogClose(true)}
           >
             Yes, Confirm
           </Button>
@@ -352,7 +423,7 @@ function VouchersPage() {
             sx={{ width: '140px' }}
             variant="contained"
             className="btn-black-fill btn-icon"
-            onClick={handleDialogClose}
+            onClick={() => handleDialogClose(false)}
           >
             No, Cancel
           </Button>

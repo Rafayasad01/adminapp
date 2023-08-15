@@ -4,7 +4,7 @@ import Button from '@mui/material/Button';
 import Input from '@mui/material/Input';
 import dayjs from 'dayjs';
 import '../../assets/css/PopupStyle.css';
-import { useForm } from "react-hook-form";
+import { useForm } from 'react-hook-form';
 import { AppUserAddress } from '../../interfaces/app-user.interface';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
@@ -17,12 +17,21 @@ type Props = {
   callback: Function;
 };
 
+function DriversAddressEditPopup({
+  openFormDialog,
+  setOpenFormDialog,
+  formData,
+  callback,
+}: Props) {
+  const [formType, setFormType] = useState<any>('Home');
 
-
-function DriversAddressEditPopup({ openFormDialog, setOpenFormDialog, formData, callback }: Props) {
-  const [formType, setFormType] = useState<any>('Home')
-
-  const { register, handleSubmit, watch, formState: { errors }, control } = useForm<AppUserAddress>();
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+    control,
+  } = useForm<AppUserAddress>();
 
   const handleFormClose = () => setOpenFormDialog(false);
 
@@ -36,7 +45,6 @@ function DriversAddressEditPopup({ openFormDialog, setOpenFormDialog, formData, 
     if (formData) {
       setFormType(formData.type);
     }
-
   }, []);
 
   return (
@@ -62,9 +70,14 @@ function DriversAddressEditPopup({ openFormDialog, setOpenFormDialog, formData, 
                     className="FormInput"
                     id="name"
                     disableUnderline
-                    {...register("name", { required: "Name is required", value: formData.name })}
+                    {...register('name', {
+                      required: 'Name is required',
+                      value: formData.name,
+                    })}
                   />
-                  {errors.name && <span role="alert">{errors.name?.message}</span>}
+                  {errors.name && (
+                    <span role="alert">{errors.name?.message}</span>
+                  )}
                 </FormControl>
                 <FormControl className="FormControl" variant="standard">
                   <label className="FormLabel">Type</label>
@@ -74,19 +87,22 @@ function DriversAddressEditPopup({ openFormDialog, setOpenFormDialog, formData, 
                     labelId="demo-simple-select-label"
                     disableUnderline
                     value={formType}
-                    {...register("type", { required: "type is required", value: formData.type })}
+                    {...register('type', {
+                      required: 'type is required',
+                      value: formData.type,
+                    })}
                     onChange={(event) => {
                       setFormType(event.target.value);
                     }}
-
                   >
                     <MenuItem value="Home">Home</MenuItem>
                     <MenuItem value="Office">Office</MenuItem>
                     <MenuItem value="Other">Other</MenuItem>
                   </Select>
-                  {errors.type && <span role="alert">{errors.type?.message}</span>}
+                  {errors.type && (
+                    <span role="alert">{errors.type?.message}</span>
+                  )}
                 </FormControl>
-
               </div>
               <div className="FormFields">
                 <FormControl className="FormControl" variant="standard">
@@ -96,7 +112,7 @@ function DriversAddressEditPopup({ openFormDialog, setOpenFormDialog, formData, 
                     className="FormInput"
                     id="latitude"
                     disableUnderline
-                    {...register("latitude", { value: formData.latitude })}
+                    {...register('latitude', { value: formData.latitude })}
                   />
                 </FormControl>
                 <FormControl className="FormControl" variant="standard">
@@ -106,7 +122,7 @@ function DriversAddressEditPopup({ openFormDialog, setOpenFormDialog, formData, 
                     className="FormInput"
                     id="longitude"
                     disableUnderline
-                    {...register("longitude", { value: formData.longitude })}
+                    {...register('longitude', { value: formData.longitude })}
                   />
                 </FormControl>
               </div>
@@ -117,9 +133,14 @@ function DriversAddressEditPopup({ openFormDialog, setOpenFormDialog, formData, 
                     className="FormInput"
                     id="address"
                     disableUnderline
-                    {...register("address", { required: "Address is required", value: formData.address })}
+                    {...register('address', {
+                      required: 'Address is required',
+                      value: formData.address,
+                    })}
                   />
-                  {errors.address && <span role="alert">{errors.address?.message}</span>}
+                  {errors.address && (
+                    <span role="alert">{errors.address?.message}</span>
+                  )}
                 </FormControl>
               </div>
             </div>

@@ -11,7 +11,7 @@ import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
 
 import '../../assets/css/PopupStyle.css';
-import { useForm } from "react-hook-form";
+import { useForm } from 'react-hook-form';
 import { AppUser } from '../../interfaces/app-user.interface';
 
 type Props = {
@@ -25,14 +25,20 @@ function CustomersEditPopup({
   openFormDialog,
   setOpenFormDialog,
   formData,
-  callback
+  callback,
 }: Props) {
   const [showPassword, setShowPassword] = useState(false);
   const [avatar, setAvatar] = useState<any>(null);
   const [avatarName, setAvatarName] = useState<string>('');
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
-  const { register, handleSubmit, watch, formState: { errors }, control } = useForm<AppUser>();
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+    control,
+  } = useForm<AppUser>();
 
   const handleFormClose = () => setOpenFormDialog(false);
   const handleRemoveImage = () => {
@@ -53,14 +59,13 @@ function CustomersEditPopup({
 
   useEffect(() => {
     if (formData && formData.avatar !== null) {
-      let avatar = formData.avatar.split("/").slice(-1)[0];
+      let avatar = formData.avatar.split('/').slice(-1)[0];
       const regexExp = /[a-z,0-9,-]{36}/;
       if (regexExp.test(avatar)) {
-        avatar = avatar.split("-").splice(5)[0];
+        avatar = avatar.split('-').splice(5)[0];
       }
       setAvatarName(avatar);
     }
-
   }, []);
 
   return (
@@ -88,9 +93,14 @@ function CustomersEditPopup({
                       id="first_name"
                       placeholder="Vincent"
                       disableUnderline
-                      {...register("first_name", { required: "First name is required", value: formData.firstName })}
+                      {...register('first_name', {
+                        required: 'First name is required',
+                        value: formData.firstName,
+                      })}
                     />
-                    {errors.first_name && <span role="alert">{errors.first_name?.message}</span>}
+                    {errors.first_name && (
+                      <span role="alert">{errors.first_name?.message}</span>
+                    )}
                   </FormControl>
                   <FormControl className="FormControl" variant="standard">
                     <label className="FormLabel">Last Name</label>
@@ -99,9 +109,14 @@ function CustomersEditPopup({
                       id="last_name"
                       placeholder="Boyd"
                       disableUnderline
-                      {...register("last_name", { required: "Last name is required", value: formData.lastName })}
+                      {...register('last_name', {
+                        required: 'Last name is required',
+                        value: formData.lastName,
+                      })}
                     />
-                    {errors.last_name && <span role="alert">{errors.last_name?.message}</span>}
+                    {errors.last_name && (
+                      <span role="alert">{errors.last_name?.message}</span>
+                    )}
                   </FormControl>
                 </div>
                 <div className="FormFields">
@@ -112,9 +127,14 @@ function CustomersEditPopup({
                       id="phone"
                       placeholder="+1 536 569"
                       disableUnderline
-                      {...register("phone", { required: "Phone number is required", value: formData.phone })}
+                      {...register('phone', {
+                        required: 'Phone number is required',
+                        value: formData.phone,
+                      })}
                     />
-                    {errors.phone && <span role="alert">{errors.phone?.message}</span>}
+                    {errors.phone && (
+                      <span role="alert">{errors.phone?.message}</span>
+                    )}
                   </FormControl>
                   <FormControl className="FormControl" variant="standard">
                     <label className="FormLabel">Email Address</label>
@@ -124,7 +144,7 @@ function CustomersEditPopup({
                       placeholder="Vincent.96@gmail.com"
                       disableUnderline
                       disabled
-                      {...register("email", { value: formData.email })}
+                      {...register('email', { value: formData.email })}
                     />
                   </FormControl>
                 </div>
@@ -136,7 +156,9 @@ function CustomersEditPopup({
                       id="postal_code"
                       placeholder="M6G 596"
                       disableUnderline
-                      {...register("postal_code", { value: formData.postalCode })}
+                      {...register('postal_code', {
+                        value: formData.postalCode,
+                      })}
                     />
                   </FormControl>
                 </div>
@@ -148,24 +170,28 @@ function CustomersEditPopup({
                       style={{ display: 'none' }}
                       id="raised-button-file"
                       type="file"
-                      {...register("avatar")}
+                      {...register('avatar')}
                       onChange={(
                         event: React.InputHTMLAttributes<HTMLInputElement>
                       ) => {
                         handleFileChange(event);
                       }}
-
                     />
                     <label htmlFor="raised-button-file" className="ImageLabel">
                       <Button component="span" className="ImageBtn">
-                        <FileUploadOutlinedIcon sx={{ marginRight: '0.5rem' }} />
+                        <FileUploadOutlinedIcon
+                          sx={{ marginRight: '0.5rem' }}
+                        />
                         Upload image
                       </Button>
                     </label>
                     {avatarName ? (
                       <div className="ShowImageBox">
                         <label className="ShowImageLabel">{avatarName}</label>
-                        <IconButton className="btn-dot" onClick={handleRemoveImage}>
+                        <IconButton
+                          className="btn-dot"
+                          onClick={handleRemoveImage}
+                        >
                           <CloseOutlinedIcon
                             sx={{
                               color: '#1D1D1D',

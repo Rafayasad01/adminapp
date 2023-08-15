@@ -7,7 +7,7 @@ import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
 import IconButton from '@mui/material/IconButton';
 import TextField from '@mui/material/TextField';
-import { useForm } from "react-hook-form";
+import { useForm } from 'react-hook-form';
 
 import '../../assets/css/PopupStyle.css';
 import { CategoryService } from '../../interfaces/category.interface';
@@ -18,11 +18,21 @@ type Props = {
   callback: Function;
 };
 
-function CategoriesServicesCreatePopup({ openFormDialog, setOpenFormDialog, callback }: Props) {
+function CategoriesServicesCreatePopup({
+  openFormDialog,
+  setOpenFormDialog,
+  callback,
+}: Props) {
   const [image, setImage] = useState<any>(null);
   const [imageName, setImageName] = useState<string>('');
 
-  const { register, handleSubmit, watch, formState: { errors }, control } = useForm<CategoryService>();
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+    control,
+  } = useForm<CategoryService>();
   const onSubmit = (data: CategoryService) => {
     data.icon = image;
     setOpenFormDialog(false);
@@ -61,10 +71,12 @@ function CategoriesServicesCreatePopup({ openFormDialog, setOpenFormDialog, call
                 <Input
                   className="FormInput"
                   id="name"
-                  {...register("name", { required: "Name is required" })}
+                  {...register('name', { required: 'Name is required' })}
                   disableUnderline
                 />
-                {errors.name && <span role="alert">{errors.name?.message}</span>}
+                {errors.name && (
+                  <span role="alert">{errors.name?.message}</span>
+                )}
               </FormControl>
             </div>
             <div className="FormFields">
@@ -74,10 +86,14 @@ function CategoriesServicesCreatePopup({ openFormDialog, setOpenFormDialog, call
                   className="FormInput"
                   id="name"
                   type="number"
-                  {...register("quantity", { required: "Quantity is required" })}
+                  {...register('quantity', {
+                    required: 'Quantity is required',
+                  })}
                   disableUnderline
                 />
-                {errors.quantity && <span role="alert">{errors.quantity?.message}</span>}
+                {errors.quantity && (
+                  <span role="alert">{errors.quantity?.message}</span>
+                )}
               </FormControl>
               <FormControl className="FormControl" variant="standard">
                 <label className="FormLabel">Price</label>
@@ -85,10 +101,12 @@ function CategoriesServicesCreatePopup({ openFormDialog, setOpenFormDialog, call
                   className="FormInput"
                   id="name"
                   type="number"
-                  {...register("price", { required: "Price is required" })}
+                  {...register('price', { required: 'Price is required' })}
                   disableUnderline
                 />
-                {errors.price && <span role="alert">{errors.price?.message}</span>}
+                {errors.price && (
+                  <span role="alert">{errors.price?.message}</span>
+                )}
               </FormControl>
             </div>
             <div className="FormField">
@@ -104,7 +122,7 @@ function CategoriesServicesCreatePopup({ openFormDialog, setOpenFormDialog, call
                   rows={2}
                   defaultValue=""
                   placeholder="Write Description"
-                  {...register("desc")}
+                  {...register('desc')}
                 />
               </FormControl>
             </div>
@@ -116,7 +134,7 @@ function CategoriesServicesCreatePopup({ openFormDialog, setOpenFormDialog, call
                   style={{ display: 'none' }}
                   id="raised-button-file"
                   type="file"
-                  {...register("icon", { required: "Icon is required" })}
+                  {...register('icon', { required: 'Icon is required' })}
                   onChange={(
                     event: React.InputHTMLAttributes<HTMLInputElement>
                   ) => {
