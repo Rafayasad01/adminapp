@@ -16,8 +16,8 @@ function CustomersDetailPage() {
     Service.getDetailService(id).then((item: any) => {
       const newAddresses: string[] = [];
       item.data.data.appUserAddress.forEach((addressItem: any) => {
-        newAddresses.push(addressItem.address)
-      })
+        newAddresses.push(addressItem.address);
+      });
       setAddresses(newAddresses);
       setDetail(item.data.data);
     });
@@ -38,7 +38,20 @@ function CustomersDetailPage() {
                     className="mr-4 w-[100px] rounded-full"
                   />
                 ) : (
-                  <Avatar className="avatar flex flex-row items-center" sx={{ bgcolor: '#1D1D1D', width: 100, height: 100, textTransform: 'uppercase', fontSize: '25px', marginRight: '10px' }}>{detail.firstName.charAt(0)}{detail.lastName.charAt(0)}</Avatar>
+                  <Avatar
+                    className="avatar flex flex-row items-center"
+                    sx={{
+                      bgcolor: '#1D1D1D',
+                      width: 100,
+                      height: 100,
+                      textTransform: 'uppercase',
+                      fontSize: '25px',
+                      marginRight: '10px',
+                    }}
+                  >
+                    {detail.firstName.charAt(0)}
+                    {detail.lastName.charAt(0)}
+                  </Avatar>
                 )}
                 <div className="flex flex-col justify-start justify-items-center">
                   <span className="font-open-sans text-xl font-semibold text-[#1A1A1A]">
@@ -47,7 +60,11 @@ function CustomersDetailPage() {
                   <span className="font-sm font-open-sans text-sm text-[#6A6A6A]">
                     {detail.phone}
                   </span>
-                  <span className={`font-sm mt-2 font-open-sans text-sm ${detail.isActive ? 'text-[#29CC97]' : 'text-[#f50057]'}`}>
+                  <span
+                    className={`font-sm mt-2 font-open-sans text-sm ${
+                      detail.isActive ? 'text-[#29CC97]' : 'text-[#f50057]'
+                    }`}
+                  >
                     {detail.isActive ? 'Active' : 'Inactive'}
                   </span>
                 </div>

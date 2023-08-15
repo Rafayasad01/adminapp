@@ -6,7 +6,7 @@ import Input from '@mui/material/Input';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
 import IconButton from '@mui/material/IconButton';
-import { useForm } from "react-hook-form";
+import { useForm } from 'react-hook-form';
 import { Category } from '../../interfaces/category.interface';
 import category from '../../services/adminapp/adminCategory';
 
@@ -23,21 +23,26 @@ function CategoriesEditPopup({
   openFormDialog,
   setOpenFormDialog,
   formData,
-  callback
+  callback,
 }: Props) {
   const [image, setImage] = useState<any>(null);
   const [imageName, setImageName] = useState<string>('');
 
-  const { register, handleSubmit, watch, formState: { errors }, control } = useForm<Category>();
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+    control,
+  } = useForm<Category>();
   const onSubmit = (data: Category) => {
     data.icon = image;
     setOpenFormDialog(false);
     callback(data);
-
   };
 
   const handleFormClose = () => {
-    setOpenFormDialog(false)
+    setOpenFormDialog(false);
   };
   const handleRemoveImage = () => {
     setImage('');
@@ -50,10 +55,10 @@ function CategoriesEditPopup({
   };
 
   useEffect(() => {
-    let icon = formData.icon.split("/").slice(-1)[0];
+    let icon = formData.icon.split('/').slice(-1)[0];
     const regexExp = /[a-z,0-9,-]{36}/;
     if (regexExp.test(icon)) {
-      icon = icon.split("-").splice(5)[0];
+      icon = icon.split('-').splice(5)[0];
     }
     setImageName(icon);
   }, []);
@@ -83,9 +88,14 @@ function CategoriesEditPopup({
                       type="text"
                       id="name"
                       disableUnderline
-                      {...register("name", { required: true, value: formData.name })}
+                      {...register('name', {
+                        required: true,
+                        value: formData.name,
+                      })}
                     />
-                    {errors.name?.type === 'required' && <span role="alert">Category name is required</span>}
+                    {errors.name?.type === 'required' && (
+                      <span role="alert">Category name is required</span>
+                    )}
                   </FormControl>
                 </div>
                 <div className="FormField">
@@ -94,7 +104,7 @@ function CategoriesEditPopup({
                     <input
                       accept="image/*"
                       style={{ display: 'none' }}
-                      {...register("icon", { required: false })}
+                      {...register('icon', { required: false })}
                       id="raised-button-file"
                       type="file"
                       onChange={(
@@ -106,7 +116,9 @@ function CategoriesEditPopup({
                     />
                     <label htmlFor="raised-button-file" className="ImageLabel">
                       <Button component="span" className="ImageBtn">
-                        <FileUploadOutlinedIcon sx={{ marginRight: '0.5rem' }} />
+                        <FileUploadOutlinedIcon
+                          sx={{ marginRight: '0.5rem' }}
+                        />
                         Upload image
                       </Button>
                     </label>
@@ -114,7 +126,10 @@ function CategoriesEditPopup({
                     {imageName ? (
                       <div className="ShowImageBox">
                         <label className="ShowImageLabel">{imageName}</label>
-                        <IconButton className="btn-dot" onClick={handleRemoveImage}>
+                        <IconButton
+                          className="btn-dot"
+                          onClick={handleRemoveImage}
+                        >
                           <CloseOutlinedIcon
                             sx={{
                               color: '#1D1D1D',
@@ -150,7 +165,6 @@ function CategoriesEditPopup({
                     padding: '0.375rem 2rem !important',
                   }}
                 />
-
               </div>
             </>
           )}

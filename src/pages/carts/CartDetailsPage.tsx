@@ -21,14 +21,14 @@ function CartDetailsPage() {
         //console.log('item', item.data.data);
         setViewData(item.data.data);
       }
-    })
-  }, [])
+    });
+  }, []);
   return (
     <>
       <TopBar isNestedRoute title="View Cart" />
       <div className="container py-3">
-        <div className="flex flex-center justify-center">
-          <div className="w-[60%] mb-auto min-h-[600px] rounded-lg bg-[#fff] shadow-lg">
+        <div className="flex-center flex justify-center">
+          <div className="mb-auto min-h-[600px] w-[60%] rounded-lg bg-[#fff] shadow-lg">
             <div className="p-4">
               <div className="flex items-center">
                 {viewData && viewData.status === CART_STATUS_NEW ? (
@@ -72,7 +72,9 @@ function CartDetailsPage() {
                       color="inherit"
                     />
                     <div className="absolute top-0 left-0 bottom-0 right-0 flex items-center justify-center">
-                      <div className="text-xl"><ProcessingIcon /></div>
+                      <div className="text-xl">
+                        <ProcessingIcon />
+                      </div>
                     </div>
                   </div>
                 )}
@@ -87,13 +89,24 @@ function CartDetailsPage() {
                     </span>
                   </div>
                   <div className="font-open-sans text-xs font-normal text-neutral-500">
-                    {dayjs(viewData.updatedDate).isValid() ? (`${dayjs(viewData.updatedDate)?.format('ddd, MMM DD, YYYY | hh:mm:ssA')}`) : "----"}
+                    {dayjs(viewData.updatedDate).isValid()
+                      ? `${dayjs(viewData.updatedDate)?.format(
+                          'ddd, MMM DD, YYYY | hh:mm:ssA'
+                        )}`
+                      : '----'}
                   </div>
-                  <div className={`font-open-sans text-sm font-semibold ${viewData.status === CART_STATUS_NEW ? 'text-blue-500' : 'text-green-500'}`}>
+                  <div
+                    className={`font-open-sans text-sm font-semibold ${
+                      viewData.status === CART_STATUS_NEW
+                        ? 'text-blue-500'
+                        : 'text-green-500'
+                    }`}
+                  >
                     {viewData.status}
                   </div>
                 </div>
-                <div className="flex-grow" /></div>
+                <div className="flex-grow" />
+              </div>
               <hr className="my-4 h-[1px] w-full bg-neutral-200" />
               <div className="grid grid-cols-2">
                 <div className="flex flex-col">
@@ -103,19 +116,24 @@ function CartDetailsPage() {
                   <div className="mt-2 flex items-center gap-2">
                     <DateRangeIcon className="mr-2 text-xl text-neutral-900" />
                     <div className="font-open-sans text-xs font-normal text-neutral-500">
-                      {dayjs(viewData.pickupDateTime).isValid() ? dayjs(viewData.pickupDateTime)?.format('ddd, MMM DD, YYYY') : "----"}
+                      {dayjs(viewData.pickupDateTime).isValid()
+                        ? dayjs(viewData.pickupDateTime)?.format(
+                            'ddd, MMM DD, YYYY'
+                          )
+                        : '----'}
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
                     <AccessTimeIcon className="mr-2 text-xl text-neutral-900" />
                     <div className="font-open-sans text-xs font-normal text-neutral-500">
-                      {dayjs(viewData.pickupDateTime).isValid() ?
-                        `
+                      {dayjs(viewData.pickupDateTime).isValid()
+                        ? `
                       ${dayjs(viewData.pickupDateTime)?.format('HH:mm:ssA')} -
-                      ${dayjs(viewData.pickupDateTime)?.add(1, 'hours').format('HH:mm:ssA')}
+                      ${dayjs(viewData.pickupDateTime)
+                        ?.add(1, 'hours')
+                        .format('HH:mm:ssA')}
                       `
-                        : "----"}
-
+                        : '----'}
                     </div>
                   </div>
                 </div>
@@ -126,18 +144,24 @@ function CartDetailsPage() {
                   <div className="mt-2 flex items-center gap-2">
                     <DateRangeIcon className="mr-2 text-xl text-neutral-900" />
                     <div className="font-open-sans text-xs font-normal text-neutral-500">
-                      {dayjs(viewData.dropDateTime).isValid() ? dayjs(viewData.dropDateTime)?.format('ddd, MMM DD, YYYY') : "----"}
+                      {dayjs(viewData.dropDateTime).isValid()
+                        ? dayjs(viewData.dropDateTime)?.format(
+                            'ddd, MMM DD, YYYY'
+                          )
+                        : '----'}
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
                     <AccessTimeIcon className="mr-2 text-xl text-neutral-900" />
                     <div className="font-open-sans text-xs font-normal text-neutral-500">
-                      {dayjs(viewData.dropDateTime).isValid() ?
-                        `
+                      {dayjs(viewData.dropDateTime).isValid()
+                        ? `
                       ${dayjs(viewData.dropDateTime)?.format('HH:mm:ssA')} -
-                      ${dayjs(viewData.dropDateTime)?.add(1, 'hours').format('HH:mm:ssA')}
+                      ${dayjs(viewData.dropDateTime)
+                        ?.add(1, 'hours')
+                        .format('HH:mm:ssA')}
                       `
-                        : "----"}
+                        : '----'}
                     </div>
                   </div>
                 </div>
@@ -146,35 +170,38 @@ function CartDetailsPage() {
               <div className="flex items-center">
                 <LocationOnOutlinedIcon className="mr-2 text-xl text-neutral-900" />
                 <div className="font-open-sans text-sm font-normal text-neutral-500">
-                  {viewData.userAddress && viewData.userAddress.address ? viewData.userAddress.address : "No Address"}
+                  {viewData.userAddress && viewData.userAddress.address
+                    ? viewData.userAddress.address
+                    : 'No Address'}
                 </div>
               </div>
               <hr className="my-3 h-[1px] w-full bg-neutral-200" />
-              {viewData.appUserCartItems && viewData.appUserCartItems.map((item: any, index: number) => {
-
-                return (
-                  <div key={index}>
-                    {index > 0 && <hr className="my-2 h-[1px] w-full bg-neutral-200" />}
-                    <div className="flex items-center" >
-                      <img
-                        className="mr-2 aspect-square w-11 rounded-full"
-                        src={item.icon}
-                        alt=""
-                      />
-                      <div className="flex-grow font-open-sans text-xs font-semibold text-neutral-900">
-                        {item.name}
-                      </div>
-                      <div className="mx-4 text-right font-open-sans text-xs font-normal text-neutral-500">
-                        {item.quantity} Items
-                      </div>
-                      <div className="text-right font-open-sans text-sm font-semibold text-neutral-900">
-                        ${item.unitPrice}
+              {viewData.appUserCartItems &&
+                viewData.appUserCartItems.map((item: any, index: number) => {
+                  return (
+                    <div key={index}>
+                      {index > 0 && (
+                        <hr className="my-2 h-[1px] w-full bg-neutral-200" />
+                      )}
+                      <div className="flex items-center">
+                        <img
+                          className="mr-2 aspect-square w-11 rounded-full"
+                          src={item.icon}
+                          alt=""
+                        />
+                        <div className="flex-grow font-open-sans text-xs font-semibold text-neutral-900">
+                          {item.name}
+                        </div>
+                        <div className="mx-4 text-right font-open-sans text-xs font-normal text-neutral-500">
+                          {item.quantity} Items
+                        </div>
+                        <div className="text-right font-open-sans text-sm font-semibold text-neutral-900">
+                          ${item.unitPrice}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                )
-
-              })}
+                  );
+                })}
               <hr className="my-2 h-[1px] w-full bg-neutral-200" />
               <div className="flex flex-col gap-2">
                 <div className="flex items-center justify-between">
@@ -213,7 +240,7 @@ function CartDetailsPage() {
             </div>
           </div>
         </div>
-      </div >
+      </div>
     </>
   );
 }

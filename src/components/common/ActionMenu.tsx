@@ -3,48 +3,48 @@ import MenuItem from '@mui/material/MenuItem';
 import { useNavigate } from 'react-router-dom';
 
 type Props = {
-    open: boolean;
-    anchorEl: any;
-    setAnchorEl: React.Dispatch<React.SetStateAction<null | HTMLElement>>;
-    options: string[];
-    callback: Function;
+  open: boolean;
+  anchorEl: any;
+  setAnchorEl: React.Dispatch<React.SetStateAction<null | HTMLElement>>;
+  options: string[];
+  callback: Function;
 };
 const ITEM_HEIGHT = 48;
 function ActionMenu({ open, anchorEl, setAnchorEl, options, callback }: Props) {
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
-    const handleSelectedMenuClose = (option: string) => {
-        setAnchorEl(null);
-        callback(option);
-    };
-    return (
-        <Menu
-            id="long-menu"
-            MenuListProps={{
-                'aria-labelledby': 'long-button',
-            }}
-            anchorEl={anchorEl}
-            open={open}
-            onClose={handleClose}
-            PaperProps={{
-                style: {
-                    maxHeight: ITEM_HEIGHT * 4.5,
-                    width: '11ch',
-                },
-            }}
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+  const handleSelectedMenuClose = (option: string) => {
+    setAnchorEl(null);
+    callback(option);
+  };
+  return (
+    <Menu
+      id="long-menu"
+      MenuListProps={{
+        'aria-labelledby': 'long-button',
+      }}
+      anchorEl={anchorEl}
+      open={open}
+      onClose={handleClose}
+      PaperProps={{
+        style: {
+          maxHeight: ITEM_HEIGHT * 4.5,
+          width: '11ch',
+        },
+      }}
+    >
+      {options.map((option) => (
+        <MenuItem
+          key={option}
+          selected={option === 'Pyxis'}
+          onClick={() => handleSelectedMenuClose(option)}
         >
-            {options.map((option) => (
-                <MenuItem
-                    key={option}
-                    selected={option === 'Pyxis'}
-                    onClick={() => handleSelectedMenuClose(option)}
-                >
-                    {option}
-                </MenuItem>
-            ))}
-        </Menu>
-    )
+          {option}
+        </MenuItem>
+      ))}
+    </Menu>
+  );
 }
 
-export default ActionMenu
+export default ActionMenu;

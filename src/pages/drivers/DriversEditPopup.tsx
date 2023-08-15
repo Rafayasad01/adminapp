@@ -9,7 +9,7 @@ import IconButton from '@mui/material/IconButton';
 import dayjs from 'dayjs';
 import '../../assets/css/PopupStyle.css';
 import TimePicker from '../../components/common/TimePicker';
-import { useForm } from "react-hook-form";
+import { useForm } from 'react-hook-form';
 import { AppUserDriverExt } from '../../interfaces/app-user.interface';
 
 type Props = {
@@ -19,13 +19,24 @@ type Props = {
   callback: Function;
 };
 
-function DriversEditPopup({ openFormDialog, setOpenFormDialog, formData, callback }: Props) {
+function DriversEditPopup({
+  openFormDialog,
+  setOpenFormDialog,
+  formData,
+  callback,
+}: Props) {
   const [startTime, setStartTime] = useState<dayjs.Dayjs | null>(null);
   const [endTime, setEndTime] = useState<dayjs.Dayjs | null>(null);
   const [avatar, setAvatar] = useState<any>(null);
   const [avatarName, setAvatarName] = useState<string>('');
 
-  const { register, handleSubmit, watch, formState: { errors }, control } = useForm<AppUserDriverExt>();
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+    control,
+  } = useForm<AppUserDriverExt>();
 
   const handleFormClose = () => setOpenFormDialog(false);
   const handleRemoveImage = () => {
@@ -48,14 +59,13 @@ function DriversEditPopup({ openFormDialog, setOpenFormDialog, formData, callbac
 
   useEffect(() => {
     if (formData && formData.avatar) {
-      let avatar = formData.avatar.split("/").slice(-1)[0];
+      let avatar = formData.avatar.split('/').slice(-1)[0];
       const regexExp = /[a-z,0-9,-]{36}/;
       if (regexExp.test(avatar)) {
-        avatar = avatar.split("-").splice(5)[0];
+        avatar = avatar.split('-').splice(5)[0];
       }
       setAvatarName(avatar);
     }
-
   }, []);
 
   return (
@@ -82,9 +92,14 @@ function DriversEditPopup({ openFormDialog, setOpenFormDialog, formData, callbac
                       className="FormInput"
                       id="first_name"
                       disableUnderline
-                      {...register("first_name", { required: "First name is required", value: formData.firstName })}
+                      {...register('first_name', {
+                        required: 'First name is required',
+                        value: formData.firstName,
+                      })}
                     />
-                    {errors.first_name && <span role="alert">{errors.first_name?.message}</span>}
+                    {errors.first_name && (
+                      <span role="alert">{errors.first_name?.message}</span>
+                    )}
                   </FormControl>
                   <FormControl className="FormControl" variant="standard">
                     <label className="FormLabel">Last name</label>
@@ -92,9 +107,14 @@ function DriversEditPopup({ openFormDialog, setOpenFormDialog, formData, callbac
                       className="FormInput"
                       id="last_name"
                       disableUnderline
-                      {...register("last_name", { required: "Last name is required", value: formData.lastName })}
+                      {...register('last_name', {
+                        required: 'Last name is required',
+                        value: formData.lastName,
+                      })}
                     />
-                    {errors.last_name && <span role="alert">{errors.last_name?.message}</span>}
+                    {errors.last_name && (
+                      <span role="alert">{errors.last_name?.message}</span>
+                    )}
                   </FormControl>
                 </div>
                 <div className="FormField">
@@ -117,9 +137,14 @@ function DriversEditPopup({ openFormDialog, setOpenFormDialog, formData, callbac
                       className="FormInput"
                       id="phone"
                       disableUnderline
-                      {...register("phone", { required: "Phone is required", value: formData.phone })}
+                      {...register('phone', {
+                        required: 'Phone is required',
+                        value: formData.phone,
+                      })}
                     />
-                    {errors.phone && <span role="alert">{errors.phone?.message}</span>}
+                    {errors.phone && (
+                      <span role="alert">{errors.phone?.message}</span>
+                    )}
                   </FormControl>
                   <FormControl className="FormControl" variant="standard">
                     <label className="FormLabel">
@@ -130,9 +155,14 @@ function DriversEditPopup({ openFormDialog, setOpenFormDialog, formData, callbac
                       className="FormInput"
                       id="license"
                       disableUnderline
-                      {...register("license_number", { required: "License number is required", value: formData.licenseNumber })}
+                      {...register('license_number', {
+                        required: 'License number is required',
+                        value: formData.licenseNumber,
+                      })}
                     />
-                    {errors.license_number && <span role="alert">{errors.license_number?.message}</span>}
+                    {errors.license_number && (
+                      <span role="alert">{errors.license_number?.message}</span>
+                    )}
                   </FormControl>
                 </div>
                 <div className="FormField">
@@ -143,24 +173,28 @@ function DriversEditPopup({ openFormDialog, setOpenFormDialog, formData, callbac
                       style={{ display: 'none' }}
                       id="raised-button-file"
                       type="file"
-                      {...register("avatar")}
+                      {...register('avatar')}
                       onChange={(
                         event: React.InputHTMLAttributes<HTMLInputElement>
                       ) => {
                         handleFileChange(event);
                       }}
-
                     />
                     <label htmlFor="raised-button-file" className="ImageLabel">
                       <Button component="span" className="ImageBtn">
-                        <FileUploadOutlinedIcon sx={{ marginRight: '0.5rem' }} />
+                        <FileUploadOutlinedIcon
+                          sx={{ marginRight: '0.5rem' }}
+                        />
                         Upload image
                       </Button>
                     </label>
                     {avatarName ? (
                       <div className="ShowImageBox">
                         <label className="ShowImageLabel">{avatarName}</label>
-                        <IconButton className="btn-dot" onClick={handleRemoveImage}>
+                        <IconButton
+                          className="btn-dot"
+                          onClick={handleRemoveImage}
+                        >
                           <CloseOutlinedIcon
                             sx={{
                               color: '#1D1D1D',

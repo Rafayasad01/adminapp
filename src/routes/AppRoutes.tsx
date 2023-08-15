@@ -51,7 +51,6 @@ import CustomersAddressPage from '../pages/customers/CustomersAddressPage';
 import DriversDetailPage from '../pages/drivers/DriversDetailPage';
 import NotificationPage from '../pages/notification/NotificationPage';
 
-
 export const routeObjects: RouteObject[] = [
   {
     index: true,
@@ -367,5 +366,4 @@ export const routeObjects: RouteObject[] = [
       },
     ],
   },
-
 ];

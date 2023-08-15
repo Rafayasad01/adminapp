@@ -27,10 +27,11 @@ function CategoriesPage() {
   const [page, setPage] = useState(0);
   const [total, setTotal] = useState(0);
   const [list, setList] = useState<any>([]);
-  const [editFormData, setEditFormData] = useState<any>(null)
+  const [editFormData, setEditFormData] = useState<any>(null);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const [actionMenuItemid, setActionMenuItemid] = React.useState("");
-  const [actionMenuAnchorEl, setActionMenuAnchorEl] = useState<null | HTMLElement>(null);
+  const [actionMenuItemid, setActionMenuItemid] = React.useState('');
+  const [actionMenuAnchorEl, setActionMenuAnchorEl] =
+    useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
   const actionMenuOptions = ['Service', 'Edit', 'Delete'];
 
@@ -46,57 +47,70 @@ function CategoriesPage() {
     const newPage = 0;
     setSearch(searchTxt);
     setPage(newPage);
-    category.searchService(authState.user.tenant, searchTxt, newPage, rowsPerPage).then(item => {
-      setList(item.data.data.list);
-      setTotal(item.data.data.total);
-    })
+    category
+      .searchService(authState.user.tenant, searchTxt, newPage, rowsPerPage)
+      .then((item) => {
+        setList(item.data.data.list);
+        setTotal(item.data.data.total);
+      });
   };
 
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
-    newPage: number,
+    newPage: number
   ) => {
     setPage(newPage);
     //offset? ,limit rowsperpage hoga ofset page * rowsperPage
-    if (search === "" || search === null || search === undefined) {
-      category.getListService(authState.user.tenant, newPage, rowsPerPage).then(item => {
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      });
+    if (search === '' || search === null || search === undefined) {
+      category
+        .getListService(authState.user.tenant, newPage, rowsPerPage)
+        .then((item) => {
+          setList(item.data.data.list);
+          setTotal(item.data.data.total);
+        });
     } else {
-      category.searchService(authState.user.tenant, search, newPage, rowsPerPage).then(item => {
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      });
+      category
+        .searchService(authState.user.tenant, search, newPage, rowsPerPage)
+        .then((item) => {
+          setList(item.data.data.list);
+          setTotal(item.data.data.total);
+        });
     }
   };
   const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const newRowperPage = parseInt(event.target.value, 10);
     const newPage = 0;
     setRowsPerPage(newRowperPage);
     setPage(newPage);
-    if (search === "" || search === null || search === undefined) {
-      category.getListService(authState.user.tenant, newPage, rowsPerPage).then(item => {
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      });
+    if (search === '' || search === null || search === undefined) {
+      category
+        .getListService(authState.user.tenant, newPage, rowsPerPage)
+        .then((item) => {
+          setList(item.data.data.list);
+          setTotal(item.data.data.total);
+        });
     } else {
-      category.searchService(authState.user.tenant, search, newPage, rowsPerPage).then(item => {
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      });
+      category
+        .searchService(authState.user.tenant, search, newPage, rowsPerPage)
+        .then((item) => {
+          setList(item.data.data.list);
+          setTotal(item.data.data.total);
+        });
     }
   };
 
   useEffect(() => {
-    category.getListService(authState.user.tenant, page, rowsPerPage).then((item: any) => {
-      setList(item.data.data.list);
-      setTotal(item.data.data.total);
-    }).catch(error => {
-      console.log('error::::::::', error)
-    })
+    category
+      .getListService(authState.user.tenant, page, rowsPerPage)
+      .then((item: any) => {
+        setList(item.data.data.list);
+        setTotal(item.data.data.total);
+      })
+      .catch((error) => {
+        console.log('error::::::::', error);
+      });
   }, []);
   const manuHandler = (option: string) => {
     if (option === 'Edit') {
@@ -105,53 +119,56 @@ function CategoriesPage() {
           setEditFormData(item.data.data);
           setOpenEditFormDialog(true);
         }
-      })
+      });
     } else if (option === 'Service') {
       navigate(`service/${actionMenuItemid}`);
     } else if (option === 'Delete') {
       deleteHandler(actionMenuItemid);
     }
-  }
+  };
   const createFormHandler = (data: any) => {
     const formData = new FormData();
-    formData.append("name", data.name);
-    formData.append("icon", data.icon);
-    formData.append("tenant", authState.user.tenant);
-    formData.append("created_by", authState.user.id);
-    formData.append("updated_by", authState.user.id);
+    formData.append('name', data.name);
+    formData.append('icon', data.icon);
+    formData.append('tenant', authState.user.tenant);
+    formData.append('created_by', authState.user.id);
+    formData.append('updated_by', authState.user.id);
     category.create(formData).then((item) => {
       if (item.data.success) {
         list.push(item.data.data);
         setList(list);
       }
-    })
-  }
+    });
+  };
 
   const updateFormHandler = (data: any) => {
     const formData = new FormData();
-    formData.append("name", data.name);
-    formData.append("updated_by", authState.user.id);
-    if (data.icon !== null) formData.append("icon", data.icon);
-    category.updateCategory(actionMenuItemid, formData).then((updateItem: any) => {
-      if (updateItem.data.success) {
-        setList((newArr: any) => {
-          return newArr.map((item: any) => {
-            if (item.id === updateItem.data.data.id) {
-              item.name = updateItem.data.data.name;
-              if (updateItem.data.data.hasOwnProperty('icon')) item.icon = updateItem.data.data.icon;
-            }
-            return { ...item };
-          })
-        })
-      }
-    })
-  }
+    formData.append('name', data.name);
+    formData.append('updated_by', authState.user.id);
+    if (data.icon !== null) formData.append('icon', data.icon);
+    category
+      .updateCategory(actionMenuItemid, formData)
+      .then((updateItem: any) => {
+        if (updateItem.data.success) {
+          setList((newArr: any) => {
+            return newArr.map((item: any) => {
+              if (item.id === updateItem.data.data.id) {
+                item.name = updateItem.data.data.name;
+                if (updateItem.data.data.hasOwnProperty('icon'))
+                  item.icon = updateItem.data.data.icon;
+              }
+              return { ...item };
+            });
+          });
+        }
+      });
+  };
 
   const handleSwitchChange = (event: any, id: string) => {
     const data = {
       is_active: event.target.checked,
-      updated_by: authState.user.id
-    }
+      updated_by: authState.user.id,
+    };
     category.updateStatus(id, data).then((updateItem) => {
       if (updateItem.data.success) {
         setList((newArr: any) => {
@@ -160,27 +177,27 @@ function CategoriesPage() {
               item.isActive = updateItem.data.data.isActive;
             }
             return { ...item };
-          })
-        })
+          });
+        });
       }
-    })
+    });
   };
 
   const deleteHandler = (id: string) => {
     const data = {
       is_active: false,
       is_deleted: true,
-      updated_by: authState.user.id
-    }
+      updated_by: authState.user.id,
+    };
     category.deleteCategory(id, data).then((updateItem) => {
       if (updateItem.data.success) {
         setList((newArr: any) => {
           return newArr.filter((item: any) => item.id !== id);
-        })
+        });
         let newtotal = total;
-        setTotal(newtotal -= 1)
+        setTotal((newtotal -= 1));
       }
-    })
+    });
   };
 
   return (
@@ -247,54 +264,80 @@ function CategoriesPage() {
                 </tr>
               </thead>
               <tbody>
-                {list && list.map((item: any, index: number) => {
-                  return (
-                    <tr key={index}>
-                      <td>
-                        <div className="avatar flex flex-row items-center">
-                          {item.icon ? (
-                            <img src={item.icon} alt="" />
-                          ) : (<img src={assets.tempImages.avatarDryCLean} alt="" />)}
-                          <div className="flex flex-col items-start justify-start">
-                            <span className="text-sm font-semibold">
-                              {item.name}
-                            </span>
+                {list &&
+                  list.map((item: any, index: number) => {
+                    return (
+                      <tr key={index}>
+                        <td>
+                          <div className="avatar flex flex-row items-center">
+                            {item.icon ? (
+                              <img src={item.icon} alt="" />
+                            ) : (
+                              <img
+                                src={assets.tempImages.avatarDryCLean}
+                                alt=""
+                              />
+                            )}
+                            <div className="flex flex-col items-start justify-start">
+                              <span className="text-sm font-semibold">
+                                {item.name}
+                              </span>
+                            </div>
                           </div>
-                        </div>
-                      </td>
-                      <td>{dayjs(item.createdDate).isValid() ? dayjs(item.createdDate)?.format('ddd, MMM DD, YYYY hh:mm:ssA') : '--'}</td>
-                      <td>{item.isActive ? (<span className="badge badge-success">Enabled</span>) : (<span className="badge badge-danger">Disabled</span>)}</td>
+                        </td>
+                        <td>
+                          {dayjs(item.createdDate).isValid()
+                            ? dayjs(item.createdDate)?.format(
+                                'ddd, MMM DD, YYYY hh:mm:ssA'
+                              )
+                            : '--'}
+                        </td>
+                        <td>
+                          {item.isActive ? (
+                            <span className="badge badge-success">Enabled</span>
+                          ) : (
+                            <span className="badge badge-danger">Disabled</span>
+                          )}
+                        </td>
 
-                      <td>
-                        <div className="flex flex-row-reverse">
-                          <IconButton
-                            className="btn-dot"
-                            aria-label="more"
-                            id="long-button"
-                            aria-controls={actionMenuOpen ? 'long-menu' : undefined}
-                            aria-expanded={actionMenuOpen ? 'true' : undefined}
-                            aria-haspopup="true"
-                            onClick={(event: React.MouseEvent<HTMLElement>) => {
-                              setActionMenuItemid(list[index].id)
-                              setActionMenuAnchorEl(event.currentTarget);
-                            }}
-                          >
-                            <MoreVertIcon />
-                          </IconButton>
-                          <Switch
-                            checked={item.isActive}
-                            onChange={(event: React.ChangeEvent<HTMLInputElement>) => handleSwitchChange(event, list[index].id)}
-                            inputProps={{ 'aria-label': 'controlled' }}
-                          />
-                        </div>
-                      </td>
-                    </tr>
-                  )
-                })}
+                        <td>
+                          <div className="flex flex-row-reverse">
+                            <IconButton
+                              className="btn-dot"
+                              aria-label="more"
+                              id="long-button"
+                              aria-controls={
+                                actionMenuOpen ? 'long-menu' : undefined
+                              }
+                              aria-expanded={
+                                actionMenuOpen ? 'true' : undefined
+                              }
+                              aria-haspopup="true"
+                              onClick={(
+                                event: React.MouseEvent<HTMLElement>
+                              ) => {
+                                setActionMenuItemid(list[index].id);
+                                setActionMenuAnchorEl(event.currentTarget);
+                              }}
+                            >
+                              <MoreVertIcon />
+                            </IconButton>
+                            <Switch
+                              checked={item.isActive}
+                              onChange={(
+                                event: React.ChangeEvent<HTMLInputElement>
+                              ) => handleSwitchChange(event, list[index].id)}
+                              inputProps={{ 'aria-label': 'controlled' }}
+                            />
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
               </tbody>
             </table>
           </div>
-          <div className='w-[100%] mt-3 flex justify-center py-3'>
+          <div className="mt-3 flex w-[100%] justify-center py-3">
             <TablePagination
               component="div"
               count={total}
@@ -307,7 +350,13 @@ function CategoriesPage() {
         </div>
       </div>
       {actionMenuAnchorEl && (
-        <ActionMenu open={actionMenuOpen} anchorEl={actionMenuAnchorEl} setAnchorEl={setActionMenuAnchorEl} options={actionMenuOptions} callback={manuHandler} />
+        <ActionMenu
+          open={actionMenuOpen}
+          anchorEl={actionMenuAnchorEl}
+          setAnchorEl={setActionMenuAnchorEl}
+          options={actionMenuOptions}
+          callback={manuHandler}
+        />
       )}
       {openFormDialog && (
         <CategoriesCreatePopup

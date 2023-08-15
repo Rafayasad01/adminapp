@@ -3,7 +3,7 @@ import Dialog from '@mui/material/Dialog';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
-import { useForm } from "react-hook-form";
+import { useForm } from 'react-hook-form';
 
 import '../../assets/css/PopupStyle.css';
 import { Notification } from '../../interfaces/notification.interface';
@@ -15,16 +15,25 @@ type Props = {
   callback: Function;
 };
 
-function NotificationCreatePopup({ openFormDialog, setOpenFormDialog, callback }: Props) {
-  const { register, handleSubmit, watch, formState: { errors }, control } = useForm<Notification>();
+function NotificationCreatePopup({
+  openFormDialog,
+  setOpenFormDialog,
+  callback,
+}: Props) {
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+    control,
+  } = useForm<Notification>();
   const onSubmit = (data: Notification) => {
     setOpenFormDialog(false);
     callback(data);
-
   };
 
   const handleFormClose = () => {
-    setOpenFormDialog(false)
+    setOpenFormDialog(false);
   };
 
   return (
@@ -47,12 +56,14 @@ function NotificationCreatePopup({ openFormDialog, setOpenFormDialog, callback }
                 <label className="FormLabel">Title</label>
                 <Input
                   className="FormInput"
-                  {...register("title", { required: true })}
+                  {...register('title', { required: true })}
                   type="text"
                   id="title"
                   disableUnderline
                 />
-                {errors.title?.type === 'required' && <span role="alert">Title is required</span>}
+                {errors.title?.type === 'required' && (
+                  <span role="alert">Title is required</span>
+                )}
               </FormControl>
             </div>
             <div className="FormField">
@@ -68,9 +79,11 @@ function NotificationCreatePopup({ openFormDialog, setOpenFormDialog, callback }
                   rows={4}
                   defaultValue=""
                   placeholder="Write Description"
-                  {...register("message", { required: true })}
+                  {...register('message', { required: true })}
                 />
-                {errors.message?.type === 'required' && <span role="alert">Message is required</span>}
+                {errors.message?.type === 'required' && (
+                  <span role="alert">Message is required</span>
+                )}
               </FormControl>
             </div>
           </div>
@@ -95,7 +108,6 @@ function NotificationCreatePopup({ openFormDialog, setOpenFormDialog, callback }
                 padding: '0.375rem 2rem !important',
               }}
             />
-
           </div>
         </form>
       </div>

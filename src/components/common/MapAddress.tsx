@@ -14,7 +14,6 @@ const loader = new Loader({
   version: 'weekly',
 });
 
-
 function MapAddress({ addresses, zoom }: Props) {
   const mapRef = useRef<HTMLDivElement>(null);
   const [map, setMap] = useState<google.maps.Map>();
@@ -22,8 +21,8 @@ function MapAddress({ addresses, zoom }: Props) {
   const [isError, setIsError] = useState<boolean>(false);
   const center: google.maps.LatLngLiteral = {
     lat: 0,
-    lng: 0
-  }
+    lng: 0,
+  };
 
   useEffect(() => {
     loader.load().then(async (e) => {
@@ -48,7 +47,7 @@ function MapAddress({ addresses, zoom }: Props) {
       const geocoder = new google.maps.Geocoder();
       const newMarkers: google.maps.Marker[] = [];
       addresses.forEach((address) => {
-        geocoder.geocode({ 'address': address }, (results, status: any) => {
+        geocoder.geocode({ address: address }, (results, status: any) => {
           if (status === 'OK' && status !== 'ZERO_RESULTS') {
             const location = results[0].geometry.location;
             if (location && location.lat() && location.lng()) {
@@ -66,8 +65,7 @@ function MapAddress({ addresses, zoom }: Props) {
             } else {
               console.error('Invalid geocoder response for address:', address);
             }
-          }
-          else {
+          } else {
             addressCount++;
             if (addresses.length === addressCount) {
               // geocoder.geocode({ 'address': OFFICE_MAP_ADDRESS }, (results, status: any) => {
@@ -96,10 +94,9 @@ function MapAddress({ addresses, zoom }: Props) {
               //     }
               //   }
               // });
-            };
+            }
             //console.error('Geocode was not successful for the following reason:', status);
           }
-
         });
       });
 

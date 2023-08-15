@@ -26,16 +26,16 @@ function CategoriesServicesFaqPage() {
   const [page, setPage] = useState(0);
   const [total, setTotal] = useState<number>(0);
   const [list, setList] = useState<any>([]);
-  const [editFormData, setEditFormData] = useState<any>(null)
+  const [editFormData, setEditFormData] = useState<any>(null);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const [actionMenuItemid, setActionMenuItemid] = React.useState("");
-  const [actionMenuAnchorEl, setActionMenuAnchorEl] = useState<null | HTMLElement>(null);
+  const [actionMenuItemid, setActionMenuItemid] = React.useState('');
+  const [actionMenuAnchorEl, setActionMenuAnchorEl] =
+    useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
-  const actionMenuOptions = ["Edit", "Delete"];
+  const actionMenuOptions = ['Edit', 'Delete'];
 
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
-
 
   const categoryServiceId: any = params.categoryServiceId;
 
@@ -44,57 +44,85 @@ function CategoriesServicesFaqPage() {
     const newPage = 0;
     setSearch(searchTxt);
     setPage(newPage);
-    category.searchCategoryServiceFaq(categoryServiceId, searchTxt, newPage, rowsPerPage).then(item => {
-      setList(item.data.data.list);
-      setTotal(item.data.data.total);
-    })
+    category
+      .searchCategoryServiceFaq(
+        categoryServiceId,
+        searchTxt,
+        newPage,
+        rowsPerPage
+      )
+      .then((item) => {
+        setList(item.data.data.list);
+        setTotal(item.data.data.total);
+      });
   };
 
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
-    newPage: number,
+    newPage: number
   ) => {
     setPage(newPage);
     //offset? ,limit rowsperpage hoga ofset page * rowsperPage
-    if (search === "" || search === null || search === undefined) {
-      category.getCategoryServiceFaqList(categoryServiceId, newPage, rowsPerPage).then(item => {
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      });
+    if (search === '' || search === null || search === undefined) {
+      category
+        .getCategoryServiceFaqList(categoryServiceId, newPage, rowsPerPage)
+        .then((item) => {
+          setList(item.data.data.list);
+          setTotal(item.data.data.total);
+        });
     } else {
-      category.searchCategoryServiceFaq(categoryServiceId, search, newPage, rowsPerPage).then(item => {
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      });
+      category
+        .searchCategoryServiceFaq(
+          categoryServiceId,
+          search,
+          newPage,
+          rowsPerPage
+        )
+        .then((item) => {
+          setList(item.data.data.list);
+          setTotal(item.data.data.total);
+        });
     }
   };
   const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const newRowperPage = parseInt(event.target.value, 10);
     const newPage = 0;
     setRowsPerPage(newRowperPage);
     setPage(newPage);
-    if (search === "" || search === null || search === undefined) {
-      category.getCategoryServiceFaqList(categoryServiceId, newPage, rowsPerPage).then(item => {
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      });
+    if (search === '' || search === null || search === undefined) {
+      category
+        .getCategoryServiceFaqList(categoryServiceId, newPage, rowsPerPage)
+        .then((item) => {
+          setList(item.data.data.list);
+          setTotal(item.data.data.total);
+        });
     } else {
-      category.searchCategoryServiceFaq(categoryServiceId, search, newPage, rowsPerPage).then(item => {
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      });
+      category
+        .searchCategoryServiceFaq(
+          categoryServiceId,
+          search,
+          newPage,
+          rowsPerPage
+        )
+        .then((item) => {
+          setList(item.data.data.list);
+          setTotal(item.data.data.total);
+        });
     }
   };
 
   useEffect(() => {
-    category.getCategoryServiceFaqList(categoryServiceId, page, rowsPerPage).then((item: any) => {
-      setList(item.data.data.list);
-      setTotal(item.data.data.total);
-    }).catch(error => {
-      console.log('error::::::::', error)
-    })
+    category
+      .getCategoryServiceFaqList(categoryServiceId, page, rowsPerPage)
+      .then((item: any) => {
+        setList(item.data.data.list);
+        setTotal(item.data.data.total);
+      })
+      .catch((error) => {
+        console.log('error::::::::', error);
+      });
   }, []);
 
   const manuHandler = (option: string) => {
@@ -104,11 +132,11 @@ function CategoriesServicesFaqPage() {
           setEditFormData(item.data.data);
           setOpenEditFormDialog(true);
         }
-      })
+      });
     } else if (option === 'Delete') {
       deleteHandler(actionMenuItemid);
     }
-  }
+  };
 
   const createFormHandler = (data: any) => {
     data.created_by = authState.user.id;
@@ -118,30 +146,32 @@ function CategoriesServicesFaqPage() {
         list.push(item.data.data);
         setList(list);
       }
-    })
-  }
+    });
+  };
   const updateFormHandler = (data: any) => {
     data.updated_by = authState.user.id;
-    category.updateCategoryServiceFaq(actionMenuItemid, data).then((updateItem: any) => {
-      if (updateItem.data.success) {
-        setList((newArr: any) => {
-          return newArr.map((item: any) => {
-            if (item.id === updateItem.data.data.id) {
-              item.question = updateItem.data.data.question;
-              item.answer = updateItem.data.data.answer;
-            }
-            return { ...item };
-          })
-        })
-      }
-    })
-  }
+    category
+      .updateCategoryServiceFaq(actionMenuItemid, data)
+      .then((updateItem: any) => {
+        if (updateItem.data.success) {
+          setList((newArr: any) => {
+            return newArr.map((item: any) => {
+              if (item.id === updateItem.data.data.id) {
+                item.question = updateItem.data.data.question;
+                item.answer = updateItem.data.data.answer;
+              }
+              return { ...item };
+            });
+          });
+        }
+      });
+  };
 
   const handleSwitchChange = (event: any, id: string) => {
     const data = {
       is_active: event.target.checked,
-      updated_by: authState.user.id
-    }
+      updated_by: authState.user.id,
+    };
     category.updateCategoryServiceFaqStatus(id, data).then((updateItem) => {
       if (updateItem.data.success) {
         setList((newArr: any) => {
@@ -150,27 +180,27 @@ function CategoriesServicesFaqPage() {
               item.isActive = updateItem.data.data.isActive;
             }
             return { ...item };
-          })
-        })
+          });
+        });
       }
-    })
+    });
   };
 
   const deleteHandler = (id: string) => {
     const data = {
       is_active: false,
       is_deleted: true,
-      updated_by: authState.user.id
-    }
+      updated_by: authState.user.id,
+    };
     category.deleteCategoryServiceFaq(id, data).then((updateItem) => {
       if (updateItem.data.success) {
         setList((newArr: any) => {
           return newArr.filter((item: any) => item.id !== id);
-        })
+        });
         let newtotal = total;
-        setTotal(newtotal -= 1)
+        setTotal((newtotal -= 1));
       }
-    })
+    });
   };
 
   return (
@@ -238,52 +268,72 @@ function CategoriesServicesFaqPage() {
                 </tr>
               </thead>
               <tbody>
-                {list && list.map((item: any, index: number) => {
-                  return (
-                    <tr key={item.id}>
-                      <td>
-                        <div className="avatar flex flex-row items-center">
-                          <div className="flex flex-col items-start justify-start">
-                            <span className="text-sm font-semibold">
-                              {item.question}
-                            </span>
+                {list &&
+                  list.map((item: any, index: number) => {
+                    return (
+                      <tr key={item.id}>
+                        <td>
+                          <div className="avatar flex flex-row items-center">
+                            <div className="flex flex-col items-start justify-start">
+                              <span className="text-sm font-semibold">
+                                {item.question}
+                              </span>
+                            </div>
                           </div>
-                        </div>
-                      </td>
-                      <td>{item.answer}</td>
-                      <td>{dayjs(item.createdDate).isValid() ? dayjs(item.createdDate)?.format('ddd, MMM DD, YYYY hh:mm:ssA') : '--'}</td>
-                      <td>{item.isActive ? (<span className="badge badge-success">Enabled</span>) : (<span className="badge badge-danger">Disabled</span>)}</td>
-                      <td>
-                        <div className="flex flex-row-reverse">
-                          <IconButton
-                            className="btn-dot"
-                            aria-label="more"
-                            id="long-button"
-                            aria-controls={actionMenuOpen ? 'long-menu' : undefined}
-                            aria-expanded={actionMenuOpen ? 'true' : undefined}
-                            aria-haspopup="true"
-                            onClick={(event: React.MouseEvent<HTMLElement>) => {
-                              setActionMenuItemid(list[index].id)
-                              setActionMenuAnchorEl(event.currentTarget);
-                            }}
-                          >
-                            <MoreVertIcon />
-                          </IconButton>
-                          <Switch
-                            checked={item.isActive ? true : false}
-                            onChange={(event: React.ChangeEvent<HTMLInputElement>) => handleSwitchChange(event, list[index].id)}
-                            inputProps={{ 'aria-label': 'controlled' }}
-                          />
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })}
-
+                        </td>
+                        <td>{item.answer}</td>
+                        <td>
+                          {dayjs(item.createdDate).isValid()
+                            ? dayjs(item.createdDate)?.format(
+                                'ddd, MMM DD, YYYY hh:mm:ssA'
+                              )
+                            : '--'}
+                        </td>
+                        <td>
+                          {item.isActive ? (
+                            <span className="badge badge-success">Enabled</span>
+                          ) : (
+                            <span className="badge badge-danger">Disabled</span>
+                          )}
+                        </td>
+                        <td>
+                          <div className="flex flex-row-reverse">
+                            <IconButton
+                              className="btn-dot"
+                              aria-label="more"
+                              id="long-button"
+                              aria-controls={
+                                actionMenuOpen ? 'long-menu' : undefined
+                              }
+                              aria-expanded={
+                                actionMenuOpen ? 'true' : undefined
+                              }
+                              aria-haspopup="true"
+                              onClick={(
+                                event: React.MouseEvent<HTMLElement>
+                              ) => {
+                                setActionMenuItemid(list[index].id);
+                                setActionMenuAnchorEl(event.currentTarget);
+                              }}
+                            >
+                              <MoreVertIcon />
+                            </IconButton>
+                            <Switch
+                              checked={item.isActive ? true : false}
+                              onChange={(
+                                event: React.ChangeEvent<HTMLInputElement>
+                              ) => handleSwitchChange(event, list[index].id)}
+                              inputProps={{ 'aria-label': 'controlled' }}
+                            />
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
               </tbody>
             </table>
           </div>
-          <div className='w-[100%] mt-3 flex justify-center py-3'>
+          <div className="mt-3 flex w-[100%] justify-center py-3">
             <TablePagination
               component="div"
               count={total}
@@ -296,7 +346,13 @@ function CategoriesServicesFaqPage() {
         </div>
       </div>
       {actionMenuAnchorEl && (
-        <ActionMenu open={actionMenuOpen} anchorEl={actionMenuAnchorEl} setAnchorEl={setActionMenuAnchorEl} options={actionMenuOptions} callback={manuHandler} />
+        <ActionMenu
+          open={actionMenuOpen}
+          anchorEl={actionMenuAnchorEl}
+          setAnchorEl={setActionMenuAnchorEl}
+          options={actionMenuOptions}
+          callback={manuHandler}
+        />
       )}
       {openFormDialog && (
         <CategoriesServicesFaqCreatePopup

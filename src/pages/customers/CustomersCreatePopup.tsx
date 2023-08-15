@@ -11,7 +11,7 @@ import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
 
 import '../../assets/css/PopupStyle.css';
-import { useForm } from "react-hook-form";
+import { useForm } from 'react-hook-form';
 import { AppUser } from '../../interfaces/app-user.interface';
 
 type Props = {
@@ -20,13 +20,23 @@ type Props = {
   callback: Function;
 };
 
-function CustomersCreatePopup({ openFormDialog, setOpenFormDialog, callback }: Props) {
+function CustomersCreatePopup({
+  openFormDialog,
+  setOpenFormDialog,
+  callback,
+}: Props) {
   const [showPassword, setShowPassword] = useState(false);
   const [avatar, setAvatar] = useState<any>(null);
   const [avatarName, setAvatarName] = useState<string>('');
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
-  const { register, handleSubmit, watch, formState: { errors }, control } = useForm<AppUser>();
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+    control,
+  } = useForm<AppUser>();
 
   const handleFormClose = () => setOpenFormDialog(false);
   const handleRemoveImage = () => {
@@ -68,9 +78,13 @@ function CustomersCreatePopup({ openFormDialog, setOpenFormDialog, callback }: P
                   id="first_name"
                   placeholder="Vincent"
                   disableUnderline
-                  {...register("first_name", { required: "First name is required" })}
+                  {...register('first_name', {
+                    required: 'First name is required',
+                  })}
                 />
-                {errors.first_name && <span role="alert">{errors.first_name?.message}</span>}
+                {errors.first_name && (
+                  <span role="alert">{errors.first_name?.message}</span>
+                )}
               </FormControl>
               <FormControl className="FormControl" variant="standard">
                 <label className="FormLabel">Last Name</label>
@@ -79,9 +93,13 @@ function CustomersCreatePopup({ openFormDialog, setOpenFormDialog, callback }: P
                   id="last_name"
                   placeholder="Boyd"
                   disableUnderline
-                  {...register("last_name", { required: "Last name is required" })}
+                  {...register('last_name', {
+                    required: 'Last name is required',
+                  })}
                 />
-                {errors.last_name && <span role="alert">{errors.last_name?.message}</span>}
+                {errors.last_name && (
+                  <span role="alert">{errors.last_name?.message}</span>
+                )}
               </FormControl>
             </div>
             <div className="FormFields">
@@ -92,9 +110,13 @@ function CustomersCreatePopup({ openFormDialog, setOpenFormDialog, callback }: P
                   id="phone"
                   placeholder="+1 536 569"
                   disableUnderline
-                  {...register("phone", { required: "Phone number is required" })}
+                  {...register('phone', {
+                    required: 'Phone number is required',
+                  })}
                 />
-                {errors.phone && <span role="alert">{errors.phone?.message}</span>}
+                {errors.phone && (
+                  <span role="alert">{errors.phone?.message}</span>
+                )}
               </FormControl>
               <FormControl className="FormControl" variant="standard">
                 <label className="FormLabel">Email Address</label>
@@ -103,9 +125,11 @@ function CustomersCreatePopup({ openFormDialog, setOpenFormDialog, callback }: P
                   id="name"
                   placeholder="Vincent.96@gmail.com"
                   disableUnderline
-                  {...register("email", { required: "Email is required" })}
+                  {...register('email', { required: 'Email is required' })}
                 />
-                {errors.email && <span role="alert">{errors.email?.message}</span>}
+                {errors.email && (
+                  <span role="alert">{errors.email?.message}</span>
+                )}
               </FormControl>
             </div>
             <div className="FormFields">
@@ -117,7 +141,9 @@ function CustomersCreatePopup({ openFormDialog, setOpenFormDialog, callback }: P
                   id="password"
                   placeholder="**********"
                   type={showPassword ? 'text' : 'password'}
-                  {...register("password", { required: "Password is required" })}
+                  {...register('password', {
+                    required: 'Password is required',
+                  })}
                   endAdornment={
                     <InputAdornment position="end">
                       <IconButton
@@ -131,7 +157,9 @@ function CustomersCreatePopup({ openFormDialog, setOpenFormDialog, callback }: P
                   }
                   disableUnderline
                 />
-                {errors.password && <span role="alert">{errors.password?.message}</span>}
+                {errors.password && (
+                  <span role="alert">{errors.password?.message}</span>
+                )}
               </FormControl>
               <FormControl className="FormControl" variant="standard">
                 <label className="FormLabel">Postal Code</label>
@@ -140,7 +168,7 @@ function CustomersCreatePopup({ openFormDialog, setOpenFormDialog, callback }: P
                   id="postal_code"
                   placeholder="M6G 596"
                   disableUnderline
-                  {...register("postal_code")}
+                  {...register('postal_code')}
                 />
               </FormControl>
             </div>
@@ -151,9 +179,11 @@ function CustomersCreatePopup({ openFormDialog, setOpenFormDialog, callback }: P
                   className="FormInput"
                   id="address"
                   disableUnderline
-                  {...register("address", { required: "Address is required" })}
+                  {...register('address', { required: 'Address is required' })}
                 />
-                {errors.address && <span role="alert">{errors.address?.message}</span>}
+                {errors.address && (
+                  <span role="alert">{errors.address?.message}</span>
+                )}
               </FormControl>
             </div>
             <div className="FormField">
@@ -164,13 +194,12 @@ function CustomersCreatePopup({ openFormDialog, setOpenFormDialog, callback }: P
                   style={{ display: 'none' }}
                   id="raised-button-file"
                   type="file"
-                  {...register("avatar")}
+                  {...register('avatar')}
                   onChange={(
                     event: React.InputHTMLAttributes<HTMLInputElement>
                   ) => {
                     handleFileChange(event);
                   }}
-
                 />
                 <label htmlFor="raised-button-file" className="ImageLabel">
                   <Button component="span" className="ImageBtn">

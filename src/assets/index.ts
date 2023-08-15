@@ -55,7 +55,7 @@ const assets = {
     totalShopsIcon,
     totalDriversIcon,
     imageIcon,
-    truckDriverIcon
+    truckDriverIcon,
   },
   tempImages: {
     wash,
