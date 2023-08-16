@@ -21,8 +21,8 @@ function MapAddress({ address, zoom }: Props) {
 
   const center: google.maps.LatLngLiteral = {
     lat: 0,
-    lng: 0
-  }
+    lng: 0,
+  };
 
   useEffect(() => {
     loader.load().then(async (e) => {

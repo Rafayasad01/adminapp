@@ -1,43 +1,103 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { useState } from 'react';
+/* eslint-disable @typescript-eslint/ban-types */
+import React, { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import Dialog from '@mui/material/Dialog';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
+import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import Switch from '@mui/material/Switch';
 
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { Dayjs } from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 
 import '../../assets/css/PopupStyle.css';
 import DatePickerField from './DatePickerField';
+import { useAppSelector } from '../../redux/redux-hooks';
 
 type Props = {
   vouchersPromoEditDialog: boolean;
   setVouchersPromoEditDialog: React.Dispatch<React.SetStateAction<boolean>>;
+  item: any;
+  callback: Function;
 };
+
+interface UpdateVoucherPayload {
+  discountType: 'Amount' | 'Percentage';
+  value: number;
+  minProduct: number;
+  minAmount: number;
+  maxRedeem: number;
+  validFrom: string;
+  validTill: string;
+  status: 'Active' | 'Inactive';
+  type: 'Referral' | 'Promo';
+  backOfficeUser: string;
+  name: string;
+}
+
+interface UpdateVoucherFromData {
+  type: string;
+  discountType: string;
+  name: string;
+  value: string;
+  minProduct: string;
+  minAmount: string;
+  maxRedeem: string;
+  status: boolean;
+}
 
 function VouchersPromoEditPopup({
   vouchersPromoEditDialog,
   setVouchersPromoEditDialog,
+  item,
+  callback,
 }: Props) {
-  const [selectShop, setSelectShop] = useState('status');
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<UpdateVoucherFromData>();
+  const authState: any = useAppSelector((state) => state.authState);
   const handleFormClose = () => setVouchersPromoEditDialog(false);
   const [checked, setChecked] = useState(true);
 
-  const [validFromDate, setValidFromDate] = useState<Dayjs | null>(null);
-  const [validTillDate, setValidTillDate] = useState<Dayjs | null>(null);
-
-  const handleChange = (event: SelectChangeEvent) => {
-    setSelectShop(event.target.value as string);
-  };
+  const [validFromDate, setValidFromDate] = useState<Dayjs | null>(
+    dayjs(item.validFrom)
+  );
+  const [validTillDate, setValidTillDate] = useState<Dayjs | null>(
+    dayjs(item.validTill)
+  );
 
   const handleSwitchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setChecked(event.target.checked);
   };
+
+  const onSubmit = (data: UpdateVoucherFromData) => {
+    handleFormClose();
+    const updateVoucherPayload: UpdateVoucherPayload = {
+      type: data.type as 'Referral' | 'Promo',
+      discountType: data.discountType as 'Amount' | 'Percentage',
+      name: data.name,
+      value: +data.value,
+      minProduct: +data.minProduct,
+      minAmount: +data.minAmount,
+      maxRedeem: +data.maxRedeem,
+      status: data.status ? 'Active' : 'Inactive',
+      backOfficeUser: authState.user.id,
+      validFrom: validFromDate?.toISOString() ?? '',
+      validTill: validTillDate?.toISOString() ?? '',
+    };
+    callback(item.id, updateVoucherPayload);
+  };
+
+  useEffect(() => {
+    reset(item);
+  }, [item, reset]);
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -50,147 +110,235 @@ function VouchersPromoEditPopup({
         }}
       >
         <div className="Content">
-          <div className="FormHeader">
-            <span className="Title">Edit Voucher</span>
-          </div>
-          <div className="FormBody">
-            <div className="FormFields">
-              <FormControl className="FormControl" variant="standard">
-                <label className="FormLabel">Coupon Type</label>
-                <Select
-                  className="FormSelect"
-                  labelId="demo-simple-select-label"
-                  value="Promo"
-                  disableUnderline
-                  onChange={(event) => {
-                    handleChange(event);
-                  }}
-                >
-                  <MenuItem value="Promo">Promo</MenuItem>
-                </Select>
-              </FormControl>
-              <FormControl className="FormControl" variant="standard">
-                <label className="FormLabel">Offer Type</label>
-                <Select
-                  className="FormSelect"
-                  labelId="demo-simple-select-label"
-                  value="Amount"
-                  disableUnderline
-                  onChange={(event) => {
-                    handleChange(event);
-                  }}
-                >
-                  <MenuItem value="Amount">Amount</MenuItem>
-                </Select>
-              </FormControl>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <div className="FormHeader">
+              <span className="Title">Edit Voucher</span>
             </div>
-            <div className="FormField">
-              <FormControl className="FormControl" variant="standard">
-                <label className="FormLabel">Coupon Code</label>
-                <Input
-                  className="FormInput"
-                  id="name"
-                  value=""
-                  name="name"
-                  placeholder="Coupon Code"
-                  disableUnderline
+            <div className="FormBody">
+              <div className="FormFields">
+                <FormControl className="FormControl" variant="standard">
+                  <label className="FormLabel">Coupon Type</label>
+                  <Select
+                    {...register('type', { required: true })}
+                    className="FormSelect"
+                    labelId="demo-simple-select-label"
+                    defaultValue={item.type}
+                    disableUnderline
+                  >
+                    <MenuItem value="Promo">Promo</MenuItem>
+                  </Select>
+                  {errors.type?.type === 'required' && (
+                    <span
+                      role="alert"
+                      style={{
+                        fontSize: '0.75rem',
+                        lineHeight: '1rem',
+                        color: 'rgb(220 38 38 / 1)',
+                      }}
+                    >
+                      Coupon Type is required
+                    </span>
+                  )}
+                </FormControl>
+                <FormControl className="FormControl" variant="standard">
+                  <label className="FormLabel">Offer Type</label>
+                  <Select
+                    {...register('discountType', { required: true })}
+                    className="FormSelect"
+                    labelId="demo-simple-select-label"
+                    defaultValue={item.discountType}
+                    disableUnderline
+                  >
+                    <MenuItem value="Amount">Amount</MenuItem>
+                    <MenuItem value="Percentage">Percentage</MenuItem>
+                  </Select>
+                  {errors.discountType?.type === 'required' && (
+                    <span
+                      role="alert"
+                      style={{
+                        fontSize: '0.75rem',
+                        lineHeight: '1rem',
+                        color: 'rgb(220 38 38 / 1)',
+                      }}
+                    >
+                      Offer Type is required
+                    </span>
+                  )}
+                </FormControl>
+              </div>
+              <div className="FormField">
+                <FormControl className="FormControl" variant="standard">
+                  <label className="FormLabel">Coupon Code</label>
+                  <Input
+                    {...register('name', { required: true })}
+                    className="FormInput"
+                    id="name"
+                    name="name"
+                    defaultValue={item.name}
+                    placeholder="Coupon Code"
+                    disableUnderline
+                  />
+                  {errors.name?.type === 'required' && (
+                    <span
+                      role="alert"
+                      style={{
+                        fontSize: '0.75rem',
+                        lineHeight: '1rem',
+                        color: 'rgb(220 38 38 / 1)',
+                      }}
+                    >
+                      Coupon Code is required
+                    </span>
+                  )}
+                </FormControl>
+              </div>
+              <div className="FormFields">
+                <DatePickerField
+                  datePickerLabel="Valid From"
+                  datePickerValue={validFromDate}
+                  setDatePickerValue={setValidFromDate}
+                  id="validFromDatePicker"
                 />
-              </FormControl>
+                <DatePickerField
+                  datePickerLabel="Valid Till"
+                  datePickerValue={validTillDate}
+                  setDatePickerValue={setValidTillDate}
+                  id="validTillDatePicker"
+                />
+              </div>
+              <div className="FormFields">
+                <FormControl className="FormControl" variant="standard">
+                  <label className="FormLabel">Offer Value</label>
+                  <Input
+                    {...register('value', { required: true })}
+                    className="FormInput"
+                    id="value"
+                    name="value"
+                    defaultValue={item.value}
+                    placeholder="Offer Value"
+                    disableUnderline
+                  />
+                  {errors.value?.type === 'required' && (
+                    <span
+                      role="alert"
+                      style={{
+                        fontSize: '0.75rem',
+                        lineHeight: '1rem',
+                        color: 'rgb(220 38 38 / 1)',
+                      }}
+                    >
+                      Offer Value is required
+                    </span>
+                  )}
+                </FormControl>
+                <FormControl className="FormControl" variant="standard">
+                  <label className="FormLabel">Min Products</label>
+                  <Input
+                    {...register('minProduct', { required: true })}
+                    className="FormInput"
+                    id="minProduct"
+                    name="minProduct"
+                    defaultValue={item.minProduct}
+                    placeholder="Min Products"
+                    disableUnderline
+                  />
+                  {errors.minProduct?.type === 'required' && (
+                    <span
+                      role="alert"
+                      style={{
+                        fontSize: '0.75rem',
+                        lineHeight: '1rem',
+                        color: 'rgb(220 38 38 / 1)',
+                      }}
+                    >
+                      Min Products is required
+                    </span>
+                  )}
+                </FormControl>
+              </div>
+              <div className="FormFields">
+                <FormControl className="FormControl" variant="standard">
+                  <label className="FormLabel">Min Amount</label>
+                  <Input
+                    {...register('minAmount', { required: true })}
+                    className="FormInput"
+                    id="minAmount"
+                    name="minAmount"
+                    defaultValue={item.minAmount}
+                    placeholder="Min Amount"
+                    disableUnderline
+                  />
+                  {errors.minAmount?.type === 'required' && (
+                    <span
+                      role="alert"
+                      style={{
+                        fontSize: '0.75rem',
+                        lineHeight: '1rem',
+                        color: 'rgb(220 38 38 / 1)',
+                      }}
+                    >
+                      Min Amount is required
+                    </span>
+                  )}
+                </FormControl>
+                <FormControl className="FormControl" variant="standard">
+                  <label className="FormLabel">Max Redeem</label>
+                  <Input
+                    {...register('maxRedeem', { required: true })}
+                    className="FormInput"
+                    id="maxRedeem"
+                    name="maxRedeem"
+                    defaultValue={item.maxRedeem}
+                    placeholder="Max Redeem"
+                    disableUnderline
+                  />
+                  {errors.maxRedeem?.type === 'required' && (
+                    <span
+                      role="alert"
+                      style={{
+                        fontSize: '0.75rem',
+                        lineHeight: '1rem',
+                        color: 'rgb(220 38 38 / 1)',
+                      }}
+                    >
+                      Max Redeem is required
+                    </span>
+                  )}
+                </FormControl>
+              </div>
+              <div className="FormField">
+                <FormControl className="FormControl" variant="standard">
+                  <label className="FormLabel">Status</label>
+                  <Switch
+                    checked={checked}
+                    onChange={handleSwitchChange}
+                    inputProps={{ 'aria-label': 'controlled' }}
+                  />
+                </FormControl>
+              </div>
             </div>
-            <div className="FormFields">
-              <DatePickerField
-                datePickerLabel="Valid From"
-                datePickerValue={validFromDate}
-                setDatePickerValue={setValidFromDate}
-                id="validFromDatePicker"
-              />
-              <DatePickerField
-                datePickerLabel="Valid Till"
-                datePickerValue={validTillDate}
-                setDatePickerValue={setValidTillDate}
-                id="validTillDatePicker"
-              />
+            <div className="FormFooter">
+              <Button
+                className="btn-black-outline"
+                onClick={handleFormClose}
+                sx={{
+                  marginRight: '0.5rem',
+                  padding: '0.375rem 1.5rem !important',
+                }}
+              >
+                Cancel
+              </Button>
+              <Button
+                className="btn-black-fill"
+                type="submit"
+                sx={{
+                  padding: '0.375rem 2rem !important',
+                }}
+              >
+                Update
+              </Button>
             </div>
-            <div className="FormFields">
-              <FormControl className="FormControl" variant="standard">
-                <label className="FormLabel">Offer Value</label>
-                <Input
-                  className="FormInput"
-                  id="name"
-                  value=""
-                  name="name"
-                  placeholder="Offer Value"
-                  disableUnderline
-                />
-              </FormControl>
-              <FormControl className="FormControl" variant="standard">
-                <label className="FormLabel">Min Products</label>
-                <Input
-                  className="FormInput"
-                  id="name"
-                  value=""
-                  name="name"
-                  placeholder="Min Products"
-                  disableUnderline
-                />
-              </FormControl>
-            </div>
-            <div className="FormFields">
-              <FormControl className="FormControl" variant="standard">
-                <label className="FormLabel">Min Amount</label>
-                <Input
-                  className="FormInput"
-                  id="name"
-                  value=""
-                  name="name"
-                  placeholder="Min Amount"
-                  disableUnderline
-                />
-              </FormControl>
-              <FormControl className="FormControl" variant="standard">
-                <label className="FormLabel">Max Redeem</label>
-                <Input
-                  className="FormInput"
-                  id="name"
-                  value=""
-                  name="name"
-                  placeholder="Max Redeem"
-                  disableUnderline
-                />
-              </FormControl>
-            </div>
-            <div className="FormField">
-              <FormControl className="FormControl" variant="standard">
-                <label className="FormLabel">Status</label>
-                <Switch
-                  checked={checked}
-                  onChange={handleSwitchChange}
-                  inputProps={{ 'aria-label': 'controlled' }}
-                />
-              </FormControl>
-            </div>
-          </div>
-          <div className="FormFooter">
-            <Button
-              className="btn-black-outline"
-              onClick={handleFormClose}
-              sx={{
-                marginRight: '0.5rem',
-                padding: '0.375rem 1.5rem !important',
-              }}
-            >
-              Cancel
-            </Button>
-            <Button
-              className="btn-black-fill"
-              onClick={handleFormClose}
-              sx={{
-                padding: '0.375rem 2rem !important',
-              }}
-            >
-              Update
-            </Button>
-          </div>
+          </form>
         </div>
       </Dialog>
     </LocalizationProvider>

@@ -14,11 +14,15 @@ import dayjs from 'dayjs';
 
 import Avatar from '@mui/material/Avatar';
 import TablePagination from '@mui/material/TablePagination';
-import { APP_USER_STATUS_OFFLINE, APP_USER_STATUS_ONLINE, ORDER_DELIVERY_STATUS_CANCELLED, ORDER_DELIVERY_STATUS_NEW, ORDER_DELIVERY_STATUS_NOT_ASSIGN } from '../../utils/constants';
+import {
+  APP_USER_STATUS_OFFLINE,
+  APP_USER_STATUS_ONLINE,
+  ORDER_DELIVERY_STATUS_CANCELLED,
+  ORDER_DELIVERY_STATUS_NEW,
+  ORDER_DELIVERY_STATUS_NOT_ASSIGN,
+} from '../../utils/constants';
 import Service from '../../services/adminapp/adminOrders';
 import AlertBox from '../../utils/Alert';
-
-
 
 function OrdersAssignPage() {
   const authState: any = useAppSelector((state) => state.authState);
@@ -28,8 +32,8 @@ function OrdersAssignPage() {
   const [total, setTotal] = useState(0);
   const [list, setList] = useState<any>([]);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [alertMsg, setAlertMsg] = useState<string>("");
-  const [alertSeverty, setAlertSeverty] = useState<string>("");
+  const [alertMsg, setAlertMsg] = useState<string>('');
+  const [alertSeverty, setAlertSeverty] = useState<string>('');
   const [alertOpen, setAlertOpen] = useState<boolean>(false);
 
   const params = useParams();
@@ -41,13 +45,22 @@ function OrdersAssignPage() {
       const newPage = 0;
       setSearch(searchTxt);
       setPage(newPage);
-      if (searchTxt === "" || searchTxt === null || searchTxt === undefined) {
-        Service.getListAssignService(authState.user.tenant, newPage, rowsPerPage).then(item => {
+      if (searchTxt === '' || searchTxt === null || searchTxt === undefined) {
+        Service.getListAssignService(
+          authState.user.tenant,
+          newPage,
+          rowsPerPage
+        ).then((item) => {
           setList(item.data.data.list);
           setTotal(item.data.data.total);
         });
       } else {
-        Service.searchAssignService(authState.user.tenant, search, newPage, rowsPerPage).then(item => {
+        Service.searchAssignService(
+          authState.user.tenant,
+          search,
+          newPage,
+          rowsPerPage
+        ).then((item) => {
           setList(item.data.data.list);
           setTotal(item.data.data.total);
         });
@@ -57,36 +70,54 @@ function OrdersAssignPage() {
 
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
-    newPage: number,
+    newPage: number
   ) => {
     setPage(newPage);
     //offset? ,limit rowsperpage hoga ofset page * rowsperPage
-    if (search === "" || search === null || search === undefined) {
-      Service.getListAssignService(authState.user.tenant, newPage, rowsPerPage).then(item => {
+    if (search === '' || search === null || search === undefined) {
+      Service.getListAssignService(
+        authState.user.tenant,
+        newPage,
+        rowsPerPage
+      ).then((item) => {
         setList(item.data.data.list);
         setTotal(item.data.data.total);
       });
     } else {
-      Service.searchAssignService(authState.user.tenant, search, newPage, rowsPerPage).then(item => {
+      Service.searchAssignService(
+        authState.user.tenant,
+        search,
+        newPage,
+        rowsPerPage
+      ).then((item) => {
         setList(item.data.data.list);
         setTotal(item.data.data.total);
       });
     }
   };
   const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const newRowperPage = parseInt(event.target.value, 10);
     const newPage = 0;
     setRowsPerPage(newRowperPage);
     setPage(newPage);
-    if (search === "" || search === null || search === undefined) {
-      Service.getListAssignService(authState.user.tenant, newPage, rowsPerPage).then(item => {
+    if (search === '' || search === null || search === undefined) {
+      Service.getListAssignService(
+        authState.user.tenant,
+        newPage,
+        rowsPerPage
+      ).then((item) => {
         setList(item.data.data.list);
         setTotal(item.data.data.total);
       });
     } else {
-      Service.searchAssignService(authState.user.tenant, search, newPage, rowsPerPage).then(item => {
+      Service.searchAssignService(
+        authState.user.tenant,
+        search,
+        newPage,
+        rowsPerPage
+      ).then((item) => {
         setList(item.data.data.list);
         setTotal(item.data.data.total);
       });
@@ -94,14 +125,15 @@ function OrdersAssignPage() {
   };
 
   useEffect(() => {
-
-    Service.getListAssignService(authState.user.tenant, page, rowsPerPage).then((item: any) => {
-      if (item.data.success) {
-        console.log('item.data.data', item.data)
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
+    Service.getListAssignService(authState.user.tenant, page, rowsPerPage).then(
+      (item: any) => {
+        if (item.data.success) {
+          console.log('item.data.data', item.data);
+          setList(item.data.data.list);
+          setTotal(item.data.data.total);
+        }
       }
-    });
+    );
   }, []);
 
   const assignHandler = (userId: string) => {
@@ -109,10 +141,10 @@ function OrdersAssignPage() {
       app_user: userId,
       app_order: orderId,
       created_by: authState.user.id,
-      status: ORDER_DELIVERY_STATUS_NEW
-    }
+      status: ORDER_DELIVERY_STATUS_NEW,
+    };
     Service.createAssignService(data).then((item: any) => {
-      console.log('Create item.data ', item.data)
+      console.log('Create item.data ', item.data);
       if (item.data.success) {
         navigate(`../view/${orderId}`);
       } else {
@@ -120,12 +152,17 @@ function OrdersAssignPage() {
         setAlertSeverty('error');
         setAlertOpen(true);
       }
-    })
-  }
+    });
+  };
   return (
     <>
       {alertOpen && (
-        <AlertBox msg={alertMsg} setSeverty={alertSeverty} alertOpen={alertOpen} setAlertOpen={setAlertOpen} />
+        <AlertBox
+          msg={alertMsg}
+          setSeverty={alertSeverty}
+          alertOpen={alertOpen}
+          setAlertOpen={setAlertOpen}
+        />
       )}
 
       <TopBar isNestedRoute={true} title="Order Assign" />
@@ -186,90 +223,137 @@ function OrdersAssignPage() {
                 </tr>
               </thead>
               <tbody>
-                {list && list.map((item: any, index: number) => {
-                  return (
-                    <tr key={item.id}>
-                      <td>
-                        <div className="avatar flex flex-row items-center">
-                          {item.avatar ? (
-                            <img src={item.avatar} alt="" />
-                          ) : (
-                            <Avatar className="avatar flex flex-row items-center" sx={{ bgcolor: '#1D1D1D', width: 35, height: 35, textTransform: 'uppercase', fontSize: '14px', marginRight: '10px' }}>{item.firstName.charAt(0)}{item.lastName.charAt(0)}</Avatar>
-                          )}
+                {list &&
+                  list.map((item: any, index: number) => {
+                    return (
+                      <tr key={item.id}>
+                        <td>
+                          <div className="avatar flex flex-row items-center">
+                            {item.avatar ? (
+                              <img src={item.avatar} alt="" />
+                            ) : (
+                              <Avatar
+                                className="avatar flex flex-row items-center"
+                                sx={{
+                                  bgcolor: '#1D1D1D',
+                                  width: 35,
+                                  height: 35,
+                                  textTransform: 'uppercase',
+                                  fontSize: '14px',
+                                  marginRight: '10px',
+                                }}
+                              >
+                                {item.firstName.charAt(0)}
+                                {item.lastName.charAt(0)}
+                              </Avatar>
+                            )}
 
-                          <div className="flex flex-col items-start justify-start">
-                            <span className="text-sm font-semibold">
-                              {`${item.firstName} ${item.lastName}`}
-                            </span>
-                            <span className="text-xs font-normal text-[#6A6A6A]">
-                              {dayjs(item.createdDate).isValid() ? dayjs(item.createdDate)?.format('MMMM DD, YYYY') : '--'}
-                            </span>
+                            <div className="flex flex-col items-start justify-start">
+                              <span className="text-sm font-semibold">
+                                {`${item.firstName} ${item.lastName}`}
+                              </span>
+                              <span className="text-xs font-normal text-[#6A6A6A]">
+                                {dayjs(item.createdDate).isValid()
+                                  ? dayjs(item.createdDate)?.format(
+                                      'MMMM DD, YYYY'
+                                    )
+                                  : '--'}
+                              </span>
+                            </div>
                           </div>
-                        </div>
-                      </td>
-                      <td>{item.phone}</td>
-                      <td>
-                        <span className={`badge badge-${item.status == APP_USER_STATUS_OFFLINE ? 'danger' : 'success'}`}>{item.status}</span>
-                      </td>
-                      <td>
-                        {item.appDriverWorkingSchedule ? (
-                          <span>{dayjs(item.appDriverWorkingSchedule[0].startTime)?.format('HH:mm')} to {dayjs(item.appDriverWorkingSchedule[0].endTime)?.format('HH:mm A')}</span>
-                        ) : '--'}
-
-                      </td>
-                      <td>{item.licenseNumber ? item.licenseNumber : '--'}</td>
-                      <td>{item.appOrderDelivery.status ? (
-                        <span className="badge badge-success">{item.appOrderDelivery.status}</span>
-                      ) : (
-                        <span className="badge badge-danger">{ORDER_DELIVERY_STATUS_NOT_ASSIGN}</span>
-                      )}</td>
-                      <td>
-                        {!item.appOrderDelivery.appOrder && item.status === APP_USER_STATUS_ONLINE ? (
-                          <Button
-                            variant="contained"
-                            className="btn-black-fill btn-icon"
-                            onClick={() => assignHandler(item.id)}
-                            disabled={false}
+                        </td>
+                        <td>{item.phone}</td>
+                        <td>
+                          <span
+                            className={`badge badge-${
+                              item.status == APP_USER_STATUS_OFFLINE
+                                ? 'danger'
+                                : 'success'
+                            }`}
                           >
-                            Assign
-                          </Button>
-                        ) : item.appOrderDelivery.appOrder === orderId && item.appOrderDelivery.status !== ORDER_DELIVERY_STATUS_CANCELLED ? (
-                          <Button
-                            variant="contained"
-                            className="btn-black-fill btn-icon"
-                            onClick={() => assignHandler(item.id)}
-                            disabled={true}
-                          >
-                            Assign
-                          </Button>
-                        ) : item.appOrderDelivery.appOrder && item.appOrderDelivery.status === ORDER_DELIVERY_STATUS_CANCELLED ? (
-                          <Button
-                            variant="contained"
-                            className="btn-black-fill btn-icon"
-                            onClick={() => assignHandler(item.id)}
-                            disabled={false}
-                          >
-                            Assign
-                          </Button>
-                        ) : (
-                          <Button
-                            variant="contained"
-                            className="btn-black-fill btn-icon"
-                            onClick={() => assignHandler(item.id)}
-                            disabled={true}
-                          >
-                            Assign
-                          </Button>
-                        )}
-
-                      </td>
-                    </tr>
-                  )
-                })}
+                            {item.status}
+                          </span>
+                        </td>
+                        <td>
+                          {item.appDriverWorkingSchedule ? (
+                            <span>
+                              {dayjs(
+                                item.appDriverWorkingSchedule[0].startTime
+                              )?.format('HH:mm')}{' '}
+                              to{' '}
+                              {dayjs(
+                                item.appDriverWorkingSchedule[0].endTime
+                              )?.format('HH:mm A')}
+                            </span>
+                          ) : (
+                            '--'
+                          )}
+                        </td>
+                        <td>
+                          {item.licenseNumber ? item.licenseNumber : '--'}
+                        </td>
+                        <td>
+                          {item.appOrderDelivery.status ? (
+                            <span className="badge badge-success">
+                              {item.appOrderDelivery.status}
+                            </span>
+                          ) : (
+                            <span className="badge badge-danger">
+                              {ORDER_DELIVERY_STATUS_NOT_ASSIGN}
+                            </span>
+                          )}
+                        </td>
+                        <td>
+                          {!item.appOrderDelivery.appOrder &&
+                          item.status === APP_USER_STATUS_ONLINE ? (
+                            <Button
+                              variant="contained"
+                              className="btn-black-fill btn-icon"
+                              onClick={() => assignHandler(item.id)}
+                              disabled={false}
+                            >
+                              Assign
+                            </Button>
+                          ) : item.appOrderDelivery.appOrder === orderId &&
+                            item.appOrderDelivery.status !==
+                              ORDER_DELIVERY_STATUS_CANCELLED ? (
+                            <Button
+                              variant="contained"
+                              className="btn-black-fill btn-icon"
+                              onClick={() => assignHandler(item.id)}
+                              disabled={true}
+                            >
+                              Assign
+                            </Button>
+                          ) : item.appOrderDelivery.appOrder &&
+                            item.appOrderDelivery.status ===
+                              ORDER_DELIVERY_STATUS_CANCELLED ? (
+                            <Button
+                              variant="contained"
+                              className="btn-black-fill btn-icon"
+                              onClick={() => assignHandler(item.id)}
+                              disabled={false}
+                            >
+                              Assign
+                            </Button>
+                          ) : (
+                            <Button
+                              variant="contained"
+                              className="btn-black-fill btn-icon"
+                              onClick={() => assignHandler(item.id)}
+                              disabled={true}
+                            >
+                              Assign
+                            </Button>
+                          )}
+                        </td>
+                      </tr>
+                    );
+                  })}
               </tbody>
             </table>
           </div>
-          <div className='w-[100%] mt-3 flex justify-center py-3'>
+          <div className="mt-3 flex w-[100%] justify-center py-3">
             <TablePagination
               component="div"
               count={total}
@@ -282,7 +366,6 @@ function OrdersAssignPage() {
         </div>
       </div>
     </>
-
   );
 }
 

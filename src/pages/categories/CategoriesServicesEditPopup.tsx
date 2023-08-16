@@ -7,7 +7,7 @@ import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
 import IconButton from '@mui/material/IconButton';
 import TextField from '@mui/material/TextField';
-import { useForm } from "react-hook-form";
+import { useForm } from 'react-hook-form';
 
 import '../../assets/css/PopupStyle.css';
 import { CategoryService } from '../../interfaces/category.interface';
@@ -23,12 +23,18 @@ function CategoriesServicesEditPopup({
   openFormDialog,
   setOpenFormDialog,
   formData,
-  callback
+  callback,
 }: Props) {
   const [image, setImage] = useState<any>(null);
   const [imageName, setImageName] = useState<string>('');
 
-  const { register, handleSubmit, watch, formState: { errors }, control } = useForm<CategoryService>();
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+    control,
+  } = useForm<CategoryService>();
   const onSubmit = (data: CategoryService) => {
     data.icon = image;
     setOpenFormDialog(false);
@@ -47,10 +53,10 @@ function CategoriesServicesEditPopup({
   };
 
   useEffect(() => {
-    let icon = formData.icon.split("/").slice(-1)[0];
+    let icon = formData.icon.split('/').slice(-1)[0];
     const regexExp = /[a-z,0-9,-]{36}/;
     if (regexExp.test(icon)) {
-      icon = icon.split("-").splice(5)[0];
+      icon = icon.split('-').splice(5)[0];
     }
     setImageName(icon);
   }, []);
@@ -76,10 +82,15 @@ function CategoriesServicesEditPopup({
                 <Input
                   className="FormInput"
                   id="name"
-                  {...register("name", { required: "Name is required", value: formData.name })}
+                  {...register('name', {
+                    required: 'Name is required',
+                    value: formData.name,
+                  })}
                   disableUnderline
                 />
-                {errors.name && <span role="alert">{errors.name?.message}</span>}
+                {errors.name && (
+                  <span role="alert">{errors.name?.message}</span>
+                )}
               </FormControl>
             </div>
             <div className="FormFields">
@@ -89,10 +100,15 @@ function CategoriesServicesEditPopup({
                   className="FormInput"
                   id="name"
                   type="number"
-                  {...register("quantity", { required: "Quantity is required", value: formData.quantity })}
+                  {...register('quantity', {
+                    required: 'Quantity is required',
+                    value: formData.quantity,
+                  })}
                   disableUnderline
                 />
-                {errors.quantity && <span role="alert">{errors.quantity?.message}</span>}
+                {errors.quantity && (
+                  <span role="alert">{errors.quantity?.message}</span>
+                )}
               </FormControl>
               <FormControl className="FormControl" variant="standard">
                 <label className="FormLabel">Price</label>
@@ -100,10 +116,15 @@ function CategoriesServicesEditPopup({
                   className="FormInput"
                   id="name"
                   type="number"
-                  {...register("price", { required: "Price is required", value: formData.price })}
+                  {...register('price', {
+                    required: 'Price is required',
+                    value: formData.price,
+                  })}
                   disableUnderline
                 />
-                {errors.price && <span role="alert">{errors.price?.message}</span>}
+                {errors.price && (
+                  <span role="alert">{errors.price?.message}</span>
+                )}
               </FormControl>
             </div>
             <div className="FormField">
@@ -119,7 +140,7 @@ function CategoriesServicesEditPopup({
                   rows={2}
                   defaultValue=""
                   placeholder="Write Description"
-                  {...register("desc", { value: formData.desc })}
+                  {...register('desc', { value: formData.desc })}
                 />
               </FormControl>
             </div>

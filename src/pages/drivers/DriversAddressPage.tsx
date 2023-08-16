@@ -35,8 +35,9 @@ function DriversAddressPage() {
   const [address, setAddress] = useState<string>("");
   const [editFormData, setEditFormData] = useState<any>(null);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const [actionMenuItemid, setActionMenuItemid] = React.useState("");
-  const [actionMenuAnchorEl, setActionMenuAnchorEl] = useState<null | HTMLElement>(null);
+  const [actionMenuItemid, setActionMenuItemid] = React.useState('');
+  const [actionMenuAnchorEl, setActionMenuAnchorEl] =
+    useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
   const actionMenuOptions = ['Edit', 'Delete'];
 
@@ -51,20 +52,22 @@ function DriversAddressPage() {
     } else if (option === 'Delete') {
       deleteEntity(actionMenuItemid);
     }
-  }
+  };
 
   const deleteEntity = (id: string) => {
     const data = {
       is_deleted: true,
-    }
+    };
     Service.deleteAddressService(id, data).then((item: any) => {
       if (item.data.success) {
         setList((newArr: any) => {
-          return newArr.filter((newItem: any) => newItem.id !== item.data.data.id);
+          return newArr.filter(
+            (newItem: any) => newItem.id !== item.data.data.id
+          );
         });
       }
-    })
-  }
+    });
+  };
 
   const getData = (id: string) => {
     Service.getAddress(id).then((item: any) => {
@@ -72,8 +75,8 @@ function DriversAddressPage() {
         setEditFormData(item.data.data);
         setOpenEditFormDialog(true);
       }
-    })
-  }
+    });
+  };
 
   const handleClickSearch = (event: any) => {
     if (event.key === 'Enter') {
@@ -81,16 +84,18 @@ function DriversAddressPage() {
       const newPage = 0;
       setSearch(searchTxt);
       setPage(newPage);
-      Service.searchAddressService(id, searchTxt, newPage, rowsPerPage).then(item => {
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      })
+      Service.searchAddressService(id, searchTxt, newPage, rowsPerPage).then(
+        (item) => {
+          setList(item.data.data.list);
+          setTotal(item.data.data.total);
+        }
+      );
     }
   };
 
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
-    newPage: number,
+    newPage: number
   ) => {
     setPage(newPage);
     //offset? ,limit rowsperpage hoga ofset page * rowsperPage
@@ -100,14 +105,16 @@ function DriversAddressPage() {
         setTotal(item.data.data.total);
       });
     } else {
-      Service.searchAddressService(id, search, newPage, rowsPerPage).then(item => {
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      });
+      Service.searchAddressService(id, search, newPage, rowsPerPage).then(
+        (item) => {
+          setList(item.data.data.list);
+          setTotal(item.data.data.total);
+        }
+      );
     }
   };
   const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const newRowperPage = parseInt(event.target.value, 10);
     const newPage = 0;
@@ -119,13 +126,14 @@ function DriversAddressPage() {
         setTotal(item.data.data.total);
       });
     } else {
-      Service.searchAddressService(id, search, newPage, rowsPerPage).then(item => {
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      });
+      Service.searchAddressService(id, search, newPage, rowsPerPage).then(
+        (item) => {
+          setList(item.data.data.list);
+          setTotal(item.data.data.total);
+        }
+      );
     }
   };
-
 
   useEffect(() => {
     Service.getAddressService(id).then((item: any) => {
@@ -140,25 +148,25 @@ function DriversAddressPage() {
           setTotal(Number(item.data.data.total));
         }
       }
-    })
+    });
   }, []);
 
   const createFormHandler = (data: any) => {
     const formData = new FormData();
-    formData.append("name", data.name);
-    formData.append("latitude", data.latitude);
-    formData.append("longitude", data.longitude);
-    formData.append("type", data.type);
-    formData.append("address", data.address);
-    formData.append("app_user", id);
-    formData.append("tenant", authState.user.tenant);
+    formData.append('name', data.name);
+    formData.append('latitude', data.latitude);
+    formData.append('longitude', data.longitude);
+    formData.append('type', data.type);
+    formData.append('address', data.address);
+    formData.append('app_user', id);
+    formData.append('tenant', authState.user.tenant);
     Service.createAddress(actionMenuItemid, formData).then((item) => {
       if (item.data.success) {
         list.unshift(item.data.data);
         setList(list);
       }
-    })
-  }
+    });
+  };
 
   const updateFormHandler = (data: any) => {
     const formData = new FormData();
@@ -178,13 +186,13 @@ function DriversAddressPage() {
               newItem.latitude = item.data.data.latitude;
               newItem.longitude = item.data.data.longitude;
               newItem.address = item.data.data.address;
-              return { ...newItem }
+              return { ...newItem };
             }
           });
         });
       }
-    })
-  }
+    });
+  };
 
   const handleSwitchChange = (event: any, id: string) => {
     if (list.length > 1) {
@@ -213,7 +221,6 @@ function DriversAddressPage() {
           <div className="grid grid-cols-12 gap-3">
             <div className="col-span-4 rounded-lg bg-[#fff] px-4 py-5 shadow-lg">
               <div className="flex w-full items-center">
-
                 {detail.avatar ? (
                   <img
                     src={detail.avatar}
@@ -221,7 +228,20 @@ function DriversAddressPage() {
                     className="mr-4 w-[100px] rounded-full"
                   />
                 ) : (
-                  <Avatar className="avatar flex flex-row items-center" sx={{ bgcolor: '#1D1D1D', width: 100, height: 100, textTransform: 'uppercase', fontSize: '25px', marginRight: '10px' }}>{detail.firstName.charAt(0)}{detail.lastName.charAt(0)}</Avatar>
+                  <Avatar
+                    className="avatar flex flex-row items-center"
+                    sx={{
+                      bgcolor: '#1D1D1D',
+                      width: 100,
+                      height: 100,
+                      textTransform: 'uppercase',
+                      fontSize: '25px',
+                      marginRight: '10px',
+                    }}
+                  >
+                    {detail.firstName.charAt(0)}
+                    {detail.lastName.charAt(0)}
+                  </Avatar>
                 )}
                 <div className="flex flex-col justify-start justify-items-center">
                   <span className="font-open-sans text-xl font-semibold text-[#1A1A1A]">
@@ -230,7 +250,10 @@ function DriversAddressPage() {
                   <span className="font-sm font-open-sans text-sm text-[#6A6A6A]">
                     {detail.phone}
                   </span>
-                  <span className={`font-sm mt-2 font-open-sans text-sm ${detail.isActive ? 'text-[#29CC97]' : 'text-[#f50057]'}`}>
+                  <span
+                    className={`font-sm mt-2 font-open-sans text-sm ${detail.isActive ? 'text-[#29CC97]' : 'text-[#f50057]'
+                      }`}
+                  >
                     {detail.isActive ? 'Active' : 'Inactive'}
                   </span>
                 </div>
@@ -354,11 +377,17 @@ function DriversAddressPage() {
                                 className="btn-dot"
                                 aria-label="more"
                                 id="long-button"
-                                aria-controls={actionMenuOpen ? 'long-menu' : undefined}
-                                aria-expanded={actionMenuOpen ? 'true' : undefined}
+                                aria-controls={
+                                  actionMenuOpen ? 'long-menu' : undefined
+                                }
+                                aria-expanded={
+                                  actionMenuOpen ? 'true' : undefined
+                                }
                                 aria-haspopup="true"
-                                onClick={(event: React.MouseEvent<HTMLElement>) => {
-                                  setActionMenuItemid(list[index].id)
+                                onClick={(
+                                  event: React.MouseEvent<HTMLElement>
+                                ) => {
+                                  setActionMenuItemid(list[index].id);
                                   setActionMenuAnchorEl(event.currentTarget);
                                 }}
                               >
@@ -371,7 +400,7 @@ function DriversAddressPage() {
                     </tbody>
                   </table>
                 </div>
-                <div className='w-[100%] mt-3 flex justify-center py-3'>
+                <div className="mt-3 flex w-[100%] justify-center py-3">
                   <TablePagination
                     component="div"
                     count={total}
@@ -387,7 +416,13 @@ function DriversAddressPage() {
         </div>
       )}
       {actionMenuAnchorEl && (
-        <ActionMenu open={actionMenuOpen} anchorEl={actionMenuAnchorEl} setAnchorEl={setActionMenuAnchorEl} options={actionMenuOptions} callback={manuHandler} />
+        <ActionMenu
+          open={actionMenuOpen}
+          anchorEl={actionMenuAnchorEl}
+          setAnchorEl={setActionMenuAnchorEl}
+          options={actionMenuOptions}
+          callback={manuHandler}
+        />
       )}
       <DriversAddressCreatePopup
         openFormDialog={openFormDialog}

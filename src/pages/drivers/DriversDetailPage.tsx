@@ -19,8 +19,6 @@ import Button from '@mui/material/Button';
 import { useAppSelector } from '../../redux/redux-hooks';
 import TablePagination from '@mui/material/TablePagination';
 import Switch from '@mui/material/Switch';
-import DriversAddressCreatePopup from './DriversAddressCreatePopup';
-import DriversAddressEditPopup from './DriversAddressEditPopup';
 import { ORDER_DELIVERY_STATUS_ACCEPTED, ORDER_DELIVERY_STATUS_CANCELLED, ORDER_DELIVERY_STATUS_DELIVERED, ORDER_DELIVERY_STATUS_IN_DELIVERY, ORDER_DELIVERY_STATUS_NEW, ORDER_DELIVERY_STATUS_PICKED_UP } from '../../utils/constants';
 import assets from '../../assets';
 
@@ -35,8 +33,9 @@ function DriversDetailPage() {
   const [list, setList] = useState<any>([]);
   const [address, setAddress] = useState<string>("");
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const [actionMenuItemid, setActionMenuItemid] = React.useState("");
-  const [actionMenuAnchorEl, setActionMenuAnchorEl] = useState<null | HTMLElement>(null);
+  const [actionMenuItemid, setActionMenuItemid] = React.useState('');
+  const [actionMenuAnchorEl, setActionMenuAnchorEl] =
+    useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
   const actionMenuOptions = ['Edit', 'Delete'];
 
@@ -46,7 +45,7 @@ function DriversDetailPage() {
     if (option === 'Edit') {
     } else if (option === 'Delete') {
     }
-  }
+  };
 
   const handleClickSearch = (event: any) => {
     // if (event.key === 'Enter') {
@@ -63,12 +62,12 @@ function DriversDetailPage() {
 
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
-    newPage: number,
+    newPage: number
   ) => {
     setPage(newPage);
     //offset? ,limit rowsperpage hoga ofset page * rowsperPage
-    if (search === "" || search === null || search === undefined) {
-      Service.getDeliveryListService(id, newPage, rowsPerPage).then(item => {
+    if (search === '' || search === null || search === undefined) {
+      Service.getDeliveryListService(id, newPage, rowsPerPage).then((item) => {
         setList(item.data.data.list);
         setTotal(item.data.data.total);
       });
@@ -80,14 +79,14 @@ function DriversDetailPage() {
     }
   };
   const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const newRowperPage = parseInt(event.target.value, 10);
     const newPage = 0;
     setRowsPerPage(newRowperPage);
     setPage(newPage);
-    if (search === "" || search === null || search === undefined) {
-      Service.getDeliveryListService(id, newPage, rowsPerPage).then(item => {
+    if (search === '' || search === null || search === undefined) {
+      Service.getDeliveryListService(id, newPage, rowsPerPage).then((item) => {
         setList(item.data.data.list);
         setTotal(item.data.data.total);
       });
@@ -99,7 +98,6 @@ function DriversDetailPage() {
     }
   };
 
-
   useEffect(() => {
     Service.getDetailService(id).then((item: any) => {
       if (item.data.success) {
@@ -108,26 +106,26 @@ function DriversDetailPage() {
         setList(item.data.data.appOrderDelivery.reverse());
         setTotal(Number(item.data.data.total));
       }
-    })
+    });
   }, []);
 
   const getStatusTag = (status: string) => {
-    let tag = "";
+    let tag = '';
     if (status === ORDER_DELIVERY_STATUS_NEW) {
-      tag = "blue";
+      tag = 'blue';
     } else if (status === ORDER_DELIVERY_STATUS_ACCEPTED) {
-      tag = "blue";
+      tag = 'blue';
     } else if (status === ORDER_DELIVERY_STATUS_PICKED_UP) {
-      tag = "purple";
+      tag = 'purple';
     } else if (status === ORDER_DELIVERY_STATUS_IN_DELIVERY) {
-      tag = "orange";
+      tag = 'orange';
     } else if (status === ORDER_DELIVERY_STATUS_DELIVERED) {
-      tag = "yellow";
+      tag = 'yellow';
     } else if (status === ORDER_DELIVERY_STATUS_CANCELLED) {
-      tag = "red";
+      tag = 'red';
     }
     return tag;
-  }
+  };
 
   return (
     <>
@@ -137,7 +135,6 @@ function DriversDetailPage() {
           <div className="grid grid-cols-12 gap-3">
             <div className="col-span-4 rounded-lg bg-[#fff] px-4 py-5 shadow-lg">
               <div className="flex w-full items-center">
-
                 {detail.avatar ? (
                   <img
                     src={detail.avatar}
@@ -145,7 +142,20 @@ function DriversDetailPage() {
                     className="mr-4 w-[100px] rounded-full"
                   />
                 ) : (
-                  <Avatar className="avatar flex flex-row items-center" sx={{ bgcolor: '#1D1D1D', width: 100, height: 100, textTransform: 'uppercase', fontSize: '25px', marginRight: '10px' }}>{detail.firstName.charAt(0)}{detail.lastName.charAt(0)}</Avatar>
+                  <Avatar
+                    className="avatar flex flex-row items-center"
+                    sx={{
+                      bgcolor: '#1D1D1D',
+                      width: 100,
+                      height: 100,
+                      textTransform: 'uppercase',
+                      fontSize: '25px',
+                      marginRight: '10px',
+                    }}
+                  >
+                    {detail.firstName.charAt(0)}
+                    {detail.lastName.charAt(0)}
+                  </Avatar>
                 )}
                 <div className="flex flex-col justify-start justify-items-center">
                   <span className="font-open-sans text-xl font-semibold text-[#1A1A1A]">
@@ -154,7 +164,10 @@ function DriversDetailPage() {
                   <span className="font-sm font-open-sans text-sm text-[#6A6A6A]">
                     {detail.phone}
                   </span>
-                  <span className={`font-sm mt-2 font-open-sans text-sm ${detail.isActive ? 'text-[#29CC97]' : 'text-[#f50057]'}`}>
+                  <span
+                    className={`font-sm mt-2 font-open-sans text-sm ${detail.isActive ? 'text-[#29CC97]' : 'text-[#f50057]'
+                      }`}
+                  >
                     {detail.isActive ? 'Active' : 'Inactive'}
                   </span>
                 </div>
@@ -248,27 +261,55 @@ function DriversDetailPage() {
                               {dayjs(item.pickupDateTime).isValid() ? (
                                 <div className="flex flex-col">
                                   <span className="text-sm font-normal text-[#1A1A1A]">
-                                    {dayjs(item.pickupDateTime)?.format('hh:mm:ssA')} - {dayjs(item.pickupDateTime).add(1, 'hour').format('hh:mm:ssA')}
+                                    {dayjs(item.pickupDateTime)?.format(
+                                      'hh:mm:ssA'
+                                    )}{' '}
+                                    -{' '}
+                                    {dayjs(item.pickupDateTime)
+                                      .add(1, 'hour')
+                                      .format('hh:mm:ssA')}
                                   </span>
                                   <span className="text-xs font-normal text-[#6A6A6A]">
-                                    {dayjs(item.pickupDateTime)?.format('ddd, MMM DD, YYYY')}
+                                    {dayjs(item.pickupDateTime)?.format(
+                                      'ddd, MMM DD, YYYY'
+                                    )}
                                   </span>
                                 </div>
-                              ) : "----"}
+                              ) : (
+                                '----'
+                              )}
                             </td>
                             <td>
                               {dayjs(item.dropDateTime).isValid() ? (
                                 <div className="flex flex-col">
                                   <span className="text-sm font-normal text-[#1A1A1A]">
-                                    {dayjs(item.dropDateTime)?.format('hh:mm:ssA')} - {dayjs(item.dropDateTime).add(1, 'hour').format('hh:mm:ssA')}
+                                    {dayjs(item.dropDateTime)?.format(
+                                      'hh:mm:ssA'
+                                    )}{' '}
+                                    -{' '}
+                                    {dayjs(item.dropDateTime)
+                                      .add(1, 'hour')
+                                      .format('hh:mm:ssA')}
                                   </span>
                                   <span className="text-xs font-normal text-[#6A6A6A]">
-                                    {dayjs(item.dropDateTime)?.format('ddd, MMM DD, YYYY')}
+                                    {dayjs(item.dropDateTime)?.format(
+                                      'ddd, MMM DD, YYYY'
+                                    )}
                                   </span>
                                 </div>
-                              ) : "----"}
+                              ) : (
+                                '----'
+                              )}
                             </td>
-                            <td><span className={`badge badge-${getStatusTag(item.status)}`}>{item.status}</span></td>
+                            <td>
+                              <span
+                                className={`badge badge-${getStatusTag(
+                                  item.status
+                                )}`}
+                              >
+                                {item.status}
+                              </span>
+                            </td>
                             <td>
                               {/* <IconButton
                                 className="btn-dot"
@@ -291,7 +332,7 @@ function DriversDetailPage() {
                     </tbody>
                   </table>
                 </div>
-                <div className='w-[100%] mt-3 flex justify-center py-3'>
+                <div className="mt-3 flex w-[100%] justify-center py-3">
                   <TablePagination
                     component="div"
                     count={total}
@@ -307,7 +348,13 @@ function DriversDetailPage() {
         </div>
       )}
       {actionMenuAnchorEl && (
-        <ActionMenu open={actionMenuOpen} anchorEl={actionMenuAnchorEl} setAnchorEl={setActionMenuAnchorEl} options={actionMenuOptions} callback={manuHandler} />
+        <ActionMenu
+          open={actionMenuOpen}
+          anchorEl={actionMenuAnchorEl}
+          setAnchorEl={setActionMenuAnchorEl}
+          options={actionMenuOptions}
+          callback={manuHandler}
+        />
       )}
     </>
   );

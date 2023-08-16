@@ -29,49 +29,57 @@ function CartsPage() {
   const [total, setTotal] = useState(0);
   const [list, setList] = useState<any>([]);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const [actionMenuItemid, setActionMenuItemid] = React.useState("");
-  const [actionMenuAnchorEl, setActionMenuAnchorEl] = useState<null | HTMLElement>(null);
+  const [actionMenuItemid, setActionMenuItemid] = React.useState('');
+  const [actionMenuAnchorEl, setActionMenuAnchorEl] =
+    useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
 
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
-    newPage: number,
+    newPage: number
   ) => {
     setPage(newPage);
     //offset? ,limit rowsperpage hoga ofset page * rowsperPage
-    if (search === "" || search === null || search === undefined) {
-      cart.getListService(authState.user.tenant, newPage, rowsPerPage).then(item => {
-        setList(item.data.data.list.map((item: any) => ({ ...item })));
-        setTotal(item.data.data.total);
-      });
+    if (search === '' || search === null || search === undefined) {
+      cart
+        .getListService(authState.user.tenant, newPage, rowsPerPage)
+        .then((item) => {
+          setList(item.data.data.list.map((item: any) => ({ ...item })));
+          setTotal(item.data.data.total);
+        });
     } else {
-      cart.searchService(authState.user.tenant, search, newPage, rowsPerPage).then(item => {
-        setList(item.data.data.list.map((item: any) => ({ ...item })));
-        setTotal(item.data.data.total);
-      });
+      cart
+        .searchService(authState.user.tenant, search, newPage, rowsPerPage)
+        .then((item) => {
+          setList(item.data.data.list.map((item: any) => ({ ...item })));
+          setTotal(item.data.data.total);
+        });
     }
-
   };
 
   const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const newRowperPage = parseInt(event.target.value, 10);
     const newPage = 0;
     setRowsPerPage(newRowperPage);
     setPage(newPage);
-    if (search === "" || search === null || search === undefined) {
-      cart.getListService(authState.user.tenant, newPage, newRowperPage).then(item => {
-        //console.log(item.data.data)
-        setList(item.data.data.list.map((item: any) => ({ ...item })));
-        setTotal(item.data.data.total);
-      });
+    if (search === '' || search === null || search === undefined) {
+      cart
+        .getListService(authState.user.tenant, newPage, newRowperPage)
+        .then((item) => {
+          //console.log(item.data.data)
+          setList(item.data.data.list.map((item: any) => ({ ...item })));
+          setTotal(item.data.data.total);
+        });
     } else {
-      cart.searchService(authState.user.tenant, search, newPage, newRowperPage).then(item => {
-        console.log('item::::::', item)
-        setList(item.data.data.list.map((item: any) => ({ ...item })));
-        setTotal(item.data.data.total);
-      });
+      cart
+        .searchService(authState.user.tenant, search, newPage, newRowperPage)
+        .then((item) => {
+          console.log('item::::::', item);
+          setList(item.data.data.list.map((item: any) => ({ ...item })));
+          setTotal(item.data.data.total);
+        });
     }
   };
 
@@ -80,18 +88,22 @@ function CartsPage() {
     const newPage = 0;
     setSearch(searchTxt);
     setPage(newPage);
-    cart.searchService(authState.user.tenant, searchTxt, newPage, rowsPerPage).then(item => {
-      setList(item.data.data.list.map((item: any) => ({ ...item })));
-      setTotal(item.data.data.total);
-    })
+    cart
+      .searchService(authState.user.tenant, searchTxt, newPage, rowsPerPage)
+      .then((item) => {
+        setList(item.data.data.list.map((item: any) => ({ ...item })));
+        setTotal(item.data.data.total);
+      });
   };
 
   useEffect(() => {
-    cart.getListService(authState.user.tenant, page, rowsPerPage).then(item => {
-      //console.log(item.data.data)
-      setList(item.data.data.list.map((item: any) => ({ ...item })));
-      setTotal(item.data.data.total);
-    });
+    cart
+      .getListService(authState.user.tenant, page, rowsPerPage)
+      .then((item) => {
+        //console.log(item.data.data)
+        setList(item.data.data.list.map((item: any) => ({ ...item })));
+        setTotal(item.data.data.total);
+      });
   }, []);
 
   const manuHandler = (option: string) => {
@@ -105,22 +117,28 @@ function CartsPage() {
     }
     navigate(`${doOption}/${actionMenuItemid}`);
     //console.log('actionMenuItemid', actionMenuItemid)
-  }
+  };
 
   const getStatusTag = (status: string) => {
-    let tag = "";
+    let tag = '';
     if (status === CART_STATUS_NEW) {
-      tag = "blue";
+      tag = 'blue';
     } else if (status === CART_STATUS_PROCESSING) {
-      tag = "green";
+      tag = 'green';
     }
     return tag;
-  }
+  };
 
   return (
     <>
       {actionMenuAnchorEl && (
-        <ActionMenu open={actionMenuOpen} anchorEl={actionMenuAnchorEl} setAnchorEl={setActionMenuAnchorEl} options={actionMenuOptions} callback={manuHandler} />
+        <ActionMenu
+          open={actionMenuOpen}
+          anchorEl={actionMenuAnchorEl}
+          setAnchorEl={setActionMenuAnchorEl}
+          options={actionMenuOptions}
+          callback={manuHandler}
+        />
       )}
       <TopBar title="Carts" />
       <div className="container mt-5">
@@ -150,7 +168,6 @@ function CartsPage() {
                       if (event.key === 'Enter') {
                         handleClickSearch(event);
                       }
-
                     }}
                     endAdornment={
                       <InputAdornment position="end">
@@ -158,9 +175,7 @@ function CartsPage() {
                           sx={{ height: 28, m: 0.5 }}
                           orientation="vertical"
                         />
-                        <IconButton aria-label="toggle password visibility"
-
-                        >
+                        <IconButton aria-label="toggle password visibility">
                           <SearchIcon className="text-[#6A6A6A]" />
                         </IconButton>
                       </InputAdornment>
@@ -216,81 +231,107 @@ function CartsPage() {
                 </tr>
               </thead>
               <tbody>
-                {list && list.map((cart: any, index: number) => {
-                  //console.log(order);
-                  return (
-                    <tr key={cart.id}>
-                      <td>
-                        {cart.user.firstName ? (
-                          <div className="flex flex-col">
-                            <span className="text-sm font-semibold text-[#1A1A1A]">
-                              {cart.user.firstName} {cart.user.lastName}
-                            </span>
-                            <span className="text-xs font-normal text-[#6A6A6A]">
-                              {cart.user.email}
-                            </span>
-                            <span className="text-xs font-normal text-[#6A6A6A]">
-                              {cart.userAddress.address}
-                            </span>
-                          </div>
-                        ) : "----"}
-                      </td>
-                      <td>
-                        {dayjs(cart.pickupDateTime).isValid() ? (
-                          <div className="flex flex-col">
-                            <span className="text-sm font-normal text-[#1A1A1A]">
-                              {dayjs(cart.pickupDateTime)?.format('hh:mm:ssA')} - {dayjs(cart.pickupDateTime).add(1, 'hour').format('hh:mm:ssA')}
-
-                            </span>
-                            <span className="text-xs font-normal text-[#6A6A6A]">
-                              {dayjs(cart.pickupDateTime)?.format('ddd, MMM DD, YYYY')}
-                            </span>
-                          </div>
-                        ) : "----"}
-
-                      </td>
-                      <td>
-                        {dayjs(cart.dropDateTime).isValid() ? (
-                          <div className="flex flex-col">
-                            <span className="text-sm font-normal text-[#1A1A1A]">
-                              {dayjs(cart.dropDateTime)?.format('hh:mm:ssA')} - {dayjs(cart.dropDateTime).add(1, 'hour').format('hh:mm:ssA')}
-                            </span>
-                            <span className="text-xs font-normal text-[#6A6A6A]">
-                              {dayjs(cart.dropDateTime)?.format('ddd, MMM DD, YYYY')}
-                            </span>
-                          </div>
-                        ) : "----"}
-
-                      </td>
-                      <td className="text-sm font-semibold text-[#1A1A1A]">
-                        ${cart.grandTotal}
-                      </td>
-                      <td>
-                        <span className={`badge badge-${getStatusTag(cart.status)}`}>{cart.status}</span>
-                      </td>
-                      <td>
-                        <IconButton
-                          className="btn-dot"
-                          aria-label="more"
-                          id="long-button"
-                          aria-controls={actionMenuOpen ? 'long-menu' : undefined}
-                          aria-expanded={actionMenuOpen ? 'true' : undefined}
-                          aria-haspopup="true"
-                          onClick={(event: React.MouseEvent<HTMLElement>) => {
-                            setActionMenuItemid(list[index].id)
-                            setActionMenuAnchorEl(event.currentTarget);
-                          }}
-                        >
-                          <MoreVertIcon />
-                        </IconButton>
-                      </td>
-                    </tr>
-                  )
-                })}
+                {list &&
+                  list.map((cart: any, index: number) => {
+                    //console.log(order);
+                    return (
+                      <tr key={cart.id}>
+                        <td>
+                          {cart.user.firstName ? (
+                            <div className="flex flex-col">
+                              <span className="text-sm font-semibold text-[#1A1A1A]">
+                                {cart.user.firstName} {cart.user.lastName}
+                              </span>
+                              <span className="text-xs font-normal text-[#6A6A6A]">
+                                {cart.user.email}
+                              </span>
+                              <span className="text-xs font-normal text-[#6A6A6A]">
+                                {cart.userAddress.address}
+                              </span>
+                            </div>
+                          ) : (
+                            '----'
+                          )}
+                        </td>
+                        <td>
+                          {dayjs(cart.pickupDateTime).isValid() ? (
+                            <div className="flex flex-col">
+                              <span className="text-sm font-normal text-[#1A1A1A]">
+                                {dayjs(cart.pickupDateTime)?.format(
+                                  'hh:mm:ssA'
+                                )}{' '}
+                                -{' '}
+                                {dayjs(cart.pickupDateTime)
+                                  .add(1, 'hour')
+                                  .format('hh:mm:ssA')}
+                              </span>
+                              <span className="text-xs font-normal text-[#6A6A6A]">
+                                {dayjs(cart.pickupDateTime)?.format(
+                                  'ddd, MMM DD, YYYY'
+                                )}
+                              </span>
+                            </div>
+                          ) : (
+                            '----'
+                          )}
+                        </td>
+                        <td>
+                          {dayjs(cart.dropDateTime).isValid() ? (
+                            <div className="flex flex-col">
+                              <span className="text-sm font-normal text-[#1A1A1A]">
+                                {dayjs(cart.dropDateTime)?.format('hh:mm:ssA')}{' '}
+                                -{' '}
+                                {dayjs(cart.dropDateTime)
+                                  .add(1, 'hour')
+                                  .format('hh:mm:ssA')}
+                              </span>
+                              <span className="text-xs font-normal text-[#6A6A6A]">
+                                {dayjs(cart.dropDateTime)?.format(
+                                  'ddd, MMM DD, YYYY'
+                                )}
+                              </span>
+                            </div>
+                          ) : (
+                            '----'
+                          )}
+                        </td>
+                        <td className="text-sm font-semibold text-[#1A1A1A]">
+                          ${cart.grandTotal}
+                        </td>
+                        <td>
+                          <span
+                            className={`badge badge-${getStatusTag(
+                              cart.status
+                            )}`}
+                          >
+                            {cart.status}
+                          </span>
+                        </td>
+                        <td>
+                          <IconButton
+                            className="btn-dot"
+                            aria-label="more"
+                            id="long-button"
+                            aria-controls={
+                              actionMenuOpen ? 'long-menu' : undefined
+                            }
+                            aria-expanded={actionMenuOpen ? 'true' : undefined}
+                            aria-haspopup="true"
+                            onClick={(event: React.MouseEvent<HTMLElement>) => {
+                              setActionMenuItemid(list[index].id);
+                              setActionMenuAnchorEl(event.currentTarget);
+                            }}
+                          >
+                            <MoreVertIcon />
+                          </IconButton>
+                        </td>
+                      </tr>
+                    );
+                  })}
               </tbody>
             </table>
           </div>
-          <div className='w-[100%] mt-3 flex justify-center py-3'>
+          <div className="mt-3 flex w-[100%] justify-center py-3">
             <TablePagination
               component="div"
               count={total}

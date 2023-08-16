@@ -3,7 +3,7 @@ import Dialog from '@mui/material/Dialog';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
-import { useForm } from "react-hook-form";
+import { useForm } from 'react-hook-form';
 
 import '../../assets/css/PopupStyle.css';
 import { CategoryServiceFaq } from '../../interfaces/category.interface';
@@ -15,16 +15,25 @@ type Props = {
   callback: Function;
 };
 
-function CategoriesServicesFaqCreatePopup({ openFormDialog, setOpenFormDialog, callback }: Props) {
-  const { register, handleSubmit, watch, formState: { errors }, control } = useForm<CategoryServiceFaq>();
+function CategoriesServicesFaqCreatePopup({
+  openFormDialog,
+  setOpenFormDialog,
+  callback,
+}: Props) {
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+    control,
+  } = useForm<CategoryServiceFaq>();
   const onSubmit = (data: CategoryServiceFaq) => {
     setOpenFormDialog(false);
     callback(data);
-
   };
 
   const handleFormClose = () => {
-    setOpenFormDialog(false)
+    setOpenFormDialog(false);
   };
 
   return (
@@ -50,9 +59,13 @@ function CategoriesServicesFaqCreatePopup({ openFormDialog, setOpenFormDialog, c
                   id="question"
                   placeholder="Question"
                   disableUnderline
-                  {...register("question", { required: "Question is required" })}
+                  {...register('question', {
+                    required: 'Question is required',
+                  })}
                 />
-                {errors.question && <span role="alert">{errors.question?.message}</span>}
+                {errors.question && (
+                  <span role="alert">{errors.question?.message}</span>
+                )}
               </FormControl>
             </div>
             <div className="FormField">
@@ -65,9 +78,11 @@ function CategoriesServicesFaqCreatePopup({ openFormDialog, setOpenFormDialog, c
                   maxRows={15}
                   defaultValue=""
                   placeholder="Write answer here..."
-                  {...register("answer", { required: "Answer is required" })}
+                  {...register('answer', { required: 'Answer is required' })}
                 />
-                {errors.answer && <span role="alert">{errors.answer?.message}</span>}
+                {errors.answer && (
+                  <span role="alert">{errors.answer?.message}</span>
+                )}
               </FormControl>
             </div>
           </div>
@@ -91,7 +106,6 @@ function CategoriesServicesFaqCreatePopup({ openFormDialog, setOpenFormDialog, c
                 padding: '0.375rem 2rem !important',
               }}
             />
-
           </div>
         </form>
       </div>

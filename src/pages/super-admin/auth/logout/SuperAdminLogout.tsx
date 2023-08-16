@@ -4,13 +4,13 @@ import { useAppDispatch } from '../../../../redux/redux-hooks';
 import { logout } from '../../../../redux/features/authStateSlice';
 
 function SuperAdminLogout() {
-    const dispatch = useAppDispatch();
-    const navigate = useNavigate();
-    useEffect(() => {
-        dispatch(logout());
-        navigate('../auth/login');
-    });
-    return (<></>)
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  useEffect(() => {
+    dispatch(logout());
+    navigate('../auth/login');
+  });
+  return <></>;
 }
 
 export default SuperAdminLogout;

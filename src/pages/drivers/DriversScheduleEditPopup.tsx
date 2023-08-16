@@ -5,7 +5,7 @@ import Input from '@mui/material/Input';
 import dayjs from 'dayjs';
 import '../../assets/css/PopupStyle.css';
 import TimePicker from '../../components/common/TimePicker';
-import { useForm } from "react-hook-form";
+import { useForm } from 'react-hook-form';
 import { AppUserDriverExt } from '../../interfaces/app-user.interface';
 
 type Props = {
@@ -15,13 +15,22 @@ type Props = {
   callback: Function;
 };
 
-
-
-function DriversScheduleEditPopup({ openFormDialog, setOpenFormDialog, formData, callback }: Props) {
+function DriversScheduleEditPopup({
+  openFormDialog,
+  setOpenFormDialog,
+  formData,
+  callback,
+}: Props) {
   const [startTime, setStartTime] = useState<dayjs.Dayjs | null>(null);
   const [endTime, setEndTime] = useState<dayjs.Dayjs | null>(null);
 
-  const { register, handleSubmit, watch, formState: { errors }, control } = useForm<AppUserDriverExt>();
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+    control,
+  } = useForm<AppUserDriverExt>();
 
   const handleFormClose = () => setOpenFormDialog(false);
 
@@ -36,7 +45,6 @@ function DriversScheduleEditPopup({ openFormDialog, setOpenFormDialog, formData,
       setStartTime(formData.startTime);
       setEndTime(formData.endTime);
     }
-
   }, []);
 
   return (

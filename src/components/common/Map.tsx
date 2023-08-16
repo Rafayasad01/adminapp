@@ -2,7 +2,11 @@ import { useEffect, useRef, useState } from 'react';
 import { Loader } from '@googlemaps/js-api-loader';
 
 import assets from '../../assets';
-import { OFFICE_MAP_LABEL, OFFICE_MAP_LAT, OFFICE_MAP_LNG } from '../../utils/constants';
+import {
+  OFFICE_MAP_LABEL,
+  OFFICE_MAP_LAT,
+  OFFICE_MAP_LNG,
+} from '../../utils/constants';
 
 type Props = {
   center: google.maps.LatLngLiteral;
@@ -28,8 +32,8 @@ function Map({ center, zoom }: Props) {
         label = {
           text: OFFICE_MAP_LABEL,
           color: '#1A1A1A',
-          className: 'map-label-styling'
-        }
+          className: 'map-label-styling',
+        };
       }
       const options: google.maps.MapOptions = {
         center,

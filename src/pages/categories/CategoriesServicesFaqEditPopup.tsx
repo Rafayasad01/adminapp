@@ -3,7 +3,7 @@ import Dialog from '@mui/material/Dialog';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
-import { useForm } from "react-hook-form";
+import { useForm } from 'react-hook-form';
 
 import '../../assets/css/PopupStyle.css';
 import { CategoryServiceFaq } from '../../interfaces/category.interface';
@@ -20,17 +20,22 @@ function CategoriesServicesFaqEditPopup({
   openFormDialog,
   setOpenFormDialog,
   formData,
-  callback
+  callback,
 }: Props) {
-  const { register, handleSubmit, watch, formState: { errors }, control } = useForm<CategoryServiceFaq>();
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+    control,
+  } = useForm<CategoryServiceFaq>();
   const onSubmit = (data: CategoryServiceFaq) => {
     setOpenFormDialog(false);
     callback(data);
-
   };
 
   const handleFormClose = () => {
-    setOpenFormDialog(false)
+    setOpenFormDialog(false);
   };
 
   return (
@@ -56,9 +61,14 @@ function CategoriesServicesFaqEditPopup({
                   id="question"
                   placeholder="Question"
                   disableUnderline
-                  {...register("question", { required: "Question is required", value: formData.question })}
+                  {...register('question', {
+                    required: 'Question is required',
+                    value: formData.question,
+                  })}
                 />
-                {errors.question && <span role="alert">{errors.question?.message}</span>}
+                {errors.question && (
+                  <span role="alert">{errors.question?.message}</span>
+                )}
               </FormControl>
             </div>
             <div className="FormField">
@@ -71,9 +81,14 @@ function CategoriesServicesFaqEditPopup({
                   maxRows={15}
                   defaultValue=""
                   placeholder="Write answer here..."
-                  {...register("answer", { required: "Answer is required", value: formData.answer })}
+                  {...register('answer', {
+                    required: 'Answer is required',
+                    value: formData.answer,
+                  })}
                 />
-                {errors.answer && <span role="alert">{errors.answer?.message}</span>}
+                {errors.answer && (
+                  <span role="alert">{errors.answer?.message}</span>
+                )}
               </FormControl>
             </div>
           </div>
@@ -97,7 +112,6 @@ function CategoriesServicesFaqEditPopup({
                 padding: '0.375rem 2rem !important',
               }}
             />
-
           </div>
         </form>
       </div>

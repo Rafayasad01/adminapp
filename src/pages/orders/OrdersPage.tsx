@@ -20,10 +20,17 @@ import order from '../../services/adminapp/adminOrders';
 import dayjs from 'dayjs';
 import TablePagination from '@mui/material/TablePagination';
 import ActionMenu from '../../components/common/ActionMenu';
-import { ORDER_STATUSES, ORDER_STATUS_IN_CANCELLED, ORDER_STATUS_IN_DELIVERED, ORDER_STATUS_IN_DELIVERY, ORDER_STATUS_NEW, ORDER_STATUS_PICKED_UP, ORDER_STATUS_PROCESSING } from '../../utils/constants';
+import {
+  ORDER_STATUSES,
+  ORDER_STATUS_IN_CANCELLED,
+  ORDER_STATUS_IN_DELIVERED,
+  ORDER_STATUS_IN_DELIVERY,
+  ORDER_STATUS_NEW,
+  ORDER_STATUS_PICKED_UP,
+  ORDER_STATUS_PROCESSING,
+} from '../../utils/constants';
 import TopBar from '../../components/common/TopBar';
 import { useAppSelector } from '../../redux/redux-hooks';
-
 
 function OrdersPage() {
   const authState: any = useAppSelector((state) => state.authState);
@@ -35,28 +42,44 @@ function OrdersPage() {
   const [total, setTotal] = useState(0);
   const [list, setList] = useState<any>([]);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const [actionMenuItemid, setActionMenuItemid] = React.useState("");
-  const [actionMenuAnchorEl, setActionMenuAnchorEl] = useState<null | HTMLElement>(null);
+  const [actionMenuItemid, setActionMenuItemid] = React.useState('');
+  const [actionMenuAnchorEl, setActionMenuAnchorEl] =
+    useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
   const actionMenuOptions = ['Detail'];
 
-
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
-    newPage: number,
+    newPage: number
   ) => {
     setPage(newPage);
     //offset? ,limit rowsperpage hoga ofset page * rowsperPage
-    if (search === "" || search === null || search === undefined) {
-      order.getListService(authState.user.tenant, newPage, rowsPerPage).then(item => {
-        setList(item.data.data.list.map((item: any) => ({ ...item, isSelected: false, orderStatus: item.status })));
-        setTotal(item.data.data.total);
-      });
+    if (search === '' || search === null || search === undefined) {
+      order
+        .getListService(authState.user.tenant, newPage, rowsPerPage)
+        .then((item) => {
+          setList(
+            item.data.data.list.map((item: any) => ({
+              ...item,
+              isSelected: false,
+              orderStatus: item.status,
+            }))
+          );
+          setTotal(item.data.data.total);
+        });
     } else {
-      order.searchService(authState.user.tenant, search, newPage, rowsPerPage).then(item => {
-        setList(item.data.data.list.map((item: any) => ({ ...item, isSelected: false, orderStatus: item.status })));
-        setTotal(item.data.data.total);
-      });
+      order
+        .searchService(authState.user.tenant, search, newPage, rowsPerPage)
+        .then((item) => {
+          setList(
+            item.data.data.list.map((item: any) => ({
+              ...item,
+              isSelected: false,
+              orderStatus: item.status,
+            }))
+          );
+          setTotal(item.data.data.total);
+        });
     }
     // order.searchService(search, newPage, rowsPerPage).then(item => {
     //   setList(item.data.data.list.map((item: any) => ({ ...item, isSelected: false, orderStatus: item.status })));
@@ -64,22 +87,38 @@ function OrdersPage() {
     // });
   };
   const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const newRowperPage = parseInt(event.target.value, 10);
     const newPage = 0;
     setRowsPerPage(newRowperPage);
     setPage(newPage);
-    if (search === "" || search === null || search === undefined) {
-      order.getListService(authState.user.tenant, newPage, rowsPerPage).then(item => {
-        setList(item.data.data.list.map((item: any) => ({ ...item, isSelected: false, orderStatus: item.status })));
-        setTotal(item.data.data.total);
-      });
+    if (search === '' || search === null || search === undefined) {
+      order
+        .getListService(authState.user.tenant, newPage, rowsPerPage)
+        .then((item) => {
+          setList(
+            item.data.data.list.map((item: any) => ({
+              ...item,
+              isSelected: false,
+              orderStatus: item.status,
+            }))
+          );
+          setTotal(item.data.data.total);
+        });
     } else {
-      order.searchService(authState.user.tenant, search, newPage, rowsPerPage).then(item => {
-        setList(item.data.data.list.map((item: any) => ({ ...item, isSelected: false, orderStatus: item.status })));
-        setTotal(item.data.data.total);
-      });
+      order
+        .searchService(authState.user.tenant, search, newPage, rowsPerPage)
+        .then((item) => {
+          setList(
+            item.data.data.list.map((item: any) => ({
+              ...item,
+              isSelected: false,
+              orderStatus: item.status,
+            }))
+          );
+          setTotal(item.data.data.total);
+        });
     }
     // order.searchService(search, page, rowsPerPage).then(item => {
     //   setList(item.data.data.list.map((item: any) => ({ ...item, isSelected: false, orderStatus: item.status })));
@@ -94,10 +133,18 @@ function OrdersPage() {
     const searchTxt = event.target.value as string;
     setSearch(searchTxt);
     setPage(0);
-    order.searchService(authState.user.tenant, searchTxt, page, rowsPerPage).then(item => {
-      setList(item.data.data.list.map((item: any) => ({ ...item, isSelected: false, orderStatus: item.status })));
-      setTotal(item.data.data.total);
-    })
+    order
+      .searchService(authState.user.tenant, searchTxt, page, rowsPerPage)
+      .then((item) => {
+        setList(
+          item.data.data.list.map((item: any) => ({
+            ...item,
+            isSelected: false,
+            orderStatus: item.status,
+          }))
+        );
+        setTotal(item.data.data.total);
+      });
   };
 
   // const handleStatusChange = (event: SelectChangeEvent) => {
@@ -112,11 +159,19 @@ function OrdersPage() {
   // };
 
   useEffect(() => {
-    order.getListService(authState.user.tenant, page, rowsPerPage).then(item => {
-      //console.log(item.data.data);
-      setList(item.data.data.list.map((item: any) => ({ ...item, isSelected: false, orderStatus: item.status })));
-      setTotal(item.data.data.total);
-    });
+    order
+      .getListService(authState.user.tenant, page, rowsPerPage)
+      .then((item) => {
+        //console.log(item.data.data);
+        setList(
+          item.data.data.list.map((item: any) => ({
+            ...item,
+            isSelected: false,
+            orderStatus: item.status,
+          }))
+        );
+        setTotal(item.data.data.total);
+      });
   }, []);
 
   const manuHandler = (option: string) => {
@@ -130,34 +185,43 @@ function OrdersPage() {
     }
     navigate(`${doOption}/${actionMenuItemid}`);
     //console.log('actionMenuItemid', actionMenuItemid)
-  }
+  };
 
   const getStatusTag = (status: string) => {
-    let tag = "";
+    let tag = '';
     if (status === ORDER_STATUS_NEW) {
-      tag = "blue";
+      tag = 'blue';
     } else if (status === ORDER_STATUS_PICKED_UP) {
-      tag = "purple";
+      tag = 'purple';
     } else if (status === ORDER_STATUS_PROCESSING) {
-      tag = "green";
+      tag = 'green';
     } else if (status === ORDER_STATUS_IN_DELIVERY) {
-      tag = "orange";
+      tag = 'orange';
     } else if (status === ORDER_STATUS_IN_DELIVERED) {
-      tag = "yellow";
+      tag = 'yellow';
     } else if (status === ORDER_STATUS_IN_CANCELLED) {
-      tag = "red";
+      tag = 'red';
     }
     return tag;
-  }
+  };
   const setOrderStatus = (status: string) => {
-    const newStatuses = [...ORDER_STATUSES].map(([key, value]) => ({ key, value }));
-    const newStatus = newStatuses.filter(s => s.key === status);
+    const newStatuses = [...ORDER_STATUSES].map(([key, value]) => ({
+      key,
+      value,
+    }));
+    const newStatus = newStatuses.filter((s) => s.key === status);
     return newStatus[0].value.title;
-  }
+  };
   return (
     <>
       {actionMenuAnchorEl && (
-        <ActionMenu open={actionMenuOpen} anchorEl={actionMenuAnchorEl} setAnchorEl={setActionMenuAnchorEl} options={actionMenuOptions} callback={manuHandler} />
+        <ActionMenu
+          open={actionMenuOpen}
+          anchorEl={actionMenuAnchorEl}
+          setAnchorEl={setActionMenuAnchorEl}
+          options={actionMenuOptions}
+          callback={manuHandler}
+        />
       )}
       <TopBar title="Orders" />
       <div className="container mt-5">
@@ -187,7 +251,6 @@ function OrdersPage() {
                       if (event.key === 'Enter') {
                         handleClickSearch(event);
                       }
-
                     }}
                     endAdornment={
                       <InputAdornment position="end">
@@ -246,78 +309,98 @@ function OrdersPage() {
                   <th>Pickup Time</th>
                   <th>Drop-off Time</th>
                   <th>Amount</th>
-                  <th >Status</th>
+                  <th>Status</th>
                   <th>Order ID</th>
                   <th>&nbsp;</th>
                 </tr>
               </thead>
               <tbody>
-                {list && list.map((order: any, index: number) => {
-                  return (
-                    <tr key={order.id}>
-                      <td>
-                        <div className="flex flex-col">
-                          <span className="text-sm font-semibold text-[#1A1A1A]">
-                            {order.user.firstName} {order.user.lastName}
+                {list &&
+                  list.map((order: any, index: number) => {
+                    return (
+                      <tr key={order.id}>
+                        <td>
+                          <div className="flex flex-col">
+                            <span className="text-sm font-semibold text-[#1A1A1A]">
+                              {order.user.firstName} {order.user.lastName}
+                            </span>
+                            <span className="text-xs font-normal text-[#6A6A6A]">
+                              {order.user.email}
+                            </span>
+                            <span className="text-xs font-normal text-[#6A6A6A]">
+                              {order.userAddress.address}
+                            </span>
+                          </div>
+                        </td>
+                        <td>
+                          <div className="flex flex-col">
+                            <span className="text-sm font-normal text-[#1A1A1A]">
+                              {dayjs(order.pickupDateTime)?.format('hh:mm:ssA')}{' '}
+                              -{' '}
+                              {dayjs(order.pickupDateTime)
+                                .add(1, 'hour')
+                                .format('hh:mm:ssA')}
+                            </span>
+                            <span className="text-xs font-normal text-[#6A6A6A]">
+                              {dayjs(order.pickupDateTime)?.format(
+                                'ddd, MMM DD, YYYY'
+                              )}
+                            </span>
+                          </div>
+                        </td>
+                        <td>
+                          <div className="flex flex-col">
+                            <span className="text-sm font-normal text-[#1A1A1A]">
+                              {dayjs(order.dropDateTime)?.format('hh:mm:ssA')} -{' '}
+                              {dayjs(order.dropDateTime)
+                                .add(1, 'hour')
+                                .format('hh:mm:ssA')}
+                            </span>
+                            <span className="text-xs font-normal text-[#6A6A6A]">
+                              {dayjs(order.dropDateTime)?.format(
+                                'ddd, MMM DD, YYYY'
+                              )}
+                            </span>
+                          </div>
+                        </td>
+                        <td className="text-sm font-semibold text-[#1A1A1A]">
+                          ${order.grandTotal}
+                        </td>
+                        <td>
+                          <span
+                            className={`badge badge-${getStatusTag(
+                              order.status
+                            )}`}
+                          >
+                            {setOrderStatus(order.status)}
                           </span>
-                          <span className="text-xs font-normal text-[#6A6A6A]">
-                            {order.user.email}
-                          </span>
-                          <span className="text-xs font-normal text-[#6A6A6A]">
-                            {order.userAddress.address}
-                          </span>
-                        </div>
-                      </td>
-                      <td>
-                        <div className="flex flex-col">
-                          <span className="text-sm font-normal text-[#1A1A1A]">
-                            {dayjs(order.pickupDateTime)?.format('hh:mm:ssA')} - {dayjs(order.pickupDateTime).add(1, 'hour').format('hh:mm:ssA')}
-                          </span>
-                          <span className="text-xs font-normal text-[#6A6A6A]">
-                            {dayjs(order.pickupDateTime)?.format('ddd, MMM DD, YYYY')}
-                          </span>
-                        </div>
-                      </td>
-                      <td>
-                        <div className="flex flex-col">
-                          <span className="text-sm font-normal text-[#1A1A1A]">
-                            {dayjs(order.dropDateTime)?.format('hh:mm:ssA')} - {dayjs(order.dropDateTime).add(1, 'hour').format('hh:mm:ssA')}
-                          </span>
-                          <span className="text-xs font-normal text-[#6A6A6A]">
-                            {dayjs(order.dropDateTime)?.format('ddd, MMM DD, YYYY')}
-                          </span>
-                        </div>
-                      </td>
-                      <td className="text-sm font-semibold text-[#1A1A1A]">
-                        ${order.grandTotal}
-                      </td>
-                      <td>
-                        <span className={`badge badge-${getStatusTag(order.status)}`}>{setOrderStatus(order.status)}</span>
-                      </td>
-                      <td>{order.orderNumber}</td>
-                      <td>
-                        <IconButton
-                          className="btn-dot"
-                          aria-label="more"
-                          id="long-button"
-                          aria-controls={actionMenuOpen ? 'long-menu' : undefined}
-                          aria-expanded={actionMenuOpen ? 'true' : undefined}
-                          aria-haspopup="true"
-                          onClick={(event: React.MouseEvent<HTMLElement>) => {
-                            setActionMenuItemid(list[index].id)
-                            setActionMenuAnchorEl(event.currentTarget);
-                          }}
-                        >
-                          <MoreVertIcon />
-                        </IconButton>
-                      </td>
-                    </tr>
-                  )
-                })}
+                        </td>
+                        <td>{order.orderNumber}</td>
+                        <td>
+                          <IconButton
+                            className="btn-dot"
+                            aria-label="more"
+                            id="long-button"
+                            aria-controls={
+                              actionMenuOpen ? 'long-menu' : undefined
+                            }
+                            aria-expanded={actionMenuOpen ? 'true' : undefined}
+                            aria-haspopup="true"
+                            onClick={(event: React.MouseEvent<HTMLElement>) => {
+                              setActionMenuItemid(list[index].id);
+                              setActionMenuAnchorEl(event.currentTarget);
+                            }}
+                          >
+                            <MoreVertIcon />
+                          </IconButton>
+                        </td>
+                      </tr>
+                    );
+                  })}
               </tbody>
             </table>
           </div>
-          <div className='w-[100%] mt-3 flex justify-center py-3'>
+          <div className="mt-3 flex w-[100%] justify-center py-3">
             <TablePagination
               component="div"
               count={total}

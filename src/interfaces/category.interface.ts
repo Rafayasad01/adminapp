@@ -20,4 +20,3 @@ export interface CategoryServiceFaq {
   created_by: string;
   updated_by: string;
 }
-

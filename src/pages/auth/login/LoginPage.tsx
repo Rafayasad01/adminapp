@@ -11,7 +11,6 @@ import assets from '../../../assets';
 import styles from '../../../assets/css/AuthPage.module.css';
 
 function LoginPage() {
-
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');

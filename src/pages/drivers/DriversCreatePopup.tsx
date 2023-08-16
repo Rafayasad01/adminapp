@@ -9,7 +9,7 @@ import IconButton from '@mui/material/IconButton';
 import dayjs from 'dayjs';
 import '../../assets/css/PopupStyle.css';
 import TimePicker from '../../components/common/TimePicker';
-import { useForm } from "react-hook-form";
+import { useForm } from 'react-hook-form';
 import { AppUserDriverExt } from '../../interfaces/app-user.interface';
 
 type Props = {
@@ -18,13 +18,23 @@ type Props = {
   callback: Function;
 };
 
-function DriversCreatePopup({ openFormDialog, setOpenFormDialog, callback }: Props) {
+function DriversCreatePopup({
+  openFormDialog,
+  setOpenFormDialog,
+  callback,
+}: Props) {
   const [startTime, setStartTime] = useState<dayjs.Dayjs | null>(null);
   const [endTime, setEndTime] = useState<dayjs.Dayjs | null>(null);
   const [avatar, setAvatar] = useState<any>(null);
   const [avatarName, setAvatarName] = useState<string>('');
 
-  const { register, handleSubmit, watch, formState: { errors }, control } = useForm<AppUserDriverExt>();
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+    control,
+  } = useForm<AppUserDriverExt>();
 
   const handleFormClose = () => setOpenFormDialog(false);
   const handleRemoveImage = () => {
@@ -67,9 +77,13 @@ function DriversCreatePopup({ openFormDialog, setOpenFormDialog, callback }: Pro
                   className="FormInput"
                   id="first_name"
                   disableUnderline
-                  {...register("first_name", { required: "First name is required" })}
+                  {...register('first_name', {
+                    required: 'First name is required',
+                  })}
                 />
-                {errors.first_name && <span role="alert">{errors.first_name?.message}</span>}
+                {errors.first_name && (
+                  <span role="alert">{errors.first_name?.message}</span>
+                )}
               </FormControl>
               <FormControl className="FormControl" variant="standard">
                 <label className="FormLabel">Last name</label>
@@ -77,9 +91,13 @@ function DriversCreatePopup({ openFormDialog, setOpenFormDialog, callback }: Pro
                   className="FormInput"
                   id="last_name"
                   disableUnderline
-                  {...register("last_name", { required: "Last name is required" })}
+                  {...register('last_name', {
+                    required: 'Last name is required',
+                  })}
                 />
-                {errors.last_name && <span role="alert">{errors.last_name?.message}</span>}
+                {errors.last_name && (
+                  <span role="alert">{errors.last_name?.message}</span>
+                )}
               </FormControl>
             </div>
             <div className="FormField">
@@ -89,9 +107,11 @@ function DriversCreatePopup({ openFormDialog, setOpenFormDialog, callback }: Pro
                   className="FormInput"
                   id="email"
                   disableUnderline
-                  {...register("email", { required: "Email is required" })}
+                  {...register('email', { required: 'Email is required' })}
                 />
-                {errors.email && <span role="alert">{errors.email?.message}</span>}
+                {errors.email && (
+                  <span role="alert">{errors.email?.message}</span>
+                )}
               </FormControl>
             </div>
             <div className="FormFields">
@@ -102,9 +122,11 @@ function DriversCreatePopup({ openFormDialog, setOpenFormDialog, callback }: Pro
                   className="FormInput"
                   id="phone"
                   disableUnderline
-                  {...register("phone", { required: "Phone is required" })}
+                  {...register('phone', { required: 'Phone is required' })}
                 />
-                {errors.phone && <span role="alert">{errors.phone?.message}</span>}
+                {errors.phone && (
+                  <span role="alert">{errors.phone?.message}</span>
+                )}
               </FormControl>
               <FormControl className="FormControl" variant="standard">
                 <label className="FormLabel">
@@ -115,9 +137,13 @@ function DriversCreatePopup({ openFormDialog, setOpenFormDialog, callback }: Pro
                   className="FormInput"
                   id="license"
                   disableUnderline
-                  {...register("license_number", { required: "License number is required" })}
+                  {...register('license_number', {
+                    required: 'License number is required',
+                  })}
                 />
-                {errors.license_number && <span role="alert">{errors.license_number?.message}</span>}
+                {errors.license_number && (
+                  <span role="alert">{errors.license_number?.message}</span>
+                )}
               </FormControl>
             </div>
             <div className="FormField">
@@ -127,9 +153,11 @@ function DriversCreatePopup({ openFormDialog, setOpenFormDialog, callback }: Pro
                   className="FormInput"
                   id="address"
                   disableUnderline
-                  {...register("address", { required: "Address is required" })}
+                  {...register('address', { required: 'Address is required' })}
                 />
-                {errors.address && <span role="alert">{errors.address?.message}</span>}
+                {errors.address && (
+                  <span role="alert">{errors.address?.message}</span>
+                )}
               </FormControl>
             </div>
             <div className="FormField">
@@ -140,13 +168,12 @@ function DriversCreatePopup({ openFormDialog, setOpenFormDialog, callback }: Pro
                   style={{ display: 'none' }}
                   id="raised-button-file"
                   type="file"
-                  {...register("avatar")}
+                  {...register('avatar')}
                   onChange={(
                     event: React.InputHTMLAttributes<HTMLInputElement>
                   ) => {
                     handleFileChange(event);
                   }}
-
                 />
                 <label htmlFor="raised-button-file" className="ImageLabel">
                   <Button component="span" className="ImageBtn">
