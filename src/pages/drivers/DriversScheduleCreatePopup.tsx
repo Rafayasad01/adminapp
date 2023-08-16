@@ -76,6 +76,7 @@ function DriversScheduleCreatePopup({ openFormDialog, setOpenFormDialog, callbac
               type="submit"
               value="Add"
               className="btn-black-fill"
+              disableUnderline
               sx={{
                 padding: '0.375rem 2rem !important',
               }}

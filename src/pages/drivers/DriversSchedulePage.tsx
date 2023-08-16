@@ -23,6 +23,7 @@ import { useAppSelector } from '../../redux/redux-hooks';
 import DriversScheduleEditPopup from './DriversScheduleEditPopup';
 import TablePagination from '@mui/material/TablePagination';
 import Switch from '@mui/material/Switch';
+import assets from '../../assets';
 
 function DriversSchedulePage() {
   const authState: any = useAppSelector((state) => state.authState);
@@ -33,7 +34,7 @@ function DriversSchedulePage() {
   const [page, setPage] = useState(0);
   const [total, setTotal] = useState(0);
   const [list, setList] = useState<any>([]);
-  const [addresses, setAddresses] = useState<any>([]);
+  const [address, setAddress] = useState<string>('');
   const [editFormData, setEditFormData] = useState<any>(null);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [actionMenuItemid, setActionMenuItemid] = React.useState("");
@@ -119,7 +120,6 @@ function DriversSchedulePage() {
     setPage(newPage);
     if (search === "" || search === null || search === undefined) {
       Service.getListScheduleService(id, newPage, rowsPerPage).then(item => {
-        console.log('item::::::::', item)
         setList(item.data.data.list);
         setTotal(item.data.data.total);
       });
@@ -135,15 +135,12 @@ function DriversSchedulePage() {
   useEffect(() => {
     Service.getScheduleService(id).then((item: any) => {
       if (item.data.success) {
-        console.log('item:::::::', item)
-        const newAddresses: string[] = [];
-        item.data.data.appUserAddress.forEach((addressItem: any) => {
-          newAddresses.push(addressItem.address)
-        })
-        setAddresses(newAddresses);
+        setAddress(item.data.data.appUserAddress);
         setDetail(item.data.data);
-        setList(item.data.data.appDriverWorkingSchedule);
-        setTotal(Number(item.data.data.total));
+        if (item.data.data.appDriverWorkingSchedule && item.data.data.appDriverWorkingSchedule.length > 0) {
+          setList(item.data.data.appDriverWorkingSchedule.reverse());
+          setTotal(Number(item.data.data.total));
+        }
       }
     })
   }, []);
@@ -168,7 +165,6 @@ function DriversSchedulePage() {
     formData.append("updated_by", authState.user.id);
     Service.updateSchedule(actionMenuItemid, formData).then((item) => {
       if (item.data.success) {
-
         setList((newArr: any) => {
           return newArr.map((newItem: any) => {
             if (newItem.id === actionMenuItemid) {
@@ -181,6 +177,24 @@ function DriversSchedulePage() {
       }
     })
   }
+  const handleSwitchChange = (event: any, id: string) => {
+    if (list.length > 1) {
+      Service.updateStatusScheduleService(id).then((updateItem) => {
+        if (updateItem.data.success) {
+          setList((newArr: any) => {
+            return newArr.map((item: any) => {
+              if (item.id === updateItem.data.data.id) {
+                item.isActive = true;
+              } else {
+                item.isActive = false;
+              }
+              return { ...item };
+            })
+          })
+        }
+      })
+    }
+  };
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -249,14 +263,8 @@ function DriversSchedulePage() {
                 </div>
               </div>
             </div>
-            <div className="col-span-8 rounded-lg bg-[#fff] shadow-lg">
-              <div className="flex h-[375px] w-full">
-                {detail.appUserAddress.length > 0 ? (
-                  <MapAddress addresses={addresses} zoom={15} />
-                ) : (
-                  <Map center={{ lat: 0, lng: 0 }} zoom={15} />
-                )}
-              </div>
+            <div className="col-span-8 min-h-[375px] rounded-lg bg-[#fff] shadow-lg">
+              <MapAddress address={address} zoom={15} />
             </div>
           </div>
           {list.length > 0 && (
@@ -335,6 +343,11 @@ function DriversSchedulePage() {
                               )}
                             </td>
                             <td>
+                              <Switch
+                                checked={item.isActive}
+                                onChange={(event: React.ChangeEvent<HTMLInputElement>) => handleSwitchChange(event, list[index].id)}
+                                inputProps={{ 'aria-label': 'controlled' }}
+                              />
                               <IconButton
                                 className="btn-dot"
                                 aria-label="more"

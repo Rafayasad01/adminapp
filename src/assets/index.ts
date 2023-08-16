@@ -33,6 +33,8 @@ import soapyLaundry from './images/soapy-laundry.png';
 import spotlessLaundry from './images/spotless-laundry.png';
 import freshCleanLaundry from './images/fresh-clean-laundry.png';
 import truckDriverIcon from './images/TruckDriver.svg';
+import comingSoonIcon from './images/icon-coming-soon.png';
+import noMapLocation from './images/icon-noMapLocation.svg';
 
 const assets = {
   images: {
@@ -55,7 +57,9 @@ const assets = {
     totalShopsIcon,
     totalDriversIcon,
     imageIcon,
-    truckDriverIcon
+    truckDriverIcon,
+    comingSoonIcon,
+    noMapLocation
   },
   tempImages: {
     wash,

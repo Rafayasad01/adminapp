@@ -59,6 +59,9 @@ const searchAddressService = (id: string, search: string, page: number, size: nu
 const deleteAddressService = (id: string, data: any) => {
     return network.post(`${CUSTOMER_PREFIX}/${CUSTOMER_ADDRESS_PREFIX}/delete/${id}`, data);
 }
+const updateStatusAddressService = (id: string) => {
+    return network.get(`${CUSTOMER_PREFIX}/${CUSTOMER_ADDRESS_PREFIX}/update/status/${id}`);
+}
 
 export default {
     getListService,
@@ -75,5 +78,6 @@ export default {
     getListAddressService,
     searchAddressService,
     deleteAddressService,
-    getDetailService
+    getDetailService,
+    updateStatusAddressService
 }

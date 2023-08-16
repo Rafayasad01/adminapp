@@ -35,7 +35,6 @@ function DriversScheduleEditPopup({ openFormDialog, setOpenFormDialog, formData,
     if (formData) {
       setStartTime(formData.startTime);
       setEndTime(formData.endTime);
-      console.log('startTime:::::::', startTime)
     }
 
   }, []);
@@ -88,6 +87,7 @@ function DriversScheduleEditPopup({ openFormDialog, setOpenFormDialog, formData,
                 type="submit"
                 value="Update"
                 className="btn-black-fill"
+                disableUnderline
                 sx={{
                   padding: '0.375rem 2rem !important',
                 }}

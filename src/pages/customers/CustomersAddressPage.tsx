@@ -19,17 +19,19 @@ import { useAppSelector } from '../../redux/redux-hooks';
 import TablePagination from '@mui/material/TablePagination';
 import CustomersAddressCreatePopup from './CustomersAddressCreatePopup';
 import CustomersAddressEditPopup from './CustomersAddressEditPopup';
+import Switch from '@mui/material/Switch';
+import assets from '../../assets';
 
 function CustomersAddressPage() {
   const authState: any = useAppSelector((state) => state.authState);
   const params = useParams();
   const navigate = useNavigate();
   const [detail, setDetail] = useState<any>(null);
+  const [address, setAddress] = useState<string>("");
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(0);
   const [total, setTotal] = useState(0);
   const [list, setList] = useState<any>([]);
-  const [addresses, setAddresses] = useState<any>([]);
   const [editFormData, setEditFormData] = useState<any>(null);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [actionMenuItemid, setActionMenuItemid] = React.useState("");
@@ -127,16 +129,15 @@ function CustomersAddressPage() {
   useEffect(() => {
     Service.getAddressService(id).then((item: any) => {
       if (item.data.success) {
-        if (item.data.data.appUserAddress) {
-          const newAddresses: string[] = [];
-          item.data.data.appUserAddress.forEach((addressItem: any) => {
-            newAddresses.push(addressItem.address)
-          })
-          setAddresses(newAddresses);
-        }
         setDetail(item.data.data);
-        setList(item.data.data.appUserAddress.reverse());
-        setTotal(Number(item.data.data.total));
+        if (item.data.data.appUserAddress && item.data.data.appUserAddress.length > 0) {
+          const activeAddress = item.data.data.appUserAddress.filter((newItem: any) => newItem.isActive === true);
+          if (activeAddress.length > 0) {
+            setAddress(activeAddress[0].address);
+          }
+          setList(item.data.data.appUserAddress.reverse());
+          setTotal(Number(item.data.data.total));
+        }
       }
     })
   }, []);
@@ -150,7 +151,7 @@ function CustomersAddressPage() {
     formData.append("address", data.address);
     formData.append("app_user", id);
     formData.append("tenant", authState.user.tenant);
-    Service.createAddress(actionMenuItemid, formData).then((item) => {
+    Service.createAddress(actionMenuItemid, formData).then((item: any) => {
       if (item.data.success) {
         list.push(item.data.data);
         setList(list);
@@ -165,7 +166,8 @@ function CustomersAddressPage() {
     formData.append("longitude", data.longitude);
     formData.append("type", data.type);
     formData.append("address", data.address);
-    Service.updateAddress(actionMenuItemid, formData).then((item) => {
+    formData.append("app_user", id);
+    Service.updateAddress(actionMenuItemid, formData).then((item: any) => {
       if (item.data.success) {
         setList((newArr: any) => {
           return newArr.map((newItem: any) => {
@@ -182,6 +184,25 @@ function CustomersAddressPage() {
       }
     })
   }
+
+  const handleSwitchChange = (event: any, id: string) => {
+    if (list.length > 1) {
+      Service.updateStatusAddressService(id).then((updateItem) => {
+        if (updateItem.data.success) {
+          setList((newArr: any) => {
+            return newArr.map((item: any) => {
+              if (item.id === updateItem.data.data.id) {
+                item.isActive = true;
+              } else {
+                item.isActive = false;
+              }
+              return { ...item };
+            })
+          })
+        }
+      })
+    }
+  };
 
   return (
     <>
@@ -242,14 +263,21 @@ function CustomersAddressPage() {
                 </div>
               </div>
             </div>
-            <div className="col-span-8 rounded-lg bg-[#fff] shadow-lg">
-              <div className="flex h-[318px] w-full">
-                {detail.appUserAddress && detail.appUserAddress.length > 0 ? (
-                  <MapAddress addresses={addresses} zoom={15} />
-                ) : (
-                  <Map center={{ lat: 0, lng: 0 }} zoom={15} />
-                )}
-              </div>
+            <div className="col-span-8 min-h-[318px] rounded-lg bg-[#fff] shadow-lg">
+
+              {address ? (
+                <MapAddress address={address} zoom={15} />
+              ) : (
+                <div className="no-map-location">
+                  <div className="content">
+                    <div className="icon">
+                      <img className='w-100' src={assets.images.noMapLocation} alt="" />
+                    </div>
+                    <h4 className='text'>Location not available</h4>
+                  </div>
+                </div>
+              )}
+
             </div>
           </div>
           {list.length > 0 && (
@@ -296,9 +324,11 @@ function CustomersAddressPage() {
                     <thead>
                       <tr>
                         <th className="w-[28%]">address</th>
+                        <th>Name</th>
                         <th>latitude</th>
                         <th>longitude</th>
                         <th>type</th>
+                        <th>status</th>
                         <th>&nbsp;</th>
                       </tr>
                     </thead>
@@ -307,10 +337,23 @@ function CustomersAddressPage() {
                         return (
                           <tr key={item.id}>
                             <td>{item.address}</td>
+                            <td>{item.name}</td>
                             <td>{item.latitude}</td>
                             <td>{item.longitude}</td>
                             <td>{item.type}</td>
                             <td>
+                              {item.isActive ? (
+                                <span className="badge badge-success">ACTIVE</span>
+                              ) : (
+                                <span className="badge badge-danger">INACTIVE</span>
+                              )}
+                            </td>
+                            <td>
+                              <Switch
+                                checked={item.isActive}
+                                onChange={(event: React.ChangeEvent<HTMLInputElement>) => handleSwitchChange(event, list[index].id)}
+                                inputProps={{ 'aria-label': 'controlled' }}
+                              />
                               <IconButton
                                 className="btn-dot"
                                 aria-label="more"
@@ -325,6 +368,7 @@ function CustomersAddressPage() {
                               >
                                 <MoreVertIcon />
                               </IconButton>
+
                             </td>
                           </tr>
                         );

@@ -22,6 +22,7 @@ import Switch from '@mui/material/Switch';
 import DriversAddressCreatePopup from './DriversAddressCreatePopup';
 import DriversAddressEditPopup from './DriversAddressEditPopup';
 import { ORDER_DELIVERY_STATUS_ACCEPTED, ORDER_DELIVERY_STATUS_CANCELLED, ORDER_DELIVERY_STATUS_DELIVERED, ORDER_DELIVERY_STATUS_IN_DELIVERY, ORDER_DELIVERY_STATUS_NEW, ORDER_DELIVERY_STATUS_PICKED_UP } from '../../utils/constants';
+import assets from '../../assets';
 
 function DriversDetailPage() {
   const authState: any = useAppSelector((state) => state.authState);
@@ -32,7 +33,7 @@ function DriversDetailPage() {
   const [page, setPage] = useState(0);
   const [total, setTotal] = useState(0);
   const [list, setList] = useState<any>([]);
-  const [addresses, setAddresses] = useState<any>([]);
+  const [address, setAddress] = useState<string>("");
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [actionMenuItemid, setActionMenuItemid] = React.useState("");
   const [actionMenuAnchorEl, setActionMenuAnchorEl] = useState<null | HTMLElement>(null);
@@ -102,12 +103,7 @@ function DriversDetailPage() {
   useEffect(() => {
     Service.getDetailService(id).then((item: any) => {
       if (item.data.success) {
-        console.log('item::::::::', item.data)
-        const newAddresses: string[] = [];
-        item.data.data.appUserAddress.forEach((addressItem: any) => {
-          newAddresses.push(addressItem.address)
-        })
-        setAddresses(newAddresses);
+        setAddress(item.data.data.appUserAddress);
         setDetail(item.data.data);
         setList(item.data.data.appOrderDelivery.reverse());
         setTotal(Number(item.data.data.total));
@@ -191,14 +187,8 @@ function DriversDetailPage() {
                 </div>
               </div>
             </div>
-            <div className="col-span-8 rounded-lg bg-[#fff] shadow-lg">
-              <div className="flex h-[375px] w-full">
-                {detail.appUserAddress.length > 0 ? (
-                  <MapAddress addresses={addresses} zoom={15} />
-                ) : (
-                  <Map center={{ lat: 0, lng: 0 }} zoom={15} />
-                )}
-              </div>
+            <div className="col-span-8 min-h-[375px] rounded-lg bg-[#fff] shadow-lg">
+              <MapAddress address={address} zoom={15} />
             </div>
           </div>
           {list.length > 0 && (

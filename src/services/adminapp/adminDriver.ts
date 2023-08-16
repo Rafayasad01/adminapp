@@ -64,6 +64,10 @@ const deleteScheduleService = (id: string, data: any) => {
     return network.post(`${DRIVER_PREFIX}/${DRIVER_SCHEDULE_PREFIX}/delete/${id}`, data);
 }
 
+const updateStatusScheduleService = (id: string) => {
+    return network.get(`${DRIVER_PREFIX}/${DRIVER_SCHEDULE_PREFIX}/update/status/${id}`);
+}
+
 const getAddressService = (id: string) => {
     return network.get(`${DRIVER_PREFIX}/${DRIVER_ADDRESS_PREFIX}/detail/${id}`);
 }
@@ -90,6 +94,10 @@ const deleteAddressService = (id: string, data: any) => {
     return network.post(`${DRIVER_PREFIX}/${DRIVER_ADDRESS_PREFIX}/delete/${id}`, data);
 }
 
+const updateStatusAddressService = (id: string) => {
+    return network.get(`${DRIVER_PREFIX}/${DRIVER_ADDRESS_PREFIX}/update/status/${id}`);
+}
+
 
 export default {
     getListService,
@@ -114,5 +122,7 @@ export default {
     searchAddressService,
     deleteAddressService,
     getDetailService,
-    getDeliveryListService
+    getDeliveryListService,
+    updateStatusAddressService,
+    updateStatusScheduleService
 }
