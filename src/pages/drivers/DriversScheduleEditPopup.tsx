@@ -44,7 +44,6 @@ function DriversScheduleEditPopup({
     if (formData) {
       setStartTime(formData.startTime);
       setEndTime(formData.endTime);
-      console.log('startTime:::::::', startTime);
     }
   }, []);
 
@@ -96,6 +95,7 @@ function DriversScheduleEditPopup({
                 type="submit"
                 value="Update"
                 className="btn-black-fill"
+                disableUnderline
                 sx={{
                   padding: '0.375rem 2rem !important',
                 }}

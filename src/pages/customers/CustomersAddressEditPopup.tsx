@@ -37,7 +37,7 @@ function CustomersAddressEditPopup({
   const onSubmit = (data: AppUserAddress) => {
     data.longitude = Number(data.longitude);
     data.latitude = Number(data.latitude);
-    setOpenFormDialog(false);
+    //setOpenFormDialog(false);
     callback(data);
   };
   useEffect(() => {

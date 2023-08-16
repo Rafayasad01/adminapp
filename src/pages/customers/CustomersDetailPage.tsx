@@ -1,25 +1,28 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import Divider from '@mui/material/Divider';
-import Map from '../../components/common/Map';
 import TopBar from '../../components/common/TopBar';
 import Service from '../../services/adminapp/adminCustomer';
 import MapAddress from '../../components/common/MapAddress';
 import Avatar from '@mui/material/Avatar';
+import assets from '../../assets';
 
 function CustomersDetailPage() {
   const params = useParams();
-  const [addresses, setAddresses] = useState<any>([]);
+  const [address, setAddress] = useState<string>("");
   const [detail, setDetail] = useState<any>(null);
   const id: any = params.customerId;
   useEffect(() => {
     Service.getDetailService(id).then((item: any) => {
-      const newAddresses: string[] = [];
-      item.data.data.appUserAddress.forEach((addressItem: any) => {
-        newAddresses.push(addressItem.address);
-      });
-      setAddresses(newAddresses);
-      setDetail(item.data.data);
+      if (item.data.success) {
+        if (item.data.data.appUserAddress && item.data.data.appUserAddress.length > 0) {
+          const activeAddress = item.data.data.appUserAddress.filter((newItem: any) => newItem.isActive === true);
+          if (activeAddress.length > 0) {
+            setAddress(activeAddress[0].address);
+          }
+        }
+        setDetail(item.data.data);
+      }
     });
   }, []);
 
@@ -29,7 +32,7 @@ function CustomersDetailPage() {
       <div className="container mt-5">
         {detail && (
           <div className="grid w-full grid-cols-12 gap-3">
-            <div className="col-span-4 min-h-[640px] rounded-lg bg-white px-4 py-5 shadow-lg">
+            <div className="col-span-4 rounded-lg bg-white px-4 py-5 shadow-lg">
               <div className="flex w-full items-center">
                 {detail.avatar ? (
                   <img
@@ -61,9 +64,8 @@ function CustomersDetailPage() {
                     {detail.phone}
                   </span>
                   <span
-                    className={`font-sm mt-2 font-open-sans text-sm ${
-                      detail.isActive ? 'text-[#29CC97]' : 'text-[#f50057]'
-                    }`}
+                    className={`font-sm mt-2 font-open-sans text-sm ${detail.isActive ? 'text-[#29CC97]' : 'text-[#f50057]'
+                      }`}
                   >
                     {detail.isActive ? 'Active' : 'Inactive'}
                   </span>
@@ -114,16 +116,23 @@ function CustomersDetailPage() {
                     Amount Spent
                   </span>
                   <span className="font-open-sans text-sm font-normal text-[#6A6A6A]">
-                    ${detail.amountSpent}
+                    ${`${detail.amountSpent ? detail.amountSpent : 0} `}
                   </span>
                 </div>
               </div>
             </div>
-            <div className="col-span-8 min-h-[640px] rounded-lg bg-white shadow-lg">
-              {detail.appUserAddress.length > 0 ? (
-                <MapAddress addresses={addresses} zoom={15} />
+            <div className="col-span-8 min-h-[400px] rounded-lg bg-white shadow-lg">
+              {address ? (
+                <MapAddress address={address} zoom={15} />
               ) : (
-                <Map center={{ lat: 0, lng: 0 }} zoom={15} />
+                <div className="no-map-location">
+                  <div className="content">
+                    <div className="icon">
+                      <img className='w-100' src={assets.images.noMapLocation} alt="" />
+                    </div>
+                    <h4 className='text'>Location not available</h4>
+                  </div>
+                </div>
               )}
             </div>
           </div>
