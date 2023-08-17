@@ -100,8 +100,10 @@ function VouchersPage() {
     if (search === '' || search === null || search === undefined) {
       Service.listVouchers(authState.user.tenant, newPage, rowsPerPage).then(
         (response) => {
-          setList(response.data.data.result);
-          setTotal(response.data.data.totalResults);
+          if (response.data.success) {
+            setList(response.data.data.result);
+            setTotal(response.data.data.totalResults);
+          }
         }
       );
     }
@@ -116,8 +118,10 @@ function VouchersPage() {
     if (search === '' || search === null || search === undefined) {
       Service.listVouchers(authState.user.tenant, newPage, rowsPerPage).then(
         (response) => {
-          setList(response.data.data.result);
-          setTotal(response.data.data.totalResults);
+          if (response.data.success) {
+            setList(response.data.data.result);
+            setTotal(response.data.data.totalResults);
+          }
         }
       );
     }
@@ -429,7 +433,6 @@ function VouchersPage() {
           </Button>
         </DialogActions>
       </Dialog>
-      ;
     </>
   );
 }
