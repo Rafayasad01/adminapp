@@ -112,18 +112,29 @@ function CategoriesServicesCreatePopup({
             <div className="FormField">
               <FormControl className="FormControl" variant="standard">
                 <label className="FormLabel">
-                  Description{' '}
-                  <span className="SubLabel">Write 25-250 Characters</span>
+                  Message{' '}
+                  <span className="SubLabel">Write 05-50 Characters</span>
                 </label>
                 <TextField
                   className="FormTextarea"
-                  id="outlined-multiline-static"
+                  id="message"
                   multiline
-                  rows={2}
+                  rows={4}
                   defaultValue=""
                   placeholder="Write Description"
-                  {...register('desc')}
+                  {...register('desc', {
+                    required: 'Description is required', minLength: {
+                      value: 5,
+                      message: "Minimum Five Characters"
+                    }, maxLength: {
+                      value: 50,
+                      message: "Too Many Characters"
+                    }
+                  })}
                 />
+                {errors.desc && (
+                  <span role="alert">{errors.desc?.message}</span>
+                )}
               </FormControl>
             </div>
             <div className="FormField">
