@@ -11,6 +11,7 @@ import { Category } from '../../interfaces/category.interface';
 import category from '../../services/adminapp/adminCategory';
 
 import '../../assets/css/PopupStyle.css';
+import TextField from '@mui/material/TextField';
 
 type Props = {
   openFormDialog: boolean;
@@ -99,6 +100,34 @@ function CategoriesEditPopup({
                   </FormControl>
                 </div>
                 <div className="FormField">
+                  <FormControl className="FormControl" variant="standard">
+                    <label className="FormLabel">
+                      Message{' '}
+                      <span className="SubLabel">Write 05-50 Characters</span>
+                    </label>
+                    <TextField
+                      className="FormTextarea"
+                      id="message"
+                      multiline
+                      rows={4}
+                      defaultValue=""
+                      placeholder="Write Description"
+                      {...register('desc', {
+                        required: 'Description is required', value: formData.desc, minLength: {
+                          value: 5,
+                          message: "Minimum Five Characters"
+                        }, maxLength: {
+                          value: 50,
+                          message: "Too Many Characters"
+                        }
+                      })}
+                    />
+                    {errors.desc && (
+                      <span role="alert">{errors.desc?.message}</span>
+                    )}
+                  </FormControl>
+                </div>
+                <div className="FormField">
                   <label className="FormLabel">Upload Image</label>
                   <div className="ImageBox">
                     <input
@@ -161,6 +190,7 @@ function CategoriesEditPopup({
                   type="submit"
                   value="Update"
                   className="btn-black-fill"
+                  disableUnderline
                   sx={{
                     padding: '0.375rem 2rem !important',
                   }}

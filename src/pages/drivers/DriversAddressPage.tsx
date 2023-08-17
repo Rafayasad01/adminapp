@@ -21,6 +21,7 @@ import TablePagination from '@mui/material/TablePagination';
 import Switch from '@mui/material/Switch';
 import DriversAddressCreatePopup from './DriversAddressCreatePopup';
 import DriversAddressEditPopup from './DriversAddressEditPopup';
+import assets from '../../assets';
 
 function DriversAddressPage() {
   const authState: any = useAppSelector((state) => state.authState);
@@ -31,7 +32,7 @@ function DriversAddressPage() {
   const [page, setPage] = useState(0);
   const [total, setTotal] = useState(0);
   const [list, setList] = useState<any>([]);
-  const [addresses, setAddresses] = useState<any>([]);
+  const [address, setAddress] = useState<string>("");
   const [editFormData, setEditFormData] = useState<any>(null);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [actionMenuItemid, setActionMenuItemid] = React.useState('');
@@ -98,9 +99,8 @@ function DriversAddressPage() {
   ) => {
     setPage(newPage);
     //offset? ,limit rowsperpage hoga ofset page * rowsperPage
-    if (search === '' || search === null || search === undefined) {
-      Service.getListAddressService(id, newPage, rowsPerPage).then((item) => {
-        console.log('item::::::::', item);
+    if (search === "" || search === null || search === undefined) {
+      Service.getListAddressService(id, newPage, rowsPerPage).then(item => {
         setList(item.data.data.list);
         setTotal(item.data.data.total);
       });
@@ -120,9 +120,8 @@ function DriversAddressPage() {
     const newPage = 0;
     setRowsPerPage(newRowperPage);
     setPage(newPage);
-    if (search === '' || search === null || search === undefined) {
-      Service.getListAddressService(id, newPage, rowsPerPage).then((item) => {
-        console.log('item::::::::', item);
+    if (search === "" || search === null || search === undefined) {
+      Service.getListAddressService(id, newPage, rowsPerPage).then(item => {
         setList(item.data.data.list);
         setTotal(item.data.data.total);
       });
@@ -139,14 +138,15 @@ function DriversAddressPage() {
   useEffect(() => {
     Service.getAddressService(id).then((item: any) => {
       if (item.data.success) {
-        const newAddresses: string[] = [];
-        item.data.data.appUserAddress.forEach((addressItem: any) => {
-          newAddresses.push(addressItem.address);
-        });
-        setAddresses(newAddresses);
         setDetail(item.data.data);
-        setList(item.data.data.appUserAddress.reverse());
-        setTotal(Number(item.data.data.total));
+        if (item.data.data.appUserAddress && item.data.data.appUserAddress.length > 0) {
+          const activeAddress = item.data.data.appUserAddress.filter((newItem: any) => newItem.isActive === true);
+          if (activeAddress.length > 0) {
+            setAddress(activeAddress[0].address);
+          }
+          setList(item.data.data.appUserAddress.reverse());
+          setTotal(Number(item.data.data.total));
+        }
       }
     });
   }, []);
@@ -170,14 +170,14 @@ function DriversAddressPage() {
 
   const updateFormHandler = (data: any) => {
     const formData = new FormData();
-    formData.append('name', data.name);
-    formData.append('latitude', data.latitude);
-    formData.append('longitude', data.longitude);
-    formData.append('type', data.type);
-    formData.append('address', data.address);
+    formData.append("name", data.name);
+    formData.append("latitude", data.latitude);
+    formData.append("longitude", data.longitude);
+    formData.append("type", data.type);
+    formData.append("address", data.address);
+    formData.append("app_user", id);
     Service.updateAddress(actionMenuItemid, formData).then((item) => {
       if (item.data.success) {
-        console.log('item.data::::::', item.data.data);
         setList((newArr: any) => {
           return newArr.map((newItem: any) => {
             if (newItem.id === actionMenuItemid) {
@@ -192,6 +192,25 @@ function DriversAddressPage() {
         });
       }
     });
+  };
+
+  const handleSwitchChange = (event: any, id: string) => {
+    if (list.length > 1) {
+      Service.updateStatusAddressService(id).then((updateItem) => {
+        if (updateItem.data.success) {
+          setList((newArr: any) => {
+            return newArr.map((item: any) => {
+              if (item.id === updateItem.data.data.id) {
+                item.isActive = true;
+              } else {
+                item.isActive = false;
+              }
+              return { ...item };
+            })
+          })
+        }
+      })
+    }
   };
 
   return (
@@ -232,9 +251,8 @@ function DriversAddressPage() {
                     {detail.phone}
                   </span>
                   <span
-                    className={`font-sm mt-2 font-open-sans text-sm ${
-                      detail.isActive ? 'text-[#29CC97]' : 'text-[#f50057]'
-                    }`}
+                    className={`font-sm mt-2 font-open-sans text-sm ${detail.isActive ? 'text-[#29CC97]' : 'text-[#f50057]'
+                      }`}
                   >
                     {detail.isActive ? 'Active' : 'Inactive'}
                   </span>
@@ -277,14 +295,8 @@ function DriversAddressPage() {
                 </div>
               </div>
             </div>
-            <div className="col-span-8 rounded-lg bg-[#fff] shadow-lg">
-              <div className="flex h-[375px] w-full">
-                {detail.appUserAddress.length > 0 ? (
-                  <MapAddress addresses={addresses} zoom={15} />
-                ) : (
-                  <Map center={{ lat: 0, lng: 0 }} zoom={15} />
-                )}
-              </div>
+            <div className="col-span-8 min-h-[375px] rounded-lg bg-[#fff] shadow-lg">
+              <MapAddress address={address} zoom={15} />
             </div>
           </div>
           {list.length > 0 && (
@@ -331,9 +343,11 @@ function DriversAddressPage() {
                     <thead>
                       <tr>
                         <th className="w-[28%]">address</th>
+                        <th>Name</th>
                         <th>latitude</th>
                         <th>longitude</th>
                         <th>type</th>
+                        <th>status</th>
                         <th>&nbsp;</th>
                       </tr>
                     </thead>
@@ -342,10 +356,23 @@ function DriversAddressPage() {
                         return (
                           <tr key={item.id}>
                             <td>{item.address}</td>
+                            <td>{item.name}</td>
                             <td>{item.latitude}</td>
                             <td>{item.longitude}</td>
                             <td>{item.type}</td>
                             <td>
+                              {item.isActive ? (
+                                <span className="badge badge-success">ACTIVE</span>
+                              ) : (
+                                <span className="badge badge-danger">INACTIVE</span>
+                              )}
+                            </td>
+                            <td>
+                              <Switch
+                                checked={item.isActive}
+                                onChange={(event: React.ChangeEvent<HTMLInputElement>) => handleSwitchChange(event, list[index].id)}
+                                inputProps={{ 'aria-label': 'controlled' }}
+                              />
                               <IconButton
                                 className="btn-dot"
                                 aria-label="more"

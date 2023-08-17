@@ -137,8 +137,7 @@ function CategoriesServicesPage() {
     formData.append('updated_by', authState.user.id);
     category.categoryServiceCreate(categoryId, formData).then((item) => {
       if (item.data.success) {
-        list.push(item.data.data);
-        setList(list);
+        setList([item.data.data, ...list]);
       }
     });
   };

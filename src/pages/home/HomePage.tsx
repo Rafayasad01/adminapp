@@ -27,7 +27,7 @@ function HomePage() {
   const [openTopDriverDialog, setOpenTopDriverDialog] = useState(false);
   const data = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
   return (
-    <div>
+    <>
       <PickupModal
         open={openPickupDialog}
         setOpen={setOpenPickupDialog}
@@ -64,7 +64,15 @@ function HomePage() {
         data={data}
       />
       <TopBar title="Dashboard" />
-      <div className="container mt-3">
+      <div className="coming-soon">
+        <div className="content">
+          <div className="icon">
+            <img className='w-100' src={assets.images.comingSoonIcon} alt="" />
+          </div>
+          <h4 className='text'>Coming Soon</h4>
+        </div>
+      </div>
+      {/* <div className="container mt-3">
         <div className="mt-2 grid grid-cols-4 gap-3">
           <div className="flex h-24 flex-row rounded-lg bg-white shadow-lg">
             <div className="... flex w-44 flex-col justify-center pl-3">
@@ -374,8 +382,8 @@ function HomePage() {
             </div>
           </div>
         </div>
-      </div>
-    </div>
+      </div> */}
+    </>
   );
 }
 

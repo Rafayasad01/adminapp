@@ -116,6 +116,7 @@ function CategoriesPage() {
     if (option === 'Edit') {
       category.getCategory(actionMenuItemid).then((item: any) => {
         if (item.data.success) {
+          console.log('tem.data.data:::::::', item.data.data)
           setEditFormData(item.data.data);
           setOpenEditFormDialog(true);
         }
@@ -129,14 +130,14 @@ function CategoriesPage() {
   const createFormHandler = (data: any) => {
     const formData = new FormData();
     formData.append('name', data.name);
+    formData.append('desc', data.desc);
     formData.append('icon', data.icon);
     formData.append('tenant', authState.user.tenant);
     formData.append('created_by', authState.user.id);
     formData.append('updated_by', authState.user.id);
     category.create(formData).then((item) => {
       if (item.data.success) {
-        list.push(item.data.data);
-        setList(list);
+        setList([item.data.data, ...list]);
       }
     });
   };
@@ -144,6 +145,7 @@ function CategoriesPage() {
   const updateFormHandler = (data: any) => {
     const formData = new FormData();
     formData.append('name', data.name);
+    formData.append('desc', data.desc);
     formData.append('updated_by', authState.user.id);
     if (data.icon !== null) formData.append('icon', data.icon);
     category
@@ -154,6 +156,7 @@ function CategoriesPage() {
             return newArr.map((item: any) => {
               if (item.id === updateItem.data.data.id) {
                 item.name = updateItem.data.data.name;
+                item.desc = updateItem.data.data.desc;
                 if (updateItem.data.data.hasOwnProperty('icon'))
                   item.icon = updateItem.data.data.icon;
               }
@@ -288,8 +291,8 @@ function CategoriesPage() {
                         <td>
                           {dayjs(item.createdDate).isValid()
                             ? dayjs(item.createdDate)?.format(
-                                'ddd, MMM DD, YYYY hh:mm:ssA'
-                              )
+                              'ddd, MMM DD, YYYY hh:mm:ssA'
+                            )
                             : '--'}
                         </td>
                         <td>
