@@ -33,7 +33,7 @@ interface UpdateVoucherPayload {
   maxRedeem: number;
   validFrom: string;
   validTill: string;
-  status: 'Active' | 'Inactive';
+  isActive: boolean;
   type: 'Referral' | 'Promo';
   backOfficeUser: string;
   name: string;
@@ -47,7 +47,7 @@ interface UpdateVoucherFromData {
   minProduct: string;
   minAmount: string;
   maxRedeem: string;
-  status: boolean;
+  isActive: boolean;
 }
 
 function VouchersPromoEditPopup({
@@ -87,7 +87,7 @@ function VouchersPromoEditPopup({
       minProduct: +data.minProduct,
       minAmount: +data.minAmount,
       maxRedeem: +data.maxRedeem,
-      status: data.status ? 'Active' : 'Inactive',
+      isActive: data.isActive,
       backOfficeUser: authState.user.id,
       validFrom: validFromDate?.toISOString() ?? '',
       validTill: validTillDate?.toISOString() ?? '',
@@ -310,6 +310,9 @@ function VouchersPromoEditPopup({
                 <FormControl className="FormControl" variant="standard">
                   <label className="FormLabel">Status</label>
                   <Switch
+                    {...register('isActive')}
+                    id="isActive"
+                    name="isActive"
                     checked={checked}
                     onChange={handleSwitchChange}
                     inputProps={{ 'aria-label': 'controlled' }}
