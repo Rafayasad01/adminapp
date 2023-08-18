@@ -108,6 +108,7 @@ function OrderDetailsPage() {
   };
 
   const setData = (item: any) => {
+    console.log('item::::::', item)
     setViewData(item);
     let quantity: number = 0;
     item.appOrderStatuses.forEach((item: any, index: number) => {
@@ -169,19 +170,18 @@ function OrderDetailsPage() {
           callback={statusCancelHandler}
         />
       )}
-      <TopBar isNestedRoute title="View Order" />
+      <TopBar isNestedRoute title="Order Detail" />
       <div className="container py-3">
         <div className="grid w-full grid-cols-2 gap-3">
           <div className="mb-auto min-h-[600px] rounded-lg bg-[#fff] shadow-lg">
             <div className="p-4">
               <div className="flex items-center">
                 <div
-                  className={`relative mr-2 inline-flex ${
-                    currentStatus &&
+                  className={`relative mr-2 inline-flex ${currentStatus &&
                     currentStatus.key === ORDER_STATUS_IN_CANCELLED
-                      ? 'text-red-500'
-                      : 'text-green-500'
-                  }`}
+                    ? 'text-red-500'
+                    : 'text-green-500'
+                    }`}
                 >
                   <CircularProgress
                     thickness={1.5}
@@ -218,12 +218,11 @@ function OrderDetailsPage() {
                     )}
                   </div>
                   <div
-                    className={`font-open-sans text-sm font-semibold  ${
-                      currentStatus &&
+                    className={`font-open-sans text-sm font-semibold  ${currentStatus &&
                       currentStatus.key === ORDER_STATUS_IN_CANCELLED
-                        ? 'text-red-500'
-                        : 'text-green-500'
-                    } `}
+                      ? 'text-red-500'
+                      : 'text-green-500'
+                      } `}
                   >
                     {currentStatus && `${currentStatus.value.title} `}
                   </div>
@@ -235,11 +234,10 @@ function OrderDetailsPage() {
                     setDialogText('Are you sure you want to cancel this Order');
                     setCancelDialogOpen(true);
                   }}
-                  className={`rounded-xl py-2 px-12 font-open-sans text-sm font-semibold ${
-                    cancelled || isCancelled
-                      ? 'bg-neutral-400 text-neutral-900'
-                      : 'bg-neutral-900 text-gray-50'
-                  } `}
+                  className={`rounded-xl py-2 px-12 font-open-sans text-sm font-semibold ${cancelled || isCancelled
+                    ? 'bg-neutral-400 text-neutral-900'
+                    : 'bg-neutral-900 text-gray-50'
+                    } `}
                   color="inherit"
                   disabled={cancelled || isCancelled ? true : false}
                 >
@@ -303,68 +301,92 @@ function OrderDetailsPage() {
                 </div>
               </div>
               <hr className="my-3 h-[1px] w-full bg-neutral-200" />
+
               <div className="flex w-full flex-shrink-0 items-center gap-x-3">
-                {viewData.driver ? (
-                  <>
+                {viewData.status != ORDER_STATUS_IN_CANCELLED ?
+                  (
+
+                    viewData.driver ? (
+                      <>
+                        <IconButton
+                          aria-label="delete"
+                          className="p-0"
+                          disableRipple
+                          disabled
+                        >
+                          <Avatar
+                            alt="Truck Driver Icon"
+                            src={assets.images.truckDriverIcon}
+                            sx={{ width: 24, height: 24, marginRight: '5px' }}
+                          />
+                        </IconButton>
+                        <div className="flex-grow-1 flex w-full items-center justify-between font-open-sans text-sm font-normal text-neutral-500">
+                          <div className="flex items-center gap-x-1">
+                            <div className="avatar">
+                              {viewData.driver.avatar ? (
+                                <img src={viewData.driver.avatar} alt="" />
+                              ) : (
+                                <Avatar
+                                  className="avatar flex items-center"
+                                  sx={{
+                                    bgcolor: '#1D1D1D',
+                                    width: 25,
+                                    height: 25,
+                                    textTransform: 'uppercase',
+                                    fontSize: '11px',
+                                    marginRight: '10px',
+                                  }}
+                                >
+                                  {viewData.driver.firstName.charAt(0)}
+                                  {viewData.driver.lastName.charAt(0)}
+                                </Avatar>
+                              )}
+                            </div>
+                            <div>
+                              <span>{`${viewData.driver.firstName} ${viewData.driver.lastName}`}</span>
+                            </div>
+                          </div>
+                          <span>{viewData.driver.phone}</span>
+                          <span>{viewData.driver.licenseNumber}</span>
+                        </div>
+                      </>
+                    ) : (
+                      <IconButton
+                        aria-label="delete"
+                        className="p-0"
+                        disableRipple
+                        onClick={() => navigate('../assign/' + id)}
+                      >
+                        <Avatar
+                          alt="Truck Driver Icon"
+                          src={assets.images.truckDriverIcon}
+                          sx={{ width: 24, height: 24, marginRight: '5px' }}
+                        />
+                        <div className="font-open-sans text-sm font-normal text-neutral-500">
+                          Choose a driver
+                        </div>
+                      </IconButton>
+                    )
+
+                  )
+                  : (
                     <IconButton
                       aria-label="delete"
                       className="p-0"
                       disableRipple
                       disabled
+                      onClick={() => navigate('../assign/' + id)}
                     >
                       <Avatar
                         alt="Truck Driver Icon"
                         src={assets.images.truckDriverIcon}
                         sx={{ width: 24, height: 24, marginRight: '5px' }}
                       />
-                    </IconButton>
-                    <div className="flex-grow-1 flex w-full items-center justify-between font-open-sans text-sm font-normal text-neutral-500">
-                      <div className="flex items-center gap-x-1">
-                        <div className="avatar">
-                          {viewData.driver.avatar ? (
-                            <img src={viewData.driver.avatar} alt="" />
-                          ) : (
-                            <Avatar
-                              className="avatar flex items-center"
-                              sx={{
-                                bgcolor: '#1D1D1D',
-                                width: 25,
-                                height: 25,
-                                textTransform: 'uppercase',
-                                fontSize: '11px',
-                                marginRight: '10px',
-                              }}
-                            >
-                              {viewData.driver.firstName.charAt(0)}
-                              {viewData.driver.lastName.charAt(0)}
-                            </Avatar>
-                          )}
-                        </div>
-                        <div>
-                          <span>{`${viewData.driver.firstName} ${viewData.driver.lastName}`}</span>
-                        </div>
+                      <div className="font-open-sans text-sm font-normal text-neutral-500">
+                        Choose a driver
                       </div>
-                      <span>{viewData.driver.phone}</span>
-                      <span>{viewData.driver.licenseNumber}</span>
-                    </div>
-                  </>
-                ) : (
-                  <IconButton
-                    aria-label="delete"
-                    className="p-0"
-                    disableRipple
-                    onClick={() => navigate('../assign/' + id)}
-                  >
-                    <Avatar
-                      alt="Truck Driver Icon"
-                      src={assets.images.truckDriverIcon}
-                      sx={{ width: 24, height: 24, marginRight: '5px' }}
-                    />
-                    <div className="font-open-sans text-sm font-normal text-neutral-500">
-                      Choose a driver
-                    </div>
-                  </IconButton>
-                )}
+                    </IconButton>
+                  )}
               </div>
               <hr className="my-3 h-[1px] w-full bg-neutral-200" />
               {viewData.orderItems &&
@@ -452,18 +474,17 @@ function OrderDetailsPage() {
                         );
                         setDialogOpen(true);
                       }}
-                      className={`- xl py - 2 px - 12 font - open - sans text - sm font - semibold rounded ${
-                        cancelled ||
+                      className={`- xl py - 2 px - 12 font - open - sans text - sm font - semibold rounded ${cancelled ||
                         (isCancelled &&
                           nextBtn.key === ORDER_STATUS_IN_CANCELLED)
-                          ? 'bg-neutral-400 text-neutral-900'
-                          : 'bg-neutral-900 text-gray-50'
-                      } `}
+                        ? 'bg-neutral-400 text-neutral-900'
+                        : 'bg-neutral-900 text-gray-50'
+                        } `}
                       color="inherit"
                       disabled={
                         cancelled ||
-                        (isCancelled &&
-                          nextBtn.key === ORDER_STATUS_IN_CANCELLED)
+                          (isCancelled &&
+                            nextBtn.key === ORDER_STATUS_IN_CANCELLED)
                           ? true
                           : false
                       }
@@ -483,9 +504,8 @@ function OrderDetailsPage() {
                     return (
                       <div
                         key={item.key}
-                        className={`items - center flex ${
-                          item.isStatus ? '' : 'opacity-25'
-                        } `}
+                        className={`items - center flex ${item.isStatus ? '' : 'opacity-25'
+                          } `}
                       >
                         {item.isStatus ? (
                           <CheckCircleOutlineOutlinedIcon />
@@ -494,11 +514,10 @@ function OrderDetailsPage() {
                         )}
 
                         <div
-                          className={`mx - 2 - relative inline flex ${
-                            item.isStatus
-                              ? item.value.color
-                              : 'text-neutral-500'
-                          } `}
+                          className={`mx - 2 - relative inline flex ${item.isStatus
+                            ? item.value.color
+                            : 'text-neutral-500'
+                            } `}
                         >
                           <CircularProgress
                             thickness={1.5}
@@ -514,11 +533,10 @@ function OrderDetailsPage() {
                         </div>
                         <div>
                           <div
-                            className={`font - open - sans text - base font - semibold ${
-                              item.isStatus
-                                ? item.value.color
-                                : 'text-neutral-500'
-                            } `}
+                            className={`font - open - sans text - base font - semibold ${item.isStatus
+                              ? item.value.color
+                              : 'text-neutral-500'
+                              } `}
                           >
                             {item.value.title}
                           </div>

@@ -8,14 +8,8 @@ import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
 import { SelectChangeEvent } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
-import Checkbox from '@mui/material/Checkbox';
-import CheckBoxOutlineBlankOutlinedIcon from '@mui/icons-material/CheckBoxOutlineBlankOutlined';
-import CheckBoxOutlinedIcon from '@mui/icons-material/CheckBoxOutlined';
 
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
-//import Pagination from '@mui/material/Pagination';
-//import Stack from '@mui/material/Stack';
+import WysiwygOutlinedIcon from '@mui/icons-material/WysiwygOutlined';
 import order from '../../services/adminapp/adminOrders';
 import dayjs from 'dayjs';
 import TablePagination from '@mui/material/TablePagination';
@@ -42,11 +36,6 @@ function OrdersPage() {
   const [total, setTotal] = useState(0);
   const [list, setList] = useState<any>([]);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const [actionMenuItemid, setActionMenuItemid] = React.useState('');
-  const [actionMenuAnchorEl, setActionMenuAnchorEl] =
-    useState<null | HTMLElement>(null);
-  const actionMenuOpen = Boolean(actionMenuAnchorEl);
-  const actionMenuOptions = ['Detail'];
 
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
@@ -174,19 +163,6 @@ function OrdersPage() {
       });
   }, []);
 
-  const manuHandler = (option: string) => {
-    let doOption = '';
-    if (option === 'Edit') {
-      doOption = 'edit';
-    } else if (option === 'Detail') {
-      doOption = 'view';
-    } else {
-      doOption = 'download';
-    }
-    navigate(`${doOption}/${actionMenuItemid}`);
-    //console.log('actionMenuItemid', actionMenuItemid)
-  };
-
   const getStatusTag = (status: string) => {
     let tag = '';
     if (status === ORDER_STATUS_NEW) {
@@ -214,15 +190,6 @@ function OrdersPage() {
   };
   return (
     <>
-      {actionMenuAnchorEl && (
-        <ActionMenu
-          open={actionMenuOpen}
-          anchorEl={actionMenuAnchorEl}
-          setAnchorEl={setActionMenuAnchorEl}
-          options={actionMenuOptions}
-          callback={manuHandler}
-        />
-      )}
       <TopBar title="Orders" />
       <div className="container mt-5">
         <div className="w-full rounded-lg bg-white shadow-lg">
@@ -378,20 +345,10 @@ function OrdersPage() {
                         <td>{order.orderNumber}</td>
                         <td>
                           <IconButton
-                            className="btn-dot"
-                            aria-label="more"
-                            id="long-button"
-                            aria-controls={
-                              actionMenuOpen ? 'long-menu' : undefined
-                            }
-                            aria-expanded={actionMenuOpen ? 'true' : undefined}
-                            aria-haspopup="true"
-                            onClick={(event: React.MouseEvent<HTMLElement>) => {
-                              setActionMenuItemid(list[index].id);
-                              setActionMenuAnchorEl(event.currentTarget);
-                            }}
+                            className="icon-btn mr-3.5 p-0"
+                            onClick={() => navigate(`detail/${list[index].id}`)}
                           >
-                            <MoreVertIcon />
+                            <WysiwygOutlinedIcon />
                           </IconButton>
                         </td>
                       </tr>

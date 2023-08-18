@@ -210,7 +210,7 @@ export const routeObjects: RouteObject[] = [
             element: <OrdersCreatePage />,
           },
           {
-            path: 'view/:orderId',
+            path: 'detail/:orderId',
             element: <OrderDetailsPage />,
           },
           {
