@@ -1,10 +1,16 @@
 import network from '../../utils/network';
 
-const listVouchers = (tenant: string, page: number, size: number) => {
+const listVouchers = (
+  tenant: string,
+  page: number,
+  size: number,
+  search = ''
+) => {
   const searchParams = new URLSearchParams({
     limit: size.toString(),
     offset: (page * size).toString(),
   });
+  if (search) searchParams.append('search', search);
   return network.get(`voucher/list/${tenant}?${searchParams}`);
 };
 

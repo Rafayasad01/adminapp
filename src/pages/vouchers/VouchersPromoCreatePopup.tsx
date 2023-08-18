@@ -32,7 +32,7 @@ interface CreateVoucherPayload {
   maxRedeem: number;
   validFrom: string;
   validTill: string;
-  status: 'Active' | 'Inactive';
+  isActive: boolean;
   type: 'Referral' | 'Promo';
   backOfficeUser: string;
   name: string;
@@ -46,7 +46,7 @@ interface CreateVoucherFromData {
   minProduct: string;
   minAmount: string;
   maxRedeem: string;
-  status: boolean;
+  isActive: boolean;
 }
 
 function VouchersPromoCreatePopup({
@@ -57,6 +57,7 @@ function VouchersPromoCreatePopup({
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<CreateVoucherFromData>();
 
@@ -81,12 +82,13 @@ function VouchersPromoCreatePopup({
       minProduct: +data.minProduct,
       minAmount: +data.minAmount,
       maxRedeem: +data.maxRedeem,
-      status: data.status ? 'Active' : 'Inactive',
+      isActive: data.isActive,
       backOfficeUser: authState.user.id,
       validFrom: validFromDate?.toISOString() ?? '',
       validTill: validTillDate?.toISOString() ?? '',
     };
     callback(createVoucherPayload);
+    reset();
   };
 
   return (
@@ -303,10 +305,10 @@ function VouchersPromoCreatePopup({
                 <FormControl className="FormControl" variant="standard">
                   <label className="FormLabel">Status</label>
                   <Switch
-                    {...register('status')}
+                    {...register('isActive')}
                     checked={checked}
-                    id="status"
-                    name="status"
+                    id="isActive"
+                    name="isActive"
                     onChange={handleSwitchChange}
                     inputProps={{ 'aria-label': 'controlled' }}
                   />
