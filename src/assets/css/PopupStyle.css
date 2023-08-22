@@ -1,48 +1,63 @@
 .Dialog {
-  @apply relative m-0  w-[40%] overflow-hidden bg-transparent shadow-none  !important;
+  @apply relative m-0 w-[40%] overflow-hidden bg-transparent shadow-none !important;
 }
+
 .Dialog.Width-60 {
-  @apply w-[60%]  !important;
+  @apply w-[60%] !important;
 }
+
 .Dialog.Width-30 {
-  @apply w-[30%]  !important;
+  @apply w-[30%] !important;
 }
+
 .Dialog.Width-55 {
-  @apply w-[55%]  !important;
+  @apply w-[55%] !important;
 }
+
 .height-230 {
   height: 230px;
 }
+
 .Dialog .Content {
   @apply flex h-full w-full flex-col justify-evenly rounded-lg bg-[#fff] px-4 py-5 shadow-lg !important;
 }
+
 .Dialog .Content.NoPadding {
   @apply p-0 !important;
 }
+
 .Content .Row {
   @apply grid grid-cols-12;
 }
+
 .gap-x3 {
   @apply gap-x-3;
 }
+
 .Content .Column-6 {
   @apply col-span-6;
 }
+
 .Content .Column-5 {
   @apply col-span-5;
 }
+
 .Content .Column-7 {
   @apply col-span-7;
 }
+
 .Content .css-dpjnhs-MuiInputBase-root-MuiOutlinedInput-root {
   @apply border-0 border-transparent bg-transparent px-0 !important;
 }
+
 .Content .MuiOutlinedInput-notchedOutline {
   @apply border-0 border-transparent bg-transparent px-0 !important;
 }
+
 .Content .css-1rxz5jq-MuiSelect-select-MuiInputBase-input-MuiInput-input:focus {
   @apply border-0 border-transparent bg-transparent !important;
 }
+
 .Content .FormInput input::placeholder,
 .Content .FormTextarea textarea::placeholder {
   /* Chrome, Firefox, Opera, Safari 10.1+ */
@@ -54,6 +69,7 @@
   /* Internet Explorer 10-11 */
   @apply font-open-sans text-sm text-[#6a6a6a] opacity-100 !important;
 }
+
 .Content .FormInput input::-ms-input-placeholder,
 .Content .FormTextarea textarea::-ms-input-placeholder {
   /* Microsoft Edge */
@@ -63,47 +79,79 @@
 .Content .FormHeader {
   @apply flex w-full !important;
 }
+
 .Content .Title {
   @apply font-open-sans text-xl font-semibold text-[#1A1A1A] !important;
 }
+
 .Content .FormBody {
   @apply flex w-full flex-col justify-evenly !important;
 }
+
 .Content .FormFields {
   @apply mt-3 grid grid-cols-2 gap-3 !important;
 }
+
 .Content .FormField {
   @apply mt-3 grid !important;
 }
-.Content .FormControl {
-  @apply m-0 w-full !important;
+
+.Content .FormMultipleFields {
+  @apply mt-3 flex !important;
 }
+
+.Content .FormMultipleFields .FormControl {
+  @apply w-[auto] !important;
+}
+
+.Content .FormControl {
+  @apply m-0 w-full mr-4 !important;
+}
+
 .Content .FormLabel {
   @apply font-open-sans text-sm font-normal text-[#1A1A1A] !important;
 }
+
 .Content .FormLabel .SubLabel {
   @apply ml-2 font-open-sans text-[0.60rem] font-normal text-[#6A6A6A] !important;
 }
+
 .Content .FormInput,
 .Content .FormTextarea,
 .Content .FormSelect {
-  @apply mt-1 rounded-md border border-solid border-[#C9C9C9] px-3 font-open-sans text-sm font-normal text-[#1A1A1A] opacity-[0.7] after:border-b-neutral-900 !important;
+  @apply mt-1 rounded-md border border-solid border-[#C9C9C9] px-3 font-open-sans text-sm font-normal text-[#1A1A1A] opacity-[0.7] !important;
 }
+
+.Content .FormInput:after,
+.Content .FormTextarea:after,
+.Content .FormSelect:after {
+  @apply border-b-neutral-900 !important;
+}
+
 .Content .ImageBox {
   @apply mt-1 flex w-full flex-col !important;
 }
+
 .Content .ImageLabel {
   @apply flex w-full rounded-lg border border-dashed border-[#0D54C9] !important;
 }
+
 .Content .ImageBtn {
-  @apply flex w-full items-center justify-center font-open-sans text-sm font-normal normal-case text-[#0D54C9] hover:bg-transparent !important;
+  @apply flex w-full items-center justify-center font-open-sans text-sm font-normal normal-case text-[#0D54C9] !important;
 }
+
+.Content .ImageBtn:hover {
+  @apply bg-transparent !important;
+}
+
 .Content .ShowImageBox {
   @apply mt-3 flex w-fit items-center justify-start rounded-md border border-solid border-[#E4E4E4] px-2 !important;
 }
+
 .Content .ShowImageLabel {
   @apply mr-4 font-open-sans text-xs font-normal text-[#1A1A1A] !important;
 }
+
 .Content .FormFooter {
   @apply mt-5 flex items-center justify-end;
 }
@@ -111,108 +159,143 @@
 .Chat .ChatHeader {
   @apply flex w-full flex-row items-center !important;
 }
+
 .Chat .BackBtn svg {
   @apply w-[25px] text-[#1D1D1D] !important;
 }
+
 .Chat .HeaderInfoBox {
-  @apply flex w-full flex-row items-start justify-start  !important;
+  @apply flex w-full flex-row items-start justify-start !important;
 }
+
 .Chat .HeaderLogo {
   @apply ml-1 h-[44px] w-[44px] rounded-full !important;
 }
+
 .Chat .HeaderInfo {
   @apply flex flex-row items-start justify-start !important;
 }
+
 .Chat .HeaderDetails {
   @apply ml-2 flex flex-col items-start justify-start !important;
 }
+
 .Chat .HeaderHeading {
   @apply font-open-sans text-xl font-semibold text-[#1A1A1A] !important;
 }
+
 .Chat .HeaderCurrentTxt {
   @apply font-open-sans text-sm font-normal text-[#6A6A6A] !important;
 }
+
 .Chat .HeaderStatusCircle {
   @apply ml-2 mt-2 h-[10px] w-[10px] rounded-full !important;
 }
+
 .HeaderStatusCircle.GreenColor {
   @apply bg-[#29CC97] !important;
 }
+
 .Chat .ChatContent {
   @apply flex flex-col !important;
 }
+
 .ChatContent .DateStyle {
   @apply flex items-center justify-center font-open-sans text-xs font-normal text-[#6A6A6A] !important;
 }
+
 .Chat .ChatHeader {
   @apply flex w-full flex-row items-center !important;
 }
+
 .Chat .BackBtn svg {
   @apply w-[25px] text-[#1D1D1D] !important;
 }
+
 .Chat .HeaderInfoBox {
-  @apply flex w-full flex-row items-start justify-start  !important;
+  @apply flex w-full flex-row items-start justify-start !important;
 }
+
 .Chat .HeaderLogo {
   @apply ml-1 h-[44px] w-[44px] rounded-full !important;
 }
+
 .Chat .HeaderInfo {
   @apply flex flex-row items-start justify-start !important;
 }
+
 .Chat .HeaderDetails {
   @apply ml-2 flex flex-col items-start justify-start !important;
 }
+
 .Chat .HeaderHeading {
   @apply font-open-sans text-xl font-semibold text-[#1A1A1A] !important;
 }
+
 .Chat .HeaderCurrentTxt {
   @apply font-open-sans text-sm font-normal text-[#6A6A6A] !important;
 }
+
 .Chat .HeaderStatusCircle {
   @apply ml-2 mt-2 h-[10px] w-[10px] rounded-full !important;
 }
+
 .HeaderStatusCircle.GreenColor {
   @apply bg-[#29CC97] !important;
 }
+
 .Chat .ChatContent {
   @apply flex flex-col !important;
 }
+
 .ChatContent .DateStyle {
   @apply flex items-center justify-center font-open-sans text-xs font-normal text-[#6A6A6A] !important;
 }
+
 .ChatContent .ChatLeftBox {
-  @apply mr-28 flex flex-row items-end justify-start  !important;
+  @apply mr-28 flex flex-row items-end justify-start !important;
 }
+
 .ChatContent .ChatRightBox {
   @apply ml-28 flex flex-row-reverse items-end justify-start !important;
 }
+
 .ChatContent .ChatLogo {
   @apply mr-2 h-[44px] w-[44px] rounded-full !important;
 }
+
 .ChatDetails {
   @apply mt-4 border border-solid border-[#C9C9C9] py-3 px-3 shadow-md !important;
 }
+
 .ChatLeftBox .ChatDetails {
   @apply rounded-tl-lg rounded-tr-lg rounded-br-lg !important;
 }
+
 .ChatRightBox .ChatDetails {
   @apply rounded-tl-lg rounded-tr-lg rounded-bl-lg bg-[#1D1D1D] !important;
 }
+
 .ChatContent .ChatTxt {
   @apply flex items-center justify-center font-open-sans text-xs font-normal !important;
 }
+
 .ChatLeftBox .ChatTxt {
   @apply text-[#1A1A1A] !important;
 }
+
 .ChatRightBox .ChatTxt {
   @apply text-[#fff] !important;
 }
+
 .ChatContent .ChatTime {
   @apply mt-4 flex items-center justify-end font-open-sans text-xs font-normal !important;
 }
+
 .ChatLeftBox .ChatTime {
   @apply text-[#6A6A6A] !important;
 }
+
 .ChatRightBox .ChatTime {
   @apply text-[#C9C9C9] !important;
 }
@@ -220,17 +303,21 @@
 .ChatFooter {
   @apply mt-4 rounded-lg border border-[#E4E4E4] p-2 !important;
 }
+
 .FormTextarea.NoBorder {
   @apply m-0 border-0 p-0 !important;
 }
+
 .ChatFooter .css-dpjnhs-MuiInputBase-root-MuiOutlinedInput-root {
   @apply p-0 !important;
 }
+
 .ChatBtnBox {
   @apply mt-2 flex w-full items-center justify-between justify-items-center !important;
 }
-.ChatBtnLeftBox {
-}
+
+.ChatBtnLeftBox {}
+
 .ChatBtnRightBox {
   @apply flex flex-row items-center justify-items-center !important;
 }
@@ -242,52 +329,68 @@
   background: transparent !important;
   border-radius: 26px !important;
 }
+
 .FormControl .MuiSwitch-switchBase {
   padding: 0 !important;
   margin: 0 !important;
   transition-duration: 300ms !important;
   margin-top: 2px !important;
 }
+
 .FormControl .MuiSwitch-switchBase.Mui-checked {
   transform: translateX(27px) !important;
   color: #fff !important;
   margin-top: 2px;
 }
-.FormControl .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track {
+
+.FormControl .MuiSwitch-switchBase.Mui-checked+.MuiSwitch-track {
   background-color: #51b541 !important;
   opacity: 1 !important;
   border: 0 !important;
 }
-.FormControl .MuiSwitch-switchBase.Mui-checked.Mui-disabled + .MuiSwitch-track {
+
+.FormControl .MuiSwitch-switchBase.Mui-checked.Mui-disabled+.MuiSwitch-track {
   opacity: 0.5 !important;
 }
+
 .FormControl .MuiSwitch-switchBase.Mui-focusVisible .MuiSwitch-thumb {
   color: #51b541 !important;
   border: 6px solid #fff !important;
 }
+
 .FormControl .MuiSwitch-switchBase.Mui-disabled .MuiSwitch-thumb {
   color: #fff;
 }
-.FormControl .MuiSwitch-switchBase.Mui-disabled + .MuiSwitch-track {
+
+.FormControl .MuiSwitch-switchBase.Mui-disabled+.MuiSwitch-track {
   opacity: 0.3 !important;
 }
+
 .FormControl .MuiSwitch-thumb {
   box-sizing: border-box !important;
   width: 22px !important;
   height: 22px !important;
 }
+
 .FormControl .MuiSwitch-track {
   border-radius: 26 !important;
   background-color: #e9e9ea !important;
   opacity: 1 !important;
   transition-duration: 500ms;
 }
+
 .FormControl .DatePicker {
-  @apply mt-1 rounded-md border border-solid border-[#C9C9C9] px-3 font-open-sans text-sm font-normal text-[#1A1A1A] opacity-[0.7] after:border-b-neutral-900 !important;
+  @apply mt-1 rounded-md border border-solid border-[#C9C9C9] px-3 font-open-sans text-sm font-normal text-[#1A1A1A] opacity-[0.7] !important;
 }
+
+.FormControl .DatePicker:after {
+  @apply border-b-neutral-900 !important;
+}
+
 .FormControl .DatePicker input {
   @apply py-[4px] px-0 font-open-sans text-sm font-normal text-[#1A1A1A] opacity-[0.7] !important;
 }
+
 .FormControl .DatePicker button {
   padding: 0 !important;
 }
@@ -296,27 +399,33 @@
   color: #1d1d1d !important;
   height: 8px !important;
 }
+
 .FormControl .css-187mznn-MuiSlider-root .css-14pt78w-MuiSlider-rail {
   background-color: #c9c9c9 !important;
 }
+
 .FormControl .css-1vj64c4-MuiSlider-root .MuiSlider-track {
   border: none !important;
 }
+
 .FormControl .MuiSlider-thumb {
   height: 24px !important;
   width: 24px !important;
   background-color: #fff !important;
   border: 6px solid currentColor !important;
 }
+
 .FormControl .MuiSlider-thumb:focus,
 .FormControl .MuiSlider-thumb:hover,
 .FormControl .MuiSlider-thumb.Mui-active,
 .FormControl .MuiSlider-thumb.Mui-focusVisible {
   box-shadow: inherit !important;
 }
+
 .FormControl .MuiSlider-thumb:before {
   display: none !important;
 }
+
 .FormControl .MuiSlider-valueLabel {
   line-height: 1.2px !important;
   font-size: 12px !important;
@@ -325,6 +434,7 @@
   background-color: #c9c9c9 !important;
   color: #1a1a1a !important;
 }
+
 /*.FormControl .MuiSlider-valueLabel:before {
   display: none !important;
 }
@@ -347,6 +457,7 @@
   cursor: pointer;
   padding: 15px;
 }
+
 .FormControl .FileUploadText,
 .FormControl .FileUploadText span {
   font-family: 'Open Sans' !important;
@@ -357,6 +468,7 @@
   color: #0f0f0f !important;
   background: transparent !important;
 }
+
 .FormControl .UploadButton {
   font-family: 'Open Sans';
   font-style: normal;
@@ -364,12 +476,15 @@
   font-size: 14px;
   line-height: 24px;
 }
+
 .FormControl #InputFileUpload {
   display: none;
 }
+
 .FormControl #LabelFileUpload.DragActive {
   background-color: #ffffff;
 }
+
 .FormControl .UploadButton {
   cursor: pointer;
   padding: 0.25rem;
@@ -379,10 +494,12 @@
   background-color: transparent;
   text-decoration-line: underline;
 }
+
 .FormControl .UploadButton:hover {
   text-decoration-line: underline;
   background: none !important;
 }
+
 .FormControl #DragFileElement {
   position: absolute;
   width: 100%;
@@ -393,6 +510,7 @@
   bottom: 0px;
   left: 0px;
 }
+
 .CustomToggleBtn {
   border: none !important;
   border-radius: 6px !important;
@@ -412,11 +530,13 @@
   outline: 0 none !important;
   margin-left: 0px !important;
 }
+
 .CustomToggleBtn.Mui-selected {
   background: #1d1d1d !important;
   color: #ffffff !important;
   border: 1px solid #1d1d1d !important;
 }
+
 .css-wclgr9-MuiButtonBase-root-MuiTab-root {
   padding: 0;
 }
