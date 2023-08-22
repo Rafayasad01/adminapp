@@ -29,6 +29,12 @@ module.exports = {
     'react/no-array-index-key': 0,
     'react/require-default-props': 0,
     'no-param-reassign': 0,
-    'jsx-a11y/label-has-associated-control':0
+    'jsx-a11y/label-has-associated-control': 0,
+    'prettier/prettier': [
+      'error',
+      {
+        endOfLine: 'auto',
+      },
+    ],
   },
 };
