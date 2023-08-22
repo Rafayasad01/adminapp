@@ -12,13 +12,21 @@ import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
 import Stack from '@mui/material/Stack';
 import Toolbar from '@mui/material/Toolbar';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import OrderIcon from '../icons/OrderIcon';
 import CategoryIcon from '../icons/CategoryIcon';
 import VoucherIcon from '../icons/VoucherIcon';
 import DriverIcon from '../icons/DriverIcon';
+import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
+import { logout } from '../../redux/features/authStateSlice'
+import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined'
+import FacebookIcon from '@mui/icons-material/Facebook'
+import TwitterIcon from '@mui/icons-material/Twitter'
+import InstagramIcon from '@mui/icons-material/Instagram'
+import MailIcon from '@mui/icons-material/Mail'
 
 import assets from '../../assets';
+import IconButton from '@mui/material/IconButton';
 
 const links = [
   {
@@ -61,6 +69,11 @@ const links = [
     path: 'vouchers',
     icon: <VoucherIcon />,
   },
+  {
+    name: 'Settings',
+    path: 'settings',
+    icon: <SettingsOutlinedIcon fontSize="inherit" />,
+  },
   // {
   //   name: 'Reports',
   //   path: 'reports',
@@ -83,19 +96,22 @@ const links = [
   //   path: 'vouchers',
   //   icon: <VoucherIcon />,
   // },
-  // {
-  //   name: 'Settings',
-  //   path: 'settings',
-  //   icon: <SettingsOutlinedIcon fontSize="inherit" />,
-  // },
 ];
 
+
 function Sidebar() {
+  const authState: any = useAppSelector((state) => state.authState);
+  const dispatch = useAppDispatch()
+  const navigate = useNavigate()
+  const logOut = () => {
+    dispatch(logout())
+    navigate(`../../../admin/auth/login`);
+  }
   return (
     <Drawer
       variant="permanent"
       PaperProps={{
-        className: 'box-border w-64 border-r-0 bg-stone-900 text-gray-50',
+        className: 'left-sidebar box-border w-64 border-r-0 bg-stone-900 text-gray-50',
       }}
     >
       <List disablePadding>
@@ -127,6 +143,45 @@ function Sidebar() {
               </NavLink>
             );
           })}
+        </div>
+        <div className="sidebar-footer-content mt-5">
+          <div className="share-via">
+            <h6 className="heading">Share</h6>
+            <div className="social-icons">
+              <IconButton className="social-btn" onClick={() => null}>
+                <FacebookIcon className="text-3xl" />
+              </IconButton>
+              <IconButton className="social-btn" onClick={() => null}>
+                <TwitterIcon className="text-3xl" />
+              </IconButton>
+              <IconButton className="social-btn" onClick={() => null}>
+                <InstagramIcon className="text-3xl" />
+              </IconButton>
+              <IconButton className="social-btn" onClick={() => null}>
+                <MailIcon className="text-3xl" />
+              </IconButton>
+            </div>
+            <hr className="mb-0" />
+            {/* <NavLink className="link mb-1" to="#">
+              Terms & Conditions
+            </NavLink>
+            <NavLink className="link" to="#">
+              Privacy Policy
+            </NavLink>
+            <hr className="mt-2" /> */}
+          </div>
+          {authState ? (
+            <NavLink
+              className="logout-link"
+              to="/dashboard"
+              onClick={() => logOut()}
+            >
+              <LogoutOutlinedIcon className="icon" />
+              Logout
+            </NavLink>
+          ) : (
+            ''
+          )}
         </div>
       </List>
     </Drawer>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Dialog from '@mui/material/Dialog';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
@@ -8,21 +8,23 @@ import { SelectChangeEvent } from '@mui/material/Select';
 import '../../assets/css/PopupStyle.css';
 
 type Props = {
-  socialLinks: boolean;
-  setSocialLinks: React.Dispatch<React.SetStateAction<boolean>>;
+  openDialog: boolean;
+  setOpenDialog: React.Dispatch<React.SetStateAction<boolean>>;
+  socialMediaLinks: any;
+  setSocialMediaLinks: React.Dispatch<React.SetStateAction<any>>;
 };
 
-function SocialLinksPopup({ socialLinks, setSocialLinks }: Props) {
-  const [quantity, setQuantity] = useState('status');
-  const handleFormClose = () => setSocialLinks(false);
+function SocialLinksPopup({ openDialog, setOpenDialog, socialMediaLinks, setSocialMediaLinks }: Props) {
 
-  const handleQuantityChange = (event: SelectChangeEvent) => {
-    setQuantity(event.target.value as string);
-  };
+  const handleFormClose = () => setOpenDialog(false);
+
+  useEffect(() => {
+    console.log('socialMediaLinks::::::', socialMediaLinks)
+  }, []);
 
   return (
     <Dialog
-      open={socialLinks}
+      open={openDialog}
       onClose={handleFormClose}
       PaperProps={{
         className: 'Dialog Width-30',
@@ -39,11 +41,21 @@ function SocialLinksPopup({ socialLinks, setSocialLinks }: Props) {
               <label className="FormLabel">Facebook</label>
               <Input
                 className="FormInput"
-                id="address"
-                value=""
-                name="address"
+                id="facebook"
+                value={socialMediaLinks.facebook ?? ""}
+                name="facebook"
                 placeholder="Url"
                 disableUnderline
+                onChange={(item: any) => {
+                  setSocialMediaLinks(
+                    (newItem: any) => {
+                      return {
+                        ...newItem,
+                        facebook: item.target.value
+                      }
+                    }
+                  );
+                }}
               />
             </FormControl>
           </div>
@@ -52,11 +64,21 @@ function SocialLinksPopup({ socialLinks, setSocialLinks }: Props) {
               <label className="FormLabel">Instagram</label>
               <Input
                 className="FormInput"
-                id="address"
-                value=""
-                name="address"
+                id="instagram"
+                value={socialMediaLinks.instagram ?? ""}
+                name="instagram"
                 placeholder="Url"
                 disableUnderline
+                onChange={(item: any) => {
+                  setSocialMediaLinks(
+                    (newItem: any) => {
+                      return {
+                        ...newItem,
+                        instagram: item.target.value
+                      }
+                    }
+                  );
+                }}
               />
             </FormControl>
           </div>
@@ -65,11 +87,21 @@ function SocialLinksPopup({ socialLinks, setSocialLinks }: Props) {
               <label className="FormLabel">LinkedIn</label>
               <Input
                 className="FormInput"
-                id="address"
-                value=""
-                name="address"
+                id="linkedin"
+                value={socialMediaLinks.linkedin ?? ""}
+                name="linkedin"
                 placeholder="Url"
                 disableUnderline
+                onChange={(item: any) => {
+                  setSocialMediaLinks(
+                    (newItem: any) => {
+                      return {
+                        ...newItem,
+                        linkedin: item.target.value
+                      }
+                    }
+                  );
+                }}
               />
             </FormControl>
           </div>
@@ -78,11 +110,21 @@ function SocialLinksPopup({ socialLinks, setSocialLinks }: Props) {
               <label className="FormLabel">Twitter</label>
               <Input
                 className="FormInput"
-                id="address"
-                value=""
-                name="address"
+                id="twitter"
+                value={socialMediaLinks.twitter ?? ""}
+                name="twitter"
                 placeholder="Url"
                 disableUnderline
+                onChange={(item: any) => {
+                  setSocialMediaLinks(
+                    (newItem: any) => {
+                      return {
+                        ...newItem,
+                        twitter: item.target.value
+                      }
+                    }
+                  );
+                }}
               />
             </FormControl>
           </div>
@@ -91,11 +133,21 @@ function SocialLinksPopup({ socialLinks, setSocialLinks }: Props) {
               <label className="FormLabel">YouTube</label>
               <Input
                 className="FormInput"
-                id="address"
-                value=""
-                name="address"
+                id="youtube"
+                value={socialMediaLinks.youtube ?? ""}
+                name="youtube"
                 placeholder="Url"
                 disableUnderline
+                onChange={(item: any) => {
+                  setSocialMediaLinks(
+                    (newItem: any) => {
+                      return {
+                        ...newItem,
+                        youtube: item.target.value
+                      }
+                    }
+                  );
+                }}
               />
             </FormControl>
           </div>
@@ -104,11 +156,21 @@ function SocialLinksPopup({ socialLinks, setSocialLinks }: Props) {
               <label className="FormLabel">WhatsApp</label>
               <Input
                 className="FormInput"
-                id="address"
-                value=""
-                name="address"
+                id="whatsapp"
+                value={socialMediaLinks.whatsapp ?? ""}
+                name="whatsapp"
                 placeholder="Url"
                 disableUnderline
+                onChange={(item: any) => {
+                  setSocialMediaLinks(
+                    (newItem: any) => {
+                      return {
+                        ...newItem,
+                        whatsapp: item.target.value
+                      }
+                    }
+                  );
+                }}
               />
             </FormControl>
           </div>
