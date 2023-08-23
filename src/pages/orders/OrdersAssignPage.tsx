@@ -8,12 +8,12 @@ import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
 import Button from '@mui/material/Button';
 import SearchIcon from '@mui/icons-material/Search';
-import TopBar from '../../components/common/TopBar';
-import { useAppSelector } from '../../redux/redux-hooks';
 import dayjs from 'dayjs';
 
 import Avatar from '@mui/material/Avatar';
 import TablePagination from '@mui/material/TablePagination';
+import { useAppSelector } from '../../redux/redux-hooks';
+import TopBar from '../../components/common/TopBar';
 import {
   APP_USER_STATUS_OFFLINE,
   APP_USER_STATUS_ONLINE,
@@ -37,7 +37,7 @@ function OrdersAssignPage() {
   const [alertOpen, setAlertOpen] = useState<boolean>(false);
 
   const params = useParams();
-  const orderId: any = params.orderId;
+  const { orderId } = params;
 
   const handleClickSearch = (event: any) => {
     if (event.key === 'Enter') {
@@ -73,7 +73,7 @@ function OrdersAssignPage() {
     newPage: number
   ) => {
     setPage(newPage);
-    //offset? ,limit rowsperpage hoga ofset page * rowsperPage
+    // offset? ,limit rowsperpage hoga ofset page * rowsperPage
     if (search === '' || search === null || search === undefined) {
       Service.getListAssignService(
         authState.user.tenant,
@@ -134,7 +134,7 @@ function OrdersAssignPage() {
         }
       }
     );
-  }, []);
+  }, [authState, page, rowsPerPage]);
 
   const assignHandler = (userId: string) => {
     const data = {
@@ -154,18 +154,53 @@ function OrdersAssignPage() {
       }
     });
   };
+  const assignButton = (item: any) => {
+    let btn: any;
+    if (
+      !item.appOrderDelivery.appOrder &&
+      item.status === APP_USER_STATUS_ONLINE
+    ) {
+      btn = (
+        <Button
+          variant="contained"
+          className="btn-black-fill btn-icon"
+          onClick={() => assignHandler(item.id)}
+          disabled={false}
+        >
+          Assign
+        </Button>
+      );
+    } else if (
+      item.appOrderDelivery.appOrder &&
+      item.appOrderDelivery.status === ORDER_DELIVERY_STATUS_CANCELLED
+    ) {
+      btn = (
+        <Button
+          variant="contained"
+          className="btn-black-fill btn-icon"
+          onClick={() => assignHandler(item.id)}
+          disabled={false}
+        >
+          Assign
+        </Button>
+      );
+    } else {
+      btn = (
+        <Button
+          variant="contained"
+          className="btn-black-fill btn-icon"
+          onClick={() => assignHandler(item.id)}
+          disabled
+        >
+          Assign
+        </Button>
+      );
+    }
+    return btn;
+  };
   return (
     <>
-      {alertOpen && (
-        <AlertBox
-          msg={alertMsg}
-          setSeverty={alertSeverty}
-          alertOpen={alertOpen}
-          setAlertOpen={setAlertOpen}
-        />
-      )}
-
-      <TopBar isNestedRoute={true} title="Order Assign" />
+      <TopBar isNestedRoute title="Order Assign" />
       <div className="container mt-5">
         <div className="w-full rounded-lg bg-white shadow-lg">
           <div className="grid grid-cols-12 px-4 py-5">
@@ -266,7 +301,7 @@ function OrdersAssignPage() {
                         <td>
                           <span
                             className={`badge badge-${
-                              item.status == APP_USER_STATUS_OFFLINE
+                              item.status === APP_USER_STATUS_OFFLINE
                                 ? 'danger'
                                 : 'success'
                             }`}
@@ -303,50 +338,7 @@ function OrdersAssignPage() {
                             </span>
                           )}
                         </td>
-                        <td>
-                          {!item.appOrderDelivery.appOrder &&
-                          item.status === APP_USER_STATUS_ONLINE ? (
-                            <Button
-                              variant="contained"
-                              className="btn-black-fill btn-icon"
-                              onClick={() => assignHandler(item.id)}
-                              disabled={false}
-                            >
-                              Assign
-                            </Button>
-                          ) : item.appOrderDelivery.appOrder === orderId &&
-                            item.appOrderDelivery.status !==
-                              ORDER_DELIVERY_STATUS_CANCELLED ? (
-                            <Button
-                              variant="contained"
-                              className="btn-black-fill btn-icon"
-                              onClick={() => assignHandler(item.id)}
-                              disabled={true}
-                            >
-                              Assign
-                            </Button>
-                          ) : item.appOrderDelivery.appOrder &&
-                            item.appOrderDelivery.status ===
-                              ORDER_DELIVERY_STATUS_CANCELLED ? (
-                            <Button
-                              variant="contained"
-                              className="btn-black-fill btn-icon"
-                              onClick={() => assignHandler(item.id)}
-                              disabled={false}
-                            >
-                              Assign
-                            </Button>
-                          ) : (
-                            <Button
-                              variant="contained"
-                              className="btn-black-fill btn-icon"
-                              onClick={() => assignHandler(item.id)}
-                              disabled={true}
-                            >
-                              Assign
-                            </Button>
-                          )}
-                        </td>
+                        <td>{assignButton(item)}</td>
                       </tr>
                     );
                   })}
@@ -365,6 +357,14 @@ function OrdersAssignPage() {
           </div>
         </div>
       </div>
+      {alertOpen && (
+        <AlertBox
+          msg={alertMsg}
+          setSeverty={alertSeverty}
+          alertOpen={alertOpen}
+          setAlertOpen={setAlertOpen}
+        />
+      )}
     </>
   );
 }

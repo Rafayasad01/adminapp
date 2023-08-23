@@ -16,7 +16,7 @@ type Props = {
   openFormDialog: boolean;
   setOpenFormDialog: React.Dispatch<React.SetStateAction<boolean>>;
   formData: any;
-  callback: Function;
+  callback: (...args: any[]) => any;
 };
 
 function CategoriesServicesEditPopup({
@@ -56,10 +56,10 @@ function CategoriesServicesEditPopup({
     let icon = formData.icon.split('/').slice(-1)[0];
     const regexExp = /[a-z,0-9,-]{36}/;
     if (regexExp.test(icon)) {
-      icon = icon.split('-').splice(5)[0];
+      icon = icon.split('-').splice(5)[0].at(0);
     }
     setImageName(icon);
-  }, []);
+  }, [formData]);
 
   return (
     <Dialog
@@ -141,13 +141,16 @@ function CategoriesServicesEditPopup({
                   defaultValue=""
                   placeholder="Write Description"
                   {...register('desc', {
-                    required: 'Description is required', value: formData.desc, minLength: {
+                    required: 'Description is required',
+                    value: formData.desc,
+                    minLength: {
                       value: 5,
-                      message: "Minimum Five Characters"
-                    }, maxLength: {
+                      message: 'Minimum Five Characters',
+                    },
+                    maxLength: {
                       value: 50,
-                      message: "Too Many Characters"
-                    }
+                      message: 'Too Many Characters',
+                    },
                   })}
                 />
                 {errors.desc && (

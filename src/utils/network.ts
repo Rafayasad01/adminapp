@@ -1,7 +1,9 @@
 import axios from 'axios';
-import { BASE_URL, token } from '../utils/constants';
+import { BASE_URL, TOKEN_STORE_KEY } from './constants';
 
-const post = (endPoint: string, data: any) => {
+const token = JSON.parse(localStorage.getItem(TOKEN_STORE_KEY) ?? '') ?? null;
+
+const post = <T = any>(endPoint: string, data: T) => {
   return axios.post(`${BASE_URL}${endPoint}`, data, {
     headers: {
       'Content-Type': 'application/json',
@@ -19,7 +21,7 @@ const get = (endPoint: string) => {
   });
 };
 
-const postMultipart = (endPoint: string, data: any) => {
+const postMultipart = <T = any>(endPoint: string, data: T) => {
   return axios.post(`${BASE_URL}${endPoint}`, data, {
     headers: {
       'Content-Type': 'multipart/form-data',

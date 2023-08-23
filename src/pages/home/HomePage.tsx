@@ -67,9 +67,9 @@ function HomePage() {
       <div className="coming-soon">
         <div className="content">
           <div className="icon">
-            <img className='w-100' src={assets.images.comingSoonIcon} alt="" />
+            <img className="w-100" src={assets.images.comingSoonIcon} alt="" />
           </div>
-          <h4 className='text'>Coming Soon</h4>
+          <h4 className="text">Coming Soon</h4>
         </div>
       </div>
       {/* <div className="container mt-3">

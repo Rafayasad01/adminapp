@@ -10,8 +10,7 @@ type Props = {
   data: any;
 };
 
-function TopCustomerModal({ open, setOpen }: Props) {
-  const handleOpen = () => setOpen(true);
+function TopCustomerModal({ open, setOpen, data }: Props) {
   const handleClose = () => setOpen(false);
   return (
     <Modal

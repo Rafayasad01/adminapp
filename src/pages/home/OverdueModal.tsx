@@ -10,7 +10,7 @@ type Props = {
   data: any;
 };
 
-function OverdueModal({ open, setOpen }: Props) {
+function OverdueModal({ open, setOpen, data }: Props) {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   return (

@@ -15,7 +15,7 @@ import { CategoryService } from '../../interfaces/category.interface';
 type Props = {
   openFormDialog: boolean;
   setOpenFormDialog: React.Dispatch<React.SetStateAction<boolean>>;
-  callback: Function;
+  callback: (...args: any[]) => any;
 };
 
 function CategoriesServicesCreatePopup({
@@ -123,13 +123,15 @@ function CategoriesServicesCreatePopup({
                   defaultValue=""
                   placeholder="Write Description"
                   {...register('desc', {
-                    required: 'Description is required', minLength: {
+                    required: 'Description is required',
+                    minLength: {
                       value: 5,
-                      message: "Minimum Five Characters"
-                    }, maxLength: {
+                      message: 'Minimum Five Characters',
+                    },
+                    maxLength: {
                       value: 50,
-                      message: "Too Many Characters"
-                    }
+                      message: 'Too Many Characters',
+                    },
                   })}
                 />
                 {errors.desc && (

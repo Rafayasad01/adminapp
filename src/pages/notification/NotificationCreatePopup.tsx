@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Dialog from '@mui/material/Dialog';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
@@ -6,13 +6,13 @@ import Input from '@mui/material/Input';
 import { useForm } from 'react-hook-form';
 
 import '../../assets/css/PopupStyle.css';
-import { Notification } from '../../interfaces/notification.interface';
 import TextField from '@mui/material/TextField';
+import { Notification } from '../../interfaces/notification.interface';
 
 type Props = {
   openFormDialog: boolean;
   setOpenFormDialog: React.Dispatch<React.SetStateAction<boolean>>;
-  callback: Function;
+  callback: (...args: any[]) => any;
 };
 
 function NotificationCreatePopup({
@@ -23,9 +23,7 @@ function NotificationCreatePopup({
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
-    control,
   } = useForm<Notification>();
   const onSubmit = (data: Notification) => {
     setOpenFormDialog(false);

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import Dialog from '@mui/material/Dialog';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
@@ -14,13 +14,13 @@ type Props = {
   setSocialMediaLinks: React.Dispatch<React.SetStateAction<any>>;
 };
 
-function SocialLinksPopup({ openDialog, setOpenDialog, socialMediaLinks, setSocialMediaLinks }: Props) {
-
+function SocialLinksPopup({
+  openDialog,
+  setOpenDialog,
+  socialMediaLinks,
+  setSocialMediaLinks,
+}: Props) {
   const handleFormClose = () => setOpenDialog(false);
-
-  useEffect(() => {
-    console.log('socialMediaLinks::::::', socialMediaLinks)
-  }, []);
 
   return (
     <Dialog
@@ -42,19 +42,17 @@ function SocialLinksPopup({ openDialog, setOpenDialog, socialMediaLinks, setSoci
               <Input
                 className="FormInput"
                 id="facebook"
-                value={socialMediaLinks.facebook ?? ""}
+                value={socialMediaLinks.facebook ?? ''}
                 name="facebook"
                 placeholder="Url"
                 disableUnderline
                 onChange={(item: any) => {
-                  setSocialMediaLinks(
-                    (newItem: any) => {
-                      return {
-                        ...newItem,
-                        facebook: item.target.value
-                      }
-                    }
-                  );
+                  setSocialMediaLinks((newItem: any) => {
+                    return {
+                      ...newItem,
+                      facebook: item.target.value,
+                    };
+                  });
                 }}
               />
             </FormControl>
@@ -65,19 +63,17 @@ function SocialLinksPopup({ openDialog, setOpenDialog, socialMediaLinks, setSoci
               <Input
                 className="FormInput"
                 id="instagram"
-                value={socialMediaLinks.instagram ?? ""}
+                value={socialMediaLinks.instagram ?? ''}
                 name="instagram"
                 placeholder="Url"
                 disableUnderline
                 onChange={(item: any) => {
-                  setSocialMediaLinks(
-                    (newItem: any) => {
-                      return {
-                        ...newItem,
-                        instagram: item.target.value
-                      }
-                    }
-                  );
+                  setSocialMediaLinks((newItem: any) => {
+                    return {
+                      ...newItem,
+                      instagram: item.target.value,
+                    };
+                  });
                 }}
               />
             </FormControl>
@@ -88,19 +84,17 @@ function SocialLinksPopup({ openDialog, setOpenDialog, socialMediaLinks, setSoci
               <Input
                 className="FormInput"
                 id="linkedin"
-                value={socialMediaLinks.linkedin ?? ""}
+                value={socialMediaLinks.linkedin ?? ''}
                 name="linkedin"
                 placeholder="Url"
                 disableUnderline
                 onChange={(item: any) => {
-                  setSocialMediaLinks(
-                    (newItem: any) => {
-                      return {
-                        ...newItem,
-                        linkedin: item.target.value
-                      }
-                    }
-                  );
+                  setSocialMediaLinks((newItem: any) => {
+                    return {
+                      ...newItem,
+                      linkedin: item.target.value,
+                    };
+                  });
                 }}
               />
             </FormControl>
@@ -111,19 +105,17 @@ function SocialLinksPopup({ openDialog, setOpenDialog, socialMediaLinks, setSoci
               <Input
                 className="FormInput"
                 id="twitter"
-                value={socialMediaLinks.twitter ?? ""}
+                value={socialMediaLinks.twitter ?? ''}
                 name="twitter"
                 placeholder="Url"
                 disableUnderline
                 onChange={(item: any) => {
-                  setSocialMediaLinks(
-                    (newItem: any) => {
-                      return {
-                        ...newItem,
-                        twitter: item.target.value
-                      }
-                    }
-                  );
+                  setSocialMediaLinks((newItem: any) => {
+                    return {
+                      ...newItem,
+                      twitter: item.target.value,
+                    };
+                  });
                 }}
               />
             </FormControl>
@@ -134,19 +126,17 @@ function SocialLinksPopup({ openDialog, setOpenDialog, socialMediaLinks, setSoci
               <Input
                 className="FormInput"
                 id="youtube"
-                value={socialMediaLinks.youtube ?? ""}
+                value={socialMediaLinks.youtube ?? ''}
                 name="youtube"
                 placeholder="Url"
                 disableUnderline
                 onChange={(item: any) => {
-                  setSocialMediaLinks(
-                    (newItem: any) => {
-                      return {
-                        ...newItem,
-                        youtube: item.target.value
-                      }
-                    }
-                  );
+                  setSocialMediaLinks((newItem: any) => {
+                    return {
+                      ...newItem,
+                      youtube: item.target.value,
+                    };
+                  });
                 }}
               />
             </FormControl>
@@ -157,19 +147,17 @@ function SocialLinksPopup({ openDialog, setOpenDialog, socialMediaLinks, setSoci
               <Input
                 className="FormInput"
                 id="whatsapp"
-                value={socialMediaLinks.whatsapp ?? ""}
+                value={socialMediaLinks.whatsapp ?? ''}
                 name="whatsapp"
                 placeholder="Url"
                 disableUnderline
                 onChange={(item: any) => {
-                  setSocialMediaLinks(
-                    (newItem: any) => {
-                      return {
-                        ...newItem,
-                        whatsapp: item.target.value
-                      }
-                    }
-                  );
+                  setSocialMediaLinks((newItem: any) => {
+                    return {
+                      ...newItem,
+                      whatsapp: item.target.value,
+                    };
+                  });
                 }}
               />
             </FormControl>

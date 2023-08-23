@@ -8,13 +8,13 @@ import InputAdornment from '@mui/material/InputAdornment';
 import Button from '@mui/material/Button';
 import SearchIcon from '@mui/icons-material/Search';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
+import dayjs from 'dayjs';
+import TablePagination from '@mui/material/TablePagination';
+import WysiwygOutlinedIcon from '@mui/icons-material/WysiwygOutlined';
 import TopBar from '../../components/common/TopBar';
 import Service from '../../services/adminapp/adminNotification';
 import { useAppSelector } from '../../redux/redux-hooks';
-import dayjs from 'dayjs';
-import TablePagination from '@mui/material/TablePagination';
 import NotificationCreatePopup from './NotificationCreatePopup';
-import WysiwygOutlinedIcon from '@mui/icons-material/WysiwygOutlined';
 import {
   NOTIFICATION_STATUS_CANCELLED,
   NOTIFICATION_STATUS_COMPLETED,
@@ -67,7 +67,7 @@ function NotificationPage() {
     newPage: number
   ) => {
     setPage(newPage);
-    //offset? ,limit rowsperpage hoga ofset page * rowsperPage
+    // offset? ,limit rowsperpage hoga ofset page * rowsperPage
     if (search === '' || search === null || search === undefined) {
       Service.getListService(authState.user.tenant, newPage, rowsPerPage).then(
         (item) => {
@@ -123,7 +123,7 @@ function NotificationPage() {
       .catch((error) => {
         console.log('error::::::::', error);
       });
-  }, []);
+  }, [authState, page, rowsPerPage]);
 
   const createFormHandler = (data: any) => {
     const formData = new FormData();

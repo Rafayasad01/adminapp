@@ -5,18 +5,19 @@ const getService = (tenantConfig: string) => {
   return network.get(`${SETTING_PREFIX}/get/${tenantConfig}`);
 };
 
-const updateService = (tenantConfig: string, data: any) => {
-  return network.postMultipart(`${SETTING_PREFIX}/update/${tenantConfig}`, data);
+const updateService = <T = any>(tenantConfig: string, data: T) => {
+  return network.postMultipart(
+    `${SETTING_PREFIX}/update/${tenantConfig}`,
+    data
+  );
 };
 
 const getAddressService = (tenant: string) => {
   return network.get(`${SETTING_PREFIX}/address/${tenant}`);
 };
 
-
-
 export default {
   getService,
   updateService,
-  getAddressService
+  getAddressService,
 };

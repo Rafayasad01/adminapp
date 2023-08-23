@@ -34,14 +34,14 @@ function SuperAdminLoginPage() {
   const loginHandler = async () => {
     const userData: SuperadminUserLogin = {
       username: email,
-      password: password,
+      password,
     };
     const user: any = await auth.loginService(userData);
     if (user && user.data.success) {
-      const userData = user.data.data;
-      setToken(userData.token);
-      dispatch(login(userData));
-      if (userData.isSuperAdmin) {
+      const newUserData = user.data.data;
+      setToken(newUserData.token);
+      dispatch(login(newUserData));
+      if (newUserData.isSuperAdmin) {
         navigate('../../main');
       } else {
         navigate('../../../dashboard/home');

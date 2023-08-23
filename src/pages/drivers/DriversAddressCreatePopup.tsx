@@ -4,15 +4,15 @@ import Button from '@mui/material/Button';
 import Input from '@mui/material/Input';
 import '../../assets/css/PopupStyle.css';
 import { useForm } from 'react-hook-form';
-import { AppUserAddress } from '../../interfaces/app-user.interface';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
+import { AppUserAddress } from '../../interfaces/app-user.interface';
 
 type Props = {
   openFormDialog: boolean;
   setOpenFormDialog: React.Dispatch<React.SetStateAction<boolean>>;
-  callback: Function;
+  callback: (...args: any[]) => any;
 };
 
 function DriversAddressCreatePopup({

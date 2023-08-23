@@ -1,34 +1,32 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import Divider from '@mui/material/Divider';
-import FormControl from '@mui/material/FormControl';
-import Input from '@mui/material/Input';
-import InputAdornment from '@mui/material/InputAdornment';
+// import FormControl from '@mui/material/FormControl';
+// import Input from '@mui/material/Input';
+// import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
-import SearchIcon from '@mui/icons-material/Search';
+// import SearchIcon from '@mui/icons-material/Search';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
-import TopBar from '../../components/common/TopBar';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import Map from '../../components/common/Map';
+import dayjs from 'dayjs';
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import TablePagination from '@mui/material/TablePagination';
+import Switch from '@mui/material/Switch';
+import TopBar from '../../components/common/TopBar';
 import MapAddress from '../../components/common/MapAddress';
 import Service from '../../services/adminapp/adminDriver';
 import ActionMenu from '../../components/common/ActionMenu';
 import DriversScheduleCreatePopup from './DriversScheduleCreatePopup';
-import dayjs from 'dayjs';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
 import { useAppSelector } from '../../redux/redux-hooks';
 import DriversScheduleEditPopup from './DriversScheduleEditPopup';
-import TablePagination from '@mui/material/TablePagination';
-import Switch from '@mui/material/Switch';
-import assets from '../../assets';
 
 function DriversSchedulePage() {
   const authState: any = useAppSelector((state) => state.authState);
   const params = useParams();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const [detail, setDetail] = useState<any>(null);
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(0);
@@ -47,22 +45,13 @@ function DriversSchedulePage() {
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
 
   const id: any = params.driverId;
-
-  const manuHandler = (option: string) => {
-    if (option === 'Edit') {
-      getData(actionMenuItemid);
-    } else if (option === 'Delete') {
-      deleteEntity(actionMenuItemid);
-    }
-  };
-
-  const deleteEntity = (id: string) => {
+  const deleteEntity = (driverId: string) => {
     const data = {
       is_active: false,
       is_deleted: true,
       updated_by: authState.user.id,
     };
-    Service.deleteScheduleService(id, data).then((item: any) => {
+    Service.deleteScheduleService(driverId, data).then((item: any) => {
       if (item.data.success) {
         setList((newArr: any) => {
           return newArr.filter(
@@ -73,8 +62,8 @@ function DriversSchedulePage() {
     });
   };
 
-  const getData = (id: string) => {
-    Service.getSchedule(id).then((item: any) => {
+  const getData = (driverId: string) => {
+    Service.getSchedule(driverId).then((item: any) => {
       if (item.data.success) {
         setEditFormData(item.data.data);
         setOpenEditFormDialog(true);
@@ -82,30 +71,37 @@ function DriversSchedulePage() {
     });
   };
 
-  const handleClickSearch = (event: any) => {
-    if (event.key === 'Enter') {
-      const searchTxt = event.target.value as string;
-      const newPage = 0;
-      setSearch(searchTxt);
-      setPage(newPage);
-      Service.searchScheduleService(id, searchTxt, newPage, rowsPerPage).then(
-        (item) => {
-          setList(item.data.data.list);
-          setTotal(item.data.data.total);
-        }
-      );
+  const manuHandler = (option: string) => {
+    if (option === 'Edit') {
+      getData(actionMenuItemid);
+    } else if (option === 'Delete') {
+      deleteEntity(actionMenuItemid);
     }
   };
+
+  // const handleClickSearch = (event: any) => {
+  //   if (event.key === 'Enter') {
+  //     const searchTxt = event.target.value as string;
+  //     const newPage = 0;
+  //     setSearch(searchTxt);
+  //     setPage(newPage);
+  //     Service.searchScheduleService(id, searchTxt, newPage, rowsPerPage).then(
+  //       (item) => {
+  //         setList(item.data.data.list);
+  //         setTotal(item.data.data.total);
+  //       }
+  //     );
+  //   }
+  // };
 
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number
   ) => {
     setPage(newPage);
-    //offset? ,limit rowsperpage hoga ofset page * rowsperPage
+    // offset? ,limit rowsperpage hoga ofset page * rowsperPage
     if (search === '' || search === null || search === undefined) {
       Service.getListScheduleService(id, newPage, rowsPerPage).then((item) => {
-        console.log('item::::::::', item);
         setList(item.data.data.list);
         setTotal(item.data.data.total);
       });
@@ -125,8 +121,8 @@ function DriversSchedulePage() {
     const newPage = 0;
     setRowsPerPage(newRowperPage);
     setPage(newPage);
-    if (search === "" || search === null || search === undefined) {
-      Service.getListScheduleService(id, newPage, rowsPerPage).then(item => {
+    if (search === '' || search === null || search === undefined) {
+      Service.getListScheduleService(id, newPage, rowsPerPage).then((item) => {
         setList(item.data.data.list);
         setTotal(item.data.data.total);
       });
@@ -145,13 +141,16 @@ function DriversSchedulePage() {
       if (item.data.success) {
         setAddress(item.data.data.appUserAddress);
         setDetail(item.data.data);
-        if (item.data.data.appDriverWorkingSchedule && item.data.data.appDriverWorkingSchedule.length > 0) {
+        if (
+          item.data.data.appDriverWorkingSchedule &&
+          item.data.data.appDriverWorkingSchedule.length > 0
+        ) {
           setList(item.data.data.appDriverWorkingSchedule.reverse());
           setTotal(Number(item.data.data.total));
         }
       }
     });
-  }, []);
+  }, [id]);
 
   const createFormHandler = (data: any) => {
     const formData = new FormData();
@@ -174,20 +173,20 @@ function DriversSchedulePage() {
     Service.updateSchedule(actionMenuItemid, formData).then((item) => {
       if (item.data.success) {
         setList((newArr: any) => {
-          return newArr.map((newItem: any) => {
+          return newArr?.map((newItem: any) => {
             if (newItem.id === actionMenuItemid) {
               newItem.startTime = item.data.data.startTime;
               newItem.endTime = item.data.data.endTime;
-              return { ...newItem };
             }
+            return { ...newItem };
           });
         });
       }
-    })
-  }
-  const handleSwitchChange = (event: any, id: string) => {
+    });
+  };
+  const handleSwitchChange = (event: any, driverId: string) => {
     if (list.length > 1) {
-      Service.updateStatusScheduleService(id).then((updateItem) => {
+      Service.updateStatusScheduleService(driverId).then((updateItem) => {
         if (updateItem.data.success) {
           setList((newArr: any) => {
             return newArr.map((item: any) => {
@@ -197,10 +196,10 @@ function DriversSchedulePage() {
                 item.isActive = false;
               }
               return { ...item };
-            })
-          })
+            });
+          });
         }
-      })
+      });
     }
   };
 
@@ -242,8 +241,9 @@ function DriversSchedulePage() {
                     {detail.phone}
                   </span>
                   <span
-                    className={`font-sm mt-2 font-open-sans text-sm ${detail.isActive ? 'text-[#29CC97]' : 'text-[#f50057]'
-                      }`}
+                    className={`font-sm mt-2 font-open-sans text-sm ${
+                      detail.isActive ? 'text-[#29CC97]' : 'text-[#f50057]'
+                    }`}
                   >
                     {detail.isActive ? 'Active' : 'Inactive'}
                   </span>
@@ -371,7 +371,9 @@ function DriversSchedulePage() {
                             <td>
                               <Switch
                                 checked={item.isActive}
-                                onChange={(event: React.ChangeEvent<HTMLInputElement>) => handleSwitchChange(event, list[index].id)}
+                                onChange={(
+                                  event: React.ChangeEvent<HTMLInputElement>
+                                ) => handleSwitchChange(event, list[index].id)}
                                 inputProps={{ 'aria-label': 'controlled' }}
                               />
                               <IconButton

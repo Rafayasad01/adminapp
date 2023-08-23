@@ -13,6 +13,8 @@ import DomainVerificationOutlinedIcon from '@mui/icons-material/DomainVerificati
 import Button from '@mui/material/Button';
 import dayjs from 'dayjs';
 
+import Avatar from '@mui/material/Avatar';
+import IconButton from '@mui/material/IconButton';
 import TopBar from '../../components/common/TopBar';
 import orderService from '../../services/adminapp/adminOrders';
 
@@ -23,15 +25,13 @@ import {
   ORDER_STATUSES,
 } from '../../utils/constants';
 import PermissionPopup from '../../utils/PermissionPopup';
-import Avatar from '@mui/material/Avatar';
 import assets from '../../assets';
-import IconButton from '@mui/material/IconButton';
 
 function OrderDetailsPage() {
   const navigate = useNavigate();
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
   const [cancelDialogOpen, setCancelDialogOpen] = useState<boolean>(false);
-  const [orderAssign, setOrderAssign] = useState<boolean>(false);
+  // const [orderAssign, setOrderAssign] = useState<boolean>(false);
   const [dialogText, setDialogText] = useState<any>('');
   const [viewData, setViewData] = useState<any>({});
   const [totalQuantity, setTotalQuantity] = useState(0);
@@ -43,13 +43,55 @@ function OrderDetailsPage() {
   const params = useParams();
   const id: any = params.orderId;
 
+  const setData = (itemData: any) => {
+    setViewData(itemData);
+    let quantity = 0;
+    itemData.appOrderStatuses.forEach((item: any, index: number) => {
+      if (item.status !== ORDER_STATUS_IN_CANCELLED) {
+        quantity = (index + 1) * 20;
+      }
+    });
+    setTotalQuantity(quantity);
+    let laststatus = {};
+    const newStatuses = [...ORDER_STATUSES].map(([key, value]) => ({
+      key,
+      value,
+    }));
+    const newResult = newStatuses.map((statusItem, index) => {
+      const result = itemData.appOrderStatuses.find((matchItem: any) =>
+        matchItem.status.includes(statusItem.key)
+      );
+      if (result) {
+        laststatus = statusItem;
+        if (
+          result.status === ORDER_STATUS_IN_DELIVERY ||
+          result.status === ORDER_STATUS_IN_DELIVERED
+        ) {
+          setIsCancelled(true);
+          if (result.status === ORDER_STATUS_IN_DELIVERED) {
+            setCancelled(true);
+          }
+        }
+        if (result.status === ORDER_STATUS_IN_CANCELLED) {
+          setCancelled(true);
+        }
+        if (typeof newStatuses[index + 1] !== 'undefined') {
+          setNextBtn(newStatuses[index + 1]);
+        }
+        return { ...statusItem, isStatus: true };
+      }
+      return { ...statusItem, isStatus: false };
+    });
+    setCurrentStatus(laststatus);
+    setOrderStatuses(newResult);
+  };
   useEffect(() => {
     orderService.viewService(id).then((item) => {
       if (item) {
         setData(item.data.data);
       }
     });
-  }, []);
+  }, [id]);
 
   const getIcon = (string: string) => {
     let icon;
@@ -63,12 +105,24 @@ function OrderDetailsPage() {
       icon = <DomainVerificationOutlinedIcon className="text-xl" />;
     } else if (string === 'AccessTimeIcon') {
       icon = <AccessTimeIcon className="text-xl" />;
-    } else if (string === 'DomainVerificationOutlinedIcon') {
-      icon = <DomainVerificationOutlinedIcon className="text-xl" />;
     } else {
       icon = '';
     }
     return icon;
+  };
+
+  const createOrderStatusesService = (data: any, key: string) => {
+    if (key === ORDER_STATUS_IN_CANCELLED && (cancelled || isCancelled)) {
+      return;
+    }
+    orderService.createStatusesService(data).then((item) => {
+      if (item) {
+        const tempData = viewData;
+        tempData.appOrderStatuses.push(item.data.data);
+        setViewData(tempData);
+        setData(tempData);
+      }
+    });
   };
 
   const statusUpdateHandler = () => {
@@ -91,64 +145,6 @@ function OrderDetailsPage() {
       status: ORDER_STATUS_IN_CANCELLED,
     };
     createOrderStatusesService(data, ORDER_STATUS_IN_CANCELLED);
-  };
-
-  const createOrderStatusesService = (data: any, key: string) => {
-    if (key === ORDER_STATUS_IN_CANCELLED && (cancelled || isCancelled)) {
-      return null;
-    }
-    orderService.createStatusesService(data).then((item) => {
-      if (item) {
-        let tempData = viewData;
-        tempData.appOrderStatuses.push(item.data.data);
-        setViewData(tempData);
-        setData(tempData);
-      }
-    });
-  };
-
-  const setData = (item: any) => {
-    setViewData(item);
-    let quantity: number = 0;
-    item.appOrderStatuses.forEach((item: any, index: number) => {
-      if (item.status !== ORDER_STATUS_IN_CANCELLED) {
-        quantity = (index + 1) * 20;
-      }
-    });
-    setTotalQuantity(quantity);
-    let laststatus = {};
-    const newStatuses = [...ORDER_STATUSES].map(([key, value]) => ({
-      key,
-      value,
-    }));
-    const newResult = newStatuses.map((statusItem, index) => {
-      let result = item.appOrderStatuses.find((matchItem: any) =>
-        matchItem.status.includes(statusItem.key)
-      );
-      if (result) {
-        laststatus = statusItem;
-        if (
-          result.status === ORDER_STATUS_IN_DELIVERY ||
-          result.status === ORDER_STATUS_IN_DELIVERED
-        ) {
-          setIsCancelled(true);
-          if (result.status === ORDER_STATUS_IN_DELIVERED) {
-            setCancelled(true);
-          }
-        }
-        if (result.status === ORDER_STATUS_IN_CANCELLED) {
-          setCancelled(true);
-        }
-        if (typeof newStatuses[index + 1] !== 'undefined') {
-          setNextBtn(newStatuses[index + 1]);
-        }
-        return { ...statusItem, isStatus: true };
-      } else {
-        return { ...statusItem, isStatus: false };
-      }
-    });
-    setCurrentStatus(laststatus);
-    setOrderStatuses(newResult);
   };
 
   return (
@@ -241,7 +237,7 @@ function OrderDetailsPage() {
                       : 'bg-neutral-900 text-gray-50'
                   } `}
                   color="inherit"
-                  disabled={cancelled || isCancelled ? true : false}
+                  disabled={!!(cancelled || isCancelled)}
                 >
                   Cancel Order
                 </Button>
@@ -353,7 +349,7 @@ function OrderDetailsPage() {
                     aria-label="delete"
                     className="p-0"
                     disableRipple
-                    onClick={() => navigate('../assign/' + id)}
+                    onClick={() => navigate(`../assign/${id}`)}
                   >
                     <Avatar
                       alt="Truck Driver Icon"
@@ -461,11 +457,11 @@ function OrderDetailsPage() {
                       } `}
                       color="inherit"
                       disabled={
-                        cancelled ||
-                        (isCancelled &&
-                          nextBtn.key === ORDER_STATUS_IN_CANCELLED)
-                          ? true
-                          : false
+                        !!(
+                          cancelled ||
+                          (isCancelled &&
+                            nextBtn.key === ORDER_STATUS_IN_CANCELLED)
+                        )
                       }
                     >
                       {nextBtn.value.title}
@@ -479,62 +475,59 @@ function OrderDetailsPage() {
                 orderStatuses.map((item: any) => {
                   if (item.key === ORDER_STATUS_IN_CANCELLED && isCancelled) {
                     return null;
-                  } else {
-                    return (
+                  }
+                  return (
+                    <div
+                      key={item.key}
+                      className={`flex items-center ${
+                        item.isStatus ? '' : 'opacity-25'
+                      } `}
+                    >
+                      {item.isStatus ? (
+                        <CheckCircleOutlineOutlinedIcon />
+                      ) : (
+                        <CircleOutlinedIcon className="text-neutral-500" />
+                      )}
+
                       <div
-                        key={item.key}
-                        className={`items - center flex ${
-                          item.isStatus ? '' : 'opacity-25'
+                        className={`mx-2-relative inline flex ${
+                          item.isStatus ? item.value.color : 'text-neutral-500'
                         } `}
                       >
-                        {item.isStatus ? (
-                          <CheckCircleOutlineOutlinedIcon />
-                        ) : (
-                          <CircleOutlinedIcon className="text-neutral-500" />
-                        )}
-
+                        <CircularProgress
+                          thickness={1.5}
+                          className="z-10"
+                          size="3rem"
+                          variant="determinate"
+                          value={100}
+                          color="inherit"
+                        />
+                        <div className="absolute top-0 left-0 bottom-0 right-0 flex items-center justify-center">
+                          {getIcon(item.value.iconText)}
+                        </div>
+                      </div>
+                      <div>
                         <div
-                          className={`mx - 2 - relative inline flex ${
+                          className={`font-open-sans text-base font-semibold ${
                             item.isStatus
                               ? item.value.color
                               : 'text-neutral-500'
                           } `}
                         >
-                          <CircularProgress
-                            thickness={1.5}
-                            className="z-10"
-                            size="3rem"
-                            variant="determinate"
-                            value={100}
-                            color="inherit"
-                          />
-                          <div className="absolute top-0 left-0 bottom-0 right-0 flex items-center justify-center">
-                            {getIcon(item.value.iconText)}
-                          </div>
+                          {item.value.title}
                         </div>
-                        <div>
-                          <div
-                            className={`font - open - sans text - base font - semibold ${
-                              item.isStatus
-                                ? item.value.color
-                                : 'text-neutral-500'
-                            } `}
-                          >
-                            {item.value.title}
-                          </div>
-                          <div className="font-open-sans text-sm font-normal text-neutral-500">
-                            {item.value.text}
-                          </div>
-                        </div>
-                        <div className="flex-grow" />
                         <div className="font-open-sans text-sm font-normal text-neutral-500">
-                          {dayjs(item.createdDate).format(
-                            'MMM DD, YY | HH:mm:ssA'
-                          )}
+                          {item.value.text}
                         </div>
                       </div>
-                    );
-                  }
+                      <div className="flex-grow" />
+                      <div className="font-open-sans text-sm font-normal text-neutral-500">
+                        {dayjs(item.createdDate).format(
+                          'MMM DD, YY | HH:mm:ssA'
+                        )}
+                      </div>
+                    </div>
+                  );
                 })}
             </div>
           </div>

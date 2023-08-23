@@ -63,7 +63,7 @@ const assets = {
     imageIcon,
     truckDriverIcon,
     comingSoonIcon,
-    noMapLocation
+    noMapLocation,
   },
   tempImages: {
     wash,

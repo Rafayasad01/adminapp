@@ -1,39 +1,31 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import Divider from '@mui/material/Divider';
-import FormControl from '@mui/material/FormControl';
-import Input from '@mui/material/Input';
-import InputAdornment from '@mui/material/InputAdornment';
-import IconButton from '@mui/material/IconButton';
-import SearchIcon from '@mui/icons-material/Search';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
+import dayjs from 'dayjs';
+import Avatar from '@mui/material/Avatar';
+import TablePagination from '@mui/material/TablePagination';
 import TopBar from '../../components/common/TopBar';
-import Map from '../../components/common/Map';
 import MapAddress from '../../components/common/MapAddress';
 import Service from '../../services/adminapp/adminDriver';
 import ActionMenu from '../../components/common/ActionMenu';
-import dayjs from 'dayjs';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import { useAppSelector } from '../../redux/redux-hooks';
-import TablePagination from '@mui/material/TablePagination';
-import Switch from '@mui/material/Switch';
-import { ORDER_DELIVERY_STATUS_ACCEPTED, ORDER_DELIVERY_STATUS_CANCELLED, ORDER_DELIVERY_STATUS_DELIVERED, ORDER_DELIVERY_STATUS_IN_DELIVERY, ORDER_DELIVERY_STATUS_NEW, ORDER_DELIVERY_STATUS_PICKED_UP } from '../../utils/constants';
-import assets from '../../assets';
+import {
+  ORDER_DELIVERY_STATUS_ACCEPTED,
+  ORDER_DELIVERY_STATUS_CANCELLED,
+  ORDER_DELIVERY_STATUS_DELIVERED,
+  ORDER_DELIVERY_STATUS_IN_DELIVERY,
+  ORDER_DELIVERY_STATUS_NEW,
+  ORDER_DELIVERY_STATUS_PICKED_UP,
+} from '../../utils/constants';
 
 function DriversDetailPage() {
-  const authState: any = useAppSelector((state) => state.authState);
   const params = useParams();
-  const navigate = useNavigate();
   const [detail, setDetail] = useState<any>(null);
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(0);
   const [total, setTotal] = useState(0);
   const [list, setList] = useState<any>([]);
-  const [address, setAddress] = useState<string>("");
+  const [address, setAddress] = useState<string>('');
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const [actionMenuItemid, setActionMenuItemid] = React.useState('');
   const [actionMenuAnchorEl, setActionMenuAnchorEl] =
     useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
@@ -42,9 +34,9 @@ function DriversDetailPage() {
   const id: any = params.driverId;
 
   const manuHandler = (option: string) => {
-    if (option === 'Edit') {
-    } else if (option === 'Delete') {
-    }
+    // if (option === 'Edit') {
+    // } else if (option === 'Delete') {
+    // }
   };
 
   const handleClickSearch = (event: any) => {
@@ -65,7 +57,7 @@ function DriversDetailPage() {
     newPage: number
   ) => {
     setPage(newPage);
-    //offset? ,limit rowsperpage hoga ofset page * rowsperPage
+    // offset? ,limit rowsperpage hoga ofset page * rowsperPage
     if (search === '' || search === null || search === undefined) {
       Service.getDeliveryListService(id, newPage, rowsPerPage).then((item) => {
         setList(item.data.data.list);
@@ -107,7 +99,7 @@ function DriversDetailPage() {
         setTotal(Number(item.data.data.total));
       }
     });
-  }, []);
+  }, [id]);
 
   const getStatusTag = (status: string) => {
     let tag = '';
@@ -165,8 +157,9 @@ function DriversDetailPage() {
                     {detail.phone}
                   </span>
                   <span
-                    className={`font-sm mt-2 font-open-sans text-sm ${detail.isActive ? 'text-[#29CC97]' : 'text-[#f50057]'
-                      }`}
+                    className={`font-sm mt-2 font-open-sans text-sm ${
+                      detail.isActive ? 'text-[#29CC97]' : 'text-[#f50057]'
+                    }`}
                   >
                     {detail.isActive ? 'Active' : 'Inactive'}
                   </span>

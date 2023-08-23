@@ -18,11 +18,11 @@ function CartDetailsPage() {
   useEffect(() => {
     cartService.viewService(id).then((item) => {
       if (item) {
-        //console.log('item', item.data.data);
+        // console.log('item', item.data.data);
         setViewData(item.data.data);
       }
     });
-  }, []);
+  }, [id]);
   return (
     <>
       <TopBar isNestedRoute title="View Cart" />

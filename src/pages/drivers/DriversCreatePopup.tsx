@@ -8,14 +8,13 @@ import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
 import IconButton from '@mui/material/IconButton';
 import dayjs from 'dayjs';
 import '../../assets/css/PopupStyle.css';
-import TimePicker from '../../components/common/TimePicker';
 import { useForm } from 'react-hook-form';
 import { AppUserDriverExt } from '../../interfaces/app-user.interface';
 
 type Props = {
   openFormDialog: boolean;
   setOpenFormDialog: React.Dispatch<React.SetStateAction<boolean>>;
-  callback: Function;
+  callback: (...args: any[]) => any;
 };
 
 function DriversCreatePopup({
