@@ -17,7 +17,7 @@ import { AppUser } from '../../interfaces/app-user.interface';
 type Props = {
   openFormDialog: boolean;
   setOpenFormDialog: React.Dispatch<React.SetStateAction<boolean>>;
-  callback: Function;
+  callback: (...args: any[]) => any;
 };
 
 function CustomersCreatePopup({

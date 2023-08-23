@@ -25,6 +25,9 @@ function Map({ center, zoom }: Props) {
 
   useEffect(() => {
     loader.load().then(async (e) => {
+      if (!mapRef.current) {
+        return;
+      }
       let label: any = null;
       if (center.lat === 0 && center.lng === 0) {
         center.lat = OFFICE_MAP_LAT;
@@ -45,12 +48,12 @@ function Map({ center, zoom }: Props) {
         fullscreenControl: false,
         scaleControl: true,
       };
-      const map = new google.maps.Map(mapRef.current!, options);
-      setMap(map);
+      const newMap = new google.maps.Map(mapRef.current, options);
+      setMap(newMap);
       const marker = new google.maps.Marker({
         position: center,
         map,
-        label: label,
+        label,
         title: 'Location',
         icon: assets.images.iconMap,
         draggable: false,
@@ -59,7 +62,7 @@ function Map({ center, zoom }: Props) {
 
       markerRef.current = marker;
     });
-  }, []);
+  }, [map, center, zoom]);
 
   return (
     <div

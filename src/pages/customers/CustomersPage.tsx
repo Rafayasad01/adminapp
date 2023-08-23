@@ -9,15 +9,15 @@ import Button from '@mui/material/Button';
 import SearchIcon from '@mui/icons-material/Search';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
-import TopBar from '../../components/common/TopBar';
-import CustomersCreatePopup from './CustomersCreatePopup';
-import CustomersEditPopup from './CustomersEditPopup';
 import TablePagination from '@mui/material/TablePagination';
-import { useAppSelector } from '../../redux/redux-hooks';
-import ActionMenu from '../../components/common/ActionMenu';
 import Switch from '@mui/material/Switch';
 import dayjs from 'dayjs';
 import Avatar from '@mui/material/Avatar';
+import TopBar from '../../components/common/TopBar';
+import CustomersCreatePopup from './CustomersCreatePopup';
+import CustomersEditPopup from './CustomersEditPopup';
+import { useAppSelector } from '../../redux/redux-hooks';
+import ActionMenu from '../../components/common/ActionMenu';
 import Service from '../../services/adminapp/adminCustomer';
 
 function CustomersPage() {
@@ -65,7 +65,7 @@ function CustomersPage() {
     newPage: number
   ) => {
     setPage(newPage);
-    //offset? ,limit rowsperpage hoga ofset page * rowsperPage
+    // offset? ,limit rowsperpage hoga ofset page * rowsperPage
     if (search === '' || search === null || search === undefined) {
       Service.getListService(authState.user.tenant, newPage, rowsPerPage).then(
         (item) => {
@@ -152,7 +152,7 @@ function CustomersPage() {
         }
       }
     );
-  }, []);
+  }, [authState, page, rowsPerPage]);
 
   const createFormHandler = (data: any) => {
     const formData = new FormData();
@@ -192,8 +192,8 @@ function CustomersPage() {
               newItem.phone = item.data.data.phone;
               newItem.postalCode = item.data.data.postalCode;
               if (data.avatar !== null) newItem.phone = item.data.data.avatar;
-              return { ...newItem };
             }
+            return { ...newItem };
           });
         });
       }

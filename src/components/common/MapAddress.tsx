@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useRef, useState } from 'react';
 import { Loader } from '@googlemaps/js-api-loader';
 import assets from '../../assets';
@@ -11,7 +12,6 @@ const loader = new Loader({
   apiKey: 'AIzaSyBp7k8-SYDkEkhcGbXQ9f_fAXPXmwmlvUQ',
   version: 'weekly',
 });
-
 
 function MapAddress({ address, zoom }: Props) {
   const mapRef = useRef<HTMLDivElement>(null);
@@ -36,18 +36,20 @@ function MapAddress({ address, zoom }: Props) {
         fullscreenControl: false,
         scaleControl: false,
       };
-      const mapInstance = new google.maps.Map(mapRef.current!, options);
-      setMap(mapInstance);
+      if (mapRef.current) {
+        const mapInstance = new google.maps.Map(mapRef.current, options);
+        setMap(mapInstance);
+      }
     });
-  }, [loader.apiKey]);
+  }, []); // loader ki state change ni hogi tou wo useeffect py koi asar ni karyga
 
   useEffect(() => {
     if (map && address) {
       const geocoder = new google.maps.Geocoder();
-      geocoder.geocode({ 'address': address }, (results, status: any) => {
+      geocoder.geocode({ address }, (results, status: any) => {
         if (status === 'OK' && status !== 'ZERO_RESULTS') {
           setIsError(false);
-          const location = results[0].geometry.location;
+          const { location } = results[0].geometry;
           if (location && location.lat() && location.lng()) {
             const newMarker = new google.maps.Marker({
               position: location,
@@ -61,24 +63,26 @@ function MapAddress({ address, zoom }: Props) {
             map.setCenter(location);
           } else {
             setIsError(true);
-            //console.error('Invalid geocoder response for address:', address);
+            // console.error('Invalid geocoder response for address:', address);
           }
-        }
-        else {
+        } else {
           setIsError(true);
-          //console.error('Geocode was not successful for the following reason:', status);
+          // console.error('Geocode was not successful for the following reason:', status);
         }
-
       });
     }
   }, [map, address]);
 
   return (
     <>
-      <div style={{ display: isError ? 'block' : 'none', width: '100%', height: '100%' }}>
-        <div
-          className="no-map-location"
-        >
+      <div
+        style={{
+          display: isError ? 'block' : 'none',
+          width: '100%',
+          height: '100%',
+        }}
+      >
+        <div className="no-map-location">
           <div className="content">
             <div className="icon">
               <img className="w-100" src={assets.images.noMapLocation} alt="" />

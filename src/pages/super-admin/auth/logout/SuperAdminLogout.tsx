@@ -10,7 +10,6 @@ function SuperAdminLogout() {
     dispatch(logout());
     navigate('../auth/login');
   });
-  return <></>;
 }
 
 export default SuperAdminLogout;

@@ -4,15 +4,15 @@ import Button from '@mui/material/Button';
 import Input from '@mui/material/Input';
 import dayjs from 'dayjs';
 import '../../assets/css/PopupStyle.css';
-import TimePicker from '../../components/common/TimePicker';
 import { useForm } from 'react-hook-form';
+import TimePicker from '../../components/common/TimePicker';
 import { AppUserDriverExt } from '../../interfaces/app-user.interface';
 
 type Props = {
   openFormDialog: boolean;
   setOpenFormDialog: React.Dispatch<React.SetStateAction<boolean>>;
   formData: any;
-  callback: Function;
+  callback: (...args: any[]) => any;
 };
 
 function DriversScheduleEditPopup({
@@ -25,11 +25,8 @@ function DriversScheduleEditPopup({
   const [endTime, setEndTime] = useState<dayjs.Dayjs | null>(null);
 
   const {
-    register,
     handleSubmit,
-    watch,
     formState: { errors },
-    control,
   } = useForm<AppUserDriverExt>();
 
   const handleFormClose = () => setOpenFormDialog(false);
@@ -37,7 +34,7 @@ function DriversScheduleEditPopup({
   const onSubmit = (data: AppUserDriverExt) => {
     data.start_time = dayjs(startTime).format('YYYY-MM-DD HH:mm:ss');
     data.end_time = dayjs(endTime).format('YYYY-MM-DD HH:mm:ss');
-    //setOpenFormDialog(false);
+    // setOpenFormDialog(false);
     callback(data);
   };
   useEffect(() => {
@@ -45,7 +42,7 @@ function DriversScheduleEditPopup({
       setStartTime(formData.startTime);
       setEndTime(formData.endTime);
     }
-  }, []);
+  }, [formData]);
 
   return (
     <Dialog

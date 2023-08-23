@@ -1,5 +1,6 @@
 import network from '../../utils/network';
 import { ORDER_PREFIX } from '../../utils/constants';
+
 const ASSIGN_PREFIX = 'assign';
 
 const getListService = (tenant: string, page: number, size: number) => {

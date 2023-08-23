@@ -10,8 +10,7 @@ type Props = {
   data: any;
 };
 
-function TopDriverModal({ open, setOpen }: Props) {
-  const handleOpen = () => setOpen(true);
+function TopDriverModal({ open, setOpen, data }: Props) {
   const handleClose = () => setOpen(false);
   return (
     <Modal

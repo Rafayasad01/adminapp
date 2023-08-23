@@ -13,20 +13,20 @@ import List from '@mui/material/List';
 import Stack from '@mui/material/Stack';
 import Toolbar from '@mui/material/Toolbar';
 import { NavLink, useNavigate } from 'react-router-dom';
+import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
+import FacebookIcon from '@mui/icons-material/Facebook';
+import TwitterIcon from '@mui/icons-material/Twitter';
+import InstagramIcon from '@mui/icons-material/Instagram';
+import MailIcon from '@mui/icons-material/Mail';
+import IconButton from '@mui/material/IconButton';
 import OrderIcon from '../icons/OrderIcon';
 import CategoryIcon from '../icons/CategoryIcon';
 import VoucherIcon from '../icons/VoucherIcon';
 import DriverIcon from '../icons/DriverIcon';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
-import { logout } from '../../redux/features/authStateSlice'
-import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined'
-import FacebookIcon from '@mui/icons-material/Facebook'
-import TwitterIcon from '@mui/icons-material/Twitter'
-import InstagramIcon from '@mui/icons-material/Instagram'
-import MailIcon from '@mui/icons-material/Mail'
+import { logout } from '../../redux/features/authStateSlice';
 
 import assets from '../../assets';
-import IconButton from '@mui/material/IconButton';
 
 const links = [
   {
@@ -98,20 +98,20 @@ const links = [
   // },
 ];
 
-
 function Sidebar() {
   const authState: any = useAppSelector((state) => state.authState);
-  const dispatch = useAppDispatch()
-  const navigate = useNavigate()
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const logOut = () => {
-    dispatch(logout())
+    dispatch(logout());
     navigate(`../../../admin/auth/login`);
-  }
+  };
   return (
     <Drawer
       variant="permanent"
       PaperProps={{
-        className: 'left-sidebar box-border w-64 border-r-0 bg-stone-900 text-gray-50',
+        className:
+          'left-sidebar box-border w-64 border-r-0 bg-stone-900 text-gray-50',
       }}
     >
       <List disablePadding>

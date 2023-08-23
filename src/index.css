@@ -50,27 +50,27 @@ table {
   @apply w-full;
 }
 
-table>thead>tr>td,
-table>thead>tr>th {
+table > thead > tr > td,
+table > thead > tr > th {
   @apply py-5 pl-4 pr-1 text-left font-open-sans text-xs font-normal text-[#1a1a1a];
 }
 
-table>tbody>tr>td,
-table>tbody>tr>th {
+table > tbody > tr > td,
+table > tbody > tr > th {
   @apply py-5 pl-4 pr-1 text-left font-open-sans text-xs font-normal text-[#1a1a1a];
 }
 
-table>tbody>tr:nth-child(odd) {
+table > tbody > tr:nth-child(odd) {
   @apply bg-[#f8f8f8];
 }
 
-.avatar-table>thead>tr>td,
-.avatar-table>thead>tr>th {
+.avatar-table > thead > tr > td,
+.avatar-table > thead > tr > th {
   @apply py-2.5 pr-1 pl-5;
 }
 
-.avatar-table>tbody>tr>td,
-.avatar-table>tbody>tr>th {
+.avatar-table > tbody > tr > td,
+.avatar-table > tbody > tr > th {
   @apply py-2.5 pr-1 pl-5;
 }
 
@@ -82,24 +82,24 @@ table .avatar img {
   @apply mr-2.5 h-10 w-10 rounded-full object-cover;
 }
 
-table.table-border>thead>tr>th {
+table.table-border > thead > tr > th {
   @apply border-b-2 border-solid border-[#dfe0eb] font-open-sans text-sm font-semibold text-[#1a1a1a];
   /* border-bottom: 1.5px solid #dfe0eb; */
 }
 
-table.table-border>tbody>tr {
+table.table-border > tbody > tr {
   @apply relative border-b border-solid border-[#DFE0EB] !important;
 }
 
-table.table-border>tbody>tr:nth-child(odd) {
+table.table-border > tbody > tr:nth-child(odd) {
   @apply bg-transparent;
 }
 
-table.no-border-table>tbody>tr:nth-child(odd) {
+table.no-border-table > tbody > tr:nth-child(odd) {
   @apply bg-transparent;
 }
 
-table>tbody>tr:last-child {
+table > tbody > tr:last-child {
   border-bottom: none !important;
 }
 
@@ -318,13 +318,15 @@ table>tbody>tr:last-child {
   text-transform: capitalize;
 }
 
-.report-page .css-1yk1gt9-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root {
+.report-page
+  .css-1yk1gt9-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root {
   background: rgba(29, 29, 29, 0.05);
   border-radius: 10px;
   border-radius: 10px !important;
 }
 
-.report-page .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input {
+.report-page
+  .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input {
   padding: 10px 15px !important;
   margin-right: 15px !important;
   font-family: 'Open Sans' !important;
@@ -592,7 +594,7 @@ table>tbody>tr:last-child {
   color: #1a1a1a !important;
 }
 
-.rdrDay .rdrDayNumber>span {
+.rdrDay .rdrDayNumber > span {
   font-family: 'Open Sans';
   font-style: normal;
   font-weight: 400;
@@ -602,7 +604,7 @@ table>tbody>tr:last-child {
   color: #1a1a1a;
 }
 
-.rdrDayPassive .rdrDayNumber>span {
+.rdrDayPassive .rdrDayNumber > span {
   color: #e4e4e4 !important;
 }
 
@@ -623,7 +625,7 @@ table>tbody>tr:last-child {
   border-radius: 5px;
 }
 
-.rdrDayToday:not(.rdrDayPassive).rdrDayToday .rdrInRange~.rdrDayNumber span {
+.rdrDayToday:not(.rdrDayPassive).rdrDayToday .rdrInRange ~ .rdrDayNumber span {
   color: #fff !important;
 }
 
@@ -640,10 +642,10 @@ table>tbody>tr:last-child {
   color: #fff !important;
 }
 
-.rdrDay:not(.rdrDayPassive) .rdrInRange~.rdrDayNumber span,
-.rdrDay:not(.rdrDayPassive) .rdrStartEdge~.rdrDayNumber span,
-.rdrDay:not(.rdrDayPassive) .rdrEndEdge~.rdrDayNumber span,
-.rdrDay:not(.rdrDayPassive) .rdrSelected~.rdrDayNumber span {
+.rdrDay:not(.rdrDayPassive) .rdrInRange ~ .rdrDayNumber span,
+.rdrDay:not(.rdrDayPassive) .rdrStartEdge ~ .rdrDayNumber span,
+.rdrDay:not(.rdrDayPassive) .rdrEndEdge ~ .rdrDayNumber span,
+.rdrDay:not(.rdrDayPassive) .rdrSelected ~ .rdrDayNumber span {
   color: #1a1a1a !important;
 }
 
@@ -651,7 +653,7 @@ table>tbody>tr:last-child {
 
 /* Schedulling Table Style*/
 
-table.schedule-table>thead>tr>th {
+table.schedule-table > thead > tr > th {
   font-family: 'Open Sans';
   font-style: normal;
   font-weight: 600;
@@ -663,13 +665,13 @@ table.schedule-table>thead>tr>th {
   padding-bottom: 0;
 }
 
-table.schedule-table>tbody>tr>td {
+table.schedule-table > tbody > tr > td {
   background: #ffffff;
   border-top: 1px solid #c9c9c9;
   border-bottom: 1px solid #c9c9c9;
 }
 
-table.schedule-table>tbody>tr>td:nth-child(1) {
+table.schedule-table > tbody > tr > td:nth-child(1) {
   border: none;
   font-family: 'DM Sans';
   font-style: normal;
@@ -680,25 +682,25 @@ table.schedule-table>tbody>tr>td:nth-child(1) {
   background: transparent !important;
 }
 
-table.schedule-table>tbody>tr>td:nth-child(2) {
+table.schedule-table > tbody > tr > td:nth-child(2) {
   border-left: 1px solid #c9c9c9;
   border-top-left-radius: 10px !important;
   border-bottom-left-radius: 10px !important;
 }
 
-table.schedule-table>tbody>tr>td:last-child {
+table.schedule-table > tbody > tr > td:last-child {
   border-top-right-radius: 10px !important;
   border-bottom-right-radius: 10px !important;
   border-right: 1px solid #c9c9c9;
 }
 
-table.schedule-table>tbody>tr>td {
+table.schedule-table > tbody > tr > td {
   padding-top: 0.375rem;
   padding-bottom: 0.375rem;
   border-spacing: 0.125rem 0.125rem;
 }
 
-table.schedule-table>tbody>tr.days-off>td {
+table.schedule-table > tbody > tr.days-off > td {
   background: rgba(241, 43, 44, 0.2);
   border-color: #f12b2c;
 }
@@ -736,7 +738,6 @@ table.schedule-table>tbody>tr.days-off>td {
 }
 
 /* End Schedulling Table Style*/
-
 
 .coming-soon {
   @apply flex items-center justify-center;
@@ -796,7 +797,7 @@ table.schedule-table>tbody>tr.days-off>td {
 }
 
 .left-sidebar .sidebar-footer-content .share-via .social-icons {
-  @apply flex items-center gap-x-2.5 mb-4;
+  @apply mb-4 flex items-center gap-x-2.5;
 }
 
 .left-sidebar .sidebar-footer-content .share-via .social-icons .social-btn {
@@ -817,7 +818,7 @@ table.schedule-table>tbody>tr.days-off>td {
 }
 
 .left-sidebar .sidebar-footer-content .logout-link {
-  @apply w-full flex items-center gap-x-4 px-7 py-3;
+  @apply flex w-full items-center gap-x-4 px-7 py-3;
   background-color: transparent;
   font-size: var(--fs-16);
   font-weight: var(--fw-400);
@@ -833,7 +834,7 @@ table.schedule-table>tbody>tr.days-off>td {
 }
 
 .left-sidebar .sidebar-footer-content .logout-link .icon {
-  @apply w-5 h-auto rotate-180;
+  @apply h-auto w-5 rotate-180;
   color: var(--dark-300);
   transition: all 0.3s;
 }
@@ -843,7 +844,8 @@ table.schedule-table>tbody>tr.days-off>td {
   color: var(--white);
 }
 
-@media only screen and (max-width: 1023.98px) and (min-width: 768px) {}
+@media only screen and (max-width: 1023.98px) and (min-width: 768px) {
+}
 
 @media only screen and (max-width: 1023.98px) {
   .left-sidebar {
@@ -858,4 +860,5 @@ table.schedule-table>tbody>tr.days-off>td {
   }
 }
 
-@media only screen and (max-width: 767.98px) {}
+@media only screen and (max-width: 767.98px) {
+}

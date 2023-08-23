@@ -1,38 +1,31 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import Divider from '@mui/material/Divider';
-import FormControl from '@mui/material/FormControl';
-import Input from '@mui/material/Input';
-import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
-import SearchIcon from '@mui/icons-material/Search';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import TablePagination from '@mui/material/TablePagination';
+import Switch from '@mui/material/Switch';
 import TopBar from '../../components/common/TopBar';
-import Map from '../../components/common/Map';
 import MapAddress from '../../components/common/MapAddress';
 import Service from '../../services/adminapp/adminDriver';
 import ActionMenu from '../../components/common/ActionMenu';
-import dayjs from 'dayjs';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
 import { useAppSelector } from '../../redux/redux-hooks';
-import TablePagination from '@mui/material/TablePagination';
-import Switch from '@mui/material/Switch';
 import DriversAddressCreatePopup from './DriversAddressCreatePopup';
 import DriversAddressEditPopup from './DriversAddressEditPopup';
-import assets from '../../assets';
 
 function DriversAddressPage() {
   const authState: any = useAppSelector((state) => state.authState);
   const params = useParams();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const [detail, setDetail] = useState<any>(null);
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(0);
   const [total, setTotal] = useState(0);
   const [list, setList] = useState<any>([]);
-  const [address, setAddress] = useState<string>("");
+  const [address, setAddress] = useState<string>('');
   const [editFormData, setEditFormData] = useState<any>(null);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [actionMenuItemid, setActionMenuItemid] = React.useState('');
@@ -45,20 +38,11 @@ function DriversAddressPage() {
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
 
   const id: any = params.driverId;
-
-  const manuHandler = (option: string) => {
-    if (option === 'Edit') {
-      getData(actionMenuItemid);
-    } else if (option === 'Delete') {
-      deleteEntity(actionMenuItemid);
-    }
-  };
-
-  const deleteEntity = (id: string) => {
+  const deleteEntity = (addressId: string) => {
     const data = {
       is_deleted: true,
     };
-    Service.deleteAddressService(id, data).then((item: any) => {
+    Service.deleteAddressService(addressId, data).then((item: any) => {
       if (item.data.success) {
         setList((newArr: any) => {
           return newArr.filter(
@@ -69,8 +53,8 @@ function DriversAddressPage() {
     });
   };
 
-  const getData = (id: string) => {
-    Service.getAddress(id).then((item: any) => {
+  const getData = (addressId: string) => {
+    Service.getAddress(addressId).then((item: any) => {
       if (item.data.success) {
         setEditFormData(item.data.data);
         setOpenEditFormDialog(true);
@@ -78,29 +62,37 @@ function DriversAddressPage() {
     });
   };
 
-  const handleClickSearch = (event: any) => {
-    if (event.key === 'Enter') {
-      const searchTxt = event.target.value as string;
-      const newPage = 0;
-      setSearch(searchTxt);
-      setPage(newPage);
-      Service.searchAddressService(id, searchTxt, newPage, rowsPerPage).then(
-        (item) => {
-          setList(item.data.data.list);
-          setTotal(item.data.data.total);
-        }
-      );
+  const manuHandler = (option: string) => {
+    if (option === 'Edit') {
+      getData(actionMenuItemid);
+    } else if (option === 'Delete') {
+      deleteEntity(actionMenuItemid);
     }
   };
+
+  // const handleClickSearch = (event: any) => {
+  //   if (event.key === 'Enter') {
+  //     const searchTxt = event.target.value as string;
+  //     const newPage = 0;
+  //     setSearch(searchTxt);
+  //     setPage(newPage);
+  //     Service.searchAddressService(id, searchTxt, newPage, rowsPerPage).then(
+  //       (item) => {
+  //         setList(item.data.data.list);
+  //         setTotal(item.data.data.total);
+  //       }
+  //     );
+  //   }
+  // };
 
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number
   ) => {
     setPage(newPage);
-    //offset? ,limit rowsperpage hoga ofset page * rowsperPage
-    if (search === "" || search === null || search === undefined) {
-      Service.getListAddressService(id, newPage, rowsPerPage).then(item => {
+    // offset? ,limit rowsperpage hoga ofset page * rowsperPage
+    if (search === '' || search === null || search === undefined) {
+      Service.getListAddressService(id, newPage, rowsPerPage).then((item) => {
         setList(item.data.data.list);
         setTotal(item.data.data.total);
       });
@@ -120,8 +112,8 @@ function DriversAddressPage() {
     const newPage = 0;
     setRowsPerPage(newRowperPage);
     setPage(newPage);
-    if (search === "" || search === null || search === undefined) {
-      Service.getListAddressService(id, newPage, rowsPerPage).then(item => {
+    if (search === '' || search === null || search === undefined) {
+      Service.getListAddressService(id, newPage, rowsPerPage).then((item) => {
         setList(item.data.data.list);
         setTotal(item.data.data.total);
       });
@@ -139,8 +131,13 @@ function DriversAddressPage() {
     Service.getAddressService(id).then((item: any) => {
       if (item.data.success) {
         setDetail(item.data.data);
-        if (item.data.data.appUserAddress && item.data.data.appUserAddress.length > 0) {
-          const activeAddress = item.data.data.appUserAddress.filter((newItem: any) => newItem.isActive === true);
+        if (
+          item.data.data.appUserAddress &&
+          item.data.data.appUserAddress.length > 0
+        ) {
+          const activeAddress = item.data.data.appUserAddress.filter(
+            (newItem: any) => newItem.isActive === true
+          );
           if (activeAddress.length > 0) {
             setAddress(activeAddress[0].address);
           }
@@ -149,7 +146,7 @@ function DriversAddressPage() {
         }
       }
     });
-  }, []);
+  }, [id]);
 
   const createFormHandler = (data: any) => {
     const formData = new FormData();
@@ -170,12 +167,12 @@ function DriversAddressPage() {
 
   const updateFormHandler = (data: any) => {
     const formData = new FormData();
-    formData.append("name", data.name);
-    formData.append("latitude", data.latitude);
-    formData.append("longitude", data.longitude);
-    formData.append("type", data.type);
-    formData.append("address", data.address);
-    formData.append("app_user", id);
+    formData.append('name', data.name);
+    formData.append('latitude', data.latitude);
+    formData.append('longitude', data.longitude);
+    formData.append('type', data.type);
+    formData.append('address', data.address);
+    formData.append('app_user', id);
     Service.updateAddress(actionMenuItemid, formData).then((item) => {
       if (item.data.success) {
         setList((newArr: any) => {
@@ -186,17 +183,17 @@ function DriversAddressPage() {
               newItem.latitude = item.data.data.latitude;
               newItem.longitude = item.data.data.longitude;
               newItem.address = item.data.data.address;
-              return { ...newItem };
             }
+            return { ...newItem };
           });
         });
       }
     });
   };
 
-  const handleSwitchChange = (event: any, id: string) => {
+  const handleSwitchChange = (event: any, addressId: string) => {
     if (list.length > 1) {
-      Service.updateStatusAddressService(id).then((updateItem) => {
+      Service.updateStatusAddressService(addressId).then((updateItem) => {
         if (updateItem.data.success) {
           setList((newArr: any) => {
             return newArr.map((item: any) => {
@@ -206,10 +203,10 @@ function DriversAddressPage() {
                 item.isActive = false;
               }
               return { ...item };
-            })
-          })
+            });
+          });
         }
-      })
+      });
     }
   };
 
@@ -251,8 +248,9 @@ function DriversAddressPage() {
                     {detail.phone}
                   </span>
                   <span
-                    className={`font-sm mt-2 font-open-sans text-sm ${detail.isActive ? 'text-[#29CC97]' : 'text-[#f50057]'
-                      }`}
+                    className={`font-sm mt-2 font-open-sans text-sm ${
+                      detail.isActive ? 'text-[#29CC97]' : 'text-[#f50057]'
+                    }`}
                   >
                     {detail.isActive ? 'Active' : 'Inactive'}
                   </span>
@@ -362,15 +360,21 @@ function DriversAddressPage() {
                             <td>{item.type}</td>
                             <td>
                               {item.isActive ? (
-                                <span className="badge badge-success">ACTIVE</span>
+                                <span className="badge badge-success">
+                                  ACTIVE
+                                </span>
                               ) : (
-                                <span className="badge badge-danger">INACTIVE</span>
+                                <span className="badge badge-danger">
+                                  INACTIVE
+                                </span>
                               )}
                             </td>
                             <td>
                               <Switch
                                 checked={item.isActive}
-                                onChange={(event: React.ChangeEvent<HTMLInputElement>) => handleSwitchChange(event, list[index].id)}
+                                onChange={(
+                                  event: React.ChangeEvent<HTMLInputElement>
+                                ) => handleSwitchChange(event, list[index].id)}
                                 inputProps={{ 'aria-label': 'controlled' }}
                               />
                               <IconButton

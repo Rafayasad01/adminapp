@@ -6,7 +6,7 @@ type Props = {
   anchorEl: any;
   setAnchorEl: React.Dispatch<React.SetStateAction<null | HTMLElement>>;
   options: string[];
-  callback: Function;
+  callback: (...args: any[]) => any;
 };
 const ITEM_HEIGHT = 48;
 function ActionMenu({ open, anchorEl, setAnchorEl, options, callback }: Props) {

@@ -7,8 +7,8 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import { useNavigate } from 'react-router-dom';
 import Link from '@mui/material/Link';
+import { useForm } from 'react-hook-form';
 import DragDropFile from './DragDropFile';
-import { Marker } from '../../interfaces/map.interface';
 import PlusIcon from '../../components/icons/PlusIcon';
 import { Setting, SocialMedia } from '../../interfaces/app.interface';
 import SocialLinksPopup from './SocialLinksPopup';
@@ -16,19 +16,26 @@ import { useAppSelector } from '../../redux/redux-hooks';
 
 import '../../assets/css/PopupStyle.css';
 import assets from '../../assets';
-import { useForm } from 'react-hook-form';
 import ColorPicker from '../../components/common/ColorPicker';
 import Service from '../../services/adminapp/admin';
-import { FACEBOOK, INSTAGRAM, LINKEDIN, TWITTER, WHATSAPP, YOUTUBE } from '../../utils/constants';
+import {
+  FACEBOOK,
+  INSTAGRAM,
+  LINKEDIN,
+  TWITTER,
+  WHATSAPP,
+  YOUTUBE,
+} from '../../utils/constants';
 import AlertBox from '../../utils/Alert';
 import MapAddress from '../../components/common/MapAddress';
 
 type AssetsImages = keyof typeof assets.images;
 
 function Item(props: { value: any; name: AssetsImages }) {
+  const { value, name } = props;
   return (
-    <Link href={props.value} underline="none" target="_blank">
-      <img src={assets.images[props.name]} alt="" />
+    <Link href={value} underline="none" target="_blank">
+      <img src={assets.images[name]} alt="" />
     </Link>
   );
 }
@@ -36,12 +43,14 @@ function Item(props: { value: any; name: AssetsImages }) {
 function SettingsApp() {
   const authState: any = useAppSelector((state) => state.authState);
   const navigate = useNavigate();
-  const [socialMediaLinks, setSocialMediaLinks] = useState<SocialMedia | any>(null);
+  const [socialMediaLinks, setSocialMediaLinks] = useState<SocialMedia | any>(
+    null
+  );
   const [openSocialMediaPopup, setOpenSocialMediaPopup] = useState(false);
   const [file, setFile] = useState<any>(null);
-  const [color1, setColor1] = useState<any>("#1A1A1A");
-  const [color2, setColor2] = useState<any>("#1A1A1A");
-  const [color3, setColor3] = useState<any>("#1A1A1A");
+  const [color1, setColor1] = useState<any>('#1A1A1A');
+  const [color2, setColor2] = useState<any>('#1A1A1A');
+  const [color3, setColor3] = useState<any>('#1A1A1A');
   const [detail, setDetail] = useState<any>(null);
   const [alertPopup, setAlertPopup] = useState<boolean>(false);
   const [alertSeverty, setAlertSeverty] = useState<string>('');
@@ -75,43 +84,58 @@ function SettingsApp() {
     formData.append('updated_by', authState.user.id);
     if (file !== null) formData.append('logo', file);
 
-    Service.updateService(authState.user.tenantConfig, formData).then((item: any) => {
-      if (item.data.success) {
-        const socialIconList = {
-          facebook: item.data.data.facebook === 'null' ? '' : item.data.data.facebook,
-          instagram: item.data.data.instagram === 'null' ? '' : item.data.data.instagram,
-          linkedin: item.data.data.linkedin === 'null' ? '' : item.data.data.linkedin,
-          twitter: item.data.data.twitter === 'null' ? '' : item.data.data.twitter,
-          youtube: item.data.data.youtube === 'null' ? '' : item.data.data.youtube,
-          whatsapp: item.data.data.whatsapp === 'null' ? '' : item.data.data.whatsapp,
-        };
-        if (item.data.data.color1) setColor1(item.data.data.color1);
-        if (item.data.data.color2) setColor1(item.data.data.color2);
-        if (item.data.data.color3) setColor1(item.data.data.color3);
-        setSocialMediaLinks(socialIconList);
-        setDetail(item.data.data);
-        setAlertMsg(item.data.message);
-        setAlertSeverty('success');
-        setAlertPopup(true);
-      } else {
-        setAlertMsg(item.data.message);
-        setAlertSeverty('error');
-        setAlertPopup(true);
+    Service.updateService(authState.user.tenantConfig, formData).then(
+      (item: any) => {
+        if (item.data.success) {
+          const socialIconList = {
+            facebook:
+              item.data.data.facebook === 'null' ? '' : item.data.data.facebook,
+            instagram:
+              item.data.data.instagram === 'null'
+                ? ''
+                : item.data.data.instagram,
+            linkedin:
+              item.data.data.linkedin === 'null' ? '' : item.data.data.linkedin,
+            twitter:
+              item.data.data.twitter === 'null' ? '' : item.data.data.twitter,
+            youtube:
+              item.data.data.youtube === 'null' ? '' : item.data.data.youtube,
+            whatsapp:
+              item.data.data.whatsapp === 'null' ? '' : item.data.data.whatsapp,
+          };
+          if (item.data.data.color1) setColor1(item.data.data.color1);
+          if (item.data.data.color2) setColor1(item.data.data.color2);
+          if (item.data.data.color3) setColor1(item.data.data.color3);
+          setSocialMediaLinks(socialIconList);
+          setDetail(item.data.data);
+          setAlertMsg(item.data.message);
+          setAlertSeverty('success');
+          setAlertPopup(true);
+        } else {
+          setAlertMsg(item.data.message);
+          setAlertSeverty('error');
+          setAlertPopup(true);
+        }
       }
-    });
+    );
   };
-
 
   useEffect(() => {
     Service.getService(authState.user.tenantConfig).then((item: any) => {
       if (item.data.success) {
         const socialIconList = {
-          facebook: item.data.data.facebook === 'null' ? '' : item.data.data.facebook,
-          instagram: item.data.data.instagram === 'null' ? '' : item.data.data.instagram,
-          linkedin: item.data.data.linkedin === 'null' ? '' : item.data.data.linkedin,
-          twitter: item.data.data.twitter === 'null' ? '' : item.data.data.twitter,
-          youtube: item.data.data.youtube === 'null' ? '' : item.data.data.youtube,
-          whatsapp: item.data.data.whatsapp === 'null' ? '' : item.data.data.whatsapp,
+          facebook:
+            item.data.data.facebook === 'null' ? '' : item.data.data.facebook,
+          instagram:
+            item.data.data.instagram === 'null' ? '' : item.data.data.instagram,
+          linkedin:
+            item.data.data.linkedin === 'null' ? '' : item.data.data.linkedin,
+          twitter:
+            item.data.data.twitter === 'null' ? '' : item.data.data.twitter,
+          youtube:
+            item.data.data.youtube === 'null' ? '' : item.data.data.youtube,
+          whatsapp:
+            item.data.data.whatsapp === 'null' ? '' : item.data.data.whatsapp,
         };
         if (item.data.data.color1) setColor1(item.data.data.color1);
         if (item.data.data.color2) setColor2(item.data.data.color2);
@@ -125,7 +149,7 @@ function SettingsApp() {
         setAddress(item.data.data);
       }
     });
-  }, []);
+  }, [authState]);
 
   return (
     <>
@@ -153,8 +177,12 @@ function SettingsApp() {
                     <DragDropFile setFile={setFile} />
                   </div>
                   {detail.logo && (
-                    <div className="mb-4 mt-[0.75rem] w-[150px] h-[142px] ml-4 rounded-md">
-                      <img className="w-full h-full rounded-md" src={detail.logo} alt="Shop Logo" />
+                    <div className="mb-4 mt-[0.75rem] ml-4 h-[142px] w-[150px] rounded-md">
+                      <img
+                        className="h-full w-full rounded-md"
+                        src={detail.logo}
+                        alt="Shop Logo"
+                      />
                     </div>
                   )}
                 </div>
@@ -188,7 +216,9 @@ function SettingsApp() {
                       id="gst_percentage"
                       placeholder="1%"
                       disableUnderline
-                      {...register('gst_percentage', { value: detail.gstPercentage })}
+                      {...register('gst_percentage', {
+                        value: detail.gstPercentage,
+                      })}
                     />
                   </FormControl>
                 </div>
@@ -200,7 +230,9 @@ function SettingsApp() {
                       id="min_order_amount"
                       placeholder="$1.00"
                       disableUnderline
-                      {...register('min_order_amount', { value: detail.minOrderAmount })}
+                      {...register('min_order_amount', {
+                        value: detail.minOrderAmount,
+                      })}
                     />
                   </FormControl>
                   <FormControl className="FormControl" variant="standard">
@@ -210,7 +242,9 @@ function SettingsApp() {
                       id="name"
                       placeholder="$1.00"
                       disableUnderline
-                      {...register('delivery_fee', { value: detail.deliveryFee })}
+                      {...register('delivery_fee', {
+                        value: detail.deliveryFee,
+                      })}
                     />
                   </FormControl>
                 </div>
@@ -219,42 +253,42 @@ function SettingsApp() {
                     <label className="FormLabel">Social Links</label>
                     <div className="mt-2 flex flex-row items-center gap-3">
                       {socialMediaLinks && socialMediaLinks.facebook && (
-                        < Item
+                        <Item
                           key={socialMediaLinks.facebook}
                           value={socialMediaLinks.facebook}
                           name={FACEBOOK as AssetsImages}
                         />
                       )}
                       {socialMediaLinks && socialMediaLinks.instagram && (
-                        < Item
+                        <Item
                           key={socialMediaLinks.instagram}
                           value={socialMediaLinks.instagram}
                           name={INSTAGRAM as AssetsImages}
                         />
                       )}
                       {socialMediaLinks && socialMediaLinks.linkedin && (
-                        < Item
+                        <Item
                           key={socialMediaLinks.linkedin}
                           value={socialMediaLinks.linkedin}
                           name={LINKEDIN as AssetsImages}
                         />
                       )}
                       {socialMediaLinks && socialMediaLinks.twitter && (
-                        < Item
+                        <Item
                           key={socialMediaLinks.twitter}
                           value={socialMediaLinks.twitter}
                           name={TWITTER as AssetsImages}
                         />
                       )}
                       {socialMediaLinks && socialMediaLinks.youtube && (
-                        < Item
+                        <Item
                           key={socialMediaLinks.youtube}
                           value={socialMediaLinks.youtube}
                           name={YOUTUBE as AssetsImages}
                         />
                       )}
                       {socialMediaLinks && socialMediaLinks.whatsapp && (
-                        < Item
+                        <Item
                           key={socialMediaLinks.whatsapp}
                           value={socialMediaLinks.whatsapp}
                           name={WHATSAPP as AssetsImages}
@@ -308,20 +342,21 @@ function SettingsApp() {
           {address ? (
             <MapAddress address={address.address} zoom={10} />
           ) : (
-            <div
-              className="no-map-location"
-            >
+            <div className="no-map-location">
               <div className="content">
                 <div className="icon">
-                  <img className="w-100" src={assets.images.noMapLocation} alt="" />
+                  <img
+                    className="w-100"
+                    src={assets.images.noMapLocation}
+                    alt=""
+                  />
                 </div>
                 <h4 className="text">Location not available</h4>
               </div>
             </div>
           )}
-
         </div>
-      </div >
+      </div>
       {openSocialMediaPopup && (
         <SocialLinksPopup
           openDialog={openSocialMediaPopup}
@@ -329,18 +364,15 @@ function SettingsApp() {
           socialMediaLinks={socialMediaLinks}
           setSocialMediaLinks={setSocialMediaLinks}
         />
-      )
-      }
-      {
-        alertPopup && (
-          <AlertBox
-            msg={alertMsg}
-            setSeverty={alertSeverty}
-            alertOpen={alertPopup}
-            setAlertOpen={setAlertPopup}
-          />
-        )
-      }
+      )}
+      {alertPopup && (
+        <AlertBox
+          msg={alertMsg}
+          setSeverty={alertSeverty}
+          alertOpen={alertPopup}
+          setAlertOpen={setAlertPopup}
+        />
+      )}
     </>
   );
 }

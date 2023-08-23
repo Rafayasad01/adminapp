@@ -6,9 +6,7 @@ import Input from '@mui/material/Input';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
 import IconButton from '@mui/material/IconButton';
-import dayjs from 'dayjs';
 import '../../assets/css/PopupStyle.css';
-import TimePicker from '../../components/common/TimePicker';
 import { useForm } from 'react-hook-form';
 import { AppUserDriverExt } from '../../interfaces/app-user.interface';
 
@@ -16,7 +14,7 @@ type Props = {
   openFormDialog: boolean;
   setOpenFormDialog: React.Dispatch<React.SetStateAction<boolean>>;
   formData: any;
-  callback: Function;
+  callback: (...args: any[]) => any;
 };
 
 function DriversEditPopup({
@@ -25,17 +23,13 @@ function DriversEditPopup({
   formData,
   callback,
 }: Props) {
-  const [startTime, setStartTime] = useState<dayjs.Dayjs | null>(null);
-  const [endTime, setEndTime] = useState<dayjs.Dayjs | null>(null);
   const [avatar, setAvatar] = useState<any>(null);
   const [avatarName, setAvatarName] = useState<string>('');
 
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
-    control,
   } = useForm<AppUserDriverExt>();
 
   const handleFormClose = () => setOpenFormDialog(false);
@@ -53,20 +47,20 @@ function DriversEditPopup({
     const licenseNumber = data.license_number.replace(/\s+/g, '');
     data.avatar = avatar;
     data.license_number = licenseNumber;
-    //setOpenFormDialog(false);
+    // setOpenFormDialog(false);
     callback(data);
   };
 
   useEffect(() => {
     if (formData && formData.avatar) {
-      let avatar = formData.avatar.split('/').slice(-1)[0];
+      let newAvatar = formData.avatar.split('/').slice(-1)[0];
       const regexExp = /[a-z,0-9,-]{36}/;
-      if (regexExp.test(avatar)) {
-        avatar = avatar.split('-').splice(5)[0];
+      if (regexExp.test(newAvatar)) {
+        newAvatar = newAvatar.split('-').splice(5)[0].at(0);
       }
-      setAvatarName(avatar);
+      setAvatarName(newAvatar);
     }
-  }, []);
+  }, [formData]);
 
   return (
     <Dialog

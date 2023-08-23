@@ -1,5 +1,5 @@
-// export const BASE_URL = import.meta.env.VITE_SERVICE_BASE_URL;
-export const BASE_URL = "https://dev.urapptech.com/api/v1/admin/";
+export const BASE_URL = import.meta.env.VITE_SERVICE_BASE_URL;
+// export const BASE_URL = "https://dev.urapptech.com/api/v1/admin/";
 export const GOOGLE_MAP_KEY = import.meta.env.VITE_GOOGLE_MAP_KEY;
 export const BACKOFFICE_PREFIX = 'backofficeUser';
 export const PERMISSION_PREFIX = 'permission';
@@ -45,9 +45,10 @@ export const TWITTER = 'twitter';
 export const YOUTUBE = 'youtube';
 export const WHATSAPP = 'whatsapp';
 
-export let token = '';
+// LocalStorage my token save kara lyty
+export const TOKEN_STORE_KEY = 'APP_AUTH_TOKEN';
 export const setToken = (data: string) => {
-  token = data;
+  localStorage.setItem(TOKEN_STORE_KEY, JSON.stringify(data));
 };
 
 export const ORDER_STATUSES = new Map();

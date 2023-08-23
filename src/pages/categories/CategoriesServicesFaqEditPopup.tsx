@@ -6,14 +6,14 @@ import Input from '@mui/material/Input';
 import { useForm } from 'react-hook-form';
 
 import '../../assets/css/PopupStyle.css';
-import { CategoryServiceFaq } from '../../interfaces/category.interface';
 import TextareaAutosize from '@mui/base/TextareaAutosize';
+import { CategoryServiceFaq } from '../../interfaces/category.interface';
 
 type Props = {
   openFormDialog: boolean;
   setOpenFormDialog: React.Dispatch<React.SetStateAction<boolean>>;
   formData: any;
-  callback: Function;
+  callback: (...args: any[]) => any;
 };
 
 function CategoriesServicesFaqEditPopup({

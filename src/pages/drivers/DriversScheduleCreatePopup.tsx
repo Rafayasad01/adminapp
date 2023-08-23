@@ -4,14 +4,14 @@ import Button from '@mui/material/Button';
 import Input from '@mui/material/Input';
 import dayjs from 'dayjs';
 import '../../assets/css/PopupStyle.css';
-import TimePicker from '../../components/common/TimePicker';
 import { useForm } from 'react-hook-form';
+import TimePicker from '../../components/common/TimePicker';
 import { AppUserDriverExt } from '../../interfaces/app-user.interface';
 
 type Props = {
   openFormDialog: boolean;
   setOpenFormDialog: React.Dispatch<React.SetStateAction<boolean>>;
-  callback: Function;
+  callback: (...args: any[]) => any;
 };
 
 function DriversScheduleCreatePopup({

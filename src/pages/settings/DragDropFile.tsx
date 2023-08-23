@@ -9,14 +9,12 @@ type Props = {
   setFile: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-function DragDropFile({
-  setFile
-}: Props) {
+function DragDropFile({ setFile }: Props) {
   const [dragActive, setDragActive] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleFile = (files: any) => {
-    //console.log(files);
+    // console.log(files);
     setFile(files[0]);
   };
 

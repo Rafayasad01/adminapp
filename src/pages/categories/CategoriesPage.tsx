@@ -9,16 +9,16 @@ import Button from '@mui/material/Button';
 import SearchIcon from '@mui/icons-material/Search';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
+import dayjs from 'dayjs';
+import TablePagination from '@mui/material/TablePagination';
+import Switch from '@mui/material/Switch';
 import TopBar from '../../components/common/TopBar';
 import CategoriesCreatePopup from './CategoriesCreatePopup';
 import assets from '../../assets';
 import CategoriesEditPopup from './CategoriesEditPopup';
 import category from '../../services/adminapp/adminCategory';
 import { useAppSelector } from '../../redux/redux-hooks';
-import dayjs from 'dayjs';
 import ActionMenu from '../../components/common/ActionMenu';
-import TablePagination from '@mui/material/TablePagination';
-import Switch from '@mui/material/Switch';
 
 function CategoriesPage() {
   const authState: any = useAppSelector((state) => state.authState);
@@ -60,7 +60,7 @@ function CategoriesPage() {
     newPage: number
   ) => {
     setPage(newPage);
-    //offset? ,limit rowsperpage hoga ofset page * rowsperPage
+    // offset? ,limit rowsperpage hoga ofset page * rowsperPage
     if (search === '' || search === null || search === undefined) {
       category
         .getListService(authState.user.tenant, newPage, rowsPerPage)
@@ -111,12 +111,30 @@ function CategoriesPage() {
       .catch((error) => {
         console.log('error::::::::', error);
       });
-  }, []);
+  }, [authState, page, rowsPerPage]);
+
+  const deleteHandler = (id: string) => {
+    const data = {
+      is_active: false,
+      is_deleted: true,
+      updated_by: authState.user.id,
+    };
+    category.deleteCategory(id, data).then((updateItem) => {
+      if (updateItem.data.success) {
+        setList((newArr: any) => {
+          return newArr.filter((item: any) => item.id !== id);
+        });
+        let newtotal = total;
+        setTotal((newtotal -= 1));
+      }
+    });
+  };
+
   const manuHandler = (option: string) => {
     if (option === 'Edit') {
       category.getCategory(actionMenuItemid).then((item: any) => {
         if (item.data.success) {
-          console.log('tem.data.data:::::::', item.data.data)
+          console.log('tem.data.data:::::::', item.data.data);
           setEditFormData(item.data.data);
           setOpenEditFormDialog(true);
         }
@@ -157,7 +175,7 @@ function CategoriesPage() {
               if (item.id === updateItem.data.data.id) {
                 item.name = updateItem.data.data.name;
                 item.desc = updateItem.data.data.desc;
-                if (updateItem.data.data.hasOwnProperty('icon'))
+                if (updateItem.data.data.icon)
                   item.icon = updateItem.data.data.icon;
               }
               return { ...item };
@@ -182,23 +200,6 @@ function CategoriesPage() {
             return { ...item };
           });
         });
-      }
-    });
-  };
-
-  const deleteHandler = (id: string) => {
-    const data = {
-      is_active: false,
-      is_deleted: true,
-      updated_by: authState.user.id,
-    };
-    category.deleteCategory(id, data).then((updateItem) => {
-      if (updateItem.data.success) {
-        setList((newArr: any) => {
-          return newArr.filter((item: any) => item.id !== id);
-        });
-        let newtotal = total;
-        setTotal((newtotal -= 1));
       }
     });
   };
@@ -291,8 +292,8 @@ function CategoriesPage() {
                         <td>
                           {dayjs(item.createdDate).isValid()
                             ? dayjs(item.createdDate)?.format(
-                              'ddd, MMM DD, YYYY hh:mm:ssA'
-                            )
+                                'ddd, MMM DD, YYYY hh:mm:ssA'
+                              )
                             : '--'}
                         </td>
                         <td>

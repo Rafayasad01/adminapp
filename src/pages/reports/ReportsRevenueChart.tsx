@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
+/* eslint no-underscore-dangle: 0 */
 import {
   Chart as ChartJS,
   CoreChartOptions,

@@ -1,22 +1,27 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import Divider from '@mui/material/Divider';
+import Avatar from '@mui/material/Avatar';
 import TopBar from '../../components/common/TopBar';
 import Service from '../../services/adminapp/adminCustomer';
 import MapAddress from '../../components/common/MapAddress';
-import Avatar from '@mui/material/Avatar';
 import assets from '../../assets';
 
 function CustomersDetailPage() {
   const params = useParams();
-  const [address, setAddress] = useState<string>("");
+  const [address, setAddress] = useState<string>('');
   const [detail, setDetail] = useState<any>(null);
   const id: any = params.customerId;
   useEffect(() => {
     Service.getDetailService(id).then((item: any) => {
       if (item.data.success) {
-        if (item.data.data.appUserAddress && item.data.data.appUserAddress.length > 0) {
-          const activeAddress = item.data.data.appUserAddress.filter((newItem: any) => newItem.isActive === true);
+        if (
+          item.data.data.appUserAddress &&
+          item.data.data.appUserAddress.length > 0
+        ) {
+          const activeAddress = item.data.data.appUserAddress.filter(
+            (newItem: any) => newItem.isActive === true
+          );
           if (activeAddress.length > 0) {
             setAddress(activeAddress[0].address);
           }
@@ -24,7 +29,7 @@ function CustomersDetailPage() {
         setDetail(item.data.data);
       }
     });
-  }, []);
+  }, [id]);
 
   return (
     <>
@@ -64,8 +69,9 @@ function CustomersDetailPage() {
                     {detail.phone}
                   </span>
                   <span
-                    className={`font-sm mt-2 font-open-sans text-sm ${detail.isActive ? 'text-[#29CC97]' : 'text-[#f50057]'
-                      }`}
+                    className={`font-sm mt-2 font-open-sans text-sm ${
+                      detail.isActive ? 'text-[#29CC97]' : 'text-[#f50057]'
+                    }`}
                   >
                     {detail.isActive ? 'Active' : 'Inactive'}
                   </span>
@@ -128,9 +134,13 @@ function CustomersDetailPage() {
                 <div className="no-map-location">
                   <div className="content">
                     <div className="icon">
-                      <img className='w-100' src={assets.images.noMapLocation} alt="" />
+                      <img
+                        className="w-100"
+                        src={assets.images.noMapLocation}
+                        alt=""
+                      />
                     </div>
-                    <h4 className='text'>Location not available</h4>
+                    <h4 className="text">Location not available</h4>
                   </div>
                 </div>
               )}
