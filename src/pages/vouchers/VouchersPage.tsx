@@ -121,7 +121,7 @@ function VouchersPage() {
         }
       })
       .catch((error) => {
-        console.log('error::::::::', error);
+        console.log('error :>> ', error);
       });
   }, [authState.user.tenant, page, rowsPerPage, search]);
 

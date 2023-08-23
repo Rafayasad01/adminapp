@@ -7,17 +7,17 @@ import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
 import IconButton from '@mui/material/IconButton';
 import { useForm } from 'react-hook-form';
+import TextField from '@mui/material/TextField';
 import { Category } from '../../interfaces/category.interface';
 import category from '../../services/adminapp/adminCategory';
 
 import '../../assets/css/PopupStyle.css';
-import TextField from '@mui/material/TextField';
 
 type Props = {
   openFormDialog: boolean;
   setOpenFormDialog: React.Dispatch<React.SetStateAction<boolean>>;
   formData: any;
-  callback: Function;
+  callback: (...args: any[]) => any;
 };
 
 function CategoriesEditPopup({
@@ -59,10 +59,10 @@ function CategoriesEditPopup({
     let icon = formData.icon.split('/').slice(-1)[0];
     const regexExp = /[a-z,0-9,-]{36}/;
     if (regexExp.test(icon)) {
-      icon = icon.split('-').splice(5)[0];
+      icon = icon.split('-').splice(5)[0].at(0);
     }
     setImageName(icon);
-  }, []);
+  }, [formData]);
 
   return (
     <Dialog
@@ -113,13 +113,16 @@ function CategoriesEditPopup({
                       defaultValue=""
                       placeholder="Write Description"
                       {...register('desc', {
-                        required: 'Description is required', value: formData.desc, minLength: {
+                        required: 'Description is required',
+                        value: formData.desc,
+                        minLength: {
                           value: 5,
-                          message: "Minimum Five Characters"
-                        }, maxLength: {
+                          message: 'Minimum Five Characters',
+                        },
+                        maxLength: {
                           value: 50,
-                          message: "Too Many Characters"
-                        }
+                          message: 'Too Many Characters',
+                        },
                       })}
                     />
                     {errors.desc && (
@@ -140,7 +143,7 @@ function CategoriesEditPopup({
                         event: React.InputHTMLAttributes<HTMLInputElement>
                       ) => {
                         handleFileChange(event);
-                        //setIsImage(event.nativeEventtarget.files[0])
+                        // setIsImage(event.nativeEventtarget.files[0])
                       }}
                     />
                     <label htmlFor="raised-button-file" className="ImageLabel">

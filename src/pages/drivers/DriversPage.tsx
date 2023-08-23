@@ -11,18 +11,18 @@ import InputAdornment from '@mui/material/InputAdornment';
 import Button from '@mui/material/Button';
 import SearchIcon from '@mui/icons-material/Search';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
+import dayjs from 'dayjs';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import Avatar from '@mui/material/Avatar';
+import Switch from '@mui/material/Switch';
+import TablePagination from '@mui/material/TablePagination';
 import TopBar from '../../components/common/TopBar';
 import DriversCreatePopup from './DriversCreatePopup';
 import DriversEditPopup from './DriversEditPopup';
 import driver from '../../services/adminapp/adminDriver';
 import { useAppSelector } from '../../redux/redux-hooks';
-import dayjs from 'dayjs';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 import ActionMenu from '../../components/common/ActionMenu';
-import Avatar from '@mui/material/Avatar';
-import Switch from '@mui/material/Switch';
-import TablePagination from '@mui/material/TablePagination';
 
 function DriversPage() {
   const authState: any = useAppSelector((state) => state.authState);
@@ -41,21 +41,6 @@ function DriversPage() {
 
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
-
-  const manuHandler = (option: string) => {
-    if (option === 'Edit') {
-      edit(actionMenuItemid);
-    } else if (option === 'Delete') {
-      deleteEntity(actionMenuItemid);
-    } else if (option === 'Address') {
-      navigate(`address/${actionMenuItemid}`);
-    } else if (option === 'Schedule') {
-      navigate(`schedule/${actionMenuItemid}`);
-    } else if (option === 'Detail') {
-      navigate(`detail/${actionMenuItemid}`);
-    }
-  };
-
   const deleteEntity = (id: string) => {
     const data = {
       is_active: false,
@@ -71,13 +56,27 @@ function DriversPage() {
     });
   };
 
-  const edit = (id: string) => {
+  const editHandler = (id: string) => {
     driver.getService(id).then((item: any) => {
       if (item.data.success) {
         setEditFormData(item.data.data);
         setOpenEditFormDialog(true);
       }
     });
+  };
+
+  const manuHandler = (option: string) => {
+    if (option === 'Edit') {
+      editHandler(actionMenuItemid);
+    } else if (option === 'Delete') {
+      deleteEntity(actionMenuItemid);
+    } else if (option === 'Address') {
+      navigate(`address/${actionMenuItemid}`);
+    } else if (option === 'Schedule') {
+      navigate(`schedule/${actionMenuItemid}`);
+    } else if (option === 'Detail') {
+      navigate(`detail/${actionMenuItemid}`);
+    }
   };
 
   const handleClickSearch = (event: any) => {
@@ -100,7 +99,7 @@ function DriversPage() {
     newPage: number
   ) => {
     setPage(newPage);
-    //offset? ,limit rowsperpage hoga ofset page * rowsperPage
+    // offset? ,limit rowsperpage hoga ofset page * rowsperPage
     if (search === '' || search === null || search === undefined) {
       driver
         .getListService(authState.user.tenant, newPage, rowsPerPage)
@@ -150,7 +149,7 @@ function DriversPage() {
           setTotal(item.data.data.total);
         }
       });
-  }, []);
+  }, [authState, page, rowsPerPage]);
 
   const createFormHandler = (data: any) => {
     const formData = new FormData();
@@ -190,8 +189,8 @@ function DriversPage() {
               newItem.licenseNumber = item.data.data.licenseNumber;
               newItem.phone = item.data.data.phone;
               if (data.avatar !== null) newItem.phone = item.data.data.avatar;
-              return { ...newItem };
             }
+            return { ...newItem };
           });
         });
       }
@@ -286,109 +285,99 @@ function DriversPage() {
               <tbody>
                 {list &&
                   list.map((item: any, index: number) => {
-                    if (!item.isDeleted) {
-                      return (
-                        <tr key={item.id}>
-                          <td>
-                            <div className="avatar flex flex-row items-center">
-                              {item.avatar ? (
-                                <img src={item.avatar} alt="" />
-                              ) : (
-                                <Avatar
-                                  className="avatar flex flex-row items-center"
-                                  sx={{
-                                    bgcolor: '#1D1D1D',
-                                    width: 35,
-                                    height: 35,
-                                    textTransform: 'uppercase',
-                                    fontSize: '14px',
-                                    marginRight: '10px',
-                                  }}
-                                >
-                                  {item.firstName.charAt(0)}
-                                  {item.lastName.charAt(0)}
-                                </Avatar>
-                              )}
+                    return (
+                      <tr key={item.id}>
+                        <td>
+                          <div className="avatar flex flex-row items-center">
+                            {item.avatar ? (
+                              <img src={item.avatar} alt="" />
+                            ) : (
+                              <Avatar
+                                className="avatar flex flex-row items-center"
+                                sx={{
+                                  bgcolor: '#1D1D1D',
+                                  width: 35,
+                                  height: 35,
+                                  textTransform: 'uppercase',
+                                  fontSize: '14px',
+                                  marginRight: '10px',
+                                }}
+                              >
+                                {item.firstName.charAt(0)}
+                                {item.lastName.charAt(0)}
+                              </Avatar>
+                            )}
 
-                              <div className="flex flex-col items-start justify-start">
-                                <span className="text-sm font-semibold">
-                                  {`${item.firstName} ${item.lastName}`}
-                                </span>
-                                <span className="text-xs font-normal text-[#6A6A6A]">
-                                  {dayjs(item.createdDate).isValid()
-                                    ? dayjs(item.createdDate)?.format(
-                                        'MMMM DD, YYYY'
-                                      )
-                                    : '--'}
-                                </span>
-                              </div>
+                            <div className="flex flex-col items-start justify-start">
+                              <span className="text-sm font-semibold">
+                                {`${item.firstName} ${item.lastName}`}
+                              </span>
+                              <span className="text-xs font-normal text-[#6A6A6A]">
+                                {dayjs(item.createdDate).isValid()
+                                  ? dayjs(item.createdDate)?.format(
+                                      'MMMM DD, YYYY'
+                                    )
+                                  : '--'}
+                              </span>
                             </div>
-                          </td>
-                          <td>{item.phone}</td>
-                          <td>{item.email}</td>
-                          <td>
-                            <span
-                              className={`badge badge-${
-                                item.status == 'Offline' ? 'danger' : 'success'
-                              }`}
-                            >
-                              {item.status}
-                            </span>
-                          </td>
-                          {/* <td>
+                          </div>
+                        </td>
+                        <td>{item.phone}</td>
+                        <td>{item.email}</td>
+                        <td>
+                          <span
+                            className={`badge badge-${
+                              item.status === 'Offline' ? 'danger' : 'success'
+                            }`}
+                          >
+                            {item.status}
+                          </span>
+                        </td>
+                        {/* <td>
                           {item.appDriverWorkingSchedule.length > 0 ? item.appDriverWorkingSchedule.map((scheduleItem: any) => {
                             const newStartTime = dayjs().format('YYYY MM DD') + ", " + scheduleItem.startTime;
                             const newEndTime = dayjs().format('YYYY MM DD') + ", " + scheduleItem.endTime;
                             return <span style={{ display: 'block' }} key={scheduleItem.id}>{dayjs(newStartTime)?.format('HH:mm')} to {dayjs(newEndTime)?.format('HH:mm A')}</span>
                           }) : '--'}
                         </td> */}
-                          <td>
-                            {item.licenseNumber ? item.licenseNumber : '--'}
-                          </td>
-                          <td>
-                            {item.isActive ? (
-                              <span className="badge badge-success">
-                                ACTIVE
-                              </span>
-                            ) : (
-                              <span className="badge badge-danger">
-                                INACTIVE
-                              </span>
-                            )}
-                          </td>
+                        <td>
+                          {item.licenseNumber ? item.licenseNumber : '--'}
+                        </td>
+                        <td>
+                          {item.isActive ? (
+                            <span className="badge badge-success">ACTIVE</span>
+                          ) : (
+                            <span className="badge badge-danger">INACTIVE</span>
+                          )}
+                        </td>
 
-                          <td>
-                            <Switch
-                              checked={item.isActive}
-                              onChange={(
-                                event: React.ChangeEvent<HTMLInputElement>
-                              ) => handleSwitchChange(event, list[index].id)}
-                              inputProps={{ 'aria-label': 'controlled' }}
-                            />
-                            <IconButton
-                              className="btn-dot"
-                              aria-label="more"
-                              id="long-button"
-                              aria-controls={
-                                actionMenuOpen ? 'long-menu' : undefined
-                              }
-                              aria-expanded={
-                                actionMenuOpen ? 'true' : undefined
-                              }
-                              aria-haspopup="true"
-                              onClick={(
-                                event: React.MouseEvent<HTMLElement>
-                              ) => {
-                                setActionMenuItemid(list[index].id);
-                                setActionMenuAnchorEl(event.currentTarget);
-                              }}
-                            >
-                              <MoreVertIcon />
-                            </IconButton>
-                          </td>
-                        </tr>
-                      );
-                    }
+                        <td>
+                          <Switch
+                            checked={item.isActive}
+                            onChange={(
+                              event: React.ChangeEvent<HTMLInputElement>
+                            ) => handleSwitchChange(event, list[index].id)}
+                            inputProps={{ 'aria-label': 'controlled' }}
+                          />
+                          <IconButton
+                            className="btn-dot"
+                            aria-label="more"
+                            id="long-button"
+                            aria-controls={
+                              actionMenuOpen ? 'long-menu' : undefined
+                            }
+                            aria-expanded={actionMenuOpen ? 'true' : undefined}
+                            aria-haspopup="true"
+                            onClick={(event: React.MouseEvent<HTMLElement>) => {
+                              setActionMenuItemid(list[index].id);
+                              setActionMenuAnchorEl(event.currentTarget);
+                            }}
+                          >
+                            <MoreVertIcon />
+                          </IconButton>
+                        </td>
+                      </tr>
+                    );
                   })}
               </tbody>
             </table>

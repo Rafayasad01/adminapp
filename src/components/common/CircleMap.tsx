@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useRef, useState } from 'react';
 import { Loader } from '@googlemaps/js-api-loader';
 
@@ -22,6 +23,9 @@ function CircleMap({ center, zoom, radius }: Props) {
 
   useEffect(() => {
     loader.load().then(async (e) => {
+      if (!mapRef.current) {
+        return;
+      }
       const options: google.maps.MapOptions = {
         center,
         zoom,
@@ -33,8 +37,8 @@ function CircleMap({ center, zoom, radius }: Props) {
         scaleControl: false,
       };
       const { google } = window;
-      const map = new google.maps.Map(mapRef.current!, options);
-
+      const newMap = new google.maps.Map(mapRef.current, options);
+      setMap(newMap);
       const marker = new google.maps.Marker({
         position: center,
         map,
@@ -43,7 +47,7 @@ function CircleMap({ center, zoom, radius }: Props) {
         animation: google.maps.Animation.DROP,
       });
 
-      const circle = new google.maps.Circle({
+      const newCircle = new google.maps.Circle({
         strokeColor: '#1D1D1D',
         strokeOpacity: 0.5,
         strokeWeight: 0.5,
@@ -54,16 +58,16 @@ function CircleMap({ center, zoom, radius }: Props) {
         radius,
       });
 
-      setMap(map);
-      setCircle(circle);
+      // setMap(map);
+      setCircle(newCircle);
     });
-  }, []);
+  }, [center, zoom]);
 
   useEffect(() => {
     if (circle) {
       circle.setRadius(radius);
     }
-  }, [radius]);
+  }, [radius, circle]);
 
   return (
     <div

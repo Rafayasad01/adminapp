@@ -9,13 +9,13 @@ import IconButton from '@mui/material/IconButton';
 import { useForm } from 'react-hook-form';
 
 import '../../assets/css/PopupStyle.css';
-import { Category } from '../../interfaces/category.interface';
 import TextField from '@mui/material/TextField';
+import { Category } from '../../interfaces/category.interface';
 
 type Props = {
   openFormDialog: boolean;
   setOpenFormDialog: React.Dispatch<React.SetStateAction<boolean>>;
-  callback: Function;
+  callback: (...args: any[]) => any;
 };
 
 function CategoriesCreatePopup({
@@ -96,13 +96,15 @@ function CategoriesCreatePopup({
                   defaultValue=""
                   placeholder="Write Description"
                   {...register('desc', {
-                    required: 'Description is required', minLength: {
+                    required: 'Description is required',
+                    minLength: {
                       value: 5,
-                      message: "Minimum Five Characters"
-                    }, maxLength: {
+                      message: 'Minimum Five Characters',
+                    },
+                    maxLength: {
                       value: 50,
-                      message: "Too Many Characters"
-                    }
+                      message: 'Too Many Characters',
+                    },
                   })}
                 />
                 {errors.desc && (
@@ -123,7 +125,7 @@ function CategoriesCreatePopup({
                     event: React.InputHTMLAttributes<HTMLInputElement>
                   ) => {
                     handleFileChange(event);
-                    //setIsImage(event.nativeEventtarget.files[0])
+                    // setIsImage(event.nativeEventtarget.files[0])
                   }}
                 />
                 <label htmlFor="raised-button-file" className="ImageLabel">

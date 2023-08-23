@@ -1,6 +1,7 @@
 import network from '../../utils/network';
 import { NOTIFICATION_PREFIX } from '../../utils/constants';
-const ASSIGN_PREFIX = 'assign';
+
+// const ASSIGN_PREFIX = 'assign';
 
 const getListService = (tenant: string, page: number, size: number) => {
   return network.get(`${NOTIFICATION_PREFIX}/list/${tenant}/${page}/${size}`);

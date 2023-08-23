@@ -30,6 +30,10 @@ module.exports = {
     'react/require-default-props': 0,
     'no-param-reassign': 0,
     'jsx-a11y/label-has-associated-control': 0,
+    "@typescript-eslint/no-explicit-any": "off",
+    'react/jsx-props-no-spreading': 'off',
+    //'@typescript-eslint/no-unused-vars': 'off',
+    //'no-console': 'off',
     'prettier/prettier': [
       'error',
       {

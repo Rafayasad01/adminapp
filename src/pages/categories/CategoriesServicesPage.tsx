@@ -9,14 +9,14 @@ import Button from '@mui/material/Button';
 import SearchIcon from '@mui/icons-material/Search';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
+import TablePagination from '@mui/material/TablePagination';
+import Switch from '@mui/material/Switch';
 import TopBar from '../../components/common/TopBar';
 import ServicesCreatePopup from './CategoriesServicesCreatePopup';
 import ServicesEditPopup from './CategoriesServicesEditPopup';
 import { useAppSelector } from '../../redux/redux-hooks';
 import ActionMenu from '../../components/common/ActionMenu';
-import TablePagination from '@mui/material/TablePagination';
 import category from '../../services/adminapp/adminCategory';
-import Switch from '@mui/material/Switch';
 
 function CategoriesServicesPage() {
   const params = useParams();
@@ -37,7 +37,7 @@ function CategoriesServicesPage() {
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
 
-  const categoryId: any = params.categoryId;
+  const categoryId = params.categoryId ?? '';
 
   const handleClickSearch = (event: any) => {
     const searchTxt = event.target.value as string;
@@ -57,7 +57,7 @@ function CategoriesServicesPage() {
     newPage: number
   ) => {
     setPage(newPage);
-    //offset? ,limit rowsperpage hoga ofset page * rowsperPage
+    // offset? ,limit rowsperpage hoga ofset page * rowsperPage
     if (search === '' || search === null || search === undefined) {
       category
         .getCategoryServiceList(categoryId, newPage, rowsPerPage)
@@ -108,7 +108,24 @@ function CategoriesServicesPage() {
       .catch((error) => {
         console.log('error::::::::', error);
       });
-  }, []);
+  }, [categoryId, page, rowsPerPage]);
+
+  const deleteHandler = (id: string) => {
+    const data = {
+      is_active: false,
+      is_deleted: true,
+      updated_by: authState.user.id,
+    };
+    category.deleteCategoryService(id, data).then((updateItem) => {
+      if (updateItem.data.success) {
+        setList((newArr: any) => {
+          return newArr.filter((item: any) => item.id !== id);
+        });
+        let newtotal = total;
+        setTotal((newtotal -= 1));
+      }
+    });
+  };
 
   const manuHandler = (option: string) => {
     if (option === 'Edit') {
@@ -119,7 +136,6 @@ function CategoriesServicesPage() {
         }
       });
     } else if (option === "Faq's") {
-      console.log('actionMenuItemid::::::', actionMenuItemid);
       navigate(`../service/faq/${actionMenuItemid}`);
     } else if (option === 'Delete') {
       deleteHandler(actionMenuItemid);
@@ -160,7 +176,7 @@ function CategoriesServicesPage() {
                 item.quantity = updateItem.data.data.quantity;
                 item.price = updateItem.data.data.price;
                 item.desc = updateItem.data.data.desc;
-                if (updateItem.data.data.hasOwnProperty('icon'))
+                if (updateItem.data.data.icon)
                   item.icon = updateItem.data.data.icon;
               }
               return { ...item };
@@ -189,26 +205,9 @@ function CategoriesServicesPage() {
     });
   };
 
-  const deleteHandler = (id: string) => {
-    const data = {
-      is_active: false,
-      is_deleted: true,
-      updated_by: authState.user.id,
-    };
-    category.deleteCategoryService(id, data).then((updateItem) => {
-      if (updateItem.data.success) {
-        setList((newArr: any) => {
-          return newArr.filter((item: any) => item.id !== id);
-        });
-        let newtotal = total;
-        setTotal((newtotal -= 1));
-      }
-    });
-  };
-
   return (
     <>
-      <TopBar isNestedRoute={true} title="Services" />
+      <TopBar isNestedRoute title="Services" />
       <div className="container mt-5">
         <div className="w-full rounded-lg bg-white shadow-lg">
           <div className="grid grid-cols-12 px-4 py-5">
@@ -319,7 +318,7 @@ function CategoriesServicesPage() {
                               <MoreVertIcon />
                             </IconButton>
                             <Switch
-                              checked={item.isActive ? true : false}
+                              checked={!!item.isActive}
                               onChange={(
                                 event: React.ChangeEvent<HTMLInputElement>
                               ) => handleSwitchChange(event, list[index].id)}

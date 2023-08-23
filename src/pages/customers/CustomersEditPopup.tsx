@@ -3,9 +3,6 @@ import Dialog from '@mui/material/Dialog';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
-import InputAdornment from '@mui/material/InputAdornment';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import Visibility from '@mui/icons-material/Visibility';
 import IconButton from '@mui/material/IconButton';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
@@ -18,7 +15,7 @@ type Props = {
   openFormDialog: boolean;
   setOpenFormDialog: React.Dispatch<React.SetStateAction<boolean>>;
   formData: any;
-  callback: Function;
+  callback: (...args: any[]) => any;
 };
 
 function CustomersEditPopup({
@@ -59,14 +56,14 @@ function CustomersEditPopup({
 
   useEffect(() => {
     if (formData && formData.avatar !== null) {
-      let avatar = formData.avatar.split('/').slice(-1)[0];
+      let newAvatar = formData.avatar.split('/').slice(-1)[0];
       const regexExp = /[a-z,0-9,-]{36}/;
-      if (regexExp.test(avatar)) {
-        avatar = avatar.split('-').splice(5)[0];
+      if (regexExp.test(newAvatar)) {
+        newAvatar = newAvatar.split('-').splice(5)[0].at(0);
       }
-      setAvatarName(avatar);
+      setAvatarName(newAvatar);
     }
-  }, []);
+  }, [formData]);
 
   return (
     <Dialog

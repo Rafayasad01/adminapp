@@ -193,6 +193,9 @@ function SuperAdminMarkersMap({ markers, zoom }: Props) {
   const markerRef = useRef<google.maps.Marker>();
   useEffect(() => {
     loader.load().then(async (e) => {
+      if (!mapRef.current) {
+        return;
+      }
       if (markers.length > 0) {
         const options: google.maps.MapOptions = {
           center: { lat: markers[0].lat, lng: markers[0].lng },
@@ -205,7 +208,7 @@ function SuperAdminMarkersMap({ markers, zoom }: Props) {
           scaleControl: false,
           styles: googleMapsStyles,
         };
-        const map = new google.maps.Map(mapRef.current!, options);
+        const map = new google.maps.Map(mapRef.current, options);
         markers.forEach((marker) => {
           const markerVal = new window.google.maps.Marker({
             position: { lat: marker.lat, lng: marker.lng },

@@ -8,18 +8,18 @@ import IconButton from '@mui/material/IconButton';
 import SearchIcon from '@mui/icons-material/Search';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import TablePagination from '@mui/material/TablePagination';
+import Switch from '@mui/material/Switch';
 import TopBar from '../../components/common/TopBar';
 import Map from '../../components/common/Map';
 import MapAddress from '../../components/common/MapAddress';
 import Service from '../../services/adminapp/adminCustomer';
 import ActionMenu from '../../components/common/ActionMenu';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
 import { useAppSelector } from '../../redux/redux-hooks';
-import TablePagination from '@mui/material/TablePagination';
 import CustomersAddressCreatePopup from './CustomersAddressCreatePopup';
 import CustomersAddressEditPopup from './CustomersAddressEditPopup';
-import Switch from '@mui/material/Switch';
 import assets from '../../assets';
 
 function CustomersAddressPage() {
@@ -27,7 +27,7 @@ function CustomersAddressPage() {
   const params = useParams();
   const navigate = useNavigate();
   const [detail, setDetail] = useState<any>(null);
-  const [address, setAddress] = useState<string>("");
+  const [address, setAddress] = useState<string>('');
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(0);
   const [total, setTotal] = useState(0);
@@ -45,19 +45,11 @@ function CustomersAddressPage() {
 
   const id: any = params.customerId;
 
-  const manuHandler = (option: string) => {
-    if (option === 'Edit') {
-      getData(actionMenuItemid);
-    } else if (option === 'Delete') {
-      deleteEntity(actionMenuItemid);
-    }
-  };
-
-  const deleteEntity = (id: string) => {
+  const deleteEntity = (customerId: string) => {
     const data = {
       is_deleted: true,
     };
-    Service.deleteAddressService(id, data).then((item: any) => {
+    Service.deleteAddressService(customerId, data).then((item: any) => {
       if (item.data.success) {
         setList((newArr: any) => {
           return newArr.filter(
@@ -68,8 +60,8 @@ function CustomersAddressPage() {
     });
   };
 
-  const getData = (id: string) => {
-    Service.getAddress(id).then((item: any) => {
+  const getData = (customerId: string) => {
+    Service.getAddress(customerId).then((item: any) => {
       if (item.data.success) {
         setEditFormData(item.data.data);
         setOpenEditFormDialog(true);
@@ -77,27 +69,35 @@ function CustomersAddressPage() {
     });
   };
 
-  const handleClickSearch = (event: any) => {
-    if (event.key === 'Enter') {
-      const searchTxt = event.target.value as string;
-      const newPage = 0;
-      setSearch(searchTxt);
-      setPage(newPage);
-      Service.searchAddressService(id, searchTxt, newPage, rowsPerPage).then(
-        (item) => {
-          setList(item.data.data.list);
-          setTotal(item.data.data.total);
-        }
-      );
+  const manuHandler = (option: string) => {
+    if (option === 'Edit') {
+      getData(actionMenuItemid);
+    } else if (option === 'Delete') {
+      deleteEntity(actionMenuItemid);
     }
   };
+
+  // const handleClickSearch = (event: any) => {
+  //   if (event.key === 'Enter') {
+  //     const searchTxt = event.target.value as string;
+  //     const newPage = 0;
+  //     setSearch(searchTxt);
+  //     setPage(newPage);
+  //     Service.searchAddressService(id, searchTxt, newPage, rowsPerPage).then(
+  //       (item) => {
+  //         setList(item.data.data.list);
+  //         setTotal(item.data.data.total);
+  //       }
+  //     );
+  //   }
+  // };
 
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number
   ) => {
     setPage(newPage);
-    //offset? ,limit rowsperpage hoga ofset page * rowsperPage
+    // offset? ,limit rowsperpage hoga ofset page * rowsperPage
     if (search === '' || search === null || search === undefined) {
       Service.getListAddressService(id, newPage, rowsPerPage).then((item) => {
         setList(item.data.data.list);
@@ -138,8 +138,13 @@ function CustomersAddressPage() {
     Service.getAddressService(id).then((item: any) => {
       if (item.data.success) {
         setDetail(item.data.data);
-        if (item.data.data.appUserAddress && item.data.data.appUserAddress.length > 0) {
-          const activeAddress = item.data.data.appUserAddress.filter((newItem: any) => newItem.isActive === true);
+        if (
+          item.data.data.appUserAddress &&
+          item.data.data.appUserAddress.length > 0
+        ) {
+          const activeAddress = item.data.data.appUserAddress.filter(
+            (newItem: any) => newItem.isActive === true
+          );
           if (activeAddress.length > 0) {
             setAddress(activeAddress[0].address);
           }
@@ -148,17 +153,17 @@ function CustomersAddressPage() {
         }
       }
     });
-  }, []);
+  }, [id]);
 
   const createFormHandler = (data: any) => {
     const formData = new FormData();
-    formData.append("name", data.name);
-    formData.append("latitude", data.latitude);
-    formData.append("longitude", data.longitude);
-    formData.append("type", data.type);
-    formData.append("address", data.address);
-    formData.append("app_user", id);
-    formData.append("tenant", authState.user.tenant);
+    formData.append('name', data.name);
+    formData.append('latitude', data.latitude);
+    formData.append('longitude', data.longitude);
+    formData.append('type', data.type);
+    formData.append('address', data.address);
+    formData.append('app_user', id);
+    formData.append('tenant', authState.user.tenant);
     Service.createAddress(actionMenuItemid, formData).then((item: any) => {
       if (item.data.success) {
         list.push(item.data.data);
@@ -169,12 +174,12 @@ function CustomersAddressPage() {
 
   const updateFormHandler = (data: any) => {
     const formData = new FormData();
-    formData.append("name", data.name);
-    formData.append("latitude", data.latitude);
-    formData.append("longitude", data.longitude);
-    formData.append("type", data.type);
-    formData.append("address", data.address);
-    formData.append("app_user", id);
+    formData.append('name', data.name);
+    formData.append('latitude', data.latitude);
+    formData.append('longitude', data.longitude);
+    formData.append('type', data.type);
+    formData.append('address', data.address);
+    formData.append('app_user', id);
     Service.updateAddress(actionMenuItemid, formData).then((item: any) => {
       if (item.data.success) {
         setList((newArr: any) => {
@@ -185,17 +190,17 @@ function CustomersAddressPage() {
               newItem.latitude = item.data.data.latitude;
               newItem.longitude = item.data.data.longitude;
               newItem.address = item.data.data.address;
-              return { ...newItem };
             }
+            return { ...newItem };
           });
         });
       }
     });
   };
 
-  const handleSwitchChange = (event: any, id: string) => {
+  const handleSwitchChange = (event: any, customerId: string) => {
     if (list.length > 1) {
-      Service.updateStatusAddressService(id).then((updateItem) => {
+      Service.updateStatusAddressService(customerId).then((updateItem) => {
         if (updateItem.data.success) {
           setList((newArr: any) => {
             return newArr.map((item: any) => {
@@ -205,10 +210,10 @@ function CustomersAddressPage() {
                 item.isActive = false;
               }
               return { ...item };
-            })
-          })
+            });
+          });
         }
-      })
+      });
     }
   };
 
@@ -250,8 +255,9 @@ function CustomersAddressPage() {
                     {detail.phone}
                   </span>
                   <span
-                    className={`font-sm mt-2 font-open-sans text-sm ${detail.isActive ? 'text-[#29CC97]' : 'text-[#f50057]'
-                      }`}
+                    className={`font-sm mt-2 font-open-sans text-sm ${
+                      detail.isActive ? 'text-[#29CC97]' : 'text-[#f50057]'
+                    }`}
                   >
                     {detail.isActive ? 'Active' : 'Inactive'}
                   </span>
@@ -287,20 +293,22 @@ function CustomersAddressPage() {
               </div>
             </div>
             <div className="col-span-8 min-h-[318px] rounded-lg bg-[#fff] shadow-lg">
-
               {address ? (
                 <MapAddress address={address} zoom={15} />
               ) : (
                 <div className="no-map-location">
                   <div className="content">
                     <div className="icon">
-                      <img className='w-100' src={assets.images.noMapLocation} alt="" />
+                      <img
+                        className="w-100"
+                        src={assets.images.noMapLocation}
+                        alt=""
+                      />
                     </div>
-                    <h4 className='text'>Location not available</h4>
+                    <h4 className="text">Location not available</h4>
                   </div>
                 </div>
               )}
-
             </div>
           </div>
           {list.length > 0 && (
@@ -366,15 +374,21 @@ function CustomersAddressPage() {
                             <td>{item.type}</td>
                             <td>
                               {item.isActive ? (
-                                <span className="badge badge-success">ACTIVE</span>
+                                <span className="badge badge-success">
+                                  ACTIVE
+                                </span>
                               ) : (
-                                <span className="badge badge-danger">INACTIVE</span>
+                                <span className="badge badge-danger">
+                                  INACTIVE
+                                </span>
                               )}
                             </td>
                             <td>
                               <Switch
                                 checked={item.isActive}
-                                onChange={(event: React.ChangeEvent<HTMLInputElement>) => handleSwitchChange(event, list[index].id)}
+                                onChange={(
+                                  event: React.ChangeEvent<HTMLInputElement>
+                                ) => handleSwitchChange(event, list[index].id)}
                                 inputProps={{ 'aria-label': 'controlled' }}
                               />
                               <IconButton
@@ -397,7 +411,6 @@ function CustomersAddressPage() {
                               >
                                 <MoreVertIcon />
                               </IconButton>
-
                             </td>
                           </tr>
                         );

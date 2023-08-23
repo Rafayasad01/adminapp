@@ -9,15 +9,15 @@ import Button from '@mui/material/Button';
 import SearchIcon from '@mui/icons-material/Search';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
+import TablePagination from '@mui/material/TablePagination';
+import dayjs from 'dayjs';
+import Switch from '@mui/material/Switch';
 import TopBar from '../../components/common/TopBar';
 import { useAppSelector } from '../../redux/redux-hooks';
 import ActionMenu from '../../components/common/ActionMenu';
-import TablePagination from '@mui/material/TablePagination';
 import category from '../../services/adminapp/adminCategory';
-import dayjs from 'dayjs';
 import CategoriesServicesFaqCreatePopup from './CategoriesServicesFaqCreatePopup';
 import CategoriesServicesFaqEditPopup from './CategoriesServicesFaqEditPopup';
-import Switch from '@mui/material/Switch';
 
 function CategoriesServicesFaqPage() {
   const params = useParams();
@@ -37,7 +37,7 @@ function CategoriesServicesFaqPage() {
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
 
-  const categoryServiceId: any = params.categoryServiceId;
+  const categoryServiceId = params.categoryServiceId ?? '';
 
   const handleClickSearch = (event: any) => {
     const searchTxt = event.target.value as string;
@@ -62,7 +62,7 @@ function CategoriesServicesFaqPage() {
     newPage: number
   ) => {
     setPage(newPage);
-    //offset? ,limit rowsperpage hoga ofset page * rowsperPage
+    // offset? ,limit rowsperpage hoga ofset page * rowsperPage
     if (search === '' || search === null || search === undefined) {
       category
         .getCategoryServiceFaqList(categoryServiceId, newPage, rowsPerPage)
@@ -123,7 +123,24 @@ function CategoriesServicesFaqPage() {
       .catch((error) => {
         console.log('error::::::::', error);
       });
-  }, []);
+  }, [categoryServiceId, page, rowsPerPage]);
+
+  const deleteHandler = (id: string) => {
+    const data = {
+      is_active: false,
+      is_deleted: true,
+      updated_by: authState.user.id,
+    };
+    category.deleteCategoryServiceFaq(id, data).then((updateItem) => {
+      if (updateItem.data.success) {
+        setList((newArr: any) => {
+          return newArr.filter((item: any) => item.id !== id);
+        });
+        let newtotal = total;
+        setTotal((newtotal -= 1));
+      }
+    });
+  };
 
   const manuHandler = (option: string) => {
     if (option === 'Edit') {
@@ -186,32 +203,15 @@ function CategoriesServicesFaqPage() {
     });
   };
 
-  const deleteHandler = (id: string) => {
-    const data = {
-      is_active: false,
-      is_deleted: true,
-      updated_by: authState.user.id,
-    };
-    category.deleteCategoryServiceFaq(id, data).then((updateItem) => {
-      if (updateItem.data.success) {
-        setList((newArr: any) => {
-          return newArr.filter((item: any) => item.id !== id);
-        });
-        let newtotal = total;
-        setTotal((newtotal -= 1));
-      }
-    });
-  };
-
   return (
     <>
-      <TopBar isNestedRoute={true} title="Faq's" />
+      <TopBar isNestedRoute title="Faq's" />
       <div className="container mt-5">
         <div className="w-full rounded-lg bg-white shadow-lg">
           <div className="grid grid-cols-12 px-4 py-5">
             <div className="col-span-7">
               <span className="font-open-sans text-xl font-semibold text-[#252733]">
-                All Faq's
+                All Faq&apos;s
               </span>
             </div>
             <div className="col-span-5">
@@ -319,7 +319,7 @@ function CategoriesServicesFaqPage() {
                               <MoreVertIcon />
                             </IconButton>
                             <Switch
-                              checked={item.isActive ? true : false}
+                              checked={!!item.isActive}
                               onChange={(
                                 event: React.ChangeEvent<HTMLInputElement>
                               ) => handleSwitchChange(event, list[index].id)}

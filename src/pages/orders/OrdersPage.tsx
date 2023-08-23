@@ -6,19 +6,14 @@ import Divider from '@mui/material/Divider';
 import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
-import { SelectChangeEvent } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
-import Checkbox from '@mui/material/Checkbox';
-import CheckBoxOutlineBlankOutlinedIcon from '@mui/icons-material/CheckBoxOutlineBlankOutlined';
-import CheckBoxOutlinedIcon from '@mui/icons-material/CheckBoxOutlined';
 
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
-//import Pagination from '@mui/material/Pagination';
-//import Stack from '@mui/material/Stack';
-import order from '../../services/adminapp/adminOrders';
+// import Pagination from '@mui/material/Pagination';
+// import Stack from '@mui/material/Stack';
 import dayjs from 'dayjs';
 import TablePagination from '@mui/material/TablePagination';
+import order from '../../services/adminapp/adminOrders';
 import ActionMenu from '../../components/common/ActionMenu';
 import {
   ORDER_STATUSES,
@@ -36,8 +31,6 @@ function OrdersPage() {
   const authState: any = useAppSelector((state) => state.authState);
   const navigate = useNavigate();
   const [search, setSearch] = useState('');
-  const [status, setStatus] = useState('status');
-  const [time, setTime] = useState('time');
   const [page, setPage] = useState(0);
   const [total, setTotal] = useState(0);
   const [list, setList] = useState<any>([]);
@@ -53,16 +46,16 @@ function OrdersPage() {
     newPage: number
   ) => {
     setPage(newPage);
-    //offset? ,limit rowsperpage hoga ofset page * rowsperPage
+    // offset? ,limit rowsperpage hoga ofset page * rowsperPage
     if (search === '' || search === null || search === undefined) {
       order
         .getListService(authState.user.tenant, newPage, rowsPerPage)
         .then((item) => {
           setList(
-            item.data.data.list.map((item: any) => ({
-              ...item,
+            item.data.data.list.map((newItem: any) => ({
+              ...newItem,
               isSelected: false,
-              orderStatus: item.status,
+              orderStatus: newItem.status,
             }))
           );
           setTotal(item.data.data.total);
@@ -72,10 +65,10 @@ function OrdersPage() {
         .searchService(authState.user.tenant, search, newPage, rowsPerPage)
         .then((item) => {
           setList(
-            item.data.data.list.map((item: any) => ({
-              ...item,
+            item.data.data.list.map((newItem: any) => ({
+              ...newItem,
               isSelected: false,
-              orderStatus: item.status,
+              orderStatus: newItem.status,
             }))
           );
           setTotal(item.data.data.total);
@@ -98,10 +91,10 @@ function OrdersPage() {
         .getListService(authState.user.tenant, newPage, rowsPerPage)
         .then((item) => {
           setList(
-            item.data.data.list.map((item: any) => ({
-              ...item,
+            item.data.data.list.map((newItem: any) => ({
+              ...newItem,
               isSelected: false,
-              orderStatus: item.status,
+              orderStatus: newItem.status,
             }))
           );
           setTotal(item.data.data.total);
@@ -111,10 +104,10 @@ function OrdersPage() {
         .searchService(authState.user.tenant, search, newPage, rowsPerPage)
         .then((item) => {
           setList(
-            item.data.data.list.map((item: any) => ({
-              ...item,
+            item.data.data.list.map((newItem: any) => ({
+              ...newItem,
               isSelected: false,
-              orderStatus: item.status,
+              orderStatus: newItem.status,
             }))
           );
           setTotal(item.data.data.total);
@@ -137,10 +130,10 @@ function OrdersPage() {
       .searchService(authState.user.tenant, searchTxt, page, rowsPerPage)
       .then((item) => {
         setList(
-          item.data.data.list.map((item: any) => ({
-            ...item,
+          item.data.data.list.map((newItem: any) => ({
+            ...newItem,
             isSelected: false,
-            orderStatus: item.status,
+            orderStatus: newItem.status,
           }))
         );
         setTotal(item.data.data.total);
@@ -162,17 +155,17 @@ function OrdersPage() {
     order
       .getListService(authState.user.tenant, page, rowsPerPage)
       .then((item) => {
-        //console.log(item.data.data);
+        // console.log(item.data.data);
         setList(
-          item.data.data.list.map((item: any) => ({
-            ...item,
+          item.data.data.list.map((newItem: any) => ({
+            ...newItem,
             isSelected: false,
-            orderStatus: item.status,
+            orderStatus: newItem.status,
           }))
         );
         setTotal(item.data.data.total);
       });
-  }, []);
+  }, [authState, page, rowsPerPage]);
 
   const manuHandler = (option: string) => {
     let doOption = '';
@@ -184,7 +177,7 @@ function OrdersPage() {
       doOption = 'download';
     }
     navigate(`${doOption}/${actionMenuItemid}`);
-    //console.log('actionMenuItemid', actionMenuItemid)
+    // console.log('actionMenuItemid', actionMenuItemid)
   };
 
   const getStatusTag = (status: string) => {
@@ -316,33 +309,33 @@ function OrdersPage() {
               </thead>
               <tbody>
                 {list &&
-                  list.map((order: any, index: number) => {
+                  list.map((Item: any, index: number) => {
                     return (
-                      <tr key={order.id}>
+                      <tr key={Item.id}>
                         <td>
                           <div className="flex flex-col">
                             <span className="text-sm font-semibold text-[#1A1A1A]">
-                              {order.user.firstName} {order.user.lastName}
+                              {Item.user.firstName} {Item.user.lastName}
                             </span>
                             <span className="text-xs font-normal text-[#6A6A6A]">
-                              {order.user.email}
+                              {Item.user.email}
                             </span>
                             <span className="text-xs font-normal text-[#6A6A6A]">
-                              {order.userAddress.address}
+                              {Item.userAddress.address}
                             </span>
                           </div>
                         </td>
                         <td>
                           <div className="flex flex-col">
                             <span className="text-sm font-normal text-[#1A1A1A]">
-                              {dayjs(order.pickupDateTime)?.format('hh:mm:ssA')}{' '}
+                              {dayjs(Item.pickupDateTime)?.format('hh:mm:ssA')}{' '}
                               -{' '}
-                              {dayjs(order.pickupDateTime)
+                              {dayjs(Item.pickupDateTime)
                                 .add(1, 'hour')
                                 .format('hh:mm:ssA')}
                             </span>
                             <span className="text-xs font-normal text-[#6A6A6A]">
-                              {dayjs(order.pickupDateTime)?.format(
+                              {dayjs(Item.pickupDateTime)?.format(
                                 'ddd, MMM DD, YYYY'
                               )}
                             </span>
@@ -351,31 +344,31 @@ function OrdersPage() {
                         <td>
                           <div className="flex flex-col">
                             <span className="text-sm font-normal text-[#1A1A1A]">
-                              {dayjs(order.dropDateTime)?.format('hh:mm:ssA')} -{' '}
-                              {dayjs(order.dropDateTime)
+                              {dayjs(Item.dropDateTime)?.format('hh:mm:ssA')} -{' '}
+                              {dayjs(Item.dropDateTime)
                                 .add(1, 'hour')
                                 .format('hh:mm:ssA')}
                             </span>
                             <span className="text-xs font-normal text-[#6A6A6A]">
-                              {dayjs(order.dropDateTime)?.format(
+                              {dayjs(Item.dropDateTime)?.format(
                                 'ddd, MMM DD, YYYY'
                               )}
                             </span>
                           </div>
                         </td>
                         <td className="text-sm font-semibold text-[#1A1A1A]">
-                          ${order.grandTotal}
+                          ${Item.grandTotal}
                         </td>
                         <td>
                           <span
                             className={`badge badge-${getStatusTag(
-                              order.status
+                              Item.status
                             )}`}
                           >
-                            {setOrderStatus(order.status)}
+                            {setOrderStatus(Item.status)}
                           </span>
                         </td>
-                        <td>{order.orderNumber}</td>
+                        <td>{Item.orderNumber}</td>
                         <td>
                           <IconButton
                             className="btn-dot"

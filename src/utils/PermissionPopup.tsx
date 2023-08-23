@@ -7,7 +7,7 @@ type Props = {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   dialogText: string;
-  callback: Function;
+  callback: (...args: any[]) => any;
 };
 
 function PermissionPopup({ open, setOpen, dialogText, callback }: Props) {
