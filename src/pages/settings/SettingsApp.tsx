@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
 import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
@@ -43,15 +44,12 @@ function Item(props: { value: any; name: AssetsImages }) {
 function SettingsApp() {
   const authState: any = useAppSelector((state) => state.authState);
   const navigate = useNavigate();
-  const [socialMediaLinks, setSocialMediaLinks] = useState<SocialMedia | any>(
-    null
-  );
   const [openSocialMediaPopup, setOpenSocialMediaPopup] = useState(false);
   const [file, setFile] = useState<any>(null);
   const [color1, setColor1] = useState<any>('#1A1A1A');
   const [color2, setColor2] = useState<any>('#1A1A1A');
   const [color3, setColor3] = useState<any>('#1A1A1A');
-  const [detail, setDetail] = useState<any>(null);
+  const [detail, setDetail] = useState<Setting>();
   const [alertPopup, setAlertPopup] = useState<boolean>(false);
   const [alertSeverty, setAlertSeverty] = useState<string>('');
   const [alertMsg, setAlertMsg] = useState<string>('');
@@ -61,52 +59,51 @@ function SettingsApp() {
     register,
     handleSubmit,
     watch,
+    setValue,
     formState: { errors },
     control,
   } = useForm<Setting>();
+
+  const setData = (item: any) => {
+    setValue('name', item.name);
+    setValue('email', item.email);
+    setValue('gst_percentage', item.gstPercentage);
+    setValue('min_order_amount', item.minOrderAmount);
+    setValue('delivery_fee', item.deliveryFee);
+    setValue('facebook', item.facebook);
+    setValue('instagram', item.instagram);
+    setValue('linkedin', item.linkedin);
+    setValue('twitter', item.twitter);
+    setValue('youtube', item.youtube);
+    setValue('whatsapp', item.whatsapp);
+    setColor1(item.color1);
+    setColor2(item.color2);
+    setColor3(item.color3);
+  };
   const onSubmit = (data: Setting) => {
     const formData = new FormData();
     formData.append('name', data.name);
-    formData.append('desc', data.desc);
-    formData.append('color1', color1);
-    formData.append('color2', color2);
-    formData.append('color3', color3);
+    formData.append('desc', data.name);
     formData.append('gst_percentage', data.gst_percentage);
     formData.append('email', data.email);
     formData.append('min_order_amount', data.min_order_amount);
     formData.append('delivery_fee', data.delivery_fee);
-    formData.append('facebook', socialMediaLinks.facebook);
-    formData.append('instagram', socialMediaLinks.instagram);
-    formData.append('linkedin', socialMediaLinks.linkedin);
-    formData.append('twitter', socialMediaLinks.twitter);
-    formData.append('youtube', socialMediaLinks.youtube);
-    formData.append('whatsapp', socialMediaLinks.whatsapp);
+    formData.append('facebook', detail ? detail.facebook : '');
+    formData.append('instagram', detail ? detail.instagram : '');
+    formData.append('linkedin', detail ? detail.linkedin : '');
+    formData.append('twitter', detail ? detail.twitter : '');
+    formData.append('youtube', detail ? detail.youtube : '');
+    formData.append('whatsapp', detail ? detail.whatsapp : '');
     formData.append('updated_by', authState.user.id);
+    formData.append('color1', color1);
+    formData.append('color2', color2);
+    formData.append('color3', color3);
     if (file !== null) formData.append('logo', file);
 
     Service.updateService(authState.user.tenantConfig, formData).then(
       (item: any) => {
         if (item.data.success) {
-          const socialIconList = {
-            facebook:
-              item.data.data.facebook === 'null' ? '' : item.data.data.facebook,
-            instagram:
-              item.data.data.instagram === 'null'
-                ? ''
-                : item.data.data.instagram,
-            linkedin:
-              item.data.data.linkedin === 'null' ? '' : item.data.data.linkedin,
-            twitter:
-              item.data.data.twitter === 'null' ? '' : item.data.data.twitter,
-            youtube:
-              item.data.data.youtube === 'null' ? '' : item.data.data.youtube,
-            whatsapp:
-              item.data.data.whatsapp === 'null' ? '' : item.data.data.whatsapp,
-          };
-          if (item.data.data.color1) setColor1(item.data.data.color1);
-          if (item.data.data.color2) setColor1(item.data.data.color2);
-          if (item.data.data.color3) setColor1(item.data.data.color3);
-          setSocialMediaLinks(socialIconList);
+          setData(item.data.data);
           setDetail(item.data.data);
           setAlertMsg(item.data.message);
           setAlertSeverty('success');
@@ -123,24 +120,7 @@ function SettingsApp() {
   useEffect(() => {
     Service.getService(authState.user.tenantConfig).then((item: any) => {
       if (item.data.success) {
-        const socialIconList = {
-          facebook:
-            item.data.data.facebook === 'null' ? '' : item.data.data.facebook,
-          instagram:
-            item.data.data.instagram === 'null' ? '' : item.data.data.instagram,
-          linkedin:
-            item.data.data.linkedin === 'null' ? '' : item.data.data.linkedin,
-          twitter:
-            item.data.data.twitter === 'null' ? '' : item.data.data.twitter,
-          youtube:
-            item.data.data.youtube === 'null' ? '' : item.data.data.youtube,
-          whatsapp:
-            item.data.data.whatsapp === 'null' ? '' : item.data.data.whatsapp,
-        };
-        if (item.data.data.color1) setColor1(item.data.data.color1);
-        if (item.data.data.color2) setColor2(item.data.data.color2);
-        if (item.data.data.color3) setColor3(item.data.data.color3);
-        setSocialMediaLinks(socialIconList);
+        setData(item.data.data);
         setDetail(item.data.data);
       }
     });
@@ -170,172 +150,172 @@ function SettingsApp() {
             </Tabs>
           </div>
           <div className="Content w-full py-5 px-4">
-            {detail && (
-              <form onSubmit={handleSubmit(onSubmit)}>
-                <div className="flex items-center">
-                  <div className="FormField mb-4 w-[150px]">
-                    <DragDropFile setFile={setFile} />
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <div className="flex items-center">
+                <div className="FormField mb-4 w-[150px]">
+                  <DragDropFile setFile={setFile} />
+                </div>
+                {detail && detail.logo && (
+                  <div className="mb-4 mt-[0.75rem] ml-4 h-[142px] w-[150px] rounded-md">
+                    <img
+                      className="h-full w-full rounded-md"
+                      src={detail.logo}
+                      alt="Shop Logo"
+                    />
                   </div>
-                  {detail.logo && (
-                    <div className="mb-4 mt-[0.75rem] ml-4 h-[142px] w-[150px] rounded-md">
-                      <img
-                        className="h-full w-full rounded-md"
-                        src={detail.logo}
-                        alt="Shop Logo"
+                )}
+              </div>
+              <div className="FormField mb-4">
+                <FormControl className="FormControl" variant="standard">
+                  <label className="FormLabel">App Name</label>
+                  <Input
+                    className="FormInput"
+                    id="name"
+                    placeholder="UrLaundry"
+                    disableUnderline
+                    {...register('name', { value: detail ? detail.name : '' })}
+                  />
+                </FormControl>
+              </div>
+              <div className="FormFields mb-4">
+                <FormControl className="FormControl" variant="standard">
+                  <label className="FormLabel">Contact Email</label>
+                  <Input
+                    className="FormInput"
+                    id="email"
+                    placeholder="info@urlaundry.com"
+                    disableUnderline
+                    {...register('email', {
+                      value: detail ? detail.email : '',
+                    })}
+                  />
+                </FormControl>
+                <FormControl className="FormControl" variant="standard">
+                  <label className="FormLabel">Tax</label>
+                  <Input
+                    className="FormInput"
+                    id="gst_percentage"
+                    placeholder="1%"
+                    disableUnderline
+                    {...register('gst_percentage', {
+                      value: detail ? detail.gst_percentage : '',
+                    })}
+                  />
+                </FormControl>
+              </div>
+              <div className="FormFields mb-4">
+                <FormControl className="FormControl" variant="standard">
+                  <label className="FormLabel">Min order Amount</label>
+                  <Input
+                    className="FormInput"
+                    id="min_order_amount"
+                    placeholder="$1.00"
+                    disableUnderline
+                    {...register('min_order_amount', {
+                      value: detail ? detail.min_order_amount : '',
+                    })}
+                  />
+                </FormControl>
+                <FormControl className="FormControl" variant="standard">
+                  <label className="FormLabel">Delivery fee</label>
+                  <Input
+                    className="FormInput"
+                    id="name"
+                    placeholder="$1.00"
+                    disableUnderline
+                    {...register('delivery_fee', {
+                      value: detail ? detail.delivery_fee : '',
+                    })}
+                  />
+                </FormControl>
+              </div>
+              <div className="FormField mb-4">
+                <FormControl className="FormControl" variant="standard">
+                  <label className="FormLabel">Social Links</label>
+                  <div className="mt-2 flex flex-row items-center gap-3">
+                    {detail && detail.facebook && (
+                      <Item
+                        key={detail.facebook}
+                        value={detail.facebook}
+                        name={FACEBOOK as AssetsImages}
                       />
-                    </div>
-                  )}
-                </div>
-                <div className="FormField mb-4">
-                  <FormControl className="FormControl" variant="standard">
-                    <label className="FormLabel">App Name</label>
-                    <Input
-                      className="FormInput"
-                      id="name"
-                      placeholder="UrLaundry"
-                      disableUnderline
-                      {...register('name', { value: detail.name })}
-                    />
-                  </FormControl>
-                </div>
-                <div className="FormFields mb-4">
-                  <FormControl className="FormControl" variant="standard">
-                    <label className="FormLabel">Contact Email</label>
-                    <Input
-                      className="FormInput"
-                      id="email"
-                      placeholder="info@urlaundry.com"
-                      disableUnderline
-                      {...register('email', { value: detail.email })}
-                    />
-                  </FormControl>
-                  <FormControl className="FormControl" variant="standard">
-                    <label className="FormLabel">Tax</label>
-                    <Input
-                      className="FormInput"
-                      id="gst_percentage"
-                      placeholder="1%"
-                      disableUnderline
-                      {...register('gst_percentage', {
-                        value: detail.gstPercentage,
-                      })}
-                    />
-                  </FormControl>
-                </div>
-                <div className="FormFields mb-4">
-                  <FormControl className="FormControl" variant="standard">
-                    <label className="FormLabel">Min order Amount</label>
-                    <Input
-                      className="FormInput"
-                      id="min_order_amount"
-                      placeholder="$1.00"
-                      disableUnderline
-                      {...register('min_order_amount', {
-                        value: detail.minOrderAmount,
-                      })}
-                    />
-                  </FormControl>
-                  <FormControl className="FormControl" variant="standard">
-                    <label className="FormLabel">Delivery fee</label>
-                    <Input
-                      className="FormInput"
-                      id="name"
-                      placeholder="$1.00"
-                      disableUnderline
-                      {...register('delivery_fee', {
-                        value: detail.deliveryFee,
-                      })}
-                    />
-                  </FormControl>
-                </div>
-                <div className="FormField mb-4">
-                  <FormControl className="FormControl" variant="standard">
-                    <label className="FormLabel">Social Links</label>
-                    <div className="mt-2 flex flex-row items-center gap-3">
-                      {socialMediaLinks && socialMediaLinks.facebook && (
-                        <Item
-                          key={socialMediaLinks.facebook}
-                          value={socialMediaLinks.facebook}
-                          name={FACEBOOK as AssetsImages}
-                        />
-                      )}
-                      {socialMediaLinks && socialMediaLinks.instagram && (
-                        <Item
-                          key={socialMediaLinks.instagram}
-                          value={socialMediaLinks.instagram}
-                          name={INSTAGRAM as AssetsImages}
-                        />
-                      )}
-                      {socialMediaLinks && socialMediaLinks.linkedin && (
-                        <Item
-                          key={socialMediaLinks.linkedin}
-                          value={socialMediaLinks.linkedin}
-                          name={LINKEDIN as AssetsImages}
-                        />
-                      )}
-                      {socialMediaLinks && socialMediaLinks.twitter && (
-                        <Item
-                          key={socialMediaLinks.twitter}
-                          value={socialMediaLinks.twitter}
-                          name={TWITTER as AssetsImages}
-                        />
-                      )}
-                      {socialMediaLinks && socialMediaLinks.youtube && (
-                        <Item
-                          key={socialMediaLinks.youtube}
-                          value={socialMediaLinks.youtube}
-                          name={YOUTUBE as AssetsImages}
-                        />
-                      )}
-                      {socialMediaLinks && socialMediaLinks.whatsapp && (
-                        <Item
-                          key={socialMediaLinks.whatsapp}
-                          value={socialMediaLinks.whatsapp}
-                          name={WHATSAPP as AssetsImages}
-                        />
-                      )}
-                      <IconButton
-                        className="p-0 text-[1.675rem]"
-                        onClick={() => setOpenSocialMediaPopup(true)}
-                      >
-                        <PlusIcon />
-                      </IconButton>
-                    </div>
-                  </FormControl>
-                </div>
-                <div className="FormMultipleFields mb-4">
-                  <ColorPicker
-                    colorPickerLabel="Color1"
-                    colorPickerValue={color1}
-                    setColorPickerValue={setColor1}
-                    id="color1"
-                  />
-                  <ColorPicker
-                    colorPickerLabel="Color2"
-                    colorPickerValue={color2}
-                    setColorPickerValue={setColor2}
-                    id="color2"
-                  />
-                  <ColorPicker
-                    colorPickerLabel="Color3"
-                    colorPickerValue={color3}
-                    setColorPickerValue={setColor3}
-                    id="color3"
-                  />
-                </div>
-                <div className="FormField">
-                  <Button
-                    type="submit"
-                    className="btn-black-fill flex justify-self-end"
-                    sx={{
-                      padding: '0.375rem 2rem !important',
-                    }}
-                  >
-                    Save
-                  </Button>
-                </div>
-              </form>
-            )}
+                    )}
+                    {detail && detail.instagram && (
+                      <Item
+                        key={detail.instagram}
+                        value={detail.instagram}
+                        name={INSTAGRAM as AssetsImages}
+                      />
+                    )}
+                    {detail && detail.linkedin && (
+                      <Item
+                        key={detail.linkedin}
+                        value={detail.linkedin}
+                        name={LINKEDIN as AssetsImages}
+                      />
+                    )}
+                    {detail && detail.twitter && (
+                      <Item
+                        key={detail.twitter}
+                        value={detail.twitter}
+                        name={TWITTER as AssetsImages}
+                      />
+                    )}
+                    {detail && detail.youtube && (
+                      <Item
+                        key={detail.youtube}
+                        value={detail.youtube}
+                        name={YOUTUBE as AssetsImages}
+                      />
+                    )}
+                    {detail && detail.whatsapp && (
+                      <Item
+                        key={detail.whatsapp}
+                        value={detail.whatsapp}
+                        name={WHATSAPP as AssetsImages}
+                      />
+                    )}
+                    <IconButton
+                      className="p-0 text-[1.675rem]"
+                      onClick={() => setOpenSocialMediaPopup(true)}
+                    >
+                      <PlusIcon />
+                    </IconButton>
+                  </div>
+                </FormControl>
+              </div>
+              <div className="FormMultipleFields mb-4">
+                <ColorPicker
+                  colorPickerLabel="Color1"
+                  colorPickerValue={color1}
+                  setColorPickerValue={setColor1}
+                  id="color1"
+                />
+                <ColorPicker
+                  colorPickerLabel="Color2"
+                  colorPickerValue={color2}
+                  setColorPickerValue={setColor2}
+                  id="color2"
+                />
+                <ColorPicker
+                  colorPickerLabel="Color3"
+                  colorPickerValue={color3}
+                  setColorPickerValue={setColor3}
+                  id="color3"
+                />
+              </div>
+              <div className="FormField">
+                <Button
+                  type="submit"
+                  className="btn-black-fill flex justify-self-end"
+                  sx={{
+                    padding: '0.375rem 2rem !important',
+                  }}
+                >
+                  Save
+                </Button>
+              </div>
+            </form>
           </div>
         </div>
         <div className="col-span-6 min-h-[500px] rounded-lg bg-white shadow-lg">
@@ -361,8 +341,8 @@ function SettingsApp() {
         <SocialLinksPopup
           openDialog={openSocialMediaPopup}
           setOpenDialog={setOpenSocialMediaPopup}
-          socialMediaLinks={socialMediaLinks}
-          setSocialMediaLinks={setSocialMediaLinks}
+          detail={detail}
+          setDetail={setDetail}
         />
       )}
       {alertPopup && (
