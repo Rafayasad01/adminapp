@@ -86,7 +86,7 @@ function SuperAdminShopDetailsPage() {
               />
               <img
                 className="aspect-square w-9 object-contain"
-                src={assets.images.whatsApp}
+                src={assets.images.whatsapp}
                 alt=""
               />
               <IconButton className="aspect-square w-9 rounded-full bg-neutral-200 p-0 text-neutral-900 hover:!bg-neutral-200">

@@ -10,15 +10,15 @@ import '../../assets/css/PopupStyle.css';
 type Props = {
   openDialog: boolean;
   setOpenDialog: React.Dispatch<React.SetStateAction<boolean>>;
-  socialMediaLinks: any;
-  setSocialMediaLinks: React.Dispatch<React.SetStateAction<any>>;
+  detail: any;
+  setDetail: React.Dispatch<React.SetStateAction<any>>;
 };
 
 function SocialLinksPopup({
   openDialog,
   setOpenDialog,
-  socialMediaLinks,
-  setSocialMediaLinks,
+  detail,
+  setDetail,
 }: Props) {
   const handleFormClose = () => setOpenDialog(false);
 
@@ -42,12 +42,12 @@ function SocialLinksPopup({
               <Input
                 className="FormInput"
                 id="facebook"
-                value={socialMediaLinks.facebook ?? ''}
+                value={detail.facebook ?? ''}
                 name="facebook"
                 placeholder="Url"
                 disableUnderline
                 onChange={(item: any) => {
-                  setSocialMediaLinks((newItem: any) => {
+                  setDetail((newItem: any) => {
                     return {
                       ...newItem,
                       facebook: item.target.value,
@@ -63,12 +63,12 @@ function SocialLinksPopup({
               <Input
                 className="FormInput"
                 id="instagram"
-                value={socialMediaLinks.instagram ?? ''}
+                value={detail.instagram ?? ''}
                 name="instagram"
                 placeholder="Url"
                 disableUnderline
                 onChange={(item: any) => {
-                  setSocialMediaLinks((newItem: any) => {
+                  setDetail((newItem: any) => {
                     return {
                       ...newItem,
                       instagram: item.target.value,
@@ -84,12 +84,12 @@ function SocialLinksPopup({
               <Input
                 className="FormInput"
                 id="linkedin"
-                value={socialMediaLinks.linkedin ?? ''}
+                value={detail.linkedin ?? ''}
                 name="linkedin"
                 placeholder="Url"
                 disableUnderline
                 onChange={(item: any) => {
-                  setSocialMediaLinks((newItem: any) => {
+                  setDetail((newItem: any) => {
                     return {
                       ...newItem,
                       linkedin: item.target.value,
@@ -105,12 +105,12 @@ function SocialLinksPopup({
               <Input
                 className="FormInput"
                 id="twitter"
-                value={socialMediaLinks.twitter ?? ''}
+                value={detail.twitter ?? ''}
                 name="twitter"
                 placeholder="Url"
                 disableUnderline
                 onChange={(item: any) => {
-                  setSocialMediaLinks((newItem: any) => {
+                  setDetail((newItem: any) => {
                     return {
                       ...newItem,
                       twitter: item.target.value,
@@ -126,12 +126,12 @@ function SocialLinksPopup({
               <Input
                 className="FormInput"
                 id="youtube"
-                value={socialMediaLinks.youtube ?? ''}
+                value={detail.youtube ?? ''}
                 name="youtube"
                 placeholder="Url"
                 disableUnderline
                 onChange={(item: any) => {
-                  setSocialMediaLinks((newItem: any) => {
+                  setDetail((newItem: any) => {
                     return {
                       ...newItem,
                       youtube: item.target.value,
@@ -147,12 +147,12 @@ function SocialLinksPopup({
               <Input
                 className="FormInput"
                 id="whatsapp"
-                value={socialMediaLinks.whatsapp ?? ''}
+                value={detail.whatsapp ?? ''}
                 name="whatsapp"
                 placeholder="Url"
                 disableUnderline
                 onChange={(item: any) => {
-                  setSocialMediaLinks((newItem: any) => {
+                  setDetail((newItem: any) => {
                     return {
                       ...newItem,
                       whatsapp: item.target.value,
