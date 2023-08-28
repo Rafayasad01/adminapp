@@ -67,9 +67,26 @@ function SettingsApp() {
   const setData = (item: any) => {
     setValue('name', item.name);
     setValue('email', item.email);
-    setValue('gst_percentage', item.gstPercentage);
-    setValue('min_order_amount', item.minOrderAmount);
-    setValue('delivery_fee', item.deliveryFee);
+    setValue(
+      'gst_percentage',
+      item.gstPercentage ? item.gstPercentage : item.gst_percentage
+    );
+    setValue(
+      'min_order_amount',
+      item.minOrderAmount ? item.minOrderAmount : item.min_order_amount
+    );
+    setValue(
+      'delivery_fee',
+      item.deliveryFee ? item.deliveryFee : item.delivery_fee
+    );
+    setValue(
+      'development_domain',
+      item.developmentDomain ? item.developmentDomain : item.development_domain
+    );
+    setValue(
+      'live_domain',
+      item.liveDomain ? item.liveDomain : item.live_domain
+    );
     setValue('facebook', item.facebook);
     setValue('instagram', item.instagram);
     setValue('linkedin', item.linkedin);
@@ -88,6 +105,8 @@ function SettingsApp() {
     formData.append('email', data.email);
     formData.append('min_order_amount', data.min_order_amount);
     formData.append('delivery_fee', data.delivery_fee);
+    formData.append('development_domain', data.development_domain);
+    formData.append('live_domain', data.live_domain);
     formData.append('facebook', detail ? detail.facebook : '');
     formData.append('instagram', detail ? detail.instagram : '');
     formData.append('linkedin', detail ? detail.linkedin : '');
@@ -119,6 +138,7 @@ function SettingsApp() {
 
   useEffect(() => {
     Service.getService(authState.user.tenantConfig).then((item: any) => {
+      // console.log('item Select:::::', item)
       if (item.data.success) {
         setData(item.data.data);
         setDetail(item.data.data);
@@ -225,6 +245,34 @@ function SettingsApp() {
                     disableUnderline
                     {...register('delivery_fee', {
                       value: detail ? detail.delivery_fee : '',
+                    })}
+                  />
+                </FormControl>
+              </div>
+              <div className="FormField mb-4">
+                <FormControl className="FormControl" variant="standard">
+                  <label className="FormLabel">Development Domain</label>
+                  <Input
+                    className="FormInput"
+                    id="development_domain"
+                    placeholder="Development URL..."
+                    disableUnderline
+                    {...register('development_domain', {
+                      value: detail ? detail.development_domain : '',
+                    })}
+                  />
+                </FormControl>
+              </div>
+              <div className="FormField mb-4">
+                <FormControl className="FormControl" variant="standard">
+                  <label className="FormLabel">Live Domain</label>
+                  <Input
+                    className="FormInput"
+                    id="live_domain"
+                    placeholder="Live URL..."
+                    disableUnderline
+                    {...register('live_domain', {
+                      value: detail ? detail.live_domain : '',
                     })}
                   />
                 </FormControl>
