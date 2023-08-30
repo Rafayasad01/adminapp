@@ -11,7 +11,7 @@ import Link from '@mui/material/Link';
 import { useForm } from 'react-hook-form';
 import DragDropFile from './DragDropFile';
 import PlusIcon from '../../components/icons/PlusIcon';
-import { Setting, SocialMedia } from '../../interfaces/app.interface';
+import { Setting } from '../../interfaces/app.interface';
 import SocialLinksPopup from './SocialLinksPopup';
 import { useAppSelector } from '../../redux/redux-hooks';
 
@@ -20,6 +20,7 @@ import assets from '../../assets';
 import ColorPicker from '../../components/common/ColorPicker';
 import Service from '../../services/adminapp/admin';
 import {
+  DOMAIN_PREFIX,
   FACEBOOK,
   INSTAGRAM,
   LINKEDIN,
@@ -29,6 +30,8 @@ import {
 } from '../../utils/constants';
 import AlertBox from '../../utils/Alert';
 import MapAddress from '../../components/common/MapAddress';
+import TextField from '@mui/material/TextField';
+import InputAdornment from '@mui/material/InputAdornment';
 
 type AssetsImages = keyof typeof assets.images;
 
@@ -252,11 +255,24 @@ function SettingsApp() {
               <div className="FormField mb-4">
                 <FormControl className="FormControl" variant="standard">
                   <label className="FormLabel">Development Domain</label>
-                  <Input
+                  {/* <Input
                     className="FormInput"
                     id="development_domain"
                     placeholder="Development URL..."
                     disableUnderline
+                    {...register('development_domain', {
+                      value: detail ? detail.development_domain : '',
+                    })}
+                  /> */}
+                  <TextField
+                    className="FormInput"
+                    sx={{ padding: 0 }}
+                    id="development_domain"
+                    InputProps={{
+                      startAdornment: <InputAdornment position="start">https://</InputAdornment>,
+                      endAdornment: <InputAdornment position="end">{DOMAIN_PREFIX}</InputAdornment>
+                    }}
+                    variant="outlined"
                     {...register('development_domain', {
                       value: detail ? detail.development_domain : '',
                     })}
@@ -266,11 +282,24 @@ function SettingsApp() {
               <div className="FormField mb-4">
                 <FormControl className="FormControl" variant="standard">
                   <label className="FormLabel">Live Domain</label>
-                  <Input
+                  {/* <Input
                     className="FormInput"
                     id="live_domain"
                     placeholder="Live URL..."
                     disableUnderline
+                    {...register('live_domain', {
+                      value: detail ? detail.live_domain : '',
+                    })}
+                  /> */}
+                  <TextField
+                    className="FormInput"
+                    sx={{ padding: 0 }}
+                    id="live_domain"
+                    InputProps={{
+                      startAdornment: <InputAdornment position="start">https://</InputAdornment>,
+                      endAdornment: <InputAdornment position="end">{DOMAIN_PREFIX}</InputAdornment>
+                    }}
+                    variant="outlined"
                     {...register('live_domain', {
                       value: detail ? detail.live_domain : '',
                     })}
