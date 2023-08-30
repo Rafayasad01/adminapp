@@ -316,8 +316,7 @@
   @apply mt-2 flex w-full items-center justify-between justify-items-center !important;
 }
 
-.ChatBtnLeftBox {
-}
+.ChatBtnLeftBox {}
 
 .ChatBtnRightBox {
   @apply flex flex-row items-center justify-items-center !important;
@@ -344,13 +343,13 @@
   margin-top: 2px;
 }
 
-.FormControl .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track {
+.FormControl .MuiSwitch-switchBase.Mui-checked+.MuiSwitch-track {
   background-color: #51b541 !important;
   opacity: 1 !important;
   border: 0 !important;
 }
 
-.FormControl .MuiSwitch-switchBase.Mui-checked.Mui-disabled + .MuiSwitch-track {
+.FormControl .MuiSwitch-switchBase.Mui-checked.Mui-disabled+.MuiSwitch-track {
   opacity: 0.5 !important;
 }
 
@@ -363,7 +362,7 @@
   color: #fff;
 }
 
-.FormControl .MuiSwitch-switchBase.Mui-disabled + .MuiSwitch-track {
+.FormControl .MuiSwitch-switchBase.Mui-disabled+.MuiSwitch-track {
   opacity: 0.3 !important;
 }
 
@@ -540,4 +539,21 @@
 
 .css-wclgr9-MuiButtonBase-root-MuiTab-root {
   padding: 0;
+}
+
+.Content .FormInput .MuiInputBase-adornedStart {
+  padding: 0;
+  margin: 0;
+  width: auto;
+
+}
+
+.Content .FormInput .MuiInputBase-inputAdornedEnd {
+  padding: 4px 0 5px;
+  margin-top: 1px;
+}
+
+.Content .FormInput .MuiInputAdornment-positionStart,
+.Content .FormInput .MuiInputAdornment-positionEnd {
+  margin: 0;
 }
