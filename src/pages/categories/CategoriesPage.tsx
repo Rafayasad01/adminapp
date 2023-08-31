@@ -19,6 +19,7 @@ import CategoriesEditPopup from './CategoriesEditPopup';
 import category from '../../services/adminapp/adminCategory';
 import { useAppSelector } from '../../redux/redux-hooks';
 import ActionMenu from '../../components/common/ActionMenu';
+import Loader from '../../components/common/Loader';
 
 function CategoriesPage() {
   const authState: any = useAppSelector((state) => state.authState);
@@ -30,6 +31,7 @@ function CategoriesPage() {
   const [editFormData, setEditFormData] = useState<any>(null);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [actionMenuItemid, setActionMenuItemid] = React.useState('');
+  const [isLoader, setIsLoader] = React.useState(true);
   const [actionMenuAnchorEl, setActionMenuAnchorEl] =
     useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
@@ -41,6 +43,20 @@ function CategoriesPage() {
   const handleFormClickOpen = () => {
     setOpenFormDialog(true);
   };
+
+  useEffect(() => {
+    category
+      .getListService(authState.user.tenant, page, rowsPerPage)
+      .then((item: any) => {
+        setIsLoader(false);
+        setList(item.data.data.list);
+        setTotal(item.data.data.total);
+      })
+      .catch((error) => {
+        setIsLoader(false);
+        console.log('error::::::::', error);
+      })
+  }, [authState, page, rowsPerPage]);
 
   const handleClickSearch = (event: any) => {
     const searchTxt = event.target.value as string;
@@ -101,17 +117,7 @@ function CategoriesPage() {
     }
   };
 
-  useEffect(() => {
-    category
-      .getListService(authState.user.tenant, page, rowsPerPage)
-      .then((item: any) => {
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      })
-      .catch((error) => {
-        console.log('error::::::::', error);
-      });
-  }, [authState, page, rowsPerPage]);
+
 
   const deleteHandler = (id: string) => {
     const data = {
@@ -205,179 +211,185 @@ function CategoriesPage() {
   };
 
   return (
-    <>
-      <TopBar title="Categories" />
-      <div className="container mt-5">
-        <div className="w-full rounded-lg bg-white shadow-lg">
-          <div className="grid grid-cols-12 px-4 py-5">
-            <div className="col-span-7">
-              <span className="font-open-sans text-xl font-semibold text-[#252733]">
-                All Categories
-              </span>
-            </div>
-            <div className="col-span-5">
-              <div className="flex flex-row justify-end gap-3">
-                <FormControl
-                  className="search-grey-outline placeholder-grey w-60"
-                  variant="filled"
-                >
-                  <Input
-                    className="input-with-icon after:border-b-neutral-900"
-                    id="search"
-                    type="text"
-                    placeholder="Search"
-                    onKeyDown={(
-                      event: React.KeyboardEvent<
-                        HTMLInputElement | HTMLTextAreaElement
-                      >
-                    ) => {
-                      handleClickSearch(event);
-                    }}
-                    endAdornment={
-                      <InputAdornment position="end">
-                        <Divider
-                          sx={{ height: 28, m: 0.5 }}
-                          orientation="vertical"
-                        />
-                        <IconButton aria-label="toggle password visibility">
-                          <SearchIcon className="text-[#6A6A6A]" />
-                        </IconButton>
-                      </InputAdornment>
-                    }
-                    disableUnderline
-                  />
-                </FormControl>
-                <Button
-                  variant="contained"
-                  className="btn-black-fill btn-icon"
-                  onClick={handleFormClickOpen}
-                >
-                  <AddOutlinedIcon /> Add New
-                </Button>
+    isLoader ?
+      <Loader />
+      :
+      <>
+        <TopBar title="Categories" />
+        <div className="container mt-5">
+          <div className="w-full rounded-lg bg-white shadow-lg">
+            <div className="grid grid-cols-12 px-4 py-5">
+              <div className="col-span-7">
+                <span className="font-open-sans text-xl font-semibold text-[#252733]">
+                  All Categories
+                </span>
+              </div>
+              <div className="col-span-5">
+                <div className="flex flex-row justify-end gap-3">
+                  <FormControl
+                    className="search-grey-outline placeholder-grey w-60"
+                    variant="filled"
+                  >
+                    <Input
+                      className="input-with-icon after:border-b-neutral-900"
+                      id="search"
+                      type="text"
+                      placeholder="Search"
+                      onKeyDown={(
+                        event: React.KeyboardEvent<
+                          HTMLInputElement | HTMLTextAreaElement
+                        >
+                      ) => {
+                        handleClickSearch(event);
+                      }}
+                      endAdornment={
+                        <InputAdornment position="end">
+                          <Divider
+                            sx={{ height: 28, m: 0.5 }}
+                            orientation="vertical"
+                          />
+                          <IconButton aria-label="toggle password visibility">
+                            <SearchIcon className="text-[#6A6A6A]" />
+                          </IconButton>
+                        </InputAdornment>
+                      }
+                      disableUnderline
+                    />
+                  </FormControl>
+                  <Button
+                    variant="contained"
+                    className="btn-black-fill btn-icon"
+                    onClick={handleFormClickOpen}
+                  >
+                    <AddOutlinedIcon /> Add New
+                  </Button>
+                </div>
               </div>
             </div>
-          </div>
-          <div className="mt-3 grid grid-cols-none">
-            <table className="table-border table-auto">
-              <thead>
-                <tr>
-                  <th>Category Name</th>
-                  <th>Created Date</th>
-                  <th>Status</th>
-                  <th>&nbsp;</th>
-                </tr>
-              </thead>
-              <tbody>
-                {list &&
-                  list.map((item: any, index: number) => {
-                    return (
-                      <tr key={index}>
-                        <td>
-                          <div className="avatar flex flex-row items-center">
-                            {item.icon ? (
-                              <img src={item.icon} alt="" />
-                            ) : (
-                              <img
-                                src={assets.tempImages.avatarDryCLean}
-                                alt=""
-                              />
-                            )}
-                            <div className="flex flex-col items-start justify-start">
-                              <span className="text-sm font-semibold">
-                                {item.name}
-                              </span>
+            <div className="mt-3 grid grid-cols-none">
+              <table className="table-border table-auto">
+                <thead>
+                  <tr>
+                    <th>Category Name</th>
+                    <th>Created Date</th>
+                    <th>Status</th>
+                    <th>&nbsp;</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {list &&
+                    list.map((item: any, index: number) => {
+                      return (
+                        <tr key={index}>
+                          <td>
+                            <div className="avatar flex flex-row items-center">
+                              {item.icon ? (
+                                <img src={item.icon} alt="" />
+                              ) : (
+                                <img
+                                  src={assets.tempImages.avatarDryCLean}
+                                  alt=""
+                                />
+                              )}
+                              <div className="flex flex-col items-start justify-start">
+                                <span className="text-sm font-semibold">
+                                  {item.name}
+                                </span>
+                              </div>
                             </div>
-                          </div>
-                        </td>
-                        <td>
-                          {dayjs(item.createdDate).isValid()
-                            ? dayjs(item.createdDate)?.format(
+                          </td>
+                          <td>
+                            {dayjs(item.createdDate).isValid()
+                              ? dayjs(item.createdDate)?.format(
                                 'ddd, MMM DD, YYYY hh:mm:ssA'
                               )
-                            : '--'}
-                        </td>
-                        <td>
-                          {item.isActive ? (
-                            <span className="badge badge-success">Enabled</span>
-                          ) : (
-                            <span className="badge badge-danger">Disabled</span>
-                          )}
-                        </td>
+                              : '--'}
+                          </td>
+                          <td>
+                            {item.isActive ? (
+                              <span className="badge badge-success">Enabled</span>
+                            ) : (
+                              <span className="badge badge-danger">Disabled</span>
+                            )}
+                          </td>
 
-                        <td>
-                          <div className="flex flex-row-reverse">
-                            <IconButton
-                              className="btn-dot"
-                              aria-label="more"
-                              id="long-button"
-                              aria-controls={
-                                actionMenuOpen ? 'long-menu' : undefined
-                              }
-                              aria-expanded={
-                                actionMenuOpen ? 'true' : undefined
-                              }
-                              aria-haspopup="true"
-                              onClick={(
-                                event: React.MouseEvent<HTMLElement>
-                              ) => {
-                                setActionMenuItemid(list[index].id);
-                                setActionMenuAnchorEl(event.currentTarget);
-                              }}
-                            >
-                              <MoreVertIcon />
-                            </IconButton>
-                            <Switch
-                              checked={item.isActive}
-                              onChange={(
-                                event: React.ChangeEvent<HTMLInputElement>
-                              ) => handleSwitchChange(event, list[index].id)}
-                              inputProps={{ 'aria-label': 'controlled' }}
-                            />
-                          </div>
-                        </td>
-                      </tr>
-                    );
-                  })}
-              </tbody>
-            </table>
-          </div>
-          <div className="mt-3 flex w-[100%] justify-center py-3">
-            <TablePagination
-              component="div"
-              count={total}
-              page={page}
-              onPageChange={handleChangePage}
-              rowsPerPage={rowsPerPage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-            />
+                          <td>
+                            <div className="flex flex-row-reverse">
+                              <IconButton
+                                className="btn-dot"
+                                aria-label="more"
+                                id="long-button"
+                                aria-controls={
+                                  actionMenuOpen ? 'long-menu' : undefined
+                                }
+                                aria-expanded={
+                                  actionMenuOpen ? 'true' : undefined
+                                }
+                                aria-haspopup="true"
+                                onClick={(
+                                  event: React.MouseEvent<HTMLElement>
+                                ) => {
+                                  setActionMenuItemid(list[index].id);
+                                  setActionMenuAnchorEl(event.currentTarget);
+                                }}
+                              >
+                                <MoreVertIcon />
+                              </IconButton>
+                              <Switch
+                                checked={item.isActive}
+                                onChange={(
+                                  event: React.ChangeEvent<HTMLInputElement>
+                                ) => handleSwitchChange(event, list[index].id)}
+                                inputProps={{ 'aria-label': 'controlled' }}
+                              />
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                </tbody>
+              </table>
+            </div>
+            <>
+            {list?.length < 1 ? <div className='w-full flex justify-center items-center py-5 bg-gray-200'><p>No Records Found</p></div> : null}
+            </>
+            <div className="mt-3 flex w-[100%] justify-center py-3">
+              <TablePagination
+                component="div"
+                count={total}
+                page={page}
+                onPageChange={handleChangePage}
+                rowsPerPage={rowsPerPage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+              />
+            </div>
           </div>
         </div>
-      </div>
-      {actionMenuAnchorEl && (
-        <ActionMenu
-          open={actionMenuOpen}
-          anchorEl={actionMenuAnchorEl}
-          setAnchorEl={setActionMenuAnchorEl}
-          options={actionMenuOptions}
-          callback={manuHandler}
-        />
-      )}
-      {openFormDialog && (
-        <CategoriesCreatePopup
-          openFormDialog={openFormDialog}
-          setOpenFormDialog={setOpenFormDialog}
-          callback={createFormHandler}
-        />
-      )}
-      {openEditFormDialog && (
-        <CategoriesEditPopup
-          openFormDialog={openEditFormDialog}
-          setOpenFormDialog={setOpenEditFormDialog}
-          formData={editFormData}
-          callback={updateFormHandler}
-        />
-      )}
-    </>
+        {actionMenuAnchorEl && (
+          <ActionMenu
+            open={actionMenuOpen}
+            anchorEl={actionMenuAnchorEl}
+            setAnchorEl={setActionMenuAnchorEl}
+            options={actionMenuOptions}
+            callback={manuHandler}
+          />
+        )}
+        {openFormDialog && (
+          <CategoriesCreatePopup
+            openFormDialog={openFormDialog}
+            setOpenFormDialog={setOpenFormDialog}
+            callback={createFormHandler}
+          />
+        )}
+        {openEditFormDialog && (
+          <CategoriesEditPopup
+            openFormDialog={openEditFormDialog}
+            setOpenFormDialog={setOpenEditFormDialog}
+            formData={editFormData}
+            callback={updateFormHandler}
+          />
+        )}
+      </>
   );
 }
 

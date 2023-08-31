@@ -393,6 +393,9 @@ function OrdersPage() {
               </tbody>
             </table>
           </div>
+          <>
+            {list?.length < 1 ? <div className='w-full flex justify-center items-center py-5 bg-gray-200'><p>No Records Found</p></div> : null}
+          </>
           <div className="mt-3 flex w-[100%] justify-center py-3">
             <TablePagination
               component="div"

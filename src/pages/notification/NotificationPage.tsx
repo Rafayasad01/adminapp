@@ -24,6 +24,7 @@ import {
 } from '../../utils/constants';
 import NotificationDetailPopup from './NotificationDetailPopup';
 import AlertBox from '../../utils/Alert';
+import Loader from '../../components/common/Loader';
 
 function NotificationPage() {
   const authState: any = useAppSelector((state) => state.authState);
@@ -39,6 +40,8 @@ function NotificationPage() {
   const [alertPopup, setAlertPopup] = useState<boolean>(false);
   const [alertSeverty, setAlertSeverty] = useState<string>('');
   const [alertMsg, setAlertMsg] = useState<string>('');
+
+  const [isLoader, setIsLoader] = React.useState(true);
 
   const handleFormClickOpen = () => {
     setOpenFormDialog(true);
@@ -117,10 +120,12 @@ function NotificationPage() {
   useEffect(() => {
     Service.getListService(authState.user.tenant, page, rowsPerPage)
       .then((item: any) => {
+        setIsLoader(false)
         setList(item.data.data.list);
         setTotal(item.data.data.total);
       })
       .catch((error) => {
+        setIsLoader(false)
         console.log('error::::::::', error);
       });
   }, [authState, page, rowsPerPage]);
@@ -170,146 +175,152 @@ function NotificationPage() {
   };
 
   return (
-    <>
-      <TopBar title="Notification" />
-      <div className="container mt-5">
-        <div className="w-full rounded-lg bg-white shadow-lg">
-          <div className="grid grid-cols-12 px-4 py-5">
-            <div className="col-span-7">
-              <span className="font-open-sans text-xl font-semibold text-[#252733]">
-                All Notifications
-              </span>
-            </div>
-            <div className="col-span-5">
-              <div className="flex flex-row justify-end gap-3">
-                <FormControl
-                  className="search-grey-outline placeholder-grey w-60"
-                  variant="filled"
-                >
-                  <Input
-                    className="input-with-icon after:border-b-neutral-900"
-                    id="search"
-                    type="text"
-                    placeholder="Search"
-                    onKeyDown={(
-                      event: React.KeyboardEvent<
-                        HTMLInputElement | HTMLTextAreaElement
-                      >
-                    ) => {
-                      handleClickSearch(event);
-                    }}
-                    endAdornment={
-                      <InputAdornment position="end">
-                        <Divider
-                          sx={{ height: 28, m: 0.5 }}
-                          orientation="vertical"
-                        />
-                        <IconButton aria-label="toggle password visibility">
-                          <SearchIcon className="text-[#6A6A6A]" />
-                        </IconButton>
-                      </InputAdornment>
-                    }
-                    disableUnderline
-                  />
-                </FormControl>
-                <Button
-                  variant="contained"
-                  className="btn-black-fill btn-icon"
-                  onClick={handleFormClickOpen}
-                >
-                  <AddOutlinedIcon /> Sent
-                </Button>
+    isLoader ?
+      <Loader />
+      :
+      <>
+        <TopBar title="Notification" />
+        <div className="container mt-5">
+          <div className="w-full rounded-lg bg-white shadow-lg">
+            <div className="grid grid-cols-12 px-4 py-5">
+              <div className="col-span-7">
+                <span className="font-open-sans text-xl font-semibold text-[#252733]">
+                  All Notifications
+                </span>
+              </div>
+              <div className="col-span-5">
+                <div className="flex flex-row justify-end gap-3">
+                  <FormControl
+                    className="search-grey-outline placeholder-grey w-60"
+                    variant="filled"
+                  >
+                    <Input
+                      className="input-with-icon after:border-b-neutral-900"
+                      id="search"
+                      type="text"
+                      placeholder="Search"
+                      onKeyDown={(
+                        event: React.KeyboardEvent<
+                          HTMLInputElement | HTMLTextAreaElement
+                        >
+                      ) => {
+                        handleClickSearch(event);
+                      }}
+                      endAdornment={
+                        <InputAdornment position="end">
+                          <Divider
+                            sx={{ height: 28, m: 0.5 }}
+                            orientation="vertical"
+                          />
+                          <IconButton aria-label="toggle password visibility">
+                            <SearchIcon className="text-[#6A6A6A]" />
+                          </IconButton>
+                        </InputAdornment>
+                      }
+                      disableUnderline
+                    />
+                  </FormControl>
+                  <Button
+                    variant="contained"
+                    className="btn-black-fill btn-icon"
+                    onClick={handleFormClickOpen}
+                  >
+                    <AddOutlinedIcon /> Sent
+                  </Button>
+                </div>
               </div>
             </div>
-          </div>
-          <div className="mt-3 grid grid-cols-none">
-            <table className="table-border table-auto">
-              <thead>
-                <tr>
-                  <th className="w-[16rem]">Title</th>
-                  <th className="w-[30rem]">Message</th>
-                  <th>status</th>
-                  <th>Dated</th>
-                  <th>&nbsp;</th>
-                </tr>
-              </thead>
-              <tbody>
-                {list &&
-                  list.map((item: any, index: number) => {
-                    return (
-                      <tr key={item.id}>
-                        <td>{item.title}</td>
-                        <td>{item.description}</td>
-                        <td>
-                          <span
-                            className={`badge badge-${getStatusTag(
-                              item.status
-                            )}`}
-                          >
-                            {item.status}
-                          </span>
-                        </td>
-                        <td>
-                          <div className="flex flex-col">
-                            <span className="text-sm font-normal text-[#1A1A1A]">
-                              {dayjs(item.createdDate)?.format('hh:mm:ssA')}
+            <div className="mt-3 grid grid-cols-none">
+              <table className="table-border table-auto">
+                <thead>
+                  <tr>
+                    <th className="w-[16rem]">Title</th>
+                    <th className="w-[30rem]">Message</th>
+                    <th>status</th>
+                    <th>Dated</th>
+                    <th>&nbsp;</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {list &&
+                    list.map((item: any, index: number) => {
+                      return (
+                        <tr key={item.id}>
+                          <td>{item.title}</td>
+                          <td>{item.description}</td>
+                          <td>
+                            <span
+                              className={`badge badge-${getStatusTag(
+                                item.status
+                              )}`}
+                            >
+                              {item.status}
                             </span>
-                            <span className="text-xs font-normal text-[#6A6A6A]">
-                              {dayjs(item.createdDate)?.format(
-                                'ddd, MMM DD, YYYY'
-                              )}
-                            </span>
-                          </div>
-                        </td>
-                        <td>
-                          <IconButton
-                            className="icon-btn mr-3.5 p-0"
-                            onClick={() => detailButtonHandler(index)}
-                          >
-                            <WysiwygOutlinedIcon />
-                          </IconButton>
-                        </td>
-                      </tr>
-                    );
-                  })}
-              </tbody>
-            </table>
-          </div>
-          <div className="mt-3 flex w-[100%] justify-center py-3">
-            <TablePagination
-              component="div"
-              count={total}
-              page={page}
-              onPageChange={handleChangePage}
-              rowsPerPage={rowsPerPage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-            />
+                          </td>
+                          <td>
+                            <div className="flex flex-col">
+                              <span className="text-sm font-normal text-[#1A1A1A]">
+                                {dayjs(item.createdDate)?.format('hh:mm:ssA')}
+                              </span>
+                              <span className="text-xs font-normal text-[#6A6A6A]">
+                                {dayjs(item.createdDate)?.format(
+                                  'ddd, MMM DD, YYYY'
+                                )}
+                              </span>
+                            </div>
+                          </td>
+                          <td>
+                            <IconButton
+                              className="icon-btn mr-3.5 p-0"
+                              onClick={() => detailButtonHandler(index)}
+                            >
+                              <WysiwygOutlinedIcon />
+                            </IconButton>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                </tbody>
+              </table>
+            </div>
+            <>
+              {list?.length < 1 ? <div className='w-full flex justify-center items-center py-5 bg-gray-200'><p>No Records Found</p></div> : null}
+            </>
+            <div className="mt-3 flex w-[100%] justify-center py-3">
+              <TablePagination
+                component="div"
+                count={total}
+                page={page}
+                onPageChange={handleChangePage}
+                rowsPerPage={rowsPerPage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+              />
+            </div>
           </div>
         </div>
-      </div>
-      {openFormDialog && (
-        <NotificationCreatePopup
-          openFormDialog={openFormDialog}
-          setOpenFormDialog={setOpenFormDialog}
-          callback={createFormHandler}
-        />
-      )}
-      {detailPopup && (
-        <NotificationDetailPopup
-          openDetailDialog={detailPopup}
-          setOpenDetailDialog={setDetailPopup}
-          detail={batchDetail}
-        />
-      )}
-      {alertPopup && (
-        <AlertBox
-          msg={alertMsg}
-          setSeverty={alertSeverty}
-          alertOpen={alertPopup}
-          setAlertOpen={setAlertPopup}
-        />
-      )}
-    </>
+        {openFormDialog && (
+          <NotificationCreatePopup
+            openFormDialog={openFormDialog}
+            setOpenFormDialog={setOpenFormDialog}
+            callback={createFormHandler}
+          />
+        )}
+        {detailPopup && (
+          <NotificationDetailPopup
+            openDetailDialog={detailPopup}
+            setOpenDetailDialog={setDetailPopup}
+            detail={batchDetail}
+          />
+        )}
+        {alertPopup && (
+          <AlertBox
+            msg={alertMsg}
+            setSeverty={alertSeverty}
+            alertOpen={alertPopup}
+            setAlertOpen={setAlertPopup}
+          />
+        )}
+      </>
   );
 }
 
