@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import Divider from '@mui/material/Divider';
 import FormControl from '@mui/material/FormControl';
@@ -255,9 +255,8 @@ function CustomersAddressPage() {
                     {detail.phone}
                   </span>
                   <span
-                    className={`font-sm mt-2 font-open-sans text-sm ${
-                      detail.isActive ? 'text-[#29CC97]' : 'text-[#f50057]'
-                    }`}
+                    className={`font-sm mt-2 font-open-sans text-sm ${detail.isActive ? 'text-[#29CC97]' : 'text-[#f50057]'
+                      }`}
                   >
                     {detail.isActive ? 'Active' : 'Inactive'}
                   </span>
@@ -311,15 +310,15 @@ function CustomersAddressPage() {
               )}
             </div>
           </div>
-          {list.length > 0 && (
-            <div className="mt-3 grid grid-cols-12">
-              <div className="col-span-12 rounded-lg bg-[#fff] px-4 py-5 shadow-lg">
-                <div className="flex justify-between">
-                  <span className="font-open-sans text-xl font-semibold text-[#1A1A1A]">
-                    Address History
-                  </span>
-                  <div className="flex-grow">&nbsp;</div>
-                  {/* <FormControl
+
+          <div className="mt-3 grid grid-cols-12">
+            <div className="col-span-12 rounded-lg bg-[#fff] px-4 py-5 shadow-lg">
+              <div className="flex justify-between">
+                <span className="font-open-sans text-xl pb-2 font-semibold text-[#1A1A1A]">
+                  Address History
+                </span>
+                {/* <div className="flex-grow">&nbsp;</div> */}
+                {/* <FormControl
                     className="search-grey-outline placeholder-grey w-60"
                     variant="filled"
                   >
@@ -349,88 +348,95 @@ function CustomersAddressPage() {
                       disableUnderline
                     />
                   </FormControl> */}
-                </div>
-                <div className="mt-3 grid grid-cols-none">
-                  <table className="table-border table-auto">
-                    <thead>
-                      <tr>
-                        <th className="w-[28%]">address</th>
-                        <th>Name</th>
-                        <th>latitude</th>
-                        <th>longitude</th>
-                        <th>type</th>
-                        <th>status</th>
-                        <th>&nbsp;</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {list.map((item: any, index: number) => {
-                        return (
-                          <tr key={item.id}>
-                            <td>{item.address}</td>
-                            <td>{item.name}</td>
-                            <td>{item.latitude}</td>
-                            <td>{item.longitude}</td>
-                            <td>{item.type}</td>
-                            <td>
-                              {item.isActive ? (
-                                <span className="badge badge-success">
-                                  ACTIVE
-                                </span>
-                              ) : (
-                                <span className="badge badge-danger">
-                                  INACTIVE
-                                </span>
-                              )}
-                            </td>
-                            <td>
-                              <Switch
-                                checked={item.isActive}
-                                onChange={(
-                                  event: React.ChangeEvent<HTMLInputElement>
-                                ) => handleSwitchChange(event, list[index].id)}
-                                inputProps={{ 'aria-label': 'controlled' }}
-                              />
-                              <IconButton
-                                className="btn-dot"
-                                aria-label="more"
-                                id="long-button"
-                                aria-controls={
-                                  actionMenuOpen ? 'long-menu' : undefined
-                                }
-                                aria-expanded={
-                                  actionMenuOpen ? 'true' : undefined
-                                }
-                                aria-haspopup="true"
-                                onClick={(
-                                  event: React.MouseEvent<HTMLElement>
-                                ) => {
-                                  setActionMenuItemid(list[index].id);
-                                  setActionMenuAnchorEl(event.currentTarget);
-                                }}
-                              >
-                                <MoreVertIcon />
-                              </IconButton>
-                            </td>
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                  </table>
-                </div>
-                <div className="mt-3 flex w-[100%] justify-center py-3">
-                  <TablePagination
-                    component="div"
-                    count={total}
-                    page={page}
-                    onPageChange={handleChangePage}
-                    rowsPerPage={rowsPerPage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
-                  />
-                </div>
               </div>
+              {list?.length > 0 ? (
+                <Fragment>
+                  <div className="mt-3 grid grid-cols-none">
+                    <table className="table-border table-auto">
+                      <thead>
+                        <tr>
+                          <th className="w-[28%]">address</th>
+                          <th>Name</th>
+                          <th>latitude</th>
+                          <th>longitude</th>
+                          <th>type</th>
+                          <th>status</th>
+                          <th>&nbsp;</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {list.map((item: any, index: number) => {
+                          return (
+                            <tr key={item.id}>
+                              <td>{item.address}</td>
+                              <td>{item.name}</td>
+                              <td>{item.latitude}</td>
+                              <td>{item.longitude}</td>
+                              <td>{item.type}</td>
+                              <td>
+                                {item.isActive ? (
+                                  <span className="badge badge-success">
+                                    ACTIVE
+                                  </span>
+                                ) : (
+                                  <span className="badge badge-danger">
+                                    INACTIVE
+                                  </span>
+                                )}
+                              </td>
+                              <td>
+                                <Switch
+                                  checked={item.isActive}
+                                  onChange={(
+                                    event: React.ChangeEvent<HTMLInputElement>
+                                  ) => handleSwitchChange(event, list[index].id)}
+                                  inputProps={{ 'aria-label': 'controlled' }}
+                                />
+                                <IconButton
+                                  className="btn-dot"
+                                  aria-label="more"
+                                  id="long-button"
+                                  aria-controls={
+                                    actionMenuOpen ? 'long-menu' : undefined
+                                  }
+                                  aria-expanded={
+                                    actionMenuOpen ? 'true' : undefined
+                                  }
+                                  aria-haspopup="true"
+                                  onClick={(
+                                    event: React.MouseEvent<HTMLElement>
+                                  ) => {
+                                    setActionMenuItemid(list[index].id);
+                                    setActionMenuAnchorEl(event.currentTarget);
+                                  }}
+                                >
+                                  <MoreVertIcon />
+                                </IconButton>
+                              </td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+                  <div className="mt-3 flex w-[100%] justify-center py-3">
+                    <TablePagination
+                      component="div"
+                      count={total}
+                      page={page}
+                      onPageChange={handleChangePage}
+                      rowsPerPage={rowsPerPage}
+                      onRowsPerPageChange={handleChangeRowsPerPage}
+                    />
+                  </div>
+                </Fragment>
+              )
+                : <div className='flex w-full items-center justify-center bg-gray-200 py-3 rounded-lg'>
+                  <p className='font-open-sans'>No Address Records</p>
+                </div>
+              }
             </div>
-          )}
+          </div>
         </div>
       )}
       {actionMenuAnchorEl && (

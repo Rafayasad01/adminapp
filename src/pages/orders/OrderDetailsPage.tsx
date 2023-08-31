@@ -151,6 +151,7 @@ function OrderDetailsPage() {
     <>
       {dialogOpen && (
         <PermissionPopup
+       
           open={dialogOpen}
           setOpen={setDialogOpen}
           dialogText={dialogText}
@@ -159,6 +160,7 @@ function OrderDetailsPage() {
       )}
       {cancelDialogOpen && (
         <PermissionPopup
+          type='shock'
           open={cancelDialogOpen}
           setOpen={setCancelDialogOpen}
           dialogText={dialogText}
@@ -490,7 +492,7 @@ function OrderDetailsPage() {
                       )}
 
                       <div
-                        className={`mx-2-relative inline flex ${
+                        className={`mx-2 relative inline flex ${
                           item.isStatus ? item.value.color : 'text-neutral-500'
                         } `}
                       >

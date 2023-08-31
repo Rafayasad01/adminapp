@@ -3,12 +3,15 @@ import Toolbar from '@mui/material/Toolbar';
 import AppBar from '@mui/material/AppBar';
 import IconButton from '@mui/material/IconButton';
 import SearchIcon from '@mui/icons-material/Search';
+import Avatar from '@mui/material/Avatar';
+// import { blac } from '@mui/material/colors';
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import { useNavigate } from 'react-router-dom';
 
 import BackArrowIcon from '../icons/BackArrowIcon';
 
 import assets from '../../assets';
+import { useSelector } from 'react-redux';
 
 type Props = {
   title: string;
@@ -16,6 +19,7 @@ type Props = {
 };
 
 function TopBar({ title, isNestedRoute = false }: Props) {
+  const userData = useSelector(state => state.authState.user);
   const navigate = useNavigate();
   const backHandler = () => {
     navigate(-1);
@@ -42,8 +46,11 @@ function TopBar({ title, isNestedRoute = false }: Props) {
           </IconButton>
           <hr className="divider vertical my-2" />
           <div className="header-user-box ml-3.5">
-            <span>Jones Ferdinand</span>
-            <img src={assets.images.avatarUser} alt="" />
+            <span>{`${userData.firstName} ${userData.lastName}`}</span>
+            {userData?.avatar ?
+              <Avatar sx={{ width: 56, height: 56 }} alt="user image" src={userData.avatar} /> :
+              <Avatar sx={{ bgcolor: 'black', fontSize: "18px" }}>{`${userData.firstName.charAt(0)}${userData.lastName.charAt(0)}`}</Avatar>
+            }
           </div>
         </div>
       </Toolbar>

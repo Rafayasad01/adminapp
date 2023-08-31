@@ -20,6 +20,7 @@ import category from '../../services/adminapp/adminCategory';
 import { useAppSelector } from '../../redux/redux-hooks';
 import ActionMenu from '../../components/common/ActionMenu';
 import Loader from '../../components/common/Loader';
+import Notify from '../../components/common/Notify';
 
 function CategoriesPage() {
   const authState: any = useAppSelector((state) => state.authState);
@@ -39,6 +40,8 @@ function CategoriesPage() {
 
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
+  const [isNotify, setIsNotify] = React.useState(false);
+  const [notifyMessage, setNotifyMessage] = React.useState({});
 
   const handleFormClickOpen = () => {
     setOpenFormDialog(true);
@@ -120,6 +123,7 @@ function CategoriesPage() {
 
 
   const deleteHandler = (id: string) => {
+    setIsLoader(true);
     const data = {
       is_active: false,
       is_deleted: true,
@@ -127,13 +131,26 @@ function CategoriesPage() {
     };
     category.deleteCategory(id, data).then((updateItem) => {
       if (updateItem.data.success) {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: updateItem.data.message,
+          type: "success"
+        });
         setList((newArr: any) => {
           return newArr.filter((item: any) => item.id !== id);
         });
         let newtotal = total;
         setTotal((newtotal -= 1));
       }
-    });
+    }).catch((err) => {
+      setIsLoader(false);
+      setIsNotify(true);
+      setNotifyMessage({
+        text: err.message,
+        type: "error"
+      });
+    })
   };
 
   const manuHandler = (option: string) => {
@@ -152,6 +169,7 @@ function CategoriesPage() {
     }
   };
   const createFormHandler = (data: any) => {
+    setIsLoader(true)
     const formData = new FormData();
     formData.append('name', data.name);
     formData.append('desc', data.desc);
@@ -161,12 +179,26 @@ function CategoriesPage() {
     formData.append('updated_by', authState.user.id);
     category.create(formData).then((item) => {
       if (item.data.success) {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: item.data.message,
+          type: "success"
+        });
         setList([item.data.data, ...list]);
       }
-    });
+    }).catch((err) => {
+      setIsLoader(false);
+      setIsNotify(true);
+      setNotifyMessage({
+        text: err.message,
+        type: "error"
+      });
+    })
   };
 
   const updateFormHandler = (data: any) => {
+    setIsLoader(true)
     const formData = new FormData();
     formData.append('name', data.name);
     formData.append('desc', data.desc);
@@ -176,6 +208,12 @@ function CategoriesPage() {
       .updateCategory(actionMenuItemid, formData)
       .then((updateItem: any) => {
         if (updateItem.data.success) {
+          setIsLoader(false)
+          setNotifyMessage({
+            text: updateItem.data.message,
+            type: "success"
+          });
+          setIsNotify(true);
           setList((newArr: any) => {
             return newArr.map((item: any) => {
               if (item.id === updateItem.data.data.id) {
@@ -188,7 +226,14 @@ function CategoriesPage() {
             });
           });
         }
-      });
+      }).catch((err) => {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: "error"
+        });
+      })
   };
 
   const handleSwitchChange = (event: any, id: string) => {
@@ -215,6 +260,7 @@ function CategoriesPage() {
       <Loader />
       :
       <>
+        <Notify isOpen={isNotify} setIsOpen={setIsNotify} displayMessage={notifyMessage} />
         <TopBar title="Categories" />
         <div className="container mt-5">
           <div className="w-full rounded-lg bg-white shadow-lg">
@@ -351,7 +397,7 @@ function CategoriesPage() {
               </table>
             </div>
             <>
-            {list?.length < 1 ? <div className='w-full flex justify-center items-center py-5 bg-gray-200'><p>No Records Found</p></div> : null}
+              {list?.length < 1 ? <div className='w-full flex justify-center items-center py-5 bg-gray-200'><p>No Records Found</p></div> : null}
             </>
             <div className="mt-3 flex w-[100%] justify-center py-3">
               <TablePagination
