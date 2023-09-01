@@ -19,6 +19,7 @@ import { useAppSelector } from '../../redux/redux-hooks';
 import ActionMenu from '../../components/common/ActionMenu';
 import PermissionPopup from '../../utils/PermissionPopup';
 import Loader from '../../components/common/Loader';
+import Notify from '../../components/common/Notify';
 
 const options = ['Edit', 'Delete'];
 function VouchersPage() {
@@ -36,6 +37,8 @@ function VouchersPage() {
   const [editItem, setEditItem] = useState<any>(null);
   const [deleteItemId, setDeleteItemId] = useState<string>('');
   const [isLoader, setIsLoader] = React.useState(true);
+  const [isNotify, setIsNotify] = React.useState(false);
+  const [notifyMessage, setNotifyMessage] = React.useState({});
 
   const open = Boolean(anchorEl);
 
@@ -117,225 +120,286 @@ function VouchersPage() {
   useEffect(() => {
     Service.listVouchers(authState.user.tenant, page, rowsPerPage, search)
       .then((response: any) => {
-        setIsLoader(false);
         if (response.data.success) {
+          setIsLoader(false);
           setList(response.data.data.result);
           setTotal(response.data.data.totalResults);
+        } else {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: response.data.message,
+            type: 'error',
+          });
         }
       })
       .catch((error) => {
         setIsLoader(false);
-        console.log('error :>> ', error);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: error.message,
+          type: 'error',
+        });
       });
   }, [authState.user.tenant, page, rowsPerPage, search]);
 
   const createFormHandler = (data: any) => {
-    Service.createVoucher(authState.user.tenant, data).then((response) => {
-      if (response.data.success) {
-        const newList = [...list, response.data.data];
-        setList(newList);
-      }
-    });
+    setIsLoader(true);
+    Service.createVoucher(authState.user.tenant, data)
+      .then((response) => {
+        if (response.data.success) {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: response.data.message,
+            type: 'success',
+          });
+          const newList = [...list, response.data.data];
+          setList(newList);
+        } else {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: response.data.message,
+            type: 'error',
+          });
+        }
+      })
+      .catch((err) => {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
+        });
+      });
   };
 
   const updateFormHandler = (id: string, data: any) => {
-    Service.updateVoucher(authState.user.tenant, id, data).then(
-      (response: any) => {
+    setIsLoader(true);
+    Service.updateVoucher(authState.user.tenant, id, data)
+      .then((response: any) => {
         if (response.data.success) {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: response.data.message,
+            type: 'success',
+          });
           const newList = [
             ...list.filter((item: any) => item.id !== response.data.data.id),
             response.data.data,
           ];
           setList(newList);
+        } else {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: response.data.message,
+            type: 'error',
+          });
         }
-      }
-    );
+      })
+      .catch((err) => {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
+        });
+      });
   };
-  return (
-    isLoader ?
-      <Loader />
-      :
-      <>
-        <VouchersPromoCreatePopup
-          vouchersPromoDialog={vouchersPromoDialog}
-          setVouchersPromoDialog={setVouchersPromoDialog}
-          callback={createFormHandler}
+  return isLoader ? (
+    <Loader />
+  ) : (
+    <>
+      <Notify
+        isOpen={isNotify}
+        setIsOpen={setIsNotify}
+        displayMessage={notifyMessage}
+      />
+      <VouchersPromoCreatePopup
+        vouchersPromoDialog={vouchersPromoDialog}
+        setVouchersPromoDialog={setVouchersPromoDialog}
+        callback={createFormHandler}
+      />
+      {editItem ? (
+        <VouchersPromoEditPopup
+          vouchersPromoEditDialog={vouchersPromoEditDialog}
+          setVouchersPromoEditDialog={setVouchersPromoEditDialog}
+          item={editItem}
+          callback={updateFormHandler}
         />
-        {editItem ? (
-          <VouchersPromoEditPopup
-            vouchersPromoEditDialog={vouchersPromoEditDialog}
-            setVouchersPromoEditDialog={setVouchersPromoEditDialog}
-            item={editItem}
-            callback={updateFormHandler}
-          />
-        ) : null}
-        <VouchersReferralCreatePopup
-          vouchersReferralDialog={vouchersReferralDialog}
-          setVouchersReferralDialog={setVouchersReferralDialog}
-        />
-        <TopBar title="Vouchers" />
-        <div className="container mt-5">
-          <div className="w-full rounded-lg bg-white shadow-lg">
-            <div className="grid grid-cols-12 px-4 py-5">
-              <div className="col-span-7">
-                <span className="font-open-sans text-xl font-semibold text-[#252733]">
-                  All Vouchers
-                </span>
-              </div>
-              <div className="col-span-5">
-                <div className="flex flex-row justify-end gap-3">
-                  <FormControl
-                    className="search-grey-outline placeholder-grey w-60"
-                    variant="filled"
-                  >
-                    <Input
-                      className="input-with-icon after:border-b-neutral-900"
-                      id="search"
-                      type="text"
-                      placeholder="Search"
-                      onKeyDown={(
-                        event: React.KeyboardEvent<
-                          HTMLInputElement | HTMLTextAreaElement
-                        >
-                      ) => {
-                        handleClickSearch(event);
-                      }}
-                      endAdornment={
-                        <InputAdornment position="end">
-                          <Divider
-                            sx={{ height: 28, m: 0.5 }}
-                            orientation="vertical"
-                          />
-                          <IconButton aria-label="toggle password visibility">
-                            <SearchIcon className="text-[#6A6A6A]" />
-                          </IconButton>
-                        </InputAdornment>
-                      }
-                      disableUnderline
-                    />
-                  </FormControl>
-                  <Button
-                    variant="contained"
-                    className="btn-black-fill btn-icon"
-                    onClick={() => setVouchersPromoDialog(true)}
-                  >
-                    <AddOutlinedIcon /> Add New
-                  </Button>
-                </div>
-              </div>
+      ) : null}
+      <VouchersReferralCreatePopup
+        vouchersReferralDialog={vouchersReferralDialog}
+        setVouchersReferralDialog={setVouchersReferralDialog}
+      />
+      <TopBar title="Vouchers" />
+      <div className="container mt-5">
+        <div className="w-full rounded-lg bg-white shadow-lg">
+          <div className="grid grid-cols-12 px-4 py-5">
+            <div className="col-span-7">
+              <span className="font-open-sans text-xl font-semibold text-[#252733]">
+                All Vouchers
+              </span>
             </div>
-            <div className="mt-3 grid grid-cols-none">
-              <table className="table-border table-auto">
-                <thead>
-                  <tr>
-                    <th>Vouchers</th>
-                    <th>Valid From</th>
-                    <th>Valid Till</th>
-                    <th>Value</th>
-                    <th>
-                      Min
-                      <br />
-                      Products
-                    </th>
-                    <th>
-                      Min
-                      <br />
-                      Amount
-                    </th>
-                    <th>Type</th>
-                    <th>Redeem</th>
-                    <th>
-                      Max
-                      <br />
-                      Redeem
-                    </th>
-                    <th>Status</th>
-                    <th>&nbsp;</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {list &&
-                    list.map((item: any) => {
-                      return (
-                        <tr key={item.id}>
-                          <td>
-                            <div className="avatar flex flex-row items-center">
-                              <div className="flex flex-col items-start justify-start">
-                                <span className="text-sm font-semibold">
-                                  {item.name}
-                                </span>
-                                <span className="text-xs font-normal text-[#6A6A6A]">
-                                  {item.type}
-                                </span>
-                              </div>
-                            </div>
-                          </td>
-                          <td>{dayjs(item.validFrom).format('MMMM DD, YYYY')}</td>
-                          <td>{dayjs(item.validTill).format('MMMM DD, YYYY')}</td>
-                          <td>${item.value}</td>
-                          <td>{item.minProduct}</td>
-                          <td>${item.minAmount}</td>
-                          <td>{item.discountType}</td>
-                          <td>{item.redeemCount}</td>
-                          <td>{item.maxRedeem}</td>
-                          <td>
-                            {item.isActive ? (
-                              <span className="badge badge-success">ACTIVE</span>
-                            ) : (
-                              <span className="badge badge-danger">INACTIVE</span>
-                            )}
-                          </td>
-                          <td>
-                            <div className="flex flex-row-reverse">
-                              <IconButton
-                                className="btn-dot"
-                                aria-label="more"
-                                id="long-button"
-                                aria-controls={open ? 'long-menu' : undefined}
-                                aria-expanded={open ? 'true' : undefined}
-                                aria-haspopup="true"
-                                onClick={(event) => handleClick(event, item.id)}
-                              >
-                                <MoreVertIcon />
-                              </IconButton>
-                            </div>
-                          </td>
-                        </tr>
-                      );
-                    })}
-                </tbody>
-              </table>
-            </div>
-            <>
-            {list?.length < 1 ? <div className='w-full flex justify-center items-center py-5 bg-gray-200'><p>No Records Found</p></div> : null}
-            </>
-            <div className="mt-3 flex w-[100%] justify-center py-3">
-              <TablePagination
-                component="div"
-                count={total}
-                page={page}
-                onPageChange={handleChangePage}
-                rowsPerPage={rowsPerPage}
-                onRowsPerPageChange={handleChangeRowsPerPage}
-              />
+            <div className="col-span-5">
+              <div className="flex flex-row justify-end gap-3">
+                <FormControl
+                  className="search-grey-outline placeholder-grey w-60"
+                  variant="filled"
+                >
+                  <Input
+                    className="input-with-icon after:border-b-neutral-900"
+                    id="search"
+                    type="text"
+                    placeholder="Search"
+                    onKeyDown={(
+                      event: React.KeyboardEvent<
+                        HTMLInputElement | HTMLTextAreaElement
+                      >
+                    ) => {
+                      handleClickSearch(event);
+                    }}
+                    endAdornment={
+                      <InputAdornment position="end">
+                        <Divider
+                          sx={{ height: 28, m: 0.5 }}
+                          orientation="vertical"
+                        />
+                        <IconButton aria-label="toggle password visibility">
+                          <SearchIcon className="text-[#6A6A6A]" />
+                        </IconButton>
+                      </InputAdornment>
+                    }
+                    disableUnderline
+                  />
+                </FormControl>
+                <Button
+                  variant="contained"
+                  className="btn-black-fill btn-icon"
+                  onClick={() => setVouchersPromoDialog(true)}
+                >
+                  <AddOutlinedIcon /> Add New
+                </Button>
+              </div>
             </div>
           </div>
+          <div className="mt-3 grid grid-cols-none">
+            <table className="table-border table-auto">
+              <thead>
+                <tr>
+                  <th>Vouchers</th>
+                  <th>Valid From</th>
+                  <th>Valid Till</th>
+                  <th>Value</th>
+                  <th>
+                    Min
+                    <br />
+                    Products
+                  </th>
+                  <th>
+                    Min
+                    <br />
+                    Amount
+                  </th>
+                  <th>Type</th>
+                  <th>Redeem</th>
+                  <th>
+                    Max
+                    <br />
+                    Redeem
+                  </th>
+                  <th>Status</th>
+                  <th>&nbsp;</th>
+                </tr>
+              </thead>
+              <tbody>
+                {list &&
+                  list.map((item: any) => {
+                    return (
+                      <tr key={item.id}>
+                        <td>
+                          <div className="avatar flex flex-row items-center">
+                            <div className="flex flex-col items-start justify-start">
+                              <span className="text-sm font-semibold">
+                                {item.name}
+                              </span>
+                              <span className="text-xs font-normal text-[#6A6A6A]">
+                                {item.type}
+                              </span>
+                            </div>
+                          </div>
+                        </td>
+                        <td>{dayjs(item.validFrom).format('MMMM DD, YYYY')}</td>
+                        <td>{dayjs(item.validTill).format('MMMM DD, YYYY')}</td>
+                        <td>${item.value}</td>
+                        <td>{item.minProduct}</td>
+                        <td>${item.minAmount}</td>
+                        <td>{item.discountType}</td>
+                        <td>{item.redeemCount}</td>
+                        <td>{item.maxRedeem}</td>
+                        <td>
+                          {item.isActive ? (
+                            <span className="badge badge-success">ACTIVE</span>
+                          ) : (
+                            <span className="badge badge-danger">INACTIVE</span>
+                          )}
+                        </td>
+                        <td>
+                          <div className="flex flex-row-reverse">
+                            <IconButton
+                              className="btn-dot"
+                              aria-label="more"
+                              id="long-button"
+                              aria-controls={open ? 'long-menu' : undefined}
+                              aria-expanded={open ? 'true' : undefined}
+                              aria-haspopup="true"
+                              onClick={(event) => handleClick(event, item.id)}
+                            >
+                              <MoreVertIcon />
+                            </IconButton>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+              </tbody>
+            </table>
+          </div>
+          {list?.length < 1 ? (
+            <div className="flex w-full items-center justify-center bg-gray-200 py-5">
+              <p>No Records Found</p>
+            </div>
+          ) : null}
+          <div className="mt-3 flex w-[100%] justify-center py-3">
+            <TablePagination
+              component="div"
+              count={total}
+              page={page}
+              onPageChange={handleChangePage}
+              rowsPerPage={rowsPerPage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+            />
+          </div>
         </div>
-        <ActionMenu
-          options={options}
-          anchorEl={anchorEl}
-          open={open}
-          setAnchorEl={setAnchorEl}
-          callback={handleSelectedMenuClose}
-        />
+      </div>
+      <ActionMenu
+        options={options}
+        anchorEl={anchorEl}
+        open={open}
+        setAnchorEl={setAnchorEl}
+        callback={handleSelectedMenuClose}
+      />
 
-        <PermissionPopup
-          open={openDialog}
-          setOpen={setOpenDialog}
-          dialogText="Delete Voucher?"
-          callback={() => handleDialogClose(true)}
-        />
-      </>
+      <PermissionPopup
+        open={openDialog}
+        setOpen={setOpenDialog}
+        dialogText="Delete Voucher?"
+        callback={() => handleDialogClose(true)}
+      />
+    </>
   );
 }
 

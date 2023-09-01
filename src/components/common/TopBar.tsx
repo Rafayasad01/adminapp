@@ -8,10 +8,10 @@ import Avatar from '@mui/material/Avatar';
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import { useNavigate } from 'react-router-dom';
 
+import { useSelector } from 'react-redux';
 import BackArrowIcon from '../icons/BackArrowIcon';
 
 import assets from '../../assets';
-import { useSelector } from 'react-redux';
 
 type Props = {
   title: string;

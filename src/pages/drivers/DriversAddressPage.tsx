@@ -15,6 +15,8 @@ import ActionMenu from '../../components/common/ActionMenu';
 import { useAppSelector } from '../../redux/redux-hooks';
 import DriversAddressCreatePopup from './DriversAddressCreatePopup';
 import DriversAddressEditPopup from './DriversAddressEditPopup';
+import Loader from '../../components/common/Loader';
+import Notify from '../../components/common/Notify';
 
 function DriversAddressPage() {
   const authState: any = useAppSelector((state) => state.authState);
@@ -37,25 +39,55 @@ function DriversAddressPage() {
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
 
+  const [isLoader, setIsLoader] = React.useState(true);
+  const [isNotify, setIsNotify] = React.useState(false);
+  const [notifyMessage, setNotifyMessage] = React.useState({});
+
   const id: any = params.driverId;
   const deleteEntity = (addressId: string) => {
+    setIsLoader(true);
     const data = {
       is_deleted: true,
     };
-    Service.deleteAddressService(addressId, data).then((item: any) => {
-      if (item.data.success) {
-        setList((newArr: any) => {
-          return newArr.filter(
-            (newItem: any) => newItem.id !== item.data.data.id
-          );
+    Service.deleteAddressService(addressId, data)
+      .then((item: any) => {
+        if (item.data.success) {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'success',
+          });
+          setList((newArr: any) => {
+            return newArr.filter(
+              (newItem: any) => newItem.id !== item.data.data.id
+            );
+          });
+        } else {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'error',
+          });
+        }
+      })
+      .catch((err) => {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
         });
-      }
-    });
+      });
   };
 
   const getData = (addressId: string) => {
     Service.getAddress(addressId).then((item: any) => {
       if (item.data.success) {
+        console.log('addressData', item.data);
+
+        setIsLoader(false);
         setEditFormData(item.data.data);
         setOpenEditFormDialog(true);
       }
@@ -128,27 +160,45 @@ function DriversAddressPage() {
   };
 
   useEffect(() => {
-    Service.getAddressService(id).then((item: any) => {
-      if (item.data.success) {
-        setDetail(item.data.data);
-        if (
-          item.data.data.appUserAddress &&
-          item.data.data.appUserAddress.length > 0
-        ) {
-          const activeAddress = item.data.data.appUserAddress.filter(
-            (newItem: any) => newItem.isActive === true
-          );
-          if (activeAddress.length > 0) {
-            setAddress(activeAddress[0].address);
+    Service.getAddressService(id)
+      .then((item: any) => {
+        if (item.data.success) {
+          setIsLoader(false);
+          setDetail(item.data.data);
+          if (
+            item.data.data.appUserAddress &&
+            item.data.data.appUserAddress.length > 0
+          ) {
+            const activeAddress = item.data.data.appUserAddress.filter(
+              (newItem: any) => newItem.isActive === true
+            );
+            if (activeAddress.length > 0) {
+              setAddress(activeAddress[0].address);
+            }
+            setList(item.data.data.appUserAddress.reverse());
+            setTotal(Number(item.data.data.total));
           }
-          setList(item.data.data.appUserAddress.reverse());
-          setTotal(Number(item.data.data.total));
+        } else {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'error',
+          });
         }
-      }
-    });
+      })
+      .catch((err) => {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
+        });
+      });
   }, [id]);
 
   const createFormHandler = (data: any) => {
+    setIsLoader(true);
     const formData = new FormData();
     formData.append('name', data.name);
     formData.append('latitude', data.latitude);
@@ -157,15 +207,38 @@ function DriversAddressPage() {
     formData.append('address', data.address);
     formData.append('app_user', id);
     formData.append('tenant', authState.user.tenant);
-    Service.createAddress(actionMenuItemid, formData).then((item) => {
-      if (item.data.success) {
-        list.unshift(item.data.data);
-        setList(list);
-      }
-    });
+    Service.createAddress(actionMenuItemid, formData)
+      .then((item) => {
+        if (item.data.success) {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'success',
+          });
+          list.unshift(item.data.data);
+          setList(list);
+        } else {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'error',
+          });
+        }
+      })
+      .catch((err) => {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
+        });
+      });
   };
 
   const updateFormHandler = (data: any) => {
+    setIsLoader(true);
     const formData = new FormData();
     formData.append('name', data.name);
     formData.append('latitude', data.latitude);
@@ -173,22 +246,44 @@ function DriversAddressPage() {
     formData.append('type', data.type);
     formData.append('address', data.address);
     formData.append('app_user', id);
-    Service.updateAddress(actionMenuItemid, formData).then((item) => {
-      if (item.data.success) {
-        setList((newArr: any) => {
-          return newArr.map((newItem: any) => {
-            if (newItem.id === actionMenuItemid) {
-              newItem.name = item.data.data.name;
-              newItem.type = item.data.data.type;
-              newItem.latitude = item.data.data.latitude;
-              newItem.longitude = item.data.data.longitude;
-              newItem.address = item.data.data.address;
-            }
-            return { ...newItem };
+    Service.updateAddress(actionMenuItemid, formData)
+      .then((item) => {
+        if (item.data.success) {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'success',
           });
+          setList((newArr: any) => {
+            return newArr.map((newItem: any) => {
+              if (newItem.id === actionMenuItemid) {
+                newItem.name = item.data.data.name;
+                newItem.type = item.data.data.type;
+                newItem.latitude = item.data.data.latitude;
+                newItem.longitude = item.data.data.longitude;
+                newItem.address = item.data.data.address;
+              }
+              return { ...newItem };
+            });
+          });
+        } else {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'error',
+          });
+        }
+      })
+      .catch((err) => {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
         });
-      }
-    });
+      });
   };
 
   const handleSwitchChange = (event: any, addressId: string) => {
@@ -210,8 +305,15 @@ function DriversAddressPage() {
     }
   };
 
-  return (
+  return isLoader ? (
+    <Loader />
+  ) : (
     <>
+      <Notify
+        isOpen={isNotify}
+        setIsOpen={setIsNotify}
+        displayMessage={notifyMessage}
+      />
       <TopBar isNestedRoute title="Driver Address" />
       {detail && (
         <div className="container mt-5">
@@ -248,8 +350,9 @@ function DriversAddressPage() {
                     {detail.phone}
                   </span>
                   <span
-                    className={`font-sm mt-2 font-open-sans text-sm ${detail.isActive ? 'text-[#29CC97]' : 'text-[#f50057]'
-                      }`}
+                    className={`font-sm mt-2 font-open-sans text-sm ${
+                      detail.isActive ? 'text-[#29CC97]' : 'text-[#f50057]'
+                    }`}
                   >
                     {detail.isActive ? 'Active' : 'Inactive'}
                   </span>
@@ -299,7 +402,7 @@ function DriversAddressPage() {
           <div className="mt-3 grid grid-cols-12">
             <div className="col-span-12 rounded-lg bg-[#fff] px-4 py-5 shadow-lg">
               <div className="flex justify-between">
-                <span className="font-open-sans text-xl pb-2 font-semibold text-[#1A1A1A]">
+                <span className="pb-2 font-open-sans text-xl font-semibold text-[#1A1A1A]">
                   Address History
                 </span>
                 {/* <div className="flex-grow">&nbsp;</div> */}
@@ -335,7 +438,7 @@ function DriversAddressPage() {
                   </FormControl> */}
               </div>
               {list?.length > 0 ? (
-                <Fragment>
+                <>
                   <div className="mt-3 grid grid-cols-none">
                     <table className="table-border table-auto">
                       <thead>
@@ -374,7 +477,9 @@ function DriversAddressPage() {
                                   checked={item.isActive}
                                   onChange={(
                                     event: React.ChangeEvent<HTMLInputElement>
-                                  ) => handleSwitchChange(event, list[index].id)}
+                                  ) =>
+                                    handleSwitchChange(event, list[index].id)
+                                  }
                                   inputProps={{ 'aria-label': 'controlled' }}
                                 />
                                 <IconButton
@@ -414,11 +519,12 @@ function DriversAddressPage() {
                       onRowsPerPageChange={handleChangeRowsPerPage}
                     />
                   </div>
-                </Fragment>
-              ) : <div className='flex w-full items-center justify-center bg-gray-200 py-3 rounded-lg'>
-                <p className='font-open-sans'>No Address Records</p>
-              </div>
-              }
+                </>
+              ) : (
+                <div className="flex w-full items-center justify-center rounded-lg bg-gray-200 py-3">
+                  <p className="font-open-sans">No Address Records</p>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -441,6 +547,7 @@ function DriversAddressPage() {
         openFormDialog={openEditFormDialog}
         setOpenFormDialog={setOpenEditFormDialog}
         formData={editFormData}
+        setEditFormData={setEditFormData}
         callback={updateFormHandler}
       />
     </>

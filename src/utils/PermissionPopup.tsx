@@ -34,9 +34,11 @@ function PermissionPopup({ open, setOpen, dialogText, callback, type }: Props) {
       }}
     >
       <div className={popupStyle.Content}>
-        {type == "shock" ?
+        {type === 'shock' ? (
           <SentimentVeryDissatisfiedIcon className={popupStyle.Icon} />
-          : <SentimentSatisfiedAltOutlinedIcon className={popupStyle.Icon} />}
+        ) : (
+          <SentimentSatisfiedAltOutlinedIcon className={popupStyle.Icon} />
+        )}
         <div className={popupStyle.Title}>Hey Wait!</div>
         <div className={popupStyle.Message}>{dialogText}</div>
         <div className={popupStyle.Actions}>

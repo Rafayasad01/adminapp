@@ -15,6 +15,7 @@ type Props = {
   openFormDialog: boolean;
   setOpenFormDialog: React.Dispatch<React.SetStateAction<boolean>>;
   formData: any;
+  setEditFormData: any;
   callback: (...args: any[]) => any;
 };
 
@@ -22,6 +23,7 @@ function CustomersEditPopup({
   openFormDialog,
   setOpenFormDialog,
   formData,
+  setEditFormData,
   callback,
 }: Props) {
   const [showPassword, setShowPassword] = useState(false);
@@ -52,6 +54,7 @@ function CustomersEditPopup({
     data.avatar = avatar;
     setOpenFormDialog(false);
     callback(data);
+    setEditFormData(null);
   };
 
   useEffect(() => {
@@ -64,6 +67,8 @@ function CustomersEditPopup({
       setAvatarName(newAvatar);
     }
   }, [formData]);
+
+  console.log('formdata', formData);
 
   return (
     <Dialog
@@ -92,7 +97,7 @@ function CustomersEditPopup({
                       disableUnderline
                       {...register('first_name', {
                         required: 'First name is required',
-                        value: formData.firstName,
+                        value: formData.firstName || formData.first_name,
                       })}
                     />
                     {errors.first_name && (
@@ -108,7 +113,7 @@ function CustomersEditPopup({
                       disableUnderline
                       {...register('last_name', {
                         required: 'Last name is required',
-                        value: formData.lastName,
+                        value: formData.lastName || formData.last_name,
                       })}
                     />
                     {errors.last_name && (
@@ -154,7 +159,7 @@ function CustomersEditPopup({
                       placeholder="M6G 596"
                       disableUnderline
                       {...register('postal_code', {
-                        value: formData.postalCode,
+                        value: formData.postalCode || formData.postal_code,
                       })}
                     />
                   </FormControl>

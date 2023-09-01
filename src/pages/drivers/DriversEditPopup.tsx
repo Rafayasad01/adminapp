@@ -14,6 +14,7 @@ type Props = {
   openFormDialog: boolean;
   setOpenFormDialog: React.Dispatch<React.SetStateAction<boolean>>;
   formData: any;
+  setEditFormData: any;
   callback: (...args: any[]) => any;
 };
 
@@ -21,6 +22,7 @@ function DriversEditPopup({
   openFormDialog,
   setOpenFormDialog,
   formData,
+  setEditFormData,
   callback,
 }: Props) {
   const [avatar, setAvatar] = useState<any>(null);
@@ -32,7 +34,10 @@ function DriversEditPopup({
     formState: { errors },
   } = useForm<AppUserDriverExt>();
 
-  const handleFormClose = () => setOpenFormDialog(false);
+  const handleFormClose = () => {
+    console.log('im close');
+    setOpenFormDialog(false);
+  };
   const handleRemoveImage = () => {
     setAvatar('');
     setAvatarName('');
@@ -47,8 +52,9 @@ function DriversEditPopup({
     const licenseNumber = data.license_number.replace(/\s+/g, '');
     data.avatar = avatar;
     data.license_number = licenseNumber;
-    // setOpenFormDialog(false);
+    setOpenFormDialog(false);
     callback(data);
+    setEditFormData(null);
   };
 
   useEffect(() => {

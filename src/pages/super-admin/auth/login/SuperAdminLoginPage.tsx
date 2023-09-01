@@ -41,8 +41,8 @@ function SuperAdminLoginPage() {
     setIsLoader(true);
     const user: any = await auth.loginService(userData);
     if (user && user.data.success) {
-      setIsLoader(false)
-      console.log("superadmin", user.data.data);
+      setIsLoader(false);
+      console.log('superadmin', user.data.data);
 
       const newUserData = user.data.data;
       setToken(newUserData.token);
@@ -131,7 +131,11 @@ function SuperAdminLoginPage() {
               color="inherit"
               onClick={loginHandler}
             >
-              {!isLoader ? `Login` : <CircularProgress color='inherit' size={24} />}
+              {!isLoader ? (
+                `Login`
+              ) : (
+                <CircularProgress color="inherit" size={24} />
+              )}
             </Button>
           </div>
         </div>

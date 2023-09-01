@@ -36,6 +36,7 @@ function CategoriesEditPopup({
     formState: { errors },
     control,
   } = useForm<Category>();
+
   const onSubmit = (data: Category) => {
     data.icon = image;
     setOpenFormDialog(false);

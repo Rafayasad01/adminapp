@@ -9,6 +9,8 @@ import Tab from '@mui/material/Tab';
 import { useNavigate } from 'react-router-dom';
 import Link from '@mui/material/Link';
 import { useForm } from 'react-hook-form';
+import TextField from '@mui/material/TextField';
+import InputAdornment from '@mui/material/InputAdornment';
 import DragDropFile from './DragDropFile';
 import PlusIcon from '../../components/icons/PlusIcon';
 import { Setting } from '../../interfaces/app.interface';
@@ -30,8 +32,6 @@ import {
 } from '../../utils/constants';
 import AlertBox from '../../utils/Alert';
 import MapAddress from '../../components/common/MapAddress';
-import TextField from '@mui/material/TextField';
-import InputAdornment from '@mui/material/InputAdornment';
 
 type AssetsImages = keyof typeof assets.images;
 
@@ -269,8 +269,16 @@ function SettingsApp() {
                     sx={{ padding: 0 }}
                     id="development_domain"
                     InputProps={{
-                      startAdornment: <InputAdornment position="start">https://</InputAdornment>,
-                      endAdornment: <InputAdornment position="end">{DOMAIN_PREFIX}</InputAdornment>
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          https://
+                        </InputAdornment>
+                      ),
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          {DOMAIN_PREFIX}
+                        </InputAdornment>
+                      ),
                     }}
                     variant="outlined"
                     {...register('development_domain', {
@@ -296,8 +304,16 @@ function SettingsApp() {
                     sx={{ padding: 0 }}
                     id="live_domain"
                     InputProps={{
-                      startAdornment: <InputAdornment position="start">https://</InputAdornment>,
-                      endAdornment: <InputAdornment position="end">{DOMAIN_PREFIX}</InputAdornment>
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          https://
+                        </InputAdornment>
+                      ),
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          {DOMAIN_PREFIX}
+                        </InputAdornment>
+                      ),
                     }}
                     variant="outlined"
                     {...register('live_domain', {

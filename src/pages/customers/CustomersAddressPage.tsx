@@ -21,6 +21,8 @@ import { useAppSelector } from '../../redux/redux-hooks';
 import CustomersAddressCreatePopup from './CustomersAddressCreatePopup';
 import CustomersAddressEditPopup from './CustomersAddressEditPopup';
 import assets from '../../assets';
+import Notify from '../../components/common/Notify';
+import Loader from '../../components/common/Loader';
 
 function CustomersAddressPage() {
   const authState: any = useAppSelector((state) => state.authState);
@@ -43,21 +45,48 @@ function CustomersAddressPage() {
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
 
+  const [isLoader, setIsLoader] = React.useState(true);
+  const [isNotify, setIsNotify] = React.useState(false);
+  const [notifyMessage, setNotifyMessage] = React.useState({});
+
   const id: any = params.customerId;
 
   const deleteEntity = (customerId: string) => {
+    setIsLoader(true);
     const data = {
       is_deleted: true,
     };
-    Service.deleteAddressService(customerId, data).then((item: any) => {
-      if (item.data.success) {
-        setList((newArr: any) => {
-          return newArr.filter(
-            (newItem: any) => newItem.id !== item.data.data.id
-          );
+    Service.deleteAddressService(customerId, data)
+      .then((item: any) => {
+        if (item.data.success) {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'success',
+          });
+          setList((newArr: any) => {
+            return newArr.filter(
+              (newItem: any) => newItem.id !== item.data.data.id
+            );
+          });
+        } else {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'error',
+          });
+        }
+      })
+      .catch((err) => {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
         });
-      }
-    });
+      });
   };
 
   const getData = (customerId: string) => {
@@ -156,6 +185,7 @@ function CustomersAddressPage() {
   }, [id]);
 
   const createFormHandler = (data: any) => {
+    setIsLoader(true);
     const formData = new FormData();
     formData.append('name', data.name);
     formData.append('latitude', data.latitude);
@@ -164,15 +194,38 @@ function CustomersAddressPage() {
     formData.append('address', data.address);
     formData.append('app_user', id);
     formData.append('tenant', authState.user.tenant);
-    Service.createAddress(actionMenuItemid, formData).then((item: any) => {
-      if (item.data.success) {
-        list.push(item.data.data);
-        setList(list);
-      }
-    });
+    Service.createAddress(actionMenuItemid, formData)
+      .then((item: any) => {
+        if (item.data.success) {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'success',
+          });
+          list.push(item.data.data);
+          setList(list);
+        } else {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'error',
+          });
+        }
+      })
+      .catch((err) => {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
+        });
+      });
   };
 
   const updateFormHandler = (data: any) => {
+    setIsLoader(true);
     const formData = new FormData();
     formData.append('name', data.name);
     formData.append('latitude', data.latitude);
@@ -180,22 +233,44 @@ function CustomersAddressPage() {
     formData.append('type', data.type);
     formData.append('address', data.address);
     formData.append('app_user', id);
-    Service.updateAddress(actionMenuItemid, formData).then((item: any) => {
-      if (item.data.success) {
-        setList((newArr: any) => {
-          return newArr.map((newItem: any) => {
-            if (newItem.id === actionMenuItemid) {
-              newItem.name = item.data.data.name;
-              newItem.type = item.data.data.type;
-              newItem.latitude = item.data.data.latitude;
-              newItem.longitude = item.data.data.longitude;
-              newItem.address = item.data.data.address;
-            }
-            return { ...newItem };
+    Service.updateAddress(actionMenuItemid, formData)
+      .then((item: any) => {
+        if (item.data.success) {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'success',
           });
+          setList((newArr: any) => {
+            return newArr.map((newItem: any) => {
+              if (newItem.id === actionMenuItemid) {
+                newItem.name = item.data.data.name;
+                newItem.type = item.data.data.type;
+                newItem.latitude = item.data.data.latitude;
+                newItem.longitude = item.data.data.longitude;
+                newItem.address = item.data.data.address;
+              }
+              return { ...newItem };
+            });
+          });
+        } else {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'error',
+          });
+        }
+      })
+      .catch((err) => {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
         });
-      }
-    });
+      });
   };
 
   const handleSwitchChange = (event: any, customerId: string) => {
@@ -217,8 +292,15 @@ function CustomersAddressPage() {
     }
   };
 
-  return (
+  return isLoader ? (
+    <Loader />
+  ) : (
     <>
+      <Notify
+        isOpen={isNotify}
+        setIsOpen={setIsNotify}
+        displayMessage={notifyMessage}
+      />
       <TopBar isNestedRoute title="Customer Address" />
       {detail && (
         <div className="container mt-5">
@@ -255,8 +337,9 @@ function CustomersAddressPage() {
                     {detail.phone}
                   </span>
                   <span
-                    className={`font-sm mt-2 font-open-sans text-sm ${detail.isActive ? 'text-[#29CC97]' : 'text-[#f50057]'
-                      }`}
+                    className={`font-sm mt-2 font-open-sans text-sm ${
+                      detail.isActive ? 'text-[#29CC97]' : 'text-[#f50057]'
+                    }`}
                   >
                     {detail.isActive ? 'Active' : 'Inactive'}
                   </span>
@@ -314,7 +397,7 @@ function CustomersAddressPage() {
           <div className="mt-3 grid grid-cols-12">
             <div className="col-span-12 rounded-lg bg-[#fff] px-4 py-5 shadow-lg">
               <div className="flex justify-between">
-                <span className="font-open-sans text-xl pb-2 font-semibold text-[#1A1A1A]">
+                <span className="pb-2 font-open-sans text-xl font-semibold text-[#1A1A1A]">
                   Address History
                 </span>
                 {/* <div className="flex-grow">&nbsp;</div> */}
@@ -350,7 +433,7 @@ function CustomersAddressPage() {
                   </FormControl> */}
               </div>
               {list?.length > 0 ? (
-                <Fragment>
+                <>
                   <div className="mt-3 grid grid-cols-none">
                     <table className="table-border table-auto">
                       <thead>
@@ -389,7 +472,9 @@ function CustomersAddressPage() {
                                   checked={item.isActive}
                                   onChange={(
                                     event: React.ChangeEvent<HTMLInputElement>
-                                  ) => handleSwitchChange(event, list[index].id)}
+                                  ) =>
+                                    handleSwitchChange(event, list[index].id)
+                                  }
                                   inputProps={{ 'aria-label': 'controlled' }}
                                 />
                                 <IconButton
@@ -429,12 +514,12 @@ function CustomersAddressPage() {
                       onRowsPerPageChange={handleChangeRowsPerPage}
                     />
                   </div>
-                </Fragment>
-              )
-                : <div className='flex w-full items-center justify-center bg-gray-200 py-3 rounded-lg'>
-                  <p className='font-open-sans'>No Address Records</p>
+                </>
+              ) : (
+                <div className="flex w-full items-center justify-center rounded-lg bg-gray-200 py-3">
+                  <p className="font-open-sans">No Address Records</p>
                 </div>
-              }
+              )}
             </div>
           </div>
         </div>
