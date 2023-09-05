@@ -2,10 +2,10 @@
 /* eslint-disable import/prefer-default-export */
 import { RouteObject, Navigate } from 'react-router-dom';
 import MainLayout from '../components/layout/MainLayout';
-import ChangePasswordPage from '../pages/auth/change-password/ChangePasswordPage';
-import ForgotPasswordPage from '../pages/auth/forgot-password/ForgotPasswordPage';
-import LoginPage from '../pages/auth/login/LoginPage';
-import OtpVerificationPage from '../pages/auth/otp-verification/OtpVerificationPage';
+// import ChangePasswordPage from '../pages/auth/change-password/ChangePasswordPage';
+// import ForgotPasswordPage from '../pages/auth/forgot-password/ForgotPasswordPage';
+// import LoginPage from '../pages/auth/login/LoginPage';
+// import OtpVerificationPage from '../pages/auth/otp-verification/OtpVerificationPage';
 import CategoriesPage from '../pages/categories/CategoriesPage';
 import ComplainsPage from '../pages/complain/ComplainsPage';
 import CustomersDetailPage from '../pages/customers/CustomersDetailPage';
@@ -25,7 +25,7 @@ import SettingsPage from '../pages/settings/SettingsPage';
 import ProfilePage from '../pages/profile/ProfilePage';
 import SettingsApp from '../pages/settings/SettingsApp';
 import SettingsShopScheduling from '../pages/settings/SettingsShopScheduling';
-import AuthLayout from '../components/layout/AuthLayout';
+// import AuthLayout from '../components/layout/AuthLayout';
 import SuperAdminLayout from '../components/layout/super-admin/SuperAdminLayout';
 import SuperAdminAuthLayout from '../components/layout/super-admin/SuperAdminAuthLayout';
 import SuperAdminMainLayout from '../components/layout/super-admin/SuperAdminMainLayout';
@@ -39,7 +39,6 @@ import SuperAdminAddNewShopPage from '../pages/super-admin/main/shops/SuperAdmin
 import SuperAdminShopDetailsPage from '../pages/super-admin/main/shops/SuperAdminShopDetailsPage';
 import SuperAdminUsersListPage from '../pages/super-admin/main/users/SuperAdminUsersListPage';
 import SuperAdminSupportPage from '../pages/super-admin/main/support/SuperAdminSupportPage';
-import SuperAdminLogout from '../pages/super-admin/auth/logout/SuperAdminLogout';
 import CartsPage from '../pages/carts/CartsPage';
 import CartDetailsPage from '../pages/carts/CartDetailsPage';
 import CategoriesServicesPage from '../pages/categories/CategoriesServicesPage';
@@ -135,10 +134,6 @@ export const routeObjects: RouteObject[] = [
           //   path: 'role/permission',
           //   element: <RolePermissions />,
           // },
-          {
-            path: 'logout',
-            element: <SuperAdminLogout />,
-          },
         ],
       },
     ],
@@ -270,15 +265,15 @@ export const routeObjects: RouteObject[] = [
           },
         ],
       },
-      {
-        path: 'services',
-        children: [
-          {
-            index: true,
-            element: <ServicesPage />,
-          },
-        ],
-      },
+      // {
+      //   path: 'services',
+      //   children: [
+      //     {
+      //       index: true,
+      //       element: <ServicesPage />,
+      //     },
+      //   ],
+      // },
       {
         path: 'locations',
         children: [
@@ -314,15 +309,15 @@ export const routeObjects: RouteObject[] = [
           },
         ],
       },
-      {
-        path: 'faqs',
-        children: [
-          {
-            index: true,
-            element: <FAQSPage />,
-          },
-        ],
-      },
+      // {
+      //   path: 'faqs',
+      //   children: [
+      //     {
+      //       index: true,
+      //       element: <FAQSPage />,
+      //     },
+      //   ],
+      // },
       {
         path: 'settings',
         children: [

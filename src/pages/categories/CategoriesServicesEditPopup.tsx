@@ -16,7 +16,9 @@ type Props = {
   openFormDialog: boolean;
   setOpenFormDialog: React.Dispatch<React.SetStateAction<boolean>>;
   formData: any;
-  callback: Function;
+  callback: (...args: any[]) => any;
+  setIsNotify: any;
+  setNotifyMessage: any;
 };
 
 function CategoriesServicesEditPopup({
@@ -24,9 +26,10 @@ function CategoriesServicesEditPopup({
   setOpenFormDialog,
   formData,
   callback,
+  setIsNotify,
+  setNotifyMessage,
 }: Props) {
   const [image, setImage] = useState<any>(null);
-  const [imageName, setImageName] = useState<string>('');
 
   const {
     register,
@@ -36,30 +39,38 @@ function CategoriesServicesEditPopup({
     control,
   } = useForm<CategoryService>();
   const onSubmit = (data: CategoryService) => {
-    data.icon = image;
-    setOpenFormDialog(false);
-    callback(data);
+    if (data.desc && image && data.name && data.price && data.quantity) {
+      data.icon = image;
+      setOpenFormDialog(false);
+      callback(data);
+    } else {
+      setIsNotify(true)
+      setNotifyMessage({
+        text: "All fields are required!",
+        type: 'error',
+      });
+    }
   };
 
   const handleFormClose = () => setOpenFormDialog(false);
-  const handleRemoveImage = () => {
-    setImage('');
-    setImageName('');
-  };
 
   const handleFileChange = (event: any) => {
     setImage(event.target.files[0]);
-    setImageName(event.target.files[0].name);
   };
+
+  const handleFileOnClick = (event: any) => {
+    event.target.value = null
+    setImage(null)
+  }
 
   useEffect(() => {
     let icon = formData.icon.split('/').slice(-1)[0];
     const regexExp = /[a-z,0-9,-]{36}/;
     if (regexExp.test(icon)) {
-      icon = icon.split('-').splice(5)[0];
+      icon = icon.split('-').splice(5)[0].at(0);
     }
-    setImageName(icon);
-  }, []);
+    setImage({ name: icon });
+  }, [formData]);
 
   return (
     <Dialog
@@ -141,13 +152,16 @@ function CategoriesServicesEditPopup({
                   defaultValue=""
                   placeholder="Write Description"
                   {...register('desc', {
-                    required: 'Description is required', value: formData.desc, minLength: {
+                    required: 'Description is required',
+                    value: formData.desc,
+                    minLength: {
                       value: 5,
-                      message: "Minimum Five Characters"
-                    }, maxLength: {
+                      message: 'Minimum Five Characters',
+                    },
+                    maxLength: {
                       value: 50,
-                      message: "Too Many Characters"
-                    }
+                      message: 'Too Many Characters',
+                    },
                   })}
                 />
                 {errors.desc && (
@@ -163,10 +177,11 @@ function CategoriesServicesEditPopup({
                   style={{ display: 'none' }}
                   id="raised-button-file"
                   type="file"
-                  onChange={(
-                    event: React.InputHTMLAttributes<HTMLInputElement>
-                  ) => {
+                  onChange={(event: React.InputHTMLAttributes<HTMLInputElement>) => {
                     handleFileChange(event);
+                  }}
+                  onClick={(event: React.InputHTMLAttributes<HTMLInputElement>) => {
+                    handleFileOnClick(event)
                   }}
                 />
                 <label htmlFor="raised-button-file" className="ImageLabel">
@@ -175,10 +190,10 @@ function CategoriesServicesEditPopup({
                     Upload image
                   </Button>
                 </label>
-                {imageName ? (
+                {image ? (
                   <div className="ShowImageBox">
-                    <label className="ShowImageLabel">{imageName}</label>
-                    <IconButton className="btn-dot" onClick={handleRemoveImage}>
+                    <label className="ShowImageLabel">{image.name}</label>
+                    <IconButton className="btn-dot" onClick={() => setImage(null)}>
                       <CloseOutlinedIcon
                         sx={{
                           color: '#1D1D1D',
@@ -192,6 +207,7 @@ function CategoriesServicesEditPopup({
                   ''
                 )}
               </div>
+              {image === null && errors.icon && <span role="alert">{errors.icon?.message}</span>}
             </div>
           </div>
           <div className="FormFooter">

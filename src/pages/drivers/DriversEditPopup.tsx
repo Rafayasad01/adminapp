@@ -6,9 +6,7 @@ import Input from '@mui/material/Input';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
 import IconButton from '@mui/material/IconButton';
-import dayjs from 'dayjs';
 import '../../assets/css/PopupStyle.css';
-import TimePicker from '../../components/common/TimePicker';
 import { useForm } from 'react-hook-form';
 import { AppUserDriverExt } from '../../interfaces/app-user.interface';
 
@@ -16,57 +14,71 @@ type Props = {
   openFormDialog: boolean;
   setOpenFormDialog: React.Dispatch<React.SetStateAction<boolean>>;
   formData: any;
-  callback: Function;
+  setEditFormData: any;
+  callback: (...args: any[]) => any;
+  setIsNotify: any;
+  setNotifyMessage: any;
 };
 
 function DriversEditPopup({
   openFormDialog,
   setOpenFormDialog,
   formData,
+  setEditFormData,
   callback,
+  setIsNotify,
+  setNotifyMessage,
 }: Props) {
-  const [startTime, setStartTime] = useState<dayjs.Dayjs | null>(null);
-  const [endTime, setEndTime] = useState<dayjs.Dayjs | null>(null);
   const [avatar, setAvatar] = useState<any>(null);
-  const [avatarName, setAvatarName] = useState<string>('');
 
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
-    control,
   } = useForm<AppUserDriverExt>();
 
-  const handleFormClose = () => setOpenFormDialog(false);
-  const handleRemoveImage = () => {
-    setAvatar('');
-    setAvatarName('');
+  const handleFormClose = () => {
+    console.log('im close');
+    setOpenFormDialog(false);
   };
 
   const handleFileChange = (event: any) => {
     setAvatar(event.target.files[0]);
-    setAvatarName(event.target.files[0].name);
   };
 
+  const handleFileOnClick = (event: any) => {
+    event.target.value = null
+    setAvatar(null)
+  }
   const onSubmit = (data: AppUserDriverExt) => {
-    const licenseNumber = data.license_number.replace(/\s+/g, '');
-    data.avatar = avatar;
-    data.license_number = licenseNumber;
-    //setOpenFormDialog(false);
-    callback(data);
+    console.log(data);
+
+    if (data.first_name && data.last_name && data.phone && data.license_number) {
+      const licenseNumber = data.license_number.replace(/\s+/g, '');
+      data.avatar = avatar;
+      data.license_number = licenseNumber;
+      setOpenFormDialog(false);
+      callback(data);
+      setEditFormData(null);
+    } else {
+      setIsNotify(true)
+      setNotifyMessage({
+        text: "All fields are required, Except avater image!",
+        type: 'error',
+      });
+    }
   };
 
   useEffect(() => {
     if (formData && formData.avatar) {
-      let avatar = formData.avatar.split('/').slice(-1)[0];
+      let newAvatar = formData.avatar.split('/').slice(-1)[0];
       const regexExp = /[a-z,0-9,-]{36}/;
-      if (regexExp.test(avatar)) {
-        avatar = avatar.split('-').splice(5)[0];
+      if (regexExp.test(newAvatar)) {
+        newAvatar = newAvatar.split('-').splice(5)[0].at(0);
       }
-      setAvatarName(avatar);
+      setAvatar({ name: newAvatar });
     }
-  }, []);
+  }, [formData]);
 
   return (
     <Dialog
@@ -174,10 +186,11 @@ function DriversEditPopup({
                       id="raised-button-file"
                       type="file"
                       {...register('avatar')}
-                      onChange={(
-                        event: React.InputHTMLAttributes<HTMLInputElement>
-                      ) => {
+                      onChange={(event: React.InputHTMLAttributes<HTMLInputElement>) => {
                         handleFileChange(event);
+                      }}
+                      onClick={(event: React.InputHTMLAttributes<HTMLInputElement>) => {
+                        handleFileOnClick(event)
                       }}
                     />
                     <label htmlFor="raised-button-file" className="ImageLabel">
@@ -188,12 +201,12 @@ function DriversEditPopup({
                         Upload image
                       </Button>
                     </label>
-                    {avatarName ? (
+                    {avatar ? (
                       <div className="ShowImageBox">
-                        <label className="ShowImageLabel">{avatarName}</label>
+                        <label className="ShowImageLabel">{avatar.name}</label>
                         <IconButton
                           className="btn-dot"
-                          onClick={handleRemoveImage}
+                          onClick={() => setAvatar(null)}
                         >
                           <CloseOutlinedIcon
                             sx={{

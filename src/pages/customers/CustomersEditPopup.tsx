@@ -3,9 +3,6 @@ import Dialog from '@mui/material/Dialog';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
-import InputAdornment from '@mui/material/InputAdornment';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import Visibility from '@mui/icons-material/Visibility';
 import IconButton from '@mui/material/IconButton';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
@@ -18,18 +15,23 @@ type Props = {
   openFormDialog: boolean;
   setOpenFormDialog: React.Dispatch<React.SetStateAction<boolean>>;
   formData: any;
-  callback: Function;
+  setEditFormData: any;
+  callback: (...args: any[]) => any;
+  setIsNotify: any;
+  setNotifyMessage: any;
 };
 
 function CustomersEditPopup({
   openFormDialog,
   setOpenFormDialog,
   formData,
+  setEditFormData,
   callback,
+  setIsNotify,
+  setNotifyMessage,
 }: Props) {
   const [showPassword, setShowPassword] = useState(false);
   const [avatar, setAvatar] = useState<any>(null);
-  const [avatarName, setAvatarName] = useState<string>('');
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const {
@@ -41,32 +43,43 @@ function CustomersEditPopup({
   } = useForm<AppUser>();
 
   const handleFormClose = () => setOpenFormDialog(false);
-  const handleRemoveImage = () => {
-    setAvatar('');
-    setAvatarName('');
-  };
 
   const handleFileChange = (event: any) => {
     setAvatar(event.target.files[0]);
-    setAvatarName(event.target.files[0].name);
   };
 
+  const handleFileOnClick = (event: any) => {
+    event.target.value = null
+    setAvatar(null)
+  }
+
   const onSubmit = (data: AppUser) => {
-    data.avatar = avatar;
-    setOpenFormDialog(false);
-    callback(data);
+    if (data.first_name && data.last_name && data.phone) {
+      data.avatar = avatar;
+      setOpenFormDialog(false);
+      callback(data);
+      setEditFormData(null);
+    } else {
+      setIsNotify(true)
+      setNotifyMessage({
+        text: "All fields are required, Except avater image!",
+        type: 'error',
+      });
+    }
   };
 
   useEffect(() => {
     if (formData && formData.avatar !== null) {
-      let avatar = formData.avatar.split('/').slice(-1)[0];
+      let newAvatar = formData.avatar.split('/').slice(-1)[0];
       const regexExp = /[a-z,0-9,-]{36}/;
-      if (regexExp.test(avatar)) {
-        avatar = avatar.split('-').splice(5)[0];
+      if (regexExp.test(newAvatar)) {
+        newAvatar = newAvatar.split('-').splice(5)[0].at(0);
       }
-      setAvatarName(avatar);
+      setAvatar({ name: newAvatar });
     }
-  }, []);
+  }, [formData]);
+
+  console.log('formdata', formData);
 
   return (
     <Dialog
@@ -95,7 +108,7 @@ function CustomersEditPopup({
                       disableUnderline
                       {...register('first_name', {
                         required: 'First name is required',
-                        value: formData.firstName,
+                        value: formData.firstName || formData.first_name,
                       })}
                     />
                     {errors.first_name && (
@@ -111,7 +124,7 @@ function CustomersEditPopup({
                       disableUnderline
                       {...register('last_name', {
                         required: 'Last name is required',
-                        value: formData.lastName,
+                        value: formData.lastName || formData.last_name,
                       })}
                     />
                     {errors.last_name && (
@@ -157,7 +170,7 @@ function CustomersEditPopup({
                       placeholder="M6G 596"
                       disableUnderline
                       {...register('postal_code', {
-                        value: formData.postalCode,
+                        value: formData.postalCode || formData.postal_code,
                       })}
                     />
                   </FormControl>
@@ -171,10 +184,11 @@ function CustomersEditPopup({
                       id="raised-button-file"
                       type="file"
                       {...register('avatar')}
-                      onChange={(
-                        event: React.InputHTMLAttributes<HTMLInputElement>
-                      ) => {
+                      onChange={(event: React.InputHTMLAttributes<HTMLInputElement>) => {
                         handleFileChange(event);
+                      }}
+                      onClick={(event: React.InputHTMLAttributes<HTMLInputElement>) => {
+                        handleFileOnClick(event)
                       }}
                     />
                     <label htmlFor="raised-button-file" className="ImageLabel">
@@ -185,12 +199,12 @@ function CustomersEditPopup({
                         Upload image
                       </Button>
                     </label>
-                    {avatarName ? (
+                    {avatar ? (
                       <div className="ShowImageBox">
-                        <label className="ShowImageLabel">{avatarName}</label>
+                        <label className="ShowImageLabel">{avatar.name}</label>
                         <IconButton
                           className="btn-dot"
-                          onClick={handleRemoveImage}
+                          onClick={() => setAvatar(null)}
                         >
                           <CloseOutlinedIcon
                             sx={{

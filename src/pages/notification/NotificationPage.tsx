@@ -8,13 +8,13 @@ import InputAdornment from '@mui/material/InputAdornment';
 import Button from '@mui/material/Button';
 import SearchIcon from '@mui/icons-material/Search';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
+import dayjs from 'dayjs';
+import TablePagination from '@mui/material/TablePagination';
+import WysiwygOutlinedIcon from '@mui/icons-material/WysiwygOutlined';
 import TopBar from '../../components/common/TopBar';
 import Service from '../../services/adminapp/adminNotification';
 import { useAppSelector } from '../../redux/redux-hooks';
-import dayjs from 'dayjs';
-import TablePagination from '@mui/material/TablePagination';
 import NotificationCreatePopup from './NotificationCreatePopup';
-import WysiwygOutlinedIcon from '@mui/icons-material/WysiwygOutlined';
 import {
   NOTIFICATION_STATUS_CANCELLED,
   NOTIFICATION_STATUS_COMPLETED,
@@ -24,6 +24,7 @@ import {
 } from '../../utils/constants';
 import NotificationDetailPopup from './NotificationDetailPopup';
 import AlertBox from '../../utils/Alert';
+import Loader from '../../components/common/Loader';
 
 function NotificationPage() {
   const authState: any = useAppSelector((state) => state.authState);
@@ -39,6 +40,8 @@ function NotificationPage() {
   const [alertPopup, setAlertPopup] = useState<boolean>(false);
   const [alertSeverty, setAlertSeverty] = useState<string>('');
   const [alertMsg, setAlertMsg] = useState<string>('');
+
+  const [isLoader, setIsLoader] = React.useState(true);
 
   const handleFormClickOpen = () => {
     setOpenFormDialog(true);
@@ -67,7 +70,7 @@ function NotificationPage() {
     newPage: number
   ) => {
     setPage(newPage);
-    //offset? ,limit rowsperpage hoga ofset page * rowsperPage
+    // offset? ,limit rowsperpage hoga ofset page * rowsperPage
     if (search === '' || search === null || search === undefined) {
       Service.getListService(authState.user.tenant, newPage, rowsPerPage).then(
         (item) => {
@@ -117,13 +120,15 @@ function NotificationPage() {
   useEffect(() => {
     Service.getListService(authState.user.tenant, page, rowsPerPage)
       .then((item: any) => {
+        setIsLoader(false);
         setList(item.data.data.list);
         setTotal(item.data.data.total);
       })
       .catch((error) => {
+        setIsLoader(false);
         console.log('error::::::::', error);
       });
-  }, []);
+  }, [authState, page, rowsPerPage]);
 
   const createFormHandler = (data: any) => {
     const formData = new FormData();
@@ -131,12 +136,18 @@ function NotificationPage() {
     formData.append('message', data.message);
     formData.append('tenant', authState.user.tenant);
     formData.append('userId', authState.user.id);
-    Service.sentService(formData).then((item) => {
-      if (item.data.success) {
-        // list.push(item.data.data);
-        // setList(list);
-      }
-    });
+    Service.sentService(formData)
+      .then((item) => {
+        if (item.data.success) {
+          // list.push(item.data.data);
+          // setList(list);
+        }
+      })
+      .catch((err) => {
+        setAlertMsg(err.message);
+        setAlertSeverty('error');
+        setAlertPopup(true);
+      });
   };
 
   const getStatusTag = (status: string) => {
@@ -169,7 +180,9 @@ function NotificationPage() {
     });
   };
 
-  return (
+  return isLoader ? (
+    <Loader />
+  ) : (
     <>
       <TopBar title="Notification" />
       <div className="container mt-5">
@@ -275,6 +288,11 @@ function NotificationPage() {
               </tbody>
             </table>
           </div>
+          {list?.length < 1 ? (
+            <div className="flex w-full items-center justify-center bg-gray-200 py-5">
+              <p>No Records Found</p>
+            </div>
+          ) : null}
           <div className="mt-3 flex w-[100%] justify-center py-3">
             <TablePagination
               component="div"

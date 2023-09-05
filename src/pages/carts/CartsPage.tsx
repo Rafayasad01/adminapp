@@ -7,17 +7,18 @@ import Divider from '@mui/material/Divider';
 import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
-import { SelectChangeEvent } from '@mui/material';
+// import { SelectChangeEvent } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import cart from '../../services/adminapp/adminCarts';
 import dayjs from 'dayjs';
 import TablePagination from '@mui/material/TablePagination';
+import cart from '../../services/adminapp/adminCarts';
 import ActionMenu from '../../components/common/ActionMenu';
 import { CART_STATUS_NEW, CART_STATUS_PROCESSING } from '../../utils/constants';
 import TopBar from '../../components/common/TopBar';
 import { useAppSelector } from '../../redux/redux-hooks';
+import Loader from '../../components/common/Loader';
 
 const actionMenuOptions = ['View'];
 function CartsPage() {
@@ -33,25 +34,26 @@ function CartsPage() {
   const [actionMenuAnchorEl, setActionMenuAnchorEl] =
     useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
+  const [isLoader, setIsLoader] = React.useState(true);
 
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number
   ) => {
     setPage(newPage);
-    //offset? ,limit rowsperpage hoga ofset page * rowsperPage
+    // offset? ,limit rowsperpage hoga ofset page * rowsperPage
     if (search === '' || search === null || search === undefined) {
       cart
         .getListService(authState.user.tenant, newPage, rowsPerPage)
         .then((item) => {
-          setList(item.data.data.list.map((item: any) => ({ ...item })));
+          setList(item.data.data.list.map((newItem: any) => ({ ...newItem })));
           setTotal(item.data.data.total);
         });
     } else {
       cart
         .searchService(authState.user.tenant, search, newPage, rowsPerPage)
         .then((item) => {
-          setList(item.data.data.list.map((item: any) => ({ ...item })));
+          setList(item.data.data.list.map((newItem: any) => ({ ...newItem })));
           setTotal(item.data.data.total);
         });
     }
@@ -68,16 +70,15 @@ function CartsPage() {
       cart
         .getListService(authState.user.tenant, newPage, newRowperPage)
         .then((item) => {
-          //console.log(item.data.data)
-          setList(item.data.data.list.map((item: any) => ({ ...item })));
+          // console.log(item.data.data)
+          setList(item.data.data.list.map((newItem: any) => ({ ...newItem })));
           setTotal(item.data.data.total);
         });
     } else {
       cart
         .searchService(authState.user.tenant, search, newPage, newRowperPage)
         .then((item) => {
-          console.log('item::::::', item);
-          setList(item.data.data.list.map((item: any) => ({ ...item })));
+          setList(item.data.data.list.map((newItem: any) => ({ ...newItem })));
           setTotal(item.data.data.total);
         });
     }
@@ -91,7 +92,7 @@ function CartsPage() {
     cart
       .searchService(authState.user.tenant, searchTxt, newPage, rowsPerPage)
       .then((item) => {
-        setList(item.data.data.list.map((item: any) => ({ ...item })));
+        setList(item.data.data.list.map((newItem: any) => ({ ...newItem })));
         setTotal(item.data.data.total);
       });
   };
@@ -100,11 +101,15 @@ function CartsPage() {
     cart
       .getListService(authState.user.tenant, page, rowsPerPage)
       .then((item) => {
-        //console.log(item.data.data)
-        setList(item.data.data.list.map((item: any) => ({ ...item })));
+        // console.log(item.data.data)
+        setIsLoader(false);
+        setList(item.data.data.list.map((newItem: any) => ({ ...newItem })));
         setTotal(item.data.data.total);
+      })
+      .catch((err) => {
+        setIsLoader(false);
       });
-  }, []);
+  }, [authState, page, rowsPerPage]);
 
   const manuHandler = (option: string) => {
     let doOption = '';
@@ -116,7 +121,7 @@ function CartsPage() {
       doOption = 'download';
     }
     navigate(`${doOption}/${actionMenuItemid}`);
-    //console.log('actionMenuItemid', actionMenuItemid)
+    // console.log('actionMenuItemid', actionMenuItemid)
   };
 
   const getStatusTag = (status: string) => {
@@ -129,7 +134,9 @@ function CartsPage() {
     return tag;
   };
 
-  return (
+  return isLoader ? (
+    <Loader />
+  ) : (
     <>
       {actionMenuAnchorEl && (
         <ActionMenu
@@ -232,21 +239,21 @@ function CartsPage() {
               </thead>
               <tbody>
                 {list &&
-                  list.map((cart: any, index: number) => {
-                    //console.log(order);
+                  list.map((item: any, index: number) => {
+                    // console.log(order);
                     return (
-                      <tr key={cart.id}>
+                      <tr key={item.id}>
                         <td>
-                          {cart.user.firstName ? (
+                          {item.user.firstName ? (
                             <div className="flex flex-col">
                               <span className="text-sm font-semibold text-[#1A1A1A]">
-                                {cart.user.firstName} {cart.user.lastName}
+                                {item.user.firstName} {item.user.lastName}
                               </span>
                               <span className="text-xs font-normal text-[#6A6A6A]">
-                                {cart.user.email}
+                                {item.user.email}
                               </span>
                               <span className="text-xs font-normal text-[#6A6A6A]">
-                                {cart.userAddress.address}
+                                {item.userAddress.address}
                               </span>
                             </div>
                           ) : (
@@ -254,19 +261,19 @@ function CartsPage() {
                           )}
                         </td>
                         <td>
-                          {dayjs(cart.pickupDateTime).isValid() ? (
+                          {dayjs(item.pickupDateTime).isValid() ? (
                             <div className="flex flex-col">
                               <span className="text-sm font-normal text-[#1A1A1A]">
-                                {dayjs(cart.pickupDateTime)?.format(
+                                {dayjs(item.pickupDateTime)?.format(
                                   'hh:mm:ssA'
                                 )}{' '}
                                 -{' '}
-                                {dayjs(cart.pickupDateTime)
+                                {dayjs(item.pickupDateTime)
                                   .add(1, 'hour')
                                   .format('hh:mm:ssA')}
                               </span>
                               <span className="text-xs font-normal text-[#6A6A6A]">
-                                {dayjs(cart.pickupDateTime)?.format(
+                                {dayjs(item.pickupDateTime)?.format(
                                   'ddd, MMM DD, YYYY'
                                 )}
                               </span>
@@ -276,17 +283,17 @@ function CartsPage() {
                           )}
                         </td>
                         <td>
-                          {dayjs(cart.dropDateTime).isValid() ? (
+                          {dayjs(item.dropDateTime).isValid() ? (
                             <div className="flex flex-col">
                               <span className="text-sm font-normal text-[#1A1A1A]">
-                                {dayjs(cart.dropDateTime)?.format('hh:mm:ssA')}{' '}
+                                {dayjs(item.dropDateTime)?.format('hh:mm:ssA')}{' '}
                                 -{' '}
-                                {dayjs(cart.dropDateTime)
+                                {dayjs(item.dropDateTime)
                                   .add(1, 'hour')
                                   .format('hh:mm:ssA')}
                               </span>
                               <span className="text-xs font-normal text-[#6A6A6A]">
-                                {dayjs(cart.dropDateTime)?.format(
+                                {dayjs(item.dropDateTime)?.format(
                                   'ddd, MMM DD, YYYY'
                                 )}
                               </span>
@@ -296,15 +303,15 @@ function CartsPage() {
                           )}
                         </td>
                         <td className="text-sm font-semibold text-[#1A1A1A]">
-                          ${cart.grandTotal}
+                          ${item.grandTotal}
                         </td>
                         <td>
                           <span
                             className={`badge badge-${getStatusTag(
-                              cart.status
+                              item.status
                             )}`}
                           >
-                            {cart.status}
+                            {item.status}
                           </span>
                         </td>
                         <td>
@@ -331,6 +338,11 @@ function CartsPage() {
               </tbody>
             </table>
           </div>
+          {list?.length < 1 ? (
+            <div className="flex w-full items-center justify-center bg-gray-200 py-5">
+              <p>No Records Found</p>
+            </div>
+          ) : null}
           <div className="mt-3 flex w-[100%] justify-center py-3">
             <TablePagination
               component="div"

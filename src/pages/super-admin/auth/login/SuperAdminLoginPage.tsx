@@ -7,6 +7,7 @@ import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import CircularProgress from '@mui/material/CircularProgress';
 import auth from '../../../../services/superadmin/SuperAdminAuth';
 import { SuperadminUserLogin } from '../../../../interfaces/superadmin/auth.interface';
 import AlertBox from '../../../../utils/Alert';
@@ -25,6 +26,7 @@ function SuperAdminLoginPage() {
   const [alertMsg, setAlertMsg] = useState('');
   const [showAlert, setShowAlert] = useState(false);
   const [alertSeverity, setAlertSeverity] = useState('');
+  const [isLoader, setIsLoader] = useState(false);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const handleMouseDownPassword = (
     event: React.MouseEvent<HTMLButtonElement>
@@ -34,19 +36,24 @@ function SuperAdminLoginPage() {
   const loginHandler = async () => {
     const userData: SuperadminUserLogin = {
       username: email,
-      password: password,
+      password,
     };
+    setIsLoader(true);
     const user: any = await auth.loginService(userData);
     if (user && user.data.success) {
-      const userData = user.data.data;
-      setToken(userData.token);
-      dispatch(login(userData));
-      if (userData.isSuperAdmin) {
+      setIsLoader(false);
+      console.log('superadmin', user.data.data);
+
+      const newUserData = user.data.data;
+      setToken(newUserData.token);
+      dispatch(login(newUserData));
+      if (newUserData.isSuperAdmin) {
         navigate('../../main');
       } else {
         navigate('../../../dashboard/home');
       }
     } else {
+      setIsLoader(false);
       setAlertMsg(user.data.message);
       setAlertSeverity('error');
       setShowAlert(true);
@@ -119,12 +126,16 @@ function SuperAdminLoginPage() {
           </div>
           <div className="mt-8 w-full px-4">
             <Button
-              className=" w-full bg-neutral-900 px-16 text-gray-50"
+              className="w-full bg-neutral-900 px-16 text-gray-50"
               variant="contained"
               color="inherit"
               onClick={loginHandler}
             >
-              Login
+              {!isLoader ? (
+                `Login`
+              ) : (
+                <CircularProgress color="inherit" size={24} />
+              )}
             </Button>
           </div>
         </div>

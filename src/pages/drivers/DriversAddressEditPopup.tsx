@@ -2,25 +2,26 @@ import React, { useState, useEffect } from 'react';
 import Dialog from '@mui/material/Dialog';
 import Button from '@mui/material/Button';
 import Input from '@mui/material/Input';
-import dayjs from 'dayjs';
 import '../../assets/css/PopupStyle.css';
 import { useForm } from 'react-hook-form';
-import { AppUserAddress } from '../../interfaces/app-user.interface';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
+import { AppUserAddress } from '../../interfaces/app-user.interface';
 
 type Props = {
   openFormDialog: boolean;
   setOpenFormDialog: React.Dispatch<React.SetStateAction<boolean>>;
   formData: any;
-  callback: Function;
+  setEditFormData: any;
+  callback: (...args: any[]) => any;
 };
 
 function DriversAddressEditPopup({
   openFormDialog,
   setOpenFormDialog,
   formData,
+  setEditFormData,
   callback,
 }: Props) {
   const [formType, setFormType] = useState<any>('Home');
@@ -40,12 +41,13 @@ function DriversAddressEditPopup({
     data.latitude = Number(data.latitude);
     setOpenFormDialog(false);
     callback(data);
+    setEditFormData(null);
   };
   useEffect(() => {
     if (formData) {
       setFormType(formData.type);
     }
-  }, []);
+  }, [formData]);
 
   return (
     <Dialog

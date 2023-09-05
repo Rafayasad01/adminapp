@@ -1,16 +1,12 @@
 import React, { useState } from 'react';
-import SuperAdminTopBar from '../../../../components/super-admin/common/SuperAdminTopbar';
 import Checkbox from '@mui/material/Checkbox';
 import CheckBoxOutlineBlankOutlinedIcon from '@mui/icons-material/CheckBoxOutlineBlankOutlined';
 import CheckBoxOutlinedIcon from '@mui/icons-material/CheckBoxOutlined';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
-import Avatar from '@mui/material/Avatar';
-import deepPurple from '@mui/material/colors/deepPurple';
 import Button from '@mui/material/Button';
-import Backdrop from '@mui/material/Backdrop';
-import CircularProgress from '@mui/material/CircularProgress';
+import SuperAdminTopBar from '../../../../components/super-admin/common/SuperAdminTopbar';
 import { useAppSelector } from '../../../../redux/redux-hooks';
 import permission from '../../../../services/superadmin/SuperAdminRole';
 
@@ -29,19 +25,19 @@ function RolePermissions() {
 
   const handleFormClose = async () => {
     if (authState.user) {
-      const id = authState.user.id;
+      const { id } = authState.user;
       console.log(authState.user);
       const formData = {
         created_by: id,
         updated_by: id,
-        name: name,
+        name,
         permission_parent: null,
         action: '/create',
         permission_type: 'backend',
         desc: 'Create Permission',
         parentCheck: isPrentCheck,
         permission_sequence: 2,
-        childName: childName,
+        childName,
       };
       console.log(formData);
       const create = await permission.createPermission(formData);
@@ -81,15 +77,14 @@ function RolePermissions() {
               disableUnderline
               placeholder="Name"
               onChange={(
-                name: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-              ) => setName(name.target.value)}
+                val: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+              ) => setName(val.target.value)}
             />
           </FormControl>
-
-          <FormControl variant="standard">
+          {/* <FormControl variant="standard">
             <label>Name</label>
             <Input
-              id="name"
+              id="name2"
               type="text"
               value={childName}
               name="name"
@@ -99,7 +94,7 @@ function RolePermissions() {
                 name: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
               ) => setChildName(name.target.value)}
             />
-          </FormControl>
+          </FormControl> */}
 
           <Button
             onClick={handleFormClose}

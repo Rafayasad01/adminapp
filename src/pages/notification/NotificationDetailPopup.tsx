@@ -6,8 +6,8 @@ import Input from '@mui/material/Input';
 import { useForm } from 'react-hook-form';
 
 import '../../assets/css/PopupStyle.css';
-import { Notification } from '../../interfaces/notification.interface';
 import TextField from '@mui/material/TextField';
+import { Notification } from '../../interfaces/notification.interface';
 
 type Props = {
   openDetailDialog: boolean;
@@ -67,7 +67,7 @@ function NotificationDetailPopup({
               );
             })}
           </div>
-          <div className="FormFooter"></div>
+          <div className="FormFooter" />
         </form>
       </div>
     </Dialog>

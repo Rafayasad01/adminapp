@@ -9,16 +9,19 @@ import Button from '@mui/material/Button';
 import SearchIcon from '@mui/icons-material/Search';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
+import dayjs from 'dayjs';
+import TablePagination from '@mui/material/TablePagination';
+import Switch from '@mui/material/Switch';
 import TopBar from '../../components/common/TopBar';
 import CategoriesCreatePopup from './CategoriesCreatePopup';
 import assets from '../../assets';
 import CategoriesEditPopup from './CategoriesEditPopup';
 import category from '../../services/adminapp/adminCategory';
 import { useAppSelector } from '../../redux/redux-hooks';
-import dayjs from 'dayjs';
 import ActionMenu from '../../components/common/ActionMenu';
-import TablePagination from '@mui/material/TablePagination';
-import Switch from '@mui/material/Switch';
+import Loader from '../../components/common/Loader';
+import Notify from '../../components/common/Notify';
+import PermissionPopup from '../../utils/PermissionPopup';
 
 function CategoriesPage() {
   const authState: any = useAppSelector((state) => state.authState);
@@ -30,6 +33,7 @@ function CategoriesPage() {
   const [editFormData, setEditFormData] = useState<any>(null);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [actionMenuItemid, setActionMenuItemid] = React.useState('');
+  const [isLoader, setIsLoader] = React.useState(true);
   const [actionMenuAnchorEl, setActionMenuAnchorEl] =
     useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
@@ -37,10 +41,36 @@ function CategoriesPage() {
 
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
+  const [isNotify, setIsNotify] = React.useState(false);
+  const [notifyMessage, setNotifyMessage] = React.useState({});
+  const [cancelDialogOpen, setCancelDialogOpen] = useState<boolean>(false);
+  const [dialogText, setDialogText] = useState<any>('Are you sure you want to delete this Category ?');
 
   const handleFormClickOpen = () => {
     setOpenFormDialog(true);
   };
+
+  console.log("cancelDialogOpen", cancelDialogOpen);
+
+
+  useEffect(() => {
+    category
+      .getListService(authState.user.tenant, page, rowsPerPage)
+      .then((item: any) => {
+        setIsLoader(false);
+        setList(item.data.data.list);
+        setTotal(item.data.data.total);
+      })
+      .catch((error) => {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: error.message,
+          type: 'error',
+        });
+        console.log('error::::::::', error);
+      });
+  }, [authState, page, rowsPerPage]);
 
   const handleClickSearch = (event: any) => {
     const searchTxt = event.target.value as string;
@@ -60,7 +90,7 @@ function CategoriesPage() {
     newPage: number
   ) => {
     setPage(newPage);
-    //offset? ,limit rowsperpage hoga ofset page * rowsperPage
+    // offset? ,limit rowsperpage hoga ofset page * rowsperPage
     if (search === '' || search === null || search === undefined) {
       category
         .getListService(authState.user.tenant, newPage, rowsPerPage)
@@ -101,22 +131,49 @@ function CategoriesPage() {
     }
   };
 
-  useEffect(() => {
+  const deleteHandler = (id: string) => {
+    setIsLoader(true);
+    const data = {
+      is_active: false,
+      is_deleted: true,
+      updated_by: authState.user.id,
+    };
     category
-      .getListService(authState.user.tenant, page, rowsPerPage)
-      .then((item: any) => {
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
+      .deleteCategory(id, data)
+      .then((updateItem) => {
+        if (updateItem.data.success) {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: updateItem.data.message,
+            type: 'success',
+          });
+          setList((newArr: any) => {
+            return newArr.filter((item: any) => item.id !== id);
+          });
+          let newtotal = total;
+          setTotal((newtotal -= 1));
+        }
       })
-      .catch((error) => {
-        console.log('error::::::::', error);
+      .catch((err) => {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
+        });
       });
-  }, []);
+  };
+
+  const statusCancelHandler = () => {
+    deleteHandler(actionMenuItemid);
+  }
+
   const manuHandler = (option: string) => {
     if (option === 'Edit') {
       category.getCategory(actionMenuItemid).then((item: any) => {
         if (item.data.success) {
-          console.log('tem.data.data:::::::', item.data.data)
+          console.log('tem.data.data:::::::', item.data.data);
           setEditFormData(item.data.data);
           setOpenEditFormDialog(true);
         }
@@ -124,10 +181,12 @@ function CategoriesPage() {
     } else if (option === 'Service') {
       navigate(`service/${actionMenuItemid}`);
     } else if (option === 'Delete') {
-      deleteHandler(actionMenuItemid);
+      setCancelDialogOpen(true)
     }
   };
+
   const createFormHandler = (data: any) => {
+    setIsLoader(true);
     const formData = new FormData();
     formData.append('name', data.name);
     formData.append('desc', data.desc);
@@ -135,14 +194,47 @@ function CategoriesPage() {
     formData.append('tenant', authState.user.tenant);
     formData.append('created_by', authState.user.id);
     formData.append('updated_by', authState.user.id);
-    category.create(formData).then((item) => {
-      if (item.data.success) {
-        setList([item.data.data, ...list]);
-      }
-    });
+    if (data.name && data.desc && data.icon) {
+      category
+        .create(formData)
+        .then((item) => {
+          if (item.data.success) {
+            setIsLoader(false);
+            setIsNotify(true);
+            setNotifyMessage({
+              text: item.data.message,
+              type: 'success',
+            });
+            setList([item.data.data, ...list]);
+          } else {
+            setIsLoader(false);
+            setIsNotify(true);
+            setNotifyMessage({
+              text: item.data.message,
+              type: 'error',
+            });
+          }
+        })
+        .catch((err) => {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: err.message,
+            type: 'error',
+          });
+        });
+    } else {
+      setIsLoader(false);
+      setIsNotify(true);
+      setNotifyMessage({
+        text: "All fields are required!",
+        type: 'error',
+      });
+    }
   };
 
   const updateFormHandler = (data: any) => {
+    setIsLoader(true);
     const formData = new FormData();
     formData.append('name', data.name);
     formData.append('desc', data.desc);
@@ -152,18 +244,37 @@ function CategoriesPage() {
       .updateCategory(actionMenuItemid, formData)
       .then((updateItem: any) => {
         if (updateItem.data.success) {
-          setList((newArr: any) => {
-            return newArr.map((item: any) => {
-              if (item.id === updateItem.data.data.id) {
-                item.name = updateItem.data.data.name;
-                item.desc = updateItem.data.data.desc;
-                if (updateItem.data.data.hasOwnProperty('icon'))
-                  item.icon = updateItem.data.data.icon;
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: updateItem.data.message,
+            type: 'success',
+          });
+          for (var i = 0; i < list.length; i++) {
+            if (list[i].id === updateItem.data.data.id) {
+              list[i].name = updateItem.data.data.name;
+              list[i].desc = updateItem.data.data.desc;
+              if (updateItem.data.data.icon) {
+                list[i].icon = updateItem.data.data.icon;
               }
-              return { ...item };
-            });
+            }
+          }
+        } else {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: updateItem.data.message,
+            type: 'error',
           });
         }
+      })
+      .catch((err) => {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
+        });
       });
   };
 
@@ -186,25 +297,15 @@ function CategoriesPage() {
     });
   };
 
-  const deleteHandler = (id: string) => {
-    const data = {
-      is_active: false,
-      is_deleted: true,
-      updated_by: authState.user.id,
-    };
-    category.deleteCategory(id, data).then((updateItem) => {
-      if (updateItem.data.success) {
-        setList((newArr: any) => {
-          return newArr.filter((item: any) => item.id !== id);
-        });
-        let newtotal = total;
-        setTotal((newtotal -= 1));
-      }
-    });
-  };
-
-  return (
+  return isLoader ? (
+    <Loader />
+  ) : (
     <>
+      <Notify
+        isOpen={isNotify}
+        setIsOpen={setIsNotify}
+        displayMessage={notifyMessage}
+      />
       <TopBar title="Categories" />
       <div className="container mt-5">
         <div className="w-full rounded-lg bg-white shadow-lg">
@@ -340,6 +441,11 @@ function CategoriesPage() {
               </tbody>
             </table>
           </div>
+          {list?.length < 1 ? (
+            <div className="flex w-full items-center justify-center bg-gray-200 py-5">
+              <p>No Records Found</p>
+            </div>
+          ) : null}
           <div className="mt-3 flex w-[100%] justify-center py-3">
             <TablePagination
               component="div"
@@ -352,6 +458,15 @@ function CategoriesPage() {
           </div>
         </div>
       </div>
+      {cancelDialogOpen && (
+        <PermissionPopup
+          type="shock"
+          open={cancelDialogOpen}
+          setOpen={setCancelDialogOpen}
+          dialogText={dialogText}
+          callback={statusCancelHandler}
+        />
+      )}
       {actionMenuAnchorEl && (
         <ActionMenu
           open={actionMenuOpen}
@@ -363,6 +478,8 @@ function CategoriesPage() {
       )}
       {openFormDialog && (
         <CategoriesCreatePopup
+          setIsNotify={setIsNotify}
+          setNotifyMessage={setNotifyMessage}
           openFormDialog={openFormDialog}
           setOpenFormDialog={setOpenFormDialog}
           callback={createFormHandler}
@@ -370,6 +487,8 @@ function CategoriesPage() {
       )}
       {openEditFormDialog && (
         <CategoriesEditPopup
+          setIsNotify={setIsNotify}
+          setNotifyMessage={setNotifyMessage}
           openFormDialog={openEditFormDialog}
           setOpenFormDialog={setOpenEditFormDialog}
           formData={editFormData}

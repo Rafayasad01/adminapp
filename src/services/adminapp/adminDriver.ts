@@ -1,5 +1,6 @@
 import network from '../../utils/network';
 import { DRIVER_PREFIX } from '../../utils/constants';
+
 const DRIVER_SCHEDULE_PREFIX = 'schedule';
 const DRIVER_ADDRESS_PREFIX = 'address';
 
@@ -96,8 +97,10 @@ const deleteScheduleService = (id: string, data: any) => {
 };
 
 const updateStatusScheduleService = (id: string) => {
-  return network.get(`${DRIVER_PREFIX}/${DRIVER_SCHEDULE_PREFIX}/update/status/${id}`);
-}
+  return network.get(
+    `${DRIVER_PREFIX}/${DRIVER_SCHEDULE_PREFIX}/update/status/${id}`
+  );
+};
 
 const getAddressService = (id: string) => {
   return network.get(`${DRIVER_PREFIX}/${DRIVER_ADDRESS_PREFIX}/detail/${id}`);
@@ -137,13 +140,17 @@ const searchAddressService = (
 };
 
 const deleteAddressService = (id: string, data: any) => {
-  return network.post(`${DRIVER_PREFIX}/${DRIVER_ADDRESS_PREFIX}/delete/${id}`, data);
-}
+  return network.post(
+    `${DRIVER_PREFIX}/${DRIVER_ADDRESS_PREFIX}/delete/${id}`,
+    data
+  );
+};
 
 const updateStatusAddressService = (id: string) => {
-  return network.get(`${DRIVER_PREFIX}/${DRIVER_ADDRESS_PREFIX}/update/status/${id}`);
-}
-
+  return network.get(
+    `${DRIVER_PREFIX}/${DRIVER_ADDRESS_PREFIX}/update/status/${id}`
+  );
+};
 
 export default {
   getListService,
@@ -170,5 +177,5 @@ export default {
   getDetailService,
   getDeliveryListService,
   updateStatusAddressService,
-  updateStatusScheduleService
-}
+  updateStatusScheduleService,
+};

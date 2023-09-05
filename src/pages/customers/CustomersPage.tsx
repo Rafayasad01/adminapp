@@ -9,16 +9,18 @@ import Button from '@mui/material/Button';
 import SearchIcon from '@mui/icons-material/Search';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
-import TopBar from '../../components/common/TopBar';
-import CustomersCreatePopup from './CustomersCreatePopup';
-import CustomersEditPopup from './CustomersEditPopup';
 import TablePagination from '@mui/material/TablePagination';
-import { useAppSelector } from '../../redux/redux-hooks';
-import ActionMenu from '../../components/common/ActionMenu';
 import Switch from '@mui/material/Switch';
 import dayjs from 'dayjs';
 import Avatar from '@mui/material/Avatar';
+import TopBar from '../../components/common/TopBar';
+import CustomersCreatePopup from './CustomersCreatePopup';
+import CustomersEditPopup from './CustomersEditPopup';
+import { useAppSelector } from '../../redux/redux-hooks';
+import ActionMenu from '../../components/common/ActionMenu';
 import Service from '../../services/adminapp/adminCustomer';
+import Loader from '../../components/common/Loader';
+import Notify from '../../components/common/Notify';
 
 function CustomersPage() {
   const authState: any = useAppSelector((state) => state.authState);
@@ -37,6 +39,9 @@ function CustomersPage() {
 
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
+  const [isLoader, setIsLoader] = React.useState(true);
+  const [isNotify, setIsNotify] = React.useState(false);
+  const [notifyMessage, setNotifyMessage] = React.useState({});
 
   const handleFormClickOpen = () => {
     setOpenFormDialog(true);
@@ -65,7 +70,7 @@ function CustomersPage() {
     newPage: number
   ) => {
     setPage(newPage);
-    //offset? ,limit rowsperpage hoga ofset page * rowsperPage
+    // offset? ,limit rowsperpage hoga ofset page * rowsperPage
     if (search === '' || search === null || search === undefined) {
       Service.getListService(authState.user.tenant, newPage, rowsPerPage).then(
         (item) => {
@@ -123,38 +128,64 @@ function CustomersPage() {
     } else if (option === 'Address') {
       navigate(`address/${actionMenuItemid}`);
     } else if (option === 'Delete') {
+      setIsLoader(true);
       const data = {
         is_active: false,
         is_deleted: true,
         updated_by: authState.user.id,
       };
-      Service.deleteService(actionMenuItemid, data).then((item: any) => {
-        if (item.data.success) {
-          setList((newArr: any) => {
-            console.log('newArr:::::', newArr);
-            return newArr.filter(
-              (newItem: any) => newItem.id !== item.data.data.id
-            );
+      Service.deleteService(actionMenuItemid, data)
+        .then((item: any) => {
+          if (item.data.success) {
+            setIsLoader(false);
+            setIsNotify(true);
+            setNotifyMessage({
+              text: item.data.message,
+              type: 'success',
+            });
+            setList((newArr: any) => {
+              console.log('newArr:::::', newArr);
+              return newArr.filter(
+                (newItem: any) => newItem.id !== item.data.data.id
+              );
+            });
+          }
+        })
+        .catch((err) => {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: err.message,
+            type: 'error',
           });
-        }
-      });
+        });
     } else if (option === 'Detail') {
       navigate(`detail/${actionMenuItemid}`);
     }
   };
 
   useEffect(() => {
-    Service.getListService(authState.user.tenant, page, rowsPerPage).then(
-      (item: any) => {
+    Service.getListService(authState.user.tenant, page, rowsPerPage)
+      .then((item: any) => {
         if (item.data.success) {
+          console.log('customers data==>', item.data);
+          setIsLoader(false);
           setList(item.data.data.list);
           setTotal(item.data.data.total);
         }
-      }
-    );
-  }, []);
+      })
+      .catch((err) => {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
+        });
+      });
+  }, [authState, page, rowsPerPage]);
 
   const createFormHandler = (data: any) => {
+    setIsLoader(true);
     const formData = new FormData();
     formData.append('first_name', data.first_name);
     formData.append('last_name', data.last_name);
@@ -162,19 +193,43 @@ function CustomersPage() {
     formData.append('email', data.email);
     formData.append('phone', data.phone);
     formData.append('address', data.address);
+    formData.append('postal_code', data.postal_code);
     formData.append('tenant', authState.user.tenant);
     formData.append('created_by', authState.user.id);
     formData.append('updated_by', authState.user.id);
     if (data.avatar !== null) formData.append('avatar', data.avatar);
-    Service.create(formData).then((item) => {
-      if (item.data.success) {
-        list.unshift(item.data.data);
-        setList(list);
-      }
-    });
+    Service.create(formData)
+      .then((item) => {
+        if (item.data.success) {
+          console.log("customer created", item.data);
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'success',
+          });
+          setList([...list, item.data.data]);
+        } else {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'error',
+          });
+        }
+      })
+      .catch((err) => {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
+        });
+      });
   };
 
   const updateFormHandler = (data: any) => {
+    setIsLoader(true);
     const formData = new FormData();
     formData.append('first_name', data.first_name);
     formData.append('last_name', data.last_name);
@@ -182,22 +237,41 @@ function CustomersPage() {
     formData.append('postal_code', data.postal_code);
     formData.append('updated_by', authState.user.id);
     if (data.avatar !== null) formData.append('avatar', data.avatar);
-    Service.updateService(actionMenuItemid, formData).then((item) => {
-      if (item.data.success) {
-        setList((newArr: any) => {
-          return newArr.map((newItem: any) => {
-            if (newItem.id === actionMenuItemid) {
-              newItem.firstName = item.data.data.firstName;
-              newItem.lastName = item.data.data.lastName;
-              newItem.phone = item.data.data.phone;
-              newItem.postalCode = item.data.data.postalCode;
-              if (data.avatar !== null) newItem.phone = item.data.data.avatar;
-              return { ...newItem };
-            }
+    Service.updateService(actionMenuItemid, formData)
+      .then((item) => {
+        if (item.data.success) {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'success',
           });
+          for (var i = 0; i < list.length; i++) {
+            if (list[i].id === item.data.data.id) {
+              list[i].firstName = item.data.data.first_name;
+              list[i].lastName = item.data.data.last_name;
+              list[i].phone = item.data.data.phone;
+              list[i].postalCode = item.data.data.postal_code
+              if (data.avatar !== null) list[i].phone = item.data.data.avatar;
+            }
+          }
+        } else {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'error',
+          });
+        }
+      })
+      .catch((err) => {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
         });
-      }
-    });
+      });
   };
 
   const handleSwitchChange = (event: any, id: string) => {
@@ -219,27 +293,14 @@ function CustomersPage() {
     });
   };
 
-  return (
+  return isLoader ? (
+    <Loader />
+  ) : (
     <>
-      {actionMenuAnchorEl && (
-        <ActionMenu
-          open={actionMenuOpen}
-          anchorEl={actionMenuAnchorEl}
-          setAnchorEl={setActionMenuAnchorEl}
-          options={actionMenuOptions}
-          callback={manuHandler}
-        />
-      )}
-      <CustomersCreatePopup
-        openFormDialog={openFormDialog}
-        setOpenFormDialog={setOpenFormDialog}
-        callback={createFormHandler}
-      />
-      <CustomersEditPopup
-        openFormDialog={openEditFormDialog}
-        setOpenFormDialog={setOpenEditFormDialog}
-        formData={editFormData}
-        callback={updateFormHandler}
+      <Notify
+        isOpen={isNotify}
+        setIsOpen={setIsNotify}
+        displayMessage={notifyMessage}
       />
       <TopBar title="Customers" />
       <div className="container mt-5">
@@ -325,8 +386,9 @@ function CustomersPage() {
                                   marginRight: '10px',
                                 }}
                               >
-                                {item.firstName.charAt(0)}
-                                {item.lastName.charAt(0)}
+                                {console.log('name', item.firstName)}
+                                {item.firstName?.charAt(0)}
+                                {item.lastName?.charAt(0)}
                               </Avatar>
                             )}
 
@@ -337,8 +399,8 @@ function CustomersPage() {
                               <span className="text-xs font-normal text-[#6A6A6A]">
                                 {dayjs(item.createdDate).isValid()
                                   ? dayjs(item.createdDate)?.format(
-                                      'MMMM DD, YYYY'
-                                    )
+                                    'MMMM DD, YYYY'
+                                  )
                                   : '--'}
                               </span>
                             </div>
@@ -391,6 +453,11 @@ function CustomersPage() {
               </tbody>
             </table>
           </div>
+          {list?.length < 1 ? (
+            <div className="flex w-full items-center justify-center bg-gray-200 py-5">
+              <p>No Records Found</p>
+            </div>
+          ) : null}
           <TablePagination
             component="div"
             count={total}
@@ -401,6 +468,31 @@ function CustomersPage() {
           />
         </div>
       </div>
+      {actionMenuAnchorEl && (
+        <ActionMenu
+          open={actionMenuOpen}
+          anchorEl={actionMenuAnchorEl}
+          setAnchorEl={setActionMenuAnchorEl}
+          options={actionMenuOptions}
+          callback={manuHandler}
+        />
+      )}
+      <CustomersCreatePopup
+        setIsNotify={setIsNotify}
+        setNotifyMessage={setNotifyMessage}
+        openFormDialog={openFormDialog}
+        setOpenFormDialog={setOpenFormDialog}
+        callback={createFormHandler}
+      />
+      <CustomersEditPopup
+        setIsNotify={setIsNotify}
+        setNotifyMessage={setNotifyMessage}
+        openFormDialog={openEditFormDialog}
+        setOpenFormDialog={setOpenEditFormDialog}
+        formData={editFormData}
+        setEditFormData={setEditFormData}
+        callback={updateFormHandler}
+      />
     </>
   );
 }

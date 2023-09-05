@@ -8,8 +8,7 @@ type Props = {
   data: any;
 };
 
-function TodayOrderModal({ open, setOpen }: Props) {
-  const handleOpen = () => setOpen(true);
+function TodayOrderModal({ open, setOpen, data }: Props) {
   const handleClose = () => setOpen(false);
   return (
     <Modal

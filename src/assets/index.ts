@@ -19,8 +19,10 @@ import iconMap from './images/icon-map.png';
 import fileUpload from './images/file-upload.svg';
 import facebook from './images/Facebook.svg';
 import instagram from './images/Instagram.svg';
+import linkedin from './images/Linkedin.svg';
 import twitter from './images/Twitter.svg';
-import whatsApp from './images/Whatsapp.svg';
+import youtube from './images/Youtube.svg';
+import whatsapp from './images/Whatsapp.svg';
 import imageIcon from './images/image-icon.png';
 
 import activeShopsIcon from './images/active-shops-icon.svg';
@@ -50,8 +52,10 @@ const assets = {
     fileUpload,
     facebook,
     instagram,
+    linkedin,
     twitter,
-    whatsApp,
+    youtube,
+    whatsapp,
     activeShopsIcon,
     inactiveShopsIcon,
     totalShopsIcon,
@@ -59,7 +63,7 @@ const assets = {
     imageIcon,
     truckDriverIcon,
     comingSoonIcon,
-    noMapLocation
+    noMapLocation,
   },
   tempImages: {
     wash,

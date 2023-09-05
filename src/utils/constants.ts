@@ -1,5 +1,5 @@
-export const BASE_URL = import.meta.env.VITE_SERVICE_BASE_URL;
-//export const BASE_URL = "https://dev.urapptech.com/api/v1/admin/";
+// export const BASE_URL = import.meta.env.VITE_SERVICE_BASE_URL;
+export const BASE_URL = 'https://dev.urapptech.com/api/v1/admin/';
 export const GOOGLE_MAP_KEY = import.meta.env.VITE_GOOGLE_MAP_KEY;
 export const BACKOFFICE_PREFIX = 'backofficeUser';
 export const PERMISSION_PREFIX = 'permission';
@@ -8,6 +8,7 @@ export const CART_PREFIX = 'cart';
 export const DRIVER_PREFIX = 'driver';
 export const CUSTOMER_PREFIX = 'customer';
 export const CATEGORY_PREFIX = 'category';
+export const SETTING_PREFIX = 'setting';
 export const NOTIFICATION_PREFIX = 'notification';
 export const ORDER_STATUS_NEW = 'New';
 export const ORDER_STATUS_PICKED_UP = 'PickedUp';
@@ -37,10 +38,18 @@ export const NOTIFICATION_STATUS_SENDING = 'Sending';
 export const NOTIFICATION_STATUS_FAILED = 'Failed';
 export const NOTIFICATION_STATUS_COMPLETED = 'Completed';
 export const NOTIFICATION_STATUS_CANCELLED = 'Cancelled';
+export const FACEBOOK = 'facebook';
+export const INSTAGRAM = 'instagram';
+export const LINKEDIN = 'linkedin';
+export const TWITTER = 'twitter';
+export const YOUTUBE = 'youtube';
+export const WHATSAPP = 'whatsapp';
+export const DOMAIN_PREFIX = '.urapptech.com';
 
-export let token = '';
+// LocalStorage my token save kara lyty
+export const TOKEN_STORE_KEY = 'APP_AUTH_TOKEN';
 export const setToken = (data: string) => {
-  token = data;
+  localStorage.setItem(TOKEN_STORE_KEY, JSON.stringify(data));
 };
 
 export const ORDER_STATUSES = new Map();

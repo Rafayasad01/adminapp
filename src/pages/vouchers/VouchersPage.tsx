@@ -3,21 +3,11 @@ import dayjs from 'dayjs';
 import TablePagination from '@mui/material/TablePagination';
 import IconButton from '@mui/material/IconButton';
 import Divider from '@mui/material/Divider';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
 import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
 import SearchIcon from '@mui/icons-material/Search';
-import Checkbox from '@mui/material/Checkbox';
-import CheckBoxOutlineBlankOutlinedIcon from '@mui/icons-material/CheckBoxOutlineBlankOutlined';
-import CheckBoxOutlinedIcon from '@mui/icons-material/CheckBoxOutlined';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import TopBar from '../../components/common/TopBar';
@@ -26,16 +16,18 @@ import VouchersReferralCreatePopup from './VouchersReferralCreatePopup';
 import VouchersPromoEditPopup from './VouchersPromoEditPopup';
 import Service from '../../services/adminapp/adminVouchers';
 import { useAppSelector } from '../../redux/redux-hooks';
+import ActionMenu from '../../components/common/ActionMenu';
+import PermissionPopup from '../../utils/PermissionPopup';
+import Loader from '../../components/common/Loader';
+import Notify from '../../components/common/Notify';
 
 const options = ['Edit', 'Delete'];
-const ITEM_HEIGHT = 48;
 function VouchersPage() {
   const authState: any = useAppSelector((state) => state.authState);
   const [list, setList] = useState<any>([]);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [search, setSearch] = useState('');
   const [openDialog, setOpenDialog] = useState(false);
-  const [isCheckedAll, setIsCheckedAll] = useState(false);
   const [page, setPage] = useState<number>(0);
   const [total, setTotal] = useState<number>(0);
   const [rowsPerPage, setRowsPerPage] = React.useState<number>(10);
@@ -44,12 +36,11 @@ function VouchersPage() {
   const [vouchersReferralDialog, setVouchersReferralDialog] = useState(false);
   const [editItem, setEditItem] = useState<any>(null);
   const [deleteItemId, setDeleteItemId] = useState<string>('');
+  const [isLoader, setIsLoader] = React.useState(true);
+  const [isNotify, setIsNotify] = React.useState(false);
+  const [notifyMessage, setNotifyMessage] = React.useState({});
 
   const open = Boolean(anchorEl);
-
-  const handleCheckAllChange = (event: any) => {
-    setIsCheckedAll(event.target.checked);
-  };
 
   const handleDialogClose = (deleteVoucher: boolean) => {
     if (deleteVoucher) {
@@ -75,9 +66,7 @@ function VouchersPage() {
     setEditItem(list.find((item: any) => item.id === id));
     setDeleteItemId(id);
   };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+
   const handleSelectedMenuClose = (option: string) => {
     setAnchorEl(null);
     if (option === 'Edit') {
@@ -96,17 +85,17 @@ function VouchersPage() {
     newPage: number
   ) => {
     setPage(newPage);
-    // offset? ,limit rowsperpage hoga ofset page * rowsperPage
-    if (search === '' || search === null || search === undefined) {
-      Service.listVouchers(authState.user.tenant, newPage, rowsPerPage).then(
-        (response) => {
-          if (response.data.success) {
-            setList(response.data.data.result);
-            setTotal(response.data.data.totalResults);
-          }
-        }
-      );
-    }
+    Service.listVouchers(
+      authState.user.tenant,
+      newPage,
+      rowsPerPage,
+      search
+    ).then((response) => {
+      if (response.data.success) {
+        setList(response.data.data.result);
+        setTotal(response.data.data.totalResults);
+      }
+    });
   };
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -115,53 +104,119 @@ function VouchersPage() {
     const newPage = 0;
     setRowsPerPage(newRowPerPage);
     setPage(newPage);
-    if (search === '' || search === null || search === undefined) {
-      Service.listVouchers(authState.user.tenant, newPage, rowsPerPage).then(
-        (response) => {
-          if (response.data.success) {
-            setList(response.data.data.result);
-            setTotal(response.data.data.totalResults);
-          }
-        }
-      );
-    }
-  };
-
-  useEffect(() => {
-    Service.listVouchers(authState.user.tenant, page, rowsPerPage)
-      .then((response: any) => {
+    Service.listVouchers(
+      authState.user.tenant,
+      newPage,
+      rowsPerPage,
+      search
+    ).then((response) => {
+      if (response.data.success) {
         setList(response.data.data.result);
         setTotal(response.data.data.totalResults);
-      })
-      .catch((error) => {
-        console.log('error::::::::', error);
-      });
-  }, [authState.user.tenant, page, rowsPerPage]);
-
-  const createFormHandler = (data: any) => {
-    Service.createVoucher(authState.user.tenant, data).then((response) => {
-      if (response.data.success) {
-        const newList = [...list, response.data.data];
-        setList(newList);
       }
     });
   };
 
-  const updateFormHandler = (id: string, data: any) => {
-    Service.updateVoucher(authState.user.tenant, id, data).then(
-      (response: any) => {
+  useEffect(() => {
+    Service.listVouchers(authState.user.tenant, page, rowsPerPage, search)
+      .then((response: any) => {
         if (response.data.success) {
+          setIsLoader(false);
+          setList(response.data.data.result);
+          setTotal(response.data.data.totalResults);
+        } else {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: response.data.message,
+            type: 'error',
+          });
+        }
+      })
+      .catch((error) => {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: error.message,
+          type: 'error',
+        });
+      });
+  }, [authState.user.tenant, page, rowsPerPage, search]);
+
+  const createFormHandler = (data: any) => {
+    setIsLoader(true);
+    Service.createVoucher(authState.user.tenant, data)
+      .then((response) => {
+        if (response.data.success) {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: response.data.message,
+            type: 'success',
+          });
+          setList([...list, response.data.data]);
+        } else {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: response.data.message,
+            type: 'error',
+          });
+        }
+      })
+      .catch((err) => {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
+        });
+      });
+  };
+
+  const updateFormHandler = (id: string, data: any) => {
+    setIsLoader(true);
+    Service.updateVoucher(authState.user.tenant, id, data)
+      .then((response: any) => {
+        if (response.data.success) {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: response.data.message,
+            type: 'success',
+          });
           const newList = [
             ...list.filter((item: any) => item.id !== response.data.data.id),
             response.data.data,
           ];
           setList(newList);
+        } else {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: response.data.message,
+            type: 'error',
+          });
         }
-      }
-    );
+      })
+      .catch((err) => {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
+        });
+      });
   };
-  return (
+  return isLoader ? (
+    <Loader />
+  ) : (
     <>
+      <Notify
+        isOpen={isNotify}
+        setIsOpen={setIsNotify}
+        displayMessage={notifyMessage}
+      />
       <VouchersPromoCreatePopup
         vouchersPromoDialog={vouchersPromoDialog}
         setVouchersPromoDialog={setVouchersPromoDialog}
@@ -234,21 +289,6 @@ function VouchersPage() {
             <table className="table-border table-auto">
               <thead>
                 <tr>
-                  <th className="w-5">
-                    <Checkbox
-                      icon={
-                        <CheckBoxOutlineBlankOutlinedIcon className=" text-[#E4E4E4]" />
-                      }
-                      checkedIcon={
-                        <CheckBoxOutlinedIcon className="text-[#1D1D1D]" />
-                      }
-                      onChange={(
-                        event: React.ChangeEvent<HTMLInputElement>
-                      ) => {
-                        handleCheckAllChange(event);
-                      }}
-                    />
-                  </th>
                   <th>Vouchers</th>
                   <th>Valid From</th>
                   <th>Valid Till</th>
@@ -280,17 +320,6 @@ function VouchersPage() {
                     return (
                       <tr key={item.id}>
                         <td>
-                          <Checkbox
-                            icon={
-                              <CheckBoxOutlineBlankOutlinedIcon className=" text-[#E4E4E4]" />
-                            }
-                            checkedIcon={
-                              <CheckBoxOutlinedIcon className="text-[#1D1D1D]" />
-                            }
-                            checked={isCheckedAll}
-                          />
-                        </td>
-                        <td>
                           <div className="avatar flex flex-row items-center">
                             <div className="flex flex-col items-start justify-start">
                               <span className="text-sm font-semibold">
@@ -302,8 +331,8 @@ function VouchersPage() {
                             </div>
                           </div>
                         </td>
-                        <td>{dayjs(item.validFrom).format('DD MMM, YYYY')}</td>
-                        <td>{dayjs(item.validTill).format('DD MMM, YYYY')}</td>
+                        <td>{dayjs(item.validFrom).format('MMMM DD, YYYY')}</td>
+                        <td>{dayjs(item.validTill).format('MMMM DD, YYYY')}</td>
                         <td>${item.value}</td>
                         <td>{item.minProduct}</td>
                         <td>${item.minAmount}</td>
@@ -311,7 +340,7 @@ function VouchersPage() {
                         <td>{item.redeemCount}</td>
                         <td>{item.maxRedeem}</td>
                         <td>
-                          {item.status === 'Active' ? (
+                          {item.isActive ? (
                             <span className="badge badge-success">ACTIVE</span>
                           ) : (
                             <span className="badge badge-danger">INACTIVE</span>
@@ -338,6 +367,11 @@ function VouchersPage() {
               </tbody>
             </table>
           </div>
+          {list?.length < 1 ? (
+            <div className="flex w-full items-center justify-center bg-gray-200 py-5">
+              <p>No Records Found</p>
+            </div>
+          ) : null}
           <div className="mt-3 flex w-[100%] justify-center py-3">
             <TablePagination
               component="div"
@@ -350,89 +384,20 @@ function VouchersPage() {
           </div>
         </div>
       </div>
-      <Menu
-        id="long-menu"
-        MenuListProps={{
-          'aria-labelledby': 'long-button',
-        }}
+      <ActionMenu
+        options={options}
         anchorEl={anchorEl}
         open={open}
-        onClose={handleClose}
-        PaperProps={{
-          style: {
-            maxHeight: ITEM_HEIGHT * 4.5,
-            width: '11ch',
-          },
-        }}
-      >
-        {options.map((option) => (
-          <MenuItem
-            key={option}
-            selected={option === 'Pyxis'}
-            onClick={() => handleSelectedMenuClose(option)}
-          >
-            {option}
-          </MenuItem>
-        ))}
-      </Menu>
-      <Dialog
+        setAnchorEl={setAnchorEl}
+        callback={handleSelectedMenuClose}
+      />
+
+      <PermissionPopup
         open={openDialog}
-        onClose={() => handleDialogClose(false)}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle
-          id="alert-dialog-title"
-          sx={{
-            color: '#1A1A1A',
-            fontFamily: 'Inter',
-            fonWeight: 600,
-            fonSize: '20px',
-            padding: '10px 15px 0 15px',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          Delete Voucher?
-        </DialogTitle>
-        <DialogContent
-          sx={{
-            color: '#6A6A6A',
-            fontFamily: 'Inter',
-            fonWeight: 400,
-            fonSize: '14px',
-            padding: '10px 15px 0 15px',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          <DialogContentText id="alert-dialog-description">
-            Do you really want to delete this voucher?
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions
-          sx={{ justifyContent: 'space-between', margin: '15px 5px 10px 5px' }}
-        >
-          <Button
-            sx={{ width: '140px' }}
-            variant="contained"
-            className="btn-black-outline mr-3"
-            onClick={() => handleDialogClose(true)}
-          >
-            Yes, Confirm
-          </Button>
-          <Button
-            sx={{ width: '140px' }}
-            variant="contained"
-            className="btn-black-fill btn-icon"
-            onClick={() => handleDialogClose(false)}
-          >
-            No, Cancel
-          </Button>
-        </DialogActions>
-      </Dialog>
+        setOpen={setOpenDialog}
+        dialogText="Delete Voucher?"
+        callback={() => handleDialogClose(true)}
+      />
     </>
   );
 }

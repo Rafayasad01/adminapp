@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Dialog from '@mui/material/Dialog';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
@@ -8,21 +8,23 @@ import { SelectChangeEvent } from '@mui/material/Select';
 import '../../assets/css/PopupStyle.css';
 
 type Props = {
-  socialLinks: boolean;
-  setSocialLinks: React.Dispatch<React.SetStateAction<boolean>>;
+  openDialog: boolean;
+  setOpenDialog: React.Dispatch<React.SetStateAction<boolean>>;
+  detail: any;
+  setDetail: React.Dispatch<React.SetStateAction<any>>;
 };
 
-function SocialLinksPopup({ socialLinks, setSocialLinks }: Props) {
-  const [quantity, setQuantity] = useState('status');
-  const handleFormClose = () => setSocialLinks(false);
-
-  const handleQuantityChange = (event: SelectChangeEvent) => {
-    setQuantity(event.target.value as string);
-  };
+function SocialLinksPopup({
+  openDialog,
+  setOpenDialog,
+  detail,
+  setDetail,
+}: Props) {
+  const handleFormClose = () => setOpenDialog(false);
 
   return (
     <Dialog
-      open={socialLinks}
+      open={openDialog}
       onClose={handleFormClose}
       PaperProps={{
         className: 'Dialog Width-30',
@@ -39,11 +41,19 @@ function SocialLinksPopup({ socialLinks, setSocialLinks }: Props) {
               <label className="FormLabel">Facebook</label>
               <Input
                 className="FormInput"
-                id="address"
-                value=""
-                name="address"
+                id="facebook"
+                value={detail.facebook ?? ''}
+                name="facebook"
                 placeholder="Url"
                 disableUnderline
+                onChange={(item: any) => {
+                  setDetail((newItem: any) => {
+                    return {
+                      ...newItem,
+                      facebook: item.target.value,
+                    };
+                  });
+                }}
               />
             </FormControl>
           </div>
@@ -52,11 +62,19 @@ function SocialLinksPopup({ socialLinks, setSocialLinks }: Props) {
               <label className="FormLabel">Instagram</label>
               <Input
                 className="FormInput"
-                id="address"
-                value=""
-                name="address"
+                id="instagram"
+                value={detail.instagram ?? ''}
+                name="instagram"
                 placeholder="Url"
                 disableUnderline
+                onChange={(item: any) => {
+                  setDetail((newItem: any) => {
+                    return {
+                      ...newItem,
+                      instagram: item.target.value,
+                    };
+                  });
+                }}
               />
             </FormControl>
           </div>
@@ -65,11 +83,19 @@ function SocialLinksPopup({ socialLinks, setSocialLinks }: Props) {
               <label className="FormLabel">LinkedIn</label>
               <Input
                 className="FormInput"
-                id="address"
-                value=""
-                name="address"
+                id="linkedin"
+                value={detail.linkedin ?? ''}
+                name="linkedin"
                 placeholder="Url"
                 disableUnderline
+                onChange={(item: any) => {
+                  setDetail((newItem: any) => {
+                    return {
+                      ...newItem,
+                      linkedin: item.target.value,
+                    };
+                  });
+                }}
               />
             </FormControl>
           </div>
@@ -78,11 +104,19 @@ function SocialLinksPopup({ socialLinks, setSocialLinks }: Props) {
               <label className="FormLabel">Twitter</label>
               <Input
                 className="FormInput"
-                id="address"
-                value=""
-                name="address"
+                id="twitter"
+                value={detail.twitter ?? ''}
+                name="twitter"
                 placeholder="Url"
                 disableUnderline
+                onChange={(item: any) => {
+                  setDetail((newItem: any) => {
+                    return {
+                      ...newItem,
+                      twitter: item.target.value,
+                    };
+                  });
+                }}
               />
             </FormControl>
           </div>
@@ -91,11 +125,19 @@ function SocialLinksPopup({ socialLinks, setSocialLinks }: Props) {
               <label className="FormLabel">YouTube</label>
               <Input
                 className="FormInput"
-                id="address"
-                value=""
-                name="address"
+                id="youtube"
+                value={detail.youtube ?? ''}
+                name="youtube"
                 placeholder="Url"
                 disableUnderline
+                onChange={(item: any) => {
+                  setDetail((newItem: any) => {
+                    return {
+                      ...newItem,
+                      youtube: item.target.value,
+                    };
+                  });
+                }}
               />
             </FormControl>
           </div>
@@ -104,11 +146,19 @@ function SocialLinksPopup({ socialLinks, setSocialLinks }: Props) {
               <label className="FormLabel">WhatsApp</label>
               <Input
                 className="FormInput"
-                id="address"
-                value=""
-                name="address"
+                id="whatsapp"
+                value={detail.whatsapp ?? ''}
+                name="whatsapp"
                 placeholder="Url"
                 disableUnderline
+                onChange={(item: any) => {
+                  setDetail((newItem: any) => {
+                    return {
+                      ...newItem,
+                      whatsapp: item.target.value,
+                    };
+                  });
+                }}
               />
             </FormControl>
           </div>
