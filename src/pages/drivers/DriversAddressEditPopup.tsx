@@ -13,6 +13,7 @@ type Props = {
   openFormDialog: boolean;
   setOpenFormDialog: React.Dispatch<React.SetStateAction<boolean>>;
   formData: any;
+  setEditFormData: any;
   callback: (...args: any[]) => any;
 };
 
@@ -20,6 +21,7 @@ function DriversAddressEditPopup({
   openFormDialog,
   setOpenFormDialog,
   formData,
+  setEditFormData,
   callback,
 }: Props) {
   const [formType, setFormType] = useState<any>('Home');
@@ -39,6 +41,7 @@ function DriversAddressEditPopup({
     data.latitude = Number(data.latitude);
     setOpenFormDialog(false);
     callback(data);
+    setEditFormData(null);
   };
   useEffect(() => {
     if (formData) {

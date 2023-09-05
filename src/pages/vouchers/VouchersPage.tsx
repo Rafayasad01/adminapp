@@ -18,6 +18,8 @@ import Service from '../../services/adminapp/adminVouchers';
 import { useAppSelector } from '../../redux/redux-hooks';
 import ActionMenu from '../../components/common/ActionMenu';
 import PermissionPopup from '../../utils/PermissionPopup';
+import Loader from '../../components/common/Loader';
+import Notify from '../../components/common/Notify';
 
 const options = ['Edit', 'Delete'];
 function VouchersPage() {
@@ -34,6 +36,9 @@ function VouchersPage() {
   const [vouchersReferralDialog, setVouchersReferralDialog] = useState(false);
   const [editItem, setEditItem] = useState<any>(null);
   const [deleteItemId, setDeleteItemId] = useState<string>('');
+  const [isLoader, setIsLoader] = React.useState(true);
+  const [isNotify, setIsNotify] = React.useState(false);
+  const [notifyMessage, setNotifyMessage] = React.useState({});
 
   const open = Boolean(anchorEl);
 
@@ -116,39 +121,102 @@ function VouchersPage() {
     Service.listVouchers(authState.user.tenant, page, rowsPerPage, search)
       .then((response: any) => {
         if (response.data.success) {
+          setIsLoader(false);
           setList(response.data.data.result);
           setTotal(response.data.data.totalResults);
+        } else {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: response.data.message,
+            type: 'error',
+          });
         }
       })
       .catch((error) => {
-        console.log('error :>> ', error);
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: error.message,
+          type: 'error',
+        });
       });
   }, [authState.user.tenant, page, rowsPerPage, search]);
 
   const createFormHandler = (data: any) => {
-    Service.createVoucher(authState.user.tenant, data).then((response) => {
-      if (response.data.success) {
-        const newList = [...list, response.data.data];
-        setList(newList);
-      }
-    });
+    setIsLoader(true);
+    Service.createVoucher(authState.user.tenant, data)
+      .then((response) => {
+        if (response.data.success) {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: response.data.message,
+            type: 'success',
+          });
+          setList([...list, response.data.data]);
+        } else {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: response.data.message,
+            type: 'error',
+          });
+        }
+      })
+      .catch((err) => {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
+        });
+      });
   };
 
   const updateFormHandler = (id: string, data: any) => {
-    Service.updateVoucher(authState.user.tenant, id, data).then(
-      (response: any) => {
+    setIsLoader(true);
+    Service.updateVoucher(authState.user.tenant, id, data)
+      .then((response: any) => {
         if (response.data.success) {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: response.data.message,
+            type: 'success',
+          });
           const newList = [
             ...list.filter((item: any) => item.id !== response.data.data.id),
             response.data.data,
           ];
           setList(newList);
+        } else {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: response.data.message,
+            type: 'error',
+          });
         }
-      }
-    );
+      })
+      .catch((err) => {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
+        });
+      });
   };
-  return (
+  return isLoader ? (
+    <Loader />
+  ) : (
     <>
+      <Notify
+        isOpen={isNotify}
+        setIsOpen={setIsNotify}
+        displayMessage={notifyMessage}
+      />
       <VouchersPromoCreatePopup
         vouchersPromoDialog={vouchersPromoDialog}
         setVouchersPromoDialog={setVouchersPromoDialog}
@@ -299,6 +367,11 @@ function VouchersPage() {
               </tbody>
             </table>
           </div>
+          {list?.length < 1 ? (
+            <div className="flex w-full items-center justify-center bg-gray-200 py-5">
+              <p>No Records Found</p>
+            </div>
+          ) : null}
           <div className="mt-3 flex w-[100%] justify-center py-3">
             <TablePagination
               component="div"

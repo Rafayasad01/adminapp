@@ -10,6 +10,7 @@ type User = {
   isActive: boolean;
   isSuperAdmin: boolean;
   token: string;
+  avatar: string;
 };
 
 type AuthState = {

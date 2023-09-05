@@ -18,6 +18,7 @@ import ActionMenu from '../../components/common/ActionMenu';
 import { CART_STATUS_NEW, CART_STATUS_PROCESSING } from '../../utils/constants';
 import TopBar from '../../components/common/TopBar';
 import { useAppSelector } from '../../redux/redux-hooks';
+import Loader from '../../components/common/Loader';
 
 const actionMenuOptions = ['View'];
 function CartsPage() {
@@ -33,6 +34,7 @@ function CartsPage() {
   const [actionMenuAnchorEl, setActionMenuAnchorEl] =
     useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
+  const [isLoader, setIsLoader] = React.useState(true);
 
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
@@ -100,8 +102,12 @@ function CartsPage() {
       .getListService(authState.user.tenant, page, rowsPerPage)
       .then((item) => {
         // console.log(item.data.data)
+        setIsLoader(false);
         setList(item.data.data.list.map((newItem: any) => ({ ...newItem })));
         setTotal(item.data.data.total);
+      })
+      .catch((err) => {
+        setIsLoader(false);
       });
   }, [authState, page, rowsPerPage]);
 
@@ -128,7 +134,9 @@ function CartsPage() {
     return tag;
   };
 
-  return (
+  return isLoader ? (
+    <Loader />
+  ) : (
     <>
       {actionMenuAnchorEl && (
         <ActionMenu
@@ -330,6 +338,11 @@ function CartsPage() {
               </tbody>
             </table>
           </div>
+          {list?.length < 1 ? (
+            <div className="flex w-full items-center justify-center bg-gray-200 py-5">
+              <p>No Records Found</p>
+            </div>
+          ) : null}
           <div className="mt-3 flex w-[100%] justify-center py-3">
             <TablePagination
               component="div"

@@ -18,6 +18,8 @@ import ActionMenu from '../../components/common/ActionMenu';
 import category from '../../services/adminapp/adminCategory';
 import CategoriesServicesFaqCreatePopup from './CategoriesServicesFaqCreatePopup';
 import CategoriesServicesFaqEditPopup from './CategoriesServicesFaqEditPopup';
+import Loader from '../../components/common/Loader';
+import Notify from '../../components/common/Notify';
 
 function CategoriesServicesFaqPage() {
   const params = useParams();
@@ -36,6 +38,9 @@ function CategoriesServicesFaqPage() {
 
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
+  const [isLoader, setIsLoader] = React.useState(true);
+  const [isNotify, setIsNotify] = React.useState(false);
+  const [notifyMessage, setNotifyMessage] = React.useState({});
 
   const categoryServiceId = params.categoryServiceId ?? '';
 
@@ -117,29 +122,48 @@ function CategoriesServicesFaqPage() {
     category
       .getCategoryServiceFaqList(categoryServiceId, page, rowsPerPage)
       .then((item: any) => {
+        setIsLoader(false);
         setList(item.data.data.list);
         setTotal(item.data.data.total);
       })
       .catch((error) => {
+        setIsLoader(false);
         console.log('error::::::::', error);
       });
-  }, [categoryServiceId, page, rowsPerPage]);
+  }, [categoryServiceId, page, rowsPerPage, list]);
 
   const deleteHandler = (id: string) => {
+    setIsLoader(true);
     const data = {
       is_active: false,
       is_deleted: true,
       updated_by: authState.user.id,
     };
-    category.deleteCategoryServiceFaq(id, data).then((updateItem) => {
-      if (updateItem.data.success) {
-        setList((newArr: any) => {
-          return newArr.filter((item: any) => item.id !== id);
+    category
+      .deleteCategoryServiceFaq(id, data)
+      .then((updateItem) => {
+        if (updateItem.data.success) {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: updateItem.data.message,
+            type: 'success',
+          });
+          setList((newArr: any) => {
+            return newArr.filter((item: any) => item.id !== id);
+          });
+          let newtotal = total;
+          setTotal((newtotal -= 1));
+        }
+      })
+      .catch((err) => {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
         });
-        let newtotal = total;
-        setTotal((newtotal -= 1));
-      }
-    });
+      });
   };
 
   const manuHandler = (option: string) => {
@@ -156,31 +180,59 @@ function CategoriesServicesFaqPage() {
   };
 
   const createFormHandler = (data: any) => {
+    setIsLoader(true);
     data.created_by = authState.user.id;
     data.updated_by = authState.user.id;
-    category.categoryServiceCreateFaq(categoryServiceId, data).then((item) => {
-      if (item.data.success) {
-        list.push(item.data.data);
-        setList(list);
-      }
-    });
+    category
+      .categoryServiceCreateFaq(categoryServiceId, data)
+      .then((item) => {
+        if (item.data.success) {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'success',
+          });
+          setList([item.data.data, ...list]);
+        }
+      })
+      .catch((err) => {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
+        });
+      });
   };
   const updateFormHandler = (data: any) => {
+    setIsLoader(true);
     data.updated_by = authState.user.id;
     category
       .updateCategoryServiceFaq(actionMenuItemid, data)
       .then((updateItem: any) => {
         if (updateItem.data.success) {
-          setList((newArr: any) => {
-            return newArr.map((item: any) => {
-              if (item.id === updateItem.data.data.id) {
-                item.question = updateItem.data.data.question;
-                item.answer = updateItem.data.data.answer;
-              }
-              return { ...item };
-            });
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: updateItem.data.message,
+            type: 'success',
           });
+          for (var i = 0; i < list.length; i++) {
+            if (list[i].id === updateItem.data.data.id) {
+              list[i].question = updateItem.data.data.question;
+              list[i].answer = updateItem.data.data.answer;
+            }
+          }
         }
+      })
+      .catch((err) => {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
+        });
       });
   };
 
@@ -203,8 +255,15 @@ function CategoriesServicesFaqPage() {
     });
   };
 
-  return (
+  return isLoader ? (
+    <Loader />
+  ) : (
     <>
+      <Notify
+        isOpen={isNotify}
+        setIsOpen={setIsNotify}
+        displayMessage={notifyMessage}
+      />
       <TopBar isNestedRoute title="Faq's" />
       <div className="container mt-5">
         <div className="w-full rounded-lg bg-white shadow-lg">
@@ -285,8 +344,8 @@ function CategoriesServicesFaqPage() {
                         <td>
                           {dayjs(item.createdDate).isValid()
                             ? dayjs(item.createdDate)?.format(
-                                'ddd, MMM DD, YYYY hh:mm:ssA'
-                              )
+                              'ddd, MMM DD, YYYY hh:mm:ssA'
+                            )
                             : '--'}
                         </td>
                         <td>
@@ -333,6 +392,11 @@ function CategoriesServicesFaqPage() {
               </tbody>
             </table>
           </div>
+          {list?.length < 1 ? (
+            <div className="flex w-full items-center justify-center bg-gray-200 py-5">
+              <p>No Records Found</p>
+            </div>
+          ) : null}
           <div className="mt-3 flex w-[100%] justify-center py-3">
             <TablePagination
               component="div"

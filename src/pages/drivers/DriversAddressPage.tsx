@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import { useParams } from 'react-router-dom';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
@@ -15,6 +15,8 @@ import ActionMenu from '../../components/common/ActionMenu';
 import { useAppSelector } from '../../redux/redux-hooks';
 import DriversAddressCreatePopup from './DriversAddressCreatePopup';
 import DriversAddressEditPopup from './DriversAddressEditPopup';
+import Loader from '../../components/common/Loader';
+import Notify from '../../components/common/Notify';
 
 function DriversAddressPage() {
   const authState: any = useAppSelector((state) => state.authState);
@@ -37,25 +39,55 @@ function DriversAddressPage() {
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
 
+  const [isLoader, setIsLoader] = React.useState(true);
+  const [isNotify, setIsNotify] = React.useState(false);
+  const [notifyMessage, setNotifyMessage] = React.useState({});
+
   const id: any = params.driverId;
   const deleteEntity = (addressId: string) => {
+    setIsLoader(true);
     const data = {
       is_deleted: true,
     };
-    Service.deleteAddressService(addressId, data).then((item: any) => {
-      if (item.data.success) {
-        setList((newArr: any) => {
-          return newArr.filter(
-            (newItem: any) => newItem.id !== item.data.data.id
-          );
+    Service.deleteAddressService(addressId, data)
+      .then((item: any) => {
+        if (item.data.success) {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'success',
+          });
+          setList((newArr: any) => {
+            return newArr.filter(
+              (newItem: any) => newItem.id !== item.data.data.id
+            );
+          });
+        } else {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'error',
+          });
+        }
+      })
+      .catch((err) => {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
         });
-      }
-    });
+      });
   };
 
   const getData = (addressId: string) => {
     Service.getAddress(addressId).then((item: any) => {
       if (item.data.success) {
+        console.log('addressData', item.data);
+
+        setIsLoader(false);
         setEditFormData(item.data.data);
         setOpenEditFormDialog(true);
       }
@@ -128,27 +160,45 @@ function DriversAddressPage() {
   };
 
   useEffect(() => {
-    Service.getAddressService(id).then((item: any) => {
-      if (item.data.success) {
-        setDetail(item.data.data);
-        if (
-          item.data.data.appUserAddress &&
-          item.data.data.appUserAddress.length > 0
-        ) {
-          const activeAddress = item.data.data.appUserAddress.filter(
-            (newItem: any) => newItem.isActive === true
-          );
-          if (activeAddress.length > 0) {
-            setAddress(activeAddress[0].address);
+    Service.getAddressService(id)
+      .then((item: any) => {
+        if (item.data.success) {
+          setIsLoader(false);
+          setDetail(item.data.data);
+          if (
+            item.data.data.appUserAddress &&
+            item.data.data.appUserAddress.length > 0
+          ) {
+            const activeAddress = item.data.data.appUserAddress.filter(
+              (newItem: any) => newItem.isActive === true
+            );
+            if (activeAddress.length > 0) {
+              setAddress(activeAddress[0].address);
+            }
+            setList(item.data.data.appUserAddress.reverse());
+            setTotal(Number(item.data.data.total));
           }
-          setList(item.data.data.appUserAddress.reverse());
-          setTotal(Number(item.data.data.total));
+        } else {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'error',
+          });
         }
-      }
-    });
+      })
+      .catch((err) => {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
+        });
+      });
   }, [id]);
 
   const createFormHandler = (data: any) => {
+    setIsLoader(true);
     const formData = new FormData();
     formData.append('name', data.name);
     formData.append('latitude', data.latitude);
@@ -157,15 +207,38 @@ function DriversAddressPage() {
     formData.append('address', data.address);
     formData.append('app_user', id);
     formData.append('tenant', authState.user.tenant);
-    Service.createAddress(actionMenuItemid, formData).then((item) => {
-      if (item.data.success) {
-        list.unshift(item.data.data);
-        setList(list);
-      }
-    });
+    Service.createAddress(actionMenuItemid, formData)
+      .then((item) => {
+        if (item.data.success) {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'success',
+          });
+          list.unshift(item.data.data);
+          setList(list);
+        } else {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'error',
+          });
+        }
+      })
+      .catch((err) => {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
+        });
+      });
   };
 
   const updateFormHandler = (data: any) => {
+    setIsLoader(true);
     const formData = new FormData();
     formData.append('name', data.name);
     formData.append('latitude', data.latitude);
@@ -173,22 +246,44 @@ function DriversAddressPage() {
     formData.append('type', data.type);
     formData.append('address', data.address);
     formData.append('app_user', id);
-    Service.updateAddress(actionMenuItemid, formData).then((item) => {
-      if (item.data.success) {
-        setList((newArr: any) => {
-          return newArr.map((newItem: any) => {
-            if (newItem.id === actionMenuItemid) {
-              newItem.name = item.data.data.name;
-              newItem.type = item.data.data.type;
-              newItem.latitude = item.data.data.latitude;
-              newItem.longitude = item.data.data.longitude;
-              newItem.address = item.data.data.address;
-            }
-            return { ...newItem };
+    Service.updateAddress(actionMenuItemid, formData)
+      .then((item) => {
+        if (item.data.success) {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'success',
           });
+          setList((newArr: any) => {
+            return newArr.map((newItem: any) => {
+              if (newItem.id === actionMenuItemid) {
+                newItem.name = item.data.data.name;
+                newItem.type = item.data.data.type;
+                newItem.latitude = item.data.data.latitude;
+                newItem.longitude = item.data.data.longitude;
+                newItem.address = item.data.data.address;
+              }
+              return { ...newItem };
+            });
+          });
+        } else {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'error',
+          });
+        }
+      })
+      .catch((err) => {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
         });
-      }
-    });
+      });
   };
 
   const handleSwitchChange = (event: any, addressId: string) => {
@@ -210,8 +305,15 @@ function DriversAddressPage() {
     }
   };
 
-  return (
+  return isLoader ? (
+    <Loader />
+  ) : (
     <>
+      <Notify
+        isOpen={isNotify}
+        setIsOpen={setIsNotify}
+        displayMessage={notifyMessage}
+      />
       <TopBar isNestedRoute title="Driver Address" />
       {detail && (
         <div className="container mt-5">
@@ -297,18 +399,17 @@ function DriversAddressPage() {
               <MapAddress address={address} zoom={15} />
             </div>
           </div>
-          {list.length > 0 && (
-            <div className="mt-3 grid grid-cols-12">
-              <div className="col-span-12 rounded-lg bg-[#fff] px-4 py-5 shadow-lg">
-                <div className="flex justify-between">
-                  <span className="font-open-sans text-xl font-semibold text-[#1A1A1A]">
-                    Address History
-                  </span>
-                  <div className="flex-grow">&nbsp;</div>
-                  {/* <FormControl
+          <div className="mt-3 grid grid-cols-12">
+            <div className="col-span-12 rounded-lg bg-[#fff] px-4 py-5 shadow-lg">
+              <div className="flex justify-between">
+                <span className="pb-2 font-open-sans text-xl font-semibold text-[#1A1A1A]">
+                  Address History
+                </span>
+                {/* <div className="flex-grow">&nbsp;</div> */}
+                {/* <FormControl
                     className="search-grey-outline placeholder-grey w-60"
                     variant="filled"
-                  >
+                    >
                     <Input
                       className="input-with-icon after:border-b-neutral-900"
                       id="search"
@@ -323,9 +424,9 @@ function DriversAddressPage() {
                       }}
                       endAdornment={
                         <InputAdornment position="end">
-                          <Divider
-                            sx={{ height: 28, m: 0.5 }}
-                            orientation="vertical"
+                        <Divider
+                        sx={{ height: 28, m: 0.5 }}
+                        orientation="vertical"
                           />
                           <IconButton aria-label="toggle password visibility">
                             <SearchIcon className="text-[#6A6A6A]" />
@@ -333,90 +434,99 @@ function DriversAddressPage() {
                         </InputAdornment>
                       }
                       disableUnderline
-                    />
+                      />
                   </FormControl> */}
-                </div>
-                <div className="mt-3 grid grid-cols-none">
-                  <table className="table-border table-auto">
-                    <thead>
-                      <tr>
-                        <th className="w-[28%]">address</th>
-                        <th>Name</th>
-                        <th>latitude</th>
-                        <th>longitude</th>
-                        <th>type</th>
-                        <th>status</th>
-                        <th>&nbsp;</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {list.map((item: any, index: number) => {
-                        return (
-                          <tr key={item.id}>
-                            <td>{item.address}</td>
-                            <td>{item.name}</td>
-                            <td>{item.latitude}</td>
-                            <td>{item.longitude}</td>
-                            <td>{item.type}</td>
-                            <td>
-                              {item.isActive ? (
-                                <span className="badge badge-success">
-                                  ACTIVE
-                                </span>
-                              ) : (
-                                <span className="badge badge-danger">
-                                  INACTIVE
-                                </span>
-                              )}
-                            </td>
-                            <td>
-                              <Switch
-                                checked={item.isActive}
-                                onChange={(
-                                  event: React.ChangeEvent<HTMLInputElement>
-                                ) => handleSwitchChange(event, list[index].id)}
-                                inputProps={{ 'aria-label': 'controlled' }}
-                              />
-                              <IconButton
-                                className="btn-dot"
-                                aria-label="more"
-                                id="long-button"
-                                aria-controls={
-                                  actionMenuOpen ? 'long-menu' : undefined
-                                }
-                                aria-expanded={
-                                  actionMenuOpen ? 'true' : undefined
-                                }
-                                aria-haspopup="true"
-                                onClick={(
-                                  event: React.MouseEvent<HTMLElement>
-                                ) => {
-                                  setActionMenuItemid(list[index].id);
-                                  setActionMenuAnchorEl(event.currentTarget);
-                                }}
-                              >
-                                <MoreVertIcon />
-                              </IconButton>
-                            </td>
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                  </table>
-                </div>
-                <div className="mt-3 flex w-[100%] justify-center py-3">
-                  <TablePagination
-                    component="div"
-                    count={total}
-                    page={page}
-                    onPageChange={handleChangePage}
-                    rowsPerPage={rowsPerPage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
-                  />
-                </div>
               </div>
+              {list?.length > 0 ? (
+                <>
+                  <div className="mt-3 grid grid-cols-none">
+                    <table className="table-border table-auto">
+                      <thead>
+                        <tr>
+                          <th className="w-[28%]">address</th>
+                          <th>Name</th>
+                          <th>latitude</th>
+                          <th>longitude</th>
+                          <th>type</th>
+                          <th>status</th>
+                          <th>&nbsp;</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {list.map((item: any, index: number) => {
+                          return (
+                            <tr key={item.id}>
+                              <td>{item.address}</td>
+                              <td>{item.name}</td>
+                              <td>{item.latitude}</td>
+                              <td>{item.longitude}</td>
+                              <td>{item.type}</td>
+                              <td>
+                                {item.isActive ? (
+                                  <span className="badge badge-success">
+                                    ACTIVE
+                                  </span>
+                                ) : (
+                                  <span className="badge badge-danger">
+                                    INACTIVE
+                                  </span>
+                                )}
+                              </td>
+                              <td>
+                                <Switch
+                                  checked={item.isActive}
+                                  onChange={(
+                                    event: React.ChangeEvent<HTMLInputElement>
+                                  ) =>
+                                    handleSwitchChange(event, list[index].id)
+                                  }
+                                  inputProps={{ 'aria-label': 'controlled' }}
+                                />
+                                <IconButton
+                                  className="btn-dot"
+                                  aria-label="more"
+                                  id="long-button"
+                                  aria-controls={
+                                    actionMenuOpen ? 'long-menu' : undefined
+                                  }
+                                  aria-expanded={
+                                    actionMenuOpen ? 'true' : undefined
+                                  }
+                                  aria-haspopup="true"
+                                  onClick={(
+                                    event: React.MouseEvent<HTMLElement>
+                                  ) => {
+                                    setActionMenuItemid(list[index].id);
+                                    setActionMenuAnchorEl(event.currentTarget);
+                                  }}
+                                >
+                                  <MoreVertIcon />
+                                </IconButton>
+                              </td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+                  <div className="mt-3 flex w-[100%] justify-center py-3">
+                    <TablePagination
+                      component="div"
+                      count={total}
+                      page={page}
+                      onPageChange={handleChangePage}
+                      rowsPerPage={rowsPerPage}
+                      onRowsPerPageChange={handleChangeRowsPerPage}
+                    />
+                  </div>
+                </>
+              ) : (
+                <div className="flex w-full items-center justify-center rounded-lg bg-gray-200 py-3">
+                  <p className="font-open-sans">No Address Records</p>
+                </div>
+              )}
             </div>
-          )}
+          </div>
         </div>
       )}
       {actionMenuAnchorEl && (
@@ -437,6 +547,7 @@ function DriversAddressPage() {
         openFormDialog={openEditFormDialog}
         setOpenFormDialog={setOpenEditFormDialog}
         formData={editFormData}
+        setEditFormData={setEditFormData}
         callback={updateFormHandler}
       />
     </>

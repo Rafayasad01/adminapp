@@ -24,6 +24,7 @@ import {
 } from '../../utils/constants';
 import NotificationDetailPopup from './NotificationDetailPopup';
 import AlertBox from '../../utils/Alert';
+import Loader from '../../components/common/Loader';
 
 function NotificationPage() {
   const authState: any = useAppSelector((state) => state.authState);
@@ -39,6 +40,8 @@ function NotificationPage() {
   const [alertPopup, setAlertPopup] = useState<boolean>(false);
   const [alertSeverty, setAlertSeverty] = useState<string>('');
   const [alertMsg, setAlertMsg] = useState<string>('');
+
+  const [isLoader, setIsLoader] = React.useState(true);
 
   const handleFormClickOpen = () => {
     setOpenFormDialog(true);
@@ -117,10 +120,12 @@ function NotificationPage() {
   useEffect(() => {
     Service.getListService(authState.user.tenant, page, rowsPerPage)
       .then((item: any) => {
+        setIsLoader(false);
         setList(item.data.data.list);
         setTotal(item.data.data.total);
       })
       .catch((error) => {
+        setIsLoader(false);
         console.log('error::::::::', error);
       });
   }, [authState, page, rowsPerPage]);
@@ -131,12 +136,18 @@ function NotificationPage() {
     formData.append('message', data.message);
     formData.append('tenant', authState.user.tenant);
     formData.append('userId', authState.user.id);
-    Service.sentService(formData).then((item) => {
-      if (item.data.success) {
-        // list.push(item.data.data);
-        // setList(list);
-      }
-    });
+    Service.sentService(formData)
+      .then((item) => {
+        if (item.data.success) {
+          // list.push(item.data.data);
+          // setList(list);
+        }
+      })
+      .catch((err) => {
+        setAlertMsg(err.message);
+        setAlertSeverty('error');
+        setAlertPopup(true);
+      });
   };
 
   const getStatusTag = (status: string) => {
@@ -169,7 +180,9 @@ function NotificationPage() {
     });
   };
 
-  return (
+  return isLoader ? (
+    <Loader />
+  ) : (
     <>
       <TopBar title="Notification" />
       <div className="container mt-5">
@@ -275,6 +288,11 @@ function NotificationPage() {
               </tbody>
             </table>
           </div>
+          {list?.length < 1 ? (
+            <div className="flex w-full items-center justify-center bg-gray-200 py-5">
+              <p>No Records Found</p>
+            </div>
+          ) : null}
           <div className="mt-3 flex w-[100%] justify-center py-3">
             <TablePagination
               component="div"
