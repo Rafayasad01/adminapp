@@ -201,6 +201,7 @@ function CustomersPage() {
     Service.create(formData)
       .then((item) => {
         if (item.data.success) {
+          console.log("customer created", item.data);
           setIsLoader(false);
           setIsNotify(true);
           setNotifyMessage({
@@ -245,21 +246,15 @@ function CustomersPage() {
             text: item.data.message,
             type: 'success',
           });
-          console.log('list2', item.data);
-
-          setList((newArr: any) => {
-            return newArr.map((newItem: any) => {
-              if (newItem.id === item.data.data.id) {
-                console.log('dataupdated', item.data.data.id);
-                newItem.firstName = item.data.data.first_name;
-                newItem.lastName = item.data.data.last_name;
-                newItem.phone = item.data.data.phone;
-                newItem.postalCode = item.data.data.postal_code;
-                if (data.avatar !== null) newItem.phone = item.data.data.avatar;
-              }
-              return { ...newItem };
-            });
-          });
+          for (var i = 0; i < list.length; i++) {
+            if (list[i].id === item.data.data.id) {
+              list[i].firstName = item.data.data.first_name;
+              list[i].lastName = item.data.data.last_name;
+              list[i].phone = item.data.data.phone;
+              list[i].postalCode = item.data.data.postal_code
+              if (data.avatar !== null) list[i].phone = item.data.data.avatar;
+            }
+          }
         } else {
           setIsLoader(false);
           setIsNotify(true);
@@ -297,8 +292,6 @@ function CustomersPage() {
       }
     });
   };
-
-  console.log('list', list);
 
   return isLoader ? (
     <Loader />
@@ -485,11 +478,15 @@ function CustomersPage() {
         />
       )}
       <CustomersCreatePopup
+        setIsNotify={setIsNotify}
+        setNotifyMessage={setNotifyMessage}
         openFormDialog={openFormDialog}
         setOpenFormDialog={setOpenFormDialog}
         callback={createFormHandler}
       />
       <CustomersEditPopup
+        setIsNotify={setIsNotify}
+        setNotifyMessage={setNotifyMessage}
         openFormDialog={openEditFormDialog}
         setOpenFormDialog={setOpenEditFormDialog}
         formData={editFormData}

@@ -21,6 +21,7 @@ import { useAppSelector } from '../../redux/redux-hooks';
 import ActionMenu from '../../components/common/ActionMenu';
 import Loader from '../../components/common/Loader';
 import Notify from '../../components/common/Notify';
+import PermissionPopup from '../../utils/PermissionPopup';
 
 function CategoriesPage() {
   const authState: any = useAppSelector((state) => state.authState);
@@ -42,10 +43,15 @@ function CategoriesPage() {
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
+  const [cancelDialogOpen, setCancelDialogOpen] = useState<boolean>(false);
+  const [dialogText, setDialogText] = useState<any>('Are you sure you want to delete this Category ?');
 
   const handleFormClickOpen = () => {
     setOpenFormDialog(true);
   };
+
+  console.log("cancelDialogOpen", cancelDialogOpen);
+
 
   useEffect(() => {
     category
@@ -159,6 +165,10 @@ function CategoriesPage() {
       });
   };
 
+  const statusCancelHandler = () => {
+    deleteHandler(actionMenuItemid);
+  }
+
   const manuHandler = (option: string) => {
     if (option === 'Edit') {
       category.getCategory(actionMenuItemid).then((item: any) => {
@@ -171,9 +181,10 @@ function CategoriesPage() {
     } else if (option === 'Service') {
       navigate(`service/${actionMenuItemid}`);
     } else if (option === 'Delete') {
-      deleteHandler(actionMenuItemid);
+      setCancelDialogOpen(true)
     }
   };
+
   const createFormHandler = (data: any) => {
     setIsLoader(true);
     const formData = new FormData();
@@ -183,27 +194,43 @@ function CategoriesPage() {
     formData.append('tenant', authState.user.tenant);
     formData.append('created_by', authState.user.id);
     formData.append('updated_by', authState.user.id);
-    category
-      .create(formData)
-      .then((item) => {
-        if (item.data.success) {
+    if (data.name && data.desc && data.icon) {
+      category
+        .create(formData)
+        .then((item) => {
+          if (item.data.success) {
+            setIsLoader(false);
+            setIsNotify(true);
+            setNotifyMessage({
+              text: item.data.message,
+              type: 'success',
+            });
+            setList([item.data.data, ...list]);
+          } else {
+            setIsLoader(false);
+            setIsNotify(true);
+            setNotifyMessage({
+              text: item.data.message,
+              type: 'error',
+            });
+          }
+        })
+        .catch((err) => {
           setIsLoader(false);
           setIsNotify(true);
           setNotifyMessage({
-            text: item.data.message,
-            type: 'success',
+            text: err.message,
+            type: 'error',
           });
-          setList([item.data.data, ...list]);
-        }
-      })
-      .catch((err) => {
-        setIsLoader(false);
-        setIsNotify(true);
-        setNotifyMessage({
-          text: err.message,
-          type: 'error',
         });
+    } else {
+      setIsLoader(false);
+      setIsNotify(true);
+      setNotifyMessage({
+        text: "All fields are required!",
+        type: 'error',
       });
+    }
   };
 
   const updateFormHandler = (data: any) => {
@@ -223,16 +250,21 @@ function CategoriesPage() {
             text: updateItem.data.message,
             type: 'success',
           });
-          setList((newArr: any) => {
-            return newArr.map((item: any) => {
-              if (item.id === updateItem.data.data.id) {
-                item.name = updateItem.data.data.name;
-                item.desc = updateItem.data.data.desc;
-                if (updateItem.data.data.icon)
-                  item.icon = updateItem.data.data.icon;
+          for (var i = 0; i < list.length; i++) {
+            if (list[i].id === updateItem.data.data.id) {
+              list[i].name = updateItem.data.data.name;
+              list[i].desc = updateItem.data.data.desc;
+              if (updateItem.data.data.icon) {
+                list[i].icon = updateItem.data.data.icon;
               }
-              return { ...item };
-            });
+            }
+          }
+        } else {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: updateItem.data.message,
+            type: 'error',
           });
         }
       })
@@ -360,8 +392,8 @@ function CategoriesPage() {
                         <td>
                           {dayjs(item.createdDate).isValid()
                             ? dayjs(item.createdDate)?.format(
-                                'ddd, MMM DD, YYYY hh:mm:ssA'
-                              )
+                              'ddd, MMM DD, YYYY hh:mm:ssA'
+                            )
                             : '--'}
                         </td>
                         <td>
@@ -426,6 +458,15 @@ function CategoriesPage() {
           </div>
         </div>
       </div>
+      {cancelDialogOpen && (
+        <PermissionPopup
+          type="shock"
+          open={cancelDialogOpen}
+          setOpen={setCancelDialogOpen}
+          dialogText={dialogText}
+          callback={statusCancelHandler}
+        />
+      )}
       {actionMenuAnchorEl && (
         <ActionMenu
           open={actionMenuOpen}
@@ -437,6 +478,8 @@ function CategoriesPage() {
       )}
       {openFormDialog && (
         <CategoriesCreatePopup
+          setIsNotify={setIsNotify}
+          setNotifyMessage={setNotifyMessage}
           openFormDialog={openFormDialog}
           setOpenFormDialog={setOpenFormDialog}
           callback={createFormHandler}
@@ -444,6 +487,8 @@ function CategoriesPage() {
       )}
       {openEditFormDialog && (
         <CategoriesEditPopup
+          setIsNotify={setIsNotify}
+          setNotifyMessage={setNotifyMessage}
           openFormDialog={openEditFormDialog}
           setOpenFormDialog={setOpenEditFormDialog}
           formData={editFormData}

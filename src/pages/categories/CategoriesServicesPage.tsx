@@ -187,6 +187,13 @@ function CategoriesServicesPage() {
             type: 'success',
           });
           setList([item.data.data, ...list]);
+        } else {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'error',
+          });
         }
       })
       .catch((err) => {
@@ -217,19 +224,17 @@ function CategoriesServicesPage() {
             text: updateItem.data.message,
             type: 'success',
           });
-          setList((newArr: any) => {
-            return newArr.map((item: any) => {
-              if (item.id === updateItem.data.data.id) {
-                item.name = updateItem.data.data.name;
-                item.quantity = updateItem.data.data.quantity;
-                item.price = updateItem.data.data.price;
-                item.desc = updateItem.data.data.desc;
-                if (updateItem.data.data.icon)
-                  item.icon = updateItem.data.data.icon;
+          for (var i = 0; i < list.length; i++) {
+            if (list[i].id === updateItem.data.data.id) {
+              list[i].name = updateItem.data.data.name;
+              list[i].quantity = updateItem.data.data.quantity;
+              list[i].price = updateItem.data.data.price;
+              list[i].desc = updateItem.data.data.desc;
+              if (updateItem.data.data.icon) {
+                list[i].icon = updateItem.data.data.icon;
               }
-              return { ...item };
-            });
-          });
+            }
+          }
         }
       })
       .catch((err) => {
@@ -423,6 +428,8 @@ function CategoriesServicesPage() {
       )}
       {openFormDialog && (
         <ServicesCreatePopup
+          setIsNotify={setIsNotify}
+          setNotifyMessage={setNotifyMessage}
           openFormDialog={openFormDialog}
           setOpenFormDialog={setOpenFormDialog}
           callback={createFormHandler}
@@ -430,6 +437,8 @@ function CategoriesServicesPage() {
       )}
       {openEditFormDialog && (
         <ServicesEditPopup
+          setIsNotify={setIsNotify}
+          setNotifyMessage={setNotifyMessage}
           openFormDialog={openEditFormDialog}
           formData={editFormData}
           setOpenFormDialog={setOpenEditFormDialog}

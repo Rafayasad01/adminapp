@@ -17,6 +17,8 @@ type Props = {
   formData: any;
   setEditFormData: any;
   callback: (...args: any[]) => any;
+  setIsNotify: any;
+  setNotifyMessage: any;
 };
 
 function CustomersEditPopup({
@@ -25,10 +27,11 @@ function CustomersEditPopup({
   formData,
   setEditFormData,
   callback,
+  setIsNotify,
+  setNotifyMessage,
 }: Props) {
   const [showPassword, setShowPassword] = useState(false);
   const [avatar, setAvatar] = useState<any>(null);
-  const [avatarName, setAvatarName] = useState<string>('');
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const {
@@ -40,21 +43,29 @@ function CustomersEditPopup({
   } = useForm<AppUser>();
 
   const handleFormClose = () => setOpenFormDialog(false);
-  const handleRemoveImage = () => {
-    setAvatar('');
-    setAvatarName('');
-  };
 
   const handleFileChange = (event: any) => {
     setAvatar(event.target.files[0]);
-    setAvatarName(event.target.files[0].name);
   };
 
+  const handleFileOnClick = (event: any) => {
+    event.target.value = null
+    setAvatar(null)
+  }
+
   const onSubmit = (data: AppUser) => {
-    data.avatar = avatar;
-    setOpenFormDialog(false);
-    callback(data);
-    setEditFormData(null);
+    if (data.first_name && data.last_name && data.phone) {
+      data.avatar = avatar;
+      setOpenFormDialog(false);
+      callback(data);
+      setEditFormData(null);
+    } else {
+      setIsNotify(true)
+      setNotifyMessage({
+        text: "All fields are required, Except avater image!",
+        type: 'error',
+      });
+    }
   };
 
   useEffect(() => {
@@ -64,7 +75,7 @@ function CustomersEditPopup({
       if (regexExp.test(newAvatar)) {
         newAvatar = newAvatar.split('-').splice(5)[0].at(0);
       }
-      setAvatarName(newAvatar);
+      setAvatar({ name: newAvatar });
     }
   }, [formData]);
 
@@ -173,10 +184,11 @@ function CustomersEditPopup({
                       id="raised-button-file"
                       type="file"
                       {...register('avatar')}
-                      onChange={(
-                        event: React.InputHTMLAttributes<HTMLInputElement>
-                      ) => {
+                      onChange={(event: React.InputHTMLAttributes<HTMLInputElement>) => {
                         handleFileChange(event);
+                      }}
+                      onClick={(event: React.InputHTMLAttributes<HTMLInputElement>) => {
+                        handleFileOnClick(event)
                       }}
                     />
                     <label htmlFor="raised-button-file" className="ImageLabel">
@@ -187,12 +199,12 @@ function CustomersEditPopup({
                         Upload image
                       </Button>
                     </label>
-                    {avatarName ? (
+                    {avatar ? (
                       <div className="ShowImageBox">
-                        <label className="ShowImageLabel">{avatarName}</label>
+                        <label className="ShowImageLabel">{avatar.name}</label>
                         <IconButton
                           className="btn-dot"
-                          onClick={handleRemoveImage}
+                          onClick={() => setAvatar(null)}
                         >
                           <CloseOutlinedIcon
                             sx={{

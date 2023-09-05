@@ -154,8 +154,7 @@ function VouchersPage() {
             text: response.data.message,
             type: 'success',
           });
-          const newList = [...list, response.data.data];
-          setList(newList);
+          setList([...list, response.data.data]);
         } else {
           setIsLoader(false);
           setIsNotify(true);

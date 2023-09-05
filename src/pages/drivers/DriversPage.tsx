@@ -215,8 +215,7 @@ function DriversPage() {
             text: item.data.message,
             type: 'success',
           });
-          list.push(item.data.data);
-          setList(list);
+          setList([...list, item.data.data]);
         } else {
           setIsLoader(false);
           setIsNotify(true);
@@ -255,18 +254,15 @@ function DriversPage() {
             text: item.data.message,
             type: 'success',
           });
-          setList((newArr: any) => {
-            return newArr.map((newItem: any) => {
-              if (newItem.id === actionMenuItemid) {
-                newItem.firstName = item.data.data.first_name;
-                newItem.lastName = item.data.data.last_name;
-                newItem.licenseNumber = item.data.data.license_number;
-                newItem.phone = item.data.data.phone;
-                if (data.avatar !== null) newItem.phone = item.data.data.avatar;
-              }
-              return { ...newItem };
-            });
-          });
+          for (var i = 0; i < list.length; i++) {
+            if (list[i].id === actionMenuItemid) {
+              list[i].firstName = item.data.data.first_name;
+              list[i].lastName = item.data.data.last_name;
+              list[i].licenseNumber = item.data.data.license_number;
+              list[i].phone = item.data.data.phone;
+              if (data.avatar !== null) list[i].phone = item.data.data.avatar;
+            }
+          }
         } else {
           setIsLoader(false);
           setIsNotify(true);
@@ -411,8 +407,8 @@ function DriversPage() {
                               <span className="text-xs font-normal text-[#6A6A6A]">
                                 {dayjs(item.createdDate).isValid()
                                   ? dayjs(item.createdDate)?.format(
-                                      'MMMM DD, YYYY'
-                                    )
+                                    'MMMM DD, YYYY'
+                                  )
                                   : '--'}
                               </span>
                             </div>
@@ -422,9 +418,8 @@ function DriversPage() {
                         <td>{item.email}</td>
                         <td>
                           <span
-                            className={`badge badge-${
-                              item.status === 'Offline' ? 'danger' : 'success'
-                            }`}
+                            className={`badge badge-${item.status === 'Offline' ? 'danger' : 'success'
+                              }`}
                           >
                             {item.status}
                           </span>
@@ -505,11 +500,15 @@ function DriversPage() {
         />
       )}
       <DriversCreatePopup
+        setIsNotify={setIsNotify}
+        setNotifyMessage={setNotifyMessage}
         openFormDialog={openFormDialog}
         setOpenFormDialog={setOpenFormDialog}
         callback={createFormHandler}
       />
       <DriversEditPopup
+        setIsNotify={setIsNotify}
+        setNotifyMessage={setNotifyMessage}
         openFormDialog={openEditFormDialog}
         setOpenFormDialog={setOpenEditFormDialog}
         formData={editFormData}

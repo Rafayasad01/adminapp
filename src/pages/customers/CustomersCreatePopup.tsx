@@ -18,16 +18,19 @@ type Props = {
   openFormDialog: boolean;
   setOpenFormDialog: React.Dispatch<React.SetStateAction<boolean>>;
   callback: (...args: any[]) => any;
+  setIsNotify: any;
+  setNotifyMessage: any;
 };
 
 function CustomersCreatePopup({
   openFormDialog,
   setOpenFormDialog,
   callback,
+  setIsNotify,
+  setNotifyMessage,
 }: Props) {
   const [showPassword, setShowPassword] = useState(false);
   const [avatar, setAvatar] = useState<any>(null);
-  const [avatarName, setAvatarName] = useState<string>('');
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const {
@@ -39,20 +42,28 @@ function CustomersCreatePopup({
   } = useForm<AppUser>();
 
   const handleFormClose = () => setOpenFormDialog(false);
-  const handleRemoveImage = () => {
-    setAvatar('');
-    setAvatarName('');
-  };
 
   const handleFileChange = (event: any) => {
     setAvatar(event.target.files[0]);
-    setAvatarName(event.target.files[0].name);
   };
 
+  const handleFileOnClick = (event: any) => {
+    event.target.value = null
+    setAvatar(null)
+  }
+
   const onSubmit = (data: AppUser) => {
-    data.avatar = avatar;
-    setOpenFormDialog(false);
-    callback(data);
+    if (data.first_name && data.last_name && data.address && data.phone && data.password) {
+      data.avatar = avatar;
+      setOpenFormDialog(false);
+      callback(data);
+    } else {
+      setIsNotify(true)
+      setNotifyMessage({
+        text: "All fields are required, Except avater image!",
+        type: 'error',
+      });
+    }
   };
 
   return (
@@ -195,10 +206,11 @@ function CustomersCreatePopup({
                   id="raised-button-file"
                   type="file"
                   {...register('avatar')}
-                  onChange={(
-                    event: React.InputHTMLAttributes<HTMLInputElement>
-                  ) => {
+                  onChange={(event: React.InputHTMLAttributes<HTMLInputElement>) => {
                     handleFileChange(event);
+                  }}
+                  onClick={(event: React.InputHTMLAttributes<HTMLInputElement>) => {
+                    handleFileOnClick(event)
                   }}
                 />
                 <label htmlFor="raised-button-file" className="ImageLabel">
@@ -207,10 +219,10 @@ function CustomersCreatePopup({
                     Upload image
                   </Button>
                 </label>
-                {avatarName ? (
+                {avatar ? (
                   <div className="ShowImageBox">
-                    <label className="ShowImageLabel">{avatarName}</label>
-                    <IconButton className="btn-dot" onClick={handleRemoveImage}>
+                    <label className="ShowImageLabel">{avatar.name}</label>
+                    <IconButton className="btn-dot" onClick={() => setAvatar(null)}>
                       <CloseOutlinedIcon
                         sx={{
                           color: '#1D1D1D',

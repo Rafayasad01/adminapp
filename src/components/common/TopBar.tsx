@@ -49,7 +49,7 @@ function TopBar({ title, isNestedRoute = false }: Props) {
             <span>{`${userData.firstName} ${userData.lastName}`}</span>
             {userData?.avatar ?
               <Avatar sx={{ width: 56, height: 56 }} alt="user image" src={userData.avatar} /> :
-              <Avatar sx={{ bgcolor: 'black', fontSize: "18px" }}>{`${userData.firstName.charAt(0)}${userData.lastName.charAt(0)}`}</Avatar>
+              <Avatar sx={{ bgcolor: 'black', fontSize: "18px" }}>{`${userData.firstName?.charAt(0)}${userData.lastName?.charAt(0)}`}</Avatar>
             }
           </div>
         </div>

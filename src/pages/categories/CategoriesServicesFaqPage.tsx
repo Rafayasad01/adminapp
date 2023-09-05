@@ -193,8 +193,7 @@ function CategoriesServicesFaqPage() {
             text: item.data.message,
             type: 'success',
           });
-          list.push(item.data.data);
-          setList(list);
+          setList([item.data.data, ...list]);
         }
       })
       .catch((err) => {
@@ -219,15 +218,12 @@ function CategoriesServicesFaqPage() {
             text: updateItem.data.message,
             type: 'success',
           });
-          setList((newArr: any) => {
-            return newArr.map((item: any) => {
-              if (item.id === updateItem.data.data.id) {
-                item.question = updateItem.data.data.question;
-                item.answer = updateItem.data.data.answer;
-              }
-              return { ...item };
-            });
-          });
+          for (var i = 0; i < list.length; i++) {
+            if (list[i].id === updateItem.data.data.id) {
+              list[i].question = updateItem.data.data.question;
+              list[i].answer = updateItem.data.data.answer;
+            }
+          }
         }
       })
       .catch((err) => {
@@ -348,8 +344,8 @@ function CategoriesServicesFaqPage() {
                         <td>
                           {dayjs(item.createdDate).isValid()
                             ? dayjs(item.createdDate)?.format(
-                                'ddd, MMM DD, YYYY hh:mm:ssA'
-                              )
+                              'ddd, MMM DD, YYYY hh:mm:ssA'
+                            )
                             : '--'}
                         </td>
                         <td>
