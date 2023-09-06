@@ -241,8 +241,8 @@ function NotificationPage() {
                 <tr>
                   <th className="w-[16rem]">Title</th>
                   <th className="w-[30rem]">Message</th>
-                  <th>status</th>
                   <th>Dated</th>
+                  <th>status</th>
                   <th>&nbsp;</th>
                 </tr>
               </thead>
@@ -254,15 +254,6 @@ function NotificationPage() {
                         <td>{item.title}</td>
                         <td>{item.description}</td>
                         <td>
-                          <span
-                            className={`badge badge-${getStatusTag(
-                              item.status
-                            )}`}
-                          >
-                            {item.status}
-                          </span>
-                        </td>
-                        <td>
                           <div className="flex flex-col">
                             <span className="text-sm font-normal text-[#1A1A1A]">
                               {dayjs(item.createdDate)?.format('hh:mm:ssA')}
@@ -273,6 +264,15 @@ function NotificationPage() {
                               )}
                             </span>
                           </div>
+                        </td>
+                        <td>
+                          <span
+                            className={`badge badge-${getStatusTag(
+                              item.status
+                            )}`}
+                          >
+                            {item.status}
+                          </span>
                         </td>
                         <td>
                           <IconButton
