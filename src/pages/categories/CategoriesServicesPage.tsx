@@ -19,6 +19,7 @@ import ActionMenu from '../../components/common/ActionMenu';
 import category from '../../services/adminapp/adminCategory';
 import Loader from '../../components/common/Loader';
 import Notify from '../../components/common/Notify';
+import PermissionPopup from '../../utils/PermissionPopup';
 
 function CategoriesServicesPage() {
   const params = useParams();
@@ -41,6 +42,8 @@ function CategoriesServicesPage() {
   const [isLoader, setIsLoader] = React.useState(true);
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
+  const [cancelDialogOpen, setCancelDialogOpen] = useState<boolean>(false);
+  const [dialogText, setDialogText] = useState<any>('Are you sure you want to delete this service ?');
 
   const categoryId = params.categoryId ?? '';
 
@@ -151,6 +154,10 @@ function CategoriesServicesPage() {
       });
   };
 
+  const statusCancelHandler = () => {
+    deleteHandler(actionMenuItemid);
+  }
+
   const manuHandler = (option: string) => {
     if (option === 'Edit') {
       category.getCategoryService(actionMenuItemid).then((item: any) => {
@@ -162,9 +169,10 @@ function CategoriesServicesPage() {
     } else if (option === "Faq's") {
       navigate(`../service/faq/${actionMenuItemid}`);
     } else if (option === 'Delete') {
-      deleteHandler(actionMenuItemid);
+      setCancelDialogOpen(true)
     }
   };
+
 
   const createFormHandler = (data: any) => {
     setIsLoader(true);
@@ -417,6 +425,15 @@ function CategoriesServicesPage() {
           </div>
         </div>
       </div>
+      {cancelDialogOpen && (
+        <PermissionPopup
+          type="shock"
+          open={cancelDialogOpen}
+          setOpen={setCancelDialogOpen}
+          dialogText={dialogText}
+          callback={statusCancelHandler}
+        />
+      )}
       {actionMenuAnchorEl && (
         <ActionMenu
           open={actionMenuOpen}

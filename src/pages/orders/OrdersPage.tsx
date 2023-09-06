@@ -26,7 +26,6 @@ import {
 } from '../../utils/constants';
 import TopBar from '../../components/common/TopBar';
 import { useAppSelector } from '../../redux/redux-hooks';
-import Loader from '../../components/common/Loader';
 
 function OrdersPage() {
   const authState: any = useAppSelector((state) => state.authState);
@@ -41,7 +40,6 @@ function OrdersPage() {
     useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
   const actionMenuOptions = ['Detail'];
-  const [isLoader, setIsLoader] = React.useState(true);
 
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
@@ -158,7 +156,6 @@ function OrdersPage() {
       .getListService(authState.user.tenant, page, rowsPerPage)
       .then((item) => {
         // console.log(item.data.data);
-        setIsLoader(false);
         setList(
           item.data.data.list.map((newItem: any) => ({
             ...newItem,
@@ -167,14 +164,6 @@ function OrdersPage() {
           }))
         );
         setTotal(item.data.data.total);
-      })
-      .catch((err) => {
-        setIsLoader(false);
-        // setIsNotify(true);
-        // setNotifyMessage({
-        //   text: err.message,
-        //   type: "error"
-        // });
       });
   }, [authState, page, rowsPerPage]);
 
@@ -183,7 +172,7 @@ function OrdersPage() {
     if (option === 'Edit') {
       doOption = 'edit';
     } else if (option === 'Detail') {
-      doOption = 'view';
+      doOption = 'detail';
     } else {
       doOption = 'download';
     }
@@ -216,9 +205,7 @@ function OrdersPage() {
     const newStatus = newStatuses.filter((s) => s.key === status);
     return newStatus[0].value.title;
   };
-  return isLoader ? (
-    <Loader />
-  ) : (
+  return (
     <>
       {actionMenuAnchorEl && (
         <ActionMenu
@@ -406,11 +393,6 @@ function OrdersPage() {
               </tbody>
             </table>
           </div>
-          {list?.length < 1 ? (
-            <div className="flex w-full items-center justify-center bg-gray-200 py-5">
-              <p>No Records Found</p>
-            </div>
-          ) : null}
           <div className="mt-3 flex w-[100%] justify-center py-3">
             <TablePagination
               component="div"
