@@ -6,9 +6,9 @@ import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import assets from '../../../../assets';
+import assets from '../../../assets';
 
-function SuperAdminNewPasswordPage() {
+function NewPasswordPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
@@ -24,7 +24,7 @@ function SuperAdminNewPasswordPage() {
   ) => {
     event.preventDefault();
   };
-  const saveHandler = () => {};
+  const saveHandler = () => { };
 
   return (
     <div className="flex h-full w-full items-center justify-center">
@@ -99,4 +99,4 @@ function SuperAdminNewPasswordPage() {
   );
 }
 
-export default SuperAdminNewPasswordPage;
+export default NewPasswordPage;

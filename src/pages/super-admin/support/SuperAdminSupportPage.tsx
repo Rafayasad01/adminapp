@@ -5,13 +5,13 @@ import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import CameraAltOutlinedIcon from '@mui/icons-material/CameraAltOutlined';
 import SendOutlinedIcon from '@mui/icons-material/SendOutlined';
 import dayjs from 'dayjs';
-import assets from '../../../../assets';
-import SuperAdminTopBar from '../../../../components/super-admin/common/SuperAdminTopbar';
+import assets from '../../../assets';
+import TopBar from '../../../components/common/TopBar';
 
 function SuperAdminSupportPage() {
   return (
     <>
-      <SuperAdminTopBar title="Support" />
+      <TopBar title="Support" />
       <div className="grid grid-cols-12 gap-3">
         <div className="col-span-4 h-full w-full rounded-xl bg-gray-50 p-2">
           <div className="flex flex-col">

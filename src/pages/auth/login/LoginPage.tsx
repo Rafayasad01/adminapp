@@ -1,37 +1,77 @@
-import React, { useState } from 'react';
-import FormControl from '@mui/material/FormControl';
-import Input from '@mui/material/Input';
-import IconButton from '@mui/material/IconButton';
-import InputAdornment from '@mui/material/InputAdornment';
-import Button from '@mui/material/Button';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import Visibility from '@mui/icons-material/Visibility';
+import { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
+import Button from '@mui/material/Button';
+import FormControl from '@mui/material/FormControl';
+import IconButton from '@mui/material/IconButton';
+import Input from '@mui/material/Input';
+import InputAdornment from '@mui/material/InputAdornment';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import CircularProgress from '@mui/material/CircularProgress';
+import auth from '../../../services/superadmin/SuperAdminAuth';
+import { UserLogin } from '../../../interfaces/superadmin/auth.interface';
+import AlertBox from '../../../utils/Alert';
+import { setToken } from '../../../utils/constants';
+import { useAppDispatch } from '../../../redux/redux-hooks';
+import { login } from '../../../redux/features/authStateSlice';
+
 import assets from '../../../assets';
-import styles from '../../../assets/css/AuthPage.module.css';
 
 function LoginPage() {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
-  const navigate = useNavigate();
+  const [alertMsg, setAlertMsg] = useState('');
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertSeverity, setAlertSeverity] = useState('');
+  const [isLoader, setIsLoader] = useState(false);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const handleMouseDownPassword = (
     event: React.MouseEvent<HTMLButtonElement>
   ) => {
     event.preventDefault();
   };
-  const loginHandler = () => {
-    navigate('/dashboard/home');
+  const loginHandler = async () => {
+    const userData: UserLogin = {
+      username: email,
+      password,
+    };
+    setIsLoader(true);
+    const user: any = await auth.loginService(userData);
+    if (user && user.data.success) {
+      setIsLoader(false);
+      const newUserData = user.data.data;
+      setToken(newUserData.token);
+      dispatch(login(newUserData));
+      if (newUserData.isSuperAdmin) {
+        navigate('../../../main');
+      } else {
+        navigate('../../../dashboard');
+      }
+    } else {
+      setIsLoader(false);
+      setAlertMsg(user.data.message);
+      setAlertSeverity('error');
+      setShowAlert(true);
+    }
   };
 
   return (
-    <div className={styles.bg}>
-      <div className={styles.centerBox}>
-        <img className={styles.logo} src={assets.images.logoBlack} alt="" />
-        <div className={styles.midBox}>
-          <div className="form-group">
+    <>
+      {showAlert && (
+        <AlertBox
+          msg={alertMsg}
+          setSeverty={alertSeverity}
+          alertOpen={showAlert}
+          setAlertOpen={setShowAlert}
+        />
+      )}
+      <div className="flex h-full w-full items-center justify-center">
+        <div className="flex w-96 flex-col items-center justify-center rounded-xl bg-gray-50 p-5">
+          <img className="my-4" src={assets.images.logoBlack} alt="" />
+          <div className="form-group w-full">
             <label htmlFor="email" className="font-sans">
               Email
             </label>
@@ -46,7 +86,7 @@ function LoginPage() {
               />
             </FormControl>
           </div>
-          <div className="form-group">
+          <div className="form-group w-full">
             <label htmlFor="password">Password</label>
             <FormControl className="m-1 w-full" variant="filled">
               <Input
@@ -62,7 +102,11 @@ function LoginPage() {
                       onClick={handleClickShowPassword}
                       onMouseDown={handleMouseDownPassword}
                     >
-                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                      {showPassword ? (
+                        <VisibilityIcon />
+                      ) : (
+                        <VisibilityOffIcon />
+                      )}
                     </IconButton>
                   </InputAdornment>
                 }
@@ -70,19 +114,31 @@ function LoginPage() {
               />
             </FormControl>
           </div>
-          <div className="form-group">
-            <NavLink to="#" className={styles.forgotPassword}>
+          <div className="form-group self-end">
+            <NavLink
+              className="font-open-sans text-sm font-normal text-neutral-900"
+              to="../forgot-password"
+            >
               Forget Password?
             </NavLink>
           </div>
-        </div>
-        <div className={`form-group ${styles.submitBtn}`}>
-          <Button variant="contained" onClick={loginHandler}>
-            Login
-          </Button>
+          <div className="mt-8 w-full px-4">
+            <Button
+              className="w-full bg-neutral-900 px-16 text-gray-50"
+              variant="contained"
+              color="inherit"
+              onClick={loginHandler}
+            >
+              {!isLoader ? (
+                `Login`
+              ) : (
+                <CircularProgress color="inherit" size={24} />
+              )}
+            </Button>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 

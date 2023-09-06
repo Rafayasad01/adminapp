@@ -1,14 +1,14 @@
 import dayjs from 'dayjs';
 import IconButton from '@mui/material/IconButton';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
-import SuperAdminTopBar from '../../../../components/super-admin/common/SuperAdminTopbar';
-import assets from '../../../../assets';
+import assets from '../../../assets';
 import SuperAdminShopDetailsTotalSaleBarChart from './SuperAdminShopDetailsTotalSaleBarChart';
+import TopBar from '../../../components/common/TopBar';
 
 function SuperAdminShopDetailsPage() {
   return (
     <>
-      <SuperAdminTopBar isNestedRoute title="Shop Details" />
+      <TopBar isNestedRoute title="Shop Details" />
       <div className="grid w-full grid-cols-9 gap-3">
         <div className="col-span-3 w-full">
           <div className="rounded-lg bg-gray-50 p-2">

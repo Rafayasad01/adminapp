@@ -1,57 +1,59 @@
 import { useState } from 'react';
-import OTPInput from 'react18-otp-input';
 import Button from '@mui/material/Button';
+import OtpInput from 'react18-otp-input';
 import assets from '../../../assets';
-import styles from '../../../assets/css/AuthPage.module.css';
 
-function OtpVerificationPage() {
+function OTPVerificationPage() {
   const [OTP, setOTP] = useState('');
-  return (
-    <div className={styles.bg}>
-      <div className={styles.centerBox}>
-        <img className={styles.logo} src={assets.images.logoBlack} alt="" />
-        <div className={styles.midBox}>
-          <div className="form-group mb-8">
-            <div className={styles.txtBox}>
-              <div className={styles.txt}>An 4 digit code has been sent to</div>
-              <div className={styles.txt}>Vincent-bo@gmail.com</div>
-            </div>
-          </div>
-          <div className="form-group">
-            <div className={styles.verificationBox}>
-              <OTPInput
-                containerStyle="flex items-center gap-4"
-                inputStyle={{
-                  width: '3.5rem',
-                  aspectRatio: '1/1',
-                  borderRadius: '0.75rem',
-                  outlineStyle: 'solid',
-                  outlineWidth: '2px',
-                  outlineColor: '#e5e5e5',
-                  fontFamily: 'Open Sans',
-                  fontSize: '1.25rem',
-                  lineHeight: '1.75rem',
-                  fontWeight: 600,
-                  color: '#1A1A1A',
-                }}
-                focusStyle={{ outlineColor: '#18181b' }}
-                numInputs={4}
-                onChange={(value: string) => setOTP(value)}
-                separator={<span> </span>}
-                isInputNum
-                shouldAutoFocus
-                value={OTP}
-              />
-            </div>
-          </div>
-        </div>
+  const submitHandler = () => { };
 
-        <div className={`form-group ${styles.submitBtn}`}>
-          <Button variant="contained">Submit</Button>
+  return (
+    <div className="flex h-full w-full items-center justify-center">
+      <div className="flex w-96 flex-col items-center justify-center rounded-xl bg-gray-50 p-5">
+        <img className="my-4" src={assets.images.logoBlack} alt="" />
+        <div className="my-4 mb-8 w-full text-center font-open-sans text-sm font-normal text-neutral-500">
+          An 4 digit code has been sent to <br />
+          <span className="font-medium text-neutral-900">
+            Vincent-bo@gmail.com
+          </span>
+        </div>
+        <OtpInput
+          containerStyle="flex items-center gap-4"
+          inputStyle={{
+            width: '3.5rem',
+            aspectRatio: '1/1',
+            borderRadius: '0.75rem',
+            outlineStyle: 'solid',
+            outlineWidth: '2px',
+            outlineColor: '#e5e5e5',
+            fontFamily: 'Open Sans',
+            fontSize: '1.25rem',
+            lineHeight: '1.75rem',
+            fontWeight: 600,
+            color: '#18181b',
+          }}
+          focusStyle={{ outlineColor: '#18181b' }}
+          numInputs={4}
+          onChange={(value: string) => setOTP(value)}
+          separator={<span> </span>}
+          isInputNum
+          shouldAutoFocus
+          value={OTP}
+        />
+        <div className="py-6" />
+        <div className="mt-8 w-full px-4">
+          <Button
+            className=" w-full bg-neutral-900 px-16 text-gray-50"
+            variant="contained"
+            color="inherit"
+            onClick={submitHandler}
+          >
+            Submit
+          </Button>
         </div>
       </div>
     </div>
   );
 }
 
-export default OtpVerificationPage;
+export default OTPVerificationPage;
