@@ -86,7 +86,7 @@ export const routeObjects: RouteObject[] = [
         path: 'main',
         element: <SuperAdminAppLayout />,
         children: [
-          { index: true, element: <Navigate to="dashboard" replace /> },
+          { index: true, element: <Navigate to="/admin/dashboard" replace /> },
           {
             path: 'dashboard',
             element: <SuperAdminDashboardPage />,
@@ -126,7 +126,7 @@ export const routeObjects: RouteObject[] = [
         ],
       },
       {
-        path: 'dashboard',
+        path: '/admin/dashboard',
         element: <AppLayout />,
         children: [
           {
