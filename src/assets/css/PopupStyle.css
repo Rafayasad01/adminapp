@@ -10,6 +10,10 @@
   @apply w-[30%] !important;
 }
 
+.Dialog.Width-20 {
+  @apply w-[20%] !important;
+}
+
 .Dialog.Width-55 {
   @apply w-[55%] !important;
 }
@@ -556,4 +560,94 @@
 .Content .FormInput .MuiInputAdornment-positionStart,
 .Content .FormInput .MuiInputAdornment-positionEnd {
   margin: 0;
+}
+
+.NotificationBatchBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.NotificationBatchBox .Top {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.NotificationBatchBox .Mid {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-direction: row;
+  flex-shrink: 0;
+  width: 100%;
+}
+
+.NotificationBatchBox .Bottom {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  border-radius: 10px;
+  background: #EEE;
+  flex-shrink: 0;
+  width: 100%;
+  padding: 10px;
+}
+
+.NotificationBatchBox .Top .Title {
+  text-align: center;
+  font-size: 20px;
+}
+
+.NotificationBatchBox .Bottom .Title {
+  text-align: center;
+  font-size: 18px;
+  text-transform: capitalize;
+}
+
+.NotificationBatchBox .Detail {
+  text-align: center;
+  font-family: 'Open Sans';
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  opacity: 0.5;
+  margin-top: 10px;
+}
+
+.NotificationBatchBox .Mid .BatchBox {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.NotificationBatchBox .Mid .Separator {
+  height: 112px;
+  width: 1px;
+  display: flex;
+  opacity: 0.2;
+  background: #000;
+  margin: 0 40px;
+}
+
+.NotificationBatchBox .Mid .BatchBox .BatchValue {
+  font-family: 'Open Sans';
+  font-size: 64px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+
+.NotificationBatchBox .Mid .BatchBox .BatchHeading {
+  font-family: 'Open Sans';
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  text-transform: capitalize;
 }
