@@ -20,6 +20,7 @@ import {
   ORDER_DELIVERY_STATUS_CANCELLED,
   ORDER_DELIVERY_STATUS_NEW,
   ORDER_DELIVERY_STATUS_NOT_ASSIGN,
+  ORDER_STATUS_IN_CANCELLED,
 } from '../../utils/constants';
 import Service from '../../services/adminapp/adminOrders';
 import AlertBox from '../../utils/Alert';
@@ -155,49 +156,113 @@ function OrdersAssignPage() {
     });
   };
   const assignButton = (item: any) => {
-    let btn: any;
-    if (
-      !item.appOrderDelivery.appOrder &&
-      item.status === APP_USER_STATUS_ONLINE
-    ) {
-      btn = (
-        <Button
-          variant="contained"
-          className="btn-black-fill btn-icon"
-          onClick={() => assignHandler(item.id)}
-          disabled={false}
-        >
-          Assign
-        </Button>
-      );
-    } else if (
-      item.appOrderDelivery.appOrder &&
-      item.appOrderDelivery.status === ORDER_DELIVERY_STATUS_CANCELLED
-    ) {
-      btn = (
-        <Button
-          variant="contained"
-          className="btn-black-fill btn-icon"
-          onClick={() => assignHandler(item.id)}
-          disabled={false}
-        >
-          Assign
-        </Button>
-      );
+    // console.log("ITEMS", item);
+    let isTrue = false;
+    if (item.isActive === false
+      || item.status === APP_USER_STATUS_OFFLINE
+      || item.appOrderDelivery.status === ORDER_STATUS_IN_CANCELLED) {
+      isTrue = true;
     } else {
-      btn = (
-        <Button
-          variant="contained"
-          className="btn-black-fill btn-icon"
-          onClick={() => assignHandler(item.id)}
-          disabled
-        >
-          Assign
-        </Button>
-      );
+      if (item.appOrderDelivery.status === ORDER_DELIVERY_STATUS_NOT_ASSIGN
+        || item.appOrderDelivery.status === null) {
+        isTrue = false
+      } else {
+        if (item.appOrderDelivery.appOrder === orderId) {
+          isTrue = true
+        } else {
+          isTrue = false
+        }
+      }
     }
-    return btn;
+    return isTrue;
   };
+
+  const assignBtnColor = (item: any) => {
+    let colorText = ""
+    if (item.isActive === false
+      || item.status === APP_USER_STATUS_OFFLINE
+      || item.appOrderDelivery.status === ORDER_STATUS_IN_CANCELLED) {
+      colorText = "btn-gray-fill btn-icon"
+    } else {
+      console.log("item order delivery", item.appOrderDelivery.status);
+      if (item.appOrderDelivery.status === ORDER_DELIVERY_STATUS_NOT_ASSIGN
+        || item.appOrderDelivery.status === null) {
+        colorText = "btn-black-fill btn-icon"
+      } else {
+        if (item.appOrderDelivery.appOrder === orderId) {
+          colorText = "btn-gray-fill btn-icon"
+        } else {
+          colorText = "btn-black-fill btn-icon"
+        }
+      }
+    }
+    return colorText;
+  }
+  // return (
+  // <Button
+  //   variant="contained"
+  //   className={`
+  //   ${item.isActive === true && item.status === APP_USER_STATUS_ONLINE && item.appOrderDelivery.status === ORDER_DELIVERY_STATUS_NOT_ASSIGN || item.appOrderDelivery.status === null
+  //       ? "btn-black-fill" :
+  //       item.isActive === false && item.status === APP_USER_STATUS_OFFLINE && item.appOrderDelivery.status === ORDER_STATUS_IN_CANCELLED || item.appOrderDelivery.status !== ORDER_DELIVERY_STATUS_NOT_ASSIGN
+  //       && true && "btn-gray-fill"}
+  //       btn-icon`}
+  //   disabled={
+  //     item.isActive === true && item.status === APP_USER_STATUS_ONLINE && item.appOrderDelivery.status === ORDER_DELIVERY_STATUS_NOT_ASSIGN || item.appOrderDelivery.status === null
+  //       ? false :
+  //       item.isActive === false && item.status === APP_USER_STATUS_OFFLINE && item.appOrderDelivery.status === ORDER_STATUS_IN_CANCELLED || item.appOrderDelivery.status !== ORDER_DELIVERY_STATUS_NOT_ASSIGN
+  //       && true
+  //   }
+  //   onClick={() => alert("hello")}
+  // >
+  //   Assign
+  // </Button>
+  // );
+
+
+  // let btn: any;
+  // if (
+  //   !item.appOrderDelivery.appOrder &&
+  //   item.status === APP_USER_STATUS_ONLINE
+  // ) {
+  //   btn = (
+  //     <Button
+  //       variant="contained"
+  //       className="btn-black-fill btn-icon"
+  //       onClick={() => assignHandler(item.id)}
+  //       disabled={false}
+  //     >
+  //       Assign
+  //     </Button>
+  //   );
+  // } else if (
+  //   item.appOrderDelivery.appOrder &&
+  //   item.appOrderDelivery.status === ORDER_DELIVERY_STATUS_CANCELLED
+  // ) {
+  //   btn = (
+  //     <Button
+  //       variant="contained"
+  //       className="btn-blac-fill btn-icon"
+  //       onClick={() => assignHandler(item.id)}
+  //       disabled={false}
+  //     >
+  //       Assign
+  //     </Button>
+  //   );
+  // } else {
+  //   btn = (
+  //     <Button
+  //       variant="contained"
+  //       className="btn-gray-fill btn-icon"
+  //       onClick={() => assignHandler(item.id)}
+  //       disabled
+  //     >
+  //       Assign
+  //     </Button>
+  // );
+  // }
+  // return btn;
+
   return (
     <>
       <TopBar isNestedRoute title="Order Assign" />
@@ -285,13 +350,13 @@ function OrdersAssignPage() {
 
                             <div className="flex flex-col items-start justify-start">
                               <span className="text-sm font-semibold">
-                                {`${item.firstName} ${item.lastName}`}
+                                {`${item.firstName} ${item.lastName} `}
                               </span>
                               <span className="text-xs font-normal text-[#6A6A6A]">
                                 {dayjs(item.createdDate).isValid()
                                   ? dayjs(item.createdDate)?.format(
-                                      'MMMM DD, YYYY'
-                                    )
+                                    'MMMM DD, YYYY'
+                                  )
                                   : '--'}
                               </span>
                             </div>
@@ -299,12 +364,10 @@ function OrdersAssignPage() {
                         </td>
                         <td>{item.phone}</td>
                         <td>
-                          <span
-                            className={`badge badge-${
-                              item.status === APP_USER_STATUS_OFFLINE
-                                ? 'danger'
-                                : 'success'
-                            }`}
+                          <span className={`badge badge-${item.status === APP_USER_STATUS_OFFLINE
+                            ? 'danger'
+                            : 'success'
+                            } `}
                           >
                             {item.status}
                           </span>
@@ -338,7 +401,17 @@ function OrdersAssignPage() {
                             </span>
                           )}
                         </td>
-                        <td>{assignButton(item)}</td>
+                        {/* <td>{assignButton(item)}</td> */}
+                        <td>
+                          <Button
+                            variant="contained"
+                            className={assignBtnColor(item)}
+                            disabled={assignButton(item)}
+                            onClick={() => assignHandler(item.id)}
+                          >
+                            Assign
+                          </Button>
+                        </td>
                       </tr>
                     );
                   })}

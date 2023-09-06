@@ -20,6 +20,7 @@ import CategoriesServicesFaqCreatePopup from './CategoriesServicesFaqCreatePopup
 import CategoriesServicesFaqEditPopup from './CategoriesServicesFaqEditPopup';
 import Loader from '../../components/common/Loader';
 import Notify from '../../components/common/Notify';
+import PermissionPopup from '../../utils/PermissionPopup';
 
 function CategoriesServicesFaqPage() {
   const params = useParams();
@@ -41,6 +42,8 @@ function CategoriesServicesFaqPage() {
   const [isLoader, setIsLoader] = React.useState(true);
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
+  const [cancelDialogOpen, setCancelDialogOpen] = useState<boolean>(false);
+  const [dialogText, setDialogText] = useState<any>('Are you sure you want to delete this faq ?');
 
   const categoryServiceId = params.categoryServiceId ?? '';
 
@@ -154,6 +157,13 @@ function CategoriesServicesFaqPage() {
           });
           let newtotal = total;
           setTotal((newtotal -= 1));
+        } else {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: updateItem.data.message,
+            type: 'error',
+          });
         }
       })
       .catch((err) => {
@@ -166,6 +176,10 @@ function CategoriesServicesFaqPage() {
       });
   };
 
+  const statusCancelHandler = () => {
+    deleteHandler(actionMenuItemid);
+  }
+
   const manuHandler = (option: string) => {
     if (option === 'Edit') {
       category.getCategoryServiceFaq(actionMenuItemid).then((item: any) => {
@@ -175,7 +189,7 @@ function CategoriesServicesFaqPage() {
         }
       });
     } else if (option === 'Delete') {
-      deleteHandler(actionMenuItemid);
+      setCancelDialogOpen(true)
     }
   };
 
@@ -409,6 +423,15 @@ function CategoriesServicesFaqPage() {
           </div>
         </div>
       </div>
+      {cancelDialogOpen && (
+        <PermissionPopup
+          type="shock"
+          open={cancelDialogOpen}
+          setOpen={setCancelDialogOpen}
+          dialogText={dialogText}
+          callback={statusCancelHandler}
+        />
+      )}
       {actionMenuAnchorEl && (
         <ActionMenu
           open={actionMenuOpen}
