@@ -29,7 +29,6 @@ function NotificationDetailPopup({
     >
       {detail && (
         <div className="Content">
-          <div className="FormHeader" />
           <div className="FormBody">
             <div className='NotificationBatchBox'>
               <div className='Top'>
@@ -52,7 +51,6 @@ function NotificationDetailPopup({
               </div>
             </div>
           </div>
-          <div className="FormFooter" />
         </div>
       )}
     </Dialog>
