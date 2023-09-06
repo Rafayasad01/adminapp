@@ -173,9 +173,9 @@ function OrderDetailsPage() {
               <div className="flex items-center">
                 <div
                   className={`relative mr-2 inline-flex ${currentStatus &&
-                      currentStatus.key === ORDER_STATUS_IN_CANCELLED
-                      ? 'text-red-500'
-                      : 'text-green-500'
+                    currentStatus.key === ORDER_STATUS_IN_CANCELLED
+                    ? 'text-red-500'
+                    : 'text-green-500'
                     }`}
                 >
                   <CircularProgress
@@ -214,9 +214,9 @@ function OrderDetailsPage() {
                   </div>
                   <div
                     className={`font-open-sans text-sm font-semibold  ${currentStatus &&
-                        currentStatus.key === ORDER_STATUS_IN_CANCELLED
-                        ? 'text-red-500'
-                        : 'text-green-500'
+                      currentStatus.key === ORDER_STATUS_IN_CANCELLED
+                      ? 'text-red-500'
+                      : 'text-green-500'
                       } `}
                   >
                     {currentStatus && `${currentStatus.value.title} `}
@@ -230,8 +230,8 @@ function OrderDetailsPage() {
                     setCancelDialogOpen(true);
                   }}
                   className={`rounded-xl py-2 px-12 font-open-sans text-sm font-semibold ${cancelled || isCancelled
-                      ? 'bg-neutral-400 text-neutral-900'
-                      : 'bg-neutral-900 text-gray-50'
+                    ? 'bg-neutral-400 text-neutral-900'
+                    : 'bg-neutral-900 text-gray-50'
                     } `}
                   color="inherit"
                   disabled={!!(cancelled || isCancelled)}
@@ -446,10 +446,10 @@ function OrderDetailsPage() {
                         setDialogOpen(true);
                       }}
                       className={`py-2 px-12 font-open-sans text-sm font-semibold rounded ${cancelled ||
-                          (isCancelled &&
-                            nextBtn.key === ORDER_STATUS_IN_CANCELLED)
-                          ? 'bg-neutral-400 text-neutral-900'
-                          : 'bg-neutral-900 text-gray-50'
+                        (isCancelled &&
+                          nextBtn.key === ORDER_STATUS_IN_CANCELLED)
+                        ? 'bg-neutral-400 text-neutral-900'
+                        : 'bg-neutral-900 text-gray-50'
                         } `}
                       color="inherit"
                       disabled={
@@ -485,7 +485,7 @@ function OrderDetailsPage() {
                       )}
 
                       <div
-                        className={`mx-2 relative inline flex ${item.isStatus ? item.value.color : 'text-neutral-500'
+                        className={`mx-2 relative flex ${item.isStatus ? item.value.color : 'text-neutral-500'
                           } `}
                       >
                         <CircularProgress
@@ -503,8 +503,8 @@ function OrderDetailsPage() {
                       <div>
                         <div
                           className={`font-open-sans text-base font-semibold ${item.isStatus
-                              ? item.value.color
-                              : 'text-neutral-500'
+                            ? item.value.color
+                            : 'text-neutral-500'
                             } `}
                         >
                           {item.value.title}
