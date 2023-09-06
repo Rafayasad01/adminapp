@@ -167,10 +167,10 @@ function NotificationPage() {
     return tag;
   };
 
-  const detailButtonHandler = (index: number) => {
+  const detailButtonHandler = (getItem: any, index: number) => {
     Service.batchDetailService(list[index].id).then((item) => {
       if (item.data.success) {
-        setBatchDetail(item.data.data);
+        setBatchDetail({ ...getItem, ...item.data.data });
         setDetailPopup(true);
       } else {
         setAlertMsg('No batches found');
@@ -277,7 +277,7 @@ function NotificationPage() {
                         <td>
                           <IconButton
                             className="icon-btn mr-3.5 p-0"
-                            onClick={() => detailButtonHandler(index)}
+                            onClick={() => detailButtonHandler(item, index)}
                           >
                             <WysiwygOutlinedIcon />
                           </IconButton>
