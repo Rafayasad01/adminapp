@@ -1,4 +1,5 @@
 /* eslint-disable prettier/prettier */
+import React, { useState, useEffect } from 'react';
 import GridViewOutlinedIcon from '@mui/icons-material/GridViewOutlined';
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
@@ -12,7 +13,7 @@ import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
 import Stack from '@mui/material/Stack';
 import Toolbar from '@mui/material/Toolbar';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import TwitterIcon from '@mui/icons-material/Twitter';
@@ -25,6 +26,9 @@ import VoucherIcon from '../icons/VoucherIcon';
 import DriverIcon from '../icons/DriverIcon';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 import { logout } from '../../redux/features/authStateSlice';
+
+import HeadphonesOutlinedIcon from '@mui/icons-material/HeadphonesOutlined';
+import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined';
 
 import assets from '../../assets';
 
@@ -98,14 +102,55 @@ const links = [
   // },
 ];
 
+const superAdminlinks = [
+  {
+    name: 'Dashboard',
+    path: 'dashboard',
+    icon: <GridViewOutlinedIcon fontSize="inherit" />,
+  },
+  {
+    name: 'Shops',
+    path: 'shop',
+    icon: <DescriptionOutlinedIcon fontSize="inherit" />,
+  },
+
+  {
+    name: 'Support',
+    path: 'support',
+    icon: <HeadphonesOutlinedIcon fontSize="inherit" />,
+  },
+  // {
+  //   name: 'Users',
+  //   path: 'user',
+  //   icon: <GroupsOutlinedIcon fontSize="inherit" />,
+  // },
+  // {
+  //   name: 'Role',
+  //   path: 'role/permission',
+  //   icon: <HeadphonesOutlinedIcon fontSize="inherit" />,
+  // },
+  // {
+  //   name: 'Settings',
+  //   path: 'settings',
+  //   icon: <SettingsOutlinedIcon fontSize="inherit" />,
+  // },
+];
+
 function Sidebar() {
+  const [list, setList] = useState<any>(null);
   const authState: any = useAppSelector((state) => state.authState);
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
   const logOut = () => {
     dispatch(logout());
-    navigate(`../../../admin/auth/login`);
   };
+  useEffect(() => {
+    if (authState.user.isSuperAdmin) {
+      setList(superAdminlinks);
+    } else {
+      setList(links);
+    }
+  }, []);
+
   return (
     <Drawer
       variant="permanent"
@@ -122,7 +167,7 @@ function Sidebar() {
         </Toolbar>
 
         <div className="flex w-full flex-col text-base ">
-          {links.map((link) => {
+          {list && list.map((link: any) => {
             return (
               <NavLink
                 key={link.path}
@@ -145,35 +190,37 @@ function Sidebar() {
           })}
         </div>
         <div className="sidebar-footer-content mt-5">
-          <div className="share-via">
-            <h6 className="heading">Share</h6>
-            <div className="social-icons">
-              <IconButton className="social-btn" onClick={() => null}>
-                <FacebookIcon className="text-3xl" />
-              </IconButton>
-              <IconButton className="social-btn" onClick={() => null}>
-                <TwitterIcon className="text-3xl" />
-              </IconButton>
-              <IconButton className="social-btn" onClick={() => null}>
-                <InstagramIcon className="text-3xl" />
-              </IconButton>
-              <IconButton className="social-btn" onClick={() => null}>
-                <MailIcon className="text-3xl" />
-              </IconButton>
-            </div>
-            <hr className="mb-0" />
-            {/* <NavLink className="link mb-1" to="#">
+          {!authState.user.isSuperAdmin && (
+            <div className="share-via">
+              <h6 className="heading">Share</h6>
+              <div className="social-icons">
+                <IconButton className="social-btn" onClick={() => null}>
+                  <FacebookIcon className="text-3xl" />
+                </IconButton>
+                <IconButton className="social-btn" onClick={() => null}>
+                  <TwitterIcon className="text-3xl" />
+                </IconButton>
+                <IconButton className="social-btn" onClick={() => null}>
+                  <InstagramIcon className="text-3xl" />
+                </IconButton>
+                <IconButton className="social-btn" onClick={() => null}>
+                  <MailIcon className="text-3xl" />
+                </IconButton>
+              </div>
+              <hr className="mb-0" />
+              {/* <NavLink className="link mb-1" to="#">
               Terms & Conditions
             </NavLink>
             <NavLink className="link" to="#">
               Privacy Policy
             </NavLink>
             <hr className="mt-2" /> */}
-          </div>
+            </div>
+          )}
           {authState ? (
             <NavLink
               className="logout-link"
-              to="/dashboard"
+              to="/admin"
               onClick={() => logOut()}
             >
               <LogoutOutlinedIcon className="icon" />

@@ -11,15 +11,13 @@ import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import BackArrowIcon from '../icons/BackArrowIcon';
 
-import assets from '../../assets';
-
 type Props = {
   title: string;
   isNestedRoute?: boolean;
 };
 
 function TopBar({ title, isNestedRoute = false }: Props) {
-  const userData = useSelector(state => state.authState.user);
+  const userData = useSelector((state: any) => state.authState.user);
   const navigate = useNavigate();
   const backHandler = () => {
     navigate(-1);

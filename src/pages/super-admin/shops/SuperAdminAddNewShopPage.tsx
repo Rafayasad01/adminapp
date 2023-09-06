@@ -8,10 +8,10 @@ import Button from '@mui/material/Button';
 
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
 import RemoveCircleOutlineOutlinedIcon from '@mui/icons-material/RemoveCircleOutlineOutlined';
-import SuperAdminTopBar from '../../../../components/super-admin/common/SuperAdminTopbar';
-import { Marker } from '../../../../interfaces/map.interface';
-import SuperAdminMarkersMap from '../../../../components/super-admin/common/SuperAdminMap';
-import SuperAdminDragDropFile from '../../../../components/super-admin/common/SuperAdminDragDropFile';
+import { Marker } from '../../../interfaces/map.interface';
+import SuperAdminMarkersMap from '../../../components/super-admin/common/SuperAdminMap';
+import SuperAdminDragDropFile from '../../../components/super-admin/common/SuperAdminDragDropFile';
+import TopBar from '../../../components/common/TopBar';
 
 const data = [
   { name: 'Address1', lat: -33.890542, lng: 151.274856 },
@@ -46,7 +46,7 @@ function SuperAdminAddNewShopPage() {
   };
   return (
     <>
-      <SuperAdminTopBar title="Add New Shop" />
+      <TopBar title="Add New Shop" />
       <div className="container mt-5">
         <div className="grid w-full grid-cols-12 gap-3">
           <div className="col-span-6 min-h-[32rem] rounded-lg bg-gray-50 py-3 shadow-lg">

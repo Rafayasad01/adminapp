@@ -3,14 +3,14 @@ import Button from '@mui/material/Button';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import dayjs from 'dayjs';
-import SuperAdminTopBar from '../../../../components/super-admin/common/SuperAdminTopbar';
 import SuperAdminDashboardRevenueLineChart from './SuperAdminDashboardRevenueLineChart';
-import assets from '../../../../assets';
+import assets from '../../../assets';
+import TopBar from '../../../components/common/TopBar';
 
 function SuperAdminDashboardPage() {
   return (
     <>
-      <SuperAdminTopBar title="Dashboard" />
+      <TopBar title="Dashboard" />
       <div className="container mt-3">
         <div className="mt-2 grid grid-cols-4 gap-3">
           <div className="flex h-24 flex-row rounded-lg bg-gray-50 shadow-lg">

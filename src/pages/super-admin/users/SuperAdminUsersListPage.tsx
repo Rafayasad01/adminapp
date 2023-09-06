@@ -15,11 +15,11 @@ import CheckBoxOutlinedIcon from '@mui/icons-material/CheckBoxOutlined';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import dayjs from 'dayjs';
-import SuperAdminTopBar from '../../../../components/super-admin/common/SuperAdminTopbar';
-import assets from '../../../../assets';
+import assets from '../../../assets';
 import SuperAdminAddNewUserDialog from './SuperAdminAddNewUserDialog';
 import SuperAdminEditUserDialog from './SuperAdminEditUserDialog';
 import SuperAdminChangeUserAccessDialog from './SuperAdminChangeUserAccessDialog';
+import TopBar from '../../../components/common/TopBar';
 
 const ITEM_HEIGHT = 48;
 function SuperAdminUsersListPage() {
@@ -69,7 +69,7 @@ function SuperAdminUsersListPage() {
         openDialog={changeUserAccessDialogOpen}
         setOpenDialog={setChangeUserAccessDialogOpen}
       />
-      <SuperAdminTopBar title="Users" />
+      <TopBar title="Users" />
       <div className="container mt-5">
         <div className="w-full rounded-lg bg-white shadow-lg">
           <div className="flex gap-3 p-4">
