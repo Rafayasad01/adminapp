@@ -22,6 +22,9 @@ import ActionMenu from '../../components/common/ActionMenu';
 import DriversScheduleCreatePopup from './DriversScheduleCreatePopup';
 import { useAppSelector } from '../../redux/redux-hooks';
 import DriversScheduleEditPopup from './DriversScheduleEditPopup';
+import Loader from '../../components/common/Loader';
+import Notify from '../../components/common/Notify';
+import PermissionPopup from '../../utils/PermissionPopup';
 
 function DriversSchedulePage() {
   const authState: any = useAppSelector((state) => state.authState);
@@ -43,39 +46,84 @@ function DriversSchedulePage() {
 
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
+  const [isLoader, setIsLoader] = useState(true);
+  const [isNotify, setIsNotify] = React.useState(false);
+  const [notifyMessage, setNotifyMessage] = React.useState({});
+  const [cancelDialogOpen, setCancelDialogOpen] = useState<boolean>(false);
+  const [dialogText, setDialogText] = useState<any>(
+    'Are you sure you want to delete this working schedule ?'
+  );
 
   const id: any = params.driverId;
+
   const deleteEntity = (driverId: string) => {
+    setIsLoader(true);
     const data = {
       is_active: false,
       is_deleted: true,
       updated_by: authState.user.id,
     };
-    Service.deleteScheduleService(driverId, data).then((item: any) => {
-      if (item.data.success) {
-        setList((newArr: any) => {
-          return newArr.filter(
-            (newItem: any) => newItem.id !== item.data.data.id
-          );
+    Service.deleteScheduleService(driverId, data)
+      .then((item: any) => {
+        if (item.data.success) {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'success',
+          });
+          setList((newArr: any) => {
+            return newArr.filter(
+              (newItem: any) => newItem.id !== item.data.data.id
+            );
+          });
+        } else {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'error',
+          });
+        }
+      })
+      .catch((err) => {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
         });
-      }
-    });
+      });
+  };
+
+  const statusCancelHandler = () => {
+    deleteEntity(actionMenuItemid);
   };
 
   const getData = (driverId: string) => {
-    Service.getSchedule(driverId).then((item: any) => {
-      if (item.data.success) {
-        setEditFormData(item.data.data);
-        setOpenEditFormDialog(true);
-      }
-    });
+    Service.getSchedule(driverId)
+      .then((item: any) => {
+        if (item.data.success) {
+          setIsLoader(false);
+          setEditFormData(item.data.data);
+          setOpenEditFormDialog(true);
+        }
+      })
+      .catch((err) => {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
+        });
+      });
   };
 
   const manuHandler = (option: string) => {
     if (option === 'Edit') {
       getData(actionMenuItemid);
     } else if (option === 'Delete') {
-      deleteEntity(actionMenuItemid);
+      setCancelDialogOpen(true);
     }
   };
 
@@ -137,19 +185,36 @@ function DriversSchedulePage() {
   };
 
   useEffect(() => {
-    Service.getScheduleService(id).then((item: any) => {
-      if (item.data.success) {
-        setAddress(item.data.data.appUserAddress);
-        setDetail(item.data.data);
-        if (
-          item.data.data.appDriverWorkingSchedule &&
-          item.data.data.appDriverWorkingSchedule.length > 0
-        ) {
-          setList(item.data.data.appDriverWorkingSchedule.reverse());
-          setTotal(Number(item.data.data.total));
+    Service.getScheduleService(id)
+      .then((item: any) => {
+        if (item.data.success) {
+          setIsLoader(false);
+          setAddress(item.data.data.appUserAddress);
+          setDetail(item.data.data);
+          if (
+            item.data.data.appDriverWorkingSchedule &&
+            item.data.data.appDriverWorkingSchedule.length > 0
+          ) {
+            setList(item.data.data.appDriverWorkingSchedule.reverse());
+            setTotal(Number(item.data.data.total));
+          }
+        } else {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'error',
+          });
         }
-      }
-    });
+      })
+      .catch((err) => {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
+        });
+      });
   }, [id]);
 
   const createFormHandler = (data: any) => {
@@ -203,8 +268,15 @@ function DriversSchedulePage() {
     }
   };
 
-  return (
+  return isLoader ? (
+    <Loader />
+  ) : (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <Notify
+        isOpen={isNotify}
+        setIsOpen={setIsNotify}
+        displayMessage={notifyMessage}
+      />
       <TopBar isNestedRoute title="Driver Schedule" />
       {detail && (
         <div className="container mt-5">
@@ -417,6 +489,15 @@ function DriversSchedulePage() {
             </div>
           )}
         </div>
+      )}
+      {cancelDialogOpen && (
+        <PermissionPopup
+          type="shock"
+          open={cancelDialogOpen}
+          setOpen={setCancelDialogOpen}
+          dialogText={dialogText}
+          callback={statusCancelHandler}
+        />
       )}
       {actionMenuAnchorEl && (
         <ActionMenu

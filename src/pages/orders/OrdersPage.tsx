@@ -26,6 +26,8 @@ import {
 } from '../../utils/constants';
 import TopBar from '../../components/common/TopBar';
 import { useAppSelector } from '../../redux/redux-hooks';
+import Loader from '../../components/common/Loader';
+import Notify from '../../components/common/Notify';
 
 function OrdersPage() {
   const authState: any = useAppSelector((state) => state.authState);
@@ -36,6 +38,9 @@ function OrdersPage() {
   const [list, setList] = useState<any>([]);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [actionMenuItemid, setActionMenuItemid] = React.useState('');
+  const [isLoader, setIsLoader] = useState(true);
+  const [isNotify, setIsNotify] = React.useState(false);
+  const [notifyMessage, setNotifyMessage] = React.useState({});
   const [actionMenuAnchorEl, setActionMenuAnchorEl] =
     useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
@@ -155,6 +160,7 @@ function OrdersPage() {
     order
       .getListService(authState.user.tenant, page, rowsPerPage)
       .then((item) => {
+        setIsLoader(false);
         // console.log(item.data.data);
         setList(
           item.data.data.list.map((newItem: any) => ({
@@ -164,6 +170,14 @@ function OrdersPage() {
           }))
         );
         setTotal(item.data.data.total);
+      })
+      .catch((err) => {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
+        });
       });
   }, [authState, page, rowsPerPage]);
 
@@ -205,7 +219,9 @@ function OrdersPage() {
     const newStatus = newStatuses.filter((s) => s.key === status);
     return newStatus[0].value.title;
   };
-  return (
+  return isLoader ? (
+    <Loader />
+  ) : (
     <>
       {actionMenuAnchorEl && (
         <ActionMenu
@@ -216,6 +232,11 @@ function OrdersPage() {
           callback={manuHandler}
         />
       )}
+      <Notify
+        isOpen={isNotify}
+        setIsOpen={setIsNotify}
+        displayMessage={notifyMessage}
+      />
       <TopBar title="Orders" />
       <div className="container mt-5">
         <div className="w-full rounded-lg bg-white shadow-lg">

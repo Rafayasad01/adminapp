@@ -26,6 +26,8 @@ import {
 } from '../../utils/constants';
 import PermissionPopup from '../../utils/PermissionPopup';
 import assets from '../../assets';
+import Loader from '../../components/common/Loader';
+import Notify from '../../components/common/Notify';
 
 function OrderDetailsPage() {
   const navigate = useNavigate();
@@ -40,6 +42,9 @@ function OrderDetailsPage() {
   const [cancelled, setCancelled] = useState<boolean>(false);
   const [nextBtn, setNextBtn] = useState<any>(null);
   const [currentStatus, setCurrentStatus] = useState<any>(null);
+  const [isLoader, setIsLoader] = useState(true);
+  const [isNotify, setIsNotify] = useState(false);
+  const [notifyMessage, setNotifyMessage] = useState({});
   const params = useParams();
   const id: any = params.orderId;
 
@@ -86,11 +91,22 @@ function OrderDetailsPage() {
     setOrderStatuses(newResult);
   };
   useEffect(() => {
-    orderService.viewService(id).then((item) => {
-      if (item) {
-        setData(item.data.data);
-      }
-    });
+    orderService
+      .viewService(id)
+      .then((item) => {
+        setIsLoader(false);
+        if (item) {
+          setData(item.data.data);
+        }
+      })
+      .catch((err) => {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
+        });
+      });
   }, [id]);
 
   const getIcon = (string: string) => {
@@ -147,7 +163,9 @@ function OrderDetailsPage() {
     createOrderStatusesService(data, ORDER_STATUS_IN_CANCELLED);
   };
 
-  return (
+  return isLoader ? (
+    <Loader />
+  ) : (
     <>
       {dialogOpen && (
         <PermissionPopup
@@ -159,12 +177,18 @@ function OrderDetailsPage() {
       )}
       {cancelDialogOpen && (
         <PermissionPopup
+          type="shock"
           open={cancelDialogOpen}
           setOpen={setCancelDialogOpen}
           dialogText={dialogText}
           callback={statusCancelHandler}
         />
       )}
+      <Notify
+        isOpen={isNotify}
+        setIsOpen={setIsNotify}
+        displayMessage={notifyMessage}
+      />
       <TopBar isNestedRoute title="View Order" />
       <div className="container py-3">
         <div className="grid w-full grid-cols-2 gap-3">
@@ -172,11 +196,12 @@ function OrderDetailsPage() {
             <div className="p-4">
               <div className="flex items-center">
                 <div
-                  className={`relative mr-2 inline-flex ${currentStatus &&
-                      currentStatus.key === ORDER_STATUS_IN_CANCELLED
+                  className={`relative mr-2 inline-flex ${
+                    currentStatus &&
+                    currentStatus.key === ORDER_STATUS_IN_CANCELLED
                       ? 'text-red-500'
                       : 'text-green-500'
-                    }`}
+                  }`}
                 >
                   <CircularProgress
                     thickness={1.5}
@@ -213,11 +238,12 @@ function OrderDetailsPage() {
                     )}
                   </div>
                   <div
-                    className={`font-open-sans text-sm font-semibold  ${currentStatus &&
-                        currentStatus.key === ORDER_STATUS_IN_CANCELLED
+                    className={`font-open-sans text-sm font-semibold  ${
+                      currentStatus &&
+                      currentStatus.key === ORDER_STATUS_IN_CANCELLED
                         ? 'text-red-500'
                         : 'text-green-500'
-                      } `}
+                    } `}
                   >
                     {currentStatus && `${currentStatus.value.title} `}
                   </div>
@@ -229,10 +255,11 @@ function OrderDetailsPage() {
                     setDialogText('Are you sure you want to cancel this Order');
                     setCancelDialogOpen(true);
                   }}
-                  className={`rounded-xl py-2 px-12 font-open-sans text-sm font-semibold ${cancelled || isCancelled
+                  className={`rounded-xl py-2 px-12 font-open-sans text-sm font-semibold ${
+                    cancelled || isCancelled
                       ? 'bg-neutral-400 text-neutral-900'
                       : 'bg-neutral-900 text-gray-50'
-                    } `}
+                  } `}
                   color="inherit"
                   disabled={!!(cancelled || isCancelled)}
                 >
@@ -363,7 +390,7 @@ function OrderDetailsPage() {
               {viewData.orderItems &&
                 viewData.orderItems.map((item: any, index: number) => {
                   return (
-                    <div key={item.id}>
+                    <div key={index}>
                       {index > 0 && (
                         <hr className="my-2 h-[1px] w-full bg-neutral-200" />
                       )}
@@ -445,12 +472,13 @@ function OrderDetailsPage() {
                         );
                         setDialogOpen(true);
                       }}
-                      className={`py-2 px-12 font-open-sans text-sm font-semibold rounded ${cancelled ||
-                          (isCancelled &&
-                            nextBtn.key === ORDER_STATUS_IN_CANCELLED)
+                      className={`rounded py-2 px-12 font-open-sans text-sm font-semibold ${
+                        cancelled ||
+                        (isCancelled &&
+                          nextBtn.key === ORDER_STATUS_IN_CANCELLED)
                           ? 'bg-neutral-400 text-neutral-900'
                           : 'bg-neutral-900 text-gray-50'
-                        } `}
+                      } `}
                       color="inherit"
                       disabled={
                         !!(
@@ -468,15 +496,16 @@ function OrderDetailsPage() {
             </div>
             <div className="flex flex-col gap-4 px-4 py-4">
               {orderStatuses &&
-                orderStatuses.map((item: any) => {
+                orderStatuses.map((item: any, index: number) => {
                   if (item.key === ORDER_STATUS_IN_CANCELLED && isCancelled) {
                     return null;
                   }
                   return (
                     <div
-                      key={item.key}
-                      className={`flex items-center ${item.isStatus ? '' : 'opacity-25'
-                        } `}
+                      key={index}
+                      className={`flex items-center ${
+                        item.isStatus ? '' : 'opacity-25'
+                      } `}
                     >
                       {item.isStatus ? (
                         <CheckCircleOutlineOutlinedIcon />
@@ -485,8 +514,9 @@ function OrderDetailsPage() {
                       )}
 
                       <div
-                        className={`mx-2 relative inline flex ${item.isStatus ? item.value.color : 'text-neutral-500'
-                          } `}
+                        className={`relative mx-2 inline flex ${
+                          item.isStatus ? item.value.color : 'text-neutral-500'
+                        } `}
                       >
                         <CircularProgress
                           thickness={1.5}
@@ -502,10 +532,11 @@ function OrderDetailsPage() {
                       </div>
                       <div>
                         <div
-                          className={`font-open-sans text-base font-semibold ${item.isStatus
+                          className={`font-open-sans text-base font-semibold ${
+                            item.isStatus
                               ? item.value.color
                               : 'text-neutral-500'
-                            } `}
+                          } `}
                         >
                           {item.value.title}
                         </div>

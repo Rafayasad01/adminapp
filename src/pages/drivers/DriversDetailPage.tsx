@@ -16,6 +16,8 @@ import {
   ORDER_DELIVERY_STATUS_NEW,
   ORDER_DELIVERY_STATUS_PICKED_UP,
 } from '../../utils/constants';
+import Loader from '../../components/common/Loader';
+import Notify from '../../components/common/Notify';
 
 function DriversDetailPage() {
   const params = useParams();
@@ -26,6 +28,11 @@ function DriversDetailPage() {
   const [list, setList] = useState<any>([]);
   const [address, setAddress] = useState<string>('');
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+
+  const [isLoader, setIsLoader] = React.useState(true);
+  const [isNotify, setIsNotify] = React.useState(false);
+  const [notifyMessage, setNotifyMessage] = React.useState({});
+
   const [actionMenuAnchorEl, setActionMenuAnchorEl] =
     useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
@@ -91,14 +98,31 @@ function DriversDetailPage() {
   };
 
   useEffect(() => {
-    Service.getDetailService(id).then((item: any) => {
-      if (item.data.success) {
-        setAddress(item.data.data.appUserAddress);
-        setDetail(item.data.data);
-        setList(item.data.data.appOrderDelivery.reverse());
-        setTotal(Number(item.data.data.total));
-      }
-    });
+    Service.getDetailService(id)
+      .then((item: any) => {
+        if (item.data.success) {
+          setIsLoader(false);
+          setAddress(item.data.data.appUserAddress);
+          setDetail(item.data.data);
+          setList(item.data.data.appOrderDelivery.reverse());
+          setTotal(Number(item.data.data.total));
+        } else {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'error',
+          });
+        }
+      })
+      .catch((err) => {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
+        });
+      });
   }, [id]);
 
   const getStatusTag = (status: string) => {
@@ -119,8 +143,15 @@ function DriversDetailPage() {
     return tag;
   };
 
-  return (
+  return isLoader ? (
+    <Loader />
+  ) : (
     <>
+      <Notify
+        isOpen={isNotify}
+        setIsOpen={setIsNotify}
+        displayMessage={notifyMessage}
+      />
       <TopBar isNestedRoute title="Driver Detail" />
       {detail && (
         <div className="container mt-5">

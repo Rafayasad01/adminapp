@@ -43,7 +43,9 @@ function CategoriesServicesFaqPage() {
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
   const [cancelDialogOpen, setCancelDialogOpen] = useState<boolean>(false);
-  const [dialogText, setDialogText] = useState<any>('Are you sure you want to delete this faq ?');
+  const [dialogText, setDialogText] = useState<any>(
+    'Are you sure you want to delete this faq ?'
+  );
 
   const categoryServiceId = params.categoryServiceId ?? '';
 
@@ -178,7 +180,7 @@ function CategoriesServicesFaqPage() {
 
   const statusCancelHandler = () => {
     deleteHandler(actionMenuItemid);
-  }
+  };
 
   const manuHandler = (option: string) => {
     if (option === 'Edit') {
@@ -189,7 +191,7 @@ function CategoriesServicesFaqPage() {
         }
       });
     } else if (option === 'Delete') {
-      setCancelDialogOpen(true)
+      setCancelDialogOpen(true);
     }
   };
 
@@ -232,7 +234,7 @@ function CategoriesServicesFaqPage() {
             text: updateItem.data.message,
             type: 'success',
           });
-          for (var i = 0; i < list.length; i++) {
+          for (let i = 0; i < list.length; i += 1) {
             if (list[i].id === updateItem.data.data.id) {
               list[i].question = updateItem.data.data.question;
               list[i].answer = updateItem.data.data.answer;
@@ -278,13 +280,13 @@ function CategoriesServicesFaqPage() {
         setIsOpen={setIsNotify}
         displayMessage={notifyMessage}
       />
-      <TopBar isNestedRoute title="Faq's" />
+      <TopBar isNestedRoute title="Category Item Faq's" />
       <div className="container mt-5">
         <div className="w-full rounded-lg bg-white shadow-lg">
           <div className="grid grid-cols-12 px-4 py-5">
             <div className="col-span-7">
               <span className="font-open-sans text-xl font-semibold text-[#252733]">
-                All Faq&apos;s
+                All Category Item Faq&apos;s
               </span>
             </div>
             <div className="col-span-5">
@@ -358,8 +360,8 @@ function CategoriesServicesFaqPage() {
                         <td>
                           {dayjs(item.createdDate).isValid()
                             ? dayjs(item.createdDate)?.format(
-                              'ddd, MMM DD, YYYY hh:mm:ssA'
-                            )
+                                'ddd, MMM DD, YYYY hh:mm:ssA'
+                              )
                             : '--'}
                         </td>
                         <td>

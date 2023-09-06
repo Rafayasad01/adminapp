@@ -37,21 +37,22 @@ function CategoriesPage() {
   const [actionMenuAnchorEl, setActionMenuAnchorEl] =
     useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
-  const actionMenuOptions = ['Service', 'Edit', 'Delete'];
+  const actionMenuOptions = ['Items', 'Edit', 'Delete'];
 
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
   const [cancelDialogOpen, setCancelDialogOpen] = useState<boolean>(false);
-  const [dialogText, setDialogText] = useState<any>('Are you sure you want to delete this Category ?');
+  const [dialogText, setDialogText] = useState<any>(
+    'Are you sure you want to delete this Category ?'
+  );
 
   const handleFormClickOpen = () => {
     setOpenFormDialog(true);
   };
 
-  console.log("cancelDialogOpen", cancelDialogOpen);
-
+  console.log('cancelDialogOpen', cancelDialogOpen);
 
   useEffect(() => {
     category
@@ -167,7 +168,7 @@ function CategoriesPage() {
 
   const statusCancelHandler = () => {
     deleteHandler(actionMenuItemid);
-  }
+  };
 
   const manuHandler = (option: string) => {
     if (option === 'Edit') {
@@ -178,10 +179,10 @@ function CategoriesPage() {
           setOpenEditFormDialog(true);
         }
       });
-    } else if (option === 'Service') {
+    } else if (option === 'Items') {
       navigate(`service/${actionMenuItemid}`);
     } else if (option === 'Delete') {
-      setCancelDialogOpen(true)
+      setCancelDialogOpen(true);
     }
   };
 
@@ -227,7 +228,7 @@ function CategoriesPage() {
       setIsLoader(false);
       setIsNotify(true);
       setNotifyMessage({
-        text: "All fields are required!",
+        text: 'All fields are required!',
         type: 'error',
       });
     }
@@ -250,7 +251,7 @@ function CategoriesPage() {
             text: updateItem.data.message,
             type: 'success',
           });
-          for (var i = 0; i < list.length; i++) {
+          for (let i = 0; i < list.length; i += 1) {
             if (list[i].id === updateItem.data.data.id) {
               list[i].name = updateItem.data.data.name;
               list[i].desc = updateItem.data.data.desc;
@@ -392,8 +393,8 @@ function CategoriesPage() {
                         <td>
                           {dayjs(item.createdDate).isValid()
                             ? dayjs(item.createdDate)?.format(
-                              'ddd, MMM DD, YYYY hh:mm:ssA'
-                            )
+                                'ddd, MMM DD, YYYY hh:mm:ssA'
+                              )
                             : '--'}
                         </td>
                         <td>

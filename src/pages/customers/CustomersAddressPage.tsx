@@ -23,6 +23,7 @@ import CustomersAddressEditPopup from './CustomersAddressEditPopup';
 import assets from '../../assets';
 import Notify from '../../components/common/Notify';
 import Loader from '../../components/common/Loader';
+import PermissionPopup from '../../utils/PermissionPopup';
 
 function CustomersAddressPage() {
   const authState: any = useAppSelector((state) => state.authState);
@@ -48,6 +49,10 @@ function CustomersAddressPage() {
   const [isLoader, setIsLoader] = React.useState(true);
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
+  const [cancelDialogOpen, setCancelDialogOpen] = useState<boolean>(false);
+  const [dialogText, setDialogText] = useState<any>(
+    'Are you sure you want to delete this customer address ?'
+  );
 
   const id: any = params.customerId;
 
@@ -89,6 +94,10 @@ function CustomersAddressPage() {
       });
   };
 
+  const statusCancelHandler = () => {
+    deleteEntity(actionMenuItemid);
+  };
+
   const getData = (customerId: string) => {
     Service.getAddress(customerId).then((item: any) => {
       if (item.data.success) {
@@ -102,7 +111,7 @@ function CustomersAddressPage() {
     if (option === 'Edit') {
       getData(actionMenuItemid);
     } else if (option === 'Delete') {
-      deleteEntity(actionMenuItemid);
+      setCancelDialogOpen(true);
     }
   };
 
@@ -164,24 +173,34 @@ function CustomersAddressPage() {
   };
 
   useEffect(() => {
-    Service.getAddressService(id).then((item: any) => {
-      if (item.data.success) {
-        setDetail(item.data.data);
-        if (
-          item.data.data.appUserAddress &&
-          item.data.data.appUserAddress.length > 0
-        ) {
-          const activeAddress = item.data.data.appUserAddress.filter(
-            (newItem: any) => newItem.isActive === true
-          );
-          if (activeAddress.length > 0) {
-            setAddress(activeAddress[0].address);
+    Service.getAddressService(id)
+      .then((item: any) => {
+        if (item.data.success) {
+          setIsLoader(false);
+          setDetail(item.data.data);
+          if (
+            item.data.data.appUserAddress &&
+            item.data.data.appUserAddress.length > 0
+          ) {
+            const activeAddress = item.data.data.appUserAddress.filter(
+              (newItem: any) => newItem.isActive === true
+            );
+            if (activeAddress.length > 0) {
+              setAddress(activeAddress[0].address);
+            }
+            setList(item.data.data.appUserAddress.reverse());
+            setTotal(Number(item.data.data.total));
           }
-          setList(item.data.data.appUserAddress.reverse());
-          setTotal(Number(item.data.data.total));
         }
-      }
-    });
+      })
+      .catch((err) => {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
+        });
+      });
   }, [id]);
 
   const createFormHandler = (data: any) => {
@@ -523,6 +542,15 @@ function CustomersAddressPage() {
             </div>
           </div>
         </div>
+      )}
+      {cancelDialogOpen && (
+        <PermissionPopup
+          type="shock"
+          open={cancelDialogOpen}
+          setOpen={setCancelDialogOpen}
+          dialogText={dialogText}
+          callback={statusCancelHandler}
+        />
       )}
       {actionMenuAnchorEl && (
         <ActionMenu

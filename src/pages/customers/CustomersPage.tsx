@@ -21,6 +21,7 @@ import ActionMenu from '../../components/common/ActionMenu';
 import Service from '../../services/adminapp/adminCustomer';
 import Loader from '../../components/common/Loader';
 import Notify from '../../components/common/Notify';
+import PermissionPopup from '../../utils/PermissionPopup';
 
 function CustomersPage() {
   const authState: any = useAppSelector((state) => state.authState);
@@ -42,6 +43,10 @@ function CustomersPage() {
   const [isLoader, setIsLoader] = React.useState(true);
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
+  const [cancelDialogOpen, setCancelDialogOpen] = useState<boolean>(false);
+  const [dialogText, setDialogText] = useState<any>(
+    'Are you sure you want to delete this customer ?'
+  );
 
   const handleFormClickOpen = () => {
     setOpenFormDialog(true);
@@ -117,6 +122,44 @@ function CustomersPage() {
     }
   };
 
+  const deleteHandler = (id: string) => {
+    setIsLoader(true);
+    const data = {
+      is_active: false,
+      is_deleted: true,
+      updated_by: authState.user.id,
+    };
+    Service.deleteService(actionMenuItemid, data)
+      .then((item: any) => {
+        if (item.data.success) {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'success',
+          });
+          setList((newArr: any) => {
+            console.log('newArr:::::', newArr);
+            return newArr.filter(
+              (newItem: any) => newItem.id !== item.data.data.id
+            );
+          });
+        }
+      })
+      .catch((err) => {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
+        });
+      });
+  };
+
+  const statusCancelHandler = () => {
+    deleteHandler(actionMenuItemid);
+  };
+
   const manuHandler = (option: string) => {
     if (option === 'Edit') {
       Service.getService(actionMenuItemid).then((item: any) => {
@@ -128,37 +171,7 @@ function CustomersPage() {
     } else if (option === 'Address') {
       navigate(`address/${actionMenuItemid}`);
     } else if (option === 'Delete') {
-      setIsLoader(true);
-      const data = {
-        is_active: false,
-        is_deleted: true,
-        updated_by: authState.user.id,
-      };
-      Service.deleteService(actionMenuItemid, data)
-        .then((item: any) => {
-          if (item.data.success) {
-            setIsLoader(false);
-            setIsNotify(true);
-            setNotifyMessage({
-              text: item.data.message,
-              type: 'success',
-            });
-            setList((newArr: any) => {
-              console.log('newArr:::::', newArr);
-              return newArr.filter(
-                (newItem: any) => newItem.id !== item.data.data.id
-              );
-            });
-          }
-        })
-        .catch((err) => {
-          setIsLoader(false);
-          setIsNotify(true);
-          setNotifyMessage({
-            text: err.message,
-            type: 'error',
-          });
-        });
+      setCancelDialogOpen(true);
     } else if (option === 'Detail') {
       navigate(`detail/${actionMenuItemid}`);
     }
@@ -201,7 +214,7 @@ function CustomersPage() {
     Service.create(formData)
       .then((item) => {
         if (item.data.success) {
-          console.log("customer created", item.data);
+          console.log('customer created', item.data);
           setIsLoader(false);
           setIsNotify(true);
           setNotifyMessage({
@@ -246,12 +259,12 @@ function CustomersPage() {
             text: item.data.message,
             type: 'success',
           });
-          for (var i = 0; i < list.length; i++) {
+          for (let i = 0; i < list.length; i += 1) {
             if (list[i].id === item.data.data.id) {
               list[i].firstName = item.data.data.first_name;
               list[i].lastName = item.data.data.last_name;
               list[i].phone = item.data.data.phone;
-              list[i].postalCode = item.data.data.postal_code
+              list[i].postalCode = item.data.data.postal_code;
               if (data.avatar !== null) list[i].phone = item.data.data.avatar;
             }
           }
@@ -399,8 +412,8 @@ function CustomersPage() {
                               <span className="text-xs font-normal text-[#6A6A6A]">
                                 {dayjs(item.createdDate).isValid()
                                   ? dayjs(item.createdDate)?.format(
-                                    'MMMM DD, YYYY'
-                                  )
+                                      'MMMM DD, YYYY'
+                                    )
                                   : '--'}
                               </span>
                             </div>
@@ -468,6 +481,15 @@ function CustomersPage() {
           />
         </div>
       </div>
+      {cancelDialogOpen && (
+        <PermissionPopup
+          type="shock"
+          open={cancelDialogOpen}
+          setOpen={setCancelDialogOpen}
+          dialogText={dialogText}
+          callback={statusCancelHandler}
+        />
+      )}
       {actionMenuAnchorEl && (
         <ActionMenu
           open={actionMenuOpen}

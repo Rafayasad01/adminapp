@@ -17,6 +17,7 @@ import DriversAddressCreatePopup from './DriversAddressCreatePopup';
 import DriversAddressEditPopup from './DriversAddressEditPopup';
 import Loader from '../../components/common/Loader';
 import Notify from '../../components/common/Notify';
+import PermissionPopup from '../../utils/PermissionPopup';
 
 function DriversAddressPage() {
   const authState: any = useAppSelector((state) => state.authState);
@@ -31,6 +32,10 @@ function DriversAddressPage() {
   const [editFormData, setEditFormData] = useState<any>(null);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [actionMenuItemid, setActionMenuItemid] = React.useState('');
+  const [cancelDialogOpen, setCancelDialogOpen] = useState<boolean>(false);
+  const [dialogText, setDialogText] = useState<any>(
+    'Are you sure you want to delete this driver address ?'
+  );
   const [actionMenuAnchorEl, setActionMenuAnchorEl] =
     useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
@@ -44,6 +49,7 @@ function DriversAddressPage() {
   const [notifyMessage, setNotifyMessage] = React.useState({});
 
   const id: any = params.driverId;
+
   const deleteEntity = (addressId: string) => {
     setIsLoader(true);
     const data = {
@@ -82,6 +88,10 @@ function DriversAddressPage() {
       });
   };
 
+  const statusCancelHandler = () => {
+    deleteEntity(actionMenuItemid);
+  };
+
   const getData = (addressId: string) => {
     Service.getAddress(addressId).then((item: any) => {
       if (item.data.success) {
@@ -98,7 +108,7 @@ function DriversAddressPage() {
     if (option === 'Edit') {
       getData(actionMenuItemid);
     } else if (option === 'Delete') {
-      deleteEntity(actionMenuItemid);
+      setCancelDialogOpen(true);
     }
   };
 
@@ -528,6 +538,15 @@ function DriversAddressPage() {
             </div>
           </div>
         </div>
+      )}
+      {cancelDialogOpen && (
+        <PermissionPopup
+          type="shock"
+          open={cancelDialogOpen}
+          setOpen={setCancelDialogOpen}
+          dialogText={dialogText}
+          callback={statusCancelHandler}
+        />
       )}
       {actionMenuAnchorEl && (
         <ActionMenu
