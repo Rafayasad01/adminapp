@@ -1,6 +1,7 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable import/prefer-default-export */
 import { RouteObject, Navigate } from 'react-router-dom';
+import CAN from "../services/permissions/permissions";
 import CategoriesPage from '../pages/categories/CategoriesPage';
 import ComplainsPage from '../pages/complain/ComplainsPage';
 import CustomersDetailPage from '../pages/customers/CustomersDetailPage';
@@ -146,7 +147,7 @@ export const routeObjects: RouteObject[] = [
             children: [
               {
                 index: true,
-                element: <CartsPage />,
+                element: CAN("canView", "Cart List") ? <CartsPage /> : <p>not authorized</p>,
               },
               {
                 path: 'view/:cartId',
@@ -159,7 +160,7 @@ export const routeObjects: RouteObject[] = [
             children: [
               {
                 index: true,
-                element: <OrdersPage />,
+                element: CAN("canView", "Order List") ? <OrdersPage /> : <p>not authorized</p>,
               },
               {
                 path: 'create',
@@ -184,7 +185,7 @@ export const routeObjects: RouteObject[] = [
             children: [
               {
                 index: true,
-                element: <DriversPage />,
+                element: CAN("canView", "Driver List") ? < DriversPage /> : <p>not authorized</p>,
               },
               {
                 path: 'detail/:driverId',
@@ -214,7 +215,7 @@ export const routeObjects: RouteObject[] = [
             children: [
               {
                 index: true,
-                element: <CategoriesPage />,
+                element: CAN("canView", "Category List") ? <CategoriesPage /> : <p>not authorized</p>,
               },
               {
                 path: 'service/:categoryId',
@@ -240,7 +241,7 @@ export const routeObjects: RouteObject[] = [
             children: [
               {
                 index: true,
-                element: <CustomersPage />,
+                element: CAN("canView", "Customer List") ? <CustomersPage /> : <p>not authorized</p>,
               },
               {
                 path: 'detail/:customerId',
@@ -257,7 +258,7 @@ export const routeObjects: RouteObject[] = [
             children: [
               {
                 index: true,
-                element: <VouchersPage />,
+                element: CAN("canView", "Voucher List") ? <VouchersPage /> : <p>not authorized</p>,
               },
             ],
           },
@@ -266,7 +267,7 @@ export const routeObjects: RouteObject[] = [
             children: [
               {
                 path: '',
-                element: <SettingsPage />,
+                element: CAN("canView", "Setting View") ? <SettingsPage /> : <p>not authorized</p>,
                 children: [
                   {
                     index: true,
@@ -298,7 +299,7 @@ export const routeObjects: RouteObject[] = [
             children: [
               {
                 index: true,
-                element: <NotificationPage />,
+                element: CAN("canView", "Notification List") ? <NotificationPage /> : <p>not authorized</p>,
               },
             ],
           },

@@ -398,32 +398,34 @@ function OrderDetailsPage() {
                 )}
               </div>
               <hr className="my-3 h-[1px] w-full bg-neutral-200" />
-              {viewData.orderItems &&
-                viewData.orderItems.map((item: any, index: number) => {
-                  return (
-                    <div key={index}>
-                      {index > 0 && (
-                        <hr className="my-2 h-[1px] w-full bg-neutral-200" />
-                      )}
-                      <div className="flex items-center">
-                        <img
-                          className="mr-2 aspect-square w-11 rounded-full"
-                          src={item.icon}
-                          alt=""
-                        />
-                        <div className="flex-grow font-open-sans text-xs font-semibold text-neutral-900">
-                          {item.name}
-                        </div>
-                        <div className="mx-4 text-right font-open-sans text-xs font-normal text-neutral-500">
-                          {item.quantity} Items
-                        </div>
-                        <div className="text-right font-open-sans text-sm font-semibold text-neutral-900">
-                          {item.unitPrice}
+              <div className='max-h-48 flex-none overflow-y-scroll px-4 scroll-smooth'>
+                {viewData.orderItems &&
+                  viewData.orderItems.map((item: any, index: number) => {
+                    return (
+                      <div key={index}>
+                        {index > 0 && (
+                          <hr className="my-2 h-[1px] w-full bg-neutral-200" />
+                        )}
+                        <div className="flex items-center">
+                          <img
+                            className="mr-2 aspect-square w-11 rounded-full"
+                            src={item.icon}
+                            alt=""
+                          />
+                          <div className="flex-grow font-open-sans text-xs font-semibold text-neutral-900">
+                            {item.name}
+                          </div>
+                          <div className="mx-4 text-right font-open-sans text-xs font-normal text-neutral-500">
+                            {item.quantity} Items
+                          </div>
+                          <div className="text-right font-open-sans text-sm font-semibold text-neutral-900">
+                            {item.unitPrice}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  );
-                })}
+                    );
+                  })}
+              </div>
 
               <hr className="my-2 h-[1px] w-full bg-neutral-200" />
               <div className="flex flex-col gap-2">
@@ -462,7 +464,7 @@ function OrderDetailsPage() {
               </div>
             </div>
           </div>
-          <div className="mb-auto min-h-[600px] rounded-lg bg-[#fff] shadow-lg">
+          <div className="mb-auto min-h-[610px] rounded-lg bg-[#fff] shadow-lg">
             <div className="rounded-t-xl bg-neutral-300 py-2 px-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center">
