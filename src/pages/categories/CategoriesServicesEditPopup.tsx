@@ -44,9 +44,9 @@ function CategoriesServicesEditPopup({
       setOpenFormDialog(false);
       callback(data);
     } else {
-      setIsNotify(true)
+      setIsNotify(true);
       setNotifyMessage({
-        text: "All fields are required!",
+        text: 'All fields are required!',
         type: 'error',
       });
     }
@@ -59,9 +59,9 @@ function CategoriesServicesEditPopup({
   };
 
   const handleFileOnClick = (event: any) => {
-    event.target.value = null
-    setImage(null)
-  }
+    event.target.value = null;
+    setImage(null);
+  };
 
   useEffect(() => {
     let icon = formData.icon.split('/').slice(-1)[0];
@@ -177,11 +177,15 @@ function CategoriesServicesEditPopup({
                   style={{ display: 'none' }}
                   id="raised-button-file"
                   type="file"
-                  onChange={(event: React.InputHTMLAttributes<HTMLInputElement>) => {
+                  onChange={(
+                    event: React.InputHTMLAttributes<HTMLInputElement>
+                  ) => {
                     handleFileChange(event);
                   }}
-                  onClick={(event: React.InputHTMLAttributes<HTMLInputElement>) => {
-                    handleFileOnClick(event)
+                  onClick={(
+                    event: React.InputHTMLAttributes<HTMLInputElement>
+                  ) => {
+                    handleFileOnClick(event);
                   }}
                 />
                 <label htmlFor="raised-button-file" className="ImageLabel">
@@ -193,7 +197,10 @@ function CategoriesServicesEditPopup({
                 {image ? (
                   <div className="ShowImageBox">
                     <label className="ShowImageLabel">{image.name}</label>
-                    <IconButton className="btn-dot" onClick={() => setImage(null)}>
+                    <IconButton
+                      className="btn-dot"
+                      onClick={() => setImage(null)}
+                    >
                       <CloseOutlinedIcon
                         sx={{
                           color: '#1D1D1D',
@@ -207,7 +214,9 @@ function CategoriesServicesEditPopup({
                   ''
                 )}
               </div>
-              {image === null && errors.icon && <span role="alert">{errors.icon?.message}</span>}
+              {image === null && errors.icon && (
+                <span role="alert">{errors.icon?.message}</span>
+              )}
             </div>
           </div>
           <div className="FormFooter">

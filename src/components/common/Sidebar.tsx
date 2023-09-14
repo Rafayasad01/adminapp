@@ -20,6 +20,8 @@ import TwitterIcon from '@mui/icons-material/Twitter';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import MailIcon from '@mui/icons-material/Mail';
 import IconButton from '@mui/material/IconButton';
+import HeadphonesOutlinedIcon from '@mui/icons-material/HeadphonesOutlined';
+import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined';
 import OrderIcon from '../icons/OrderIcon';
 import CategoryIcon from '../icons/CategoryIcon';
 import VoucherIcon from '../icons/VoucherIcon';
@@ -27,8 +29,6 @@ import DriverIcon from '../icons/DriverIcon';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 import { logout } from '../../redux/features/authStateSlice';
 
-import HeadphonesOutlinedIcon from '@mui/icons-material/HeadphonesOutlined';
-import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined';
 
 import assets from '../../assets';
 
@@ -117,6 +117,11 @@ const superAdminlinks = [
   {
     name: 'Support',
     path: 'support',
+    icon: <HeadphonesOutlinedIcon fontSize="inherit" />,
+  },
+  {
+    name: 'Tenant',
+    path: 'tenant',
     icon: <HeadphonesOutlinedIcon fontSize="inherit" />,
   },
   // {

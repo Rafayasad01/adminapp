@@ -254,7 +254,7 @@ function DriversPage() {
             text: item.data.message,
             type: 'success',
           });
-          for (var i = 0; i < list.length; i++) {
+          for (let i = 0; i < list.length; i++) {
             if (list[i].id === actionMenuItemid) {
               list[i].firstName = item.data.data.first_name;
               list[i].lastName = item.data.data.last_name;
@@ -407,8 +407,8 @@ function DriversPage() {
                               <span className="text-xs font-normal text-[#6A6A6A]">
                                 {dayjs(item.createdDate).isValid()
                                   ? dayjs(item.createdDate)?.format(
-                                    'MMMM DD, YYYY'
-                                  )
+                                      'MMMM DD, YYYY'
+                                    )
                                   : '--'}
                               </span>
                             </div>
@@ -418,8 +418,9 @@ function DriversPage() {
                         <td>{item.email}</td>
                         <td>
                           <span
-                            className={`badge badge-${item.status === 'Offline' ? 'danger' : 'success'
-                              }`}
+                            className={`badge badge-${
+                              item.status === 'Offline' ? 'danger' : 'success'
+                            }`}
                           >
                             {item.status}
                           </span>

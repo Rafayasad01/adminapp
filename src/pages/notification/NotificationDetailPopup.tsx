@@ -13,7 +13,6 @@ function NotificationDetailPopup({
   setOpenDetailDialog,
   detail,
 }: Props) {
-
   const handleFormClose = () => {
     setOpenDetailDialog(false);
   };
@@ -30,24 +29,24 @@ function NotificationDetailPopup({
       {detail && (
         <div className="Content">
           <div className="FormBody">
-            <div className='NotificationBatchBox'>
-              <div className='Top'>
+            <div className="NotificationBatchBox">
+              <div className="Top">
                 <span className="Title">Notification Batch Detail</span>
               </div>
-              <div className='Mid'>
-                <div className='BatchBox'>
-                  <span className='BatchValue'>{detail.success}</span>
-                  <span className='BatchHeading'>Success</span>
+              <div className="Mid">
+                <div className="BatchBox">
+                  <span className="BatchValue">{detail.success}</span>
+                  <span className="BatchHeading">Success</span>
                 </div>
-                <div className='Separator'></div>
-                <div className='BatchBox'>
-                  <span className='BatchValue'>{detail.failure}</span>
-                  <span className='BatchHeading'>Failed</span>
+                <div className="Separator" />
+                <div className="BatchBox">
+                  <span className="BatchValue">{detail.failure}</span>
+                  <span className="BatchHeading">Failed</span>
                 </div>
               </div>
-              <div className='Bottom'>
-                <span className='Title'>Message Title</span>
-                <span className='Detail'>{detail.description}</span>
+              <div className="Bottom">
+                <span className="Title">Message Title</span>
+                <span className="Detail">{detail.description}</span>
               </div>
             </div>
           </div>

@@ -46,13 +46,13 @@ function CategoriesEditPopup({
       setOpenFormDialog(false);
       callback(data);
     } else {
-      setIsNotify(true)
+      setIsNotify(true);
       setNotifyMessage({
-        text: "All fields are required!",
+        text: 'All fields are required!',
         type: 'error',
       });
     }
-  }
+  };
 
   const handleFormClose = () => {
     setOpenFormDialog(false);
@@ -63,9 +63,9 @@ function CategoriesEditPopup({
   };
 
   const handleFileOnClick = (event: any) => {
-    event.target.value = null
-    setImage(null)
-  }
+    event.target.value = null;
+    setImage(null);
+  };
 
   useEffect(() => {
     let icon = formData.icon.split('/').slice(-1)[0];
@@ -152,11 +152,15 @@ function CategoriesEditPopup({
                       {...register('icon', { required: false })}
                       id="raised-button-file"
                       type="file"
-                      onChange={(event: React.InputHTMLAttributes<HTMLInputElement>) => {
+                      onChange={(
+                        event: React.InputHTMLAttributes<HTMLInputElement>
+                      ) => {
                         handleFileChange(event);
                       }}
-                      onClick={(event: React.InputHTMLAttributes<HTMLInputElement>) => {
-                        handleFileOnClick(event)
+                      onClick={(
+                        event: React.InputHTMLAttributes<HTMLInputElement>
+                      ) => {
+                        handleFileOnClick(event);
                       }}
                     />
                     <label htmlFor="raised-button-file" className="ImageLabel">
@@ -188,7 +192,9 @@ function CategoriesEditPopup({
                       ''
                     )}
                   </div>
-                  {image === null && errors.icon && <span role="alert">{errors.icon?.message}</span>}
+                  {image === null && errors.icon && (
+                    <span role="alert">{errors.icon?.message}</span>
+                  )}
                 </div>
               </div>
               <div className="FormFooter">

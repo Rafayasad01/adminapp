@@ -49,9 +49,9 @@ function CustomersEditPopup({
   };
 
   const handleFileOnClick = (event: any) => {
-    event.target.value = null
-    setAvatar(null)
-  }
+    event.target.value = null;
+    setAvatar(null);
+  };
 
   const onSubmit = (data: AppUser) => {
     if (data.first_name && data.last_name && data.phone) {
@@ -60,9 +60,9 @@ function CustomersEditPopup({
       callback(data);
       setEditFormData(null);
     } else {
-      setIsNotify(true)
+      setIsNotify(true);
       setNotifyMessage({
-        text: "All fields are required, Except avater image!",
+        text: 'All fields are required, Except avater image!',
         type: 'error',
       });
     }
@@ -184,11 +184,15 @@ function CustomersEditPopup({
                       id="raised-button-file"
                       type="file"
                       {...register('avatar')}
-                      onChange={(event: React.InputHTMLAttributes<HTMLInputElement>) => {
+                      onChange={(
+                        event: React.InputHTMLAttributes<HTMLInputElement>
+                      ) => {
                         handleFileChange(event);
                       }}
-                      onClick={(event: React.InputHTMLAttributes<HTMLInputElement>) => {
-                        handleFileOnClick(event)
+                      onClick={(
+                        event: React.InputHTMLAttributes<HTMLInputElement>
+                      ) => {
+                        handleFileOnClick(event);
                       }}
                     />
                     <label htmlFor="raised-button-file" className="ImageLabel">

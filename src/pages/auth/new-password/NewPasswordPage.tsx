@@ -24,7 +24,7 @@ function NewPasswordPage() {
   ) => {
     event.preventDefault();
   };
-  const saveHandler = () => { };
+  const saveHandler = () => {};
 
   return (
     <div className="flex h-full w-full items-center justify-center">
