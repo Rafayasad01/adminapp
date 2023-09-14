@@ -33,7 +33,6 @@ import AuthLayout from '../components/layout/AuthLayout';
 import AppLayout from '../components/layout/AppLayout';
 import LoginPage from '../pages/auth/login/LoginPage';
 import ForgotPasswordPage from '../pages/auth/forgot-password/ForgotPasswordPage';
-import OTPVerificationPage from '../pages/auth/otp-verification/OTPVerificationPage';
 import NewPasswordPage from '../pages/auth/new-password/NewPasswordPage';
 import SuperAdminAppLayout from '../components/layout/SuperAdminAppLayout';
 import SuperAdminDashboardPage from '../pages/super-admin/dashboard/SuperAdminDashboardPage';
@@ -42,6 +41,8 @@ import SuperAdminAddNewShopPage from '../pages/super-admin/shops/SuperAdminAddNe
 import SuperAdminShopDetailsPage from '../pages/super-admin/shops/SuperAdminShopDetailsPage';
 import SuperAdminSupportPage from '../pages/super-admin/support/SuperAdminSupportPage';
 import SuperAdminUsersListPage from '../pages/super-admin/users/SuperAdminUsersListPage';
+import OTPVerificationPage from '../pages/auth/otp-verification/OtpVerificationPage';
+import SuperAdminTenantPage from '../pages/super-admin/tenat/SuperAdminTenantPage';
 
 export const routeObjects: RouteObject[] = [
   {
@@ -86,7 +87,7 @@ export const routeObjects: RouteObject[] = [
         path: 'main',
         element: <SuperAdminAppLayout />,
         children: [
-          { index: true, element: <Navigate to="/admin/dashboard" replace /> },
+          { index: true, element: <Navigate to="dashboard" replace /> },
           {
             path: 'dashboard',
             element: <SuperAdminDashboardPage />,
@@ -123,10 +124,20 @@ export const routeObjects: RouteObject[] = [
               },
             ],
           },
+          {
+            path: 'tenant',
+            children: [
+              { index: true, element: <Navigate to="list" replace /> },
+              {
+                path: 'list',
+                element: <SuperAdminTenantPage />,
+              },
+            ],
+          },
         ],
       },
       {
-        path: '/admin/dashboard',
+        path: 'dashboard',
         element: <AppLayout />,
         children: [
           {

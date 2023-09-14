@@ -5,7 +5,7 @@ import assets from '../../../assets';
 
 function OTPVerificationPage() {
   const [OTP, setOTP] = useState('');
-  const submitHandler = () => { };
+  const submitHandler = () => {};
 
   return (
     <div className="flex h-full w-full items-center justify-center">

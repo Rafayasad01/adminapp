@@ -43,7 +43,9 @@ function CategoriesServicesPage() {
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
   const [cancelDialogOpen, setCancelDialogOpen] = useState<boolean>(false);
-  const [dialogText, setDialogText] = useState<any>('Are you sure you want to delete this service ?');
+  const [dialogText, setDialogText] = useState<any>(
+    'Are you sure you want to delete this service ?'
+  );
 
   const categoryId = params.categoryId ?? '';
 
@@ -156,7 +158,7 @@ function CategoriesServicesPage() {
 
   const statusCancelHandler = () => {
     deleteHandler(actionMenuItemid);
-  }
+  };
 
   const manuHandler = (option: string) => {
     if (option === 'Edit') {
@@ -169,10 +171,9 @@ function CategoriesServicesPage() {
     } else if (option === "Faq's") {
       navigate(`../service/faq/${actionMenuItemid}`);
     } else if (option === 'Delete') {
-      setCancelDialogOpen(true)
+      setCancelDialogOpen(true);
     }
   };
-
 
   const createFormHandler = (data: any) => {
     setIsLoader(true);
@@ -232,7 +233,7 @@ function CategoriesServicesPage() {
             text: updateItem.data.message,
             type: 'success',
           });
-          for (var i = 0; i < list.length; i++) {
+          for (let i = 0; i < list.length; i++) {
             if (list[i].id === updateItem.data.data.id) {
               list[i].name = updateItem.data.data.name;
               list[i].quantity = updateItem.data.data.quantity;

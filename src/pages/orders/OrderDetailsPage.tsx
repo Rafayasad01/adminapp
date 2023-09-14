@@ -172,11 +172,12 @@ function OrderDetailsPage() {
             <div className="p-4">
               <div className="flex items-center">
                 <div
-                  className={`relative mr-2 inline-flex ${currentStatus &&
+                  className={`relative mr-2 inline-flex ${
+                    currentStatus &&
                     currentStatus.key === ORDER_STATUS_IN_CANCELLED
-                    ? 'text-red-500'
-                    : 'text-green-500'
-                    }`}
+                      ? 'text-red-500'
+                      : 'text-green-500'
+                  }`}
                 >
                   <CircularProgress
                     thickness={1.5}
@@ -213,11 +214,12 @@ function OrderDetailsPage() {
                     )}
                   </div>
                   <div
-                    className={`font-open-sans text-sm font-semibold  ${currentStatus &&
+                    className={`font-open-sans text-sm font-semibold  ${
+                      currentStatus &&
                       currentStatus.key === ORDER_STATUS_IN_CANCELLED
-                      ? 'text-red-500'
-                      : 'text-green-500'
-                      } `}
+                        ? 'text-red-500'
+                        : 'text-green-500'
+                    } `}
                   >
                     {currentStatus && `${currentStatus.value.title} `}
                   </div>
@@ -229,10 +231,11 @@ function OrderDetailsPage() {
                     setDialogText('Are you sure you want to cancel this Order');
                     setCancelDialogOpen(true);
                   }}
-                  className={`rounded-xl py-2 px-12 font-open-sans text-sm font-semibold ${cancelled || isCancelled
-                    ? 'bg-neutral-400 text-neutral-900'
-                    : 'bg-neutral-900 text-gray-50'
-                    } `}
+                  className={`rounded-xl py-2 px-12 font-open-sans text-sm font-semibold ${
+                    cancelled || isCancelled
+                      ? 'bg-neutral-400 text-neutral-900'
+                      : 'bg-neutral-900 text-gray-50'
+                  } `}
                   color="inherit"
                   disabled={!!(cancelled || isCancelled)}
                 >
@@ -445,12 +448,13 @@ function OrderDetailsPage() {
                         );
                         setDialogOpen(true);
                       }}
-                      className={`py-2 px-12 font-open-sans text-sm font-semibold rounded ${cancelled ||
+                      className={`rounded py-2 px-12 font-open-sans text-sm font-semibold ${
+                        cancelled ||
                         (isCancelled &&
                           nextBtn.key === ORDER_STATUS_IN_CANCELLED)
-                        ? 'bg-neutral-400 text-neutral-900'
-                        : 'bg-neutral-900 text-gray-50'
-                        } `}
+                          ? 'bg-neutral-400 text-neutral-900'
+                          : 'bg-neutral-900 text-gray-50'
+                      } `}
                       color="inherit"
                       disabled={
                         !!(
@@ -475,8 +479,9 @@ function OrderDetailsPage() {
                   return (
                     <div
                       key={item.key}
-                      className={`flex items-center ${item.isStatus ? '' : 'opacity-25'
-                        } `}
+                      className={`flex items-center ${
+                        item.isStatus ? '' : 'opacity-25'
+                      } `}
                     >
                       {item.isStatus ? (
                         <CheckCircleOutlineOutlinedIcon />
@@ -485,8 +490,9 @@ function OrderDetailsPage() {
                       )}
 
                       <div
-                        className={`mx-2 relative flex ${item.isStatus ? item.value.color : 'text-neutral-500'
-                          } `}
+                        className={`relative mx-2 flex ${
+                          item.isStatus ? item.value.color : 'text-neutral-500'
+                        } `}
                       >
                         <CircularProgress
                           thickness={1.5}
@@ -502,10 +508,11 @@ function OrderDetailsPage() {
                       </div>
                       <div>
                         <div
-                          className={`font-open-sans text-base font-semibold ${item.isStatus
-                            ? item.value.color
-                            : 'text-neutral-500'
-                            } `}
+                          className={`font-open-sans text-base font-semibold ${
+                            item.isStatus
+                              ? item.value.color
+                              : 'text-neutral-500'
+                          } `}
                         >
                           {item.value.title}
                         </div>

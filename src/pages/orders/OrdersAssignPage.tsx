@@ -158,46 +158,48 @@ function OrdersAssignPage() {
   const assignButton = (item: any) => {
     // console.log("ITEMS", item);
     let isTrue = false;
-    if (item.isActive === false
-      || item.status === APP_USER_STATUS_OFFLINE
-      || item.appOrderDelivery.status === ORDER_STATUS_IN_CANCELLED) {
+    if (
+      item.isActive === false ||
+      item.status === APP_USER_STATUS_OFFLINE ||
+      item.appOrderDelivery.status === ORDER_STATUS_IN_CANCELLED
+    ) {
+      isTrue = true;
+    } else if (
+      item.appOrderDelivery.status === ORDER_DELIVERY_STATUS_NOT_ASSIGN ||
+      item.appOrderDelivery.status === null
+    ) {
+      isTrue = false;
+    } else if (item.appOrderDelivery.appOrder === orderId) {
       isTrue = true;
     } else {
-      if (item.appOrderDelivery.status === ORDER_DELIVERY_STATUS_NOT_ASSIGN
-        || item.appOrderDelivery.status === null) {
-        isTrue = false
-      } else {
-        if (item.appOrderDelivery.appOrder === orderId) {
-          isTrue = true
-        } else {
-          isTrue = false
-        }
-      }
+      isTrue = false;
     }
     return isTrue;
   };
 
   const assignBtnColor = (item: any) => {
-    let colorText = ""
-    if (item.isActive === false
-      || item.status === APP_USER_STATUS_OFFLINE
-      || item.appOrderDelivery.status === ORDER_STATUS_IN_CANCELLED) {
-      colorText = "btn-gray-fill btn-icon"
+    let colorText = '';
+    if (
+      item.isActive === false ||
+      item.status === APP_USER_STATUS_OFFLINE ||
+      item.appOrderDelivery.status === ORDER_STATUS_IN_CANCELLED
+    ) {
+      colorText = 'btn-gray-fill btn-icon';
     } else {
-      console.log("item order delivery", item.appOrderDelivery.status);
-      if (item.appOrderDelivery.status === ORDER_DELIVERY_STATUS_NOT_ASSIGN
-        || item.appOrderDelivery.status === null) {
-        colorText = "btn-black-fill btn-icon"
+      console.log('item order delivery', item.appOrderDelivery.status);
+      if (
+        item.appOrderDelivery.status === ORDER_DELIVERY_STATUS_NOT_ASSIGN ||
+        item.appOrderDelivery.status === null
+      ) {
+        colorText = 'btn-black-fill btn-icon';
+      } else if (item.appOrderDelivery.appOrder === orderId) {
+        colorText = 'btn-gray-fill btn-icon';
       } else {
-        if (item.appOrderDelivery.appOrder === orderId) {
-          colorText = "btn-gray-fill btn-icon"
-        } else {
-          colorText = "btn-black-fill btn-icon"
-        }
+        colorText = 'btn-black-fill btn-icon';
       }
     }
     return colorText;
-  }
+  };
   // return (
   // <Button
   //   variant="contained"
@@ -218,7 +220,6 @@ function OrdersAssignPage() {
   //   Assign
   // </Button>
   // );
-
 
   // let btn: any;
   // if (
@@ -355,8 +356,8 @@ function OrdersAssignPage() {
                               <span className="text-xs font-normal text-[#6A6A6A]">
                                 {dayjs(item.createdDate).isValid()
                                   ? dayjs(item.createdDate)?.format(
-                                    'MMMM DD, YYYY'
-                                  )
+                                      'MMMM DD, YYYY'
+                                    )
                                   : '--'}
                               </span>
                             </div>
@@ -364,9 +365,11 @@ function OrdersAssignPage() {
                         </td>
                         <td>{item.phone}</td>
                         <td>
-                          <span className={`badge badge-${item.status === APP_USER_STATUS_OFFLINE
-                            ? 'danger'
-                            : 'success'
+                          <span
+                            className={`badge badge-${
+                              item.status === APP_USER_STATUS_OFFLINE
+                                ? 'danger'
+                                : 'success'
                             } `}
                           >
                             {item.status}

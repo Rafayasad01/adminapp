@@ -201,7 +201,7 @@ function CustomersPage() {
     Service.create(formData)
       .then((item) => {
         if (item.data.success) {
-          console.log("customer created", item.data);
+          console.log('customer created', item.data);
           setIsLoader(false);
           setIsNotify(true);
           setNotifyMessage({
@@ -246,12 +246,12 @@ function CustomersPage() {
             text: item.data.message,
             type: 'success',
           });
-          for (var i = 0; i < list.length; i++) {
+          for (let i = 0; i < list.length; i++) {
             if (list[i].id === item.data.data.id) {
               list[i].firstName = item.data.data.first_name;
               list[i].lastName = item.data.data.last_name;
               list[i].phone = item.data.data.phone;
-              list[i].postalCode = item.data.data.postal_code
+              list[i].postalCode = item.data.data.postal_code;
               if (data.avatar !== null) list[i].phone = item.data.data.avatar;
             }
           }
@@ -399,8 +399,8 @@ function CustomersPage() {
                               <span className="text-xs font-normal text-[#6A6A6A]">
                                 {dayjs(item.createdDate).isValid()
                                   ? dayjs(item.createdDate)?.format(
-                                    'MMMM DD, YYYY'
-                                  )
+                                      'MMMM DD, YYYY'
+                                    )
                                   : '--'}
                               </span>
                             </div>
