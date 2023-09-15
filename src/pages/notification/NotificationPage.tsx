@@ -25,6 +25,7 @@ import {
 import NotificationDetailPopup from './NotificationDetailPopup';
 import AlertBox from '../../utils/Alert';
 import Loader from '../../components/common/Loader';
+import Notify from '../../components/common/Notify';
 
 function NotificationPage() {
   const authState: any = useAppSelector((state) => state.authState);
@@ -33,7 +34,7 @@ function NotificationPage() {
   const [page, setPage] = useState<number>(0);
   const [total, setTotal] = useState<number>(0);
   const [list, setList] = useState<any>([]);
-  const [rowsPerPage, setRowsPerPage] = React.useState<number>(10);
+  const [rowsPerPage, setRowsPerPage] = useState<number>(10);
   const [openFormDialog, setOpenFormDialog] = useState<boolean>(false);
   const [detailPopup, setDetailPopup] = useState<boolean>(false);
   const [batchDetail, setBatchDetail] = useState<any>(null);
@@ -41,7 +42,9 @@ function NotificationPage() {
   const [alertSeverty, setAlertSeverty] = useState<string>('');
   const [alertMsg, setAlertMsg] = useState<string>('');
 
-  const [isLoader, setIsLoader] = React.useState(true);
+  const [isLoader, setIsLoader] = useState(true);
+  const [isNotify, setIsNotify] = useState(false);
+  const [notifyMessage, setNotifyMessage] = useState({});
 
   const handleFormClickOpen = () => {
     setOpenFormDialog(true);
@@ -126,6 +129,11 @@ function NotificationPage() {
       })
       .catch((error) => {
         setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: error.message,
+          type: 'error',
+        });
         console.log('error::::::::', error);
       });
   }, [authState, page, rowsPerPage]);
@@ -184,6 +192,11 @@ function NotificationPage() {
     <Loader />
   ) : (
     <>
+      <Notify
+        isOpen={isNotify}
+        setIsOpen={setIsNotify}
+        displayMessage={notifyMessage}
+      />
       <TopBar title="Notification" />
       <div className="container mt-5">
         <div className="w-full rounded-lg bg-white shadow-lg">

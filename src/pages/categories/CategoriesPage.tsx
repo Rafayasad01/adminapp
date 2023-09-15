@@ -37,7 +37,7 @@ function CategoriesPage() {
   const [actionMenuAnchorEl, setActionMenuAnchorEl] =
     useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
-  const actionMenuOptions = ['Service', 'Edit', 'Delete'];
+  const actionMenuOptions = ['Items', 'Edit', 'Delete'];
 
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
@@ -179,7 +179,7 @@ function CategoriesPage() {
           setOpenEditFormDialog(true);
         }
       });
-    } else if (option === 'Service') {
+    } else if (option === 'Items') {
       navigate(`service/${actionMenuItemid}`);
     } else if (option === 'Delete') {
       setCancelDialogOpen(true);
@@ -251,7 +251,7 @@ function CategoriesPage() {
             text: updateItem.data.message,
             type: 'success',
           });
-          for (let i = 0; i < list.length; i++) {
+          for (let i = 0; i < list.length; i += 1) {
             if (list[i].id === updateItem.data.data.id) {
               list[i].name = updateItem.data.data.name;
               list[i].desc = updateItem.data.data.desc;

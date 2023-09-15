@@ -13,6 +13,7 @@ import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
 import DragDropFile from './DragDropFile';
 import PlusIcon from '../../components/icons/PlusIcon';
+import EditIcon from '@mui/icons-material/Edit';
 import { Setting } from '../../interfaces/app.interface';
 import SocialLinksPopup from './SocialLinksPopup';
 import { useAppSelector } from '../../redux/redux-hooks';
@@ -57,6 +58,7 @@ function SettingsApp() {
   const [address, setAddress] = useState<any>(null);
   const [isLoader, setIsLoader] = useState(true);
   const [isNotify, setIsNotify] = useState(false);
+  const [childIndicator, setChildIndicator] = useState(false);
   const [notifyMessage, setNotifyMessage] = useState({});
 
   const {
@@ -101,6 +103,7 @@ function SettingsApp() {
     setColor2(item.color2);
     setColor3(item.color3);
   };
+
   const onSubmit = (data: Setting) => {
     setIsLoader(true);
     const formData = new FormData();
@@ -148,6 +151,15 @@ function SettingsApp() {
       }
     });
   };
+
+  const HelpingIcon = (items: any) => {
+    let filtered = items.items?.filter((el: string) => el !== "")
+    if (filtered?.length < 6) {
+      return <PlusIcon />
+    } else {
+      return <EditIcon />
+    }
+  }
 
   useEffect(() => {
     Service.getService(authState.user.tenantConfig).then((item: any) => {
@@ -398,30 +410,32 @@ function SettingsApp() {
                       className="p-0 text-[1.675rem]"
                       onClick={() => setOpenSocialMediaPopup(true)}
                     >
-                      <PlusIcon />
+                      <HelpingIcon
+                        items={[detail?.facebook, detail?.instagram, detail?.linkedin, detail?.twitter, detail?.whatsapp, detail?.youtube]}
+                      />
                     </IconButton>
                   </div>
                 </FormControl>
               </div>
               <div className="FormMultipleFields mb-4">
                 <ColorPicker
-                  colorPickerLabel="Color1"
+                  colorPickerLabel="Theme Color"
                   colorPickerValue={color1 || '#1A1A1A'}
                   setColorPickerValue={setColor1}
                   id="color1"
                 />
                 <ColorPicker
-                  colorPickerLabel="Color2"
+                  colorPickerLabel="Text Color"
                   colorPickerValue={color2 || '#1A1A1A'}
                   setColorPickerValue={setColor2}
                   id="color2"
                 />
-                <ColorPicker
+                {/* <ColorPicker
                   colorPickerLabel="Color3"
                   colorPickerValue={color3 || '#1A1A1A'}
                   setColorPickerValue={setColor3}
                   id="color3"
-                />
+                /> */}
               </div>
               <div className="FormField">
                 <Button
@@ -458,6 +472,7 @@ function SettingsApp() {
       </div>
       {openSocialMediaPopup && (
         <SocialLinksPopup
+          setIsLoader={setIsLoader}
           openDialog={openSocialMediaPopup}
           setOpenDialog={setOpenSocialMediaPopup}
           detail={detail}

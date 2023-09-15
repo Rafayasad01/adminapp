@@ -138,6 +138,8 @@ function OrdersAssignPage() {
   }, [authState, page, rowsPerPage]);
 
   const assignHandler = (userId: string) => {
+    console.log('im runniggggggggggggggg');
+
     const data = {
       app_user: userId,
       app_order: orderId,
@@ -200,69 +202,6 @@ function OrdersAssignPage() {
     }
     return colorText;
   };
-  // return (
-  // <Button
-  //   variant="contained"
-  //   className={`
-  //   ${item.isActive === true && item.status === APP_USER_STATUS_ONLINE && item.appOrderDelivery.status === ORDER_DELIVERY_STATUS_NOT_ASSIGN || item.appOrderDelivery.status === null
-  //       ? "btn-black-fill" :
-  //       item.isActive === false && item.status === APP_USER_STATUS_OFFLINE && item.appOrderDelivery.status === ORDER_STATUS_IN_CANCELLED || item.appOrderDelivery.status !== ORDER_DELIVERY_STATUS_NOT_ASSIGN
-  //       && true && "btn-gray-fill"}
-  //       btn-icon`}
-  //   disabled={
-  //     item.isActive === true && item.status === APP_USER_STATUS_ONLINE && item.appOrderDelivery.status === ORDER_DELIVERY_STATUS_NOT_ASSIGN || item.appOrderDelivery.status === null
-  //       ? false :
-  //       item.isActive === false && item.status === APP_USER_STATUS_OFFLINE && item.appOrderDelivery.status === ORDER_STATUS_IN_CANCELLED || item.appOrderDelivery.status !== ORDER_DELIVERY_STATUS_NOT_ASSIGN
-  //       && true
-  //   }
-  //   onClick={() => alert("hello")}
-  // >
-  //   Assign
-  // </Button>
-  // );
-
-  // let btn: any;
-  // if (
-  //   !item.appOrderDelivery.appOrder &&
-  //   item.status === APP_USER_STATUS_ONLINE
-  // ) {
-  //   btn = (
-  //     <Button
-  //       variant="contained"
-  //       className="btn-black-fill btn-icon"
-  //       onClick={() => assignHandler(item.id)}
-  //       disabled={false}
-  //     >
-  //       Assign
-  //     </Button>
-  //   );
-  // } else if (
-  //   item.appOrderDelivery.appOrder &&
-  //   item.appOrderDelivery.status === ORDER_DELIVERY_STATUS_CANCELLED
-  // ) {
-  //   btn = (
-  //     <Button
-  //       variant="contained"
-  //       className="btn-blac-fill btn-icon"
-  //       onClick={() => assignHandler(item.id)}
-  //       disabled={false}
-  //     >
-  //       Assign
-  //     </Button>
-  //   );
-  // } else {
-  //   btn = (
-  //     <Button
-  //       variant="contained"
-  //       className="btn-gray-fill btn-icon"
-  //       onClick={() => assignHandler(item.id)}
-  //       disabled
-  //     >
-  //       Assign
-  //     </Button>
-  // );
-  // }
-  // return btn;
 
   return (
     <>

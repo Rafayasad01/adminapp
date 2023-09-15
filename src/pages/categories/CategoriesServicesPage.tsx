@@ -35,7 +35,7 @@ function CategoriesServicesPage() {
   const [actionMenuAnchorEl, setActionMenuAnchorEl] =
     useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
-  const actionMenuOptions = ["Faq's", 'Edit', 'Delete'];
+  const actionMenuOptions = ["Item faq's", 'Edit', 'Delete'];
 
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
@@ -168,7 +168,7 @@ function CategoriesServicesPage() {
           setOpenEditFormDialog(true);
         }
       });
-    } else if (option === "Faq's") {
+    } else if (option === "Item faq's") {
       navigate(`../service/faq/${actionMenuItemid}`);
     } else if (option === 'Delete') {
       setCancelDialogOpen(true);
@@ -233,7 +233,7 @@ function CategoriesServicesPage() {
             text: updateItem.data.message,
             type: 'success',
           });
-          for (let i = 0; i < list.length; i++) {
+          for (let i = 0; i < list.length; i += 1) {
             if (list[i].id === updateItem.data.data.id) {
               list[i].name = updateItem.data.data.name;
               list[i].quantity = updateItem.data.data.quantity;
@@ -284,13 +284,13 @@ function CategoriesServicesPage() {
         setIsOpen={setIsNotify}
         displayMessage={notifyMessage}
       />
-      <TopBar isNestedRoute title="Services" />
+      <TopBar isNestedRoute title="Items" />
       <div className="container mt-5">
         <div className="w-full rounded-lg bg-white shadow-lg">
           <div className="grid grid-cols-12 px-4 py-5">
             <div className="col-span-7">
               <span className="font-open-sans text-xl font-semibold text-[#252733]">
-                All Services
+                All Items
               </span>
             </div>
             <div className="col-span-5">
@@ -339,7 +339,7 @@ function CategoriesServicesPage() {
             <table className="table-border table-auto">
               <thead>
                 <tr>
-                  <th className="w-56">Service Name</th>
+                  <th className="w-56">Item Name</th>
                   <th className="w-80">Description</th>
                   <th>Min Quantity</th>
                   <th>Price</th>

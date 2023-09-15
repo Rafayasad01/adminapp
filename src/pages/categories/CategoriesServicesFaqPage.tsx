@@ -234,7 +234,7 @@ function CategoriesServicesFaqPage() {
             text: updateItem.data.message,
             type: 'success',
           });
-          for (let i = 0; i < list.length; i++) {
+          for (let i = 0; i < list.length; i += 1) {
             if (list[i].id === updateItem.data.data.id) {
               list[i].question = updateItem.data.data.question;
               list[i].answer = updateItem.data.data.answer;
@@ -280,13 +280,13 @@ function CategoriesServicesFaqPage() {
         setIsOpen={setIsNotify}
         displayMessage={notifyMessage}
       />
-      <TopBar isNestedRoute title="Faq's" />
+      <TopBar isNestedRoute title="Category Item Faq's" />
       <div className="container mt-5">
         <div className="w-full rounded-lg bg-white shadow-lg">
           <div className="grid grid-cols-12 px-4 py-5">
             <div className="col-span-7">
               <span className="font-open-sans text-xl font-semibold text-[#252733]">
-                All Faq&apos;s
+                All Category Item Faq&apos;s
               </span>
             </div>
             <div className="col-span-5">

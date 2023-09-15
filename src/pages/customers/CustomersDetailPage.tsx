@@ -6,32 +6,49 @@ import TopBar from '../../components/common/TopBar';
 import Service from '../../services/adminapp/adminCustomer';
 import MapAddress from '../../components/common/MapAddress';
 import assets from '../../assets';
+import Loader from '../../components/common/Loader';
 
 function CustomersDetailPage() {
   const params = useParams();
   const [address, setAddress] = useState<string>('');
   const [detail, setDetail] = useState<any>(null);
+  const [isLoader, setIsLoader] = useState<boolean>(true);
+  const [isNotify, setIsNotify] = useState(false);
+  const [notifyMessage, setNotifyMessage] = useState({});
+
   const id: any = params.customerId;
   useEffect(() => {
-    Service.getDetailService(id).then((item: any) => {
-      if (item.data.success) {
-        if (
-          item.data.data.appUserAddress &&
-          item.data.data.appUserAddress.length > 0
-        ) {
-          const activeAddress = item.data.data.appUserAddress.filter(
-            (newItem: any) => newItem.isActive === true
-          );
-          if (activeAddress.length > 0) {
-            setAddress(activeAddress[0].address);
+    Service.getDetailService(id)
+      .then((item: any) => {
+        if (item.data.success) {
+          setIsLoader(false);
+          if (
+            item.data.data.appUserAddress &&
+            item.data.data.appUserAddress.length > 0
+          ) {
+            const activeAddress = item.data.data.appUserAddress.filter(
+              (newItem: any) => newItem.isActive === true
+            );
+            if (activeAddress.length > 0) {
+              setAddress(activeAddress[0].address);
+            }
           }
+          setDetail(item.data.data);
         }
-        setDetail(item.data.data);
-      }
-    });
+      })
+      .catch((err) => {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
+        });
+      });
   }, [id]);
 
-  return (
+  return isLoader ? (
+    <Loader />
+  ) : (
     <>
       <TopBar isNestedRoute title="Customer Detail" />
       <div className="container mt-5">

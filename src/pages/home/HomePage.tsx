@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable prettier/prettier */
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import IconButton from '@mui/material/IconButton';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
@@ -18,6 +18,7 @@ import assets from '../../assets';
 import TopBar from '../../components/common/TopBar';
 
 function HomePage() {
+
   const [openPickupDialog, setOpenPickupDialog] = useState(false);
   const [openDeliveryDialog, setOpenDeliveryDialog] = useState(false);
   const [openOverDueDialog, setOpenOverDueDialog] = useState(false);

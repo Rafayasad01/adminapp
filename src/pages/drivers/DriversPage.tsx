@@ -16,6 +16,7 @@ import CustomTable from '../../components/common/CustomTable';
 import CustomersCreatePopup from '../customers/CustomersCreatePopup';
 import CustomersEditPopup from '../customers/CustomersEditPopup';
 import CustomDialog from '../../components/common/CustomDialog';
+import PermissionPopup from '../../utils/PermissionPopup';
 
 import { AppUserDriverExt } from '../../interfaces/app-user.interface';
 import { useForm } from 'react-hook-form';
@@ -35,6 +36,9 @@ function DriversPage() {
   const [notifyMessage, setNotifyMessage] = React.useState({});
   const [editFormData, setEditFormData] = useState<any>(null);
   const [avatar, setAvatar] = useState<any>(null);
+  const [dialogText, setDialogText] = useState<any>(
+    'Are you sure you want to delete this driver ?'
+  );
 
   // boolean states
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
@@ -42,6 +46,7 @@ function DriversPage() {
   const [isNotify, setIsNotify] = React.useState(false);
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [showPassword, setShowPassword] = useState(true);
+  const [cancelDialogOpen, setCancelDialogOpen] = useState<boolean>(false);
 
   // pagination states
   const [page, setPage] = useState(0);
@@ -290,6 +295,10 @@ function DriversPage() {
     setAvatar(null)
   }
 
+  const statusCancelHandler = () => {
+    deleteEntity(actionMenuItemid);
+  };
+
   // fields for dialog
   const inputFieldsData = [
     {
@@ -414,6 +423,15 @@ function DriversPage() {
           setRowsPerPage={setRowsPerPage}
         />
       </div>
+      {cancelDialogOpen && (
+        <PermissionPopup
+          type="shock"
+          open={cancelDialogOpen}
+          setOpen={setCancelDialogOpen}
+          dialogText={dialogText}
+          callback={statusCancelHandler}
+        />
+      )}
       {actionMenuAnchorEl && (
         <ActionMenu
           open={actionMenuOpen}
