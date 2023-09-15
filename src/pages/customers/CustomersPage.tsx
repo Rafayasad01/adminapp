@@ -64,7 +64,7 @@ function CustomersPage() {
       });
     }
   };
-
+  console.log("actionMenuItemid C", actionMenuItemid);
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number
@@ -119,6 +119,8 @@ function CustomersPage() {
 
   const manuHandler = (option: string) => {
     if (option === 'Edit') {
+      console.log("IDD", actionMenuItemid);
+      
       Service.getService(actionMenuItemid).then((item: any) => {
         if (item.data.success) {
           setEditFormData(item.data.data);
@@ -147,7 +149,7 @@ function CustomersPage() {
               console.log('newArr:::::', newArr);
               return newArr.filter(
                 (newItem: any) => newItem.id !== item.data.data.id
-              );
+                );
             });
           }
         })
@@ -159,13 +161,14 @@ function CustomersPage() {
             type: 'error',
           });
         });
-    } else if (option === 'Detail') {
-      navigate(`detail/${actionMenuItemid}`);
-    }
-  };
-
-  useEffect(() => {
-    Service.getListService(authState.user.tenant, page, rowsPerPage)
+      } else if (option === 'Detail') {
+        navigate(`detail/${actionMenuItemid}`);
+      }
+    };
+    
+    console.log("IDD 2", editFormData);
+    useEffect(() => {
+      Service.getListService(authState.user.tenant, page, rowsPerPage)
       .then((item: any) => {
         if (item.data.success) {
           console.log('customers data==>', item.data);
@@ -252,7 +255,7 @@ function CustomersPage() {
               list[i].lastName = item.data.data.last_name;
               list[i].phone = item.data.data.phone;
               list[i].postalCode = item.data.data.postal_code
-              if (data.avatar !== null) list[i].phone = item.data.data.avatar;
+              if (data.avatar !== null) list[i].avatar = item.data.data.avatar;
             }
           }
         } else {
@@ -492,6 +495,7 @@ function CustomersPage() {
         formData={editFormData}
         setEditFormData={setEditFormData}
         callback={updateFormHandler}
+        setActionMenuItemid={setActionMenuItemid}
       />
     </>
   );

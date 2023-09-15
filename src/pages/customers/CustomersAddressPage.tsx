@@ -166,6 +166,7 @@ function CustomersAddressPage() {
   useEffect(() => {
     Service.getAddressService(id).then((item: any) => {
       if (item.data.success) {
+        setIsLoader(false);
         setDetail(item.data.data);
         if (
           item.data.data.appUserAddress &&
@@ -181,7 +182,14 @@ function CustomersAddressPage() {
           setTotal(Number(item.data.data.total));
         }
       }
-    });
+    }).catch((err) => {
+      setIsLoader(false);
+      setIsNotify(true);
+      setNotifyMessage({
+        text: err.message,
+        type: 'error',
+      });
+    })
   }, [id]);
 
   const createFormHandler = (data: any) => {
@@ -337,9 +345,8 @@ function CustomersAddressPage() {
                     {detail.phone}
                   </span>
                   <span
-                    className={`font-sm mt-2 font-open-sans text-sm ${
-                      detail.isActive ? 'text-[#29CC97]' : 'text-[#f50057]'
-                    }`}
+                    className={`font-sm mt-2 font-open-sans text-sm ${detail.isActive ? 'text-[#29CC97]' : 'text-[#f50057]'
+                      }`}
                   >
                     {detail.isActive ? 'Active' : 'Inactive'}
                   </span>

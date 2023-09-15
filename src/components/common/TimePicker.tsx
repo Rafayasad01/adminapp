@@ -26,18 +26,31 @@ type Props = {
   timePickerValue: dayjs.Dayjs | null;
   setTimePickerValue: React.Dispatch<React.SetStateAction<dayjs.Dayjs | null>>;
   id: string;
+  errors?: any;
+  setError?: any;
 };
 function TimePicker({
   timePickerLabel,
   timePickerSubLabel,
   timePickerValue,
   setTimePickerValue,
+  errors,
+  setError,
   id,
 }: Props) {
+  // console.log("message", errors);
+
   const [timePicker, setTimePicker] = useState<HTMLButtonElement | null>(null);
   const buttonElement = useRef(null);
   const handleClick = () => {
     setTimePicker(buttonElement.current);
+    console.log("HITTT2", buttonElement.current);
+    if (timePickerValue?.format('HH:MM A') !== null) {
+      setError(id, {
+        type: "manual",
+        message: ""
+      })
+    }
   };
   const handleClose = () => {
     setTimePicker(null);
@@ -82,6 +95,9 @@ function TimePicker({
           }
           disableUnderline
         />
+        {errors && (
+          <span style={{ fontSize: "14px" }} role="alert">{errors.message}</span>
+        )}
       </FormControl>
 
       <Popover
