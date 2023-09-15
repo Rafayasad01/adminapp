@@ -124,34 +124,36 @@ function SettingsApp() {
     formData.append('color3', color3);
     if (file !== null) formData.append('logo', file);
 
-    Service.updateService(authState.user.tenant, authState.user.tenantConfig, formData).then(
-      (item: any) => {
-        if (item.data.success) {
-          setIsLoader(false);
-          setIsNotify(true);
-          setNotifyMessage({
-            text: item.data.message,
-            type: 'success',
-          });
-          setData(item.data.data);
-          setDetail(item.data.data);
-        } else {
-          setIsLoader(false);
-          setIsNotify(true);
-          setNotifyMessage({
-            text: item.data.message,
-            type: 'error',
-          });
-        }
+    Service.updateService(
+      authState.user.tenant,
+      authState.user.tenantConfig,
+      formData
+    ).then((item: any) => {
+      if (item.data.success) {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: item.data.message,
+          type: 'success',
+        });
+        setData(item.data.data);
+        setDetail(item.data.data);
+      } else {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: item.data.message,
+          type: 'error',
+        });
       }
-    );
+    });
   };
 
   useEffect(() => {
     Service.getService(authState.user.tenantConfig).then((item: any) => {
       // console.log('item Select:::::', item)
       if (item.data.success) {
-        console.log("color", item.data)
+        console.log('color', item.data);
         setIsLoader(false);
         setData(item.data.data);
         setDetail(item.data.data);
@@ -171,111 +173,115 @@ function SettingsApp() {
     });
   }, [authState]);
 
-  return (
-    isLoader ?
-      <Loader /> :
-      <>
-        <Notify isOpen={isNotify} setIsOpen={setIsNotify} displayMessage={notifyMessage} />
-        <div className="grid w-full grid-cols-12 gap-3">
-          <div className="col-span-6 min-h-[500px] rounded-lg bg-white py-3 shadow-lg">
-            <div className="custom-tab">
-              <Tabs value="APP_SETTINGS" aria-label="basic tabs example">
-                <Tab
-                  label="App Settings"
-                  value="APP_SETTINGS"
-                  onClick={() => navigate('../app')}
-                />
-                {/* <Tab
+  return isLoader ? (
+    <Loader />
+  ) : (
+    <>
+      <Notify
+        isOpen={isNotify}
+        setIsOpen={setIsNotify}
+        displayMessage={notifyMessage}
+      />
+      <div className="grid w-full grid-cols-12 gap-3">
+        <div className="col-span-6 min-h-[500px] rounded-lg bg-white py-3 shadow-lg">
+          <div className="custom-tab">
+            <Tabs value="APP_SETTINGS" aria-label="basic tabs example">
+              <Tab
+                label="App Settings"
+                value="APP_SETTINGS"
+                onClick={() => navigate('../app')}
+              />
+              {/* <Tab
                 label="Shop Scheduling"
                 value="SHOP_SCHEDULING"
                 onClick={() => navigate('../shop')}
               /> */}
-              </Tabs>
-            </div>
-            <div className="Content w-full py-5 px-4">
-              <form onSubmit={handleSubmit(onSubmit)}>
-                <div className="flex items-center">
-                  <div className="FormField mb-4 w-[150px]">
-                    <DragDropFile setFile={setFile} />
+            </Tabs>
+          </div>
+          <div className="Content w-full py-5 px-4">
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <div className="flex items-center">
+                <div className="FormField mb-4 w-[150px]">
+                  <DragDropFile setFile={setFile} />
+                </div>
+                {detail && detail.logo && (
+                  <div className="mb-4 mt-[0.75rem] ml-4 h-[142px] w-[150px] rounded-md">
+                    <img
+                      className="h-full w-full rounded-md"
+                      src={detail.logo}
+                      alt="Shop Logo"
+                    />
                   </div>
-                  {detail && detail.logo && (
-                    <div className="mb-4 mt-[0.75rem] ml-4 h-[142px] w-[150px] rounded-md">
-                      <img
-                        className="h-full w-full rounded-md"
-                        src={detail.logo}
-                        alt="Shop Logo"
-                      />
-                    </div>
-                  )}
-                </div>
-                <div className="FormField mb-4">
-                  <FormControl className="FormControl" variant="standard">
-                    <label className="FormLabel">App Name</label>
-                    <Input
-                      className="FormInput"
-                      id="name"
-                      placeholder="UrLaundry"
-                      disableUnderline
-                      {...register('name', { value: detail ? detail.name : '' })}
-                    />
-                  </FormControl>
-                </div>
-                <div className="FormFields mb-4">
-                  <FormControl className="FormControl" variant="standard">
-                    <label className="FormLabel">Contact Email</label>
-                    <Input
-                      className="FormInput"
-                      id="email"
-                      placeholder="info@urlaundry.com"
-                      disableUnderline
-                      {...register('email', {
-                        value: detail ? detail.email : '',
-                      })}
-                    />
-                  </FormControl>
-                  <FormControl className="FormControl" variant="standard">
-                    <label className="FormLabel">Tax</label>
-                    <Input
-                      className="FormInput"
-                      id="gst_percentage"
-                      placeholder="1%"
-                      disableUnderline
-                      {...register('gst_percentage', {
-                        value: detail ? detail.gst_percentage : '',
-                      })}
-                    />
-                  </FormControl>
-                </div>
-                <div className="FormFields mb-4">
-                  <FormControl className="FormControl" variant="standard">
-                    <label className="FormLabel">Min order Amount</label>
-                    <Input
-                      className="FormInput"
-                      id="min_order_amount"
-                      placeholder="$1.00"
-                      disableUnderline
-                      {...register('min_order_amount', {
-                        value: detail ? detail.min_order_amount : '',
-                      })}
-                    />
-                  </FormControl>
-                  <FormControl className="FormControl" variant="standard">
-                    <label className="FormLabel">Delivery fee</label>
-                    <Input
-                      className="FormInput"
-                      id="name"
-                      placeholder="$1.00"
-                      disableUnderline
-                      {...register('delivery_fee', {
-                        value: detail ? detail.delivery_fee : '',
-                      })}
-                    />
-                  </FormControl>
-                </div>
-                <div className="FormField mb-4">
-                  <FormControl className="FormControl" variant="standard">
-                    <label className="FormLabel">Development Domain</label>
-                    {/* <Input
+                )}
+              </div>
+              <div className="FormField mb-4">
+                <FormControl className="FormControl" variant="standard">
+                  <label className="FormLabel">App Name</label>
+                  <Input
+                    className="FormInput"
+                    id="name"
+                    placeholder="UrLaundry"
+                    disableUnderline
+                    {...register('name', { value: detail ? detail.name : '' })}
+                  />
+                </FormControl>
+              </div>
+              <div className="FormFields mb-4">
+                <FormControl className="FormControl" variant="standard">
+                  <label className="FormLabel">Contact Email</label>
+                  <Input
+                    className="FormInput"
+                    id="email"
+                    placeholder="info@urlaundry.com"
+                    disableUnderline
+                    {...register('email', {
+                      value: detail ? detail.email : '',
+                    })}
+                  />
+                </FormControl>
+                <FormControl className="FormControl" variant="standard">
+                  <label className="FormLabel">Tax</label>
+                  <Input
+                    className="FormInput"
+                    id="gst_percentage"
+                    placeholder="1%"
+                    disableUnderline
+                    {...register('gst_percentage', {
+                      value: detail ? detail.gst_percentage : '',
+                    })}
+                  />
+                </FormControl>
+              </div>
+              <div className="FormFields mb-4">
+                <FormControl className="FormControl" variant="standard">
+                  <label className="FormLabel">Min order Amount</label>
+                  <Input
+                    className="FormInput"
+                    id="min_order_amount"
+                    placeholder="$1.00"
+                    disableUnderline
+                    {...register('min_order_amount', {
+                      value: detail ? detail.min_order_amount : '',
+                    })}
+                  />
+                </FormControl>
+                <FormControl className="FormControl" variant="standard">
+                  <label className="FormLabel">Delivery fee</label>
+                  <Input
+                    className="FormInput"
+                    id="name"
+                    placeholder="$1.00"
+                    disableUnderline
+                    {...register('delivery_fee', {
+                      value: detail ? detail.delivery_fee : '',
+                    })}
+                  />
+                </FormControl>
+              </div>
+              <div className="FormField mb-4">
+                <FormControl className="FormControl" variant="standard">
+                  <label className="FormLabel">Development Domain</label>
+                  {/* <Input
                     className="FormInput"
                     id="development_domain"
                     placeholder="Development URL..."
@@ -284,33 +290,33 @@ function SettingsApp() {
                       value: detail ? detail.development_domain : '',
                     })}
                   /> */}
-                    <TextField
-                      className="FormInput"
-                      sx={{ padding: 0 }}
-                      id="development_domain"
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position="start">
-                            https://
-                          </InputAdornment>
-                        ),
-                        endAdornment: (
-                          <InputAdornment position="end">
-                            {DOMAIN_PREFIX}
-                          </InputAdornment>
-                        ),
-                      }}
-                      variant="outlined"
-                      {...register('development_domain', {
-                        value: detail ? detail.development_domain : '',
-                      })}
-                    />
-                  </FormControl>
-                </div>
-                <div className="FormField mb-4">
-                  <FormControl className="FormControl" variant="standard">
-                    <label className="FormLabel">Live Domain</label>
-                    {/* <Input
+                  <TextField
+                    className="FormInput"
+                    sx={{ padding: 0 }}
+                    id="development_domain"
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          https://
+                        </InputAdornment>
+                      ),
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          {DOMAIN_PREFIX}
+                        </InputAdornment>
+                      ),
+                    }}
+                    variant="outlined"
+                    {...register('development_domain', {
+                      value: detail ? detail.development_domain : '',
+                    })}
+                  />
+                </FormControl>
+              </div>
+              <div className="FormField mb-4">
+                <FormControl className="FormControl" variant="standard">
+                  <label className="FormLabel">Live Domain</label>
+                  {/* <Input
                     className="FormInput"
                     id="live_domain"
                     placeholder="Live URL..."
@@ -319,146 +325,146 @@ function SettingsApp() {
                       value: detail ? detail.live_domain : '',
                     })}
                   /> */}
-                    <TextField
-                      className="FormInput"
-                      sx={{ padding: 0 }}
-                      id="live_domain"
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position="start">
-                            https://
-                          </InputAdornment>
-                        ),
-                        endAdornment: (
-                          <InputAdornment position="end">
-                            {DOMAIN_PREFIX}
-                          </InputAdornment>
-                        ),
-                      }}
-                      variant="outlined"
-                      {...register('live_domain', {
-                        value: detail ? detail.live_domain : '',
-                      })}
-                    />
-                  </FormControl>
-                </div>
-                <div className="FormField mb-4">
-                  <FormControl className="FormControl" variant="standard">
-                    <label className="FormLabel">Social Links</label>
-                    <div className="mt-2 flex flex-row items-center gap-3">
-                      {detail && detail.facebook && (
-                        <Item
-                          key={detail.facebook}
-                          value={detail.facebook}
-                          name={FACEBOOK as AssetsImages}
-                        />
-                      )}
-                      {detail && detail.instagram && (
-                        <Item
-                          key={detail.instagram}
-                          value={detail.instagram}
-                          name={INSTAGRAM as AssetsImages}
-                        />
-                      )}
-                      {detail && detail.linkedin && (
-                        <Item
-                          key={detail.linkedin}
-                          value={detail.linkedin}
-                          name={LINKEDIN as AssetsImages}
-                        />
-                      )}
-                      {detail && detail.twitter && (
-                        <Item
-                          key={detail.twitter}
-                          value={detail.twitter}
-                          name={TWITTER as AssetsImages}
-                        />
-                      )}
-                      {detail && detail.youtube && (
-                        <Item
-                          key={detail.youtube}
-                          value={detail.youtube}
-                          name={YOUTUBE as AssetsImages}
-                        />
-                      )}
-                      {detail && detail.whatsapp && (
-                        <Item
-                          key={detail.whatsapp}
-                          value={detail.whatsapp}
-                          name={WHATSAPP as AssetsImages}
-                        />
-                      )}
-                      <IconButton
-                        className="p-0 text-[1.675rem]"
-                        onClick={() => setOpenSocialMediaPopup(true)}
-                      >
-                        <PlusIcon />
-                      </IconButton>
-                    </div>
-                  </FormControl>
-                </div>
-                <div className="FormMultipleFields mb-4">
-                  <ColorPicker
-                    colorPickerLabel="Color1"
-                    colorPickerValue={color1 ? color1 : "#1A1A1A"}
-                    setColorPickerValue={setColor1}
-                    id="color1"
-                  />
-                  <ColorPicker
-                    colorPickerLabel="Color2"
-                    colorPickerValue={color2 ? color2 : "#1A1A1A"}
-                    setColorPickerValue={setColor2}
-                    id="color2"
-                  />
-                  <ColorPicker
-                    colorPickerLabel="Color3"
-                    colorPickerValue={color3 ? color3 : "#1A1A1A"}
-                    setColorPickerValue={setColor3}
-                    id="color3"
-                  />
-                </div>
-                <div className="FormField">
-                  <Button
-                    type="submit"
-                    className="btn-black-fill flex justify-self-end"
-                    sx={{
-                      padding: '0.375rem 2rem !important',
+                  <TextField
+                    className="FormInput"
+                    sx={{ padding: 0 }}
+                    id="live_domain"
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          https://
+                        </InputAdornment>
+                      ),
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          {DOMAIN_PREFIX}
+                        </InputAdornment>
+                      ),
                     }}
-                  >
-                    Save
-                  </Button>
-                </div>
-              </form>
-            </div>
-          </div>
-          <div className="col-span-6 min-h-[500px] rounded-lg bg-white shadow-lg">
-            {address ? (
-              <MapAddress address={address.address} zoom={10} />
-            ) : (
-              <div className="no-map-location">
-                <div className="content">
-                  <div className="icon">
-                    <img
-                      className="w-100"
-                      src={assets.images.noMapLocation}
-                      alt=""
-                    />
-                  </div>
-                  <h4 className="text">Location not available</h4>
-                </div>
+                    variant="outlined"
+                    {...register('live_domain', {
+                      value: detail ? detail.live_domain : '',
+                    })}
+                  />
+                </FormControl>
               </div>
-            )}
+              <div className="FormField mb-4">
+                <FormControl className="FormControl" variant="standard">
+                  <label className="FormLabel">Social Links</label>
+                  <div className="mt-2 flex flex-row items-center gap-3">
+                    {detail && detail.facebook && (
+                      <Item
+                        key={detail.facebook}
+                        value={detail.facebook}
+                        name={FACEBOOK as AssetsImages}
+                      />
+                    )}
+                    {detail && detail.instagram && (
+                      <Item
+                        key={detail.instagram}
+                        value={detail.instagram}
+                        name={INSTAGRAM as AssetsImages}
+                      />
+                    )}
+                    {detail && detail.linkedin && (
+                      <Item
+                        key={detail.linkedin}
+                        value={detail.linkedin}
+                        name={LINKEDIN as AssetsImages}
+                      />
+                    )}
+                    {detail && detail.twitter && (
+                      <Item
+                        key={detail.twitter}
+                        value={detail.twitter}
+                        name={TWITTER as AssetsImages}
+                      />
+                    )}
+                    {detail && detail.youtube && (
+                      <Item
+                        key={detail.youtube}
+                        value={detail.youtube}
+                        name={YOUTUBE as AssetsImages}
+                      />
+                    )}
+                    {detail && detail.whatsapp && (
+                      <Item
+                        key={detail.whatsapp}
+                        value={detail.whatsapp}
+                        name={WHATSAPP as AssetsImages}
+                      />
+                    )}
+                    <IconButton
+                      className="p-0 text-[1.675rem]"
+                      onClick={() => setOpenSocialMediaPopup(true)}
+                    >
+                      <PlusIcon />
+                    </IconButton>
+                  </div>
+                </FormControl>
+              </div>
+              <div className="FormMultipleFields mb-4">
+                <ColorPicker
+                  colorPickerLabel="Color1"
+                  colorPickerValue={color1 || '#1A1A1A'}
+                  setColorPickerValue={setColor1}
+                  id="color1"
+                />
+                <ColorPicker
+                  colorPickerLabel="Color2"
+                  colorPickerValue={color2 || '#1A1A1A'}
+                  setColorPickerValue={setColor2}
+                  id="color2"
+                />
+                <ColorPicker
+                  colorPickerLabel="Color3"
+                  colorPickerValue={color3 || '#1A1A1A'}
+                  setColorPickerValue={setColor3}
+                  id="color3"
+                />
+              </div>
+              <div className="FormField">
+                <Button
+                  type="submit"
+                  className="btn-black-fill flex justify-self-end"
+                  sx={{
+                    padding: '0.375rem 2rem !important',
+                  }}
+                >
+                  Save
+                </Button>
+              </div>
+            </form>
           </div>
         </div>
-        {openSocialMediaPopup && (
-          <SocialLinksPopup
-            openDialog={openSocialMediaPopup}
-            setOpenDialog={setOpenSocialMediaPopup}
-            detail={detail}
-            setDetail={setDetail}
-          />
-        )}
-      </>
+        <div className="col-span-6 min-h-[500px] rounded-lg bg-white shadow-lg">
+          {address ? (
+            <MapAddress address={address.address} zoom={10} />
+          ) : (
+            <div className="no-map-location">
+              <div className="content">
+                <div className="icon">
+                  <img
+                    className="w-100"
+                    src={assets.images.noMapLocation}
+                    alt=""
+                  />
+                </div>
+                <h4 className="text">Location not available</h4>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+      {openSocialMediaPopup && (
+        <SocialLinksPopup
+          openDialog={openSocialMediaPopup}
+          setOpenDialog={setOpenSocialMediaPopup}
+          detail={detail}
+          setDetail={setDetail}
+        />
+      )}
+    </>
   );
 }
 

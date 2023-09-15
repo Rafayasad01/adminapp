@@ -1,13 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Dialog from '@mui/material/Dialog';
-import Button from '@mui/material/Button';
-import FormControl from '@mui/material/FormControl';
-import Input from '@mui/material/Input';
-import { useForm } from 'react-hook-form';
-
 import '../../assets/css/PopupStyle.css';
-import TextField from '@mui/material/TextField';
-import { Notification } from '../../interfaces/notification.interface';
 
 type Props = {
   openDetailDialog: boolean;
@@ -20,17 +13,6 @@ function NotificationDetailPopup({
   setOpenDetailDialog,
   detail,
 }: Props) {
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors },
-    control,
-  } = useForm<Notification>();
-  const onSubmit = (data: Notification) => {
-    setOpenDetailDialog(false);
-  };
-
   const handleFormClose = () => {
     setOpenDetailDialog(false);
   };
@@ -40,36 +22,36 @@ function NotificationDetailPopup({
       open={openDetailDialog}
       onClose={handleFormClose}
       PaperProps={{
-        className: 'Dialog',
+        className: 'Dialog Width-20',
         style: { maxWidth: '100%', maxHeight: 'auto' },
       }}
     >
-      <div className="Content">
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="FormHeader">
-            <span className="Title">Notification Batch Detail</span>
-          </div>
+      {detail && (
+        <div className="Content">
           <div className="FormBody">
-            {Object.entries(detail).map(([key, value]: any) => {
-              return (
-                <div
-                  key={key}
-                  style={{
-                    display: 'flex',
-                    gap: '10px',
-                    padding: '10px 10px',
-                    backgroundColor: '#d1d0cd',
-                  }}
-                >
-                  <div className="key">{key}</div>:
-                  <div className="value">{value}</div>
+            <div className="NotificationBatchBox">
+              <div className="Top">
+                <span className="Title">Notification Batch Detail</span>
+              </div>
+              <div className="Mid">
+                <div className="BatchBox">
+                  <span className="BatchValue">{detail.success}</span>
+                  <span className="BatchHeading">Success</span>
                 </div>
-              );
-            })}
+                <div className="Separator" />
+                <div className="BatchBox">
+                  <span className="BatchValue">{detail.failure}</span>
+                  <span className="BatchHeading">Failed</span>
+                </div>
+              </div>
+              <div className="Bottom">
+                <span className="Title">Message Title</span>
+                <span className="Detail">{detail.description}</span>
+              </div>
+            </div>
           </div>
-          <div className="FormFooter" />
-        </form>
-      </div>
+        </div>
+      )}
     </Dialog>
   );
 }

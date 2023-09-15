@@ -46,21 +46,28 @@ function DriversCreatePopup({
   };
 
   const handleFileOnClick = (event: any) => {
-    event.target.value = null
-    setAvatar(null)
-  }
+    event.target.value = null;
+    setAvatar(null);
+  };
 
   const onSubmit = (data: AppUserDriverExt) => {
-    if (data.first_name && data.last_name && data.email && data.phone && data.license_number && data.address) {
+    if (
+      data.first_name &&
+      data.last_name &&
+      data.email &&
+      data.phone &&
+      data.license_number &&
+      data.address
+    ) {
       const licenseNumber = data.license_number.replace(/\s+/g, '');
       data.avatar = avatar;
       data.license_number = licenseNumber;
       setOpenFormDialog(false);
       callback(data);
     } else {
-      setIsNotify(true)
+      setIsNotify(true);
       setNotifyMessage({
-        text: "All fields are required, Except avater image!",
+        text: 'All fields are required, Except avater image!',
         type: 'error',
       });
     }
@@ -188,11 +195,15 @@ function DriversCreatePopup({
                   id="raised-button-file"
                   type="file"
                   {...register('avatar')}
-                  onChange={(event: React.InputHTMLAttributes<HTMLInputElement>) => {
+                  onChange={(
+                    event: React.InputHTMLAttributes<HTMLInputElement>
+                  ) => {
                     handleFileChange(event);
                   }}
-                  onClick={(event: React.InputHTMLAttributes<HTMLInputElement>) => {
-                    handleFileOnClick(event)
+                  onClick={(
+                    event: React.InputHTMLAttributes<HTMLInputElement>
+                  ) => {
+                    handleFileOnClick(event);
                   }}
                 />
                 <label htmlFor="raised-button-file" className="ImageLabel">
@@ -204,7 +215,10 @@ function DriversCreatePopup({
                 {avatar ? (
                   <div className="ShowImageBox">
                     <label className="ShowImageLabel">{avatar.name}</label>
-                    <IconButton className="btn-dot" onClick={() => setAvatar(null)}>
+                    <IconButton
+                      className="btn-dot"
+                      onClick={() => setAvatar(null)}
+                    >
                       <CloseOutlinedIcon
                         sx={{
                           color: '#1D1D1D',

@@ -10,6 +10,7 @@ export const CUSTOMER_PREFIX = 'customer';
 export const CATEGORY_PREFIX = 'category';
 export const SETTING_PREFIX = 'setting';
 export const NOTIFICATION_PREFIX = 'notification';
+export const TENANT_PREFIX = 'tenant';
 export const ORDER_STATUS_NEW = 'New';
 export const ORDER_STATUS_PICKED_UP = 'PickedUp';
 export const ORDER_STATUS_PROCESSING = 'Processing';

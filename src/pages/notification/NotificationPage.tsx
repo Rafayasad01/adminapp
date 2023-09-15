@@ -167,10 +167,10 @@ function NotificationPage() {
     return tag;
   };
 
-  const detailButtonHandler = (index: number) => {
+  const detailButtonHandler = (getItem: any, index: number) => {
     Service.batchDetailService(list[index].id).then((item) => {
       if (item.data.success) {
-        setBatchDetail(item.data.data);
+        setBatchDetail({ ...getItem, ...item.data.data });
         setDetailPopup(true);
       } else {
         setAlertMsg('No batches found');
@@ -241,8 +241,8 @@ function NotificationPage() {
                 <tr>
                   <th className="w-[16rem]">Title</th>
                   <th className="w-[30rem]">Message</th>
-                  <th>status</th>
                   <th>Dated</th>
+                  <th>status</th>
                   <th>&nbsp;</th>
                 </tr>
               </thead>
@@ -253,15 +253,6 @@ function NotificationPage() {
                       <tr key={item.id}>
                         <td>{item.title}</td>
                         <td>{item.description}</td>
-                        <td>
-                          <span
-                            className={`badge badge-${getStatusTag(
-                              item.status
-                            )}`}
-                          >
-                            {item.status}
-                          </span>
-                        </td>
                         <td>
                           <div className="flex flex-col">
                             <span className="text-sm font-normal text-[#1A1A1A]">
@@ -275,9 +266,18 @@ function NotificationPage() {
                           </div>
                         </td>
                         <td>
+                          <span
+                            className={`badge badge-${getStatusTag(
+                              item.status
+                            )}`}
+                          >
+                            {item.status}
+                          </span>
+                        </td>
+                        <td>
                           <IconButton
                             className="icon-btn mr-3.5 p-0"
-                            onClick={() => detailButtonHandler(index)}
+                            onClick={() => detailButtonHandler(item, index)}
                           >
                             <WysiwygOutlinedIcon />
                           </IconButton>
