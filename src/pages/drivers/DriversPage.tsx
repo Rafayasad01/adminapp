@@ -6,8 +6,6 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 import TopBar from '../../components/common/TopBar';
-import DriversCreatePopup from './DriversCreatePopup';
-import DriversEditPopup from './DriversEditPopup';
 import driver from '../../services/adminapp/adminDriver';
 import { useAppSelector } from '../../redux/redux-hooks';
 
@@ -15,8 +13,6 @@ import ActionMenu from '../../components/common/ActionMenu';
 import Loader from '../../components/common/Loader';
 import Notify from '../../components/common/Notify';
 import CustomTable from '../../components/common/CustomTable';
-import CustomersCreatePopup from '../customers/CustomersCreatePopup';
-import CustomersEditPopup from '../customers/CustomersEditPopup';
 import CustomDialog from '../../components/common/CustomDialog';
 import PermissionPopup from '../../utils/PermissionPopup';
 
