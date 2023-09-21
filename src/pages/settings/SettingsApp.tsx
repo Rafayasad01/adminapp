@@ -1,4 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import { useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
@@ -9,8 +10,7 @@ import Tab from '@mui/material/Tab';
 import { useNavigate } from 'react-router-dom';
 import Link from '@mui/material/Link';
 import { useForm } from 'react-hook-form';
-import TextField from '@mui/material/TextField';
-import InputAdornment from '@mui/material/InputAdornment';
+import EditIcon from '@mui/icons-material/Edit';
 import DragDropFile from './DragDropFile';
 import PlusIcon from '../../components/icons/PlusIcon';
 import { Setting } from '../../interfaces/app.interface';
@@ -26,6 +26,7 @@ import {
   FACEBOOK,
   INSTAGRAM,
   LINKEDIN,
+  DOMAIN_PROTOCOL,
   TWITTER,
   WHATSAPP,
   YOUTUBE,
@@ -33,6 +34,7 @@ import {
 import MapAddress from '../../components/common/MapAddress';
 import Loader from '../../components/common/Loader';
 import Notify from '../../components/common/Notify';
+import { listingRolePermission } from '../../utils/helper';
 
 type AssetsImages = keyof typeof assets.images;
 
@@ -45,8 +47,20 @@ function Item(props: { value: any; name: AssetsImages }) {
   );
 }
 
+function HelpingIcon(elements: any) {
+  const { links } = elements;
+  const filtered = links?.filter((el: string) => el !== '');
+  if (filtered?.length < 6) {
+    return <PlusIcon />;
+  }
+  return <EditIcon />;
+}
+
 function SettingsApp() {
   const authState: any = useAppSelector((state) => state.authState);
+  const dataRole = useSelector(
+    (state: any) => state.roleState.role.permissions
+  );
   const navigate = useNavigate();
   const [openSocialMediaPopup, setOpenSocialMediaPopup] = useState(false);
   const [file, setFile] = useState<any>(null);
@@ -101,76 +115,84 @@ function SettingsApp() {
     setColor2(item.color2);
     setColor3(item.color3);
   };
-  const onSubmit = (data: Setting) => {
-    setIsLoader(true);
-    const formData = new FormData();
-    formData.append('name', data.name);
-    formData.append('desc', data.name);
-    formData.append('gst_percentage', data.gst_percentage);
-    formData.append('email', data.email);
-    formData.append('min_order_amount', data.min_order_amount);
-    formData.append('delivery_fee', data.delivery_fee);
-    formData.append('development_domain', data.development_domain);
-    formData.append('live_domain', data.live_domain);
-    formData.append('facebook', detail ? detail.facebook : '');
-    formData.append('instagram', detail ? detail.instagram : '');
-    formData.append('linkedin', detail ? detail.linkedin : '');
-    formData.append('twitter', detail ? detail.twitter : '');
-    formData.append('youtube', detail ? detail.youtube : '');
-    formData.append('whatsapp', detail ? detail.whatsapp : '');
-    formData.append('updated_by', authState.user.id);
-    formData.append('color1', color1);
-    formData.append('color2', color2);
-    formData.append('color3', color3);
-    if (file !== null) formData.append('logo', file);
 
-    Service.updateService(
-      authState.user.tenant,
-      authState.user.tenantConfig,
-      formData
-    ).then((item: any) => {
-      if (item.data.success) {
-        setIsLoader(false);
-        setIsNotify(true);
-        setNotifyMessage({
-          text: item.data.message,
-          type: 'success',
-        });
-        setData(item.data.data);
-        setDetail(item.data.data);
-      } else {
-        setIsLoader(false);
-        setIsNotify(true);
-        setNotifyMessage({
-          text: item.data.message,
-          type: 'error',
-        });
-      }
-    });
+  const onSubmit = (data: Setting) => {
+    if (listingRolePermission(dataRole, 'Setting Update')) {
+      setIsLoader(true);
+      const formData = new FormData();
+      formData.append('name', data.name);
+      formData.append('desc', data.name);
+      formData.append('gst_percentage', data.gst_percentage);
+      formData.append('email', data.email);
+      formData.append('min_order_amount', data.min_order_amount);
+      formData.append('delivery_fee', data.delivery_fee);
+      formData.append('development_domain', data.development_domain);
+      formData.append('live_domain', data.live_domain);
+      formData.append('facebook', detail ? detail.facebook : '');
+      formData.append('instagram', detail ? detail.instagram : '');
+      formData.append('linkedin', detail ? detail.linkedin : '');
+      formData.append('twitter', detail ? detail.twitter : '');
+      formData.append('youtube', detail ? detail.youtube : '');
+      formData.append('whatsapp', detail ? detail.whatsapp : '');
+      formData.append('updated_by', authState.user.id);
+      formData.append('color1', color1);
+      formData.append('color2', color2);
+      formData.append('color3', color3);
+      if (file !== null) formData.append('logo', file);
+
+      Service.updateService(
+        authState.user.tenant,
+        authState.user.tenantConfig,
+        formData
+      ).then((item: any) => {
+        const { success, message, data: itemData } = item.data;
+        if (success) {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: message,
+            type: 'success',
+          });
+          setData(itemData);
+          setDetail(itemData);
+        } else {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: message,
+            type: 'error',
+          });
+        }
+      });
+    }
   };
 
   useEffect(() => {
-    Service.getService(authState.user.tenantConfig).then((item: any) => {
-      // console.log('item Select:::::', item)
-      if (item.data.success) {
-        console.log('color', item.data);
-        setIsLoader(false);
-        setData(item.data.data);
-        setDetail(item.data.data);
-      } else {
-        setIsLoader(false);
-        setIsNotify(true);
-        setNotifyMessage({
-          text: item.data.message,
-          type: 'error',
-        });
-      }
-    });
-    Service.getAddressService(authState.user.tenant).then((item: any) => {
-      if (item.data.success) {
-        setAddress(item.data.data);
-      }
-    });
+    if (listingRolePermission(dataRole, 'Setting View')) {
+      Service.getService(authState.user.tenantConfig).then((item: any) => {
+        // console.log('item Select:::::', item)
+        if (item.data.success) {
+          console.log('color', item.data);
+          setIsLoader(false);
+          setData(item.data.data);
+          setDetail(item.data.data);
+        } else {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'error',
+          });
+        }
+      });
+    }
+    if (listingRolePermission(dataRole, 'Setting Address')) {
+      Service.getAddressService(authState.user.tenant).then((item: any) => {
+        if (item.data.success) {
+          setAddress(item.data.data);
+        }
+      });
+    }
   }, [authState]);
 
   return isLoader ? (
@@ -232,7 +254,7 @@ function SettingsApp() {
                   <Input
                     className="FormInput"
                     id="email"
-                    placeholder="info@urlaundry.com"
+                    placeholder="warning@urlaundry.com"
                     disableUnderline
                     {...register('email', {
                       value: detail ? detail.email : '',
@@ -281,70 +303,24 @@ function SettingsApp() {
               <div className="FormField mb-4">
                 <FormControl className="FormControl" variant="standard">
                   <label className="FormLabel">Development Domain</label>
-                  {/* <Input
+                  <Input
                     className="FormInput"
                     id="development_domain"
-                    placeholder="Development URL..."
+                    value={`${DOMAIN_PROTOCOL}${detail ? detail.development_domain : 'abc'}${DOMAIN_PREFIX}`}
                     disableUnderline
-                    {...register('development_domain', {
-                      value: detail ? detail.development_domain : '',
-                    })}
-                  /> */}
-                  <TextField
-                    className="FormInput"
-                    sx={{ padding: 0 }}
-                    id="development_domain"
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          https://
-                        </InputAdornment>
-                      ),
-                      endAdornment: (
-                        <InputAdornment position="end">
-                          {DOMAIN_PREFIX}
-                        </InputAdornment>
-                      ),
-                    }}
-                    variant="outlined"
-                    {...register('development_domain', {
-                      value: detail ? detail.development_domain : '',
-                    })}
+                    disabled={true}
                   />
                 </FormControl>
               </div>
               <div className="FormField mb-4">
                 <FormControl className="FormControl" variant="standard">
                   <label className="FormLabel">Live Domain</label>
-                  {/* <Input
+                  <Input
                     className="FormInput"
                     id="live_domain"
-                    placeholder="Live URL..."
+                    value={`${DOMAIN_PROTOCOL}${detail ? detail.live_domain : 'abc'}${DOMAIN_PREFIX}`}
                     disableUnderline
-                    {...register('live_domain', {
-                      value: detail ? detail.live_domain : '',
-                    })}
-                  /> */}
-                  <TextField
-                    className="FormInput"
-                    sx={{ padding: 0 }}
-                    id="live_domain"
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          https://
-                        </InputAdornment>
-                      ),
-                      endAdornment: (
-                        <InputAdornment position="end">
-                          {DOMAIN_PREFIX}
-                        </InputAdornment>
-                      ),
-                    }}
-                    variant="outlined"
-                    {...register('live_domain', {
-                      value: detail ? detail.live_domain : '',
-                    })}
+                    disabled={true}
                   />
                 </FormControl>
               </div>
@@ -398,30 +374,39 @@ function SettingsApp() {
                       className="p-0 text-[1.675rem]"
                       onClick={() => setOpenSocialMediaPopup(true)}
                     >
-                      <PlusIcon />
+                      <HelpingIcon
+                        links={[
+                          detail?.facebook,
+                          detail?.instagram,
+                          detail?.linkedin,
+                          detail?.twitter,
+                          detail?.whatsapp,
+                          detail?.youtube,
+                        ]}
+                      />
                     </IconButton>
                   </div>
                 </FormControl>
               </div>
               <div className="FormMultipleFields mb-4">
                 <ColorPicker
-                  colorPickerLabel="Color1"
+                  colorPickerLabel="Theme Color"
                   colorPickerValue={color1 || '#1A1A1A'}
                   setColorPickerValue={setColor1}
                   id="color1"
                 />
                 <ColorPicker
-                  colorPickerLabel="Color2"
+                  colorPickerLabel="Text Color"
                   colorPickerValue={color2 || '#1A1A1A'}
                   setColorPickerValue={setColor2}
                   id="color2"
                 />
-                <ColorPicker
+                {/* <ColorPicker
                   colorPickerLabel="Color3"
                   colorPickerValue={color3 || '#1A1A1A'}
                   setColorPickerValue={setColor3}
                   id="color3"
-                />
+                /> */}
               </div>
               <div className="FormField">
                 <Button
@@ -458,6 +443,7 @@ function SettingsApp() {
       </div>
       {openSocialMediaPopup && (
         <SocialLinksPopup
+          setIsLoader={setIsLoader}
           openDialog={openSocialMediaPopup}
           setOpenDialog={setOpenSocialMediaPopup}
           detail={detail}

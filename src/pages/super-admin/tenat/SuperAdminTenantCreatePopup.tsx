@@ -8,9 +8,12 @@ import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined';
 import RadioButtonUncheckedOutlinedIcon from '@mui/icons-material/RadioButtonUncheckedOutlined';
+import TextField from '@mui/material/TextField';
+import InputAdornment from '@mui/material/InputAdornment';
 
 import '../../../assets/css/PopupStyle.css';
 import { Tenant } from '../../../interfaces/superadmin/tenant.interface';
+import { DOMAIN_PREFIX, DOMAIN_PROTOCOL } from '../../../utils/constants';
 
 type Props = {
   openFormDialog: boolean;
@@ -81,16 +84,16 @@ function SuperAdminTenantCreatePopup({
                 )}
               </FormControl>
               <FormControl className="FormControl" variant="standard">
-                <label className="FormLabel">Shop Admin</label>
+                <label className="FormLabel">Email</label>
                 <Input
                   className="FormInput"
-                  {...register('shopAdmin', { required: true })}
+                  {...register('email', { required: true })}
                   type="text"
-                  id="shopAdmin"
+                  id="email"
                   disableUnderline
                 />
-                {errors.shopAdmin?.type === 'required' && (
-                  <span role="alert">Shop admin is required</span>
+                {errors.email?.type === 'required' && (
+                  <span role="alert">Email is required</span>
                 )}
               </FormControl>
             </div>
@@ -120,6 +123,54 @@ function SuperAdminTenantCreatePopup({
                 {errors.lastName?.type === 'required' && (
                   <span role="alert">Last name is required</span>
                 )}
+              </FormControl>
+            </div>
+            <div className="FormField mb-4">
+              <FormControl className="FormControl" variant="standard">
+                <label className="FormLabel">Development Domain</label>
+                <TextField
+                  className="FormInput"
+                  sx={{ padding: 0 }}
+                  id="development_domain"
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        {DOMAIN_PROTOCOL}
+                      </InputAdornment>
+                    ),
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        {DOMAIN_PREFIX}
+                      </InputAdornment>
+                    ),
+                  }}
+                  variant="outlined"
+                  {...register('developmentDomain')}
+                />
+              </FormControl>
+            </div>
+            <div className="FormField mb-4">
+              <FormControl className="FormControl" variant="standard">
+                <label className="FormLabel">Live Domain</label>
+                <TextField
+                  className="FormInput"
+                  sx={{ padding: 0 }}
+                  id="live_domain"
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        {DOMAIN_PROTOCOL}
+                      </InputAdornment>
+                    ),
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        {DOMAIN_PREFIX}
+                      </InputAdornment>
+                    ),
+                  }}
+                  variant="outlined"
+                  {...register('liveDomain')}
+                />
               </FormControl>
             </div>
             <div className="FormField">

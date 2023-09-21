@@ -30,9 +30,9 @@ function CustomersCreatePopup({
   setNotifyMessage,
 }: Props) {
   const [showPassword, setShowPassword] = useState(false);
-  const [avatar, setAvatar] = useState<any>(null);
-
   const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+  const [avatar, setAvatar] = useState<any>(null);
   const {
     register,
     handleSubmit,

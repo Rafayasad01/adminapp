@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import '../../assets/css/PopupStyle.css';
 import Dialog from '@mui/material/Dialog';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
@@ -7,9 +8,9 @@ import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
 import IconButton from '@mui/material/IconButton';
 import dayjs from 'dayjs';
-import '../../assets/css/PopupStyle.css';
 import { useForm } from 'react-hook-form';
 import { AppUserDriverExt } from '../../interfaces/app-user.interface';
+import CustomButton from '../../components/common/CustomButton';
 
 type Props = {
   openFormDialog: boolean;
@@ -180,7 +181,25 @@ function DriversCreatePopup({
             <div className="FormField">
               <label className="FormLabel">Upload Image</label>
               <div className="ImageBox">
-                <input
+                <CustomButton
+                  buttonType="upload"
+                  title="Upload image"
+                  register={register}
+                  icon={
+                    <FileUploadOutlinedIcon sx={{ marginRight: '0.5rem' }} />
+                  }
+                  onchange={(
+                    event: React.InputHTMLAttributes<HTMLInputElement>
+                  ) => {
+                    handleFileChange(event);
+                  }}
+                  onclick={(
+                    event: React.InputHTMLAttributes<HTMLInputElement>
+                  ) => {
+                    handleFileOnClick(event);
+                  }}
+                />
+                {/* <input
                   accept="image/*"
                   style={{ display: 'none' }}
                   id="raised-button-file"
@@ -202,7 +221,7 @@ function DriversCreatePopup({
                     <FileUploadOutlinedIcon sx={{ marginRight: '0.5rem' }} />
                     Upload image
                   </Button>
-                </label>
+                </label> */}
                 {avatar ? (
                   <div className="ShowImageBox">
                     <label className="ShowImageLabel">{avatar.name}</label>
@@ -226,7 +245,28 @@ function DriversCreatePopup({
             </div>
           </div>
           <div className="FormFooter">
-            <Button
+            <CustomButton
+              buttonType="button"
+              title="Cancel"
+              className="btn-black-outline"
+              onclick={handleFormClose}
+              sx={{
+                marginRight: '0.5rem',
+                padding: '0.375rem 1.5rem !important',
+              }}
+            />
+            <CustomButton
+              buttonType="button"
+              title="Add"
+              type="submit"
+              className="btn-black-fill"
+              sx={{
+                padding: '0.375rem 2rem !important',
+                width: '85%',
+                height: '35px',
+              }}
+            />
+            {/* <Button
               className="btn-black-outline"
               onClick={handleFormClose}
               sx={{
@@ -235,15 +275,15 @@ function DriversCreatePopup({
               }}
             >
               Cancel
-            </Button>
-            <Input
+            </Button> */}
+            {/* <Input
               type="submit"
               value="Add"
               className="btn-black-fill"
               sx={{
                 padding: '0.375rem 2rem !important',
               }}
-            />
+            /> */}
           </div>
         </form>
       </div>

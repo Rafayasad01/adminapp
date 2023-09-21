@@ -32,8 +32,11 @@ module.exports = {
     'jsx-a11y/label-has-associated-control': 0,
     "@typescript-eslint/no-explicit-any": "off",
     'react/jsx-props-no-spreading': 'off',
-    //'@typescript-eslint/no-unused-vars': 'off',
-    //'no-console': 'off',
+    "no-nested-ternary": "off",
+    "react-hooks/exhaustive-deps": "off",
+    "@typescript-eslint/no-unused-expressions": "off",
+    // '@typescript-eslint/no-unused-vars': 'off',
+    // 'no-console': 'off',
     'prettier/prettier': [
       'error',
       {

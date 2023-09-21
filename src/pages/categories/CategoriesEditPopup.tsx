@@ -36,6 +36,7 @@ function CategoriesEditPopup({
     register,
     handleSubmit,
     watch,
+    getValues,
     formState: { errors },
     control,
   } = useForm<Category>();
@@ -76,6 +77,8 @@ function CategoriesEditPopup({
     // setImageName(icon);
     setImage({ name: icon });
   }, [formData]);
+
+  console.log('IDD 4 CAT', getValues('name'));
 
   return (
     <Dialog

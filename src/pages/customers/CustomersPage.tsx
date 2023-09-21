@@ -13,6 +13,7 @@ import TablePagination from '@mui/material/TablePagination';
 import Switch from '@mui/material/Switch';
 import dayjs from 'dayjs';
 import Avatar from '@mui/material/Avatar';
+import { useSelector } from 'react-redux';
 import TopBar from '../../components/common/TopBar';
 import CustomersCreatePopup from './CustomersCreatePopup';
 import CustomersEditPopup from './CustomersEditPopup';
@@ -21,9 +22,16 @@ import ActionMenu from '../../components/common/ActionMenu';
 import Service from '../../services/adminapp/adminCustomer';
 import Loader from '../../components/common/Loader';
 import Notify from '../../components/common/Notify';
+import PermissionPopup from '../../utils/PermissionPopup';
+import { NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
+import { CheckRolePermission, listingRolePermission } from '../../utils/helper';
+import CustomText from '../../components/common/CustomText';
 
 function CustomersPage() {
   const authState: any = useAppSelector((state) => state.authState);
+  const dataRole = useSelector(
+    (state: any) => state.roleState.role.permissions
+  );
   const navigate = useNavigate();
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(0);
@@ -42,9 +50,21 @@ function CustomersPage() {
   const [isLoader, setIsLoader] = React.useState(true);
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
+  const [cancelDialogOpen, setCancelDialogOpen] = useState<boolean>(false);
+  const [dialogText, setDialogText] = useState<any>(
+    'Are you sure you want to delete this customer ?'
+  );
 
   const handleFormClickOpen = () => {
-    setOpenFormDialog(true);
+    if (listingRolePermission(dataRole, 'Customer Create')) {
+      setOpenFormDialog(true);
+    } else {
+      setIsNotify(true);
+      setNotifyMessage({
+        text: NOT_AUTHORIZED_MESSAGE,
+        type: 'warning',
+      });
+    }
   };
 
   const handleClickSearch = (event: any) => {
@@ -64,7 +84,7 @@ function CustomersPage() {
       });
     }
   };
-
+  console.log('actionMenuItemid C', actionMenuItemid);
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number
@@ -117,61 +137,28 @@ function CustomersPage() {
     }
   };
 
-  const manuHandler = (option: string) => {
-    if (option === 'Edit') {
-      Service.getService(actionMenuItemid).then((item: any) => {
+  const deleteHandler = (id: string) => {
+    setIsLoader(true);
+    const data = {
+      is_active: false,
+      is_deleted: true,
+      updated_by: authState.user.id,
+    };
+    Service.deleteService(actionMenuItemid, data)
+      .then((item: any) => {
         if (item.data.success) {
-          setEditFormData(item.data.data);
-          setOpenEditFormDialog(true);
-        }
-      });
-    } else if (option === 'Address') {
-      navigate(`address/${actionMenuItemid}`);
-    } else if (option === 'Delete') {
-      setIsLoader(true);
-      const data = {
-        is_active: false,
-        is_deleted: true,
-        updated_by: authState.user.id,
-      };
-      Service.deleteService(actionMenuItemid, data)
-        .then((item: any) => {
-          if (item.data.success) {
-            setIsLoader(false);
-            setIsNotify(true);
-            setNotifyMessage({
-              text: item.data.message,
-              type: 'success',
-            });
-            setList((newArr: any) => {
-              console.log('newArr:::::', newArr);
-              return newArr.filter(
-                (newItem: any) => newItem.id !== item.data.data.id
-              );
-            });
-          }
-        })
-        .catch((err) => {
           setIsLoader(false);
           setIsNotify(true);
           setNotifyMessage({
-            text: err.message,
-            type: 'error',
+            text: item.data.message,
+            type: 'success',
           });
-        });
-    } else if (option === 'Detail') {
-      navigate(`detail/${actionMenuItemid}`);
-    }
-  };
-
-  useEffect(() => {
-    Service.getListService(authState.user.tenant, page, rowsPerPage)
-      .then((item: any) => {
-        if (item.data.success) {
-          console.log('customers data==>', item.data);
-          setIsLoader(false);
-          setList(item.data.data.list);
-          setTotal(item.data.data.total);
+          setList((newArr: any) => {
+            console.log('newArr:::::', newArr);
+            return newArr.filter(
+              (newItem: any) => newItem.id !== item.data.data.id
+            );
+          });
         }
       })
       .catch((err) => {
@@ -182,6 +169,107 @@ function CustomersPage() {
           type: 'error',
         });
       });
+  };
+
+  const statusCancelHandler = () => {
+    deleteHandler(actionMenuItemid);
+  };
+
+  const manuHandler = (option: string) => {
+    if (option === 'Edit') {
+      if (listingRolePermission(dataRole, 'Customer Update')) {
+        Service.getService(actionMenuItemid).then((item: any) => {
+          if (item.data.success) {
+            setEditFormData(item.data.data);
+            setOpenEditFormDialog(true);
+          }
+        });
+      } else {
+        setIsNotify(true);
+        setNotifyMessage({
+          text: NOT_AUTHORIZED_MESSAGE,
+          type: 'warning',
+        });
+      }
+    } else if (option === 'Address') {
+      CheckRolePermission(
+        'Customer Address Detail',
+        dataRole,
+        navigate,
+        `address/${actionMenuItemid}`
+      );
+      // navigate(`address/${actionMenuItemid}`);
+    } else if (option === 'Delete') {
+      if (listingRolePermission(dataRole, 'Customer Delete')) {
+        setIsLoader(true);
+        const data = {
+          is_active: false,
+          is_deleted: true,
+          updated_by: authState.user.id,
+        };
+        Service.deleteService(actionMenuItemid, data)
+          .then((item: any) => {
+            if (item.data.success) {
+              setIsLoader(false);
+              setIsNotify(true);
+              setNotifyMessage({
+                text: item.data.message,
+                type: 'success',
+              });
+              setList((newArr: any) => {
+                console.log('newArr:::::', newArr);
+                return newArr.filter(
+                  (newItem: any) => newItem.id !== item.data.data.id
+                );
+              });
+            }
+          })
+          .catch((err) => {
+            setIsLoader(false);
+            setIsNotify(true);
+            setNotifyMessage({
+              text: err.message,
+              type: 'error',
+            });
+          });
+      } else {
+        setIsNotify(true);
+        setNotifyMessage({
+          text: NOT_AUTHORIZED_MESSAGE,
+          type: 'warning',
+        });
+      }
+    } else if (option === 'Detail') {
+      CheckRolePermission(
+        'Customer Detail',
+        dataRole,
+        navigate,
+        `detail/${actionMenuItemid}`
+      );
+      // navigate(`detail/${actionMenuItemid}`);
+    }
+  };
+
+  useEffect(() => {
+    if (listingRolePermission(dataRole, 'Customer List')) {
+      Service.getListService(authState.user.tenant, page, rowsPerPage)
+        .then((item: any) => {
+          if (item.data.success) {
+            console.log('customers data==>', item.data);
+            setIsLoader(false);
+            setList(item.data.data.list);
+            setTotal(item.data.data.total);
+          }
+        })
+        .catch((err) => {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: err.message,
+            type: 'error',
+          });
+        });
+    }
   }, [authState, page, rowsPerPage]);
 
   const createFormHandler = (data: any) => {
@@ -246,13 +334,13 @@ function CustomersPage() {
             text: item.data.message,
             type: 'success',
           });
-          for (let i = 0; i < list.length; i++) {
+          for (let i = 0; i < list.length; i += 1) {
             if (list[i].id === item.data.data.id) {
               list[i].firstName = item.data.data.first_name;
               list[i].lastName = item.data.data.last_name;
               list[i].phone = item.data.data.phone;
               list[i].postalCode = item.data.data.postal_code;
-              if (data.avatar !== null) list[i].phone = item.data.data.avatar;
+              if (data.avatar !== null) list[i].avatar = item.data.data.avatar;
             }
           }
         } else {
@@ -275,22 +363,30 @@ function CustomersPage() {
   };
 
   const handleSwitchChange = (event: any, id: string) => {
-    const data = {
-      is_active: event.target.checked,
-      updated_by: authState.user.id,
-    };
-    Service.updateStatus(id, data).then((updateItem) => {
-      if (updateItem.data.success) {
-        setList((newArr: any) => {
-          return newArr.map((item: any) => {
-            if (item.id === updateItem.data.data.id) {
-              item.isActive = updateItem.data.data.isActive;
-            }
-            return { ...item };
+    if (listingRolePermission(dataRole, 'Customer Update Status')) {
+      const data = {
+        is_active: event.target.checked,
+        updated_by: authState.user.id,
+      };
+      Service.updateStatus(id, data).then((updateItem) => {
+        if (updateItem.data.success) {
+          setList((newArr: any) => {
+            return newArr.map((item: any) => {
+              if (item.id === updateItem.data.data.id) {
+                item.isActive = updateItem.data.data.isActive;
+              }
+              return { ...item };
+            });
           });
-        });
-      }
-    });
+        }
+      });
+    } else {
+      setIsNotify(true);
+      setNotifyMessage({
+        text: NOT_AUTHORIZED_MESSAGE,
+        type: 'warning',
+      });
+    }
   };
 
   return isLoader ? (
@@ -454,9 +550,7 @@ function CustomersPage() {
             </table>
           </div>
           {list?.length < 1 ? (
-            <div className="flex w-full items-center justify-center bg-gray-200 py-5">
-              <p>No Records Found</p>
-            </div>
+            <CustomText noroundedborders text="No Records Found" />
           ) : null}
           <TablePagination
             component="div"
@@ -468,6 +562,15 @@ function CustomersPage() {
           />
         </div>
       </div>
+      {cancelDialogOpen && (
+        <PermissionPopup
+          type="shock"
+          open={cancelDialogOpen}
+          setOpen={setCancelDialogOpen}
+          dialogText={dialogText}
+          callback={statusCancelHandler}
+        />
+      )}
       {actionMenuAnchorEl && (
         <ActionMenu
           open={actionMenuOpen}
@@ -492,6 +595,7 @@ function CustomersPage() {
         formData={editFormData}
         setEditFormData={setEditFormData}
         callback={updateFormHandler}
+        setActionMenuItemid={setActionMenuItemid}
       />
     </>
   );

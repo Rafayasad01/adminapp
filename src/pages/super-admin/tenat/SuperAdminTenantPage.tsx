@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import IconButton from '@mui/material/IconButton';
 import Divider from '@mui/material/Divider';
 import FormControl from '@mui/material/FormControl';
@@ -14,8 +15,12 @@ import Loader from '../../../components/common/Loader';
 import Service from '../../../services/superadmin/Tenant';
 import SuperAdminTenantCreatePopup from './SuperAdminTenantCreatePopup';
 import Notify from '../../../components/common/Notify';
+import WysiwygOutlinedIcon from '@mui/icons-material/WysiwygOutlined';
+import SuperAdminTenantUpdatePopup from './SuperAdminTenantUpdatePopup';
+import CustomText from '../../../components/common/CustomText';
 
 function SuperAdminTenantPage() {
+  const navigate = useNavigate();
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(0);
   const [total, setTotal] = useState(0);
@@ -23,6 +28,8 @@ function SuperAdminTenantPage() {
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [isLoader, setIsLoader] = React.useState(true);
   const [openFormDialog, setOpenFormDialog] = useState(false);
+  const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
+  const [formDetail, setFormDetail] = useState<any>(null);
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
 
@@ -97,11 +104,13 @@ function SuperAdminTenantPage() {
     setIsLoader(true);
     const formData = new FormData();
     formData.append('tenantName', data.tenantName);
-    formData.append('shopAdmin', data.shopAdmin);
+    formData.append('email', data.email);
     formData.append('firstName', data.firstName);
     formData.append('lastName', data.lastName);
     formData.append('trialMode', data.trialMode);
-    if (data.tenantName && data.shopAdmin && data.firstName && data.lastName) {
+    formData.append('developmentDomain', data.developmentDomain);
+    formData.append('liveDomain', data.liveDomain);
+    if (data.tenantName && data.email && data.firstName && data.lastName) {
       Service.create(formData)
         .then((item: any) => {
           if (item.data.success) {
@@ -137,6 +146,94 @@ function SuperAdminTenantPage() {
         type: 'error',
       });
     }
+  };
+  const updateFormHandler = (data: any) => {
+    console.log('data::::::', data)
+    setIsLoader(true);
+    const formData = new FormData();
+    formData.append('tenantName', data.tenantName);
+    formData.append('email', data.email);
+    formData.append('firstName', data.firstName);
+    formData.append('lastName', data.lastName);
+    formData.append('trialMode', data.trialMode);
+    formData.append('trailStartDate', data.trailStartDate);
+    formData.append('trialUpdateMode', data.trialUpdateMode);
+    formData.append('developmentDomain', data.developmentDomain);
+    formData.append('liveDomain', data.liveDomain);
+    if (data.tenantName && data.email && data.firstName && data.lastName) {
+      setIsLoader(false);
+      // Service.create(formData)
+      //   .then((item: any) => {
+      //     if (item.data.success) {
+      //       setIsLoader(false);
+      //       setIsNotify(true);
+      //       setNotifyMessage({
+      //         text: item.data.message,
+      //         type: 'success',
+      //       });
+      //       setList([item.data.data, ...list]);
+      //     } else {
+      //       setIsLoader(false);
+      //       setIsNotify(true);
+      //       setNotifyMessage({
+      //         text: item.data.message,
+      //         type: 'error',
+      //       });
+      //     }
+      //   })
+      //   .catch((err) => {
+      //     setIsLoader(false);
+      //     setIsNotify(true);
+      //     setNotifyMessage({
+      //       text: err.message,
+      //       type: 'error',
+      //     });
+      //   });
+    } else {
+      setIsLoader(false);
+      setIsNotify(true);
+      setNotifyMessage({
+        text: 'All fields are required!',
+        type: 'error',
+      });
+    }
+  };
+
+  const editHandler = (id: string) => {
+    setIsLoader(true);
+    Service.get(id).then((item: any) => {
+      if (item.data.success) {
+        setIsLoader(false);
+        setFormDetail(item.data.data);
+        setOpenEditFormDialog(true);
+      } else {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: 'All fields are required!',
+          type: 'error',
+        });
+      }
+    });
+  }
+
+  const handleSwitchChange = (event: any, id: string) => {
+    // const data = {
+    //   is_active: event.target.checked,
+    //   updated_by: authState.user.id,
+    // };
+    // category.updateStatus(id, data).then((updateItem) => {
+    //   if (updateItem.data.success) {
+    //     setList((newArr: any) => {
+    //       return newArr.map((item: any) => {
+    //         if (item.id === id) {
+    //           item.isActive = updateItem.data.data.isActive;
+    //         }
+    //         return { ...item };
+    //       });
+    //     });
+    //   }
+    // });
   };
 
   return isLoader ? (
@@ -249,7 +346,27 @@ function SuperAdminTenantPage() {
                           )}
                         </td>
                         <td>
-                          <div className="flex flex-row-reverse" />
+                          <div className="flex flex-row-reverse">
+                            <IconButton
+                              className="icon-btn mr-3.5 p-0"
+                              onClick={() => navigate(`../detail/${item.id}`)}
+                            >
+                              <WysiwygOutlinedIcon />
+                            </IconButton>
+                            {/* <IconButton
+                              className="icon-btn mr-3.5 p-0"
+                              onClick={() => editHandler(item.id)}
+                            >
+                              <EditIcon />
+                            </IconButton> */}
+                            {/* <Switch
+                              checked={item.isActive}
+                              onChange={(
+                                event: React.ChangeEvent<HTMLInputElement>
+                              ) => handleSwitchChange(event, list[index].id)}
+                              inputProps={{ 'aria-label': 'controlled' }}
+                            /> */}
+                          </div>
                         </td>
                       </tr>
                     );
@@ -257,11 +374,7 @@ function SuperAdminTenantPage() {
               </tbody>
             </table>
           </div>
-          {list?.length < 1 ? (
-            <div className="flex w-full items-center justify-center bg-gray-200 py-5">
-              <p>No Records Found</p>
-            </div>
-          ) : null}
+          {list?.length < 1 ? <CustomText text="No Records Found" /> : null}
           <div className="mt-3 flex w-[100%] justify-center py-3">
             <TablePagination
               component="div"
@@ -283,6 +396,17 @@ function SuperAdminTenantPage() {
           callback={createFormHandler}
         />
       )}
+      {openEditFormDialog && (
+        <SuperAdminTenantUpdatePopup
+          setIsNotify={setIsNotify}
+          setNotifyMessage={setNotifyMessage}
+          item={formDetail}
+          openFormDialog={openEditFormDialog}
+          setOpenFormDialog={setOpenEditFormDialog}
+          callback={updateFormHandler}
+        />
+      )}
+
       {isNotify && (
         <Notify
           isOpen={isNotify}

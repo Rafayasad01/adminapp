@@ -7,6 +7,7 @@ import '../../assets/css/PopupStyle.css';
 import { useForm } from 'react-hook-form';
 import TimePicker from '../../components/common/TimePicker';
 import { AppUserDriverExt } from '../../interfaces/app-user.interface';
+import CustomButton from '../../components/common/CustomButton';
 
 type Props = {
   openFormDialog: boolean;
@@ -26,17 +27,40 @@ function DriversScheduleCreatePopup({
     register,
     handleSubmit,
     watch,
+    setError,
     formState: { errors },
     control,
   } = useForm<AppUserDriverExt>();
 
   const handleFormClose = () => setOpenFormDialog(false);
 
-  const onSubmit = (data: AppUserDriverExt) => {
-    data.start_time = dayjs(startTime).format('YYYY-MM-DD HH:mm:ss');
-    data.end_time = dayjs(endTime).format('YYYY-MM-DD HH:mm:ss');
-    setOpenFormDialog(false);
-    callback(data);
+  const onSubmit = () => {
+    console.log('HIT', startTime);
+    if (startTime !== null && endTime !== null) {
+      const data = {
+        start_time: '',
+        end_time: '',
+      };
+      data.start_time = dayjs(startTime).format('YYYY-MM-DD HH:mm:ss');
+      data.end_time = dayjs(endTime).format('YYYY-MM-DD HH:mm:ss');
+      setOpenFormDialog(false);
+      callback(data);
+      console.log('s1', startTime, endTime, data);
+    } else {
+      if (startTime === null) {
+        setError('start_time', {
+          type: 'manual',
+          message: 'Start time is required.',
+        });
+      }
+      if (endTime === null) {
+        setError('end_time', {
+          type: 'manual',
+          message: 'End time is required.',
+        });
+      }
+      setOpenFormDialog(true);
+    }
   };
 
   return (
@@ -49,7 +73,7 @@ function DriversScheduleCreatePopup({
       }}
     >
       <div className="Content">
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form>
           <div className="FormHeader">
             <span className="Title">Add Schedule</span>
           </div>
@@ -61,6 +85,8 @@ function DriversScheduleCreatePopup({
                 timePickerValue={startTime}
                 setTimePickerValue={setStartTime}
                 id="start_time"
+                errors={errors.start_time}
+                setError={setError}
               />
               <TimePicker
                 timePickerLabel="End Time"
@@ -68,6 +94,8 @@ function DriversScheduleCreatePopup({
                 timePickerValue={endTime}
                 setTimePickerValue={setEndTime}
                 id="end_time"
+                errors={errors.end_time}
+                setError={setError}
               />
             </div>
           </div>
@@ -82,15 +110,28 @@ function DriversScheduleCreatePopup({
             >
               Cancel
             </Button>
-            <Input
-              type="submit"
+            <CustomButton
+              buttonType="button"
+              title="Add"
+              onclick={() => onSubmit()}
+              // type='submit'
+              className="btn-black-fill"
+              sx={{
+                padding: '0.375rem 2rem !important',
+                width: '85%',
+                height: '35px',
+              }}
+            />
+            {/* <Input
+              // type="submit"
               value="Add"
               className="btn-black-fill"
               disableUnderline
+              onClick={() => onSubmit()}
               sx={{
                 padding: '0.375rem 2rem !important',
               }}
-            />
+            /> */}
           </div>
         </form>
       </div>

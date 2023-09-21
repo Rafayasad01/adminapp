@@ -10,20 +10,37 @@ import TopBar from '../../components/common/TopBar';
 import cartService from '../../services/adminapp/adminCarts';
 import { CART_STATUS_NEW } from '../../utils/constants';
 import ProcessingIcon from '../../components/icons/ProcessingIcon';
+import Loader from '../../components/common/Loader';
 
 function CartDetailsPage() {
   const [viewData, setViewData] = useState<any>({});
+  const [isLoader, setIsLoader] = useState(true);
+  const [isNotify, setIsNotify] = useState(false);
+  const [notifyMessage, setNotifyMessage] = useState({});
   const params = useParams();
   const id: any = params.cartId;
   useEffect(() => {
-    cartService.viewService(id).then((item) => {
-      if (item) {
-        // console.log('item', item.data.data);
-        setViewData(item.data.data);
-      }
-    });
+    cartService
+      .viewService(id)
+      .then((item) => {
+        if (item) {
+          setIsLoader(false);
+          // console.log('item', item.data.data);
+          setViewData(item.data.data);
+        }
+      })
+      .catch((err) => {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
+        });
+      });
   }, [id]);
-  return (
+  return isLoader ? (
+    <Loader />
+  ) : (
     <>
       <TopBar isNestedRoute title="View Cart" />
       <div className="container py-3">

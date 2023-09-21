@@ -11,6 +11,7 @@ import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import dayjs from 'dayjs';
 import TablePagination from '@mui/material/TablePagination';
 import WysiwygOutlinedIcon from '@mui/icons-material/WysiwygOutlined';
+import { useSelector } from 'react-redux';
 import TopBar from '../../components/common/TopBar';
 import Service from '../../services/adminapp/adminNotification';
 import { useAppSelector } from '../../redux/redux-hooks';
@@ -21,19 +22,26 @@ import {
   NOTIFICATION_STATUS_FAILED,
   NOTIFICATION_STATUS_NEW,
   NOTIFICATION_STATUS_SENDING,
+  NOT_AUTHORIZED_MESSAGE,
 } from '../../utils/constants';
 import NotificationDetailPopup from './NotificationDetailPopup';
 import AlertBox from '../../utils/Alert';
 import Loader from '../../components/common/Loader';
+import Notify from '../../components/common/Notify';
+import { listingRolePermission } from '../../utils/helper';
+import CustomText from '../../components/common/CustomText';
 
 function NotificationPage() {
   const authState: any = useAppSelector((state) => state.authState);
+  const dataRole = useSelector(
+    (state: any) => state.roleState.role.permissions
+  );
   const navigate = useNavigate();
   const [search, setSearch] = useState<string>('');
   const [page, setPage] = useState<number>(0);
   const [total, setTotal] = useState<number>(0);
   const [list, setList] = useState<any>([]);
-  const [rowsPerPage, setRowsPerPage] = React.useState<number>(10);
+  const [rowsPerPage, setRowsPerPage] = useState<number>(10);
   const [openFormDialog, setOpenFormDialog] = useState<boolean>(false);
   const [detailPopup, setDetailPopup] = useState<boolean>(false);
   const [batchDetail, setBatchDetail] = useState<any>(null);
@@ -41,10 +49,20 @@ function NotificationPage() {
   const [alertSeverty, setAlertSeverty] = useState<string>('');
   const [alertMsg, setAlertMsg] = useState<string>('');
 
-  const [isLoader, setIsLoader] = React.useState(true);
+  const [isLoader, setIsLoader] = useState(true);
+  const [isNotify, setIsNotify] = useState(false);
+  const [notifyMessage, setNotifyMessage] = useState({});
 
   const handleFormClickOpen = () => {
-    setOpenFormDialog(true);
+    if (listingRolePermission(dataRole, 'Notification Sent')) {
+      setOpenFormDialog(true);
+    } else {
+      setIsNotify(true);
+      setNotifyMessage({
+        text: NOT_AUTHORIZED_MESSAGE,
+        type: 'warning',
+      });
+    }
   };
 
   const handleClickSearch = (event: any) => {
@@ -118,16 +136,23 @@ function NotificationPage() {
   };
 
   useEffect(() => {
-    Service.getListService(authState.user.tenant, page, rowsPerPage)
-      .then((item: any) => {
-        setIsLoader(false);
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      })
-      .catch((error) => {
-        setIsLoader(false);
-        console.log('error::::::::', error);
-      });
+    if (listingRolePermission(dataRole, 'Notification List')) {
+      Service.getListService(authState.user.tenant, page, rowsPerPage)
+        .then((item: any) => {
+          setIsLoader(false);
+          setList(item.data.data.list);
+          setTotal(item.data.data.total);
+        })
+        .catch((error) => {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: error.message,
+            type: 'error',
+          });
+          console.log('error::::::::', error);
+        });
+    }
   }, [authState, page, rowsPerPage]);
 
   const createFormHandler = (data: any) => {
@@ -168,22 +193,35 @@ function NotificationPage() {
   };
 
   const detailButtonHandler = (getItem: any, index: number) => {
-    Service.batchDetailService(list[index].id).then((item) => {
-      if (item.data.success) {
-        setBatchDetail({ ...getItem, ...item.data.data });
-        setDetailPopup(true);
-      } else {
-        setAlertMsg('No batches found');
-        setAlertSeverty('error');
-        setAlertPopup(true);
-      }
-    });
+    if (listingRolePermission(dataRole, 'Notification Batch Detail')) {
+      Service.batchDetailService(list[index].id).then((item) => {
+        if (item.data.success) {
+          setBatchDetail({ ...getItem, ...item.data.data });
+          setDetailPopup(true);
+        } else {
+          setAlertMsg('No batches found');
+          setAlertSeverty('error');
+          setAlertPopup(true);
+        }
+      });
+    } else {
+      setIsNotify(true);
+      setNotifyMessage({
+        text: NOT_AUTHORIZED_MESSAGE,
+        type: 'warning',
+      });
+    }
   };
 
   return isLoader ? (
     <Loader />
   ) : (
     <>
+      <Notify
+        isOpen={isNotify}
+        setIsOpen={setIsNotify}
+        displayMessage={notifyMessage}
+      />
       <TopBar title="Notification" />
       <div className="container mt-5">
         <div className="w-full rounded-lg bg-white shadow-lg">
@@ -288,11 +326,7 @@ function NotificationPage() {
               </tbody>
             </table>
           </div>
-          {list?.length < 1 ? (
-            <div className="flex w-full items-center justify-center bg-gray-200 py-5">
-              <p>No Records Found</p>
-            </div>
-          ) : null}
+          {list?.length < 1 ? <CustomText text="No Records Found" /> : null}
           <div className="mt-3 flex w-[100%] justify-center py-3">
             <TablePagination
               component="div"

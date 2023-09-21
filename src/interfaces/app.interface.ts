@@ -18,12 +18,12 @@ export interface Setting {
   email: string;
   min_order_amount: any;
   delivery_fee: any;
-  development_domain: string;
-  live_domain: string;
   facebook: string;
   instagram: string;
   linkedin: string;
   twitter: string;
   youtube: string;
   whatsapp: string;
+  development_domain: string;
+  live_domain: string;
 }
