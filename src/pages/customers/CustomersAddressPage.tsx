@@ -12,6 +12,7 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import TablePagination from '@mui/material/TablePagination';
 import Switch from '@mui/material/Switch';
+import { useSelector } from 'react-redux';
 import TopBar from '../../components/common/TopBar';
 import Map from '../../components/common/Map';
 import MapAddress from '../../components/common/MapAddress';
@@ -24,9 +25,15 @@ import assets from '../../assets';
 import Notify from '../../components/common/Notify';
 import Loader from '../../components/common/Loader';
 import PermissionPopup from '../../utils/PermissionPopup';
+import { NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
+import { listingRolePermission } from '../../utils/helper';
+import CustomText from '../../components/common/CustomText';
 
 function CustomersAddressPage() {
   const authState: any = useAppSelector((state) => state.authState);
+  const dataRole = useSelector(
+    (state: any) => state.roleState.role.permissions
+  );
   const params = useParams();
   const navigate = useNavigate();
   const [detail, setDetail] = useState<any>(null);
@@ -109,9 +116,25 @@ function CustomersAddressPage() {
 
   const manuHandler = (option: string) => {
     if (option === 'Edit') {
-      getData(actionMenuItemid);
+      if (listingRolePermission(dataRole, 'Customer Address Update')) {
+        getData(actionMenuItemid);
+      } else {
+        setIsNotify(true);
+        setNotifyMessage({
+          text: NOT_AUTHORIZED_MESSAGE,
+          type: 'warning',
+        });
+      }
     } else if (option === 'Delete') {
-      setCancelDialogOpen(true);
+      if (listingRolePermission(dataRole, 'Customer Address Delete')) {
+        setCancelDialogOpen(true);
+      } else {
+        setIsNotify(true);
+        setNotifyMessage({
+          text: NOT_AUTHORIZED_MESSAGE,
+          type: 'warning',
+        });
+      }
     }
   };
 
@@ -150,6 +173,7 @@ function CustomersAddressPage() {
       );
     }
   };
+
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -173,34 +197,36 @@ function CustomersAddressPage() {
   };
 
   useEffect(() => {
-    Service.getAddressService(id)
-      .then((item: any) => {
-        if (item.data.success) {
-          setIsLoader(false);
-          setDetail(item.data.data);
-          if (
-            item.data.data.appUserAddress &&
-            item.data.data.appUserAddress.length > 0
-          ) {
-            const activeAddress = item.data.data.appUserAddress.filter(
-              (newItem: any) => newItem.isActive === true
-            );
-            if (activeAddress.length > 0) {
-              setAddress(activeAddress[0].address);
+    if (listingRolePermission(dataRole, 'Customer Address List')) {
+      Service.getAddressService(id)
+        .then((item: any) => {
+          if (item.data.success) {
+            setIsLoader(false);
+            setDetail(item.data.data);
+            if (
+              item.data.data.appUserAddress &&
+              item.data.data.appUserAddress.length > 0
+            ) {
+              const activeAddress = item.data.data.appUserAddress.filter(
+                (newItem: any) => newItem.isActive === true
+              );
+              if (activeAddress.length > 0) {
+                setAddress(activeAddress[0].address);
+              }
+              setList(item.data.data.appUserAddress.reverse());
+              setTotal(Number(item.data.data.total));
             }
-            setList(item.data.data.appUserAddress.reverse());
-            setTotal(Number(item.data.data.total));
           }
-        }
-      })
-      .catch((err) => {
-        setIsLoader(false);
-        setIsNotify(true);
-        setNotifyMessage({
-          text: err.message,
-          type: 'error',
+        })
+        .catch((err) => {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: err.message,
+            type: 'error',
+          });
         });
-      });
+    }
   }, [id]);
 
   const createFormHandler = (data: any) => {
@@ -293,20 +319,40 @@ function CustomersAddressPage() {
   };
 
   const handleSwitchChange = (event: any, customerId: string) => {
-    if (list.length > 1) {
-      Service.updateStatusAddressService(customerId).then((updateItem) => {
-        if (updateItem.data.success) {
-          setList((newArr: any) => {
-            return newArr.map((item: any) => {
-              if (item.id === updateItem.data.data.id) {
-                item.isActive = true;
-              } else {
-                item.isActive = false;
-              }
-              return { ...item };
+    if (listingRolePermission(dataRole, 'Customer Address Update Status')) {
+      if (list.length > 1) {
+        Service.updateStatusAddressService(customerId).then((updateItem) => {
+          if (updateItem.data.success) {
+            setList((newArr: any) => {
+              return newArr.map((item: any) => {
+                if (item.id === updateItem.data.data.id) {
+                  item.isActive = true;
+                } else {
+                  item.isActive = false;
+                }
+                return { ...item };
+              });
             });
-          });
-        }
+          }
+        });
+      }
+    } else {
+      setIsNotify(true);
+      setNotifyMessage({
+        text: NOT_AUTHORIZED_MESSAGE,
+        type: 'warning',
+      });
+    }
+  };
+
+  const handleAddNew = () => {
+    if (listingRolePermission(dataRole, 'Customer Address Create')) {
+      setOpenFormDialog(true);
+    } else {
+      setIsNotify(true);
+      setNotifyMessage({
+        text: NOT_AUTHORIZED_MESSAGE,
+        type: 'warning',
       });
     }
   };
@@ -356,8 +402,9 @@ function CustomersAddressPage() {
                     {detail.phone}
                   </span>
                   <span
-                    className={`font-sm mt-2 font-open-sans text-sm ${detail.isActive ? 'text-[#29CC97]' : 'text-[#f50057]'
-                      }`}
+                    className={`font-sm mt-2 font-open-sans text-sm ${
+                      detail.isActive ? 'text-[#29CC97]' : 'text-[#f50057]'
+                    }`}
                   >
                     {detail.isActive ? 'Active' : 'Inactive'}
                   </span>
@@ -385,7 +432,7 @@ function CustomersAddressPage() {
                   <Button
                     variant="contained"
                     className="btn-black-fill btn-icon mt-4"
-                    onClick={() => setOpenFormDialog(true)}
+                    onClick={handleAddNew}
                   >
                     <AddOutlinedIcon /> Add New
                   </Button>
@@ -534,9 +581,7 @@ function CustomersAddressPage() {
                   </div>
                 </>
               ) : (
-                <div className="flex w-full items-center justify-center rounded-lg bg-gray-200 py-3">
-                  <p className="font-open-sans">No Address Records</p>
-                </div>
+                <CustomText noroundedborders text="No Records Found" />
               )}
             </div>
           </div>

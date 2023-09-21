@@ -10,6 +10,7 @@ import Button from '@mui/material/Button';
 import SearchIcon from '@mui/icons-material/Search';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
+import { useSelector } from 'react-redux';
 import TopBar from '../../components/common/TopBar';
 import VouchersPromoCreatePopup from './VouchersPromoCreatePopup';
 import VouchersReferralCreatePopup from './VouchersReferralCreatePopup';
@@ -20,10 +21,16 @@ import ActionMenu from '../../components/common/ActionMenu';
 import PermissionPopup from '../../utils/PermissionPopup';
 import Loader from '../../components/common/Loader';
 import Notify from '../../components/common/Notify';
+import { listingRolePermission } from '../../utils/helper';
+import { NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
+import CustomText from '../../components/common/CustomText';
 
 const options = ['Edit', 'Delete'];
 function VouchersPage() {
   const authState: any = useAppSelector((state) => state.authState);
+  const dataRole = useSelector(
+    (state: any) => state.roleState.role.permissions
+  );
   const [list, setList] = useState<any>([]);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [search, setSearch] = useState('');
@@ -61,6 +68,18 @@ function VouchersPage() {
     setOpenDialog(false);
   };
 
+  const handleAddNew = () => {
+    if (listingRolePermission(dataRole, 'Voucher Create')) {
+      setVouchersPromoDialog(true);
+    } else {
+      setIsNotify(true);
+      setNotifyMessage({
+        text: NOT_AUTHORIZED_MESSAGE,
+        type: 'warning',
+      });
+    }
+  };
+
   const handleClick = (event: React.MouseEvent<HTMLElement>, id: string) => {
     setAnchorEl(event.currentTarget);
     setEditItem(list.find((item: any) => item.id === id));
@@ -70,10 +89,26 @@ function VouchersPage() {
   const handleSelectedMenuClose = (option: string) => {
     setAnchorEl(null);
     if (option === 'Edit') {
-      setVouchersPromoEditDialog(true);
+      if (listingRolePermission(dataRole, 'Voucher Update')) {
+        setVouchersPromoEditDialog(true);
+      } else {
+        setIsNotify(true);
+        setNotifyMessage({
+          text: NOT_AUTHORIZED_MESSAGE,
+          type: 'warning',
+        });
+      }
     }
     if (option === 'Delete') {
-      setOpenDialog(true);
+      if (listingRolePermission(dataRole, 'Voucher Delete')) {
+        setOpenDialog(true);
+      } else {
+        setIsNotify(true);
+        setNotifyMessage({
+          text: NOT_AUTHORIZED_MESSAGE,
+          type: 'warning',
+        });
+      }
     }
   };
   const handleClickSearch = (event: any) => {
@@ -118,29 +153,31 @@ function VouchersPage() {
   };
 
   useEffect(() => {
-    Service.listVouchers(authState.user.tenant, page, rowsPerPage, search)
-      .then((response: any) => {
-        if (response.data.success) {
-          setIsLoader(false);
-          setList(response.data.data.result);
-          setTotal(response.data.data.totalResults);
-        } else {
+    if (listingRolePermission(dataRole, 'Voucher List')) {
+      Service.listVouchers(authState.user.tenant, page, rowsPerPage, search)
+        .then((response: any) => {
+          if (response.data.success) {
+            setIsLoader(false);
+            setList(response.data.data.result);
+            setTotal(response.data.data.totalResults);
+          } else {
+            setIsLoader(false);
+            setIsNotify(true);
+            setNotifyMessage({
+              text: response.data.message,
+              type: 'error',
+            });
+          }
+        })
+        .catch((error) => {
           setIsLoader(false);
           setIsNotify(true);
           setNotifyMessage({
-            text: response.data.message,
+            text: error.message,
             type: 'error',
           });
-        }
-      })
-      .catch((error) => {
-        setIsLoader(false);
-        setIsNotify(true);
-        setNotifyMessage({
-          text: error.message,
-          type: 'error',
         });
-      });
+    }
   }, [authState.user.tenant, page, rowsPerPage, search]);
 
   const createFormHandler = (data: any) => {
@@ -208,6 +245,7 @@ function VouchersPage() {
         });
       });
   };
+
   return isLoader ? (
     <Loader />
   ) : (
@@ -278,7 +316,7 @@ function VouchersPage() {
                 <Button
                   variant="contained"
                   className="btn-black-fill btn-icon"
-                  onClick={() => setVouchersPromoDialog(true)}
+                  onClick={handleAddNew}
                 >
                   <AddOutlinedIcon /> Add New
                 </Button>
@@ -367,11 +405,7 @@ function VouchersPage() {
               </tbody>
             </table>
           </div>
-          {list?.length < 1 ? (
-            <div className="flex w-full items-center justify-center bg-gray-200 py-5">
-              <p>No Records Found</p>
-            </div>
-          ) : null}
+          {list?.length < 1 ? <CustomText text="No Records Found" /> : null}
           <div className="mt-3 flex w-[100%] justify-center py-3">
             <TablePagination
               component="div"

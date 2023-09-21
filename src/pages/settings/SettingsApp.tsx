@@ -1,4 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import { useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
@@ -11,9 +12,9 @@ import Link from '@mui/material/Link';
 import { useForm } from 'react-hook-form';
 import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
+import EditIcon from '@mui/icons-material/Edit';
 import DragDropFile from './DragDropFile';
 import PlusIcon from '../../components/icons/PlusIcon';
-import EditIcon from '@mui/icons-material/Edit';
 import { Setting } from '../../interfaces/app.interface';
 import SocialLinksPopup from './SocialLinksPopup';
 import { useAppSelector } from '../../redux/redux-hooks';
@@ -34,6 +35,7 @@ import {
 import MapAddress from '../../components/common/MapAddress';
 import Loader from '../../components/common/Loader';
 import Notify from '../../components/common/Notify';
+import { listingRolePermission } from '../../utils/helper';
 
 type AssetsImages = keyof typeof assets.images;
 
@@ -46,8 +48,20 @@ function Item(props: { value: any; name: AssetsImages }) {
   );
 }
 
+function HelpingIcon(elements: any) {
+  const { links } = elements;
+  const filtered = links?.filter((el: string) => el !== '');
+  if (filtered?.length < 6) {
+    return <PlusIcon />;
+  }
+  return <EditIcon />;
+}
+
 function SettingsApp() {
   const authState: any = useAppSelector((state) => state.authState);
+  const dataRole = useSelector(
+    (state: any) => state.roleState.role.permissions
+  );
   const navigate = useNavigate();
   const [openSocialMediaPopup, setOpenSocialMediaPopup] = useState(false);
   const [file, setFile] = useState<any>(null);
@@ -105,84 +119,82 @@ function SettingsApp() {
   };
 
   const onSubmit = (data: Setting) => {
-    setIsLoader(true);
-    const formData = new FormData();
-    formData.append('name', data.name);
-    formData.append('desc', data.name);
-    formData.append('gst_percentage', data.gst_percentage);
-    formData.append('email', data.email);
-    formData.append('min_order_amount', data.min_order_amount);
-    formData.append('delivery_fee', data.delivery_fee);
-    formData.append('development_domain', data.development_domain);
-    formData.append('live_domain', data.live_domain);
-    formData.append('facebook', detail ? detail.facebook : '');
-    formData.append('instagram', detail ? detail.instagram : '');
-    formData.append('linkedin', detail ? detail.linkedin : '');
-    formData.append('twitter', detail ? detail.twitter : '');
-    formData.append('youtube', detail ? detail.youtube : '');
-    formData.append('whatsapp', detail ? detail.whatsapp : '');
-    formData.append('updated_by', authState.user.id);
-    formData.append('color1', color1);
-    formData.append('color2', color2);
-    formData.append('color3', color3);
-    if (file !== null) formData.append('logo', file);
+    if (listingRolePermission(dataRole, 'Setting Update')) {
+      setIsLoader(true);
+      const formData = new FormData();
+      formData.append('name', data.name);
+      formData.append('desc', data.name);
+      formData.append('gst_percentage', data.gst_percentage);
+      formData.append('email', data.email);
+      formData.append('min_order_amount', data.min_order_amount);
+      formData.append('delivery_fee', data.delivery_fee);
+      formData.append('development_domain', data.development_domain);
+      formData.append('live_domain', data.live_domain);
+      formData.append('facebook', detail ? detail.facebook : '');
+      formData.append('instagram', detail ? detail.instagram : '');
+      formData.append('linkedin', detail ? detail.linkedin : '');
+      formData.append('twitter', detail ? detail.twitter : '');
+      formData.append('youtube', detail ? detail.youtube : '');
+      formData.append('whatsapp', detail ? detail.whatsapp : '');
+      formData.append('updated_by', authState.user.id);
+      formData.append('color1', color1);
+      formData.append('color2', color2);
+      formData.append('color3', color3);
+      if (file !== null) formData.append('logo', file);
 
-    Service.updateService(
-      authState.user.tenant,
-      authState.user.tenantConfig,
-      formData
-    ).then((item: any) => {
-      if (item.data.success) {
-        setIsLoader(false);
-        setIsNotify(true);
-        setNotifyMessage({
-          text: item.data.message,
-          type: 'success',
-        });
-        setData(item.data.data);
-        setDetail(item.data.data);
-      } else {
-        setIsLoader(false);
-        setIsNotify(true);
-        setNotifyMessage({
-          text: item.data.message,
-          type: 'error',
-        });
-      }
-    });
+      Service.updateService(
+        authState.user.tenant,
+        authState.user.tenantConfig,
+        formData
+      ).then((item: any) => {
+        const { success, message, data: itemData } = item.data;
+        if (success) {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: message,
+            type: 'success',
+          });
+          setData(itemData);
+          setDetail(itemData);
+        } else {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: message,
+            type: 'error',
+          });
+        }
+      });
+    }
   };
 
-  const HelpingIcon = (items: any) => {
-    let filtered = items.items?.filter((el: string) => el !== "")
-    if (filtered?.length < 6) {
-      return <PlusIcon />
-    } else {
-      return <EditIcon />
-    }
-  }
-
   useEffect(() => {
-    Service.getService(authState.user.tenantConfig).then((item: any) => {
-      // console.log('item Select:::::', item)
-      if (item.data.success) {
-        console.log('color', item.data);
-        setIsLoader(false);
-        setData(item.data.data);
-        setDetail(item.data.data);
-      } else {
-        setIsLoader(false);
-        setIsNotify(true);
-        setNotifyMessage({
-          text: item.data.message,
-          type: 'error',
-        });
-      }
-    });
-    Service.getAddressService(authState.user.tenant).then((item: any) => {
-      if (item.data.success) {
-        setAddress(item.data.data);
-      }
-    });
+    if (listingRolePermission(dataRole, 'Setting View')) {
+      Service.getService(authState.user.tenantConfig).then((item: any) => {
+        // console.log('item Select:::::', item)
+        if (item.data.success) {
+          console.log('color', item.data);
+          setIsLoader(false);
+          setData(item.data.data);
+          setDetail(item.data.data);
+        } else {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'error',
+          });
+        }
+      });
+    }
+    if (listingRolePermission(dataRole, 'Setting Address')) {
+      Service.getAddressService(authState.user.tenant).then((item: any) => {
+        if (item.data.success) {
+          setAddress(item.data.data);
+        }
+      });
+    }
   }, [authState]);
 
   return isLoader ? (
@@ -244,7 +256,7 @@ function SettingsApp() {
                   <Input
                     className="FormInput"
                     id="email"
-                    placeholder="info@urlaundry.com"
+                    placeholder="warning@urlaundry.com"
                     disableUnderline
                     {...register('email', {
                       value: detail ? detail.email : '',
@@ -411,7 +423,14 @@ function SettingsApp() {
                       onClick={() => setOpenSocialMediaPopup(true)}
                     >
                       <HelpingIcon
-                        items={[detail?.facebook, detail?.instagram, detail?.linkedin, detail?.twitter, detail?.whatsapp, detail?.youtube]}
+                        links={[
+                          detail?.facebook,
+                          detail?.instagram,
+                          detail?.linkedin,
+                          detail?.twitter,
+                          detail?.whatsapp,
+                          detail?.youtube,
+                        ]}
                       />
                     </IconButton>
                   </div>

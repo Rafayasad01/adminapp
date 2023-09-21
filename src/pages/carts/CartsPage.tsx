@@ -13,16 +13,23 @@ import SearchIcon from '@mui/icons-material/Search';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import dayjs from 'dayjs';
 import TablePagination from '@mui/material/TablePagination';
+import { useSelector } from 'react-redux';
 import cart from '../../services/adminapp/adminCarts';
 import ActionMenu from '../../components/common/ActionMenu';
 import { CART_STATUS_NEW, CART_STATUS_PROCESSING } from '../../utils/constants';
 import TopBar from '../../components/common/TopBar';
 import { useAppSelector } from '../../redux/redux-hooks';
 import Loader from '../../components/common/Loader';
+import { CheckRolePermission } from '../../utils/helper';
+import CustomText from '../../components/common/CustomText';
 
 const actionMenuOptions = ['View'];
 function CartsPage() {
   const authState: any = useAppSelector((state) => state.authState);
+  const dataRole = useSelector(
+    (state: any) => state.roleState.role.permissions
+  );
+
   const navigate = useNavigate();
 
   const [search, setSearch] = useState('');
@@ -120,8 +127,12 @@ function CartsPage() {
     } else {
       doOption = 'download';
     }
-    navigate(`${doOption}/${actionMenuItemid}`);
-    // console.log('actionMenuItemid', actionMenuItemid)
+    CheckRolePermission(
+      'Cart View',
+      dataRole,
+      navigate,
+      `${doOption}/${actionMenuItemid}`
+    );
   };
 
   const getStatusTag = (status: string) => {
@@ -339,9 +350,7 @@ function CartsPage() {
             </table>
           </div>
           {list?.length < 1 ? (
-            <div className="flex w-full items-center justify-center bg-gray-200 py-5">
-              <p>No Records Found</p>
-            </div>
+            <CustomText text="No Driver History Records" noroundedborders />
           ) : null}
           <div className="mt-3 flex w-[100%] justify-center py-3">
             <TablePagination

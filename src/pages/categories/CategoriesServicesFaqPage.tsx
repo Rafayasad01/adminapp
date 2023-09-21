@@ -12,6 +12,7 @@ import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import TablePagination from '@mui/material/TablePagination';
 import dayjs from 'dayjs';
 import Switch from '@mui/material/Switch';
+import { useSelector } from 'react-redux';
 import TopBar from '../../components/common/TopBar';
 import { useAppSelector } from '../../redux/redux-hooks';
 import ActionMenu from '../../components/common/ActionMenu';
@@ -21,10 +22,16 @@ import CategoriesServicesFaqEditPopup from './CategoriesServicesFaqEditPopup';
 import Loader from '../../components/common/Loader';
 import Notify from '../../components/common/Notify';
 import PermissionPopup from '../../utils/PermissionPopup';
+import { listingRolePermission } from '../../utils/helper';
+import { NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
+import CustomText from '../../components/common/CustomText';
 
 function CategoriesServicesFaqPage() {
   const params = useParams();
   const authState: any = useAppSelector((state) => state.authState);
+  const dataRole = useSelector(
+    (state: any) => state.roleState.role.permissions
+  );
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(0);
   const [total, setTotal] = useState<number>(0);
@@ -124,18 +131,20 @@ function CategoriesServicesFaqPage() {
   };
 
   useEffect(() => {
-    category
-      .getCategoryServiceFaqList(categoryServiceId, page, rowsPerPage)
-      .then((item: any) => {
-        setIsLoader(false);
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      })
-      .catch((error) => {
-        setIsLoader(false);
-        console.log('error::::::::', error);
-      });
-  }, [categoryServiceId, page, rowsPerPage, list]);
+    if (listingRolePermission(dataRole, 'Category Service Faq List')) {
+      category
+        .getCategoryServiceFaqList(categoryServiceId, page, rowsPerPage)
+        .then((item: any) => {
+          setIsLoader(false);
+          setList(item.data.data.list);
+          setTotal(item.data.data.total);
+        })
+        .catch((error) => {
+          setIsLoader(false);
+          console.log('error::::::::', error);
+        });
+    }
+  }, [categoryServiceId, page, rowsPerPage]);
 
   const deleteHandler = (id: string) => {
     setIsLoader(true);
@@ -184,14 +193,30 @@ function CategoriesServicesFaqPage() {
 
   const manuHandler = (option: string) => {
     if (option === 'Edit') {
-      category.getCategoryServiceFaq(actionMenuItemid).then((item: any) => {
-        if (item.data.success) {
-          setEditFormData(item.data.data);
-          setOpenEditFormDialog(true);
-        }
-      });
+      if (listingRolePermission(dataRole, 'Category Service Faq Update')) {
+        category.getCategoryServiceFaq(actionMenuItemid).then((item: any) => {
+          if (item.data.success) {
+            setEditFormData(item.data.data);
+            setOpenEditFormDialog(true);
+          }
+        });
+      } else {
+        setIsNotify(true);
+        setNotifyMessage({
+          text: NOT_AUTHORIZED_MESSAGE,
+          type: 'warning',
+        });
+      }
     } else if (option === 'Delete') {
-      setCancelDialogOpen(true);
+      if (listingRolePermission(dataRole, 'Category Service Faq Delete')) {
+        setCancelDialogOpen(true);
+      } else {
+        setIsNotify(true);
+        setNotifyMessage({
+          text: NOT_AUTHORIZED_MESSAGE,
+          type: 'warning',
+        });
+      }
     }
   };
 
@@ -221,6 +246,7 @@ function CategoriesServicesFaqPage() {
         });
       });
   };
+
   const updateFormHandler = (data: any) => {
     setIsLoader(true);
     data.updated_by = authState.user.id;
@@ -235,7 +261,7 @@ function CategoriesServicesFaqPage() {
             type: 'success',
           });
           for (let i = 0; i < list.length; i += 1) {
-            if (list[i].id === updateItem.data.data.id) {
+            if (list[i].id === actionMenuItemid) {
               list[i].question = updateItem.data.data.question;
               list[i].answer = updateItem.data.data.answer;
             }
@@ -253,6 +279,7 @@ function CategoriesServicesFaqPage() {
   };
 
   const handleSwitchChange = (event: any, id: string) => {
+    // if () {
     const data = {
       is_active: event.target.checked,
       updated_by: authState.user.id,
@@ -269,6 +296,25 @@ function CategoriesServicesFaqPage() {
         });
       }
     });
+    // } else {
+    //   setIsNotify(true);
+    //   setNotifyMessage({
+    //     text: NOT_AUTHORIZED_MESSAGE,
+    //     type: 'warning',
+    //   });
+    // }
+  };
+
+  const handleAddNew = () => {
+    if (listingRolePermission(dataRole, 'Category Service Faq Create')) {
+      setOpenFormDialog(true);
+    } else {
+      setIsNotify(true);
+      setNotifyMessage({
+        text: NOT_AUTHORIZED_MESSAGE,
+        type: 'warning',
+      });
+    }
   };
 
   return isLoader ? (
@@ -324,7 +370,7 @@ function CategoriesServicesFaqPage() {
                 <Button
                   variant="contained"
                   className="btn-black-fill btn-icon"
-                  onClick={() => setOpenFormDialog(true)}
+                  onClick={handleAddNew}
                 >
                   <AddOutlinedIcon /> Add New
                 </Button>
@@ -409,9 +455,7 @@ function CategoriesServicesFaqPage() {
             </table>
           </div>
           {list?.length < 1 ? (
-            <div className="flex w-full items-center justify-center bg-gray-200 py-5">
-              <p>No Records Found</p>
-            </div>
+            <CustomText noroundedborders text="No Records Found" />
           ) : null}
           <div className="mt-3 flex w-[100%] justify-center py-3">
             <TablePagination

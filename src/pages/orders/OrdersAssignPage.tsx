@@ -12,6 +12,7 @@ import dayjs from 'dayjs';
 
 import Avatar from '@mui/material/Avatar';
 import TablePagination from '@mui/material/TablePagination';
+import { useSelector } from 'react-redux';
 import { useAppSelector } from '../../redux/redux-hooks';
 import TopBar from '../../components/common/TopBar';
 import {
@@ -24,9 +25,15 @@ import {
 } from '../../utils/constants';
 import Service from '../../services/adminapp/adminOrders';
 import AlertBox from '../../utils/Alert';
+import { listingRolePermission } from '../../utils/helper';
+import Loader from '../../components/common/Loader';
+import Notify from '../../components/common/Notify';
 
 function OrdersAssignPage() {
   const authState: any = useAppSelector((state) => state.authState);
+  const dataRole = useSelector(
+    (state: any) => state.roleState.role.permissions
+  );
   const navigate = useNavigate();
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(0);
@@ -36,6 +43,9 @@ function OrdersAssignPage() {
   const [alertMsg, setAlertMsg] = useState<string>('');
   const [alertSeverty, setAlertSeverty] = useState<string>('');
   const [alertOpen, setAlertOpen] = useState<boolean>(false);
+  const [isLoader, setIsLoader] = useState(true);
+  const [isNotify, setIsNotify] = useState(false);
+  const [notifyMessage, setNotifyMessage] = useState({});
 
   const params = useParams();
   const { orderId } = params;
@@ -99,6 +109,7 @@ function OrdersAssignPage() {
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
+    setIsLoader(true);
     const newRowperPage = parseInt(event.target.value, 10);
     const newPage = 0;
     setRowsPerPage(newRowperPage);
@@ -109,6 +120,7 @@ function OrdersAssignPage() {
         newPage,
         rowsPerPage
       ).then((item) => {
+        setIsLoader(false);
         setList(item.data.data.list);
         setTotal(item.data.data.total);
       });
@@ -119,6 +131,7 @@ function OrdersAssignPage() {
         newPage,
         rowsPerPage
       ).then((item) => {
+        setIsLoader(false);
         setList(item.data.data.list);
         setTotal(item.data.data.total);
       });
@@ -126,36 +139,52 @@ function OrdersAssignPage() {
   };
 
   useEffect(() => {
-    Service.getListAssignService(authState.user.tenant, page, rowsPerPage).then(
-      (item: any) => {
-        if (item.data.success) {
-          console.log('item.data.data', item.data);
-          setList(item.data.data.list);
-          setTotal(item.data.data.total);
-        }
-      }
-    );
+    if (listingRolePermission(dataRole, 'Order Assign List')) {
+      Service.getListAssignService(authState.user.tenant, page, rowsPerPage)
+        .then((item: any) => {
+          if (item.data.success) {
+            setIsLoader(false);
+            setList(item.data.data.list);
+            setTotal(item.data.data.total);
+          } else {
+            setIsLoader(false);
+            setIsNotify(true);
+            setNotifyMessage({
+              text: item.data.message,
+              type: 'error',
+            });
+          }
+        })
+        .catch((err) => {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: err.message,
+            type: 'error',
+          });
+        });
+    }
   }, [authState, page, rowsPerPage]);
 
   const assignHandler = (userId: string) => {
-    console.log('im runniggggggggggggggg');
-
-    const data = {
-      app_user: userId,
-      app_order: orderId,
-      created_by: authState.user.id,
-      status: ORDER_DELIVERY_STATUS_NEW,
-    };
-    Service.createAssignService(data).then((item: any) => {
-      console.log('Create item.data ', item.data);
-      if (item.data.success) {
-        navigate(`../view/${orderId}`);
-      } else {
-        setAlertMsg('Not Assign');
-        setAlertSeverty('error');
-        setAlertOpen(true);
-      }
-    });
+    if (listingRolePermission(dataRole, 'Order Assign Create')) {
+      const data = {
+        app_user: userId,
+        app_order: orderId,
+        created_by: authState.user.id,
+        status: ORDER_DELIVERY_STATUS_NEW,
+      };
+      Service.createAssignService(data).then((item: any) => {
+        console.log('Create item.data ', item.data);
+        if (item.data.success) {
+          navigate(`../view/${orderId}`);
+        } else {
+          setAlertMsg('Not Assign');
+          setAlertSeverty('error');
+          setAlertOpen(true);
+        }
+      });
+    }
   };
   const assignButton = (item: any) => {
     // console.log("ITEMS", item);
@@ -203,9 +232,16 @@ function OrdersAssignPage() {
     return colorText;
   };
 
-  return (
+  return isLoader ? (
+    <Loader />
+  ) : (
     <>
       <TopBar isNestedRoute title="Order Assign" />
+      <Notify
+        isOpen={isNotify}
+        setIsOpen={setIsNotify}
+        displayMessage={notifyMessage}
+      />
       <div className="container mt-5">
         <div className="w-full rounded-lg bg-white shadow-lg">
           <div className="grid grid-cols-12 px-4 py-5">

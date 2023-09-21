@@ -1,6 +1,6 @@
 import network from '../../utils/network';
-import { SETTING_PREFIX } from '../../utils/constants';
-import { BACKOFFICE_PREFIX } from '../../utils/constants';
+import { SETTING_PREFIX, BACKOFFICE_PREFIX } from '../../utils/constants';
+
 import { UserLogin } from '../../interfaces/superadmin/auth.interface';
 
 const getService = (tenantConfig: string) => {
@@ -30,5 +30,5 @@ export default {
   getService,
   updateService,
   getAddressService,
-  loginService
+  loginService,
 };

@@ -12,6 +12,7 @@ import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import dayjs from 'dayjs';
 import TablePagination from '@mui/material/TablePagination';
 import Switch from '@mui/material/Switch';
+import { useSelector } from 'react-redux';
 import TopBar from '../../components/common/TopBar';
 import CategoriesCreatePopup from './CategoriesCreatePopup';
 import assets from '../../assets';
@@ -22,9 +23,15 @@ import ActionMenu from '../../components/common/ActionMenu';
 import Loader from '../../components/common/Loader';
 import Notify from '../../components/common/Notify';
 import PermissionPopup from '../../utils/PermissionPopup';
+import { CheckRolePermission, listingRolePermission } from '../../utils/helper';
+import { NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
+import CustomText from '../../components/common/CustomText';
 
 function CategoriesPage() {
   const authState: any = useAppSelector((state) => state.authState);
+  const dataRole = useSelector(
+    (state: any) => state.roleState.role.permissions
+  );
   const navigate = useNavigate();
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(0);
@@ -49,28 +56,36 @@ function CategoriesPage() {
   );
 
   const handleFormClickOpen = () => {
-    setOpenFormDialog(true);
+    if (listingRolePermission(dataRole, 'Category Create')) {
+      setOpenFormDialog(true);
+    } else {
+      setIsNotify(true);
+      setNotifyMessage({
+        text: NOT_AUTHORIZED_MESSAGE,
+        type: 'warning',
+      });
+    }
   };
 
-  console.log('cancelDialogOpen', cancelDialogOpen);
-
   useEffect(() => {
-    category
-      .getListService(authState.user.tenant, page, rowsPerPage)
-      .then((item: any) => {
-        setIsLoader(false);
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      })
-      .catch((error) => {
-        setIsLoader(false);
-        setIsNotify(true);
-        setNotifyMessage({
-          text: error.message,
-          type: 'error',
+    if (listingRolePermission(dataRole, 'Category List')) {
+      category
+        .getListService(authState.user.tenant, page, rowsPerPage)
+        .then((item: any) => {
+          setIsLoader(false);
+          setList(item.data.data.list);
+          setTotal(item.data.data.total);
+        })
+        .catch((error) => {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: error.message,
+            type: 'error',
+          });
+          console.log('error::::::::', error);
         });
-        console.log('error::::::::', error);
-      });
+    }
   }, [authState, page, rowsPerPage]);
 
   const handleClickSearch = (event: any) => {
@@ -172,17 +187,39 @@ function CategoriesPage() {
 
   const manuHandler = (option: string) => {
     if (option === 'Edit') {
-      category.getCategory(actionMenuItemid).then((item: any) => {
-        if (item.data.success) {
-          console.log('tem.data.data:::::::', item.data.data);
-          setEditFormData(item.data.data);
-          setOpenEditFormDialog(true);
-        }
-      });
+      if (listingRolePermission(dataRole, 'Category Update')) {
+        category.getCategory(actionMenuItemid).then((item: any) => {
+          if (item.data.success) {
+            console.log('tem.data.data:::::::', item.data.data);
+            setEditFormData(item.data.data);
+            setOpenEditFormDialog(true);
+          }
+        });
+      } else {
+        setIsNotify(true);
+        setNotifyMessage({
+          text: NOT_AUTHORIZED_MESSAGE,
+          type: 'warning',
+        });
+      }
     } else if (option === 'Items') {
-      navigate(`service/${actionMenuItemid}`);
+      CheckRolePermission(
+        'Category Service Get',
+        dataRole,
+        navigate,
+        `service/${actionMenuItemid}`
+      );
+      // navigate(`service/${actionMenuItemid}`);
     } else if (option === 'Delete') {
-      setCancelDialogOpen(true);
+      if (listingRolePermission(dataRole, 'Category Delete')) {
+        setCancelDialogOpen(true);
+      } else {
+        setIsNotify(true);
+        setNotifyMessage({
+          text: NOT_AUTHORIZED_MESSAGE,
+          type: 'warning',
+        });
+      }
     }
   };
 
@@ -280,22 +317,30 @@ function CategoriesPage() {
   };
 
   const handleSwitchChange = (event: any, id: string) => {
-    const data = {
-      is_active: event.target.checked,
-      updated_by: authState.user.id,
-    };
-    category.updateStatus(id, data).then((updateItem) => {
-      if (updateItem.data.success) {
-        setList((newArr: any) => {
-          return newArr.map((item: any) => {
-            if (item.id === id) {
-              item.isActive = updateItem.data.data.isActive;
-            }
-            return { ...item };
+    if (listingRolePermission(dataRole, 'Category Update Status')) {
+      const data = {
+        is_active: event.target.checked,
+        updated_by: authState.user.id,
+      };
+      category.updateStatus(id, data).then((updateItem) => {
+        if (updateItem.data.success) {
+          setList((newArr: any) => {
+            return newArr.map((item: any) => {
+              if (item.id === id) {
+                item.isActive = updateItem.data.data.isActive;
+              }
+              return { ...item };
+            });
           });
-        });
-      }
-    });
+        }
+      });
+    } else {
+      setIsNotify(true);
+      setNotifyMessage({
+        text: NOT_AUTHORIZED_MESSAGE,
+        type: 'warning',
+      });
+    }
   };
 
   return isLoader ? (
@@ -443,9 +488,7 @@ function CategoriesPage() {
             </table>
           </div>
           {list?.length < 1 ? (
-            <div className="flex w-full items-center justify-center bg-gray-200 py-5">
-              <p>No Records Found</p>
-            </div>
+            <CustomText noroundedborders text="No Records Found" />
           ) : null}
           <div className="mt-3 flex w-[100%] justify-center py-3">
             <TablePagination

@@ -22,6 +22,7 @@ import MailIcon from '@mui/icons-material/Mail';
 import IconButton from '@mui/material/IconButton';
 import HeadphonesOutlinedIcon from '@mui/icons-material/HeadphonesOutlined';
 import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined';
+import { useSelector } from 'react-redux';
 import OrderIcon from '../icons/OrderIcon';
 import CategoryIcon from '../icons/CategoryIcon';
 import VoucherIcon from '../icons/VoucherIcon';
@@ -29,17 +30,16 @@ import DriverIcon from '../icons/DriverIcon';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 import { logout } from '../../redux/features/authStateSlice';
 import { setRolePermissions } from '../../redux/features/permissionsStateSlice';
-import CAN from "../../services/permissions/permissions";
-
+import CAN, { defineRules } from "../../services/permissions/permissions";
 import assets from '../../assets';
 
 const links = [
-  // {
-  //   name: 'Dashboard',
-  //   path: 'home',
-  //   permission: "Dashboard List",
-  //   icon: <GridViewOutlinedIcon fontSize="inherit" />,
-  // },
+  {
+    name: 'Dashboard',
+    path: 'home',
+    permission: "Dashboard List",
+    icon: <GridViewOutlinedIcon fontSize="inherit" />,
+  },
   {
     name: 'Carts',
     path: 'carts',
@@ -151,44 +151,54 @@ const superAdminlinks = [
   // },
 ];
 
+function SideBarMenu(path: string, name: string, icon: any) {
+  return (
+    <NavLink
+      key={path}
+      className={({ isActive }) =>
+        isActive
+          ? 'w-full bg-gray-50 bg-opacity-5 py-3 pl-8 pr-4'
+          : 'w-full py-3 pl-8 pr-4'
+      }
+      to={path}
+    >
+      <div className="flex items-center  text-gray-50">
+        <span className="text-base leading-3"> {icon} </span>
+        <div className="mr-2">&nbsp;</div>
+        <span className="font-open-sans text-sm font-semibold">
+          {/* {console.log("CAN VIEW",link.permission)} */}
+          {name}
+        </span>
+      </div>
+    </NavLink>
+  )
+}
+
 function Sidebar() {
   const [list, setList] = useState<any>(null);
   const authState: any = useAppSelector((state: any) => state.authState);
+  const dataRole = useSelector((state: any) => state)
   const dispatch = useAppDispatch();
   const logOut = () => {
     dispatch(logout());
     dispatch(setRolePermissions({ id: "", name: "", permissions: [] }));
   };
+
   useEffect(() => {
+    defineRules(dataRole.roleState.role.permissions)
     if (authState.user.isSuperAdmin) {
       setList(superAdminlinks);
-    } else {
-      setList(links);
+    } else if (dataRole.roleState.role.permissions) {
+      const tempList = links.filter(el => CAN("canView", el.permission));
+      tempList.unshift({
+        name: 'Dashboard',
+        path: 'home',
+        permission: "Dashboard List",
+        icon: <GridViewOutlinedIcon fontSize="inherit" />,
+      })
+      setList(tempList);
     }
-  }, [authState]);
-
-  const SideBarMenu = (path: string, name: string, icon: any) => {
-    return (
-      <NavLink
-        key={path}
-        className={({ isActive }) =>
-          isActive
-            ? 'w-full bg-gray-50 bg-opacity-5 py-3 pl-8 pr-4'
-            : 'w-full py-3 pl-8 pr-4'
-        }
-        to={path}
-      >
-        <div className="flex items-center  text-gray-50">
-          <span className="text-base leading-3"> {icon} </span>
-          <div className="mr-2">&nbsp;</div>
-          <span className="font-open-sans text-sm font-semibold">
-            {/* {console.log("CAN VIEW",link.permission)} */}
-            {name}
-          </span>
-        </div>
-      </NavLink>
-    )
-  }
+  }, [authState, dataRole.roleState.role.permissions]);
 
   return (
     <Drawer
@@ -203,20 +213,14 @@ function Sidebar() {
           <Stack className="w-full" direction="row" justifyContent="center">
             <img className="mt-9" src={assets.images.logo} alt="" />
           </Stack>
-          {CAN("canView", "Order Assign List") && (
-            <p>hello</p>
-          )
-          }
         </Toolbar>
 
         <div className="flex w-full flex-col text-base ">
-          {SideBarMenu("home", "Dashboard", <GridViewOutlinedIcon fontSize="inherit" />)}
+          {/* {SideBarMenu("", "Dashboard", <GridViewOutlinedIcon fontSize="inherit" />)} */}
           {list && list.map((link: any) => {
             return (
               <Fragment key={link.path}>
-                {CAN("canView", link.permission) ?
-                  SideBarMenu(link.path, link.name, link.icon)
-                  : null}
+                {SideBarMenu(link.path, link.name, link.icon)}
               </Fragment>
             );
           })}

@@ -1,12 +1,21 @@
-import { useSelector } from 'react-redux';
+export const CheckRolePermission = (
+  name: string,
+  permissions: any,
+  navigate: any,
+  navTo: string
+) => {
+  const isTrue = permissions?.find((el: any) => el.name === name);
+  if (isTrue) {
+    navigate(navTo);
+  } else {
+    navigate('../no-auth');
+  }
+};
 
-const Role = () => {
-
-    return "hello"
-    // const role = useSelector((state: any) => state.roleState.role);
-    // return role;
-}
-
-export {
-    Role
-}
+export const listingRolePermission = (permissions: any, name: string) => {
+  const isTrue = permissions?.find((el: any) => el.name === name);
+  if (isTrue) {
+    return true;
+  }
+  return false;
+};

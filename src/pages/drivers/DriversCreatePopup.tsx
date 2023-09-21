@@ -182,12 +182,22 @@ function DriversCreatePopup({
               <label className="FormLabel">Upload Image</label>
               <div className="ImageBox">
                 <CustomButton
-                  buttonType='upload'
-                  title='Upload image'
+                  buttonType="upload"
+                  title="Upload image"
                   register={register}
-                  icon={<FileUploadOutlinedIcon sx={{ marginRight: '0.5rem' }} />}
-                  onchange={(event: React.InputHTMLAttributes<HTMLInputElement>) => { handleFileChange(event) }}
-                  onclick={(event: React.InputHTMLAttributes<HTMLInputElement>) => { handleFileOnClick(event) }}
+                  icon={
+                    <FileUploadOutlinedIcon sx={{ marginRight: '0.5rem' }} />
+                  }
+                  onchange={(
+                    event: React.InputHTMLAttributes<HTMLInputElement>
+                  ) => {
+                    handleFileChange(event);
+                  }}
+                  onclick={(
+                    event: React.InputHTMLAttributes<HTMLInputElement>
+                  ) => {
+                    handleFileOnClick(event);
+                  }}
                 />
                 {/* <input
                   accept="image/*"
@@ -236,18 +246,25 @@ function DriversCreatePopup({
           </div>
           <div className="FormFooter">
             <CustomButton
-              buttonType='button'
-              title='Cancel'
-              className={"btn-black-outline"}
+              buttonType="button"
+              title="Cancel"
+              className="btn-black-outline"
               onclick={handleFormClose}
-              sx={{ marginRight: '0.5rem', padding: '0.375rem 1.5rem !important' }}
+              sx={{
+                marginRight: '0.5rem',
+                padding: '0.375rem 1.5rem !important',
+              }}
             />
             <CustomButton
-              buttonType='button'
-              title='Add'
-              type='submit'
-              className={"btn-black-fill"}
-              sx={{ padding: '0.375rem 2rem !important', width: "85%", height: "35px" }}
+              buttonType="button"
+              title="Add"
+              type="submit"
+              className="btn-black-fill"
+              sx={{
+                padding: '0.375rem 2rem !important',
+                width: '85%',
+                height: '35px',
+              }}
             />
             {/* <Button
               className="btn-black-outline"

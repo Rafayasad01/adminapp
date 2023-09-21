@@ -61,12 +61,22 @@ function ColorPicker({
           ref={buttonElement}
           aria-label="toggle password visibility"
           onClick={handleClick}
-          style={{ padding: 0, width: '50px', height: '50px', margin: 0 }}
+          style={{
+            padding: 0,
+            width: '50px',
+            height: '50px',
+            margin: 0,
+            justifyContent: 'flex-start',
+          }}
           disableRipple
         >
-          <ColorLensOutlinedIcon
-            style={{ fontSize: '40px', color: colorPickerValue }}
+          <span
+            style={{ backgroundColor: colorPickerValue }}
+            className="block h-[25px] w-[25px] rounded-full border border-[#D9D9D9]"
           />
+          {/* <ColorLensOutlinedIcon
+            style={{ fontSize: '40px', color: colorPickerValue }}
+          /> */}
         </IconButton>
       </FormControl>
       <Popover

@@ -8,6 +8,7 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import TablePagination from '@mui/material/TablePagination';
 import Switch from '@mui/material/Switch';
+import { useSelector } from 'react-redux';
 import TopBar from '../../components/common/TopBar';
 import MapAddress from '../../components/common/MapAddress';
 import Service from '../../services/adminapp/adminDriver';
@@ -18,9 +19,15 @@ import DriversAddressEditPopup from './DriversAddressEditPopup';
 import Loader from '../../components/common/Loader';
 import Notify from '../../components/common/Notify';
 import PermissionPopup from '../../utils/PermissionPopup';
+import { listingRolePermission } from '../../utils/helper';
+import { NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
+import CustomText from '../../components/common/CustomText';
 
 function DriversAddressPage() {
   const authState: any = useAppSelector((state) => state.authState);
+  const dataRole = useSelector(
+    (state: any) => state.roleState.role.permissions
+  );
   const params = useParams();
   // const navigate = useNavigate();
   const [detail, setDetail] = useState<any>(null);
@@ -92,23 +99,56 @@ function DriversAddressPage() {
     deleteEntity(actionMenuItemid);
   };
 
-  const getData = (addressId: string) => {
-    Service.getAddress(addressId).then((item: any) => {
-      if (item.data.success) {
-        console.log('addressData', item.data);
+  const handleAddNew = () => {
+    if (listingRolePermission(dataRole, 'Driver Address Create')) {
+      setOpenFormDialog(true);
+    } else {
+      setIsNotify(true);
+      setNotifyMessage({
+        text: NOT_AUTHORIZED_MESSAGE,
+        type: 'warning',
+      });
+    }
+  };
 
-        setIsLoader(false);
-        setEditFormData(item.data.data);
-        setOpenEditFormDialog(true);
-      }
-    });
+  const getData = (addressId: string) => {
+    if (listingRolePermission(dataRole, 'Driver Address Get')) {
+      Service.getAddress(addressId)
+        .then((item: any) => {
+          if (item.data.success) {
+            console.log('addressData', item.data);
+            setIsLoader(false);
+            setEditFormData(item.data.data);
+            setOpenEditFormDialog(true);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   };
 
   const manuHandler = (option: string) => {
     if (option === 'Edit') {
-      getData(actionMenuItemid);
+      if (listingRolePermission(dataRole, 'Driver Address Update')) {
+        getData(actionMenuItemid);
+      } else {
+        setIsNotify(true);
+        setNotifyMessage({
+          text: NOT_AUTHORIZED_MESSAGE,
+          type: 'warning',
+        });
+      }
     } else if (option === 'Delete') {
-      setCancelDialogOpen(true);
+      if (listingRolePermission(dataRole, 'Driver Address Delete')) {
+        setCancelDialogOpen(true);
+      } else {
+        setIsNotify(true);
+        setNotifyMessage({
+          text: NOT_AUTHORIZED_MESSAGE,
+          type: 'warning',
+        });
+      }
     }
   };
 
@@ -170,41 +210,43 @@ function DriversAddressPage() {
   };
 
   useEffect(() => {
-    Service.getAddressService(id)
-      .then((item: any) => {
-        if (item.data.success) {
-          setIsLoader(false);
-          setDetail(item.data.data);
-          if (
-            item.data.data.appUserAddress &&
-            item.data.data.appUserAddress.length > 0
-          ) {
-            const activeAddress = item.data.data.appUserAddress.filter(
-              (newItem: any) => newItem.isActive === true
-            );
-            if (activeAddress.length > 0) {
-              setAddress(activeAddress[0].address);
+    if (listingRolePermission(dataRole, 'Driver Address Detail')) {
+      Service.getAddressService(id)
+        .then((item: any) => {
+          if (item.data.success) {
+            setIsLoader(false);
+            setDetail(item.data.data);
+            if (
+              item.data.data.appUserAddress &&
+              item.data.data.appUserAddress.length > 0
+            ) {
+              const activeAddress = item.data.data.appUserAddress.filter(
+                (newItem: any) => newItem.isActive === true
+              );
+              if (activeAddress.length > 0) {
+                setAddress(activeAddress[0].address);
+              }
+              setList(item.data.data.appUserAddress.reverse());
+              setTotal(Number(item.data.data.total));
             }
-            setList(item.data.data.appUserAddress.reverse());
-            setTotal(Number(item.data.data.total));
+          } else {
+            setIsLoader(false);
+            setIsNotify(true);
+            setNotifyMessage({
+              text: item.data.message,
+              type: 'error',
+            });
           }
-        } else {
+        })
+        .catch((err) => {
           setIsLoader(false);
           setIsNotify(true);
           setNotifyMessage({
-            text: item.data.message,
+            text: err.message,
             type: 'error',
           });
-        }
-      })
-      .catch((err) => {
-        setIsLoader(false);
-        setIsNotify(true);
-        setNotifyMessage({
-          text: err.message,
-          type: 'error',
         });
-      });
+    }
   }, [id]);
 
   const createFormHandler = (data: any) => {
@@ -297,20 +339,28 @@ function DriversAddressPage() {
   };
 
   const handleSwitchChange = (event: any, addressId: string) => {
-    if (list.length > 1) {
-      Service.updateStatusAddressService(addressId).then((updateItem) => {
-        if (updateItem.data.success) {
-          setList((newArr: any) => {
-            return newArr.map((item: any) => {
-              if (item.id === updateItem.data.data.id) {
-                item.isActive = true;
-              } else {
-                item.isActive = false;
-              }
-              return { ...item };
+    if (listingRolePermission(dataRole, 'Driver Address Update Status')) {
+      if (list.length > 1) {
+        Service.updateStatusAddressService(addressId).then((updateItem) => {
+          if (updateItem.data.success) {
+            setList((newArr: any) => {
+              return newArr.map((item: any) => {
+                if (item.id === updateItem.data.data.id) {
+                  item.isActive = true;
+                } else {
+                  item.isActive = false;
+                }
+                return { ...item };
+              });
             });
-          });
-        }
+          }
+        });
+      }
+    } else {
+      setIsNotify(true);
+      setNotifyMessage({
+        text: NOT_AUTHORIZED_MESSAGE,
+        type: 'warning',
       });
     }
   };
@@ -398,7 +448,7 @@ function DriversAddressPage() {
                   <Button
                     variant="contained"
                     className="btn-black-fill btn-icon mt-4"
-                    onClick={() => setOpenFormDialog(true)}
+                    onClick={handleAddNew}
                   >
                     <AddOutlinedIcon /> Add New
                   </Button>
@@ -531,9 +581,7 @@ function DriversAddressPage() {
                   </div>
                 </>
               ) : (
-                <div className="flex w-full items-center justify-center rounded-lg bg-gray-200 py-3">
-                  <p className="font-open-sans">No Address Records</p>
-                </div>
+                <CustomText noroundedborders text="No Address Records" />
               )}
             </div>
           </div>

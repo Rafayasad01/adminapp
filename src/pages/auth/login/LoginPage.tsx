@@ -42,7 +42,7 @@ function LoginPage() {
     setIsLoader(true);
     const user: any = await auth.loginService(userData);
     if (user && user.data.success) {
-      console.log("dataaaaaaaaaaaa", user.data.data.role);
+      console.log('dataaaaaaaaaaaa', user.data.data.role);
       dispatch(setRolePermissions(user.data.data.role));
       setIsLoader(false);
       const newUserData = user.data.data;
@@ -60,8 +60,6 @@ function LoginPage() {
       setShowAlert(true);
     }
   };
-
-
 
   return (
     <>

@@ -13,6 +13,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 // import Stack from '@mui/material/Stack';
 import dayjs from 'dayjs';
 import TablePagination from '@mui/material/TablePagination';
+import { useSelector } from 'react-redux';
 import order from '../../services/adminapp/adminOrders';
 import ActionMenu from '../../components/common/ActionMenu';
 import {
@@ -28,9 +29,13 @@ import TopBar from '../../components/common/TopBar';
 import { useAppSelector } from '../../redux/redux-hooks';
 import Loader from '../../components/common/Loader';
 import Notify from '../../components/common/Notify';
+import { CheckRolePermission, listingRolePermission } from '../../utils/helper';
 
 function OrdersPage() {
   const authState: any = useAppSelector((state) => state.authState);
+  const dataRole = useSelector(
+    (state: any) => state.roleState.role.permissions
+  );
   const navigate = useNavigate();
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(0);
@@ -123,6 +128,7 @@ function OrdersPage() {
     //   setTotal(item.data.data.total);
     // });
   };
+
   const addRouteHandler = () => {
     navigate('create');
   };
@@ -157,28 +163,30 @@ function OrdersPage() {
   // };
 
   useEffect(() => {
-    order
-      .getListService(authState.user.tenant, page, rowsPerPage)
-      .then((item) => {
-        setIsLoader(false);
-        // console.log(item.data.data);
-        setList(
-          item.data.data.list.map((newItem: any) => ({
-            ...newItem,
-            isSelected: false,
-            orderStatus: newItem.status,
-          }))
-        );
-        setTotal(item.data.data.total);
-      })
-      .catch((err) => {
-        setIsLoader(false);
-        setIsNotify(true);
-        setNotifyMessage({
-          text: err.message,
-          type: 'error',
+    if (listingRolePermission(dataRole, 'Order List')) {
+      order
+        .getListService(authState.user.tenant, page, rowsPerPage)
+        .then((item) => {
+          setIsLoader(false);
+          // console.log(item.data.data);
+          setList(
+            item.data.data.list.map((newItem: any) => ({
+              ...newItem,
+              isSelected: false,
+              orderStatus: newItem.status,
+            }))
+          );
+          setTotal(item.data.data.total);
+        })
+        .catch((err) => {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: err.message,
+            type: 'error',
+          });
         });
-      });
+    }
   }, [authState, page, rowsPerPage]);
 
   const manuHandler = (option: string) => {
@@ -190,8 +198,12 @@ function OrdersPage() {
     } else {
       doOption = 'download';
     }
-    navigate(`${doOption}/${actionMenuItemid}`);
-    // console.log('actionMenuItemid', actionMenuItemid)
+    CheckRolePermission(
+      'Order View',
+      dataRole,
+      navigate,
+      `${doOption}/${actionMenuItemid}`
+    );
   };
 
   const getStatusTag = (status: string) => {
@@ -211,6 +223,7 @@ function OrdersPage() {
     }
     return tag;
   };
+
   const setOrderStatus = (status: string) => {
     const newStatuses = [...ORDER_STATUSES].map(([key, value]) => ({
       key,

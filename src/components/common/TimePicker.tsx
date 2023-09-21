@@ -44,12 +44,12 @@ function TimePicker({
   const buttonElement = useRef(null);
   const handleClick = () => {
     setTimePicker(buttonElement.current);
-    console.log("HITTT2", buttonElement.current);
+    console.log('HITTT2', buttonElement.current);
     if (timePickerValue?.format('HH:MM A') !== null) {
       setError(id, {
-        type: "manual",
-        message: ""
-      })
+        type: 'manual',
+        message: '',
+      });
     }
   };
   const handleClose = () => {
@@ -96,7 +96,9 @@ function TimePicker({
           disableUnderline
         />
         {errors && (
-          <span style={{ fontSize: "14px" }} role="alert">{errors.message}</span>
+          <span style={{ fontSize: '14px' }} role="alert">
+            {errors.message}
+          </span>
         )}
       </FormControl>
 

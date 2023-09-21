@@ -30,7 +30,7 @@ function CustomersEditPopup({
   callback,
   setIsNotify,
   setNotifyMessage,
-  setActionMenuItemid
+  setActionMenuItemid,
 }: Props) {
   const [showPassword, setShowPassword] = useState(false);
   const [avatar, setAvatar] = useState<any>(null);
@@ -46,9 +46,9 @@ function CustomersEditPopup({
   } = useForm<AppUser>();
 
   const handleFormClose = () => {
-    setOpenFormDialog(false)
-    setActionMenuItemid(null)
-    setEditFormData(null)
+    setOpenFormDialog(false);
+    setActionMenuItemid(null);
+    setEditFormData(null);
   };
 
   const handleFileChange = (event: any) => {

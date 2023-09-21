@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import { useParams } from 'react-router-dom';
 import Divider from '@mui/material/Divider';
 import dayjs from 'dayjs';
 import Avatar from '@mui/material/Avatar';
 import TablePagination from '@mui/material/TablePagination';
+import { useSelector } from 'react-redux';
 import TopBar from '../../components/common/TopBar';
 import MapAddress from '../../components/common/MapAddress';
 import Service from '../../services/adminapp/adminDriver';
@@ -18,9 +19,14 @@ import {
 } from '../../utils/constants';
 import Loader from '../../components/common/Loader';
 import Notify from '../../components/common/Notify';
+import { listingRolePermission } from '../../utils/helper';
+import CustomText from '../../components/common/CustomText';
 
 function DriversDetailPage() {
   const params = useParams();
+  const dataRole = useSelector(
+    (state: any) => state.roleState.role.permissions
+  );
   const [detail, setDetail] = useState<any>(null);
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(0);
@@ -98,31 +104,33 @@ function DriversDetailPage() {
   };
 
   useEffect(() => {
-    Service.getDetailService(id)
-      .then((item: any) => {
-        if (item.data.success) {
-          setIsLoader(false);
-          setAddress(item.data.data.appUserAddress);
-          setDetail(item.data.data);
-          setList(item.data.data.appOrderDelivery.reverse());
-          setTotal(Number(item.data.data.total));
-        } else {
+    if (listingRolePermission(dataRole, 'Driver Detail')) {
+      Service.getDetailService(id)
+        .then((item: any) => {
+          if (item.data.success) {
+            setIsLoader(false);
+            setAddress(item.data.data.appUserAddress);
+            setDetail(item.data.data);
+            setList(item.data.data.appOrderDelivery.reverse());
+            setTotal(Number(item.data.data.total));
+          } else {
+            setIsLoader(false);
+            setIsNotify(true);
+            setNotifyMessage({
+              text: item.data.message,
+              type: 'error',
+            });
+          }
+        })
+        .catch((err) => {
           setIsLoader(false);
           setIsNotify(true);
           setNotifyMessage({
-            text: item.data.message,
+            text: err.message,
             type: 'error',
           });
-        }
-      })
-      .catch((err) => {
-        setIsLoader(false);
-        setIsNotify(true);
-        setNotifyMessage({
-          text: err.message,
-          type: 'error',
         });
-      });
+    }
   }, [id]);
 
   const getStatusTag = (status: string) => {
@@ -228,15 +236,15 @@ function DriversDetailPage() {
               <MapAddress address={address} zoom={15} />
             </div>
           </div>
-          {list.length > 0 && (
-            <div className="mt-3 grid grid-cols-12">
-              <div className="col-span-12 rounded-lg bg-[#fff] px-4 py-5 shadow-lg">
-                <div className="flex justify-between">
-                  <span className="font-open-sans text-xl font-semibold text-[#1A1A1A]">
-                    Driver History
-                  </span>
-                  <div className="flex-grow">&nbsp;</div>
-                  {/* <FormControl
+
+          <div className="mt-3 grid grid-cols-12">
+            <div className="col-span-12 rounded-lg bg-[#fff] px-4 py-5 shadow-lg">
+              <div className="flex justify-between">
+                <span className="font-open-sans text-xl font-semibold text-[#1A1A1A]">
+                  Driver History
+                </span>
+                <div className="flex-grow">&nbsp;</div>
+                {/* <FormControl
                     className="search-grey-outline placeholder-grey w-60"
                     variant="filled"
                   >
@@ -266,76 +274,78 @@ function DriversDetailPage() {
                       disableUnderline
                     />
                   </FormControl> */}
-                </div>
-                <div className="mt-3 grid grid-cols-none">
-                  <table className="table-border table-auto">
-                    <thead>
-                      <tr>
-                        <th>Pickup Time</th>
-                        <th>Drop Time</th>
-                        <th>Status</th>
-                        <th>&nbsp;</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {list.map((item: any, index: number) => {
-                        return (
-                          <tr key={item.id}>
-                            <td>
-                              {dayjs(item.pickupDateTime).isValid() ? (
-                                <div className="flex flex-col">
-                                  <span className="text-sm font-normal text-[#1A1A1A]">
-                                    {dayjs(item.pickupDateTime)?.format(
-                                      'hh:mm:ssA'
-                                    )}{' '}
-                                    -{' '}
-                                    {dayjs(item.pickupDateTime)
-                                      .add(1, 'hour')
-                                      .format('hh:mm:ssA')}
-                                  </span>
-                                  <span className="text-xs font-normal text-[#6A6A6A]">
-                                    {dayjs(item.pickupDateTime)?.format(
-                                      'ddd, MMM DD, YYYY'
-                                    )}
-                                  </span>
-                                </div>
-                              ) : (
-                                '----'
-                              )}
-                            </td>
-                            <td>
-                              {dayjs(item.dropDateTime).isValid() ? (
-                                <div className="flex flex-col">
-                                  <span className="text-sm font-normal text-[#1A1A1A]">
-                                    {dayjs(item.dropDateTime)?.format(
-                                      'hh:mm:ssA'
-                                    )}{' '}
-                                    -{' '}
-                                    {dayjs(item.dropDateTime)
-                                      .add(1, 'hour')
-                                      .format('hh:mm:ssA')}
-                                  </span>
-                                  <span className="text-xs font-normal text-[#6A6A6A]">
-                                    {dayjs(item.dropDateTime)?.format(
-                                      'ddd, MMM DD, YYYY'
-                                    )}
-                                  </span>
-                                </div>
-                              ) : (
-                                '----'
-                              )}
-                            </td>
-                            <td>
-                              <span
-                                className={`badge badge-${getStatusTag(
-                                  item.status
-                                )}`}
-                              >
-                                {item.status}
-                              </span>
-                            </td>
-                            <td>
-                              {/* <IconButton
+              </div>
+              {list.length > 0 ? (
+                <>
+                  <div className="mt-3 grid grid-cols-none">
+                    <table className="table-border table-auto">
+                      <thead>
+                        <tr>
+                          <th>Pickup Time</th>
+                          <th>Drop Time</th>
+                          <th>Status</th>
+                          <th>&nbsp;</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {list.map((item: any, index: number) => {
+                          return (
+                            <tr key={item.id}>
+                              <td>
+                                {dayjs(item.pickupDateTime).isValid() ? (
+                                  <div className="flex flex-col">
+                                    <span className="text-sm font-normal text-[#1A1A1A]">
+                                      {dayjs(item.pickupDateTime)?.format(
+                                        'hh:mm:ssA'
+                                      )}{' '}
+                                      -{' '}
+                                      {dayjs(item.pickupDateTime)
+                                        .add(1, 'hour')
+                                        .format('hh:mm:ssA')}
+                                    </span>
+                                    <span className="text-xs font-normal text-[#6A6A6A]">
+                                      {dayjs(item.pickupDateTime)?.format(
+                                        'ddd, MMM DD, YYYY'
+                                      )}
+                                    </span>
+                                  </div>
+                                ) : (
+                                  '----'
+                                )}
+                              </td>
+                              <td>
+                                {dayjs(item.dropDateTime).isValid() ? (
+                                  <div className="flex flex-col">
+                                    <span className="text-sm font-normal text-[#1A1A1A]">
+                                      {dayjs(item.dropDateTime)?.format(
+                                        'hh:mm:ssA'
+                                      )}{' '}
+                                      -{' '}
+                                      {dayjs(item.dropDateTime)
+                                        .add(1, 'hour')
+                                        .format('hh:mm:ssA')}
+                                    </span>
+                                    <span className="text-xs font-normal text-[#6A6A6A]">
+                                      {dayjs(item.dropDateTime)?.format(
+                                        'ddd, MMM DD, YYYY'
+                                      )}
+                                    </span>
+                                  </div>
+                                ) : (
+                                  '----'
+                                )}
+                              </td>
+                              <td>
+                                <span
+                                  className={`badge badge-${getStatusTag(
+                                    item.status
+                                  )}`}
+                                >
+                                  {item.status}
+                                </span>
+                              </td>
+                              <td>
+                                {/* <IconButton
                                 className="btn-dot"
                                 aria-label="more"
                                 id="long-button"
@@ -349,26 +359,29 @@ function DriversDetailPage() {
                               >
                                 <MoreVertIcon />
                               </IconButton> */}
-                            </td>
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                  </table>
-                </div>
-                <div className="mt-3 flex w-[100%] justify-center py-3">
-                  <TablePagination
-                    component="div"
-                    count={total}
-                    page={page}
-                    onPageChange={handleChangePage}
-                    rowsPerPage={rowsPerPage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
-                  />
-                </div>
-              </div>
+                              </td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+                  <div className="mt-3 flex w-[100%] justify-center py-3">
+                    <TablePagination
+                      component="div"
+                      count={total}
+                      page={page}
+                      onPageChange={handleChangePage}
+                      rowsPerPage={rowsPerPage}
+                      onRowsPerPageChange={handleChangeRowsPerPage}
+                    />
+                  </div>
+                </>
+              ) : (
+                <CustomText noroundedborders text="No Driver History Records" />
+              )}
             </div>
-          )}
+          </div>
         </div>
       )}
       {actionMenuAnchorEl && (

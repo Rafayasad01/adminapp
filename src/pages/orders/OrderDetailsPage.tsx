@@ -15,10 +15,12 @@ import dayjs from 'dayjs';
 
 import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
+import { useSelector } from 'react-redux';
 import TopBar from '../../components/common/TopBar';
 import orderService from '../../services/adminapp/adminOrders';
 
 import {
+  NOT_AUTHORIZED_MESSAGE,
   ORDER_STATUS_IN_CANCELLED,
   ORDER_STATUS_IN_DELIVERED,
   ORDER_STATUS_IN_DELIVERY,
@@ -28,9 +30,13 @@ import PermissionPopup from '../../utils/PermissionPopup';
 import assets from '../../assets';
 import Loader from '../../components/common/Loader';
 import Notify from '../../components/common/Notify';
+import { listingRolePermission } from '../../utils/helper';
 
 function OrderDetailsPage() {
   const navigate = useNavigate();
+  const dataRole = useSelector(
+    (state: any) => state.roleState.role.permissions
+  );
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
   const [cancelDialogOpen, setCancelDialogOpen] = useState<boolean>(false);
   // const [orderAssign, setOrderAssign] = useState<boolean>(false);
@@ -90,23 +96,26 @@ function OrderDetailsPage() {
     setCurrentStatus(laststatus);
     setOrderStatuses(newResult);
   };
+
   useEffect(() => {
-    orderService
-      .viewService(id)
-      .then((item) => {
-        setIsLoader(false);
-        if (item) {
-          setData(item.data.data);
-        }
-      })
-      .catch((err) => {
-        setIsLoader(false);
-        setIsNotify(true);
-        setNotifyMessage({
-          text: err.message,
-          type: 'error',
+    if (listingRolePermission(dataRole, 'Order View')) {
+      orderService
+        .viewService(id)
+        .then((item) => {
+          setIsLoader(false);
+          if (item) {
+            setData(item.data.data);
+          }
+        })
+        .catch((err) => {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: err.message,
+            type: 'error',
+          });
         });
-      });
+    }
   }, [id]);
 
   const getIcon = (string: string) => {
@@ -132,49 +141,68 @@ function OrderDetailsPage() {
     if (key === ORDER_STATUS_IN_CANCELLED && (cancelled || isCancelled)) {
       return;
     }
-    orderService.createStatusesService(data).then((item) => {
-      if (item) {
+    orderService
+      .createStatusesService(data)
+      .then((item) => {
+        if (item) {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'success',
+          });
+          const tempData = viewData;
+          tempData.appOrderStatuses.push(item.data.data);
+          setViewData(tempData);
+          setData(tempData);
+        }
+      })
+      .catch((err) => {
         setIsLoader(false);
         setIsNotify(true);
         setNotifyMessage({
-          text: item.data.message,
-          type: 'success',
+          text: err.message,
+          type: 'error',
         });
-        const tempData = viewData;
-        tempData.appOrderStatuses.push(item.data.data);
-        setViewData(tempData);
-        setData(tempData);
-      }
-    }).catch((err) => {
-      setIsLoader(false);
-      setIsNotify(true);
-      setNotifyMessage({
-        text: err.message,
-        type: 'error',
       });
-    })
   };
 
   const statusUpdateHandler = () => {
-    let newIndex = 0;
-    orderStatuses.forEach((item: any, index: number) => {
-      if (typeof viewData.appOrderStatuses[index] !== 'undefined') {
-        newIndex = index;
-      }
-    });
-    const data = {
-      app_order: id,
-      status: orderStatuses[newIndex + 1].key,
-    };
-    createOrderStatusesService(data, orderStatuses[newIndex].key);
+    if (listingRolePermission(dataRole, 'Order Statuses Create')) {
+      let newIndex = 0;
+      orderStatuses.forEach((item: any, index: number) => {
+        if (typeof viewData.appOrderStatuses[index] !== 'undefined') {
+          newIndex = index;
+        }
+      });
+      const data = {
+        app_order: id,
+        status: orderStatuses[newIndex + 1].key,
+      };
+      createOrderStatusesService(data, orderStatuses[newIndex].key);
+    } else {
+      setIsNotify(true);
+      setNotifyMessage({
+        text: NOT_AUTHORIZED_MESSAGE,
+        type: 'warning',
+      });
+    }
   };
 
   const statusCancelHandler = () => {
-    const data = {
-      app_order: id,
-      status: ORDER_STATUS_IN_CANCELLED,
-    };
-    createOrderStatusesService(data, ORDER_STATUS_IN_CANCELLED);
+    if (listingRolePermission(dataRole, 'Order Statuses Create')) {
+      const data = {
+        app_order: id,
+        status: ORDER_STATUS_IN_CANCELLED,
+      };
+      createOrderStatusesService(data, ORDER_STATUS_IN_CANCELLED);
+    } else {
+      setIsNotify(true);
+      setNotifyMessage({
+        text: NOT_AUTHORIZED_MESSAGE,
+        type: 'warning',
+      });
+    }
   };
 
   return isLoader ? (
@@ -401,7 +429,7 @@ function OrderDetailsPage() {
                 )}
               </div>
               <hr className="my-3 h-[1px] w-full bg-neutral-200" />
-              <div className='max-h-48 flex-none overflow-y-scroll px-4 scroll-smooth'>
+              <div className="max-h-48 flex-none overflow-y-scroll scroll-smooth px-4">
                 {viewData.orderItems &&
                   viewData.orderItems.map((item: any, index: number) => {
                     return (
@@ -519,8 +547,9 @@ function OrderDetailsPage() {
                   return (
                     <div
                       key={index}
-                      className={`flex items-center ${item.isStatus ? '' : 'opacity-25'
-                        } `}
+                      className={`flex items-center ${
+                        item.isStatus ? '' : 'opacity-25'
+                      } `}
                     >
                       {item.isStatus ? (
                         <CheckCircleOutlineOutlinedIcon />
@@ -529,7 +558,9 @@ function OrderDetailsPage() {
                       )}
 
                       <div
-                        className={`relative mx-2 inline flex ${item.isStatus ? item.value.color : 'text-neutral-500'} `}
+                        className={`relative mx-2 inline flex ${
+                          item.isStatus ? item.value.color : 'text-neutral-500'
+                        } `}
                       >
                         <CircularProgress
                           thickness={1.5}

@@ -35,30 +35,29 @@ function DriversScheduleCreatePopup({
   const handleFormClose = () => setOpenFormDialog(false);
 
   const onSubmit = () => {
-    console.log("HIT", startTime);
+    console.log('HIT', startTime);
     if (startTime !== null && endTime !== null) {
-      let data = {
-        start_time: "",
-        end_time: ""
-      }
+      const data = {
+        start_time: '',
+        end_time: '',
+      };
       data.start_time = dayjs(startTime).format('YYYY-MM-DD HH:mm:ss');
       data.end_time = dayjs(endTime).format('YYYY-MM-DD HH:mm:ss');
       setOpenFormDialog(false);
       callback(data);
-      console.log("s1", startTime, endTime, data);
-    }
-    else {
+      console.log('s1', startTime, endTime, data);
+    } else {
       if (startTime === null) {
-        setError("start_time", {
-          type: "manual",
-          message: "Start time is required."
-        })
+        setError('start_time', {
+          type: 'manual',
+          message: 'Start time is required.',
+        });
       }
       if (endTime === null) {
-        setError("end_time", {
-          type: "manual",
-          message: "End time is required."
-        })
+        setError('end_time', {
+          type: 'manual',
+          message: 'End time is required.',
+        });
       }
       setOpenFormDialog(true);
     }
@@ -112,12 +111,16 @@ function DriversScheduleCreatePopup({
               Cancel
             </Button>
             <CustomButton
-              buttonType='button'
-              title='Add'
+              buttonType="button"
+              title="Add"
               onclick={() => onSubmit()}
               // type='submit'
-              className={"btn-black-fill"}
-              sx={{ padding: '0.375rem 2rem !important', width: "85%", height: "35px" }}
+              className="btn-black-fill"
+              sx={{
+                padding: '0.375rem 2rem !important',
+                width: '85%',
+                height: '35px',
+              }}
             />
             {/* <Input
               // type="submit"

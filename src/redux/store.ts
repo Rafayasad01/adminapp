@@ -1,25 +1,28 @@
 import { configureStore } from '@reduxjs/toolkit';
+import { persistReducer, persistStore } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
 import appStateReducer from './features/appStateSlice';
 import authStateReducer from './features/authStateSlice';
 import rolePermissionStateReducer from './features/permissionsStateSlice';
-import { persistReducer, persistStore } from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
 
 const persistConfig = {
   key: 'root',
   storage,
-}
+};
 
 export const store = configureStore({
   reducer: {
     appState: appStateReducer,
     authState: authStateReducer,
-    roleState: persistReducer<any, any>(persistConfig, rolePermissionStateReducer),
+    roleState: persistReducer<any, any>(
+      persistConfig,
+      rolePermissionStateReducer
+    ),
   },
-  middleware: getDefaultMiddleware =>
+  middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: false,
-    })
+    }),
 });
 
 export const persistor = persistStore(store);

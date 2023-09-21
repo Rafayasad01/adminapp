@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import { useParams } from 'react-router-dom';
 import Divider from '@mui/material/Divider';
 // import FormControl from '@mui/material/FormControl';
@@ -15,6 +15,7 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import TablePagination from '@mui/material/TablePagination';
 import Switch from '@mui/material/Switch';
+import { useSelector } from 'react-redux';
 import TopBar from '../../components/common/TopBar';
 import MapAddress from '../../components/common/MapAddress';
 import Service from '../../services/adminapp/adminDriver';
@@ -25,9 +26,15 @@ import DriversScheduleEditPopup from './DriversScheduleEditPopup';
 import Loader from '../../components/common/Loader';
 import Notify from '../../components/common/Notify';
 import PermissionPopup from '../../utils/PermissionPopup';
+import { listingRolePermission } from '../../utils/helper';
+import { NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
+import CustomText from '../../components/common/CustomText';
 
 function DriversSchedulePage() {
   const authState: any = useAppSelector((state) => state.authState);
+  const dataRole = useSelector(
+    (state: any) => state.roleState.role.permissions
+  );
   const params = useParams();
   // const navigate = useNavigate();
   const [detail, setDetail] = useState<any>(null);
@@ -100,30 +107,60 @@ function DriversSchedulePage() {
     deleteEntity(actionMenuItemid);
   };
 
-  const getData = (driverId: string) => {
-    Service.getSchedule(driverId)
-      .then((item: any) => {
-        if (item.data.success) {
-          setIsLoader(false);
-          setEditFormData(item.data.data);
-          setOpenEditFormDialog(true);
-        }
-      })
-      .catch((err) => {
-        setIsLoader(false);
-        setIsNotify(true);
-        setNotifyMessage({
-          text: err.message,
-          type: 'error',
-        });
+  const handleAddNew = () => {
+    if (listingRolePermission(dataRole, 'Driver Schedule Create')) {
+      setOpenFormDialog(true);
+    } else {
+      setIsNotify(true);
+      setNotifyMessage({
+        text: NOT_AUTHORIZED_MESSAGE,
+        type: 'warning',
       });
+    }
+  };
+
+  const getData = (driverId: string) => {
+    if (listingRolePermission(dataRole, 'Driver Schedule Get')) {
+      Service.getSchedule(driverId)
+        .then((item: any) => {
+          if (item.data.success) {
+            setIsLoader(false);
+            setEditFormData(item.data.data);
+            setOpenEditFormDialog(true);
+          }
+        })
+        .catch((err) => {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: err.message,
+            type: 'error',
+          });
+        });
+    }
   };
 
   const manuHandler = (option: string) => {
     if (option === 'Edit') {
-      getData(actionMenuItemid);
+      if (listingRolePermission(dataRole, 'Driver Schedule Update')) {
+        getData(actionMenuItemid);
+      } else {
+        setIsNotify(true);
+        setNotifyMessage({
+          text: NOT_AUTHORIZED_MESSAGE,
+          type: 'warning',
+        });
+      }
     } else if (option === 'Delete') {
-      setCancelDialogOpen(true);
+      if (listingRolePermission(dataRole, 'Driver Schedule Delete')) {
+        setCancelDialogOpen(true);
+      } else {
+        setIsNotify(true);
+        setNotifyMessage({
+          text: NOT_AUTHORIZED_MESSAGE,
+          type: 'warning',
+        });
+      }
     }
   };
 
@@ -185,36 +222,38 @@ function DriversSchedulePage() {
   };
 
   useEffect(() => {
-    Service.getScheduleService(id)
-      .then((item: any) => {
-        if (item.data.success) {
-          setIsLoader(false);
-          setAddress(item.data.data.appUserAddress);
-          setDetail(item.data.data);
-          if (
-            item.data.data.appDriverWorkingSchedule &&
-            item.data.data.appDriverWorkingSchedule.length > 0
-          ) {
-            setList(item.data.data.appDriverWorkingSchedule.reverse());
-            setTotal(Number(item.data.data.total));
+    if (listingRolePermission(dataRole, 'Driver Schedule Detail')) {
+      Service.getScheduleService(id)
+        .then((item: any) => {
+          if (item.data.success) {
+            setIsLoader(false);
+            setAddress(item.data.data.appUserAddress);
+            setDetail(item.data.data);
+            if (
+              item.data.data.appDriverWorkingSchedule &&
+              item.data.data.appDriverWorkingSchedule.length > 0
+            ) {
+              setList(item.data.data.appDriverWorkingSchedule.reverse());
+              setTotal(Number(item.data.data.total));
+            }
+          } else {
+            setIsLoader(false);
+            setIsNotify(true);
+            setNotifyMessage({
+              text: item.data.message,
+              type: 'error',
+            });
           }
-        } else {
+        })
+        .catch((err) => {
           setIsLoader(false);
           setIsNotify(true);
           setNotifyMessage({
-            text: item.data.message,
+            text: err.message,
             type: 'error',
           });
-        }
-      })
-      .catch((err) => {
-        setIsLoader(false);
-        setIsNotify(true);
-        setNotifyMessage({
-          text: err.message,
-          type: 'error',
         });
-      });
+    }
   }, [id]);
 
   const createFormHandler = (data: any) => {
@@ -249,21 +288,30 @@ function DriversSchedulePage() {
       }
     });
   };
+
   const handleSwitchChange = (event: any, driverId: string) => {
-    if (list.length > 1) {
-      Service.updateStatusScheduleService(driverId).then((updateItem) => {
-        if (updateItem.data.success) {
-          setList((newArr: any) => {
-            return newArr.map((item: any) => {
-              if (item.id === updateItem.data.data.id) {
-                item.isActive = true;
-              } else {
-                item.isActive = false;
-              }
-              return { ...item };
+    if (listingRolePermission(dataRole, 'Driver Schedule Update Status')) {
+      if (list.length > 1) {
+        Service.updateStatusScheduleService(driverId).then((updateItem) => {
+          if (updateItem.data.success) {
+            setList((newArr: any) => {
+              return newArr.map((item: any) => {
+                if (item.id === updateItem.data.data.id) {
+                  item.isActive = true;
+                } else {
+                  item.isActive = false;
+                }
+                return { ...item };
+              });
             });
-          });
-        }
+          }
+        });
+      }
+    } else {
+      setIsNotify(true);
+      setNotifyMessage({
+        text: NOT_AUTHORIZED_MESSAGE,
+        type: 'warning',
       });
     }
   };
@@ -351,7 +399,7 @@ function DriversSchedulePage() {
                   <Button
                     variant="contained"
                     className="btn-black-fill btn-icon mt-4"
-                    onClick={() => setOpenFormDialog(true)}
+                    onClick={handleAddNew}
                   >
                     <AddOutlinedIcon /> Add New
                   </Button>
@@ -362,15 +410,15 @@ function DriversSchedulePage() {
               <MapAddress address={address} zoom={15} />
             </div>
           </div>
-          {list.length > 0 && (
-            <div className="mt-3 grid grid-cols-12">
-              <div className="col-span-12 rounded-lg bg-[#fff] px-4 py-5 shadow-lg">
-                <div className="flex justify-between">
-                  <span className="font-open-sans text-xl font-semibold text-[#1A1A1A]">
-                    Working Schedule History
-                  </span>
-                  <div className="flex-grow">&nbsp;</div>
-                  {/* <FormControl
+
+          <div className="mt-3 grid grid-cols-12">
+            <div className="col-span-12 rounded-lg bg-[#fff] px-4 py-5 shadow-lg">
+              <div className="flex justify-between">
+                <span className="font-open-sans text-xl font-semibold text-[#1A1A1A]">
+                  Working Schedule History
+                </span>
+                <div className="flex-grow">&nbsp;</div>
+                {/* <FormControl
                     className="search-grey-outline placeholder-grey w-60"
                     variant="filled"
                   >
@@ -400,94 +448,103 @@ function DriversSchedulePage() {
                       disableUnderline
                     />
                   </FormControl> */}
-                </div>
-                <div className="mt-3 grid grid-cols-none">
-                  <table className="table-border table-auto">
-                    <thead>
-                      <tr>
-                        <th>Start Time</th>
-                        <th>End Time</th>
-                        <th>Status</th>
-                        <th>&nbsp;</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {list.map((item: any, index: number) => {
-                        return (
-                          <tr key={item.id}>
-                            <td>
-                              <div className="flex flex-col">
-                                <span className="text-sm font-normal text-[#1A1A1A]">
-                                  {`${dayjs(item.startTime).format('HH:mm A')}`}
-                                </span>
-                              </div>
-                            </td>
-                            <td>
-                              <div className="flex flex-col">
-                                <span className="text-sm font-normal text-[#1A1A1A]">
-                                  {`${dayjs(item.endTime).format('HH:mm A')}`}
-                                </span>
-                              </div>
-                            </td>
-                            <td>
-                              {!item.isActive ? (
-                                <span className="badge badge-danger">
-                                  Inactive
-                                </span>
-                              ) : (
-                                <span className="badge badge-success">
-                                  Active
-                                </span>
-                              )}
-                            </td>
-                            <td>
-                              <Switch
-                                checked={item.isActive}
-                                onChange={(
-                                  event: React.ChangeEvent<HTMLInputElement>
-                                ) => handleSwitchChange(event, list[index].id)}
-                                inputProps={{ 'aria-label': 'controlled' }}
-                              />
-                              <IconButton
-                                className="btn-dot"
-                                aria-label="more"
-                                id="long-button"
-                                aria-controls={
-                                  actionMenuOpen ? 'long-menu' : undefined
-                                }
-                                aria-expanded={
-                                  actionMenuOpen ? 'true' : undefined
-                                }
-                                aria-haspopup="true"
-                                onClick={(
-                                  event: React.MouseEvent<HTMLElement>
-                                ) => {
-                                  setActionMenuItemid(list[index].id);
-                                  setActionMenuAnchorEl(event.currentTarget);
-                                }}
-                              >
-                                <MoreVertIcon />
-                              </IconButton>
-                            </td>
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                  </table>
-                </div>
-                <div className="mt-3 flex w-[100%] justify-center py-3">
-                  <TablePagination
-                    component="div"
-                    count={total}
-                    page={page}
-                    onPageChange={handleChangePage}
-                    rowsPerPage={rowsPerPage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
-                  />
-                </div>
               </div>
+              {list?.length > 0 ? (
+                <>
+                  <div className="mt-3 grid grid-cols-none">
+                    <table className="table-border table-auto">
+                      <thead>
+                        <tr>
+                          <th>Start Time</th>
+                          <th>End Time</th>
+                          <th>Status</th>
+                          <th>&nbsp;</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {list.map((item: any, index: number) => {
+                          return (
+                            <tr key={item.id}>
+                              <td>
+                                <div className="flex flex-col">
+                                  <span className="text-sm font-normal text-[#1A1A1A]">
+                                    {`${dayjs(item.startTime).format(
+                                      'HH:mm A'
+                                    )}`}
+                                  </span>
+                                </div>
+                              </td>
+                              <td>
+                                <div className="flex flex-col">
+                                  <span className="text-sm font-normal text-[#1A1A1A]">
+                                    {`${dayjs(item.endTime).format('HH:mm A')}`}
+                                  </span>
+                                </div>
+                              </td>
+                              <td>
+                                {!item.isActive ? (
+                                  <span className="badge badge-danger">
+                                    Inactive
+                                  </span>
+                                ) : (
+                                  <span className="badge badge-success">
+                                    Active
+                                  </span>
+                                )}
+                              </td>
+                              <td>
+                                <Switch
+                                  checked={item.isActive}
+                                  onChange={(
+                                    event: React.ChangeEvent<HTMLInputElement>
+                                  ) =>
+                                    handleSwitchChange(event, list[index].id)
+                                  }
+                                  inputProps={{ 'aria-label': 'controlled' }}
+                                />
+                                <IconButton
+                                  className="btn-dot"
+                                  aria-label="more"
+                                  id="long-button"
+                                  aria-controls={
+                                    actionMenuOpen ? 'long-menu' : undefined
+                                  }
+                                  aria-expanded={
+                                    actionMenuOpen ? 'true' : undefined
+                                  }
+                                  aria-haspopup="true"
+                                  onClick={(
+                                    event: React.MouseEvent<HTMLElement>
+                                  ) => {
+                                    setActionMenuItemid(list[index].id);
+                                    setActionMenuAnchorEl(event.currentTarget);
+                                  }}
+                                >
+                                  <MoreVertIcon />
+                                </IconButton>
+                              </td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+                  <div className="mt-3 flex w-[100%] justify-center py-3">
+                    <TablePagination
+                      component="div"
+                      count={total}
+                      page={page}
+                      onPageChange={handleChangePage}
+                      rowsPerPage={rowsPerPage}
+                      onRowsPerPageChange={handleChangeRowsPerPage}
+                    />
+                  </div>
+                </>
+              ) : (
+                <CustomText noroundedborders text="No Schedule Records" />
+              )}
             </div>
-          )}
+          </div>
         </div>
       )}
       {cancelDialogOpen && (
