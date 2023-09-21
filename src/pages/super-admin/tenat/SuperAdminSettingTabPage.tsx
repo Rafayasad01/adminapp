@@ -3,7 +3,7 @@ import Loader2 from '../../../components/common/Loader2';
 import assets from '../../../assets';
 import Avatar from '@mui/material/Avatar';
 import Link from '@mui/material/Link';
-import { FACEBOOK, INSTAGRAM, LINKEDIN, TWITTER, WHATSAPP, YOUTUBE } from '../../../utils/constants';
+import { DOMAIN_PREFIX, DOMAIN_PROTOCOL, FACEBOOK, INSTAGRAM, LINKEDIN, TWITTER, WHATSAPP, YOUTUBE } from '../../../utils/constants';
 import Service from '../../../services/superadmin/Tenant';
 
 type Props = {
@@ -116,11 +116,11 @@ const SuperAdminSettingTabPage = ({ tenant }: Props) => {
 
                     <div className='flex flex-col w-full mt-4'>
                         <span className='text-[#1A1A1A] font-open-sans text-base font-semibold not-italic'>development domain</span>
-                        <div className='text-[#6A6A6A] font-open-sans text-sm font-normal not-italic mt-1'>{detail.developmentDomain ? detail.developmentDomain : '--'}</div>
+                        <div className='text-[#6A6A6A] font-open-sans text-sm font-normal not-italic mt-1'>{detail.developmentDomain ? DOMAIN_PROTOCOL + detail.developmentDomain + DOMAIN_PREFIX : '--'}</div>
                     </div>
                     <div className='flex flex-col w-full mt-4'>
                         <span className='text-[#1A1A1A] font-open-sans text-base font-semibold not-italic'>live domain</span>
-                        <div className='text-[#6A6A6A] font-open-sans text-sm font-normal not-italic mt-1'>{detail.liveDomain ? detail.liveDomain : '--'}</div>
+                        <div className='text-[#6A6A6A] font-open-sans text-sm font-normal not-italic mt-1'>{detail.liveDomain ? DOMAIN_PROTOCOL + detail.liveDomain + DOMAIN_PREFIX : '--'}</div>
                     </div>
                     <div className='flex flex-col w-full mt-4'>
                         <span className='text-[#1A1A1A] font-open-sans text-base font-semibold not-italic'>Social Media Icons</span>
