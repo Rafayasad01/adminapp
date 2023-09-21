@@ -18,8 +18,8 @@ function LocationsAddPopup({ locationAddDialog, setLocationAddDialog }: Props) {
   const handleSliderChange = (event: Event, newValue: number | number[]) => {
     if (typeof newValue === 'number') {
       setSliderCount(() => newValue);
-      console.log(newValue);
-      console.log(sliderCount);
+      // console.log(newValue);
+      // console.log(sliderCount);
     }
   };
 

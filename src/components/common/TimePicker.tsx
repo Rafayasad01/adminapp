@@ -44,7 +44,6 @@ function TimePicker({
   const buttonElement = useRef(null);
   const handleClick = () => {
     setTimePicker(buttonElement.current);
-    console.log('HITTT2', buttonElement.current);
     if (timePickerValue?.format('HH:MM A') !== null) {
       setError(id, {
         type: 'manual',

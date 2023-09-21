@@ -35,7 +35,6 @@ function DriversScheduleCreatePopup({
   const handleFormClose = () => setOpenFormDialog(false);
 
   const onSubmit = () => {
-    console.log('HIT', startTime);
     if (startTime !== null && endTime !== null) {
       const data = {
         start_time: '',
@@ -45,7 +44,7 @@ function DriversScheduleCreatePopup({
       data.end_time = dayjs(endTime).format('YYYY-MM-DD HH:mm:ss');
       setOpenFormDialog(false);
       callback(data);
-      console.log('s1', startTime, endTime, data);
+      // console.log('s1', startTime, endTime, data);
     } else {
       if (startTime === null) {
         setError('start_time', {

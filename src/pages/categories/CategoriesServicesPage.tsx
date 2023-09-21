@@ -141,7 +141,7 @@ function CategoriesServicesPage() {
         })
         .catch((error) => {
           setIsLoader(false);
-          console.log('error::::::::', error);
+          // console.log('error::::::::', error);
         });
     }
   }, [categoryId, page, rowsPerPage]);

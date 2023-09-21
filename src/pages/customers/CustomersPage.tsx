@@ -84,7 +84,6 @@ function CustomersPage() {
       });
     }
   };
-  console.log('actionMenuItemid C', actionMenuItemid);
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number
@@ -154,7 +153,6 @@ function CustomersPage() {
             type: 'success',
           });
           setList((newArr: any) => {
-            console.log('newArr:::::', newArr);
             return newArr.filter(
               (newItem: any) => newItem.id !== item.data.data.id
             );
@@ -217,7 +215,6 @@ function CustomersPage() {
                 type: 'success',
               });
               setList((newArr: any) => {
-                console.log('newArr:::::', newArr);
                 return newArr.filter(
                   (newItem: any) => newItem.id !== item.data.data.id
                 );
@@ -255,7 +252,6 @@ function CustomersPage() {
       Service.getListService(authState.user.tenant, page, rowsPerPage)
         .then((item: any) => {
           if (item.data.success) {
-            console.log('customers data==>', item.data);
             setIsLoader(false);
             setList(item.data.data.list);
             setTotal(item.data.data.total);
@@ -289,7 +285,6 @@ function CustomersPage() {
     Service.create(formData)
       .then((item) => {
         if (item.data.success) {
-          console.log('customer created', item.data);
           setIsLoader(false);
           setIsNotify(true);
           setNotifyMessage({
@@ -482,7 +477,6 @@ function CustomersPage() {
                                   marginRight: '10px',
                                 }}
                               >
-                                {console.log('name', item.firstName)}
                                 {item.firstName?.charAt(0)}
                                 {item.lastName?.charAt(0)}
                               </Avatar>

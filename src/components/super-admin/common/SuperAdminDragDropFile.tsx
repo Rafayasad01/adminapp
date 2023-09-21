@@ -9,7 +9,7 @@ function SuperAdminDragDropFile() {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleFile = (files: any) => {
-    console.log(files);
+    // console.log(files);
   };
 
   const handleDrag = (e: any) => {

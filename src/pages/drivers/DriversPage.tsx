@@ -106,7 +106,6 @@ function DriversPage() {
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
   const createFormHandler = (data: any) => {
-    console.log("driverOBJ", data,authState);
     setIsLoader(true);
     const formData = new FormData();
     formData.append('first_name', data.first_name);
@@ -120,40 +119,46 @@ function DriversPage() {
     formData.append('created_by', authState.user.id);
     formData.append('updated_by', authState.user.id);
     if (data.avatar !== null) formData.append('avatar', data.avatar);
-    // driver
-    //   .create(formData)
-    //   .then((item) => {
-    //     if (item.data.success) {
-    //       reset();
-    //       setAvatar(null);
-    //       setIsLoader(false);
-    //       setIsNotify(true);
-    //       setNotifyMessage({
-    //         text: item.data.message,
-    //         type: 'success',
-    //       });
-    //       setList([...list, item.data.data]);
-    //     } else {
-    //       reset();
-    //       setAvatar(null);
-    //       setIsLoader(false);
-    //       setIsNotify(true);
-    //       setNotifyMessage({
-    //         text: item.data.message,
-    //         type: 'error',
-    //       });
-    //     }
-    //   })
-    //   .catch((err) => {
-    //     reset();
-    //     setAvatar(null);
-    //     setIsLoader(false);
-    //     setIsNotify(true);
-    //     setNotifyMessage({
-    //       text: err.message,
-    //       type: 'error',
-    //     });
-    //   });
+    driver
+      .create(formData)
+      .then((item) => {
+        if (item.data.success) {
+          reset();
+          setAvatar(null);
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'success',
+          });
+          setList([{
+            firstName: item.data.data.first_name,
+            lastName: item.data.data.last_name,
+            licenseNumber: item.data.data.license_number,
+            isActive: item.data.data.is_active,
+            ...item.data.data
+          }, ...list]);
+        } else {
+          reset();
+          setAvatar(null);
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'error',
+          });
+        }
+      })
+      .catch((err) => {
+        reset();
+        setAvatar(null);
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
+        });
+      });
   };
 
   const updateFormHandler = (data: any) => {
@@ -215,7 +220,6 @@ function DriversPage() {
     driver.getService(id).then((item: any) => {
       if (item.data.success) {
         setOpenEditFormDialog(true);
-        console.log('edit data', item.data);
         setValue('first_name', item.data.data.firstName);
         setValue('last_name', item.data.data.lastName);
         setValue('email', item.data.data.email);
@@ -415,9 +419,9 @@ function DriversPage() {
     },
   ];
 
+
   // submit dialog callback
   const onSubmitDialogBox = (data: AppUserDriverExt) => {
-    console.log('datass', data, avatar);
     if (
       data.first_name &&
       data.last_name &&

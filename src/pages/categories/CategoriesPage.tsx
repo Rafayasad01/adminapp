@@ -83,7 +83,7 @@ function CategoriesPage() {
             text: error.message,
             type: 'error',
           });
-          console.log('error::::::::', error);
+          // console.log('error::::::::', error);
         });
     }
   }, [authState, page, rowsPerPage]);
@@ -190,7 +190,7 @@ function CategoriesPage() {
       if (listingRolePermission(dataRole, 'Category Update')) {
         category.getCategory(actionMenuItemid).then((item: any) => {
           if (item.data.success) {
-            console.log('tem.data.data:::::::', item.data.data);
+            // console.log('tem.data.data:::::::', item.data.data);
             setEditFormData(item.data.data);
             setOpenEditFormDialog(true);
           }

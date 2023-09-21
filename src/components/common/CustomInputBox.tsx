@@ -31,7 +31,6 @@ function CustomInputBox({
   onclick,
   showPassVisibility,
 }: Props) {
-  console.log('VAL', value);
 
   return (
     <>

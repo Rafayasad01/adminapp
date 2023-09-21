@@ -96,7 +96,7 @@ function SuperAdminTenantPage() {
       })
       .catch((error) => {
         setIsLoader(false);
-        console.log('error::::::::', error);
+        // console.log('error::::::::', error);
       });
   }, [page, rowsPerPage]);
 
@@ -148,7 +148,6 @@ function SuperAdminTenantPage() {
     }
   };
   const updateFormHandler = (data: any) => {
-    console.log('data::::::', data)
     setIsLoader(true);
     const formData = new FormData();
     formData.append('tenantName', data.tenantName);

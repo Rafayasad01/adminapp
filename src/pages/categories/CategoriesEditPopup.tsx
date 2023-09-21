@@ -78,8 +78,6 @@ function CategoriesEditPopup({
     setImage({ name: icon });
   }, [formData]);
 
-  console.log('IDD 4 CAT', getValues('name'));
-
   return (
     <Dialog
       open={openFormDialog}

@@ -172,7 +172,6 @@ function SettingsApp() {
       Service.getService(authState.user.tenantConfig).then((item: any) => {
         // console.log('item Select:::::', item)
         if (item.data.success) {
-          console.log('color', item.data);
           setIsLoader(false);
           setData(item.data.data);
           setDetail(item.data.data);
