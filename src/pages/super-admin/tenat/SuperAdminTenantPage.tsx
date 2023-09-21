@@ -16,9 +16,8 @@ import Service from '../../../services/superadmin/Tenant';
 import SuperAdminTenantCreatePopup from './SuperAdminTenantCreatePopup';
 import Notify from '../../../components/common/Notify';
 import WysiwygOutlinedIcon from '@mui/icons-material/WysiwygOutlined';
-import Switch from '@mui/material/Switch';
-import EditIcon from '@mui/icons-material/Edit';
 import SuperAdminTenantUpdatePopup from './SuperAdminTenantUpdatePopup';
+import CustomText from '../../../components/common/CustomText';
 
 function SuperAdminTenantPage() {
   const navigate = useNavigate();
@@ -375,11 +374,7 @@ function SuperAdminTenantPage() {
               </tbody>
             </table>
           </div>
-          {list?.length < 1 ? (
-            <div className="flex w-full items-center justify-center bg-gray-200 py-5">
-              <p>No Records Found</p>
-            </div>
-          ) : null}
+          {list?.length < 1 ? <CustomText text="No Records Found" /> : null}
           <div className="mt-3 flex w-[100%] justify-center py-3">
             <TablePagination
               component="div"

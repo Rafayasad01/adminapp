@@ -8,7 +8,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import CircularProgress from '@mui/material/CircularProgress';
-import auth from '../../../services/superadmin/SuperAdminAuth';
+import auth from '../../../services/adminapp/admin';
 import { UserLogin } from '../../../interfaces/superadmin/auth.interface';
 import AlertBox from '../../../utils/Alert';
 import { setToken } from '../../../utils/constants';
@@ -16,6 +16,7 @@ import { useAppDispatch } from '../../../redux/redux-hooks';
 import { login } from '../../../redux/features/authStateSlice';
 
 import assets from '../../../assets';
+import { setRolePermissions } from '../../../redux/features/permissionsStateSlice';
 
 function LoginPage() {
   const dispatch = useAppDispatch();
@@ -41,6 +42,8 @@ function LoginPage() {
     setIsLoader(true);
     const user: any = await auth.loginService(userData);
     if (user && user.data.success) {
+      console.log('dataaaaaaaaaaaa', user.data.data.role);
+      dispatch(setRolePermissions(user.data.data.role));
       setIsLoader(false);
       const newUserData = user.data.data;
       setToken(newUserData.token);

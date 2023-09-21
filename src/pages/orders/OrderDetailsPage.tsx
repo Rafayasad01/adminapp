@@ -15,10 +15,12 @@ import dayjs from 'dayjs';
 
 import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
+import { useSelector } from 'react-redux';
 import TopBar from '../../components/common/TopBar';
 import orderService from '../../services/adminapp/adminOrders';
 
 import {
+  NOT_AUTHORIZED_MESSAGE,
   ORDER_STATUS_IN_CANCELLED,
   ORDER_STATUS_IN_DELIVERED,
   ORDER_STATUS_IN_DELIVERY,
@@ -26,9 +28,15 @@ import {
 } from '../../utils/constants';
 import PermissionPopup from '../../utils/PermissionPopup';
 import assets from '../../assets';
+import Loader from '../../components/common/Loader';
+import Notify from '../../components/common/Notify';
+import { listingRolePermission } from '../../utils/helper';
 
 function OrderDetailsPage() {
   const navigate = useNavigate();
+  const dataRole = useSelector(
+    (state: any) => state.roleState.role.permissions
+  );
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
   const [cancelDialogOpen, setCancelDialogOpen] = useState<boolean>(false);
   // const [orderAssign, setOrderAssign] = useState<boolean>(false);
@@ -40,6 +48,9 @@ function OrderDetailsPage() {
   const [cancelled, setCancelled] = useState<boolean>(false);
   const [nextBtn, setNextBtn] = useState<any>(null);
   const [currentStatus, setCurrentStatus] = useState<any>(null);
+  const [isLoader, setIsLoader] = useState(true);
+  const [isNotify, setIsNotify] = useState(false);
+  const [notifyMessage, setNotifyMessage] = useState({});
   const params = useParams();
   const id: any = params.orderId;
 
@@ -85,12 +96,26 @@ function OrderDetailsPage() {
     setCurrentStatus(laststatus);
     setOrderStatuses(newResult);
   };
+
   useEffect(() => {
-    orderService.viewService(id).then((item) => {
-      if (item) {
-        setData(item.data.data);
-      }
-    });
+    if (listingRolePermission(dataRole, 'Order View')) {
+      orderService
+        .viewService(id)
+        .then((item) => {
+          setIsLoader(false);
+          if (item) {
+            setData(item.data.data);
+          }
+        })
+        .catch((err) => {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: err.message,
+            type: 'error',
+          });
+        });
+    }
   }, [id]);
 
   const getIcon = (string: string) => {
@@ -112,42 +137,77 @@ function OrderDetailsPage() {
   };
 
   const createOrderStatusesService = (data: any, key: string) => {
+    setIsLoader(true);
     if (key === ORDER_STATUS_IN_CANCELLED && (cancelled || isCancelled)) {
       return;
     }
-    orderService.createStatusesService(data).then((item) => {
-      if (item) {
-        const tempData = viewData;
-        tempData.appOrderStatuses.push(item.data.data);
-        setViewData(tempData);
-        setData(tempData);
-      }
-    });
+    orderService
+      .createStatusesService(data)
+      .then((item) => {
+        if (item) {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'success',
+          });
+          const tempData = viewData;
+          tempData.appOrderStatuses.push(item.data.data);
+          setViewData(tempData);
+          setData(tempData);
+        }
+      })
+      .catch((err) => {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
+        });
+      });
   };
 
   const statusUpdateHandler = () => {
-    let newIndex = 0;
-    orderStatuses.forEach((item: any, index: number) => {
-      if (typeof viewData.appOrderStatuses[index] !== 'undefined') {
-        newIndex = index;
-      }
-    });
-    const data = {
-      app_order: id,
-      status: orderStatuses[newIndex + 1].key,
-    };
-    createOrderStatusesService(data, orderStatuses[newIndex].key);
+    if (listingRolePermission(dataRole, 'Order Statuses Create')) {
+      let newIndex = 0;
+      orderStatuses.forEach((item: any, index: number) => {
+        if (typeof viewData.appOrderStatuses[index] !== 'undefined') {
+          newIndex = index;
+        }
+      });
+      const data = {
+        app_order: id,
+        status: orderStatuses[newIndex + 1].key,
+      };
+      createOrderStatusesService(data, orderStatuses[newIndex].key);
+    } else {
+      setIsNotify(true);
+      setNotifyMessage({
+        text: NOT_AUTHORIZED_MESSAGE,
+        type: 'warning',
+      });
+    }
   };
 
   const statusCancelHandler = () => {
-    const data = {
-      app_order: id,
-      status: ORDER_STATUS_IN_CANCELLED,
-    };
-    createOrderStatusesService(data, ORDER_STATUS_IN_CANCELLED);
+    if (listingRolePermission(dataRole, 'Order Statuses Create')) {
+      const data = {
+        app_order: id,
+        status: ORDER_STATUS_IN_CANCELLED,
+      };
+      createOrderStatusesService(data, ORDER_STATUS_IN_CANCELLED);
+    } else {
+      setIsNotify(true);
+      setNotifyMessage({
+        text: NOT_AUTHORIZED_MESSAGE,
+        type: 'warning',
+      });
+    }
   };
 
-  return (
+  return isLoader ? (
+    <Loader />
+  ) : (
     <>
       {dialogOpen && (
         <PermissionPopup
@@ -159,12 +219,18 @@ function OrderDetailsPage() {
       )}
       {cancelDialogOpen && (
         <PermissionPopup
+          type="shock"
           open={cancelDialogOpen}
           setOpen={setCancelDialogOpen}
           dialogText={dialogText}
           callback={statusCancelHandler}
         />
       )}
+      <Notify
+        isOpen={isNotify}
+        setIsOpen={setIsNotify}
+        displayMessage={notifyMessage}
+      />
       <TopBar isNestedRoute title="View Order" />
       <div className="container py-3">
         <div className="grid w-full grid-cols-2 gap-3">
@@ -363,32 +429,34 @@ function OrderDetailsPage() {
                 )}
               </div>
               <hr className="my-3 h-[1px] w-full bg-neutral-200" />
-              {viewData.orderItems &&
-                viewData.orderItems.map((item: any, index: number) => {
-                  return (
-                    <div key={item.id}>
-                      {index > 0 && (
-                        <hr className="my-2 h-[1px] w-full bg-neutral-200" />
-                      )}
-                      <div className="flex items-center">
-                        <img
-                          className="mr-2 aspect-square w-11 rounded-full"
-                          src={item.icon}
-                          alt=""
-                        />
-                        <div className="flex-grow font-open-sans text-xs font-semibold text-neutral-900">
-                          {item.name}
-                        </div>
-                        <div className="mx-4 text-right font-open-sans text-xs font-normal text-neutral-500">
-                          {item.quantity} Items
-                        </div>
-                        <div className="text-right font-open-sans text-sm font-semibold text-neutral-900">
-                          {item.unitPrice}
+              <div className="max-h-48 flex-none overflow-y-scroll scroll-smooth px-4">
+                {viewData.orderItems &&
+                  viewData.orderItems.map((item: any, index: number) => {
+                    return (
+                      <div key={index}>
+                        {index > 0 && (
+                          <hr className="my-2 h-[1px] w-full bg-neutral-200" />
+                        )}
+                        <div className="flex items-center">
+                          <img
+                            className="mr-2 aspect-square w-11 rounded-full"
+                            src={item.icon}
+                            alt=""
+                          />
+                          <div className="flex-grow font-open-sans text-xs font-semibold text-neutral-900">
+                            {item.name}
+                          </div>
+                          <div className="mx-4 text-right font-open-sans text-xs font-normal text-neutral-500">
+                            {item.quantity} Items
+                          </div>
+                          <div className="text-right font-open-sans text-sm font-semibold text-neutral-900">
+                            {item.unitPrice}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  );
-                })}
+                    );
+                  })}
+              </div>
 
               <hr className="my-2 h-[1px] w-full bg-neutral-200" />
               <div className="flex flex-col gap-2">
@@ -427,7 +495,7 @@ function OrderDetailsPage() {
               </div>
             </div>
           </div>
-          <div className="mb-auto min-h-[600px] rounded-lg bg-[#fff] shadow-lg">
+          <div className="mb-auto min-h-[610px] rounded-lg bg-[#fff] shadow-lg">
             <div className="rounded-t-xl bg-neutral-300 py-2 px-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center">
@@ -472,13 +540,13 @@ function OrderDetailsPage() {
             </div>
             <div className="flex flex-col gap-4 px-4 py-4">
               {orderStatuses &&
-                orderStatuses.map((item: any) => {
+                orderStatuses.map((item: any, index: number) => {
                   if (item.key === ORDER_STATUS_IN_CANCELLED && isCancelled) {
                     return null;
                   }
                   return (
                     <div
-                      key={item.key}
+                      key={index}
                       className={`flex items-center ${
                         item.isStatus ? '' : 'opacity-25'
                       } `}
@@ -490,7 +558,7 @@ function OrderDetailsPage() {
                       )}
 
                       <div
-                        className={`relative mx-2 flex ${
+                        className={`relative mx-2 inline flex ${
                           item.isStatus ? item.value.color : 'text-neutral-500'
                         } `}
                       >

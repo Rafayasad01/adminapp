@@ -12,7 +12,7 @@ import { useSelector } from 'react-redux';
 import BackArrowIcon from '../icons/BackArrowIcon';
 
 type Props = {
-  title: string;
+  title?: string;
   isNestedRoute?: boolean;
 };
 

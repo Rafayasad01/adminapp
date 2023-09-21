@@ -11,6 +11,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import TablePagination from '@mui/material/TablePagination';
 import Switch from '@mui/material/Switch';
+import { useSelector } from 'react-redux';
 import TopBar from '../../components/common/TopBar';
 import ServicesCreatePopup from './CategoriesServicesCreatePopup';
 import ServicesEditPopup from './CategoriesServicesEditPopup';
@@ -20,10 +21,16 @@ import category from '../../services/adminapp/adminCategory';
 import Loader from '../../components/common/Loader';
 import Notify from '../../components/common/Notify';
 import PermissionPopup from '../../utils/PermissionPopup';
+import { CheckRolePermission, listingRolePermission } from '../../utils/helper';
+import { NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
+import CustomText from '../../components/common/CustomText';
 
 function CategoriesServicesPage() {
   const params = useParams();
   const authState: any = useAppSelector((state) => state.authState);
+  const dataRole = useSelector(
+    (state: any) => state.roleState.role.permissions
+  );
   const navigate = useNavigate();
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(0);
@@ -35,7 +42,7 @@ function CategoriesServicesPage() {
   const [actionMenuAnchorEl, setActionMenuAnchorEl] =
     useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
-  const actionMenuOptions = ["Faq's", 'Edit', 'Delete'];
+  const actionMenuOptions = ["Item faq's", 'Edit', 'Delete'];
 
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
@@ -84,6 +91,19 @@ function CategoriesServicesPage() {
         });
     }
   };
+
+  const handleAddNew = () => {
+    if (listingRolePermission(dataRole, 'Category Service Create')) {
+      setOpenFormDialog(true);
+    } else {
+      setIsNotify(true);
+      setNotifyMessage({
+        text: NOT_AUTHORIZED_MESSAGE,
+        type: 'warning',
+      });
+    }
+  };
+
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -109,17 +129,21 @@ function CategoriesServicesPage() {
   };
 
   useEffect(() => {
-    category
-      .getCategoryServiceList(categoryId, page, rowsPerPage)
-      .then((item: any) => {
-        setIsLoader(false);
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      })
-      .catch((error) => {
-        setIsLoader(false);
-        console.log('error::::::::', error);
-      });
+    if (listingRolePermission(dataRole, 'Category Service List')) {
+      category
+        .getCategoryServiceList(categoryId, page, rowsPerPage)
+        .then((item: any) => {
+          if (listingRolePermission(dataRole, 'Category Service Get')) {
+            setIsLoader(false);
+            setList(item.data.data.list);
+            setTotal(item.data.data.total);
+          }
+        })
+        .catch((error) => {
+          setIsLoader(false);
+          console.log('error::::::::', error);
+        });
+    }
   }, [categoryId, page, rowsPerPage]);
 
   const deleteHandler = (id: string) => {
@@ -164,14 +188,36 @@ function CategoriesServicesPage() {
     if (option === 'Edit') {
       category.getCategoryService(actionMenuItemid).then((item: any) => {
         if (item.data.success) {
-          setEditFormData(item.data.data);
-          setOpenEditFormDialog(true);
+          if (listingRolePermission(dataRole, 'Category Service Update')) {
+            setEditFormData(item.data.data);
+            setOpenEditFormDialog(true);
+          } else {
+            setIsNotify(true);
+            setNotifyMessage({
+              text: NOT_AUTHORIZED_MESSAGE,
+              type: 'warning',
+            });
+          }
         }
       });
-    } else if (option === "Faq's") {
-      navigate(`../service/faq/${actionMenuItemid}`);
+    } else if (option === "Item faq's") {
+      CheckRolePermission(
+        'Category Service List',
+        dataRole,
+        navigate,
+        `../service/faq/${actionMenuItemid}`
+      );
+      // navigate(`../service/faq/${actionMenuItemid}`);
     } else if (option === 'Delete') {
-      setCancelDialogOpen(true);
+      if (listingRolePermission(dataRole, 'Category Service Delete')) {
+        setCancelDialogOpen(true);
+      } else {
+        setIsNotify(true);
+        setNotifyMessage({
+          text: NOT_AUTHORIZED_MESSAGE,
+          type: 'warning',
+        });
+      }
     }
   };
 
@@ -233,7 +279,7 @@ function CategoriesServicesPage() {
             text: updateItem.data.message,
             type: 'success',
           });
-          for (let i = 0; i < list.length; i++) {
+          for (let i = 0; i < list.length; i += 1) {
             if (list[i].id === updateItem.data.data.id) {
               list[i].name = updateItem.data.data.name;
               list[i].quantity = updateItem.data.data.quantity;
@@ -257,22 +303,30 @@ function CategoriesServicesPage() {
   };
 
   const handleSwitchChange = (event: any, id: string) => {
-    const data = {
-      is_active: event.target.checked,
-      updated_by: authState.user.id,
-    };
-    category.updateCategoryServiceStatus(id, data).then((updateItem) => {
-      if (updateItem.data.success) {
-        setList((newArr: any) => {
-          return newArr.map((item: any) => {
-            if (item.id === id) {
-              item.isActive = updateItem.data.data.isActive;
-            }
-            return { ...item };
+    if (listingRolePermission(dataRole, 'Category Service Update Status')) {
+      const data = {
+        is_active: event.target.checked,
+        updated_by: authState.user.id,
+      };
+      category.updateCategoryServiceStatus(id, data).then((updateItem) => {
+        if (updateItem.data.success) {
+          setList((newArr: any) => {
+            return newArr.map((item: any) => {
+              if (item.id === id) {
+                item.isActive = updateItem.data.data.isActive;
+              }
+              return { ...item };
+            });
           });
-        });
-      }
-    });
+        }
+      });
+    } else {
+      setIsNotify(true);
+      setNotifyMessage({
+        text: NOT_AUTHORIZED_MESSAGE,
+        type: 'warning',
+      });
+    }
   };
 
   return isLoader ? (
@@ -284,13 +338,13 @@ function CategoriesServicesPage() {
         setIsOpen={setIsNotify}
         displayMessage={notifyMessage}
       />
-      <TopBar isNestedRoute title="Services" />
+      <TopBar isNestedRoute title="Items" />
       <div className="container mt-5">
         <div className="w-full rounded-lg bg-white shadow-lg">
           <div className="grid grid-cols-12 px-4 py-5">
             <div className="col-span-7">
               <span className="font-open-sans text-xl font-semibold text-[#252733]">
-                All Services
+                All Items
               </span>
             </div>
             <div className="col-span-5">
@@ -328,7 +382,7 @@ function CategoriesServicesPage() {
                 <Button
                   variant="contained"
                   className="btn-black-fill btn-icon"
-                  onClick={() => setOpenFormDialog(true)}
+                  onClick={handleAddNew}
                 >
                   <AddOutlinedIcon /> Add New
                 </Button>
@@ -339,7 +393,7 @@ function CategoriesServicesPage() {
             <table className="table-border table-auto">
               <thead>
                 <tr>
-                  <th className="w-56">Service Name</th>
+                  <th className="w-56">Item Name</th>
                   <th className="w-80">Description</th>
                   <th>Min Quantity</th>
                   <th>Price</th>
@@ -410,9 +464,7 @@ function CategoriesServicesPage() {
             </table>
           </div>
           {list?.length < 1 ? (
-            <div className="flex w-full items-center justify-center bg-gray-200 py-5">
-              <p>No Records Found</p>
-            </div>
+            <CustomText noroundedborders text="No Records Found" />
           ) : null}
           <div className="mt-3 flex w-[100%] justify-center py-3">
             <TablePagination

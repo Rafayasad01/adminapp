@@ -1,6 +1,7 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable import/prefer-default-export */
 import { RouteObject, Navigate } from 'react-router-dom';
+import CAN from "../services/permissions/permissions";
 import CategoriesPage from '../pages/categories/CategoriesPage';
 import ComplainsPage from '../pages/complain/ComplainsPage';
 import CustomersDetailPage from '../pages/customers/CustomersDetailPage';
@@ -44,7 +45,7 @@ import SuperAdminUsersListPage from '../pages/super-admin/users/SuperAdminUsersL
 import OTPVerificationPage from '../pages/auth/otp-verification/OtpVerificationPage';
 import SuperAdminTenantPage from '../pages/super-admin/tenat/SuperAdminTenantPage';
 import SuperAdminTenantDetailPage from '../pages/super-admin/tenat/SuperAdminTenantDetailPage';
-
+import NotAuthorized from '../pages/notAuthorized/notAuthorized';
 export const routeObjects: RouteObject[] = [
   {
     index: true,
@@ -163,6 +164,7 @@ export const routeObjects: RouteObject[] = [
               {
                 index: true,
                 element: <CartsPage />,
+                // element: CAN("canView", "Cart List") ? <CartsPage /> : <NotAuthorized />,
               },
               {
                 path: 'view/:cartId',
@@ -176,13 +178,14 @@ export const routeObjects: RouteObject[] = [
               {
                 index: true,
                 element: <OrdersPage />,
+                // element: CAN("canView", "Order List") ? <OrdersPage /> : <p>not authorized</p>,
               },
               {
                 path: 'create',
                 element: <OrdersCreatePage />,
               },
               {
-                path: 'view/:orderId',
+                path: 'detail/:orderId',
                 element: <OrderDetailsPage />,
               },
               {
@@ -201,6 +204,7 @@ export const routeObjects: RouteObject[] = [
               {
                 index: true,
                 element: <DriversPage />,
+                // element: CAN("canView", "Driver List") ? < DriversPage /> : <p>not authorized</p>,
               },
               {
                 path: 'detail/:driverId',
@@ -231,6 +235,7 @@ export const routeObjects: RouteObject[] = [
               {
                 index: true,
                 element: <CategoriesPage />,
+                // element: CAN("canView", "Category List") ? <CategoriesPage /> : <p>not authorized</p>,
               },
               {
                 path: 'service/:categoryId',
@@ -257,6 +262,7 @@ export const routeObjects: RouteObject[] = [
               {
                 index: true,
                 element: <CustomersPage />,
+                // element: CAN("canView", "Customer List") ? <CustomersPage /> : <p>not authorized</p>,
               },
               {
                 path: 'detail/:customerId',
@@ -274,6 +280,7 @@ export const routeObjects: RouteObject[] = [
               {
                 index: true,
                 element: <VouchersPage />,
+                // element: CAN("canView", "Voucher List") ? <VouchersPage /> : <p>not authorized</p>,
               },
             ],
           },
@@ -283,6 +290,7 @@ export const routeObjects: RouteObject[] = [
               {
                 path: '',
                 element: <SettingsPage />,
+                // element: CAN("canView", "Setting View") ? <SettingsPage /> : <p>not authorized</p>,
                 children: [
                   {
                     index: true,
@@ -314,13 +322,22 @@ export const routeObjects: RouteObject[] = [
             children: [
               {
                 index: true,
-                element: <NotificationPage />,
+                element: <NotificationPage />
+                // element: CAN("canView", "Notification List") ? <NotificationPage /> : <p>not authorized</p>,
               },
             ],
           },
+          {
+            path: "no-auth",
+            children: [
+              {
+                index: true,
+                element: <NotAuthorized />,
+              },
+            ],
+          }
         ],
       },
-
     ],
-  },
+  }
 ];

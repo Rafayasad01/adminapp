@@ -19,6 +19,7 @@ type Props = {
   callback: (...args: any[]) => any;
   setIsNotify: any;
   setNotifyMessage: any;
+  setActionMenuItemid: any;
 };
 
 function CustomersEditPopup({
@@ -29,6 +30,7 @@ function CustomersEditPopup({
   callback,
   setIsNotify,
   setNotifyMessage,
+  setActionMenuItemid,
 }: Props) {
   const [showPassword, setShowPassword] = useState(false);
   const [avatar, setAvatar] = useState<any>(null);
@@ -38,11 +40,16 @@ function CustomersEditPopup({
     register,
     handleSubmit,
     watch,
+    setValue,
     formState: { errors },
     control,
   } = useForm<AppUser>();
 
-  const handleFormClose = () => setOpenFormDialog(false);
+  const handleFormClose = () => {
+    setOpenFormDialog(false);
+    setActionMenuItemid(null);
+    setEditFormData(null);
+  };
 
   const handleFileChange = (event: any) => {
     setAvatar(event.target.files[0]);
@@ -79,7 +86,7 @@ function CustomersEditPopup({
     }
   }, [formData]);
 
-  console.log('formdata', formData);
+  console.log('IDD 3', formData);
 
   return (
     <Dialog
