@@ -43,6 +43,7 @@ import SuperAdminSupportPage from '../pages/super-admin/support/SuperAdminSuppor
 import SuperAdminUsersListPage from '../pages/super-admin/users/SuperAdminUsersListPage';
 import OTPVerificationPage from '../pages/auth/otp-verification/OtpVerificationPage';
 import SuperAdminTenantPage from '../pages/super-admin/tenat/SuperAdminTenantPage';
+import SuperAdminTenantDetailPage from '../pages/super-admin/tenat/SuperAdminTenantDetailPage';
 
 export const routeObjects: RouteObject[] = [
   {
@@ -131,6 +132,10 @@ export const routeObjects: RouteObject[] = [
               {
                 path: 'list',
                 element: <SuperAdminTenantPage />,
+              },
+              {
+                path: 'detail/:id',
+                element: <SuperAdminTenantDetailPage />,
               },
             ],
           },

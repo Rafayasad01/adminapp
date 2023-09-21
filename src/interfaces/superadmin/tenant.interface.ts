@@ -1,7 +1,11 @@
 export interface Tenant {
   tenantName: string;
-  shopAdmin: string;
+  email: string;
   firstName: string;
   lastName: string;
   trialMode: boolean;
+  trialUpdateMode: boolean;
+  trailStartDate: string;
+  developmentDomain: string;
+  liveDomain: string;
 }

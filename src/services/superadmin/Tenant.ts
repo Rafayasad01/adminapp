@@ -12,8 +12,30 @@ const create = (data: any) => {
   return network.post(`${TENANT_PREFIX}/insert`, data);
 };
 
+const detail = (id: any) => {
+  return network.get(`${TENANT_PREFIX}/detail/${id}`);
+};
+
+const detailSetting = (id: any) => {
+  return network.get(`${TENANT_PREFIX}/detail/setting/${id}`);
+};
+const detailUser = (id: any) => {
+  return network.get(`${TENANT_PREFIX}/detail/user/${id}`);
+};
+const detailCategory = (id: any) => {
+  return network.get(`${TENANT_PREFIX}/detail/category/${id}`);
+};
+const get = (id: any) => {
+  return network.get(`${TENANT_PREFIX}/get/${id}`);
+};
+
 export default {
   getListService,
   create,
   searchService,
+  detail,
+  detailSetting,
+  detailUser,
+  detailCategory,
+  get
 };

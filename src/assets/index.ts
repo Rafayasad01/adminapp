@@ -37,6 +37,9 @@ import freshCleanLaundry from './images/fresh-clean-laundry.png';
 import truckDriverIcon from './images/TruckDriver.svg';
 import comingSoonIcon from './images/icon-coming-soon.png';
 import noMapLocation from './images/icon-noMapLocation.svg';
+import tenantIcon from './images/tenant-icon.svg';
+import categoryIcon from './images/category-icon.svg';
+import subCategoryIcon from './images/sub-category-icon.svg';
 
 const assets = {
   images: {
@@ -64,6 +67,9 @@ const assets = {
     truckDriverIcon,
     comingSoonIcon,
     noMapLocation,
+    tenantIcon,
+    categoryIcon,
+    subCategoryIcon
   },
   tempImages: {
     wash,

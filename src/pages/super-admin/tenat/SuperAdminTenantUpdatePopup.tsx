@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import Dialog from '@mui/material/Dialog';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
@@ -10,6 +10,11 @@ import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined';
 import RadioButtonUncheckedOutlinedIcon from '@mui/icons-material/RadioButtonUncheckedOutlined';
 import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
+import dayjs from 'dayjs';
+import duration from 'dayjs/plugin/duration';
+import isBetween from 'dayjs/plugin/isBetween';
+dayjs.extend(duration);
+dayjs.extend(isBetween);
 
 import '../../../assets/css/PopupStyle.css';
 import { Tenant } from '../../../interfaces/superadmin/tenant.interface';
@@ -18,14 +23,16 @@ import { DOMAIN_PREFIX, DOMAIN_PROTOCOL } from '../../../utils/constants';
 type Props = {
   openFormDialog: boolean;
   setOpenFormDialog: React.Dispatch<React.SetStateAction<boolean>>;
+  item: any;
   callback: (...args: any[]) => any;
   setIsNotify: any;
   setNotifyMessage: any;
 };
 
-function SuperAdminTenantCreatePopup({
+function SuperAdminTenantUpdatePopup({
   openFormDialog,
   setOpenFormDialog,
+  item,
   callback,
   setIsNotify,
   setNotifyMessage,
@@ -34,6 +41,7 @@ function SuperAdminTenantCreatePopup({
     register,
     handleSubmit,
     watch,
+    setValue,
     formState: { errors },
     control,
   } = useForm<Tenant>();
@@ -54,7 +62,40 @@ function SuperAdminTenantCreatePopup({
     setOpenFormDialog(false);
   };
 
-  return (
+  useEffect(() => {
+    if (item) {
+      setValue('tenantName', item.name);
+      setValue('email', item.backofficeUser.email);
+      setValue('firstName', item.backofficeUser.firstName);
+      setValue('lastName', item.backofficeUser.lastName);
+      setValue('trialMode', item.trialMode);
+      setValue('trailStartDate', item.trailStartDate);
+      setValue('developmentDomain', item.developmentDomain);
+      setValue('liveDomain', item.liveDomain);
+    }
+  }, [item]);
+
+  const getRemainingTime = (time: any) => {
+    const addTime = dayjs(time).add(14, 'days');
+    const endTime: any = dayjs(addTime).format('YYYY-MM-DD HH:mm:ss');
+    const diffBetween = dayjs.duration(dayjs().diff(endTime));
+    const remainingTime = Math.abs(diffBetween.days());
+    let dayTxt = "day";
+    if (remainingTime > 1) {
+      dayTxt = "days";
+    }
+    let remainingTxt;
+    if (remainingTime <= 0) {
+      remainingTxt = "Expired";
+    } else {
+      remainingTxt = `Remaining ${remainingTime} ${dayTxt} left`;
+    }
+    return remainingTxt;
+  }
+
+
+
+  return item && (
     <Dialog
       open={openFormDialog}
       onClose={handleFormClose}
@@ -74,7 +115,7 @@ function SuperAdminTenantCreatePopup({
                 <label className="FormLabel">Tenant Name</label>
                 <Input
                   className="FormInput"
-                  {...register('tenantName', { required: true })}
+                  {...register('tenantName', { required: true, value: item.name })}
                   type="text"
                   id="tenantName"
                   disableUnderline
@@ -87,7 +128,7 @@ function SuperAdminTenantCreatePopup({
                 <label className="FormLabel">Email</label>
                 <Input
                   className="FormInput"
-                  {...register('email', { required: true })}
+                  {...register('email', { required: true, value: item.email })}
                   type="text"
                   id="email"
                   disableUnderline
@@ -102,7 +143,7 @@ function SuperAdminTenantCreatePopup({
                 <label className="FormLabel">First Name</label>
                 <Input
                   className="FormInput"
-                  {...register('firstName', { required: true })}
+                  {...register('firstName', { required: true, value: item.firstName })}
                   type="text"
                   id="firstName"
                   disableUnderline
@@ -115,7 +156,7 @@ function SuperAdminTenantCreatePopup({
                 <label className="FormLabel">Last Name</label>
                 <Input
                   className="FormInput"
-                  {...register('lastName', { required: true })}
+                  {...register('lastName', { required: true, value: item.lastName })}
                   type="text"
                   id="lastName"
                   disableUnderline
@@ -128,52 +169,77 @@ function SuperAdminTenantCreatePopup({
             <div className="FormField mb-4">
               <FormControl className="FormControl" variant="standard">
                 <label className="FormLabel">Development Domain</label>
-                <TextField
-                  className="FormInput"
-                  sx={{ padding: 0 }}
-                  id="development_domain"
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        {DOMAIN_PROTOCOL}
-                      </InputAdornment>
-                    ),
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        {DOMAIN_PREFIX}
-                      </InputAdornment>
-                    ),
-                  }}
-                  variant="outlined"
-                  {...register('developmentDomain')}
-                />
+                {item.developmentDomain ? (
+                  <Input
+                    className="FormInput"
+                    type="text"
+                    id="developmentDmain"
+                    value={item.developmentDomain}
+                    disableUnderline
+                    disabled
+                  />
+                ) : (
+                  <TextField
+                    className="FormInput"
+                    sx={{ padding: 0 }}
+                    id="development_domain"
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          {DOMAIN_PROTOCOL}
+                        </InputAdornment>
+                      ),
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          {DOMAIN_PREFIX}
+                        </InputAdornment>
+                      ),
+                    }}
+                    variant="outlined"
+                    {...register('developmentDomain')}
+                  />
+                )}
+
               </FormControl>
             </div>
             <div className="FormField mb-4">
               <FormControl className="FormControl" variant="standard">
                 <label className="FormLabel">Live Domain</label>
-                <TextField
-                  className="FormInput"
-                  sx={{ padding: 0 }}
-                  id="live_domain"
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        {DOMAIN_PROTOCOL}
-                      </InputAdornment>
-                    ),
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        {DOMAIN_PREFIX}
-                      </InputAdornment>
-                    ),
-                  }}
-                  variant="outlined"
-                  {...register('liveDomain')}
-                />
+                {item.liveDomain ? (
+                  <Input
+                    className="FormInput"
+                    type="text"
+                    id="liveDomain"
+                    value={item.liveDomain}
+                    disableUnderline
+                    disabled
+                  />
+                ) : (
+                  <TextField
+                    className="FormInput"
+                    sx={{ padding: 0 }}
+                    id="live_domain"
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          {DOMAIN_PROTOCOL}
+                        </InputAdornment>
+                      ),
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          {DOMAIN_PREFIX}
+                        </InputAdornment>
+                      ),
+                    }}
+                    variant="outlined"
+                    {...register('liveDomain')}
+
+                  />
+                )}
+
               </FormControl>
             </div>
-            <div className="FormField">
+            <div className="FormFields">
               <FormControlLabel
                 control={
                   <Checkbox
@@ -185,12 +251,54 @@ function SuperAdminTenantCreatePopup({
                     checkedIcon={
                       <CheckCircleOutlinedIcon style={{ color: '#1D1D1D' }} />
                     }
-                    {...register('trialMode')}
+                    {...register('trialMode', { value: item.trialMode })}
+                    checked={item.trialMode ?? true}
                   />
                 }
                 label="Trail Mode"
               />
+              {item.trialMode && (
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      icon={
+                        <RadioButtonUncheckedOutlinedIcon
+                          style={{ color: '#1D1D1D' }}
+                        />
+                      }
+                      checkedIcon={
+                        <CheckCircleOutlinedIcon style={{ color: '#1D1D1D' }} />
+                      }
+                      {...register('trialUpdateMode',)}
+                    />
+                  }
+                  label="Re Again Trail"
+                />
+              )}
             </div>
+            {item.trialMode && (
+              <div className="FormField">
+                <FormControl className="FormControl" variant="standard">
+                  <TextField
+                    className="FormInput"
+                    sx={{ padding: 0 }}
+                    id="trailStartDate"
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          {item.trailStartDate && (
+                            <span>{getRemainingTime(item.trailStartDate)}</span>
+                          )}
+                        </InputAdornment>
+                      ),
+                    }}
+                    variant="outlined"
+                    value={dayjs(item.trailStartDate).format('YYYY-MM-DD HH:mm:ss')}
+
+                  />
+                </FormControl>
+              </div>
+            )}
           </div>
           <div className="FormFooter">
             <Button
@@ -220,4 +328,4 @@ function SuperAdminTenantCreatePopup({
   );
 }
 
-export default SuperAdminTenantCreatePopup;
+export default SuperAdminTenantUpdatePopup;

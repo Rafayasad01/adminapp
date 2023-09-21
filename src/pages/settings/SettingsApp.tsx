@@ -9,8 +9,6 @@ import Tab from '@mui/material/Tab';
 import { useNavigate } from 'react-router-dom';
 import Link from '@mui/material/Link';
 import { useForm } from 'react-hook-form';
-import TextField from '@mui/material/TextField';
-import InputAdornment from '@mui/material/InputAdornment';
 import DragDropFile from './DragDropFile';
 import PlusIcon from '../../components/icons/PlusIcon';
 import { Setting } from '../../interfaces/app.interface';
@@ -26,6 +24,7 @@ import {
   FACEBOOK,
   INSTAGRAM,
   LINKEDIN,
+  DOMAIN_PROTOCOL,
   TWITTER,
   WHATSAPP,
   YOUTUBE,
@@ -110,8 +109,6 @@ function SettingsApp() {
     formData.append('email', data.email);
     formData.append('min_order_amount', data.min_order_amount);
     formData.append('delivery_fee', data.delivery_fee);
-    formData.append('development_domain', data.development_domain);
-    formData.append('live_domain', data.live_domain);
     formData.append('facebook', detail ? detail.facebook : '');
     formData.append('instagram', detail ? detail.instagram : '');
     formData.append('linkedin', detail ? detail.linkedin : '');
@@ -281,70 +278,24 @@ function SettingsApp() {
               <div className="FormField mb-4">
                 <FormControl className="FormControl" variant="standard">
                   <label className="FormLabel">Development Domain</label>
-                  {/* <Input
+                  <Input
                     className="FormInput"
                     id="development_domain"
-                    placeholder="Development URL..."
+                    value={`${DOMAIN_PROTOCOL}${detail ? detail.development_domain : 'abc'}${DOMAIN_PREFIX}`}
                     disableUnderline
-                    {...register('development_domain', {
-                      value: detail ? detail.development_domain : '',
-                    })}
-                  /> */}
-                  <TextField
-                    className="FormInput"
-                    sx={{ padding: 0 }}
-                    id="development_domain"
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          https://
-                        </InputAdornment>
-                      ),
-                      endAdornment: (
-                        <InputAdornment position="end">
-                          {DOMAIN_PREFIX}
-                        </InputAdornment>
-                      ),
-                    }}
-                    variant="outlined"
-                    {...register('development_domain', {
-                      value: detail ? detail.development_domain : '',
-                    })}
+                    disabled={true}
                   />
                 </FormControl>
               </div>
               <div className="FormField mb-4">
                 <FormControl className="FormControl" variant="standard">
                   <label className="FormLabel">Live Domain</label>
-                  {/* <Input
+                  <Input
                     className="FormInput"
                     id="live_domain"
-                    placeholder="Live URL..."
+                    value={`${DOMAIN_PROTOCOL}${detail ? detail.live_domain : 'abc'}${DOMAIN_PREFIX}`}
                     disableUnderline
-                    {...register('live_domain', {
-                      value: detail ? detail.live_domain : '',
-                    })}
-                  /> */}
-                  <TextField
-                    className="FormInput"
-                    sx={{ padding: 0 }}
-                    id="live_domain"
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          https://
-                        </InputAdornment>
-                      ),
-                      endAdornment: (
-                        <InputAdornment position="end">
-                          {DOMAIN_PREFIX}
-                        </InputAdornment>
-                      ),
-                    }}
-                    variant="outlined"
-                    {...register('live_domain', {
-                      value: detail ? detail.live_domain : '',
-                    })}
+                    disabled={true}
                   />
                 </FormControl>
               </div>

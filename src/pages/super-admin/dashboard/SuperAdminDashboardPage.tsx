@@ -11,7 +11,15 @@ function SuperAdminDashboardPage() {
   return (
     <>
       <TopBar title="Dashboard" />
-      <div className="container mt-3">
+      <div className="coming-soon">
+        <div className="content">
+          <div className="icon">
+            <img className="w-100" src={assets.images.comingSoonIcon} alt="" />
+          </div>
+          <h4 className="text">Coming Soon</h4>
+        </div>
+      </div>
+      {/* <div className="container mt-3">
         <div className="mt-2 grid grid-cols-4 gap-3">
           <div className="flex h-24 flex-row rounded-lg bg-gray-50 shadow-lg">
             <div className="flex w-full flex-col justify-center pl-3">
@@ -337,7 +345,7 @@ function SuperAdminDashboardPage() {
             </tbody>
           </table>
         </div>
-      </div>
+      </div> */}
     </>
   );
 }

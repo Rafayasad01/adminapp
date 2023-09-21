@@ -46,6 +46,7 @@ export const TWITTER = 'twitter';
 export const YOUTUBE = 'youtube';
 export const WHATSAPP = 'whatsapp';
 export const DOMAIN_PREFIX = '.urapptech.com';
+export const DOMAIN_PROTOCOL = 'https://';
 
 // LocalStorage my token save kara lyty
 export const TOKEN_STORE_KEY = 'APP_AUTH_TOKEN';

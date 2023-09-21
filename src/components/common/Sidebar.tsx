@@ -31,6 +31,7 @@ import { logout } from '../../redux/features/authStateSlice';
 
 
 import assets from '../../assets';
+import TenantIcon from '../icons/TenantIcon';
 
 const links = [
   {
@@ -108,21 +109,21 @@ const superAdminlinks = [
     path: 'dashboard',
     icon: <GridViewOutlinedIcon fontSize="inherit" />,
   },
-  {
-    name: 'Shops',
-    path: 'shop',
-    icon: <DescriptionOutlinedIcon fontSize="inherit" />,
-  },
+  // {
+  //   name: 'Shops',
+  //   path: 'shop',
+  //   icon: <DescriptionOutlinedIcon fontSize="inherit" />,
+  // },
 
-  {
-    name: 'Support',
-    path: 'support',
-    icon: <HeadphonesOutlinedIcon fontSize="inherit" />,
-  },
+  // {
+  //   name: 'Support',
+  //   path: 'support',
+  //   icon: <HeadphonesOutlinedIcon fontSize="inherit" />,
+  // },
   {
     name: 'Tenant',
     path: 'tenant',
-    icon: <HeadphonesOutlinedIcon fontSize="inherit" />,
+    icon: <TenantIcon />,
   },
   // {
   //   name: 'Users',
