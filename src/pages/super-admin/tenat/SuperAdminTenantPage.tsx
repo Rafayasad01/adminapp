@@ -10,12 +10,12 @@ import SearchIcon from '@mui/icons-material/Search';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import dayjs from 'dayjs';
 import TablePagination from '@mui/material/TablePagination';
+import WysiwygOutlinedIcon from '@mui/icons-material/WysiwygOutlined';
 import TopBar from '../../../components/common/TopBar';
 import Loader from '../../../components/common/Loader';
 import Service from '../../../services/superadmin/Tenant';
 import SuperAdminTenantCreatePopup from './SuperAdminTenantCreatePopup';
 import Notify from '../../../components/common/Notify';
-import WysiwygOutlinedIcon from '@mui/icons-material/WysiwygOutlined';
 import SuperAdminTenantUpdatePopup from './SuperAdminTenantUpdatePopup';
 import CustomText from '../../../components/common/CustomText';
 
@@ -214,7 +214,7 @@ function SuperAdminTenantPage() {
         });
       }
     });
-  }
+  };
 
   const handleSwitchChange = (event: any, id: string) => {
     // const data = {

@@ -215,17 +215,15 @@ function OrdersAssignPage() {
       item.appOrderDelivery.status === ORDER_STATUS_IN_CANCELLED
     ) {
       colorText = 'btn-gray-fill btn-icon';
+    } else if (
+      item.appOrderDelivery.status === ORDER_DELIVERY_STATUS_NOT_ASSIGN ||
+      item.appOrderDelivery.status === null
+    ) {
+      colorText = 'btn-black-fill btn-icon';
+    } else if (item.appOrderDelivery.appOrder === orderId) {
+      colorText = 'btn-gray-fill btn-icon';
     } else {
-      if (
-        item.appOrderDelivery.status === ORDER_DELIVERY_STATUS_NOT_ASSIGN ||
-        item.appOrderDelivery.status === null
-      ) {
-        colorText = 'btn-black-fill btn-icon';
-      } else if (item.appOrderDelivery.appOrder === orderId) {
-        colorText = 'btn-gray-fill btn-icon';
-      } else {
-        colorText = 'btn-black-fill btn-icon';
-      }
+      colorText = 'btn-black-fill btn-icon';
     }
     return colorText;
   };

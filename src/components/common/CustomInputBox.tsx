@@ -31,7 +31,6 @@ function CustomInputBox({
   onclick,
   showPassVisibility,
 }: Props) {
-
   return (
     <>
       <div className="flex">

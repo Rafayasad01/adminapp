@@ -127,13 +127,16 @@ function DriversPage() {
             text: item.data.message,
             type: 'success',
           });
-          setList([{
-            firstName: item.data.data.first_name,
-            lastName: item.data.data.last_name,
-            licenseNumber: item.data.data.license_number,
-            isActive: item.data.data.is_active,
-            ...item.data.data
-          }, ...list]);
+          setList([
+            {
+              firstName: item.data.data.first_name,
+              lastName: item.data.data.last_name,
+              licenseNumber: item.data.data.license_number,
+              isActive: item.data.data.is_active,
+              ...item.data.data,
+            },
+            ...list,
+          ]);
         } else {
           reset();
           setAvatar(null);
@@ -415,7 +418,6 @@ function DriversPage() {
     },
   ];
 
-
   // submit dialog callback
   const onSubmitDialogBox = (data: AppUserDriverExt) => {
     if (
@@ -533,8 +535,8 @@ function DriversPage() {
         inputFieldsData={
           openEditFormDialog
             ? inputFieldsData.filter(
-              (item) => item.id !== 'address' && item.id !== 'password'
-            )
+                (item) => item.id !== 'address' && item.id !== 'password'
+              )
             : inputFieldsData
         }
         handleSubmit={handleSubmit}

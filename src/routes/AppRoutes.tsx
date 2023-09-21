@@ -46,6 +46,7 @@ import OTPVerificationPage from '../pages/auth/otp-verification/OtpVerificationP
 import SuperAdminTenantPage from '../pages/super-admin/tenat/SuperAdminTenantPage';
 import SuperAdminTenantDetailPage from '../pages/super-admin/tenat/SuperAdminTenantDetailPage';
 import NotAuthorized from '../pages/notAuthorized/notAuthorized';
+
 export const routeObjects: RouteObject[] = [
   {
     index: true,

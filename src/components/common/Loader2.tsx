@@ -3,11 +3,9 @@ import CircularProgress from '@mui/material/CircularProgress';
 
 function Loader() {
   return (
-    <>
-      <div className="h-full w-full min-h-[400px] flex justify-center items-center" >
-        <CircularProgress color="inherit" />
-      </div>
-    </>
+    <div className="flex h-full min-h-[400px] w-full items-center justify-center">
+      <CircularProgress color="inherit" />
+    </div>
   );
 }
 export default Loader;

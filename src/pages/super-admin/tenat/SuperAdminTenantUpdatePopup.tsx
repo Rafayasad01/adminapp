@@ -13,12 +13,13 @@ import InputAdornment from '@mui/material/InputAdornment';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 import isBetween from 'dayjs/plugin/isBetween';
-dayjs.extend(duration);
-dayjs.extend(isBetween);
 
 import '../../../assets/css/PopupStyle.css';
 import { Tenant } from '../../../interfaces/superadmin/tenant.interface';
 import { DOMAIN_PREFIX, DOMAIN_PROTOCOL } from '../../../utils/constants';
+
+dayjs.extend(duration);
+dayjs.extend(isBetween);
 
 type Props = {
   openFormDialog: boolean;
@@ -80,184 +81,174 @@ function SuperAdminTenantUpdatePopup({
     const endTime: any = dayjs(addTime).format('YYYY-MM-DD HH:mm:ss');
     const diffBetween = dayjs.duration(dayjs().diff(endTime));
     const remainingTime = Math.abs(diffBetween.days());
-    let dayTxt = "day";
+    let dayTxt = 'day';
     if (remainingTime > 1) {
-      dayTxt = "days";
+      dayTxt = 'days';
     }
     let remainingTxt;
     if (remainingTime <= 0) {
-      remainingTxt = "Expired";
+      remainingTxt = 'Expired';
     } else {
       remainingTxt = `Remaining ${remainingTime} ${dayTxt} left`;
     }
     return remainingTxt;
-  }
+  };
 
-
-
-  return item && (
-    <Dialog
-      open={openFormDialog}
-      onClose={handleFormClose}
-      PaperProps={{
-        className: 'Dialog',
-        style: { maxWidth: '100%', maxHeight: 'auto' },
-      }}
-    >
-      <div className="Content">
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="FormHeader">
-            <span className="Title">Add Tenant</span>
-          </div>
-          <div className="FormBody">
-            <div className="FormFields">
-              <FormControl className="FormControl" variant="standard">
-                <label className="FormLabel">Tenant Name</label>
-                <Input
-                  className="FormInput"
-                  {...register('tenantName', { required: true, value: item.name })}
-                  type="text"
-                  id="tenantName"
-                  disableUnderline
-                />
-                {errors.tenantName?.type === 'required' && (
-                  <span role="alert">Tenant name is required</span>
-                )}
-              </FormControl>
-              <FormControl className="FormControl" variant="standard">
-                <label className="FormLabel">Email</label>
-                <Input
-                  className="FormInput"
-                  {...register('email', { required: true, value: item.email })}
-                  type="text"
-                  id="email"
-                  disableUnderline
-                />
-                {errors.email?.type === 'required' && (
-                  <span role="alert">Email is required</span>
-                )}
-              </FormControl>
+  return (
+    item && (
+      <Dialog
+        open={openFormDialog}
+        onClose={handleFormClose}
+        PaperProps={{
+          className: 'Dialog',
+          style: { maxWidth: '100%', maxHeight: 'auto' },
+        }}
+      >
+        <div className="Content">
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <div className="FormHeader">
+              <span className="Title">Add Tenant</span>
             </div>
-            <div className="FormFields">
-              <FormControl className="FormControl" variant="standard">
-                <label className="FormLabel">First Name</label>
-                <Input
-                  className="FormInput"
-                  {...register('firstName', { required: true, value: item.firstName })}
-                  type="text"
-                  id="firstName"
-                  disableUnderline
-                />
-                {errors.firstName?.type === 'required' && (
-                  <span role="alert">First name is required</span>
-                )}
-              </FormControl>
-              <FormControl className="FormControl" variant="standard">
-                <label className="FormLabel">Last Name</label>
-                <Input
-                  className="FormInput"
-                  {...register('lastName', { required: true, value: item.lastName })}
-                  type="text"
-                  id="lastName"
-                  disableUnderline
-                />
-                {errors.lastName?.type === 'required' && (
-                  <span role="alert">Last name is required</span>
-                )}
-              </FormControl>
-            </div>
-            <div className="FormField mb-4">
-              <FormControl className="FormControl" variant="standard">
-                <label className="FormLabel">Development Domain</label>
-                {item.developmentDomain ? (
+            <div className="FormBody">
+              <div className="FormFields">
+                <FormControl className="FormControl" variant="standard">
+                  <label className="FormLabel">Tenant Name</label>
                   <Input
                     className="FormInput"
+                    {...register('tenantName', {
+                      required: true,
+                      value: item.name,
+                    })}
                     type="text"
-                    id="developmentDmain"
-                    value={item.developmentDomain}
+                    id="tenantName"
                     disableUnderline
-                    disabled
                   />
-                ) : (
-                  <TextField
-                    className="FormInput"
-                    sx={{ padding: 0 }}
-                    id="development_domain"
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          {DOMAIN_PROTOCOL}
-                        </InputAdornment>
-                      ),
-                      endAdornment: (
-                        <InputAdornment position="end">
-                          {DOMAIN_PREFIX}
-                        </InputAdornment>
-                      ),
-                    }}
-                    variant="outlined"
-                    {...register('developmentDomain')}
-                  />
-                )}
-
-              </FormControl>
-            </div>
-            <div className="FormField mb-4">
-              <FormControl className="FormControl" variant="standard">
-                <label className="FormLabel">Live Domain</label>
-                {item.liveDomain ? (
+                  {errors.tenantName?.type === 'required' && (
+                    <span role="alert">Tenant name is required</span>
+                  )}
+                </FormControl>
+                <FormControl className="FormControl" variant="standard">
+                  <label className="FormLabel">Email</label>
                   <Input
                     className="FormInput"
+                    {...register('email', {
+                      required: true,
+                      value: item.email,
+                    })}
                     type="text"
-                    id="liveDomain"
-                    value={item.liveDomain}
+                    id="email"
                     disableUnderline
-                    disabled
                   />
-                ) : (
-                  <TextField
+                  {errors.email?.type === 'required' && (
+                    <span role="alert">Email is required</span>
+                  )}
+                </FormControl>
+              </div>
+              <div className="FormFields">
+                <FormControl className="FormControl" variant="standard">
+                  <label className="FormLabel">First Name</label>
+                  <Input
                     className="FormInput"
-                    sx={{ padding: 0 }}
-                    id="live_domain"
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          {DOMAIN_PROTOCOL}
-                        </InputAdornment>
-                      ),
-                      endAdornment: (
-                        <InputAdornment position="end">
-                          {DOMAIN_PREFIX}
-                        </InputAdornment>
-                      ),
-                    }}
-                    variant="outlined"
-                    {...register('liveDomain')}
-
+                    {...register('firstName', {
+                      required: true,
+                      value: item.firstName,
+                    })}
+                    type="text"
+                    id="firstName"
+                    disableUnderline
                   />
-                )}
-
-              </FormControl>
-            </div>
-            <div className="FormFields">
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    icon={
-                      <RadioButtonUncheckedOutlinedIcon
-                        style={{ color: '#1D1D1D' }}
-                      />
-                    }
-                    checkedIcon={
-                      <CheckCircleOutlinedIcon style={{ color: '#1D1D1D' }} />
-                    }
-                    {...register('trialMode', { value: item.trialMode })}
-                    checked={item.trialMode ?? true}
+                  {errors.firstName?.type === 'required' && (
+                    <span role="alert">First name is required</span>
+                  )}
+                </FormControl>
+                <FormControl className="FormControl" variant="standard">
+                  <label className="FormLabel">Last Name</label>
+                  <Input
+                    className="FormInput"
+                    {...register('lastName', {
+                      required: true,
+                      value: item.lastName,
+                    })}
+                    type="text"
+                    id="lastName"
+                    disableUnderline
                   />
-                }
-                label="Trail Mode"
-              />
-              {item.trialMode && (
+                  {errors.lastName?.type === 'required' && (
+                    <span role="alert">Last name is required</span>
+                  )}
+                </FormControl>
+              </div>
+              <div className="FormField mb-4">
+                <FormControl className="FormControl" variant="standard">
+                  <label className="FormLabel">Development Domain</label>
+                  {item.developmentDomain ? (
+                    <Input
+                      className="FormInput"
+                      type="text"
+                      id="developmentDmain"
+                      value={item.developmentDomain}
+                      disableUnderline
+                      disabled
+                    />
+                  ) : (
+                    <TextField
+                      className="FormInput"
+                      sx={{ padding: 0 }}
+                      id="development_domain"
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            {DOMAIN_PROTOCOL}
+                          </InputAdornment>
+                        ),
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            {DOMAIN_PREFIX}
+                          </InputAdornment>
+                        ),
+                      }}
+                      variant="outlined"
+                      {...register('developmentDomain')}
+                    />
+                  )}
+                </FormControl>
+              </div>
+              <div className="FormField mb-4">
+                <FormControl className="FormControl" variant="standard">
+                  <label className="FormLabel">Live Domain</label>
+                  {item.liveDomain ? (
+                    <Input
+                      className="FormInput"
+                      type="text"
+                      id="liveDomain"
+                      value={item.liveDomain}
+                      disableUnderline
+                      disabled
+                    />
+                  ) : (
+                    <TextField
+                      className="FormInput"
+                      sx={{ padding: 0 }}
+                      id="live_domain"
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            {DOMAIN_PROTOCOL}
+                          </InputAdornment>
+                        ),
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            {DOMAIN_PREFIX}
+                          </InputAdornment>
+                        ),
+                      }}
+                      variant="outlined"
+                      {...register('liveDomain')}
+                    />
+                  )}
+                </FormControl>
+              </div>
+              <div className="FormFields">
                 <FormControlLabel
                   control={
                     <Checkbox
@@ -269,62 +260,86 @@ function SuperAdminTenantUpdatePopup({
                       checkedIcon={
                         <CheckCircleOutlinedIcon style={{ color: '#1D1D1D' }} />
                       }
-                      {...register('trialUpdateMode',)}
+                      {...register('trialMode', { value: item.trialMode })}
+                      checked={item.trialMode ?? true}
                     />
                   }
-                  label="Re Again Trail"
+                  label="Trail Mode"
                 />
+                {item.trialMode && (
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        icon={
+                          <RadioButtonUncheckedOutlinedIcon
+                            style={{ color: '#1D1D1D' }}
+                          />
+                        }
+                        checkedIcon={
+                          <CheckCircleOutlinedIcon
+                            style={{ color: '#1D1D1D' }}
+                          />
+                        }
+                        {...register('trialUpdateMode')}
+                      />
+                    }
+                    label="Re Again Trail"
+                  />
+                )}
+              </div>
+              {item.trialMode && (
+                <div className="FormField">
+                  <FormControl className="FormControl" variant="standard">
+                    <TextField
+                      className="FormInput"
+                      sx={{ padding: 0 }}
+                      id="trailStartDate"
+                      InputProps={{
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            {item.trailStartDate && (
+                              <span>
+                                {getRemainingTime(item.trailStartDate)}
+                              </span>
+                            )}
+                          </InputAdornment>
+                        ),
+                      }}
+                      variant="outlined"
+                      value={dayjs(item.trailStartDate).format(
+                        'YYYY-MM-DD HH:mm:ss'
+                      )}
+                    />
+                  </FormControl>
+                </div>
               )}
             </div>
-            {item.trialMode && (
-              <div className="FormField">
-                <FormControl className="FormControl" variant="standard">
-                  <TextField
-                    className="FormInput"
-                    sx={{ padding: 0 }}
-                    id="trailStartDate"
-                    InputProps={{
-                      endAdornment: (
-                        <InputAdornment position="end">
-                          {item.trailStartDate && (
-                            <span>{getRemainingTime(item.trailStartDate)}</span>
-                          )}
-                        </InputAdornment>
-                      ),
-                    }}
-                    variant="outlined"
-                    value={dayjs(item.trailStartDate).format('YYYY-MM-DD HH:mm:ss')}
-
-                  />
-                </FormControl>
-              </div>
-            )}
-          </div>
-          <div className="FormFooter">
-            <Button
-              className="btn-black-outline"
-              type="submit"
-              onClick={handleFormClose}
-              sx={{
-                marginRight: '0.5rem',
-                padding: '0.375rem 1.5rem !important',
-              }}
-            >
-              Cancel
-            </Button>
-            <Input
-              type="submit"
-              value="Add"
-              className="btn-black-fill"
-              disableUnderline
-              sx={{
-                padding: '0.375rem 2rem !important',
-              }}
-            />
-          </div>
-        </form>
-      </div>
-    </Dialog>
+            <div className="FormFooter">
+              <Button
+                className="btn-black-outline"
+                type="submit"
+                onClick={handleFormClose}
+                sx={{
+                  marginRight: '0.5rem',
+                  padding: '0.375rem 1.5rem !important',
+                }}
+              >
+                Cancel
+              </Button>
+              <Input
+                type="submit"
+                value="Add"
+                className="btn-black-fill"
+                disableUnderline
+                sx={{
+                  padding: '0.375rem 2rem !important',
+                }}
+              />
+            </div>
+          </form>
+        </div>
+      </Dialog>
+    )
   );
 }
 
