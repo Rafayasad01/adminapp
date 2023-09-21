@@ -175,7 +175,6 @@ function OrdersAssignPage() {
         status: ORDER_DELIVERY_STATUS_NEW,
       };
       Service.createAssignService(data).then((item: any) => {
-        console.log('Create item.data ', item.data);
         if (item.data.success) {
           navigate(`../view/${orderId}`);
         } else {
@@ -216,18 +215,15 @@ function OrdersAssignPage() {
       item.appOrderDelivery.status === ORDER_STATUS_IN_CANCELLED
     ) {
       colorText = 'btn-gray-fill btn-icon';
+    } else if (
+      item.appOrderDelivery.status === ORDER_DELIVERY_STATUS_NOT_ASSIGN ||
+      item.appOrderDelivery.status === null
+    ) {
+      colorText = 'btn-black-fill btn-icon';
+    } else if (item.appOrderDelivery.appOrder === orderId) {
+      colorText = 'btn-gray-fill btn-icon';
     } else {
-      console.log('item order delivery', item.appOrderDelivery.status);
-      if (
-        item.appOrderDelivery.status === ORDER_DELIVERY_STATUS_NOT_ASSIGN ||
-        item.appOrderDelivery.status === null
-      ) {
-        colorText = 'btn-black-fill btn-icon';
-      } else if (item.appOrderDelivery.appOrder === orderId) {
-        colorText = 'btn-gray-fill btn-icon';
-      } else {
-        colorText = 'btn-black-fill btn-icon';
-      }
+      colorText = 'btn-black-fill btn-icon';
     }
     return colorText;
   };

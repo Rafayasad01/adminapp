@@ -38,7 +38,7 @@ function DriversEditPopup({
   } = useForm<AppUserDriverExt>();
 
   const handleFormClose = () => {
-    console.log('im close');
+    // console.log('im close');
     setOpenFormDialog(false);
   };
 
@@ -51,7 +51,7 @@ function DriversEditPopup({
     setAvatar(null);
   };
   const onSubmit = (data: AppUserDriverExt) => {
-    console.log(data);
+    // console.log(data);
 
     if (
       data.first_name &&

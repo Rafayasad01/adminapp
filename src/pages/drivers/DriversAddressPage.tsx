@@ -116,14 +116,14 @@ function DriversAddressPage() {
       Service.getAddress(addressId)
         .then((item: any) => {
           if (item.data.success) {
-            console.log('addressData', item.data);
+            // console.log('addressData', item.data);
             setIsLoader(false);
             setEditFormData(item.data.data);
             setOpenEditFormDialog(true);
           }
         })
         .catch((err) => {
-          console.log(err);
+          // console.log(err);
         });
     }
   };

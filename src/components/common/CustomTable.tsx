@@ -90,7 +90,7 @@ function CustomTable({
           }
         })
         .catch((err: Error) => {
-          console.log('error', err);
+          // console.log('error', err);
         });
     } else {
       setIsNotify(true);

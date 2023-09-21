@@ -172,7 +172,6 @@ function SettingsApp() {
       Service.getService(authState.user.tenantConfig).then((item: any) => {
         // console.log('item Select:::::', item)
         if (item.data.success) {
-          console.log('color', item.data);
           setIsLoader(false);
           setData(item.data.data);
           setDetail(item.data.data);
@@ -306,9 +305,11 @@ function SettingsApp() {
                   <Input
                     className="FormInput"
                     id="development_domain"
-                    value={`${DOMAIN_PROTOCOL}${detail ? detail.development_domain : 'abc'}${DOMAIN_PREFIX}`}
+                    value={`${DOMAIN_PROTOCOL}${
+                      detail ? detail.development_domain : 'abc'
+                    }${DOMAIN_PREFIX}`}
                     disableUnderline
-                    disabled={true}
+                    disabled
                   />
                 </FormControl>
               </div>
@@ -318,9 +319,11 @@ function SettingsApp() {
                   <Input
                     className="FormInput"
                     id="live_domain"
-                    value={`${DOMAIN_PROTOCOL}${detail ? detail.live_domain : 'abc'}${DOMAIN_PREFIX}`}
+                    value={`${DOMAIN_PROTOCOL}${
+                      detail ? detail.live_domain : 'abc'
+                    }${DOMAIN_PREFIX}`}
                     disableUnderline
-                    disabled={true}
+                    disabled
                   />
                 </FormControl>
               </div>

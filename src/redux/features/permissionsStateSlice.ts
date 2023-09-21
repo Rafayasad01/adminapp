@@ -19,7 +19,6 @@ export const RolePermissionsStateSlice = createSlice({
   initialState,
   reducers: {
     setRolePermissions: (state, action: PayloadAction<RolePermissions>) => {
-      console.log('action', action);
       state.role = JSON.parse(JSON.stringify(action.payload));
       // localStorage.setItem('rolePermission', JSON.stringify(action.payload));
     },

@@ -16,7 +16,7 @@ function OffDaysForm() {
   ) => {
     if (newDevices.length) {
       setDevices(newDevices);
-      console.log(newDevices);
+      // console.log(newDevices);
     }
   };
   return (

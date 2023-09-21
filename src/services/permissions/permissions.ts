@@ -14,7 +14,6 @@ type AppAbilityType = PureAbility<[Actions, Subject]>;
 const AppAbility = PureAbility as AbilityClass<AppAbilityType>;
 
 export const defineRules = (permissions: any): any => {
-  console.log('PERMISSIONS', permissions);
   const { can, rules } = new AbilityBuilder<AppAbilityType>(AppAbility);
   permissions?.forEach((item: any) => {
     item.showOnMenu && can('canAdd', item.name);

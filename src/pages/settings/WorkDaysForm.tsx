@@ -25,7 +25,6 @@ function WorkDaysForm() {
   ) => {
     if (newDevices.length) {
       setDevices(newDevices);
-      console.log(newDevices);
     }
   };
 

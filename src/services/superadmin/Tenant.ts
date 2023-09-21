@@ -37,5 +37,5 @@ export default {
   detailSetting,
   detailUser,
   detailCategory,
-  get
+  get,
 };

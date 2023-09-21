@@ -39,10 +39,7 @@ function SocialLinksPopup({
 
   const handleFormClose = () => setOpenDialog(false);
 
-  console.log('dettttt', detail);
-
   const onSubmit = (data: SocialMedia) => {
-    console.log('data', data);
     setIsLoader(true);
     setOpenDialog(false);
     const formData = new FormData();

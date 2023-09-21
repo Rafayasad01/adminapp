@@ -150,7 +150,7 @@ function NotificationPage() {
             text: error.message,
             type: 'error',
           });
-          console.log('error::::::::', error);
+          // console.log('error::::::::', error);
         });
     }
   }, [authState, page, rowsPerPage]);

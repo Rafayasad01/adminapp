@@ -384,7 +384,20 @@ function OrderDetailsPage() {
                       <div className="flex items-center gap-x-1">
                         <div className="avatar">
                           {viewData.driver.avatar ? (
-                            <img src={viewData.driver.avatar} alt="" />
+                            // <img src={viewData.driver.avatar} alt="" />
+                            <Avatar
+                              className="avatar flex items-center"
+                              sx={{
+                                bgcolor: '#1D1D1D',
+                                width: 25,
+                                height: 25,
+                                textTransform: 'uppercase',
+                                fontSize: '11px',
+                                marginRight: '10px',
+                              }}
+                              src={viewData.driver.avatar}
+                              alt=""
+                            />
                           ) : (
                             <Avatar
                               className="avatar flex items-center"

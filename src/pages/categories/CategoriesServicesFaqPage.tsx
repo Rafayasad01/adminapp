@@ -141,7 +141,7 @@ function CategoriesServicesFaqPage() {
         })
         .catch((error) => {
           setIsLoader(false);
-          console.log('error::::::::', error);
+          // console.log('error::::::::', error);
         });
     }
   }, [categoryServiceId, page, rowsPerPage]);
