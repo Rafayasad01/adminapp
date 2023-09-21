@@ -106,7 +106,7 @@ function DriversPage() {
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
   const createFormHandler = (data: any) => {
-    console.log("driverOBJ", data,authState);
+    console.log("driverOBJ", data, authState);
     setIsLoader(true);
     const formData = new FormData();
     formData.append('first_name', data.first_name);
@@ -120,40 +120,40 @@ function DriversPage() {
     formData.append('created_by', authState.user.id);
     formData.append('updated_by', authState.user.id);
     if (data.avatar !== null) formData.append('avatar', data.avatar);
-    // driver
-    //   .create(formData)
-    //   .then((item) => {
-    //     if (item.data.success) {
-    //       reset();
-    //       setAvatar(null);
-    //       setIsLoader(false);
-    //       setIsNotify(true);
-    //       setNotifyMessage({
-    //         text: item.data.message,
-    //         type: 'success',
-    //       });
-    //       setList([...list, item.data.data]);
-    //     } else {
-    //       reset();
-    //       setAvatar(null);
-    //       setIsLoader(false);
-    //       setIsNotify(true);
-    //       setNotifyMessage({
-    //         text: item.data.message,
-    //         type: 'error',
-    //       });
-    //     }
-    //   })
-    //   .catch((err) => {
-    //     reset();
-    //     setAvatar(null);
-    //     setIsLoader(false);
-    //     setIsNotify(true);
-    //     setNotifyMessage({
-    //       text: err.message,
-    //       type: 'error',
-    //     });
-    //   });
+    driver
+      .create(formData)
+      .then((item) => {
+        if (item.data.success) {
+          reset();
+          setAvatar(null);
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'success',
+          });
+          setList([...list, item.data.data]);
+        } else {
+          reset();
+          setAvatar(null);
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'error',
+          });
+        }
+      })
+      .catch((err) => {
+        reset();
+        setAvatar(null);
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
+        });
+      });
   };
 
   const updateFormHandler = (data: any) => {
