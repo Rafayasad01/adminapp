@@ -6,8 +6,6 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 import TopBar from '../../components/common/TopBar';
-import DriversCreatePopup from './DriversCreatePopup';
-import DriversEditPopup from './DriversEditPopup';
 import driver from '../../services/adminapp/adminDriver';
 import { useAppSelector } from '../../redux/redux-hooks';
 
@@ -15,8 +13,6 @@ import ActionMenu from '../../components/common/ActionMenu';
 import Loader from '../../components/common/Loader';
 import Notify from '../../components/common/Notify';
 import CustomTable from '../../components/common/CustomTable';
-import CustomersCreatePopup from '../customers/CustomersCreatePopup';
-import CustomersEditPopup from '../customers/CustomersEditPopup';
 import CustomDialog from '../../components/common/CustomDialog';
 import PermissionPopup from '../../utils/PermissionPopup';
 
@@ -106,7 +102,7 @@ function DriversPage() {
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
   const createFormHandler = (data: any) => {
-    console.log("driverOBJ", data,authState);
+    console.log("driverOBJ", data, authState);
     setIsLoader(true);
     const formData = new FormData();
     formData.append('first_name', data.first_name);
@@ -120,40 +116,40 @@ function DriversPage() {
     formData.append('created_by', authState.user.id);
     formData.append('updated_by', authState.user.id);
     if (data.avatar !== null) formData.append('avatar', data.avatar);
-    // driver
-    //   .create(formData)
-    //   .then((item) => {
-    //     if (item.data.success) {
-    //       reset();
-    //       setAvatar(null);
-    //       setIsLoader(false);
-    //       setIsNotify(true);
-    //       setNotifyMessage({
-    //         text: item.data.message,
-    //         type: 'success',
-    //       });
-    //       setList([...list, item.data.data]);
-    //     } else {
-    //       reset();
-    //       setAvatar(null);
-    //       setIsLoader(false);
-    //       setIsNotify(true);
-    //       setNotifyMessage({
-    //         text: item.data.message,
-    //         type: 'error',
-    //       });
-    //     }
-    //   })
-    //   .catch((err) => {
-    //     reset();
-    //     setAvatar(null);
-    //     setIsLoader(false);
-    //     setIsNotify(true);
-    //     setNotifyMessage({
-    //       text: err.message,
-    //       type: 'error',
-    //     });
-    //   });
+    driver
+      .create(formData)
+      .then((item) => {
+        if (item.data.success) {
+          reset();
+          setAvatar(null);
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'success',
+          });
+          setList([...list, item.data.data]);
+        } else {
+          reset();
+          setAvatar(null);
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'error',
+          });
+        }
+      })
+      .catch((err) => {
+        reset();
+        setAvatar(null);
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
+        });
+      });
   };
 
   const updateFormHandler = (data: any) => {
