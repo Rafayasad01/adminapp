@@ -126,7 +126,7 @@ function SuperAdminSettingTabPage({ tenant }: Props) {
             </div>
             <div className="mt-4 flex w-full flex-col">
               <span className="font-open-sans text-base font-semibold not-italic text-[#1A1A1A]">
-                GST percentage
+                GST Percentage
               </span>
               <div className="mt-1 font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
                 {detail.gstPercentage ? detail.gstPercentage : '0.00'}%
@@ -154,7 +154,7 @@ function SuperAdminSettingTabPage({ tenant }: Props) {
           <div className="flex flex-col py-[2rem] px-5">
             <div className="flex w-full flex-col">
               <span className="font-open-sans text-base font-semibold not-italic text-[#1A1A1A]">
-                minimum order amount
+                Minimum Order Amount
               </span>
               <div className="mt-1 font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
                 {detail.minOrderAmount ? detail.minOrderAmount : '--'}
@@ -162,7 +162,7 @@ function SuperAdminSettingTabPage({ tenant }: Props) {
             </div>
             <div className="mt-4 flex w-full flex-col">
               <span className="font-open-sans text-base font-semibold not-italic text-[#1A1A1A]">
-                delivery fee
+                Delivery Fee
               </span>
               <div className="mt-1 font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
                 {detail.deliveryFee ? detail.deliveryFee : '--'}
@@ -171,7 +171,7 @@ function SuperAdminSettingTabPage({ tenant }: Props) {
 
             <div className="mt-4 flex w-full flex-col">
               <span className="font-open-sans text-base font-semibold not-italic text-[#1A1A1A]">
-                development domain
+                Development Domain
               </span>
               <div className="mt-1 font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
                 {detail.developmentDomain
@@ -181,7 +181,7 @@ function SuperAdminSettingTabPage({ tenant }: Props) {
             </div>
             <div className="mt-4 flex w-full flex-col">
               <span className="font-open-sans text-base font-semibold not-italic text-[#1A1A1A]">
-                live domain
+                Live Domain
               </span>
               <div className="mt-1 font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
                 {detail.liveDomain

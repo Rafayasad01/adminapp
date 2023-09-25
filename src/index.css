@@ -146,6 +146,11 @@ table>tbody>tr:last-child {
   @apply bg-[#c367f1];
 }
 
+.badge-w-100 {
+  width: 100px;
+  height: 20px;
+}
+
 .custom-circle {
   @apply h-2 w-2 rounded-full;
 }

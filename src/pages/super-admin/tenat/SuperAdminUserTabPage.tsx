@@ -23,7 +23,15 @@ function SuperAdminUserTabPage({ tenant }: Props) {
     });
   }, [tenant]);
 
-  const handleFormClickOpen = () => {};
+  const sentEmailHandler = (id: string) => {
+    setIsLoader(true);
+    Service.sentToEmail(id).then((item: any) => {
+      if (item.data.success) {
+        setDetail({ ...detail, sendToEmail: true });
+        setIsLoader(false);
+      }
+    });
+  };
 
   return isLoader ? (
     <Loader2 />
@@ -53,7 +61,7 @@ function SuperAdminUserTabPage({ tenant }: Props) {
             </div>
             <div className="mt-4 flex w-full flex-col">
               <span className="font-open-sans text-base font-semibold not-italic text-[#1A1A1A]">
-                username
+                Username
               </span>
               <div className="mt-1 font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
                 {detail.username
@@ -75,7 +83,7 @@ function SuperAdminUserTabPage({ tenant }: Props) {
             </div>
             <div className="mt-4 flex w-full flex-col">
               <span className="font-open-sans text-base font-semibold not-italic text-[#1A1A1A]">
-                email
+                Email
               </span>
               <div className="mt-1 font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
                 {detail.email}
@@ -108,19 +116,33 @@ function SuperAdminUserTabPage({ tenant }: Props) {
               </div>
             </div>
             <div className="mt-4 flex w-full flex-col">
-              <Button
-                variant="contained"
-                className="btn-black-fill btn-icon"
-                disableRipple
-                sx={{ width: '200px' }}
-                onClick={handleFormClickOpen}
-              >
-                <SendOutlinedIcon
-                  sx={{ marginRight: '6px !important', width: '18px' }}
-                />{' '}
-                Send To Email
-              </Button>
+              <span className="font-open-sans text-base font-semibold not-italic text-[#1A1A1A]">
+                Sent Email
+              </span>
+              <div className="mt-1 font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
+                {detail.sendToEmail ? (
+                  <span className="badge badge-success">sent</span>
+                ) : (
+                  <span className="badge badge-danger">NOt Sent</span>
+                )}
+              </div>
             </div>
+            {!detail.sendToEmail && (
+              <div className="mt-4 flex w-full flex-col">
+                <Button
+                  variant="contained"
+                  className="btn-black-fill btn-icon"
+                  disableRipple
+                  sx={{ width: '200px' }}
+                  onClick={() => sentEmailHandler(detail.id)}
+                >
+                  <SendOutlinedIcon
+                    sx={{ marginRight: '6px !important', width: '18px' }}
+                  />{' '}
+                  Send To Email
+                </Button>
+              </div>
+            )}
           </div>
         </div>
       </div>

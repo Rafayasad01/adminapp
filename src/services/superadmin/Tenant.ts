@@ -12,21 +12,31 @@ const create = (data: any) => {
   return network.post(`${TENANT_PREFIX}/insert`, data);
 };
 
-const detail = (id: any) => {
+const detail = (id: string) => {
   return network.get(`${TENANT_PREFIX}/detail/${id}`);
 };
 
-const detailSetting = (id: any) => {
+const detailSetting = (id: string) => {
   return network.get(`${TENANT_PREFIX}/detail/setting/${id}`);
 };
-const detailUser = (id: any) => {
+const detailUser = (id: string) => {
   return network.get(`${TENANT_PREFIX}/detail/user/${id}`);
 };
-const detailCategory = (id: any) => {
+const detailCategory = (id: string) => {
   return network.get(`${TENANT_PREFIX}/detail/category/${id}`);
 };
 const get = (id: any) => {
   return network.get(`${TENANT_PREFIX}/get/${id}`);
+};
+const update = (id: string, data: any) => {
+  return network.post(`${TENANT_PREFIX}/update/${id}`, data);
+};
+const updateStatus = (id: string, data: any) => {
+  return network.post(`${TENANT_PREFIX}/update/status/${id}`, data);
+};
+
+const sentToEmail = (id: string) => {
+  return network.post(`${TENANT_PREFIX}/email/sent/${id}`, {});
 };
 
 export default {
@@ -38,4 +48,7 @@ export default {
   detailUser,
   detailCategory,
   get,
+  update,
+  updateStatus,
+  sentToEmail,
 };
