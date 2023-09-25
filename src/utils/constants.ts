@@ -3,6 +3,7 @@ export const BASE_URL = 'https://dev.urapptech.com/api/v1/admin/';
 export const GOOGLE_MAP_KEY = import.meta.env.VITE_GOOGLE_MAP_KEY;
 export const BACKOFFICE_PREFIX = 'backofficeUser';
 export const PERMISSION_PREFIX = 'permission';
+export const DASHBOARD_PREFIX = 'dashboard';
 export const ORDER_PREFIX = 'order';
 export const CART_PREFIX = 'cart';
 export const DRIVER_PREFIX = 'driver';

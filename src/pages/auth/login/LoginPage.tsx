@@ -42,11 +42,11 @@ function LoginPage() {
     setIsLoader(true);
     const user: any = await auth.loginService(userData);
     if (user && user.data.success) {
-      // console.log('dataaaaaaaaaaaa', user.data.data.role);
-      dispatch(setRolePermissions(user.data.data.role));
       setIsLoader(false);
       const newUserData = user.data.data;
       setToken(newUserData.token);
+      dispatch(setRolePermissions(newUserData.role));
+      delete newUserData.role;
       dispatch(login(newUserData));
       if (newUserData.isSuperAdmin) {
         navigate('../../../main');

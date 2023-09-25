@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+
 import IconButton from '@mui/material/IconButton';
 import Divider from '@mui/material/Divider';
 import FormControl from '@mui/material/FormControl';
@@ -11,6 +12,7 @@ import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import dayjs from 'dayjs';
 import TablePagination from '@mui/material/TablePagination';
 import WysiwygOutlinedIcon from '@mui/icons-material/WysiwygOutlined';
+import Switch from '@mui/material/Switch';
 import TopBar from '../../../components/common/TopBar';
 import Loader from '../../../components/common/Loader';
 import Service from '../../../services/superadmin/Tenant';
@@ -18,7 +20,6 @@ import SuperAdminTenantCreatePopup from './SuperAdminTenantCreatePopup';
 import Notify from '../../../components/common/Notify';
 import SuperAdminTenantUpdatePopup from './SuperAdminTenantUpdatePopup';
 import CustomText from '../../../components/common/CustomText';
-import { Switch } from '@mui/material';
 import { useAppSelector } from '../../../redux/redux-hooks';
 import EditIcon from '@mui/icons-material/Edit';
 
