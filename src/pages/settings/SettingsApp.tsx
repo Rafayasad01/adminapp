@@ -83,6 +83,8 @@ function SettingsApp() {
   } = useForm<Setting>();
 
   const setData = (item: any) => {
+    console.log('itesmssss', item);
+
     setValue('name', item.name);
     setValue('email', item.email);
     setValue(
@@ -99,12 +101,9 @@ function SettingsApp() {
     );
     setValue(
       'development_domain',
-      item.developmentDomain ? item.developmentDomain : item.development_domain
+      item.developmentDomain ? item.developmentDomain : ''
     );
-    setValue(
-      'live_domain',
-      item.liveDomain ? item.liveDomain : item.live_domain
-    );
+    setValue('live_domain', item.liveDomain ? item.liveDomain : '');
     setValue('facebook', item.facebook);
     setValue('instagram', item.instagram);
     setValue('linkedin', item.linkedin);
@@ -225,7 +224,7 @@ function SettingsApp() {
                 <div className="FormField mb-4 w-[150px]">
                   <DragDropFile setFile={setFile} />
                 </div>
-                {detail && detail.logo && (
+                {detail && detail.logo ? (
                   <div className="mb-4 mt-[0.75rem] ml-4 h-[142px] w-[150px] rounded-md">
                     <img
                       className="h-full w-full rounded-md"
@@ -233,7 +232,7 @@ function SettingsApp() {
                       alt="Shop Logo"
                     />
                   </div>
-                )}
+                ) : null}
               </div>
               <div className="FormField mb-4">
                 <FormControl className="FormControl" variant="standard">
@@ -305,9 +304,12 @@ function SettingsApp() {
                   <Input
                     className="FormInput"
                     id="development_domain"
-                    value={`${DOMAIN_PROTOCOL}${
-                      detail ? detail.development_domain : 'abc'
-                    }${DOMAIN_PREFIX}`}
+                    value={
+                      watch('development_domain') &&
+                      `${DOMAIN_PROTOCOL}${watch(
+                        'development_domain'
+                      )}${DOMAIN_PREFIX}`
+                    }
                     disableUnderline
                     disabled
                   />
@@ -319,9 +321,12 @@ function SettingsApp() {
                   <Input
                     className="FormInput"
                     id="live_domain"
-                    value={`${DOMAIN_PROTOCOL}${
-                      detail ? detail.live_domain : 'abc'
-                    }${DOMAIN_PREFIX}`}
+                    value={
+                      watch('live_domain') &&
+                      `${DOMAIN_PROTOCOL}${watch(
+                        'live_domain'
+                      )}${DOMAIN_PREFIX}`
+                    }
                     disableUnderline
                     disabled
                   />

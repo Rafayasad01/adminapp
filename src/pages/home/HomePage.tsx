@@ -16,9 +16,17 @@ import TopDriverModal from './TopDriverModal';
 
 import assets from '../../assets';
 import TopBar from '../../components/common/TopBar';
+import Service from '../../services/adminapp/adminDashboard';
+import { useAppSelector } from '../../redux/redux-hooks';
+import Loader from '../../components/common/Loader';
+import Notify from '../../components/common/Notify';
 
 function HomePage() {
-
+  const authState: any = useAppSelector((state) => state.authState);
+  const [count, setCount] = useState<any>();
+  const [isLoader, setIsLoader] = useState(true);
+  const [isNotify, setIsNotify] = useState(false);
+  const [notifyMessage, setNotifyMessage] = useState({});
   const [openPickupDialog, setOpenPickupDialog] = useState(false);
   const [openDeliveryDialog, setOpenDeliveryDialog] = useState(false);
   const [openOverDueDialog, setOpenOverDueDialog] = useState(false);
@@ -27,142 +35,168 @@ function HomePage() {
   const [openTopCustomerDialog, setOpenTopCustomerDialog] = useState(false);
   const [openTopDriverDialog, setOpenTopDriverDialog] = useState(false);
   const data = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+
+
+  useEffect(() => {
+    Service.getDashboardCount(authState.user.tenant)
+      .then((res) => {
+        if (res.data.success) {
+          setIsLoader(false)
+          setCount(res.data.data.data)
+        } else {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: res.data.message,
+            type: 'error',
+          });
+        }
+      })
+  }, [])
+
   return (
-    <>
-      <PickupModal
-        open={openPickupDialog}
-        setOpen={setOpenPickupDialog}
-        data={data}
-      />
-      <DeliveryModal
-        open={openDeliveryDialog}
-        setOpen={setOpenDeliveryDialog}
-        data={data}
-      />
-      <OverdueModal
-        open={openOverDueDialog}
-        setOpen={setOpenOverDueDialog}
-        data={data}
-      />
-      <DeliveredModal
-        open={openDeliveredDialog}
-        setOpen={setOpenDeliveredDialog}
-        data={data}
-      />
-      <TodayOrderModal
-        open={openTodayOrderDialog}
-        setOpen={setOpenTodayOrderDialog}
-        data={data}
-      />
-      <TopCustomerModal
-        open={openTopCustomerDialog}
-        setOpen={setOpenTopCustomerDialog}
-        data={data}
-      />
-      <TopDriverModal
-        open={openTopDriverDialog}
-        setOpen={setOpenTopDriverDialog}
-        data={data}
-      />
-      <TopBar title="Dashboard" />
-      <div className="coming-soon">
+    isLoader ? <Loader /> :
+      <>
+        <Notify
+          isOpen={isNotify}
+          setIsOpen={setIsNotify}
+          displayMessage={notifyMessage}
+        />
+        <PickupModal
+          open={openPickupDialog}
+          setOpen={setOpenPickupDialog}
+          data={data}
+        />
+        <DeliveryModal
+          open={openDeliveryDialog}
+          setOpen={setOpenDeliveryDialog}
+          data={data}
+        />
+        <OverdueModal
+          open={openOverDueDialog}
+          setOpen={setOpenOverDueDialog}
+          data={data}
+        />
+        <DeliveredModal
+          open={openDeliveredDialog}
+          setOpen={setOpenDeliveredDialog}
+          data={data}
+        />
+        <TodayOrderModal
+          open={openTodayOrderDialog}
+          setOpen={setOpenTodayOrderDialog}
+          data={data}
+        />
+        <TopCustomerModal
+          open={openTopCustomerDialog}
+          setOpen={setOpenTopCustomerDialog}
+          data={data}
+        />
+        <TopDriverModal
+          open={openTopDriverDialog}
+          setOpen={setOpenTopDriverDialog}
+          data={data}
+        />
+        <TopBar title="Dashboard" />
+        {/* <div className="coming-soon">
         <div className="content">
           <div className="icon">
             <img className="w-100" src={assets.images.comingSoonIcon} alt="" />
           </div>
           <h4 className="text">Coming Soon</h4>
         </div>
-      </div>
-      {/* <div className="container mt-3">
-        <div className="mt-2 grid grid-cols-4 gap-3">
-          <div className="flex h-24 flex-row rounded-lg bg-white shadow-lg">
-            <div className="... flex w-44 flex-col justify-center pl-3">
-              <h2 className="heading-color font-open-sans text-2xl font-semibold">
-                200
-              </h2>
-              <span className="text-color font-open-sans text-xs">
-                Pickup Today
-              </span>
+      </div> */}
+        {console.log("COUNT", count)}
+        <div className="container mt-3">
+          <div className="mt-2 grid grid-cols-4 gap-3">
+            <div className="flex h-24 flex-row rounded-lg bg-white shadow-lg">
+              <div className="... flex w-44 flex-col justify-center pl-3">
+                <h2 className="heading-color font-open-sans text-2xl font-semibold">
+                  {count ? count.pickupToday : "0"}
+                </h2>
+                <span className="text-color font-open-sans text-xs">
+                  Pickup Today
+                </span>
+              </div>
+              <div className="flex w-20 flex-col items-center justify-around">
+                <IconButton
+                  className="p-0"
+                  onClick={() => setOpenPickupDialog(true)}
+                >
+                  <img
+                    className="h-12 w-12"
+                    src={assets.images.iconPickup}
+                    alt=""
+                  />
+                </IconButton>
+              </div>
             </div>
-            <div className="flex w-20 flex-col items-center justify-around">
-              <IconButton
-                className="p-0"
-                onClick={() => setOpenPickupDialog(true)}
-              >
-                <img
-                  className="h-12 w-12"
-                  src={assets.images.iconPickup}
-                  alt=""
-                />
-              </IconButton>
+            <div className="flex h-24 flex-row rounded-lg bg-white shadow-lg">
+              <div className="flex w-44 flex-col justify-center pl-3">
+                <h2 className="heading-color font-open-sans text-2xl font-semibold">
+                  {count ? count.deliveryToday : "0"}
+                </h2>
+                <span className="text-color font-open-sans text-xs">
+                  Delivery Today
+                </span>
+              </div>
+              <div className="flex w-20 flex-col items-center justify-around">
+                <IconButton
+                  className="p-0"
+                  onClick={() => setOpenDeliveryDialog(true)}
+                >
+                  <img
+                    className="h-12 w-12"
+                    src={assets.images.iconDeliveryToday}
+                    alt=""
+                  />
+                </IconButton>
+              </div>
+            </div>
+            <div className="flex h-24 flex-row rounded-lg bg-white shadow-lg">
+              <div className="... flex w-44 flex-col justify-center pl-3">
+                <h2 className="heading-color font-open-sans text-2xl font-semibold">
+                  {count ? count.overdue : "0"}
+                </h2>
+                <span className="text-color font-open-sans text-xs">Overdue</span>
+              </div>
+              <div className="... flex w-20 flex-col items-center justify-around">
+                <IconButton
+                  className="p-0"
+                  onClick={() => setOpenOverDueDialog(true)}
+                >
+                  <img
+                    className="h-12 w-12"
+                    src={assets.images.iconOverDue}
+                    alt=""
+                  />
+                </IconButton>
+              </div>
+            </div>
+            <div className="flex h-24 flex-row rounded-lg bg-white shadow-lg">
+              <div className="... flex w-44 flex-col justify-center pl-3">
+                <h2 className="heading-color font-open-sans text-2xl font-semibold">
+                  {count ? count.deliveredToday : "0"}
+                </h2>
+                <span className="text-color font-open-sans text-xs">
+                  Delivered Today
+                </span>
+              </div>
+              <div className="... flex w-20 flex-col items-center justify-around">
+                <IconButton
+                  className="p-0"
+                  onClick={() => setOpenDeliveredDialog(true)}
+                >
+                  <img
+                    className="h-12 w-12"
+                    src={assets.images.iconDeliveredToday}
+                    alt=""
+                  />
+                </IconButton>
+              </div>
             </div>
           </div>
-          <div className="flex h-24 flex-row rounded-lg bg-white shadow-lg">
-            <div className="flex w-44 flex-col justify-center pl-3">
-              <h2 className="heading-color font-open-sans text-2xl font-semibold">
-                50
-              </h2>
-              <span className="text-color font-open-sans text-xs">
-                Delivery Today
-              </span>
-            </div>
-            <div className="flex w-20 flex-col items-center justify-around">
-              <IconButton
-                className="p-0"
-                onClick={() => setOpenDeliveryDialog(true)}
-              >
-                <img
-                  className="h-12 w-12"
-                  src={assets.images.iconDeliveryToday}
-                  alt=""
-                />
-              </IconButton>
-            </div>
-          </div>
-          <div className="flex h-24 flex-row rounded-lg bg-white shadow-lg">
-            <div className="... flex w-44 flex-col justify-center pl-3">
-              <h2 className="heading-color font-open-sans text-2xl font-semibold">
-                80
-              </h2>
-              <span className="text-color font-open-sans text-xs">Overdue</span>
-            </div>
-            <div className="... flex w-20 flex-col items-center justify-around">
-              <IconButton
-                className="p-0"
-                onClick={() => setOpenOverDueDialog(true)}
-              >
-                <img
-                  className="h-12 w-12"
-                  src={assets.images.iconOverDue}
-                  alt=""
-                />
-              </IconButton>
-            </div>
-          </div>
-          <div className="flex h-24 flex-row rounded-lg bg-white shadow-lg">
-            <div className="... flex w-44 flex-col justify-center pl-3">
-              <h2 className="heading-color font-open-sans text-2xl font-semibold">
-                130
-              </h2>
-              <span className="text-color font-open-sans text-xs">
-                Delivered Today
-              </span>
-            </div>
-            <div className="... flex w-20 flex-col items-center justify-around">
-              <IconButton
-                className="p-0"
-                onClick={() => setOpenDeliveredDialog(true)}
-              >
-                <img
-                  className="h-12 w-12"
-                  src={assets.images.iconDeliveredToday}
-                  alt=""
-                />
-              </IconButton>
-            </div>
-          </div>
-        </div>
-        <div className="mt-3 grid grid-cols-2 gap-3 ">
+          {/* <div className="mt-3 grid grid-cols-2 gap-3 ">
           <div className="flex flex-col rounded-lg bg-white py-5 shadow-lg">
             <div className="flex justify-between px-3">
               <span className="heading-color flex font-open-sans text-sm font-semibold">
@@ -382,9 +416,9 @@ function HomePage() {
               </div>
             </div>
           </div>
+        </div> */}
         </div>
-      </div> */}
-    </>
+      </>
   );
 }
 
