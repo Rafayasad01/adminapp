@@ -186,7 +186,11 @@ function SuperAdminTenantUpdatePopup({
                       className="FormInput"
                       type="text"
                       id="developmentDmain"
-                      value={DOMAIN_PROTOCOL + item.tenantConfig.developmentDomain + DOMAIN_PREFIX}
+                      value={
+                        DOMAIN_PROTOCOL +
+                        item.tenantConfig.developmentDomain +
+                        DOMAIN_PREFIX
+                      }
                       disableUnderline
                       disabled
                     />
@@ -221,7 +225,11 @@ function SuperAdminTenantUpdatePopup({
                       className="FormInput"
                       type="text"
                       id="liveDomain"
-                      value={DOMAIN_PROTOCOL + item.tenantConfig.liveDomain + DOMAIN_PREFIX}
+                      value={
+                        DOMAIN_PROTOCOL +
+                        item.tenantConfig.liveDomain +
+                        DOMAIN_PREFIX
+                      }
                       disableUnderline
                       disabled
                     />
@@ -249,7 +257,7 @@ function SuperAdminTenantUpdatePopup({
                 </FormControl>
               </div>
               <div className="FormField">
-                <div className='MergedField'>
+                <div className="MergedField">
                   <FormControlLabel
                     control={
                       <Checkbox
@@ -269,9 +277,13 @@ function SuperAdminTenantUpdatePopup({
                     label={item.trialMode ? 'Re Again Trail' : 'Trail Mode'}
                   />
                   {item.trialMode ? (
-                    <span className="badge badge-success badge-w-100">Enabled</span>
+                    <span className="badge badge-success badge-w-100">
+                      Enabled
+                    </span>
                   ) : (
-                    <span className="badge badge-danger badge-w-100">Disabled</span>
+                    <span className="badge badge-danger badge-w-100">
+                      Disabled
+                    </span>
                   )}
                 </div>
               </div>

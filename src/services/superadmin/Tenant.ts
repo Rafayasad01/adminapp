@@ -50,5 +50,5 @@ export default {
   get,
   update,
   updateStatus,
-  sentToEmail
+  sentToEmail,
 };

@@ -13,6 +13,7 @@ import dayjs from 'dayjs';
 import TablePagination from '@mui/material/TablePagination';
 import WysiwygOutlinedIcon from '@mui/icons-material/WysiwygOutlined';
 import Switch from '@mui/material/Switch';
+import EditIcon from '@mui/icons-material/Edit';
 import TopBar from '../../../components/common/TopBar';
 import Loader from '../../../components/common/Loader';
 import Service from '../../../services/superadmin/Tenant';
@@ -21,7 +22,6 @@ import Notify from '../../../components/common/Notify';
 import SuperAdminTenantUpdatePopup from './SuperAdminTenantUpdatePopup';
 import CustomText from '../../../components/common/CustomText';
 import { useAppSelector } from '../../../redux/redux-hooks';
-import EditIcon from '@mui/icons-material/Edit';
 
 function SuperAdminTenantPage() {
   const authState: any = useAppSelector((state) => state.authState);
@@ -163,14 +163,14 @@ function SuperAdminTenantPage() {
     formData.append('lastName', data.lastName);
     formData.append('trialMode', data.trialMode);
     formData.append('trailStartDate', data.trailStartDate);
-    formData.append('trialUpdateMode', "true");
+    formData.append('trialUpdateMode', 'true');
     formData.append('developmentDomain', data.developmentDomain);
     formData.append('liveDomain', data.liveDomain);
     if (data.tenantName && data.email && data.firstName && data.lastName) {
       Service.update(id, formData)
         .then((item: any) => {
           if (item.data.success) {
-            console.log("updated data", item.data);
+            console.log('updated data', item.data);
             setIsLoader(false);
             setIsNotify(true);
             setNotifyMessage({
@@ -186,7 +186,7 @@ function SuperAdminTenantPage() {
                   newItem.trailStartDate = item.data.data.trailStartDate;
                 }
                 return { ...newItem };
-              })
+              });
             });
           } else {
             setIsLoader(false);
@@ -219,7 +219,7 @@ function SuperAdminTenantPage() {
     setIsLoader(true);
     Service.get(id).then((item: any) => {
       if (item.data.success) {
-        console.log('item.data.data::::::', item.data.data)
+        console.log('item.data.data::::::', item.data.data);
         setIsLoader(false);
         setFormDetail(item.data.data);
         setOpenEditFormDialog(true);
@@ -374,7 +374,9 @@ function SuperAdminTenantPage() {
                             </IconButton>
                             <IconButton
                               className="icon-btn mr-3.5 p-0"
-                              onClick={() => item.isActive ? editHandler(item.id) : null}
+                              onClick={() =>
+                                item.isActive ? editHandler(item.id) : null
+                              }
                             >
                               <EditIcon />
                             </IconButton>

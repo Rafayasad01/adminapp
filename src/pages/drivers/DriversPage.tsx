@@ -535,8 +535,8 @@ function DriversPage() {
         inputFieldsData={
           openEditFormDialog
             ? inputFieldsData.filter(
-              (item) => item.id !== 'address' && item.id !== 'password'
-            )
+                (item) => item.id !== 'address' && item.id !== 'password'
+              )
             : inputFieldsData
         }
         handleSubmit={handleSubmit}
