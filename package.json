@@ -34,8 +34,8 @@
     "react-hook-form": "^7.45.2",
     "react-redux": "^8.0.5",
     "react-router-dom": "^6.8.2",
-    "react18-otp-input": "^1.0.3",
     "redux-persist": "^6.0.0",
+    "react18-otp-input": "^1.0.3",
     "styled-components": "^5.3.9"
   },
   "devDependencies": {
