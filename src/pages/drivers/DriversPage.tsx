@@ -21,7 +21,7 @@ import { CheckRolePermission, listingRolePermission } from '../../utils/helper';
 import { NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
 
 function DriversPage() {
-  const authState: any = useAppSelector((state) => state.authState);
+  const authState = useAppSelector((state: any) => state.authState);
   const dataRole = useSelector(
     (state: any) => state.roleState.role.permissions
   );
@@ -535,8 +535,8 @@ function DriversPage() {
         inputFieldsData={
           openEditFormDialog
             ? inputFieldsData.filter(
-                (item) => item.id !== 'address' && item.id !== 'password'
-              )
+              (item) => item.id !== 'address' && item.id !== 'password'
+            )
             : inputFieldsData
         }
         handleSubmit={handleSubmit}

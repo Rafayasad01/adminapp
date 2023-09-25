@@ -29,7 +29,7 @@ function SuperAdminTenantTabPage({ tenant }: Props) {
   };
 
   const getRemainingTime = (time: any) => {
-    const addTime = dayjs(time).add(14, 'days');
+    const addTime = dayjs(time).add(15, 'days');
     const endTime: any = dayjs(addTime).format('YYYY-MM-DD HH:mm:ss');
     const diffBetween = dayjs.duration(dayjs().diff(endTime));
     const remainingTime = Math.abs(diffBetween.days());
@@ -97,7 +97,7 @@ function SuperAdminTenantTabPage({ tenant }: Props) {
             )}
             <div className="mt-4 flex w-full flex-col">
               <span className="font-open-sans text-base font-semibold not-italic text-[#1A1A1A]">
-                Trial mode
+                Trial Mode
               </span>
               <div className="mt-1 font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
                 <Switch
@@ -109,7 +109,7 @@ function SuperAdminTenantTabPage({ tenant }: Props) {
             </div>
             <div className="mt-4 flex w-full flex-col">
               <span className="font-open-sans text-base font-semibold not-italic text-[#1A1A1A]">
-                trail start date
+                Trail Start Date
               </span>
               <div className="mt-1 font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
                 {dayjs(detail.trailStartDate).isValid() ? (
@@ -121,7 +121,7 @@ function SuperAdminTenantTabPage({ tenant }: Props) {
             </div>
             <div className="mt-4 flex w-full flex-col">
               <span className="font-open-sans text-base font-semibold not-italic text-[#1A1A1A]">
-                Trial End time
+                Trial End Time
               </span>
               <div className="mt-1 font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
                 {dayjs(detail.trailStartDate).isValid() ? (

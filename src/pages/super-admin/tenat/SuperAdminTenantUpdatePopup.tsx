@@ -49,7 +49,7 @@ function SuperAdminTenantUpdatePopup({
   const onSubmit = (data: Tenant) => {
     if (data.tenantName) {
       setOpenFormDialog(false);
-      callback(data);
+      callback(item.id, data);
     } else {
       setIsNotify(true);
       setNotifyMessage({
@@ -71,13 +71,13 @@ function SuperAdminTenantUpdatePopup({
       setValue('lastName', item.backofficeUser.lastName);
       setValue('trialMode', item.trialMode);
       setValue('trailStartDate', item.trailStartDate);
-      setValue('developmentDomain', item.developmentDomain);
-      setValue('liveDomain', item.liveDomain);
+      setValue('developmentDomain', item.tenantConfig.developmentDomain);
+      setValue('liveDomain', item.tenantConfig.liveDomain);
     }
   }, [item]);
 
   const getRemainingTime = (time: any) => {
-    const addTime = dayjs(time).add(14, 'days');
+    const addTime = dayjs(time).add(15, 'days');
     const endTime: any = dayjs(addTime).format('YYYY-MM-DD HH:mm:ss');
     const diffBetween = dayjs.duration(dayjs().diff(endTime));
     const remainingTime = Math.abs(diffBetween.days());
@@ -181,12 +181,12 @@ function SuperAdminTenantUpdatePopup({
               <div className="FormField mb-4">
                 <FormControl className="FormControl" variant="standard">
                   <label className="FormLabel">Development Domain</label>
-                  {item.developmentDomain ? (
+                  {item.tenantConfig.developmentDomain ? (
                     <Input
                       className="FormInput"
                       type="text"
                       id="developmentDmain"
-                      value={item.developmentDomain}
+                      value={DOMAIN_PROTOCOL + item.tenantConfig.developmentDomain + DOMAIN_PREFIX}
                       disableUnderline
                       disabled
                     />
@@ -216,12 +216,12 @@ function SuperAdminTenantUpdatePopup({
               <div className="FormField mb-4">
                 <FormControl className="FormControl" variant="standard">
                   <label className="FormLabel">Live Domain</label>
-                  {item.liveDomain ? (
+                  {item.tenantConfig.liveDomain ? (
                     <Input
                       className="FormInput"
                       type="text"
                       id="liveDomain"
-                      value={item.liveDomain}
+                      value={DOMAIN_PROTOCOL + item.tenantConfig.liveDomain + DOMAIN_PREFIX}
                       disableUnderline
                       disabled
                     />
@@ -248,25 +248,8 @@ function SuperAdminTenantUpdatePopup({
                   )}
                 </FormControl>
               </div>
-              <div className="FormFields">
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      icon={
-                        <RadioButtonUncheckedOutlinedIcon
-                          style={{ color: '#1D1D1D' }}
-                        />
-                      }
-                      checkedIcon={
-                        <CheckCircleOutlinedIcon style={{ color: '#1D1D1D' }} />
-                      }
-                      {...register('trialMode', { value: item.trialMode })}
-                      checked={item.trialMode ?? true}
-                    />
-                  }
-                  label="Trail Mode"
-                />
-                {item.trialMode && (
+              <div className="FormField">
+                <div className='MergedField'>
                   <FormControlLabel
                     control={
                       <Checkbox
@@ -283,11 +266,16 @@ function SuperAdminTenantUpdatePopup({
                         {...register('trialUpdateMode')}
                       />
                     }
-                    label="Re Again Trail"
+                    label={item.trialMode ? 'Re Again Trail' : 'Trail Mode'}
                   />
-                )}
+                  {item.trialMode ? (
+                    <span className="badge badge-success badge-w-100">Enabled</span>
+                  ) : (
+                    <span className="badge badge-danger badge-w-100">Disabled</span>
+                  )}
+                </div>
               </div>
-              {item.trialMode && (
+              {dayjs(item.trailStartDate).isValid() && (
                 <div className="FormField">
                   <FormControl className="FormControl" variant="standard">
                     <TextField
@@ -328,7 +316,7 @@ function SuperAdminTenantUpdatePopup({
               </Button>
               <Input
                 type="submit"
-                value="Add"
+                value="Update"
                 className="btn-black-fill"
                 disableUnderline
                 sx={{
