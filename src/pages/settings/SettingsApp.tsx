@@ -125,8 +125,8 @@ function SettingsApp() {
       formData.append('email', data.email);
       formData.append('min_order_amount', data.min_order_amount);
       formData.append('delivery_fee', data.delivery_fee);
-      formData.append('development_domain', data.development_domain);
-      formData.append('live_domain', data.live_domain);
+      // formData.append('development_domain', data.development_domain);
+      // formData.append('live_domain', data.live_domain);
       formData.append('facebook', detail ? detail.facebook : '');
       formData.append('instagram', detail ? detail.instagram : '');
       formData.append('linkedin', detail ? detail.linkedin : '');
@@ -211,11 +211,11 @@ function SettingsApp() {
                 value="APP_SETTINGS"
                 onClick={() => navigate('../app')}
               />
-              {/* <Tab
+              <Tab
                 label="Shop Scheduling"
                 value="SHOP_SCHEDULING"
                 onClick={() => navigate('../shop')}
-              /> */}
+              />
             </Tabs>
           </div>
           <div className="Content w-full py-5 px-4">
