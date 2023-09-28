@@ -83,7 +83,7 @@ function SettingsApp() {
   } = useForm<Setting>();
 
   const setData = (item: any) => {
-    console.log('itesmssss', item);
+    //console.log('itesmssss', item);
 
     setValue('name', item.name);
     setValue('email', item.email);
@@ -101,9 +101,9 @@ function SettingsApp() {
     );
     setValue(
       'development_domain',
-      item.developmentDomain ? item.developmentDomain : ''
+      item.developmentDomain ? item.developmentDomain : item.development_domain
     );
-    setValue('live_domain', item.liveDomain ? item.liveDomain : '');
+    setValue('live_domain', item.liveDomain ? item.liveDomain : item.live_domain);
     setValue('facebook', item.facebook);
     setValue('instagram', item.instagram);
     setValue('linkedin', item.linkedin);
@@ -125,8 +125,6 @@ function SettingsApp() {
       formData.append('email', data.email);
       formData.append('min_order_amount', data.min_order_amount);
       formData.append('delivery_fee', data.delivery_fee);
-      formData.append('development_domain', data.development_domain);
-      formData.append('live_domain', data.live_domain);
       formData.append('facebook', detail ? detail.facebook : '');
       formData.append('instagram', detail ? detail.instagram : '');
       formData.append('linkedin', detail ? detail.linkedin : '');
