@@ -14,7 +14,8 @@ function DragDropFile({ setFile }: Props) {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleFile = (files: any) => {
-    // console.log(files);
+    console.log(files);
+  
     setFile(files[0]);
   };
 
