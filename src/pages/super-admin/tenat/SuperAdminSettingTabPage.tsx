@@ -100,9 +100,8 @@ function SuperAdminSettingTabPage({ tenant }: Props) {
                 <div className="mt-1 font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
                   <span
                     style={{
-                      background: `${
-                        detail.color1 ? detail.color1 : '#1A1A1A'
-                      }`,
+                      background: `${detail.color1 ? detail.color1 : '#1A1A1A'
+                        }`,
                     }}
                     className="block h-[25px] w-[25px] rounded-full border border-[#D9D9D9]"
                   />
@@ -115,9 +114,8 @@ function SuperAdminSettingTabPage({ tenant }: Props) {
                 <div className="mt-1 font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
                   <span
                     style={{
-                      background: `${
-                        detail.color2 ? detail.color2 : '#1A1A1A'
-                      }`,
+                      background: `${detail.color2 ? detail.color2 : '#1A1A1A'
+                        }`,
                     }}
                     className="block h-[25px] w-[25px] rounded-full border border-[#D9D9D9]"
                   />
