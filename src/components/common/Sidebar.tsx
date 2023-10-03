@@ -119,11 +119,11 @@ const superAdminlinks = [
     path: 'dashboard',
     icon: <GridViewOutlinedIcon fontSize="inherit" />,
   },
-  // {
-  //   name: 'Shops',
-  //   path: 'shop',
-  //   icon: <DescriptionOutlinedIcon fontSize="inherit" />,
-  // },
+  {
+    name: 'Shops',
+    path: 'shop',
+    icon: <DescriptionOutlinedIcon fontSize="inherit" />,
+  },
 
   // {
   //   name: 'Support',

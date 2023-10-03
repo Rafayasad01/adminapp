@@ -97,8 +97,8 @@ function SuperAdminUserTabPage({ tenant }: Props) {
                 <div className="mt-1 font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
                   {dayjs(detail.createdDate).isValid()
                     ? dayjs(detail.createdDate)?.format(
-                        'ddd MMM DD YYYY HH:mm:ss'
-                      )
+                      'ddd MMM DD YYYY HH:mm:ss'
+                    )
                     : '--'}
                 </div>
               </div>
@@ -109,8 +109,8 @@ function SuperAdminUserTabPage({ tenant }: Props) {
                 <div className="mt-1 font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
                   {dayjs(detail.updatedDate).isValid()
                     ? dayjs(detail.updatedDate)?.format(
-                        'ddd MMM DD YYYY HH:mm:ss'
-                      )
+                      'ddd MMM DD YYYY HH:mm:ss'
+                    )
                     : '--'}
                 </div>
               </div>
