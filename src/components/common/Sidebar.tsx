@@ -122,7 +122,7 @@ const superAdminlinks = [
   {
     name: 'Shops',
     path: 'shop',
-    icon: <DescriptionOutlinedIcon fontSize="inherit" />,
+    icon: <img src={assets.images.shopIcon} />,
   },
 
   // {
@@ -143,7 +143,7 @@ const superAdminlinks = [
   {
     name: 'Role',
     path: 'role',
-    icon: <HeadphonesOutlinedIcon fontSize="inherit" />,
+    icon: <img src={assets.images.roleIcon} />,
   },
   // {
   //   name: 'Settings',
