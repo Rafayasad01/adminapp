@@ -35,6 +35,7 @@ module.exports = {
     "no-nested-ternary": "off",
     "react-hooks/exhaustive-deps": "off",
     "@typescript-eslint/no-unused-expressions": "off",
+    "import/no-mutable-exports": "off",
     // '@typescript-eslint/no-unused-vars': 'off',
     // 'no-console': 'off',
     'prettier/prettier': [

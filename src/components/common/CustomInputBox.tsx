@@ -17,6 +17,7 @@ type Props = {
   inputType?: string;
   onclick?: (items?: any) => void;
   showPassVisibility: boolean;
+  typeImportant: boolean;
 };
 
 function CustomInputBox({
@@ -30,6 +31,7 @@ function CustomInputBox({
   inputType,
   onclick,
   showPassVisibility,
+  typeImportant,
 }: Props) {
   return (
     <>
@@ -45,7 +47,10 @@ function CustomInputBox({
         sx={{ width: length }}
         className="FormInput"
         id={id}
-        type={showPassVisibility ? inputType : 'text'}
+        min={0}
+        type={
+          typeImportant ? inputType : showPassVisibility ? inputType : 'text'
+        }
         disableUnderline
         {...register(id, {
           required: `${inputTitle?.toLocaleLowerCase()} is required`,

@@ -8,6 +8,7 @@ import IconButton from '@mui/material/IconButton';
 import { AppUserDriverExt } from '../../interfaces/app-user.interface';
 import CustomButton from './CustomButton';
 import CustomInputBox from './CustomInputBox';
+import CustomDropDown from './CustomDropDown';
 
 type Props = {
   openFormDialog: boolean;
@@ -67,16 +68,27 @@ function CustomDialog({
                         className="FormControl"
                         variant="standard"
                       >
-                        <CustomInputBox
-                          inputTitle={items.fieldName}
-                          id={items.id}
-                          value={items.value ? items.value : ''}
-                          register={items.register}
-                          error={items.error}
-                          inputType={items.type}
-                          onclick={items.onclick}
-                          showPassVisibility={items.showPassVisibility}
-                        />
+                        {items.type === 'select' ? (
+                          <CustomDropDown
+                            id={items.id}
+                            // error={items.error}
+                            register={items.register}
+                            options={items.options}
+                            inputTitle={items.fieldName}
+                          />
+                        ) : (
+                          <CustomInputBox
+                            inputTitle={items.fieldName}
+                            id={items.id}
+                            value={items.value ? items.value : ''}
+                            register={items.register}
+                            error={items.error}
+                            inputType={items.type}
+                            onclick={items.onclick}
+                            showPassVisibility={items.showPassVisibility}
+                            typeImportant={items.typeImportant}
+                          />
+                        )}
                       </FormControl>
                     )}
                     {index === array.length - 1 && index % 2 !== 0 && <br />}
@@ -145,7 +157,7 @@ function CustomDialog({
             />
             <CustomButton
               buttonType="button"
-              title="Add"
+              title={type === 'edit' ? 'Edit' : 'Add'}
               type="submit"
               className="btn-black-fill"
               sx={{

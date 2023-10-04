@@ -1,6 +1,8 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import Switch from '@mui/material/Switch';
 import IconButton from '@mui/material/IconButton';
 import Divider from '@mui/material/Divider';
 import FormControl from '@mui/material/FormControl';
@@ -9,15 +11,21 @@ import InputAdornment from '@mui/material/InputAdornment';
 import Button from '@mui/material/Button';
 import SearchIcon from '@mui/icons-material/Search';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
-import TopBar from '../../../components/common/TopBar';
-import CustomText from '../../../components/common/CustomText';
 import TablePagination from '@mui/material/TablePagination';
 import EditIcon from '@mui/icons-material/Edit';
 import dayjs from 'dayjs';
 import Avatar from '@mui/material/Avatar';
+import CustomText from '../../../components/common/CustomText';
+import TopBar from '../../../components/common/TopBar';
+import { Shop } from '../../../interfaces/superadmin/shop.interface';
 import Service from '../../../services/superadmin/shop';
 import Loader from '../../../components/common/Loader';
+import Notify from '../../../components/common/Notify';
+import CustomDialog from '../../../components/common/CustomDialog';
+import { useAppSelector } from '../../../redux/redux-hooks';
+
 function SuperAdminShopsListPage() {
+  const authState: any = useAppSelector((state) => state.authState);
   const navigate = useNavigate();
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(0);
@@ -25,25 +33,134 @@ function SuperAdminShopsListPage() {
   const [list, setList] = useState<any>([]);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [openFormDialog, setOpenFormDialog] = useState(false);
-  const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
-
+  const [avatar, setAvatar] = useState<any>(null);
   const [isLoader, setIsLoader] = React.useState(true);
   const [isNotify, setIsNotify] = React.useState(false);
+  const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
+  const [dataById, setDataById] = React.useState<any>();
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    reset,
+    getValues,
+    setValue,
+    formState: { errors },
+    control,
+  } = useForm<Shop>();
+
+  const inputFieldsData = [
+    {
+      fieldName: 'Role',
+      id: 'role',
+      register,
+      error: errors.role,
+      type: 'select',
+      options: dataById,
+    },
+    {
+      fieldName: 'User Limits',
+      id: 'userLimits',
+      register,
+      value: dataById?.userLimits,
+      error: errors.user_limits,
+      type: 'number',
+      typeImportant: true,
+    },
+    {
+      fieldName: 'es',
+      id: 'userLimits',
+      register,
+      error: errors.user_limits,
+      type: 'text',
+    },
+  ];
+
+  const onSubmitDialogBox = (data: any) => {
+    setIsLoader(true);
+    // console.log("DATAssssssssssssssssssssssssss", data);
+    const updateddata = {
+      userLimits: data.userLimits,
+      role: data.role,
+      updatedBy: authState.user.id,
+    };
+    Service.update(dataById?.id, updateddata).then((updateItem) => {
+      if (updateItem.data.success) {
+        // console.log("updateItem", updateItem);
+        const filterRolename = dataById?.roles.filter(
+          (el: any) => el.id === updateItem.data.data.role
+        );
+        setList((newArr: any) => {
+          return newArr.map((item: any) => {
+            if (item.id === dataById?.id) {
+              item.role = filterRolename[0].name;
+              item.userLimits = updateItem.data.data.userLimits;
+            }
+            return { ...item };
+          });
+        });
+        setOpenEditFormDialog(false);
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: updateItem.data.message,
+          type: 'success',
+        });
+      }
+    });
+  };
 
   const handleFormClickOpen = () => {
     setOpenFormDialog(true);
   };
 
+  const handleSwitchChange = (event: any, id: string) => {
+    const data = {
+      isActive: event.target.checked,
+      updatedBy: authState.user.id,
+    };
+    Service.updateStatus(id, data).then((updateItem) => {
+      if (updateItem.data.success) {
+        setList((newArr: any) => {
+          return newArr.map((item: any) => {
+            if (item.id === id) {
+              item.isActive = updateItem.data.data.isActive;
+            }
+            return { ...item };
+          });
+        });
+      }
+    });
+  };
+
   const handleClickSearch = (event: any) => {
     const searchTxt = event.target.value as string;
     const newPage = 0;
-    // setSearch(searchTxt);
-    // setPage(newPage);
-    // Service.searchService(searchTxt, newPage, rowsPerPage).then((item) => {
-    //   setList(item.data.data.list);
-    //   setTotal(item.data.data.total);
-    // });
+    setSearch(searchTxt);
+    setPage(newPage);
+    Service.searchService(searchTxt, newPage, rowsPerPage)
+      .then((item) => {
+        // console.log("AS", item.data.data);
+        if (item.data.success) {
+          setList(item.data.data.list);
+          setTotal(item.data.data.total);
+        } else {
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'error',
+          });
+        }
+      })
+      .catch((err) => {
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
+        });
+      });
   };
 
   const handleChangePage = (
@@ -86,27 +203,28 @@ function SuperAdminShopsListPage() {
 
   const editHandler = (id: string) => {
     setIsLoader(true);
-    // Service.get(id).then((item: any) => {
-    //   if (item.data.success) {
-    //     console.log('item.data.data::::::', item.data.data);
-    //     setIsLoader(false);
-    //     setFormDetail(item.data.data);
-    //     setOpenEditFormDialog(true);
-    //   } else {
-    //     setIsLoader(false);
-    //     setIsNotify(true);
-    //     setNotifyMessage({
-    //       text: 'All fields are required!',
-    //       type: 'error',
-    //     });
-    //   }
-    // });
+    setOpenEditFormDialog(true);
+    Service.get(id).then((item: any) => {
+      if (item.data.success) {
+        setDataById(item.data.data);
+        // console.log('item.data.data::::::', item.data.data);
+        setIsLoader(false);
+        setOpenEditFormDialog(true);
+      } else {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: item.data.message,
+          type: 'error',
+        });
+      }
+    });
   };
 
   useEffect(() => {
     Service.getListService(page, rowsPerPage).then((item) => {
       if (item.data.success) {
-        console.log('item', item.data.data)
+        // console.log('item', item.data.data)
         setList(item.data.data.list);
         setTotal(item.data.data.total);
         setIsLoader(false);
@@ -120,6 +238,11 @@ function SuperAdminShopsListPage() {
     <Loader />
   ) : (
     <>
+      <Notify
+        isOpen={isNotify}
+        setIsOpen={setIsNotify}
+        displayMessage={notifyMessage}
+      />
       <TopBar title="Shops" />
       <div className="container mt-5">
         <div className="w-full rounded-lg bg-white shadow-lg">
@@ -226,8 +349,8 @@ function SuperAdminShopsListPage() {
                               <span className="text-xs font-normal text-[#6A6A6A]">
                                 {dayjs(item.createdDate).isValid()
                                   ? dayjs(item.createdDate)?.format(
-                                    'MMMM DD, YYYY'
-                                  )
+                                      'MMMM DD, YYYY'
+                                    )
                                   : '--'}
                               </span>
                             </div>
@@ -253,6 +376,13 @@ function SuperAdminShopsListPage() {
                             >
                               <EditIcon />
                             </IconButton>
+                            <Switch
+                              checked={item.isActive}
+                              onChange={(
+                                event: React.ChangeEvent<HTMLInputElement>
+                              ) => handleSwitchChange(event, list[index].id)}
+                              inputProps={{ 'aria-label': 'controlled' }}
+                            />
                           </div>
                         </td>
                       </tr>
@@ -274,6 +404,17 @@ function SuperAdminShopsListPage() {
           </div>
         </div>
       </div>
+      <CustomDialog
+        DialogHeader="Edit Shop"
+        type="edit"
+        reset={reset}
+        inputFieldsData={inputFieldsData}
+        handleSubmit={handleSubmit}
+        onSubmit={onSubmitDialogBox}
+        openFormDialog={openEditFormDialog}
+        setOpenFormDialog={setOpenEditFormDialog}
+        setAvater={setAvatar}
+      />
     </>
   );
 }
