@@ -1,5 +1,5 @@
-//export const BASE_URL = import.meta.env.VITE_SERVICE_BASE_URL;
-export const BASE_URL = 'https://dev.urapptech.com/api/v1/admin/';
+export const BASE_URL = import.meta.env.VITE_SERVICE_BASE_URL;
+//export const BASE_URL = 'https://dev.urapptech.com/api/v1/admin/';
 export const GOOGLE_MAP_KEY = import.meta.env.VITE_GOOGLE_MAP_KEY;
 export const BACKOFFICE_PREFIX = 'backofficeUser';
 export const PERMISSION_PREFIX = 'permission';
@@ -13,6 +13,7 @@ export const SETTING_PREFIX = 'setting';
 export const NOTIFICATION_PREFIX = 'notification';
 export const TENANT_PREFIX = 'tenant';
 export const ROLE_PREFIX = 'role';
+export const SHOP_PREFIX = 'shop';
 export const ORDER_STATUS_NEW = 'New';
 export const ORDER_STATUS_PICKED_UP = 'PickedUp';
 export const ORDER_STATUS_PROCESSING = 'Processing';
