@@ -120,9 +120,14 @@ const superAdminlinks = [
     icon: <GridViewOutlinedIcon fontSize="inherit" />,
   },
   {
+    name: 'Tenant',
+    path: 'tenant',
+    icon: <TenantIcon />,
+  },
+  {
     name: 'Shops',
     path: 'shop',
-    icon: <DescriptionOutlinedIcon fontSize="inherit" />,
+    icon: <img src={assets.images.shopIcon} />,
   },
 
   // {
@@ -130,11 +135,7 @@ const superAdminlinks = [
   //   path: 'support',
   //   icon: <HeadphonesOutlinedIcon fontSize="inherit" />,
   // },
-  {
-    name: 'Tenant',
-    path: 'tenant',
-    icon: <TenantIcon />,
-  },
+
   // {
   //   name: 'Users',
   //   path: 'user',
@@ -143,7 +144,7 @@ const superAdminlinks = [
   {
     name: 'Role',
     path: 'role',
-    icon: <HeadphonesOutlinedIcon fontSize="inherit" />,
+    icon: <img src={assets.images.roleIcon} />,
   },
   // {
   //   name: 'Settings',

@@ -40,6 +40,8 @@ import noMapLocation from './images/icon-noMapLocation.svg';
 import tenantIcon from './images/tenant-icon.svg';
 import categoryIcon from './images/category-icon.svg';
 import subCategoryIcon from './images/sub-category-icon.svg';
+import shopIcon from './images/shop.svg';
+import roleIcon from './images/role.svg';
 
 const assets = {
   images: {
@@ -69,7 +71,9 @@ const assets = {
     noMapLocation,
     tenantIcon,
     categoryIcon,
-    subCategoryIcon
+    subCategoryIcon,
+    shopIcon,
+    roleIcon
   },
   tempImages: {
     wash,
