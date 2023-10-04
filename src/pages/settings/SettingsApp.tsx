@@ -83,7 +83,7 @@ function SettingsApp() {
   } = useForm<Setting>();
 
   const setData = (item: any) => {
-    //console.log('itesmssss', item);
+    // console.log('itesmssss', item);
 
     setValue('name', item.name);
     setValue('email', item.email);
@@ -103,7 +103,10 @@ function SettingsApp() {
       'development_domain',
       item.developmentDomain ? item.developmentDomain : item.development_domain
     );
-    setValue('live_domain', item.liveDomain ? item.liveDomain : item.live_domain);
+    setValue(
+      'live_domain',
+      item.liveDomain ? item.liveDomain : item.live_domain
+    );
     setValue('facebook', item.facebook);
     setValue('instagram', item.instagram);
     setValue('linkedin', item.linkedin);

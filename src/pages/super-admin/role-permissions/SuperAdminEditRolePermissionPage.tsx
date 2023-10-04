@@ -1,4 +1,4 @@
-import '../../../../src/index.css';
+import '../../../index.css';
 import { useEffect, useState } from 'react';
 import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
@@ -9,191 +9,219 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import CheckBoxRoundedIcon from '@mui/icons-material/CheckBoxRounded';
 import CheckBoxOutlineBlankRoundedIcon from '@mui/icons-material/CheckBoxOutlineBlankRounded';
 import { useForm } from 'react-hook-form';
-import { useLocation, useNavigate, useParams } from "react-router-dom";
-import TopBar from "../../../components/common/TopBar";
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import TopBar from '../../../components/common/TopBar';
 import { RolePermissions } from '../../../interfaces/superadmin/rolepermissions.interface';
 import CustomButton from '../../../components/common/CustomButton';
 import Service from '../../../services/superadmin/RolePermissions';
 import Loader from '../../../components/common/Loader';
 import Notify from '../../../components/common/Notify';
+import { setText } from '../../../utils/constants';
 
-const SuperAdminEditRolePermissionsPage = () => {
+function SuperAdminEditRolePermissionsPage() {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const [isLoader, setIsLoader] = useState<boolean>(true);
+  const [selectAll, setSelectAll] = useState(false);
+  const [list, setList] = useState<any>();
+  const [name, setName] = useState<string>();
+  const [desc, setDesc] = useState<string>();
+  const [updatedList, setUpdatedList] = useState<any>();
+  const [isNotify, setIsNotify] = useState(false);
+  const [notifyMessage, setNotifyMessage] = useState({});
 
-    const { state } = useLocation();
-    let { id } = useParams();
-    const [isLoader, setIsLoader] = useState<boolean>(true);
-    const [selectAll, setSelectAll] = useState(false);
-    const [list, setList] = useState<any>();
-    const [updatedList, setUpdatedList] = useState<any>();
-    const [isNotify, setIsNotify] = useState(false);
-    const [notifyMessage, setNotifyMessage] = useState({});
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+    control,
+  } = useForm<RolePermissions>();
+  // console.log('id', typeof id);
 
-    const {
-        register,
-        handleSubmit,
-        watch,
-        formState: { errors },
-        control
-    } = useForm<RolePermissions>();
-    console.log("id", typeof (id));
+  useEffect(() => {
+    setIsLoader(true);
+    // Service.getRolePermissionService()
+    //     .then((item: any) => {
+    //         if (item.data.success) {
+    //             setIsLoader(false);
+    //             state?.data?.length > 0 ? setList(state.data) :
+    //                 setList(item.data.data)
+    //             console.log("DAATAssP", item.data.data);
+    //         }
+    //     })
+    //     .catch((error) => {
+    //         setIsLoader(false);
+    //         console.log('error::::::::', error);
+    //     });
+    Service.getPermissionById(id).then((item: any) => {
+      if (item.data.success) {
+        setIsLoader(false);
+        setName(item.data.data.name);
+        setDesc(item.data.data.desc);
+        setList(item.data.data.data);
+        // console.log('item.data.data::::::', item.data.data);
+      } else {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: 'All fields are required!',
+          type: 'error',
+        });
+      }
+    });
+  }, []);
 
-    useEffect(() => {
-        Service.getRolePermissionService()
-            .then((item: any) => {
-                if (item.data.success) {
-                    setIsLoader(false);
-                    state?.data?.length > 0 ? setList(state.data) :
-                        setList(item.data.data)
-                    console.log("DAATAssP", item.data.data);
-                }
-            })
-            .catch((error) => {
-                setIsLoader(false);
-                console.log('error::::::::', error);
-            });
-    }, [])
+  const onSubmit = (data: RolePermissions) => {
+    setIsLoader(true);
+    const finalData = {
+      name: data.roleName,
+      desc: data.roleDescription,
+      data: list,
+    };
 
-    const onSubmit = (data: RolePermissions) => {
-        setIsLoader(true);
-        const finalData = {
-            name: data.roleName,
-            desc: data.roleDescription,
-            data: list
-        }
+    const hasValidData = list.some((category: any) =>
+      category.data.some((detail: any) => detail.status === true)
+    );
 
-        const hasValidData = list.some((category: any) =>
-            category.data.some((detail: any) => detail.status === true)
-        );
-
-        if (hasValidData) {
-            Service.update(id, finalData)
-                .then((item: any) => {
-                    if (item.data.success) {
-                        setIsLoader(false);
-                        setIsNotify(true);
-                        setNotifyMessage({
-                            text: item.data.message,
-                            type: 'success',
-                        });
-                    } else {
-                        setIsLoader(false);
-                        setIsNotify(true);
-                        setNotifyMessage({
-                            text: item.data.message,
-                            type: 'error',
-                        });
-                    }
-                })
-                .catch((err) => {
-                    setIsLoader(false);
-                    setIsNotify(true);
-                    setNotifyMessage({
-                        text: err.message,
-                        type: 'error',
-                    });
-                });
-        } else {
+    if (hasValidData) {
+      Service.update(id, finalData)
+        .then((item: any) => {
+          if (item.data.success) {
+            // setIsLoader(false);
+            setText(item.data.message);
+            navigate('../list');
+          } else {
+            setIsLoader(false);
             setIsNotify(true);
             setNotifyMessage({
-                text: "Select atleast one checkbox",
-                type: 'error',
+              text: item.data.message,
+              type: 'error',
             });
-        }
-    };
-
-    const handleCheckboxChange = (categoryIndex: number, detailIndex: number, checked: any) => {
-        const updatedData = [...list];
-        updatedData[categoryIndex].data[detailIndex].status = checked;
-        setList(updatedData);
-        // console.log("updated", updatedData);
-    };
-
-    const handleCategorySelectAll = (categoryIndex: number, checked: any) => {
-        const updatedData = [...list];
-        updatedData[categoryIndex].data.forEach((detail: any) => {
-            detail.status = checked;
+          }
+        })
+        .catch((err) => {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: err.message,
+            type: 'error',
+          });
         });
-        setList(updatedData);
-        // console.log("updateds", updatedData);
-    };
+    } else {
+      setIsNotify(true);
+      setNotifyMessage({
+        text: 'Select atleast one checkbox',
+        type: 'error',
+      });
+    }
+  };
 
-    const handleSelectAllChange = (checked: any) => {
-        const updatedData = list.map((category: any) => ({
-            ...category,
-            data: category.data.map((detail: any) => ({
-                ...detail,
-                status: checked,
-            })),
-        }));
-        console.log("UU",updatedData);
-        
-        setList(updatedData);
-        setSelectAll(checked);
-    };
+  const handleCheckboxChange = (
+    categoryIndex: number,
+    detailIndex: number,
+    checked: any
+  ) => {
+    const updatedData = [...list];
+    updatedData[categoryIndex].data[detailIndex].status = checked;
+    setList(updatedData);
+    // console.log("updated", updatedData);
+  };
 
-    return (
-        isLoader ? <Loader />
-            :
-            <div>
-                <Notify
-                    isOpen={isNotify}
-                    setIsOpen={setIsNotify}
-                    displayMessage={notifyMessage}
+  const handleCategorySelectAll = (categoryIndex: number, checked: any) => {
+    const updatedData = [...list];
+    updatedData[categoryIndex].data.forEach((detail: any) => {
+      detail.status = checked;
+    });
+    setList(updatedData);
+    // console.log("updateds", updatedData);
+  };
+
+  const handleSelectAllChange = (checked: any) => {
+    const updatedData = list.map((category: any) => ({
+      ...category,
+      data: category.data.map((detail: any) => ({
+        ...detail,
+        status: checked,
+      })),
+    }));
+    // console.log('UU', updatedData);
+
+    setList(updatedData);
+    setSelectAll(checked);
+  };
+
+  return isLoader ? (
+    <Loader />
+  ) : (
+    <div>
+      <Notify
+        isOpen={isNotify}
+        setIsOpen={setIsNotify}
+        displayMessage={notifyMessage}
+      />
+      <TopBar title="Edit Role Permissions" />
+      <div className="m-auto mx-5 mt-5">
+        <div className="w-full rounded-lg bg-white py-5 shadow-lg">
+          <form onSubmit={handleSubmit(onSubmit)} className="FormBody m-5">
+            <div className="FormField">
+              <FormControl className="FormControl" variant="standard">
+                <label className="pb-2 font-bold">Role</label>
+                <Input
+                  className="FormInput m-0 h-[40px] w-[280px] rounded-lg border-2 border-[#949EAE] px-3 outline-none"
+                  {...register('roleName', { required: true, value: name })}
+                  type="text"
+                  id="roleName"
+                  placeholder="Enter Role name"
+                  disableUnderline
                 />
-                <TopBar title="Edit Role Permissions" />
-                <div className="mx-5 m-auto mt-5">
-                    <div className="w-full py-5 rounded-lg bg-white shadow-lg">
-                        <form onSubmit={handleSubmit(onSubmit)} className="FormBody m-5">
-                            <div className="FormField">
-                                <FormControl className="FormControl" variant="standard">
-                                    <label className="font-bold pb-2">Role</label>
-                                    <Input
-                                        className="FormInput m-0 border-2 h-[40px] w-[280px] border-[#949EAE] px-3 rounded-lg outline-none"
-                                        {...register('roleName', { required: true, value: state.name ? state.name : "" })}
-                                        type="text"
-                                        id="roleName"
-                                        placeholder='Enter Role name'
-                                        disableUnderline
-                                    />
-                                    {errors.roleName?.type === 'required' && (
-                                        <span role="alert">Role name is required</span>
-                                    )}
-                                </FormControl>
-                            </div>
-                            <div className="FormField">
-                                <FormControl className="FormControl my-5" variant="standard">
-                                    <label className="font-bold pb-2">Description</label>
-                                    <TextareaAutosize
-                                        minRows={3}
-                                        maxRows={6}
-                                        {...register('roleDescription', { value: state.desc ? state.desc : "" })}
-                                        placeholder="Enter Role description"
-                                        className='border-2 w-[280px] border-[#949EAE] p-3 rounded-lg outline-none'
-                                    />
-                                </FormControl>
-                            </div>
-                            <div className='mt-5'>
-                                <div className='flex items-center justify-between'>
-                                    <p className="font-bold">Permissions</p>
-                                    <FormControlLabel
-                                        className='text-[#949EAE]'
-                                        control={
-                                            <Checkbox
-                                                icon={<CheckBoxOutlineBlankRoundedIcon style={{ color: '#000000' }} />}
-                                                checkedIcon={<CheckBoxRoundedIcon style={{ color: '#000000' }} />}
-                                                onChange={(e) => handleSelectAllChange(e.target.checked)}
-                                                checked={selectAll}
-                                            />
-                                        }
-                                        label={"Select all"}
-                                    />
-                                </div>
-                                {list?.map((items: any, mainIndex: number) => {
-                                    return (
-                                        <div key={mainIndex} className='m-2 py-1'>
-                                            <div className='flex items-center justify-between'>
-                                                <p className='py-2 font-semibold underline-offset-2 underline'>{items.name}</p>
-                                                {/* <FormControlLabel
+                {errors.roleName?.type === 'required' && (
+                  <span role="alert">Role name is required</span>
+                )}
+              </FormControl>
+            </div>
+            <div className="FormField">
+              <FormControl className="FormControl my-5" variant="standard">
+                <label className="pb-2 font-bold">Description</label>
+                <TextareaAutosize
+                  minRows={3}
+                  maxRows={6}
+                  {...register('roleDescription', { value: desc })}
+                  placeholder="Enter Role description"
+                  className="w-[280px] rounded-lg border-2 border-[#949EAE] p-3 outline-none"
+                />
+              </FormControl>
+            </div>
+            <div className="mt-5">
+              <div className="flex items-center justify-between">
+                <p className="font-bold">Permissions</p>
+                <FormControlLabel
+                  className="text-[#949EAE]"
+                  control={
+                    <Checkbox
+                      icon={
+                        <CheckBoxOutlineBlankRoundedIcon
+                          style={{ color: '#000000' }}
+                        />
+                      }
+                      checkedIcon={
+                        <CheckBoxRoundedIcon style={{ color: '#000000' }} />
+                      }
+                      onChange={(e) => handleSelectAllChange(e.target.checked)}
+                      checked={selectAll}
+                    />
+                  }
+                  label="Select all"
+                />
+              </div>
+              {list?.map((items: any, mainIndex: number) => {
+                return (
+                  <div key={mainIndex} className="m-2 py-1">
+                    <div className="flex items-center justify-between">
+                      <p className="py-2 font-semibold underline underline-offset-2">
+                        {items.name}
+                      </p>
+                      {/* <FormControlLabel
                                                     className='text-[#949EAE]'
                                                     control={
                                                         <Checkbox
@@ -211,50 +239,58 @@ const SuperAdminEditRolePermissionsPage = () => {
                                                     }
                                                     label={"Select all"}
                                                 /> */}
-                                            </div>
-                                            <div className='grid grid-cols-4 gap-2'>
-                                                {items.data.map((item: any, detailIndex: number) => {
-                                                    return (
-                                                        <div key={detailIndex} className=''>
-                                                            <FormControlLabel
-                                                                className='text-[#949EAE]'
-                                                                control={
-                                                                    <Checkbox
-                                                                        icon={
-                                                                            <CheckBoxOutlineBlankRoundedIcon
-                                                                                style={{ color: '#000000' }}
-                                                                            />
-                                                                        }
-                                                                        checkedIcon={
-                                                                            <CheckBoxRoundedIcon style={{ color: '#000000' }} />
-                                                                        }
-                                                                        onChange={(e) => handleCheckboxChange(mainIndex, detailIndex, e.target.checked)}
-                                                                        checked={item.status}
-                                                                    />
-                                                                }
-                                                                label={item.name}
-                                                            />
-                                                        </div>
-                                                    )
-                                                })}
-                                            </div>
-                                        </div>
-                                    )
-                                })}
-                            </div>
-                            <div className='mt-5'>
-                                <CustomButton
-                                    sx={{ backgroundColor: "black" }}
-                                    buttonType={"button"}
-                                    type={"submit"}
-                                    title={'edit'}
-                                />
-                            </div>
-                        </form>
                     </div>
-                </div>
+                    <div className="grid grid-cols-4 gap-2">
+                      {items.data.map((item: any, detailIndex: number) => {
+                        return (
+                          <div key={detailIndex} className="">
+                            <FormControlLabel
+                              className="text-[#949EAE]"
+                              control={
+                                <Checkbox
+                                  icon={
+                                    <CheckBoxOutlineBlankRoundedIcon
+                                      style={{ color: '#000000' }}
+                                    />
+                                  }
+                                  checkedIcon={
+                                    <CheckBoxRoundedIcon
+                                      style={{ color: '#000000' }}
+                                    />
+                                  }
+                                  onChange={(e) =>
+                                    handleCheckboxChange(
+                                      mainIndex,
+                                      detailIndex,
+                                      e.target.checked
+                                    )
+                                  }
+                                  checked={item.status}
+                                />
+                              }
+                              label={item.name}
+                            />
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                );
+              })}
             </div>
-    )
+            <div className="mt-5">
+              <CustomButton
+                sx={{ backgroundColor: 'black' }}
+                buttonType="button"
+                type="submit"
+                title="edit"
+              />
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export default SuperAdminEditRolePermissionsPage;

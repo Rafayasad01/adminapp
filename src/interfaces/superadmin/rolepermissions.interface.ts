@@ -1,4 +1,4 @@
 export interface RolePermissions {
-    roleName: string;
-    roleDescription: string;
+  roleName: string;
+  roleDescription: string;
 }
