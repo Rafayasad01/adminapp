@@ -4,7 +4,7 @@ import Button from '@mui/material/Button';
 import SendOutlinedIcon from '@mui/icons-material/SendOutlined';
 import dayjs from 'dayjs';
 import Loader2 from '../../../components/common/Loader2';
-import Service from '../../../services/superadmin/Tenant';
+import Service from '../../../services/superadmin/tenant';
 
 type Props = {
   tenant: string;

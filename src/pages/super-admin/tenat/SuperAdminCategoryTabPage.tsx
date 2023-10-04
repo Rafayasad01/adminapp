@@ -7,7 +7,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Avatar from '@mui/material/Avatar';
 import assets from '../../../assets';
 import Loader2 from '../../../components/common/Loader2';
-import Service from '../../../services/superadmin/Tenant';
+import Service from '../../../services/superadmin/tenant';
 
 type Props = {
   tenant: string;

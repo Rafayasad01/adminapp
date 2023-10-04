@@ -13,7 +13,7 @@ import {
   WHATSAPP,
   YOUTUBE,
 } from '../../../utils/constants';
-import Service from '../../../services/superadmin/Tenant';
+import Service from '../../../services/superadmin/tenant';
 
 type Props = {
   tenant: string;
