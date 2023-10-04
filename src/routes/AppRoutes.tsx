@@ -46,6 +46,9 @@ import OTPVerificationPage from '../pages/auth/otp-verification/OtpVerificationP
 import SuperAdminTenantPage from '../pages/super-admin/tenat/SuperAdminTenantPage';
 import SuperAdminTenantDetailPage from '../pages/super-admin/tenat/SuperAdminTenantDetailPage';
 import NotAuthorized from '../pages/notAuthorized/notAuthorized';
+import SuperAdminRolePermissionsPage from '../pages/super-admin/role-permissions/SuperAdminRolePermissionsPage';
+import SuperAdminAddRolePermissionsPage from '../pages/super-admin/role-permissions/SuperAdminAddRolePermissionsPage';
+import SuperAdminEditRolePermissionsPage from '../pages/super-admin/role-permissions/SuperAdminEditRolePermissionPage';
 
 export const routeObjects: RouteObject[] = [
   {
@@ -139,6 +142,24 @@ export const routeObjects: RouteObject[] = [
                 path: 'detail/:id',
                 element: <SuperAdminTenantDetailPage />,
               },
+            ],
+          },
+          {
+            path: 'role',
+            children: [
+              { index: true, element: <Navigate to="list" replace /> },
+              {
+                path: 'list',
+                element: <SuperAdminRolePermissionsPage />,
+              },
+              {
+                path: 'add-role',
+                element: <SuperAdminAddRolePermissionsPage />,
+              },
+              {
+                path: 'edit-role/:id',
+                element: <SuperAdminEditRolePermissionsPage />,
+              }
             ],
           },
         ],

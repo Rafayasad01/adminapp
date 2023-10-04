@@ -35,7 +35,7 @@ function CustomButton({
         sx={sx}
         variant="contained"
         className={className}
-        onClick={onclick || (() => {})}
+        // onClick={onclick || (() => {})}
       >
         {icon && icon} {title}
       </Button>
