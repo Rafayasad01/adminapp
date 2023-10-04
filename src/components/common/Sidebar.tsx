@@ -140,11 +140,11 @@ const superAdminlinks = [
   //   path: 'user',
   //   icon: <GroupsOutlinedIcon fontSize="inherit" />,
   // },
-  // {
-  //   name: 'Role',
-  //   path: 'role/permission',
-  //   icon: <HeadphonesOutlinedIcon fontSize="inherit" />,
-  // },
+  {
+    name: 'Role',
+    path: 'role',
+    icon: <HeadphonesOutlinedIcon fontSize="inherit" />,
+  },
   // {
   //   name: 'Settings',
   //   path: 'settings',

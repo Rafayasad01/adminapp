@@ -30,6 +30,7 @@ function SuperAdminTenantCreatePopup({
   setIsNotify,
   setNotifyMessage,
 }: Props) {
+
   const {
     register,
     handleSubmit,
@@ -37,6 +38,7 @@ function SuperAdminTenantCreatePopup({
     formState: { errors },
     control,
   } = useForm<Tenant>();
+  
   const onSubmit = (data: Tenant) => {
     if (data.tenantName) {
       setOpenFormDialog(false);
