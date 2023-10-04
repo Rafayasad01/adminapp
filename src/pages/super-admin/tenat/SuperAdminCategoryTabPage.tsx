@@ -7,7 +7,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Avatar from '@mui/material/Avatar';
 import assets from '../../../assets';
 import Loader2 from '../../../components/common/Loader2';
-import Service from '../../../services/superadmin/Tenant';
+import Service from '../../../services/superadmin/tenant';
 
 type Props = {
   tenant: string;
@@ -24,17 +24,17 @@ function SuperAdminCategoryTabPage({ tenant }: Props) {
 
   const handleChange =
     (panel: string, item: any) =>
-    (event: React.SyntheticEvent, isExpanded: boolean) => {
-      setExpanded(isExpanded ? panel : false);
-      setSubCategories(item);
-      setExpanded2('subCategory0');
-    };
+      (event: React.SyntheticEvent, isExpanded: boolean) => {
+        setExpanded(isExpanded ? panel : false);
+        setSubCategories(item);
+        setExpanded2('subCategory0');
+      };
 
   const handleChange2 =
     (panel: string, item: any) =>
-    (event: React.SyntheticEvent, isExpanded: boolean) => {
-      setExpanded2(isExpanded ? panel : false);
-    };
+      (event: React.SyntheticEvent, isExpanded: boolean) => {
+        setExpanded2(isExpanded ? panel : false);
+      };
 
   useEffect(() => {
     Service.detailCategory(tenant).then((item: any) => {

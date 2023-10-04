@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Switch from '@mui/material/Switch';
 import dayjs from 'dayjs';
 import Loader2 from '../../../components/common/Loader2';
-import Service from '../../../services/superadmin/Tenant';
+import Service from '../../../services/superadmin/tenant';
 
 type Props = {
   tenant: string;

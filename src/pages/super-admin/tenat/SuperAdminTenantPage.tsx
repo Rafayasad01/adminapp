@@ -16,7 +16,7 @@ import Switch from '@mui/material/Switch';
 import EditIcon from '@mui/icons-material/Edit';
 import TopBar from '../../../components/common/TopBar';
 import Loader from '../../../components/common/Loader';
-import Service from '../../../services/superadmin/Tenant';
+import Service from '../../../services/superadmin/tenant';
 import SuperAdminTenantCreatePopup from './SuperAdminTenantCreatePopup';
 import Notify from '../../../components/common/Notify';
 import SuperAdminTenantUpdatePopup from './SuperAdminTenantUpdatePopup';
