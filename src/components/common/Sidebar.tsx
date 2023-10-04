@@ -127,7 +127,7 @@ const superAdminlinks = [
   {
     name: 'Shops',
     path: 'shop',
-    icon: <img src={assets.images.shopIcon} />,
+    icon: <img src={assets.images.shopIcon} alt="Shop" />,
   },
 
   // {
@@ -144,7 +144,7 @@ const superAdminlinks = [
   {
     name: 'Role',
     path: 'role',
-    icon: <img src={assets.images.roleIcon} />,
+    icon: <img src={assets.images.roleIcon} alt="Role" />,
   },
   // {
   //   name: 'Settings',
