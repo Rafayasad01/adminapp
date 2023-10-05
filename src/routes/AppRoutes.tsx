@@ -49,6 +49,8 @@ import NotAuthorized from '../pages/notAuthorized/notAuthorized';
 import SuperAdminRolePermissionsPage from '../pages/super-admin/role-permissions/SuperAdminRolePermissionsPage';
 import SuperAdminAddRolePermissionsPage from '../pages/super-admin/role-permissions/SuperAdminAddRolePermissionsPage';
 import SuperAdminEditRolePermissionsPage from '../pages/super-admin/role-permissions/SuperAdminEditRolePermissionPage';
+import SuperAdminPermissionPage from '../pages/super-admin/role-permissions/SuperAdminPermissionPage';
+import SuperAdminAddPermissionsPage from '../pages/super-admin/role-permissions/SuperAdminAddPermissionsPage';
 
 export const routeObjects: RouteObject[] = [
   {
@@ -159,6 +161,23 @@ export const routeObjects: RouteObject[] = [
               {
                 path: 'edit-role/:id',
                 element: <SuperAdminEditRolePermissionsPage />,
+              },
+              {
+                path: 'permission',
+                children: [
+                  {
+                    path: 'list',
+                    element: <SuperAdminPermissionPage />,
+                  },
+                  {
+                    path: 'add-permission',
+                    element: <SuperAdminAddPermissionsPage />,
+                  },
+                  {
+                    path: 'edit-permission/:id',
+                    element: <SuperAdminPermissionPage />,
+                  },
+                ]
               }
             ],
           },

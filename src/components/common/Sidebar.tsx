@@ -33,6 +33,8 @@ import { setRolePermissions } from '../../redux/features/permissionsStateSlice';
 import CAN, { defineRules } from "../../services/permissions/permissions";
 import assets from '../../assets';
 import TenantIcon from '../icons/TenantIcon';
+import ShopIcon from '../icons/ShopIcon';
+import RoleIcon from '../icons/RoleIcon';
 
 const links = [
   {
@@ -127,7 +129,7 @@ const superAdminlinks = [
   {
     name: 'Shops',
     path: 'shop',
-    icon: <img src={assets.images.shopIcon} alt="Shop" />,
+    icon: <ShopIcon />
   },
 
   // {
@@ -144,7 +146,7 @@ const superAdminlinks = [
   {
     name: 'Role',
     path: 'role',
-    icon: <img src={assets.images.roleIcon} alt="Role" />,
+    icon: <RoleIcon />,
   },
   // {
   //   name: 'Settings',
