@@ -11,6 +11,7 @@ import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import TablePagination from '@mui/material/TablePagination';
 import Switch from '@mui/material/Switch';
 import EditIcon from '@mui/icons-material/Edit';
+import WysiwygOutlinedIcon from '@mui/icons-material/WysiwygOutlined';
 import { useAppSelector } from '../../../redux/redux-hooks';
 import TopBar from '../../../components/common/TopBar';
 import Loader from '../../../components/common/Loader';
@@ -18,7 +19,6 @@ import Service from '../../../services/superadmin/RolePermissions';
 import Notify from '../../../components/common/Notify';
 import CustomText from '../../../components/common/CustomText';
 import { TEXT_STORE_KEY, setText } from '../../../utils/constants';
-import WysiwygOutlinedIcon from '@mui/icons-material/WysiwygOutlined';
 import SuperAdminPermissionPagePopup from './SuperAdminPermissionPagePopup';
 
 function SuperAdminPermissionPage() {
@@ -33,7 +33,7 @@ function SuperAdminPermissionPage() {
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
   const [openDialog, setOpenDialog] = useState(false);
-  const [heading, setHeading] = useState<string>("");
+  const [heading, setHeading] = useState<string>('');
   const [childList, setChildList] = useState<any>();
 
   const handleFormClickOpen = () => {
@@ -45,11 +45,13 @@ function SuperAdminPermissionPage() {
     const newPage = 0;
     setSearch(searchTxt);
     setPage(newPage);
-    Service.getPermissionSearchService(searchTxt, newPage, rowsPerPage).then((item) => {
-      console.log('item:::::', item)
-      setList(item.data.data.list);
-      //setTotal(item.data.data.total);
-    });
+    Service.getPermissionSearchService(searchTxt, newPage, rowsPerPage).then(
+      (item) => {
+        console.log('item:::::', item);
+        setList(item.data.data.list);
+        // setTotal(item.data.data.total);
+      }
+    );
   };
 
   const handleChangePage = (
@@ -64,10 +66,12 @@ function SuperAdminPermissionPage() {
         setTotal(item.data.data.total);
       });
     } else {
-      Service.getPermissionSearchService(search, newPage, rowsPerPage).then((item) => {
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      });
+      Service.getPermissionSearchService(search, newPage, rowsPerPage).then(
+        (item) => {
+          setList(item.data.data.list);
+          setTotal(item.data.data.total);
+        }
+      );
     }
   };
 
@@ -84,10 +88,12 @@ function SuperAdminPermissionPage() {
         setTotal(item.data.data.total);
       });
     } else {
-      Service.getPermissionSearchService(search, newPage, rowsPerPage).then((item) => {
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      });
+      Service.getPermissionSearchService(search, newPage, rowsPerPage).then(
+        (item) => {
+          setList(item.data.data.list);
+          setTotal(item.data.data.total);
+        }
+      );
     }
   };
 
@@ -117,7 +123,7 @@ function SuperAdminPermissionPage() {
   }, [page, rowsPerPage]);
 
   const editHandler = (id: string) => {
-    navigate(`../edit-role/${id}`);
+    navigate(`../edit-permission/${id}`);
   };
 
   const handleSwitchChange = (event: any, id: string) => {
@@ -149,8 +155,7 @@ function SuperAdminPermissionPage() {
         setChildList(item.data.data);
       }
     });
-
-  }
+  };
 
   return isLoader ? (
     <Loader />
@@ -224,44 +229,50 @@ function SuperAdminPermissionPage() {
                 </tr>
               </thead>
               <tbody>
-                {list && list.map((item: any, index: number) => {
-                  return (
-                    <tr key={index}>
-                      <td>{item.name}</td>
-                      <td>{item.desc}</td>
-                      <td>{item.permissionType}</td>
-                      <td>{item.isActive ? (
-                        <span className="badge badge-success">ENABLED</span>
-                      ) : (
-                        <span className="badge badge-danger">DISABLED</span>
-                      )}</td>
-                      <td>
-                        <div className="flex flex-row-reverse">
-                          <IconButton
-                            className="icon-btn mr-3.5 p-0"
-                            onClick={() => childDataHandler(item)}
-                          >
-                            <WysiwygOutlinedIcon />
-                          </IconButton>
-                          <IconButton
-                            className="icon-btn mr-3 p-0"
-                            onClick={() => editHandler(item.id)}
-                          >
-                            <EditIcon />
-                          </IconButton>
-                          <Switch
-                            checked={item.isActive}
-                            onChange={(
-                              event: React.ChangeEvent<HTMLInputElement>
-                            ) => handleSwitchChange(event, list[index].id)}
-                            inputProps={{ 'aria-label': 'controlled' }}
-                          />
-                        </div>
-                      </td>
-                    </tr>
-                  )
-                })}
-
+                {list &&
+                  list.map((item: any, index: number) => {
+                    return (
+                      <tr key={index}>
+                        <td>{item.name}</td>
+                        <td>{item.desc}</td>
+                        <td>{item.permissionType}</td>
+                        <td>
+                          {item.isActive ? (
+                            <span className="badge badge-success">ENABLED</span>
+                          ) : (
+                            <span className="badge badge-danger">DISABLED</span>
+                          )}
+                        </td>
+                        <td>
+                          <div className="flex flex-row-reverse">
+                            {item.isActive && (
+                              <>
+                                <IconButton
+                                  className="icon-btn mr-3.5 p-0"
+                                  onClick={() => childDataHandler(item)}
+                                >
+                                  <WysiwygOutlinedIcon />
+                                </IconButton>
+                                <IconButton
+                                  className="icon-btn mr-3 p-0"
+                                  onClick={() => editHandler(item.id)}
+                                >
+                                  <EditIcon />
+                                </IconButton>
+                              </>
+                            )}
+                            <Switch
+                              checked={item.isActive}
+                              onChange={(
+                                event: React.ChangeEvent<HTMLInputElement>
+                              ) => handleSwitchChange(event, list[index].id)}
+                              inputProps={{ 'aria-label': 'controlled' }}
+                            />
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
               </tbody>
             </table>
           </div>

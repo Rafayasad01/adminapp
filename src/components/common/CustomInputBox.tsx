@@ -9,15 +9,18 @@ import IconButton from '@mui/material/IconButton';
 type Props = {
   register: any;
   id: any;
-  inputTitle: string;
-  error: any;
+  inputTitle?: string;
+  error?: any;
   subInputTitle?: string;
   length?: string;
   value?: any;
   inputType?: string;
   onclick?: (items?: any) => void;
-  showPassVisibility: boolean;
-  typeImportant: boolean;
+  showPassVisibility?: boolean;
+  typeImportant?: boolean;
+  customClass?: string;
+  fieldNameSize?: string;
+  customFontClass?: string;
 };
 
 function CustomInputBox({
@@ -32,28 +35,39 @@ function CustomInputBox({
   onclick,
   showPassVisibility,
   typeImportant,
+  fieldNameSize,
+  customFontClass,
+  customClass,
 }: Props) {
   return (
     <>
       <div className="flex">
-        <label className="FormLabel">{inputTitle}</label>
+        <label className={`FormLabel ${customFontClass}`}>{inputTitle}</label>
         {subInputTitle && (
-          <span style={{ fontSize: '11px', paddingLeft: '5px' }}>
+          <span
+            style={{
+              fontSize: fieldNameSize || '11px',
+              paddingLeft: '5px',
+            }}
+          >
             {subInputTitle}
           </span>
         )}
       </div>
       <Input
         sx={{ width: length }}
-        className="FormInput"
+        className={`FormInput ${customClass}`}
+        key={id}
         id={id}
-        min={0}
         type={
           typeImportant ? inputType : showPassVisibility ? inputType : 'text'
         }
         disableUnderline
         {...register(id, {
-          required: `${inputTitle?.toLocaleLowerCase()} is required`,
+          required:
+            inputType === 'hidden'
+              ? false
+              : `${inputTitle?.toLocaleLowerCase()} is required`,
           value: value || '',
         })}
         endAdornment={

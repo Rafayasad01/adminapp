@@ -6,7 +6,8 @@ function ShopIcon() {
         height="1em"
         viewBox="0 0 16 16"
         fill="none"
-        xmlns="http://www.w3.org/2000/svg">
+        xmlns="http://www.w3.org/2000/svg"
+      >
         <g id="Store 1" clipPath="url(#clip0_2860_193)">
           <g id="store-1--store-shop-shops-stores">
             <path
@@ -50,7 +51,8 @@ function ShopIcon() {
               strokeLinejoin="round"
             />
             <path
-              id="Vector_6" d="M10.5711 4.57153V5.71439C10.5711 6.3206 10.3303 6.90198 9.90161 7.33063C9.47295 7.75929 8.89157 8.0001 8.28537 8.0001H7.71394C7.10773 8.0001 6.52635 7.75929 6.0977 7.33063C5.66903 6.90198 5.42822 6.3206 5.42822 5.71439V4.57153"
+              id="Vector_6"
+              d="M10.5711 4.57153V5.71439C10.5711 6.3206 10.3303 6.90198 9.90161 7.33063C9.47295 7.75929 8.89157 8.0001 8.28537 8.0001H7.71394C7.10773 8.0001 6.52635 7.75929 6.0977 7.33063C5.66903 6.90198 5.42822 6.3206 5.42822 5.71439V4.57153"
               stroke="white"
               strokeWidth="1.5"
               strokeLinecap="round"

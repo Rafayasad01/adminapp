@@ -6,7 +6,8 @@ function PermissionIcon() {
         height="1em"
         viewBox="0 0 21 22"
         fill="none"
-        xmlns="http://www.w3.org/2000/svg">
+        xmlns="http://www.w3.org/2000/svg"
+      >
         <g id="Keyhole Lock Circle">
           <path
             id="Vector (Stroke)"

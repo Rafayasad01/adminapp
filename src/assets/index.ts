@@ -42,6 +42,9 @@ import categoryIcon from './images/category-icon.svg';
 import subCategoryIcon from './images/sub-category-icon.svg';
 import shopIcon from './images/shop.svg';
 import roleIcon from './images/role.svg';
+import removeIcon from './images/cancel.svg';
+import userPermissionIcon from './images/userPermission.svg';
+import addImg from './images/add.svg';
 
 const assets = {
   images: {
@@ -73,7 +76,10 @@ const assets = {
     categoryIcon,
     subCategoryIcon,
     shopIcon,
-    roleIcon
+    roleIcon,
+    removeIcon,
+    addImg,
+    userPermissionIcon
   },
   tempImages: {
     wash,

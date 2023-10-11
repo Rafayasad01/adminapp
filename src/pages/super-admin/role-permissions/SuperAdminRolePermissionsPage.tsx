@@ -193,9 +193,13 @@ function SuperAdminRolePermissionsPage() {
                 <Button
                   variant="contained"
                   className="btn-black-fill btn-icon"
-                  onClick={() => { navigate(`../permission/list`); }}
+                  onClick={() => {
+                    navigate(`../../permission`);
+                  }}
                 >
-                  <span style={{ marginRight: '5px' }}><PermissionIcon /></span>
+                  <span style={{ marginRight: '5px' }}>
+                    <PermissionIcon />
+                  </span>
                   Permissions
                 </Button>
                 <Button
@@ -237,8 +241,8 @@ function SuperAdminRolePermissionsPage() {
                         <td>
                           {item.createdDate !== null
                             ? dayjs(item.createdDate)?.format(
-                              'ddd, MMM DD, YYYY'
-                            )
+                                'ddd, MMM DD, YYYY'
+                              )
                             : '--'}
                         </td>
                         <td>

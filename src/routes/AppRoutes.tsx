@@ -51,6 +51,7 @@ import SuperAdminAddRolePermissionsPage from '../pages/super-admin/role-permissi
 import SuperAdminEditRolePermissionsPage from '../pages/super-admin/role-permissions/SuperAdminEditRolePermissionPage';
 import SuperAdminPermissionPage from '../pages/super-admin/role-permissions/SuperAdminPermissionPage';
 import SuperAdminAddPermissionsPage from '../pages/super-admin/role-permissions/SuperAdminAddPermissionsPage';
+import SuperAdminEditPermissionsPage from '../pages/super-admin/role-permissions/SuperAdminEditPermissionPage';
 
 export const routeObjects: RouteObject[] = [
   {
@@ -146,25 +147,66 @@ export const routeObjects: RouteObject[] = [
               },
             ],
           },
+          // {
+          //   path: 'user-permission',
+          //   children: [
+          //     { index: true, element: <Navigate to="role" replace /> },
+          //     {
+          //       path: 'list',
+          //       element: <SuperAdminRolePermissionsPage />,
+          //     },
+          //     {
+          //       path: 'add-role',
+          //       element: <SuperAdminAddRolePermissionsPage />,
+          //     },
+          //     {
+          //       path: 'edit-role/:id',
+          //       element: <SuperAdminEditRolePermissionsPage />,
+          //     },
+          //     {
+          //       path: 'permission',
+          //       children: [
+          //         {
+          //           path: 'list',
+          //           element: <SuperAdminPermissionPage />,
+          //         },
+          //         {
+          //           path: 'add-permission',
+          //           element: <SuperAdminAddPermissionsPage />,
+          //         },
+          //         {
+          //           path: 'edit-permission/:id',
+          //           element: <SuperAdminEditPermissionsPage />,
+          //         },
+          //       ]
+          //     }
+          //   ],
+          // },
           {
-            path: 'role',
+            path: "user-permission",
             children: [
-              { index: true, element: <Navigate to="list" replace /> },
               {
-                path: 'list',
-                element: <SuperAdminRolePermissionsPage />,
-              },
-              {
-                path: 'add-role',
-                element: <SuperAdminAddRolePermissionsPage />,
-              },
-              {
-                path: 'edit-role/:id',
-                element: <SuperAdminEditRolePermissionsPage />,
-              },
-              {
-                path: 'permission',
+                path: "role",
                 children: [
+                  { index: true, element: <Navigate to="list" replace /> },
+                  {
+                    path: 'list',
+                    element: <SuperAdminRolePermissionsPage />,
+                  },
+                  {
+                    path: 'add-role',
+                    element: <SuperAdminAddRolePermissionsPage />,
+                  },
+                  {
+                    path: 'edit-role/:id',
+                    element: <SuperAdminEditRolePermissionsPage />,
+                  },
+                ]
+              },
+              {
+                path: "permission",
+                children: [
+                  { index: true, element: <Navigate to="list" replace /> },
                   {
                     path: 'list',
                     element: <SuperAdminPermissionPage />,
@@ -175,12 +217,12 @@ export const routeObjects: RouteObject[] = [
                   },
                   {
                     path: 'edit-permission/:id',
-                    element: <SuperAdminPermissionPage />,
-                  },
+                    element: <SuperAdminEditPermissionsPage />,
+                  }
                 ]
               }
-            ],
-          },
+            ]
+          }
         ],
       },
       {

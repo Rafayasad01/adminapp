@@ -25,7 +25,7 @@ function TopBar({ title, isNestedRoute = false }: Props) {
   return (
     <AppBar
       position="relative"
-      className="w-full bg-gray-50 text-gray-50 shadow-none"
+      className="w-full bg-gray-50 text-gray-50 shadow-none px-5"
     >
       <Toolbar className="toolbar-style flex">
         {isNestedRoute ? (
