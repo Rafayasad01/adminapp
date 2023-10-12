@@ -257,22 +257,22 @@ function SuperAdminPermissionPage() {
                         </td>
                         <td>
                           <div className="flex flex-row-reverse">
-                            {item.isActive && (
-                              <>
-                                <IconButton
-                                  className="icon-btn mr-3.5 p-0"
-                                  onClick={() => childDataHandler(item)}
-                                >
-                                  <WysiwygOutlinedIcon />
-                                </IconButton>
-                                <IconButton
-                                  className="icon-btn mr-3 p-0"
-                                  onClick={() => editHandler(item.id)}
-                                >
-                                  <EditIcon />
-                                </IconButton>
-                              </>
-                            )}
+                            <>
+                              <IconButton
+                                disabled={!(item.isActive)}
+                                className="icon-btn mr-3.5 p-0"
+                                onClick={() => childDataHandler(item)}
+                              >
+                                <WysiwygOutlinedIcon />
+                              </IconButton>
+                              <IconButton
+                                disabled={!(item.isActive)}
+                                className="icon-btn mr-3 p-0"
+                                onClick={() => editHandler(item.id)}
+                              >
+                                <EditIcon />
+                              </IconButton>
+                            </>
                             <Switch
                               checked={item.isActive}
                               onChange={(

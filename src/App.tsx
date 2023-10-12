@@ -14,6 +14,13 @@ function App() {
   //   }
   // }, [dataRole])
 
+
+  if (process.env.NODE_ENV === 'development') {
+    console.log = () => { }
+    console.error = () => { }
+    console.warn = () => { }
+  }
+
   const routes = useRoutes(routeObjects);
   return routes;
 }
