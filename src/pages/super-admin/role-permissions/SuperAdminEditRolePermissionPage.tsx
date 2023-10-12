@@ -41,20 +41,7 @@ function SuperAdminEditRolePermissionsPage() {
 
   useEffect(() => {
     setIsLoader(true);
-    // Service.getRolePermissionService()
-    //     .then((item: any) => {
-    //         if (item.data.success) {
-    //             setIsLoader(false);
-    //             state?.data?.length > 0 ? setList(state.data) :
-    //                 setList(item.data.data)
-    //             console.log("DAATAssP", item.data.data);
-    //         }
-    //     })
-    //     .catch((error) => {
-    //         setIsLoader(false);
-    //         console.log('error::::::::', error);
-    //     });
-    Service.getPermissionById(id).then((item: any) => {
+    Service.getRolePermissionById(id).then((item: any) => {
       if (item.data.success) {
         setIsLoader(false);
         setName(item.data.data.name);
@@ -160,7 +147,7 @@ function SuperAdminEditRolePermissionsPage() {
         setIsOpen={setIsNotify}
         displayMessage={notifyMessage}
       />
-      <TopBar title="Edit Role Permissions" />
+      <TopBar isNestedRoute title="Edit Role Permissions" />
       <div className="m-auto mx-5 mt-5">
         <div className="w-full rounded-lg bg-white py-5 shadow-lg">
           <form onSubmit={handleSubmit(onSubmit)} className="FormBody m-5">
@@ -283,7 +270,7 @@ function SuperAdminEditRolePermissionsPage() {
                 sx={{ backgroundColor: 'black' }}
                 buttonType="button"
                 type="submit"
-                title="edit"
+                title="update"
               />
             </div>
           </form>

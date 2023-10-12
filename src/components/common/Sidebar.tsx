@@ -35,6 +35,10 @@ import assets from '../../assets';
 import TenantIcon from '../icons/TenantIcon';
 import ShopIcon from '../icons/ShopIcon';
 import RoleIcon from '../icons/RoleIcon';
+import ArrowDown from '../icons/ArrowDown';
+import ArrowUp from '../icons/ArrowUp';
+import UserPermission from '../icons/UserPermission';
+import PermissionIcon from '../icons/PermissionIcon';
 
 const links = [
   {
@@ -144,9 +148,21 @@ const superAdminlinks = [
   //   icon: <GroupsOutlinedIcon fontSize="inherit" />,
   // },
   {
-    name: 'Role',
+    name: 'user permissions',
     path: 'role',
-    icon: <RoleIcon />,
+    icon: <UserPermission />,
+    childLinks: [
+      {
+        name: 'Permission',
+        path: 'user-permission/permission',
+        icon: <PermissionIcon />
+      },
+      {
+        name: 'Role',
+        path: 'user-permission/role',
+        icon: <RoleIcon />
+      }
+    ]
   },
   // {
   //   name: 'Settings',
@@ -155,31 +171,11 @@ const superAdminlinks = [
   // },
 ];
 
-function SideBarMenu(path: string, name: string, icon: any) {
-  return (
-    <NavLink
-      key={path}
-      className={({ isActive }) =>
-        isActive
-          ? 'w-full bg-gray-50 bg-opacity-5 py-3 pl-8 pr-4'
-          : 'w-full py-3 pl-8 pr-4'
-      }
-      to={path}
-    >
-      <div className="flex items-center  text-gray-50">
-        <span className="text-base leading-3"> {icon} </span>
-        <div className="mr-2">&nbsp;</div>
-        <span className="font-open-sans text-sm font-semibold">
-          {/* {console.log("CAN VIEW",link.permission)} */}
-          {name}
-        </span>
-      </div>
-    </NavLink>
-  )
-}
+
 
 function Sidebar() {
   const [list, setList] = useState<any>(null);
+  const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
   const authState: any = useAppSelector((state: any) => state.authState);
   const dataRole = useSelector((state: any) => state)
   const dispatch = useAppDispatch();
@@ -187,6 +183,69 @@ function Sidebar() {
     dispatch(logout());
     dispatch(setRolePermissions({ id: "", name: "", permissions: [] }));
   };
+
+  const handleToggle = (index: number) => {
+    if (expandedIndex === index) {
+      setExpandedIndex(null);
+    } else {
+      setExpandedIndex(index);
+    }
+  };
+
+  function NavbarLinks(path: any, icon: any, name: string, index: number) {
+    return (
+      <NavLink
+        key={path}
+        className={({ isActive }) =>
+          isActive
+            ? 'bg-gray-50 bg-opacity-5 py-3 pl-8 pr-4 w-full'
+            : 'py-3 pl-8 pr-4 w-full'
+        }
+        to={path}
+      >
+        <div className="flex items-center  text-gray-50">
+          <span className="text-base leading-3"> {icon} </span>
+          <div className="mr-2">&nbsp;</div>
+          <span className="font-open-sans text-sm font-semibold">
+            {name}
+          </span>
+        </div>
+      </NavLink>
+    )
+  }
+
+  function SideBarMenu(path: string, name: string, icon: any, childLinks: any, index: number) {
+    return (
+      childLinks?.length > 0 ?
+        <>
+          <div onClick={() => handleToggle(index)} className='cursor-pointer flex items-center mx-[30px] justify-between'>
+            <div className='flex items-center my-2'>
+              <div>
+                {icon}
+              </div>
+              <div className='mx-[8px]'>
+                {name}
+              </div>
+            </div>
+            <div className=''>
+              {expandedIndex === index ? <ArrowUp />
+                : <ArrowDown />}
+            </div>
+          </div >
+          {expandedIndex === index &&
+            childLinks?.map((el: any, childIndex: number) => {
+              return (
+                <div key={childIndex} className='flex mx-8'>
+                  {NavbarLinks(el.path, el.icon, el.name, childIndex)}
+                </div>
+              )
+            })
+          }
+        </>
+        :
+        NavbarLinks(path, icon, name, index)
+    )
+  }
 
   useEffect(() => {
     defineRules(dataRole.roleState.role.permissions)
@@ -221,10 +280,10 @@ function Sidebar() {
 
         <div className="flex w-full flex-col text-base ">
           {/* {SideBarMenu("", "Dashboard", <GridViewOutlinedIcon fontSize="inherit" />)} */}
-          {list && list.map((link: any) => {
+          {list && list.map((link: any, index: number) => {
             return (
               <Fragment key={link.path}>
-                {SideBarMenu(link.path, link.name, link.icon)}
+                {SideBarMenu(link.path, link.name, link.icon, link.childLinks, index)}
               </Fragment>
             );
           })}

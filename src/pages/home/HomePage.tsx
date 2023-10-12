@@ -107,8 +107,8 @@ function HomePage() {
         </div>
       </div> */}
         {console.log("COUNT", count)}
-        <div className="container mt-3">
-          <div className="mt-2 grid grid-cols-4 gap-3">
+        <div className="container m-auto mt-3">
+          <div className="mt-2 flex-1 grid grid-cols-4 gap-3">
             <div className="flex h-24 flex-row rounded-lg bg-white shadow-lg">
               <div className="... flex w-44 flex-col justify-center pl-3">
                 <h2 className="heading-color font-open-sans text-2xl font-semibold">
@@ -194,6 +194,14 @@ function HomePage() {
                   />
                 </IconButton>
               </div>
+            </div>
+          </div>
+          <div className="2xl:h-[800px] xl:h-[350px] flex items-center justify-center">
+            <div className="content">
+              <div className="icon">
+                <img className="w-100" src={assets.images.comingSoonIcon} alt="" />
+              </div>
+              <h4 className="text">Coming Soon</h4>
             </div>
           </div>
           {/* <div className="mt-3 grid grid-cols-2 gap-3 ">

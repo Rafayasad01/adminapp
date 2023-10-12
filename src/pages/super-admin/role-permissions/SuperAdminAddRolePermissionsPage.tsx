@@ -149,7 +149,7 @@ function SuperAdminAddRolePermissionsPage() {
         setIsOpen={setIsNotify}
         displayMessage={notifyMessage}
       />
-      <TopBar title="Add Role Permissions" />
+      <TopBar isNestedRoute title="Add Role Permissions" />
       <div className="m-auto mx-5 mt-5">
         <div className="w-full rounded-lg bg-white py-5 shadow-lg">
           <form onSubmit={handleSubmit(onSubmit)} className="FormBody m-5">

@@ -299,6 +299,7 @@ function SuperAdminShopsListPage() {
               <thead>
                 <tr>
                   <th>Shop</th>
+                  <th>Tenant Name</th>
                   <th>Email</th>
                   <th>Role</th>
                   <th>User Limits</th>
@@ -356,6 +357,7 @@ function SuperAdminShopsListPage() {
                             </div>
                           </div>
                         </td>
+                        <td>{item.tenantName}</td>
                         <td>{item.email}</td>
                         <td>{item.role ? item.role : '--'}</td>
                         <td>{item.userLimits}</td>

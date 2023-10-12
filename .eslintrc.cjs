@@ -36,6 +36,9 @@ module.exports = {
     "react-hooks/exhaustive-deps": "off",
     "@typescript-eslint/no-unused-expressions": "off",
     "import/no-mutable-exports": "off",
+    "jsx-a11y/click-events-have-key-events": "off",
+    "jsx-a11y/no-static-element-interactions": "off",
+    "react/no-unstable-nested-components": "off",
     // '@typescript-eslint/no-unused-vars': 'off',
     // 'no-console': 'off',
     'prettier/prettier': [
