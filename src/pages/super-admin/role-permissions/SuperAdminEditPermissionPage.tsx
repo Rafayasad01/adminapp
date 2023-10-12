@@ -223,7 +223,7 @@ function SuperAdminEditPermissionsPage() {
                     className="FormInput m-0 h-[40px] w-[350px] rounded-lg border-2 border-[#949EAE] px-3 outline-none"
                     {...register('moduleName', {
                       required: true,
-                      value: dataObj.name,
+                      value: dataObj?.name,
                     })}
                     type="text"
                     id="moduleName"
@@ -263,7 +263,7 @@ function SuperAdminEditPermissionsPage() {
                 <TextareaAutosize
                   minRows={3}
                   maxRows={6}
-                  {...register('moduleDesc', { value: dataObj.desc })}
+                  {...register('moduleDesc', { value: dataObj?.desc })}
                   placeholder="Enter Module description"
                   className="w-[507px] rounded-lg border-2 border-[#949EAE] p-3 outline-none"
                 />

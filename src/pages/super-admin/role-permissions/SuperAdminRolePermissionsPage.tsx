@@ -193,18 +193,6 @@ function SuperAdminRolePermissionsPage() {
                 <Button
                   variant="contained"
                   className="btn-black-fill btn-icon"
-                  onClick={() => {
-                    navigate(`../../permission`);
-                  }}
-                >
-                  <span style={{ marginRight: '5px' }}>
-                    <PermissionIcon />
-                  </span>
-                  Permissions
-                </Button>
-                <Button
-                  variant="contained"
-                  className="btn-black-fill btn-icon"
                   onClick={handleFormClickOpen}
                 >
                   <AddOutlinedIcon /> Add Role
