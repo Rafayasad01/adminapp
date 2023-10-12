@@ -146,13 +146,25 @@ function SuperAdminPermissionPage() {
   };
 
   const childDataHandler = (data: any) => {
+    console.log("DATA", data);
+
     setIsLoader(true);
     Service.getChildPermissionListService(data.id).then((item) => {
       if (item.data.success) {
-        setIsLoader(false);
-        setOpenDialog(true);
-        setHeading(data.name);
-        setChildList(item.data.data);
+        console.log("itemss", item.data);
+        if (item.data.data.length > 0) {
+          setIsLoader(false);
+          setOpenDialog(true);
+          setHeading(data.name);
+          setChildList(item.data.data);
+        } else {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: "No Child List Found!",
+            type: 'info',
+          })
+        }
       }
     });
   };
