@@ -39,6 +39,7 @@ import ArrowDown from '../icons/ArrowDown';
 import ArrowUp from '../icons/ArrowUp';
 import UserPermission from '../icons/UserPermission';
 import PermissionIcon from '../icons/PermissionIcon';
+import CollectionsOutlinedIcon from '@mui/icons-material/CollectionsOutlined';
 
 const links = [
   {
@@ -134,6 +135,11 @@ const superAdminlinks = [
     name: 'Shops',
     path: 'shop',
     icon: <ShopIcon />
+  },
+  {
+    name: 'App Image',
+    path: 'app/image-upload',
+    icon: <CollectionsOutlinedIcon fontSize="inherit" />
   },
 
   // {

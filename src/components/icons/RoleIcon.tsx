@@ -3,8 +3,8 @@ function RoleIcon() {
     <div className="text-base">
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        width="20"
-        height="20"
+        width="1em"
+        height="1em"
         viewBox="3 0 22 22"
         fill="none"
       >

@@ -2,8 +2,8 @@ function UserPermission() {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="21"
-      height="22"
+      width="1em"
+      height="1em"
       viewBox="0 0 21 22"
       fill="none"
     >

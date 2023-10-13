@@ -27,3 +27,9 @@ export interface Setting {
   development_domain: string;
   live_domain: string;
 }
+
+export interface AppImage {
+  name: string;
+  desc: string;
+  avatar: string;
+}
