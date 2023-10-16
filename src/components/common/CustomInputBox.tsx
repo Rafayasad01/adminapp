@@ -21,6 +21,7 @@ type Props = {
   customClass?: string;
   fieldNameSize?: string;
   customFontClass?: string;
+  disable?: boolean;
 };
 
 function CustomInputBox({
@@ -33,6 +34,7 @@ function CustomInputBox({
   length,
   inputType,
   onclick,
+  disable,
   showPassVisibility,
   typeImportant,
   fieldNameSize,
@@ -55,6 +57,7 @@ function CustomInputBox({
         )}
       </div>
       <Input
+        disabled={disable || false}
         sx={{ width: length }}
         className={`FormInput ${customClass}`}
         key={id}
@@ -76,7 +79,7 @@ function CustomInputBox({
               <IconButton
                 style={{ padding: 0 }}
                 aria-label="toggle password visibility"
-                onClick={onclick || (() => {})}
+                onClick={onclick || (() => { })}
               >
                 {showPassVisibility ? <VisibilityOff /> : <Visibility />}
               </IconButton>
