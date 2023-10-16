@@ -6,17 +6,17 @@ import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import assets from '../../../assets';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useForm, Controller } from 'react-hook-form';
+import assets from '../../../assets';
 
 import Service from '../../../services/adminapp/admin';
 import { NewPassword } from '../../../interfaces/auth.interface';
 
 function NewPasswordPage() {
   const navigate = useNavigate();
-  let location = useLocation();
-  let params = new URLSearchParams(location.search);
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
   const code = params.get('code');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -45,10 +45,10 @@ function NewPasswordPage() {
     if (data && data.password) {
       const newData = {
         password: data.password,
-        code: code
-      }
+        code,
+      };
       Service.createNewPassword(newData).then((item) => {
-        console.log('item:::::::::', item)
+        console.log('item:::::::::', item);
       });
     }
   };
@@ -64,10 +64,8 @@ function NewPasswordPage() {
   };
 
   useEffect(() => {
-    //navigate(`address/${actionMenuItemid}`);
+    // navigate(`address/${actionMenuItemid}`);
   }, []);
-
-
 
   return (
     <div className="flex h-full w-full items-center justify-center">
@@ -82,7 +80,9 @@ function NewPasswordPage() {
                 id="password"
                 type={showPassword ? 'text' : 'password'}
                 {...register('password', { required: 'Password is required' })}
-                onChange={(event: any) => { setPassword(event.target.value) }}
+                onChange={(event: any) => {
+                  setPassword(event.target.value);
+                }}
                 endAdornment={
                   <InputAdornment position="end">
                     <IconButton
@@ -90,7 +90,11 @@ function NewPasswordPage() {
                       onClick={handleClickShowPassword}
                       onMouseDown={handleMouseDownPassword}
                     >
-                      {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                      {showPassword ? (
+                        <VisibilityIcon />
+                      ) : (
+                        <VisibilityOffIcon />
+                      )}
                     </IconButton>
                   </InputAdornment>
                 }
@@ -108,8 +112,12 @@ function NewPasswordPage() {
                 className="input-with-icon after:border-b-neutral-900"
                 id="confirm-password"
                 type={showConfirmPassword ? 'text' : 'password'}
-                {...register('confirmPassword', { required: 'Confirm Password is required' })}
-                onChange={(event: any) => { validatePassword(event.target.value) }}
+                {...register('confirmPassword', {
+                  required: 'Confirm Password is required',
+                })}
+                onChange={(event: any) => {
+                  validatePassword(event.target.value);
+                }}
                 endAdornment={
                   <InputAdornment position="end">
                     <IconButton

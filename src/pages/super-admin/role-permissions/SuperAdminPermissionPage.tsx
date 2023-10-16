@@ -146,12 +146,12 @@ function SuperAdminPermissionPage() {
   };
 
   const childDataHandler = (data: any) => {
-    console.log("DATA", data);
+    console.log('DATA', data);
 
     setIsLoader(true);
     Service.getChildPermissionListService(data.id).then((item) => {
       if (item.data.success) {
-        console.log("itemss", item.data);
+        console.log('itemss', item.data);
         if (item.data.data.length > 0) {
           setIsLoader(false);
           setOpenDialog(true);
@@ -161,9 +161,9 @@ function SuperAdminPermissionPage() {
           setIsLoader(false);
           setIsNotify(true);
           setNotifyMessage({
-            text: "No Child List Found!",
+            text: 'No Child List Found!',
             type: 'info',
-          })
+          });
         }
       }
     });
@@ -257,22 +257,20 @@ function SuperAdminPermissionPage() {
                         </td>
                         <td>
                           <div className="flex flex-row-reverse">
-                            <>
-                              <IconButton
-                                disabled={!(item.isActive)}
-                                className="icon-btn mr-3.5 p-0"
-                                onClick={() => childDataHandler(item)}
-                              >
-                                <WysiwygOutlinedIcon />
-                              </IconButton>
-                              <IconButton
-                                disabled={!(item.isActive)}
-                                className="icon-btn mr-3 p-0"
-                                onClick={() => editHandler(item.id)}
-                              >
-                                <EditIcon />
-                              </IconButton>
-                            </>
+                            <IconButton
+                              disabled={!item.isActive}
+                              className="icon-btn mr-3.5 p-0"
+                              onClick={() => childDataHandler(item)}
+                            >
+                              <WysiwygOutlinedIcon />
+                            </IconButton>
+                            <IconButton
+                              disabled={!item.isActive}
+                              className="icon-btn mr-3 p-0"
+                              onClick={() => editHandler(item.id)}
+                            >
+                              <EditIcon />
+                            </IconButton>
                             <Switch
                               checked={item.isActive}
                               onChange={(
@@ -288,7 +286,7 @@ function SuperAdminPermissionPage() {
               </tbody>
             </table>
           </div>
-          {list?.length < 1 ? <CustomText text="No Records Found" /> : null}
+          {list?.length < 0 ? <CustomText text="No Records Found" /> : null}
           <div className="mt-3 flex w-[100%] justify-center py-3">
             <TablePagination
               component="div"

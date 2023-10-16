@@ -45,6 +45,7 @@ import roleIcon from './images/role.svg';
 import removeIcon from './images/cancel.svg';
 import userPermissionIcon from './images/userPermission.svg';
 import addImg from './images/add.svg';
+import dummyimg from './images/super-admin-background-image.png';
 
 const assets = {
   images: {
@@ -79,7 +80,8 @@ const assets = {
     roleIcon,
     removeIcon,
     addImg,
-    userPermissionIcon
+    userPermissionIcon,
+    dummyimg
   },
   tempImages: {
     wash,

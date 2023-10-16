@@ -9,50 +9,46 @@ import Button from '@mui/material/Button';
 import SearchIcon from '@mui/icons-material/Search';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import TablePagination from '@mui/material/TablePagination';
-import Switch from '@mui/material/Switch';
 import EditIcon from '@mui/icons-material/Edit';
 import WysiwygOutlinedIcon from '@mui/icons-material/WysiwygOutlined';
 import { useAppSelector } from '../../../redux/redux-hooks';
 import TopBar from '../../../components/common/TopBar';
 import Loader from '../../../components/common/Loader';
-import Service from '../../../services/superadmin/RolePermissions';
+import Service from '../../../services/superadmin/appImage';
 import Notify from '../../../components/common/Notify';
 import CustomText from '../../../components/common/CustomText';
-import { TEXT_STORE_KEY, setText } from '../../../utils/constants';
 import SuperAdminAppImageCreatePopup from './SuperAdminAppImageCreatePopup';
 import SuperAdminAppImageEditPopup from './SuperAdminAppImageEditPopup';
 import Avatar from '@mui/material/Avatar';
 import dayjs from 'dayjs';
+import SuperAdminAppImagePagePopup from './SuperAdminAppImagePagePopup';
 
 const SuperAdminAppImagePage = () => {
   const authState: any = useAppSelector((state) => state.authState);
-  const navigate = useNavigate();
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(0);
   const [total, setTotal] = useState(0);
   const [list, setList] = useState<any>();
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const [isLoader, setIsLoader] = React.useState(false);
+  const [isLoader, setIsLoader] = React.useState(true);
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
 
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
+  const [openPopupDialog, setOpenPopupDialog] = useState(false);
   const [editFormData, setEditFormData] = useState<any>();
   const [actionMenuItemid, setActionMenuItemid] = useState<string>('');
-
-  const handleFormClickOpen = () => {
-    navigate('../add-role');
-  };
+  const [childData, setChildData] = useState<any>();
 
   const handleClickSearch = (event: any) => {
     const searchTxt = event.target.value as string;
     const newPage = 0;
     setSearch(searchTxt);
     setPage(newPage);
-    Service.getPermissionSearchService(searchTxt, newPage, rowsPerPage).then(
+    Service.searchService(searchTxt, newPage, rowsPerPage).then(
       (item) => {
-        console.log('item:::::', item);
+        // console.log('item:::::', item);
         setList(item.data.data.list);
         // setTotal(item.data.data.total);
       }
@@ -64,14 +60,14 @@ const SuperAdminAppImagePage = () => {
     newPage: number
   ) => {
     setPage(newPage);
-    // offset? ,limit rowsperpage hoga ofset page * rowsperPage
+    // offset ? , limit rowsperpage hoga ofset page * rowsperPage
     if (search === '' || search === null || search === undefined) {
-      Service.getListService(newPage, rowsPerPage).then((item) => {
+      Service.listService(newPage, rowsPerPage).then((item) => {
         setList(item.data.data.list);
         setTotal(item.data.data.total);
       });
     } else {
-      Service.getPermissionSearchService(search, newPage, rowsPerPage).then(
+      Service.searchService(search, newPage, rowsPerPage).then(
         (item) => {
           setList(item.data.data.list);
           setTotal(item.data.data.total);
@@ -88,12 +84,12 @@ const SuperAdminAppImagePage = () => {
     setRowsPerPage(newRowperPage);
     setPage(newPage);
     if (search === '' || search === null || search === undefined) {
-      Service.getListService(newPage, rowsPerPage).then((item) => {
+      Service.listService(newPage, rowsPerPage).then((item) => {
         setList(item.data.data.list);
         setTotal(item.data.data.total);
       });
     } else {
-      Service.getPermissionSearchService(search, newPage, rowsPerPage).then(
+      Service.searchService(search, newPage, rowsPerPage).then(
         (item) => {
           setList(item.data.data.list);
           setTotal(item.data.data.total);
@@ -103,73 +99,66 @@ const SuperAdminAppImagePage = () => {
   };
 
   useEffect(() => {
-    if (TEXT_STORE_KEY) {
-      setIsNotify(true);
-      setNotifyMessage({
-        text: TEXT_STORE_KEY,
-        type: 'success',
-      });
-      setText('');
-    } else {
-      setIsLoader(true);
-    }
-    Service.getPermissionListService(page, rowsPerPage)
+    Service.listService(page, rowsPerPage)
       .then((item: any) => {
         if (item.data.success) {
           setIsLoader(false);
           setList(item.data.data.list);
           setTotal(item.data.data.total);
+        } else {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'error',
+          })
         }
       })
       .catch((error) => {
         setIsLoader(false);
-        console.error('error::::::::', error);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: error.message,
+          type: 'error',
+        })
       });
   }, [page, rowsPerPage]);
 
-  const editHandler = (id: string) => {
-    //navigate(`../edit-permission/${id}`);
-  };
-
-  const handleSwitchChange = (event: any, id: string) => {
-    const data = {
-      isActive: event.target.checked,
-      updatedBy: authState.user.id,
-    };
-    Service.updatePermissionStatus(id, data).then((updateItem) => {
-      if (updateItem.data.success) {
-        setList((newArr: any) => {
-          return newArr.map((item: any) => {
-            if (item.id === id) {
-              item.isActive = updateItem.data.data.isActive;
-            }
-            return { ...item };
-          });
+  const childDataHandler = (id: any) => {
+    setIsLoader(true);
+    Service.get(id).then((item: any) => {
+      if (item.data.success) {
+        // console.log('item.data.data::::::', item.data.data);
+        setIsLoader(false);
+        setChildData(item.data.data.avatar);
+        setOpenPopupDialog(true)
+      } else {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: item.data.message,
+          type: 'error',
         });
       }
     });
   };
 
-  const childDataHandler = (data: any) => {
-    console.log("DATA", data);
-
+  const editHandler = (id: string) => {
     setIsLoader(true);
-    Service.getChildPermissionListService(data.id).then((item) => {
+    Service.get(id).then((item: any) => {
       if (item.data.success) {
-        console.log("itemss", item.data);
-        // if (item.data.data.length > 0) {
-        //   setIsLoader(false);
-        //   setOpenDialog(true);
-        //   setHeading(data.name);
-        //   setChildList(item.data.data);
-        // } else {
-        //   setIsLoader(false);
-        //   setIsNotify(true);
-        //   setNotifyMessage({
-        //     text: "No Child List Found!",
-        //     type: 'info',
-        //   })
-        // }
+        // console.log('item.data.data::::::', item.data.data);
+        setIsLoader(false);
+        setActionMenuItemid(id);
+        setOpenEditFormDialog(true);
+        setEditFormData(item.data.data);
+      } else {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: item.data.message,
+          type: 'error',
+        });
       }
     });
   };
@@ -179,39 +168,37 @@ const SuperAdminAppImagePage = () => {
     const formData = new FormData();
     formData.append('name', data.name);
     formData.append('desc', data.desc);
-    formData.append('icon', data.icon);
-    formData.append('tenant', authState.user.tenant);
-    formData.append('created_by', authState.user.id);
-    formData.append('updated_by', authState.user.id);
-    if (data.name && data.desc && data.icon) {
-      // category
-      //   .create(formData)
-      //   .then((item) => {
-      //     if (item.data.success) {
-      //       setIsLoader(false);
-      //       setIsNotify(true);
-      //       setNotifyMessage({
-      //         text: item.data.message,
-      //         type: 'success',
-      //       });
-      //       setList([item.data.data, ...list]);
-      //     } else {
-      //       setIsLoader(false);
-      //       setIsNotify(true);
-      //       setNotifyMessage({
-      //         text: item.data.message,
-      //         type: 'error',
-      //       });
-      //     }
-      //   })
-      //   .catch((err) => {
-      //     setIsLoader(false);
-      //     setIsNotify(true);
-      //     setNotifyMessage({
-      //       text: err.message,
-      //       type: 'error',
-      //     });
-      //   });
+    formData.append('avatar', data.avatar);
+    formData.append('createdBy', authState.user.id);
+    if (data.name && data.avatar) {
+      Service
+        .create(formData)
+        .then((item) => {
+          if (item.data.success) {
+            setIsLoader(false);
+            setIsNotify(true);
+            setNotifyMessage({
+              text: item.data.message,
+              type: 'success',
+            });
+            setList([item.data.data, ...list]);
+          } else {
+            setIsLoader(false);
+            setIsNotify(true);
+            setNotifyMessage({
+              text: item.data.message,
+              type: 'error',
+            });
+          }
+        })
+        .catch((err) => {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: err.message,
+            type: 'error',
+          });
+        });
     } else {
       setIsLoader(false);
       setIsNotify(true);
@@ -224,42 +211,55 @@ const SuperAdminAppImagePage = () => {
 
   const updateFormHandler = (data: any) => {
     setIsLoader(true);
+    // console.log("data", data);
+
     const formData = new FormData();
     formData.append('name', data.name);
     formData.append('desc', data.desc);
-    formData.append('icon', data.icon);
-    formData.append('tenant', authState.user.tenant);
-    formData.append('created_by', authState.user.id);
-    formData.append('updated_by', authState.user.id);
-    if (data.name && data.desc && data.icon) {
-      // category
-      //   .create(formData)
-      //   .then((item) => {
-      //     if (item.data.success) {
-      //       setIsLoader(false);
-      //       setIsNotify(true);
-      //       setNotifyMessage({
-      //         text: item.data.message,
-      //         type: 'success',
-      //       });
-      //       setList([item.data.data, ...list]);
-      //     } else {
-      //       setIsLoader(false);
-      //       setIsNotify(true);
-      //       setNotifyMessage({
-      //         text: item.data.message,
-      //         type: 'error',
-      //       });
-      //     }
-      //   })
-      //   .catch((err) => {
-      //     setIsLoader(false);
-      //     setIsNotify(true);
-      //     setNotifyMessage({
-      //       text: err.message,
-      //       type: 'error',
-      //     });
-      //   });
+    if (data.avatar !== null) {
+      formData.append('avatar', data.avatar);
+    }
+    formData.append('updatedBy', authState.user.id);
+    if (data.name) {
+      Service
+        .update(actionMenuItemid, formData)
+        .then((item) => {
+          if (item.data.success) {
+            // console.log("updated data", item.data);
+            setIsLoader(false);
+            setIsNotify(true);
+            setNotifyMessage({
+              text: item.data.message,
+              type: 'success',
+            });
+            setList((newArr: any) => {
+              return newArr.map((newItem: any) => {
+                if (newItem.id === item.data.data.id) {
+                  newItem.name = item.data.data.name;
+                  newItem.isActive = item.data.data.isActive;
+                  newItem.desc = item.data.data.desc;
+                  newItem.avatar = item.data.data.avatar
+                }
+                return { ...newItem };
+              });
+            });
+          } else {
+            setIsLoader(false);
+            setIsNotify(true);
+            setNotifyMessage({
+              text: item.data.message,
+              type: 'error',
+            });
+          }
+        })
+        .catch((err) => {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: err.message,
+            type: 'error',
+          });
+        });
     } else {
       setIsLoader(false);
       setIsNotify(true);
@@ -269,6 +269,17 @@ const SuperAdminAppImagePage = () => {
       });
     }
   };
+
+  const childList = [
+    {
+      image: "image 1",
+      link: "image link 1"
+    },
+    {
+      image: "image 1",
+      link: "image link 1"
+    }
+  ]
 
   return isLoader ? (
     <Loader />
@@ -351,14 +362,12 @@ const SuperAdminAppImagePage = () => {
                           <div className="avatar flex flex-row items-center">
                             {item.avatar ? (
                               <Avatar
-                                className="avatar flex flex-row items-center"
+                                className=""
+                                style={{ objectFit: "cover" }}
                                 sx={{
                                   bgcolor: '#1D1D1D',
                                   width: 35,
-                                  height: 35,
-                                  textTransform: 'uppercase',
-                                  fontSize: '14px',
-                                  marginRight: '10px',
+                                  height: 35
                                 }}
                                 src={item.avatar}
                                 alt=""
@@ -403,14 +412,14 @@ const SuperAdminAppImagePage = () => {
                               <IconButton
                                 disabled={!(item.isActive)}
                                 className="icon-btn mr-3.5 p-0"
-                                onClick={() => childDataHandler(item)}
+                                onClick={() => childDataHandler(item.id)}
                               >
                                 <WysiwygOutlinedIcon />
                               </IconButton>
                               <IconButton
                                 disabled={!(item.isActive)}
                                 className="icon-btn mr-3 p-0"
-                                onClick={() => { setActionMenuItemid(item.id), setOpenEditFormDialog(true) }}
+                                onClick={() => item.isActive ? editHandler(item.id) : null}
                               >
                                 <EditIcon />
                               </IconButton>
@@ -453,6 +462,13 @@ const SuperAdminAppImagePage = () => {
           callback={updateFormHandler}
           setIsNotify={setIsNotify}
           setNotifyMessage={setNotifyMessage}
+        />
+      )}
+      {openPopupDialog && (
+        <SuperAdminAppImagePagePopup
+          openDialog={openPopupDialog}
+          setOpenDialog={setOpenPopupDialog}
+          link={childData}
         />
       )}
     </>

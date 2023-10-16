@@ -9,7 +9,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import CircularProgress from '@mui/material/CircularProgress';
 import auth from '../../../services/adminapp/admin';
-import { UserLogin } from '../../../interfaces/superadmin/auth.interface';
+import { UserLogin } from '../../../interfaces/auth.interface';
 import AlertBox from '../../../utils/Alert';
 import { setToken } from '../../../utils/constants';
 import { useAppDispatch } from '../../../redux/redux-hooks';

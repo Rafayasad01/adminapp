@@ -35,5 +35,5 @@ export default {
   updateService,
   getAddressService,
   loginService,
-  createNewPassword
+  createNewPassword,
 };
