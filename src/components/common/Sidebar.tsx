@@ -198,14 +198,14 @@ function Sidebar() {
     }
   };
 
-  function NavbarLinks(path: any, icon: any, name: string, index: number, padding: any) {
+  function NavbarLinks(path: any, icon: any, name: string, index: number, padding: any, paddingLeft: any) {
     return (
       <NavLink
         key={path}
         className={({ isActive }) =>
           isActive
-            ? `bg-gray-50 bg-opacity-5 ${padding} pl-8 pr-4 w-full`
-            : `${padding} pl-8 pr-4 w-full`
+            ? `bg-gray-50 bg-opacity-5 ${padding} ${paddingLeft} pr-4 w-full`
+            : `${padding} ${paddingLeft} pr-4 w-full`
         }
         to={path}
       >
@@ -242,14 +242,14 @@ function Sidebar() {
             childLinks?.map((el: any, childIndex: number) => {
               return (
                 <div key={childIndex} className='flex mx-8'>
-                  {NavbarLinks(el.path, el.icon, el.name, childIndex, "py-2")}
+                  {NavbarLinks(el.path, el.icon, el.name, childIndex, "py-2", "pl-[21px]")}
                 </div>
               )
             })
           }
         </>
         :
-        NavbarLinks(path, icon, name, index, "py-3")
+        NavbarLinks(path, icon, name, index, "py-3", "pl-8")
     )
   }
 

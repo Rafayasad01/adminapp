@@ -78,6 +78,7 @@ function CustomDialog({
                           />
                         ) : (
                           <CustomInputBox
+                            disable={items.disable}
                             inputTitle={items.fieldName}
                             id={items.id}
                             value={items.value ? items.value : ''}

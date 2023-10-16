@@ -64,18 +64,10 @@ function SuperAdminShopsListPage() {
       fieldName: 'User Limits',
       id: 'userLimits',
       register,
-      value: dataById?.userLimits,
-      error: errors.user_limits,
+      error: errors.userLimits,
       type: 'number',
       typeImportant: true,
-    },
-    {
-      fieldName: 'es',
-      id: 'userLimits',
-      register,
-      error: errors.user_limits,
-      type: 'text',
-    },
+    }, {}
   ];
 
   const onSubmitDialogBox = (data: any) => {
@@ -207,7 +199,7 @@ function SuperAdminShopsListPage() {
     Service.get(id).then((item: any) => {
       if (item.data.success) {
         setDataById(item.data.data);
-        // console.log('item.data.data::::::', item.data.data);
+        setValue("userLimits", item.data.data.userLimits)
         setIsLoader(false);
         setOpenEditFormDialog(true);
       } else {
@@ -350,8 +342,8 @@ function SuperAdminShopsListPage() {
                               <span className="text-xs font-normal text-[#6A6A6A]">
                                 {dayjs(item.createdDate).isValid()
                                   ? dayjs(item.createdDate)?.format(
-                                      'MMMM DD, YYYY'
-                                    )
+                                    'MMMM DD, YYYY'
+                                  )
                                   : '--'}
                               </span>
                             </div>

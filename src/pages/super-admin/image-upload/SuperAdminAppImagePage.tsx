@@ -269,18 +269,7 @@ const SuperAdminAppImagePage = () => {
       });
     }
   };
-
-  const childList = [
-    {
-      image: "image 1",
-      link: "image link 1"
-    },
-    {
-      image: "image 1",
-      link: "image link 1"
-    }
-  ]
-
+  
   return isLoader ? (
     <Loader />
   ) : (
@@ -361,17 +350,25 @@ const SuperAdminAppImagePage = () => {
                         <td>
                           <div className="avatar flex flex-row items-center">
                             {item.avatar ? (
-                              <Avatar
-                                className=""
-                                style={{ objectFit: "cover" }}
-                                sx={{
-                                  bgcolor: '#1D1D1D',
-                                  width: 35,
-                                  height: 35
-                                }}
+                              <img
                                 src={item.avatar}
+                                // width={25}
+                                // height={25}
+                                style={{ objectFit: "contain", width: 30, height: 30, border: "1px solid #DFE0EB",padding:"4px" }}
                                 alt=""
                               />
+                              // <Avatar
+                              //   className=""
+                              //   style={{ objectFit: "cover" }}
+                              //   sx={{
+                              //     border:"1px solid #DFE0EB",
+                              //     // bgcolor: '#1D1D1D',
+                              //     width: 15,
+                              //     height: 35
+                              //   }}
+                              //   src={item.avatar}
+                              //   alt=""
+                              // />
                             ) : (
                               <Avatar
                                 className="avatar flex flex-row items-center"
