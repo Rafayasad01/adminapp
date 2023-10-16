@@ -11,6 +11,7 @@ import { useForm } from 'react-hook-form';
 import '../../../assets/css/PopupStyle.css';
 import TextField from '@mui/material/TextField';
 import { AppImage } from '../../../interfaces/app.interface';
+import CustomButton from '../../../components/common/CustomButton';
 // import { Category } from '../../interfaces/category.interface';
 
 type Props = {
@@ -21,13 +22,13 @@ type Props = {
   setNotifyMessage: any;
 };
 
-const SuperAdminAppImageCreatePopup = ({
+function SuperAdminAppImageCreatePopup({
   openDialog,
   setOpenDialog,
   callback,
   setIsNotify,
   setNotifyMessage,
-}: Props) => {
+}: Props) {
   const [image, setImage] = useState<any>(null);
 
   const {
@@ -37,18 +38,12 @@ const SuperAdminAppImageCreatePopup = ({
     formState: { errors },
     control,
   } = useForm<AppImage>();
+
   const onSubmit = (data: AppImage) => {
-    if (data.desc && image && data.name) {
-      data.avatar = image;
-      setOpenDialog(false);
-      callback(data);
-    } else {
-      setIsNotify(true);
-      setNotifyMessage({
-        text: 'All fields are required!',
-        type: 'error',
-      });
-    }
+    console.log('data', data, image);
+    data.avatar = image;
+    setOpenDialog(false);
+    callback(data);
   };
 
   const handleFormClose = () => {
@@ -76,17 +71,18 @@ const SuperAdminAppImageCreatePopup = ({
       <div className="Content">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="FormHeader">
-            <span className="Title">Add Category</span>
+            <span className="Title">Add Image</span>
           </div>
           <div className="FormBody">
             <div className="FormField">
               <FormControl className="FormControl" variant="standard">
-                <label className="FormLabel">Category Name</label>
+                <label className="FormLabel">Image Name</label>
                 <Input
                   className="FormInput"
                   {...register('name', { required: true })}
                   type="text"
                   id="name"
+                  placeholder="Write Image Name"
                   disableUnderline
                 />
                 {errors.name?.type === 'required' && (
@@ -97,7 +93,7 @@ const SuperAdminAppImageCreatePopup = ({
             <div className="FormField">
               <FormControl className="FormControl" variant="standard">
                 <label className="FormLabel">
-                  Message{' '}
+                  Image Description{' '}
                   <span className="SubLabel">Write 05-50 Characters</span>
                 </label>
                 <TextField
@@ -106,18 +102,8 @@ const SuperAdminAppImageCreatePopup = ({
                   multiline
                   rows={4}
                   defaultValue=""
-                  placeholder="Write Description"
-                  {...register('desc', {
-                    required: 'Description is required',
-                    minLength: {
-                      value: 5,
-                      message: 'Minimum Five Characters',
-                    },
-                    maxLength: {
-                      value: 50,
-                      message: 'Too Many Characters',
-                    },
-                  })}
+                  placeholder="Write Image Description"
+                  {...register('desc')}
                 />
                 {errors.desc && (
                   <span role="alert">{errors.desc?.message}</span>
@@ -188,7 +174,18 @@ const SuperAdminAppImageCreatePopup = ({
             >
               Cancel
             </Button>
-            <Input
+            <CustomButton
+              buttonType="button"
+              title="add"
+              type="submit"
+              className="btn-black-fill"
+              sx={{
+                width: '100%',
+                marginRight: '0.5rem',
+                padding: '0.375rem 1.5rem !important',
+              }}
+            />
+            {/* <Input
               type="submit"
               value="Add"
               className="btn-black-fill"
@@ -196,7 +193,7 @@ const SuperAdminAppImageCreatePopup = ({
               sx={{
                 padding: '0.375rem 2rem !important',
               }}
-            />
+            /> */}
           </div>
         </form>
       </div>

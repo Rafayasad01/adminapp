@@ -14,6 +14,7 @@ export const NOTIFICATION_PREFIX = 'notification';
 export const TENANT_PREFIX = 'tenant';
 export const ROLE_PREFIX = 'role';
 export const SHOP_PREFIX = 'shop';
+export const APP_IMAGE_PREFIX = 'appImage';
 export const ORDER_STATUS_NEW = 'New';
 export const ORDER_STATUS_PICKED_UP = 'PickedUp';
 export const ORDER_STATUS_PROCESSING = 'Processing';

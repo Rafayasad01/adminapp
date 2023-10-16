@@ -9,7 +9,7 @@ function ArrowDown() {
     >
       <path
         d="M11 6.5L6 1.5L1 6.5"
-        stroke="#6A6A6A"
+        stroke="#fff"
         strokeWidth="2"
         strokeLinecap="round"
       />

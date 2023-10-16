@@ -9,7 +9,7 @@ function ArrowUp() {
     >
       <path
         d="M1 1.5L6 6.5L11 1.5"
-        stroke="#6A6A6A"
+        stroke="#fff"
         strokeWidth="2"
         strokeLinecap="round"
       />

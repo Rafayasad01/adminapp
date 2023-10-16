@@ -23,6 +23,7 @@ import IconButton from '@mui/material/IconButton';
 import HeadphonesOutlinedIcon from '@mui/icons-material/HeadphonesOutlined';
 import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined';
 import { useSelector } from 'react-redux';
+import CollectionsOutlinedIcon from '@mui/icons-material/CollectionsOutlined';
 import OrderIcon from '../icons/OrderIcon';
 import CategoryIcon from '../icons/CategoryIcon';
 import VoucherIcon from '../icons/VoucherIcon';
@@ -39,7 +40,6 @@ import ArrowDown from '../icons/ArrowDown';
 import ArrowUp from '../icons/ArrowUp';
 import UserPermission from '../icons/UserPermission';
 import PermissionIcon from '../icons/PermissionIcon';
-import CollectionsOutlinedIcon from '@mui/icons-material/CollectionsOutlined';
 
 const links = [
   {
@@ -198,14 +198,14 @@ function Sidebar() {
     }
   };
 
-  function NavbarLinks(path: any, icon: any, name: string, index: number) {
+  function NavbarLinks(path: any, icon: any, name: string, index: number, padding: any) {
     return (
       <NavLink
         key={path}
         className={({ isActive }) =>
           isActive
-            ? 'bg-gray-50 bg-opacity-5 py-3 pl-8 pr-4 w-full'
-            : 'py-3 pl-8 pr-4 w-full'
+            ? `bg-gray-50 bg-opacity-5 ${padding} pl-8 pr-4 w-full`
+            : `${padding} pl-8 pr-4 w-full`
         }
         to={path}
       >
@@ -242,14 +242,14 @@ function Sidebar() {
             childLinks?.map((el: any, childIndex: number) => {
               return (
                 <div key={childIndex} className='flex mx-8'>
-                  {NavbarLinks(el.path, el.icon, el.name, childIndex)}
+                  {NavbarLinks(el.path, el.icon, el.name, childIndex, "py-2")}
                 </div>
               )
             })
           }
         </>
         :
-        NavbarLinks(path, icon, name, index)
+        NavbarLinks(path, icon, name, index, "py-3")
     )
   }
 

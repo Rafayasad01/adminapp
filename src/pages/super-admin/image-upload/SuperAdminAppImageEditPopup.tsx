@@ -10,6 +10,7 @@ import { useForm } from 'react-hook-form';
 import TextField from '@mui/material/TextField';
 import '../../../assets/css/PopupStyle.css';
 import { AppImage } from '../../../interfaces/app.interface';
+import CustomButton from '../../../components/common/CustomButton';
 
 type Props = {
   openDialog: boolean;
@@ -20,14 +21,14 @@ type Props = {
   setNotifyMessage: any;
 };
 
-const SuperAdminAppImageEditPopup = ({
+function SuperAdminAppImageEditPopup({
   openDialog,
   setOpenDialog,
   formData,
   callback,
   setIsNotify,
   setNotifyMessage,
-}: Props) => {
+}: Props) {
   const [image, setImage] = useState<any>(null);
 
   const {
@@ -40,16 +41,12 @@ const SuperAdminAppImageEditPopup = ({
   } = useForm<AppImage>();
 
   const onSubmit = (data: AppImage) => {
-    if (data.desc && image && data.name) {
+    if (data.name) {
       data.avatar = image;
       setOpenDialog(false);
       callback(data);
     } else {
-      setIsNotify(true);
-      setNotifyMessage({
-        text: 'All fields are required!',
-        type: 'error',
-      });
+      setOpenDialog(true);
     }
   };
 
@@ -67,14 +64,15 @@ const SuperAdminAppImageEditPopup = ({
   };
 
   useEffect(() => {
-    // let icon = formData.avatar.split('/').slice(-1)[0];
-    // const regexExp = /[a-z,0-9,-]{36}/;
-    // if (regexExp.test(icon)) {
-    //   icon = icon.split('-').splice(5)[0].at(0);
-    // }
-    // // setImageName(icon);
-    // setImage({ name: icon });
+    let icon = formData?.avatar.split('/').slice(-1)[0];
+    const regexExp = /[a-z,0-9,-]{36}/;
+    if (regexExp.test(icon)) {
+      icon = icon.split('-').splice(5)[0].at(0);
+    }
+    // setImageName(icon);
+    setImage({ name: icon });
   }, [formData]);
+  console.log('image', image);
 
   return (
     <Dialog
@@ -88,26 +86,27 @@ const SuperAdminAppImageEditPopup = ({
       <div className="Content">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="FormHeader">
-            <span className="Title">Edit Category</span>
+            <span className="Title">Edit Image</span>
           </div>
           {formData && (
             <>
               <div className="FormBody">
                 <div className="FormField">
                   <FormControl className="FormControl" variant="standard">
-                    <label className="FormLabel">Category Name</label>
+                    <label className="FormLabel">Image Name</label>
                     <Input
                       className="FormInput"
                       type="text"
                       id="name"
+                      placeholder="Write Image Name"
                       disableUnderline
                       {...register('name', {
                         required: true,
-                        value: formData.name,
+                        value: formData?.name,
                       })}
                     />
                     {errors.name?.type === 'required' && (
-                      <span role="alert">Category name is required</span>
+                      <span role="alert">Image name is required</span>
                     )}
                   </FormControl>
                 </div>
@@ -123,23 +122,9 @@ const SuperAdminAppImageEditPopup = ({
                       multiline
                       rows={4}
                       defaultValue=""
-                      placeholder="Write Description"
-                      {...register('desc', {
-                        required: 'Description is required',
-                        value: formData.desc,
-                        minLength: {
-                          value: 5,
-                          message: 'Minimum Five Characters',
-                        },
-                        maxLength: {
-                          value: 50,
-                          message: 'Too Many Characters',
-                        },
-                      })}
+                      placeholder="Write Image Description"
+                      {...register('desc', { value: formData?.desc })}
                     />
-                    {errors.desc && (
-                      <span role="alert">{errors.desc?.message}</span>
-                    )}
                   </FormControl>
                 </div>
                 <div className="FormField">
@@ -173,7 +158,7 @@ const SuperAdminAppImageEditPopup = ({
 
                     {image ? (
                       <div className="ShowImageBox">
-                        <label className="ShowImageLabel">{image.name}</label>
+                        <label className="ShowImageLabel">{image?.name}</label>
                         <IconButton
                           className="btn-dot"
                           onClick={() => setImage(null)}
@@ -191,7 +176,7 @@ const SuperAdminAppImageEditPopup = ({
                       ''
                     )}
                   </div>
-                  {image === null && errors.avatar && (
+                  {image === null && (
                     <span role="alert">{errors.avatar?.message}</span>
                   )}
                 </div>
@@ -208,13 +193,15 @@ const SuperAdminAppImageEditPopup = ({
                 >
                   Cancel
                 </Button>
-                <Input
+                <CustomButton
+                  buttonType="button"
+                  title="update"
                   type="submit"
-                  value="Update"
                   className="btn-black-fill"
-                  disableUnderline
                   sx={{
-                    padding: '0.375rem 2rem !important',
+                    width: '100%',
+                    marginRight: '0.5rem',
+                    padding: '0.375rem 1.5rem !important',
                   }}
                 />
               </div>
