@@ -376,7 +376,7 @@ function DriversPage() {
       register,
       error: errors.email,
       type: 'text',
-      disable: getValues("email") ? true : false
+      disable: !!getValues('email'),
     },
     {
       fieldName: 'Password',
@@ -455,7 +455,7 @@ function DriversPage() {
       });
     }
   };
-  console.log("SSSSSSSSSSSSSS", openEditFormDialog)
+  console.log('SSSSSSSSSSSSSS', openEditFormDialog);
 
   return isLoader ? (
     <Loader />
@@ -528,7 +528,7 @@ function DriversPage() {
         openFormDialog={openFormDialog}
         setOpenFormDialog={setOpenFormDialog}
       />
-      {openEditFormDialog &&
+      {openEditFormDialog && (
         <CustomDialog
           DialogHeader="Edit Drivers"
           type="edit"
@@ -536,8 +536,8 @@ function DriversPage() {
           inputFieldsData={
             openEditFormDialog
               ? inputFieldsData.filter(
-                (item) => item.id !== 'address' && item.id !== 'password'
-              )
+                  (item) => item.id !== 'address' && item.id !== 'password'
+                )
               : inputFieldsData
           }
           handleSubmit={handleSubmit}
@@ -546,7 +546,7 @@ function DriversPage() {
           setOpenFormDialog={setOpenEditFormDialog}
           setAvater={setAvatar}
         />
-      }
+      )}
       {/* <DriversCreatePopup
         setIsNotify={setIsNotify}
         setNotifyMessage={setNotifyMessage}

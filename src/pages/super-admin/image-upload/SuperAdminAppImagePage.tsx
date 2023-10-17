@@ -342,7 +342,13 @@ function SuperAdminAppImagePage() {
                             {item.avatar ? (
                               <img
                                 src={item.avatar}
-                                style={{ objectFit: "contain", width: 30, height: 30, border: "1px solid #DFE0EB", padding: "4px" }}
+                                style={{
+                                  objectFit: 'contain',
+                                  width: 30,
+                                  height: 30,
+                                  border: '1px solid #DFE0EB',
+                                  padding: '4px',
+                                }}
                                 alt=""
                               />
                             ) : (
