@@ -67,7 +67,8 @@ function SuperAdminShopsListPage() {
       error: errors.userLimits,
       type: 'number',
       typeImportant: true,
-    }, {}
+    },
+    {},
   ];
 
   const onSubmitDialogBox = (data: any) => {
@@ -199,7 +200,7 @@ function SuperAdminShopsListPage() {
     Service.get(id).then((item: any) => {
       if (item.data.success) {
         setDataById(item.data.data);
-        setValue("userLimits", item.data.data.userLimits)
+        setValue('userLimits', item.data.data.userLimits);
         setIsLoader(false);
         setOpenEditFormDialog(true);
       } else {
@@ -342,8 +343,8 @@ function SuperAdminShopsListPage() {
                               <span className="text-xs font-normal text-[#6A6A6A]">
                                 {dayjs(item.createdDate).isValid()
                                   ? dayjs(item.createdDate)?.format(
-                                    'MMMM DD, YYYY'
-                                  )
+                                      'MMMM DD, YYYY'
+                                    )
                                   : '--'}
                               </span>
                             </div>

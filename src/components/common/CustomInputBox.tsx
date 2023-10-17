@@ -79,7 +79,7 @@ function CustomInputBox({
               <IconButton
                 style={{ padding: 0 }}
                 aria-label="toggle password visibility"
-                onClick={onclick || (() => { })}
+                onClick={onclick || (() => {})}
               >
                 {showPassVisibility ? <VisibilityOff /> : <Visibility />}
               </IconButton>
