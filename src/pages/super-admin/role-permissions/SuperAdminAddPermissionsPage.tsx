@@ -20,7 +20,7 @@ import assets from '../../../assets';
 function SuperAdminAddPermissionsPage() {
   const authState: any = useAppSelector((state) => state.authState);
   const navigate = useNavigate();
-  const [isLoader, setIsLoader] = useState<boolean>(true);
+  const [isLoader, setIsLoader] = useState<boolean>(false);
   const [isNotify, setIsNotify] = useState(false);
   const [notifyMessage, setNotifyMessage] = useState({});
   const [count, setCount] = useState(0);

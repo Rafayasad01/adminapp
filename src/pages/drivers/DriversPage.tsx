@@ -376,6 +376,7 @@ function DriversPage() {
       register,
       error: errors.email,
       type: 'text',
+      disable: getValues("email") ? true : false
     },
     {
       fieldName: 'Password',
@@ -454,6 +455,7 @@ function DriversPage() {
       });
     }
   };
+  console.log("SSSSSSSSSSSSSS", openEditFormDialog)
 
   return isLoader ? (
     <Loader />
@@ -518,7 +520,6 @@ function DriversPage() {
           callback={manuHandler}
         />
       )}
-
       <CustomDialog
         DialogHeader="Add Drivers"
         inputFieldsData={inputFieldsData}
@@ -527,24 +528,25 @@ function DriversPage() {
         openFormDialog={openFormDialog}
         setOpenFormDialog={setOpenFormDialog}
       />
-
-      <CustomDialog
-        DialogHeader="Edit Drivers"
-        type="edit"
-        reset={reset}
-        inputFieldsData={
-          openEditFormDialog
-            ? inputFieldsData.filter(
+      {openEditFormDialog &&
+        <CustomDialog
+          DialogHeader="Edit Drivers"
+          type="edit"
+          reset={reset}
+          inputFieldsData={
+            openEditFormDialog
+              ? inputFieldsData.filter(
                 (item) => item.id !== 'address' && item.id !== 'password'
               )
-            : inputFieldsData
-        }
-        handleSubmit={handleSubmit}
-        onSubmit={onSubmitDialogBox}
-        openFormDialog={openEditFormDialog}
-        setOpenFormDialog={setOpenEditFormDialog}
-        setAvater={setAvatar}
-      />
+              : inputFieldsData
+          }
+          handleSubmit={handleSubmit}
+          onSubmit={onSubmitDialogBox}
+          openFormDialog={openEditFormDialog}
+          setOpenFormDialog={setOpenEditFormDialog}
+          setAvater={setAvatar}
+        />
+      }
       {/* <DriversCreatePopup
         setIsNotify={setIsNotify}
         setNotifyMessage={setNotifyMessage}

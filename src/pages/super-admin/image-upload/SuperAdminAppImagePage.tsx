@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import IconButton from '@mui/material/IconButton';
 import Divider from '@mui/material/Divider';
 import FormControl from '@mui/material/FormControl';
@@ -261,18 +260,6 @@ function SuperAdminAppImagePage() {
       });
     }
   };
-
-  const childList = [
-    {
-      image: 'image 1',
-      link: 'image link 1',
-    },
-    {
-      image: 'image 1',
-      link: 'image link 1',
-    },
-  ];
-
   return isLoader ? (
     <Loader />
   ) : (
@@ -353,15 +340,9 @@ function SuperAdminAppImagePage() {
                         <td>
                           <div className="avatar flex flex-row items-center">
                             {item.avatar ? (
-                              <Avatar
-                                className=""
-                                style={{ objectFit: 'cover' }}
-                                sx={{
-                                  bgcolor: '#1D1D1D',
-                                  width: 35,
-                                  height: 35,
-                                }}
+                              <img
                                 src={item.avatar}
+                                style={{ objectFit: "contain", width: 30, height: 30, border: "1px solid #DFE0EB", padding: "4px" }}
                                 alt=""
                               />
                             ) : (
