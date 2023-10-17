@@ -11,6 +11,8 @@ import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import TablePagination from '@mui/material/TablePagination';
 import EditIcon from '@mui/icons-material/Edit';
 import WysiwygOutlinedIcon from '@mui/icons-material/WysiwygOutlined';
+import Avatar from '@mui/material/Avatar';
+import dayjs from 'dayjs';
 import { useAppSelector } from '../../../redux/redux-hooks';
 import TopBar from '../../../components/common/TopBar';
 import Loader from '../../../components/common/Loader';
@@ -19,11 +21,9 @@ import Notify from '../../../components/common/Notify';
 import CustomText from '../../../components/common/CustomText';
 import SuperAdminAppImageCreatePopup from './SuperAdminAppImageCreatePopup';
 import SuperAdminAppImageEditPopup from './SuperAdminAppImageEditPopup';
-import Avatar from '@mui/material/Avatar';
-import dayjs from 'dayjs';
 import SuperAdminAppImagePagePopup from './SuperAdminAppImagePagePopup';
 
-const SuperAdminAppImagePage = () => {
+function SuperAdminAppImagePage() {
   const authState: any = useAppSelector((state) => state.authState);
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(0);
@@ -46,13 +46,11 @@ const SuperAdminAppImagePage = () => {
     const newPage = 0;
     setSearch(searchTxt);
     setPage(newPage);
-    Service.searchService(searchTxt, newPage, rowsPerPage).then(
-      (item) => {
-        // console.log('item:::::', item);
-        setList(item.data.data.list);
-        // setTotal(item.data.data.total);
-      }
-    );
+    Service.searchService(searchTxt, newPage, rowsPerPage).then((item) => {
+      // console.log('item:::::', item);
+      setList(item.data.data.list);
+      // setTotal(item.data.data.total);
+    });
   };
 
   const handleChangePage = (
@@ -67,12 +65,10 @@ const SuperAdminAppImagePage = () => {
         setTotal(item.data.data.total);
       });
     } else {
-      Service.searchService(search, newPage, rowsPerPage).then(
-        (item) => {
-          setList(item.data.data.list);
-          setTotal(item.data.data.total);
-        }
-      );
+      Service.searchService(search, newPage, rowsPerPage).then((item) => {
+        setList(item.data.data.list);
+        setTotal(item.data.data.total);
+      });
     }
   };
 
@@ -89,12 +85,10 @@ const SuperAdminAppImagePage = () => {
         setTotal(item.data.data.total);
       });
     } else {
-      Service.searchService(search, newPage, rowsPerPage).then(
-        (item) => {
-          setList(item.data.data.list);
-          setTotal(item.data.data.total);
-        }
-      );
+      Service.searchService(search, newPage, rowsPerPage).then((item) => {
+        setList(item.data.data.list);
+        setTotal(item.data.data.total);
+      });
     }
   };
 
@@ -111,7 +105,7 @@ const SuperAdminAppImagePage = () => {
           setNotifyMessage({
             text: item.data.message,
             type: 'error',
-          })
+          });
         }
       })
       .catch((error) => {
@@ -120,7 +114,7 @@ const SuperAdminAppImagePage = () => {
         setNotifyMessage({
           text: error.message,
           type: 'error',
-        })
+        });
       });
   }, [page, rowsPerPage]);
 
@@ -131,7 +125,7 @@ const SuperAdminAppImagePage = () => {
         // console.log('item.data.data::::::', item.data.data);
         setIsLoader(false);
         setChildData(item.data.data.avatar);
-        setOpenPopupDialog(true)
+        setOpenPopupDialog(true);
       } else {
         setIsLoader(false);
         setIsNotify(true);
@@ -171,8 +165,7 @@ const SuperAdminAppImagePage = () => {
     formData.append('avatar', data.avatar);
     formData.append('createdBy', authState.user.id);
     if (data.name && data.avatar) {
-      Service
-        .create(formData)
+      Service.create(formData)
         .then((item) => {
           if (item.data.success) {
             setIsLoader(false);
@@ -221,8 +214,7 @@ const SuperAdminAppImagePage = () => {
     }
     formData.append('updatedBy', authState.user.id);
     if (data.name) {
-      Service
-        .update(actionMenuItemid, formData)
+      Service.update(actionMenuItemid, formData)
         .then((item) => {
           if (item.data.success) {
             // console.log("updated data", item.data);
@@ -238,7 +230,7 @@ const SuperAdminAppImagePage = () => {
                   newItem.name = item.data.data.name;
                   newItem.isActive = item.data.data.isActive;
                   newItem.desc = item.data.data.desc;
-                  newItem.avatar = item.data.data.avatar
+                  newItem.avatar = item.data.data.avatar;
                 }
                 return { ...newItem };
               });
@@ -272,14 +264,14 @@ const SuperAdminAppImagePage = () => {
 
   const childList = [
     {
-      image: "image 1",
-      link: "image link 1"
+      image: 'image 1',
+      link: 'image link 1',
     },
     {
-      image: "image 1",
-      link: "image link 1"
-    }
-  ]
+      image: 'image 1',
+      link: 'image link 1',
+    },
+  ];
 
   return isLoader ? (
     <Loader />
@@ -363,11 +355,11 @@ const SuperAdminAppImagePage = () => {
                             {item.avatar ? (
                               <Avatar
                                 className=""
-                                style={{ objectFit: "cover" }}
+                                style={{ objectFit: 'cover' }}
                                 sx={{
                                   bgcolor: '#1D1D1D',
                                   width: 35,
-                                  height: 35
+                                  height: 35,
                                 }}
                                 src={item.avatar}
                                 alt=""
@@ -394,9 +386,7 @@ const SuperAdminAppImagePage = () => {
                         <td>{item.desc}</td>
                         <td>
                           {dayjs(item.createdDate).isValid()
-                            ? dayjs(item.createdDate)?.format(
-                              'MMMM DD, YYYY'
-                            )
+                            ? dayjs(item.createdDate)?.format('MMMM DD, YYYY')
                             : '--'}
                         </td>
                         <td>
@@ -408,22 +398,22 @@ const SuperAdminAppImagePage = () => {
                         </td>
                         <td>
                           <div className="flex flex-row-reverse">
-                            <>
-                              <IconButton
-                                disabled={!(item.isActive)}
-                                className="icon-btn mr-3.5 p-0"
-                                onClick={() => childDataHandler(item.id)}
-                              >
-                                <WysiwygOutlinedIcon />
-                              </IconButton>
-                              <IconButton
-                                disabled={!(item.isActive)}
-                                className="icon-btn mr-3 p-0"
-                                onClick={() => item.isActive ? editHandler(item.id) : null}
-                              >
-                                <EditIcon />
-                              </IconButton>
-                            </>
+                            <IconButton
+                              disabled={!item.isActive}
+                              className="icon-btn mr-3.5 p-0"
+                              onClick={() => childDataHandler(item.id)}
+                            >
+                              <WysiwygOutlinedIcon />
+                            </IconButton>
+                            <IconButton
+                              disabled={!item.isActive}
+                              className="icon-btn mr-3 p-0"
+                              onClick={() =>
+                                item.isActive ? editHandler(item.id) : null
+                              }
+                            >
+                              <EditIcon />
+                            </IconButton>
                           </div>
                         </td>
                       </tr>
