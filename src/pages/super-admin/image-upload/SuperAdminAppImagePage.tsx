@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import IconButton from '@mui/material/IconButton';
 import Divider from '@mui/material/Divider';
 import FormControl from '@mui/material/FormControl';
@@ -262,7 +261,6 @@ function SuperAdminAppImagePage() {
       });
     }
   };
-
   return isLoader ? (
     <Loader />
   ) : (
@@ -345,8 +343,6 @@ function SuperAdminAppImagePage() {
                             {item.avatar ? (
                               <img
                                 src={item.avatar}
-                                // width={25}
-                                // height={25}
                                 style={{
                                   objectFit: 'contain',
                                   width: 30,
@@ -357,18 +353,6 @@ function SuperAdminAppImagePage() {
                                 alt=""
                               />
                             ) : (
-                              // <Avatar
-                              //   className=""
-                              //   style={{ objectFit: "cover" }}
-                              //   sx={{
-                              //     border:"1px solid #DFE0EB",
-                              //     // bgcolor: '#1D1D1D',
-                              //     width: 15,
-                              //     height: 35
-                              //   }}
-                              //   src={item.avatar}
-                              //   alt=""
-                              // />
                               <Avatar
                                 className="avatar flex flex-row items-center"
                                 sx={{
