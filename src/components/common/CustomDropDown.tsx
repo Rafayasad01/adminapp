@@ -8,6 +8,7 @@ type Props = {
   options: any;
   register: any;
   id: any;
+  value?: string;
 };
 
 function CustomDropDown({
@@ -17,17 +18,6 @@ function CustomDropDown({
   register,
   id,
 }: Props) {
-  const [val, setVal] = useState<any>();
-
-  const handleChange = (e: any) => {
-    setVal(e.target.value);
-  };
-  console.log('otions', options);
-
-  useEffect(() => {
-    setVal(options.role);
-  }, []);
-
   return (
     <div className="">
       <div className="" style={{ paddingBottom: '3px' }}>
@@ -44,10 +34,8 @@ function CustomDropDown({
           id="demo-simple-select"
           {...register(id, {
             required: `${inputTitle?.toLocaleLowerCase()} is required`,
-            value: val || '',
           })}
-          value={val || 'none'}
-          onChange={handleChange}
+          value={options.role || ''}
         >
           <MenuItem value="none">-- Select Role --</MenuItem>
           {options?.roles?.map((item: any, index: number) => {
@@ -58,14 +46,6 @@ function CustomDropDown({
             );
           })}
         </Select>
-        {/* <select
-                    style={{ paddingLeft: "10px", borderRadius: '5px', padding: 3, width: "100%" }}
-                    className={`pr-5`}
-                    onChange={handleChange}>
-                    <option className="text-base" value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
-                </select> */}
       </div>
     </div>
   );

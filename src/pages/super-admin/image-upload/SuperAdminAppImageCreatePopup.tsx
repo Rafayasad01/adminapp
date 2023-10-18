@@ -34,16 +34,22 @@ function SuperAdminAppImageCreatePopup({
   const {
     register,
     handleSubmit,
+    setValue,
     watch,
     formState: { errors },
     control,
   } = useForm<AppImage>();
 
   const onSubmit = (data: AppImage) => {
-    console.log('data', data, image);
-    data.avatar = image;
-    setOpenDialog(false);
-    callback(data);
+    if (data.name && data.avatar) {
+      if (data.avatar && Object.keys(data?.avatar).length > 0) {
+        data.avatar = image;
+      }
+      setOpenDialog(false);
+      callback(data);
+    } else {
+      setOpenDialog(true);
+    }
   };
 
   const handleFormClose = () => {
@@ -52,6 +58,7 @@ function SuperAdminAppImageCreatePopup({
 
   const handleFileChange = (event: any) => {
     setImage(event.target.files[0]);
+    setValue('avatar', event.target.files[0]);
   };
 
   const handleFileOnClick = (event: any) => {
@@ -142,7 +149,10 @@ function SuperAdminAppImageCreatePopup({
                     <label className="ShowImageLabel">{image.name}</label>
                     <IconButton
                       className="btn-dot"
-                      onClick={() => setImage(null)}
+                      onClick={() => {
+                        setImage(null);
+                        setValue('avatar', null);
+                      }}
                     >
                       <CloseOutlinedIcon
                         sx={{
@@ -157,9 +167,7 @@ function SuperAdminAppImageCreatePopup({
                   ''
                 )}
               </div>
-              {image === null && errors.avatar && (
-                <span role="alert">{errors.avatar?.message}</span>
-              )}
+              {image === null && <span role="alert">Image is required</span>}
             </div>
           </div>
           <div className="FormFooter">

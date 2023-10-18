@@ -72,8 +72,8 @@ function SuperAdminShopsListPage() {
   ];
 
   const onSubmitDialogBox = (data: any) => {
+    console.log('data', data);
     setIsLoader(true);
-    // console.log("DATAssssssssssssssssssssssssss", data);
     const updateddata = {
       userLimits: data.userLimits,
       role: data.role,

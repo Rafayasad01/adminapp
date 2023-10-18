@@ -60,7 +60,6 @@ function CustomInputBox({
         disabled={disable || false}
         sx={{ width: length }}
         className={`FormInput ${customClass}`}
-        key={id}
         id={id}
         type={
           typeImportant ? inputType : showPassVisibility ? inputType : 'text'

@@ -36,10 +36,6 @@ function SuperAdminPermissionPage() {
   const [heading, setHeading] = useState<string>('');
   const [childList, setChildList] = useState<any>();
 
-  const handleFormClickOpen = () => {
-    navigate('../add-role');
-  };
-
   const handleClickSearch = (event: any) => {
     const searchTxt = event.target.value as string;
     const newPage = 0;

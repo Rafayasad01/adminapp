@@ -89,7 +89,7 @@ function SuperAdminEditPermissionsPage() {
   };
 
   useEffect(() => {
-    setIsLoader(true);
+    // setIsLoader(true);
     Service.getPermissionById(id).then((item: any) => {
       if (item.data.success) {
         setIsLoader(false);
@@ -136,7 +136,8 @@ function SuperAdminEditPermissionsPage() {
   }, []);
 
   const onSubmit = (data: any) => {
-    console.log('DDDDDDDDDDDD', data);
+    // console.log('DDDDDDDDDDDD', data);
+    setIsLoader(true);
     const parent: any = {
       name: data.moduleName || '',
       desc: data.moduleDesc || '',

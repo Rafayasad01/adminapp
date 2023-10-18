@@ -34,6 +34,7 @@ function SuperAdminAppImageEditPopup({
   const {
     register,
     handleSubmit,
+    setValue,
     watch,
     getValues,
     formState: { errors },
@@ -41,8 +42,12 @@ function SuperAdminAppImageEditPopup({
   } = useForm<AppImage>();
 
   const onSubmit = (data: AppImage) => {
-    if (data.name) {
-      data.avatar = image;
+    console.log('DATATATA', data);
+
+    if (data.name && data.avatar) {
+      if (data.avatar && Object.keys(data?.avatar).length > 0) {
+        data.avatar = image;
+      }
       setOpenDialog(false);
       callback(data);
     } else {
@@ -56,6 +61,7 @@ function SuperAdminAppImageEditPopup({
 
   const handleFileChange = (event: any) => {
     setImage(event.target.files[0]);
+    setValue('avatar', event.target.files[0]);
   };
 
   const handleFileOnClick = (event: any) => {
@@ -64,15 +70,17 @@ function SuperAdminAppImageEditPopup({
   };
 
   useEffect(() => {
-    let icon = formData?.avatar.split('/').slice(-1)[0];
+    const icon = formData?.avatar.split('/').slice(-1)[0];
+    console.log('ss', icon);
+
     const regexExp = /[a-z,0-9,-]{36}/;
+    let tempicon = icon;
     if (regexExp.test(icon)) {
-      icon = icon.split('-').splice(5)[0].at(0);
+      tempicon = tempicon.split('-').slice(-1)[0];
     }
-    // setImageName(icon);
-    setImage({ name: icon });
+    setImage({ name: tempicon });
+    setValue('avatar', null);
   }, [formData]);
-  console.log('image', image);
 
   return (
     <Dialog
@@ -133,7 +141,7 @@ function SuperAdminAppImageEditPopup({
                     <input
                       accept="image/*"
                       style={{ display: 'none' }}
-                      {...register('avatar', { required: false })}
+                      {...register('avatar')}
                       id="raised-button-file"
                       type="file"
                       onChange={(
@@ -161,7 +169,10 @@ function SuperAdminAppImageEditPopup({
                         <label className="ShowImageLabel">{image?.name}</label>
                         <IconButton
                           className="btn-dot"
-                          onClick={() => setImage(null)}
+                          onClick={() => {
+                            setImage(null);
+                            setValue('avatar', null);
+                          }}
                         >
                           <CloseOutlinedIcon
                             sx={{
@@ -177,7 +188,7 @@ function SuperAdminAppImageEditPopup({
                     )}
                   </div>
                   {image === null && (
-                    <span role="alert">{errors.avatar?.message}</span>
+                    <span role="alert">Image is required</span>
                   )}
                 </div>
               </div>

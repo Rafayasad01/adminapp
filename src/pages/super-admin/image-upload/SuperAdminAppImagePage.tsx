@@ -155,6 +155,7 @@ function SuperAdminAppImagePage() {
       }
     });
   };
+  console.log('edirform', editFormData);
 
   const createFormHandler = (data: any) => {
     setIsLoader(true);
@@ -203,7 +204,7 @@ function SuperAdminAppImagePage() {
 
   const updateFormHandler = (data: any) => {
     setIsLoader(true);
-    // console.log("data", data);
+    console.log('data2222222', data);
 
     const formData = new FormData();
     formData.append('name', data.name);
