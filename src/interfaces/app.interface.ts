@@ -31,5 +31,5 @@ export interface Setting {
 export interface AppImage {
   name: string;
   desc: string;
-  avatar: string;
+  avatar: any;
 }

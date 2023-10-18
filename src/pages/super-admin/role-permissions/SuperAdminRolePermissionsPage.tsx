@@ -19,12 +19,10 @@ import Service from '../../../services/superadmin/RolePermissions';
 import Notify from '../../../components/common/Notify';
 import CustomText from '../../../components/common/CustomText';
 import { TEXT_STORE_KEY, setText } from '../../../utils/constants';
-import PermissionIcon from '../../../components/icons/PermissionIcon';
 
 function SuperAdminRolePermissionsPage() {
   const authState: any = useAppSelector((state) => state.authState);
   const navigate = useNavigate();
-  const { state } = useLocation();
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(0);
   const [total, setTotal] = useState(0);
@@ -40,14 +38,14 @@ function SuperAdminRolePermissionsPage() {
 
   const handleClickSearch = (event: any) => {
     console.log('evenet', event);
-    // const searchTxt = event.target.value as string;
-    // const newPage = 0;
-    // setSearch(searchTxt);
-    // setPage(newPage);
-    // Service.searchService(searchTxt, newPage, rowsPerPage).then((item) => {
-    //     setList(item.data.data.list);
-    //     setTotal(item.data.data.total);
-    // });
+    const searchTxt = event.target.value as string;
+    const newPage = 0;
+    setSearch(searchTxt);
+    setPage(newPage);
+    Service.roleSearchService(searchTxt, newPage, rowsPerPage).then((item) => {
+      setList(item.data.data.list);
+      // setTotal(item.data.data.total);
+    });
   };
 
   const handleChangePage = (
@@ -63,10 +61,10 @@ function SuperAdminRolePermissionsPage() {
       });
     } else {
       console.log('search functionality here');
-      // Service.searchService(search, newPage, rowsPerPage).then((item) => {
-      //     setList(item.data.data.list);
-      //     setTotal(item.data.data.total);
-      // });
+      Service.roleSearchService(search, newPage, rowsPerPage).then((item) => {
+        setList(item.data.data.list);
+        setTotal(item.data.data.total);
+      });
     }
   };
 
@@ -84,10 +82,10 @@ function SuperAdminRolePermissionsPage() {
       });
     } else {
       console.log('serach functionality here');
-      // Service.searchService(search, newPage, rowsPerPage).then((item) => {
-      //     setList(item.data.data.list);
-      //     setTotal(item.data.data.total);
-      // });
+      Service.roleSearchService(search, newPage, rowsPerPage).then((item) => {
+        setList(item.data.data.list);
+        setTotal(item.data.data.total);
+      });
     }
   };
 

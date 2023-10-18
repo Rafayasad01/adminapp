@@ -7,6 +7,10 @@ const getListService = (page: number, size: number) => {
   return network.get(`${ROLE_PREFIX}/list/${page}/${size}`);
 };
 
+const roleSearchService = (search: string, page: number, size: number) => {
+  return network.get(`${ROLE_PREFIX}/list/${search}/${page}/${size}`);
+};
+
 const getRolePermissionService = () => {
   return network.get(`${ROLE_PREFIX}/permissions`);
 };
@@ -73,6 +77,7 @@ export default {
   getPermissionById,
   getPermissionListService,
   getPermissionSearchService,
+  roleSearchService,
   getChildPermissionListService,
   updatePermissionStatus,
 };

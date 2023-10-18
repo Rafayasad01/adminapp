@@ -150,7 +150,7 @@ function SuperAdminAddPermissionsPage() {
 
   const onSubmit = (data: any) => {
     // console.log("DDDDDDDDDDDD", data)
-
+    setIsLoader(true);
     const parent: any = {
       name: data.moduleName || '',
       desc: data.moduleDesc || '',

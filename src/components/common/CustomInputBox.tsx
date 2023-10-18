@@ -60,7 +60,6 @@ function CustomInputBox({
         disabled={disable || false}
         sx={{ width: length }}
         className={`FormInput ${customClass}`}
-        key={id}
         id={id}
         type={
           typeImportant ? inputType : showPassVisibility ? inputType : 'text'
@@ -79,7 +78,7 @@ function CustomInputBox({
               <IconButton
                 style={{ padding: 0 }}
                 aria-label="toggle password visibility"
-                onClick={onclick || (() => { })}
+                onClick={onclick || (() => {})}
               >
                 {showPassVisibility ? <VisibilityOff /> : <Visibility />}
               </IconButton>

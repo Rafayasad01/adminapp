@@ -16,7 +16,7 @@ type Props = {
   DialogHeader: string;
   inputFieldsData: any;
   handleSubmit: any;
-  onSubmit: (data: AppUserDriverExt) => void;
+  onSubmit: (data: any) => void;
   type?: any;
   reset?: any;
   setAvater?: any;
@@ -62,13 +62,13 @@ function CustomDialog({
               {inputFieldsData?.map((items: any, index: number, array: any) => {
                 return (
                   <Fragment key={index}>
-                    {index !== inputFieldsData.length - 1 && (
-                      <FormControl
-                        key={index}
-                        className="FormControl"
-                        variant="standard"
-                      >
-                        {items.type === 'select' ? (
+                    {index !== inputFieldsData.length - 1 &&
+                      (items.type === 'select' ? (
+                        <FormControl
+                          key={index}
+                          className="FormControl"
+                          variant="standard"
+                        >
                           <CustomDropDown
                             id={items.id}
                             // error={items.error}
@@ -76,7 +76,13 @@ function CustomDialog({
                             options={items.options}
                             inputTitle={items.fieldName}
                           />
-                        ) : (
+                        </FormControl>
+                      ) : items.type === 'number' || items.type === 'text' ? (
+                        <FormControl
+                          key={index}
+                          className="FormControl"
+                          variant="standard"
+                        >
                           <CustomInputBox
                             disable={items.disable}
                             inputTitle={items.fieldName}
@@ -89,9 +95,8 @@ function CustomDialog({
                             showPassVisibility={items.showPassVisibility}
                             typeImportant={items.typeImportant}
                           />
-                        )}
-                      </FormControl>
-                    )}
+                        </FormControl>
+                      ) : null)}
                     {index === array.length - 1 && index % 2 !== 0 && <br />}
                     {items.id === 'upload' && (
                       <div style={{ minWidth: '204%', marginTop: '0.75rem' }}>
