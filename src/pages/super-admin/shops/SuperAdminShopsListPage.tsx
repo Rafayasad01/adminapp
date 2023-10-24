@@ -56,9 +56,11 @@ function SuperAdminShopsListPage() {
       fieldName: 'Role',
       id: 'role',
       register,
-      error: errors.role,
+      control,
+      error: errors,
       type: 'select',
       options: dataById,
+      validateRequired: true
     },
     {
       fieldName: 'User Limits',
@@ -101,8 +103,23 @@ function SuperAdminShopsListPage() {
           text: updateItem.data.message,
           type: 'success',
         });
+      } else {
+        setOpenEditFormDialog(false);
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: updateItem.data.message,
+          type: 'error',
+        });
       }
-    });
+    }).catch((err) => {
+      setIsLoader(false);
+      setIsNotify(true);
+      setNotifyMessage({
+        text: err.message,
+        type: 'error',
+      });
+    })
   };
 
   const handleFormClickOpen = () => {
@@ -162,17 +179,17 @@ function SuperAdminShopsListPage() {
   ) => {
     setPage(newPage);
     // offset? ,limit rowsperpage hoga ofset page * rowsperPage
-    // if (search === '' || search === null || search === undefined) {
-    //   Service.getListService(newPage, rowsPerPage).then((item) => {
-    //     setList(item.data.data.list);
-    //     setTotal(item.data.data.total);
-    //   });
-    // } else {
-    //   Service.searchService(search, newPage, rowsPerPage).then((item) => {
-    //     setList(item.data.data.list);
-    //     setTotal(item.data.data.total);
-    //   });
-    // }
+    if (search === '' || search === null || search === undefined) {
+      Service.getListService(newPage, rowsPerPage).then((item) => {
+        setList(item.data.data.list);
+        setTotal(item.data.data.total);
+      });
+    } else {
+      Service.searchService(search, newPage, rowsPerPage).then((item) => {
+        setList(item.data.data.list);
+        setTotal(item.data.data.total);
+      });
+    }
   };
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -181,17 +198,17 @@ function SuperAdminShopsListPage() {
     const newPage = 0;
     setRowsPerPage(newRowperPage);
     setPage(newPage);
-    // if (search === '' || search === null || search === undefined) {
-    //   Service.getListService(newPage, rowsPerPage).then((item) => {
-    //     setList(item.data.data.list);
-    //     setTotal(item.data.data.total);
-    //   });
-    // } else {
-    //   Service.searchService(search, newPage, rowsPerPage).then((item) => {
-    //     setList(item.data.data.list);
-    //     setTotal(item.data.data.total);
-    //   });
-    // }
+    if (search === '' || search === null || search === undefined) {
+      Service.getListService(newPage, rowsPerPage).then((item) => {
+        setList(item.data.data.list);
+        setTotal(item.data.data.total);
+      });
+    } else {
+      Service.searchService(search, newPage, rowsPerPage).then((item) => {
+        setList(item.data.data.list);
+        setTotal(item.data.data.total);
+      });
+    }
   };
 
   const editHandler = (id: string) => {
@@ -201,6 +218,7 @@ function SuperAdminShopsListPage() {
       if (item.data.success) {
         setDataById(item.data.data);
         setValue('userLimits', item.data.data.userLimits);
+        setValue('role', item.data.data.role ? item.data.data.role : "none");
         setIsLoader(false);
         setOpenEditFormDialog(true);
       } else {
@@ -343,8 +361,8 @@ function SuperAdminShopsListPage() {
                               <span className="text-xs font-normal text-[#6A6A6A]">
                                 {dayjs(item.createdDate).isValid()
                                   ? dayjs(item.createdDate)?.format(
-                                      'MMMM DD, YYYY'
-                                    )
+                                    'MMMM DD, YYYY'
+                                  )
                                   : '--'}
                               </span>
                             </div>
@@ -402,6 +420,7 @@ function SuperAdminShopsListPage() {
       <CustomDialog
         DialogHeader="Edit Shop"
         type="edit"
+        specailCase
         reset={reset}
         inputFieldsData={inputFieldsData}
         handleSubmit={handleSubmit}
