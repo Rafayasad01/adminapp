@@ -315,7 +315,6 @@ function SuperAdminTenantPage() {
               <thead>
                 <tr>
                   <th>Name</th>
-                  <th>Theme Id</th>
                   <th>Trial Mode</th>
                   <th>Trail Start Date</th>
                   <th>Status</th>
@@ -336,7 +335,6 @@ function SuperAdminTenantPage() {
                             </div>
                           </div>
                         </td>
-                        <td>{item.themeId}</td>
                         <td>
                           {item.trialMode ? (
                             <span className="badge badge-success">ON</span>
