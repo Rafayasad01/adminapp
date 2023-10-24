@@ -20,6 +20,7 @@ type Props = {
   type?: any;
   reset?: any;
   setAvater?: any;
+  specailCase?: boolean;
 };
 
 function CustomDialog({
@@ -30,11 +31,19 @@ function CustomDialog({
   handleSubmit,
   onSubmit,
   type,
+  specailCase,
   setAvater,
   reset,
 }: Props) {
   const handleFormClose = () => {
-    if (type === 'edit') {
+    if (type === "edit" && specailCase) {
+      reset({
+        role: "none",
+        userLimits: ""
+      });
+      setOpenFormDialog(false);
+    }
+    else if (type === 'edit' && !specailCase) {
       setAvater(null);
       reset();
       setOpenFormDialog(false);
@@ -70,8 +79,10 @@ function CustomDialog({
                           variant="standard"
                         >
                           <CustomDropDown
+                            validateRequired={items.validateRequired}
                             id={items.id}
-                            // error={items.error}
+                            control={items.control}
+                            error={items.error}
                             register={items.register}
                             options={items.options}
                             inputTitle={items.fieldName}

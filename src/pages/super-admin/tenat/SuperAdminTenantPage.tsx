@@ -156,6 +156,8 @@ function SuperAdminTenantPage() {
 
   const updateFormHandler = (id: string, data: any) => {
     if (data.trialUpdateMode) setIsTrialMode(true);
+    console.log("formDATA", data);
+
     const formData = new FormData();
     formData.append('tenantName', data.tenantName);
     formData.append('email', data.email);
@@ -170,6 +172,7 @@ function SuperAdminTenantPage() {
       Service.update(id, formData)
         .then((item: any) => {
           if (item.data.success) {
+            // console.log('updated dataL', list);
             console.log('updated data', item.data);
             setIsLoader(false);
             setIsNotify(true);
@@ -181,9 +184,11 @@ function SuperAdminTenantPage() {
               return newArr.map((newItem: any) => {
                 if (newItem.id === item.data.data.id) {
                   newItem.name = item.data.data.tenantName;
+                  newItem.email = item.data.data.email;
                   newItem.isActive = item.data.data.isActive;
-                  newItem.trialMode = item.data.data.trialMode;
                   newItem.trailStartDate = item.data.data.trailStartDate;
+                } if (item.data.data.trialMode === false) {
+                  newItem.trailMode = false
                 }
                 return { ...newItem };
               });
@@ -214,6 +219,9 @@ function SuperAdminTenantPage() {
       });
     }
   };
+
+  // console.log("lISSTS", list);
+
 
   const editHandler = (id: string) => {
     setIsLoader(true);

@@ -47,6 +47,8 @@ function SuperAdminTenantUpdatePopup({
     control,
   } = useForm<Tenant>();
   const onSubmit = (data: Tenant) => {
+    // console.log("onsubmiot", data,item);
+
     if (data.tenantName) {
       setOpenFormDialog(false);
       callback(item.id, data);
@@ -107,7 +109,7 @@ function SuperAdminTenantUpdatePopup({
         <div className="Content">
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="FormHeader">
-              <span className="Title">Add Tenant</span>
+              <span className="Title">Edit Tenant</span>
             </div>
             <div className="FormBody">
               <div className="FormFields">

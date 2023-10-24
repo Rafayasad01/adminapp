@@ -1,14 +1,17 @@
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
-import React, { useEffect, useState } from 'react';
+import { Controller } from 'react-hook-form';
 
 type Props = {
   inputTitle: string;
   customWidth?: string;
   options: any;
   register: any;
+  control?: any;
   id: any;
   value?: string;
+  error?: any;
+  validateRequired?: any;
 };
 
 function CustomDropDown({
@@ -16,7 +19,10 @@ function CustomDropDown({
   customWidth,
   options,
   register,
+  error,
+  control,
   id,
+  validateRequired
 }: Props) {
   return (
     <div className="">
@@ -24,30 +30,46 @@ function CustomDropDown({
         <span className="FormLabel">{inputTitle}</span>
       </div>
       <div className="">
-        <Select
-          fullWidth
-          disableUnderline
-          variant="outlined"
-          style={{ border: '1px solid rgb(201 201 201)' }}
-          className="select-grey-outline"
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          {...register(id, {
-            required: `${inputTitle?.toLocaleLowerCase()} is required`,
-          })}
-          value={options.role || ''}
-        >
-          <MenuItem value="none">-- Select Role --</MenuItem>
-          {options?.roles?.map((item: any, index: number) => {
-            return (
-              <MenuItem key={index} value={item.id}>
-                {item.name}
-              </MenuItem>
-            );
-          })}
-        </Select>
+        <Controller
+          name={id}
+          control={control}
+          defaultValue={options.role || 'none'}
+          rules={
+            validateRequired ? {
+              validate: (value) => {
+                return value !== 'none' || 'Select an option';
+              }
+            } : {}}
+          render={({ field, fieldState }) => (
+            <>
+              <Select
+                fullWidth
+                disableUnderline
+                variant="outlined"
+                style={{ border: '1px solid rgb(201, 201, 201)' }}
+                className="select-grey-outline"
+                labelId="demo-simple-select-label"
+                id={id}
+                {...field}
+                onChange={(event) => {
+                  field.onChange(event);
+                }}
+              >
+                <MenuItem value="none">-- Select Role --</MenuItem>
+                {options?.roles?.map((item: any, index: number) => (
+                  <MenuItem key={index} value={item.id}>
+                    {item.name}
+                  </MenuItem>
+                ))}
+              </Select>
+              {fieldState.error && (
+                <p style={{ color: 'red', fontSize: "12px" }}>{fieldState.error.message}</p>
+              )}
+            </>
+          )}
+        />
       </div>
-    </div>
+    </div >
   );
 }
 
