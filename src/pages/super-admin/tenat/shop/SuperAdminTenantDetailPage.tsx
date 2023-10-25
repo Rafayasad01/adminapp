@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-import TopBar from '../../../components/common/TopBar';
+import TopBar from '../../../../components/common/TopBar';
 import SuperAdminTenantTabPage from './SuperAdminTenantTabPage';
 import SuperAdminSettingTabPage from './SuperAdminSettingTabPage';
 import SuperAdminUserTabPage from './SuperAdminUserTabPage';
@@ -30,7 +30,7 @@ function SuperAdminTenantDetailPage() {
                 TabIndicatorProps={{}}
                 onChange={handleChange}
               >
-                <Tab label="Tenant" value={0} disableRipple />
+                <Tab label="Shop" value={0} disableRipple />
                 <Tab label="Settings" value={1} disableRipple />
                 <Tab label="User" value={2} disableRipple />
                 <Tab label="Category" value={3} disableRipple />

@@ -36,14 +36,13 @@ function CustomDialog({
   reset,
 }: Props) {
   const handleFormClose = () => {
-    if (type === "edit" && specailCase) {
+    if (type === 'edit' && specailCase) {
       reset({
-        role: "none",
-        userLimits: ""
+        role: 'none',
+        userLimits: '',
       });
       setOpenFormDialog(false);
-    }
-    else if (type === 'edit' && !specailCase) {
+    } else if (type === 'edit' && !specailCase) {
       setAvater(null);
       reset();
       setOpenFormDialog(false);

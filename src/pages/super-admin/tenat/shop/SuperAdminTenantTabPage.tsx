@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Switch from '@mui/material/Switch';
 import dayjs from 'dayjs';
-import Loader2 from '../../../components/common/Loader2';
-import Service from '../../../services/superadmin/tenant';
+import Loader2 from '../../../../components/common/Loader2';
+import Service from '../../../../services/superadmin/tenant';
 
 type Props = {
   tenant: string;
@@ -13,7 +13,7 @@ function SuperAdminTenantTabPage({ tenant }: Props) {
   const [detail, setDetail] = useState<any>(null);
 
   useEffect(() => {
-    Service.detail(tenant).then((item: any) => {
+    Service.detailShop(tenant).then((item: any) => {
       if (item.data.success) {
         setDetail(item.data.data);
         setIsLoader(false);
@@ -55,7 +55,7 @@ function SuperAdminTenantTabPage({ tenant }: Props) {
           <div className="flex flex-col py-[2rem] px-5">
             <div className="flex w-full flex-col">
               <span className="font-open-sans text-base font-semibold not-italic text-[#1A1A1A]">
-                Tenant Name
+                Shop Name
               </span>
               <div className="mt-1 font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
                 {detail.name}

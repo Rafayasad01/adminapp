@@ -11,9 +11,9 @@ import RadioButtonUncheckedOutlinedIcon from '@mui/icons-material/RadioButtonUnc
 import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
 
-import '../../../assets/css/PopupStyle.css';
-import { Tenant } from '../../../interfaces/superadmin/tenant.interface';
-import { DOMAIN_PREFIX, DOMAIN_PROTOCOL } from '../../../utils/constants';
+import '../../../../assets/css/PopupStyle.css';
+import { Tenant } from '../../../../interfaces/superadmin/tenant.interface';
+import { DOMAIN_PREFIX, DOMAIN_PROTOCOL } from '../../../../utils/constants';
 
 type Props = {
   openFormDialog: boolean;
@@ -67,12 +67,12 @@ function SuperAdminTenantCreatePopup({
       <div className="Content">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="FormHeader">
-            <span className="Title">Add Tenant</span>
+            <span className="Title">Add Shop</span>
           </div>
           <div className="FormBody">
             <div className="FormFields">
               <FormControl className="FormControl" variant="standard">
-                <label className="FormLabel">Tenant Name</label>
+                <label className="FormLabel">Shop Name</label>
                 <Input
                   className="FormInput"
                   {...register('tenantName', { required: true })}
@@ -81,7 +81,7 @@ function SuperAdminTenantCreatePopup({
                   disableUnderline
                 />
                 {errors.tenantName?.type === 'required' && (
-                  <span role="alert">Tenant name is required</span>
+                  <span role="alert">Shop name is required</span>
                 )}
               </FormControl>
               <FormControl className="FormControl" variant="standard">

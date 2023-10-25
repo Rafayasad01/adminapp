@@ -22,7 +22,7 @@ function CustomDropDown({
   error,
   control,
   id,
-  validateRequired
+  validateRequired,
 }: Props) {
   return (
     <div className="">
@@ -35,11 +35,14 @@ function CustomDropDown({
           control={control}
           defaultValue={options.role || 'none'}
           rules={
-            validateRequired ? {
-              validate: (value) => {
-                return value !== 'none' || 'Select an option';
-              }
-            } : {}}
+            validateRequired
+              ? {
+                  validate: (value) => {
+                    return value !== 'none' || 'Select an option';
+                  },
+                }
+              : {}
+          }
           render={({ field, fieldState }) => (
             <>
               <Select
@@ -63,13 +66,15 @@ function CustomDropDown({
                 ))}
               </Select>
               {fieldState.error && (
-                <p style={{ color: 'red', fontSize: "12px" }}>{fieldState.error.message}</p>
+                <p style={{ color: 'red', fontSize: '12px' }}>
+                  {fieldState.error.message}
+                </p>
               )}
             </>
           )}
         />
       </div>
-    </div >
+    </div>
   );
 }
 

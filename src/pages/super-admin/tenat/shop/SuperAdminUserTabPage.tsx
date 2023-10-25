@@ -3,8 +3,8 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import SendOutlinedIcon from '@mui/icons-material/SendOutlined';
 import dayjs from 'dayjs';
-import Loader2 from '../../../components/common/Loader2';
-import Service from '../../../services/superadmin/tenant';
+import Loader2 from '../../../../components/common/Loader2';
+import Service from '../../../../services/superadmin/tenant';
 
 type Props = {
   tenant: string;
@@ -16,8 +16,8 @@ function SuperAdminUserTabPage({ tenant }: Props) {
   const [list, setList] = useState<any>([]);
 
   useEffect(() => {
-    Service.detailUser(tenant).then((item: any) => {
-      console.log('item.data.data::::::', item.data.data)
+    Service.detailShopUser(tenant).then((item: any) => {
+      console.log('item.data.data::::::', item.data.data);
       if (item.data.success) {
         setList(item.data.data);
         setIsLoader(false);
@@ -27,9 +27,9 @@ function SuperAdminUserTabPage({ tenant }: Props) {
 
   const sentEmailHandler = (id: string) => {
     setIsLoader(true);
-    Service.sentToEmail(id).then((item: any) => {
+    Service.sentToEmailShop(id).then((item: any) => {
       if (item.data.success) {
-        //setDetail({ ...detail, sendToEmail: true });
+        // setDetail({ ...detail, sendToEmail: true });
         setIsLoader(false);
       }
     });
@@ -42,7 +42,10 @@ function SuperAdminUserTabPage({ tenant }: Props) {
       <div className="grid w-full grid-cols-12 gap-3 bg-transparent">
         {list.map((item: any, index: number) => {
           return (
-            <div className="col-span-4 border rounded-lg bg-white shadow-lg my-2 mx-2" key={index}>
+            <div
+              className="col-span-4 my-2 mx-2 rounded-lg border bg-white shadow-lg"
+              key={index}
+            >
               <div className="flex flex-col py-[2rem] px-5">
                 <div className="flex w-full flex-col">
                   <span className="font-open-sans text-base font-semibold not-italic text-[#1A1A1A]">
@@ -68,7 +71,7 @@ function SuperAdminUserTabPage({ tenant }: Props) {
                     Name
                   </span>
                   <div className="mt-1 font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
-                    {item.firstName + " " + item.lastName}
+                    {`${item.firstName} ${item.lastName}`}
                   </div>
                 </div>
                 <div className="mt-4 flex w-full flex-col">
