@@ -15,14 +15,14 @@ import TablePagination from '@mui/material/TablePagination';
 import EditIcon from '@mui/icons-material/Edit';
 import dayjs from 'dayjs';
 import Avatar from '@mui/material/Avatar';
-import CustomText from '../../../components/common/CustomText';
-import TopBar from '../../../components/common/TopBar';
-import { Shop } from '../../../interfaces/superadmin/shop.interface';
-import Service from '../../../services/superadmin/shop';
-import Loader from '../../../components/common/Loader';
-import Notify from '../../../components/common/Notify';
-import CustomDialog from '../../../components/common/CustomDialog';
-import { useAppSelector } from '../../../redux/redux-hooks';
+import CustomText from '../../../../components/common/CustomText';
+import TopBar from '../../../../components/common/TopBar';
+import { Shop } from '../../../../interfaces/superadmin/shop.interface';
+import Service from '../../../../services/superadmin/tenant';
+import Loader from '../../../../components/common/Loader';
+import Notify from '../../../../components/common/Notify';
+import CustomDialog from '../../../../components/common/CustomDialog';
+import { useAppSelector } from '../../../../redux/redux-hooks';
 
 function SuperAdminShopsListPage() {
   const authState: any = useAppSelector((state) => state.authState);
@@ -81,7 +81,7 @@ function SuperAdminShopsListPage() {
       role: data.role,
       updatedBy: authState.user.id,
     };
-    Service.update(dataById?.id, updateddata)
+    Service.updateUser(dataById?.id, updateddata)
       .then((updateItem) => {
         if (updateItem.data.success) {
           // console.log("updateItem", updateItem);
@@ -133,7 +133,7 @@ function SuperAdminShopsListPage() {
       isActive: event.target.checked,
       updatedBy: authState.user.id,
     };
-    Service.updateStatus(id, data).then((updateItem) => {
+    Service.updateUserStatus(id, data).then((updateItem) => {
       if (updateItem.data.success) {
         setList((newArr: any) => {
           return newArr.map((item: any) => {
@@ -152,7 +152,7 @@ function SuperAdminShopsListPage() {
     const newPage = 0;
     setSearch(searchTxt);
     setPage(newPage);
-    Service.searchService(searchTxt, newPage, rowsPerPage)
+    Service.searchUserService(searchTxt, newPage, rowsPerPage)
       .then((item) => {
         // console.log("AS", item.data.data);
         if (item.data.success) {
@@ -182,12 +182,12 @@ function SuperAdminShopsListPage() {
     setPage(newPage);
     // offset? ,limit rowsperpage hoga ofset page * rowsperPage
     if (search === '' || search === null || search === undefined) {
-      Service.getListService(newPage, rowsPerPage).then((item) => {
+      Service.getUserListService(newPage, rowsPerPage).then((item) => {
         setList(item.data.data.list);
         setTotal(item.data.data.total);
       });
     } else {
-      Service.searchService(search, newPage, rowsPerPage).then((item) => {
+      Service.searchUserService(search, newPage, rowsPerPage).then((item) => {
         setList(item.data.data.list);
         setTotal(item.data.data.total);
       });
@@ -201,12 +201,12 @@ function SuperAdminShopsListPage() {
     setRowsPerPage(newRowperPage);
     setPage(newPage);
     if (search === '' || search === null || search === undefined) {
-      Service.getListService(newPage, rowsPerPage).then((item) => {
+      Service.getUserListService(newPage, rowsPerPage).then((item) => {
         setList(item.data.data.list);
         setTotal(item.data.data.total);
       });
     } else {
-      Service.searchService(search, newPage, rowsPerPage).then((item) => {
+      Service.searchUserService(search, newPage, rowsPerPage).then((item) => {
         setList(item.data.data.list);
         setTotal(item.data.data.total);
       });
@@ -216,7 +216,7 @@ function SuperAdminShopsListPage() {
   const editHandler = (id: string) => {
     setIsLoader(true);
     setOpenEditFormDialog(true);
-    Service.get(id).then((item: any) => {
+    Service.getUser(id).then((item: any) => {
       if (item.data.success) {
         setDataById(item.data.data);
         setValue('userLimits', item.data.data.userLimits);
@@ -235,7 +235,7 @@ function SuperAdminShopsListPage() {
   };
 
   useEffect(() => {
-    Service.getListService(page, rowsPerPage).then((item) => {
+    Service.getUserListService(page, rowsPerPage).then((item) => {
       if (item.data.success) {
         // console.log('item', item.data.data)
         setList(item.data.data.list);
@@ -256,7 +256,7 @@ function SuperAdminShopsListPage() {
         setIsOpen={setIsNotify}
         displayMessage={notifyMessage}
       />
-      <TopBar title="Shops" />
+      <TopBar title="Shop User" />
       <div className="container mt-5">
         <div className="w-full rounded-lg bg-white shadow-lg">
           <div className="grid grid-cols-12 px-4 py-5">
@@ -311,11 +311,11 @@ function SuperAdminShopsListPage() {
             <table className="table-border table-auto">
               <thead>
                 <tr>
-                  <th>Shop</th>
-                  <th>Tenant Name</th>
+                  <th>User Name</th>
+                  <th>Shop Name</th>
                   <th>Email</th>
                   <th>Role</th>
-                  <th>User Limits</th>
+                  <th>Shop User Limits</th>
                   <th>Status</th>
                   <th>&nbsp;</th>
                 </tr>
@@ -363,8 +363,8 @@ function SuperAdminShopsListPage() {
                               <span className="text-xs font-normal text-[#6A6A6A]">
                                 {dayjs(item.createdDate).isValid()
                                   ? dayjs(item.createdDate)?.format(
-                                      'MMMM DD, YYYY'
-                                    )
+                                    'MMMM DD, YYYY'
+                                  )
                                   : '--'}
                               </span>
                             </div>
@@ -420,7 +420,7 @@ function SuperAdminShopsListPage() {
         </div>
       </div>
       <CustomDialog
-        DialogHeader="Edit Shop"
+        DialogHeader="Edit Shop User"
         type="edit"
         specailCase
         reset={reset}
