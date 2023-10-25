@@ -14,9 +14,9 @@ import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 import isBetween from 'dayjs/plugin/isBetween';
 
-import '../../../assets/css/PopupStyle.css';
-import { Tenant } from '../../../interfaces/superadmin/tenant.interface';
-import { DOMAIN_PREFIX, DOMAIN_PROTOCOL } from '../../../utils/constants';
+import '../../../../assets/css/PopupStyle.css';
+import { Tenant } from '../../../../interfaces/superadmin/tenant.interface';
+import { DOMAIN_PREFIX, DOMAIN_PROTOCOL } from '../../../../utils/constants';
 
 dayjs.extend(duration);
 dayjs.extend(isBetween);
@@ -109,12 +109,12 @@ function SuperAdminTenantUpdatePopup({
         <div className="Content">
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="FormHeader">
-              <span className="Title">Edit Tenant</span>
+              <span className="Title">Edit Shop</span>
             </div>
             <div className="FormBody">
               <div className="FormFields">
                 <FormControl className="FormControl" variant="standard">
-                  <label className="FormLabel">Tenant Name</label>
+                  <label className="FormLabel">Shop Name</label>
                   <Input
                     className="FormInput"
                     {...register('tenantName', {
@@ -126,7 +126,7 @@ function SuperAdminTenantUpdatePopup({
                     disableUnderline
                   />
                   {errors.tenantName?.type === 'required' && (
-                    <span role="alert">Tenant name is required</span>
+                    <span role="alert">Shop name is required</span>
                   )}
                 </FormControl>
                 <FormControl className="FormControl" variant="standard">

@@ -1,54 +1,81 @@
 import network from '../../utils/network';
 import { TENANT_PREFIX } from '../../utils/constants';
+const SHOP_PREFIX = 'shop';
+const USER_PREFIX = 'user';
 
-const getListService = (page: number, size: number) => {
-  return network.get(`${TENANT_PREFIX}/list/${page}/${size}`);
+const getShopListService = (page: number, size: number) => {
+  return network.get(`${TENANT_PREFIX}/${SHOP_PREFIX}/list/${page}/${size}`);
 };
-const searchService = (search: string, page: number, size: number) => {
-  return network.get(`${TENANT_PREFIX}/list/${search}/${page}/${size}`);
-};
-
-const create = (data: any) => {
-  return network.post(`${TENANT_PREFIX}/insert`, data);
+const searchShopService = (search: string, page: number, size: number) => {
+  return network.get(`${TENANT_PREFIX}/${SHOP_PREFIX}/list/${search}/${page}/${size}`);
 };
 
-const detail = (id: string) => {
-  return network.get(`${TENANT_PREFIX}/detail/${id}`);
+const createShop = (data: any) => {
+  return network.post(`${TENANT_PREFIX}/${SHOP_PREFIX}/insert`, data);
 };
 
-const detailSetting = (id: string) => {
-  return network.get(`${TENANT_PREFIX}/detail/setting/${id}`);
-};
-const detailUser = (id: string) => {
-  return network.get(`${TENANT_PREFIX}/detail/user/${id}`);
-};
-const detailCategory = (id: string) => {
-  return network.get(`${TENANT_PREFIX}/detail/category/${id}`);
-};
-const get = (id: any) => {
-  return network.get(`${TENANT_PREFIX}/get/${id}`);
-};
-const update = (id: string, data: any) => {
-  return network.post(`${TENANT_PREFIX}/update/${id}`, data);
-};
-const updateStatus = (id: string, data: any) => {
-  return network.post(`${TENANT_PREFIX}/update/status/${id}`, data);
+const detailShop = (id: string) => {
+  return network.get(`${TENANT_PREFIX}/${SHOP_PREFIX}/detail/${id}`);
 };
 
-const sentToEmail = (id: string) => {
-  return network.post(`${TENANT_PREFIX}/email/sent/${id}`, {});
+const detailShopSetting = (id: string) => {
+  return network.get(`${TENANT_PREFIX}/${SHOP_PREFIX}/detail/setting/${id}`);
+};
+const detailShopUser = (id: string) => {
+  return network.get(`${TENANT_PREFIX}/${SHOP_PREFIX}/detail/user/${id}`);
+};
+const detailShopCategory = (id: string) => {
+  return network.get(`${TENANT_PREFIX}/${SHOP_PREFIX}/detail/category/${id}`);
+};
+const getShop = (id: any) => {
+  return network.get(`${TENANT_PREFIX}/${SHOP_PREFIX}/get/${id}`);
+};
+const updateShop = (id: string, data: any) => {
+  return network.post(`${TENANT_PREFIX}/${SHOP_PREFIX}/update/${id}`, data);
+};
+const updateShopStatus = (id: string, data: any) => {
+  return network.post(`${TENANT_PREFIX}/${SHOP_PREFIX}/update/status/${id}`, data);
+};
+
+const sentToEmailShop = (id: string) => {
+  return network.post(`${TENANT_PREFIX}/${SHOP_PREFIX}/email/sent/${id}`, {});
+};
+
+const getUserListService = (page: number, size: number) => {
+  return network.get(`${TENANT_PREFIX}/${USER_PREFIX}/list/${page}/${size}`);
+};
+
+const getUser = (id: any) => {
+  return network.get(`${TENANT_PREFIX}/${USER_PREFIX}/edit/${id}`);
+};
+
+const searchUserService = (searchText: string, page: number, size: number) => {
+  return network.get(`${TENANT_PREFIX}/${USER_PREFIX}/list/${searchText}/${page}/${size}`);
+};
+
+const updateUserStatus = (id: string, data: any) => {
+  return network.post(`${TENANT_PREFIX}/${USER_PREFIX}/update/status/${id}`, data);
+};
+
+const updateUser = (id: string, data: any) => {
+  return network.post(`${TENANT_PREFIX}/${USER_PREFIX}/update/${id}`, data);
 };
 
 export default {
-  getListService,
-  create,
-  searchService,
-  detail,
-  detailSetting,
-  detailUser,
-  detailCategory,
-  get,
-  update,
-  updateStatus,
-  sentToEmail,
+  getShopListService,
+  searchShopService,
+  createShop,
+  detailShop,
+  detailShopSetting,
+  detailShopUser,
+  detailShopCategory,
+  getShop,
+  updateShop,
+  updateShopStatus,
+  sentToEmailShop,
+  getUserListService,
+  getUser,
+  searchUserService,
+  updateUserStatus,
+  updateUser
 };

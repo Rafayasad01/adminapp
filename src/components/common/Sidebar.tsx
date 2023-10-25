@@ -1,11 +1,11 @@
 /* eslint-disable prettier/prettier */
 import React, { useState, useEffect, Fragment } from 'react';
 import GridViewOutlinedIcon from '@mui/icons-material/GridViewOutlined';
-import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
+// import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
-import FormatListBulletedOutlinedIcon from '@mui/icons-material/FormatListBulletedOutlined';
-import PlaceOutlinedIcon from '@mui/icons-material/PlaceOutlined';
-import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
+// import FormatListBulletedOutlinedIcon from '@mui/icons-material/FormatListBulletedOutlined';
+// import PlaceOutlinedIcon from '@mui/icons-material/PlaceOutlined';
+// import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
@@ -20,7 +20,7 @@ import TwitterIcon from '@mui/icons-material/Twitter';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import MailIcon from '@mui/icons-material/Mail';
 import IconButton from '@mui/material/IconButton';
-import HeadphonesOutlinedIcon from '@mui/icons-material/HeadphonesOutlined';
+// import HeadphonesOutlinedIcon from '@mui/icons-material/HeadphonesOutlined';
 import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined';
 import { useSelector } from 'react-redux';
 import CollectionsOutlinedIcon from '@mui/icons-material/CollectionsOutlined';
@@ -96,28 +96,6 @@ const links = [
     permission: "Setting View",
     icon: <SettingsOutlinedIcon fontSize="inherit" />,
   },
-  // {
-  //   name: 'Reports',
-  //   path: 'reports',
-  //   icon: <DescriptionOutlinedIcon fontSize="inherit" />,
-  // },
-  // {
-  //   name: 'Complains',
-  //   path: 'complains',
-  //   icon: <DescriptionOutlinedIcon fontSize="inherit" />,
-  // },
-
-  // {
-  //   name: 'Locations',
-  //   path: 'locations',
-  //   icon: <PlaceOutlinedIcon fontSize="inherit" />,
-  // },
-
-  // {
-  //   name: 'Vouchers',
-  //   path: 'vouchers',
-  //   icon: <VoucherIcon />,
-  // },
 ];
 
 const superAdminlinks = [
@@ -127,32 +105,27 @@ const superAdminlinks = [
     icon: <GridViewOutlinedIcon fontSize="inherit" />,
   },
   {
-    name: 'Tenant',
-    path: 'tenant',
-    icon: <TenantIcon />,
-  },
-  {
-    name: 'Shops',
-    path: 'shop',
-    icon: <ShopIcon />
-  },
-  {
     name: 'App Image',
     path: 'app/image-upload',
     icon: <CollectionsOutlinedIcon fontSize="inherit" />
   },
-
-  // {
-  //   name: 'Support',
-  //   path: 'support',
-  //   icon: <HeadphonesOutlinedIcon fontSize="inherit" />,
-  // },
-
-  // {
-  //   name: 'Users',
-  //   path: 'user',
-  //   icon: <GroupsOutlinedIcon fontSize="inherit" />,
-  // },
+  {
+    name: 'tenant',
+    path: 'tenant',
+    icon: <TenantIcon />,
+    childLinks: [
+      {
+        name: 'shops',
+        path: 'tenant/shop',
+        icon: <ShopIcon />
+      },
+      {
+        name: 'users',
+        path: 'tenant/user',
+        icon: <GroupsOutlinedIcon />
+      }
+    ]
+  },
   {
     name: 'user permissions',
     path: 'role',
@@ -170,11 +143,6 @@ const superAdminlinks = [
       }
     ]
   },
-  // {
-  //   name: 'Settings',
-  //   path: 'settings',
-  //   icon: <SettingsOutlinedIcon fontSize="inherit" />,
-  // },
 ];
 
 

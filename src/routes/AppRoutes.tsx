@@ -37,14 +37,8 @@ import ForgotPasswordPage from '../pages/auth/forgot-password/ForgotPasswordPage
 import NewPasswordPage from '../pages/auth/new-password/NewPasswordPage';
 import SuperAdminAppLayout from '../components/layout/SuperAdminAppLayout';
 import SuperAdminDashboardPage from '../pages/super-admin/dashboard/SuperAdminDashboardPage';
-import SuperAdminShopsListPage from '../pages/super-admin/shops/SuperAdminShopsListPage';
-import SuperAdminAddNewShopPage from '../pages/super-admin/shops/SuperAdminAddNewShopPage';
-import SuperAdminShopDetailsPage from '../pages/super-admin/shops/SuperAdminShopDetailsPage';
-import SuperAdminSupportPage from '../pages/super-admin/support/SuperAdminSupportPage';
 import SuperAdminUsersListPage from '../pages/super-admin/users/SuperAdminUsersListPage';
 import OTPVerificationPage from '../pages/auth/otp-verification/OtpVerificationPage';
-import SuperAdminTenantPage from '../pages/super-admin/tenat/SuperAdminTenantPage';
-import SuperAdminTenantDetailPage from '../pages/super-admin/tenat/SuperAdminTenantDetailPage';
 import NotAuthorized from '../pages/notAuthorized/notAuthorized';
 import SuperAdminRolePermissionsPage from '../pages/super-admin/role-permissions/SuperAdminRolePermissionsPage';
 import SuperAdminAddRolePermissionsPage from '../pages/super-admin/role-permissions/SuperAdminAddRolePermissionsPage';
@@ -53,6 +47,9 @@ import SuperAdminPermissionPage from '../pages/super-admin/role-permissions/Supe
 import SuperAdminAddPermissionsPage from '../pages/super-admin/role-permissions/SuperAdminAddPermissionsPage';
 import SuperAdminEditPermissionsPage from '../pages/super-admin/role-permissions/SuperAdminEditPermissionPage';
 import SuperAdminAppImagePage from '../pages/super-admin/image-upload/SuperAdminAppImagePage';
+import SuperAdminTenantPage from '../pages/super-admin/tenat/shop/SuperAdminTenantPage';
+import SuperAdminTenantDetailPage from '../pages/super-admin/tenat/shop/SuperAdminTenantDetailPage';
+import SuperAdminShopsListPage from '../pages/super-admin/tenat/user/SuperAdminShopsListPage';
 
 
 export const routeObjects: RouteObject[] = [
@@ -103,24 +100,7 @@ export const routeObjects: RouteObject[] = [
             path: 'dashboard',
             element: <SuperAdminDashboardPage />,
           },
-          {
-            path: 'shop',
-            children: [
-              { index: true, element: <Navigate to="list" replace /> },
-              {
-                path: 'list',
-                element: <SuperAdminShopsListPage />,
-              },
-              {
-                path: 'add-new',
-                element: <SuperAdminAddNewShopPage />,
-              },
-              {
-                path: ':id',
-                element: <SuperAdminShopDetailsPage />,
-              },
-            ],
-          },
+
 
           {
             path: 'user',
@@ -135,14 +115,29 @@ export const routeObjects: RouteObject[] = [
           {
             path: 'tenant',
             children: [
-              { index: true, element: <Navigate to="list" replace /> },
               {
-                path: 'list',
-                element: <SuperAdminTenantPage />,
+                path: 'shop',
+                children: [
+                  { index: true, element: <Navigate to="list" replace /> },
+                  {
+                    path: 'list',
+                    element: <SuperAdminTenantPage />,
+                  },
+                  {
+                    path: 'detail/:id',
+                    element: <SuperAdminTenantDetailPage />,
+                  },
+                ],
               },
               {
-                path: 'detail/:id',
-                element: <SuperAdminTenantDetailPage />,
+                path: 'user',
+                children: [
+                  { index: true, element: <Navigate to="list" replace /> },
+                  {
+                    path: 'list',
+                    element: <SuperAdminShopsListPage />,
+                  }
+                ],
               },
             ],
           },

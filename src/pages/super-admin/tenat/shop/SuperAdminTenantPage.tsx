@@ -14,14 +14,14 @@ import TablePagination from '@mui/material/TablePagination';
 import WysiwygOutlinedIcon from '@mui/icons-material/WysiwygOutlined';
 import Switch from '@mui/material/Switch';
 import EditIcon from '@mui/icons-material/Edit';
-import TopBar from '../../../components/common/TopBar';
-import Loader from '../../../components/common/Loader';
-import Service from '../../../services/superadmin/tenant';
+import TopBar from '../../../../components/common/TopBar';
+import Loader from '../../../../components/common/Loader';
+import Service from '../../../../services/superadmin/tenant';
 import SuperAdminTenantCreatePopup from './SuperAdminTenantCreatePopup';
-import Notify from '../../../components/common/Notify';
+import Notify from '../../../../components/common/Notify';
 import SuperAdminTenantUpdatePopup from './SuperAdminTenantUpdatePopup';
-import CustomText from '../../../components/common/CustomText';
-import { useAppSelector } from '../../../redux/redux-hooks';
+import CustomText from '../../../../components/common/CustomText';
+import { useAppSelector } from '../../../../redux/redux-hooks';
 
 function SuperAdminTenantPage() {
   const authState: any = useAppSelector((state) => state.authState);
@@ -48,7 +48,7 @@ function SuperAdminTenantPage() {
     const newPage = 0;
     setSearch(searchTxt);
     setPage(newPage);
-    Service.searchService(searchTxt, newPage, rowsPerPage).then((item) => {
+    Service.searchShopService(searchTxt, newPage, rowsPerPage).then((item) => {
       setList(item.data.data.list);
       setTotal(item.data.data.total);
     });
@@ -60,12 +60,12 @@ function SuperAdminTenantPage() {
     setPage(newPage);
     // offset? ,limit rowsperpage hoga ofset page * rowsperPage
     if (search === '' || search === null || search === undefined) {
-      Service.getListService(newPage, rowsPerPage).then((item) => {
+      Service.getShopListService(newPage, rowsPerPage).then((item) => {
         setList(item.data.data.list);
         setTotal(item.data.data.total);
       });
     } else {
-      Service.searchService(search, newPage, rowsPerPage).then((item) => {
+      Service.searchShopService(search, newPage, rowsPerPage).then((item) => {
         setList(item.data.data.list);
         setTotal(item.data.data.total);
       });
@@ -79,12 +79,12 @@ function SuperAdminTenantPage() {
     setRowsPerPage(newRowperPage);
     setPage(newPage);
     if (search === '' || search === null || search === undefined) {
-      Service.getListService(newPage, rowsPerPage).then((item) => {
+      Service.getShopListService(newPage, rowsPerPage).then((item) => {
         setList(item.data.data.list);
         setTotal(item.data.data.total);
       });
     } else {
-      Service.searchService(search, newPage, rowsPerPage).then((item) => {
+      Service.searchShopService(search, newPage, rowsPerPage).then((item) => {
         setList(item.data.data.list);
         setTotal(item.data.data.total);
       });
@@ -92,7 +92,7 @@ function SuperAdminTenantPage() {
   };
 
   useEffect(() => {
-    Service.getListService(page, rowsPerPage)
+    Service.getShopListService(page, rowsPerPage)
       .then((item: any) => {
         if (item.data.success) {
           setList(item.data.data.list);
@@ -117,7 +117,7 @@ function SuperAdminTenantPage() {
     formData.append('developmentDomain', data.developmentDomain);
     formData.append('liveDomain', data.liveDomain);
     if (data.tenantName && data.email && data.firstName && data.lastName) {
-      Service.create(formData)
+      Service.createShop(formData)
         .then((item: any) => {
           if (item.data.success) {
             setIsLoader(false);
@@ -169,7 +169,7 @@ function SuperAdminTenantPage() {
     formData.append('developmentDomain', data.developmentDomain);
     formData.append('liveDomain', data.liveDomain);
     if (data.tenantName && data.email && data.firstName && data.lastName) {
-      Service.update(id, formData)
+      Service.updateShop(id, formData)
         .then((item: any) => {
           if (item.data.success) {
             // console.log('updated dataL', list);
@@ -225,7 +225,7 @@ function SuperAdminTenantPage() {
 
   const editHandler = (id: string) => {
     setIsLoader(true);
-    Service.get(id).then((item: any) => {
+    Service.getShop(id).then((item: any) => {
       if (item.data.success) {
         console.log('item.data.data::::::', item.data.data);
         setIsLoader(false);
@@ -248,7 +248,7 @@ function SuperAdminTenantPage() {
       trialMode: event.target.checked,
       updatedBy: authState.user.id,
     };
-    Service.updateStatus(id, data).then((updateItem) => {
+    Service.updateShopStatus(id, data).then((updateItem) => {
       if (updateItem.data.success) {
         setList((newArr: any) => {
           return newArr.map((item: any) => {
@@ -267,13 +267,13 @@ function SuperAdminTenantPage() {
     <Loader />
   ) : (
     <>
-      <TopBar title="Tenant" />
+      <TopBar title="Shop" />
       <div className="container mt-5">
         <div className="w-full rounded-lg bg-white shadow-lg">
           <div className="grid grid-cols-12 px-4 py-5">
             <div className="col-span-7">
               <span className="font-open-sans text-xl font-semibold text-[#252733]">
-                All Tenants
+                All Shops
               </span>
             </div>
             <div className="col-span-5">
@@ -323,7 +323,6 @@ function SuperAdminTenantPage() {
               <thead>
                 <tr>
                   <th>Name</th>
-                  <th>Theme Id</th>
                   <th>Trial Mode</th>
                   <th>Trail Start Date</th>
                   <th>Status</th>
@@ -344,7 +343,6 @@ function SuperAdminTenantPage() {
                             </div>
                           </div>
                         </td>
-                        <td>{item.themeId}</td>
                         <td>
                           {item.trialMode ? (
                             <span className="badge badge-success">ON</span>
