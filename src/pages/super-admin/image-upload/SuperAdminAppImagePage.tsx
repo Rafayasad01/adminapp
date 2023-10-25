@@ -155,7 +155,7 @@ function SuperAdminAppImagePage() {
       }
     });
   };
-  console.log('edirform', editFormData);
+  // console.log('edirform', editFormData);
 
   const createFormHandler = (data: any) => {
     setIsLoader(true);

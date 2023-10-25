@@ -195,7 +195,6 @@ function SuperAdminAppImageEditPopup({
               <div className="FormFooter">
                 <Button
                   className="btn-black-outline"
-                  type="submit"
                   onClick={handleFormClose}
                   sx={{
                     marginRight: '0.5rem',

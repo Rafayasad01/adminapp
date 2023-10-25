@@ -60,7 +60,7 @@ function SuperAdminShopsListPage() {
       error: errors,
       type: 'select',
       options: dataById,
-      validateRequired: true
+      validateRequired: true,
     },
     {
       fieldName: 'User Limits',
@@ -81,45 +81,47 @@ function SuperAdminShopsListPage() {
       role: data.role,
       updatedBy: authState.user.id,
     };
-    Service.update(dataById?.id, updateddata).then((updateItem) => {
-      if (updateItem.data.success) {
-        // console.log("updateItem", updateItem);
-        const filterRolename = dataById?.roles.filter(
-          (el: any) => el.id === updateItem.data.data.role
-        );
-        setList((newArr: any) => {
-          return newArr.map((item: any) => {
-            if (item.id === dataById?.id) {
-              item.role = filterRolename[0].name;
-              item.userLimits = updateItem.data.data.userLimits;
-            }
-            return { ...item };
+    Service.update(dataById?.id, updateddata)
+      .then((updateItem) => {
+        if (updateItem.data.success) {
+          // console.log("updateItem", updateItem);
+          const filterRolename = dataById?.roles.filter(
+            (el: any) => el.id === updateItem.data.data.role
+          );
+          setList((newArr: any) => {
+            return newArr.map((item: any) => {
+              if (item.id === dataById?.id) {
+                item.role = filterRolename[0].name;
+                item.userLimits = updateItem.data.data.userLimits;
+              }
+              return { ...item };
+            });
           });
-        });
-        setOpenEditFormDialog(false);
+          setOpenEditFormDialog(false);
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: updateItem.data.message,
+            type: 'success',
+          });
+        } else {
+          setOpenEditFormDialog(false);
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: updateItem.data.message,
+            type: 'error',
+          });
+        }
+      })
+      .catch((err) => {
         setIsLoader(false);
         setIsNotify(true);
         setNotifyMessage({
-          text: updateItem.data.message,
-          type: 'success',
-        });
-      } else {
-        setOpenEditFormDialog(false);
-        setIsLoader(false);
-        setIsNotify(true);
-        setNotifyMessage({
-          text: updateItem.data.message,
+          text: err.message,
           type: 'error',
         });
-      }
-    }).catch((err) => {
-      setIsLoader(false);
-      setIsNotify(true);
-      setNotifyMessage({
-        text: err.message,
-        type: 'error',
       });
-    })
   };
 
   const handleFormClickOpen = () => {
@@ -218,7 +220,7 @@ function SuperAdminShopsListPage() {
       if (item.data.success) {
         setDataById(item.data.data);
         setValue('userLimits', item.data.data.userLimits);
-        setValue('role', item.data.data.role ? item.data.data.role : "none");
+        setValue('role', item.data.data.role ? item.data.data.role : 'none');
         setIsLoader(false);
         setOpenEditFormDialog(true);
       } else {
@@ -361,8 +363,8 @@ function SuperAdminShopsListPage() {
                               <span className="text-xs font-normal text-[#6A6A6A]">
                                 {dayjs(item.createdDate).isValid()
                                   ? dayjs(item.createdDate)?.format(
-                                    'MMMM DD, YYYY'
-                                  )
+                                      'MMMM DD, YYYY'
+                                    )
                                   : '--'}
                               </span>
                             </div>

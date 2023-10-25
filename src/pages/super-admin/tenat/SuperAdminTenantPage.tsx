@@ -156,7 +156,7 @@ function SuperAdminTenantPage() {
 
   const updateFormHandler = (id: string, data: any) => {
     if (data.trialUpdateMode) setIsTrialMode(true);
-    console.log("formDATA", data);
+    console.log('formDATA', data);
 
     const formData = new FormData();
     formData.append('tenantName', data.tenantName);
@@ -187,8 +187,9 @@ function SuperAdminTenantPage() {
                   newItem.email = item.data.data.email;
                   newItem.isActive = item.data.data.isActive;
                   newItem.trailStartDate = item.data.data.trailStartDate;
-                } if (item.data.data.trialMode === false) {
-                  newItem.trailMode = false
+                }
+                if (item.data.data.trialMode === false) {
+                  newItem.trailMode = false;
                 }
                 return { ...newItem };
               });
@@ -221,7 +222,6 @@ function SuperAdminTenantPage() {
   };
 
   // console.log("lISSTS", list);
-
 
   const editHandler = (id: string) => {
     setIsLoader(true);

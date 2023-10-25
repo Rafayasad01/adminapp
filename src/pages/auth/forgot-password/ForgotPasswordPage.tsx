@@ -8,9 +8,13 @@ import assets from '../../../assets';
 function ForgotPasswordPage() {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
+  const [error, setError] = useState('');
+
 
   const getCodeHandler = () => {
-    navigate('../otp-verification');
+    if (email && error === "") {
+      navigate('../otp-verification');
+    }
   };
 
   return (
@@ -30,10 +34,20 @@ function ForgotPasswordPage() {
               id="email"
               type="email"
               name="email"
-              onChange={(event) => setEmail(event.target.value)}
+              onChange={(event) => {
+                const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+                if (emailRegex.test(event.target.value)) {
+                  setEmail(event.target.value)
+                  setError('')
+                } else {
+                  setEmail(event.target.value)
+                  setError('Invalid email format')
+                }
+              }}
               disableUnderline
             />
           </FormControl>
+          {error && <p className='text-xs py-1'>{error}</p>}
         </div>
         <div className="py-8" />
         <div className="mt-8 w-full px-4">
