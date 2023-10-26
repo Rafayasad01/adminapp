@@ -105,6 +105,7 @@ function SuperAdminAddPermissionsPage() {
           fieldName: 'Permission Sequence',
           id: `permission_sequence${tempCount}`,
           register,
+          // value: 1,
           error: errors.permissionSequence,
           type: 'number',
           typeImportant: true,
@@ -148,9 +149,13 @@ function SuperAdminAddPermissionsPage() {
     setPermissionList(filteredData);
   };
 
+  const hasDuplicates = (array: any) => {
+    return new Set(array).size !== array.length;
+  };
+
   const onSubmit = (data: any) => {
     // console.log("DDDDDDDDDDDD", data)
-    setIsLoader(true);
+    // setIsLoader(true);
     const parent: any = {
       name: data.moduleName || '',
       desc: data.moduleDesc || '',
@@ -158,12 +163,17 @@ function SuperAdminAddPermissionsPage() {
       createdBy: authState.user.id,
       data: [],
     };
+    let hasDuplicate = false;
+    let displayText: any = '';
+    const duplicateNames: string[] = [];
     const dataKeys = Object.keys(data).filter((key) => key.includes('name'));
 
     const indexPattern: any = /\d+$/; // Regular expression to match the index at the end of keys
 
     dataKeys.forEach((nameKey: any) => {
       const index = nameKey.match(indexPattern)[0];
+      const newName: any = data[nameKey] || '';
+
       const dataItem = {
         name: data[nameKey],
         desc: data[`desc${index}`],
@@ -172,35 +182,70 @@ function SuperAdminAddPermissionsPage() {
         permission_sequence: data[`permission_sequence${index}`],
         show_on_menu: data[`show_on_menu${index}`],
       };
+
+      const nameExists = parent.data.some((item: any) => item.name === newName);
+      if (nameExists) {
+        if (!duplicateNames.includes(newName)) {
+          duplicateNames.push(newName);
+        }
+        // duplicateNames.push(newName);
+        hasDuplicate = true;
+      } else if (dataKeys.some((name: any) => data[name] === data.moduleName)) {
+        hasDuplicate = true;
+        displayText = 'Module name must not be the same as permission names';
+      } else {
+        hasDuplicate = false;
+      }
+
       parent.data.push(dataItem);
     });
 
-    // console.log("PARENT", parent);
-
-    Service.createPermissionService(parent)
-      .then((item: any) => {
-        if (item.data.success) {
-          console.log('CREATED', item.data);
-          reset();
-          setText(item.data.message);
-          navigate('../list');
-        } else {
-          setIsLoader(false);
-          setIsNotify(true);
-          setNotifyMessage({
-            text: item.data.message,
-            type: 'error',
-          });
-        }
-      })
-      .catch((err) => {
-        setIsLoader(false);
+    if (duplicateNames.length > 0) {
+      displayText = `Permission name (${duplicateNames.join('\n')}) already existss`;
+    }
+    if (hasDuplicate) {
+      console.log("run1");
+      setIsNotify(true);
+      setNotifyMessage({
+        text: displayText,
+        type: 'error',
+      });
+    } else {
+      const allNames = parent.data.map((item: any) => item.name);
+      if (hasDuplicates(allNames)) {
+        console.log("run2");
         setIsNotify(true);
         setNotifyMessage({
-          text: err.message,
+          text: displayText,
           type: 'error',
         });
-      });
+      } else {
+        Service.createPermissionService(parent)
+          .then((item: any) => {
+            if (item.data.success) {
+              console.log('CREATED', item.data);
+              reset();
+              setText(item.data.message);
+              navigate('../list');
+            } else {
+              setIsLoader(false);
+              setIsNotify(true);
+              setNotifyMessage({
+                text: item.data.message,
+                type: 'error',
+              });
+            }
+          })
+          .catch((err) => {
+            setIsLoader(false);
+            setIsNotify(true);
+            setNotifyMessage({
+              text: err.message,
+              type: 'error',
+            });
+          });
+      }
+    }
   };
 
   return isLoader ? (
@@ -300,6 +345,7 @@ function SuperAdminAddPermissionsPage() {
                                 </div>
                               ) : (
                                 <CustomInputBox
+                                  value={item.value}
                                   customFontClass="font-bold"
                                   customClass="border-2 rounded-lg px-4"
                                   register={item.register}

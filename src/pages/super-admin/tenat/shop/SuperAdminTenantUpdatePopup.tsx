@@ -17,6 +17,7 @@ import isBetween from 'dayjs/plugin/isBetween';
 import '../../../../assets/css/PopupStyle.css';
 import { Tenant } from '../../../../interfaces/superadmin/tenant.interface';
 import { DOMAIN_PREFIX, DOMAIN_PROTOCOL } from '../../../../utils/constants';
+import CustomDropDown from '../../../../components/common/CustomDropDown';
 
 dayjs.extend(duration);
 dayjs.extend(isBetween);
@@ -28,6 +29,8 @@ type Props = {
   callback: (...args: any[]) => any;
   setIsNotify: any;
   setNotifyMessage: any;
+  roles?: any;
+  role?: any;
 };
 
 function SuperAdminTenantUpdatePopup({
@@ -37,6 +40,8 @@ function SuperAdminTenantUpdatePopup({
   callback,
   setIsNotify,
   setNotifyMessage,
+  roles,
+  role
 }: Props) {
   const {
     register,
@@ -179,6 +184,53 @@ function SuperAdminTenantUpdatePopup({
                     <span role="alert">Last name is required</span>
                   )}
                 </FormControl>
+              </div>
+              <div className="FormFields">
+                <FormControl className="FormControl" variant="standard">
+                  <label className="FormLabel">Max branch limits</label>
+                  <Input
+                    className="FormInput"
+                    {...register('maxBranchLimit', {
+                      required: true,
+                      value: item.maxBranchLimit,
+                    })}
+                    type="number"
+                    id="maxBranchLimits"
+                    placeholder='Enter max branch limits'
+                    disableUnderline
+                  />
+                  {errors.maxBranchLimit?.type === 'required' && (
+                    <span role="alert">branch limit is required</span>
+                  )}
+                </FormControl>
+                <FormControl className="FormControl" variant="standard">
+                  <label className="FormLabel">Max User Limits</label>
+                  <Input
+                    className="FormInput"
+                    {...register('maxUserLimit', {
+                      required: true,
+                      value: item.maxUserLimit,
+                    })}
+                    type="number"
+                    id="maxUserLimits"
+                    placeholder='Enter max user limits'
+                    disableUnderline={true}
+                  />
+                  {errors.maxUserLimit?.type === 'required' && (
+                    <span role="alert">User limits is required</span>
+                  )}
+                </FormControl>
+              </div>
+              <div className="FormField mb-4">
+                <CustomDropDown
+                  validateRequired={true}
+                  id={"role"}
+                  control={control}
+                  error={errors}
+                  register={register}
+                  options={{ roles: roles, role: role }}
+                  inputTitle={"Role"}
+                />
               </div>
               <div className="FormField mb-4">
                 <FormControl className="FormControl" variant="standard">

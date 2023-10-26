@@ -26,7 +26,7 @@ function CustomImageCard({ link, header }: Props) {
           }}
         >
           <img
-            style={{ maxHeight: '300px', width: 'auto', margin: 'auto' }}
+            style={{ maxHeight: '150px', width: 'auto', margin: 'auto' }}
             className="w-full"
             src={link}
             alt=""

@@ -24,6 +24,7 @@ import SuperAdminAppImagePagePopup from './SuperAdminAppImagePagePopup';
 
 function SuperAdminAppImagePage() {
   const authState: any = useAppSelector((state) => state.authState);
+  const [renderingOff, setRenderingOff] = useState<string>('');
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(0);
   const [total, setTotal] = useState(0);
@@ -41,15 +42,32 @@ function SuperAdminAppImagePage() {
   const [childData, setChildData] = useState<any>();
 
   const handleClickSearch = (event: any) => {
-    const searchTxt = event.target.value as string;
-    const newPage = 0;
-    setSearch(searchTxt);
-    setPage(newPage);
-    Service.searchService(searchTxt, newPage, rowsPerPage).then((item) => {
-      // console.log('item:::::', item);
-      setList(item.data.data.list);
-      // setTotal(item.data.data.total);
-    });
+    console.log('search event', event.target.value);
+    setSearch(event.target.value as string);
+    // const searchTxt = event.target.value as string;
+    // const newPage = 0;
+    // setPage(newPage);
+  };
+
+  const executeQuery = () => {
+    Service.searchService(search, page, rowsPerPage)
+      .then((item) => {
+        setList(item.data.data.list);
+        setTotal(item.data.data.total);
+      })
+      .catch((err) => {
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
+        });
+      });
+  };
+
+  const handleKeyPress = (e: any) => {
+    if (e.key === 'Enter') {
+      executeQuery();
+    }
   };
 
   const handleChangePage = (
@@ -92,6 +110,7 @@ function SuperAdminAppImagePage() {
   };
 
   useEffect(() => {
+
     Service.listService(page, rowsPerPage)
       .then((item: any) => {
         if (item.data.success) {
@@ -115,7 +134,7 @@ function SuperAdminAppImagePage() {
           type: 'error',
         });
       });
-  }, [page, rowsPerPage]);
+  }, [renderingOff]);
 
   const childDataHandler = (id: any) => {
     setIsLoader(true);
@@ -155,7 +174,7 @@ function SuperAdminAppImagePage() {
       }
     });
   };
-  console.log('edirform', editFormData);
+  // console.log('edirform', editFormData);
 
   const createFormHandler = (data: any) => {
     setIsLoader(true);
@@ -261,6 +280,7 @@ function SuperAdminAppImagePage() {
       });
     }
   };
+
   return isLoader ? (
     <Loader />
   ) : (
@@ -290,20 +310,18 @@ function SuperAdminAppImagePage() {
                     id="search"
                     type="text"
                     placeholder="Search"
-                    onKeyDown={(
-                      event: React.KeyboardEvent<
-                        HTMLInputElement | HTMLTextAreaElement
-                      >
-                    ) => {
-                      handleClickSearch(event);
-                    }}
+                    onChange={(event) => handleClickSearch(event)}
+                    onKeyDown={(event) => handleKeyPress(event)}
                     endAdornment={
                       <InputAdornment position="end">
                         <Divider
                           sx={{ height: 28, m: 0.5 }}
                           orientation="vertical"
                         />
-                        <IconButton aria-label="toggle password visibility">
+                        <IconButton
+                          onClick={executeQuery}
+                          aria-label="toggle password visibility"
+                        >
                           <SearchIcon className="text-[#6A6A6A]" />
                         </IconButton>
                       </InputAdornment>
@@ -434,6 +452,7 @@ function SuperAdminAppImagePage() {
       )}
       {openEditFormDialog && (
         <SuperAdminAppImageEditPopup
+          type={"edit"}
           openDialog={openEditFormDialog}
           setOpenDialog={setOpenEditFormDialog}
           formData={editFormData}

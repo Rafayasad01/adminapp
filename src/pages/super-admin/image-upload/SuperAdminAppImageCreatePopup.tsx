@@ -41,15 +41,17 @@ function SuperAdminAppImageCreatePopup({
   } = useForm<AppImage>();
 
   const onSubmit = (data: AppImage) => {
-    if (data.name && data.avatar) {
-      if (data.avatar && Object.keys(data?.avatar).length > 0) {
-        data.avatar = image;
-      }
-      setOpenDialog(false);
-      callback(data);
-    } else {
-      setOpenDialog(true);
-    }
+    console.log('onSubmit called');
+    console.log('data', data);
+    // if (data.name && data.avatar) {
+    //   if (data.avatar && Object.keys(data?.avatar).length > 0) {
+    //     data.avatar = image;
+    //   }
+    //   setOpenDialog(false);
+    //   callback(data);
+    // } else {
+    //   setOpenDialog(true);
+    // }
   };
 
   const handleFormClose = () => {
@@ -76,11 +78,11 @@ function SuperAdminAppImageCreatePopup({
       }}
     >
       <div className="Content">
+        <div className="FormHeader">
+          <span className="Title">Add Image</span>
+        </div>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="FormHeader">
-            <span className="Title">Add Image</span>
-          </div>
-          <div className="FormBody">
+          <div className="">
             <div className="FormField">
               <FormControl className="FormControl" variant="standard">
                 <label className="FormLabel">Image Name</label>
@@ -93,7 +95,7 @@ function SuperAdminAppImageCreatePopup({
                   disableUnderline
                 />
                 {errors.name?.type === 'required' && (
-                  <span role="alert">Category name is required</span>
+                  <span role="alert">Image name is required</span>
                 )}
               </FormControl>
             </div>
@@ -105,7 +107,7 @@ function SuperAdminAppImageCreatePopup({
                 </label>
                 <TextField
                   className="FormTextarea"
-                  id="message"
+                  id="desc"
                   multiline
                   rows={4}
                   defaultValue=""
@@ -173,7 +175,6 @@ function SuperAdminAppImageCreatePopup({
           <div className="FormFooter">
             <Button
               className="btn-black-outline"
-              type="submit"
               onClick={handleFormClose}
               sx={{
                 marginRight: '0.5rem',
@@ -184,8 +185,8 @@ function SuperAdminAppImageCreatePopup({
             </Button>
             <CustomButton
               buttonType="button"
-              title="add"
               type="submit"
+              title="add"
               className="btn-black-fill"
               sx={{
                 width: '100%',
@@ -193,15 +194,6 @@ function SuperAdminAppImageCreatePopup({
                 padding: '0.375rem 1.5rem !important',
               }}
             />
-            {/* <Input
-              type="submit"
-              value="Add"
-              className="btn-black-fill"
-              disableUnderline
-              sx={{
-                padding: '0.375rem 2rem !important',
-              }}
-            /> */}
           </div>
         </form>
       </div>

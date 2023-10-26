@@ -135,9 +135,11 @@ function SuperAdminEditPermissionsPage() {
     });
   }, []);
 
+  const hasDuplicates = (array: any) => {
+    return new Set(array).size !== array.length;
+  };
+
   const onSubmit = (data: any) => {
-    // console.log('DDDDDDDDDDDD', data);
-    setIsLoader(true);
     const parent: any = {
       name: data.moduleName || '',
       desc: data.moduleDesc || '',
@@ -146,13 +148,17 @@ function SuperAdminEditPermissionsPage() {
       data: [],
     };
 
+    let hasDuplicate = false;
+    let displayText: any = '';
+    const duplicateNames: string[] = [];
     const dataKeys = Object.keys(data).filter((key) => key.includes('name'));
-
     // Regular expression to match the index at the end of keys
     const indexPattern: any = /\d+$/;
 
     dataKeys.forEach((nameKey: any) => {
       const index = nameKey.match(indexPattern)[0];
+      const newName: any = data[nameKey] || '';
+
       const dataItem = {
         id: data[`id${index}`] || null,
         name: data[nameKey] || '',
@@ -167,40 +173,73 @@ function SuperAdminEditPermissionsPage() {
         permissionParent: data[`permissionParent${index}`] || null,
         isActive: data[`isActive${index}`] || true,
       };
+      const nameExists = parent.data.some((item: any) => item.name === newName);
       if (data[`permissionParent${index}`] === '') {
         delete dataItem.permissionParent;
         delete dataItem.isActive;
         delete dataItem.createdDate;
         delete dataItem.updatedDate;
       }
+      if (nameExists) {
+        if (!duplicateNames.includes(newName)) {
+          duplicateNames.push(newName);
+        }
+        // duplicateNames.push(newName);
+        hasDuplicate = true;
+      } else if (dataKeys.some((name: any) => data[name] === data.moduleName)) {
+        hasDuplicate = true;
+        displayText = 'Module name must not be the same as permission names';
+      } else {
+        hasDuplicate = false;
+      }
+
       parent.data.push(dataItem);
     });
-    // console.log("PARENT", parent);
-
-    Service.updatePermissionService(id, parent)
-      .then((item: any) => {
-        if (item.data.success) {
-          // console.log("UPDATED", item.data);
-          reset();
-          setText(item.data.message);
-          navigate('../list');
-        } else {
-          setIsLoader(false);
-          setIsNotify(true);
-          setNotifyMessage({
-            text: item.data.message,
-            type: 'error',
-          });
-        }
-      })
-      .catch((err) => {
-        setIsLoader(false);
+    if (duplicateNames.length > 0) {
+      displayText = `Permission name (${duplicateNames.join('\n')}) already existss`;
+    }
+    if (hasDuplicate) {
+      console.log("run1");
+      setIsNotify(true);
+      setNotifyMessage({
+        text: displayText,
+        type: 'error',
+      });
+    } else {
+      const allNames = parent.data.map((item: any) => item.name);
+      if (hasDuplicates(allNames)) {
+        console.log("run2");
         setIsNotify(true);
         setNotifyMessage({
-          text: err.message,
+          text: displayText,
           type: 'error',
         });
-      });
+      } else {
+        Service.updatePermissionService(id, parent)
+          .then((item: any) => {
+            if (item.data.success) {
+              reset();
+              setText(item.data.message);
+              navigate('../list');
+            } else {
+              setIsLoader(false);
+              setIsNotify(true);
+              setNotifyMessage({
+                text: item.data.message,
+                type: 'error',
+              });
+            }
+          })
+          .catch((err) => {
+            setIsLoader(false);
+            setIsNotify(true);
+            setNotifyMessage({
+              text: err.message,
+              type: 'error',
+            });
+          });
+      }
+    }
   };
 
   return isLoader ? (

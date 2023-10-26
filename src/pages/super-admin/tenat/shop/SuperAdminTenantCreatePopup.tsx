@@ -14,8 +14,10 @@ import InputAdornment from '@mui/material/InputAdornment';
 import '../../../../assets/css/PopupStyle.css';
 import { Tenant } from '../../../../interfaces/superadmin/tenant.interface';
 import { DOMAIN_PREFIX, DOMAIN_PROTOCOL } from '../../../../utils/constants';
+import CustomDropDown from '../../../../components/common/CustomDropDown';
 
 type Props = {
+  roles?: any;
   openFormDialog: boolean;
   setOpenFormDialog: React.Dispatch<React.SetStateAction<boolean>>;
   callback: (...args: any[]) => any;
@@ -24,11 +26,12 @@ type Props = {
 };
 
 function SuperAdminTenantCreatePopup({
+  roles,
   openFormDialog,
   setOpenFormDialog,
   callback,
   setIsNotify,
-  setNotifyMessage,
+  setNotifyMessage
 }: Props) {
   const {
     register,
@@ -38,7 +41,12 @@ function SuperAdminTenantCreatePopup({
     control,
   } = useForm<Tenant>();
 
+  console.log("ROLES", roles);
+
+
   const onSubmit = (data: Tenant) => {
+    console.log("submmit", data);
+
     if (data.tenantName) {
       setOpenFormDialog(false);
       callback(data);
@@ -78,6 +86,7 @@ function SuperAdminTenantCreatePopup({
                   {...register('tenantName', { required: true })}
                   type="text"
                   id="tenantName"
+                  placeholder='Enter shop name'
                   disableUnderline
                 />
                 {errors.tenantName?.type === 'required' && (
@@ -91,6 +100,7 @@ function SuperAdminTenantCreatePopup({
                   {...register('email', { required: true })}
                   type="text"
                   id="email"
+                  placeholder='Enter email'
                   disableUnderline
                 />
                 {errors.email?.type === 'required' && (
@@ -106,6 +116,7 @@ function SuperAdminTenantCreatePopup({
                   {...register('firstName', { required: true })}
                   type="text"
                   id="firstName"
+                  placeholder='Enter first name'
                   disableUnderline
                 />
                 {errors.firstName?.type === 'required' && (
@@ -119,12 +130,54 @@ function SuperAdminTenantCreatePopup({
                   {...register('lastName', { required: true })}
                   type="text"
                   id="lastName"
+                  placeholder='Enter last name'
                   disableUnderline
                 />
                 {errors.lastName?.type === 'required' && (
                   <span role="alert">Last name is required</span>
                 )}
               </FormControl>
+            </div>
+            <div className="FormFields">
+              <FormControl className="FormControl" variant="standard">
+                <label className="FormLabel">Max branch limits</label>
+                <Input
+                  className="FormInput"
+                  {...register('maxBranchLimit', { required: true })}
+                  type="number"
+                  id="maxBranchLimits"
+                  placeholder='Enter max branch limits'
+                  disableUnderline
+                />
+                {errors.maxBranchLimit?.type === 'required' && (
+                  <span role="alert">branch limit is required</span>
+                )}
+              </FormControl>
+              <FormControl className="FormControl" variant="standard">
+                <label className="FormLabel">Max User Limits</label>
+                <Input
+                  className="FormInput"
+                  {...register('maxUserLimit', { required: true })}
+                  type="number"
+                  id="maxUserLimits"
+                  placeholder='Enter max user limits'
+                  disableUnderline={true}
+                />
+                {errors.maxUserLimit?.type === 'required' && (
+                  <span role="alert">User limits is required</span>
+                )}
+              </FormControl>
+            </div>
+            <div className="FormField mb-4">
+              <CustomDropDown
+                validateRequired={true}
+                id={"role"}
+                control={control}
+                error={errors}
+                register={register}
+                options={{ roles: roles }}
+                inputTitle={"Role"}
+              />
             </div>
             <div className="FormField mb-4">
               <FormControl className="FormControl" variant="standard">

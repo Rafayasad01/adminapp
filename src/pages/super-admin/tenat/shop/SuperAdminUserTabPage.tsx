@@ -132,22 +132,6 @@ function SuperAdminUserTabPage({ tenant }: Props) {
                     )}
                   </div>
                 </div>
-                {!item.sendToEmail && (
-                  <div className="mt-4 flex w-full flex-col">
-                    <Button
-                      variant="contained"
-                      className="btn-black-fill btn-icon"
-                      disableRipple
-                      sx={{ width: '200px' }}
-                      onClick={() => sentEmailHandler(item.id)}
-                    >
-                      <SendOutlinedIcon
-                        sx={{ marginRight: '6px !important', width: '18px' }}
-                      />{' '}
-                      Send To Email
-                    </Button>
-                  </div>
-                )}
               </div>
             </div>
           );

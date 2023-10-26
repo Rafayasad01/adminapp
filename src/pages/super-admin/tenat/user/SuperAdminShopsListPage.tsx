@@ -18,7 +18,7 @@ import Avatar from '@mui/material/Avatar';
 import CustomText from '../../../../components/common/CustomText';
 import TopBar from '../../../../components/common/TopBar';
 import { Shop } from '../../../../interfaces/superadmin/shop.interface';
-import Service from '../../../../services/superadmin/tenant';
+import Service from '../../../../services/superadmin/Tenant';
 import Loader from '../../../../components/common/Loader';
 import Notify from '../../../../components/common/Notify';
 import CustomDialog from '../../../../components/common/CustomDialog';
@@ -363,8 +363,8 @@ function SuperAdminShopsListPage() {
                               <span className="text-xs font-normal text-[#6A6A6A]">
                                 {dayjs(item.createdDate).isValid()
                                   ? dayjs(item.createdDate)?.format(
-                                    'MMMM DD, YYYY'
-                                  )
+                                      'MMMM DD, YYYY'
+                                    )
                                   : '--'}
                               </span>
                             </div>

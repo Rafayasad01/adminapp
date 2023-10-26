@@ -1,5 +1,6 @@
 import network from '../../utils/network';
-import { TENANT_PREFIX } from '../../utils/constants';
+import { ROLE_PREFIX, TENANT_PREFIX } from '../../utils/constants';
+
 const SHOP_PREFIX = 'shop';
 const USER_PREFIX = 'user';
 
@@ -7,7 +8,9 @@ const getShopListService = (page: number, size: number) => {
   return network.get(`${TENANT_PREFIX}/${SHOP_PREFIX}/list/${page}/${size}`);
 };
 const searchShopService = (search: string, page: number, size: number) => {
-  return network.get(`${TENANT_PREFIX}/${SHOP_PREFIX}/list/${search}/${page}/${size}`);
+  return network.get(
+    `${TENANT_PREFIX}/${SHOP_PREFIX}/list/${search}/${page}/${size}`
+  );
 };
 
 const createShop = (data: any) => {
@@ -34,7 +37,10 @@ const updateShop = (id: string, data: any) => {
   return network.post(`${TENANT_PREFIX}/${SHOP_PREFIX}/update/${id}`, data);
 };
 const updateShopStatus = (id: string, data: any) => {
-  return network.post(`${TENANT_PREFIX}/${SHOP_PREFIX}/update/status/${id}`, data);
+  return network.post(
+    `${TENANT_PREFIX}/${SHOP_PREFIX}/update/status/${id}`,
+    data
+  );
 };
 
 const sentToEmailShop = (id: string) => {
@@ -50,16 +56,25 @@ const getUser = (id: any) => {
 };
 
 const searchUserService = (searchText: string, page: number, size: number) => {
-  return network.get(`${TENANT_PREFIX}/${USER_PREFIX}/list/${searchText}/${page}/${size}`);
+  return network.get(
+    `${TENANT_PREFIX}/${USER_PREFIX}/list/${searchText}/${page}/${size}`
+  );
 };
 
 const updateUserStatus = (id: string, data: any) => {
-  return network.post(`${TENANT_PREFIX}/${USER_PREFIX}/update/status/${id}`, data);
+  return network.post(
+    `${TENANT_PREFIX}/${USER_PREFIX}/update/status/${id}`,
+    data
+  );
 };
 
 const updateUser = (id: string, data: any) => {
   return network.post(`${TENANT_PREFIX}/${USER_PREFIX}/update/${id}`, data);
 };
+
+const getRoleListLOV = () => {
+  return network.get(`${ROLE_PREFIX}/list/lov`);
+}
 
 export default {
   getShopListService,
@@ -77,5 +92,6 @@ export default {
   getUser,
   searchUserService,
   updateUserStatus,
-  updateUser
+  updateUser,
+  getRoleListLOV
 };

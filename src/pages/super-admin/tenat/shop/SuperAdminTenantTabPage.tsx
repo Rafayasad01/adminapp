@@ -2,7 +2,12 @@ import React, { useState, useEffect } from 'react';
 import Switch from '@mui/material/Switch';
 import dayjs from 'dayjs';
 import Loader2 from '../../../../components/common/Loader2';
-import Service from '../../../../services/superadmin/tenant';
+import EditIcon from '@mui/icons-material/Edit';
+import Service from '../../../../services/superadmin/Tenant';
+import CustomButton from '../../../../components/common/CustomButton';
+import IconButton from '@mui/material/IconButton';
+import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
+import Button from '@mui/material/Button';
 
 type Props = {
   tenant: string;
@@ -50,9 +55,9 @@ function SuperAdminTenantTabPage({ tenant }: Props) {
     <Loader2 />
   ) : (
     detail && (
-      <div className="grid w-full grid-cols-12 gap-3">
-        <div className="col-span-4">
-          <div className="flex flex-col py-[2rem] px-5">
+      <div className="grid w-full grid-cols-8 gap-3">
+        <div className="col-span-4 flex py-[2rem]">
+          <div className="flex flex-col px-5">
             <div className="flex w-full flex-col">
               <span className="font-open-sans text-base font-semibold not-italic text-[#1A1A1A]">
                 Shop Name
@@ -132,7 +137,37 @@ function SuperAdminTenantTabPage({ tenant }: Props) {
               </div>
             </div>
           </div>
+          <div className='flex'>
+            <div>
+              <IconButton
+                title='Edit Branch'
+                className="pl-1 m-0"
+              // onClick={() =>
+              //   item.isActive ? editHandler(item.id) : null
+              // }
+              >
+                <EditIcon />
+              </IconButton>
+            </div>
+            <div>
+              <Button
+                variant="contained"
+                className="btn-black-fill btn-icon"
+                // onClick={handleFormClickOpen}
+              >
+                <AddOutlinedIcon /> Add New Shop
+              </Button>
+            </div>
+          </div>
         </div>
+        {/* <div className='col-span-4 bg-slate-300 flex'>
+          <div>
+            <CustomButton title='Edit Shop' buttonType="button" />
+          </div>
+          <div>
+          <CustomButton title='Add New Shop Branch' buttonType="button" />
+          </div>
+        </div> */}
       </div>
     )
   );

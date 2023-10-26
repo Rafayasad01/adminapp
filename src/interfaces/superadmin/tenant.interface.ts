@@ -8,4 +8,7 @@ export interface Tenant {
   trailStartDate: string;
   developmentDomain: string;
   liveDomain: string;
+  maxBranchLimit: number;
+  maxUserLimit: number;
+  role: string;
 }
