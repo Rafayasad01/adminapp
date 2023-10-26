@@ -50,6 +50,13 @@ select {
   @apply w-full;
 }
 
+.css-1ualgfl-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root {
+  height: 2rem !important;
+}
+.select-grey-outline{
+  height: 2rem !important;
+}
+
 .MuiFormControl-root:hover,
 .MuiInputBase-root:hover,
 .MuiOutlinedInput-notchedOutline {

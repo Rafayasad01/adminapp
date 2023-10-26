@@ -23,6 +23,7 @@ import SuperAdminPermissionPagePopup from './SuperAdminPermissionPagePopup';
 
 function SuperAdminPermissionPage() {
   const authState: any = useAppSelector((state) => state.authState);
+  const [renderingOff, setRenderingOff] = useState<string>('');
   const navigate = useNavigate();
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(0);
@@ -36,28 +37,54 @@ function SuperAdminPermissionPage() {
   const [heading, setHeading] = useState<string>('');
   const [childList, setChildList] = useState<any>();
 
+  // const handleClickSearch = (event: any) => {
+  //   const searchTxt = event.target.value as string;
+  //   const newPage = 0;
+  //   setSearch(searchTxt);
+  //   setPage(newPage);
+  //   Service.getPermissionSearchService(searchTxt, newPage, rowsPerPage).then(
+  //     (item) => {
+  //       console.log('item:::::', item);
+  //       setList(item.data.data.list);
+  //       // setTotal(item.data.data.total);
+  //     }
+  //   );
+  // };
+
   const handleClickSearch = (event: any) => {
-    const searchTxt = event.target.value as string;
-    const newPage = 0;
-    setSearch(searchTxt);
-    setPage(newPage);
-    Service.getPermissionSearchService(searchTxt, newPage, rowsPerPage).then(
-      (item) => {
-        console.log('item:::::', item);
+    setSearch(event.target.value);
+  };
+
+  const executeQuery = () => {
+    Service.getPermissionSearchService(search, page, rowsPerPage)
+      .then((item) => {
         setList(item.data.data.list);
-        // setTotal(item.data.data.total);
-      }
-    );
+        setTotal(item.data.data.total);
+      })
+      .catch((err) => {
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
+        });
+      });
+  };
+
+  const handleKeyPress = (e: any) => {
+    if (e.key === 'Enter') {
+      executeQuery();
+    }
   };
 
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number
   ) => {
-    setPage(newPage);
-    // offset? ,limit rowsperpage hoga ofset page * rowsperPage
+    const tempPage = newPage;
+    setPage(tempPage);
+    // // offset? ,limit rowsperpage hoga ofset page * rowsperPage
     if (search === '' || search === null || search === undefined) {
-      Service.getListService(newPage, rowsPerPage).then((item) => {
+      Service.getPermissionListService(newPage, rowsPerPage).then((item) => {
         setList(item.data.data.list);
         setTotal(item.data.data.total);
       });
@@ -79,7 +106,7 @@ function SuperAdminPermissionPage() {
     setRowsPerPage(newRowperPage);
     setPage(newPage);
     if (search === '' || search === null || search === undefined) {
-      Service.getListService(newPage, rowsPerPage).then((item) => {
+      Service.getPermissionListService(newPage, rowsPerPage).then((item) => {
         setList(item.data.data.list);
         setTotal(item.data.data.total);
       });
@@ -116,7 +143,7 @@ function SuperAdminPermissionPage() {
         setIsLoader(false);
         console.error('error::::::::', error);
       });
-  }, [page, rowsPerPage]);
+  }, [renderingOff]);
 
   const editHandler = (id: string) => {
     navigate(`../edit-permission/${id}`);
@@ -194,20 +221,18 @@ function SuperAdminPermissionPage() {
                     id="search"
                     type="text"
                     placeholder="Search"
-                    onKeyDown={(
-                      event: React.KeyboardEvent<
-                        HTMLInputElement | HTMLTextAreaElement
-                      >
-                    ) => {
-                      handleClickSearch(event);
-                    }}
+                    onChange={(event) => handleClickSearch(event)}
+                    onKeyDown={(event) => handleKeyPress(event)}
                     endAdornment={
                       <InputAdornment position="end">
                         <Divider
                           sx={{ height: 28, m: 0.5 }}
                           orientation="vertical"
                         />
-                        <IconButton aria-label="toggle password visibility">
+                        <IconButton
+                          onClick={executeQuery}
+                          aria-label="toggle password visibility"
+                        >
                           <SearchIcon className="text-[#6A6A6A]" />
                         </IconButton>
                       </InputAdornment>

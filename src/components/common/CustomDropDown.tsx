@@ -5,10 +5,10 @@ import { Controller } from 'react-hook-form';
 type Props = {
   inputTitle: string;
   customWidth?: string;
-  options: any;
-  register: any;
+  options?: any;
+  register?: any;
   control?: any;
-  id: any;
+  id?: any;
   value?: string;
   error?: any;
   validateRequired?: any;
@@ -33,14 +33,14 @@ function CustomDropDown({
         <Controller
           name={id}
           control={control}
-          defaultValue={options.role || 'none'}
+          defaultValue={options?.role || 'none'}
           rules={
             validateRequired
               ? {
-                  validate: (value) => {
-                    return value !== 'none' || 'Select an option';
-                  },
-                }
+                validate: (value) => {
+                  return value !== 'none' || 'Select an option';
+                },
+              }
               : {}
           }
           render={({ field, fieldState }) => (
@@ -49,7 +49,7 @@ function CustomDropDown({
                 fullWidth
                 disableUnderline
                 variant="outlined"
-                style={{ border: '1px solid rgb(201, 201, 201)' }}
+                style={{ border: '1px solid rgb(201, 201, 201)', height: "2rem !important" }}
                 className="select-grey-outline"
                 labelId="demo-simple-select-label"
                 id={id}

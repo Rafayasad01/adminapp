@@ -31,11 +31,11 @@ function CustomButton({
   if (buttonType === 'button') {
     return (
       <Button
-        type={"submit"}
+        type="submit"
         sx={sx}
         variant="contained"
         className={className}
-        onClick={onclick || (() => { })}
+        onClick={onclick || (() => {})}
       >
         {icon && icon} {title}
       </Button>

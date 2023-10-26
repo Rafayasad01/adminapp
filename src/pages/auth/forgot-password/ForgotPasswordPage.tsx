@@ -10,9 +10,8 @@ function ForgotPasswordPage() {
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
 
-
   const getCodeHandler = () => {
-    if (email && error === "") {
+    if (email && error === '') {
       navigate('../otp-verification');
     }
   };
@@ -35,19 +34,20 @@ function ForgotPasswordPage() {
               type="email"
               name="email"
               onChange={(event) => {
-                const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+                const emailRegex =
+                  /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
                 if (emailRegex.test(event.target.value)) {
-                  setEmail(event.target.value)
-                  setError('')
+                  setEmail(event.target.value);
+                  setError('');
                 } else {
-                  setEmail(event.target.value)
-                  setError('Invalid email format')
+                  setEmail(event.target.value);
+                  setError('Invalid email format');
                 }
               }}
               disableUnderline
             />
           </FormControl>
-          {error && <p className='text-xs py-1'>{error}</p>}
+          {error && <p className="py-1 text-xs">{error}</p>}
         </div>
         <div className="py-8" />
         <div className="mt-8 w-full px-4">

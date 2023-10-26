@@ -11,6 +11,8 @@ type User = {
   isSuperAdmin: boolean;
   token: string;
   avatar: string;
+  branchLimit: number;
+  employeeLimit: number;
 };
 
 type AuthState = {

@@ -42,7 +42,7 @@ function SuperAdminAppImageCreatePopup({
 
   const onSubmit = (data: AppImage) => {
     console.log('onSubmit called');
-    console.log("data", data);
+    console.log('data', data);
     // if (data.name && data.avatar) {
     //   if (data.avatar && Object.keys(data?.avatar).length > 0) {
     //     data.avatar = image;
@@ -197,7 +197,7 @@ function SuperAdminAppImageCreatePopup({
           </div>
         </form>
       </div>
-    </Dialog >
+    </Dialog>
   );
 }
 

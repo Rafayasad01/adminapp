@@ -137,7 +137,7 @@ function SuperAdminEditPermissionsPage() {
 
   const hasDuplicates = (array: any) => {
     return new Set(array).size !== array.length;
-  }
+  };
 
   const onSubmit = (data: any) => {
     const parent: any = {
@@ -150,6 +150,7 @@ function SuperAdminEditPermissionsPage() {
 
     let hasDuplicate = false;
     let displayText: any = '';
+    const duplicateNames: string[] = [];
     const dataKeys = Object.keys(data).filter((key) => key.includes('name'));
     // Regular expression to match the index at the end of keys
     const indexPattern: any = /\d+$/;
@@ -180,19 +181,25 @@ function SuperAdminEditPermissionsPage() {
         delete dataItem.updatedDate;
       }
       if (nameExists) {
-        hasDuplicate = true
-        displayText = "Permission name already exist"
-      } else if (dataKeys.some((nameKey: any) => data[nameKey] === data.moduleName)) {
-        hasDuplicate = true
-        displayText = "Module name must not be the same as permission names";
+        if (!duplicateNames.includes(newName)) {
+          duplicateNames.push(newName);
+        }
+        // duplicateNames.push(newName);
+        hasDuplicate = true;
+      } else if (dataKeys.some((name: any) => data[name] === data.moduleName)) {
+        hasDuplicate = true;
+        displayText = 'Module name must not be the same as permission names';
       } else {
-        hasDuplicate = false
+        hasDuplicate = false;
       }
 
       parent.data.push(dataItem);
     });
-
+    if (duplicateNames.length > 0) {
+      displayText = `Permission name (${duplicateNames.join('\n')}) already existss`;
+    }
     if (hasDuplicate) {
+      console.log("run1");
       setIsNotify(true);
       setNotifyMessage({
         text: displayText,
@@ -201,9 +208,10 @@ function SuperAdminEditPermissionsPage() {
     } else {
       const allNames = parent.data.map((item: any) => item.name);
       if (hasDuplicates(allNames)) {
+        console.log("run2");
         setIsNotify(true);
         setNotifyMessage({
-          text: "Permission name already exist",
+          text: displayText,
           type: 'error',
         });
       } else {

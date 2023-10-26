@@ -19,6 +19,7 @@ type Props = {
   callback: (...args: any[]) => any;
   setIsNotify: any;
   setNotifyMessage: any;
+  type?: string;
 };
 
 function SuperAdminAppImageEditPopup({
@@ -26,6 +27,7 @@ function SuperAdminAppImageEditPopup({
   setOpenDialog,
   formData,
   callback,
+  type,
   setIsNotify,
   setNotifyMessage,
 }: Props) {
@@ -43,8 +45,14 @@ function SuperAdminAppImageEditPopup({
 
   const onSubmit = (data: AppImage) => {
     console.log('DATATATA', data);
-
-    if (data.name && data.avatar) {
+    if (type === "edit" && data.name) {
+      if (data.avatar && Object.keys(data?.avatar).length > 0) {
+        data.avatar = image;
+      }
+      callback(data);
+      setOpenDialog(false);
+    }
+    else if (data.name && data.avatar) {
       if (data.avatar && Object.keys(data?.avatar).length > 0) {
         data.avatar = image;
       }
