@@ -23,6 +23,7 @@ type Props = {
   callback: (...args: any[]) => any;
   setIsNotify: any;
   setNotifyMessage: any;
+  type?: boolean;
 };
 
 function SuperAdminTenantCreatePopup({
@@ -31,7 +32,8 @@ function SuperAdminTenantCreatePopup({
   setOpenFormDialog,
   callback,
   setIsNotify,
-  setNotifyMessage
+  setNotifyMessage,
+  type,
 }: Props) {
   const {
     register,
@@ -41,11 +43,10 @@ function SuperAdminTenantCreatePopup({
     control,
   } = useForm<Tenant>();
 
-  console.log("ROLES", roles);
-
+  console.log('ROLES', roles);
 
   const onSubmit = (data: Tenant) => {
-    console.log("submmit", data);
+    console.log('submmit', data);
 
     if (data.tenantName) {
       setOpenFormDialog(false);
@@ -63,6 +64,8 @@ function SuperAdminTenantCreatePopup({
     setOpenFormDialog(false);
   };
 
+  console.log('watch check', watch('trialMode'));
+
   return (
     <Dialog
       open={openFormDialog}
@@ -75,7 +78,7 @@ function SuperAdminTenantCreatePopup({
       <div className="Content">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="FormHeader">
-            <span className="Title">Add Shop</span>
+            <span className="Title">{type ? 'Add Branch' : 'Add Shop'}</span>
           </div>
           <div className="FormBody">
             <div className="FormFields">
@@ -86,7 +89,7 @@ function SuperAdminTenantCreatePopup({
                   {...register('tenantName', { required: true })}
                   type="text"
                   id="tenantName"
-                  placeholder='Enter shop name'
+                  placeholder="Enter shop name"
                   disableUnderline
                 />
                 {errors.tenantName?.type === 'required' && (
@@ -100,7 +103,7 @@ function SuperAdminTenantCreatePopup({
                   {...register('email', { required: true })}
                   type="text"
                   id="email"
-                  placeholder='Enter email'
+                  placeholder="Enter email"
                   disableUnderline
                 />
                 {errors.email?.type === 'required' && (
@@ -116,7 +119,7 @@ function SuperAdminTenantCreatePopup({
                   {...register('firstName', { required: true })}
                   type="text"
                   id="firstName"
-                  placeholder='Enter first name'
+                  placeholder="Enter first name"
                   disableUnderline
                 />
                 {errors.firstName?.type === 'required' && (
@@ -130,7 +133,7 @@ function SuperAdminTenantCreatePopup({
                   {...register('lastName', { required: true })}
                   type="text"
                   id="lastName"
-                  placeholder='Enter last name'
+                  placeholder="Enter last name"
                   disableUnderline
                 />
                 {errors.lastName?.type === 'required' && (
@@ -146,7 +149,7 @@ function SuperAdminTenantCreatePopup({
                   {...register('maxBranchLimit', { required: true })}
                   type="number"
                   id="maxBranchLimits"
-                  placeholder='Enter max branch limits'
+                  placeholder="Enter max branch limits"
                   disableUnderline
                 />
                 {errors.maxBranchLimit?.type === 'required' && (
@@ -160,8 +163,8 @@ function SuperAdminTenantCreatePopup({
                   {...register('maxUserLimit', { required: true })}
                   type="number"
                   id="maxUserLimits"
-                  placeholder='Enter max user limits'
-                  disableUnderline={true}
+                  placeholder="Enter max user limits"
+                  disableUnderline
                 />
                 {errors.maxUserLimit?.type === 'required' && (
                   <span role="alert">User limits is required</span>
@@ -170,13 +173,13 @@ function SuperAdminTenantCreatePopup({
             </div>
             <div className="FormField mb-4">
               <CustomDropDown
-                validateRequired={true}
-                id={"role"}
+                validateRequired
+                id="role"
                 control={control}
                 error={errors}
                 register={register}
-                options={{ roles: roles }}
-                inputTitle={"Role"}
+                options={{ roles }}
+                inputTitle="Role"
               />
             </div>
             <div className="FormField mb-4">
@@ -245,6 +248,27 @@ function SuperAdminTenantCreatePopup({
                 label="Trail Mode"
               />
             </div>
+            {watch('trialMode') === true && (
+              <div>
+                <FormControl className="FormControl" variant="standard">
+                  <label className="FormLabel">Trail Mode Limit ( Days )</label>
+                  <Input
+                    className="FormInput"
+                    {...register('trialModeLimit', {
+                      required: watch('trialMode') === true && true,
+                      value: 15,
+                    })}
+                    type="number"
+                    id="trialModeLimit"
+                    placeholder="Enter Trail Mode limit in days"
+                    disableUnderline
+                  />
+                  {errors.trialModeLimit?.type === 'required' && (
+                    <span role="alert">Trail Mode limit is required</span>
+                  )}
+                </FormControl>
+              </div>
+            )}
           </div>
           <div className="FormFooter">
             <Button

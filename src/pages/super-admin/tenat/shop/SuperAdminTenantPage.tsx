@@ -15,6 +15,7 @@ import WysiwygOutlinedIcon from '@mui/icons-material/WysiwygOutlined';
 import Switch from '@mui/material/Switch';
 import EditIcon from '@mui/icons-material/Edit';
 import AddCircleOutlinedIcon from '@mui/icons-material/AddCircleOutlined';
+import Tooltip from '@mui/material/Tooltip';
 import TopBar from '../../../../components/common/TopBar';
 import Loader from '../../../../components/common/Loader';
 import Service from '../../../../services/superadmin/Tenant';
@@ -24,7 +25,6 @@ import SuperAdminTenantUpdatePopup from './SuperAdminTenantUpdatePopup';
 import CustomText from '../../../../components/common/CustomText';
 import { useAppSelector } from '../../../../redux/redux-hooks';
 import SuperAdminChildTenantCreatePopup from './SuperAdminChildTenantCreatePopup';
-import Tooltip from '@mui/material/Tooltip';
 
 function SuperAdminTenantPage() {
   const authState: any = useAppSelector((state) => state.authState);
@@ -46,13 +46,15 @@ function SuperAdminTenantPage() {
 
   const handleFormClickOpen = () => {
     setIsLoader(true);
-    Service.getRoleListLOV().then((item) => {
-      setIsLoader(false);
-      setRoleList(item.data.data)
-      setOpenFormDialog(true);
-    }).catch((err) => {
-      setIsLoader(false);
-    })
+    Service.getRoleListLOV()
+      .then((item) => {
+        setIsLoader(false);
+        setRoleList(item.data.data);
+        setOpenFormDialog(true);
+      })
+      .catch((err) => {
+        setIsLoader(false);
+      });
   };
 
   const handleClickSearch = (event: any) => {
@@ -131,6 +133,10 @@ function SuperAdminTenantPage() {
     formData.append('role', data.role);
     formData.append('maxBranchLimit', data.maxBranchLimit);
     formData.append('maxUserLimit', data.maxUserLimit);
+    formData.append(
+      'trialModeLimit',
+      data.trialModeLimit ? data.trialModeLimit : 0
+    );
     if (data.tenantName && data.email && data.firstName && data.lastName) {
       Service.createShop(formData)
         .then((item: any) => {
@@ -186,7 +192,7 @@ function SuperAdminTenantPage() {
       Service.createShop(formData)
         .then((item: any) => {
           if (item.data.success) {
-            console.log("itemeee", item.data);
+            console.log('itemeee', item.data);
             setIsLoader(false);
             setIsNotify(true);
             setNotifyMessage({
@@ -224,7 +230,7 @@ function SuperAdminTenantPage() {
   const updateFormHandler = (id: string, data: any) => {
     if (data.trialUpdateMode) setIsTrialMode(true);
     console.log('formDATA', data);
-    let formData = {
+    const formData = {
       tenantName: data.tenantName,
       email: data.email,
       firstName: data.firstName,
@@ -235,8 +241,8 @@ function SuperAdminTenantPage() {
       liveDomain: data.liveDomain,
       role: data.role,
       maxBranchLimit: data.maxBranchLimit,
-      maxUserLimit: data.maxUserLimit
-    }
+      maxUserLimit: data.maxUserLimit,
+    };
     // const formData = new FormData();
     // formData.append('tenantName', data.tenantName);
     // formData.append('email', data.email);
@@ -303,8 +309,6 @@ function SuperAdminTenantPage() {
     }
   };
 
-  // console.log("lISSTS", list);
-
   const editHandler = (id: string) => {
     setIsLoader(true);
     Service.getShop(id).then((item: any) => {
@@ -350,7 +354,7 @@ function SuperAdminTenantPage() {
   ) : (
     <>
       <TopBar title="Shop" />
-      <div className="mt-5 container m-auto">
+      <div className="container m-auto mt-5">
         <div className="w-full rounded-lg bg-white shadow-lg">
           <div className="grid grid-cols-12 px-4 py-5">
             <div className="col-span-7">
@@ -455,10 +459,14 @@ function SuperAdminTenantPage() {
                           )}
                         </td>
                         <td>
-                          <span className="">{item.maxBranchLimit} - {item.branch}</span>
+                          <span className="">
+                            {item.maxBranchLimit} - {item.branchCounts}
+                          </span>
                         </td>
                         <td>
-                          <span className="">{item.maxUserLimit} - {item.branch}</span>
+                          <span className="">
+                            {item.maxUserLimit} - {item.userCounts}
+                          </span>
                         </td>
                         <td>
                           <div className="flex flex-row-reverse">
@@ -534,7 +542,7 @@ function SuperAdminTenantPage() {
           callback={createFormHandler}
         />
       )}
-      {openEditFormDialog && (
+      {/* {openEditFormDialog && (
         <SuperAdminTenantUpdatePopup
           role={formDetail?.backofficeUser?.role}
           roles={formDetail?.roles}
@@ -545,7 +553,7 @@ function SuperAdminTenantPage() {
           setOpenFormDialog={setOpenEditFormDialog}
           callback={updateFormHandler}
         />
-      )}
+      )} */}
 
       {isNotify && (
         <Notify

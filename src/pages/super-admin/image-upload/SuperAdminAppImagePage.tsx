@@ -110,7 +110,6 @@ function SuperAdminAppImagePage() {
   };
 
   useEffect(() => {
-
     Service.listService(page, rowsPerPage)
       .then((item: any) => {
         if (item.data.success) {
@@ -291,7 +290,7 @@ function SuperAdminAppImagePage() {
         displayMessage={notifyMessage}
       />
       <TopBar title="App Image" />
-      <div className="m-auto mx-5">
+      <div className="container m-auto">
         <div className="mt-5 w-full rounded-lg bg-white shadow-lg">
           <div className="grid grid-cols-12 px-4 py-5">
             <div className="col-span-7">
@@ -452,7 +451,7 @@ function SuperAdminAppImagePage() {
       )}
       {openEditFormDialog && (
         <SuperAdminAppImageEditPopup
-          type={"edit"}
+          type="edit"
           openDialog={openEditFormDialog}
           setOpenDialog={setOpenEditFormDialog}
           formData={editFormData}

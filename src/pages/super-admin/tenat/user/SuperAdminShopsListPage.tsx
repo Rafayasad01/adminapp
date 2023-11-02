@@ -11,6 +11,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import Button from '@mui/material/Button';
 import SearchIcon from '@mui/icons-material/Search';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
+import WysiwygOutlinedIcon from '@mui/icons-material/WysiwygOutlined';
 import TablePagination from '@mui/material/TablePagination';
 import EditIcon from '@mui/icons-material/Edit';
 import dayjs from 'dayjs';
@@ -62,15 +63,6 @@ function SuperAdminShopsListPage() {
       options: dataById,
       validateRequired: true,
     },
-    {
-      fieldName: 'User Limits',
-      id: 'userLimits',
-      register,
-      error: errors.userLimits,
-      type: 'number',
-      typeImportant: true,
-    },
-    {},
   ];
 
   const onSubmitDialogBox = (data: any) => {
@@ -219,7 +211,6 @@ function SuperAdminShopsListPage() {
     Service.getUser(id).then((item: any) => {
       if (item.data.success) {
         setDataById(item.data.data);
-        setValue('userLimits', item.data.data.userLimits);
         setValue('role', item.data.data.role ? item.data.data.role : 'none');
         setIsLoader(false);
         setOpenEditFormDialog(true);
@@ -257,7 +248,7 @@ function SuperAdminShopsListPage() {
         displayMessage={notifyMessage}
       />
       <TopBar title="Shop User" />
-      <div className="container mt-5">
+      <div className="container m-auto mt-5">
         <div className="w-full rounded-lg bg-white shadow-lg">
           <div className="grid grid-cols-12 px-4 py-5">
             <div className="col-span-7">
@@ -315,7 +306,7 @@ function SuperAdminShopsListPage() {
                   <th>Shop Name</th>
                   <th>Email</th>
                   <th>Role</th>
-                  <th>Shop User Limits</th>
+                  <th>User Limit</th>
                   <th>Status</th>
                   <th>&nbsp;</th>
                 </tr>
@@ -372,8 +363,10 @@ function SuperAdminShopsListPage() {
                         </td>
                         <td>{item.tenantName}</td>
                         <td>{item.email}</td>
-                        <td>{item.role ? item.role : '--'}</td>
-                        <td>{item.userLimits}</td>
+                        <td>{item.roleName ? item.roleName : '--'}</td>
+                        <td>
+                          {item && `${item.maxUserLimit} - ${item.userCounts}`}
+                        </td>
                         <td>
                           {item.isActive ? (
                             <span className="badge badge-success">Active</span>
@@ -384,6 +377,12 @@ function SuperAdminShopsListPage() {
                         <td>
                           <div className="flex flex-row-reverse">
                             <IconButton
+                              className="icon-btn mr-3.5 p-0"
+                              onClick={() => navigate(`../detail/${item.id}`)}
+                            >
+                              <WysiwygOutlinedIcon />
+                            </IconButton>
+                            {/* <IconButton
                               className="icon-btn mr-3.5 p-0"
                               onClick={() =>
                                 item.isActive ? editHandler(item.id) : null
@@ -397,7 +396,7 @@ function SuperAdminShopsListPage() {
                                 event: React.ChangeEvent<HTMLInputElement>
                               ) => handleSwitchChange(event, list[index].id)}
                               inputProps={{ 'aria-label': 'controlled' }}
-                            />
+                            /> */}
                           </div>
                         </td>
                       </tr>
@@ -422,6 +421,7 @@ function SuperAdminShopsListPage() {
       <CustomDialog
         DialogHeader="Edit Shop User"
         type="edit"
+        singleField
         specailCase
         reset={reset}
         inputFieldsData={inputFieldsData}

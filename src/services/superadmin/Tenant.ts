@@ -31,7 +31,7 @@ const detailShopCategory = (id: string) => {
   return network.get(`${TENANT_PREFIX}/${SHOP_PREFIX}/detail/category/${id}`);
 };
 const getShop = (id: any) => {
-  return network.get(`${TENANT_PREFIX}/${SHOP_PREFIX}/get/${id}`);
+  return network.get(`${TENANT_PREFIX}/${SHOP_PREFIX}/edit/${id}`);
 };
 const updateShop = (id: string, data: any) => {
   return network.post(`${TENANT_PREFIX}/${SHOP_PREFIX}/update/${id}`, data);
@@ -74,7 +74,24 @@ const updateUser = (id: string, data: any) => {
 
 const getRoleListLOV = () => {
   return network.get(`${ROLE_PREFIX}/list/lov`);
-}
+};
+
+const createShopBranch = (data: any, tenantID: string) => {
+  return network.post(
+    `${TENANT_PREFIX}/${SHOP_PREFIX}/insert/branch/${tenantID}`,
+    data
+  );
+};
+
+const getShopWithBranch = (tenantID: string) => {
+  return network.get(
+    `${TENANT_PREFIX}/${SHOP_PREFIX}/owner/detail/${tenantID}`
+  );
+};
+
+const getUserById = (userID: any) => {
+  return network.get(`${TENANT_PREFIX}/${USER_PREFIX}/detail/${userID}`);
+};
 
 export default {
   getShopListService,
@@ -93,5 +110,8 @@ export default {
   searchUserService,
   updateUserStatus,
   updateUser,
-  getRoleListLOV
+  getRoleListLOV,
+  createShopBranch,
+  getShopWithBranch,
+  getUserById,
 };

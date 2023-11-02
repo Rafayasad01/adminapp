@@ -50,6 +50,9 @@ import SuperAdminAppImagePage from '../pages/super-admin/image-upload/SuperAdmin
 import SuperAdminTenantPage from '../pages/super-admin/tenat/shop/SuperAdminTenantPage';
 import SuperAdminTenantDetailPage from '../pages/super-admin/tenat/shop/SuperAdminTenantDetailPage';
 import SuperAdminShopsListPage from '../pages/super-admin/tenat/user/SuperAdminShopsListPage';
+import SuperAdminShopDetailsPage from '../pages/super-admin/tenat/user/SuperAdminShopDetailsPage';
+import ShopAdminUserDetailPage from '../pages/super-admin/tenat/user/SuperAdminUserDetailPage';
+import EmployeePage from '../pages/employees/EmployeePage';
 
 
 export const routeObjects: RouteObject[] = [
@@ -136,6 +139,10 @@ export const routeObjects: RouteObject[] = [
                   {
                     path: 'list',
                     element: <SuperAdminShopsListPage />,
+                  },
+                  {
+                    path: 'detail/:id',
+                    element: <ShopAdminUserDetailPage />,
                   }
                 ],
               },
@@ -324,6 +331,23 @@ export const routeObjects: RouteObject[] = [
                 index: true,
                 element: <CustomersPage />,
                 // element: CAN("canView", "Customer List") ? <CustomersPage /> : <p>not authorized</p>,
+              },
+              {
+                path: 'detail/:customerId',
+                element: <CustomersDetailPage />,
+              },
+              {
+                path: 'address/:customerId',
+                element: <CustomersAddressPage />,
+              },
+            ],
+          },
+          {
+            path: 'employees',
+            children: [
+              {
+                index: true,
+                element: <EmployeePage />
               },
               {
                 path: 'detail/:customerId',

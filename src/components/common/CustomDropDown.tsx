@@ -37,10 +37,10 @@ function CustomDropDown({
           rules={
             validateRequired
               ? {
-                validate: (value) => {
-                  return value !== 'none' || 'Select an option';
-                },
-              }
+                  validate: (value) => {
+                    return value !== 'none' || 'Select an option';
+                  },
+                }
               : {}
           }
           render={({ field, fieldState }) => (
@@ -49,8 +49,8 @@ function CustomDropDown({
                 fullWidth
                 disableUnderline
                 variant="outlined"
-                style={{ border: '1px solid rgb(201, 201, 201)', height: "2rem !important" }}
-                className="select-grey-outline"
+                style={{ border: '1px solid rgb(201, 201, 201)' }}
+                className="fixed-height w-[100%]"
                 labelId="demo-simple-select-label"
                 id={id}
                 {...field}

@@ -19,3 +19,7 @@ export const listingRolePermission = (permissions: any, name: string) => {
   }
   return false;
 };
+
+export const formatName = (firstname: string, lastname: string) => {
+  return `${firstname} ${lastname}`;
+};

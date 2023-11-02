@@ -21,6 +21,7 @@ type Props = {
   reset?: any;
   setAvater?: any;
   specailCase?: boolean;
+  singleField?: boolean;
 };
 
 function CustomDialog({
@@ -34,6 +35,7 @@ function CustomDialog({
   specailCase,
   setAvater,
   reset,
+  singleField,
 }: Props) {
   const handleFormClose = () => {
     if (type === 'edit' && specailCase) {
@@ -43,7 +45,8 @@ function CustomDialog({
       });
       setOpenFormDialog(false);
     } else if (type === 'edit' && !specailCase) {
-      setAvater(null);
+      console.log('ssSSsss');
+      setAvater && setAvater(null);
       reset();
       setOpenFormDialog(false);
     } else {
@@ -66,12 +69,13 @@ function CustomDialog({
             <span className="Title">{DialogHeader}</span>
           </div>
           <div className="FormBody">
-            <div className="FormFields">
+            <div className={singleField ? 'FormField' : 'FormFields'}>
               {inputFieldsData?.map((items: any, index: number, array: any) => {
                 return (
                   <Fragment key={index}>
-                    {index !== inputFieldsData.length - 1 &&
-                      (items.type === 'select' ? (
+                    {
+                      // index !== inputFieldsData.length - 1 &&
+                      items.type === 'select' ? (
                         <FormControl
                           key={index}
                           className="FormControl"
@@ -87,7 +91,9 @@ function CustomDialog({
                             inputTitle={items.fieldName}
                           />
                         </FormControl>
-                      ) : items.type === 'number' || items.type === 'text' ? (
+                      ) : items.type === 'number' ||
+                        items.type === 'text' ||
+                        items.type === 'password' ? (
                         <FormControl
                           key={index}
                           className="FormControl"
@@ -96,6 +102,7 @@ function CustomDialog({
                           <CustomInputBox
                             disable={items.disable}
                             inputTitle={items.fieldName}
+                            placeholder={items.placeholder}
                             id={items.id}
                             value={items.value ? items.value : ''}
                             register={items.register}
@@ -106,54 +113,57 @@ function CustomDialog({
                             typeImportant={items.typeImportant}
                           />
                         </FormControl>
-                      ) : null)}
-                    {index === array.length - 1 && index % 2 !== 0 && <br />}
+                      ) : null
+                    }
                     {items.id === 'upload' && (
-                      <div style={{ minWidth: '204%', marginTop: '0.75rem' }}>
-                        <div className="ImageBox">
-                          <CustomButton
-                            buttonType="upload"
-                            title={items.fieldName}
-                            register={items.register}
-                            icon={
-                              <FileUploadOutlinedIcon
-                                sx={{ marginRight: '0.5rem' }}
-                              />
-                            }
-                            onchange={(
-                              event: React.InputHTMLAttributes<HTMLInputElement>
-                            ) => {
-                              items.onchange(event);
-                            }}
-                            onclick={(
-                              event: React.InputHTMLAttributes<HTMLInputElement>
-                            ) => {
-                              items.onclick(event);
-                            }}
-                          />
-                          {items.avatar ? (
-                            <div className="ShowImageBox">
-                              <label className="ShowImageLabel">
-                                {items.avatar.name}
-                              </label>
-                              <IconButton
-                                className="btn-dot"
-                                onClick={() => items.setAvatar(null)}
-                              >
-                                <CloseOutlinedIcon
-                                  sx={{
-                                    color: '#1D1D1D',
-                                    fontSize: '1rem',
-                                    lineHeight: '1.5rem',
-                                  }}
+                      <>
+                        <br />
+                        <div style={{ minWidth: '204%', marginTop: '0.75rem' }}>
+                          <div className="ImageBox">
+                            <CustomButton
+                              buttonType="upload"
+                              title={items.fieldName}
+                              register={items.register}
+                              icon={
+                                <FileUploadOutlinedIcon
+                                  sx={{ marginRight: '0.5rem' }}
                                 />
-                              </IconButton>
-                            </div>
-                          ) : (
-                            ''
-                          )}
+                              }
+                              onchange={(
+                                event: React.InputHTMLAttributes<HTMLInputElement>
+                              ) => {
+                                items.onchange(event);
+                              }}
+                              onclick={(
+                                event: React.InputHTMLAttributes<HTMLInputElement>
+                              ) => {
+                                items.onclick(event);
+                              }}
+                            />
+                            {items.avatar ? (
+                              <div className="ShowImageBox">
+                                <label className="ShowImageLabel">
+                                  {items.avatar.name}
+                                </label>
+                                <IconButton
+                                  className="btn-dot"
+                                  onClick={() => items.setAvatar(null)}
+                                >
+                                  <CloseOutlinedIcon
+                                    sx={{
+                                      color: '#1D1D1D',
+                                      fontSize: '1rem',
+                                      lineHeight: '1.5rem',
+                                    }}
+                                  />
+                                </IconButton>
+                              </div>
+                            ) : (
+                              ''
+                            )}
+                          </div>
                         </div>
-                      </div>
+                      </>
                     )}
                   </Fragment>
                 );
@@ -178,7 +188,7 @@ function CustomDialog({
               className="btn-black-fill"
               sx={{
                 padding: '0.375rem 2rem !important',
-                width: '85%',
+                width: '90%',
                 height: '35px',
               }}
             />

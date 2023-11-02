@@ -148,7 +148,7 @@ function SuperAdminRolePermissionsPage() {
         displayMessage={notifyMessage}
       />
       <TopBar title="Role Permissions" />
-      <div className="m-auto mx-5">
+      <div className="container m-auto">
         <div className="mt-5 w-full rounded-lg bg-white shadow-lg">
           <div className="grid grid-cols-12 px-4 py-5">
             <div className="col-span-6">

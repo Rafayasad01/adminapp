@@ -19,12 +19,13 @@ function SuperAdminTenantDetailPage() {
   };
   return (
     <>
-      <TopBar isNestedRoute title="Tenant Detail" />
-      <div className="container mt-5">
+      <TopBar isNestedRoute title="Shop Detail" />
+      <div className="container m-auto mt-5">
         <div className="grid w-full grid-cols-12 gap-3">
           <div className="col-span-12 min-h-[500px] rounded-lg bg-white py-3 shadow-lg">
-            <div className="custom-tab">
-              <Tabs
+            <SuperAdminTenantTabPage tenant={tenantId} />
+            {/* <div className="custom-tab"> */}
+            {/* <Tabs
                 value={tabPanel}
                 aria-label="basic tabs example"
                 TabIndicatorProps={{}}
@@ -34,16 +35,16 @@ function SuperAdminTenantDetailPage() {
                 <Tab label="Settings" value={1} disableRipple />
                 <Tab label="User" value={2} disableRipple />
                 <Tab label="Category" value={3} disableRipple />
-              </Tabs>
-            </div>
-            <div className="flex">
+              </Tabs> */}
+            {/* </div> */}
+            {/* <div className="flex">
               {tabPanel === 0 && <SuperAdminTenantTabPage tenant={tenantId} />}
               {tabPanel === 1 && <SuperAdminSettingTabPage tenant={tenantId} />}
               {tabPanel === 2 && <SuperAdminUserTabPage tenant={tenantId} />}
               {tabPanel === 3 && (
                 <SuperAdminCategoryTabPage tenant={tenantId} />
               )}
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

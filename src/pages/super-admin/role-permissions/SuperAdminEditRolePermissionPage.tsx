@@ -267,7 +267,7 @@ function SuperAdminEditRolePermissionsPage() {
             </div>
             <div className="mt-5">
               <CustomButton
-                sx={{ backgroundColor: 'black' }}
+                className="bg-black"
                 buttonType="button"
                 type="submit"
                 title="update"

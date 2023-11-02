@@ -22,6 +22,7 @@ type Props = {
   fieldNameSize?: string;
   customFontClass?: string;
   disable?: boolean;
+  placeholder?: string;
 };
 
 function CustomInputBox({
@@ -29,6 +30,7 @@ function CustomInputBox({
   id,
   value,
   inputTitle,
+  placeholder,
   error,
   subInputTitle,
   length,
@@ -60,6 +62,7 @@ function CustomInputBox({
         disabled={disable || false}
         sx={{ width: length }}
         className={`FormInput ${customClass}`}
+        placeholder={placeholder}
         id={id}
         type={
           typeImportant ? inputType : showPassVisibility ? inputType : 'text'

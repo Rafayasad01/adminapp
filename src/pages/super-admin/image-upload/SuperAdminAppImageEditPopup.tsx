@@ -45,14 +45,13 @@ function SuperAdminAppImageEditPopup({
 
   const onSubmit = (data: AppImage) => {
     console.log('DATATATA', data);
-    if (type === "edit" && data.name) {
+    if (type === 'edit' && data.name) {
       if (data.avatar && Object.keys(data?.avatar).length > 0) {
         data.avatar = image;
       }
       callback(data);
       setOpenDialog(false);
-    }
-    else if (data.name && data.avatar) {
+    } else if (data.name && data.avatar) {
       if (data.avatar && Object.keys(data?.avatar).length > 0) {
         data.avatar = image;
       }
