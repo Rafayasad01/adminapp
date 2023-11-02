@@ -127,6 +127,7 @@ function LoginPage() {
           </div>
           <div className="mt-8 w-full px-4">
             <Button
+              disabled={!!isLoader}
               className="w-full bg-neutral-900 px-16 text-gray-50"
               variant="contained"
               color="inherit"

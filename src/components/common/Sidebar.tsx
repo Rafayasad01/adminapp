@@ -9,6 +9,7 @@ import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
+import PeopleOutlineOutlinedIcon from '@mui/icons-material/PeopleOutlineOutlined';
 import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
 import Stack from '@mui/material/Stack';
@@ -40,6 +41,7 @@ import ArrowDown from '../icons/ArrowDown';
 import ArrowUp from '../icons/ArrowUp';
 import UserPermission from '../icons/UserPermission';
 import PermissionIcon from '../icons/PermissionIcon';
+import { MODULE_EMPLOYEEES } from '../../utils/constants';
 
 const links = [
   {
@@ -77,6 +79,12 @@ const links = [
     path: 'drivers',
     permission: "Driver List",
     icon: <DriverIcon />,
+  },
+  {
+    name: 'Employees',
+    path: 'employees',
+    permission: "Employee List",
+    icon: <PeopleOutlineOutlinedIcon className='w-[17px]' />,
   },
   {
     name: 'Notifications',
@@ -122,7 +130,7 @@ const superAdminlinks = [
       {
         name: 'users',
         path: 'tenant/user',
-        icon: <GroupsOutlinedIcon />
+        icon: <GroupsOutlinedIcon className='w-[20px]' />
       }
     ]
   },
@@ -157,6 +165,7 @@ function Sidebar() {
     dispatch(logout());
     dispatch(setRolePermissions({ id: "", name: "", permissions: [] }));
   };
+  // console.log("ei",expandedIndex);
 
   const handleToggle = (index: number) => {
     if (expandedIndex === index) {
@@ -177,8 +186,8 @@ function Sidebar() {
         }
         to={path}
       >
-        <div className="flex items-center  text-gray-50">
-          <span className="text-base leading-3"> {icon} </span>
+        <div className="flex items-center text-gray-50">
+          <span className="text-base leading-3">{icon} </span>
           <div className="mr-2">&nbsp;</div>
           <span className="font-open-sans text-sm font-semibold">
             {name}
@@ -193,11 +202,11 @@ function Sidebar() {
       childLinks?.length > 0 ?
         <>
           <div onClick={() => handleToggle(index)} className='cursor-pointer flex items-center mx-[30px] justify-between'>
-            <div className='flex items-center my-2'>
-              <div>
-                {icon}
+            <div className='flex items-center my-3'>
+              <div className='pr-[7px]'>
+                <span className='text-base leading-3'>{icon}</span>
               </div>
-              <div className='mx-[8px]'>
+              <div className='mx-[8px] capitalize font-open-sans text-sm font-semibold'>
                 {name}
               </div>
             </div>
@@ -226,13 +235,22 @@ function Sidebar() {
     if (authState.user.isSuperAdmin) {
       setList(superAdminlinks);
     } else if (dataRole.roleState.role.permissions) {
-      const tempList = links.filter(el => CAN("canView", el.permission));
-      tempList.unshift({
-        name: 'Dashboard',
-        path: 'home',
-        permission: "Dashboard List",
-        icon: <GridViewOutlinedIcon fontSize="inherit" />,
-      })
+      // const tempList = links.filter(el => CAN("canView", el.permission));
+      const tempList = links.filter(el => {
+        if (el.name === MODULE_EMPLOYEEES) {
+          if (authState.user?.employeeLimit <= 0) {
+            return null;
+          }
+        }
+        CAN("canView", el.permission)
+        return el;
+      });
+      // tempList.unshift({
+      //   name: 'Dashboard',
+      //   path: 'home',
+      //   permission: "Dashboard List",
+      //   icon: <GridViewOutlinedIcon fontSize="inherit" />,
+      // })
       setList(tempList);
     }
   }, [authState, dataRole.roleState.role.permissions]);

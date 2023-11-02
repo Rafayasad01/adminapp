@@ -383,7 +383,7 @@ function DriversPage() {
       id: 'password',
       register,
       error: errors.password,
-      type: 'password',
+      type: 'text',
       onclick: handleClickShowPassword,
       showPassVisibility: showPassword,
     },

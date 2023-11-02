@@ -201,10 +201,12 @@ function SuperAdminAddPermissionsPage() {
     });
 
     if (duplicateNames.length > 0) {
-      displayText = `Permission name (${duplicateNames.join('\n')}) already existss`;
+      displayText = `Permission name (${duplicateNames.join(
+        '\n'
+      )}) already existss`;
     }
     if (hasDuplicate) {
-      console.log("run1");
+      console.log('run1');
       setIsNotify(true);
       setNotifyMessage({
         text: displayText,
@@ -213,7 +215,7 @@ function SuperAdminAddPermissionsPage() {
     } else {
       const allNames = parent.data.map((item: any) => item.name);
       if (hasDuplicates(allNames)) {
-        console.log("run2");
+        console.log('run2');
         setIsNotify(true);
         setNotifyMessage({
           text: displayText,
@@ -373,10 +375,10 @@ function SuperAdminAddPermissionsPage() {
             </div>
             <div className="mt-5">
               <CustomButton
-                sx={{ backgroundColor: 'black' }}
                 buttonType="button"
                 type="submit"
                 title="add"
+                className="bg-[black]"
               />
             </div>
           </form>

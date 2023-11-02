@@ -41,17 +41,17 @@ function SuperAdminAppImageCreatePopup({
   } = useForm<AppImage>();
 
   const onSubmit = (data: AppImage) => {
-    console.log('onSubmit called');
-    console.log('data', data);
-    // if (data.name && data.avatar) {
-    //   if (data.avatar && Object.keys(data?.avatar).length > 0) {
-    //     data.avatar = image;
-    //   }
-    //   setOpenDialog(false);
-    //   callback(data);
-    // } else {
-    //   setOpenDialog(true);
-    // }
+    // console.log('onSubmit called');
+    // console.log('data', data);
+    if (data.name && data.avatar) {
+      if (data.avatar && Object.keys(data?.avatar).length > 0) {
+        data.avatar = image;
+      }
+      setOpenDialog(false);
+      callback(data);
+    } else {
+      setOpenDialog(true);
+    }
   };
 
   const handleFormClose = () => {
@@ -82,96 +82,93 @@ function SuperAdminAppImageCreatePopup({
           <span className="Title">Add Image</span>
         </div>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="">
-            <div className="FormField">
-              <FormControl className="FormControl" variant="standard">
-                <label className="FormLabel">Image Name</label>
-                <Input
-                  className="FormInput"
-                  {...register('name', { required: true })}
-                  type="text"
-                  id="name"
-                  placeholder="Write Image Name"
-                  disableUnderline
-                />
-                {errors.name?.type === 'required' && (
-                  <span role="alert">Image name is required</span>
-                )}
-              </FormControl>
-            </div>
-            <div className="FormField">
-              <FormControl className="FormControl" variant="standard">
-                <label className="FormLabel">
-                  Image Description{' '}
-                  <span className="SubLabel">Write 05-50 Characters</span>
-                </label>
-                <TextField
-                  className="FormTextarea"
-                  id="desc"
-                  multiline
-                  rows={4}
-                  defaultValue=""
-                  placeholder="Write Image Description"
-                  {...register('desc')}
-                />
-                {errors.desc && (
-                  <span role="alert">{errors.desc?.message}</span>
-                )}
-              </FormControl>
-            </div>
-            <div className="FormField">
-              <label className="FormLabel">Upload Image</label>
-              <div className="ImageBox">
-                <input
-                  accept="image/*"
-                  style={{ display: 'none' }}
-                  {...register('avatar', { required: 'Icon is required' })}
-                  id="raised-button-file"
-                  type="file"
-                  onChange={(
-                    event: React.InputHTMLAttributes<HTMLInputElement>
-                  ) => {
-                    handleFileChange(event);
-                  }}
-                  onClick={(
-                    event: React.InputHTMLAttributes<HTMLInputElement>
-                  ) => {
-                    handleFileOnClick(event);
-                  }}
-                />
-                <label htmlFor="raised-button-file" className="ImageLabel">
-                  <Button component="span" className="ImageBtn">
-                    <FileUploadOutlinedIcon sx={{ marginRight: '0.5rem' }} />
-                    Upload image
-                  </Button>
-                </label>
-
-                {image ? (
-                  <div className="ShowImageBox">
-                    <label className="ShowImageLabel">{image.name}</label>
-                    <IconButton
-                      className="btn-dot"
-                      onClick={() => {
-                        setImage(null);
-                        setValue('avatar', null);
-                      }}
-                    >
-                      <CloseOutlinedIcon
-                        sx={{
-                          color: '#1D1D1D',
-                          fontSize: '1rem',
-                          lineHeight: '1.5rem',
-                        }}
-                      />
-                    </IconButton>
-                  </div>
-                ) : (
-                  ''
-                )}
-              </div>
-              {image === null && <span role="alert">Image is required</span>}
-            </div>
+          <div className="FormField">
+            <FormControl className="FormControl" variant="standard">
+              <label className="FormLabel">Image Name</label>
+              <Input
+                className="FormInput"
+                {...register('name', { required: true })}
+                type="text"
+                id="name"
+                placeholder="Write Image Name"
+                disableUnderline
+              />
+              {errors.name?.type === 'required' && (
+                <span role="alert">Image name is required</span>
+              )}
+            </FormControl>
           </div>
+          <div className="FormField">
+            <FormControl className="FormControl" variant="standard">
+              <label className="FormLabel">
+                Image Description{' '}
+                <span className="SubLabel">Write 05-50 Characters</span>
+              </label>
+              <TextField
+                className="FormTextarea"
+                id="desc"
+                multiline
+                rows={4}
+                defaultValue=""
+                placeholder="Write Image Description"
+                {...register('desc')}
+              />
+              {errors.desc && <span role="alert">{errors.desc?.message}</span>}
+            </FormControl>
+          </div>
+          <div className="FormField">
+            <label className="FormLabel">Upload Image</label>
+            <div className="ImageBox">
+              <input
+                accept="image/*"
+                style={{ display: 'none' }}
+                {...register('avatar')}
+                id="raised-button-file"
+                type="file"
+                onChange={(
+                  event: React.InputHTMLAttributes<HTMLInputElement>
+                ) => {
+                  handleFileChange(event);
+                }}
+                onClick={(
+                  event: React.InputHTMLAttributes<HTMLInputElement>
+                ) => {
+                  handleFileOnClick(event);
+                }}
+              />
+              <label htmlFor="raised-button-file" className="ImageLabel">
+                <Button component="span" className="ImageBtn">
+                  <FileUploadOutlinedIcon sx={{ marginRight: '0.5rem' }} />
+                  Upload image
+                </Button>
+              </label>
+
+              {image ? (
+                <div className="ShowImageBox">
+                  <label className="ShowImageLabel">{image.name}</label>
+                  <IconButton
+                    className="btn-dot"
+                    onClick={() => {
+                      setImage(null);
+                      setValue('avatar', null);
+                    }}
+                  >
+                    <CloseOutlinedIcon
+                      sx={{
+                        color: '#1D1D1D',
+                        fontSize: '1rem',
+                        lineHeight: '1.5rem',
+                      }}
+                    />
+                  </IconButton>
+                </div>
+              ) : (
+                ''
+              )}
+            </div>
+            {image === null && <span role="alert">Image is required</span>}
+          </div>
+
           <div className="FormFooter">
             <Button
               className="btn-black-outline"

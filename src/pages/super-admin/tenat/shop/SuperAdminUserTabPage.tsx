@@ -4,7 +4,7 @@ import Button from '@mui/material/Button';
 import SendOutlinedIcon from '@mui/icons-material/SendOutlined';
 import dayjs from 'dayjs';
 import Loader2 from '../../../../components/common/Loader2';
-import Service from '../../../../services/superadmin/tenant';
+import Service from '../../../../services/superadmin/Tenant';
 
 type Props = {
   tenant: string;
@@ -102,8 +102,8 @@ function SuperAdminUserTabPage({ tenant }: Props) {
                     <div className="mt-1 font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
                       {dayjs(item.createdDate).isValid()
                         ? dayjs(item.createdDate)?.format(
-                          'ddd MMM DD YYYY HH:mm:ss'
-                        )
+                            'ddd MMM DD YYYY HH:mm:ss'
+                          )
                         : '--'}
                     </div>
                   </div>
@@ -114,8 +114,8 @@ function SuperAdminUserTabPage({ tenant }: Props) {
                     <div className="mt-1 font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
                       {dayjs(item.updatedDate).isValid()
                         ? dayjs(item.updatedDate)?.format(
-                          'ddd MMM DD YYYY HH:mm:ss'
-                        )
+                            'ddd MMM DD YYYY HH:mm:ss'
+                          )
                         : '--'}
                     </div>
                   </div>

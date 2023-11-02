@@ -41,7 +41,7 @@ function SuperAdminTenantUpdatePopup({
   setIsNotify,
   setNotifyMessage,
   roles,
-  role
+  role,
 }: Props) {
   const {
     register,
@@ -137,6 +137,7 @@ function SuperAdminTenantUpdatePopup({
                 <FormControl className="FormControl" variant="standard">
                   <label className="FormLabel">Email</label>
                   <Input
+                    disabled
                     className="FormInput"
                     {...register('email', {
                       required: true,
@@ -196,7 +197,7 @@ function SuperAdminTenantUpdatePopup({
                     })}
                     type="number"
                     id="maxBranchLimits"
-                    placeholder='Enter max branch limits'
+                    placeholder="Enter max branch limits"
                     disableUnderline
                   />
                   {errors.maxBranchLimit?.type === 'required' && (
@@ -213,8 +214,8 @@ function SuperAdminTenantUpdatePopup({
                     })}
                     type="number"
                     id="maxUserLimits"
-                    placeholder='Enter max user limits'
-                    disableUnderline={true}
+                    placeholder="Enter max user limits"
+                    disableUnderline
                   />
                   {errors.maxUserLimit?.type === 'required' && (
                     <span role="alert">User limits is required</span>
@@ -222,15 +223,17 @@ function SuperAdminTenantUpdatePopup({
                 </FormControl>
               </div>
               <div className="FormField mb-4">
-                <CustomDropDown
-                  validateRequired={true}
-                  id={"role"}
-                  control={control}
-                  error={errors}
-                  register={register}
-                  options={{ roles: roles, role: role }}
-                  inputTitle={"Role"}
-                />
+                <FormControl className="FormControl" variant="standard">
+                  <CustomDropDown
+                    validateRequired
+                    id="role"
+                    control={control}
+                    error={errors}
+                    register={register}
+                    options={{ roles, role }}
+                    inputTitle="Role"
+                  />
+                </FormControl>
               </div>
               <div className="FormField mb-4">
                 <FormControl className="FormControl" variant="standard">
@@ -271,6 +274,7 @@ function SuperAdminTenantUpdatePopup({
                   )}
                 </FormControl>
               </div>
+
               <div className="FormField mb-4">
                 <FormControl className="FormControl" variant="standard">
                   <label className="FormLabel">Live Domain</label>
@@ -341,6 +345,29 @@ function SuperAdminTenantUpdatePopup({
                   )}
                 </div>
               </div>
+              {watch('trialUpdateMode') === true && (
+                <div>
+                  <FormControl className="FormControl" variant="standard">
+                    <label className="FormLabel">
+                      Trail Mode Limit ( Days )
+                    </label>
+                    <Input
+                      className="FormInput"
+                      {...register('trialModeLimit', {
+                        required: watch('trialMode') === true && true,
+                        value: item.trialModeLimit ? item.trialModeLimit : 15,
+                      })}
+                      type="number"
+                      id="trialModeLimit"
+                      placeholder="Enter Trail Mode limit in days"
+                      disableUnderline
+                    />
+                    {errors.trialModeLimit?.type === 'required' && (
+                      <span role="alert">Trail Mode limit is required</span>
+                    )}
+                  </FormControl>
+                </div>
+              )}
               {dayjs(item.trailStartDate).isValid() && (
                 <div className="FormField">
                   <FormControl className="FormControl" variant="standard">

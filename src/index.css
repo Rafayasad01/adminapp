@@ -10,7 +10,7 @@ body {
 
 /* Global configuration of scroll-bar */
 ::-webkit-scrollbar {
-  width: 5px;
+  width: 3px;
   border-radius: 10px !important;
 }
 
@@ -50,10 +50,7 @@ select {
   @apply w-full;
 }
 
-.css-1ualgfl-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root {
-  height: 2rem !important;
-}
-.select-grey-outline{
+.fixed-height {
   height: 2rem !important;
 }
 

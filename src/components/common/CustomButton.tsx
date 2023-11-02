@@ -11,7 +11,7 @@ type Props = {
   title?: string;
   icon?: any;
   buttonType: string;
-  type?: string;
+  type?: any;
   isMenuOpen?: boolean;
   sx?: any;
 };
@@ -31,8 +31,8 @@ function CustomButton({
   if (buttonType === 'button') {
     return (
       <Button
-        type="submit"
-        sx={sx}
+        type={type && type}
+        sx={sx && sx}
         variant="contained"
         className={className}
         onClick={onclick || (() => {})}
