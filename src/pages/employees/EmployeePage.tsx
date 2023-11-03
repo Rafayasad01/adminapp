@@ -312,6 +312,8 @@ function EmployeePage() {
             type: 'error',
           });
         });
+    } else {
+      setIsLoader(false);
     }
   }, [emptyVariable]);
 

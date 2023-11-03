@@ -53,6 +53,7 @@ import SuperAdminShopsListPage from '../pages/super-admin/tenat/user/SuperAdminS
 import SuperAdminShopDetailsPage from '../pages/super-admin/tenat/user/SuperAdminShopDetailsPage';
 import ShopAdminUserDetailPage from '../pages/super-admin/tenat/user/SuperAdminUserDetailPage';
 import EmployeePage from '../pages/employees/EmployeePage';
+import SuperAdminPermissionPageDetails from '../pages/super-admin/role-permissions/SuperAdminPermissionPageDetails';
 
 
 export const routeObjects: RouteObject[] = [
@@ -203,6 +204,10 @@ export const routeObjects: RouteObject[] = [
                   {
                     path: 'edit-permission/:id',
                     element: <SuperAdminEditPermissionsPage />,
+                  },
+                  {
+                    path: 'details/:id',
+                    element: <SuperAdminPermissionPageDetails />,
                   }
                 ]
               }

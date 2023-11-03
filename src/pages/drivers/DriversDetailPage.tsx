@@ -275,7 +275,7 @@ function DriversDetailPage() {
                     />
                   </FormControl> */}
               </div>
-              {list.length > 0 ? (
+              {list?.length > 0 ? (
                 <>
                   <div className="mt-3 grid grid-cols-none">
                     <table className="table-border table-auto">

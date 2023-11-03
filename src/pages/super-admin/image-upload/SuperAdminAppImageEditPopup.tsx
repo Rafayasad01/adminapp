@@ -121,7 +121,9 @@ function SuperAdminAppImageEditPopup({
                       })}
                     />
                     {errors.name?.type === 'required' && (
-                      <span role="alert">Image name is required</span>
+                      <span role="alert" className="text-sm">
+                        * Image name is required
+                      </span>
                     )}
                   </FormControl>
                 </div>
@@ -194,9 +196,9 @@ function SuperAdminAppImageEditPopup({
                       ''
                     )}
                   </div>
-                  {image === null && (
+                  {/* {image === null && (
                     <span role="alert">Image is required</span>
-                  )}
+                  )} */}
                 </div>
               </div>
               <div className="FormFooter">

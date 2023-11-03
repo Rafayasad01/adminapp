@@ -243,12 +243,28 @@ function SuperAdminTenantTabPage({ tenant }: Props) {
   };
 
   useEffect(() => {
-    Service.getShopWithBranch(tenant).then((item: any) => {
-      if (item.data.success) {
-        setDetail(item.data.data);
+    Service.getShopWithBranch(tenant)
+      .then((item: any) => {
+        if (item.data.success) {
+          setDetail(item.data.data);
+          setIsLoader(false);
+        } else {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'error',
+          });
+        }
+      })
+      .catch((err) => {
         setIsLoader(false);
-      }
-    });
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
+        });
+      });
   }, []);
 
   const handleFormClickOpenNewBranch = () => {
@@ -306,7 +322,14 @@ function SuperAdminTenantTabPage({ tenant }: Props) {
         setIsOpen={setIsNotify}
         displayMessage={notifyMessage}
       />
-      {detail && (
+      {detail === null && (
+        <div className="mx-5">
+          <span className="font-open-sans text-lg font-semibold text-[#1A1A1A]">
+            Shop Name
+          </span>
+        </div>
+      )}
+      {detail ? (
         <div className="grid w-full grid-cols-12 gap-3">
           <div className="col-span-4 flex w-full justify-between py-[2rem]">
             <div className="flex flex-col px-5">
@@ -391,7 +414,7 @@ function SuperAdminTenantTabPage({ tenant }: Props) {
                   </span>
                   <div className="mt-1 w-16 text-center font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
                     <span className="badge badge-primary">
-                      {detail.maxBranchLimit} - {detail.branchCounts}
+                      {detail.maxBranchLimit} - {detail.branches?.length}
                     </span>
                   </div>
                 </div>
@@ -471,14 +494,20 @@ function SuperAdminTenantTabPage({ tenant }: Props) {
             </div>
           </div>
         </div>
+      ) : (
+        <div>
+          <div className="col-span-12 grid items-center justify-center">
+            <p>No Shop Owner Found!</p>
+          </div>
+        </div>
       )}
       <div>
-        <hr className="mx-5" />
+        <hr className="mx-5 my-3" />
         <div className="m-5">
-          <p className="text-lg font-semibold">Shop Branches</p>
+          <p className="text-lg font-semibold text-[#1A1A1A]">Shop Branches</p>
           <div className="mt-4 grid grid-cols-12 gap-6">
-            {detail.branches.length > 0 ? (
-              detail.branches?.map((item: any, index: number) => {
+            {detail?.branches?.length > 0 ? (
+              detail?.branches?.map((item: any, index: number) => {
                 return (
                   <div
                     key={index}
