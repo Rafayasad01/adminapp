@@ -59,8 +59,23 @@ const updatePermissionStatus = (id: string, data: any) => {
   return network.post(`${PERMISSION_PREFIX}/update/status/${id}`, data);
 };
 
-const getChildPermissionListService = (id: string) => {
-  return network.get(`${PERMISSION_PREFIX}/child/list/${id}`);
+const getChildPermissionListService = (id: any, page: number, size: number) => {
+  return network.get(`${PERMISSION_PREFIX}/child/list/${page}/${size}/${id}`);
+};
+
+const getChildSearchPermissionListService = (
+  id: any,
+  page: number,
+  size: number,
+  search: string
+) => {
+  return network.get(
+    `${PERMISSION_PREFIX}/child/list/${search}/${page}/${size}/${id}`
+  );
+};
+
+const childUpdateStatus = (id: string, data: any) => {
+  return network.post(`${PERMISSION_PREFIX}/child/update/status/${id}`, data);
 };
 
 // http://127.0.0.1:3200/api/v1/admin/role/permissions
@@ -80,4 +95,6 @@ export default {
   roleSearchService,
   getChildPermissionListService,
   updatePermissionStatus,
+  childUpdateStatus,
+  getChildSearchPermissionListService,
 };

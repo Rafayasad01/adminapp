@@ -242,15 +242,15 @@ function Sidebar() {
             return null;
           }
         }
-        CAN("canView", el.permission)
-        return el;
+        return CAN("canView", el.permission)
       });
-      // tempList.unshift({
-      //   name: 'Dashboard',
-      //   path: 'home',
-      //   permission: "Dashboard List",
-      //   icon: <GridViewOutlinedIcon fontSize="inherit" />,
-      // })
+      // console.log("templost", tempList);
+      tempList.unshift({
+        name: 'Dashboard',
+        path: 'home',
+        permission: "Dashboard List",
+        icon: <GridViewOutlinedIcon fontSize="inherit" />,
+      })
       setList(tempList);
     }
   }, [authState, dataRole.roleState.role.permissions]);

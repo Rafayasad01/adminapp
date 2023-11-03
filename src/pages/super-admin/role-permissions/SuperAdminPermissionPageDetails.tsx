@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import IconButton from '@mui/material/IconButton';
 import Divider from '@mui/material/Divider';
 import FormControl from '@mui/material/FormControl';
@@ -21,15 +21,18 @@ import CustomText from '../../../components/common/CustomText';
 import { TEXT_STORE_KEY, setText } from '../../../utils/constants';
 import SuperAdminPermissionPagePopup from './SuperAdminPermissionPagePopup';
 
-function SuperAdminPermissionPage() {
+function SuperAdminPermissionPageDetails() {
   const authState: any = useAppSelector((state) => state.authState);
+  const { id } = useParams();
+  const { state } = useLocation();
+
   const [renderingOff, setRenderingOff] = useState<string>('');
   const navigate = useNavigate();
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(0);
   const [total, setTotal] = useState(0);
   const [list, setList] = useState<any>();
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [rowsPerPage, setRowsPerPage] = React.useState(30);
   const [isLoader, setIsLoader] = React.useState(false);
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
@@ -37,26 +40,12 @@ function SuperAdminPermissionPage() {
   const [heading, setHeading] = useState<string>('');
   const [childList, setChildList] = useState<any>();
 
-  // const handleClickSearch = (event: any) => {
-  //   const searchTxt = event.target.value as string;
-  //   const newPage = 0;
-  //   setSearch(searchTxt);
-  //   setPage(newPage);
-  //   Service.getPermissionSearchService(searchTxt, newPage, rowsPerPage).then(
-  //     (item) => {
-  //       console.log('item:::::', item);
-  //       setList(item.data.data.list);
-  //       // setTotal(item.data.data.total);
-  //     }
-  //   );
-  // };
-
   const handleClickSearch = (event: any) => {
     setSearch(event.target.value);
   };
 
   const executeQuery = () => {
-    Service.getPermissionSearchService(search, page, rowsPerPage)
+    Service.getChildSearchPermissionListService(id, page, rowsPerPage, search)
       .then((item) => {
         setList(item.data.data.list);
         setTotal(item.data.data.total);
@@ -89,12 +78,15 @@ function SuperAdminPermissionPage() {
         setTotal(item.data.data.total);
       });
     } else {
-      Service.getPermissionSearchService(search, newPage, rowsPerPage).then(
-        (item) => {
-          setList(item.data.data.list);
-          setTotal(item.data.data.total);
-        }
-      );
+      Service.getChildSearchPermissionListService(
+        id,
+        page,
+        rowsPerPage,
+        search
+      ).then((item) => {
+        setList(item.data.data.list);
+        setTotal(item.data.data.total);
+      });
     }
   };
 
@@ -111,54 +103,55 @@ function SuperAdminPermissionPage() {
         setTotal(item.data.data.total);
       });
     } else {
-      Service.getPermissionSearchService(search, newPage, rowsPerPage).then(
-        (item) => {
-          setList(item.data.data.list);
-          setTotal(item.data.data.total);
-        }
-      );
+      Service.getChildSearchPermissionListService(
+        id,
+        page,
+        rowsPerPage,
+        search
+      ).then((item) => {
+        setList(item.data.data.list);
+        setTotal(item.data.data.total);
+      });
     }
   };
 
   useEffect(() => {
-    if (TEXT_STORE_KEY) {
-      setIsNotify(true);
-      setNotifyMessage({
-        text: TEXT_STORE_KEY,
-        type: 'success',
-      });
-      setText('');
-    } else {
-      setIsLoader(true);
-    }
-    Service.getPermissionListService(page, rowsPerPage)
-      .then((item: any) => {
+    setIsLoader(true);
+    Service.getChildPermissionListService(id, page, rowsPerPage)
+      .then((item) => {
         if (item.data.success) {
           setIsLoader(false);
           setList(item.data.data.list);
           setTotal(item.data.data.total);
+        } else {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'error',
+          });
         }
       })
-      .catch((error) => {
+      .catch((err) => {
         setIsLoader(false);
-        console.error('error::::::::', error);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'info',
+        });
       });
   }, [renderingOff]);
 
-  const editHandler = (id: string) => {
-    navigate(`../edit-permission/${id}`);
-  };
-
-  const handleSwitchChange = (event: any, id: string) => {
+  const handleSwitchChange = (event: any, switchid: string) => {
     const data = {
       isActive: event.target.checked,
       updatedBy: authState.user.id,
     };
-    Service.updatePermissionStatus(id, data).then((updateItem) => {
+    Service.childUpdateStatus(switchid, data).then((updateItem) => {
       if (updateItem.data.success) {
         setList((newArr: any) => {
           return newArr.map((item: any) => {
-            if (item.id === id) {
+            if (item.id === switchid) {
               item.isActive = updateItem.data.data.isActive;
             }
             return { ...item };
@@ -177,13 +170,13 @@ function SuperAdminPermissionPage() {
         setIsOpen={setIsNotify}
         displayMessage={notifyMessage}
       />
-      <TopBar title="Permissions" />
+      <TopBar isNestedRoute title="Permissions Details" />
       <div className="container m-auto">
         <div className="mt-5 w-full rounded-lg bg-white shadow-lg">
           <div className="grid grid-cols-12 px-4 py-5">
             <div className="col-span-7">
               <span className="font-open-sans text-xl font-semibold text-[#252733]">
-                All Permissions
+                {state && state} Permission Details
               </span>
             </div>
             <div className="col-span-5">
@@ -216,35 +209,40 @@ function SuperAdminPermissionPage() {
                     disableUnderline
                   />
                 </FormControl>
-                <Button
-                  variant="contained"
-                  className="btn-black-fill btn-icon"
-                  onClick={() => navigate('../add-permission')}
-                >
-                  <AddOutlinedIcon /> Add Permission
-                </Button>
               </div>
             </div>
           </div>
-          <div className="mt-3 grid grid-cols-none">
+          <div className="Content-Table" style={{ overflowY: 'auto' }}>
             <table className="table-border table-auto">
               <thead>
                 <tr>
                   <th>Name</th>
                   <th>Description</th>
+                  <th>Action</th>
+                  <th>Sequence</th>
                   <th>Type</th>
+                  <th>Show On Menu</th>
                   <th>Status</th>
                   <th>&nbsp;</th>
                 </tr>
               </thead>
               <tbody>
                 {list &&
-                  list.map((item: any, index: number) => {
+                  list?.map((item: any, index: number) => {
                     return (
                       <tr key={index}>
                         <td>{item.name}</td>
                         <td>{item.desc}</td>
+                        <td>{item.action}</td>
+                        <td>{item.permissionSequence}</td>
                         <td>{item.permissionType}</td>
+                        <td>
+                          {item.showOnMenu ? (
+                            <span className="badge badge-success">ON</span>
+                          ) : (
+                            <span className="badge badge-danger">OFF</span>
+                          )}
+                        </td>
                         <td>
                           {item.isActive ? (
                             <span className="badge badge-success">ENABLED</span>
@@ -254,24 +252,6 @@ function SuperAdminPermissionPage() {
                         </td>
                         <td>
                           <div className="flex flex-row-reverse">
-                            <IconButton
-                              disabled={!item.isActive}
-                              className="icon-btn mr-3.5 p-0"
-                              onClick={() =>
-                                navigate(`../details/${item.id}`, {
-                                  state: item.name,
-                                })
-                              }
-                            >
-                              <WysiwygOutlinedIcon />
-                            </IconButton>
-                            <IconButton
-                              disabled={!item.isActive}
-                              className="icon-btn mr-3 p-0"
-                              onClick={() => editHandler(item.id)}
-                            >
-                              <EditIcon />
-                            </IconButton>
                             <Switch
                               checked={item.isActive}
                               onChange={(
@@ -300,16 +280,8 @@ function SuperAdminPermissionPage() {
           </div>
         </div>
       </div>
-      {openDialog && (
-        <SuperAdminPermissionPagePopup
-          openDialog={openDialog}
-          setOpenDialog={setOpenDialog}
-          heading={heading}
-          list={childList}
-        />
-      )}
     </>
   );
 }
 
-export default SuperAdminPermissionPage;
+export default SuperAdminPermissionPageDetails;

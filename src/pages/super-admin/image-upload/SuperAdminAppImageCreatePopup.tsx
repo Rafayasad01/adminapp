@@ -94,7 +94,9 @@ function SuperAdminAppImageCreatePopup({
                 disableUnderline
               />
               {errors.name?.type === 'required' && (
-                <span role="alert">Image name is required</span>
+                <span role="alert" className="mt-1 text-sm">
+                  * Image name is required
+                </span>
               )}
             </FormControl>
           </div>
@@ -166,7 +168,11 @@ function SuperAdminAppImageCreatePopup({
                 ''
               )}
             </div>
-            {image === null && <span role="alert">Image is required</span>}
+            {image === null && (
+              <span role="alert" className="mt-1 text-sm">
+                * Image is required
+              </span>
+            )}
           </div>
 
           <div className="FormFooter">
