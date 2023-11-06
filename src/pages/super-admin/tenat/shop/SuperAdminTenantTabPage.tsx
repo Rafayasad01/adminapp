@@ -182,6 +182,7 @@ function SuperAdminTenantTabPage({ tenant }: Props) {
   };
 
   const handleSwitchChange = (event: any, id: string) => {
+    setIsLoader(true);
     const data = {
       isActive: event.target.checked,
       // trialMode: event.target.checked,
@@ -198,6 +199,7 @@ function SuperAdminTenantTabPage({ tenant }: Props) {
           return { ...item };
         });
         setDetail({ ...detail, newTempArr });
+        setIsLoader(false);
         // setDetail((newArr: any) => {
         //   console.log("neearr", newArr, id)
         //   return newArr.branches.map((item: any) => {
@@ -210,8 +212,22 @@ function SuperAdminTenantTabPage({ tenant }: Props) {
         //     return { ...item };
         //   });
         // });
+      } else {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: updateItem.data.message,
+          type: 'error',
+        });
       }
-    });
+    }).catch((err) => {
+      setIsLoader(false);
+      setIsNotify(true);
+      setNotifyMessage({
+        text: err.message,
+        type: 'error',
+      });
+    })
   };
 
   console.log('DETAILS DATA', detail);
