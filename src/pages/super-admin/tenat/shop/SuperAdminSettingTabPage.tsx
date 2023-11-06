@@ -47,11 +47,13 @@ function SuperAdminSettingTabPage({
       <Dialog
         open={openFormDialog}
         onClose={handleFormClose}
-        scroll='paper'
-        PaperProps={{
-          // className: 'Dialog',
-          // style: { maxWidth: '100%', maxHeight: 'auto' },
-        }}
+        scroll="paper"
+        PaperProps={
+          {
+            // className: 'Dialog',
+            // style: { maxWidth: '100%', maxHeight: 'auto' },
+          }
+        }
       >
         <div className="Content p-5">
           <span className="font-open-sans text-xl font-semibold not-italic text-[#1A1A1A]">

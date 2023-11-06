@@ -331,7 +331,7 @@ function SuperAdminTenantPage() {
   const handleSwitchChange = (event: any, id: string) => {
     const data = {
       isActive: event.target.checked,
-      trialMode: event.target.checked,
+      // trialMode: event.target.checked,
       updatedBy: authState.user.id,
     };
     Service.updateShopStatus(id, data).then((updateItem) => {
@@ -340,7 +340,7 @@ function SuperAdminTenantPage() {
           return newArr.map((item: any) => {
             if (item.id === id) {
               item.isActive = updateItem.data.data.isActive;
-              item.trialMode = updateItem.data.data.trialMode;
+              // item.trialMode = updateItem.data.data.trialMode;
             }
             return { ...item };
           });
@@ -399,7 +399,8 @@ function SuperAdminTenantPage() {
                   className="btn-black-fill btn-icon flex items-center"
                   onClick={handleFormClickOpen}
                 >
-                  <AddOutlinedIcon /> <span className='text-xs'>Add New Shop</span>
+                  <AddOutlinedIcon />{' '}
+                  <span className="text-xs">Add New Shop</span>
                 </Button>
               </div>
             </div>
