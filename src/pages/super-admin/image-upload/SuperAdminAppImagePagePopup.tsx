@@ -22,11 +22,11 @@ function SuperAdminAppImagePagePopup({
       open={openDialog}
       onClose={handleClose}
       PaperProps={{
-        className: 'Dialog width90p 2xl:h-[30%] xl:h-[55%]',
+        className: '2xl:h-[30%] xl:h-[55%] p-4',
         style: {
           // maxWidth: '100%',
-          minHeight: '50px',
-          maxHeight: 'calc(100vh - 80px)',
+          // minHeight: '50px',
+          // maxHeight: 'calc(100vh - 80px)',
         },
       }}
     >
