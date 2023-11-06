@@ -106,14 +106,17 @@ function SuperAdminTenantUpdatePopup({
       <Dialog
         open={openFormDialog}
         onClose={handleFormClose}
+        className=''
+        disableScrollLock
+        scroll='paper'
         PaperProps={{
-          className: 'Dialog',
-          style: { maxWidth: '100%', maxHeight: 'auto' },
+          // className: 'Dialog',
+          // style: { maxWidth: '100%', maxHeight: 'auto' },
         }}
       >
-        <div className="Content">
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="FormHeader">
+        <div className="Content p-5">
+          <form className='' onSubmit={handleSubmit(onSubmit)}>
+            <div>
               <span className="Title">Edit Shop</span>
             </div>
             <div className="FormBody">

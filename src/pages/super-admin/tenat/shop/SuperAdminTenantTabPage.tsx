@@ -330,7 +330,7 @@ function SuperAdminTenantTabPage({ tenant }: Props) {
         </div>
       )}
       {detail ? (
-        <div className="grid w-full grid-cols-12 gap-3">
+        <div className="grid w-full 2xl:grid-cols-12 md:grid-cols-8 gap-3">
           <div className="col-span-4 flex w-full justify-between py-[2rem]">
             <div className="flex flex-col px-5">
               <div className="flex w-full flex-col">
@@ -482,7 +482,7 @@ function SuperAdminTenantTabPage({ tenant }: Props) {
               </div>
             </div>
           </div>
-          <div className="col-span-8 flex justify-end px-5">
+          <div className="2xl:col-span-8 md:col-span-4 flex justify-end px-5">
             <div className="mt-5">
               <Button
                 variant="contained"
@@ -511,7 +511,7 @@ function SuperAdminTenantTabPage({ tenant }: Props) {
                 return (
                   <div
                     key={index}
-                    className="col-span-3 rounded-lg bg-blue-50 shadow-xl"
+                    className="2xl:col-span-3 md:col-span-4 rounded-lg bg-blue-50 shadow-xl"
                   >
                     <div className="flex w-full justify-between py-[2rem]">
                       <div className="flex flex-col px-5">

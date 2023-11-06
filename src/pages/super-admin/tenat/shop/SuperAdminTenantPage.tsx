@@ -396,10 +396,10 @@ function SuperAdminTenantPage() {
                 </FormControl>
                 <Button
                   variant="contained"
-                  className="btn-black-fill btn-icon"
+                  className="btn-black-fill btn-icon flex items-center"
                   onClick={handleFormClickOpen}
                 >
-                  <AddOutlinedIcon /> Add New Shop
+                  <AddOutlinedIcon /> <span className='text-xs'>Add New Shop</span>
                 </Button>
               </div>
             </div>

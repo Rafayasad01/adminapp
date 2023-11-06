@@ -218,10 +218,10 @@ function SuperAdminPermissionPage() {
                 </FormControl>
                 <Button
                   variant="contained"
-                  className="btn-black-fill btn-icon"
+                  className="btn-black-fill btn-icon flex items-center"
                   onClick={() => navigate('../add-permission')}
                 >
-                  <AddOutlinedIcon /> Add Permission
+                  <AddOutlinedIcon /> <span className='text-xs w-[100px]'>Add Permission</span>
                 </Button>
               </div>
             </div>

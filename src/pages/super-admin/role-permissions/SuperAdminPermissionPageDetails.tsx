@@ -212,7 +212,7 @@ function SuperAdminPermissionPageDetails() {
               </div>
             </div>
           </div>
-          <div className="Content-Table" style={{ overflowY: 'auto' }}>
+          <div className="" style={{ overflowY: 'auto' }}>
             <table className="table-border table-auto">
               <thead>
                 <tr>

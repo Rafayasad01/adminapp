@@ -57,21 +57,23 @@ function SuperAdminCategoryTabPage({
     <Dialog
       open={openFormDialog}
       onClose={handleFormClose}
+      scroll='paper'
       PaperProps={{
-        className: 'Dialog',
-        style: { maxWidth: '100%', maxHeight: '80%' },
+        // className: 'Dialog',
+        // style: { maxWidth: '100%', maxHeight: '80%' },
       }}
     >
-      <div className="Content">
+      <div className="Content p-2">
         <div className="category-tab-content grid w-full grid-cols-12 gap-3">
           <div className="col-span-6">
             <div className="flex flex-col py-4 px-5 font-semibold">
               Category Names
             </div>
-            <div className="flex max-h-[600px] flex-col overflow-y-scroll px-5 pt-2 pb-[2rem]">
+            <div className="flex max-h-[600px] flex-col px-5 py-3">
               {categories &&
                 categories.map((item: any, index: number) => (
                   <Accordion
+                    className=''
                     key={index}
                     expanded={expanded === `category${index}`}
                     onChange={handleChange(
@@ -154,7 +156,7 @@ function SuperAdminCategoryTabPage({
             <div className="flex flex-col py-4 px-5 font-semibold">
               Sub-Category
             </div>
-            <div className="sub-category flex max-h-[600px] flex-col overflow-y-scroll px-5 pt-2 pb-[2rem]">
+            <div className="sub-category flex max-h-[600px] flex-col px-5 pt-2 pb-[2rem]">
               {subCategories &&
                 subCategories.map((item: any, index: number) => (
                   <Accordion
