@@ -512,6 +512,10 @@ table>tbody>tr:last-child {
   @apply h-[1px] bg-[#1D1D1D] !important;
 }
 
+.css-1t1j96h-MuiPaper-root-MuiDialog-paper{
+  width: 648px !important;
+}
+
 .custom-schedule-tab {
   border-bottom: 0.5px solid #e4e4e4;
   display: flex;
