@@ -16,12 +16,14 @@ import SuperAdminTenantCreatePopup from './SuperAdminTenantCreatePopup';
 import SuperAdminShopBranchDetailPopup from './SuperAdminShopBranchDetailPopup';
 import SuperAdminSettingTabPage from './SuperAdminSettingTabPage';
 import SuperAdminCategoryTabPage from './SuperAdminCategoryTabPage';
+import { useAppSelector } from '../../../../redux/redux-hooks';
 
 type Props = {
   tenant: string;
 };
 
 function SuperAdminTenantTabPage({ tenant }: Props) {
+  const authState: any = useAppSelector((state) => state.authState);
   const [emptyVariable, setEmptyVariable] = useState('');
   const [isLoader, setIsLoader] = useState(true);
   const [detail, setDetail] = useState<any>(null);
@@ -179,7 +181,40 @@ function SuperAdminTenantTabPage({ tenant }: Props) {
     }
   };
 
-  console.log('DETAILS DATA', detail?.branches?.length);
+  const handleSwitchChange = (event: any, id: string) => {
+    const data = {
+      isActive: event.target.checked,
+      // trialMode: event.target.checked,
+      updatedBy: authState.user.id,
+    };
+    Service.updateShopStatus(id, data).then((updateItem) => {
+      if (updateItem.data.success) {
+        const newTempArr = detail.branches.map((item: any) => {
+          console.log('itemss', item);
+          if (item.id === id) {
+            item.isActive = updateItem.data.data.isActive;
+            // item.trialMode = updateItem.data.data.trialMode;
+          }
+          return { ...item };
+        });
+        setDetail({ ...detail, newTempArr });
+        // setDetail((newArr: any) => {
+        //   console.log("neearr", newArr, id)
+        //   return newArr.branches.map((item: any) => {
+        //     console.log("itemss", item);
+
+        //     if (item.id === id) {
+        //       item.isActive = updateItem.data.data.isActive;
+        //       // item.trialMode = updateItem.data.data.trialMode;
+        //     }
+        //     return { ...item };
+        //   });
+        // });
+      }
+    });
+  };
+
+  console.log('DETAILS DATA', detail);
 
   const updateFormBranchHandler = (id: string, data: any) => {
     setIsLoader(true);
@@ -330,7 +365,7 @@ function SuperAdminTenantTabPage({ tenant }: Props) {
         </div>
       )}
       {detail ? (
-        <div className="grid w-full 2xl:grid-cols-12 md:grid-cols-8 gap-3">
+        <div className="grid w-full gap-3 xl:grid-cols-8 2xl:grid-cols-12">
           <div className="col-span-4 flex w-full justify-between py-[2rem]">
             <div className="flex flex-col px-5">
               <div className="flex w-full flex-col">
@@ -482,7 +517,7 @@ function SuperAdminTenantTabPage({ tenant }: Props) {
               </div>
             </div>
           </div>
-          <div className="2xl:col-span-8 md:col-span-4 flex justify-end px-5">
+          <div className="flex justify-end px-5 xl:col-span-4 2xl:col-span-8">
             <div className="mt-5">
               <Button
                 variant="contained"
@@ -511,7 +546,7 @@ function SuperAdminTenantTabPage({ tenant }: Props) {
                 return (
                   <div
                     key={index}
-                    className="2xl:col-span-3 md:col-span-4 rounded-lg bg-blue-50 shadow-xl"
+                    className="rounded-lg bg-blue-50 shadow-xl xl:col-span-4 2xl:col-span-3"
                   >
                     <div className="flex w-full justify-between py-[2rem]">
                       <div className="flex flex-col px-5">
@@ -582,6 +617,15 @@ function SuperAdminTenantTabPage({ tenant }: Props) {
                           ) : (
                             <span className="badge badge-danger">Disabled</span>
                           )}
+                          <div>
+                            <Switch
+                              checked={item.isActive}
+                              onChange={(
+                                event: React.ChangeEvent<HTMLInputElement>
+                              ) => handleSwitchChange(event, item.id)}
+                              inputProps={{ 'aria-label': 'controlled' }}
+                            />
+                          </div>
                         </div>
                       </div>
                     </div>

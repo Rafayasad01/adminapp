@@ -221,7 +221,8 @@ function SuperAdminPermissionPage() {
                   className="btn-black-fill btn-icon flex items-center"
                   onClick={() => navigate('../add-permission')}
                 >
-                  <AddOutlinedIcon /> <span className='text-xs w-[100px]'>Add Permission</span>
+                  <AddOutlinedIcon />{' '}
+                  <span className="w-[100px] text-xs">Add Permission</span>
                 </Button>
               </div>
             </div>

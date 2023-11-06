@@ -311,10 +311,10 @@ function SuperAdminEditPermissionsPage() {
                 />
               </FormControl>
             </div>
-            <div className="grid 2xl:grid-cols-3 md:grid-cols-4 gap-4">
+            <div className="grid gap-4 xl:grid-cols-4 2xl:grid-cols-3">
               {permissionList?.map((mainEl: any, mainIndex: number) => {
                 return (
-                  <div key={mainIndex} className="2xl:col-span-1 md:col-span-2">
+                  <div key={mainIndex} className="xl:col-span-2 2xl:col-span-1">
                     <div className="">
                       <div className="grid-col-12 relative grid rounded-lg border-2 p-5">
                         {/* {mainIndex > 0 && */}
@@ -457,7 +457,7 @@ function SuperAdminEditPermissionsPage() {
               })}
               <div
                 onClick={handleAddMore}
-                className="2xl:col-span-1 md:col-span-2 flex h-[326px] cursor-pointer items-center justify-center rounded-lg bg-[#F0F0F0]"
+                className="flex h-[326px] cursor-pointer items-center justify-center rounded-lg bg-[#F0F0F0] xl:col-span-2 2xl:col-span-1"
               >
                 <img alt="add" src={assets.images.addImg} />
               </div>

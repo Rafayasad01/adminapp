@@ -512,10 +512,6 @@ table>tbody>tr:last-child {
   @apply h-[1px] bg-[#1D1D1D] !important;
 }
 
-.css-1t1j96h-MuiPaper-root-MuiDialog-paper{
-  width: 648px !important;
-}
-
 .custom-schedule-tab {
   border-bottom: 0.5px solid #e4e4e4;
   display: flex;
@@ -961,7 +957,16 @@ table.schedule-table>tbody>tr.days-off>td {
   max-height: calc(100vh - 80px);
 }
 
+.css-1t1j96h-MuiPaper-root-MuiDialog-paper {
+  width: 648px !important;
+  max-width: none;
+}
 
+.custom-width-80 {
+  width: 80% !important;
+}
+
+@media screen and (min-width: 1024px) {}
 
 
 @media only screen and (max-width: 1023.98px) and (min-width: 768px) {}
@@ -977,6 +982,8 @@ table.schedule-table>tbody>tr.days-off>td {
   body.sidebar-opened .left-sidebar {
     transform: translateX(0);
   }
+
+
 }
 
 @media only screen and (max-width: 767.98px) {}

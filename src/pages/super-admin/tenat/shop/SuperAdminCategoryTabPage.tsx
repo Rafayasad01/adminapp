@@ -57,10 +57,10 @@ function SuperAdminCategoryTabPage({
     <Dialog
       open={openFormDialog}
       onClose={handleFormClose}
-      scroll='paper'
+      scroll="paper"
       PaperProps={{
-        // className: 'Dialog',
-        // style: { maxWidth: '100%', maxHeight: '80%' },
+        className: 'custom-width-80',
+        style: { maxWidth: '100%', maxHeight: '80%' },
       }}
     >
       <div className="Content p-2">
@@ -73,7 +73,7 @@ function SuperAdminCategoryTabPage({
               {categories &&
                 categories.map((item: any, index: number) => (
                   <Accordion
-                    className=''
+                    className=""
                     key={index}
                     expanded={expanded === `category${index}`}
                     onChange={handleChange(
