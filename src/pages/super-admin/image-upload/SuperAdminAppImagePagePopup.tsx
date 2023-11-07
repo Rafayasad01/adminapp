@@ -22,7 +22,7 @@ function SuperAdminAppImagePagePopup({
       open={openDialog}
       onClose={handleClose}
       PaperProps={{
-        className: 'p-4'
+        className: 'p-4',
       }}
     >
       <div className="Content">

@@ -6,10 +6,12 @@ import Input from '@mui/material/Input';
 import { SelectChangeEvent } from '@mui/material/Select';
 import '../../assets/css/PopupStyle.css';
 import { useForm } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
 import Service from '../../services/adminapp/admin';
 import { SocialMedia } from '../../interfaces/app.interface';
 import { useAppSelector } from '../../redux/redux-hooks';
 import Notify from '../../components/common/Notify';
+import { setItemState } from '../../redux/features/appStateSlice';
 
 type Props = {
   openDialog: boolean;
@@ -31,6 +33,7 @@ function SocialLinksPopup({
     handleSubmit,
     formState: { errors },
   } = useForm<SocialMedia>();
+  const dispatch = useDispatch();
   const authState: any = useAppSelector((state) => state.authState);
 
   // const [isLoader, setIsLoader] = useState(true);
@@ -41,19 +44,18 @@ function SocialLinksPopup({
 
   const onSubmit = (data: SocialMedia) => {
     setIsLoader(true);
+    console.log('data', data);
     setOpenDialog(false);
-    const formData = new FormData();
-    formData.append('facebook', data.facebook ? data.facebook : '');
-    formData.append('instagram', data.instagram ? data.instagram : '');
-    formData.append('linkedin', data.linkedin ? data.linkedin : '');
-    formData.append('twitter', data.twitter ? data.twitter : '');
-    formData.append('youtube', data.youtube ? data.youtube : '');
-    formData.append('whatsapp', data.whatsapp ? data.whatsapp : '');
-    Service.updateService(
-      authState.user.tenant,
-      authState.user.tenantConfig,
-      formData
-    )
+    const formData = {
+      facebook: data.facebook ? data.facebook : null,
+      instagram: data.instagram ? data.instagram : null,
+      linkedin: data.linkedin ? data.linkedin : null,
+      twitter: data.twitter ? data.twitter : null,
+      youtube: data.youtube ? data.youtube : null,
+      whatsapp: data.whatsapp ? data.whatsapp : null,
+      updatedBy: authState.user.id,
+    };
+    Service.updateMediaService(authState.user.tenant, formData)
       .then((item: any) => {
         if (item.data.success) {
           setIsLoader(false);
@@ -62,6 +64,17 @@ function SocialLinksPopup({
             text: item.data.message,
             type: 'success',
           });
+          console.log('item', item.data.data);
+          const tenantConfig: any = {
+            facebook: item.data.data.facebook,
+            instagram: item.data.data.instagram,
+            linkedin: item.data.data.linkedin,
+            twitter: item.data.data.twitter,
+            whatsapp: item.data.data.whatsapp,
+            youtube: item.data.data.youtube,
+          };
+
+          dispatch(setItemState({ tenantConfig }));
           setDetail(item.data.data);
         } else {
           setIsLoader(false);
@@ -130,7 +143,6 @@ function SocialLinksPopup({
                 <Input
                   className="FormInput"
                   id="instagram"
-                  value={detail.instagram ?? ''}
                   placeholder="Url"
                   disableUnderline
                   {...register('instagram', {

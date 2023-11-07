@@ -12,7 +12,7 @@ const persistConfig = {
 
 export const store = configureStore({
   reducer: {
-    appState: appStateReducer,
+    appState: persistReducer<any, any>(persistConfig, appStateReducer),
     authState: authStateReducer,
     roleState: persistReducer<any, any>(
       persistConfig,

@@ -3,19 +3,16 @@ import { SETTING_PREFIX, BACKOFFICE_PREFIX } from '../../utils/constants';
 
 import { NewPassword, UserLogin } from '../../interfaces/auth.interface';
 
-const getService = (tenantConfig: string) => {
-  return network.get(`${SETTING_PREFIX}/get/${tenantConfig}`);
+const getService = (tenant: string) => {
+  return network.get(`${SETTING_PREFIX}/get/${tenant}`);
 };
 
-const updateService = <T = any>(
-  tenant: string,
-  tenantConfig: string,
-  data: T
-) => {
-  return network.postMultipart(
-    `${SETTING_PREFIX}/update/${tenant}/${tenantConfig}`,
-    data
-  );
+const updateService = <T = any>(tenant: string, data: T) => {
+  return network.postMultipart(`${SETTING_PREFIX}/update/${tenant}`, data);
+};
+
+const updateMediaService = <T = any>(tenantId: string, data: T) => {
+  return network.post(`${SETTING_PREFIX}/update/media/${tenantId}`, data);
 };
 
 const loginService = (userData: UserLogin) => {
@@ -36,4 +33,5 @@ export default {
   getAddressService,
   loginService,
   createNewPassword,
+  updateMediaService,
 };

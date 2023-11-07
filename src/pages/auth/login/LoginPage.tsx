@@ -17,6 +17,7 @@ import { login } from '../../../redux/features/authStateSlice';
 
 import assets from '../../../assets';
 import { setRolePermissions } from '../../../redux/features/permissionsStateSlice';
+import { setItemState, setLogo } from '../../../redux/features/appStateSlice';
 
 function LoginPage() {
   const dispatch = useAppDispatch();
@@ -48,6 +49,8 @@ function LoginPage() {
       dispatch(setRolePermissions(newUserData.role));
       delete newUserData.role;
       dispatch(login(newUserData));
+      dispatch(setItemState(newUserData));
+      dispatch(setLogo(newUserData.tenantConfig.logo));
       if (newUserData.isSuperAdmin) {
         navigate('../../../main');
       } else {
