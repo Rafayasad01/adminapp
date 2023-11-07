@@ -227,8 +227,8 @@ function SettingsApp() {
           </div>
           <div className="Content w-full py-5 px-4">
             <form onSubmit={handleSubmit(onSubmit)}>
-              <div className="flex items-center">
-                <div className="FormField mb-4 w-[150px]">
+              <div className="items-center grid grid-cols-12">
+                <div className="col-span-5 mb-4">
                   <DragDropFile setFile={setFile} setImg={setSelectedImg} />
                 </div>
                 {selectedImg ? (
@@ -240,7 +240,7 @@ function SettingsApp() {
                     />
                   </div>
                 ) : detail && detail.logo ? (
-                  <div className="flex h-[50px] w-[30%] items-center justify-end">
+                  <div className="flex col-span-6 items-center 2xl:justify-start xl:justify-center">
                     <img
                       className="max-h-[100px] max-w-[150px] rounded-md"
                       src={detail.logo}

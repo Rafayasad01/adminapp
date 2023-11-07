@@ -40,6 +40,14 @@ function TopBar({ title, isNestedRoute = false }: Props) {
           {/* <IconButton className="icon-btn mr-3.5 p-0">
             <NotificationsNoneIcon />
           </IconButton> */}
+          {userData?.isSuperAdmin &&
+            <div className='flex items-center'>
+              <span className='text-sm font-semibold px-2'>
+                Super Admin
+              </span>
+              <hr className="divider vertical ml-2" />
+            </div>
+          }
           {userData?.tenantName &&
             <div className='flex items-center'>
               <span className='text-sm font-semibold px-2'>
