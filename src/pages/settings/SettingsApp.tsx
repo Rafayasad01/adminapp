@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
@@ -35,6 +35,7 @@ import MapAddress from '../../components/common/MapAddress';
 import Loader from '../../components/common/Loader';
 import Notify from '../../components/common/Notify';
 import { listingRolePermission } from '../../utils/helper';
+import { setItemState, setLogo } from '../../redux/features/appStateSlice';
 
 type AssetsImages = keyof typeof assets.images;
 
@@ -49,7 +50,9 @@ function Item(props: { value: any; name: AssetsImages }) {
 
 function HelpingIcon(elements: any) {
   const { links } = elements;
-  const filtered = links?.filter((el: string) => el !== '');
+  console.log('links', links);
+
+  const filtered = links?.filter((el: string) => el !== null);
   if (filtered?.length < 6) {
     return <PlusIcon />;
   }
@@ -57,6 +60,7 @@ function HelpingIcon(elements: any) {
 }
 
 function SettingsApp() {
+  const dispatch = useDispatch();
   const authState: any = useAppSelector((state) => state.authState);
   const dataRole = useSelector(
     (state: any) => state.roleState.role.permissions
@@ -64,6 +68,7 @@ function SettingsApp() {
   const navigate = useNavigate();
   const [openSocialMediaPopup, setOpenSocialMediaPopup] = useState(false);
   const [file, setFile] = useState<any>(null);
+  const [selectedImg, setSelectedImg] = useState<any>(null);
   const [color1, setColor1] = useState<any>('#1A1A1A');
   const [color2, setColor2] = useState<any>('#1A1A1A');
   const [color3, setColor3] = useState<any>('#1A1A1A');
@@ -88,23 +93,23 @@ function SettingsApp() {
     setValue('name', item.name);
     setValue('email', item.email);
     setValue(
-      'gst_percentage',
+      'gstPercentage',
       item.gstPercentage ? item.gstPercentage : item.gst_percentage
     );
     setValue(
-      'min_order_amount',
+      'minOrderAmount',
       item.minOrderAmount ? item.minOrderAmount : item.min_order_amount
     );
     setValue(
-      'delivery_fee',
+      'deliveryFee',
       item.deliveryFee ? item.deliveryFee : item.delivery_fee
     );
     setValue(
-      'development_domain',
+      'developmentDomain',
       item.developmentDomain ? item.developmentDomain : item.development_domain
     );
     setValue(
-      'live_domain',
+      'liveDomain',
       item.liveDomain ? item.liveDomain : item.live_domain
     );
     setValue('facebook', item.facebook);
@@ -124,52 +129,51 @@ function SettingsApp() {
       const formData = new FormData();
       formData.append('name', data.name);
       formData.append('desc', data.name);
-      formData.append('gst_percentage', data.gst_percentage);
+      formData.append('gstPercentage', data.gstPercentage);
       formData.append('email', data.email);
-      formData.append('min_order_amount', data.min_order_amount);
-      formData.append('delivery_fee', data.delivery_fee);
+      formData.append('minOrderAmount', data.minOrderAmount);
+      formData.append('deliveryFee', data.deliveryFee);
       formData.append('facebook', detail ? detail.facebook : '');
       formData.append('instagram', detail ? detail.instagram : '');
       formData.append('linkedin', detail ? detail.linkedin : '');
       formData.append('twitter', detail ? detail.twitter : '');
       formData.append('youtube', detail ? detail.youtube : '');
       formData.append('whatsapp', detail ? detail.whatsapp : '');
-      formData.append('updated_by', authState.user.id);
+      formData.append('updatedBy', authState.user.id);
       formData.append('color1', color1);
       formData.append('color2', color2);
       formData.append('color3', color3);
       if (file !== null) formData.append('logo', file);
 
-      Service.updateService(
-        authState.user.tenant,
-        authState.user.tenantConfig,
-        formData
-      ).then((item: any) => {
-        const { success, message, data: itemData } = item.data;
-        if (success) {
-          setIsLoader(false);
-          setIsNotify(true);
-          setNotifyMessage({
-            text: message,
-            type: 'success',
-          });
-          setData(itemData);
-          setDetail(itemData);
-        } else {
-          setIsLoader(false);
-          setIsNotify(true);
-          setNotifyMessage({
-            text: message,
-            type: 'error',
-          });
+      Service.updateService(authState.user.tenant, formData).then(
+        (item: any) => {
+          const { success, message, data: itemData } = item.data;
+          if (success) {
+            dispatch(setLogo(itemData.logo));
+            setIsLoader(false);
+            setIsNotify(true);
+            setNotifyMessage({
+              text: message,
+              type: 'success',
+            });
+            setData(itemData);
+            setDetail(itemData);
+          } else {
+            setIsLoader(false);
+            setIsNotify(true);
+            setNotifyMessage({
+              text: message,
+              type: 'error',
+            });
+          }
         }
-      });
+      );
     }
   };
 
   useEffect(() => {
     if (listingRolePermission(dataRole, 'Setting View')) {
-      Service.getService(authState.user.tenantConfig).then((item: any) => {
+      Service.getService(authState.user.tenant).then((item: any) => {
         // console.log('item Select:::::', item)
         if (item.data.success) {
           setIsLoader(false);
@@ -193,6 +197,8 @@ function SettingsApp() {
       });
     }
   }, [authState]);
+
+  console.log('detail', file);
 
   return isLoader ? (
     <Loader />
@@ -223,12 +229,20 @@ function SettingsApp() {
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="flex items-center">
                 <div className="FormField mb-4 w-[150px]">
-                  <DragDropFile setFile={setFile} />
+                  <DragDropFile setFile={setFile} setImg={setSelectedImg} />
                 </div>
-                {detail && detail.logo ? (
-                  <div className="mb-4 mt-[0.75rem] ml-4 h-[142px] w-[150px] rounded-md">
+                {selectedImg ? (
+                  <div className="flex h-[50px] w-[30%] items-center justify-end">
                     <img
-                      className="h-full w-full rounded-md"
+                      className="max-h-[100px] max-w-[150px] rounded-md"
+                      src={selectedImg}
+                      alt="Shop Logo"
+                    />
+                  </div>
+                ) : detail && detail.logo ? (
+                  <div className="flex h-[50px] w-[30%] items-center justify-end">
+                    <img
+                      className="max-h-[100px] max-w-[150px] rounded-md"
                       src={detail.logo}
                       alt="Shop Logo"
                     />
@@ -267,8 +281,8 @@ function SettingsApp() {
                     id="gst_percentage"
                     placeholder="1%"
                     disableUnderline
-                    {...register('gst_percentage', {
-                      value: detail ? detail.gst_percentage : '',
+                    {...register('gstPercentage', {
+                      value: detail ? detail.gstPercentage : '',
                     })}
                   />
                 </FormControl>
@@ -281,8 +295,8 @@ function SettingsApp() {
                     id="min_order_amount"
                     placeholder="$1.00"
                     disableUnderline
-                    {...register('min_order_amount', {
-                      value: detail ? detail.min_order_amount : '',
+                    {...register('minOrderAmount', {
+                      value: detail ? detail.minOrderAmount : '',
                     })}
                   />
                 </FormControl>
@@ -293,8 +307,8 @@ function SettingsApp() {
                     id="name"
                     placeholder="$1.00"
                     disableUnderline
-                    {...register('delivery_fee', {
-                      value: detail ? detail.delivery_fee : '',
+                    {...register('deliveryFee', {
+                      value: detail ? detail.deliveryFee : '',
                     })}
                   />
                 </FormControl>
@@ -304,11 +318,11 @@ function SettingsApp() {
                   <label className="FormLabel">Development Domain</label>
                   <Input
                     className="FormInput"
-                    id="development_domain"
+                    id="developmentDomain"
                     value={
-                      watch('development_domain') &&
+                      watch('developmentDomain') &&
                       `${DOMAIN_PROTOCOL}${watch(
-                        'development_domain'
+                        'developmentDomain'
                       )}${DOMAIN_PREFIX}`
                     }
                     disableUnderline
@@ -321,12 +335,10 @@ function SettingsApp() {
                   <label className="FormLabel">Live Domain</label>
                   <Input
                     className="FormInput"
-                    id="live_domain"
+                    id="liveDomain"
                     value={
-                      watch('live_domain') &&
-                      `${DOMAIN_PROTOCOL}${watch(
-                        'live_domain'
-                      )}${DOMAIN_PREFIX}`
+                      watch('liveDomain') &&
+                      `${DOMAIN_PROTOCOL}${watch('liveDomain')}${DOMAIN_PREFIX}`
                     }
                     disableUnderline
                     disabled

@@ -2,10 +2,14 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 type AppState = {
   appState: string;
+  items: any;
+  logo: any;
 };
 
 const initialState: AppState = {
   appState: '',
+  items: null,
+  logo: null
 };
 
 export const appStateSlice = createSlice({
@@ -15,9 +19,15 @@ export const appStateSlice = createSlice({
     setAppState: (state, action: PayloadAction<string>) => {
       state.appState = action.payload;
     },
+    setItemState: (state, action: PayloadAction<any>) => {
+      state.items = action.payload;
+    },
+    setLogo: (state, action: PayloadAction<any>) => {
+      state.logo = action.payload;
+    }
   },
 });
 
-export const { setAppState } = appStateSlice.actions;
+export const { setAppState, setItemState, setLogo } = appStateSlice.actions;
 
 export default appStateSlice.reducer;

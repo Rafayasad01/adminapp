@@ -188,46 +188,48 @@ function SuperAdminTenantTabPage({ tenant }: Props) {
       // trialMode: event.target.checked,
       updatedBy: authState.user.id,
     };
-    Service.updateShopStatus(id, data).then((updateItem) => {
-      if (updateItem.data.success) {
-        const newTempArr = detail.branches.map((item: any) => {
-          console.log('itemss', item);
-          if (item.id === id) {
-            item.isActive = updateItem.data.data.isActive;
-            // item.trialMode = updateItem.data.data.trialMode;
-          }
-          return { ...item };
-        });
-        setDetail({ ...detail, newTempArr });
-        setIsLoader(false);
-        // setDetail((newArr: any) => {
-        //   console.log("neearr", newArr, id)
-        //   return newArr.branches.map((item: any) => {
-        //     console.log("itemss", item);
+    Service.updateShopStatus(id, data)
+      .then((updateItem) => {
+        if (updateItem.data.success) {
+          const newTempArr = detail.branches.map((item: any) => {
+            console.log('itemss', item);
+            if (item.id === id) {
+              item.isActive = updateItem.data.data.isActive;
+              // item.trialMode = updateItem.data.data.trialMode;
+            }
+            return { ...item };
+          });
+          setDetail({ ...detail, newTempArr });
+          setIsLoader(false);
+          // setDetail((newArr: any) => {
+          //   console.log("neearr", newArr, id)
+          //   return newArr.branches.map((item: any) => {
+          //     console.log("itemss", item);
 
-        //     if (item.id === id) {
-        //       item.isActive = updateItem.data.data.isActive;
-        //       // item.trialMode = updateItem.data.data.trialMode;
-        //     }
-        //     return { ...item };
-        //   });
-        // });
-      } else {
+          //     if (item.id === id) {
+          //       item.isActive = updateItem.data.data.isActive;
+          //       // item.trialMode = updateItem.data.data.trialMode;
+          //     }
+          //     return { ...item };
+          //   });
+          // });
+        } else {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: updateItem.data.message,
+            type: 'error',
+          });
+        }
+      })
+      .catch((err) => {
         setIsLoader(false);
         setIsNotify(true);
         setNotifyMessage({
-          text: updateItem.data.message,
+          text: err.message,
           type: 'error',
         });
-      }
-    }).catch((err) => {
-      setIsLoader(false);
-      setIsNotify(true);
-      setNotifyMessage({
-        text: err.message,
-        type: 'error',
       });
-    })
   };
 
   console.log('DETAILS DATA', detail);

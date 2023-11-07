@@ -9,6 +9,7 @@ import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import { useNavigate } from 'react-router-dom';
 
 import { useSelector } from 'react-redux';
+import ShopIcon from '../icons/ShopIcon';
 import BackArrowIcon from '../icons/BackArrowIcon';
 
 type Props = {
@@ -36,13 +37,18 @@ function TopBar({ title, isNestedRoute = false }: Props) {
         <div className="title ml-1">{title}</div>
         <div className="flex-grow">&nbsp;</div>
         <div className="flex items-center text-cyan-900">
-          <IconButton className="icon-btn mr-3.5 p-0">
-            <SearchIcon />
-          </IconButton>
-          <IconButton className="icon-btn mr-3.5 p-0">
+          {/* <IconButton className="icon-btn mr-3.5 p-0">
             <NotificationsNoneIcon />
-          </IconButton>
-          <hr className="divider vertical my-2" />
+          </IconButton> */}
+          {userData?.tenantName &&
+            <div className='flex items-center'>
+              <span className='text-sm font-semibold px-2'>
+                {userData?.tenantName}
+              </span>
+              <ShopIcon color='black' />
+              <hr className="divider vertical ml-4" />
+            </div>
+          }
           <div className="header-user-box ml-3.5">
             <span>{`${userData.firstName} ${userData.lastName}`}</span>
             {userData?.avatar ?

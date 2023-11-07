@@ -1,10 +1,10 @@
 export interface SocialMedia {
-  facebook: string;
-  instagram: string;
-  linkedin: string;
-  twitter: string;
-  youtube: string;
-  whatsapp: string;
+  facebook: any;
+  instagram: any;
+  linkedin: any;
+  twitter: any;
+  youtube: any;
+  whatsapp: any;
 }
 
 export interface Setting {
@@ -14,18 +14,18 @@ export interface Setting {
   color2: string;
   color3: string;
   logo: string;
-  gst_percentage: any;
+  gstPercentage: any;
   email: string;
-  min_order_amount: any;
-  delivery_fee: any;
+  minOrderAmount: any;
+  deliveryFee: any;
   facebook: string;
   instagram: string;
   linkedin: string;
   twitter: string;
   youtube: string;
   whatsapp: string;
-  development_domain: string;
-  live_domain: string;
+  developmentDomain: string;
+  liveDomain: string;
 }
 
 export interface AppImage {

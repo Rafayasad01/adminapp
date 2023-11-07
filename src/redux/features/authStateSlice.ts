@@ -6,7 +6,7 @@ type User = {
   lastName: string;
   username: string;
   tenant: string;
-  tenantConfig: string;
+  tenantConfig: any;
   isActive: boolean;
   isSuperAdmin: boolean;
   token: string;
