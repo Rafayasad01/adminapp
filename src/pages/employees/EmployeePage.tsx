@@ -111,9 +111,20 @@ function EmployeePage() {
     },
   ];
 
+  console.log("AUTH", authState.user.employeeLimit, total);
+
+
   const handleFormClickOpen = () => {
-    if (listingRolePermission(dataRole, 'Customer Create')) {
-      setOpenFormDialog(true);
+    if (listingRolePermission(dataRole, 'Employee Create')) {
+      if (total < authState.user.employeeLimit) {
+        setOpenFormDialog(true);
+      } else {
+        setIsNotify(true);
+        setNotifyMessage({
+          text: "Employees limit has been excceed",
+          type: 'warning',
+        });
+      }
     } else {
       setIsNotify(true);
       setNotifyMessage({
@@ -560,8 +571,8 @@ function EmployeePage() {
                               <span className="text-xs font-normal text-[#6A6A6A]">
                                 {dayjs(item.createdDate).isValid()
                                   ? dayjs(item.createdDate)?.format(
-                                      'MMMM DD, YYYY'
-                                    )
+                                    'MMMM DD, YYYY'
+                                  )
                                   : '--'}
                               </span>
                             </div>
