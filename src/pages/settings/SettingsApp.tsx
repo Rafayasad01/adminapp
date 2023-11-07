@@ -232,7 +232,7 @@ function SettingsApp() {
                   <DragDropFile setFile={setFile} setImg={setSelectedImg} />
                 </div>
                 {selectedImg ? (
-                  <div className="flex h-[50px] w-[30%] items-center justify-end">
+                  <div className="flex col-span-6 items-center 2xl:justify-start xl:justify-center">
                     <img
                       className="max-h-[100px] max-w-[150px] rounded-md"
                       src={selectedImg}
