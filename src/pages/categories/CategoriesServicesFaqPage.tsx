@@ -27,8 +27,10 @@ import CategoriesServicesFaqEditPopup from './CategoriesServicesFaqEditPopup';
 
 function CategoriesServicesFaqPage() {
   const params = useParams();
-  const authState: any = useAppSelector((state) => state.authState);
-  const dataRole = useAppSelector((state) => state.roleState.role.permissions);
+  const authState: any = useAppSelector((state) => state?.authState);
+  const dataRole = useAppSelector(
+    (state) => state?.persisitReducer?.roleState?.role?.permissions
+  );
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(0);
   const [total, setTotal] = useState<number>(0);
@@ -40,7 +42,7 @@ function CategoriesServicesFaqPage() {
     useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
   const actionMenuOptions = ['Edit', 'Delete'];
-
+  const [emptyVariable] = useState(null);
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
   const [isLoader, setIsLoader] = React.useState(true);
@@ -141,7 +143,7 @@ function CategoriesServicesFaqPage() {
           // console.log('error::::::::', error);
         });
     }
-  }, [categoryServiceId, page, rowsPerPage]);
+  }, [emptyVariable]);
 
   const deleteHandler = (id: string) => {
     setIsLoader(true);

@@ -23,9 +23,9 @@ import DriversAddressCreatePopup from './DriversAddressCreatePopup';
 import DriversAddressEditPopup from './DriversAddressEditPopup';
 
 function DriversAddressPage() {
-  const authState: any = useAppSelector((state) => state.authState);
+  const authState: any = useAppSelector((state) => state?.authState);
   const dataRole = useAppSelector(
-    (state: any) => state.roleState.role.permissions
+    (state: any) => state?.persisitReducer?.roleState?.role?.permissions
   );
   const params = useParams();
   // const navigate = useNavigate();
@@ -46,7 +46,7 @@ function DriversAddressPage() {
     useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
   const actionMenuOptions = ['Edit', 'Delete'];
-
+  const [emptyVariable] = useState(null);
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
 
@@ -246,7 +246,7 @@ function DriversAddressPage() {
           });
         });
     }
-  }, [id]);
+  }, [emptyVariable]);
 
   const createFormHandler = (data: any) => {
     setIsLoader(true);

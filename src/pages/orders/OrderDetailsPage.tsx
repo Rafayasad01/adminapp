@@ -34,7 +34,7 @@ import PermissionPopup from '../../utils/PermissionPopup';
 function OrderDetailsPage() {
   const navigate = useNavigate();
   const dataRole = useAppSelector(
-    (state: any) => state.roleState.role.permissions
+    (state: any) => state?.persisitReducer?.roleState?.role?.permissions
   );
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
   const [cancelDialogOpen, setCancelDialogOpen] = useState<boolean>(false);
@@ -52,6 +52,7 @@ function OrderDetailsPage() {
   const [notifyMessage, setNotifyMessage] = useState({});
   const params = useParams();
   const id: any = params.orderId;
+  const [emptyVariable] = useState(null);
 
   const setData = (itemData: any) => {
     setViewData(itemData);
@@ -115,7 +116,7 @@ function OrderDetailsPage() {
           });
         });
     }
-  }, [id]);
+  }, [emptyVariable]);
 
   const getIcon = (string: string) => {
     let icon;

@@ -27,7 +27,7 @@ import { NavLink } from 'react-router-dom';
 import CollectionsOutlinedIcon from '@mui/icons-material/CollectionsOutlined';
 import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined';
 import assets from '../../assets';
-import { setItemState } from '../../redux/features/appStateSlice';
+import { setItemState, setLogo } from '../../redux/features/appStateSlice';
 import { logout } from '../../redux/features/authStateSlice';
 import { setRolePermissions } from '../../redux/features/permissionsStateSlice';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
@@ -156,18 +156,23 @@ const superAdminlinks = [
 ];
 
 function Sidebar() {
-  const userData = useAppSelector((state: any) => state.authState.user);
-  const socialItems = useAppSelector((state: any) => state.appState.items);
-  const logo = useAppSelector((state: any) => state.appState.logo);
+  const userData = useAppSelector((state: any) => state?.authState?.user);
+  const socialItems = useAppSelector((state: any) => state?.persisitReducer?.appState?.items);
+  
+  const logo = useAppSelector((state: any) => state?.persisitReducer?.appState?.logo);
 
   const [list, setList] = useState<any>(null);
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
-  const authState: any = useAppSelector((state: any) => state.authState);
+  const authState: any = useAppSelector((state: any) => state?.authState);
   const dataRole = useAppSelector((state: any) => state);
+  const [emptyVariable] = useState(null);
+  console.log("dataaa",dataRole);
+  
   const dispatch = useAppDispatch();
   const logOut = () => {
     dispatch(logout());
     dispatch(setItemState(null));
+    dispatch(setLogo(null));
     dispatch(setRolePermissions({ id: '', name: '', permissions: [] }));
   };
   // console.log("ei",expandedIndex);
@@ -254,10 +259,10 @@ function Sidebar() {
   }
 
   useEffect(() => {
-    defineRules(dataRole?.roleState?.role?.permissions);
+    defineRules(dataRole?.persisitReducer?.roleState?.role?.permissions);
     if (authState.user.isSuperAdmin) {
       setList(superAdminlinks);
-    } else if (dataRole?.roleState?.role?.permissions) {
+    } else if (dataRole?.persisitReducer?.roleState?.role?.permissions) {
       // const tempList = links.filter(el => CAN("canView", el.permission));
       const tempList = links.filter((el) => {
         if (el.name === MODULE_EMPLOYEEES) {
@@ -276,7 +281,7 @@ function Sidebar() {
       });
       setList(tempList);
     }
-  }, []);
+  }, [emptyVariable]);
 
   return (
     <Drawer

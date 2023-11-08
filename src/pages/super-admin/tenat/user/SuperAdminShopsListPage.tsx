@@ -26,7 +26,7 @@ import CustomDialog from '../../../../components/common/CustomDialog';
 import { useAppSelector } from '../../../../redux/redux-hooks';
 
 function SuperAdminShopsListPage() {
-  const authState: any = useAppSelector((state) => state.authState);
+  const authState: any = useAppSelector((state) => state?.authState);
   const navigate = useNavigate();
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(0);
@@ -40,6 +40,7 @@ function SuperAdminShopsListPage() {
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
   const [dataById, setDataById] = React.useState<any>();
+  const [emptyVariable] = useState(null);
 
   const {
     register,
@@ -236,7 +237,7 @@ function SuperAdminShopsListPage() {
         setIsLoader(false);
       }
     });
-  }, [page, rowsPerPage]);
+  }, [emptyVariable]);
 
   return isLoader ? (
     <Loader />

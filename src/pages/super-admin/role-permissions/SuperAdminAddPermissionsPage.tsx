@@ -18,7 +18,7 @@ import { useAppSelector } from '../../../redux/redux-hooks';
 import assets from '../../../assets';
 
 function SuperAdminAddPermissionsPage() {
-  const authState: any = useAppSelector((state) => state.authState);
+  const authState: any = useAppSelector((state) => state?.authState);
   const navigate = useNavigate();
   const [isLoader, setIsLoader] = useState<boolean>(false);
   const [isNotify, setIsNotify] = useState(false);

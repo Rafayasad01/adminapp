@@ -5,7 +5,7 @@ import Sidebar from '../common/Sidebar';
 import { useAppSelector } from '../../redux/redux-hooks';
 
 function AppLayout() {
-    const authState = useAppSelector((state) => state.authState);
+    const authState = useAppSelector((state) => state?.authState);
     if ((authState.user && authState.user.isSuperAdmin) || !authState.user) {
         return <Navigate to="/admin" />;
     }

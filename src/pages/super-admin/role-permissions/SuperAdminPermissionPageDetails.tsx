@@ -22,11 +22,11 @@ import { TEXT_STORE_KEY, setText } from '../../../utils/constants';
 import SuperAdminPermissionPagePopup from './SuperAdminPermissionPagePopup';
 
 function SuperAdminPermissionPageDetails() {
-  const authState: any = useAppSelector((state) => state.authState);
+  const authState: any = useAppSelector((state) => state?.authState);
   const { id } = useParams();
   const { state } = useLocation();
 
-  const [renderingOff, setRenderingOff] = useState<string>('');
+  const [emptyVariable] = useState(null);
   const navigate = useNavigate();
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(0);
@@ -140,7 +140,7 @@ function SuperAdminPermissionPageDetails() {
           type: 'info',
         });
       });
-  }, [renderingOff]);
+  }, [emptyVariable]);
 
   const handleSwitchChange = (event: any, switchid: string) => {
     const data = {

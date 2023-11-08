@@ -14,6 +14,7 @@ import Loader from '../../components/common/Loader';
 
 function CartDetailsPage() {
   const [viewData, setViewData] = useState<any>({});
+  const [emptyVariable] = useState(null);
   const [isLoader, setIsLoader] = useState(true);
   const [isNotify, setIsNotify] = useState(false);
   const [notifyMessage, setNotifyMessage] = useState({});
@@ -37,7 +38,8 @@ function CartDetailsPage() {
           type: 'error',
         });
       });
-  }, [id]);
+  }, [emptyVariable]);
+
   return isLoader ? (
     <Loader />
   ) : (

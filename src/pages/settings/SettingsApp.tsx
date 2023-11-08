@@ -61,9 +61,9 @@ function HelpingIcon(elements: any) {
 
 function SettingsApp() {
   const dispatch = useDispatch();
-  const authState: any = useAppSelector((state) => state.authState);
+  const authState: any = useAppSelector((state) => state?.authState);
   const dataRole = useAppSelector(
-    (state: any) => state.roleState.role.permissions
+    (state: any) => state?.persisitReducer?.roleState?.role?.permissions
   );
   const navigate = useNavigate();
   const [openSocialMediaPopup, setOpenSocialMediaPopup] = useState(false);
@@ -77,6 +77,7 @@ function SettingsApp() {
   const [isLoader, setIsLoader] = useState(true);
   const [isNotify, setIsNotify] = useState(false);
   const [notifyMessage, setNotifyMessage] = useState({});
+  const [emptyVariable] = useState(null);
 
   const {
     register,
@@ -196,7 +197,7 @@ function SettingsApp() {
         }
       });
     }
-  }, [authState]);
+  }, [emptyVariable]);
 
   console.log('detail', file);
 

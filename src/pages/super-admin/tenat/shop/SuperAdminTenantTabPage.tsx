@@ -23,7 +23,7 @@ type Props = {
 };
 
 function SuperAdminTenantTabPage({ tenant }: Props) {
-  const authState: any = useAppSelector((state) => state.authState);
+  const authState: any = useAppSelector((state) => state?.authState);
   const [emptyVariable, setEmptyVariable] = useState('');
   const [isLoader, setIsLoader] = useState(true);
   const [detail, setDetail] = useState<any>(null);
@@ -41,6 +41,7 @@ function SuperAdminTenantTabPage({ tenant }: Props) {
   const [subCategories, setSubCategories] = useState<any>([]);
   const [isTrialMode, setIsTrialMode] = React.useState<boolean>(false);
 
+  
   const getShopService = (id: any, setModalHandler: any) => {
     Service.getShop(id)
       .then((item: any) => {
@@ -318,7 +319,7 @@ function SuperAdminTenantTabPage({ tenant }: Props) {
           type: 'error',
         });
       });
-  }, []);
+  }, [emptyVariable]);
 
   const handleFormClickOpenNewBranch = () => {
     if (detail.maxBranchLimit <= detail.branches?.length) {

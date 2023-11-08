@@ -27,9 +27,9 @@ import CustomersCreatePopup from './CustomersCreatePopup';
 import CustomersEditPopup from './CustomersEditPopup';
 
 function CustomersPage() {
-  const authState: any = useAppSelector((state) => state.authState);
+  const authState: any = useAppSelector((state) => state?.authState);
   const dataRole = useAppSelector(
-    (state: any) => state.roleState.role.permissions
+    (state: any) => state?.persisitReducer?.roleState?.role?.permissions
   );
   const navigate = useNavigate();
   const [search, setSearch] = useState('');
@@ -43,7 +43,7 @@ function CustomersPage() {
     useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
   const actionMenuOptions = ['Detail', 'Address', 'Edit', 'Delete'];
-
+  const [emptyVariable] = useState(null);
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
   const [isLoader, setIsLoader] = React.useState(true);
@@ -265,7 +265,7 @@ function CustomersPage() {
           });
         });
     }
-  }, [authState, page, rowsPerPage]);
+  }, [emptyVariable]);
 
   const createFormHandler = (data: any) => {
     setIsLoader(true);

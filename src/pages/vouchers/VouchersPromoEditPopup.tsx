@@ -62,7 +62,7 @@ function VouchersPromoEditPopup({
     reset,
     formState: { errors },
   } = useForm<UpdateVoucherFromData>();
-  const authState: any = useAppSelector((state) => state.authState);
+  const authState: any = useAppSelector((state) => state?.authState);
   const handleFormClose = () => setVouchersPromoEditDialog(false);
   const [checked, setChecked] = useState(true);
 

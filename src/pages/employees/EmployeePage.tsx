@@ -30,17 +30,15 @@ import { NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
 import { listingRolePermission } from '../../utils/helper';
 
 function EmployeePage() {
-  const authState: any = useAppSelector((state) => state.authState);
+  const authState: any = useAppSelector((state: any) => state?.authState);
   const dataRole = useAppSelector(
-    (state: any) => state.roleState.role.permissions
+    (state: any) => state?.persisitReducer?.roleState?.role?.permissions
   );
-  const navigate = useNavigate();
   const [search, setSearch] = useState<any>('');
-  const [emptyVariable, setEmptyVariable] = useState('');
+  const [emptyVariable] = useState(null);
   const [page, setPage] = useState(0);
   const [total, setTotal] = useState(0);
   const [list, setList] = useState<any>([]);
-  const [editFormData, setEditFormData] = useState<any>(null);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [actionMenuItemid, setActionMenuItemid] = React.useState('');
   const [actionMenuAnchorEl, setActionMenuAnchorEl] =
@@ -58,7 +56,6 @@ function EmployeePage() {
     'Are you sure you want to delete this customer ?'
   );
   const [showPassword, setShowPassword] = useState(true);
-
   const {
     register,
     handleSubmit,
@@ -109,8 +106,6 @@ function EmployeePage() {
       showPassVisibility: showPassword,
     },
   ];
-
-  console.log('AUTH', authState.user.employeeLimit, total);
 
   const handleFormClickOpen = () => {
     if (listingRolePermission(dataRole, 'Employee Create')) {

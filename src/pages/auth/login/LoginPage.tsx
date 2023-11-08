@@ -8,6 +8,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import CircularProgress from '@mui/material/CircularProgress';
+import { useDispatch } from 'react-redux';
 import auth from '../../../services/adminapp/admin';
 import { UserLogin } from '../../../interfaces/auth.interface';
 import AlertBox from '../../../utils/Alert';
@@ -18,9 +19,10 @@ import { login } from '../../../redux/features/authStateSlice';
 import assets from '../../../assets';
 import { setRolePermissions } from '../../../redux/features/permissionsStateSlice';
 import { setItemState, setLogo } from '../../../redux/features/appStateSlice';
+import RoleIcon from '../../../components/icons/RoleIcon';
 
 function LoginPage() {
-  const dispatch = useAppDispatch();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
@@ -43,11 +45,12 @@ function LoginPage() {
     setIsLoader(true);
     const user: any = await auth.loginService(userData);
     if (user && user.data.success) {
+      console.log('rolee', user.data.data);
       setIsLoader(false);
       const newUserData = user.data.data;
       setToken(newUserData.token);
       dispatch(setRolePermissions(newUserData.role));
-      delete newUserData.role;
+      // delete newUserData.role;
       dispatch(login(newUserData));
       dispatch(setItemState(newUserData));
       dispatch(setLogo(newUserData.tenantConfig.logo));

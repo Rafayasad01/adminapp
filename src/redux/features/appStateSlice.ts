@@ -9,7 +9,7 @@ type AppState = {
 const initialState: AppState = {
   appState: '',
   items: null,
-  logo: null
+  logo: null,
 };
 
 export const appStateSlice = createSlice({
@@ -24,7 +24,7 @@ export const appStateSlice = createSlice({
     },
     setLogo: (state, action: PayloadAction<any>) => {
       state.logo = action.payload;
-    }
+    },
   },
 });
 

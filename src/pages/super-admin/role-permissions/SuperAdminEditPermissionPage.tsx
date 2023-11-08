@@ -19,13 +19,14 @@ import assets from '../../../assets';
 
 function SuperAdminEditPermissionsPage() {
   const { id } = useParams();
-  const authState: any = useAppSelector((state) => state.authState);
+  const authState: any = useAppSelector((state) => state?.authState);
   const navigate = useNavigate();
   const [dataObj, setDataObj] = useState<any>();
   const [isLoader, setIsLoader] = useState<boolean>(true);
   const [isNotify, setIsNotify] = useState(false);
   const [notifyMessage, setNotifyMessage] = useState({});
   const [count, setCount] = useState(0);
+  const [emptyVariable] = useState(null);
 
   const {
     register,
@@ -133,7 +134,7 @@ function SuperAdminEditPermissionsPage() {
         });
       }
     });
-  }, []);
+  }, [emptyVariable]);
 
   const hasDuplicates = (array: any) => {
     return new Set(array).size !== array.length;

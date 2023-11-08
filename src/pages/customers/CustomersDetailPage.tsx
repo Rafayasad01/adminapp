@@ -15,8 +15,9 @@ function CustomersDetailPage() {
   const [isLoader, setIsLoader] = useState<boolean>(true);
   const [isNotify, setIsNotify] = useState(false);
   const [notifyMessage, setNotifyMessage] = useState({});
-
+  const [emptyVariable] = useState(null);
   const id: any = params.customerId;
+  
   useEffect(() => {
     Service.getDetailService(id)
       .then((item: any) => {
@@ -44,7 +45,7 @@ function CustomersDetailPage() {
           type: 'error',
         });
       });
-  }, [id]);
+  }, [emptyVariable]);
 
   return isLoader ? (
     <Loader />

@@ -22,8 +22,8 @@ import { TEXT_STORE_KEY, setText } from '../../../utils/constants';
 import SuperAdminPermissionPagePopup from './SuperAdminPermissionPagePopup';
 
 function SuperAdminPermissionPage() {
-  const authState: any = useAppSelector((state) => state.authState);
-  const [renderingOff, setRenderingOff] = useState<string>('');
+  const authState: any = useAppSelector((state) => state?.authState);
+  const [emptyVariable] = useState(null);
   const navigate = useNavigate();
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(0);
@@ -143,7 +143,7 @@ function SuperAdminPermissionPage() {
         setIsLoader(false);
         console.error('error::::::::', error);
       });
-  }, [renderingOff]);
+  }, [emptyVariable]);
 
   const editHandler = (id: string) => {
     navigate(`../edit-permission/${id}`);

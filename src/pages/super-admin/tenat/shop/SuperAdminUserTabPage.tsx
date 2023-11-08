@@ -14,6 +14,7 @@ function SuperAdminUserTabPage({ tenant }: Props) {
   const [isLoader, setIsLoader] = useState(true);
   const [detail, setDetail] = useState<any>(null);
   const [list, setList] = useState<any>([]);
+  const [emptyVariable] = useState(null);
 
   useEffect(() => {
     Service.detailShopUser(tenant).then((item: any) => {
@@ -23,7 +24,7 @@ function SuperAdminUserTabPage({ tenant }: Props) {
         setIsLoader(false);
       }
     });
-  }, [tenant]);
+  }, [emptyVariable]);
 
   const sentEmailHandler = (id: string) => {
     setIsLoader(true);
