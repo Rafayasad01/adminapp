@@ -1,4 +1,4 @@
-import { configureStore } from '@reduxjs/toolkit';
+import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import { persistReducer, persistStore } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import appStateReducer from './features/appStateSlice';
@@ -10,14 +10,22 @@ const persistConfig = {
   storage,
 };
 
+const rootReducer = combineReducers({
+  appState: appStateReducer,
+  roleState: rolePermissionStateReducer,
+});
+
+const persistedReducer = persistReducer(persistConfig, rootReducer);
+
 export const store = configureStore({
   reducer: {
-    appState: persistReducer<any, any>(persistConfig, appStateReducer),
+    persisitReducer: persistedReducer,
+    // roleState: persistReducer<any, any>(
+    //   persistConfig,
+    //   rolePermissionStateReducer
+    // ),
+    // appState: persistReducer<any, any>(persistConfig, appStateReducer),
     authState: authStateReducer,
-    roleState: persistReducer<any, any>(
-      persistConfig,
-      rolePermissionStateReducer
-    ),
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

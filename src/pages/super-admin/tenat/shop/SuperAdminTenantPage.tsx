@@ -27,7 +27,7 @@ import { useAppSelector } from '../../../../redux/redux-hooks';
 import SuperAdminChildTenantCreatePopup from './SuperAdminChildTenantCreatePopup';
 
 function SuperAdminTenantPage() {
-  const authState: any = useAppSelector((state) => state.authState);
+  const authState: any = useAppSelector((state) => state?.authState);
   const navigate = useNavigate();
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(0);
@@ -43,6 +43,7 @@ function SuperAdminTenantPage() {
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
   const [isTrialMode, setIsTrialMode] = React.useState<boolean>(false);
+  const [emptyVariable] = useState(null);
 
   const handleFormClickOpen = () => {
     setIsLoader(true);
@@ -118,7 +119,7 @@ function SuperAdminTenantPage() {
         setIsLoader(false);
         // console.log('error::::::::', error);
       });
-  }, [page, rowsPerPage]);
+  }, [emptyVariable]);
 
   const createFormHandler = (data: any) => {
     setIsLoader(true);

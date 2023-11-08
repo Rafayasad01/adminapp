@@ -20,8 +20,10 @@ import { NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
 import { CheckRolePermission, listingRolePermission } from '../../utils/helper';
 
 function DriversPage() {
-  const authState = useAppSelector((state) => state.authState);
-  const dataRole = useAppSelector((state) => state.roleState.role.permissions);
+  const authState = useAppSelector((state:any) => state?.authState);
+  const dataRole = useAppSelector(
+    (state) => state?.persisitReducer?.roleState?.role?.permissions
+  );
   const navigate = useNavigate();
   const [list, setList] = useState<any>([]);
   const [search, setSearch] = useState('');
@@ -36,7 +38,7 @@ function DriversPage() {
   const [dialogText, setDialogText] = useState<any>(
     'Are you sure you want to delete this driver ?'
   );
-
+  const [emptyVariable] = useState(null);
   // boolean states
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
   const [isLoader, setIsLoader] = React.useState(true);
@@ -81,7 +83,7 @@ function DriversPage() {
           });
         });
     }
-  }, [authState, page, rowsPerPage]);
+  }, [emptyVariable]);
 
   // functions handling
   const handleFormClickOpen = () => {

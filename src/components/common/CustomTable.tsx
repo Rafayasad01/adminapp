@@ -62,9 +62,9 @@ function CustomTable({
   setIsNotify,
   setNotifyMessage,
 }: Props) {
-  const authState: any = useAppSelector((state) => state.authState);
+  const authState: any = useAppSelector((state) => state?.authState);
   const dataRole = useAppSelector(
-    (state: any) => state.roleState.role.permissions
+    (state: any) => state?.persisitReducer?.roleState?.role?.permissions
   );
 
   // handle switch state

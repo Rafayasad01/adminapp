@@ -24,11 +24,13 @@ import CustomText from '../../components/common/CustomText';
 
 const actionMenuOptions = ['View'];
 function CartsPage() {
-  const authState: any = useAppSelector((state) => state.authState);
-  const dataRole = useAppSelector((state) => state.roleState.role.permissions);
+  const authState: any = useAppSelector((state) => state?.authState);
+  const dataRole = useAppSelector(
+    (state) => state?.persisitReducer?.roleState?.role?.permissions
+  );
 
   const navigate = useNavigate();
-
+  const [emptyVariable] = useState(null);
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(0);
   const [total, setTotal] = useState(0);
@@ -113,7 +115,7 @@ function CartsPage() {
       .catch((err) => {
         setIsLoader(false);
       });
-  }, [authState, page, rowsPerPage]);
+  }, [emptyVariable]);
 
   const manuHandler = (option: string) => {
     let doOption = '';

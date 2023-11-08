@@ -34,7 +34,7 @@ function SocialLinksPopup({
     formState: { errors },
   } = useForm<SocialMedia>();
   const dispatch = useDispatch();
-  const authState: any = useAppSelector((state) => state.authState);
+  const authState: any = useAppSelector((state) => state?.authState);
 
   // const [isLoader, setIsLoader] = useState(true);
   const [isNotify, setIsNotify] = useState(false);

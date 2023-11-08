@@ -15,6 +15,7 @@ function ShopAdminUserDetailPage() {
   const { id } = useParams();
   const [userDetail, setUserDetail] = useState<any>();
   const [isLoader, setIsLoader] = useState<boolean>(true);
+  const [emptyVariable] = useState(null);
 
   useEffect(() => {
     Service.getUserById(id).then((item) => {
@@ -27,7 +28,7 @@ function ShopAdminUserDetailPage() {
         setIsLoader(false);
       }
     });
-  }, [id]);
+  }, [emptyVariable]);
 
   return isLoader ? (
     <Loader />

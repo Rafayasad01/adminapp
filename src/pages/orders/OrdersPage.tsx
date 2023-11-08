@@ -31,9 +31,9 @@ import {
 import { CheckRolePermission, listingRolePermission } from '../../utils/helper';
 
 function OrdersPage() {
-  const authState: any = useAppSelector((state) => state.authState);
+  const authState: any = useAppSelector((state) => state?.authState);
   const dataRole = useAppSelector(
-    (state: any) => state.roleState.role.permissions
+    (state: any) => state?.persisitReducer?.roleState?.role?.permissions
   );
   const navigate = useNavigate();
   const [search, setSearch] = useState('');
@@ -49,7 +49,7 @@ function OrdersPage() {
     useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
   const actionMenuOptions = ['Detail'];
-
+  const [emptyVariable] = useState(null);
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number
@@ -186,7 +186,7 @@ function OrdersPage() {
           });
         });
     }
-  }, [authState, page, rowsPerPage]);
+  }, [emptyVariable]);
 
   const manuHandler = (option: string) => {
     let doOption = '';

@@ -29,6 +29,7 @@ function SuperAdminEditRolePermissionsPage() {
   const [updatedList, setUpdatedList] = useState<any>();
   const [isNotify, setIsNotify] = useState(false);
   const [notifyMessage, setNotifyMessage] = useState({});
+  const [emptyVariable] = useState(null);
 
   const {
     register,
@@ -57,7 +58,7 @@ function SuperAdminEditRolePermissionsPage() {
         });
       }
     });
-  }, []);
+  }, [emptyVariable]);
 
   const onSubmit = (data: RolePermissions) => {
     setIsLoader(true);

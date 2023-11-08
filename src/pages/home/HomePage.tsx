@@ -22,7 +22,7 @@ import Loader from '../../components/common/Loader';
 import Notify from '../../components/common/Notify';
 
 function HomePage() {
-  const authState: any = useAppSelector((state) => state.authState);
+  const authState: any = useAppSelector((state) => state?.authState);
   const [count, setCount] = useState<any>();
   const [isLoader, setIsLoader] = useState(true);
   const [isNotify, setIsNotify] = useState(false);
@@ -35,7 +35,7 @@ function HomePage() {
   const [openTopCustomerDialog, setOpenTopCustomerDialog] = useState(false);
   const [openTopDriverDialog, setOpenTopDriverDialog] = useState(false);
   const data = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-
+  const [emptyVariable] = useState(null);
 
   useEffect(() => {
     Service.getDashboardCount(authState.user.tenant)
@@ -52,7 +52,7 @@ function HomePage() {
           });
         }
       })
-  }, [])
+  }, [emptyVariable])
 
   return (
     isLoader ? <Loader /> :

@@ -23,8 +23,8 @@ import SuperAdminAppImageEditPopup from './SuperAdminAppImageEditPopup';
 import SuperAdminAppImagePagePopup from './SuperAdminAppImagePagePopup';
 
 function SuperAdminAppImagePage() {
-  const authState: any = useAppSelector((state) => state.authState);
-  const [renderingOff, setRenderingOff] = useState<string>('');
+  const authState: any = useAppSelector((state) => state?.authState);
+  const [emptyVariable] = useState(null);
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(0);
   const [total, setTotal] = useState(0);
@@ -133,7 +133,7 @@ function SuperAdminAppImagePage() {
           type: 'error',
         });
       });
-  }, [renderingOff]);
+  }, [emptyVariable]);
 
   const childDataHandler = (id: any) => {
     setIsLoader(true);

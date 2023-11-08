@@ -20,11 +20,12 @@ import {
   ORDER_DELIVERY_STATUS_PICKED_UP,
 } from '../../utils/constants';
 import { listingRolePermission } from '../../utils/helper';
+import { useAppSelector } from '../../redux/redux-hooks';
 
 function DriversDetailPage() {
   const params = useParams();
   const dataRole = useAppSelector(
-    (state: any) => state.roleState.role.permissions
+    (state) => state?.persisitReducer?.roleState?.role?.permissions
   );
   const [detail, setDetail] = useState<any>(null);
   const [search, setSearch] = useState('');
@@ -33,7 +34,7 @@ function DriversDetailPage() {
   const [list, setList] = useState<any>([]);
   const [address, setAddress] = useState<string>('');
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-
+  const [emptyVariable] = useState(null);
   const [isLoader, setIsLoader] = React.useState(true);
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
@@ -130,7 +131,7 @@ function DriversDetailPage() {
           });
         });
     }
-  }, [id]);
+  }, [emptyVariable]);
 
   const getStatusTag = (status: string) => {
     let tag = '';

@@ -61,7 +61,7 @@ function VouchersPromoCreatePopup({
     formState: { errors },
   } = useForm<CreateVoucherFromData>();
 
-  const authState: any = useAppSelector((state) => state.authState);
+  const authState: any = useAppSelector((state) => state?.authState);
   const handleFormClose = () => setVouchersPromoDialog(false);
   const [checked, setChecked] = React.useState(true);
 

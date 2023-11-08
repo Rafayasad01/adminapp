@@ -26,6 +26,7 @@ function SuperAdminAddRolePermissionsPage() {
   const [selectAll, setSelectAll] = useState(false);
   const [isNotify, setIsNotify] = useState(false);
   const [notifyMessage, setNotifyMessage] = useState({});
+  const [emptyVariable] = useState(null);
 
   const {
     register,
@@ -49,7 +50,7 @@ function SuperAdminAddRolePermissionsPage() {
         setIsLoader(false);
         console.log('error::::::::', error);
       });
-  }, []);
+  }, [emptyVariable]);
   // console.log("list", list);
 
   const onSubmit = (data: RolePermissions) => {

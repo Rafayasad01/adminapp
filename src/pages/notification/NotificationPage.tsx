@@ -31,9 +31,9 @@ import NotificationCreatePopup from './NotificationCreatePopup';
 import NotificationDetailPopup from './NotificationDetailPopup';
 
 function NotificationPage() {
-  const authState: any = useAppSelector((state) => state.authState);
+  const authState: any = useAppSelector((state) => state?.authState);
   const dataRole = useAppSelector(
-    (state: any) => state.roleState.role.permissions
+    (state: any) => state?.persisitReducer?.roleState?.role?.permissions
   );
   const navigate = useNavigate();
   const [search, setSearch] = useState<string>('');
@@ -47,7 +47,7 @@ function NotificationPage() {
   const [alertPopup, setAlertPopup] = useState<boolean>(false);
   const [alertSeverty, setAlertSeverty] = useState<string>('');
   const [alertMsg, setAlertMsg] = useState<string>('');
-
+  const [emptyVariable] = useState(null);
   const [isLoader, setIsLoader] = useState(true);
   const [isNotify, setIsNotify] = useState(false);
   const [notifyMessage, setNotifyMessage] = useState({});
@@ -152,7 +152,7 @@ function NotificationPage() {
           // console.log('error::::::::', error);
         });
     }
-  }, [authState, page, rowsPerPage]);
+  }, [emptyVariable]);
 
   const createFormHandler = (data: any) => {
     const formData = new FormData();

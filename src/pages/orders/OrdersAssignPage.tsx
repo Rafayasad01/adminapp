@@ -27,9 +27,9 @@ import {
 import { listingRolePermission } from '../../utils/helper';
 
 function OrdersAssignPage() {
-  const authState: any = useAppSelector((state) => state.authState);
+  const authState: any = useAppSelector((state) => state?.authState);
   const dataRole = useAppSelector(
-    (state: any) => state.roleState.role.permissions
+    (state: any) => state?.persisitReducer?.roleState?.role?.permissions
   );
   const navigate = useNavigate();
   const [search, setSearch] = useState('');
@@ -43,7 +43,7 @@ function OrdersAssignPage() {
   const [isLoader, setIsLoader] = useState(true);
   const [isNotify, setIsNotify] = useState(false);
   const [notifyMessage, setNotifyMessage] = useState({});
-
+  const [emptyVariable] = useState(null);
   const params = useParams();
   const { orderId } = params;
 
@@ -161,7 +161,7 @@ function OrdersAssignPage() {
           });
         });
     }
-  }, [authState, page, rowsPerPage]);
+  }, [emptyVariable]);
 
   const assignHandler = (userId: string) => {
     if (listingRolePermission(dataRole, 'Order Assign Create')) {

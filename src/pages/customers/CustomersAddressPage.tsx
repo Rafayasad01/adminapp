@@ -24,9 +24,9 @@ import CustomersAddressCreatePopup from './CustomersAddressCreatePopup';
 import CustomersAddressEditPopup from './CustomersAddressEditPopup';
 
 function CustomersAddressPage() {
-  const authState: any = useAppSelector((state) => state.authState);
+  const authState: any = useAppSelector((state) => state?.authState);
   const dataRole = useAppSelector(
-    (state: any) => state.roleState.role.permissions
+    (state: any) => state?.persisitReducer?.roleState?.role?.permissions
   );
   const params = useParams();
   const navigate = useNavigate();
@@ -43,7 +43,7 @@ function CustomersAddressPage() {
     useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
   const actionMenuOptions = ['Edit', 'Delete'];
-
+  const [emptyVariable] = useState(null);
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
 
@@ -221,7 +221,7 @@ function CustomersAddressPage() {
           });
         });
     }
-  }, [id]);
+  }, [emptyVariable]);
 
   const createFormHandler = (data: any) => {
     setIsLoader(true);

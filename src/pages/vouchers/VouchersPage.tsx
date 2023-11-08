@@ -26,9 +26,9 @@ import VouchersReferralCreatePopup from './VouchersReferralCreatePopup';
 
 const options = ['Edit', 'Delete'];
 function VouchersPage() {
-  const authState: any = useAppSelector((state) => state.authState);
+  const authState: any = useAppSelector((state) => state?.authState);
   const dataRole = useAppSelector(
-    (state: any) => state.roleState.role.permissions
+    (state: any) => state?.persisitReducer?.roleState?.role?.permissions
   );
   const [list, setList] = useState<any>([]);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -45,6 +45,7 @@ function VouchersPage() {
   const [isLoader, setIsLoader] = React.useState(true);
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
+  const [emptyVariable] = useState(null);
 
   const open = Boolean(anchorEl);
 
@@ -177,7 +178,7 @@ function VouchersPage() {
           });
         });
     }
-  }, [authState.user.tenant, page, rowsPerPage, search]);
+  }, [emptyVariable]);
 
   const createFormHandler = (data: any) => {
     setIsLoader(true);

@@ -16,7 +16,7 @@ type Props = {
 };
 
 function TopBar({ title, isNestedRoute = false }: Props) {
-  const userData = useAppSelector((state: any) => state.authState.user);
+  const userData = useAppSelector((state: any) => state?.authState?.user);
   const navigate = useNavigate();
   const backHandler = () => {
     navigate(-1);

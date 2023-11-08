@@ -27,9 +27,9 @@ import { NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
 import CustomText from '../../components/common/CustomText';
 
 function CategoriesPage() {
-  const authState: any = useAppSelector((state) => state.authState);
+  const authState: any = useAppSelector((state) => state?.authState);
   const dataRole = useAppSelector(
-    (state) => state.roleState.role.permissions
+    (state) => state?.persisitReducer?.roleState?.role?.permissions
   );
   const navigate = useNavigate();
   const [search, setSearch] = useState('');
@@ -44,7 +44,7 @@ function CategoriesPage() {
     useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
   const actionMenuOptions = ['Items', 'Edit', 'Delete'];
-
+  const [emptyVariable] = useState(null);
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
   const [isNotify, setIsNotify] = React.useState(false);
@@ -85,7 +85,7 @@ function CategoriesPage() {
           // console.log('error::::::::', error);
         });
     }
-  }, [authState, page, rowsPerPage]);
+  }, [emptyVariable]);
 
   const handleClickSearch = (event: any) => {
     const searchTxt = event.target.value as string;

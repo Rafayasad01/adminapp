@@ -21,7 +21,7 @@ import CustomText from '../../../components/common/CustomText';
 import { TEXT_STORE_KEY, setText } from '../../../utils/constants';
 
 function SuperAdminRolePermissionsPage() {
-  const authState: any = useAppSelector((state) => state.authState);
+  const authState: any = useAppSelector((state) => state?.authState);
   const navigate = useNavigate();
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(0);
@@ -31,6 +31,7 @@ function SuperAdminRolePermissionsPage() {
   const [isLoader, setIsLoader] = React.useState(false);
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
+  const [emptyVariable] = useState(null);
 
   const handleFormClickOpen = () => {
     navigate('../add-role');
@@ -113,7 +114,7 @@ function SuperAdminRolePermissionsPage() {
         setIsLoader(false);
         // console.log('error::::::::', error);
       });
-  }, [page, rowsPerPage]);
+  }, [emptyVariable]);
 
   const editHandler = (id: string) => {
     navigate(`../edit-role/${id}`);
