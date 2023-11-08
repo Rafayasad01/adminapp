@@ -1,38 +1,37 @@
-import React, { useState, useEffect, Fragment } from 'react';
-import { useParams } from 'react-router-dom';
 import Divider from '@mui/material/Divider';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 // import FormControl from '@mui/material/FormControl';
 // import Input from '@mui/material/Input';
 // import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
 // import SearchIcon from '@mui/icons-material/Search';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import Switch from '@mui/material/Switch';
+import TablePagination from '@mui/material/TablePagination';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import dayjs from 'dayjs';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import TablePagination from '@mui/material/TablePagination';
-import Switch from '@mui/material/Switch';
-import { useSelector } from 'react-redux';
-import TopBar from '../../components/common/TopBar';
-import MapAddress from '../../components/common/MapAddress';
-import Service from '../../services/adminapp/adminDriver';
 import ActionMenu from '../../components/common/ActionMenu';
-import DriversScheduleCreatePopup from './DriversScheduleCreatePopup';
-import { useAppSelector } from '../../redux/redux-hooks';
-import DriversScheduleEditPopup from './DriversScheduleEditPopup';
-import Loader from '../../components/common/Loader';
-import Notify from '../../components/common/Notify';
-import PermissionPopup from '../../utils/PermissionPopup';
-import { listingRolePermission } from '../../utils/helper';
-import { NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
 import CustomText from '../../components/common/CustomText';
+import Loader from '../../components/common/Loader';
+import MapAddress from '../../components/common/MapAddress';
+import Notify from '../../components/common/Notify';
+import TopBar from '../../components/common/TopBar';
+import { useAppSelector } from '../../redux/redux-hooks';
+import Service from '../../services/adminapp/adminDriver';
+import PermissionPopup from '../../utils/PermissionPopup';
+import { NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
+import { listingRolePermission } from '../../utils/helper';
+import DriversScheduleCreatePopup from './DriversScheduleCreatePopup';
+import DriversScheduleEditPopup from './DriversScheduleEditPopup';
 
 function DriversSchedulePage() {
   const authState: any = useAppSelector((state) => state.authState);
-  const dataRole = useSelector(
+  const dataRole = useAppSelector(
     (state: any) => state.roleState.role.permissions
   );
   const params = useParams();

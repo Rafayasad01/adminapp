@@ -1,21 +1,23 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import IconButton from '@mui/material/IconButton';
+import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
+import SearchIcon from '@mui/icons-material/Search';
+import WysiwygOutlinedIcon from '@mui/icons-material/WysiwygOutlined';
+import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import FormControl from '@mui/material/FormControl';
+import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
-import Button from '@mui/material/Button';
-import SearchIcon from '@mui/icons-material/Search';
-import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
-import dayjs from 'dayjs';
 import TablePagination from '@mui/material/TablePagination';
-import WysiwygOutlinedIcon from '@mui/icons-material/WysiwygOutlined';
-import { useSelector } from 'react-redux';
+import dayjs from 'dayjs';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import CustomText from '../../components/common/CustomText';
+import Loader from '../../components/common/Loader';
+import Notify from '../../components/common/Notify';
 import TopBar from '../../components/common/TopBar';
-import Service from '../../services/adminapp/adminNotification';
 import { useAppSelector } from '../../redux/redux-hooks';
-import NotificationCreatePopup from './NotificationCreatePopup';
+import Service from '../../services/adminapp/adminNotification';
+import AlertBox from '../../utils/Alert';
 import {
   NOTIFICATION_STATUS_CANCELLED,
   NOTIFICATION_STATUS_COMPLETED,
@@ -24,16 +26,13 @@ import {
   NOTIFICATION_STATUS_SENDING,
   NOT_AUTHORIZED_MESSAGE,
 } from '../../utils/constants';
-import NotificationDetailPopup from './NotificationDetailPopup';
-import AlertBox from '../../utils/Alert';
-import Loader from '../../components/common/Loader';
-import Notify from '../../components/common/Notify';
 import { listingRolePermission } from '../../utils/helper';
-import CustomText from '../../components/common/CustomText';
+import NotificationCreatePopup from './NotificationCreatePopup';
+import NotificationDetailPopup from './NotificationDetailPopup';
 
 function NotificationPage() {
   const authState: any = useAppSelector((state) => state.authState);
-  const dataRole = useSelector(
+  const dataRole = useAppSelector(
     (state: any) => state.roleState.role.permissions
   );
   const navigate = useNavigate();

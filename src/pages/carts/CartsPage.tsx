@@ -13,7 +13,6 @@ import SearchIcon from '@mui/icons-material/Search';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import dayjs from 'dayjs';
 import TablePagination from '@mui/material/TablePagination';
-import { useSelector } from 'react-redux';
 import cart from '../../services/adminapp/adminCarts';
 import ActionMenu from '../../components/common/ActionMenu';
 import { CART_STATUS_NEW, CART_STATUS_PROCESSING } from '../../utils/constants';
@@ -26,9 +25,7 @@ import CustomText from '../../components/common/CustomText';
 const actionMenuOptions = ['View'];
 function CartsPage() {
   const authState: any = useAppSelector((state) => state.authState);
-  const dataRole = useSelector(
-    (state: any) => state.roleState.role.permissions
-  );
+  const dataRole = useAppSelector((state) => state.roleState.role.permissions);
 
   const navigate = useNavigate();
 

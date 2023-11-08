@@ -1,37 +1,34 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import IconButton from '@mui/material/IconButton';
+import SearchIcon from '@mui/icons-material/Search';
+import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import FormControl from '@mui/material/FormControl';
+import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
-import Button from '@mui/material/Button';
-import SearchIcon from '@mui/icons-material/Search';
 import dayjs from 'dayjs';
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import Avatar from '@mui/material/Avatar';
 import TablePagination from '@mui/material/TablePagination';
-import { useSelector } from 'react-redux';
-import { useAppSelector } from '../../redux/redux-hooks';
+import Loader from '../../components/common/Loader';
+import Notify from '../../components/common/Notify';
 import TopBar from '../../components/common/TopBar';
+import { useAppSelector } from '../../redux/redux-hooks';
+import Service from '../../services/adminapp/adminOrders';
+import AlertBox from '../../utils/Alert';
 import {
   APP_USER_STATUS_OFFLINE,
-  APP_USER_STATUS_ONLINE,
-  ORDER_DELIVERY_STATUS_CANCELLED,
   ORDER_DELIVERY_STATUS_NEW,
   ORDER_DELIVERY_STATUS_NOT_ASSIGN,
   ORDER_STATUS_IN_CANCELLED,
 } from '../../utils/constants';
-import Service from '../../services/adminapp/adminOrders';
-import AlertBox from '../../utils/Alert';
 import { listingRolePermission } from '../../utils/helper';
-import Loader from '../../components/common/Loader';
-import Notify from '../../components/common/Notify';
 
 function OrdersAssignPage() {
   const authState: any = useAppSelector((state) => state.authState);
-  const dataRole = useSelector(
+  const dataRole = useAppSelector(
     (state: any) => state.roleState.role.permissions
   );
   const navigate = useNavigate();

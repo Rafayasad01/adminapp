@@ -1,35 +1,34 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import IconButton from '@mui/material/IconButton';
+import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import SearchIcon from '@mui/icons-material/Search';
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import FormControl from '@mui/material/FormControl';
+import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
-import Button from '@mui/material/Button';
-import SearchIcon from '@mui/icons-material/Search';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
-import TablePagination from '@mui/material/TablePagination';
 import Switch from '@mui/material/Switch';
+import TablePagination from '@mui/material/TablePagination';
 import dayjs from 'dayjs';
-import Avatar from '@mui/material/Avatar';
-import { useSelector } from 'react-redux';
-import TopBar from '../../components/common/TopBar';
-import CustomersCreatePopup from './CustomersCreatePopup';
-import CustomersEditPopup from './CustomersEditPopup';
-import { useAppSelector } from '../../redux/redux-hooks';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import ActionMenu from '../../components/common/ActionMenu';
-import Service from '../../services/adminapp/adminCustomer';
+import CustomText from '../../components/common/CustomText';
 import Loader from '../../components/common/Loader';
 import Notify from '../../components/common/Notify';
+import TopBar from '../../components/common/TopBar';
+import { useAppSelector } from '../../redux/redux-hooks';
+import Service from '../../services/adminapp/adminCustomer';
 import PermissionPopup from '../../utils/PermissionPopup';
 import { NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
 import { CheckRolePermission, listingRolePermission } from '../../utils/helper';
-import CustomText from '../../components/common/CustomText';
+import CustomersCreatePopup from './CustomersCreatePopup';
+import CustomersEditPopup from './CustomersEditPopup';
 
 function CustomersPage() {
   const authState: any = useAppSelector((state) => state.authState);
-  const dataRole = useSelector(
+  const dataRole = useAppSelector(
     (state: any) => state.roleState.role.permissions
   );
   const navigate = useNavigate();

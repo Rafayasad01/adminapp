@@ -2,7 +2,6 @@ import Switch from '@mui/material/Switch';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import TablePagination from '@mui/material/TablePagination';
 import dayjs from 'dayjs';
-import { useSelector } from 'react-redux';
 import { useAppSelector } from '../../redux/redux-hooks';
 import CustomButton from './CustomButton';
 import CustomSearchBar from './CustomSearchBar';
@@ -64,7 +63,7 @@ function CustomTable({
   setNotifyMessage,
 }: Props) {
   const authState: any = useAppSelector((state) => state.authState);
-  const dataRole = useSelector(
+  const dataRole = useAppSelector(
     (state: any) => state.roleState.role.permissions
   );
 

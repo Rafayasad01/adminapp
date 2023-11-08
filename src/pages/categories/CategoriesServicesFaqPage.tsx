@@ -1,37 +1,34 @@
-import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import IconButton from '@mui/material/IconButton';
+import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import SearchIcon from '@mui/icons-material/Search';
+import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import FormControl from '@mui/material/FormControl';
+import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
-import Button from '@mui/material/Button';
-import SearchIcon from '@mui/icons-material/Search';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
+import Switch from '@mui/material/Switch';
 import TablePagination from '@mui/material/TablePagination';
 import dayjs from 'dayjs';
-import Switch from '@mui/material/Switch';
-import { useSelector } from 'react-redux';
-import TopBar from '../../components/common/TopBar';
-import { useAppSelector } from '../../redux/redux-hooks';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import ActionMenu from '../../components/common/ActionMenu';
-import category from '../../services/adminapp/adminCategory';
-import CategoriesServicesFaqCreatePopup from './CategoriesServicesFaqCreatePopup';
-import CategoriesServicesFaqEditPopup from './CategoriesServicesFaqEditPopup';
+import CustomText from '../../components/common/CustomText';
 import Loader from '../../components/common/Loader';
 import Notify from '../../components/common/Notify';
+import TopBar from '../../components/common/TopBar';
+import { useAppSelector } from '../../redux/redux-hooks';
+import category from '../../services/adminapp/adminCategory';
 import PermissionPopup from '../../utils/PermissionPopup';
-import { listingRolePermission } from '../../utils/helper';
 import { NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
-import CustomText from '../../components/common/CustomText';
+import { listingRolePermission } from '../../utils/helper';
+import CategoriesServicesFaqCreatePopup from './CategoriesServicesFaqCreatePopup';
+import CategoriesServicesFaqEditPopup from './CategoriesServicesFaqEditPopup';
 
 function CategoriesServicesFaqPage() {
   const params = useParams();
   const authState: any = useAppSelector((state) => state.authState);
-  const dataRole = useSelector(
-    (state: any) => state.roleState.role.permissions
-  );
+  const dataRole = useAppSelector((state) => state.roleState.role.permissions);
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(0);
   const [total, setTotal] = useState<number>(0);

@@ -1,24 +1,26 @@
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import AssignmentTurnedInOutlinedIcon from '@mui/icons-material/AssignmentTurnedInOutlined';
+import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutlineOutlined';
+import CircleOutlinedIcon from '@mui/icons-material/CircleOutlined';
+import DateRangeIcon from '@mui/icons-material/DateRange';
+import DomainVerificationOutlinedIcon from '@mui/icons-material/DomainVerificationOutlined';
+import FilterNoneOutlinedIcon from '@mui/icons-material/FilterNoneOutlined';
+import LocalShippingOutlinedIcon from '@mui/icons-material/LocalShippingOutlined';
+import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
+import Button from '@mui/material/Button';
+import CircularProgress from '@mui/material/CircularProgress';
+import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import CircularProgress from '@mui/material/CircularProgress';
-import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
-import DateRangeIcon from '@mui/icons-material/DateRange';
-import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import LocalShippingOutlinedIcon from '@mui/icons-material/LocalShippingOutlined';
-import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutlineOutlined';
-import AssignmentTurnedInOutlinedIcon from '@mui/icons-material/AssignmentTurnedInOutlined';
-import FilterNoneOutlinedIcon from '@mui/icons-material/FilterNoneOutlined';
-import CircleOutlinedIcon from '@mui/icons-material/CircleOutlined';
-import DomainVerificationOutlinedIcon from '@mui/icons-material/DomainVerificationOutlined';
-import Button from '@mui/material/Button';
-import dayjs from 'dayjs';
 
 import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
-import { useSelector } from 'react-redux';
 import TopBar from '../../components/common/TopBar';
 import orderService from '../../services/adminapp/adminOrders';
 
+import assets from '../../assets';
+import Loader from '../../components/common/Loader';
+import Notify from '../../components/common/Notify';
 import {
   NOT_AUTHORIZED_MESSAGE,
   ORDER_STATUS_IN_CANCELLED,
@@ -26,15 +28,12 @@ import {
   ORDER_STATUS_IN_DELIVERY,
   ORDER_STATUSES,
 } from '../../utils/constants';
-import PermissionPopup from '../../utils/PermissionPopup';
-import assets from '../../assets';
-import Loader from '../../components/common/Loader';
-import Notify from '../../components/common/Notify';
 import { listingRolePermission } from '../../utils/helper';
+import PermissionPopup from '../../utils/PermissionPopup';
 
 function OrderDetailsPage() {
   const navigate = useNavigate();
-  const dataRole = useSelector(
+  const dataRole = useAppSelector(
     (state: any) => state.roleState.role.permissions
   );
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);

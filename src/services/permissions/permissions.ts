@@ -1,6 +1,4 @@
-import { PureAbility, AbilityBuilder, AbilityClass } from '@casl/ability';
-import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { AbilityBuilder, AbilityClass, PureAbility } from '@casl/ability';
 
 const ability: any = new PureAbility();
 
