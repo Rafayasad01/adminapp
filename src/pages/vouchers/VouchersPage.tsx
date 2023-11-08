@@ -1,34 +1,33 @@
-import React, { useEffect, useState } from 'react';
-import dayjs from 'dayjs';
-import TablePagination from '@mui/material/TablePagination';
-import IconButton from '@mui/material/IconButton';
+import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import SearchIcon from '@mui/icons-material/Search';
+import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import FormControl from '@mui/material/FormControl';
+import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
-import Button from '@mui/material/Button';
-import SearchIcon from '@mui/icons-material/Search';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
-import { useSelector } from 'react-redux';
-import TopBar from '../../components/common/TopBar';
-import VouchersPromoCreatePopup from './VouchersPromoCreatePopup';
-import VouchersReferralCreatePopup from './VouchersReferralCreatePopup';
-import VouchersPromoEditPopup from './VouchersPromoEditPopup';
-import Service from '../../services/adminapp/adminVouchers';
-import { useAppSelector } from '../../redux/redux-hooks';
+import TablePagination from '@mui/material/TablePagination';
+import dayjs from 'dayjs';
+import React, { useEffect, useState } from 'react';
 import ActionMenu from '../../components/common/ActionMenu';
-import PermissionPopup from '../../utils/PermissionPopup';
+import CustomText from '../../components/common/CustomText';
 import Loader from '../../components/common/Loader';
 import Notify from '../../components/common/Notify';
-import { listingRolePermission } from '../../utils/helper';
+import TopBar from '../../components/common/TopBar';
+import { useAppSelector } from '../../redux/redux-hooks';
+import Service from '../../services/adminapp/adminVouchers';
+import PermissionPopup from '../../utils/PermissionPopup';
 import { NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
-import CustomText from '../../components/common/CustomText';
+import { listingRolePermission } from '../../utils/helper';
+import VouchersPromoCreatePopup from './VouchersPromoCreatePopup';
+import VouchersPromoEditPopup from './VouchersPromoEditPopup';
+import VouchersReferralCreatePopup from './VouchersReferralCreatePopup';
 
 const options = ['Edit', 'Delete'];
 function VouchersPage() {
   const authState: any = useAppSelector((state) => state.authState);
-  const dataRole = useSelector(
+  const dataRole = useAppSelector(
     (state: any) => state.roleState.role.permissions
   );
   const [list, setList] = useState<any>([]);

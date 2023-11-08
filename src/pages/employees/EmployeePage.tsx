@@ -1,38 +1,37 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import IconButton from '@mui/material/IconButton';
+import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import SearchIcon from '@mui/icons-material/Search';
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import FormControl from '@mui/material/FormControl';
+import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
-import Button from '@mui/material/Button';
-import SearchIcon from '@mui/icons-material/Search';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
-import TablePagination from '@mui/material/TablePagination';
 import Switch from '@mui/material/Switch';
+import TablePagination from '@mui/material/TablePagination';
 import dayjs from 'dayjs';
-import Avatar from '@mui/material/Avatar';
-import { useSelector } from 'react-redux';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 import TopBar from '../../components/common/TopBar';
 // import CustomersCreatePopup from './CustomersCreatePopup';
 // import CustomersEditPopup from './CustomersEditPopup';
-import { useAppSelector } from '../../redux/redux-hooks';
 import ActionMenu from '../../components/common/ActionMenu';
-import Service from '../../services/adminapp/adminEmployee';
+import CustomDialog from '../../components/common/CustomDialog';
+import CustomText from '../../components/common/CustomText';
 import Loader from '../../components/common/Loader';
 import Notify from '../../components/common/Notify';
+import { AppUserEmployees } from '../../interfaces/app-user.interface';
+import { useAppSelector } from '../../redux/redux-hooks';
+import Service from '../../services/adminapp/adminEmployee';
 import PermissionPopup from '../../utils/PermissionPopup';
 import { NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
-import { CheckRolePermission, listingRolePermission } from '../../utils/helper';
-import CustomText from '../../components/common/CustomText';
-import CustomDialog from '../../components/common/CustomDialog';
-import { AppUserEmployees } from '../../interfaces/app-user.interface';
+import { listingRolePermission } from '../../utils/helper';
 
 function EmployeePage() {
   const authState: any = useAppSelector((state) => state.authState);
-  const dataRole = useSelector(
+  const dataRole = useAppSelector(
     (state: any) => state.roleState.role.permissions
   );
   const navigate = useNavigate();
@@ -111,8 +110,7 @@ function EmployeePage() {
     },
   ];
 
-  console.log("AUTH", authState.user.employeeLimit, total);
-
+  console.log('AUTH', authState.user.employeeLimit, total);
 
   const handleFormClickOpen = () => {
     if (listingRolePermission(dataRole, 'Employee Create')) {
@@ -121,7 +119,7 @@ function EmployeePage() {
       } else {
         setIsNotify(true);
         setNotifyMessage({
-          text: "Employees limit has been excceed",
+          text: 'Employees limit has been excceed',
           type: 'warning',
         });
       }
@@ -571,8 +569,8 @@ function EmployeePage() {
                               <span className="text-xs font-normal text-[#6A6A6A]">
                                 {dayjs(item.createdDate).isValid()
                                   ? dayjs(item.createdDate)?.format(
-                                    'MMMM DD, YYYY'
-                                  )
+                                      'MMMM DD, YYYY'
+                                    )
                                   : '--'}
                               </span>
                             </div>

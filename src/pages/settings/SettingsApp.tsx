@@ -1,41 +1,41 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useDispatch, useSelector } from 'react-redux';
-import { useEffect, useState } from 'react';
-import FormControl from '@mui/material/FormControl';
-import Input from '@mui/material/Input';
-import IconButton from '@mui/material/IconButton';
-import Button from '@mui/material/Button';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import { useNavigate } from 'react-router-dom';
-import Link from '@mui/material/Link';
-import { useForm } from 'react-hook-form';
 import EditIcon from '@mui/icons-material/Edit';
-import DragDropFile from './DragDropFile';
+import Button from '@mui/material/Button';
+import FormControl from '@mui/material/FormControl';
+import IconButton from '@mui/material/IconButton';
+import Input from '@mui/material/Input';
+import Link from '@mui/material/Link';
+import Tab from '@mui/material/Tab';
+import Tabs from '@mui/material/Tabs';
+import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import PlusIcon from '../../components/icons/PlusIcon';
 import { Setting } from '../../interfaces/app.interface';
-import SocialLinksPopup from './SocialLinksPopup';
 import { useAppSelector } from '../../redux/redux-hooks';
+import DragDropFile from './DragDropFile';
+import SocialLinksPopup from './SocialLinksPopup';
 
-import '../../assets/css/PopupStyle.css';
 import assets from '../../assets';
+import '../../assets/css/PopupStyle.css';
 import ColorPicker from '../../components/common/ColorPicker';
+import Loader from '../../components/common/Loader';
+import MapAddress from '../../components/common/MapAddress';
+import Notify from '../../components/common/Notify';
+import { setLogo } from '../../redux/features/appStateSlice';
 import Service from '../../services/adminapp/admin';
 import {
   DOMAIN_PREFIX,
+  DOMAIN_PROTOCOL,
   FACEBOOK,
   INSTAGRAM,
   LINKEDIN,
-  DOMAIN_PROTOCOL,
   TWITTER,
   WHATSAPP,
   YOUTUBE,
 } from '../../utils/constants';
-import MapAddress from '../../components/common/MapAddress';
-import Loader from '../../components/common/Loader';
-import Notify from '../../components/common/Notify';
 import { listingRolePermission } from '../../utils/helper';
-import { setItemState, setLogo } from '../../redux/features/appStateSlice';
 
 type AssetsImages = keyof typeof assets.images;
 
@@ -62,7 +62,7 @@ function HelpingIcon(elements: any) {
 function SettingsApp() {
   const dispatch = useDispatch();
   const authState: any = useAppSelector((state) => state.authState);
-  const dataRole = useSelector(
+  const dataRole = useAppSelector(
     (state: any) => state.roleState.role.permissions
   );
   const navigate = useNavigate();
@@ -227,12 +227,12 @@ function SettingsApp() {
           </div>
           <div className="Content w-full py-5 px-4">
             <form onSubmit={handleSubmit(onSubmit)}>
-              <div className="items-center grid grid-cols-12">
+              <div className="grid grid-cols-12 items-center">
                 <div className="col-span-5 mb-4">
                   <DragDropFile setFile={setFile} setImg={setSelectedImg} />
                 </div>
                 {selectedImg ? (
-                  <div className="flex col-span-6 items-center 2xl:justify-start xl:justify-center">
+                  <div className="col-span-6 flex items-center xl:justify-center 2xl:justify-start">
                     <img
                       className="max-h-[100px] max-w-[150px] rounded-md"
                       src={selectedImg}
@@ -240,7 +240,7 @@ function SettingsApp() {
                     />
                   </div>
                 ) : detail && detail.logo ? (
-                  <div className="flex col-span-6 items-center 2xl:justify-start xl:justify-center">
+                  <div className="col-span-6 flex items-center xl:justify-center 2xl:justify-start">
                     <img
                       className="max-h-[100px] max-w-[150px] rounded-md"
                       src={detail.logo}

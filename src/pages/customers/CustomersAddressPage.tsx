@@ -1,37 +1,31 @@
-import React, { useState, useEffect, Fragment } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import Divider from '@mui/material/Divider';
-import FormControl from '@mui/material/FormControl';
-import Input from '@mui/material/Input';
-import InputAdornment from '@mui/material/InputAdornment';
-import IconButton from '@mui/material/IconButton';
-import SearchIcon from '@mui/icons-material/Search';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
-import TablePagination from '@mui/material/TablePagination';
+import Divider from '@mui/material/Divider';
+import IconButton from '@mui/material/IconButton';
 import Switch from '@mui/material/Switch';
-import { useSelector } from 'react-redux';
-import TopBar from '../../components/common/TopBar';
-import Map from '../../components/common/Map';
-import MapAddress from '../../components/common/MapAddress';
-import Service from '../../services/adminapp/adminCustomer';
-import ActionMenu from '../../components/common/ActionMenu';
-import { useAppSelector } from '../../redux/redux-hooks';
-import CustomersAddressCreatePopup from './CustomersAddressCreatePopup';
-import CustomersAddressEditPopup from './CustomersAddressEditPopup';
+import TablePagination from '@mui/material/TablePagination';
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import assets from '../../assets';
-import Notify from '../../components/common/Notify';
+import ActionMenu from '../../components/common/ActionMenu';
+import CustomText from '../../components/common/CustomText';
 import Loader from '../../components/common/Loader';
+import MapAddress from '../../components/common/MapAddress';
+import Notify from '../../components/common/Notify';
+import TopBar from '../../components/common/TopBar';
+import { useAppSelector } from '../../redux/redux-hooks';
+import Service from '../../services/adminapp/adminCustomer';
 import PermissionPopup from '../../utils/PermissionPopup';
 import { NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
 import { listingRolePermission } from '../../utils/helper';
-import CustomText from '../../components/common/CustomText';
+import CustomersAddressCreatePopup from './CustomersAddressCreatePopup';
+import CustomersAddressEditPopup from './CustomersAddressEditPopup';
 
 function CustomersAddressPage() {
   const authState: any = useAppSelector((state) => state.authState);
-  const dataRole = useSelector(
+  const dataRole = useAppSelector(
     (state: any) => state.roleState.role.permissions
   );
   const params = useParams();

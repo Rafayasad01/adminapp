@@ -1,30 +1,27 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import TopBar from '../../components/common/TopBar';
-import driver from '../../services/adminapp/adminDriver';
 import { useAppSelector } from '../../redux/redux-hooks';
+import driver from '../../services/adminapp/adminDriver';
 
 import ActionMenu from '../../components/common/ActionMenu';
+import CustomDialog from '../../components/common/CustomDialog';
+import CustomTable from '../../components/common/CustomTable';
 import Loader from '../../components/common/Loader';
 import Notify from '../../components/common/Notify';
-import CustomTable from '../../components/common/CustomTable';
-import CustomDialog from '../../components/common/CustomDialog';
 import PermissionPopup from '../../utils/PermissionPopup';
 
 import { AppUserDriverExt } from '../../interfaces/app-user.interface';
-import { CheckRolePermission, listingRolePermission } from '../../utils/helper';
 import { NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
+import { CheckRolePermission, listingRolePermission } from '../../utils/helper';
 
 function DriversPage() {
-  const authState = useAppSelector((state: any) => state.authState);
-  const dataRole = useSelector(
-    (state: any) => state.roleState.role.permissions
-  );
+  const authState = useAppSelector((state) => state.authState);
+  const dataRole = useAppSelector((state) => state.roleState.role.permissions);
   const navigate = useNavigate();
   const [list, setList] = useState<any>([]);
   const [search, setSearch] = useState('');

@@ -12,7 +12,6 @@ import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import dayjs from 'dayjs';
 import TablePagination from '@mui/material/TablePagination';
 import Switch from '@mui/material/Switch';
-import { useSelector } from 'react-redux';
 import TopBar from '../../components/common/TopBar';
 import CategoriesCreatePopup from './CategoriesCreatePopup';
 import assets from '../../assets';
@@ -29,8 +28,8 @@ import CustomText from '../../components/common/CustomText';
 
 function CategoriesPage() {
   const authState: any = useAppSelector((state) => state.authState);
-  const dataRole = useSelector(
-    (state: any) => state.roleState.role.permissions
+  const dataRole = useAppSelector(
+    (state) => state.roleState.role.permissions
   );
   const navigate = useNavigate();
   const [search, setSearch] = useState('');

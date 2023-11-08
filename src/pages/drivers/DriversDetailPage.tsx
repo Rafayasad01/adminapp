@@ -1,14 +1,16 @@
-import React, { useState, useEffect, Fragment } from 'react';
-import { useParams } from 'react-router-dom';
-import Divider from '@mui/material/Divider';
-import dayjs from 'dayjs';
 import Avatar from '@mui/material/Avatar';
+import Divider from '@mui/material/Divider';
 import TablePagination from '@mui/material/TablePagination';
-import { useSelector } from 'react-redux';
-import TopBar from '../../components/common/TopBar';
-import MapAddress from '../../components/common/MapAddress';
-import Service from '../../services/adminapp/adminDriver';
+import dayjs from 'dayjs';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import ActionMenu from '../../components/common/ActionMenu';
+import CustomText from '../../components/common/CustomText';
+import Loader from '../../components/common/Loader';
+import MapAddress from '../../components/common/MapAddress';
+import Notify from '../../components/common/Notify';
+import TopBar from '../../components/common/TopBar';
+import Service from '../../services/adminapp/adminDriver';
 import {
   ORDER_DELIVERY_STATUS_ACCEPTED,
   ORDER_DELIVERY_STATUS_CANCELLED,
@@ -17,14 +19,11 @@ import {
   ORDER_DELIVERY_STATUS_NEW,
   ORDER_DELIVERY_STATUS_PICKED_UP,
 } from '../../utils/constants';
-import Loader from '../../components/common/Loader';
-import Notify from '../../components/common/Notify';
 import { listingRolePermission } from '../../utils/helper';
-import CustomText from '../../components/common/CustomText';
 
 function DriversDetailPage() {
   const params = useParams();
-  const dataRole = useSelector(
+  const dataRole = useAppSelector(
     (state: any) => state.roleState.role.permissions
   );
   const [detail, setDetail] = useState<any>(null);

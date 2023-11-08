@@ -11,7 +11,6 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import TablePagination from '@mui/material/TablePagination';
 import Switch from '@mui/material/Switch';
-import { useSelector } from 'react-redux';
 import TopBar from '../../components/common/TopBar';
 import ServicesCreatePopup from './CategoriesServicesCreatePopup';
 import ServicesEditPopup from './CategoriesServicesEditPopup';
@@ -28,7 +27,7 @@ import CustomText from '../../components/common/CustomText';
 function CategoriesServicesPage() {
   const params = useParams();
   const authState: any = useAppSelector((state) => state.authState);
-  const dataRole = useSelector(
+  const dataRole = useAppSelector(
     (state: any) => state.roleState.role.permissions
   );
   const navigate = useNavigate();
