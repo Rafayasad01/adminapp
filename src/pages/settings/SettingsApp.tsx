@@ -220,7 +220,7 @@ function SettingsApp() {
     }
   }, [emptyVariable]);
 
-  console.log('detail', selectedImg,detail?.logo);
+  console.log('detail', selectedImg, detail?.logo);
 
   return isLoader ? (
     <Loader />
