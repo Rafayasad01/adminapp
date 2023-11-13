@@ -37,10 +37,10 @@ function ShopAdminUserDetailPage() {
       <>
         <TopBar title="User Detail" isNestedRoute />
         <div className="px-5">
-          <div className="grid h-[400px] w-full grid-cols-12 rounded-lg bg-[#F0F0F0] p-3">
+          <div className="grid max-h-[400px] w-full grid-cols-12 rounded-lg bg-[#F0F0F0] p-3">
             <div className="col-span-4">
               <p className="text-sm font-semibold text-[#1A1A1A]">Shop Owner</p>
-              <div className="flex h-[92%] items-center justify-center">
+              <div className="flex items-center justify-center xl:h-[40%] xl:max-h-[40%] 2xl:h-[60%] 2xl:max-h-[100%]">
                 <div className="flex items-center">
                   <div>
                     {userDetail.avatar ? (
@@ -100,15 +100,15 @@ function ShopAdminUserDetailPage() {
                 </div>
               </div>
             </div>
-            <div className="col-span-8 border-l-[1px] border-[#949EAE] px-10">
+            <div className="col-span-8 border-l-[1px] border-[#949EAE] px-10 xl:max-h-[43%] 2xl:max-h-[68%]">
               <p className="text-sm font-semibold text-[#1A1A1A]">
                 Shop Branches
               </p>
-              <div className="my-5 max-h-[100%] overflow-y-scroll">
-                <div className="grid grid-cols-4 gap-6">
+              <div className="my-5 overflow-y-scroll xl:max-h-[85%] 2xl:max-h-[86%]">
+                <div className="grid grid-cols-4 xl:gap-4 2xl:gap-6">
                   {userDetail.branchUsers?.map((item: any, index: number) => {
                     return (
-                      <div key={index} className="col-span-1">
+                      <div key={index} className="xl:col-span-2 2xl:col-span-1">
                         <CustomAvatarWithName
                           isactive={item.isActive}
                           center

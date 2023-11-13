@@ -243,8 +243,8 @@ function SuperAdminPermissionPage() {
                   list.map((item: any, index: number) => {
                     return (
                       <tr key={index}>
-                        <td>{item.name}</td>
-                        <td>{item.desc}</td>
+                        <td className="text-sm font-semibold">{item.name}</td>
+                        <td className="w-[50%]">{item.desc}</td>
                         <td>{item.permissionType}</td>
                         <td>
                           {item.isActive ? (

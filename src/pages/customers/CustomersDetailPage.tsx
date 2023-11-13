@@ -17,7 +17,7 @@ function CustomersDetailPage() {
   const [notifyMessage, setNotifyMessage] = useState({});
   const [emptyVariable] = useState(null);
   const id: any = params.customerId;
-  
+
   useEffect(() => {
     Service.getDetailService(id)
       .then((item: any) => {

@@ -10,6 +10,7 @@ import FacebookIcon from '@mui/icons-material/Facebook';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
+import CorporateFareIcon from '@mui/icons-material/CorporateFare';
 import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
 import PeopleOutlineOutlinedIcon from '@mui/icons-material/PeopleOutlineOutlined';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
@@ -89,6 +90,12 @@ const links = [
     icon: <PeopleOutlineOutlinedIcon className="w-[17px]" />,
   },
   {
+    name: 'Branches',
+    path: 'branches',
+    permission: 'Branch List',
+    icon: <CorporateFareIcon className="w-[17px]" />,
+  },
+  {
     name: 'Notifications',
     path: 'notification',
     permission: 'Notification List',
@@ -157,8 +164,11 @@ const superAdminlinks = [
 
 function Sidebar() {
   const userData = useAppSelector((state: any) => state?.authState?.user);
-  const socialItems = useAppSelector((state: any) => state?.persisitReducer?.appState?.items);
-  
+  const socialItems = useAppSelector((state: any) => state?.persisitReducer?.appState?.UserItems);
+
+  console.log("userData", userData);
+
+
   const logo = useAppSelector((state: any) => state?.persisitReducer?.appState?.logo);
 
   const [list, setList] = useState<any>(null);
@@ -166,8 +176,8 @@ function Sidebar() {
   const authState: any = useAppSelector((state: any) => state?.authState);
   const dataRole = useAppSelector((state: any) => state);
   const [emptyVariable] = useState(null);
-  console.log("dataaa",dataRole);
-  
+  console.log("dataaa", dataRole);
+
   const dispatch = useAppDispatch();
   const logOut = () => {
     dispatch(logout());
@@ -305,13 +315,13 @@ function Sidebar() {
             justifyContent="center"
           >
             {userData.isSuperAdmin ? (
-              <img className="mt-9" src={assets.images.logo} alt="" />
+              <img className="mt-9 max-w-[150px]" src={assets.images.logo} alt="" />
             ) : logo ? (
-              <img className="mt-9" src={logo} alt="logo" />
+              <img className="mt-9 max-w-[150px]" src={logo} alt="logo" />
             ) : (
               <div className="flex w-full items-center justify-start rounded-2xl p-3 text-white">
                 <img
-                  className="mt-2"
+                  className="mt-2 max-w-[150px]"
                   src={assets.images.defaultLogo}
                   alt="logo"
                 />
@@ -341,6 +351,12 @@ function Sidebar() {
           {!authState.user.isSuperAdmin && (
             <div className="share-via">
               <h6 className="heading">Share</h6>
+              {socialItems?.tenantConfig?.facebook === null &&
+                socialItems?.tenantConfig?.twitter === null &&
+                socialItems?.tenantConfig?.instagram === null &&
+                socialItems?.tenantConfig?.whatsapp === null &&
+                socialItems?.tenantConfig?.linkedin === null &&
+                socialItems?.tenantConfig?.youtube === null && <span className="text-sm">No Links yet</span>}
               {socialItems?.tenantConfig && (
                 <div className="social-icons grid grid-cols-6">
                   {socialItems?.tenantConfig?.facebook && (

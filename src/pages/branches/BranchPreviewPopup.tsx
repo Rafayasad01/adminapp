@@ -17,11 +17,11 @@ import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 import isBetween from 'dayjs/plugin/isBetween';
 
-import '../../../../assets/css/PopupStyle.css';
+import '../../assets/css/PopupStyle.css';
 import IconButton from '@mui/material/IconButton';
-import { Tenant } from '../../../../interfaces/superadmin/tenant.interface';
-import { DOMAIN_PREFIX, DOMAIN_PROTOCOL } from '../../../../utils/constants';
-import CustomDropDown from '../../../../components/common/CustomDropDown';
+import { Tenant } from '../../interfaces/superadmin/tenant.interface';
+import { DOMAIN_PREFIX, DOMAIN_PROTOCOL } from '../../utils/constants';
+import CustomDropDown from '../../components/common/CustomDropDown';
 
 dayjs.extend(duration);
 dayjs.extend(isBetween);
@@ -34,7 +34,7 @@ type Props = {
   setNotifyMessage: any;
 };
 
-function SuperAdminShopBranchDetailPopup({
+function BranchPreviewPopup({
   openFormDialog,
   setOpenFormDialog,
   items,
@@ -148,6 +148,29 @@ function SuperAdminShopBranchDetailPopup({
               </div>
             </div>
 
+            <div className="grid w-[100%] grid-cols-2">
+              <div className="mt-4 flex w-full flex-col">
+                <span className="font-open-sans text-base font-medium not-italic text-[#1A1A1A]">
+                  Branch Limit
+                </span>
+                <div className="mt-1 w-28 text-center font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
+                  <span className="badge badge-primary">
+                    {items.maxBranchLimit}
+                  </span>
+                </div>
+              </div>
+              <div className="mt-4 flex w-full flex-col items-center">
+                <span className="font-open-sans text-base font-medium not-italic text-[#1A1A1A]">
+                  Employees Limit
+                </span>
+                <div className="mt-1 font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
+                  <span className="badge badge-primary">
+                    {items.maxUserLimit}
+                  </span>
+                </div>
+              </div>
+            </div>
+
             <div className="mt-4 flex w-full flex-col">
               <span className="font-open-sans text-base font-medium not-italic text-[#1A1A1A]">
                 Trial Mode
@@ -167,4 +190,4 @@ function SuperAdminShopBranchDetailPopup({
   );
 }
 
-export default SuperAdminShopBranchDetailPopup;
+export default BranchPreviewPopup;

@@ -20,7 +20,7 @@ import { NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
 import { CheckRolePermission, listingRolePermission } from '../../utils/helper';
 
 function DriversPage() {
-  const authState = useAppSelector((state:any) => state?.authState);
+  const authState = useAppSelector((state: any) => state?.authState);
   const dataRole = useAppSelector(
     (state) => state?.persisitReducer?.roleState?.role?.permissions
   );

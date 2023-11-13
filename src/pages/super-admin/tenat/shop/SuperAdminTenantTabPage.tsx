@@ -4,6 +4,7 @@ import dayjs from 'dayjs';
 import EditIcon from '@mui/icons-material/Edit';
 import SettingsIcon from '@mui/icons-material/Settings';
 import PreviewIcon from '@mui/icons-material/Preview';
+import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import ViewListIcon from '@mui/icons-material/ViewList';
 import IconButton from '@mui/material/IconButton';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
@@ -17,6 +18,7 @@ import SuperAdminShopBranchDetailPopup from './SuperAdminShopBranchDetailPopup';
 import SuperAdminSettingTabPage from './SuperAdminSettingTabPage';
 import SuperAdminCategoryTabPage from './SuperAdminCategoryTabPage';
 import { useAppSelector } from '../../../../redux/redux-hooks';
+import SuperAdminUserTabPage from './SuperAdminUserTabPage';
 
 type Props = {
   tenant: string;
@@ -32,6 +34,7 @@ function SuperAdminTenantTabPage({ tenant }: Props) {
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
   const [openSettingDialog, setOpenSettingDialog] = useState(false);
   const [branchDialog, setBranchDialog] = useState(false);
+  const [userDialog, setUserDialog] = useState(false);
   const [openCategoryDialog, setOpenCategoryDialog] = useState(false);
   const [formDetail, setFormDetail] = useState<any>(null);
   const [isNotify, setIsNotify] = React.useState(false);
@@ -41,7 +44,42 @@ function SuperAdminTenantTabPage({ tenant }: Props) {
   const [subCategories, setSubCategories] = useState<any>([]);
   const [isTrialMode, setIsTrialMode] = React.useState<boolean>(false);
 
-  
+  const getUserById = (id: any, type: any) => {
+    setIsLoader(true);
+    let service;
+    if (type === 'shop') {
+      service = Service.detailShopUser(id);
+    } else {
+      service = Service.detailBranchUser(id);
+    }
+    service
+      .then((item: any) => {
+        console.log('item.data.data::::::', item.data.data);
+        if (item.data.success) {
+          setFormDetail(item.data.data);
+          setUserDialog(true);
+          setIsLoader(false);
+        } else {
+          setIsLoader(false);
+          setUserDialog(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'error',
+          });
+        }
+      })
+      .catch((err) => {
+        setIsLoader(false);
+        setUserDialog(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
+        });
+      });
+  };
+
   const getShopService = (id: any, setModalHandler: any) => {
     Service.getShop(id)
       .then((item: any) => {
@@ -509,6 +547,15 @@ function SuperAdminTenantTabPage({ tenant }: Props) {
               </div>
               <div className="">
                 <IconButton
+                  title="User Detail"
+                  className="m-0"
+                  onClick={() => getUserById(tenant, 'shop')}
+                >
+                  <AccountBoxIcon />
+                </IconButton>
+              </div>
+              <div className="">
+                <IconButton
                   title="Branch Category"
                   className="m-0"
                   onClick={() => getCategoryById(tenant)}
@@ -565,10 +612,10 @@ function SuperAdminTenantTabPage({ tenant }: Props) {
                 return (
                   <div
                     key={index}
-                    className="rounded-lg bg-blue-50 shadow-xl xl:col-span-4 2xl:col-span-3"
+                    className="h-[200px] rounded-2xl shadow-xl xl:col-span-6 2xl:col-span-4"
                   >
-                    <div className="flex w-full justify-between py-[2rem]">
-                      <div className="flex flex-col px-5">
+                    <div className="flex h-full w-full justify-between py-[2rem]">
+                      <div className="flex h-full flex-col justify-between px-5">
                         <div className="flex w-full flex-col">
                           <span className="font-open-sans text-base font-semibold not-italic text-[#1A1A1A]">
                             Shop Name
@@ -578,7 +625,7 @@ function SuperAdminTenantTabPage({ tenant }: Props) {
                           </div>
                         </div>
 
-                        <div className="flex w-[100%] ">
+                        <div className="flex w-[100%]">
                           <div className="mt-4 flex w-full flex-col">
                             <span className="font-open-sans text-base font-semibold not-italic text-[#1A1A1A]">
                               Employees
@@ -591,8 +638,8 @@ function SuperAdminTenantTabPage({ tenant }: Props) {
                           </div>
                         </div>
                       </div>
-                      <div className="flex-col">
-                        <div className="flex ">
+                      <div className="h-full flex-col justify-between">
+                        <div className="flex">
                           <div className="flex items-center justify-end">
                             <IconButton
                               title="View Branch"
@@ -600,6 +647,15 @@ function SuperAdminTenantTabPage({ tenant }: Props) {
                               onClick={(event) => openBranchModal(item.id)}
                             >
                               <PreviewIcon />
+                            </IconButton>
+                          </div>
+                          <div className="">
+                            <IconButton
+                              title="User Detail"
+                              className="m-0"
+                              onClick={() => getUserById(item.id, 'branch')}
+                            >
+                              <AccountBoxIcon />
                             </IconButton>
                           </div>
                           <div className="flex items-center justify-end">
@@ -630,7 +686,7 @@ function SuperAdminTenantTabPage({ tenant }: Props) {
                             </IconButton>
                           </div>
                         </div>
-                        <div className="flex h-[90%] items-center justify-end px-3 font-open-sans font-normal">
+                        <div className="flex h-[100%] items-center justify-end px-3 font-open-sans font-normal">
                           {item.isActive ? (
                             <span className="badge badge-success">Enabled</span>
                           ) : (
@@ -686,6 +742,14 @@ function SuperAdminTenantTabPage({ tenant }: Props) {
           items={formDetail}
           openFormDialog={branchDialog}
           setOpenFormDialog={setBranchDialog}
+        />
+      )}
+
+      {userDialog && (
+        <SuperAdminUserTabPage
+          items={formDetail}
+          openFormDialog={userDialog}
+          setOpenFormDialog={setUserDialog}
         />
       )}
 

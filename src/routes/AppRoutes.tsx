@@ -54,6 +54,8 @@ import SuperAdminShopDetailsPage from '../pages/super-admin/tenat/user/SuperAdmi
 import ShopAdminUserDetailPage from '../pages/super-admin/tenat/user/SuperAdminUserDetailPage';
 import EmployeePage from '../pages/employees/EmployeePage';
 import SuperAdminPermissionPageDetails from '../pages/super-admin/role-permissions/SuperAdminPermissionPageDetails';
+import BranchPage from '../pages/branches/BranchPage';
+import BranchDetailPage from '../pages/branches/BranchDetailPage';
 
 
 export const routeObjects: RouteObject[] = [
@@ -357,6 +359,23 @@ export const routeObjects: RouteObject[] = [
               {
                 path: 'detail/:customerId',
                 element: <CustomersDetailPage />,
+              },
+              {
+                path: 'address/:customerId',
+                element: <CustomersAddressPage />,
+              },
+            ],
+          },
+          {
+            path: 'branches',
+            children: [
+              {
+                index: true,
+                element: <BranchPage />
+              },
+              {
+                path: 'detail/:branchId',
+                element: <BranchDetailPage />,
               },
               {
                 path: 'address/:customerId',

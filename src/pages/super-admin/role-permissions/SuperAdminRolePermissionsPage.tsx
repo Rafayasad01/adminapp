@@ -224,7 +224,7 @@ function SuperAdminRolePermissionsPage() {
                             </div>
                           </div>
                         </td>
-                        <td>{item.desc}</td>
+                        <td className="w-[50%]">{item.desc}</td>
                         <td>
                           {item.createdDate !== null
                             ? dayjs(item.createdDate)?.format(

@@ -1,0 +1,39 @@
+import network from '../../utils/network';
+import { BACKOFFICE_PREFIX } from '../../utils/constants';
+
+const BRANCH_PREFIX = 'branch';
+
+const getListService = (tenantID: string, page: number, size: number) => {
+  return network.get(`${BRANCH_PREFIX}/list/${tenantID}/${page}/${size}`);
+};
+
+const getListServiceSearch = (
+  tenantID: string,
+  search: string,
+  page: number,
+  size: number
+) => {
+  return network.get(
+    `${BRANCH_PREFIX}/list/${tenantID}/${search}/${page}/${size}`
+  );
+};
+
+const getDetailService = (tenantID: any) => {
+  return network.get(`${BRANCH_PREFIX}/detail/${tenantID}`);
+};
+
+const getSettingService = (tenantID: any) => {
+  return network.get(`${BRANCH_PREFIX}/setting/${tenantID}`);
+};
+
+const getCategoryService = (tenantID: any) => {
+  return network.get(`${BRANCH_PREFIX}/category/${tenantID}`);
+};
+
+export default {
+  getListService,
+  getDetailService,
+  getSettingService,
+  getCategoryService,
+  getListServiceSearch,
+};
