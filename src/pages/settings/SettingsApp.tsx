@@ -9,11 +9,10 @@ import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import PlusIcon from '../../components/icons/PlusIcon';
 import { Setting } from '../../interfaces/app.interface';
-import { useAppSelector } from '../../redux/redux-hooks';
+import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 import DragDropFile from './DragDropFile';
 import SocialLinksPopup from './SocialLinksPopup';
 
@@ -60,7 +59,7 @@ function HelpingIcon(elements: any) {
 }
 
 function SettingsApp() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const authState: any = useAppSelector((state) => state?.authState);
   const dataRole = useAppSelector(
     (state: any) => state?.persisitReducer?.roleState?.role?.permissions
@@ -221,7 +220,7 @@ function SettingsApp() {
     }
   }, [emptyVariable]);
 
-  console.log('detail', file);
+  console.log('detail', selectedImg,detail?.logo);
 
   return isLoader ? (
     <Loader />
@@ -374,42 +373,36 @@ function SettingsApp() {
                   <div className="mt-2 flex flex-row items-center gap-3">
                     {detail && detail.facebook && (
                       <Item
-                        key={detail.facebook}
                         value={detail.facebook}
                         name={FACEBOOK as AssetsImages}
                       />
                     )}
                     {detail && detail.instagram && (
                       <Item
-                        key={detail.instagram}
                         value={detail.instagram}
                         name={INSTAGRAM as AssetsImages}
                       />
                     )}
                     {detail && detail.linkedin && (
                       <Item
-                        key={detail.linkedin}
                         value={detail.linkedin}
                         name={LINKEDIN as AssetsImages}
                       />
                     )}
                     {detail && detail.twitter && (
                       <Item
-                        key={detail.twitter}
                         value={detail.twitter}
                         name={TWITTER as AssetsImages}
                       />
                     )}
                     {detail && detail.youtube && (
                       <Item
-                        key={detail.youtube}
                         value={detail.youtube}
                         name={YOUTUBE as AssetsImages}
                       />
                     )}
                     {detail && detail.whatsapp && (
                       <Item
-                        key={detail.whatsapp}
                         value={detail.whatsapp}
                         name={WHATSAPP as AssetsImages}
                       />
