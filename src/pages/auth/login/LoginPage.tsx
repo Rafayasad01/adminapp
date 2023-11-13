@@ -52,7 +52,7 @@ function LoginPage() {
       dispatch(setRolePermissions(newUserData.role));
       delete newUserData.role;
       dispatch(login(newUserData));
-      dispatch(setItemState(user?.data?.data));
+      dispatch(setItemState(newUserData));
       dispatch(setLogo(user?.data?.data?.tenantConfig?.logo));
       if (newUserData.isSuperAdmin) {
         navigate('../../../main');

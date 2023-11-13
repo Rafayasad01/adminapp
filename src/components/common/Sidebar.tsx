@@ -333,7 +333,7 @@ function Sidebar() {
         <div className="flex w-full flex-col text-base ">
           {/* {SideBarMenu("", "Dashboard", <GridViewOutlinedIcon fontSize="inherit" />)} */}
           {list &&
-            list.map((link: any, index: number) => {
+            list?.map((link: any, index: number) => {
               return (
                 <Fragment key={link.path}>
                   {SideBarMenu(
