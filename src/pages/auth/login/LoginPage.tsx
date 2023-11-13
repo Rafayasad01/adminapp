@@ -22,7 +22,7 @@ import { setItemState, setLogo } from '../../../redux/features/appStateSlice';
 import RoleIcon from '../../../components/icons/RoleIcon';
 
 function LoginPage() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
@@ -53,7 +53,9 @@ function LoginPage() {
       delete newUserData.role;
       dispatch(login(newUserData));
       dispatch(setItemState(newUserData));
-      dispatch(setLogo(user?.data?.data?.tenantConfig?.logo));
+      if (newUserData?.tenantConfig) {
+        dispatch(setLogo(user?.data?.data?.tenantConfig?.logo));
+      }
       if (newUserData.isSuperAdmin) {
         navigate('../../../main');
       } else {

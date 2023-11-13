@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 type AppUserItems = {
-  items: any;
+  UserItems: any;
 };
 
 type AppUserLogo = {

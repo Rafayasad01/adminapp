@@ -165,11 +165,9 @@ const superAdminlinks = [
 function Sidebar() {
   const userData = useAppSelector((state: any) => state?.authState?.user);
   const socialItems = useAppSelector((state: any) => state?.persisitReducer?.appState?.UserItems);
-
-  console.log("userData", userData);
-
-
   const logo = useAppSelector((state: any) => state?.persisitReducer?.appState?.logo);
+
+  console.log("userData", socialItems);
 
   const [list, setList] = useState<any>(null);
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
@@ -314,7 +312,7 @@ function Sidebar() {
             direction="row"
             justifyContent="center"
           >
-            {userData.isSuperAdmin ? (
+            {userData?.isSuperAdmin ? (
               <img className="mt-9 max-w-[150px]" src={assets.images.logo} alt="" />
             ) : logo ? (
               <img className="mt-9 max-w-[150px]" src={logo} alt="logo" />
