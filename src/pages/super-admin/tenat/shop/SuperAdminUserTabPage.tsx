@@ -22,6 +22,7 @@ function SuperAdminUserTabPage({
     setOpenFormDialog(false);
   };
 
+
   // const sentEmailHandler = (id: string) => {
   //   setIsLoader(true);
   //   Service.sentToEmailShop(id).then((item: any) => {
@@ -116,7 +117,7 @@ function SuperAdminUserTabPage({
                       Status
                     </span>
                     <div className="mt-1 font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
-                      {items.isActive ? (
+                      {items[0].isActive ? (
                         <span className="badge badge-success">ACTIVE</span>
                       ) : (
                         <span className="badge badge-danger">INACTIVE</span>
