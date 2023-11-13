@@ -50,14 +50,6 @@ function SuperAdminAddPermissionsPage() {
       type: 'text',
     },
     {
-      fieldName: 'Permission Sequence',
-      id: `permission_sequence${count}`,
-      register,
-      error: errors.permissionSequence,
-      type: 'number',
-      typeImportant: true,
-    },
-    {
       fieldName: 'Action',
       id: `action${count}`,
       register,
@@ -100,15 +92,6 @@ function SuperAdminAddPermissionsPage() {
           register,
           error: errors.desc,
           type: 'text',
-        },
-        {
-          fieldName: 'Permission Sequence',
-          id: `permission_sequence${tempCount}`,
-          register,
-          // value: 1,
-          error: errors.permissionSequence,
-          type: 'number',
-          typeImportant: true,
         },
         {
           fieldName: 'Action',
@@ -179,7 +162,7 @@ function SuperAdminAddPermissionsPage() {
         desc: data[`desc${index}`],
         action: data[`action${index}`],
         permissionType: data.permissionType,
-        permission_sequence: data[`permission_sequence${index}`],
+        // permission_sequence: data[`permission_sequence${index}`],
         show_on_menu: data[`show_on_menu${index}`],
       };
 
@@ -368,7 +351,7 @@ function SuperAdminAddPermissionsPage() {
               })}
               <div
                 onClick={() => handleAddMore()}
-                className="flex h-[326px] cursor-pointer items-center justify-center rounded-lg bg-[#F0F0F0] xl:col-span-2 2xl:col-span-1"
+                className="flex h-[266px] cursor-pointer items-center justify-center rounded-lg bg-[#F0F0F0] xl:col-span-2 2xl:col-span-1"
               >
                 <img alt="add" src={assets.images.addImg} />
               </div>

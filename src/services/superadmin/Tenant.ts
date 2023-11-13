@@ -24,9 +24,16 @@ const detailShop = (id: string) => {
 const detailShopSetting = (id: string) => {
   return network.get(`${TENANT_PREFIX}/${SHOP_PREFIX}/detail/setting/${id}`);
 };
-const detailShopUser = (id: string) => {
-  return network.get(`${TENANT_PREFIX}/${SHOP_PREFIX}/detail/user/${id}`);
+const detailShopUser = (tenantId: string) => {
+  return network.get(`${TENANT_PREFIX}/${SHOP_PREFIX}/detail/user/${tenantId}`);
 };
+
+const detailBranchUser = (tenantId: string) => {
+  return network.get(
+    `${TENANT_PREFIX}/${SHOP_PREFIX}/branch/detail/user/${tenantId}`
+  );
+};
+
 const detailShopCategory = (id: string) => {
   return network.get(`${TENANT_PREFIX}/${SHOP_PREFIX}/detail/category/${id}`);
 };
@@ -114,4 +121,5 @@ export default {
   createShopBranch,
   getShopWithBranch,
   getUserById,
+  detailBranchUser,
 };

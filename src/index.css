@@ -897,6 +897,9 @@ table.schedule-table>tbody>tr.days-off>td {
   color: var(--white);
 }
 
+.css-46bh2p-MuiCardContent-root{
+  padding: 10px !important;
+}
 
 .category-tab-content .sub-category .accordian-summary[aria-expanded="false"] .avatar {
   display: none !important;

@@ -113,27 +113,33 @@ function SettingsApp() {
       'liveDomain',
       item.liveDomain ? item.liveDomain : item.live_domain
     );
-    setValue('facebook', item.facebook);
-    setValue('instagram', item.instagram);
-    setValue('linkedin', item.linkedin);
-    setValue('twitter', item.twitter);
-    setValue('youtube', item.youtube);
-    setValue('whatsapp', item.whatsapp);
+    setValue('facebook', item.facebook ? item.facebook : '');
+    setValue('instagram', item.instagram ? item.instagram : '');
+    setValue('linkedin', item.linkedin ? item.linkedin : '');
+    setValue('twitter', item.twitter ? item.twitter : '');
+    setValue('youtube', item.youtube ? item.youtube : '');
+    setValue('whatsapp', item.whatsapp ? item.whatsapp : '');
     setColor1(item.color1);
     setColor2(item.color2);
-    setColor3(item.color3);
+    // setColor3(item.color3);
   };
 
   const onSubmit = (data: Setting) => {
     if (listingRolePermission(dataRole, 'Setting Update')) {
       setIsLoader(true);
       const formData = new FormData();
-      formData.append('name', data.name);
-      formData.append('desc', data.name);
-      formData.append('gstPercentage', data.gstPercentage);
-      formData.append('email', data.email);
-      formData.append('minOrderAmount', data.minOrderAmount);
-      formData.append('deliveryFee', data.deliveryFee);
+      formData.append('name', data.name ? data.name : '');
+      formData.append('desc', data.name ? data.name : '');
+      formData.append(
+        'gstPercentage',
+        data.gstPercentage ? data.gstPercentage : ''
+      );
+      formData.append('email', data.email ? data.email : '');
+      formData.append(
+        'minOrderAmount',
+        data.minOrderAmount ? data.minOrderAmount : 0
+      );
+      formData.append('deliveryFee', data.deliveryFee ? data.deliveryFee : 0);
       formData.append('facebook', detail ? detail.facebook : '');
       formData.append('instagram', detail ? detail.instagram : '');
       formData.append('linkedin', detail ? detail.linkedin : '');
@@ -143,11 +149,11 @@ function SettingsApp() {
       formData.append('updatedBy', authState.user.id);
       formData.append('color1', color1);
       formData.append('color2', color2);
-      formData.append('color3', color3);
+      // formData.append('color3', color3);
       if (file !== null) formData.append('logo', file);
 
-      Service.updateService(authState.user.tenant, formData).then(
-        (item: any) => {
+      Service.updateService(authState.user.tenant, formData)
+        .then((item: any) => {
           const { success, message, data: itemData } = item.data;
           if (success) {
             dispatch(setLogo(itemData.logo));
@@ -167,28 +173,44 @@ function SettingsApp() {
               type: 'error',
             });
           }
-        }
-      );
+        })
+        .catch((err) => {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: err.message,
+            type: 'error',
+          });
+        });
     }
   };
 
   useEffect(() => {
     if (listingRolePermission(dataRole, 'Setting View')) {
-      Service.getService(authState.user.tenant).then((item: any) => {
-        // console.log('item Select:::::', item)
-        if (item.data.success) {
-          setIsLoader(false);
-          setData(item.data.data);
-          setDetail(item.data.data);
-        } else {
+      Service.getService(authState.user.tenant)
+        .then((item: any) => {
+          // console.log('item Select:::::', item)
+          if (item.data.success) {
+            setIsLoader(false);
+            setData(item.data.data);
+            setDetail(item.data.data);
+          } else {
+            setIsLoader(false);
+            setIsNotify(true);
+            setNotifyMessage({
+              text: item.data.message,
+              type: 'error',
+            });
+          }
+        })
+        .catch((err) => {
           setIsLoader(false);
           setIsNotify(true);
           setNotifyMessage({
-            text: item.data.message,
+            text: err.message,
             type: 'error',
           });
-        }
-      });
+        });
     }
     if (listingRolePermission(dataRole, 'Setting Address')) {
       Service.getAddressService(authState.user.tenant).then((item: any) => {

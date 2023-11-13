@@ -51,7 +51,7 @@ function SuperAdminEditPermissionsPage() {
         fieldId: tempId,
         id: '',
         name: '',
-        permission_sequence: null,
+        // permission_sequence: null,
         showOnMenu: false,
       },
     };
@@ -79,7 +79,7 @@ function SuperAdminEditPermissionsPage() {
     unRegisterValues(`fieldIndexId${removePermissionId}`);
     unRegisterValues(`id${removePermissionId}`);
     unRegisterValues(`name${removePermissionId}`);
-    unRegisterValues(`permissionSequence${removePermissionId}`);
+    // unRegisterValues(`permissionSequence${removePermissionId}`);
     unRegisterValues(`show_on_menu${removePermissionId}`);
     unRegisterValues(`createdBy${removePermissionId}`);
     unRegisterValues(`createdDate${removePermissionId}`);
@@ -110,7 +110,7 @@ function SuperAdminEditPermissionsPage() {
                 id: dataItem.id,
                 name: dataItem.name,
                 desc: dataItem.desc,
-                permissionSequence: dataItem.permissionSequence,
+                // permissionSequence: dataItem.permissionSequence,
                 action: dataItem.action,
                 showOnMenu: dataItem.showOnMenu,
                 createdBy: dataItem.createdBy,
@@ -164,7 +164,7 @@ function SuperAdminEditPermissionsPage() {
         id: data[`id${index}`] || null,
         name: data[nameKey] || '',
         desc: data[`desc${index}`] || '',
-        permissionSequence: Number(data[`permissionSequence${index}`]) || '',
+        // permissionSequence: Number(data[`permissionSequence${index}`]) || '',
         action: data[`action${index}`] || '',
         showOnMenu: data[`show_on_menu${index}`] || false,
         createdBy: authState.user.id,
@@ -263,6 +263,7 @@ function SuperAdminEditPermissionsPage() {
                 <FormControl className="FormControl" variant="standard">
                   <label className="pb-2 font-bold">Module Name</label>
                   <Input
+                    disabled
                     className="FormInput m-0 h-[40px] w-[350px] rounded-lg border-2 border-[#949EAE] px-3 outline-none"
                     {...register('moduleName', {
                       required: true,
@@ -415,7 +416,7 @@ function SuperAdminEditPermissionsPage() {
                             value={mainEl.fields.desc}
                           />
                         </FormControl>
-                        <FormControl className="FormControl" variant="standard">
+                        {/* <FormControl className="FormControl" variant="standard">
                           <CustomInputBox
                             customFontClass="font-bold"
                             customClass="border-2 rounded-lg px-4"
@@ -427,7 +428,7 @@ function SuperAdminEditPermissionsPage() {
                             error={errors}
                             value={mainEl.fields.permissionSequence}
                           />
-                        </FormControl>
+                        </FormControl> */}
                         <FormControl className="FormControl" variant="standard">
                           <CustomInputBox
                             customFontClass="font-bold"
@@ -458,7 +459,7 @@ function SuperAdminEditPermissionsPage() {
               })}
               <div
                 onClick={handleAddMore}
-                className="flex h-[326px] cursor-pointer items-center justify-center rounded-lg bg-[#F0F0F0] xl:col-span-2 2xl:col-span-1"
+                className="flex h-[266px] cursor-pointer items-center justify-center rounded-lg bg-[#F0F0F0] xl:col-span-2 2xl:col-span-1"
               >
                 <img alt="add" src={assets.images.addImg} />
               </div>

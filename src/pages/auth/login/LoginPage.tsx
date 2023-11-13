@@ -50,10 +50,10 @@ function LoginPage() {
       const newUserData = user.data.data;
       setToken(newUserData.token);
       dispatch(setRolePermissions(newUserData.role));
-      // delete newUserData.role;
+      delete newUserData.role;
       dispatch(login(newUserData));
-      dispatch(setItemState(newUserData));
-      dispatch(setLogo(newUserData.tenantConfig.logo));
+      dispatch(setItemState(user?.data?.data));
+      dispatch(setLogo(user?.data?.data?.tenantConfig?.logo));
       if (newUserData.isSuperAdmin) {
         navigate('../../../main');
       } else {
