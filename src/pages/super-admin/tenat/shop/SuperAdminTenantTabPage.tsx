@@ -425,12 +425,61 @@ function SuperAdminTenantTabPage({ tenant }: Props) {
         <div className="grid w-full gap-3 xl:grid-cols-8 2xl:grid-cols-12">
           <div className="col-span-4 flex w-full justify-between py-[2rem]">
             <div className="flex flex-col px-5">
-              <div className="flex w-full flex-col">
-                <span className="font-open-sans text-base font-semibold not-italic text-[#1A1A1A]">
-                  Shop Name
-                </span>
-                <div className="mt-1 font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
-                  {detail.name}
+              <div className='flex'>
+                <div className="flex w-full flex-col">
+                  <span className="font-open-sans text-base font-semibold not-italic text-[#1A1A1A]">
+                    Shop Name
+                  </span>
+                  <div className="mt-1 font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
+                    {detail.name}
+                  </div>
+                </div>
+                <div className="flex">
+                  <div className="">
+                    <IconButton
+                      title="View Branch"
+                      className="m-0"
+                      onClick={() => openBranchModal(tenant)}
+                    >
+                      <PreviewIcon />
+                    </IconButton>
+                  </div>
+                  <div className="">
+                    <IconButton
+                      title="User Detail"
+                      className="m-0"
+                      onClick={() => getUserById(tenant, 'shop')}
+                    >
+                      <AccountBoxIcon />
+                    </IconButton>
+                  </div>
+                  <div className="">
+                    <IconButton
+                      title="Branch Category"
+                      className="m-0"
+                      onClick={() => getCategoryById(tenant)}
+                    >
+                      <ViewListIcon />
+                    </IconButton>
+                  </div>
+                  <div className="">
+                    <IconButton
+                      title="Branch Setting"
+                      className="m-0"
+                      onClick={() => getSettingById(tenant)}
+                    >
+                      <SettingsIcon />
+                    </IconButton>
+                  </div>
+                  <div>
+                    <IconButton
+                      title="Edit Branch"
+                      className="m-0 pl-1"
+                      onClick={() => editHandler(tenant)}
+                    >
+                      <EditIcon />
+                    </IconButton>
+                  </div>
                 </div>
               </div>
 
@@ -533,53 +582,6 @@ function SuperAdminTenantTabPage({ tenant }: Props) {
                     disabled
                   />
                 </div>
-              </div>
-            </div>
-            <div className="flex">
-              <div className="">
-                <IconButton
-                  title="View Branch"
-                  className="m-0"
-                  onClick={() => openBranchModal(tenant)}
-                >
-                  <PreviewIcon />
-                </IconButton>
-              </div>
-              <div className="">
-                <IconButton
-                  title="User Detail"
-                  className="m-0"
-                  onClick={() => getUserById(tenant, 'shop')}
-                >
-                  <AccountBoxIcon />
-                </IconButton>
-              </div>
-              <div className="">
-                <IconButton
-                  title="Branch Category"
-                  className="m-0"
-                  onClick={() => getCategoryById(tenant)}
-                >
-                  <ViewListIcon />
-                </IconButton>
-              </div>
-              <div className="">
-                <IconButton
-                  title="Branch Setting"
-                  className="m-0"
-                  onClick={() => getSettingById(tenant)}
-                >
-                  <SettingsIcon />
-                </IconButton>
-              </div>
-              <div>
-                <IconButton
-                  title="Edit Branch"
-                  className="m-0 pl-1"
-                  onClick={() => editHandler(tenant)}
-                >
-                  <EditIcon />
-                </IconButton>
               </div>
             </div>
           </div>
