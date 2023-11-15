@@ -1,24 +1,21 @@
-import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined';
-import RadioButtonUncheckedOutlinedIcon from '@mui/icons-material/RadioButtonUncheckedOutlined';
 import Button from '@mui/material/Button';
-import Checkbox from '@mui/material/Checkbox';
 import Dialog from '@mui/material/Dialog';
 import FormControl from '@mui/material/FormControl';
-import FormControlLabel from '@mui/material/FormControlLabel';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
 import TextField from '@mui/material/TextField';
-import { debounce } from '@mui/material/utils';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 import isBetween from 'dayjs/plugin/isBetween';
-import kabakCase from 'lodash/kebabCase';
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import '../../../../assets/css/PopupStyle.css';
-import CustomDropDown from '../../../../components/common/CustomDropDown';
-import { Tenant } from '../../../../interfaces/superadmin/tenant.interface';
-import { DOMAIN_PREFIX, DOMAIN_PROTOCOL } from '../../../../utils/constants';
+
+import '../../assets/css/PopupStyle.css';
+import { Tenant } from '../../interfaces/superadmin/tenant.interface';
+import { DOMAIN_PREFIX, DOMAIN_PROTOCOL } from '../../utils/constants';
+
+import { debounce } from '@mui/material/utils';
+import kabakCase from 'lodash/kebabCase';
 
 dayjs.extend(duration);
 dayjs.extend(isBetween);
@@ -30,19 +27,15 @@ type Props = {
   callback: (...args: any[]) => any;
   setIsNotify: any;
   setNotifyMessage: any;
-  roles?: any;
-  role?: any;
 };
 
-function SuperAdminTenantUpdatePopup({
+function BranchUpdatePopup({
   openFormDialog,
   setOpenFormDialog,
   item,
   callback,
   setIsNotify,
   setNotifyMessage,
-  roles,
-  role,
 }: Props) {
   const {
     register,
@@ -77,30 +70,10 @@ function SuperAdminTenantUpdatePopup({
       setValue('email', item.backofficeUser.email);
       setValue('firstName', item.backofficeUser.firstName);
       setValue('lastName', item.backofficeUser.lastName);
-      setValue('trialMode', item.trialMode);
-      setValue('trailStartDate', item.trailStartDate);
       setValue('developmentDomain', item.tenantConfig.developmentDomain);
       setValue('liveDomain', item.tenantConfig.liveDomain);
     }
   }, [item]);
-
-  const getRemainingTime = (time: any) => {
-    const addTime = dayjs(time).add(15, 'days');
-    const endTime: any = dayjs(addTime).format('YYYY-MM-DD HH:mm:ss');
-    const diffBetween = dayjs.duration(dayjs().diff(endTime));
-    const remainingTime = Math.abs(diffBetween.days());
-    let dayTxt = 'day';
-    if (remainingTime > 1) {
-      dayTxt = 'days';
-    }
-    let remainingTxt;
-    if (remainingTime <= 0) {
-      remainingTxt = 'Expired';
-    } else {
-      remainingTxt = `Remaining ${remainingTime} ${dayTxt} left`;
-    }
-    return remainingTxt;
-  };
 
   const debouceRequest = debounce((value) => {
     setValue('developmentDomain', 'dev.' + kabakCase(value));
@@ -137,13 +110,13 @@ function SuperAdminTenantUpdatePopup({
                   <label className="FormLabel">Shop Name</label>
                   <Input
                     className="FormInput"
-                    type="text"
-                    id="tenantName"
-                    disableUnderline
                     {...register('tenantName', {
                       required: true,
                       value: item.name,
                     })}
+                    type="text"
+                    id="tenantName"
+                    disableUnderline
                     onChange={(val: any) => shopFieldHangler(val.target.value)}
                   />
                   {errors.tenantName?.type === 'required' && (
@@ -202,55 +175,6 @@ function SuperAdminTenantUpdatePopup({
                   )}
                 </FormControl>
               </div>
-              <div className="FormFields">
-                <FormControl className="FormControl" variant="standard">
-                  <label className="FormLabel">Max branch limits</label>
-                  <Input
-                    className="FormInput"
-                    {...register('maxBranchLimit', {
-                      required: true,
-                      value: item.maxBranchLimit,
-                    })}
-                    type="number"
-                    id="maxBranchLimits"
-                    placeholder="Enter max branch limits"
-                    disableUnderline
-                  />
-                  {errors.maxBranchLimit?.type === 'required' && (
-                    <span role="alert">branch limit is required</span>
-                  )}
-                </FormControl>
-                <FormControl className="FormControl" variant="standard">
-                  <label className="FormLabel">Max User Limits</label>
-                  <Input
-                    className="FormInput"
-                    {...register('maxUserLimit', {
-                      required: true,
-                      value: item.maxUserLimit,
-                    })}
-                    type="number"
-                    id="maxUserLimits"
-                    placeholder="Enter max user limits"
-                    disableUnderline
-                  />
-                  {errors.maxUserLimit?.type === 'required' && (
-                    <span role="alert">User limits is required</span>
-                  )}
-                </FormControl>
-              </div>
-              <div className="FormField mb-4">
-                <FormControl className="FormControl" variant="standard">
-                  <CustomDropDown
-                    validateRequired
-                    id="role"
-                    control={control}
-                    error={errors}
-                    register={register}
-                    options={{ roles, role }}
-                    inputTitle="Role"
-                  />
-                </FormControl>
-              </div>
               <div className="FormField mb-4">
                 <FormControl className="FormControl" variant="standard">
                   <label className="FormLabel">Development Domain</label>
@@ -301,86 +225,6 @@ function SuperAdminTenantUpdatePopup({
                   />
                 </FormControl>
               </div>
-              <div className="FormField">
-                <div className="MergedField">
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        icon={
-                          <RadioButtonUncheckedOutlinedIcon
-                            style={{ color: '#1D1D1D' }}
-                          />
-                        }
-                        checkedIcon={
-                          <CheckCircleOutlinedIcon
-                            style={{ color: '#1D1D1D' }}
-                          />
-                        }
-                        {...register('trialUpdateMode')}
-                      />
-                    }
-                    label={item.trialMode ? 'Re Again Trail' : 'Trail Mode'}
-                  />
-                  {item.trialMode ? (
-                    <span className="badge badge-success badge-w-100">
-                      Enabled
-                    </span>
-                  ) : (
-                    <span className="badge badge-danger badge-w-100">
-                      Disabled
-                    </span>
-                  )}
-                </div>
-              </div>
-              {watch('trialUpdateMode') === true && (
-                <div>
-                  <FormControl className="FormControl" variant="standard">
-                    <label className="FormLabel">
-                      Trail Mode Limit ( Days )
-                    </label>
-                    <Input
-                      className="FormInput"
-                      {...register('trialModeLimit', {
-                        required: watch('trialMode') === true && true,
-                        value: item.trialModeLimit ? item.trialModeLimit : 15,
-                      })}
-                      type="number"
-                      id="trialModeLimit"
-                      placeholder="Enter Trail Mode limit in days"
-                      disableUnderline
-                    />
-                    {errors.trialModeLimit?.type === 'required' && (
-                      <span role="alert">Trail Mode limit is required</span>
-                    )}
-                  </FormControl>
-                </div>
-              )}
-              {dayjs(item.trailStartDate).isValid() && (
-                <div className="FormField">
-                  <FormControl className="FormControl" variant="standard">
-                    <TextField
-                      className="FormInput"
-                      sx={{ padding: 0 }}
-                      id="trailStartDate"
-                      InputProps={{
-                        endAdornment: (
-                          <InputAdornment position="end">
-                            {item.trailStartDate && (
-                              <span>
-                                {getRemainingTime(item.trailStartDate)}
-                              </span>
-                            )}
-                          </InputAdornment>
-                        ),
-                      }}
-                      variant="outlined"
-                      value={dayjs(item.trailStartDate).format(
-                        'YYYY-MM-DD HH:mm:ss'
-                      )}
-                    />
-                  </FormControl>
-                </div>
-              )}
             </div>
             <div className="FormFooter">
               <Button
@@ -411,4 +255,4 @@ function SuperAdminTenantUpdatePopup({
   );
 }
 
-export default SuperAdminTenantUpdatePopup;
+export default BranchUpdatePopup;

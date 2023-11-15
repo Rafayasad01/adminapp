@@ -22,7 +22,6 @@ function SuperAdminUserTabPage({
     setOpenFormDialog(false);
   };
 
-
   // const sentEmailHandler = (id: string) => {
   //   setIsLoader(true);
   //   Service.sentToEmailShop(id).then((item: any) => {

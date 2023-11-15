@@ -40,7 +40,7 @@ function ShopAdminUserDetailPage() {
           <div className="grid w-full grid-cols-12 rounded-lg bg-[#F0F0F0] p-3">
             <div className="col-span-4">
               <p className="text-sm font-semibold text-[#1A1A1A]">Shop Owner</p>
-              <div className="flex items-center justify-center h-full py-5">
+              <div className="flex h-full items-center justify-center py-5">
                 <div className="flex items-center">
                   <div>
                     {userDetail.avatar ? (
@@ -105,7 +105,11 @@ function ShopAdminUserDetailPage() {
                 Shop Branches
               </p>
               <div className="my-5">
-                {userDetail?.branchUsers?.length <= 0 && <p className='text-sm text-center'>This shop has no branches.</p>}
+                {userDetail?.branchUsers?.length <= 0 && (
+                  <p className="text-center text-sm">
+                    This shop has no branches.
+                  </p>
+                )}
                 <div className="grid grid-cols-4 xl:gap-4 2xl:gap-6">
                   {userDetail.branchUsers?.map((item: any, index: number) => {
                     return (

@@ -56,6 +56,8 @@ import EmployeePage from '../pages/employees/EmployeePage';
 import SuperAdminPermissionPageDetails from '../pages/super-admin/role-permissions/SuperAdminPermissionPageDetails';
 import BranchPage from '../pages/branches/BranchPage';
 import BranchDetailPage from '../pages/branches/BranchDetailPage';
+import AppointmentVisitPage from '../pages/appointment/visit/AppointmentVisitPage';
+import AppointmentCategoryPage from '../pages/appointment/category/AppointmentCategoryPage';
 
 
 export const routeObjects: RouteObject[] = [
@@ -382,6 +384,31 @@ export const routeObjects: RouteObject[] = [
                 element: <CustomersAddressPage />,
               },
             ],
+          },
+          {
+            path: "appointment",
+            children: [
+              {
+                path: "visit",
+                children: [
+                  { index: true, element: <Navigate to="list" replace /> },
+                  {
+                    path: 'list',
+                    element: <AppointmentVisitPage />,
+                  }
+                ]
+              },
+              {
+                path: "category",
+                children: [
+                  { index: true, element: <Navigate to="list" replace /> },
+                  {
+                    path: 'list',
+                    element: <AppointmentCategoryPage />,
+                  }
+                ]
+              }
+            ]
           },
           {
             path: 'vouchers',

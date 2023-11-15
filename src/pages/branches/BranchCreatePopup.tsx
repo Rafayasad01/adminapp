@@ -1,10 +1,6 @@
-import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined';
-import RadioButtonUncheckedOutlinedIcon from '@mui/icons-material/RadioButtonUncheckedOutlined';
 import Button from '@mui/material/Button';
-import Checkbox from '@mui/material/Checkbox';
 import Dialog from '@mui/material/Dialog';
 import FormControl from '@mui/material/FormControl';
-import FormControlLabel from '@mui/material/FormControlLabel';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
 import TextField from '@mui/material/TextField';
@@ -12,13 +8,11 @@ import { debounce } from '@mui/material/utils';
 import kabakCase from 'lodash/kebabCase';
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import '../../../../assets/css/PopupStyle.css';
-import CustomDropDown from '../../../../components/common/CustomDropDown';
-import { Tenant } from '../../../../interfaces/superadmin/tenant.interface';
-import { DOMAIN_PREFIX, DOMAIN_PROTOCOL } from '../../../../utils/constants';
+import '../../assets/css/PopupStyle.css';
+import { Tenant } from '../../interfaces/superadmin/tenant.interface';
+import { DOMAIN_PREFIX, DOMAIN_PROTOCOL } from '../../utils/constants';
 
 type Props = {
-  roles?: any;
   openFormDialog: boolean;
   setOpenFormDialog: React.Dispatch<React.SetStateAction<boolean>>;
   callback: (...args: any[]) => any;
@@ -27,8 +21,7 @@ type Props = {
   type?: boolean;
 };
 
-function SuperAdminTenantCreatePopup({
-  roles,
+function BranchCreatePopup({
   openFormDialog,
   setOpenFormDialog,
   callback,
@@ -46,8 +39,6 @@ function SuperAdminTenantCreatePopup({
   } = useForm<Tenant>();
 
   const onSubmit = (data: Tenant) => {
-    console.log('submmit', data);
-
     if (data.tenantName) {
       setOpenFormDialog(false);
       callback(data);
@@ -63,7 +54,6 @@ function SuperAdminTenantCreatePopup({
   const handleFormClose = () => {
     setOpenFormDialog(false);
   };
-
   const debouceRequest = debounce((value) => {
     setValue('developmentDomain', 'dev.' + kabakCase(value));
     setValue('liveDomain', 'live.' + kabakCase(value));
@@ -93,11 +83,11 @@ function SuperAdminTenantCreatePopup({
                 <label className="FormLabel">Shop Name</label>
                 <Input
                   className="FormInput"
+                  {...register('tenantName', { required: true })}
                   type="text"
                   id="tenantName"
                   placeholder="Enter shop name"
                   disableUnderline
-                  {...register('tenantName', { required: true })}
                   onChange={(val: any) => shopFieldHangler(val.target.value)}
                 />
                 {errors.tenantName?.type === 'required' && (
@@ -149,47 +139,6 @@ function SuperAdminTenantCreatePopup({
                 )}
               </FormControl>
             </div>
-            <div className="FormFields">
-              <FormControl className="FormControl" variant="standard">
-                <label className="FormLabel">Max branch limits</label>
-                <Input
-                  className="FormInput"
-                  {...register('maxBranchLimit', { required: true })}
-                  type="number"
-                  id="maxBranchLimits"
-                  placeholder="Enter max branch limits"
-                  disableUnderline
-                />
-                {errors.maxBranchLimit?.type === 'required' && (
-                  <span role="alert">branch limit is required</span>
-                )}
-              </FormControl>
-              <FormControl className="FormControl" variant="standard">
-                <label className="FormLabel">Max User Limits</label>
-                <Input
-                  className="FormInput"
-                  {...register('maxUserLimit', { required: true })}
-                  type="number"
-                  id="maxUserLimits"
-                  placeholder="Enter max user limits"
-                  disableUnderline
-                />
-                {errors.maxUserLimit?.type === 'required' && (
-                  <span role="alert">User limits is required</span>
-                )}
-              </FormControl>
-            </div>
-            <div className="FormField mb-4">
-              <CustomDropDown
-                validateRequired
-                id="role"
-                control={control}
-                error={errors}
-                register={register}
-                options={{ roles }}
-                inputTitle="Role"
-              />
-            </div>
             <div className="FormField mb-4">
               <FormControl className="FormControl" variant="standard">
                 <label className="FormLabel">Development Domain</label>
@@ -240,45 +189,6 @@ function SuperAdminTenantCreatePopup({
                 />
               </FormControl>
             </div>
-            <div className="FormField">
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    icon={
-                      <RadioButtonUncheckedOutlinedIcon
-                        style={{ color: '#1D1D1D' }}
-                      />
-                    }
-                    checkedIcon={
-                      <CheckCircleOutlinedIcon style={{ color: '#1D1D1D' }} />
-                    }
-                    {...register('trialMode')}
-                  />
-                }
-                label="Trail Mode"
-              />
-            </div>
-            {watch('trialMode') === true && (
-              <div>
-                <FormControl className="FormControl" variant="standard">
-                  <label className="FormLabel">Trail Mode Limit ( Days )</label>
-                  <Input
-                    className="FormInput"
-                    {...register('trialModeLimit', {
-                      required: watch('trialMode') === true && true,
-                      value: 15,
-                    })}
-                    type="number"
-                    id="trialModeLimit"
-                    placeholder="Enter Trail Mode limit in days"
-                    disableUnderline
-                  />
-                  {errors.trialModeLimit?.type === 'required' && (
-                    <span role="alert">Trail Mode limit is required</span>
-                  )}
-                </FormControl>
-              </div>
-            )}
           </div>
           <div className="FormFooter">
             <Button
@@ -308,4 +218,4 @@ function SuperAdminTenantCreatePopup({
   );
 }
 
-export default SuperAdminTenantCreatePopup;
+export default BranchCreatePopup;

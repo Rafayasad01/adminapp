@@ -96,6 +96,26 @@ const links = [
     icon: <CorporateFareIcon className="w-[17px]" />,
   },
   {
+    name: 'Appointment',
+    path: 'appointment',
+    permission: 'Appointment Parent',
+    icon: <UserPermission />,
+    childLinks: [
+      {
+        name: 'Visit',
+        path: 'appointment/visit',
+        permission: 'Appointment Visit List',
+        icon: <PermissionIcon />,
+      },
+      {
+        name: 'Category',
+        path: 'appointment/category',
+        permission: 'Appointment Category List',
+        icon: <RoleIcon />,
+      },
+    ],
+  },
+  {
     name: 'Notifications',
     path: 'notification',
     permission: 'Notification List',
@@ -278,7 +298,7 @@ function Sidebar() {
             return null;
           }
         }
-        return CAN('canView', el.permission);
+        return CAN('canView', el.permission as string);
       });
       // console.log("templost", tempList);
       tempList.unshift({
