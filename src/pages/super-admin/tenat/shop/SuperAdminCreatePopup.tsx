@@ -65,8 +65,8 @@ function SuperAdminTenantCreatePopup({
   };
 
   const debouceRequest = debounce((value) => {
-    setValue('developmentDomain', 'dev.' + kabakCase(value));
-    setValue('liveDomain', 'live.' + kabakCase(value));
+    setValue('developmentDomain', `dev.${kabakCase(value)}`);
+    setValue('liveDomain', `live.${kabakCase(value)}`);
   }, 1000);
 
   const shopFieldHangler = (val: any) => {

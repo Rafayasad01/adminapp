@@ -34,7 +34,7 @@ type Props = {
   setNotifyMessage: any;
 };
 
-function SuperAdminShopBranchDetailPopup({
+function SuperAdminShopDetailsDialog({
   openFormDialog,
   setOpenFormDialog,
   items,
@@ -167,4 +167,4 @@ function SuperAdminShopBranchDetailPopup({
   );
 }
 
-export default SuperAdminShopBranchDetailPopup;
+export default SuperAdminShopDetailsDialog;

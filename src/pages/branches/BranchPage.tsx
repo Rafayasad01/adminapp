@@ -10,9 +10,10 @@ import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import TopBar from '../../components/common/TopBar';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import Button from '@mui/material/Button';
+import EditIcon from '@mui/icons-material/Edit';
+import TopBar from '../../components/common/TopBar';
 import CustomDialog from '../../components/common/CustomDialog';
 import CustomText from '../../components/common/CustomText';
 import Loader from '../../components/common/Loader';
@@ -23,7 +24,6 @@ import Service from '../../services/adminapp/adminBranch';
 import { listingRolePermission } from '../../utils/helper';
 import BranchCreatePopup from './BranchCreatePopup';
 import BranchUpdatePopup from './BranchUpdatePopup';
-import EditIcon from '@mui/icons-material/Edit';
 
 function BranchPage() {
   const navigate = useNavigate();
@@ -162,7 +162,15 @@ function BranchPage() {
             text: item.data.message,
             type: 'success',
           });
+          setList([item.data.data, ...list]);
           reset();
+        } else {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'error',
+          });
         }
       })
       .catch((err) => {
@@ -196,21 +204,47 @@ function BranchPage() {
   };
 
   const updateFormHandler = (id: string, data: any) => {
+    console.log('DATA', data);
+    setIsLoader(true);
     delete data.email;
     data.userId = authState?.user?.id;
-    Service.updateBranch(data, id).then((item: any) => {
-      setFormDetail(item.data.data);
-      setOpenEditFormDialog(true);
-      for (let i = 0; i < list.length; i += 1) {
-        if (list[i].id === item.data.data.id) {
-          list[i].tenantName = item.data.data.tenantName;
-          list[i].isActive = item.data.data.isActive;
-          list[i].trailMode = item.data.data.trailMode;
-          list[i].trailStartDate = item.data.data.trailStartDate;
+    Service.updateBranch(data, id)
+      .then((item: any) => {
+        if (item.data.success) {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'success',
+          });
+          setFormDetail(item.data.data);
+          setOpenEditFormDialog(false);
+          for (let i = 0; i < list.length; i += 1) {
+            if (list[i].id === item.data.data.id) {
+              list[i].name = item.data.data.tenantName;
+              list[i].isActive = item.data.data.isActive;
+              list[i].trailMode = item.data.data.trailMode;
+              list[i].trailStartDate = item.data.data.trailStartDate;
+            }
+          }
+          reset();
+        } else {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'error',
+          });
         }
-      }
-      reset();
-    });
+      })
+      .catch((err) => {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
+        });
+      });
   };
 
   return isLoader ? (
@@ -277,9 +311,7 @@ function BranchPage() {
                     }
                     setOpenFormDialog(true);
                   }}
-                  disabled={
-                    totalBranches >= authState.user.branchLimit ? true : false
-                  }
+                  disabled={totalBranches >= authState.user.branchLimit}
                 >
                   <AddOutlinedIcon /> Add New
                 </Button>

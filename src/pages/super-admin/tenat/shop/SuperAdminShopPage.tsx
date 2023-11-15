@@ -1,32 +1,27 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 // import Tooltip from '@mui/material/Tooltip';
-import IconButton from '@mui/material/IconButton';
+import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
+import SearchIcon from '@mui/icons-material/Search';
+import WysiwygOutlinedIcon from '@mui/icons-material/WysiwygOutlined';
+import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import FormControl from '@mui/material/FormControl';
+import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
-import Button from '@mui/material/Button';
-import SearchIcon from '@mui/icons-material/Search';
-import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
-import dayjs from 'dayjs';
-import TablePagination from '@mui/material/TablePagination';
-import WysiwygOutlinedIcon from '@mui/icons-material/WysiwygOutlined';
 import Switch from '@mui/material/Switch';
-import EditIcon from '@mui/icons-material/Edit';
-import AddCircleOutlinedIcon from '@mui/icons-material/AddCircleOutlined';
-import Tooltip from '@mui/material/Tooltip';
-import TopBar from '../../../../components/common/TopBar';
-import Loader from '../../../../components/common/Loader';
-import Service from '../../../../services/superadmin/Tenant';
-import SuperAdminTenantCreatePopup from './SuperAdminTenantCreatePopup';
-import Notify from '../../../../components/common/Notify';
-import SuperAdminTenantUpdatePopup from './SuperAdminTenantUpdatePopup';
+import TablePagination from '@mui/material/TablePagination';
+import dayjs from 'dayjs';
 import CustomText from '../../../../components/common/CustomText';
+import Loader from '../../../../components/common/Loader';
+import Notify from '../../../../components/common/Notify';
+import TopBar from '../../../../components/common/TopBar';
 import { useAppSelector } from '../../../../redux/redux-hooks';
-import SuperAdminChildTenantCreatePopup from './SuperAdminChildTenantCreatePopup';
+import Service from '../../../../services/superadmin/Tenant';
+import SuperAdminCreatePopup from './SuperAdminCreatePopup';
 
-function SuperAdminTenantPage() {
+function SuperAdminShopPage() {
   const authState: any = useAppSelector((state) => state?.authState);
   const navigate = useNavigate();
   const [search, setSearch] = useState('');
@@ -34,15 +29,11 @@ function SuperAdminTenantPage() {
   const [total, setTotal] = useState(0);
   const [list, setList] = useState<any>([]);
   const [rolelist, setRoleList] = useState<any>([]);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const [isLoader, setIsLoader] = React.useState(true);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [isLoader, setIsLoader] = useState(true);
   const [openFormDialog, setOpenFormDialog] = useState(false);
-  const [openFormBranchDialog, setOpenFormBranchDialog] = useState(false);
-  const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
-  const [formDetail, setFormDetail] = useState<any>(null);
-  const [isNotify, setIsNotify] = React.useState(false);
-  const [notifyMessage, setNotifyMessage] = React.useState({});
-  const [isTrialMode, setIsTrialMode] = React.useState<boolean>(false);
+  const [isNotify, setIsNotify] = useState(false);
+  const [notifyMessage, setNotifyMessage] = useState({});
   const [emptyVariable] = useState(null);
 
   const handleFormClickOpen = () => {
@@ -174,159 +165,6 @@ function SuperAdminTenantPage() {
         type: 'error',
       });
     }
-  };
-
-  const createFormBranchHandler = (data: any) => {
-    setIsLoader(true);
-    const formData = new FormData();
-    formData.append('tenantName', data.tenantName);
-    formData.append('email', data.email);
-    formData.append('firstName', data.firstName);
-    formData.append('lastName', data.lastName);
-    formData.append('trialMode', data.trialMode);
-    formData.append('developmentDomain', data.developmentDomain);
-    formData.append('liveDomain', data.liveDomain);
-    formData.append('role', data.role);
-    formData.append('maxBranchLimit', data.maxBranchLimit);
-    formData.append('maxUserLimit', data.maxUserLimit);
-    if (data.tenantName && data.email && data.firstName && data.lastName) {
-      Service.createShop(formData)
-        .then((item: any) => {
-          if (item.data.success) {
-            console.log('itemeee', item.data);
-            setIsLoader(false);
-            setIsNotify(true);
-            setNotifyMessage({
-              text: item.data.message,
-              type: 'success',
-            });
-            setList([item.data.data, ...list]);
-          } else {
-            setIsLoader(false);
-            setIsNotify(true);
-            setNotifyMessage({
-              text: item.data.message,
-              type: 'error',
-            });
-          }
-        })
-        .catch((err) => {
-          setIsLoader(false);
-          setIsNotify(true);
-          setNotifyMessage({
-            text: err.message,
-            type: 'error',
-          });
-        });
-    } else {
-      setIsLoader(false);
-      setIsNotify(true);
-      setNotifyMessage({
-        text: 'All fields are required!',
-        type: 'error',
-      });
-    }
-  };
-
-  const updateFormHandler = (id: string, data: any) => {
-    if (data.trialUpdateMode) setIsTrialMode(true);
-    console.log('formDATA', data);
-    const formData = {
-      tenantName: data.tenantName,
-      email: data.email,
-      firstName: data.firstName,
-      lastName: data.lastName,
-      trialMode: data.trialMode,
-      trialUpdateMode: true,
-      developmentDomain: data.developmentDomain,
-      liveDomain: data.liveDomain,
-      role: data.role,
-      maxBranchLimit: data.maxBranchLimit,
-      maxUserLimit: data.maxUserLimit,
-    };
-    // const formData = new FormData();
-    // formData.append('tenantName', data.tenantName);
-    // formData.append('email', data.email);
-    // formData.append('firstName', data.firstName);
-    // formData.append('lastName', data.lastName);
-    // formData.append('trialMode', data.trialMode);
-    // // formData.append('trailStartDate', data.trailStartDate);
-    // formData.append('trialUpdateMode', 'true');
-    // formData.append('developmentDomain', data.developmentDomain);
-    // formData.append('liveDomain', data.liveDomain);
-    // formData.append('role', data.role);
-    // formData.append('maxBranchLimit', data.maxBranchLimit);
-    // formData.append('maxUserLimit', data.maxUserLimit);
-    if (data.tenantName && data.email && data.firstName && data.lastName) {
-      Service.updateShop(id, formData)
-        .then((item: any) => {
-          if (item.data.success) {
-            // console.log('updated dataL', list);
-            console.log('updated data', item.data);
-            setIsLoader(false);
-            setIsNotify(true);
-            setNotifyMessage({
-              text: item.data.message,
-              type: 'success',
-            });
-            setList((newArr: any) => {
-              return newArr.map((newItem: any) => {
-                if (newItem.id === item.data.data.id) {
-                  newItem.name = item.data.data.tenantName;
-                  newItem.email = item.data.data.email;
-                  newItem.isActive = item.data.data.isActive;
-                  newItem.trailStartDate = item.data.data.trailStartDate;
-                }
-                if (item.data.data.trialMode === false) {
-                  newItem.trailMode = false;
-                }
-                return { ...newItem };
-              });
-            });
-          } else {
-            setIsLoader(false);
-            setIsNotify(true);
-            setNotifyMessage({
-              text: item.data.message,
-              type: 'error',
-            });
-          }
-        })
-        .catch((err) => {
-          setIsLoader(false);
-          setIsNotify(true);
-          setNotifyMessage({
-            text: err.message,
-            type: 'error',
-          });
-        });
-    } else {
-      setIsLoader(false);
-      setIsNotify(true);
-      setNotifyMessage({
-        text: 'All fields are required!',
-        type: 'error',
-      });
-    }
-  };
-
-  const editHandler = (id: string) => {
-    setIsLoader(true);
-    Service.getShop(id).then((item: any) => {
-      if (item.data.success) {
-        console.log('item.data.data::::::', item.data.data);
-        setIsLoader(false);
-        setFormDetail(item.data.data);
-        setOpenEditFormDialog(true);
-      } else {
-        setIsLoader(false);
-        setIsNotify(true);
-        setNotifyMessage({
-          text: 'All fields are required!',
-          type: 'error',
-        });
-      }
-    });
   };
 
   const handleSwitchChange = (event: any, id: string) => {
@@ -478,25 +316,6 @@ function SuperAdminTenantPage() {
                             >
                               <WysiwygOutlinedIcon />
                             </IconButton>
-                            {/* <IconButton
-                              className="icon-btn mr-3.5 p-0"
-                              onClick={() =>
-                                setOpenFormBranchDialog(true)
-                              }
-                            >
-                              <Tooltip title="Create Branch">
-                                <AddCircleOutlinedIcon />
-                              </Tooltip>
-                            </IconButton>
-                            <IconButton
-                              title='Create Branch'
-                              className="pl-1 m-0"
-                              onClick={() =>
-                                item.isActive ? editHandler(item.id) : null
-                              }
-                            >
-                              <EditIcon />
-                            </IconButton> */}
                             <Switch
                               checked={item.isActive}
                               onChange={(
@@ -525,17 +344,8 @@ function SuperAdminTenantPage() {
           </div>
         </div>
       </div>
-      {openFormBranchDialog && (
-        <SuperAdminChildTenantCreatePopup
-          setIsNotify={setIsNotify}
-          setNotifyMessage={setNotifyMessage}
-          openFormDialog={openFormBranchDialog}
-          setOpenFormDialog={setOpenFormBranchDialog}
-          callback={createFormBranchHandler}
-        />
-      )}
       {openFormDialog && (
-        <SuperAdminTenantCreatePopup
+        <SuperAdminCreatePopup
           roles={rolelist}
           setIsNotify={setIsNotify}
           setNotifyMessage={setNotifyMessage}
@@ -544,18 +354,6 @@ function SuperAdminTenantPage() {
           callback={createFormHandler}
         />
       )}
-      {/* {openEditFormDialog && (
-        <SuperAdminTenantUpdatePopup
-          role={formDetail?.backofficeUser?.role}
-          roles={formDetail?.roles}
-          setIsNotify={setIsNotify}
-          setNotifyMessage={setNotifyMessage}
-          item={formDetail}
-          openFormDialog={openEditFormDialog}
-          setOpenFormDialog={setOpenEditFormDialog}
-          callback={updateFormHandler}
-        />
-      )} */}
 
       {isNotify && (
         <Notify
@@ -568,4 +366,4 @@ function SuperAdminTenantPage() {
   );
 }
 
-export default SuperAdminTenantPage;
+export default SuperAdminShopPage;

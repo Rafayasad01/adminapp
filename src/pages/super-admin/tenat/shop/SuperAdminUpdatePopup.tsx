@@ -32,9 +32,10 @@ type Props = {
   setNotifyMessage: any;
   roles?: any;
   role?: any;
+  type?: any;
 };
 
-function SuperAdminTenantUpdatePopup({
+function SuperAdminUpdatePopup({
   openFormDialog,
   setOpenFormDialog,
   item,
@@ -43,6 +44,7 @@ function SuperAdminTenantUpdatePopup({
   setNotifyMessage,
   roles,
   role,
+  type,
 }: Props) {
   const {
     register,
@@ -103,8 +105,8 @@ function SuperAdminTenantUpdatePopup({
   };
 
   const debouceRequest = debounce((value) => {
-    setValue('developmentDomain', 'dev.' + kabakCase(value));
-    setValue('liveDomain', 'live.' + kabakCase(value));
+    setValue('developmentDomain', `dev.${kabakCase(value)}`);
+    setValue('liveDomain', `live.${kabakCase(value)}`);
   }, 1000);
 
   const shopFieldHangler = (val: any) => {
@@ -136,6 +138,7 @@ function SuperAdminTenantUpdatePopup({
                 <FormControl className="FormControl" variant="standard">
                   <label className="FormLabel">Shop Name</label>
                   <Input
+                    disabled={type === 'branch' && true}
                     className="FormInput"
                     type="text"
                     id="tenantName"
@@ -172,6 +175,7 @@ function SuperAdminTenantUpdatePopup({
                 <FormControl className="FormControl" variant="standard">
                   <label className="FormLabel">First Name</label>
                   <Input
+                    disabled={type === 'branch' && true}
                     className="FormInput"
                     {...register('firstName', {
                       required: true,
@@ -188,6 +192,7 @@ function SuperAdminTenantUpdatePopup({
                 <FormControl className="FormControl" variant="standard">
                   <label className="FormLabel">Last Name</label>
                   <Input
+                    disabled={type === 'branch' && true}
                     className="FormInput"
                     {...register('lastName', {
                       required: true,
@@ -411,4 +416,4 @@ function SuperAdminTenantUpdatePopup({
   );
 }
 
-export default SuperAdminTenantUpdatePopup;
+export default SuperAdminUpdatePopup;

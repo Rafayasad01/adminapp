@@ -11,11 +11,10 @@ import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
 import '../../assets/css/PopupStyle.css';
-import { Tenant } from '../../interfaces/superadmin/tenant.interface';
-import { DOMAIN_PREFIX, DOMAIN_PROTOCOL } from '../../utils/constants';
-
 import { debounce } from '@mui/material/utils';
 import kabakCase from 'lodash/kebabCase';
+import { Tenant } from '../../interfaces/superadmin/tenant.interface';
+import { DOMAIN_PREFIX, DOMAIN_PROTOCOL } from '../../utils/constants';
 
 dayjs.extend(duration);
 dayjs.extend(isBetween);
@@ -76,8 +75,8 @@ function BranchUpdatePopup({
   }, [item]);
 
   const debouceRequest = debounce((value) => {
-    setValue('developmentDomain', 'dev.' + kabakCase(value));
-    setValue('liveDomain', 'live.' + kabakCase(value));
+    setValue('developmentDomain', `dev.${kabakCase(value)}`);
+    setValue('liveDomain', `live.${kabakCase(value)}`);
   }, 1000);
 
   const shopFieldHangler = (val: any) => {

@@ -33,7 +33,7 @@ function Item(props: { value: any; name: AssetsImages }) {
   );
 }
 
-function SuperAdminSettingTabPage({
+function SuperAdminSettingDialog({
   openFormDialog,
   setOpenFormDialog,
   detail,
@@ -263,4 +263,4 @@ function SuperAdminSettingTabPage({
   );
 }
 
-export default SuperAdminSettingTabPage;
+export default SuperAdminSettingDialog;
