@@ -84,7 +84,6 @@ function SuperAdminTenantTabPage({ tenant }: Props) {
     Service.getShop(id)
       .then((item: any) => {
         if (item.data.success) {
-          console.log('item.data.data::::::', item.data.data);
           setIsLoader(false);
           setFormDetail(item.data.data);
           setModalHandler(true);
@@ -425,7 +424,7 @@ function SuperAdminTenantTabPage({ tenant }: Props) {
         <div className="grid w-full gap-3 xl:grid-cols-8 2xl:grid-cols-12">
           <div className="col-span-4 flex w-full justify-between py-[2rem]">
             <div className="flex flex-col px-5">
-              <div className='flex'>
+              <div className="flex">
                 <div className="flex w-full flex-col">
                   <span className="font-open-sans text-base font-semibold not-italic text-[#1A1A1A]">
                     Shop Name

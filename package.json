@@ -26,6 +26,7 @@
     "date-fns": "^2.30.0",
     "dayjs": "^1.11.7",
     "google-map-react": "^2.2.0",
+    "lodash": "^4.17.21",
     "react": "^18.2.0",
     "react-chartjs-2": "^5.2.0",
     "react-color": "^2.19.3",
@@ -34,13 +35,14 @@
     "react-hook-form": "^7.45.2",
     "react-redux": "^8.0.5",
     "react-router-dom": "^6.8.2",
-    "redux-persist": "^6.0.0",
     "react18-otp-input": "^1.0.3",
+    "redux-persist": "^6.0.0",
     "styled-components": "^5.3.9"
   },
   "devDependencies": {
     "@types/google-map-react": "^2.1.7",
     "@types/googlemaps": "^3.43.3",
+    "@types/lodash": "^4.14.201",
     "@types/react": "^18.0.27",
     "@types/react-color": "^3.0.6",
     "@types/react-date-range": "^1.4.4",

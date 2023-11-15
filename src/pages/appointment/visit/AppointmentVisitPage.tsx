@@ -10,22 +10,19 @@ import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import TopBar from '../../components/common/TopBar';
-import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
-import Button from '@mui/material/Button';
-import CustomDialog from '../../components/common/CustomDialog';
-import CustomText from '../../components/common/CustomText';
-import Loader from '../../components/common/Loader';
-import Notify from '../../components/common/Notify';
-import { AppUserEmployees } from '../../interfaces/app-user.interface';
-import { useAppSelector } from '../../redux/redux-hooks';
-import Service from '../../services/adminapp/adminBranch';
-import { listingRolePermission } from '../../utils/helper';
-import BranchCreatePopup from './BranchCreatePopup';
-import BranchUpdatePopup from './BranchUpdatePopup';
-import EditIcon from '@mui/icons-material/Edit';
+import TopBar from '../../../components/common/TopBar';
+// import CustomersCreatePopup from './CustomersCreatePopup';
+// import CustomersEditPopup from './CustomersEditPopup';
+import CustomDialog from '../../../components/common/CustomDialog';
+import CustomText from '../../../components/common/CustomText';
+import Loader from '../../../components/common/Loader';
+import Notify from '../../../components/common/Notify';
+import { AppUserEmployees } from '../../../interfaces/app-user.interface';
+import { useAppSelector } from '../../../redux/redux-hooks';
+import Service from '../../../services/adminapp/adminBranch';
+import { listingRolePermission } from '../../../utils/helper';
 
-function BranchPage() {
+function AppointmentVisitPage() {
   const navigate = useNavigate();
   const authState: any = useAppSelector((state: any) => state?.authState);
   const dataRole = useAppSelector(
@@ -37,14 +34,22 @@ function BranchPage() {
   const [total, setTotal] = useState(0);
   const [list, setList] = useState<any>([]);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [actionMenuItemid, setActionMenuItemid] = React.useState('');
+  const [actionMenuAnchorEl, setActionMenuAnchorEl] =
+    useState<null | HTMLElement>(null);
+  const actionMenuOpen = Boolean(actionMenuAnchorEl);
+  const actionMenuOptions = ['Edit', 'Delete'];
+
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
-  const [formDetail, setFormDetail] = useState<any>(null);
   const [isLoader, setIsLoader] = React.useState(true);
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
-  const [totalBranches, setTotalBranches] = useState<number>(0);
-
+  const [cancelDialogOpen, setCancelDialogOpen] = useState<boolean>(false);
+  const [dialogText, setDialogText] = useState<any>(
+    'Are you sure you want to delete this customer ?'
+  );
+  const [showPassword, setShowPassword] = useState(true);
   const {
     register,
     handleSubmit,
@@ -55,6 +60,46 @@ function BranchPage() {
     formState: { errors },
     control,
   } = useForm<AppUserEmployees>();
+
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+  const inputFieldsData = [
+    {
+      fieldName: 'First Name',
+      id: 'first_name',
+      placeholder: 'Enter first name',
+      register,
+      error: errors.first_name,
+      type: 'text',
+    },
+    {
+      fieldName: 'Last Name',
+      id: 'last_name',
+      placeholder: 'Enter last name',
+      register,
+      error: errors.last_name,
+      type: 'text',
+    },
+    {
+      fieldName: 'Email Address',
+      id: 'email',
+      placeholder: 'Enter email address',
+      register,
+      error: errors.email,
+      type: 'text',
+      disable: openEditFormDialog,
+    },
+    {
+      fieldName: 'Password',
+      id: 'password',
+      placeholder: 'Enter password',
+      register,
+      error: errors.password,
+      type: 'password',
+      onclick: handleClickShowPassword,
+      showPassVisibility: showPassword,
+    },
+  ];
 
   const handleClickSearch = (event: any) => {
     if (event.key === 'Enter') {
@@ -135,7 +180,6 @@ function BranchPage() {
             setIsLoader(false);
             setList(item.data.data.list);
             setTotal(item.data.data.total);
-            setTotalBranches(item.data.data.list.length);
           }
         })
         .catch((err) => {
@@ -151,67 +195,145 @@ function BranchPage() {
     }
   }, [emptyVariable]);
 
-  const createFormHandler = (data: any) => {
-    setIsLoader(true);
-    Service.insertBranch(data, authState?.user?.tenant)
-      .then((item: any) => {
-        if (item.data.success) {
-          setIsLoader(false);
-          setIsNotify(true);
-          setNotifyMessage({
-            text: item.data.message,
-            type: 'success',
-          });
-          reset();
-        }
-      })
-      .catch((err) => {
-        setIsLoader(false);
-        setIsNotify(true);
-        setNotifyMessage({
-          text: err.message,
-          type: 'error',
-        });
-      });
+  // const createFormHandler = (data: any) => {
+  //   setIsLoader(true);
+  //   const userData = {
+  //     firstName: data.first_name,
+  //     lastName: data.last_name,
+  //     password: data.password,
+  //     email: data.email,
+  //     createdBy: authState.user.id,
+  //     tenant: authState.user.tenant,
+  //   };
+  //   Service.create(userData)
+  //     .then((item) => {
+  //       if (item.data.success) {
+  //         reset();
+  //         setIsLoader(false);
+  //         setIsNotify(true);
+  //         setNotifyMessage({
+  //           text: item.data.message,
+  //           type: 'success',
+  //         });
+  //         setList([...list, item.data.data]);
+  //       } else {
+  //         reset();
+  //         setIsLoader(false);
+  //         setIsNotify(true);
+  //         setNotifyMessage({
+  //           text: item.data.message,
+  //           type: 'error',
+  //         });
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       reset();
+  //       setIsLoader(false);
+  //       setIsNotify(true);
+  //       setNotifyMessage({
+  //         text: err.message,
+  //         type: 'error',
+  //       });
+  //     });
+  // };
+
+  // const updateFormHandler = (data: any) => {
+  //   setIsLoader(true);
+  //   const userData = {
+  //     firstName: data.first_name,
+  //     lastName: data.last_name,
+  //     updatedBy: authState.user.id,
+  //     tenant: authState.user.tenant,
+  //   };
+  //   console.log('User', userData);
+
+  //   Service.updateService(getValues('user_id'), userData)
+  //     .then((item) => {
+  //       if (item.data.success) {
+  //         console.log('LISSST', list, item.data.data, getValues('user_id'));
+  //         setIsLoader(false);
+  //         setIsNotify(true);
+  //         setNotifyMessage({
+  //           text: item.data.message,
+  //           type: 'success',
+  //         });
+  //         for (let i = 0; i < list.length; i += 1) {
+  //           if (list[i].id === getValues('user_id')) {
+  //             list[i].firstName = item.data.data.firstName;
+  //             list[i].lastName = item.data.data.lastName;
+  //           }
+  //         }
+  //         reset();
+  //       } else {
+  //         reset();
+  //         setIsLoader(false);
+  //         setIsNotify(true);
+  //         setNotifyMessage({
+  //           text: item.data.message,
+  //           type: 'error',
+  //         });
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       reset();
+  //       setIsLoader(false);
+  //       setIsNotify(true);
+  //       setNotifyMessage({
+  //         text: err.message,
+  //         type: 'error',
+  //       });
+  //     });
+  // };
+
+  const onSubmitDialogBox = (data: any) => {
+    if (
+      openFormDialog &&
+      data.first_name &&
+      data.last_name &&
+      data.email &&
+      data.password
+    ) {
+      console.log('data', data);
+      setOpenFormDialog(false);
+      // createFormHandler(data);
+    } else if (
+      openEditFormDialog &&
+      data.first_name &&
+      data.last_name &&
+      data.email
+    ) {
+      console.log('dataEdit', data);
+      setOpenEditFormDialog(false);
+      // updateFormHandler(data);
+    }
   };
 
-  const editHandler = (id: string) => {
-    setIsLoader(true);
-    Service.editBranch(id)
-      .then((item: any) => {
-        if (item.data.success) {
-          setFormDetail(item.data.data);
-          setOpenEditFormDialog(true);
-          setIsLoader(false);
-        }
-      })
-      .catch((err) => {
-        setIsLoader(false);
-        setIsNotify(true);
-        setNotifyMessage({
-          text: err.message,
-          type: 'error',
-        });
-      });
-  };
-
-  const updateFormHandler = (id: string, data: any) => {
-    delete data.email;
-    data.userId = authState?.user?.id;
-    Service.updateBranch(data, id).then((item: any) => {
-      setFormDetail(item.data.data);
-      setOpenEditFormDialog(true);
-      for (let i = 0; i < list.length; i += 1) {
-        if (list[i].id === item.data.data.id) {
-          list[i].tenantName = item.data.data.tenantName;
-          list[i].isActive = item.data.data.isActive;
-          list[i].trailMode = item.data.data.trailMode;
-          list[i].trailStartDate = item.data.data.trailStartDate;
-        }
-      }
-      reset();
-    });
-  };
+  // const handleSwitchChange = (event: any, id: string) => {
+  //   if (listingRolePermission(dataRole, 'Employee Update Status')) {
+  //     const data = {
+  //       isActive: event.target.checked,
+  //       updatedBy: authState.user.id,
+  //     };
+  //     Service.updateStatus(id, data).then((updateItem) => {
+  //       if (updateItem.data.success) {
+  //         setList((newArr: any) => {
+  //           return newArr.map((item: any) => {
+  //             if (item.id === updateItem.data.data.id) {
+  //               item.isActive = updateItem.data.data.isActive;
+  //             }
+  //             return { ...item };
+  //           });
+  //         });
+  //       }
+  //     });
+  //   } else {
+  //     setIsNotify(true);
+  //     setNotifyMessage({
+  //       text: NOT_AUTHORIZED_MESSAGE,
+  //       type: 'warning',
+  //     });
+  //   }
+  // };
 
   return isLoader ? (
     <Loader />
@@ -263,26 +385,13 @@ function BranchPage() {
                     disableUnderline
                   />
                 </FormControl>
-                <Button
+                {/* <Button
                   variant="contained"
                   className="btn-black-fill btn-icon"
-                  onClick={() => {
-                    if (totalBranches >= authState.user.branchLimit) {
-                      setIsNotify(true);
-                      setNotifyMessage({
-                        text: 'Branch limit has been reached',
-                        type: 'error',
-                      });
-                      return;
-                    }
-                    setOpenFormDialog(true);
-                  }}
-                  disabled={
-                    totalBranches >= authState.user.branchLimit ? true : false
-                  }
+                  onClick={handleFormClickOpen}
                 >
                   <AddOutlinedIcon /> Add New
-                </Button>
+                </Button> */}
               </div>
             </div>
           </div>
@@ -342,6 +451,8 @@ function BranchPage() {
                             <span className="badge badge-danger">OFF</span>
                           )}
                         </td>
+                        {/* <td>{item.phone}</td> */}
+                        {/* <td>{item.postalCode}</td> */}
                         <td>
                           {item.isActive ? (
                             <span className="badge badge-success">ACTIVE</span>
@@ -357,14 +468,33 @@ function BranchPage() {
                             >
                               <WysiwygOutlinedIcon />
                             </IconButton>
-                            <IconButton
-                              className="icon-btn mr-3.5 p-0"
-                              onClick={() =>
-                                item.isActive ? editHandler(item.id) : null
+                            {/* <IconButton
+                              className="btn-dot"
+                              aria-label="more"
+                              id="long-button"
+                              aria-controls={
+                                actionMenuOpen ? 'long-menu' : undefined
                               }
+                              aria-expanded={
+                                actionMenuOpen ? 'true' : undefined
+                              }
+                              aria-haspopup="true"
+                              onClick={(
+                                event: React.MouseEvent<HTMLElement>
+                              ) => {
+                                setActionMenuItemid(list[index].id);
+                                setActionMenuAnchorEl(event.currentTarget);
+                              }}
                             >
-                              <EditIcon />
-                            </IconButton>
+                              <MoreVertIcon />
+                            </IconButton> */}
+                            {/* <Switch
+                              checked={item.isActive}
+                              onChange={(
+                                event: React.ChangeEvent<HTMLInputElement>
+                              ) => handleSwitchChange(event, list[index].id)}
+                              inputProps={{ 'aria-label': 'controlled' }}
+                            /> */}
                           </div>
                         </td>
                       </tr>
@@ -388,29 +518,51 @@ function BranchPage() {
           </div>
         </div>
       </div>
+      {/* {cancelDialogOpen && (
+        <PermissionPopup
+          type="shock"
+          open={cancelDialogOpen}
+          setOpen={setCancelDialogOpen}
+          dialogText={dialogText}
+          // callback={statusCancelHandler}
+        />
+      )} */}
+      {/* {actionMenuAnchorEl && (
+        <ActionMenu
+          open={actionMenuOpen}
+          anchorEl={actionMenuAnchorEl}
+          setAnchorEl={setActionMenuAnchorEl}
+          options={actionMenuOptions}
+          callback={manuHandler}
+        />
+      )} */}
       {openFormDialog && (
-        <BranchCreatePopup
-          type
-          setIsNotify={setIsNotify}
-          setNotifyMessage={setNotifyMessage}
+        <CustomDialog
+          DialogHeader="Add Employee"
+          inputFieldsData={inputFieldsData}
+          handleSubmit={handleSubmit}
+          onSubmit={onSubmitDialogBox}
           openFormDialog={openFormDialog}
           setOpenFormDialog={setOpenFormDialog}
-          callback={createFormHandler}
         />
       )}
-
       {openEditFormDialog && (
-        <BranchUpdatePopup
-          setIsNotify={setIsNotify}
-          setNotifyMessage={setNotifyMessage}
-          item={formDetail}
+        <CustomDialog
+          DialogHeader="Edit Employee"
+          type="edit"
+          specailCase={false}
+          reset={reset}
+          inputFieldsData={inputFieldsData?.filter(
+            (item) => item.id !== 'password'
+          )}
+          handleSubmit={handleSubmit}
+          onSubmit={onSubmitDialogBox}
           openFormDialog={openEditFormDialog}
           setOpenFormDialog={setOpenEditFormDialog}
-          callback={updateFormHandler}
         />
       )}
     </>
   );
 }
 
-export default BranchPage;
+export default AppointmentVisitPage;
