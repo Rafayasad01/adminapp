@@ -19,7 +19,7 @@ type Props = {
   setCategories: any;
 };
 
-function SuperAdminCategoryTabPage({
+function SuperAdminCategoryDialog({
   setOpenFormDialog,
   openFormDialog,
   categories,
@@ -252,4 +252,4 @@ function SuperAdminCategoryTabPage({
   );
 }
 
-export default SuperAdminCategoryTabPage;
+export default SuperAdminCategoryDialog;

@@ -1,63 +1,61 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable import/prefer-default-export */
-import { RouteObject, Navigate } from 'react-router-dom';
-import CAN from "../services/permissions/permissions";
+import { Navigate, RouteObject } from 'react-router-dom';
+import AppLayout from '../components/layout/AppLayout';
+import AuthLayout from '../components/layout/AuthLayout';
+import LayoutOutlet from '../components/layout/LayoutOutlet';
+import SuperAdminAppLayout from '../components/layout/SuperAdminAppLayout';
+import AppointmentCategoryPage from '../pages/appointment/category/AppointmentCategoryPage';
+import AppointmentVisitPage from '../pages/appointment/visit/AppointmentVisitPage';
+import ForgotPasswordPage from '../pages/auth/forgot-password/ForgotPasswordPage';
+import LoginPage from '../pages/auth/login/LoginPage';
+import NewPasswordPage from '../pages/auth/new-password/NewPasswordPage';
+import OTPVerificationPage from '../pages/auth/otp-verification/OtpVerificationPage';
+import BranchDetailPage from '../pages/branches/BranchDetailPage';
+import BranchPage from '../pages/branches/BranchPage';
+import CartDetailsPage from '../pages/carts/CartDetailsPage';
+import CartsPage from '../pages/carts/CartsPage';
 import CategoriesPage from '../pages/categories/CategoriesPage';
+import CategoriesServicesFaqPage from '../pages/categories/CategoriesServicesFaqPage';
+import CategoriesServicesPage from '../pages/categories/CategoriesServicesPage';
 import ComplainsPage from '../pages/complain/ComplainsPage';
+import CustomersAddressPage from '../pages/customers/CustomersAddressPage';
 import CustomersDetailPage from '../pages/customers/CustomersDetailPage';
 import CustomersPage from '../pages/customers/CustomersPage';
+import DriversAddressPage from '../pages/drivers/DriversAddressPage';
+import DriversDetailPage from '../pages/drivers/DriversDetailPage';
 import DriversPage from '../pages/drivers/DriversPage';
+import DriversSchedulePage from '../pages/drivers/DriversSchedulePage';
+import EmployeePage from '../pages/employees/EmployeePage';
 import HomePage from '../pages/home/HomePage';
 import LocationsPage from '../pages/locations/LocationsPage';
+import NotAuthorized from '../pages/notAuthorized/notAuthorized';
+import NotificationPage from '../pages/notification/NotificationPage';
 import OrderDetailsPage from '../pages/orders/OrderDetailsPage';
+import OrdersAssignPage from '../pages/orders/OrdersAssignPage';
 import OrdersCreatePage from '../pages/orders/OrdersCreatePage';
 import OrdersEditPage from '../pages/orders/OrdersEditPage';
 import OrdersPage from '../pages/orders/OrdersPage';
-import ReportsPage from '../pages/reports/ReportsPage';
-import VouchersPage from '../pages/vouchers/VouchersPage';
-import SettingsPage from '../pages/settings/SettingsPage';
 import ProfilePage from '../pages/profile/ProfilePage';
+import ReportsPage from '../pages/reports/ReportsPage';
 import SettingsApp from '../pages/settings/SettingsApp';
+import SettingsPage from '../pages/settings/SettingsPage';
 import SettingsShopScheduling from '../pages/settings/SettingsShopScheduling';
-import CartsPage from '../pages/carts/CartsPage';
-import CartDetailsPage from '../pages/carts/CartDetailsPage';
-import CategoriesServicesPage from '../pages/categories/CategoriesServicesPage';
-import CategoriesServicesFaqPage from '../pages/categories/CategoriesServicesFaqPage';
-import OrdersAssignPage from '../pages/orders/OrdersAssignPage';
-import DriversAddressPage from '../pages/drivers/DriversAddressPage';
-import DriversSchedulePage from '../pages/drivers/DriversSchedulePage';
-import CustomersAddressPage from '../pages/customers/CustomersAddressPage';
-import DriversDetailPage from '../pages/drivers/DriversDetailPage';
-import NotificationPage from '../pages/notification/NotificationPage';
-import LayoutOutlet from '../components/layout/LayoutOutlet';
-import AuthLayout from '../components/layout/AuthLayout';
-import AppLayout from '../components/layout/AppLayout';
-import LoginPage from '../pages/auth/login/LoginPage';
-import ForgotPasswordPage from '../pages/auth/forgot-password/ForgotPasswordPage';
-import NewPasswordPage from '../pages/auth/new-password/NewPasswordPage';
-import SuperAdminAppLayout from '../components/layout/SuperAdminAppLayout';
 import SuperAdminDashboardPage from '../pages/super-admin/dashboard/SuperAdminDashboardPage';
-import SuperAdminUsersListPage from '../pages/super-admin/users/SuperAdminUsersListPage';
-import OTPVerificationPage from '../pages/auth/otp-verification/OtpVerificationPage';
-import NotAuthorized from '../pages/notAuthorized/notAuthorized';
-import SuperAdminRolePermissionsPage from '../pages/super-admin/role-permissions/SuperAdminRolePermissionsPage';
+import SuperAdminAppImagePage from '../pages/super-admin/image-upload/SuperAdminAppImagePage';
+import SuperAdminAddPermissionsPage from '../pages/super-admin/role-permissions/SuperAdminAddPermissionsPage';
 import SuperAdminAddRolePermissionsPage from '../pages/super-admin/role-permissions/SuperAdminAddRolePermissionsPage';
+import SuperAdminEditPermissionsPage from '../pages/super-admin/role-permissions/SuperAdminEditPermissionPage';
 import SuperAdminEditRolePermissionsPage from '../pages/super-admin/role-permissions/SuperAdminEditRolePermissionPage';
 import SuperAdminPermissionPage from '../pages/super-admin/role-permissions/SuperAdminPermissionPage';
-import SuperAdminAddPermissionsPage from '../pages/super-admin/role-permissions/SuperAdminAddPermissionsPage';
-import SuperAdminEditPermissionsPage from '../pages/super-admin/role-permissions/SuperAdminEditPermissionPage';
-import SuperAdminAppImagePage from '../pages/super-admin/image-upload/SuperAdminAppImagePage';
-import SuperAdminTenantPage from '../pages/super-admin/tenat/shop/SuperAdminTenantPage';
-import SuperAdminTenantDetailPage from '../pages/super-admin/tenat/shop/SuperAdminTenantDetailPage';
-import SuperAdminShopsListPage from '../pages/super-admin/tenat/user/SuperAdminShopsListPage';
-import SuperAdminShopDetailsPage from '../pages/super-admin/tenat/user/SuperAdminShopDetailsPage';
-import ShopAdminUserDetailPage from '../pages/super-admin/tenat/user/SuperAdminUserDetailPage';
-import EmployeePage from '../pages/employees/EmployeePage';
 import SuperAdminPermissionPageDetails from '../pages/super-admin/role-permissions/SuperAdminPermissionPageDetails';
-import BranchPage from '../pages/branches/BranchPage';
-import BranchDetailPage from '../pages/branches/BranchDetailPage';
-import AppointmentVisitPage from '../pages/appointment/visit/AppointmentVisitPage';
-import AppointmentCategoryPage from '../pages/appointment/category/AppointmentCategoryPage';
+import SuperAdminRolePermissionsPage from '../pages/super-admin/role-permissions/SuperAdminRolePermissionsPage';
+import SuperAdminShopDetailPage from '../pages/super-admin/tenat/shop/SuperAdminShopDetailPage';
+
+import SuperAdminUserPage from '../pages/super-admin/tenat/user/SuperAdminUserPage';
+import ShopAdminUserDetailPage from '../pages/super-admin/tenat/user/SuperAdminUserDetailPage';
+import VouchersPage from '../pages/vouchers/VouchersPage';
+import SuperAdminShopPage from '../pages/super-admin/tenat/shop/SuperAdminShopPage';
 
 
 export const routeObjects: RouteObject[] = [
@@ -108,18 +106,6 @@ export const routeObjects: RouteObject[] = [
             path: 'dashboard',
             element: <SuperAdminDashboardPage />,
           },
-
-
-          {
-            path: 'user',
-            children: [
-              { index: true, element: <Navigate to="list" replace /> },
-              {
-                path: 'list',
-                element: <SuperAdminUsersListPage />,
-              },
-            ],
-          },
           {
             path: 'tenant',
             children: [
@@ -129,11 +115,11 @@ export const routeObjects: RouteObject[] = [
                   { index: true, element: <Navigate to="list" replace /> },
                   {
                     path: 'list',
-                    element: <SuperAdminTenantPage />,
+                    element: <SuperAdminShopPage />,
                   },
                   {
                     path: 'detail/:id',
-                    element: <SuperAdminTenantDetailPage />,
+                    element: <SuperAdminShopDetailPage />,
                   },
                 ],
               },
@@ -143,7 +129,7 @@ export const routeObjects: RouteObject[] = [
                   { index: true, element: <Navigate to="list" replace /> },
                   {
                     path: 'list',
-                    element: <SuperAdminShopsListPage />,
+                    element: <SuperAdminUserPage />,
                   },
                   {
                     path: 'detail/:id',

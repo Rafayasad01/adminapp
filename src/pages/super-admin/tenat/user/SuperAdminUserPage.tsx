@@ -25,7 +25,7 @@ import Notify from '../../../../components/common/Notify';
 import CustomDialog from '../../../../components/common/CustomDialog';
 import { useAppSelector } from '../../../../redux/redux-hooks';
 
-function SuperAdminShopsListPage() {
+function SuperAdminUserPage() {
   const authState: any = useAppSelector((state) => state?.authState);
   const navigate = useNavigate();
   const [search, setSearch] = useState('');
@@ -436,4 +436,4 @@ function SuperAdminShopsListPage() {
   );
 }
 
-export default SuperAdminShopsListPage;
+export default SuperAdminUserPage;

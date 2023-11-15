@@ -13,7 +13,7 @@ type Props = {
   setOpenFormDialog: any;
 };
 
-function SuperAdminUserTabPage({
+function SuperAdminUserDialog({
   items,
   openFormDialog,
   setOpenFormDialog,
@@ -145,4 +145,4 @@ function SuperAdminUserTabPage({
   );
 }
 
-export default SuperAdminUserTabPage;
+export default SuperAdminUserDialog;
