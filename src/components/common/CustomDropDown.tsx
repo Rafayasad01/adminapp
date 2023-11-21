@@ -12,6 +12,7 @@ type Props = {
   value?: string;
   error?: any;
   validateRequired?: any;
+  customClassInputTitle?: string;
 };
 
 function CustomDropDown({
@@ -23,11 +24,12 @@ function CustomDropDown({
   control,
   id,
   validateRequired,
+  customClassInputTitle
 }: Props) {
   return (
     <div className="">
       <div className="" style={{ paddingBottom: '3px' }}>
-        <span className="FormLabel">{inputTitle}</span>
+        <span className={`FormLabel ${customClassInputTitle}`}>{inputTitle}</span>
       </div>
       <div className="">
         <Controller
@@ -37,17 +39,16 @@ function CustomDropDown({
           rules={
             validateRequired
               ? {
-                  validate: (value) => {
-                    return value !== 'none' || 'Select an option';
-                  },
-                }
+                validate: (value) => {
+                  return value !== 'none' || 'Select an option';
+                },
+              }
               : {}
           }
           render={({ field, fieldState }) => (
             <>
               <Select
                 fullWidth
-                disableUnderline
                 variant="outlined"
                 style={{ border: '1px solid rgb(201, 201, 201)' }}
                 className="fixed-height w-[100%]"

@@ -1,16 +1,19 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import ThemeProvider from '@mui/material/styles/ThemeProvider';
 import createTheme from '@mui/material/styles/createTheme';
 import Popover from '@mui/material/Popover';
-import { StaticTimePicker } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+// import StaticTimePicker from '@mui/x-date-pickers/StaticTimePicker';
 import dayjs from 'dayjs';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
 import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
 import FormControl from '@mui/material/FormControl';
-
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { StaticTimePicker } from '@mui/x-date-pickers/StaticTimePicker';
 import '../../assets/css/PopupStyle.css';
+// import { StaticTimePicker } from '@mui/x-date-pickers/StaticTimePicker';
 
 const darkTheme = createTheme({
   palette: {
@@ -23,11 +26,15 @@ const darkTheme = createTheme({
 type Props = {
   timePickerLabel: string;
   timePickerSubLabel?: string;
-  timePickerValue: dayjs.Dayjs | null;
+  timePickerValue: dayjs.Dayjs | any;
   setTimePickerValue: React.Dispatch<React.SetStateAction<dayjs.Dayjs | null>>;
   id: string;
   errors?: any;
+  index?: number;
   setError?: any;
+  register?: any;
+  setValue?: any;
+  watch?: any
 };
 function TimePicker({
   timePickerLabel,
@@ -35,52 +42,65 @@ function TimePicker({
   timePickerValue,
   setTimePickerValue,
   errors,
+  index,
   setError,
   id,
+  register,
+  setValue,
+  watch
 }: Props) {
-  // console.log("message", errors);
 
   const [timePicker, setTimePicker] = useState<HTMLButtonElement | null>(null);
   const buttonElement = useRef(null);
-  const handleClick = () => {
-    setTimePicker(buttonElement.current);
-    if (timePickerValue?.format('HH:MM A') !== null) {
-      setError(id, {
-        type: 'manual',
-        message: '',
-      });
-    }
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    console.log();
+
+    setTimePicker(event.currentTarget);
+    // if (timePickerValue?.format('HH:MM A') !== null) {
+    //   setError(id, {
+    //     type: 'manual',
+    //     message: '',
+    //   });
+    // }
   };
   const handleClose = () => {
     setTimePicker(null);
   };
 
+  console.log("timePickerValue", timePickerValue);
+
+
   const open = Boolean(timePicker);
   const idProp = open ? id : undefined;
 
   const handleChange = (value: dayjs.Dayjs | null) => {
+    setValue(id, value);
     setTimePickerValue(value);
     handleClose();
   };
 
   return (
     <>
-      <FormControl className="FormControl" variant="standard">
-        <label className="FormLabel">
+      <FormControl className="FormControl w-full" variant="standard">
+        <label className="FormLabel font-bold">
           {timePickerLabel}{' '}
           {timePickerSubLabel ? (
-            <span className="SubLabel">{timePickerSubLabel}</span>
+            <span className="SubLabel text-xs">{timePickerSubLabel}</span>
           ) : (
             ''
           )}
         </label>
         <Input
-          ref={buttonElement}
-          className="FormInput"
+          name={id}
+          // ref={buttonElement}
+          {...register(id, { required: true })}
+          className="FormInput border-[2px] px-2 rounded-md"
           type="text"
-          placeholder="HH:MM A"
-          value={timePickerValue?.format('HH:MM A') ?? ''}
+          placeholder="HH:MM"
+          value={watch(id) !== null && (watch(id))?.format('HH:mm A') || ''}
           onChange={() => null}
+          id={id}
+          // {...register(id)}
           endAdornment={
             <InputAdornment position="end">
               <IconButton
@@ -94,13 +114,12 @@ function TimePicker({
           }
           disableUnderline
         />
-        {errors && (
+        {/* {errors && errors[id] && (
           <span style={{ fontSize: '14px' }} role="alert">
-            {errors.message}
+            {errors[id].message}
           </span>
-        )}
+        )} */}
       </FormControl>
-
       <Popover
         id={idProp}
         open={open}
@@ -112,11 +131,13 @@ function TimePicker({
         }}
       >
         <ThemeProvider theme={darkTheme}>
-          <StaticTimePicker
-            displayStaticWrapperAs="desktop"
-            defaultValue={dayjs('2023-01-01T00:00')}
-            onAccept={handleChange}
-          />
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <StaticTimePicker
+              displayStaticWrapperAs="desktop"
+              defaultValue={dayjs('2023-01-01T00:00')}
+              onAccept={handleChange}
+            />
+          </ LocalizationProvider>
         </ThemeProvider>
       </Popover>
     </>

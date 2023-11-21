@@ -12,7 +12,12 @@ import RadioButtonUncheckedOutlinedIcon from '@mui/icons-material/RadioButtonUnc
 import '../../assets/css/PopupStyle.css';
 import TimePickerField from './TimePickerField';
 
-function WorkDaysForm() {
+type Props = {
+  onlyweeksformat?: boolean;
+  setWeekDays?: any;
+}
+
+function WorkDaysForm({ onlyweeksformat, setWeekDays }: Props) {
   const [shopInTime, setShopInTime] = useState<dayjs.Dayjs | null>(null);
   const [shopOutTime, setShopOutTime] = useState<dayjs.Dayjs | null>(null);
   const [pickupTime, setPickupTime] = useState<dayjs.Dayjs | null>(null);
@@ -24,13 +29,15 @@ function WorkDaysForm() {
     newDevices: any
   ) => {
     if (newDevices.length) {
+      console.log("devices", newDevices);
       setDevices(newDevices);
+      setWeekDays(newDevices);
     }
   };
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <div className="height-230">
+      <div className={`${!onlyweeksformat && 'height-230'}`}>
         <div className="FormField">
           <ToggleButtonGroup
             value={devices}
@@ -39,7 +46,7 @@ function WorkDaysForm() {
           >
             <ToggleButton
               className="CustomToggleBtn"
-              value="Sun"
+              value="Sunday"
               aria-label="Sun"
               disableRipple
             >
@@ -47,7 +54,7 @@ function WorkDaysForm() {
             </ToggleButton>
             <ToggleButton
               className="CustomToggleBtn"
-              value="Mon"
+              value="Monday"
               aria-label="Mon"
               disableRipple
             >
@@ -55,7 +62,7 @@ function WorkDaysForm() {
             </ToggleButton>
             <ToggleButton
               className="CustomToggleBtn"
-              value="Tue"
+              value="Tuesday"
               aria-label="Tue"
               disableRipple
             >
@@ -63,7 +70,7 @@ function WorkDaysForm() {
             </ToggleButton>
             <ToggleButton
               className="CustomToggleBtn"
-              value="Wed"
+              value="Wednesday"
               aria-label="Wed"
               disableRipple
             >
@@ -71,7 +78,7 @@ function WorkDaysForm() {
             </ToggleButton>
             <ToggleButton
               className="CustomToggleBtn"
-              value="Thu"
+              value="Thursday"
               aria-label="Thu"
               disableRipple
             >
@@ -79,7 +86,7 @@ function WorkDaysForm() {
             </ToggleButton>
             <ToggleButton
               className="CustomToggleBtn"
-              value="Fri"
+              value="Friday"
               aria-label="Fri"
               disableRipple
             >
@@ -87,7 +94,7 @@ function WorkDaysForm() {
             </ToggleButton>
             <ToggleButton
               className="CustomToggleBtn"
-              value="Sat"
+              value="Saturday"
               aria-label="Sat"
               disableRipple
             >
@@ -95,53 +102,56 @@ function WorkDaysForm() {
             </ToggleButton>
           </ToggleButtonGroup>
         </div>
-
-        <div className="FormFields">
-          <TimePickerField
-            timePickerLabel="Shop In Time"
-            timePickerValue={shopInTime}
-            setTimePickerValue={setShopInTime}
-            id="shopInTimePicker"
-          />
-          <TimePickerField
-            timePickerLabel="Shop Out Time"
-            timePickerValue={shopOutTime}
-            setTimePickerValue={setShopOutTime}
-            id="shopOutTimePicker"
-          />
-        </div>
-        <div className="FormFields">
-          <TimePickerField
-            timePickerLabel="Pickup Time"
-            timePickerValue={pickupTime}
-            setTimePickerValue={setPickupTime}
-            id="pickupTimePicker"
-          />
-          <TimePickerField
-            timePickerLabel="Dropoff Time"
-            timePickerValue={dropoffTime}
-            setTimePickerValue={setDropoffTime}
-            id="dropoffTimePicker"
-          />
-        </div>
-        <div className="FormField">
-          <FormControlLabel
-            control={
-              <Checkbox
-                defaultChecked
-                icon={
-                  <RadioButtonUncheckedOutlinedIcon
-                    style={{ color: '#1D1D1D' }}
+        {!onlyweeksformat &&
+          <>
+            <div className="FormFields">
+              <TimePickerField
+                timePickerLabel="Shop In Time"
+                timePickerValue={shopInTime}
+                setTimePickerValue={setShopInTime}
+                id="shopInTimePicker"
+              />
+              <TimePickerField
+                timePickerLabel="Shop Out Time"
+                timePickerValue={shopOutTime}
+                setTimePickerValue={setShopOutTime}
+                id="shopOutTimePicker"
+              />
+            </div>
+            <div className="FormFields">
+              <TimePickerField
+                timePickerLabel="Pickup Time"
+                timePickerValue={pickupTime}
+                setTimePickerValue={setPickupTime}
+                id="pickupTimePicker"
+              />
+              <TimePickerField
+                timePickerLabel="Dropoff Time"
+                timePickerValue={dropoffTime}
+                setTimePickerValue={setDropoffTime}
+                id="dropoffTimePicker"
+              />
+            </div>
+            <div className="FormField">
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    defaultChecked
+                    icon={
+                      <RadioButtonUncheckedOutlinedIcon
+                        style={{ color: '#1D1D1D' }}
+                      />
+                    }
+                    checkedIcon={
+                      <CheckCircleOutlinedIcon style={{ color: '#1D1D1D' }} />
+                    }
                   />
                 }
-                checkedIcon={
-                  <CheckCircleOutlinedIcon style={{ color: '#1D1D1D' }} />
-                }
+                label="Apply on Month"
               />
-            }
-            label="Apply on Month"
-          />
-        </div>
+            </div>
+          </>
+        }
       </div>
     </LocalizationProvider>
   );

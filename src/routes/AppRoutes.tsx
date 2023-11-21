@@ -5,7 +5,7 @@ import AppLayout from '../components/layout/AppLayout';
 import AuthLayout from '../components/layout/AuthLayout';
 import LayoutOutlet from '../components/layout/LayoutOutlet';
 import SuperAdminAppLayout from '../components/layout/SuperAdminAppLayout';
-import AppointmentCategoryPage from '../pages/appointment/category/AppointmentCategoryPage';
+import AppointmentServicePage from '../pages/appointment/service/AppointmentServicePage';
 import AppointmentVisitPage from '../pages/appointment/visit/AppointmentVisitPage';
 import ForgotPasswordPage from '../pages/auth/forgot-password/ForgotPasswordPage';
 import LoginPage from '../pages/auth/login/LoginPage';
@@ -56,6 +56,9 @@ import SuperAdminUserPage from '../pages/super-admin/tenat/user/SuperAdminUserPa
 import ShopAdminUserDetailPage from '../pages/super-admin/tenat/user/SuperAdminUserDetailPage';
 import VouchersPage from '../pages/vouchers/VouchersPage';
 import SuperAdminShopPage from '../pages/super-admin/tenat/shop/SuperAdminShopPage';
+import AppointmentProviderPage from '../pages/appointment/provider/AppointmentProviderPage';
+import AppointmentProviderSchedulePage from '../pages/appointment/provider/AppointmentProviderSchedulePage';
+import AppointmentProviderAddSchedulePage from '../pages/appointment/provider/AppointmentProviderAddSchedulePage';
 
 
 export const routeObjects: RouteObject[] = [
@@ -385,12 +388,30 @@ export const routeObjects: RouteObject[] = [
                 ]
               },
               {
-                path: "category",
+                path: "service",
                 children: [
                   { index: true, element: <Navigate to="list" replace /> },
                   {
                     path: 'list',
-                    element: <AppointmentCategoryPage />,
+                    element: <AppointmentServicePage />,
+                  }
+                ]
+              },
+              {
+                path: "provider",
+                children: [
+                  { index: true, element: <Navigate to="list" replace /> },
+                  {
+                    path: 'list',
+                    element: <AppointmentProviderPage />,
+                  },
+                  {
+                    path: 'schedule/:id',
+                    element: <AppointmentProviderSchedulePage />,
+                  },
+                  {
+                    path: 'add-schedule/:id',
+                    element: <AppointmentProviderAddSchedulePage />,
                   }
                 ]
               }

@@ -1,29 +1,33 @@
+import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 import SearchIcon from '@mui/icons-material/Search';
-import WysiwygOutlinedIcon from '@mui/icons-material/WysiwygOutlined';
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import FormControl from '@mui/material/FormControl';
 import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
+import Switch from '@mui/material/Switch';
 import TablePagination from '@mui/material/TablePagination';
 import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
 import TopBar from '../../../components/common/TopBar';
-// import CustomersCreatePopup from './CustomersCreatePopup';
-// import CustomersEditPopup from './CustomersEditPopup';
+import ActionMenu from '../../../components/common/ActionMenu';
 import CustomDialog from '../../../components/common/CustomDialog';
 import CustomText from '../../../components/common/CustomText';
 import Loader from '../../../components/common/Loader';
 import Notify from '../../../components/common/Notify';
 import { AppUserEmployees } from '../../../interfaces/app-user.interface';
 import { useAppSelector } from '../../../redux/redux-hooks';
-import Service from '../../../services/adminapp/adminBranch';
+import Service from '../../../services/adminapp/adminAppointment';
+import PermissionPopup from '../../../utils/PermissionPopup';
+import { NOT_AUTHORIZED_MESSAGE } from '../../../utils/constants';
 import { listingRolePermission } from '../../../utils/helper';
+import { AppointmentProvider, AppointmentService } from '../../../interfaces/app.appointment';
 
-function AppointmentCategoryPage() {
-  const navigate = useNavigate();
+function AppointmentServicePage() {
   const authState: any = useAppSelector((state: any) => state?.authState);
   const dataRole = useAppSelector(
     (state: any) => state?.persisitReducer?.roleState?.role?.permissions
@@ -59,47 +63,39 @@ function AppointmentCategoryPage() {
     setValue,
     formState: { errors },
     control,
-  } = useForm<AppUserEmployees>();
-
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
+  } = useForm<AppointmentService>();
 
   const inputFieldsData = [
     {
-      fieldName: 'First Name',
-      id: 'first_name',
-      placeholder: 'Enter first name',
+      fieldName: 'Service Name',
+      id: 'serviceName',
+      placeholder: 'Enter service name',
       register,
-      error: errors.first_name,
-      type: 'text',
+      error: errors.serviceName,
+      type: 'text'
     },
     {
-      fieldName: 'Last Name',
-      id: 'last_name',
-      placeholder: 'Enter last name',
+      fieldName: 'Service Description',
+      id: 'serviceDesc',
+      placeholder: 'Enter service Description',
       register,
-      error: errors.last_name,
-      type: 'text',
-    },
-    {
-      fieldName: 'Email Address',
-      id: 'email',
-      placeholder: 'Enter email address',
-      register,
-      error: errors.email,
-      type: 'text',
-      disable: openEditFormDialog,
-    },
-    {
-      fieldName: 'Password',
-      id: 'password',
-      placeholder: 'Enter password',
-      register,
-      error: errors.password,
-      type: 'password',
-      onclick: handleClickShowPassword,
-      showPassVisibility: showPassword,
-    },
+      error: errors.serviceDesc,
+      type: 'textarea',
+      notRequired: true,
+    }
   ];
+
+  const handleFormClickOpen = () => {
+    if (listingRolePermission(dataRole, 'Employee Create')) {
+      setOpenFormDialog(true);
+    } else {
+      setIsNotify(true);
+      setNotifyMessage({
+        text: NOT_AUTHORIZED_MESSAGE,
+        type: 'warning',
+      });
+    }
+  };
 
   const handleClickSearch = (event: any) => {
     if (event.key === 'Enter') {
@@ -107,7 +103,7 @@ function AppointmentCategoryPage() {
       const newPage = 0;
       setSearch(searchTxt);
       setPage(newPage);
-      Service.getListServiceSearch(
+      Service.ServiceSearchList(
         authState.user.tenant,
         searchTxt,
         newPage,
@@ -126,14 +122,14 @@ function AppointmentCategoryPage() {
     setPage(newPage);
     // offset? ,limit rowsperpage hoga ofset page * rowsperPage
     if (search === '' || search === null || search === undefined) {
-      Service.getListService(authState.user.tenant, newPage, rowsPerPage).then(
+      Service.ServiceList(authState.user.tenant, newPage, rowsPerPage).then(
         (item) => {
           setList(item.data.data.list);
           setTotal(item.data.data.total);
         }
       );
     } else {
-      Service.getListServiceSearch(
+      Service.ServiceSearchList(
         authState.user.tenant,
         search,
         newPage,
@@ -153,14 +149,14 @@ function AppointmentCategoryPage() {
     setRowsPerPage(newRowperPage);
     setPage(newPage);
     if (search === '' || search === null || search === undefined) {
-      Service.getListService(authState.user.tenant, newPage, rowsPerPage).then(
+      Service.ServiceList(authState.user.tenant, newPage, rowsPerPage).then(
         (item) => {
           setList(item.data.data.list);
           setTotal(item.data.data.total);
         }
       );
     } else {
-      Service.getListServiceSearch(
+      Service.ServiceSearchList(
         authState.user.tenant,
         search,
         newPage,
@@ -172,14 +168,82 @@ function AppointmentCategoryPage() {
     }
   };
 
+  const manuHandler = (option: string) => {
+    if (option === 'Edit') {
+      if (listingRolePermission(dataRole, 'Employee Update')) {
+        setIsLoader(true);
+        Service.ServiceEdit(actionMenuItemid).then((item: any) => {
+          if (item.data.success) {
+            setIsLoader(false);
+            setValue('serviceName', item.data.data.name);
+            setValue('serviceDesc', item.data.data.desc);
+            setOpenEditFormDialog(true);
+          }
+        });
+      } else {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: NOT_AUTHORIZED_MESSAGE,
+          type: 'warning',
+        });
+      }
+    } else if (option === 'Delete') {
+      if (listingRolePermission(dataRole, 'Employee delete')) {
+        setIsLoader(true);
+        const data = {
+          updatedBy: authState.user.id,
+        };
+        console.log(actionMenuItemid);
+        Service.ServiceDelete(actionMenuItemid, data)
+          .then((item: any) => {
+            if (item.data.success) {
+              setIsLoader(false);
+              setIsNotify(true);
+              setNotifyMessage({
+                text: item.data.message,
+                type: 'success',
+              });
+              setList((newArr: any) => {
+                return newArr.filter(
+                  (newItem: any) => newItem.id !== item.data.data.id
+                );
+              });
+            }
+          })
+          .catch((err: Error) => {
+            setIsLoader(false);
+            setIsNotify(true);
+            setNotifyMessage({
+              text: err.message,
+              type: 'error',
+            });
+          });
+      } else {
+        setIsNotify(true);
+        setNotifyMessage({
+          text: NOT_AUTHORIZED_MESSAGE,
+          type: 'warning',
+        });
+      }
+    }
+  };
+
   useEffect(() => {
     if (listingRolePermission(dataRole, 'Employee List')) {
-      Service.getListService(authState.user.tenant, page, rowsPerPage)
+      Service.ServiceList(authState.user.tenant, page, rowsPerPage)
         .then((item: any) => {
           if (item.data.success) {
             setIsLoader(false);
             setList(item.data.data.list);
             setTotal(item.data.data.total);
+          } else {
+            setIsLoader(false);
+            setIsNotify(true);
+            setNotifyMessage({
+              text: item.data.message,
+              type: 'error',
+            });
           }
         })
         .catch((err) => {
@@ -195,145 +259,127 @@ function AppointmentCategoryPage() {
     }
   }, [emptyVariable]);
 
-  // const createFormHandler = (data: any) => {
-  //   setIsLoader(true);
-  //   const userData = {
-  //     firstName: data.first_name,
-  //     lastName: data.last_name,
-  //     password: data.password,
-  //     email: data.email,
-  //     createdBy: authState.user.id,
-  //     tenant: authState.user.tenant,
-  //   };
-  //   Service.create(userData)
-  //     .then((item) => {
-  //       if (item.data.success) {
-  //         reset();
-  //         setIsLoader(false);
-  //         setIsNotify(true);
-  //         setNotifyMessage({
-  //           text: item.data.message,
-  //           type: 'success',
-  //         });
-  //         setList([...list, item.data.data]);
-  //       } else {
-  //         reset();
-  //         setIsLoader(false);
-  //         setIsNotify(true);
-  //         setNotifyMessage({
-  //           text: item.data.message,
-  //           type: 'error',
-  //         });
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       reset();
-  //       setIsLoader(false);
-  //       setIsNotify(true);
-  //       setNotifyMessage({
-  //         text: err.message,
-  //         type: 'error',
-  //       });
-  //     });
-  // };
+  const createFormHandler = (data: any) => {
+    setIsLoader(true);
+    const userData = {
+      name: data.serviceName,
+      desc: data.serviceDesc ? data.serviceDesc : null,
+      tenant: authState.user.tenant,
+      createdBy: authState.user.id
+    };
+    Service.ServiceCreate(userData)
+      .then((item) => {
+        if (item.data.success) {
+          reset();
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'success',
+          });
+          setList([item.data.data, ...list]);
+        } else {
+          reset();
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'error',
+          });
+        }
+      })
+      .catch((err) => {
+        reset();
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
+        });
+      });
+  };
 
-  // const updateFormHandler = (data: any) => {
-  //   setIsLoader(true);
-  //   const userData = {
-  //     firstName: data.first_name,
-  //     lastName: data.last_name,
-  //     updatedBy: authState.user.id,
-  //     tenant: authState.user.tenant,
-  //   };
-  //   console.log('User', userData);
-
-  //   Service.updateService(getValues('user_id'), userData)
-  //     .then((item) => {
-  //       if (item.data.success) {
-  //         console.log('LISSST', list, item.data.data, getValues('user_id'));
-  //         setIsLoader(false);
-  //         setIsNotify(true);
-  //         setNotifyMessage({
-  //           text: item.data.message,
-  //           type: 'success',
-  //         });
-  //         for (let i = 0; i < list.length; i += 1) {
-  //           if (list[i].id === getValues('user_id')) {
-  //             list[i].firstName = item.data.data.firstName;
-  //             list[i].lastName = item.data.data.lastName;
-  //           }
-  //         }
-  //         reset();
-  //       } else {
-  //         reset();
-  //         setIsLoader(false);
-  //         setIsNotify(true);
-  //         setNotifyMessage({
-  //           text: item.data.message,
-  //           type: 'error',
-  //         });
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       reset();
-  //       setIsLoader(false);
-  //       setIsNotify(true);
-  //       setNotifyMessage({
-  //         text: err.message,
-  //         type: 'error',
-  //       });
-  //     });
-  // };
+  const updateFormHandler = (data: any) => {
+    setIsLoader(true);
+    const userData = {
+      name: data.serviceName,
+      desc: data.serviceDesc ? data.serviceDesc : null,
+      updatedBy: authState.user.id
+    };
+    Service.ServiceUpdate(actionMenuItemid, userData)
+      .then((item) => {
+        if (item.data.success) {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'success',
+          });
+          for (let i = 0; i < list.length; i += 1) {
+            if (list[i].id === actionMenuItemid) {
+              list[i].name = item.data.data.name;
+              list[i].desc = item.data.data.desc;
+            }
+          }
+          reset();
+        } else {
+          reset();
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'error',
+          });
+        }
+      })
+      .catch((err) => {
+        reset();
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
+        });
+      });
+  };
 
   const onSubmitDialogBox = (data: any) => {
-    if (
-      openFormDialog &&
-      data.first_name &&
-      data.last_name &&
-      data.email &&
-      data.password
-    ) {
-      console.log('data', data);
+    if (openFormDialog) {
       setOpenFormDialog(false);
-      // createFormHandler(data);
-    } else if (
-      openEditFormDialog &&
-      data.first_name &&
-      data.last_name &&
-      data.email
-    ) {
-      console.log('dataEdit', data);
+      createFormHandler(data);
+    }
+    else if (openEditFormDialog) {
       setOpenEditFormDialog(false);
-      // updateFormHandler(data);
+      updateFormHandler(data);
     }
   };
 
-  // const handleSwitchChange = (event: any, id: string) => {
-  //   if (listingRolePermission(dataRole, 'Employee Update Status')) {
-  //     const data = {
-  //       isActive: event.target.checked,
-  //       updatedBy: authState.user.id,
-  //     };
-  //     Service.updateStatus(id, data).then((updateItem) => {
-  //       if (updateItem.data.success) {
-  //         setList((newArr: any) => {
-  //           return newArr.map((item: any) => {
-  //             if (item.id === updateItem.data.data.id) {
-  //               item.isActive = updateItem.data.data.isActive;
-  //             }
-  //             return { ...item };
-  //           });
-  //         });
-  //       }
-  //     });
-  //   } else {
-  //     setIsNotify(true);
-  //     setNotifyMessage({
-  //       text: NOT_AUTHORIZED_MESSAGE,
-  //       type: 'warning',
-  //     });
-  //   }
-  // };
+  const handleSwitchChange = (event: any, id: string) => {
+    if (listingRolePermission(dataRole, 'Employee Update Status')) {
+      const data = {
+        isActive: event.target.checked,
+        updatedBy: authState.user.id,
+      };
+      Service.ServiceUpdateStatus(id, data).then((updateItem) => {
+        if (updateItem.data.success) {
+          setList((newArr: any) => {
+            return newArr.map((item: any) => {
+              if (item.id === updateItem.data.data.id) {
+                item.isActive = updateItem.data.data.isActive;
+              }
+              return { ...item };
+            });
+          });
+        }
+      });
+    } else {
+      setIsNotify(true);
+      setNotifyMessage({
+        text: NOT_AUTHORIZED_MESSAGE,
+        type: 'warning',
+      });
+    }
+  };
 
   return isLoader ? (
     <Loader />
@@ -344,13 +390,13 @@ function AppointmentCategoryPage() {
         setIsOpen={setIsNotify}
         displayMessage={notifyMessage}
       />
-      <TopBar title="Branches" />
+      <TopBar title="Service" />
       <div className="container m-auto mt-5">
         <div className="w-full rounded-lg bg-white shadow-lg">
           <div className="grid grid-cols-12 px-4 py-5">
             <div className="col-span-7">
               <span className="font-open-sans text-xl font-semibold text-[#252733]">
-                All Branches
+                All Service
               </span>
             </div>
             <div className="col-span-5">
@@ -385,13 +431,13 @@ function AppointmentCategoryPage() {
                     disableUnderline
                   />
                 </FormControl>
-                {/* <Button
+                <Button
                   variant="contained"
                   className="btn-black-fill btn-icon"
                   onClick={handleFormClickOpen}
                 >
                   <AddOutlinedIcon /> Add New
-                </Button> */}
+                </Button>
               </div>
             </div>
           </div>
@@ -399,10 +445,8 @@ function AppointmentCategoryPage() {
             <table className="table-border table-auto">
               <thead>
                 <tr>
-                  <th>Branch Name</th>
-                  <th>Employee Limit</th>
-                  <th>Trial Mode</th>
-                  <th>Trail Start Date</th>
+                  <th>Service Name</th>
+                  <th>Service Description</th>
                   <th>Status</th>
                   <th>&nbsp;</th>
                 </tr>
@@ -412,7 +456,7 @@ function AppointmentCategoryPage() {
                   list.map((item: any, index: number) => {
                     return (
                       <tr key={item.id}>
-                        <td>
+                        <td className='w-64'>
                           <div className="avatar flex flex-row items-center">
                             <div className="flex flex-col items-start justify-start">
                               <span className="text-sm font-semibold">
@@ -421,38 +465,14 @@ function AppointmentCategoryPage() {
                               <span className="text-xs font-normal text-[#6A6A6A]">
                                 {dayjs(item.createdDate).isValid()
                                   ? dayjs(item.createdDate)?.format(
-                                      'MMMM DD, YYYY'
-                                    )
+                                    'MMMM DD, YYYY'
+                                  )
                                   : '--'}
                               </span>
                             </div>
                           </div>
                         </td>
-                        <td>
-                          {item.maxUserLimit} - {item.userCounts}
-                        </td>
-                        <td>
-                          {dayjs(item.trailStartDate).isValid() ? (
-                            <>
-                              {dayjs(item.trailStartDate)?.format(
-                                'ddd, MMM DD, YYYY'
-                              )}
-                              <br />
-                              {dayjs(item.trailStartDate)?.format('hh:mm:ss A')}
-                            </>
-                          ) : (
-                            '--'
-                          )}
-                        </td>
-                        <td>
-                          {item.trialMode ? (
-                            <span className="badge badge-success">ON</span>
-                          ) : (
-                            <span className="badge badge-danger">OFF</span>
-                          )}
-                        </td>
-                        {/* <td>{item.phone}</td> */}
-                        {/* <td>{item.postalCode}</td> */}
+                        <td className='w-[60%]'>{item.desc}</td>
                         <td>
                           {item.isActive ? (
                             <span className="badge badge-success">ACTIVE</span>
@@ -463,12 +483,6 @@ function AppointmentCategoryPage() {
                         <td>
                           <div className="flex flex-row-reverse">
                             <IconButton
-                              className="icon-btn mr-3.5 p-0"
-                              onClick={() => navigate(`detail/${item.id}`)}
-                            >
-                              <WysiwygOutlinedIcon />
-                            </IconButton>
-                            {/* <IconButton
                               className="btn-dot"
                               aria-label="more"
                               id="long-button"
@@ -487,14 +501,14 @@ function AppointmentCategoryPage() {
                               }}
                             >
                               <MoreVertIcon />
-                            </IconButton> */}
-                            {/* <Switch
+                            </IconButton>
+                            <Switch
                               checked={item.isActive}
                               onChange={(
                                 event: React.ChangeEvent<HTMLInputElement>
                               ) => handleSwitchChange(event, list[index].id)}
                               inputProps={{ 'aria-label': 'controlled' }}
-                            /> */}
+                            />
                           </div>
                         </td>
                       </tr>
@@ -519,15 +533,15 @@ function AppointmentCategoryPage() {
         </div>
       </div>
       {/* {cancelDialogOpen && (
-        <PermissionPopup
-          type="shock"
-          open={cancelDialogOpen}
-          setOpen={setCancelDialogOpen}
-          dialogText={dialogText}
-          // callback={statusCancelHandler}
-        />
-      )} */}
-      {/* {actionMenuAnchorEl && (
+                <PermissionPopup
+                    type="shock"
+                    open={cancelDialogOpen}
+                    setOpen={setCancelDialogOpen}
+                    dialogText={dialogText}
+                    callback={statusCancelHandler}
+                />
+            )} */}
+      {actionMenuAnchorEl && (
         <ActionMenu
           open={actionMenuOpen}
           anchorEl={actionMenuAnchorEl}
@@ -535,10 +549,11 @@ function AppointmentCategoryPage() {
           options={actionMenuOptions}
           callback={manuHandler}
         />
-      )} */}
+      )}
       {openFormDialog && (
         <CustomDialog
-          DialogHeader="Add Employee"
+          singleField
+          DialogHeader="Add Service"
           inputFieldsData={inputFieldsData}
           handleSubmit={handleSubmit}
           onSubmit={onSubmitDialogBox}
@@ -548,13 +563,12 @@ function AppointmentCategoryPage() {
       )}
       {openEditFormDialog && (
         <CustomDialog
-          DialogHeader="Edit Employee"
+          singleField
+          DialogHeader="Edit Service"
           type="edit"
           specailCase={false}
           reset={reset}
-          inputFieldsData={inputFieldsData?.filter(
-            (item) => item.id !== 'password'
-          )}
+          inputFieldsData={inputFieldsData}
           handleSubmit={handleSubmit}
           onSubmit={onSubmitDialogBox}
           openFormDialog={openEditFormDialog}
@@ -565,4 +579,4 @@ function AppointmentCategoryPage() {
   );
 }
 
-export default AppointmentCategoryPage;
+export default AppointmentServicePage;
