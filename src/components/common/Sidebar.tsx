@@ -45,6 +45,10 @@ import ShopIcon from '../icons/ShopIcon';
 import TenantIcon from '../icons/TenantIcon';
 import UserPermission from '../icons/UserPermission';
 import VoucherIcon from '../icons/VoucherIcon';
+import AppointmentIcon from '../icons/appointmentIcon';
+import VisitIcon from '../icons/visitIcon';
+import ServiceIcon from '../icons/serviceIcon';
+import ProviderIcon from '../icons/providerIcon';
 
 const links = [
   {
@@ -96,22 +100,28 @@ const links = [
     icon: <CorporateFareIcon className="w-[17px]" />,
   },
   {
+    name: 'Banners',
+    path: 'banners',
+    permission: 'Banners List',
+    icon: <CorporateFareIcon className="w-[17px]" />,
+  },
+  {
     name: 'Appointment',
     path: 'appointment',
     permission: 'Appointment Parent',
-    icon: <UserPermission />,
+    icon: <AppointmentIcon />,
     childLinks: [
+      {
+        name: 'Provider',
+        path: 'appointment/provider',
+        permission: 'Appointment Category List',
+        icon: <ProviderIcon />,
+      },
       {
         name: 'Visit',
         path: 'appointment/visit',
         permission: 'Appointment Visit List',
-        icon: <PermissionIcon />,
-      },
-      {
-        name: 'Category',
-        path: 'appointment/category',
-        permission: 'Appointment Category List',
-        icon: <RoleIcon />,
+        icon: <VisitIcon />,
       },
     ],
   },

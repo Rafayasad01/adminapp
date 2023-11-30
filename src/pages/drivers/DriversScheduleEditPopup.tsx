@@ -5,7 +5,7 @@ import Input from '@mui/material/Input';
 import dayjs from 'dayjs';
 import '../../assets/css/PopupStyle.css';
 import { useForm } from 'react-hook-form';
-import TimePicker from '../../components/common/TimePicker';
+import TimePicker from '../../components/common/CustomTimePicker';
 import { AppUserDriverExt } from '../../interfaces/app-user.interface';
 
 type Props = {

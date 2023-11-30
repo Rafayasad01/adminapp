@@ -136,6 +136,13 @@ function BranchPage() {
             setList(item.data.data.list);
             setTotal(item.data.data.total);
             setTotalBranches(item.data.data.list.length);
+          } else {
+            setIsLoader(false);
+            setIsNotify(true);
+            setNotifyMessage({
+              text: item.data.message,
+              type: 'error'
+            });
           }
         })
         .catch((err) => {
@@ -344,8 +351,8 @@ function BranchPage() {
                               <span className="text-xs font-normal text-[#6A6A6A]">
                                 {dayjs(item.createdDate).isValid()
                                   ? dayjs(item.createdDate)?.format(
-                                      'MMMM DD, YYYY'
-                                    )
+                                    'MMMM DD, YYYY'
+                                  )
                                   : '--'}
                               </span>
                             </div>

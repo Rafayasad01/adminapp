@@ -9,12 +9,17 @@ import { AppUserDriverExt } from '../../interfaces/app-user.interface';
 import CustomButton from './CustomButton';
 import CustomInputBox from './CustomInputBox';
 import CustomDropDown from './CustomDropDown';
+import TextField from '@mui/material/TextField';
+import TimePicker from './TimePicker';
+import WorkDaysForm from '../../pages/settings/WorkDaysForm';
 
 type Props = {
   openFormDialog: boolean;
   setOpenFormDialog: React.Dispatch<React.SetStateAction<boolean>>;
-  DialogHeader: string;
-  inputFieldsData: any;
+  DialogHeader?: string;
+  DialogSubHeader?: string;
+  inputFieldsData?: any;
+  inputScheduleData?: any;
   handleSubmit: any;
   onSubmit: (data: any) => void;
   type?: any;
@@ -22,13 +27,21 @@ type Props = {
   setAvater?: any;
   specailCase?: boolean;
   singleField?: boolean;
+  setWeekDays?: any;
+  weekDays?: any
+  startTime?: any;
+  endTime?: any;
+  addScheduleFormat?: boolean;
+  noweekdays?: boolean;
 };
 
 function CustomDialog({
   openFormDialog,
   setOpenFormDialog,
   DialogHeader,
+  DialogSubHeader,
   inputFieldsData,
+  inputScheduleData,
   handleSubmit,
   onSubmit,
   type,
@@ -36,6 +49,12 @@ function CustomDialog({
   setAvater,
   reset,
   singleField,
+  setWeekDays,
+  weekDays,
+  startTime,
+  endTime,
+  addScheduleFormat,
+  noweekdays
 }: Props) {
   const handleFormClose = () => {
     if (type === 'edit' && specailCase) {
@@ -45,7 +64,6 @@ function CustomDialog({
       });
       setOpenFormDialog(false);
     } else if (type === 'edit' && !specailCase) {
-      console.log('ssSSsss');
       setAvater && setAvater(null);
       reset();
       setOpenFormDialog(false);
@@ -82,6 +100,7 @@ function CustomDialog({
                           variant="standard"
                         >
                           <CustomDropDown
+                            defaultValue={items.defaultValue}
                             validateRequired={items.validateRequired}
                             id={items.id}
                             control={items.control}
@@ -100,6 +119,8 @@ function CustomDialog({
                           variant="standard"
                         >
                           <CustomInputBox
+                            maxLetterLimit={items.maxLetterLimit}
+                            requiredType={items.notRequired}
                             disable={items.disable}
                             inputTitle={items.fieldName}
                             placeholder={items.placeholder}
@@ -113,6 +134,47 @@ function CustomDialog({
                             typeImportant={items.typeImportant}
                           />
                         </FormControl>
+                      ) : items.type === "textarea" ? (
+                        <div className=''>
+                          <FormControl className="FormControl py-2" variant="standard">
+                            <label className="FormLabel">
+                              Message{' '}
+                              <span className="SubLabel">Write 05-50 Characters</span>
+                            </label>
+                            <TextField
+                              className="FormTextarea"
+                              id={items.id}
+                              multiline
+                              rows={4}
+                              defaultValue=""
+                              placeholder="Write Description"
+                              {...items.register(items.id, {
+                                required: items.notRequired === true ? false : `${items.fieldName} is required`,
+                                minLength: {
+                                  value: 5,
+                                  message: 'Minimum Five Characters',
+                                },
+                                maxLength: {
+                                  value: 50,
+                                  message: 'Too Many Characters',
+                                },
+                              })}
+                            />
+                            {items.error && (
+                              <span role="alert" className='text-sm'>*{items.error.message}</span>
+                            )}
+                          </FormControl>
+                        </div>
+                      ) : items.type === "datepicker" ? (
+                        <TimePicker
+                          timePickerLabel={items.fieldName}
+                          timePickerSubLabel={items.placeholder}
+                          timePickerValue={items.time}
+                          setTimePickerValue={items.setTime}
+                          id={items.id}
+                          errors={items.error}
+                        // setError={setError}
+                        />
                       ) : null
                     }
                     {items.id === 'upload' && (
@@ -169,6 +231,41 @@ function CustomDialog({
                 );
               })}
             </div>
+            {DialogSubHeader &&
+              <div className="FormHeader">
+                <span className="text-md mt-2 font-semibold">{DialogSubHeader}</span>
+              </div>
+            }
+            {addScheduleFormat &&
+              <div>
+                {!noweekdays &&
+                  <div>
+                    <WorkDaysForm onlyweeksformat setWeekDays={setWeekDays} />
+                  </div>
+                }
+                <div className={singleField ? 'FormField' : 'FormFields'}>
+                  {inputScheduleData?.map((items: any, index: number) => {
+                    return (
+                      <Fragment key={index}>
+                        <TimePicker
+                          timePickerLabel={items.fieldName}
+                          timePickerSubLabel={items.placeholder}
+                          timePickerValue={items.time}
+                          setTimePickerValue={items.setTime}
+                          id={items.id}
+                          errors={items.error}
+                        // setError={setError}
+                        />
+                      </Fragment>
+                    )
+                  }
+                  )}
+                </div>
+                {(weekDays?.length < 0 || startTime === null || endTime === null) && (
+                  <span role="alert" className='text-sm'>*{"schedule is required"}</span>
+                )}
+              </div>
+            }
           </div>
           <div className="FormFooter">
             <CustomButton

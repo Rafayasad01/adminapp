@@ -39,9 +39,19 @@ function BranchCreatePopup({
   } = useForm<Tenant>();
 
   const onSubmit = (data: Tenant) => {
+    // console.log("dataCREATE", data);
+    let details = {
+      developmentDomain: data.developmentDomain,
+      email: data.email,
+      firstName: data.firstName,
+      lastName: data.lastName,
+      liveDomain: data.liveDomain,
+      tenantName: data.tenantName,
+      address: data.address
+    }
     if (data.tenantName) {
       setOpenFormDialog(false);
-      callback(data);
+      callback(details);
     } else {
       setIsNotify(true);
       setNotifyMessage({
@@ -136,6 +146,22 @@ function BranchCreatePopup({
                 />
                 {errors.lastName?.type === 'required' && (
                   <span role="alert">Last name is required</span>
+                )}
+              </FormControl>
+            </div>
+            <div className='FormField'>
+              <FormControl className="FormControl" variant="standard">
+                <label className="FormLabel">Shop Address</label>
+                <Input
+                  className="FormInput"
+                  {...register('address', { required: true })}
+                  type="text"
+                  id="address"
+                  placeholder="Enter shop address"
+                  disableUnderline
+                />
+                {errors.address?.type === 'required' && (
+                  <span role="alert">Shop address is required</span>
                 )}
               </FormControl>
             </div>

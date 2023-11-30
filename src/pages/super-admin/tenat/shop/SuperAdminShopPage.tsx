@@ -118,6 +118,7 @@ function SuperAdminShopPage() {
     formData.append('tenantName', data.tenantName);
     formData.append('email', data.email);
     formData.append('firstName', data.firstName);
+    formData.append('address', data.address);
     formData.append('lastName', data.lastName);
     formData.append('trialMode', data.trialMode);
     formData.append('developmentDomain', data.developmentDomain);

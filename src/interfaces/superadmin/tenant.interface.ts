@@ -1,6 +1,7 @@
 export interface Tenant {
   tenantName: string;
   email: string;
+  address: string;
   firstName: string;
   lastName: string;
   trialMode: boolean;
