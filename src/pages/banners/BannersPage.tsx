@@ -358,48 +358,54 @@ const BannersPage = () => {
                             </div>
                         </div>
                     </div>
-                    <div className='grid grid-cols-12 gap-6 p-5 justify-center items-center'>
-                        {list?.map((item: any, index: number) => {
-                            return (
-                                <div key={index} className='2xl:col-span-3 xl:col-span-6 items-center justify-center flex'>
-                                    <Card className='w-[500px] shadow-none border-[2px] rounded-lg'>
-                                        <div className='flex m-5 items-center justify-center h-[150px]'>
-                                            <img
-                                                className="max-w-[200px]"
-                                                src={item.banner}
-                                                alt={item.name}
-                                            />
-                                        </div>
-                                        <CardContent className='mt-5'>
-                                            <hr />
-                                            <p className='my-2 font-open-sans text-xl uppercase font-semibold text-[#252733]'>{item.name}</p>
-                                        </CardContent>
-                                        <CardActions className=''>
-                                            <div className='flex justify-between items-center w-full'>
-                                                <div>
-                                                    <IconButton onClick={() => handleEdit(item.id)} className='mr-0' aria-label="update">
-                                                        <EditIcon />
-                                                    </IconButton>
-                                                </div>
-                                                <div>
-                                                    <IconButton onClick={() => handleDelete(item.id)} className='mr-0' aria-label="delete">
-                                                        <DeleteIcon />
-                                                    </IconButton>
-                                                    <Switch
-                                                        checked={item.isActive}
-                                                        onChange={(
-                                                            event: React.ChangeEvent<HTMLInputElement>
-                                                        ) => handleSwitchChange(event, list[index].id)}
-                                                        inputProps={{ 'aria-label': 'controlled' }}
-                                                    />
-                                                </div>
+                    {list?.length > 0 ?
+                        <div className='grid grid-cols-12 gap-6 p-5 justify-center items-center'>
+                            {list?.map((item: any, index: number) => {
+                                return (
+                                    <div key={index} className='2xl:col-span-3 xl:col-span-6 items-center justify-center flex'>
+                                        <Card className='w-[500px] shadow-none border-[2px] rounded-lg'>
+                                            <div className='flex m-5 items-center justify-center h-[150px]'>
+                                                <img
+                                                    className="max-w-[200px]"
+                                                    src={item.banner}
+                                                    alt={item.name}
+                                                />
                                             </div>
-                                        </CardActions>
-                                    </Card>
-                                </div>
-                            )
-                        })}
-                    </div>
+                                            <CardContent className='mt-5'>
+                                                <hr />
+                                                <p className='my-2 font-open-sans text-xl uppercase font-semibold text-[#252733]'>{item.name}</p>
+                                            </CardContent>
+                                            <CardActions className=''>
+                                                <div className='flex justify-between items-center w-full'>
+                                                    <div>
+                                                        <IconButton onClick={() => handleEdit(item.id)} className='mr-0' aria-label="update">
+                                                            <EditIcon />
+                                                        </IconButton>
+                                                    </div>
+                                                    <div>
+                                                        <IconButton onClick={() => handleDelete(item.id)} className='mr-0' aria-label="delete">
+                                                            <DeleteIcon />
+                                                        </IconButton>
+                                                        <Switch
+                                                            checked={item.isActive}
+                                                            onChange={(
+                                                                event: React.ChangeEvent<HTMLInputElement>
+                                                            ) => handleSwitchChange(event, list[index].id)}
+                                                            inputProps={{ 'aria-label': 'controlled' }}
+                                                        />
+                                                    </div>
+                                                </div>
+                                            </CardActions>
+                                        </Card>
+                                    </div>
+                                )
+                            })}
+                        </div>
+                        :
+                        <div className='w-full flex justify-center items-center bg-slate-200 p-4 mt-4'>
+                            <p className='font-semibold'>No Banners Record</p>
+                        </div>
+                    }
                 </div>
             </div>
 
