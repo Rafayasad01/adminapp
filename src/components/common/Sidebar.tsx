@@ -15,6 +15,7 @@ import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined
 import PeopleOutlineOutlinedIcon from '@mui/icons-material/PeopleOutlineOutlined';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
+import ViewCarouselOutlinedIcon from '@mui/icons-material/ViewCarouselOutlined';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import YouTubeIcon from '@mui/icons-material/YouTube';
@@ -24,7 +25,7 @@ import List from '@mui/material/List';
 import Stack from '@mui/material/Stack';
 import Toolbar from '@mui/material/Toolbar';
 import { NavLink } from 'react-router-dom';
-// import HeadphonesOutlinedIcon from '@mui/icons-material/HeadphonesOutlined';
+// import HeadphonesOutlinedIcon from '@mui/icons-material/HeadphonesOutlined'
 import CollectionsOutlinedIcon from '@mui/icons-material/CollectionsOutlined';
 import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined';
 import assets from '../../assets';
@@ -103,7 +104,7 @@ const links = [
     name: 'Banners',
     path: 'banners',
     permission: 'Banners List',
-    icon: <CorporateFareIcon className="w-[17px]" />,
+    icon: <ViewCarouselOutlinedIcon className="w-[17px]" />,
   },
   {
     name: 'Appointment',
