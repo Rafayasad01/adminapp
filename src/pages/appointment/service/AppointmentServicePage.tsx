@@ -12,6 +12,7 @@ import Switch from '@mui/material/Switch';
 import TablePagination from '@mui/material/TablePagination';
 import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
+import { weekDays } from '../../../utils/constants';
 import { useForm } from 'react-hook-form';
 import TopBar from '../../../components/common/TopBar';
 import ActionMenu from '../../../components/common/ActionMenu';
@@ -43,7 +44,7 @@ function AppointmentServicePage() {
     useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
   const actionMenuOptions = ['Edit', 'Delete'];
-
+  const [providerLov, setProviderLov] = useState<any>();
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
   const [isLoader, setIsLoader] = React.useState(true);
@@ -75,6 +76,26 @@ function AppointmentServicePage() {
       type: 'text'
     },
     {
+      fieldName: 'Select Your Provider',
+      id: `providerName`,
+      register: register,
+      watch: watch,
+      setValue: setValue,
+      control: control,
+      error: errors.providerName,
+      defaultValue: "Select Provider",
+      options: { roles: providerLov, role: watch("providerName") },
+      type: 'select',
+    },
+    {
+      fieldName: 'Service Fees',
+      id: 'fees',
+      placeholder: 'Enter service fees',
+      register,
+      error: errors.fees,
+      type: 'text',
+    },
+    {
       fieldName: 'Service Description',
       id: 'serviceDesc',
       placeholder: 'Enter service Description',
@@ -85,9 +106,36 @@ function AppointmentServicePage() {
     }
   ];
 
+  console.log("feeeeeeeees", providerLov);
+
+
   const handleFormClickOpen = () => {
+    setIsLoader(true);
     if (listingRolePermission(dataRole, 'Employee Create')) {
-      setOpenFormDialog(true);
+      Service.ServiceProviderLov(authState.user.tenant)
+        .then((item: any) => {
+          if (item.data.success) {
+            setProviderLov(item.data.data)
+            setIsLoader(false);
+            setOpenFormDialog(true);
+          } else {
+            setOpenFormDialog(false);
+            setIsLoader(false);
+            setIsNotify(true);
+            setNotifyMessage({
+              text: item.data.message,
+              type: 'error',
+            });
+          }
+        })
+        .catch((err: Error) => {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: err.message,
+            type: 'error',
+          });
+        });
     } else {
       setIsNotify(true);
       setNotifyMessage({
@@ -177,6 +225,8 @@ function AppointmentServicePage() {
             setIsLoader(false);
             setValue('serviceName', item.data.data.name);
             setValue('serviceDesc', item.data.data.desc);
+            setValue('providerName', item.data.data.appointmentProvider);
+            setValue('fees', item.data.data.fees);
             setOpenEditFormDialog(true);
           }
         });
@@ -260,11 +310,14 @@ function AppointmentServicePage() {
   }, [emptyVariable]);
 
   const createFormHandler = (data: any) => {
+    console.log("==>", data);
     setIsLoader(true);
     const userData = {
       name: data.serviceName,
       desc: data.serviceDesc ? data.serviceDesc : null,
       tenant: authState.user.tenant,
+      appointmentProvider: data.providerName,
+      fees: data.fees,
       createdBy: authState.user.id
     };
     Service.ServiceCreate(userData)
@@ -300,12 +353,16 @@ function AppointmentServicePage() {
   };
 
   const updateFormHandler = (data: any) => {
+    // console.log("updated data", data);
     setIsLoader(true);
     const userData = {
       name: data.serviceName,
+      appointmentProvider: data.providerName,
       desc: data.serviceDesc ? data.serviceDesc : null,
+      fees: data.fees ? data.fees : '0',
       updatedBy: authState.user.id
     };
+
     Service.ServiceUpdate(actionMenuItemid, userData)
       .then((item) => {
         if (item.data.success) {

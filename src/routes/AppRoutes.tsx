@@ -59,7 +59,9 @@ import SuperAdminShopPage from '../pages/super-admin/tenat/shop/SuperAdminShopPa
 import AppointmentProviderPage from '../pages/appointment/provider/AppointmentProviderPage';
 import AppointmentProviderSchedulePage from '../pages/appointment/provider/AppointmentProviderSchedulePage';
 import AppointmentProviderAddSchedulePage from '../pages/appointment/provider/AppointmentProviderAddSchedulePage';
-
+import AppointmentVisitDetailPage from '../pages/appointment/visit/AppointmentVisitDetailPage';
+import BannersPage from '../pages/banners/BannersPage';
+import AppointmentProviderServicesList from '../pages/appointment/provider/AppointmentProviderServicesList';
 
 export const routeObjects: RouteObject[] = [
   {
@@ -384,6 +386,10 @@ export const routeObjects: RouteObject[] = [
                   {
                     path: 'list',
                     element: <AppointmentVisitPage />,
+                  },
+                  {
+                    path: 'detail/:id',
+                    element: <AppointmentVisitDetailPage />,
                   }
                 ]
               },
@@ -412,10 +418,23 @@ export const routeObjects: RouteObject[] = [
                   {
                     path: 'add-schedule/:id',
                     element: <AppointmentProviderAddSchedulePage />,
+                  },
+                  {
+                    path: 'services/:providerId',
+                    element: <AppointmentProviderServicesList />,
                   }
                 ]
               }
             ]
+          },
+          {
+            path: 'banners',
+            children: [
+              {
+                index: true,
+                element: <BannersPage />,
+              },
+            ],
           },
           {
             path: 'vouchers',

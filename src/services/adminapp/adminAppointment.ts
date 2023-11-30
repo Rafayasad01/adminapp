@@ -49,8 +49,8 @@ const ProviderScheduleEdit = (providerId: any) => {
     return network.get(`${APPOINTMENT_PREFIX}/${PROVIDER_PREFIX}/${SCHEDULE_PREFIX}/edit/${providerId}`);
 };
 
-const ProviderScheduleUpdate = (providerId: any, data: any) => {
-    return network.post(`${APPOINTMENT_PREFIX}/${PROVIDER_PREFIX}/${SCHEDULE_PREFIX}/update/${providerId}`, data);
+const ProviderScheduleUpdate = (data: any) => {
+    return network.post(`${APPOINTMENT_PREFIX}/${PROVIDER_PREFIX}/${SCHEDULE_PREFIX}/update`, data);
 };
 
 const ProviderScheduleUpdateStatus = (data: any) => {
@@ -62,12 +62,12 @@ const ProviderScheduleDelete = (data: any) => {
 };
 
 //services
-const ServiceList = (tenantID: string, page: number, size: number) => {
-    return network.get(`${APPOINTMENT_PREFIX}/${SERVICE_PREFIX}/list/${tenantID}/${page}/${size}`);
+const ServiceList = (ProviderID: any, page: number, size: number) => {
+    return network.get(`${APPOINTMENT_PREFIX}/${SERVICE_PREFIX}/list/${ProviderID}/${page}/${size}`);
 };
 
-const ServiceSearchList = (tenantID: string, search: string, page: number, size: number) => {
-    return network.get(`${APPOINTMENT_PREFIX}/${SERVICE_PREFIX}/list/${tenantID}/${search}/${page}/${size}`);
+const ServiceSearchList = (ProviderID: any, search: string, page: number, size: number) => {
+    return network.get(`${APPOINTMENT_PREFIX}/${SERVICE_PREFIX}/list/${ProviderID}/${search}/${page}/${size}`);
 };
 
 const ServiceCreate = (data: any) => {
@@ -90,6 +90,65 @@ const ServiceDelete = (providerId: any, data: any) => {
     return network.post(`${APPOINTMENT_PREFIX}/${SERVICE_PREFIX}/delete/${providerId}`, data);
 };
 
+//visit
+
+const VisitDetailById = (appointmentId: any) => {
+    return network.get(`${APPOINTMENT_PREFIX}/${VISIT_PREFIX}/detail/${appointmentId}`);
+}
+
+const VisitProviderById = (providerId: string) => {
+    return network.get(`${APPOINTMENT_PREFIX}/${VISIT_PREFIX}/${PROVIDER_PREFIX}/${providerId}`);
+};
+
+const VisitList = (tenantID: string, page: number, size: number) => {
+    return network.get(`${APPOINTMENT_PREFIX}/${VISIT_PREFIX}/list/${tenantID}/${page}/${size}`);
+};
+
+const VisitSearchList = (tenantID: string, search: string, page: number, size: number) => {
+    return network.get(`${APPOINTMENT_PREFIX}/${VISIT_PREFIX}/list/${tenantID}/${search}/${page}/${size}`);
+};
+
+const VisitCreate = (data: any) => {
+    return network.post(`${APPOINTMENT_PREFIX}/${VISIT_PREFIX}/create`, data);
+};
+
+const VisitEdit = (appointmentId: any) => {
+    return network.get(`${APPOINTMENT_PREFIX}/${VISIT_PREFIX}/edit/${appointmentId}`);
+};
+
+const VisitUpdate = (data: any) => {
+    return network.post(`${APPOINTMENT_PREFIX}/${VISIT_PREFIX}/update`, data);
+};
+
+const VisitCancel = (appointmentId: any) => {
+    return network.get(`${APPOINTMENT_PREFIX}/${VISIT_PREFIX}/cancel/${appointmentId}`);
+};
+
+const VisitReschedule = (data: any) => {
+    return network.post(`${APPOINTMENT_PREFIX}/${VISIT_PREFIX}/reschedule`, data);
+};
+
+const VisitUpdateStatus = (visitorId: any, data: any) => {
+    return network.post(`${APPOINTMENT_PREFIX}/${VISIT_PREFIX}/update/status/${visitorId}`, data);
+};
+
+const VisitDelete = (visitorId: any, data: any) => {
+    return network.post(`${APPOINTMENT_PREFIX}/${VISIT_PREFIX}/delete/${visitorId}`, data);
+};
+
+//LOVs
+
+const ServiceProviderLov = (tenantID: string) => {
+    return network.get(`${APPOINTMENT_PREFIX}/${SERVICE_PREFIX}/lov/${PROVIDER_PREFIX}/${tenantID}`);
+};
+
+const VisitLov = (tenantID: string) => {
+    return network.get(`${APPOINTMENT_PREFIX}/${VISIT_PREFIX}/lov/${PROVIDER_PREFIX}/${tenantID}`);
+};
+
+const VisitServiceLovByProviderId = (providerID: string) => {
+    return network.get(`${APPOINTMENT_PREFIX}/${VISIT_PREFIX}/lov/${SERVICE_PREFIX}/${providerID}`);
+};
 
 export default {
     ProviderList,
@@ -111,5 +170,19 @@ export default {
     ProviderScheduleEdit,
     ProviderScheduleUpdate,
     ProviderScheduleUpdateStatus,
-    ProviderScheduleDelete
+    ProviderScheduleDelete,
+    VisitProviderById,
+    VisitList,
+    VisitCreate,
+    VisitDelete,
+    VisitSearchList,
+    VisitEdit,
+    VisitUpdate,
+    VisitUpdateStatus,
+    VisitDetailById,
+    VisitLov,
+    ServiceProviderLov,
+    VisitServiceLovByProviderId,
+    VisitCancel,
+    VisitReschedule
 }

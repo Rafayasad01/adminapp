@@ -100,28 +100,28 @@ const links = [
     icon: <CorporateFareIcon className="w-[17px]" />,
   },
   {
+    name: 'Banners',
+    path: 'banners',
+    permission: 'Banners List',
+    icon: <CorporateFareIcon className="w-[17px]" />,
+  },
+  {
     name: 'Appointment',
     path: 'appointment',
     permission: 'Appointment Parent',
     icon: <AppointmentIcon />,
     childLinks: [
       {
-        name: 'Visit',
-        path: 'appointment/visit',
-        permission: 'Appointment Visit List',
-        icon: <VisitIcon />,
-      },
-      {
-        name: 'Serivce',
-        path: 'appointment/service',
-        permission: 'Appointment Category List',
-        icon: <ServiceIcon />,
-      },
-      {
         name: 'Provider',
         path: 'appointment/provider',
         permission: 'Appointment Category List',
         icon: <ProviderIcon />,
+      },
+      {
+        name: 'Visit',
+        path: 'appointment/visit',
+        permission: 'Appointment Visit List',
+        icon: <VisitIcon />,
       },
     ],
   },

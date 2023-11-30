@@ -10,7 +10,7 @@ import CustomButton from './CustomButton';
 import CustomInputBox from './CustomInputBox';
 import CustomDropDown from './CustomDropDown';
 import TextField from '@mui/material/TextField';
-import TimePicker from '../../components/common/TimePicker';
+import TimePicker from './TimePicker';
 import WorkDaysForm from '../../pages/settings/WorkDaysForm';
 
 type Props = {
@@ -64,7 +64,6 @@ function CustomDialog({
       });
       setOpenFormDialog(false);
     } else if (type === 'edit' && !specailCase) {
-      console.log('ssSSsss');
       setAvater && setAvater(null);
       reset();
       setOpenFormDialog(false);
@@ -101,6 +100,7 @@ function CustomDialog({
                           variant="standard"
                         >
                           <CustomDropDown
+                            defaultValue={items.defaultValue}
                             validateRequired={items.validateRequired}
                             id={items.id}
                             control={items.control}
@@ -135,34 +135,36 @@ function CustomDialog({
                           />
                         </FormControl>
                       ) : items.type === "textarea" ? (
-                        <FormControl className="FormControl py-2" variant="standard">
-                          <label className="FormLabel">
-                            Message{' '}
-                            <span className="SubLabel">Write 05-50 Characters</span>
-                          </label>
-                          <TextField
-                            className="FormTextarea"
-                            id={items.id}
-                            multiline
-                            rows={4}
-                            defaultValue=""
-                            placeholder="Write Description"
-                            {...items.register(items.id, {
-                              required: items.notRequired === true ? false : `${items.fieldName} is required`,
-                              minLength: {
-                                value: 5,
-                                message: 'Minimum Five Characters',
-                              },
-                              maxLength: {
-                                value: 50,
-                                message: 'Too Many Characters',
-                              },
-                            })}
-                          />
-                          {items.error && (
-                            <span role="alert" className='text-sm'>*{items.error.message}</span>
-                          )}
-                        </FormControl>
+                        <div className=''>
+                          <FormControl className="FormControl py-2" variant="standard">
+                            <label className="FormLabel">
+                              Message{' '}
+                              <span className="SubLabel">Write 05-50 Characters</span>
+                            </label>
+                            <TextField
+                              className="FormTextarea"
+                              id={items.id}
+                              multiline
+                              rows={4}
+                              defaultValue=""
+                              placeholder="Write Description"
+                              {...items.register(items.id, {
+                                required: items.notRequired === true ? false : `${items.fieldName} is required`,
+                                minLength: {
+                                  value: 5,
+                                  message: 'Minimum Five Characters',
+                                },
+                                maxLength: {
+                                  value: 50,
+                                  message: 'Too Many Characters',
+                                },
+                              })}
+                            />
+                            {items.error && (
+                              <span role="alert" className='text-sm'>*{items.error.message}</span>
+                            )}
+                          </FormControl>
+                        </div>
                       ) : items.type === "datepicker" ? (
                         <TimePicker
                           timePickerLabel={items.fieldName}
@@ -246,9 +248,6 @@ function CustomDialog({
                     return (
                       <Fragment key={index}>
                         <TimePicker
-                          register={items.register}
-                          watch={items.watch}
-                          setValue={items.setValue}
                           timePickerLabel={items.fieldName}
                           timePickerSubLabel={items.placeholder}
                           timePickerValue={items.time}

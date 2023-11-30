@@ -240,11 +240,11 @@ function SettingsApp() {
                 value="APP_SETTINGS"
                 onClick={() => navigate('../app')}
               />
-              <Tab
+              {/* <Tab
                 label="Shop Scheduling"
                 value="SHOP_SCHEDULING"
                 onClick={() => navigate('../shop')}
-              />
+              /> */}
             </Tabs>
           </div>
           <div className="Content w-full py-5 px-4">

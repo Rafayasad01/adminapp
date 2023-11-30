@@ -6,6 +6,7 @@ import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import FormControl from '@mui/material/FormControl';
 import IconButton from '@mui/material/IconButton';
+import EditIcon from '@mui/icons-material/Edit';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
 import Switch from '@mui/material/Switch';
@@ -27,6 +28,7 @@ import { NOT_AUTHORIZED_MESSAGE } from '../../../utils/constants';
 import { listingRolePermission } from '../../../utils/helper';
 import { AppointmentProvider, AppointmentProviderSchedule } from '../../../interfaces/app.appointment';
 import { useNavigate, useParams } from 'react-router-dom';
+import AppointmentProviderScheduleUpdatePopup from './AppointmentProviderScheduleUpdatePopup';
 
 function AppointmentProviderSchedulePage() {
     const { id } = useParams();
@@ -43,6 +45,7 @@ function AppointmentProviderSchedulePage() {
     const [page, setPage] = useState(0);
     const [total, setTotal] = useState(0);
     const [list, setList] = useState<any>([]);
+    const [editFormDetails, setEditFormDetails] = useState<any>();
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
     const [actionMenuItemid, setActionMenuItemid] = React.useState('');
     const [actionMenuAnchorEl, setActionMenuAnchorEl] =
@@ -234,6 +237,26 @@ function AppointmentProviderSchedulePage() {
         deleteHandler(actionMenuItemid);
     };
 
+    const editHandler = (id: string) => {
+        if (listingRolePermission(dataRole, 'Employee Update')) {
+            setIsLoader(true);
+            Service.ProviderScheduleEdit(id).then((item: any) => {
+                if (item.data.success) {
+                    setIsLoader(false);
+                    setOpenEditFormDialog(true);
+                    setEditFormDetails(item.data.data);
+                }
+            });
+        } else {
+            setIsLoader(false);
+            setIsNotify(true);
+            setNotifyMessage({
+                text: NOT_AUTHORIZED_MESSAGE,
+                type: 'warning',
+            });
+        }
+    }
+
     const manuHandler = (option: string) => {
         if (option === 'Edit') {
             if (listingRolePermission(dataRole, 'Employee Update')) {
@@ -241,14 +264,8 @@ function AppointmentProviderSchedulePage() {
                 Service.ProviderScheduleEdit(actionMenuItemid).then((item: any) => {
                     if (item.data.success) {
                         setIsLoader(false);
-                        console.log("itemmm", item.data.data);
-
                         setOpenEditFormDialog(true);
-                        setStartTime(item.data.data.startTime)
-                        setEndTime(item.data.data.endTime)
-                        // setValue("startDateTime", item.data.data.startTime)
-                        // watch("startDateTime", item.data.data.startTime);
-                        // watch("endDateTime", item.data.data.endTime);
+                        setEditFormDetails(item.data.data);
                     }
                 });
             } else {
@@ -384,35 +401,37 @@ function AppointmentProviderSchedulePage() {
 
     const updateFormHandler = (data: any) => {
         setIsLoader(true);
-        const userData = {
-            name: data.providerName,
-            address: data.address ? data.address : null,
-            email: data.email ? data.email : null,
-            phone: data.phone,
-            cnic: data.cnic,
-            updatedBy: authState.user.id
-        };
-        Service.ProviderUpdate(actionMenuItemid, userData)
+        // data.updatedBy = authState.user.id
+        let details = {
+            updatedBy: authState.user.id,
+            ...data
+        }
+        Service.ProviderScheduleUpdate(details)
             .then((item) => {
                 if (item.data.success) {
+                    console.log("itemmmm", item.data.data);
+                    reset();
+                    setStartTime('');
+                    setEndTime('');
                     setIsLoader(false);
                     setIsNotify(true);
                     setNotifyMessage({
                         text: item.data.message,
                         type: 'success',
                     });
-                    for (let i = 0; i < list.length; i += 1) {
-                        if (list[i].id === actionMenuItemid) {
-                            list[i].name = item.data.data.name;
-                            list[i].address = item.data.data.address;
-                            list[i].email = item.data.data.email;
-                            list[i].phone = item.data.data.phone;
-                            list[i].cnic = item.data.data.cnic;
-                        }
-                    }
-                    reset();
-                    setStartTime('');
-                    setEndTime('');
+                    setList((prevList: any) => {
+                        return {
+                            ...prevList,
+                            appointmentProviderSchedule: prevList.appointmentProviderSchedule?.map(
+                                (items: any) => {
+                                    if (items.id === item.data.data.id) {
+                                        return { ...items, startTime: item.data.data.startTime, endTime: item.data.data.endTime };
+                                    }
+                                    return items;
+                                }
+                            ),
+                        };
+                    });
                 } else {
                     reset();
                     setStartTime('');
@@ -656,10 +675,10 @@ function AppointmentProviderSchedulePage() {
                                                     </div>
                                                 </td>
                                                 <td>{dayjs(item.startTime).isValid()
-                                                    ? dayjs(item.startTime).format('HH:mm A')
+                                                    ? dayjs(item.startTime).format('hh:mm A')
                                                     : '--'}</td>
                                                 <td>{dayjs(item.endTime).isValid()
-                                                    ? dayjs(item.endTime).format('HH:mm A')
+                                                    ? dayjs(item.endTime).format('hh:mm A')
                                                     : '--'}</td>
                                                 <td>
                                                     {item.isActive ? (
@@ -671,6 +690,14 @@ function AppointmentProviderSchedulePage() {
                                                 <td>
                                                     <div className="flex flex-row-reverse">
                                                         <IconButton
+                                                            className="icon-btn mr-3.5 ml-4 p-0"
+                                                            onClick={() =>
+                                                                item.isActive ? editHandler(item.id) : null
+                                                            }
+                                                        >
+                                                            <EditIcon />
+                                                        </IconButton>
+                                                        {/* <IconButton
                                                             className="btn-dot"
                                                             aria-label="more"
                                                             id="long-button"
@@ -689,7 +716,7 @@ function AppointmentProviderSchedulePage() {
                                                             }}
                                                         >
                                                             <MoreVertIcon />
-                                                        </IconButton>
+                                                        </IconButton> */}
                                                         <Switch
                                                             checked={item.isActive}
                                                             onChange={(
@@ -744,34 +771,16 @@ function AppointmentProviderSchedulePage() {
                 />
             )}
             {openEditFormDialog && (
-                <CustomDialog
-                    noweekdays
-                    addScheduleFormat
-                    DialogHeader="Edit Schedule"
-                    inputScheduleData={inputScheduleData}
-                    handleSubmit={handleSubmit}
-                    onSubmit={onSubmitDialogBox}
+                <AppointmentProviderScheduleUpdatePopup
+                    setIsNotify={setIsNotify}
+                    setNotifyMessage={setNotifyMessage}
                     openFormDialog={openEditFormDialog}
                     setOpenFormDialog={setOpenEditFormDialog}
+                    formData={editFormDetails}
+                    callback={updateFormHandler}
+                // setActionMenuItemid={setActionMenuItemid}
                 />
             )}
-            {/* <CustomersCreatePopup
-        setIsNotify={setIsNotify}
-        setNotifyMessage={setNotifyMessage}
-        openFormDialog={openFormDialog}
-        setOpenFormDialog={setOpenFormDialog}
-        callback={createFormHandler}
-      />
-      <CustomersEditPopup
-        setIsNotify={setIsNotify}
-        setNotifyMessage={setNotifyMessage}
-        openFormDialog={openEditFormDialog}
-        setOpenFormDialog={setOpenEditFormDialog}
-        formData={editFormData}
-        setEditFormData={setEditFormData}
-        callback={updateFormHandler}
-        setActionMenuItemid={setActionMenuItemid}
-      /> */}
         </>
     );
 }

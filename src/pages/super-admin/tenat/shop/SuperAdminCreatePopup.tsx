@@ -46,8 +46,7 @@ function SuperAdminTenantCreatePopup({
   } = useForm<Tenant>();
 
   const onSubmit = (data: Tenant) => {
-    console.log('submmit', data);
-
+    console.log('submmit Tenant==>', data);
     if (data.tenantName) {
       setOpenFormDialog(false);
       callback(data);
@@ -179,7 +178,7 @@ function SuperAdminTenantCreatePopup({
                 )}
               </FormControl>
             </div>
-            <div className="FormField mb-4">
+            <div className="FormFields mb-4">
               <CustomDropDown
                 validateRequired
                 id="role"
@@ -189,6 +188,20 @@ function SuperAdminTenantCreatePopup({
                 options={{ roles }}
                 inputTitle="Role"
               />
+              <FormControl className="FormControl" variant="standard">
+                <label className="FormLabel">Address</label>
+                <Input
+                  className="FormInput"
+                  type="text"
+                  id="address"
+                  placeholder="Enter shop address"
+                  disableUnderline
+                  {...register('address', { required: true })}
+                />
+                {errors.address?.type === 'required' && (
+                  <span role="alert">address is required</span>
+                )}
+              </FormControl>
             </div>
             <div className="FormField mb-4">
               <FormControl className="FormControl" variant="standard">

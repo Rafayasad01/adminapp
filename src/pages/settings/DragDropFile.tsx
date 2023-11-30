@@ -8,9 +8,12 @@ import assets from '../../assets';
 type Props = {
   setFile: any;
   setImg: any;
+  customWidth?: string;
+  setError?: any;
+  error?: any
 };
 
-function DragDropFile({ setFile, setImg }: Props) {
+function DragDropFile({ setError, error, setFile, setImg, customWidth }: Props) {
   const [dragActive, setDragActive] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const [imageUrl, setImageUrl] = useState<any>();
@@ -45,6 +48,7 @@ function DragDropFile({ setFile, setImg }: Props) {
     setFile(droppedFile);
     const reader = new FileReader();
     reader.onload = () => {
+      setImg(reader.result as string);
       setImageUrl(reader.result as string);
     };
     reader.readAsDataURL(droppedFile);
@@ -60,6 +64,10 @@ function DragDropFile({ setFile, setImg }: Props) {
       if (isSVGFile(uploadedFile)) {
         console.log('ss');
       } else {
+        // setError("bannerImage", {
+        //   type: "manual",
+        //   message: ""
+        // })
         const reader = new FileReader();
         reader.onload = () => {
           setImg(reader.result as string);
@@ -78,8 +86,8 @@ function DragDropFile({ setFile, setImg }: Props) {
   };
 
   return (
-    <div className="flex w-[400px] items-center justify-start">
-      <div>
+    <div className={`flex ${customWidth ? customWidth : "w-[400px]"} items-center justify-start`}>
+      <div className=''>
         <FormControl
           className="FormControl"
           variant="standard"
@@ -131,11 +139,11 @@ function DragDropFile({ setFile, setImg }: Props) {
             />
           )}
         </FormControl>
-      </div>
-      <div>
-        {/* {imageUrl && (
-          <img src={imageUrl} alt="Uploaded File" style={{ maxWidth: '90%', maxHeight: '50%' }} />
-        )} */}
+        {/* <div>
+          {error && error?.bannerImage?.type === 'manual' && (
+            <span role="alert" style={{ color: 'red', fontSize: '12px' }}>{error.bannerImage.message}</span>
+          )}
+        </div> */}
       </div>
     </div>
   );

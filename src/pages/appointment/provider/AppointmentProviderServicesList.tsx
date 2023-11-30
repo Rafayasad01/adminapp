@@ -12,6 +12,7 @@ import Switch from '@mui/material/Switch';
 import TablePagination from '@mui/material/TablePagination';
 import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
+import { weekDays } from '../../../utils/constants';
 import { useForm } from 'react-hook-form';
 import TopBar from '../../../components/common/TopBar';
 import ActionMenu from '../../../components/common/ActionMenu';
@@ -25,18 +26,15 @@ import Service from '../../../services/adminapp/adminAppointment';
 import PermissionPopup from '../../../utils/PermissionPopup';
 import { NOT_AUTHORIZED_MESSAGE } from '../../../utils/constants';
 import { listingRolePermission } from '../../../utils/helper';
-import { AppointmentProvider } from '../../../interfaces/app.appointment';
-import { useNavigate } from 'react-router-dom';
+import { AppointmentProvider, AppointmentService } from '../../../interfaces/app.appointment';
+import { useParams } from 'react-router-dom';
 
-function AppointmentProviderPage() {
-    const navigate = useNavigate();
+function AppointmentProviderServicesList() {
+    const { providerId } = useParams();
     const authState: any = useAppSelector((state: any) => state?.authState);
     const dataRole = useAppSelector(
         (state: any) => state?.persisitReducer?.roleState?.role?.permissions
     );
-    const [startTime, setStartTime] = useState<dayjs.Dayjs | any>(null);
-    const [endTime, setEndTime] = useState<dayjs.Dayjs | any>(null);
-    const [weekDays, setWeekDays] = useState<any>([]);
     const [search, setSearch] = useState<any>('');
     const [emptyVariable] = useState(null);
     const [page, setPage] = useState(0);
@@ -47,8 +45,8 @@ function AppointmentProviderPage() {
     const [actionMenuAnchorEl, setActionMenuAnchorEl] =
         useState<null | HTMLElement>(null);
     const actionMenuOpen = Boolean(actionMenuAnchorEl);
-    const actionMenuOptions = ['Edit', 'Schedule', 'Services', 'Delete'];
-
+    const actionMenuOptions = ['Edit', 'Delete'];
+    const [providerLov, setProviderLov] = useState<any>();
     const [openFormDialog, setOpenFormDialog] = useState(false);
     const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
     const [isLoader, setIsLoader] = React.useState(true);
@@ -68,102 +66,66 @@ function AppointmentProviderPage() {
         setValue,
         formState: { errors },
         control,
-    } = useForm<AppointmentProvider>();
+    } = useForm<AppointmentService>();
 
     const inputFieldsData = [
         {
-            fieldName: 'Provider Name',
-            id: 'providerName',
-            placeholder: 'Enter provider name',
+            fieldName: 'Service Name',
+            id: 'serviceName',
+            placeholder: 'Enter service name',
             register,
-            error: errors.providerName,
+            error: errors.serviceName,
             type: 'text'
         },
         {
-            fieldName: 'Address',
-            id: 'address',
-            placeholder: 'Enter address',
+            fieldName: 'Service Fees',
+            id: 'fees',
+            placeholder: 'Enter service fees',
             register,
-            error: errors.address,
+            error: errors.fees,
             type: 'text',
+        },
+        {
+            fieldName: 'Service Description',
+            id: 'serviceDesc',
+            placeholder: 'Enter service Description',
+            register,
+            error: errors.serviceDesc,
+            type: 'textarea',
             notRequired: true,
-        },
-        {
-            fieldName: 'Email',
-            id: 'email',
-            placeholder: 'Enter email address',
-            register,
-            error: errors.email,
-            type: 'text'
-        },
-        {
-            fieldName: 'Phone',
-            id: 'phone',
-            placeholder: 'Enter Phone',
-            register,
-            error: errors.phone,
-            maxLetterLimit: 11,
-            type: 'text'
-        },
-        {
-            fieldName: 'Cnic',
-            id: 'cnic',
-            placeholder: 'Enter Cnic',
-            register,
-            error: errors.cnic,
-            type: 'text',
-            disable: openEditFormDialog && true,
-            maxLetterLimit: 13
-        },
-        {
-            fieldName: 'Urgent Fees',
-            id: 'urgentFee',
-            placeholder: 'Enter Urgent Fees',
-            register,
-            error: errors.urgentFee,
-            type: 'text',
-            maxLetterLimit: 3,
         }
     ];
 
-    const inputScheduleData = [
-        {
-            fieldName: 'Start Time',
-            id: 'startdatetime',
-            placeholder: 'Office in time',
-            register: register,
-            watch: watch,
-            setValue: setValue,
-            time: startTime,
-            setTime: setStartTime,
-            error: errors.startDateTime,
-            type: 'datepicker'
-        },
-        {
-            fieldName: 'End Time',
-            id: 'enddatetime',
-            placeholder: 'Office out time',
-            register: register,
-            watch: watch,
-            setValue: setValue,
-            time: endTime,
-            setTime: setEndTime,
-            error: errors.endDateTime,
-            type: 'datepicker'
-        },
-    ]
+    console.log("feeeeeeeees", providerLov);
+
 
     const handleFormClickOpen = () => {
+        setIsLoader(true);
         if (listingRolePermission(dataRole, 'Employee Create')) {
-            if (total < authState.user.employeeLimit) {
-                setOpenFormDialog(true);
-            } else {
-                setIsNotify(true);
-                setNotifyMessage({
-                    text: 'Employees limit has been excceed',
-                    type: 'warning',
+            Service.ServiceProviderLov(authState.user.tenant)
+                .then((item: any) => {
+                    if (item.data.success) {
+                        setProviderLov(item.data.data)
+                        setIsLoader(false);
+                        setOpenFormDialog(true);
+                    } else {
+                        setOpenFormDialog(false);
+                        setIsLoader(false);
+                        setIsNotify(true);
+                        setNotifyMessage({
+                            text: item.data.message,
+                            type: 'error',
+                        });
+                    }
+                })
+                .catch((err: Error) => {
+                    setIsLoader(false);
+                    setIsNotify(true);
+                    setNotifyMessage({
+                        text: err.message,
+                        type: 'error',
+                    });
                 });
-            }
         } else {
             setIsNotify(true);
             setNotifyMessage({
@@ -179,7 +141,7 @@ function AppointmentProviderPage() {
             const newPage = 0;
             setSearch(searchTxt);
             setPage(newPage);
-            Service.ProviderSearchList(
+            Service.ServiceSearchList(
                 authState.user.tenant,
                 searchTxt,
                 newPage,
@@ -198,14 +160,14 @@ function AppointmentProviderPage() {
         setPage(newPage);
         // offset? ,limit rowsperpage hoga ofset page * rowsperPage
         if (search === '' || search === null || search === undefined) {
-            Service.ProviderList(authState.user.tenant, newPage, rowsPerPage).then(
+            Service.ServiceList(authState.user.tenant, newPage, rowsPerPage).then(
                 (item) => {
                     setList(item.data.data.list);
                     setTotal(item.data.data.total);
                 }
             );
         } else {
-            Service.ProviderSearchList(
+            Service.ServiceSearchList(
                 authState.user.tenant,
                 search,
                 newPage,
@@ -225,14 +187,14 @@ function AppointmentProviderPage() {
         setRowsPerPage(newRowperPage);
         setPage(newPage);
         if (search === '' || search === null || search === undefined) {
-            Service.ProviderList(authState.user.tenant, newPage, rowsPerPage).then(
+            Service.ServiceList(authState.user.tenant, newPage, rowsPerPage).then(
                 (item) => {
                     setList(item.data.data.list);
                     setTotal(item.data.data.total);
                 }
             );
         } else {
-            Service.ProviderSearchList(
+            Service.ServiceSearchList(
                 authState.user.tenant,
                 search,
                 newPage,
@@ -244,58 +206,16 @@ function AppointmentProviderPage() {
         }
     };
 
-    const deleteHandler = (id: string) => {
-        setIsLoader(true);
-        const data = {
-            updatedBy: authState.user.id,
-        };
-        console.log(actionMenuItemid);
-
-        // Service.deleteService(actionMenuItemid, data)
-        //   .then((item: any) => {
-        //     if (item.data.success) {
-        //       setIsLoader(false);
-        //       setIsNotify(true);
-        //       setNotifyMessage({
-        //         text: item.data.message,
-        //         type: 'success',
-        //       });
-        //       setList((newArr: any) => {
-        //         return newArr.filter(
-        //           (newItem: any) => newItem.id !== item.data.data.id
-        //         );
-        //       });
-        //     }
-        //   })
-        //   .catch((err) => {
-        //     setIsLoader(false);
-        //     setIsNotify(true);
-        //     setNotifyMessage({
-        //       text: err.message,
-        //       type: 'error',
-        //     });
-        //   });
-    };
-
-    const statusCancelHandler = () => {
-        deleteHandler(actionMenuItemid);
-    };
-
     const manuHandler = (option: string) => {
         if (option === 'Edit') {
             if (listingRolePermission(dataRole, 'Employee Update')) {
                 setIsLoader(true);
-                Service.ProviderEdit(actionMenuItemid).then((item: any) => {
+                Service.ServiceEdit(actionMenuItemid).then((item: any) => {
                     if (item.data.success) {
                         setIsLoader(false);
-                        setValue('providerName', item.data.data.name);
-                        setValue('address', item.data.data.address);
-                        setValue('phone', item.data.data.phone);
-                        setValue('email', item.data.data.email);
-                        setValue('cnic', item.data.data.cnic);
-                        setValue('urgentFee', item.data.data.urgentFee);
-                        setStartTime(item.data.data.startTime);
-                        setEndTime(item.data.data.endTime);
+                        setValue('serviceName', item.data.data.name);
+                        setValue('serviceDesc', item.data.data.desc);
+                        setValue('fees', item.data.data.fees);
                         setOpenEditFormDialog(true);
                     }
                 });
@@ -314,7 +234,7 @@ function AppointmentProviderPage() {
                     updatedBy: authState.user.id,
                 };
                 console.log(actionMenuItemid);
-                Service.ProviderDelete(actionMenuItemid, data)
+                Service.ServiceDelete(actionMenuItemid, data)
                     .then((item: any) => {
                         if (item.data.success) {
                             setIsLoader(false);
@@ -345,16 +265,12 @@ function AppointmentProviderPage() {
                     type: 'warning',
                 });
             }
-        } else if (option === 'Schedule') {
-            navigate(`../schedule/${actionMenuItemid}`)
-        } else if (option === "Services") {
-            navigate(`../services/${actionMenuItemid}`)
         }
     };
 
     useEffect(() => {
-        if (listingRolePermission(dataRole, 'Appointment Provider List')) {
-            Service.ProviderList(authState.user.tenant, page, rowsPerPage)
+        if (listingRolePermission(dataRole, 'Employee List')) {
+            Service.ServiceList(providerId, page, rowsPerPage)
                 .then((item: any) => {
                     if (item.data.success) {
                         setIsLoader(false);
@@ -383,29 +299,20 @@ function AppointmentProviderPage() {
     }, [emptyVariable]);
 
     const createFormHandler = (data: any) => {
-        // console.log("dadada", data);
+        console.log("==>", data);
         setIsLoader(true);
         const userData = {
-            name: data.providerName,
-            address: data.address ? data.address : null,
-            email: data.email ? data.email : null,
-            urgentFee: data.urgentFee ? data.urgentFee : null,
-            phone: data.phone,
-            cnic: data.cnic,
-            startTime: startTime.format('YYYY-MM-DD HH:mm:ss'),
-            endTime: endTime.format('YYYY-MM-DD HH:mm:ss'),
-            workDays: weekDays,
-            createdBy: authState.user.id,
-            tenant: authState.user.tenant
+            name: data.serviceName,
+            desc: data.serviceDesc ? data.serviceDesc : null,
+            tenant: authState.user.tenant,
+            appointmentProvider: providerId,
+            fees: data.fees,
+            createdBy: authState.user.id
         };
-        console.log("final data", userData)
-        Service.ProviderCreate(userData)
+        Service.ServiceCreate(userData)
             .then((item) => {
                 if (item.data.success) {
                     reset();
-                    setStartTime('')
-                    setEndTime('')
-                    setWeekDays([])
                     setIsLoader(false);
                     setIsNotify(true);
                     setNotifyMessage({
@@ -415,9 +322,6 @@ function AppointmentProviderPage() {
                     setList([item.data.data, ...list]);
                 } else {
                     reset();
-                    setStartTime('')
-                    setEndTime('')
-                    setWeekDays([])
                     setIsLoader(false);
                     setIsNotify(true);
                     setNotifyMessage({
@@ -428,9 +332,6 @@ function AppointmentProviderPage() {
             })
             .catch((err) => {
                 reset();
-                setStartTime('')
-                setEndTime('')
-                setWeekDays([])
                 setIsLoader(false);
                 setIsNotify(true);
                 setNotifyMessage({
@@ -441,18 +342,17 @@ function AppointmentProviderPage() {
     };
 
     const updateFormHandler = (data: any) => {
-        // console.log("dtaat updated", data);
+        // console.log("updated data", data);
         setIsLoader(true);
         const userData = {
-            name: data.providerName,
-            address: data.address ? data.address : null,
-            urgentFee: data.urgentFee ? data.urgentFee : null,
-            email: data.email ? data.email : null,
-            phone: data.phone,
-            cnic: data.cnic,
+            name: data.serviceName,
+            appointmentProvider: providerId,
+            desc: data.serviceDesc ? data.serviceDesc : null,
+            fees: data.fees ? data.fees : '0',
             updatedBy: authState.user.id
         };
-        Service.ProviderUpdate(actionMenuItemid, userData)
+
+        Service.ServiceUpdate(actionMenuItemid, userData)
             .then((item) => {
                 if (item.data.success) {
                     setIsLoader(false);
@@ -464,19 +364,13 @@ function AppointmentProviderPage() {
                     for (let i = 0; i < list.length; i += 1) {
                         if (list[i].id === actionMenuItemid) {
                             list[i].name = item.data.data.name;
-                            list[i].address = item.data.data.address;
-                            list[i].email = item.data.data.email;
-                            list[i].phone = item.data.data.phone;
-                            list[i].cnic = item.data.data.cnic;
+                            list[i].desc = item.data.data.desc;
+                            list[i].fees = item.data.data.fees;
                         }
                     }
                     reset();
-                    setStartTime('');
-                    setEndTime('');
                 } else {
                     reset();
-                    setStartTime('');
-                    setEndTime('');
                     setIsLoader(false);
                     setIsNotify(true);
                     setNotifyMessage({
@@ -487,8 +381,6 @@ function AppointmentProviderPage() {
             })
             .catch((err) => {
                 reset();
-                setStartTime('');
-                setEndTime('');
                 setIsLoader(false);
                 setIsNotify(true);
                 setNotifyMessage({
@@ -499,7 +391,7 @@ function AppointmentProviderPage() {
     };
 
     const onSubmitDialogBox = (data: any) => {
-        if (openFormDialog && weekDays && startTime && endTime) {
+        if (openFormDialog) {
             setOpenFormDialog(false);
             createFormHandler(data);
         }
@@ -515,7 +407,7 @@ function AppointmentProviderPage() {
                 isActive: event.target.checked,
                 updatedBy: authState.user.id,
             };
-            Service.ProviderUpdateStatus(id, data).then((updateItem) => {
+            Service.ServiceUpdateStatus(id, data).then((updateItem) => {
                 if (updateItem.data.success) {
                     setList((newArr: any) => {
                         return newArr.map((item: any) => {
@@ -545,13 +437,13 @@ function AppointmentProviderPage() {
                 setIsOpen={setIsNotify}
                 displayMessage={notifyMessage}
             />
-            <TopBar title="Provider" />
+            <TopBar isNestedRoute title="Services" />
             <div className="container m-auto mt-5">
                 <div className="w-full rounded-lg bg-white shadow-lg">
                     <div className="grid grid-cols-12 px-4 py-5">
                         <div className="col-span-7">
                             <span className="font-open-sans text-xl font-semibold text-[#252733]">
-                                All Provider
+                                All Services
                             </span>
                         </div>
                         <div className="col-span-5">
@@ -600,11 +492,9 @@ function AppointmentProviderPage() {
                         <table className="table-border table-auto">
                             <thead>
                                 <tr>
-                                    <th>Provider Name</th>
-                                    <th>Email</th>
-                                    <th>Address</th>
-                                    <th>Phone</th>
-                                    <th>Cnic</th>
+                                    <th>Service Name</th>
+                                    <th>Service Description</th>
+                                    <th>Service Fees</th>
                                     <th>Status</th>
                                     <th>&nbsp;</th>
                                 </tr>
@@ -614,7 +504,7 @@ function AppointmentProviderPage() {
                                     list.map((item: any, index: number) => {
                                         return (
                                             <tr key={item.id}>
-                                                <td>
+                                                <td className='w-64'>
                                                     <div className="avatar flex flex-row items-center">
                                                         <div className="flex flex-col items-start justify-start">
                                                             <span className="text-sm font-semibold">
@@ -630,10 +520,8 @@ function AppointmentProviderPage() {
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <td>{item.email}</td>
-                                                <td>{item.address ? item.address : "--"}</td>
-                                                <td>{item.phone}</td>
-                                                <td>{item.cnic}</td>
+                                                <td className='w-[50%]'>{item.desc}</td>
+                                                <td className=''>{item.fees}</td>
                                                 <td>
                                                     {item.isActive ? (
                                                         <span className="badge badge-success">ACTIVE</span>
@@ -693,7 +581,7 @@ function AppointmentProviderPage() {
                     </div>
                 </div>
             </div>
-            {cancelDialogOpen && (
+            {/* {cancelDialogOpen && (
                 <PermissionPopup
                     type="shock"
                     open={cancelDialogOpen}
@@ -701,7 +589,7 @@ function AppointmentProviderPage() {
                     dialogText={dialogText}
                     callback={statusCancelHandler}
                 />
-            )}
+            )} */}
             {actionMenuAnchorEl && (
                 <ActionMenu
                     open={actionMenuOpen}
@@ -713,24 +601,19 @@ function AppointmentProviderPage() {
             )}
             {openFormDialog && (
                 <CustomDialog
-                    DialogHeader="Add Provider"
-                    DialogSubHeader="Select Schedule"
+                    singleField
+                    DialogHeader="Add Service"
                     inputFieldsData={inputFieldsData}
-                    inputScheduleData={inputScheduleData}
                     handleSubmit={handleSubmit}
                     onSubmit={onSubmitDialogBox}
                     openFormDialog={openFormDialog}
                     setOpenFormDialog={setOpenFormDialog}
-                    addScheduleFormat
-                    setWeekDays={setWeekDays}
-                    weekDays={weekDays}
-                    startTime={startTime}
-                    endTime={endTime}
                 />
             )}
             {openEditFormDialog && (
                 <CustomDialog
-                    DialogHeader="Edit Provider"
+                    singleField
+                    DialogHeader="Edit Service"
                     type="edit"
                     specailCase={false}
                     reset={reset}
@@ -741,25 +624,8 @@ function AppointmentProviderPage() {
                     setOpenFormDialog={setOpenEditFormDialog}
                 />
             )}
-            {/* <CustomersCreatePopup
-        setIsNotify={setIsNotify}
-        setNotifyMessage={setNotifyMessage}
-        openFormDialog={openFormDialog}
-        setOpenFormDialog={setOpenFormDialog}
-        callback={createFormHandler}
-      />
-      <CustomersEditPopup
-        setIsNotify={setIsNotify}
-        setNotifyMessage={setNotifyMessage}
-        openFormDialog={openEditFormDialog}
-        setOpenFormDialog={setOpenEditFormDialog}
-        formData={editFormData}
-        setEditFormData={setEditFormData}
-        callback={updateFormHandler}
-        setActionMenuItemid={setActionMenuItemid}
-      /> */}
         </>
     );
 }
 
-export default AppointmentProviderPage;
+export default AppointmentProviderServicesList;

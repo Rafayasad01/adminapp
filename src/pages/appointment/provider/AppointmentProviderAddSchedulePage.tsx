@@ -17,7 +17,7 @@ import CustomCheckBox from '../../../components/common/CustomCheckBox';
 import { useAppSelector } from '../../../redux/redux-hooks';
 import assets from '../../../assets';
 import CustomDropDown from '../../../components/common/CustomDropDown';
-import TimePicker from '../../../components/common/TimePicker';
+import TimePicker from '../../../components/common/CustomTimePicker';
 import { AppointmentProviderSchedule } from '../../../interfaces/app.appointment';
 import dayjs from 'dayjs';
 
@@ -42,6 +42,7 @@ function AppointmentProviderAddSchedulePage() {
         control,
         setValue,
         watch,
+        setError,
         formState: { errors },
     } = useForm<AppointmentProviderSchedule>();
     console.log("ss", startTime);
@@ -155,75 +156,25 @@ function AppointmentProviderAddSchedulePage() {
     };
 
     const onSubmit = (data: any) => {
-        console.log("ddd", data)
-        // setIsLoader(true);
+        setIsLoader(true);
         const parent: any = {
             createdBy: authState.user.id,
             appointmentProvider: id,
             workDays: [],
         };
-        let hasDuplicate = false;
-        let displayText: any = '';
-        const duplicateNames: string[] = [];
         const dataKeys = Object.keys(data).filter((key) => key.includes('name'));
-
         const indexPattern: any = /\d+$/; // Regular expression to match the index at the end of keys
-        console.log("ddd2", parent)
+
         dataKeys.forEach((nameKey: any) => {
             const index = nameKey.match(indexPattern)[0];
-            const newName: any = data[nameKey] || '';
-
             const dataItem = {
                 day: data[`name${index}`],
                 startTime: data[`startdatetime${index}`].format('YYYY-MM-DD HH:mm:ss'),
                 endTime: data[`enddatetime${index}`].format('YYYY-MM-DD HH:mm:ss'),
             };
-
-            // const nameExists = parent.data.some((item: any) => item.name === newName);
-            // if (nameExists) {
-            //     if (!duplicateNames.includes(newName)) {
-            //         duplicateNames.push(newName);
-            //     }
-            //     // duplicateNames.push(newName);
-            //     hasDuplicate = true;
-            // } else if (dataKeys.some((name: any) => data[name] === data.moduleName)) {
-            //     hasDuplicate = true;
-            //     displayText = 'Module name must not be the same as permission names';
-            // } else {
-            //     hasDuplicate = false;
-            // }
-
             parent.workDays.push(dataItem);
-
         });
-
-        console.log("dddddd", parent);
-
-
-        // if (duplicateNames.length > 0) {
-        //     displayText = `Permission name (${duplicateNames.join(
-        //         '\n'
-        //     )}) already existss`;
-        // }
-        // if (hasDuplicate) {
-        //     console.log('run1');
-        //     setIsNotify(true);
-        //     setNotifyMessage({
-        //         text: displayText,
-        //         type: 'error',
-        //     });
-        // }
-        // else {
-        //     const allNames = parent.data.map((item: any) => item.name);
-        //     if (hasDuplicates(allNames)) {
-        //         console.log('run2');
-        //         setIsNotify(true);
-        //         setNotifyMessage({
-        //             text: displayText,
-        //             type: 'error',
-        //         });
-        //     } 
-        //     else {
+        navigate(-1);
         Service.ProviderScheduleCreate(parent)
             .then((item: any) => {
                 if (item.data.success) {
@@ -248,7 +199,6 @@ function AppointmentProviderAddSchedulePage() {
                     type: 'error',
                 });
             });
-        // }
     }
 
     return isLoader ? (
@@ -311,11 +261,11 @@ function AppointmentProviderAddSchedulePage() {
                                                                                 setTimePickerValue={item.setTime}
                                                                                 id={item.id}
                                                                                 index={index}
-                                                                                // errors={errors}
+                                                                                errors={errors}
                                                                                 register={register}
                                                                                 setValue={setValue}
                                                                                 watch={watch}
-                                                                            // setError={setError}
+                                                                                setError={setError}
                                                                             />
                                                                         </div>
                                                                     ) : null}

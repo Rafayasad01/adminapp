@@ -13,6 +13,9 @@ type Props = {
   error?: any;
   validateRequired?: any;
   customClassInputTitle?: string;
+  defaultValue?: string;
+  setValue?: any;
+  alternativeId?: string;
 };
 
 function CustomDropDown({
@@ -24,7 +27,10 @@ function CustomDropDown({
   control,
   id,
   validateRequired,
-  customClassInputTitle
+  defaultValue,
+  customClassInputTitle,
+  setValue,
+  alternativeId
 }: Props) {
   return (
     <div className="">
@@ -56,10 +62,11 @@ function CustomDropDown({
                 id={id}
                 {...field}
                 onChange={(event) => {
+                  alternativeId && setValue(alternativeId, [])
                   field.onChange(event);
                 }}
               >
-                <MenuItem value="none">-- Select Role --</MenuItem>
+                <MenuItem value="none">{defaultValue ? `-- ${defaultValue} --` : `-- Select Role --`}</MenuItem>
                 {options?.roles?.map((item: any, index: number) => (
                   <MenuItem key={index} value={item.id}>
                     {item.name}
@@ -68,7 +75,7 @@ function CustomDropDown({
               </Select>
               {fieldState.error && (
                 <p style={{ color: 'red', fontSize: '12px' }}>
-                  {fieldState.error.message}
+                  *{fieldState.error.message}
                 </p>
               )}
             </>
