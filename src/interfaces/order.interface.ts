@@ -1,4 +1,4 @@
 export interface Order {
-    category: string;
-    categoriesItem: any;
+  category: string;
+  categoriesItem: any;
 }

@@ -14,6 +14,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 // import Stack from '@mui/material/Stack';
 import TablePagination from '@mui/material/TablePagination';
 import dayjs from 'dayjs';
+import Button from '@mui/material/Button';
 import ActionMenu from '../../components/common/ActionMenu';
 import Loader from '../../components/common/Loader';
 import Notify from '../../components/common/Notify';
@@ -30,7 +31,6 @@ import {
   ORDER_STATUS_PROCESSING,
 } from '../../utils/constants';
 import { CheckRolePermission, listingRolePermission } from '../../utils/helper';
-import Button from '@mui/material/Button';
 
 function OrdersPage() {
   const authState: any = useAppSelector((state) => state?.authState);
@@ -295,7 +295,7 @@ function OrdersPage() {
                 <Button
                   variant="contained"
                   className="btn-black-fill btn-icon"
-                  onClick={() => navigate("./create")}
+                  onClick={() => navigate('./create')}
                 >
                   <AddOutlinedIcon /> Add New
                 </Button>

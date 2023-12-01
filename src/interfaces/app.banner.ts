@@ -1,4 +1,4 @@
 export interface CreateBanner {
-    bannerName: string;
-    bannerImage: string;
+  bannerName: string;
+  bannerImage: string;
 }

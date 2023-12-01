@@ -9,7 +9,6 @@ import Select from '@mui/material/Select';
 
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-import Service from '../../services/adminapp/adminOrders';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import dayjs from 'dayjs';
@@ -27,8 +26,9 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import FormLabel from '@mui/material/FormLabel';
 import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined';
 import RadioButtonUncheckedOutlinedIcon from '@mui/icons-material/RadioButtonUncheckedOutlined';
+import { useForm } from 'react-hook-form';
 import DatePickerButton from './DatePickerButton';
-import AppUserService from "../../services/adminapp/adminAppUser";
+import AppUserService from '../../services/adminapp/adminAppUser';
 
 import TopBar from '../../components/common/TopBar';
 import DeleteIcon from '../../components/icons/DeleteIcon';
@@ -36,7 +36,7 @@ import assets from '../../assets';
 import CustomDropDown from '../../components/common/CustomDropDown';
 import CustomMultipleSelectBox from '../../components/common/CustomMultipleSelect';
 import { Order } from '../../interfaces/order.interface';
-import { useForm } from 'react-hook-form';
+import Service from '../../services/adminapp/adminOrders';
 import { useAppSelector } from '../../redux/redux-hooks';
 
 function OrdersCreatePage() {
@@ -70,67 +70,72 @@ function OrdersCreatePage() {
   const [notifyMessage, setNotifyMessage] = useState({});
   const authState: any = useAppSelector((state: any) => state?.authState);
 
-  const totalAmount = itemList.reduce((p: any, c: any) => p + (Number(c.price) * Number(c.quantity)), 0);
-  const gstAmount = totalAmount * (authState.user.tenantConfig.gstPercentage / 100);
+  const totalAmount = itemList.reduce(
+    (p: any, c: any) => p + Number(c.price) * Number(c.quantity),
+    0
+  );
+  const gstAmount =
+    totalAmount * (authState.user.tenantConfig.gstPercentage / 100);
   const grandTotal = gstAmount + totalAmount;
 
   const onSubmit = () => {
-    let anonIdentidier = authState?.user?.username?.split('@')[0];
+    const anonIdentidier = authState?.user?.username?.split('@')[0];
 
-    let payload = {
-      identifier: isExistingUser !== "true" ? `${anonIdentidier}@shop.com` : userIdentifier
-    }
+    const payload = {
+      identifier:
+        isExistingUser !== 'true'
+          ? `${anonIdentidier}@shop.com`
+          : userIdentifier,
+    };
 
-    AppUserService.appLogin(payload).then((res) => {
-      if (res.data.success) {
-        let cartPayload = {
-          tenant: res.data.data.tenant,
-          appUser: res.data.data.id
-        }
-        Service.OrderGetCart(cartPayload)
-          .then((item: any) => {
-            console.log("ITTTTTTEM", item);
+    AppUserService.appLogin(payload)
+      .then((res) => {
+        if (res.data.success) {
+          const cartPayload = {
+            tenant: res.data.data.tenant,
+            appUser: res.data.data.id,
+          };
+          Service.OrderGetCart(cartPayload).then((item: any) => {
+            console.log('ITTTTTTEM', item);
             if (item.data.success) {
-              let updatedCartPayload = {
+              const updatedCartPayload = {
                 cartId: item.data.data.cart.id,
                 appUser: item.data.data.cart.appUser,
                 tenant: item.data.data.cart.tenant,
                 appUserAddress: res.data.data.appUserAddress.id,
                 pickupDateTime: new Date(),
                 dropDateTime: new Date(),
-                promoCode: "",
-                products: itemList?.map((item: any) => ({
-                  id: item.id,
-                  quantity: item.quantity
-                }))
-              }
-              Service.OrderUpdateCart(updatedCartPayload)
-                .then((cartRes) => {
-                  if (res.data.success) {
-                    let orderPlace = {
-                      cartId: cartRes.data.data.cart.id,
-                      tenant: cartRes.data.data.cart.tenant,
-                      appUser: cartRes.data.data.cart.appUser,
+                promoCode: '',
+                products: itemList?.map((items: any) => ({
+                  id: items.id,
+                  quantity: items.quantity,
+                })),
+              };
+              Service.OrderUpdateCart(updatedCartPayload).then((cartRes) => {
+                if (res.data.success) {
+                  const orderPlace = {
+                    cartId: cartRes.data.data.cart.id,
+                    tenant: cartRes.data.data.cart.tenant,
+                    appUser: cartRes.data.data.cart.appUser,
+                  };
+                  Service.OrderPlace(updatedCartPayload).then((orderItem) => {
+                    if (res.data.success) {
+                      console.log('Order place', orderItem);
                     }
-                    Service.OrderPlace(updatedCartPayload)
-                      .then((orderItem) => {
-                        if (res.data.success) {
-                          console.log("Order place", orderItem);
-                        }
-                        console.log("Cart REs", cartRes);
-                      })
-                  }
-                  console.log("Cart REs", cartRes);
-                })
+                    console.log('Cart REs', cartRes);
+                  });
+                }
+                console.log('Cart REs', cartRes);
+              });
             }
-          })
-      }
-      console.log("RESS", res.data)
-    })
-      .catch((err) => console.log("Err", err))
+          });
+        }
+        console.log('RESS', res.data);
+      })
+      .catch((err) => console.log('Err', err));
 
-    console.log("result", itemList, isExistingUser, userIdentifier);
-  }
+    console.log('result', itemList, isExistingUser, userIdentifier);
+  };
 
   const handlePickUpTimeChange = (value: dayjs.Dayjs | null) => {
     setPickUpTime(value);
@@ -144,7 +149,7 @@ function OrdersCreatePage() {
   };
 
   const handleUserChange = (event: any) => {
-    console.log("enven", event);
+    console.log('enven', event);
     setIsExistingUser(event.target.value);
   };
 
@@ -164,43 +169,41 @@ function OrdersCreatePage() {
   };
   const removeQuantity = (index: number) => {
     const item = itemList[index];
-    let qty = item.quantity - 1
+    const qty = item.quantity - 1;
     if (qty > 0) {
       setItemList((prevList: any) => {
         return prevList.map((listItem: any, listIndex: number) => {
           if (index === listIndex) {
-            listItem.quantity = qty
+            listItem.quantity = qty;
           }
-          return { ...listItem }
-        })
-      })
+          return { ...listItem };
+        });
+      });
     }
   };
   const addQuantity = (index: number) => {
     const item = itemList[index];
-    let qty = item.quantity + 1
+    const qty = item.quantity + 1;
     // if (qty > 0) {
     setItemList((prevList: any) => {
       return prevList.map((listItem: any, listIndex: number) => {
         if (index === listIndex) {
-          listItem.quantity = qty
+          listItem.quantity = qty;
         }
-        return { ...listItem }
-      })
-    })
+        return { ...listItem };
+      });
+    });
     // }
   };
 
-
-
   useEffect(() => {
     // setIsLoader(true);
-    setCatItemList([])
-    if (watch("category") !== "none" && watch("category") !== undefined) {
-      Service.OrderCatItemList(watch("category"))
+    setCatItemList([]);
+    if (watch('category') !== 'none' && watch('category') !== undefined) {
+      Service.OrderCatItemList(watch('category'))
         .then((item: any) => {
           if (item.data.success) {
-            setCatItemList(item.data.data)
+            setCatItemList(item.data.data);
             setIsLoader(false);
           } else {
             setIsLoader(false);
@@ -243,34 +246,35 @@ function OrdersCreatePage() {
           });
         });
     }
-  }, [watch("category")])
+  }, [watch('category')]);
 
-
-  //console.log("ID", watch("categoriesItem"));
+  // console.log("ID", watch("categoriesItem"));
 
   const handleUserInput = (event: any) => {
-    console.log("enven", event.target.value);
+    console.log('enven', event.target.value);
     setUserIdentifier(event.target.value);
-  }
-
+  };
 
   const handleMultipleSelectCallback = () => {
-
-    const watchArr = watch("categoriesItem");
+    const watchArr = watch('categoriesItem');
     const temp: any = [];
 
     watchArr?.forEach((item: any) => {
       catItemList.filter((el: any) => {
         if (el.id === item) {
-          const oldItem = itemList.find((item2: any) => item2.id === item)
-          temp.push({ ...el, ...oldItem })
+          const oldItem = itemList.find((item2: any) => item2.id === item);
+          temp.push({ ...el, ...oldItem });
         }
-      })
-    })
+        return el;
+      });
+    });
     setItemList(temp);
 
-    const total = itemList.reduce((p: any, c: any) => p + (Number(c.price) * Number(c.quantity)), 0)
-  }
+    const total = itemList.reduce(
+      (p: any, c: any) => p + Number(c.price) * Number(c.quantity),
+      0
+    );
+  };
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -279,19 +283,19 @@ function OrdersCreatePage() {
         <div className="grid grid-cols-12 gap-3 py-5">
           <div className="col-span-7 rounded-lg bg-white py-5 px-4 shadow-lg">
             <div className="flex items-center">
-              <div className='mx-2'>
+              <div className="mx-2">
                 <FormControl className="FormControl" variant="standard">
                   <CustomDropDown
                     validateRequired
-                    customWidth='w-[300px]'
-                    id={"category"}
-                    alternativeId={"categoriesItem"}
+                    customWidth="w-[300px]"
+                    id="category"
+                    alternativeId="categoriesItem"
                     control={control}
                     error={errors}
                     register={register}
                     setValue={setValue}
                     options={{ roles: catList }}
-                    customClassInputTitle={"font-bold"}
+                    customClassInputTitle="font-bold"
                     inputTitle=""
                   />
                 </FormControl>
@@ -301,14 +305,14 @@ function OrdersCreatePage() {
                   <CustomMultipleSelectBox
                     callback={handleMultipleSelectCallback}
                     validateRequired
-                    customWidth='w-[300px]'
-                    id={"categoriesItem"}
+                    customWidth="w-[300px]"
+                    id="categoriesItem"
                     control={control}
                     error={errors}
                     setValue={setValue}
                     register={register}
                     options={{ roles: catItemList }}
-                    customClassInputTitle={"font-bold"}
+                    customClassInputTitle="font-bold"
                     inputTitle=""
                   />
                 </FormControl>
@@ -340,10 +344,19 @@ function OrdersCreatePage() {
                         <td>
                           <IconButton
                             className="p-0 text-neutral-900"
-                            onClick={() => setItemList((prev: any) => {
-                              setValue("categoriesItem", watch("categoriesItem").filter((id: any) => id !== item.id))
-                              return prev.filter((el: any) => item.id !== el.id)
-                            })}
+                            onClick={() =>
+                              setItemList((prev: any) => {
+                                setValue(
+                                  'categoriesItem',
+                                  watch('categoriesItem').filter(
+                                    (id: any) => id !== item.id
+                                  )
+                                );
+                                return prev.filter(
+                                  (el: any) => item.id !== el.id
+                                );
+                              })
+                            }
                           >
                             <DeleteIcon />
                           </IconButton>
@@ -382,10 +395,13 @@ function OrdersCreatePage() {
                           </span>
                         </td>
                         <td className="text-sm font-semibold text-[#1A1A1A]">
-                          ${(Number(item?.quantity) * Number(item?.price)).toFixed(2)}
+                          $
+                          {(
+                            Number(item?.quantity) * Number(item?.price)
+                          ).toFixed(2)}
                         </td>
                       </tr>
-                    )
+                    );
                   })}
                 </tbody>
               </table>
@@ -493,7 +509,7 @@ function OrdersCreatePage() {
                       fonWeight: 400,
                       fonSize: '14px',
                     }}
-                    value={true}
+                    value
                     control={
                       <Radio
                         className="text-[#1D1D1D]"
@@ -506,7 +522,7 @@ function OrdersCreatePage() {
                 </RadioGroup>
               </FormControl>
               {/* {console.log("isExx", isExistingUser)} */}
-              {isExistingUser === "true" &&
+              {isExistingUser === 'true' && (
                 <div className="w-full rounded-xl border border-solid border-[#E4E4E4] py-1 pl-3">
                   <Input
                     className="input-with-icon after:border-b-neutral-900"
@@ -524,7 +540,7 @@ function OrdersCreatePage() {
                     disableUnderline
                   />
                 </div>
-              }
+              )}
               <Divider flexItem className="my-5" />
               <div className="my-4">
                 <div className="font-open-sans text-lg font-semibold text-neutral-900">

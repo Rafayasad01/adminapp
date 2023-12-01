@@ -14,117 +14,121 @@ import FormControl from '@mui/material/FormControl';
 import '../../assets/css/PopupStyle.css';
 
 const darkTheme = createTheme({
-    palette: {
-        primary: {
-            main: '#171717',
-        },
+  palette: {
+    primary: {
+      main: '#171717',
     },
+  },
 });
 
 type Props = {
-    timePickerLabel: string;
-    timePickerSubLabel?: string;
-    timePickerValue: dayjs.Dayjs | null;
-    setTimePickerValue: React.Dispatch<React.SetStateAction<dayjs.Dayjs | null>>;
-    id: string;
-    errors?: any;
-    setError?: any;
-    isTrue?: boolean;
+  timePickerLabel: string;
+  timePickerSubLabel?: string;
+  timePickerValue: dayjs.Dayjs | null;
+  setTimePickerValue: React.Dispatch<React.SetStateAction<dayjs.Dayjs | null>>;
+  id: string;
+  errors?: any;
+  setError?: any;
+  isTrue?: boolean;
 };
 function TimePicker({
-    timePickerLabel,
-    timePickerSubLabel,
-    timePickerValue,
-    setTimePickerValue,
-    errors,
-    setError,
-    id,
-    isTrue
+  timePickerLabel,
+  timePickerSubLabel,
+  timePickerValue,
+  setTimePickerValue,
+  errors,
+  setError,
+  id,
+  isTrue,
 }: Props) {
+  const [timePicker, setTimePicker] = useState<HTMLButtonElement | null>(null);
+  const buttonElement = useRef(null);
+  const handleClick = () => {
+    setTimePicker(buttonElement.current);
+    // if (timePickerValue?.format('HH:MM A') !== null) {
+    //     setError(id, {
+    //         type: 'manual',
+    //         message: '',
+    //     });
+    // }
+  };
+  const handleClose = () => {
+    setTimePicker(null);
+  };
 
-    const [timePicker, setTimePicker] = useState<HTMLButtonElement | null>(null);
-    const buttonElement = useRef(null);
-    const handleClick = () => {
-        setTimePicker(buttonElement.current);
-        // if (timePickerValue?.format('HH:MM A') !== null) {
-        //     setError(id, {
-        //         type: 'manual',
-        //         message: '',
-        //     });
-        // }
-    };
-    const handleClose = () => {
-        setTimePicker(null);
-    };
+  const open = Boolean(timePicker);
+  const idProp = open ? id : undefined;
 
-    const open = Boolean(timePicker);
-    const idProp = open ? id : undefined;
+  const handleChange = (value: dayjs.Dayjs | null) => {
+    setTimePickerValue(value);
+    handleClose();
+  };
 
-    const handleChange = (value: dayjs.Dayjs | null) => {
-        setTimePickerValue(value);
-        handleClose();
-    };
+  return (
+    <>
+      <FormControl className="FormControl" variant="standard">
+        <label className="FormLabel">
+          {timePickerLabel}{' '}
+          {timePickerSubLabel ? (
+            <span className="SubLabel">{timePickerSubLabel}</span>
+          ) : (
+            ''
+          )}
+        </label>
+        <Input
+          ref={buttonElement}
+          className="FormInput"
+          type="text"
+          placeholder="HH:MM A"
+          value={
+            (timePickerValue &&
+              dayjs(timePickerValue).isValid() &&
+              dayjs(timePickerValue).format('hh:mm A')) ||
+            ''
+          }
+          onChange={() => null}
+          endAdornment={
+            <InputAdornment position="end">
+              <IconButton
+                aria-label="toggle password visibility"
+                onClick={handleClick}
+                style={{ padding: 0 }}
+              >
+                <AccessTimeOutlinedIcon style={{ color: '#1D1D1D' }} />
+              </IconButton>
+            </InputAdornment>
+          }
+          disableUnderline
+        />
+        {isTrue && timePickerValue === null && (
+          <span style={{ fontSize: '12px' }} role="alert">
+            {`*${timePickerLabel} is required`}
+          </span>
+        )}
+      </FormControl>
 
-    return (
-        <>
-            <FormControl className="FormControl" variant="standard">
-                <label className="FormLabel">
-                    {timePickerLabel}{' '}
-                    {timePickerSubLabel ? (
-                        <span className="SubLabel">{timePickerSubLabel}</span>
-                    ) : (
-                        ''
-                    )}
-                </label>
-                <Input
-                    ref={buttonElement}
-                    className="FormInput"
-                    type="text"
-                    placeholder="HH:MM A"
-                    value={timePickerValue && dayjs(timePickerValue).isValid() && dayjs(timePickerValue).format('hh:mm A') || ''}
-                    onChange={() => null}
-                    endAdornment={
-                        <InputAdornment position="end">
-                            <IconButton
-                                aria-label="toggle password visibility"
-                                onClick={handleClick}
-                                style={{ padding: 0 }}
-                            >
-                                <AccessTimeOutlinedIcon style={{ color: '#1D1D1D' }} />
-                            </IconButton>
-                        </InputAdornment>
-                    }
-                    disableUnderline
-                />
-                {isTrue && timePickerValue === null && (
-                    <span style={{ fontSize: '12px' }} role="alert">
-                        {`*${timePickerLabel} is required`}
-                    </span>
-                )}
-            </FormControl>
-
-            <Popover
-                id={idProp}
-                open={open}
-                anchorEl={timePicker}
-                onClose={handleClose}
-                anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'left',
-                }}
-            >
-                <ThemeProvider theme={darkTheme}>
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <StaticTimePicker
-                            displayStaticWrapperAs="desktop"
-                            defaultValue={dayjs('2023-01-01T00:00')}
-                            onAccept={handleChange}
-                        />
-                    </LocalizationProvider>
-                </ThemeProvider>
-            </Popover>
-        </>
-    );
+      <Popover
+        id={idProp}
+        open={open}
+        anchorEl={timePicker}
+        onClose={handleClose}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+      >
+        <ThemeProvider theme={darkTheme}>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <StaticTimePicker
+              displayStaticWrapperAs="desktop"
+              defaultValue={dayjs('2023-01-01T00:00')}
+              onAccept={handleChange}
+            />
+          </LocalizationProvider>
+        </ThemeProvider>
+      </Popover>
+    </>
+  );
 }
 
 export default TimePicker;

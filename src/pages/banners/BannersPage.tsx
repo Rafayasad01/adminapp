@@ -13,6 +13,14 @@ import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
 import TopBar from '../../components/common/TopBar';
 // import CustomersCreatePopup from './CustomersCreatePopup';
 // import CustomersEditPopup from './CustomersEditPopup';
@@ -29,408 +37,413 @@ import { NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
 import { listingRolePermission } from '../../utils/helper';
 import BannersCreatePopup from './BannersCreatePopup';
 import assets from '../../assets';
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
 import CustomCheckBox from '../../components/common/CustomCheckBox';
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
 import BannerUpdatePopup from './BannerUpdatePopup';
 
-const BannersPage = () => {
-    const authState: any = useAppSelector((state: any) => state?.authState);
-    const dataRole = useAppSelector(
-        (state: any) => state?.persisitReducer?.roleState?.role?.permissions
-    );
-    const [search, setSearch] = useState<any>('');
-    const [emptyVariable] = useState(null);
-    const [page, setPage] = useState(0);
-    const [total, setTotal] = useState(0);
-    const [list, setList] = useState<any>([]);
-    const [editFormData, setEditFormData] = useState<any>();
-    const [rowsPerPage, setRowsPerPage] = React.useState(10);
-    const [actionMenuItemid, setActionMenuItemid] = React.useState('');
-    const [actionMenuAnchorEl, setActionMenuAnchorEl] =
-        useState<null | HTMLElement>(null);
-    const actionMenuOpen = Boolean(actionMenuAnchorEl);
-    const actionMenuOptions = ['Edit', 'Delete'];
+function BannersPage() {
+  const authState: any = useAppSelector((state: any) => state?.authState);
+  const dataRole = useAppSelector(
+    (state: any) => state?.persisitReducer?.roleState?.role?.permissions
+  );
+  const [search, setSearch] = useState<any>('');
+  const [emptyVariable] = useState(null);
+  const [page, setPage] = useState(0);
+  const [total, setTotal] = useState(0);
+  const [list, setList] = useState<any>([]);
+  const [editFormData, setEditFormData] = useState<any>();
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [actionMenuItemid, setActionMenuItemid] = React.useState('');
+  const [actionMenuAnchorEl, setActionMenuAnchorEl] =
+    useState<null | HTMLElement>(null);
+  const actionMenuOpen = Boolean(actionMenuAnchorEl);
+  const actionMenuOptions = ['Edit', 'Delete'];
 
-    const [openFormDialog, setOpenFormDialog] = useState(false);
-    const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
-    const [isLoader, setIsLoader] = React.useState(true);
-    const [isNotify, setIsNotify] = React.useState(false);
-    const [notifyMessage, setNotifyMessage] = React.useState({});
-    const [cancelDialogOpen, setCancelDialogOpen] = useState<boolean>(false);
-    const [dialogText, setDialogText] = useState<any>(
-        'Are you sure you want to delete this customer ?'
-    );
-    const [showPassword, setShowPassword] = useState(true);
-    const {
-        register,
-        handleSubmit,
-        watch,
-        reset,
-        getValues,
-        setValue,
-        formState: { errors },
-        control,
-    } = useForm<AppUserEmployees>();
+  const [openFormDialog, setOpenFormDialog] = useState(false);
+  const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
+  const [isLoader, setIsLoader] = React.useState(true);
+  const [isNotify, setIsNotify] = React.useState(false);
+  const [notifyMessage, setNotifyMessage] = React.useState({});
+  const [cancelDialogOpen, setCancelDialogOpen] = useState<boolean>(false);
+  const [dialogText, setDialogText] = useState<any>(
+    'Are you sure you want to delete this customer ?'
+  );
+  const [showPassword, setShowPassword] = useState(true);
+  const {
+    register,
+    handleSubmit,
+    watch,
+    reset,
+    getValues,
+    setValue,
+    formState: { errors },
+    control,
+  } = useForm<AppUserEmployees>();
 
-    const handleClickShowPassword = () => setShowPassword((show) => !show);
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
 
-    const handleFormClickOpen = () => {
-        if (listingRolePermission(dataRole, 'Employee Create')) {
-            setOpenFormDialog(true);
-        } else {
-            setIsNotify(true);
-            setNotifyMessage({
-                text: NOT_AUTHORIZED_MESSAGE,
-                type: 'warning',
-            });
-        }
+  const handleFormClickOpen = () => {
+    if (listingRolePermission(dataRole, 'Employee Create')) {
+      setOpenFormDialog(true);
+    } else {
+      setIsNotify(true);
+      setNotifyMessage({
+        text: NOT_AUTHORIZED_MESSAGE,
+        type: 'warning',
+      });
+    }
+  };
+
+  const deleteHandler = (id: string) => {
+    setIsLoader(true);
+    const data = {
+      updatedBy: authState.user.id,
     };
+    console.log(actionMenuItemid);
 
-    const deleteHandler = (id: string) => {
-        setIsLoader(true);
-        const data = {
-            updatedBy: authState.user.id,
-        };
-        console.log(actionMenuItemid);
+    // Service.deleteService(actionMenuItemid, data)
+    //   .then((item: any) => {
+    //     if (item.data.success) {
+    //       setIsLoader(false);
+    //       setIsNotify(true);
+    //       setNotifyMessage({
+    //         text: item.data.message,
+    //         type: 'success',
+    //       });
+    //       setList((newArr: any) => {
+    //         return newArr.filter(
+    //           (newItem: any) => newItem.id !== item.data.data.id
+    //         );
+    //       });
+    //     }
+    //   })
+    //   .catch((err) => {
+    //     setIsLoader(false);
+    //     setIsNotify(true);
+    //     setNotifyMessage({
+    //       text: err.message,
+    //       type: 'error',
+    //     });
+    //   });
+  };
 
-        // Service.deleteService(actionMenuItemid, data)
-        //   .then((item: any) => {
-        //     if (item.data.success) {
-        //       setIsLoader(false);
-        //       setIsNotify(true);
-        //       setNotifyMessage({
-        //         text: item.data.message,
-        //         type: 'success',
-        //       });
-        //       setList((newArr: any) => {
-        //         return newArr.filter(
-        //           (newItem: any) => newItem.id !== item.data.data.id
-        //         );
-        //       });
-        //     }
-        //   })
-        //   .catch((err) => {
-        //     setIsLoader(false);
-        //     setIsNotify(true);
-        //     setNotifyMessage({
-        //       text: err.message,
-        //       type: 'error',
-        //     });
-        //   });
-    };
+  const statusCancelHandler = () => {
+    deleteHandler(actionMenuItemid);
+  };
 
-    const statusCancelHandler = () => {
-        deleteHandler(actionMenuItemid);
-    };
-
-    useEffect(() => {
-        if (listingRolePermission(dataRole, 'Employee List')) {
-            Service.getBanners(authState.user.tenant)
-                .then((item: any) => {
-                    if (item.data.success) {
-                        setIsLoader(false);
-                        console.log("bannerss lsit", item.data.data);
-                        setList(item.data.data);
-                        // setTotal(item.data.data.total);
-                    }
-                })
-                .catch((err) => {
-                    setIsLoader(false);
-                    setIsNotify(true);
-                    setNotifyMessage({
-                        text: err.message,
-                        type: 'error',
-                    });
-                });
-        } else {
+  useEffect(() => {
+    if (listingRolePermission(dataRole, 'Employee List')) {
+      Service.getBanners(authState.user.tenant)
+        .then((item: any) => {
+          if (item.data.success) {
             setIsLoader(false);
-        }
-    }, [emptyVariable]);
-
-    const createFormHandler = (details: any, file: any) => {
-        console.log("creating details", file);
-        setIsLoader(true);
-        const formData = new FormData();
-        formData.append('name', details.name);
-        formData.append('banner', file);
-        formData.append('createdBy', authState.user.id);
-        formData.append('tenant', authState.user.tenant);
-        Service.createBanner(formData)
-            .then((item) => {
-                if (item.data.success) {
-                    setOpenFormDialog(false)
-                    reset();
-                    setIsLoader(false);
-                    setIsNotify(true);
-                    setNotifyMessage({
-                        text: item.data.message,
-                        type: 'success',
-                    });
-                    setList([...list, item.data.data]);
-                } else {
-                    reset();
-                    setOpenFormDialog(true)
-                    setIsLoader(false);
-                    setIsNotify(true);
-                    setNotifyMessage({
-                        text: item.data.message,
-                        type: 'error',
-                    });
-                }
-            })
-            .catch((err) => {
-                reset();
-                setOpenFormDialog(true)
-                setIsLoader(false);
-                setIsNotify(true);
-                setNotifyMessage({
-                    text: err.message,
-                    type: 'error',
-                });
-            });
-    };
-
-    const updateFormHandler = (data: any) => {
-        setIsLoader(true);
-        const formDetails = new FormData();
-        formDetails.append('name', data.name);
-        formDetails.append('banner', data.banner);
-        formDetails.append('bannerId', data.id);
-        formDetails.append('updatedBy', authState.user.id);
-        Service.updateBanners(formDetails)
-            .then((item) => {
-                if (item.data.success) {
-                    console.log("UPDATED", item.data.data);
-                    setOpenEditFormDialog(false);
-                    setIsLoader(false);
-                    setIsNotify(true);
-                    setNotifyMessage({
-                        text: item.data.message,
-                        type: 'success',
-                    });
-                    for (let i = 0; i < list.length; i += 1) {
-                        if (list[i].id === item.data.data.id) {
-                            list[i].name = item.data.data.name;
-                            list[i].banner = item.data.data.banner;
-                        }
-                    }
-                    reset();
-                } else {
-                    reset();
-                    setOpenEditFormDialog(false);
-                    setIsLoader(false);
-                    setIsNotify(true);
-                    setNotifyMessage({
-                        text: item.data.message,
-                        type: 'error',
-                    });
-                }
-            })
-            .catch((err) => {
-                reset();
-                setOpenEditFormDialog(false);
-                setIsLoader(false);
-                setIsNotify(true);
-                setNotifyMessage({
-                    text: err.message,
-                    type: 'error',
-                });
-            });
-    };
-
-    const handleEdit = (id: string) => {
-        setIsLoader(true);
-        Service.editBanners(id)
-            .then((item: any) => {
-                if (item.data.success) {
-                    console.log("bannerss edit", item.data.data);
-                    setIsLoader(false);
-                    setOpenEditFormDialog(true);
-                    setEditFormData(item.data.data)
-                }
-            })
-            .catch((err) => {
-                setIsLoader(false);
-                setIsNotify(true);
-                setNotifyMessage({
-                    text: err.message,
-                    type: 'error',
-                });
-            });
+            console.log('bannerss lsit', item.data.data);
+            setList(item.data.data);
+            // setTotal(item.data.data.total);
+          }
+        })
+        .catch((err) => {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: err.message,
+            type: 'error',
+          });
+        });
+    } else {
+      setIsLoader(false);
     }
+  }, [emptyVariable]);
 
-    const handleDelete = (id: string) => {
-        setIsLoader(true);
-        let deleteObj = {
-            updatedBy: authState.user.id,
-            bannerId: id
-        }
-        Service.deleteBanner(deleteObj)
-            .then((item: any) => {
-                if (item.data.success) {
-                    setIsLoader(false);
-                    setList((newArr: any) => {
-                        return newArr.filter(
-                            (newItem: any) => newItem.id !== item.data.data.id
-                        );
-                    });
-                } else {
-                    setIsLoader(false);
-                    setIsNotify(true);
-                    setNotifyMessage({
-                        text: item.data.message,
-                        type: 'error',
-                    });
-                }
-            })
-            .catch((err) => {
-                setIsLoader(false);
-                setIsNotify(true);
-                setNotifyMessage({
-                    text: err.message,
-                    type: 'error',
-                });
-            });
-    }
-
-    const handleSwitchChange = (event: any, id: string) => {
-        if (listingRolePermission(dataRole, 'Employee Update Status')) {
-            const data = {
-                isActive: event.target.checked,
-                updatedBy: authState.user.id,
-                bannerId: id
-            };
-            Service.BannerUpdateStatus(data).then((updateItem) => {
-                if (updateItem.data.success) {
-                    setList((newArr: any) => {
-                        return newArr.map((item: any) => {
-                            if (item.id === updateItem.data.data.id) {
-                                item.isActive = updateItem.data.data.isActive;
-                            }
-                            return { ...item };
-                        });
-                    });
-                }
-            });
+  const createFormHandler = (details: any, file: any) => {
+    console.log('creating details', file);
+    setIsLoader(true);
+    const formData = new FormData();
+    formData.append('name', details.name);
+    formData.append('banner', file);
+    formData.append('createdBy', authState.user.id);
+    formData.append('tenant', authState.user.tenant);
+    Service.createBanner(formData)
+      .then((item) => {
+        if (item.data.success) {
+          setOpenFormDialog(false);
+          reset();
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'success',
+          });
+          setList([...list, item.data.data]);
         } else {
-            setIsNotify(true);
-            setNotifyMessage({
-                text: NOT_AUTHORIZED_MESSAGE,
-                type: 'warning',
-            });
+          reset();
+          setOpenFormDialog(true);
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'error',
+          });
         }
+      })
+      .catch((err) => {
+        reset();
+        setOpenFormDialog(true);
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
+        });
+      });
+  };
+
+  const updateFormHandler = (data: any) => {
+    setIsLoader(true);
+    const formDetails = new FormData();
+    formDetails.append('name', data.name);
+    formDetails.append('banner', data.banner);
+    formDetails.append('bannerId', data.id);
+    formDetails.append('updatedBy', authState.user.id);
+    Service.updateBanners(formDetails)
+      .then((item) => {
+        if (item.data.success) {
+          console.log('UPDATED', item.data.data);
+          setOpenEditFormDialog(false);
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'success',
+          });
+          for (let i = 0; i < list.length; i += 1) {
+            if (list[i].id === item.data.data.id) {
+              list[i].name = item.data.data.name;
+              list[i].banner = item.data.data.banner;
+            }
+          }
+          reset();
+        } else {
+          reset();
+          setOpenEditFormDialog(false);
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'error',
+          });
+        }
+      })
+      .catch((err) => {
+        reset();
+        setOpenEditFormDialog(false);
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
+        });
+      });
+  };
+
+  const handleEdit = (id: string) => {
+    setIsLoader(true);
+    Service.editBanners(id)
+      .then((item: any) => {
+        if (item.data.success) {
+          console.log('bannerss edit', item.data.data);
+          setIsLoader(false);
+          setOpenEditFormDialog(true);
+          setEditFormData(item.data.data);
+        }
+      })
+      .catch((err) => {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
+        });
+      });
+  };
+
+  const handleDelete = (id: string) => {
+    setIsLoader(true);
+    const deleteObj = {
+      updatedBy: authState.user.id,
+      bannerId: id,
     };
+    Service.deleteBanner(deleteObj)
+      .then((item: any) => {
+        if (item.data.success) {
+          setIsLoader(false);
+          setList((newArr: any) => {
+            return newArr.filter(
+              (newItem: any) => newItem.id !== item.data.data.id
+            );
+          });
+        } else {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'error',
+          });
+        }
+      })
+      .catch((err) => {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
+        });
+      });
+  };
 
-    return isLoader ? (
-        <Loader />
-    ) : (
-        <>
-            <Notify
-                isOpen={isNotify}
-                setIsOpen={setIsNotify}
-                displayMessage={notifyMessage}
-            />
-            <TopBar title="Banners" />
-            <div className="container m-auto mt-5">
-                <div className="w-full rounded-lg bg-white shadow-lg">
-                    <div className="grid grid-cols-12 px-4 pt-5">
-                        <div className="col-span-7">
-                            <span className="font-open-sans text-xl font-semibold text-[#252733]">
-                                All Banners
-                            </span>
-                        </div>
-                        <div className="col-span-5">
-                            <div className="flex flex-row justify-end gap-3">
-                                <Button
-                                    variant="contained"
-                                    className="btn-black-fill btn-icon"
-                                    onClick={handleFormClickOpen}
-                                >
-                                    <AddOutlinedIcon /> Add New
-                                </Button>
-                            </div>
-                        </div>
-                    </div>
-                    {list?.length > 0 ?
-                        <div className='grid grid-cols-12 gap-6 p-5 justify-center items-center'>
-                            {list?.map((item: any, index: number) => {
-                                return (
-                                    <div key={index} className='2xl:col-span-3 xl:col-span-6 items-center justify-center flex'>
-                                        <Card className='w-[500px] shadow-none border-[2px] rounded-lg'>
-                                            <div className='flex m-5 items-center justify-center h-[150px]'>
-                                                <img
-                                                    className="max-w-[200px]"
-                                                    src={item.banner}
-                                                    alt={item.name}
-                                                />
-                                            </div>
-                                            <CardContent className='mt-5'>
-                                                <hr />
-                                                <p className='my-2 font-open-sans text-xl uppercase font-semibold text-[#252733]'>{item.name}</p>
-                                            </CardContent>
-                                            <CardActions className=''>
-                                                <div className='flex justify-between items-center w-full'>
-                                                    <div>
-                                                        <IconButton onClick={() => handleEdit(item.id)} className='mr-0' aria-label="update">
-                                                            <EditIcon />
-                                                        </IconButton>
-                                                    </div>
-                                                    <div>
-                                                        <IconButton onClick={() => handleDelete(item.id)} className='mr-0' aria-label="delete">
-                                                            <DeleteIcon />
-                                                        </IconButton>
-                                                        <Switch
-                                                            checked={item.isActive}
-                                                            onChange={(
-                                                                event: React.ChangeEvent<HTMLInputElement>
-                                                            ) => handleSwitchChange(event, list[index].id)}
-                                                            inputProps={{ 'aria-label': 'controlled' }}
-                                                        />
-                                                    </div>
-                                                </div>
-                                            </CardActions>
-                                        </Card>
-                                    </div>
-                                )
-                            })}
-                        </div>
-                        :
-                        <div className='w-full flex justify-center items-center bg-slate-200 p-4 mt-4'>
-                            <p className='font-semibold'>No Banners Record</p>
-                        </div>
-                    }
-                </div>
+  const handleSwitchChange = (event: any, id: string) => {
+    if (listingRolePermission(dataRole, 'Employee Update Status')) {
+      const data = {
+        isActive: event.target.checked,
+        updatedBy: authState.user.id,
+        bannerId: id,
+      };
+      Service.BannerUpdateStatus(data).then((updateItem) => {
+        if (updateItem.data.success) {
+          setList((newArr: any) => {
+            return newArr.map((item: any) => {
+              if (item.id === updateItem.data.data.id) {
+                item.isActive = updateItem.data.data.isActive;
+              }
+              return { ...item };
+            });
+          });
+        }
+      });
+    } else {
+      setIsNotify(true);
+      setNotifyMessage({
+        text: NOT_AUTHORIZED_MESSAGE,
+        type: 'warning',
+      });
+    }
+  };
+
+  return isLoader ? (
+    <Loader />
+  ) : (
+    <>
+      <Notify
+        isOpen={isNotify}
+        setIsOpen={setIsNotify}
+        displayMessage={notifyMessage}
+      />
+      <TopBar title="Banners" />
+      <div className="container m-auto mt-5">
+        <div className="w-full rounded-lg bg-white shadow-lg">
+          <div className="grid grid-cols-12 px-4 pt-5">
+            <div className="col-span-7">
+              <span className="font-open-sans text-xl font-semibold text-[#252733]">
+                All Banners
+              </span>
             </div>
+            <div className="col-span-5">
+              <div className="flex flex-row justify-end gap-3">
+                <Button
+                  variant="contained"
+                  className="btn-black-fill btn-icon"
+                  onClick={handleFormClickOpen}
+                >
+                  <AddOutlinedIcon /> Add New
+                </Button>
+              </div>
+            </div>
+          </div>
+          {list?.length > 0 ? (
+            <div className="grid grid-cols-12 items-center justify-center gap-6 p-5">
+              {list?.map((item: any, index: number) => {
+                return (
+                  <div
+                    key={index}
+                    className="flex items-center justify-center xl:col-span-6 2xl:col-span-3"
+                  >
+                    <Card className="w-[500px] rounded-lg border-[2px] shadow-none">
+                      <div className="m-5 flex h-[150px] items-center justify-center">
+                        <img
+                          className="max-w-[200px]"
+                          src={item.banner}
+                          alt={item.name}
+                        />
+                      </div>
+                      <CardContent className="mt-5">
+                        <hr />
+                        <p className="my-2 font-open-sans text-xl font-semibold uppercase text-[#252733]">
+                          {item.name}
+                        </p>
+                      </CardContent>
+                      <CardActions className="">
+                        <div className="flex w-full items-center justify-between">
+                          <div>
+                            <IconButton
+                              onClick={() => handleEdit(item.id)}
+                              className="mr-0"
+                              aria-label="update"
+                            >
+                              <EditIcon />
+                            </IconButton>
+                          </div>
+                          <div>
+                            <IconButton
+                              onClick={() => handleDelete(item.id)}
+                              className="mr-0"
+                              aria-label="delete"
+                            >
+                              <DeleteIcon />
+                            </IconButton>
+                            <Switch
+                              checked={item.isActive}
+                              onChange={(
+                                event: React.ChangeEvent<HTMLInputElement>
+                              ) => handleSwitchChange(event, list[index].id)}
+                              inputProps={{ 'aria-label': 'controlled' }}
+                            />
+                          </div>
+                        </div>
+                      </CardActions>
+                    </Card>
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
+            <div className="mt-4 flex w-full items-center justify-center bg-slate-200 p-4">
+              <p className="font-semibold">No Banners Record</p>
+            </div>
+          )}
+        </div>
+      </div>
 
-            {openFormDialog && (
-                <BannersCreatePopup
-                    openFormDialog={openFormDialog}
-                    setOpenFormDialog={setOpenFormDialog}
-                    callback={createFormHandler}
-                    setIsNotify={setIsNotify}
-                    setNotifyMessage={setNotifyMessage}
-                />
-            )}
+      {openFormDialog && (
+        <BannersCreatePopup
+          openFormDialog={openFormDialog}
+          setOpenFormDialog={setOpenFormDialog}
+          callback={createFormHandler}
+          setIsNotify={setIsNotify}
+          setNotifyMessage={setNotifyMessage}
+        />
+      )}
 
-            {openEditFormDialog && (
-                <BannerUpdatePopup
-                    openFormDialog={openEditFormDialog}
-                    setOpenFormDialog={setOpenEditFormDialog}
-                    callback={updateFormHandler}
-                    setIsNotify={setIsNotify}
-                    setNotifyMessage={setNotifyMessage}
-                    formData={editFormData}
-                />
-            )}
-        </>
-    );
+      {openEditFormDialog && (
+        <BannerUpdatePopup
+          openFormDialog={openEditFormDialog}
+          setOpenFormDialog={setOpenEditFormDialog}
+          callback={updateFormHandler}
+          setIsNotify={setIsNotify}
+          setNotifyMessage={setNotifyMessage}
+          formData={editFormData}
+        />
+      )}
+    </>
+  );
 }
 
 export default BannersPage;

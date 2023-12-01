@@ -10,10 +10,16 @@ type Props = {
   setImg: any;
   customWidth?: string;
   setError?: any;
-  error?: any
+  error?: any;
 };
 
-function DragDropFile({ setError, error, setFile, setImg, customWidth }: Props) {
+function DragDropFile({
+  setError,
+  error,
+  setFile,
+  setImg,
+  customWidth,
+}: Props) {
   const [dragActive, setDragActive] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const [imageUrl, setImageUrl] = useState<any>();
@@ -86,8 +92,12 @@ function DragDropFile({ setError, error, setFile, setImg, customWidth }: Props) 
   };
 
   return (
-    <div className={`flex ${customWidth ? customWidth : "w-[400px]"} items-center justify-start`}>
-      <div className=''>
+    <div
+      className={`flex ${
+        customWidth || 'w-[400px]'
+      } items-center justify-start`}
+    >
+      <div className="">
         <FormControl
           className="FormControl"
           variant="standard"

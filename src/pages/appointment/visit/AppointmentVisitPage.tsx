@@ -14,6 +14,10 @@ import TablePagination from '@mui/material/TablePagination';
 import React, { useEffect, useState } from 'react';
 import { format } from 'date-fns';
 import { useForm } from 'react-hook-form';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+import { useNavigate } from 'react-router-dom';
 import TopBar from '../../../components/common/TopBar';
 import ActionMenu from '../../../components/common/ActionMenu';
 import CustomDialog from '../../../components/common/CustomDialog';
@@ -26,14 +30,14 @@ import Service from '../../../services/adminapp/adminAppointment';
 import PermissionPopup from '../../../utils/PermissionPopup';
 import { NOT_AUTHORIZED_MESSAGE } from '../../../utils/constants';
 import { listingRolePermission } from '../../../utils/helper';
-import { AppointmentProvider, AppointmentService, AppointmentVisit } from '../../../interfaces/app.appointment';
+import {
+  AppointmentProvider,
+  AppointmentService,
+  AppointmentVisit,
+} from '../../../interfaces/app.appointment';
 import AppointmentVisitCreatePopup from './AppointmentVisitCreatePopup';
 import AppointmentVisitUpdatePopup from './AppointmentVisitUpdatePopup';
 import AppointmentVisitReschedulePopup from './AppointmentVisitReschedulePopup';
-import dayjs from 'dayjs'
-import utc from 'dayjs/plugin/utc';
-import timezone from 'dayjs/plugin/timezone';
-import { useNavigate } from 'react-router-dom';
 // Extend dayjs with necessary plugins
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -61,7 +65,8 @@ function AppointmentVisitPage() {
 
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
-  const [openRescheduleFormDialog, setOpenRescheduleFormDialog] = useState(false);
+  const [openRescheduleFormDialog, setOpenRescheduleFormDialog] =
+    useState(false);
   const [isLoader, setIsLoader] = React.useState(true);
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
@@ -88,7 +93,7 @@ function AppointmentVisitPage() {
       placeholder: 'Enter Visitor name',
       register,
       error: errors.visitName,
-      type: 'text'
+      type: 'text',
     },
     {
       fieldName: 'Phone',
@@ -97,7 +102,7 @@ function AppointmentVisitPage() {
       register,
       error: errors.phone,
       maxLetterLimit: 11,
-      type: 'text'
+      type: 'text',
     },
     {
       fieldName: 'Visitor Description',
@@ -107,7 +112,7 @@ function AppointmentVisitPage() {
       error: errors.note,
       type: 'textarea',
       notRequired: true,
-    }
+    },
   ];
 
   const handleFormClickOpen = () => {
@@ -197,29 +202,31 @@ function AppointmentVisitPage() {
     if (option === 'Edit') {
       if (listingRolePermission(dataRole, 'Employee Update')) {
         setIsLoader(true);
-        Service.VisitEdit(actionMenuItemid).then((item: any) => {
-          if (item.data.success) {
-            setIsLoader(false);
-            setOpenEditFormDialog(true);
-            setEditDetails(item.data.data);
-          } else {
+        Service.VisitEdit(actionMenuItemid)
+          .then((item: any) => {
+            if (item.data.success) {
+              setIsLoader(false);
+              setOpenEditFormDialog(true);
+              setEditDetails(item.data.data);
+            } else {
+              setIsLoader(false);
+              setOpenEditFormDialog(false);
+              setIsNotify(true);
+              setNotifyMessage({
+                text: item.data.message,
+                type: 'error',
+              });
+            }
+          })
+          .catch((err) => {
             setIsLoader(false);
             setOpenEditFormDialog(false);
             setIsNotify(true);
             setNotifyMessage({
-              text: item.data.message,
+              text: err.message,
               type: 'error',
             });
-          }
-        }).catch((err) => {
-          setIsLoader(false);
-          setOpenEditFormDialog(false);
-          setIsNotify(true);
-          setNotifyMessage({
-            text: err.message,
-            type: 'error',
           });
-        })
       } else {
         setIsLoader(false);
         setIsNotify(true);
@@ -240,7 +247,7 @@ function AppointmentVisitPage() {
                 text: item.data.message,
                 type: 'success',
               });
-              console.log("statat", item.data.data);
+              console.log('statat', item.data.data);
               setList((newArr: any) => {
                 return newArr.map((items: any) => {
                   if (items.id === item.data.data.appointmentId) {
@@ -273,15 +280,15 @@ function AppointmentVisitPage() {
       // console.log("isS",isSameOrAfter);
 
       // if (isSameOrAfter) {
-      setOpenRescheduleFormDialog(true)
+      setOpenRescheduleFormDialog(true);
       // } else {
       //   setIsNotify(true);
       //   setNotifyMessage({
       //     text: "You can't reschedule on previous date",
       //     type: 'warning',
       //   });
-    } else if (option === "Detail") {
-      navigate(`../detail/${actionMenuItemid}`)
+    } else if (option === 'Detail') {
+      navigate(`../detail/${actionMenuItemid}`);
     }
     // }
   };
@@ -317,13 +324,13 @@ function AppointmentVisitPage() {
   }, [emptyVariable]);
 
   const createFormHandler = (data: any, type: string) => {
-    console.log("dataaaaCREATE", data, type);
+    console.log('dataaaaCREATE', data, type);
     setIsLoader(true);
-    if (type === "create") {
+    if (type === 'create') {
       Service.VisitCreate(data)
         .then((item) => {
           if (item.data.success) {
-            setOpenFormDialog(false)
+            setOpenFormDialog(false);
             reset();
             setIsLoader(false);
             setIsNotify(true);
@@ -334,7 +341,7 @@ function AppointmentVisitPage() {
             setList([item.data.data, ...list]);
           } else {
             reset();
-            setOpenFormDialog(false)
+            setOpenFormDialog(false);
             setIsLoader(false);
             setIsNotify(true);
             setNotifyMessage({
@@ -344,7 +351,7 @@ function AppointmentVisitPage() {
           }
         })
         .catch((err) => {
-          setOpenFormDialog(false)
+          setOpenFormDialog(false);
           reset();
           setIsLoader(false);
           setIsNotify(true);
@@ -354,12 +361,12 @@ function AppointmentVisitPage() {
           });
         });
     } else {
-      data.appointmentId = actionMenuItemid
-      console.log("daTA", data);
+      data.appointmentId = actionMenuItemid;
+      console.log('daTA', data);
       Service.VisitReschedule(data)
         .then((item: any) => {
           if (item.data.success) {
-            setOpenRescheduleFormDialog(false)
+            setOpenRescheduleFormDialog(false);
             reset();
             setIsLoader(false);
             setIsNotify(true);
@@ -370,7 +377,7 @@ function AppointmentVisitPage() {
             setList([item.data.data, ...list]);
           } else {
             reset();
-            setOpenRescheduleFormDialog(false)
+            setOpenRescheduleFormDialog(false);
             setIsLoader(false);
             setIsNotify(true);
             setNotifyMessage({
@@ -380,7 +387,7 @@ function AppointmentVisitPage() {
           }
         })
         .catch((err: Error) => {
-          setOpenRescheduleFormDialog(false)
+          setOpenRescheduleFormDialog(false);
           reset();
           setIsLoader(false);
           setIsNotify(true);
@@ -393,12 +400,12 @@ function AppointmentVisitPage() {
   };
 
   const updateFormHandler = (data: any) => {
-    console.log("datata", data);
+    console.log('datata', data);
     setIsLoader(true);
     Service.VisitUpdate(data)
       .then((item) => {
         if (item.data.success) {
-          console.log("UPDATED", item.data.data);
+          console.log('UPDATED', item.data.data);
           setOpenEditFormDialog(false);
           setIsLoader(false);
           setIsNotify(true);
@@ -445,8 +452,7 @@ function AppointmentVisitPage() {
     if (openFormDialog) {
       setOpenFormDialog(false);
       // createFormHandler(data);
-    }
-    else if (openEditFormDialog) {
+    } else if (openEditFormDialog) {
       setOpenEditFormDialog(false);
       updateFormHandler(data);
     }
@@ -558,8 +564,10 @@ function AppointmentVisitPage() {
                   list.map((item: any, index: number) => {
                     return (
                       <tr key={item.id}>
-                        <td className='font-bold text-sm'>{item.appointmentNumber}</td>
-                        <td className='w-64'>
+                        <td className="text-sm font-bold">
+                          {item.appointmentNumber}
+                        </td>
+                        <td className="w-64">
                           <div className="avatar flex flex-row items-center">
                             <div className="flex flex-col items-start justify-start">
                               <span className="text-sm font-semibold">
@@ -568,21 +576,23 @@ function AppointmentVisitPage() {
                               <span className="text-xs font-normal text-[#6A6A6A]">
                                 {dayjs(item.createdDate).isValid()
                                   ? dayjs(item.createdDate)?.format(
-                                    'MMMM DD, YYYY'
-                                  )
+                                      'MMMM DD, YYYY'
+                                    )
                                   : '--'}
                               </span>
                             </div>
                           </div>
                         </td>
-                        <td className=''>{item.note}</td>
-                        <td className=''>{item.phone}</td>
-                        <td className=''>{dayjs(item.appointmentDate).isValid()
-                          ? dayjs(item.appointmentDate)?.format(
-                            'MMMM DD, YYYY'
-                          )
-                          : '--'}</td>
-                        <td className=''>
+                        <td className="">{item.note}</td>
+                        <td className="">{item.phone}</td>
+                        <td className="">
+                          {dayjs(item.appointmentDate).isValid()
+                            ? dayjs(item.appointmentDate)?.format(
+                                'MMMM DD, YYYY'
+                              )
+                            : '--'}
+                        </td>
+                        <td className="">
                           {/* {item.appointmentTime.slice(11, item.appointmentTime.indexOf('.'))
                             + " " + dayjs(item.appointmentTime)?.format(
                               'A'
@@ -590,16 +600,26 @@ function AppointmentVisitPage() {
                           } */}
                           {/* {format(new Date(item.appointmentTime), 'p, dd/mm/yyyy')} */}
                           {dayjs(item.appointmentTime).isValid()
-                            ? dayjs(item.appointmentTime)?.format("hh:mm A")
+                            ? dayjs(item.appointmentTime)?.format('hh:mm A')
                             : '--'}
                         </td>
                         <td>
-                          <span className={`${item.status === "Cancelled" ? "badge badge-danger" : item.status === "Reschedule" ? "badge badge-success" : "badge badge-success"}`}>{item.status}</span>
+                          <span
+                            className={`${
+                              item.status === 'Cancelled'
+                                ? 'badge badge-danger'
+                                : item.status === 'Reschedule'
+                                ? 'badge badge-success'
+                                : 'badge badge-success'
+                            }`}
+                          >
+                            {item.status}
+                          </span>
                         </td>
                         <td>
                           <div className="flex flex-row-reverse">
                             <IconButton
-                              disabled={item.status === "Cancelled" ? true : false}
+                              disabled={item.status === 'Cancelled'}
                               className="btn-dot"
                               aria-label="more"
                               id="long-button"
