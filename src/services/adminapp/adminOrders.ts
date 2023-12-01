@@ -48,11 +48,15 @@ const createAssignService = (data: any) => {
 };
 
 const OrderCatList = (tenantId: any) => {
-  return network.get(`${ORDER_PREFIX}/${PLACE_PREFIX}/${CATEGORY_PREFIX}/list/${tenantId}`);
+  return network.get(
+    `${ORDER_PREFIX}/${PLACE_PREFIX}/${CATEGORY_PREFIX}/list/${tenantId}`
+  );
 };
 
 const OrderCatItemList = (catId: any) => {
-  return network.get(`${ORDER_PREFIX}/${PLACE_PREFIX}/${CATEGORY_PREFIX}/item/list/${catId}`);
+  return network.get(
+    `${ORDER_PREFIX}/${PLACE_PREFIX}/${CATEGORY_PREFIX}/item/list/${catId}`
+  );
 };
 
 const OrderGetCart = (data: any) => {
@@ -61,11 +65,11 @@ const OrderGetCart = (data: any) => {
 
 const OrderUpdateCart = (data: any) => {
   return network.post(`${ORDER_PREFIX}/${PLACE_PREFIX}/updateCart`, data);
-}
+};
 
 const OrderPlace = (data: any) => {
   return network.post(`${ORDER_PREFIX}/${PLACE_PREFIX}/newOrder`, data);
-}
+};
 
 export default {
   getListService,
@@ -79,5 +83,5 @@ export default {
   OrderCatItemList,
   OrderGetCart,
   OrderUpdateCart,
-  OrderPlace
+  OrderPlace,
 };

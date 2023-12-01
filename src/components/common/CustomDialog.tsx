@@ -5,11 +5,11 @@ import FormControl from '@mui/material/FormControl';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
 import IconButton from '@mui/material/IconButton';
+import TextField from '@mui/material/TextField';
 import { AppUserDriverExt } from '../../interfaces/app-user.interface';
 import CustomButton from './CustomButton';
 import CustomInputBox from './CustomInputBox';
 import CustomDropDown from './CustomDropDown';
-import TextField from '@mui/material/TextField';
 import TimePicker from './TimePicker';
 import WorkDaysForm from '../../pages/settings/WorkDaysForm';
 
@@ -28,7 +28,7 @@ type Props = {
   specailCase?: boolean;
   singleField?: boolean;
   setWeekDays?: any;
-  weekDays?: any
+  weekDays?: any;
   startTime?: any;
   endTime?: any;
   addScheduleFormat?: boolean;
@@ -54,7 +54,7 @@ function CustomDialog({
   startTime,
   endTime,
   addScheduleFormat,
-  noweekdays
+  noweekdays,
 }: Props) {
   const handleFormClose = () => {
     if (type === 'edit' && specailCase) {
@@ -134,12 +134,17 @@ function CustomDialog({
                             typeImportant={items.typeImportant}
                           />
                         </FormControl>
-                      ) : items.type === "textarea" ? (
-                        <div className=''>
-                          <FormControl className="FormControl py-2" variant="standard">
+                      ) : items.type === 'textarea' ? (
+                        <div className="">
+                          <FormControl
+                            className="FormControl py-2"
+                            variant="standard"
+                          >
                             <label className="FormLabel">
                               Message{' '}
-                              <span className="SubLabel">Write 05-50 Characters</span>
+                              <span className="SubLabel">
+                                Write 05-50 Characters
+                              </span>
                             </label>
                             <TextField
                               className="FormTextarea"
@@ -149,7 +154,10 @@ function CustomDialog({
                               defaultValue=""
                               placeholder="Write Description"
                               {...items.register(items.id, {
-                                required: items.notRequired === true ? false : `${items.fieldName} is required`,
+                                required:
+                                  items.notRequired === true
+                                    ? false
+                                    : `${items.fieldName} is required`,
                                 minLength: {
                                   value: 5,
                                   message: 'Minimum Five Characters',
@@ -161,11 +169,13 @@ function CustomDialog({
                               })}
                             />
                             {items.error && (
-                              <span role="alert" className='text-sm'>*{items.error.message}</span>
+                              <span role="alert" className="text-sm">
+                                *{items.error.message}
+                              </span>
                             )}
                           </FormControl>
                         </div>
-                      ) : items.type === "datepicker" ? (
+                      ) : items.type === 'datepicker' ? (
                         <TimePicker
                           timePickerLabel={items.fieldName}
                           timePickerSubLabel={items.placeholder}
@@ -173,7 +183,7 @@ function CustomDialog({
                           setTimePickerValue={items.setTime}
                           id={items.id}
                           errors={items.error}
-                        // setError={setError}
+                          // setError={setError}
                         />
                       ) : null
                     }
@@ -231,18 +241,20 @@ function CustomDialog({
                 );
               })}
             </div>
-            {DialogSubHeader &&
+            {DialogSubHeader && (
               <div className="FormHeader">
-                <span className="text-md mt-2 font-semibold">{DialogSubHeader}</span>
+                <span className="text-md mt-2 font-semibold">
+                  {DialogSubHeader}
+                </span>
               </div>
-            }
-            {addScheduleFormat &&
+            )}
+            {addScheduleFormat && (
               <div>
-                {!noweekdays &&
+                {!noweekdays && (
                   <div>
                     <WorkDaysForm onlyweeksformat setWeekDays={setWeekDays} />
                   </div>
-                }
+                )}
                 <div className={singleField ? 'FormField' : 'FormFields'}>
                   {inputScheduleData?.map((items: any, index: number) => {
                     return (
@@ -254,18 +266,21 @@ function CustomDialog({
                           setTimePickerValue={items.setTime}
                           id={items.id}
                           errors={items.error}
-                        // setError={setError}
+                          // setError={setError}
                         />
                       </Fragment>
-                    )
-                  }
-                  )}
+                    );
+                  })}
                 </div>
-                {(weekDays?.length < 0 || startTime === null || endTime === null) && (
-                  <span role="alert" className='text-sm'>*{"schedule is required"}</span>
+                {(weekDays?.length < 0 ||
+                  startTime === null ||
+                  endTime === null) && (
+                  <span role="alert" className="text-sm">
+                    *schedule is required
+                  </span>
                 )}
               </div>
-            }
+            )}
           </div>
           <div className="FormFooter">
             <CustomButton

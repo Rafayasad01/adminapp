@@ -1,11 +1,11 @@
-import network from "../../utils/network";
+import network from '../../utils/network';
 
-const APP_PREFIX = 'app/user'
+const APP_PREFIX = 'app/user';
 
 const appLogin = (data: any) => {
-    return network.post(`${APP_PREFIX}/login`, data);
+  return network.post(`${APP_PREFIX}/login`, data);
 };
 
 export default {
-    appLogin
-}
+  appLogin,
+};

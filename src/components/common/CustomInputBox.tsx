@@ -45,7 +45,7 @@ function CustomInputBox({
   customFontClass,
   customClass,
   requiredType,
-  maxLetterLimit
+  maxLetterLimit,
 }: Props) {
   return (
     <>
@@ -73,11 +73,15 @@ function CustomInputBox({
         }
         disableUnderline
         {...register(id, {
-          maxLength: { value: maxLetterLimit, message: `${inputTitle} should be ${maxLetterLimit} number long.` },
-          required: requiredType ? false :
-            inputType === 'hidden'
-              ? false
-              : `${inputTitle?.toLocaleLowerCase()} is required`,
+          maxLength: {
+            value: maxLetterLimit,
+            message: `${inputTitle} should be ${maxLetterLimit} number long.`,
+          },
+          required: requiredType
+            ? false
+            : inputType === 'hidden'
+            ? false
+            : `${inputTitle?.toLocaleLowerCase()} is required`,
           value: value || '',
         })}
         endAdornment={
@@ -86,7 +90,7 @@ function CustomInputBox({
               <IconButton
                 style={{ padding: 0 }}
                 aria-label="toggle password visibility"
-                onClick={onclick || (() => { })}
+                onClick={onclick || (() => {})}
               >
                 {showPassVisibility ? <VisibilityOff /> : <Visibility />}
               </IconButton>
@@ -94,7 +98,11 @@ function CustomInputBox({
           )
         }
       />
-      {error && <span className='text-sm' role="alert">{`${error.message ? `* ${error.message}` : ''}`}</span>}
+      {error && (
+        <span className="text-sm" role="alert">{`${
+          error.message ? `* ${error.message}` : ''
+        }`}</span>
+      )}
     </>
   );
 }

@@ -111,5 +111,5 @@ export const weekDays = [
   { id: 'Wednesday', name: 'Wednesday' },
   { id: 'Thursday', name: 'Thursday' },
   { id: 'Friday', name: 'Friday' },
-  { id: 'Saturday', name: 'Saturday' }
-]
+  { id: 'Saturday', name: 'Saturday' },
+];

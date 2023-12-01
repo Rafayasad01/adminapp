@@ -15,7 +15,7 @@ import TimePickerField from './TimePickerField';
 type Props = {
   onlyweeksformat?: boolean;
   setWeekDays?: any;
-}
+};
 
 function WorkDaysForm({ onlyweeksformat, setWeekDays }: Props) {
   const [shopInTime, setShopInTime] = useState<dayjs.Dayjs | null>(null);
@@ -29,7 +29,7 @@ function WorkDaysForm({ onlyweeksformat, setWeekDays }: Props) {
     newDevices: any
   ) => {
     if (newDevices.length) {
-      console.log("devices", newDevices);
+      console.log('devices', newDevices);
       setDevices(newDevices);
       setWeekDays(newDevices);
     }
@@ -102,7 +102,7 @@ function WorkDaysForm({ onlyweeksformat, setWeekDays }: Props) {
             </ToggleButton>
           </ToggleButtonGroup>
         </div>
-        {!onlyweeksformat &&
+        {!onlyweeksformat && (
           <>
             <div className="FormFields">
               <TimePickerField
@@ -151,7 +151,7 @@ function WorkDaysForm({ onlyweeksformat, setWeekDays }: Props) {
               />
             </div>
           </>
-        }
+        )}
       </div>
     </LocalizationProvider>
   );

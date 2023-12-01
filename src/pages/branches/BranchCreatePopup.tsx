@@ -40,15 +40,15 @@ function BranchCreatePopup({
 
   const onSubmit = (data: Tenant) => {
     // console.log("dataCREATE", data);
-    let details = {
+    const details = {
       developmentDomain: data.developmentDomain,
       email: data.email,
       firstName: data.firstName,
       lastName: data.lastName,
       liveDomain: data.liveDomain,
       tenantName: data.tenantName,
-      address: data.address
-    }
+      address: data.address,
+    };
     if (data.tenantName) {
       setOpenFormDialog(false);
       callback(details);
@@ -149,7 +149,7 @@ function BranchCreatePopup({
                 )}
               </FormControl>
             </div>
-            <div className='FormField'>
+            <div className="FormField">
               <FormControl className="FormControl" variant="standard">
                 <label className="FormLabel">Shop Address</label>
                 <Input

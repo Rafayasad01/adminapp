@@ -12,8 +12,8 @@ import Switch from '@mui/material/Switch';
 import TablePagination from '@mui/material/TablePagination';
 import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
-import { weekDays } from '../../../utils/constants';
 import { useForm } from 'react-hook-form';
+import { weekDays, NOT_AUTHORIZED_MESSAGE } from '../../../utils/constants';
 import TopBar from '../../../components/common/TopBar';
 import ActionMenu from '../../../components/common/ActionMenu';
 import CustomDialog from '../../../components/common/CustomDialog';
@@ -24,9 +24,12 @@ import { AppUserEmployees } from '../../../interfaces/app-user.interface';
 import { useAppSelector } from '../../../redux/redux-hooks';
 import Service from '../../../services/adminapp/adminAppointment';
 import PermissionPopup from '../../../utils/PermissionPopup';
-import { NOT_AUTHORIZED_MESSAGE } from '../../../utils/constants';
+
 import { listingRolePermission } from '../../../utils/helper';
-import { AppointmentProvider, AppointmentService } from '../../../interfaces/app.appointment';
+import {
+  AppointmentProvider,
+  AppointmentService,
+} from '../../../interfaces/app.appointment';
 
 function AppointmentServicePage() {
   const authState: any = useAppSelector((state: any) => state?.authState);
@@ -73,18 +76,18 @@ function AppointmentServicePage() {
       placeholder: 'Enter service name',
       register,
       error: errors.serviceName,
-      type: 'text'
+      type: 'text',
     },
     {
       fieldName: 'Select Your Provider',
       id: `providerName`,
-      register: register,
-      watch: watch,
-      setValue: setValue,
-      control: control,
+      register,
+      watch,
+      setValue,
+      control,
       error: errors.providerName,
-      defaultValue: "Select Provider",
-      options: { roles: providerLov, role: watch("providerName") },
+      defaultValue: 'Select Provider',
+      options: { roles: providerLov, role: watch('providerName') },
       type: 'select',
     },
     {
@@ -103,11 +106,10 @@ function AppointmentServicePage() {
       error: errors.serviceDesc,
       type: 'textarea',
       notRequired: true,
-    }
+    },
   ];
 
-  console.log("feeeeeeeees", providerLov);
-
+  console.log('feeeeeeeees', providerLov);
 
   const handleFormClickOpen = () => {
     setIsLoader(true);
@@ -115,7 +117,7 @@ function AppointmentServicePage() {
       Service.ServiceProviderLov(authState.user.tenant)
         .then((item: any) => {
           if (item.data.success) {
-            setProviderLov(item.data.data)
+            setProviderLov(item.data.data);
             setIsLoader(false);
             setOpenFormDialog(true);
           } else {
@@ -310,7 +312,7 @@ function AppointmentServicePage() {
   }, [emptyVariable]);
 
   const createFormHandler = (data: any) => {
-    console.log("==>", data);
+    console.log('==>', data);
     setIsLoader(true);
     const userData = {
       name: data.serviceName,
@@ -318,7 +320,7 @@ function AppointmentServicePage() {
       tenant: authState.user.tenant,
       appointmentProvider: data.providerName,
       fees: data.fees,
-      createdBy: authState.user.id
+      createdBy: authState.user.id,
     };
     Service.ServiceCreate(userData)
       .then((item) => {
@@ -360,7 +362,7 @@ function AppointmentServicePage() {
       appointmentProvider: data.providerName,
       desc: data.serviceDesc ? data.serviceDesc : null,
       fees: data.fees ? data.fees : '0',
-      updatedBy: authState.user.id
+      updatedBy: authState.user.id,
     };
 
     Service.ServiceUpdate(actionMenuItemid, userData)
@@ -404,8 +406,7 @@ function AppointmentServicePage() {
     if (openFormDialog) {
       setOpenFormDialog(false);
       createFormHandler(data);
-    }
-    else if (openEditFormDialog) {
+    } else if (openEditFormDialog) {
       setOpenEditFormDialog(false);
       updateFormHandler(data);
     }
@@ -513,7 +514,7 @@ function AppointmentServicePage() {
                   list.map((item: any, index: number) => {
                     return (
                       <tr key={item.id}>
-                        <td className='w-64'>
+                        <td className="w-64">
                           <div className="avatar flex flex-row items-center">
                             <div className="flex flex-col items-start justify-start">
                               <span className="text-sm font-semibold">
@@ -522,14 +523,14 @@ function AppointmentServicePage() {
                               <span className="text-xs font-normal text-[#6A6A6A]">
                                 {dayjs(item.createdDate).isValid()
                                   ? dayjs(item.createdDate)?.format(
-                                    'MMMM DD, YYYY'
-                                  )
+                                      'MMMM DD, YYYY'
+                                    )
                                   : '--'}
                               </span>
                             </div>
                           </div>
                         </td>
-                        <td className='w-[60%]'>{item.desc}</td>
+                        <td className="w-[60%]">{item.desc}</td>
                         <td>
                           {item.isActive ? (
                             <span className="badge badge-success">ACTIVE</span>

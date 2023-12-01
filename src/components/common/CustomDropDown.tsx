@@ -30,12 +30,14 @@ function CustomDropDown({
   defaultValue,
   customClassInputTitle,
   setValue,
-  alternativeId
+  alternativeId,
 }: Props) {
   return (
     <div className="">
       <div className="" style={{ paddingBottom: '3px' }}>
-        <span className={`FormLabel ${customClassInputTitle}`}>{inputTitle}</span>
+        <span className={`FormLabel ${customClassInputTitle}`}>
+          {inputTitle}
+        </span>
       </div>
       <div className="">
         <Controller
@@ -45,10 +47,10 @@ function CustomDropDown({
           rules={
             validateRequired
               ? {
-                validate: (value) => {
-                  return value !== 'none' || 'Select an option';
-                },
-              }
+                  validate: (value) => {
+                    return value !== 'none' || 'Select an option';
+                  },
+                }
               : {}
           }
           render={({ field, fieldState }) => (
@@ -57,16 +59,18 @@ function CustomDropDown({
                 fullWidth
                 variant="outlined"
                 style={{ border: '1px solid rgb(201, 201, 201)' }}
-                className={`fixed-height ${customWidth ? customWidth :"w-[100%]"}`}
+                className={`fixed-height ${customWidth || 'w-[100%]'}`}
                 labelId="demo-simple-select-label"
                 id={id}
                 {...field}
                 onChange={(event) => {
-                  alternativeId && setValue(alternativeId, [])
+                  alternativeId && setValue(alternativeId, []);
                   field.onChange(event);
                 }}
               >
-                <MenuItem value="none">{defaultValue ? `-- ${defaultValue} --` : `-- Select Role --`}</MenuItem>
+                <MenuItem value="none">
+                  {defaultValue ? `-- ${defaultValue} --` : `-- Select Role --`}
+                </MenuItem>
                 {options?.roles?.map((item: any, index: number) => (
                   <MenuItem key={index} value={item.id}>
                     {item.name}

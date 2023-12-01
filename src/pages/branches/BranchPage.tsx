@@ -141,7 +141,7 @@ function BranchPage() {
             setIsNotify(true);
             setNotifyMessage({
               text: item.data.message,
-              type: 'error'
+              type: 'error',
             });
           }
         })
@@ -351,8 +351,8 @@ function BranchPage() {
                               <span className="text-xs font-normal text-[#6A6A6A]">
                                 {dayjs(item.createdDate).isValid()
                                   ? dayjs(item.createdDate)?.format(
-                                    'MMMM DD, YYYY'
-                                  )
+                                      'MMMM DD, YYYY'
+                                    )
                                   : '--'}
                               </span>
                             </div>

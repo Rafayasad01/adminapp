@@ -32,7 +32,7 @@ type Props = {
   setError?: any;
   register?: any;
   setValue?: any;
-  watch?: any
+  watch?: any;
 };
 function CustomTimePicker({
   timePickerLabel,
@@ -45,24 +45,22 @@ function CustomTimePicker({
   id,
   register,
   setValue,
-  watch
+  watch,
 }: Props) {
-
   const [timePicker, setTimePicker] = useState<HTMLButtonElement | null>(null);
   const buttonElement = useRef(null);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setTimePicker(event.currentTarget);
     setError(id, {
-      type: "manual",
-      message: ""
-    })
+      type: 'manual',
+      message: '',
+    });
   };
   const handleClose = () => {
     setTimePicker(null);
   };
 
   // console.log("timePickerValue", errors);
-
 
   const open = Boolean(timePicker);
   const idProp = open ? id : undefined;
@@ -87,11 +85,16 @@ function CustomTimePicker({
         <Input
           name={id}
           // ref={buttonElement}
-          {...register(id, { required: `*Select ${(timePickerLabel).toLocaleLowerCase()}` })}
-          className="FormInput border-[2px] px-2 rounded-md"
+          {...register(id, {
+            required: `*Select ${timePickerLabel.toLocaleLowerCase()}`,
+          })}
+          className="FormInput rounded-md border-[2px] px-2"
           type="text"
           placeholder="HH:MM"
-          value={watch(id) && watch(id) !== null && (watch(id))?.format('HH:mm A') || ''}
+          value={
+            (watch(id) && watch(id) !== null && watch(id)?.format('HH:mm A')) ||
+            ''
+          }
           onChange={() => null}
           id={id}
           endAdornment={
@@ -108,7 +111,7 @@ function CustomTimePicker({
           disableUnderline
         />
         {errors && (
-          <span style={{ fontSize: '12px', color: "red" }} role="alert">
+          <span style={{ fontSize: '12px', color: 'red' }} role="alert">
             {errors[id]?.message}
           </span>
         )}
@@ -130,7 +133,7 @@ function CustomTimePicker({
               defaultValue={dayjs('2023-01-01T00:00')}
               onAccept={handleChange}
             />
-          </ LocalizationProvider>
+          </LocalizationProvider>
         </ThemeProvider>
       </Popover>
     </>
