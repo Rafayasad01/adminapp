@@ -172,12 +172,12 @@ function AppointmentVisitCreatePopup({
             onClose={handleFormClose}
             PaperProps={{
                 className: 'Dialog',
-                style: { maxWidth: '100%', maxHeight: 'auto' },
+                style: { maxWidth: '100%', minHeight: '545px', height: "550px" },
             }}
         >
             <div className="Content">
                 {isLoader ? <Loader /> :
-                    <form onSubmit={handleSubmit(onSubmit)}>
+                    <form className='px-2 overflow-auto' onSubmit={handleSubmit(onSubmit)}>
                         <div className="FormHeader">
                             <span className="Title">{"Add Visitor"}</span>
                         </div>

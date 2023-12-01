@@ -543,6 +543,7 @@ function AppointmentVisitPage() {
             <table className="table-border table-auto">
               <thead>
                 <tr>
+                  <th>Appointment Number</th>
                   <th>Service Name</th>
                   <th>Service Description</th>
                   <th>Service Contact Number</th>
@@ -557,6 +558,7 @@ function AppointmentVisitPage() {
                   list.map((item: any, index: number) => {
                     return (
                       <tr key={item.id}>
+                        <td className='font-bold text-sm'>{item.appointmentNumber}</td>
                         <td className='w-64'>
                           <div className="avatar flex flex-row items-center">
                             <div className="flex flex-col items-start justify-start">
