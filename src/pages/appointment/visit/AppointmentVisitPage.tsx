@@ -1,43 +1,33 @@
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import SearchIcon from '@mui/icons-material/Search';
-import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import FormControl from '@mui/material/FormControl';
 import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
-import Switch from '@mui/material/Switch';
 import TablePagination from '@mui/material/TablePagination';
 // import dayjs from 'dayjs';
-import React, { useEffect, useState } from 'react';
-import { format } from 'date-fns';
-import { useForm } from 'react-hook-form';
 import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
+import utc from 'dayjs/plugin/utc';
+import React, { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import TopBar from '../../../components/common/TopBar';
 import ActionMenu from '../../../components/common/ActionMenu';
-import CustomDialog from '../../../components/common/CustomDialog';
 import CustomText from '../../../components/common/CustomText';
 import Loader from '../../../components/common/Loader';
 import Notify from '../../../components/common/Notify';
-import { AppUserEmployees } from '../../../interfaces/app-user.interface';
+import TopBar from '../../../components/common/TopBar';
+import { AppointmentVisit } from '../../../interfaces/app.appointment';
 import { useAppSelector } from '../../../redux/redux-hooks';
 import Service from '../../../services/adminapp/adminAppointment';
-import PermissionPopup from '../../../utils/PermissionPopup';
 import { NOT_AUTHORIZED_MESSAGE } from '../../../utils/constants';
 import { listingRolePermission } from '../../../utils/helper';
-import {
-  AppointmentProvider,
-  AppointmentService,
-  AppointmentVisit,
-} from '../../../interfaces/app.appointment';
 import AppointmentVisitCreatePopup from './AppointmentVisitCreatePopup';
-import AppointmentVisitUpdatePopup from './AppointmentVisitUpdatePopup';
 import AppointmentVisitReschedulePopup from './AppointmentVisitReschedulePopup';
+import AppointmentVisitUpdatePopup from './AppointmentVisitUpdatePopup';
 // Extend dayjs with necessary plugins
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -61,7 +51,7 @@ function AppointmentVisitPage() {
   const [actionMenuAnchorEl, setActionMenuAnchorEl] =
     useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
-  const actionMenuOptions = ['Edit', 'Reschedule', 'Detail', 'Cancel'];
+  const actionMenuOptions = ['Detail', 'Reschedule', 'Edit', 'Cancel'];
 
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
@@ -298,6 +288,7 @@ function AppointmentVisitPage() {
       Service.VisitList(authState.user.tenant, page, rowsPerPage)
         .then((item: any) => {
           if (item.data.success) {
+            console.log('item.data.data.list::::::', item.data.data.list);
             setIsLoader(false);
             setList(item.data.data.list);
             setTotal(item.data.data.total);
@@ -448,43 +439,6 @@ function AppointmentVisitPage() {
       });
   };
 
-  const onSubmitDialogBox = (data: any) => {
-    if (openFormDialog) {
-      setOpenFormDialog(false);
-      // createFormHandler(data);
-    } else if (openEditFormDialog) {
-      setOpenEditFormDialog(false);
-      updateFormHandler(data);
-    }
-  };
-
-  const handleSwitchChange = (event: any, id: string) => {
-    if (listingRolePermission(dataRole, 'Employee Update Status')) {
-      const data = {
-        isActive: event.target.checked,
-        updatedBy: authState.user.id,
-      };
-      Service.ServiceUpdateStatus(id, data).then((updateItem) => {
-        if (updateItem.data.success) {
-          setList((newArr: any) => {
-            return newArr.map((item: any) => {
-              if (item.id === updateItem.data.data.id) {
-                item.isActive = updateItem.data.data.isActive;
-              }
-              return { ...item };
-            });
-          });
-        }
-      });
-    } else {
-      setIsNotify(true);
-      setNotifyMessage({
-        text: NOT_AUTHORIZED_MESSAGE,
-        type: 'warning',
-      });
-    }
-  };
-
   return isLoader ? (
     <Loader />
   ) : (
@@ -494,13 +448,13 @@ function AppointmentVisitPage() {
         setIsOpen={setIsNotify}
         displayMessage={notifyMessage}
       />
-      <TopBar title="Visit" />
+      <TopBar title="Appointment" />
       <div className="container m-auto mt-5">
         <div className="w-full rounded-lg bg-white shadow-lg">
           <div className="grid grid-cols-12 px-4 py-5">
             <div className="col-span-7">
               <span className="font-open-sans text-xl font-semibold text-[#252733]">
-                All Visits
+                All Appointments
               </span>
             </div>
             <div className="col-span-5">
@@ -549,12 +503,11 @@ function AppointmentVisitPage() {
             <table className="table-border table-auto">
               <thead>
                 <tr>
-                  <th>Appointment Number</th>
-                  <th>Service Name</th>
-                  <th>Service Description</th>
-                  <th>Service Contact Number</th>
-                  <th>Appointment Date</th>
-                  <th>Appointment Time</th>
+                  <th>#Number</th>
+                  <th>Name</th>
+                  <th>Phone</th>
+                  <th>Appoint Time</th>
+                  <th>Payment</th>
                   <th>Status</th>
                   <th>&nbsp;</th>
                 </tr>
@@ -576,32 +529,32 @@ function AppointmentVisitPage() {
                               <span className="text-xs font-normal text-[#6A6A6A]">
                                 {dayjs(item.createdDate).isValid()
                                   ? dayjs(item.createdDate)?.format(
-                                      'MMMM DD, YYYY'
+                                      'MMM DD, YYYY'
                                     )
                                   : '--'}
                               </span>
                             </div>
                           </div>
                         </td>
-                        <td className="">{item.note}</td>
                         <td className="">{item.phone}</td>
                         <td className="">
-                          {dayjs(item.appointmentDate).isValid()
-                            ? dayjs(item.appointmentDate)?.format(
-                                'MMMM DD, YYYY'
-                              )
-                            : '--'}
+                          {dayjs(item.appointmentTime).isValid() ? (
+                            <div className="flex flex-col">
+                              <span className="text-sm font-normal text-[#1A1A1A]">
+                                {dayjs(item.appointmentTime)?.format('hh:mm A')}
+                              </span>
+                              <span className="text-xs font-normal text-[#6A6A6A]">
+                                {dayjs(item.appointmentTime)?.format(
+                                  'ddd, MMM DD, YYYY'
+                                )}
+                              </span>
+                            </div>
+                          ) : (
+                            '----'
+                          )}
                         </td>
-                        <td className="">
-                          {/* {item.appointmentTime.slice(11, item.appointmentTime.indexOf('.'))
-                            + " " + dayjs(item.appointmentTime)?.format(
-                              'A'
-                            )
-                          } */}
-                          {/* {format(new Date(item.appointmentTime), 'p, dd/mm/yyyy')} */}
-                          {dayjs(item.appointmentTime).isValid()
-                            ? dayjs(item.appointmentTime)?.format('hh:mm A')
-                            : '--'}
+                        <td>
+                          ${Number(item.grandTotal.toString()).toFixed(2)}
                         </td>
                         <td>
                           <span

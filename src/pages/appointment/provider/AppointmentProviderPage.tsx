@@ -47,7 +47,7 @@ function AppointmentProviderPage() {
   const [actionMenuAnchorEl, setActionMenuAnchorEl] =
     useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
-  const actionMenuOptions = ['Edit', 'Schedule', 'Services', 'Delete'];
+  const actionMenuOptions = ['Services', 'Schedule', 'Edit', 'Delete'];
 
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);

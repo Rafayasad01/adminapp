@@ -48,163 +48,20 @@ dayjs.tz.setDefault('UTC');
 
 function AppointmentVisitDetailPage() {
   const { id } = useParams();
-  const authState: any = useAppSelector((state: any) => state?.authState);
   const dataRole = useAppSelector(
     (state: any) => state?.persisitReducer?.roleState?.role?.permissions
   );
-  const [search, setSearch] = useState<any>('');
   const [emptyVariable] = useState(null);
-  const [page, setPage] = useState(0);
   const [total, setTotal] = useState(0);
   const [list, setList] = useState<any>([]);
-  const [editDetails, setEditDetails] = useState<any>();
-
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const [actionMenuItemid, setActionMenuItemid] = React.useState('');
-  const [actionMenuAnchorEl, setActionMenuAnchorEl] =
-    useState<null | HTMLElement>(null);
-  const actionMenuOpen = Boolean(actionMenuAnchorEl);
-  const actionMenuOptions = ['Edit', 'Reschedule', 'Detail', 'Cancel'];
-
-  const [openFormDialog, setOpenFormDialog] = useState(false);
-  const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
-  const [openRescheduleFormDialog, setOpenRescheduleFormDialog] =
-    useState(false);
   const [isLoader, setIsLoader] = React.useState(true);
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
-  const [cancelDialogOpen, setCancelDialogOpen] = useState<boolean>(false);
-  const [dialogText, setDialogText] = useState<any>(
-    'Are you sure you want to delete this customer ?'
-  );
-  const [showPassword, setShowPassword] = useState(true);
-  const {
-    register,
-    handleSubmit,
-    watch,
-    reset,
-    getValues,
-    setValue,
-    formState: { errors },
-    control,
-  } = useForm<AppointmentVisit>();
 
   const componentRef = useRef();
   const handlePrint = useReactToPrint({
     content: (): any => componentRef.current,
   });
-
-  const inputFieldsData = [
-    {
-      fieldName: 'Visitor Name',
-      id: 'visitName',
-      placeholder: 'Enter Visitor name',
-      register,
-      error: errors.visitName,
-      type: 'text',
-    },
-    {
-      fieldName: 'Phone',
-      id: 'phone',
-      placeholder: 'Enter Phone Number',
-      register,
-      error: errors.phone,
-      maxLetterLimit: 11,
-      type: 'text',
-    },
-    {
-      fieldName: 'Visitor Description',
-      id: 'note',
-      placeholder: 'Enter Visitor Description',
-      register,
-      error: errors.note,
-      type: 'textarea',
-      notRequired: true,
-    },
-  ];
-
-  const handleFormClickOpen = () => {
-    if (listingRolePermission(dataRole, 'Employee Create')) {
-      setOpenFormDialog(true);
-    } else {
-      setIsNotify(true);
-      setNotifyMessage({
-        text: NOT_AUTHORIZED_MESSAGE,
-        type: 'warning',
-      });
-    }
-  };
-
-  const handleClickSearch = (event: any) => {
-    if (event.key === 'Enter') {
-      const searchTxt = event.target.value as string;
-      const newPage = 0;
-      setSearch(searchTxt);
-      setPage(newPage);
-      Service.ServiceSearchList(
-        authState.user.tenant,
-        searchTxt,
-        newPage,
-        rowsPerPage
-      ).then((item) => {
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      });
-    }
-  };
-
-  const handleChangePage = (
-    event: React.MouseEvent<HTMLButtonElement> | null,
-    newPage: number
-  ) => {
-    setPage(newPage);
-    // offset? ,limit rowsperpage hoga ofset page * rowsperPage
-    if (search === '' || search === null || search === undefined) {
-      Service.ServiceList(authState.user.tenant, newPage, rowsPerPage).then(
-        (item) => {
-          setList(item.data.data.list);
-          setTotal(item.data.data.total);
-        }
-      );
-    } else {
-      Service.ServiceSearchList(
-        authState.user.tenant,
-        search,
-        newPage,
-        rowsPerPage
-      ).then((item) => {
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      });
-    }
-  };
-
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const newRowperPage = parseInt(event.target.value, 10);
-    const newPage = 0;
-    setRowsPerPage(newRowperPage);
-    setPage(newPage);
-    if (search === '' || search === null || search === undefined) {
-      Service.ServiceList(authState.user.tenant, newPage, rowsPerPage).then(
-        (item) => {
-          setList(item.data.data.list);
-          setTotal(item.data.data.total);
-        }
-      );
-    } else {
-      Service.ServiceSearchList(
-        authState.user.tenant,
-        search,
-        newPage,
-        rowsPerPage
-      ).then((item) => {
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      });
-    }
-  };
 
   useEffect(() => {
     if (listingRolePermission(dataRole, 'Employee List')) {
@@ -236,167 +93,6 @@ function AppointmentVisitDetailPage() {
     }
   }, [emptyVariable]);
 
-  const createFormHandler = (data: any, type: string) => {
-    // console.log("dataaaaCREATE", data, type);
-    setIsLoader(true);
-    if (type === 'create') {
-      Service.VisitCreate(data)
-        .then((item) => {
-          if (item.data.success) {
-            setOpenFormDialog(false);
-            reset();
-            setIsLoader(false);
-            setIsNotify(true);
-            setNotifyMessage({
-              text: item.data.message,
-              type: 'success',
-            });
-            setList([item.data.data, ...list]);
-          } else {
-            reset();
-            setOpenFormDialog(false);
-            setIsLoader(false);
-            setIsNotify(true);
-            setNotifyMessage({
-              text: item.data.message,
-              type: 'error',
-            });
-          }
-        })
-        .catch((err) => {
-          setOpenFormDialog(false);
-          reset();
-          setIsLoader(false);
-          setIsNotify(true);
-          setNotifyMessage({
-            text: err.message,
-            type: 'error',
-          });
-        });
-    } else {
-      data.appointmentId = actionMenuItemid;
-      Service.VisitReschedule(data)
-        .then((item) => {
-          if (item.data.success) {
-            setOpenRescheduleFormDialog(false);
-            reset();
-            setIsLoader(false);
-            setIsNotify(true);
-            setNotifyMessage({
-              text: item.data.message,
-              type: 'success',
-            });
-            setList([item.data.data, ...list]);
-          } else {
-            reset();
-            setOpenRescheduleFormDialog(false);
-            setIsLoader(false);
-            setIsNotify(true);
-            setNotifyMessage({
-              text: item.data.message,
-              type: 'error',
-            });
-          }
-        })
-        .catch((err) => {
-          setOpenRescheduleFormDialog(false);
-          reset();
-          setIsLoader(false);
-          setIsNotify(true);
-          setNotifyMessage({
-            text: err.message,
-            type: 'error',
-          });
-        });
-    }
-  };
-
-  const updateFormHandler = (data: any) => {
-    console.log('datata', data);
-    setIsLoader(true);
-    Service.VisitUpdate(data)
-      .then((item) => {
-        if (item.data.success) {
-          console.log('UPDATED', item.data.data);
-          setOpenEditFormDialog(false);
-          setIsLoader(false);
-          setIsNotify(true);
-          setNotifyMessage({
-            text: item.data.message,
-            type: 'success',
-          });
-          for (let i = 0; i < list.length; i += 1) {
-            if (list[i].id === actionMenuItemid) {
-              list[i].name = item.data.data.name;
-              list[i].note = item.data.data.note;
-              list[i].phone = item.data.data.phone;
-              list[i].appointmentTime = item.data.data.appointmentTime;
-              list[i].appointmentDate = item.data.data.appointmentDate;
-              list[i].appointmentService = item.data.data.appointmentService;
-              list[i].appointmentProvider = item.data.data.appointmentProvider;
-            }
-          }
-          reset();
-        } else {
-          setOpenEditFormDialog(false);
-          reset();
-          setIsLoader(false);
-          setIsNotify(true);
-          setNotifyMessage({
-            text: item.data.message,
-            type: 'error',
-          });
-        }
-      })
-      .catch((err) => {
-        reset();
-        setOpenEditFormDialog(false);
-        setIsLoader(false);
-        setIsNotify(true);
-        setNotifyMessage({
-          text: err.message,
-          type: 'error',
-        });
-      });
-  };
-
-  const onSubmitDialogBox = (data: any) => {
-    if (openFormDialog) {
-      setOpenFormDialog(false);
-      // createFormHandler(data);
-    } else if (openEditFormDialog) {
-      setOpenEditFormDialog(false);
-      updateFormHandler(data);
-    }
-  };
-
-  const handleSwitchChange = (event: any, switchid: string) => {
-    if (listingRolePermission(dataRole, 'Employee Update Status')) {
-      const data = {
-        isActive: event.target.checked,
-        updatedBy: authState.user.id,
-      };
-      Service.ServiceUpdateStatus(switchid, data).then((updateItem) => {
-        if (updateItem.data.success) {
-          setList((newArr: any) => {
-            return newArr.map((item: any) => {
-              if (item.id === updateItem.data.data.id) {
-                item.isActive = updateItem.data.data.isActive;
-              }
-              return { ...item };
-            });
-          });
-        }
-      });
-    } else {
-      setIsNotify(true);
-      setNotifyMessage({
-        text: NOT_AUTHORIZED_MESSAGE,
-        type: 'warning',
-      });
-    }
-  };
-
   return isLoader ? (
     <Loader />
   ) : (
@@ -406,24 +102,9 @@ function AppointmentVisitDetailPage() {
         setIsOpen={setIsNotify}
         displayMessage={notifyMessage}
       />
-      <TopBar isNestedRoute title="Visitor Detail" />
+      <TopBar isNestedRoute title="Appointment" />
       <div className="container m-auto mt-5">
         <div className="w-full rounded-lg bg-white shadow-lg">
-          {/* <div className="p-3">
-            <div className="flex justify-end">
-              <CustomButton
-                buttonType="button"
-                title="Print Recipt"
-                type="submit"
-                className="btn-black-fill"
-                sx={{
-                  padding: '0.375rem 2rem !important',
-                  width: '10%',
-                  height: '35px',
-                }}
-              />
-            </div>
-          </div> */}
           <div className="grid grid-cols-12 gap-4 px-4 py-5">
             <div className="col-span-5 p-3">
               <div className="">
@@ -576,7 +257,11 @@ function AppointmentVisitDetailPage() {
                         </td>
                         <td>{item.name}</td>
                         <td>{item.desc ? item.desc : '--'}</td>
-                        <td>{item.fees ? `${item.fees}.00` : '--'}</td>
+                        <td>
+                          {item.fees
+                            ? `$${Number(item.fees).toFixed(2)}`
+                            : '--'}
+                        </td>
                       </tr>
                     );
                   })
@@ -596,33 +281,33 @@ function AppointmentVisitDetailPage() {
               </div>
               <div className="col-span-6 2xl:col-span-4">
                 <div className="rounded-md border-[1px] border-[#a6bac8] p-4">
-                  <p className="mb-2 text-base font-bold uppercase">
+                  <div className="mb-2 text-base font-bold uppercase">
                     Total Cost
-                  </p>
-                  <p className="text-sm font-medium">
-                    {'Sub Total Amount : '}
-                    <span className="font-bold">{list.subTotalAmount}</span>
-                  </p>
-                  <p className="text-sm font-medium">
-                    {'Urgent Fee : '}
-                    <span className="font-bold">{list.urgentFee}</span>
-                  </p>
-                  <p className="text-sm font-medium">
-                    {'Total Amount : '}
-                    <span className="font-bold">{list.totalAmount}</span>
-                  </p>
-                  <p className="text-sm font-medium">
-                    {'GST Percentage : '}
-                    <span className="font-bold">{list.gstPercentage}%</span>
-                  </p>
-                  <p className="text-sm font-medium">
-                    {'GST Amount : '}
-                    <span className="font-bold">{list.gstAmount}</span>
-                  </p>
-                  <p className="mt-2 text-lg font-medium">
-                    {'Grand Total Amount : '}
-                    <span className="font-bold">{list.grandTotal}</span>
-                  </p>
+                  </div>
+                  <div className="mb-2 flex justify-between text-sm font-medium">
+                    <span>Sub Total Amount :</span>
+                    <span className="font-bold">${list.subTotalAmount}</span>
+                  </div>
+                  <div className="mb-2 flex justify-between text-sm font-medium">
+                    <span>Urgent Fee :</span>
+                    <span className="font-bold">${list.urgentFee}</span>
+                  </div>
+                  <div className="mb-2 flex justify-between text-sm font-medium">
+                    <span>Total Amount :</span>
+                    <span className="font-bold">${list.totalAmount}</span>
+                  </div>
+                  <div className="mb-2 flex justify-between text-sm font-medium">
+                    <span>GST Percentage :</span>
+                    <span className="font-bold">${list.gstPercentage}%</span>
+                  </div>
+                  <div className="mb-2 flex justify-between text-sm font-medium">
+                    <span>GST Amount :</span>
+                    <span className="font-bold">${list.gstAmount}</span>
+                  </div>
+                  <div className="mt-2 flex justify-between text-lg font-medium">
+                    <span>Grand Total Amount :</span>
+                    <span className="font-bold">${list.grandTotal}</span>
+                  </div>
                 </div>
               </div>
             </div>

@@ -522,7 +522,7 @@ function AppointmentProviderServicesList() {
                           </div>
                         </td>
                         <td className="w-[50%]">{item.desc}</td>
-                        <td className="">{item.fees}</td>
+                        <td className="">${Number(item.fees).toFixed(2)}</td>
                         <td>
                           {item.isActive ? (
                             <span className="badge badge-success">ACTIVE</span>

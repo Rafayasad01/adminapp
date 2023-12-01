@@ -195,17 +195,17 @@ function AppointmentVisitCreatePopup({
             onSubmit={handleSubmit(onSubmit)}
           >
             <div className="FormHeader">
-              <span className="Title">Add Visitor</span>
+              <span className="Title">Add Appointment</span>
             </div>
             <div className="FormBody">
               <div className="FormFields">
                 <FormControl className="FormControl" variant="standard">
-                  <label className="FormLabel">Visitor Name</label>
+                  <label className="FormLabel">Name</label>
                   <Input
                     className="FormInput"
                     type="text"
                     id="visitName"
-                    placeholder="Enter visitor name"
+                    placeholder="Enter name"
                     disableUnderline
                     {...register('visitName', { required: true })}
                   />
@@ -214,12 +214,12 @@ function AppointmentVisitCreatePopup({
                       role="alert"
                       style={{ color: 'red', fontSize: '12px' }}
                     >
-                      *Visit name is required
+                      *Name is required
                     </span>
                   )}
                 </FormControl>
                 <FormControl className="FormControl" variant="standard">
-                  <label className="FormLabel">Phone Number</label>
+                  <label className="FormLabel">Phone</label>
                   <Input
                     className="FormInput"
                     {...register('phone', { required: true })}
@@ -233,7 +233,7 @@ function AppointmentVisitCreatePopup({
                       role="alert"
                       style={{ color: 'red', fontSize: '12px' }}
                     >
-                      *Phone is required
+                      *Phone Number is required
                     </span>
                   )}
                 </FormControl>
@@ -362,7 +362,7 @@ function AppointmentVisitCreatePopup({
                       {...register('isUrgent')}
                     />
                   }
-                  label="Enable Urgent Visit"
+                  label="Enable Urgent Appointment"
                 />
               </div>
               <div className="">

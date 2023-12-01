@@ -68,7 +68,6 @@ function AppointmentVisitUpdatePopup({
   const [endTime, setEndTime] = useState<dayjs.Dayjs | any>(null);
 
   const onSubmit = (data: AppointmentVisit) => {
-    console.log('dataSS', data);
     const visitorDetails = {
       appointmentId: formData.id,
       name: data.visitName,
@@ -163,17 +162,17 @@ function AppointmentVisitUpdatePopup({
         ) : (
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="FormHeader">
-              <span className="Title">Add Visitor</span>
+              <span className="Title">Update Appointment</span>
             </div>
             <div className="FormBody">
               <div className="FormFields">
                 <FormControl className="FormControl" variant="standard">
-                  <label className="FormLabel">Visitor Name</label>
+                  <label className="FormLabel">Name</label>
                   <Input
                     className="FormInput"
                     type="text"
                     id="visitName"
-                    placeholder="Enter visitor name"
+                    placeholder="Enter name"
                     disableUnderline
                     {...register('visitName', {
                       required: true,
@@ -185,12 +184,12 @@ function AppointmentVisitUpdatePopup({
                       role="alert"
                       style={{ color: 'red', fontSize: '12px' }}
                     >
-                      *Visit name is required
+                      *Name is required
                     </span>
                   )}
                 </FormControl>
                 <FormControl className="FormControl" variant="standard">
-                  <label className="FormLabel">Phone Number</label>
+                  <label className="FormLabel">Phone</label>
                   <Input
                     className="FormInput"
                     {...register('phone', {
@@ -207,7 +206,7 @@ function AppointmentVisitUpdatePopup({
                       role="alert"
                       style={{ color: 'red', fontSize: '12px' }}
                     >
-                      *Phone is required
+                      *Phone Number is required
                     </span>
                   )}
                 </FormControl>
@@ -330,47 +329,6 @@ function AppointmentVisitUpdatePopup({
                   )}
                 </FormControl>
               </div>
-              {/* <div className="FormField">
-                                <FormControlLabel
-                                    control={
-                                        <Checkbox
-                                            icon={
-                                                <RadioButtonUncheckedOutlinedIcon
-                                                    style={{ color: '#1D1D1D' }}
-                                                />
-                                            }
-                                            checkedIcon={
-                                                <CheckCircleOutlinedIcon style={{ color: '#1D1D1D' }} />
-                                            }
-                                            {...register('isCheckTimingSlot')}
-                                        />
-                                    }
-                                    label="Enable Timing Slot"
-                                />
-                            </div>
-                            {watch('isCheckTimingSlot') === true && (
-                                <div className="FormFields">
-                                    <FormControl className="FormControl" variant="standard">
-                                        <TimePicker
-                                            timePickerLabel={"Appointment Time"}
-                                            // timePickerSubLabel={"(Office in time)"}
-                                            timePickerValue={startTime}
-                                            setTimePickerValue={setStartTime}
-                                            id={"startTime"}
-                                        // setError={setError}
-                                        />
-                                    </FormControl>
-                                    <FormControl className="FormControl" variant="standard">
-                                        <CustomDateTimePicker
-                                            register={register}
-                                            id={"appointmentDate"}
-                                            error={errors.appointmentService}
-                                            inputTitle={"Appointmant Date"}
-                                            setValue={setValue}
-                                        />
-                                    </FormControl>
-                                </div>
-                            )} */}
             </div>
             <div className="FormFooter">
               <Button

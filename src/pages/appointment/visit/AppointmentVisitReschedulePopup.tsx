@@ -68,9 +68,10 @@ function AppointmentVisitReschedulePopup({
 
   const onSubmit = (data: AppointmentVisit) => {
     console.log('dataSS', data, startTime);
-    const formattedDate = `${dayjs(data.appointmentDate).isValid() &&
+    const formattedDate = `${
+      dayjs(data.appointmentDate).isValid() &&
       dayjs(data.appointmentDate)?.format('YYYY-MM-DD')
-      } ${dayjs(startTime).isValid() && dayjs(startTime)?.format('HH:mm:ss')}`;
+    } ${dayjs(startTime).isValid() && dayjs(startTime)?.format('HH:mm:ss')}`;
     const currentDate = dayjs();
     const formattedCurrentDate = currentDate.format('YYYY-MM-DD');
     const visitorDetails = {
@@ -197,19 +198,22 @@ function AppointmentVisitReschedulePopup({
         {isLoader ? (
           <Loader />
         ) : (
-          <form className='overflow-auto px-2' onSubmit={handleSubmit(onSubmit)}>
+          <form
+            className="overflow-auto px-2"
+            onSubmit={handleSubmit(onSubmit)}
+          >
             <div className="FormHeader">
-              <span className="Title">Add Reschedule</span>
+              <span className="Title">Appointment Reschedule</span>
             </div>
             <div className="FormBody">
               <div className="FormFields">
                 <FormControl className="FormControl" variant="standard">
-                  <label className="FormLabel">Visitor Name</label>
+                  <label className="FormLabel">Name</label>
                   <Input
                     className="FormInput"
                     type="text"
                     id="visitName"
-                    placeholder="Enter visitor name"
+                    placeholder="Enter name"
                     disableUnderline
                     {...register('visitName', { required: true })}
                   />
@@ -218,12 +222,12 @@ function AppointmentVisitReschedulePopup({
                       role="alert"
                       style={{ color: 'red', fontSize: '12px' }}
                     >
-                      *Visit name is required
+                      *Name is required
                     </span>
                   )}
                 </FormControl>
                 <FormControl className="FormControl" variant="standard">
-                  <label className="FormLabel">Phone Number</label>
+                  <label className="FormLabel">Phone</label>
                   <Input
                     className="FormInput"
                     {...register('phone', { required: true })}
@@ -237,7 +241,7 @@ function AppointmentVisitReschedulePopup({
                       role="alert"
                       style={{ color: 'red', fontSize: '12px' }}
                     >
-                      *Phone is required
+                      *Phone Number is required
                     </span>
                   )}
                 </FormControl>
@@ -365,7 +369,7 @@ function AppointmentVisitReschedulePopup({
                       {...register('isUrgent')}
                     />
                   }
-                  label="Enable Urgent Visit"
+                  label="Enable Urgent Appointment"
                 />
               </div>
               <div className="">
@@ -396,7 +400,7 @@ function AppointmentVisitReschedulePopup({
                       timePickerValue={startTime}
                       setTimePickerValue={setStartTime}
                       id="startTime"
-                    // setError={setError}
+                      // setError={setError}
                     />
                   </FormControl>
                   <FormControl className="FormControl" variant="standard">
