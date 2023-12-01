@@ -68,9 +68,10 @@ function AppointmentVisitReschedulePopup({
 
   const onSubmit = (data: AppointmentVisit) => {
     console.log('dataSS', data, startTime);
-    const formattedDate = `${dayjs(data.appointmentDate).isValid() &&
+    const formattedDate = `${
+      dayjs(data.appointmentDate).isValid() &&
       dayjs(data.appointmentDate)?.format('YYYY-MM-DD')
-      } ${dayjs(startTime).isValid() && dayjs(startTime)?.format('HH:mm:ss')}`;
+    } ${dayjs(startTime).isValid() && dayjs(startTime)?.format('HH:mm:ss')}`;
     const currentDate = dayjs();
     const formattedCurrentDate = currentDate.format('YYYY-MM-DD');
     const visitorDetails = {
@@ -197,7 +198,10 @@ function AppointmentVisitReschedulePopup({
         {isLoader ? (
           <Loader />
         ) : (
-          <form className='overflow-auto px-2' onSubmit={handleSubmit(onSubmit)}>
+          <form
+            className="overflow-auto px-2"
+            onSubmit={handleSubmit(onSubmit)}
+          >
             <div className="FormHeader">
               <span className="Title">Add Reschedule</span>
             </div>
@@ -396,7 +400,7 @@ function AppointmentVisitReschedulePopup({
                       timePickerValue={startTime}
                       setTimePickerValue={setStartTime}
                       id="startTime"
-                    // setError={setError}
+                      // setError={setError}
                     />
                   </FormControl>
                   <FormControl className="FormControl" variant="standard">

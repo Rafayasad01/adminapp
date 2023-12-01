@@ -16,6 +16,7 @@ type Props = {
   defaultValue?: string;
   setValue?: any;
   alternativeId?: string;
+  border?: string;
 };
 
 function CustomDropDown({
@@ -31,6 +32,7 @@ function CustomDropDown({
   customClassInputTitle,
   setValue,
   alternativeId,
+  border
 }: Props) {
   return (
     <div className="">
@@ -47,10 +49,10 @@ function CustomDropDown({
           rules={
             validateRequired
               ? {
-                  validate: (value) => {
-                    return value !== 'none' || 'Select an option';
-                  },
-                }
+                validate: (value) => {
+                  return value !== 'none' || 'Select an option';
+                },
+              }
               : {}
           }
           render={({ field, fieldState }) => (
@@ -58,7 +60,7 @@ function CustomDropDown({
               <Select
                 fullWidth
                 variant="outlined"
-                style={{ border: '1px solid rgb(201, 201, 201)' }}
+                style={{ border: border ? border : '1px solid rgb(201, 201, 201)' }}
                 className={`fixed-height ${customWidth || 'w-[100%]'}`}
                 labelId="demo-simple-select-label"
                 id={id}
