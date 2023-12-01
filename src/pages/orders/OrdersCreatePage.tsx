@@ -13,6 +13,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import dayjs from 'dayjs';
 import { SelectChangeEvent } from '@mui/material';
+import CircularProgress from '@mui/material/CircularProgress';
 
 import SearchIcon from '@mui/icons-material/Search';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
@@ -27,6 +28,7 @@ import FormLabel from '@mui/material/FormLabel';
 import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined';
 import RadioButtonUncheckedOutlinedIcon from '@mui/icons-material/RadioButtonUncheckedOutlined';
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 import DatePickerButton from './DatePickerButton';
 import AppUserService from '../../services/adminapp/adminAppUser';
 
@@ -38,6 +40,8 @@ import CustomMultipleSelectBox from '../../components/common/CustomMultipleSelec
 import { Order } from '../../interfaces/order.interface';
 import Service from '../../services/adminapp/adminOrders';
 import { useAppSelector } from '../../redux/redux-hooks';
+import Loader from '../../components/common/Loader2';
+import Notify from '../../components/common/Notify';
 
 function OrdersCreatePage() {
   const [catList, setCatList] = useState<any>([]);
@@ -65,6 +69,7 @@ function OrdersCreatePage() {
     control,
   } = useForm<Order>();
 
+  const navigate = useNavigate();
   const [isLoader, setIsLoader] = useState(true);
   const [isNotify, setIsNotify] = useState(false);
   const [notifyMessage, setNotifyMessage] = useState({});
@@ -79,62 +84,80 @@ function OrdersCreatePage() {
   const grandTotal = gstAmount + totalAmount;
 
   const onSubmit = () => {
-    const anonIdentidier = authState?.user?.username?.split('@')[0];
+    if (itemList?.length > 0 && totalAmount > 0) {
+      setIsLoader(true);
+      const anonIdentidier = authState?.user?.username?.split('@')[0];
+      const payload = {
+        identifier:
+          isExistingUser !== 'true'
+            ? `${anonIdentidier}@shop.com`
+            : userIdentifier,
+      };
 
-    const payload = {
-      identifier:
-        isExistingUser !== 'true'
-          ? `${anonIdentidier}@shop.com`
-          : userIdentifier,
-    };
-
-    AppUserService.appLogin(payload)
-      .then((res) => {
-        if (res.data.success) {
-          const cartPayload = {
-            tenant: res.data.data.tenant,
-            appUser: res.data.data.id,
-          };
-          Service.OrderGetCart(cartPayload).then((item: any) => {
-            console.log('ITTTTTTEM', item);
-            if (item.data.success) {
-              const updatedCartPayload = {
-                cartId: item.data.data.cart.id,
-                appUser: item.data.data.cart.appUser,
-                tenant: item.data.data.cart.tenant,
-                appUserAddress: res.data.data.appUserAddress.id,
-                pickupDateTime: new Date(),
-                dropDateTime: new Date(),
-                promoCode: '',
-                products: itemList?.map((items: any) => ({
-                  id: items.id,
-                  quantity: items.quantity,
-                })),
-              };
-              Service.OrderUpdateCart(updatedCartPayload).then((cartRes) => {
-                if (res.data.success) {
-                  const orderPlace = {
-                    cartId: cartRes.data.data.cart.id,
-                    tenant: cartRes.data.data.cart.tenant,
-                    appUser: cartRes.data.data.cart.appUser,
-                  };
-                  Service.OrderPlace(updatedCartPayload).then((orderItem) => {
-                    if (res.data.success) {
-                      console.log('Order place', orderItem);
-                    }
-                    console.log('Cart REs', cartRes);
-                  });
-                }
-                console.log('Cart REs', cartRes);
-              });
-            }
-          });
-        }
-        console.log('RESS', res.data);
-      })
-      .catch((err) => console.log('Err', err));
-
-    console.log('result', itemList, isExistingUser, userIdentifier);
+      AppUserService.appLogin(payload)
+        .then((res) => {
+          if (res.data.success) {
+            const cartPayload = {
+              tenant: res.data.data.tenant,
+              appUser: res.data.data.id,
+            };
+            Service.OrderGetCart(cartPayload).then((item: any) => {
+              // console.log('ITTTTTTEM', item);
+              if (item.data.success) {
+                const updatedCartPayload = {
+                  cartId: item.data.data.cart.id,
+                  appUser: item.data.data.cart.appUser,
+                  tenant: item.data.data.cart.tenant,
+                  appUserAddress: res.data.data.appUserAddress.id,
+                  pickupDateTime: new Date(),
+                  dropDateTime: new Date(),
+                  promoCode: '',
+                  products: itemList?.map((items: any) => ({
+                    id: items.id,
+                    quantity: items.quantity,
+                  })),
+                };
+                Service.OrderUpdateCart(updatedCartPayload).then((cartRes) => {
+                  if (res.data.success) {
+                    const orderPlace = {
+                      cartId: cartRes.data.data.cart.id,
+                      tenant: cartRes.data.data.cart.tenant,
+                      appUser: cartRes.data.data.cart.appUser,
+                    };
+                    Service.OrderPlace(updatedCartPayload).then((orderItem) => {
+                      if (res.data.success) {
+                        setIsLoader(false);
+                        // console.log('Order place', orderItem);
+                        navigate(-1);
+                      }
+                      // console.log('Cart REs', cartRes);
+                    });
+                  }
+                  // console.log('Cart REs', cartRes);
+                });
+              }
+            });
+          }
+          // console.log('RESS', res.data);
+        })
+        .catch((err) => console.log('Err', err));
+    }
+    else if (itemList?.length <= 0) {
+      setIsLoader(false);
+      setIsNotify(true);
+      setNotifyMessage({
+        text: "Select atleast one category item",
+        type: 'info',
+      });
+    }
+    else if (totalAmount <= 0) {
+      setIsLoader(false);
+      setIsNotify(true);
+      setNotifyMessage({
+        text: "Total amount is $0.00, increase your quantity",
+        type: 'info',
+      });
+    }
   };
 
   const handlePickUpTimeChange = (value: dayjs.Dayjs | null) => {
@@ -278,14 +301,20 @@ function OrdersCreatePage() {
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <Notify
+        isOpen={isNotify}
+        setIsOpen={setIsNotify}
+        displayMessage={notifyMessage}
+      />
       <TopBar isNestedRoute title="New Order" />
       <div className="container mt-3">
         <div className="grid grid-cols-12 gap-3 py-5">
           <div className="col-span-7 rounded-lg bg-white py-5 px-4 shadow-lg">
-            <div className="flex items-center">
+            <div className="flex items-center justify-center">
               <div className="mx-2">
                 <FormControl className="FormControl" variant="standard">
                   <CustomDropDown
+                    border='1px'
                     validateRequired
                     customWidth="w-[300px]"
                     id="category"
@@ -297,12 +326,14 @@ function OrdersCreatePage() {
                     options={{ roles: catList }}
                     customClassInputTitle="font-bold"
                     inputTitle=""
+                    defaultValue='Select Category'
                   />
                 </FormControl>
               </div>
               <div>
                 <FormControl className="FormControl" variant="standard">
                   <CustomMultipleSelectBox
+                    border='1px'
                     callback={handleMultipleSelectCallback}
                     validateRequired
                     customWidth="w-[300px]"
@@ -314,6 +345,7 @@ function OrdersCreatePage() {
                     options={{ roles: catItemList }}
                     customClassInputTitle="font-bold"
                     inputTitle=""
+                    defaultVal='-- Select Category items --'
                   />
                 </FormControl>
               </div>
@@ -581,12 +613,17 @@ function OrdersCreatePage() {
                 </div>
               </div>
               <Button
+                disabled={isLoader}
                 type="button"
                 onClick={onSubmit}
                 color="inherit"
                 className="w-full rounded-lg bg-neutral-900 font-open-sans text-base font-semibold text-gray-50"
               >
-                Submit
+                {isLoader ? (
+                  <CircularProgress size="25px" color="inherit" />
+                ) : (
+                  <span>Submit</span>
+                )}
               </Button>
             </div>
           </div>

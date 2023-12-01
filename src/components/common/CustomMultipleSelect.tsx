@@ -31,6 +31,8 @@ type Props = {
   validateRequired?: any;
   setValue?: any;
   callback?: (...args: any[]) => any;
+  defaultVal?: string;
+  border?: string;
 };
 
 function CustomMultipleSelectBox({
@@ -46,6 +48,8 @@ function CustomMultipleSelectBox({
   customWidth,
   options,
   register,
+  defaultVal,
+  border
 }: Props) {
   console.log('optionsss', options);
   return (
@@ -64,19 +68,18 @@ function CustomMultipleSelectBox({
         rules={
           validateRequired
             ? {
-                validate: (val) => {
-                  return val.length > 0 || 'Select an option';
-                },
-              }
+              validate: (val) => {
+                return val.length > 0 || 'Select an option';
+              },
+            }
             : {}
         }
         render={({ field, fieldState }) => (
           <>
             <Select
               variant="outlined"
-              style={{ border: '1px solid rgb(201, 201, 201)' }}
-              className={`fixed-height ${customWidth || 'w-[100%]'} `}
-              labelId="demo-simple-select-label"
+              style={{ border: border ? border : '1px solid rgb(201, 201, 201)' }}
+              className={`fixed-height ${customWidth || 'w-[100%]'} outline-none`}
               multiple
               displayEmpty
               id={id}
@@ -85,10 +88,10 @@ function CustomMultipleSelectBox({
                 field.onChange(event);
                 callback && callback(event);
               }}
-              input={<OutlinedInput label="Name" />}
+              input={<OutlinedInput />}
               renderValue={(selected) => {
                 if (selected?.length === 0) {
-                  return <span>-- Select Services --</span>;
+                  return <span>{defaultVal ? defaultVal : `-- Select Services --`}</span>;
                 }
                 return selected
                   ?.map(
