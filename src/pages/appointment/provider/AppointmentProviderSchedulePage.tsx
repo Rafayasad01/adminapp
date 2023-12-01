@@ -350,7 +350,7 @@ function AppointmentProviderSchedulePage() {
     }, [emptyVariable]);
 
     const createFormHandler = (data: any) => {
-        setIsLoader(true);
+        // setIsLoader(true);
         const userData = {
             startTime: startTime.format('YYYY-MM-DD HH:mm:ss'),
             endTime: endTime.format('YYYY-MM-DD HH:mm:ss'),

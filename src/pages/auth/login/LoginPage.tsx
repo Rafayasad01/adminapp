@@ -45,7 +45,6 @@ function LoginPage() {
     setIsLoader(true);
     const user: any = await auth.loginService(userData);
     if (user && user.data.success) {
-      console.log('rolee', user.data.data);
       setIsLoader(false);
       const newUserData = user.data.data;
       setToken(newUserData.token);

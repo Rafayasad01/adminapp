@@ -30,11 +30,11 @@ type Props = {
     error?: any;
     validateRequired?: any;
     setValue?: any
+    callback: (...args: any[]) => any;
 }
 
-const CustomMultipleSelectBox = ({ setValue, customClassInputTitle, control, id, value, error, validateRequired, inputTitle, customWidth, options, register, }: Props) => {
-    console.log("otirion", options);
-
+const CustomMultipleSelectBox = ({ callback, setValue, customClassInputTitle, control, id, value, error, validateRequired, inputTitle, customWidth, options, register, }: Props) => {
+    console.log("optionsss", options);
     return (
         <div>
             <div className="" style={{ paddingBottom: '3px' }}>
@@ -48,7 +48,6 @@ const CustomMultipleSelectBox = ({ setValue, customClassInputTitle, control, id,
                     validateRequired
                         ? {
                             validate: (value) => {
-                                console.log("valllala", value);
 
                                 return value.length > 0 || 'Select an option';
                             },
@@ -60,7 +59,7 @@ const CustomMultipleSelectBox = ({ setValue, customClassInputTitle, control, id,
                         <Select
                             variant="outlined"
                             style={{ border: '1px solid rgb(201, 201, 201)' }}
-                            className="fixed-height w-[100%]"
+                            className={`fixed-height ${customWidth ? customWidth : "w-[100%]"} `}
                             labelId="demo-simple-select-label"
                             multiple
                             displayEmpty
@@ -68,18 +67,16 @@ const CustomMultipleSelectBox = ({ setValue, customClassInputTitle, control, id,
                             {...field}
                             onChange={(event) => {
                                 field.onChange(event);
+                                callback && callback(event);
                             }}
                             input={<OutlinedInput label="Name" />}
                             renderValue={(selected) => {
-                                console.log("slected", selected, options);
-
                                 if (selected?.length === 0) {
                                     return <span>{'-- Select Services --'}</span>;
                                 }
                                 return selected?.map((selectedId: any) =>
                                     options?.roles?.find((item: any) => item.id === selectedId)?.name
-                                )
-                                    .join(', ');
+                                ).join(', ');
                             }}
                             MenuProps={MenuProps}
                         >

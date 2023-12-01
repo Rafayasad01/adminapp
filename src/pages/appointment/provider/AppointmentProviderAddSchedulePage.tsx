@@ -174,14 +174,13 @@ function AppointmentProviderAddSchedulePage() {
             };
             parent.workDays.push(dataItem);
         });
-        navigate(-1);
         Service.ProviderScheduleCreate(parent)
             .then((item: any) => {
                 if (item.data.success) {
                     console.log('CREATED', item.data);
                     reset();
                     setText(item.data.message);
-                    navigate(`../schedule/${id}`);
+                    navigate(-1);
                 } else {
                     setIsLoader(false);
                     setIsNotify(true);

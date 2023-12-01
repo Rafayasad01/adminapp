@@ -198,14 +198,12 @@ function Sidebar() {
   const socialItems = useAppSelector((state: any) => state?.persisitReducer?.appState?.UserItems);
   const logo = useAppSelector((state: any) => state?.persisitReducer?.appState?.logo);
 
-  console.log("userData", socialItems);
 
   const [list, setList] = useState<any>(null);
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
   const authState: any = useAppSelector((state: any) => state?.authState);
   const dataRole = useAppSelector((state: any) => state);
   const [emptyVariable] = useState(null);
-  console.log("dataaa", dataRole);
 
   const dispatch = useAppDispatch();
   const logOut = () => {

@@ -6,6 +6,7 @@ import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
 import React, { useEffect, useState } from 'react';
+import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import { useNavigate } from 'react-router-dom';
 
 import MoreVertIcon from '@mui/icons-material/MoreVert';
@@ -29,6 +30,7 @@ import {
   ORDER_STATUS_PROCESSING,
 } from '../../utils/constants';
 import { CheckRolePermission, listingRolePermission } from '../../utils/helper';
+import Button from '@mui/material/Button';
 
 function OrdersPage() {
   const authState: any = useAppSelector((state) => state?.authState);
@@ -253,13 +255,13 @@ function OrdersPage() {
       <div className="container mt-5">
         <div className="w-full rounded-lg bg-white shadow-lg">
           <div className="grid grid-cols-12 px-4 py-5">
-            <div className="col-span-3">
+            <div className="col-span-7">
               <span className="font-open-sans text-xl font-semibold text-[#252733]">
                 All Orders
               </span>
             </div>
-            <div className="col-span-6">
-              <div className="flex flex-row gap-3">
+            <div className="col-span-5">
+              <div className="flex flex-row justify-end gap-3">
                 <FormControl
                   className="search-grey-outline placeholder-grey w-60"
                   variant="filled"
@@ -274,9 +276,7 @@ function OrdersPage() {
                         HTMLInputElement | HTMLTextAreaElement
                       >
                     ) => {
-                      if (event.key === 'Enter') {
-                        handleClickSearch(event);
-                      }
+                      handleClickSearch(event);
                     }}
                     endAdornment={
                       <InputAdornment position="end">
@@ -292,38 +292,13 @@ function OrdersPage() {
                     disableUnderline
                   />
                 </FormControl>
-                {/* <Select
-                  className="select-grey-outline h-10 w-36"
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  value={status}
-                  onChange={handleStatusChange}
-                >
-                  <MenuItem value="status">Status</MenuItem>
-                </Select>
-                <Select
-                  className=" select-grey-outline mr-3 h-10 w-36"
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  value={time}
-                  onChange={handleTimeChange}
-                >
-                  <MenuItem value="time">Time</MenuItem>
-                </Select> */}
-              </div>
-            </div>
-            <div className="col-span-3">
-              <div className="flex flex-row">
-                {/* <Button variant="contained" className="btn-black-outline mr-3">
-                  Export to CSV
-                </Button>
                 <Button
                   variant="contained"
                   className="btn-black-fill btn-icon"
-                  onClick={addRouteHandler}
+                  onClick={() => navigate("./create")}
                 >
                   <AddOutlinedIcon /> Add New
-                </Button> */}
+                </Button>
               </div>
             </div>
           </div>

@@ -57,7 +57,7 @@ function CustomDropDown({
                 fullWidth
                 variant="outlined"
                 style={{ border: '1px solid rgb(201, 201, 201)' }}
-                className="fixed-height w-[100%]"
+                className={`fixed-height ${customWidth ? customWidth :"w-[100%]"}`}
                 labelId="demo-simple-select-label"
                 id={id}
                 {...field}
