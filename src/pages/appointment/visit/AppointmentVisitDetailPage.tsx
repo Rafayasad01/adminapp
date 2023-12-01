@@ -409,7 +409,7 @@ function AppointmentVisitDetailPage() {
       <TopBar isNestedRoute title="Visitor Detail" />
       <div className="container m-auto mt-5">
         <div className="w-full rounded-lg bg-white shadow-lg">
-          <div className="p-3">
+          {/* <div className="p-3">
             <div className="flex justify-end">
               <CustomButton
                 buttonType="button"
@@ -423,7 +423,7 @@ function AppointmentVisitDetailPage() {
                 }}
               />
             </div>
-          </div>
+          </div> */}
           <div className="grid grid-cols-12 gap-4 px-4 py-5">
             <div className="col-span-5 p-3">
               <div className="">
@@ -586,7 +586,7 @@ function AppointmentVisitDetailPage() {
               </tbody>
             </table>
             <div className="mt-10 grid grid-cols-12 gap-4">
-              <div className="col-span-5 2xl:col-span-8">
+              <div className="col-span-6 2xl:col-span-8">
                 <div className="w-72 rounded-md border-[1px] border-[#a6bac8] p-4">
                   <p className="mb-2 text-base font-bold uppercase">Notes</p>
                   <span className="text-sm">
@@ -594,7 +594,7 @@ function AppointmentVisitDetailPage() {
                   </span>
                 </div>
               </div>
-              <div className="col-span-5 2xl:col-span-4">
+              <div className="col-span-6 2xl:col-span-4">
                 <div className="rounded-md border-[1px] border-[#a6bac8] p-4">
                   <p className="mb-2 text-base font-bold uppercase">
                     Total Cost
