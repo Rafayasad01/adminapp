@@ -40,6 +40,7 @@ import AppointmentVisitCreatePopup from './AppointmentVisitCreatePopup';
 import AppointmentVisitUpdatePopup from './AppointmentVisitUpdatePopup';
 import AppointmentVisitReschedulePopup from './AppointmentVisitReschedulePopup';
 import CustomButton from '../../../components/common/CustomButton';
+import MyPrintComponent from '../../../components/common/CustomPrintLayout/CustomPrintLayout';
 // import MyPrintComponent from './print';
 // Extend dayjs with necessary plugins
 dayjs.extend(utc);
@@ -409,21 +410,7 @@ function AppointmentVisitDetailPage() {
       <TopBar isNestedRoute title="Visitor Detail" />
       <div className="container m-auto mt-5">
         <div className="w-full rounded-lg bg-white shadow-lg">
-          {/* <div className="p-3">
-            <div className="flex justify-end">
-              <CustomButton
-                buttonType="button"
-                title="Print Recipt"
-                type="submit"
-                className="btn-black-fill"
-                sx={{
-                  padding: '0.375rem 2rem !important',
-                  width: '10%',
-                  height: '35px',
-                }}
-              />
-            </div>
-          </div> */}
+          {/* <MyPrintComponent /> */}
           <div className="grid grid-cols-12 gap-4 px-4 py-5">
             <div className="col-span-5 p-3">
               <div className="">
