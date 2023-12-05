@@ -13,13 +13,14 @@ import TablePagination from '@mui/material/TablePagination';
 // import dayjs from 'dayjs';
 import React, { useEffect, useState, useRef } from 'react';
 import { format } from 'date-fns';
-import { useReactToPrint } from 'react-to-print';
+import ReactToPrint, { useReactToPrint } from 'react-to-print';
 import { useForm } from 'react-hook-form';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import { useParams } from 'react-router-dom';
 import TopBar from '../../../components/common/TopBar';
+import PrintOutlinedIcon from '@mui/icons-material/PrintOutlined';
 import ActionMenu from '../../../components/common/ActionMenu';
 import CustomDialog from '../../../components/common/CustomDialog';
 import CustomText from '../../../components/common/CustomText';
@@ -40,6 +41,7 @@ import AppointmentVisitCreatePopup from './AppointmentVisitCreatePopup';
 import AppointmentVisitUpdatePopup from './AppointmentVisitUpdatePopup';
 import AppointmentVisitReschedulePopup from './AppointmentVisitReschedulePopup';
 import CustomButton from '../../../components/common/CustomButton';
+import CustomPrintLayout from '../../../utils/CustomPrintLayout/CustomPrintLayout';
 // import MyPrintComponent from './print';
 // Extend dayjs with necessary plugins
 dayjs.extend(utc);
@@ -58,10 +60,10 @@ function AppointmentVisitDetailPage() {
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
 
-  const componentRef = useRef();
-  const handlePrint = useReactToPrint({
-    content: (): any => componentRef.current,
-  });
+  // const componentRef = useRef();
+  // const handlePrint = useReactToPrint({
+  //   content: (): any => componentRef.current,
+  // });
 
   useEffect(() => {
     if (listingRolePermission(dataRole, 'Employee List')) {
@@ -93,6 +95,20 @@ function AppointmentVisitDetailPage() {
     }
   }, [emptyVariable]);
 
+  const ref = useRef<any>(null);
+  const [isPrintEnabled, setPrintEnabled] = useState<any>(false);
+
+  // const componentRef = useRef<any>();
+  // const handlePrint = useReactToPrint({
+  //   content: (): any => componentRef.current
+  // });
+
+
+
+
+
+
+
   return isLoader ? (
     <Loader />
   ) : (
@@ -105,6 +121,17 @@ function AppointmentVisitDetailPage() {
       <TopBar isNestedRoute title="Appointment" />
       <div className="container m-auto mt-5">
         <div className="w-full rounded-lg bg-white shadow-lg">
+          <div className='px-7 py-3 flex justify-between'>
+            <div>
+              <span className='font-open-sans text-2xl font-bold text-[#252733]'>Details</span>
+            </div>
+            <div>
+              <CustomPrintLayout
+                isPrintEnabled={isPrintEnabled}
+                setPrintEnabled={setPrintEnabled}
+                data={list} />
+            </div>
+          </div>
           <div className="grid grid-cols-12 gap-4 px-4 py-5">
             <div className="col-span-5 p-3">
               <div className="">
@@ -138,7 +165,7 @@ function AppointmentVisitDetailPage() {
                   <span className="text-sm">
                     {list?.appointmentTime
                       ? dayjs(list?.appointmentTime).isValid() &&
-                        dayjs(list?.appointmentTime).format('hh:mm A')
+                      dayjs(list?.appointmentTime).format('hh:mm A')
                       : '--'}
                   </span>
                 </div>
@@ -147,7 +174,7 @@ function AppointmentVisitDetailPage() {
                   <span className="text-sm">
                     {list?.appointmentTime
                       ? dayjs(list?.appointmentTime).isValid() &&
-                        dayjs(list?.appointmentTime).format('YYYY-MM-DD')
+                      dayjs(list?.appointmentTime).format('YYYY-MM-DD')
                       : '--'}
                   </span>
                 </div>
@@ -205,11 +232,11 @@ function AppointmentVisitDetailPage() {
                   <span className="text-sm">
                     {list?.appointmentProvider?.createdDate
                       ? dayjs(
-                          list?.appointmentProvider?.createdDate
-                        ).isValid() &&
-                        dayjs(list?.appointmentProvider?.createdDate).format(
-                          'hh:mm A'
-                        )
+                        list?.appointmentProvider?.createdDate
+                      ).isValid() &&
+                      dayjs(list?.appointmentProvider?.createdDate).format(
+                        'hh:mm A'
+                      )
                       : '--'}
                   </span>
                 </div>
@@ -248,8 +275,8 @@ function AppointmentVisitDetailPage() {
                               <span className="text-xs font-normal text-[#6A6A6A]">
                                 {dayjs(item.createdDate).isValid()
                                   ? dayjs(item.createdDate)?.format(
-                                      'MMMM DD, YYYY'
-                                    )
+                                    'MMMM DD, YYYY'
+                                  )
                                   : '--'}
                               </span>
                             </div>

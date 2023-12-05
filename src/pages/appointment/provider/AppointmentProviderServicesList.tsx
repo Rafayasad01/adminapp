@@ -99,11 +99,9 @@ function AppointmentProviderServicesList() {
     },
   ];
 
-  console.log('feeeeeeeees', providerLov);
-
   const handleFormClickOpen = () => {
     setIsLoader(true);
-    if (listingRolePermission(dataRole, 'Employee Create')) {
+    if (listingRolePermission(dataRole, 'Appointment Provider Service Create')) {
       Service.ServiceProviderLov(authState.user.tenant)
         .then((item: any) => {
           if (item.data.success) {
@@ -210,7 +208,7 @@ function AppointmentProviderServicesList() {
 
   const manuHandler = (option: string) => {
     if (option === 'Edit') {
-      if (listingRolePermission(dataRole, 'Employee Update')) {
+      if (listingRolePermission(dataRole, 'Appointment Provider Service Edit')) {
         setIsLoader(true);
         Service.ServiceEdit(actionMenuItemid).then((item: any) => {
           if (item.data.success) {
@@ -230,7 +228,7 @@ function AppointmentProviderServicesList() {
         });
       }
     } else if (option === 'Delete') {
-      if (listingRolePermission(dataRole, 'Employee delete')) {
+      if (listingRolePermission(dataRole, 'Appointment Provider Service Delete')) {
         setIsLoader(true);
         const data = {
           updatedBy: authState.user.id,
@@ -271,7 +269,7 @@ function AppointmentProviderServicesList() {
   };
 
   useEffect(() => {
-    if (listingRolePermission(dataRole, 'Employee List')) {
+    if (listingRolePermission(dataRole, 'Appointment Provider Service List')) {
       Service.ServiceList(providerId, page, rowsPerPage)
         .then((item: any) => {
           if (item.data.success) {
@@ -397,13 +395,21 @@ function AppointmentProviderServicesList() {
       setOpenFormDialog(false);
       createFormHandler(data);
     } else if (openEditFormDialog) {
-      setOpenEditFormDialog(false);
-      updateFormHandler(data);
+      if (listingRolePermission(dataRole, 'Appointment Provider Service Update')) {
+        setOpenEditFormDialog(false);
+        updateFormHandler(data);
+      } else {
+        setIsNotify(true);
+        setNotifyMessage({
+          text: NOT_AUTHORIZED_MESSAGE,
+          type: 'warning',
+        });
+      }
     }
   };
 
   const handleSwitchChange = (event: any, id: string) => {
-    if (listingRolePermission(dataRole, 'Employee Update Status')) {
+    if (listingRolePermission(dataRole, 'Appointment Provider Service Update Status')) {
       const data = {
         isActive: event.target.checked,
         updatedBy: authState.user.id,
@@ -514,8 +520,8 @@ function AppointmentProviderServicesList() {
                               <span className="text-xs font-normal text-[#6A6A6A]">
                                 {dayjs(item.createdDate).isValid()
                                   ? dayjs(item.createdDate)?.format(
-                                      'MMMM DD, YYYY'
-                                    )
+                                    'MMMM DD, YYYY'
+                                  )
                                   : '--'}
                               </span>
                             </div>
