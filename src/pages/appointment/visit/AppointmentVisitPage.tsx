@@ -76,37 +76,8 @@ function AppointmentVisitPage() {
     control,
   } = useForm<AppointmentVisit>();
 
-  const inputFieldsData = [
-    {
-      fieldName: 'Visitor Name',
-      id: 'visitName',
-      placeholder: 'Enter Visitor name',
-      register,
-      error: errors.visitName,
-      type: 'text',
-    },
-    {
-      fieldName: 'Phone',
-      id: 'phone',
-      placeholder: 'Enter Phone Number',
-      register,
-      error: errors.phone,
-      maxLetterLimit: 11,
-      type: 'text',
-    },
-    {
-      fieldName: 'Visitor Description',
-      id: 'note',
-      placeholder: 'Enter Visitor Description',
-      register,
-      error: errors.note,
-      type: 'textarea',
-      notRequired: true,
-    },
-  ];
-
   const handleFormClickOpen = () => {
-    if (listingRolePermission(dataRole, 'Employee Create')) {
+    if (listingRolePermission(dataRole, 'Appointment Create')) {
       setOpenFormDialog(true);
     } else {
       setIsNotify(true);
@@ -190,7 +161,7 @@ function AppointmentVisitPage() {
 
   const manuHandler = (option: string) => {
     if (option === 'Edit') {
-      if (listingRolePermission(dataRole, 'Employee Update')) {
+      if (listingRolePermission(dataRole, 'Appointment Edit')) {
         setIsLoader(true);
         Service.VisitEdit(actionMenuItemid)
           .then((item: any) => {
@@ -226,7 +197,7 @@ function AppointmentVisitPage() {
         });
       }
     } else if (option === 'Cancel') {
-      if (listingRolePermission(dataRole, 'Employee delete')) {
+      if (listingRolePermission(dataRole, 'Appointment Cancel')) {
         setIsLoader(true);
         Service.VisitCancel(actionMenuItemid)
           .then((item: any) => {
@@ -264,27 +235,30 @@ function AppointmentVisitPage() {
         });
       }
     } else if (option === 'Reschedule') {
-      // const currentDate = dayjs();
-      // const formattedDate = currentDate.format('YYYY-MM-DD');
-      // const isSameOrAfter = currentDate.isSame(formattedDate, 'year') || currentDate.isAfter(formattedDate, 'year');
-      // console.log("isS",isSameOrAfter);
-
-      // if (isSameOrAfter) {
-      setOpenRescheduleFormDialog(true);
-      // } else {
-      //   setIsNotify(true);
-      //   setNotifyMessage({
-      //     text: "You can't reschedule on previous date",
-      //     type: 'warning',
-      //   });
+      if (listingRolePermission(dataRole, 'Appointment Reschedule')) {
+        setOpenRescheduleFormDialog(true);
+      } else {
+        setIsNotify(true);
+        setNotifyMessage({
+          text: NOT_AUTHORIZED_MESSAGE,
+          type: 'warning',
+        });
+      }
     } else if (option === 'Detail') {
-      navigate(`../detail/${actionMenuItemid}`);
+      if (listingRolePermission(dataRole, 'Appointment Detail')) {
+        navigate(`../detail/${actionMenuItemid}`);
+      } else {
+        setIsNotify(true);
+        setNotifyMessage({
+          text: NOT_AUTHORIZED_MESSAGE,
+          type: 'warning',
+        });
+      }
     }
-    // }
   };
 
   useEffect(() => {
-    if (listingRolePermission(dataRole, 'Employee List')) {
+    if (listingRolePermission(dataRole, 'Appointment List')) {
       Service.VisitList(authState.user.tenant, page, rowsPerPage)
         .then((item: any) => {
           if (item.data.success) {
@@ -529,8 +503,8 @@ function AppointmentVisitPage() {
                               <span className="text-xs font-normal text-[#6A6A6A]">
                                 {dayjs(item.createdDate).isValid()
                                   ? dayjs(item.createdDate)?.format(
-                                      'MMM DD, YYYY'
-                                    )
+                                    'MMM DD, YYYY'
+                                  )
                                   : '--'}
                               </span>
                             </div>
@@ -558,13 +532,12 @@ function AppointmentVisitPage() {
                         </td>
                         <td>
                           <span
-                            className={`${
-                              item.status === 'Cancelled'
-                                ? 'badge badge-danger'
-                                : item.status === 'Reschedule'
+                            className={`${item.status === 'Cancelled'
+                              ? 'badge badge-danger'
+                              : item.status === 'Reschedule'
                                 ? 'badge badge-success'
                                 : 'badge badge-success'
-                            }`}
+                              }`}
                           >
                             {item.status}
                           </span>

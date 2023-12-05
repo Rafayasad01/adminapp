@@ -153,14 +153,14 @@ function AppointmentVisitUpdatePopup({
       onClose={handleFormClose}
       PaperProps={{
         className: 'Dialog',
-        style: { maxWidth: '100%', maxHeight: 'auto' },
+        style: { maxWidth: '100%', minHeight: '545px', height: '550px' },
       }}
     >
       <div className="Content">
         {isLoader ? (
           <Loader />
         ) : (
-          <form onSubmit={handleSubmit(onSubmit)}>
+          <form className="overflow-auto px-2" onSubmit={handleSubmit(onSubmit)}>
             <div className="FormHeader">
               <span className="Title">Update Appointment</span>
             </div>

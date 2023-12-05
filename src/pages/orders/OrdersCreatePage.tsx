@@ -307,8 +307,8 @@ function OrdersCreatePage() {
         displayMessage={notifyMessage}
       />
       <TopBar isNestedRoute title="New Order" />
-      <div className="container mt-3">
-        <div className="grid grid-cols-12 gap-3 py-5">
+      <div className="container">
+        <div className="grid grid-cols-12 gap-3 py-2">
           <div className="col-span-7 rounded-lg bg-white py-5 px-4 shadow-lg">
             <div className="flex items-center justify-center">
               <div className="mx-2">
@@ -316,7 +316,7 @@ function OrdersCreatePage() {
                   <CustomDropDown
                     border='1px'
                     validateRequired
-                    customWidth="w-[300px]"
+                    customWidth="2xl:w-[300px] w-[200px]"
                     id="category"
                     alternativeId="categoriesItem"
                     control={control}
@@ -336,7 +336,7 @@ function OrdersCreatePage() {
                     border='1px'
                     callback={handleMultipleSelectCallback}
                     validateRequired
-                    customWidth="w-[300px]"
+                    customWidth="2xl:w-[300px] w-[200px]"
                     id="categoriesItem"
                     control={control}
                     error={errors}

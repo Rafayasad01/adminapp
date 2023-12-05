@@ -1020,3 +1020,186 @@ label+.css-1aa5qj0-MuiInputBase-root-MuiInput-root {
 }
 
 @media only screen and (max-width: 767.98px) {}
+
+/* print-css */
+.print-area {
+  max-width: 400px;
+  margin: auto;
+  padding: 0;
+}
+.print-area .print-logo {
+  width: 150px;
+  margin: 0 auto 18px;
+}
+.print-area .print-logo img {
+  max-width: 100%;
+  object-fit: contain;
+}
+.print-area .print-title {
+  margin-bottom: 12px;
+  max-width: 143px;
+  margin: 0 auto 12px;
+  color: #000;
+  text-align: center;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+.print-area .print-date {
+  width: 100%;
+  max-width: 113px;
+  margin: auto;
+  color: #000;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 117.182%;
+}
+.print-area .print-row {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  margin: 11px 0;
+}
+.print-area .print-row .col-1 {
+  width: 50%;
+}
+.print-area .print-row .col-2 {
+  width: 50%;
+  text-align: end;
+}
+.print-area .print-row .col-1 span strong {
+  color: #000;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 117.182%;
+}
+.print-area .print-row .col-2 span strong {
+  color: #000;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 117.182%;
+}
+.print-area .print-row {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  margin: 11px 0;
+}
+.print-area .print-row .col-1 {
+  width: 50%;
+}
+.print-area .print-row .col-2 {
+  width: 50%;
+  text-align: end;
+}
+.print-area .print-row .col-1 span strong {
+  color: #000;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 117.182%;
+}
+.print-area .print-row .col-2 span strong {
+  color: #000;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 117.182%;
+}
+.print-area .print-row .col-1 label {
+  color: #000;
+  font-family: Open Sans;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 117.182%;
+  display: block;
+}
+.print-area .print-row .col-2 span {
+  color: #000;
+  font-family: Open Sans;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 117.182%;
+}
+.print-area .text-area {
+  width: 100%;
+  margin: 12px 0 8px;
+}
+.print-area .text-area textarea {
+  width: 100%;
+  height: 61px;
+  background: #EFEFEF;
+  border: none;
+  outline: 0;
+  color: #000;
+  font-size: 10px;
+  text-transform: lowercase;
+  line-height: normal;
+}
+.print-area .print-banker {
+  width: 100%;
+}
+.print-area .print-banker ul {
+  margin: 0;
+  padding: 0;
+}
+.print-area .print-banker ul li {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 5px;
+}
+.print-area .print-banker ul li span {
+  color: #000;
+  font-family: Open Sans;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 117.182%;
+}
+.print-area .print-banker ul li label {
+  color: #000;
+  font-family: Open Sans;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 117.182%;
+}
+.print-quote {
+  margin: 15px auto;
+  width: 100%;
+  text-align: center;
+  color: #000;
+  font-family: Open Sans;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 117.182%;
+}
+.print-area .print-barccode {
+  text-align: center;
+  width: 100%;
+}
+.print-area .print-line {
+  height: 1px;
+  padding: 1px 0;
+  margin: 7px 0;
+  border-top: 2px dotted #000;
+}
+.print-area .straight {
+  border-top: 1px solid #6A6A6A;
+}
+.print-area ::placeholder {
+  color: #000;
+  opacity: 1; /* Firefox */
+  }
+  .print-area ::-ms-input-placeholder { /* Edge 12-18 */
+  color: #000;
+  }

@@ -154,7 +154,7 @@ function AppointmentProviderPage() {
   ];
 
   const handleFormClickOpen = () => {
-    if (listingRolePermission(dataRole, 'Employee Create')) {
+    if (listingRolePermission(dataRole, 'Appointment Provider Create')) {
       if (total < authState.user.employeeLimit) {
         setOpenFormDialog(true);
       } else {
@@ -283,7 +283,7 @@ function AppointmentProviderPage() {
 
   const manuHandler = (option: string) => {
     if (option === 'Edit') {
-      if (listingRolePermission(dataRole, 'Employee Update')) {
+      if (listingRolePermission(dataRole, 'Appointment Provider Edit')) {
         setIsLoader(true);
         Service.ProviderEdit(actionMenuItemid).then((item: any) => {
           if (item.data.success) {
@@ -308,7 +308,7 @@ function AppointmentProviderPage() {
         });
       }
     } else if (option === 'Delete') {
-      if (listingRolePermission(dataRole, 'Employee delete')) {
+      if (listingRolePermission(dataRole, 'Appointment Provider Delete')) {
         setIsLoader(true);
         const data = {
           updatedBy: authState.user.id,
@@ -346,9 +346,25 @@ function AppointmentProviderPage() {
         });
       }
     } else if (option === 'Schedule') {
-      navigate(`../schedule/${actionMenuItemid}`);
+      if (listingRolePermission(dataRole, 'Appointment Provider Schedule View')) {
+        navigate(`../schedule/${actionMenuItemid}`);
+      } else {
+        setIsNotify(true);
+        setNotifyMessage({
+          text: NOT_AUTHORIZED_MESSAGE,
+          type: 'warning',
+        });
+      }
     } else if (option === 'Services') {
-      navigate(`../services/${actionMenuItemid}`);
+      if (listingRolePermission(dataRole, 'Appointment Provider Service View')) {
+        navigate(`../services/${actionMenuItemid}`);
+      } else {
+        setIsNotify(true);
+        setNotifyMessage({
+          text: NOT_AUTHORIZED_MESSAGE,
+          type: 'warning',
+        });
+      }
     }
   };
 
@@ -379,6 +395,11 @@ function AppointmentProviderPage() {
         });
     } else {
       setIsLoader(false);
+      setIsNotify(true);
+      setNotifyMessage({
+        text: NOT_AUTHORIZED_MESSAGE,
+        type: 'warning',
+      });
     }
   }, [emptyVariable]);
 
@@ -503,13 +524,21 @@ function AppointmentProviderPage() {
       setOpenFormDialog(false);
       createFormHandler(data);
     } else if (openEditFormDialog) {
-      setOpenEditFormDialog(false);
-      updateFormHandler(data);
+      if (listingRolePermission(dataRole, 'Appointment Provider Update')) {
+        setOpenEditFormDialog(false);
+        updateFormHandler(data);
+      } else {
+        setIsNotify(true);
+        setNotifyMessage({
+          text: NOT_AUTHORIZED_MESSAGE,
+          type: 'warning',
+        });
+      }
     }
   };
 
   const handleSwitchChange = (event: any, id: string) => {
-    if (listingRolePermission(dataRole, 'Employee Update Status')) {
+    if (listingRolePermission(dataRole, 'Appointment Provider Update Status')) {
       const data = {
         isActive: event.target.checked,
         updatedBy: authState.user.id,
@@ -622,8 +651,8 @@ function AppointmentProviderPage() {
                               <span className="text-xs font-normal text-[#6A6A6A]">
                                 {dayjs(item.createdDate).isValid()
                                   ? dayjs(item.createdDate)?.format(
-                                      'MMMM DD, YYYY'
-                                    )
+                                    'MMMM DD, YYYY'
+                                  )
                                   : '--'}
                               </span>
                             </div>

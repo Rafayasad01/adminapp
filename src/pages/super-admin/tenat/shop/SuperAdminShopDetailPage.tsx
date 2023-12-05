@@ -585,7 +585,7 @@ function SuperAdminShopDetailPage() {
                         </div>
                       </div>
                     </div>
-                    <div className="flex justify-end px-5 xl:col-span-4 2xl:col-span-8">
+                    {/* <div className="flex justify-end px-5 xl:col-span-4 2xl:col-span-8">
                       <div className="mt-5">
                         <Button
                           variant="contained"
@@ -595,7 +595,7 @@ function SuperAdminShopDetailPage() {
                           <AddOutlinedIcon /> Add New Branch
                         </Button>
                       </div>
-                    </div>
+                    </div> */}
                   </div>
                 ) : (
                   <div>

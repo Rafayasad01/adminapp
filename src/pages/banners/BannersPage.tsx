@@ -82,7 +82,7 @@ function BannersPage() {
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
   const handleFormClickOpen = () => {
-    if (listingRolePermission(dataRole, 'Employee Create')) {
+    if (listingRolePermission(dataRole, 'Banners Create')) {
       setOpenFormDialog(true);
     } else {
       setIsNotify(true);
@@ -131,7 +131,7 @@ function BannersPage() {
   };
 
   useEffect(() => {
-    if (listingRolePermission(dataRole, 'Employee List')) {
+    if (listingRolePermission(dataRole, 'Banners List')) {
       Service.getBanners(authState.user.tenant)
         .then((item: any) => {
           if (item.data.success) {
@@ -155,153 +155,187 @@ function BannersPage() {
   }, [emptyVariable]);
 
   const createFormHandler = (details: any, file: any) => {
-    console.log('creating details', file);
-    setIsLoader(true);
-    const formData = new FormData();
-    formData.append('name', details.name);
-    formData.append('banner', file);
-    formData.append('createdBy', authState.user.id);
-    formData.append('tenant', authState.user.tenant);
-    Service.createBanner(formData)
-      .then((item) => {
-        if (item.data.success) {
-          setOpenFormDialog(false);
-          reset();
-          setIsLoader(false);
-          setIsNotify(true);
-          setNotifyMessage({
-            text: item.data.message,
-            type: 'success',
-          });
-          setList([...list, item.data.data]);
-        } else {
+    if (listingRolePermission(dataRole, 'Banners Create')) {
+      setIsLoader(true);
+      const formData = new FormData();
+      formData.append('name', details.name);
+      formData.append('banner', file);
+      formData.append('createdBy', authState.user.id);
+      formData.append('tenant', authState.user.tenant);
+      Service.createBanner(formData)
+        .then((item) => {
+          if (item.data.success) {
+            setOpenFormDialog(false);
+            reset();
+            setIsLoader(false);
+            setIsNotify(true);
+            setNotifyMessage({
+              text: item.data.message,
+              type: 'success',
+            });
+            setList([...list, item.data.data]);
+          } else {
+            reset();
+            setOpenFormDialog(true);
+            setIsLoader(false);
+            setIsNotify(true);
+            setNotifyMessage({
+              text: item.data.message,
+              type: 'error',
+            });
+          }
+        })
+        .catch((err) => {
           reset();
           setOpenFormDialog(true);
           setIsLoader(false);
           setIsNotify(true);
           setNotifyMessage({
-            text: item.data.message,
+            text: err.message,
             type: 'error',
           });
-        }
-      })
-      .catch((err) => {
-        reset();
-        setOpenFormDialog(true);
-        setIsLoader(false);
-        setIsNotify(true);
-        setNotifyMessage({
-          text: err.message,
-          type: 'error',
         });
+    } else {
+      setIsLoader(false);
+      setIsNotify(true);
+      setNotifyMessage({
+        text: NOT_AUTHORIZED_MESSAGE,
+        type: 'warning',
       });
+    }
   };
 
   const updateFormHandler = (data: any) => {
-    setIsLoader(true);
-    const formDetails = new FormData();
-    formDetails.append('name', data.name);
-    formDetails.append('banner', data.banner);
-    formDetails.append('bannerId', data.id);
-    formDetails.append('updatedBy', authState.user.id);
-    Service.updateBanners(formDetails)
-      .then((item) => {
-        if (item.data.success) {
-          console.log('UPDATED', item.data.data);
-          setOpenEditFormDialog(false);
-          setIsLoader(false);
-          setIsNotify(true);
-          setNotifyMessage({
-            text: item.data.message,
-            type: 'success',
-          });
-          for (let i = 0; i < list.length; i += 1) {
-            if (list[i].id === item.data.data.id) {
-              list[i].name = item.data.data.name;
-              list[i].banner = item.data.data.banner;
+    if (listingRolePermission(dataRole, 'Banners Update')) {
+      setIsLoader(true);
+      const formDetails = new FormData();
+      formDetails.append('name', data.name);
+      formDetails.append('banner', data.banner);
+      formDetails.append('bannerId', data.id);
+      formDetails.append('updatedBy', authState.user.id);
+      Service.updateBanners(formDetails)
+        .then((item) => {
+          if (item.data.success) {
+            console.log('UPDATED', item.data.data);
+            setOpenEditFormDialog(false);
+            setIsLoader(false);
+            setIsNotify(true);
+            setNotifyMessage({
+              text: item.data.message,
+              type: 'success',
+            });
+            for (let i = 0; i < list.length; i += 1) {
+              if (list[i].id === item.data.data.id) {
+                list[i].name = item.data.data.name;
+                list[i].banner = item.data.data.banner;
+              }
             }
+            reset();
+          } else {
+            reset();
+            setOpenEditFormDialog(false);
+            setIsLoader(false);
+            setIsNotify(true);
+            setNotifyMessage({
+              text: item.data.message,
+              type: 'error',
+            });
           }
-          reset();
-        } else {
+        })
+        .catch((err) => {
           reset();
           setOpenEditFormDialog(false);
           setIsLoader(false);
           setIsNotify(true);
           setNotifyMessage({
-            text: item.data.message,
+            text: err.message,
             type: 'error',
           });
-        }
-      })
-      .catch((err) => {
-        reset();
-        setOpenEditFormDialog(false);
-        setIsLoader(false);
-        setIsNotify(true);
-        setNotifyMessage({
-          text: err.message,
-          type: 'error',
         });
+    } else {
+      setIsLoader(false);
+      setIsNotify(true);
+      setNotifyMessage({
+        text: NOT_AUTHORIZED_MESSAGE,
+        type: 'warning',
       });
+    }
   };
 
   const handleEdit = (id: string) => {
-    setIsLoader(true);
-    Service.editBanners(id)
-      .then((item: any) => {
-        if (item.data.success) {
-          console.log('bannerss edit', item.data.data);
-          setIsLoader(false);
-          setOpenEditFormDialog(true);
-          setEditFormData(item.data.data);
-        }
-      })
-      .catch((err) => {
-        setIsLoader(false);
-        setIsNotify(true);
-        setNotifyMessage({
-          text: err.message,
-          type: 'error',
-        });
-      });
-  };
-
-  const handleDelete = (id: string) => {
-    setIsLoader(true);
-    const deleteObj = {
-      updatedBy: authState.user.id,
-      bannerId: id,
-    };
-    Service.deleteBanner(deleteObj)
-      .then((item: any) => {
-        if (item.data.success) {
-          setIsLoader(false);
-          setList((newArr: any) => {
-            return newArr.filter(
-              (newItem: any) => newItem.id !== item.data.data.id
-            );
-          });
-        } else {
+    if (listingRolePermission(dataRole, 'Banners Edit')) {
+      setIsLoader(true);
+      Service.editBanners(id)
+        .then((item: any) => {
+          if (item.data.success) {
+            setIsLoader(false);
+            setOpenEditFormDialog(true);
+            setEditFormData(item.data.data);
+          }
+        })
+        .catch((err) => {
           setIsLoader(false);
           setIsNotify(true);
           setNotifyMessage({
-            text: item.data.message,
+            text: err.message,
             type: 'error',
           });
-        }
-      })
-      .catch((err) => {
-        setIsLoader(false);
-        setIsNotify(true);
-        setNotifyMessage({
-          text: err.message,
-          type: 'error',
         });
+    } else {
+      setIsLoader(false);
+      setIsNotify(true);
+      setNotifyMessage({
+        text: NOT_AUTHORIZED_MESSAGE,
+        type: 'warning',
       });
+    }
+  };
+
+  const handleDelete = (id: string) => {
+    if (listingRolePermission(dataRole, 'Banners Delete')) {
+      setIsLoader(true);
+      const deleteObj = {
+        updatedBy: authState.user.id,
+        bannerId: id,
+      };
+      Service.deleteBanner(deleteObj)
+        .then((item: any) => {
+          if (item.data.success) {
+            setIsLoader(false);
+            setList((newArr: any) => {
+              return newArr.filter(
+                (newItem: any) => newItem.id !== item.data.data.id
+              );
+            });
+          } else {
+            setIsLoader(false);
+            setIsNotify(true);
+            setNotifyMessage({
+              text: item.data.message,
+              type: 'error',
+            });
+          }
+        })
+        .catch((err) => {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: err.message,
+            type: 'error',
+          });
+        });
+    } else {
+      setIsLoader(false);
+      setIsNotify(true);
+      setNotifyMessage({
+        text: NOT_AUTHORIZED_MESSAGE,
+        type: 'warning',
+      });
+    }
   };
 
   const handleSwitchChange = (event: any, id: string) => {
-    if (listingRolePermission(dataRole, 'Employee Update Status')) {
+    if (listingRolePermission(dataRole, 'Banners Update Status')) {
       const data = {
         isActive: event.target.checked,
         updatedBy: authState.user.id,

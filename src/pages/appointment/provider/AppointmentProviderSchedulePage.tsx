@@ -112,7 +112,7 @@ function AppointmentProviderSchedulePage() {
   };
 
   const handleFormClickOpen = () => {
-    if (listingRolePermission(dataRole, 'Employee Create')) {
+    if (listingRolePermission(dataRole, 'Appointment Provider Schedule Create')) {
       // setOpenFormDialog(true);
       if (list.appointmentProviderSchedule?.length < 7) {
         navigate(`../add-schedule/${id}`);
@@ -241,7 +241,7 @@ function AppointmentProviderSchedulePage() {
   };
 
   const editHandler = (editId: string) => {
-    if (listingRolePermission(dataRole, 'Employee Update')) {
+    if (listingRolePermission(dataRole, 'Appointment Provider Schedule Edit')) {
       setIsLoader(true);
       Service.ProviderScheduleEdit(editId).then((item: any) => {
         if (item.data.success) {
@@ -262,7 +262,7 @@ function AppointmentProviderSchedulePage() {
 
   const manuHandler = (option: string) => {
     if (option === 'Edit') {
-      if (listingRolePermission(dataRole, 'Employee Update')) {
+      if (listingRolePermission(dataRole, 'Appointment Provider Schedule Edit')) {
         setIsLoader(true);
         Service.ProviderScheduleEdit(actionMenuItemid).then((item: any) => {
           if (item.data.success) {
@@ -280,7 +280,7 @@ function AppointmentProviderSchedulePage() {
         });
       }
     } else if (option === 'Delete') {
-      if (listingRolePermission(dataRole, 'Employee delete')) {
+      if (listingRolePermission(dataRole, 'Appointment Provider Schedule Delete')) {
         setIsLoader(true);
         const data = {
           id: actionMenuItemid,
@@ -325,32 +325,37 @@ function AppointmentProviderSchedulePage() {
   };
 
   useEffect(() => {
-    // if (listingRolePermission(dataRole, 'Employee List')) {
-    Service.ProviderScheduleList(id, page, rowsPerPage)
-      .then((item: any) => {
-        if (item.data.success) {
-          setIsLoader(false);
-          setList(item.data.data);
-        } else {
+    if (listingRolePermission(dataRole, 'Appointment Provider Schedule List')) {
+      Service.ProviderScheduleList(id, page, rowsPerPage)
+        .then((item: any) => {
+          if (item.data.success) {
+            setIsLoader(false);
+            setList(item.data.data);
+          } else {
+            setIsLoader(false);
+            setIsNotify(true);
+            setNotifyMessage({
+              text: item.data.message,
+              type: 'error',
+            });
+          }
+        })
+        .catch((err) => {
           setIsLoader(false);
           setIsNotify(true);
           setNotifyMessage({
-            text: item.data.message,
+            text: err.message,
             type: 'error',
           });
-        }
-      })
-      .catch((err) => {
-        setIsLoader(false);
-        setIsNotify(true);
-        setNotifyMessage({
-          text: err.message,
-          type: 'error',
         });
+    } else {
+      setIsLoader(false);
+      setIsNotify(true);
+      setNotifyMessage({
+        text: NOT_AUTHORIZED_MESSAGE,
+        type: 'warning',
       });
-    // } else {
-    //     setIsLoader(false);
-    // }
+    }
   }, [emptyVariable]);
 
   const createFormHandler = (data: any) => {
@@ -676,8 +681,8 @@ function AppointmentProviderSchedulePage() {
                                 <span className="text-xs font-normal text-[#6A6A6A]">
                                   {dayjs(item.createdDate).isValid()
                                     ? dayjs(item.createdDate)?.format(
-                                        'MMMM DD, YYYY'
-                                      )
+                                      'MMMM DD, YYYY'
+                                    )
                                     : '--'}
                                 </span>
                               </div>
@@ -796,7 +801,7 @@ function AppointmentProviderSchedulePage() {
           setOpenFormDialog={setOpenEditFormDialog}
           formData={editFormDetails}
           callback={updateFormHandler}
-          // setActionMenuItemid={setActionMenuItemid}
+        // setActionMenuItemid={setActionMenuItemid}
         />
       )}
     </>
