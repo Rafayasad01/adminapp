@@ -28,6 +28,7 @@ import { listingRolePermission } from '../../../utils/helper';
 import AppointmentVisitCreatePopup from './AppointmentVisitCreatePopup';
 import AppointmentVisitReschedulePopup from './AppointmentVisitReschedulePopup';
 import AppointmentVisitUpdatePopup from './AppointmentVisitUpdatePopup';
+import CustomPrintLayout from '../../../utils/CustomPrintLayout/CustomPrintLayout';
 // Extend dayjs with necessary plugins
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -47,11 +48,11 @@ function AppointmentVisitPage() {
   const [editDetails, setEditDetails] = useState<any>();
 
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const [actionMenuItemid, setActionMenuItemid] = React.useState('');
+  const [actionMenuItemid, setActionMenuItemid] = React.useState<any>();
   const [actionMenuAnchorEl, setActionMenuAnchorEl] =
     useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
-  const actionMenuOptions = ['Detail', 'Reschedule', 'Edit', 'Cancel'];
+  const actionMenuOptions = ['Print Details', 'Detail', 'Reschedule', 'Edit', 'Cancel'];
 
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
@@ -65,6 +66,8 @@ function AppointmentVisitPage() {
     'Are you sure you want to delete this customer ?'
   );
   const [showPassword, setShowPassword] = useState(true);
+  const [isPrintEnabled, setPrintEnabled] = useState<any>([]);
+
   const {
     register,
     handleSubmit,
@@ -163,7 +166,7 @@ function AppointmentVisitPage() {
     if (option === 'Edit') {
       if (listingRolePermission(dataRole, 'Appointment Edit')) {
         setIsLoader(true);
-        Service.VisitEdit(actionMenuItemid)
+        Service.VisitEdit(actionMenuItemid?.id)
           .then((item: any) => {
             if (item.data.success) {
               setIsLoader(false);
@@ -199,7 +202,7 @@ function AppointmentVisitPage() {
     } else if (option === 'Cancel') {
       if (listingRolePermission(dataRole, 'Appointment Cancel')) {
         setIsLoader(true);
-        Service.VisitCancel(actionMenuItemid)
+        Service.VisitCancel(actionMenuItemid?.id)
           .then((item: any) => {
             if (item.data.success) {
               setIsLoader(false);
@@ -246,8 +249,20 @@ function AppointmentVisitPage() {
       }
     } else if (option === 'Detail') {
       if (listingRolePermission(dataRole, 'Appointment Detail')) {
-        navigate(`../detail/${actionMenuItemid}`);
+        navigate(`../detail/${actionMenuItemid?.id}`);
       } else {
+        setIsNotify(true);
+        setNotifyMessage({
+          text: NOT_AUTHORIZED_MESSAGE,
+          type: 'warning',
+        });
+      }
+    }
+    else if (option === 'Print Details') {
+      if (listingRolePermission(dataRole, 'Appointment Detail')) {
+        setPrintEnabled(true);
+      } else {
+        setPrintEnabled(false);
         setIsNotify(true);
         setNotifyMessage({
           text: NOT_AUTHORIZED_MESSAGE,
@@ -266,6 +281,7 @@ function AppointmentVisitPage() {
             setIsLoader(false);
             setList(item.data.data.list);
             setTotal(item.data.data.total);
+            setPrintEnabled(item.data.data.list.map((item: any) => false))
           } else {
             setIsLoader(false);
             setIsNotify(true);
@@ -326,7 +342,7 @@ function AppointmentVisitPage() {
           });
         });
     } else {
-      data.appointmentId = actionMenuItemid;
+      data.appointmentId = actionMenuItemid?.id;
       console.log('daTA', data);
       Service.VisitReschedule(data)
         .then((item: any) => {
@@ -379,7 +395,7 @@ function AppointmentVisitPage() {
             type: 'success',
           });
           for (let i = 0; i < list.length; i += 1) {
-            if (list[i].id === actionMenuItemid) {
+            if (list[i].id === actionMenuItemid?.id) {
               list[i].name = item.data.data.name;
               list[i].note = item.data.data.note;
               list[i].phone = item.data.data.phone;
@@ -412,6 +428,12 @@ function AppointmentVisitPage() {
         });
       });
   };
+
+  const handlePrintItem = () => {
+
+  }
+
+
 
   return isLoader ? (
     <Loader />
@@ -543,7 +565,7 @@ function AppointmentVisitPage() {
                           </span>
                         </td>
                         <td>
-                          <div className="flex flex-row-reverse">
+                          <div className="flex flex-row-reverse items-center">
                             <IconButton
                               disabled={item.status === 'Cancelled'}
                               className="btn-dot"
@@ -559,12 +581,20 @@ function AppointmentVisitPage() {
                               onClick={(
                                 event: React.MouseEvent<HTMLElement>
                               ) => {
-                                setActionMenuItemid(item.id);
+                                setActionMenuItemid(item);
                                 setActionMenuAnchorEl(event.currentTarget);
                               }}
                             >
                               <MoreVertIcon />
                             </IconButton>
+                            <div>
+                              <CustomPrintLayout
+                                isPrintEnabled={isPrintEnabled}
+                                setPrintEnabled={setPrintEnabled}
+                                data={item}
+                                index={index}
+                              />
+                            </div>
                           </div>
                         </td>
                       </tr>

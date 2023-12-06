@@ -95,19 +95,7 @@ function AppointmentVisitDetailPage() {
     }
   }, [emptyVariable]);
 
-  const ref = useRef<any>(null);
   const [isPrintEnabled, setPrintEnabled] = useState<any>(false);
-
-  // const componentRef = useRef<any>();
-  // const handlePrint = useReactToPrint({
-  //   content: (): any => componentRef.current
-  // });
-
-
-
-
-
-
 
   return isLoader ? (
     <Loader />
