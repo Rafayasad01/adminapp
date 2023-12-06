@@ -29,6 +29,7 @@ import AppointmentVisitCreatePopup from './AppointmentVisitCreatePopup';
 import AppointmentVisitReschedulePopup from './AppointmentVisitReschedulePopup';
 import AppointmentVisitUpdatePopup from './AppointmentVisitUpdatePopup';
 import CustomPrintLayout from '../../../utils/CustomPrintLayout/CustomAppointmentPrintLayout';
+import CustomOrderPrintLayoutCash from '../../../utils/CustomPrintLayout/CustomOrderPrintLayoutCash';
 // Extend dayjs with necessary plugins
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -588,12 +589,13 @@ function AppointmentVisitPage() {
                               <MoreVertIcon />
                             </IconButton>
                             <div>
-                              <CustomPrintLayout
+                              <CustomOrderPrintLayoutCash
                                 isPrintEnabled={isPrintEnabled}
                                 setPrintEnabled={setPrintEnabled}
                                 data={item}
                                 index={index}
                               />
+                            
                             </div>
                           </div>
                         </td>
