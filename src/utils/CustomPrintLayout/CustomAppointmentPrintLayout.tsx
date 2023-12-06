@@ -9,6 +9,7 @@ import Service from '../../services/adminapp/adminAppointment';
 import promiseHandler from '../helper';
 import Barcode from 'react-barcode';
 import { useAppSelector } from '../../redux/redux-hooks';
+import QRCode from 'qrcode.react';
 
 interface Props {
     index: any;
@@ -33,12 +34,12 @@ const CustomPrintLayouts = forwardRef<any, any>((props: any, ref: any) => {
                 console.log('err', res.data.message)
             }
             setDetaiItems(res?.data.data)
-
             setTimeout(() => props.handlePrint(), 0)
         }
         fetchData();
     }, []);
 
+    const qrCodeValue = `Tracking Id: ${detailItems?.id}`
 
     return (
         <div style={{ display: "none" }}>
@@ -155,11 +156,8 @@ const CustomPrintLayouts = forwardRef<any, any>((props: any, ref: any) => {
                         Thank you
                     </div>
                     <div className="print-barccode flex justify-center items-center text-center w-full">
-                        <Barcode value={"51102589"} textAlign="center" height={40} />
-                        {/* <img src={assets.images.logoBlack} alt="barcode" width="178" height="47" /> */}
-                        {/* <img src="img/barcode.png" alt="barcode" width="178" height="47" /> */}
+                        <QRCode size={60} value={qrCodeValue} />
                     </div>
-
                 </div>
             </div>
         </div>

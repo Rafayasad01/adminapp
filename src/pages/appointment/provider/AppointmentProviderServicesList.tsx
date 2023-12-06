@@ -127,6 +127,7 @@ function AppointmentProviderServicesList() {
           });
         });
     } else {
+      setIsLoader(false);
       setIsNotify(true);
       setNotifyMessage({
         text: NOT_AUTHORIZED_MESSAGE,
@@ -295,6 +296,11 @@ function AppointmentProviderServicesList() {
         });
     } else {
       setIsLoader(false);
+      setIsNotify(true);
+      setNotifyMessage({
+        text: NOT_AUTHORIZED_MESSAGE,
+        type: 'warning',
+      });
     }
   }, [emptyVariable]);
 

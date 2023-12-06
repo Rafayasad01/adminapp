@@ -189,6 +189,21 @@ function SuperAdminShopPage() {
     });
   };
 
+  const handleTrailModeStatus = (status: any, trialMode: boolean, trialStartDate: any): any => {
+    console.log("TTTMM", trialMode);
+
+    if (trialMode) {
+      return "Started"
+    } else {
+      if (trialStartDate && !status) {
+        return "Expired"
+      } else {
+        return "Not Started"
+      }
+    }
+    return null;
+  }
+
   return isLoader ? (
     <Loader />
   ) : (
@@ -273,11 +288,10 @@ function SuperAdminShopPage() {
                           </div>
                         </td>
                         <td>
-                          {item.trialMode ? (
-                            <span className="badge badge-success">ON</span>
-                          ) : (
-                            <span className="badge badge-danger">OFF</span>
-                          )}
+                          <span className={
+                            handleTrailModeStatus(item.status, item.trialMode, item.trailStartDate) === "Started" ? "badge badge-success" :
+                              handleTrailModeStatus(item.status, item.trialMode, item.trailStartDate) === "Not Started" ? "badge badge-primary"
+                                : "badge badge-danger"}>{handleTrailModeStatus(item.status, item.trialMode, item.trailStartDate)}</span>
                         </td>
                         <td>
                           {dayjs(item.trailStartDate).isValid() ? (

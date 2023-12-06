@@ -5,7 +5,6 @@ import AppLayout from '../components/layout/AppLayout';
 import AuthLayout from '../components/layout/AuthLayout';
 import LayoutOutlet from '../components/layout/LayoutOutlet';
 import SuperAdminAppLayout from '../components/layout/SuperAdminAppLayout';
-import AppointmentServicePage from '../pages/appointment/service/AppointmentServicePage';
 import AppointmentVisitPage from '../pages/appointment/visit/AppointmentVisitPage';
 import ForgotPasswordPage from '../pages/auth/forgot-password/ForgotPasswordPage';
 import LoginPage from '../pages/auth/login/LoginPage';
@@ -390,16 +389,6 @@ export const routeObjects: RouteObject[] = [
                   {
                     path: 'detail/:id',
                     element: <AppointmentVisitDetailPage />,
-                  }
-                ]
-              },
-              {
-                path: "service",
-                children: [
-                  { index: true, element: <Navigate to="list" replace /> },
-                  {
-                    path: 'list',
-                    element: <AppointmentServicePage />,
                   }
                 ]
               },

@@ -52,7 +52,7 @@ function AppointmentVisitPage() {
   const [actionMenuAnchorEl, setActionMenuAnchorEl] =
     useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
-  const actionMenuOptions = ['Print Details', 'Detail', 'Reschedule', 'Edit', 'Cancel'];
+  const actionMenuOptions = ['Detail', 'Reschedule', 'Edit', 'Cancel'];
 
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
@@ -163,111 +163,113 @@ function AppointmentVisitPage() {
   };
 
   const manuHandler = (option: string) => {
-    if (option === 'Edit') {
-      if (listingRolePermission(dataRole, 'Appointment Edit')) {
-        setIsLoader(true);
-        Service.VisitEdit(actionMenuItemid?.id)
-          .then((item: any) => {
-            if (item.data.success) {
-              setIsLoader(false);
-              setOpenEditFormDialog(true);
-              setEditDetails(item.data.data);
-            } else {
+    if (actionMenuItemid?.status === "Cancelled") {
+      if (option === "Detail") {
+        if (listingRolePermission(dataRole, 'Appointment Detail')) {
+          navigate(`../detail/${actionMenuItemid?.id}`);
+        } else {
+          setIsNotify(true);
+          setNotifyMessage({
+            text: NOT_AUTHORIZED_MESSAGE,
+            type: 'warning',
+          });
+        }
+      }
+    } else {
+      if (option === 'Edit') {
+        if (listingRolePermission(dataRole, 'Appointment Edit')) {
+          setIsLoader(true);
+          Service.VisitEdit(actionMenuItemid?.id)
+            .then((item: any) => {
+              if (item.data.success) {
+                setIsLoader(false);
+                setOpenEditFormDialog(true);
+                setEditDetails(item.data.data);
+              } else {
+                setIsLoader(false);
+                setOpenEditFormDialog(false);
+                setIsNotify(true);
+                setNotifyMessage({
+                  text: item.data.message,
+                  type: 'error',
+                });
+              }
+            })
+            .catch((err) => {
               setIsLoader(false);
               setOpenEditFormDialog(false);
               setIsNotify(true);
               setNotifyMessage({
-                text: item.data.message,
+                text: err.message,
                 type: 'error',
               });
-            }
-          })
-          .catch((err) => {
-            setIsLoader(false);
-            setOpenEditFormDialog(false);
-            setIsNotify(true);
-            setNotifyMessage({
-              text: err.message,
-              type: 'error',
             });
+        } else {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: NOT_AUTHORIZED_MESSAGE,
+            type: 'warning',
           });
-      } else {
-        setIsLoader(false);
-        setIsNotify(true);
-        setNotifyMessage({
-          text: NOT_AUTHORIZED_MESSAGE,
-          type: 'warning',
-        });
-      }
-    } else if (option === 'Cancel') {
-      if (listingRolePermission(dataRole, 'Appointment Cancel')) {
-        setIsLoader(true);
-        Service.VisitCancel(actionMenuItemid?.id)
-          .then((item: any) => {
-            if (item.data.success) {
+        }
+      } else if (option === 'Cancel') {
+        if (listingRolePermission(dataRole, 'Appointment Cancel')) {
+          setIsLoader(true);
+          Service.VisitCancel(actionMenuItemid?.id)
+            .then((item: any) => {
+              if (item.data.success) {
+                setIsLoader(false);
+                setIsNotify(true);
+                setNotifyMessage({
+                  text: item.data.message,
+                  type: 'success',
+                });
+                console.log('statat', item.data.data);
+                setList((newArr: any) => {
+                  return newArr.map((items: any) => {
+                    if (items.id === item.data.data.appointmentId) {
+                      items.status = item.data.data.status;
+                    }
+                    return { ...items };
+                  });
+                });
+              }
+            })
+            .catch((err: Error) => {
               setIsLoader(false);
               setIsNotify(true);
               setNotifyMessage({
-                text: item.data.message,
-                type: 'success',
+                text: err.message,
+                type: 'error',
               });
-              console.log('statat', item.data.data);
-              setList((newArr: any) => {
-                return newArr.map((items: any) => {
-                  if (items.id === item.data.data.appointmentId) {
-                    items.status = item.data.data.status;
-                  }
-                  return { ...items };
-                });
-              });
-            }
-          })
-          .catch((err: Error) => {
-            setIsLoader(false);
-            setIsNotify(true);
-            setNotifyMessage({
-              text: err.message,
-              type: 'error',
             });
+        } else {
+          setIsNotify(true);
+          setNotifyMessage({
+            text: NOT_AUTHORIZED_MESSAGE,
+            type: 'warning',
           });
-      } else {
-        setIsNotify(true);
-        setNotifyMessage({
-          text: NOT_AUTHORIZED_MESSAGE,
-          type: 'warning',
-        });
-      }
-    } else if (option === 'Reschedule') {
-      if (listingRolePermission(dataRole, 'Appointment Reschedule')) {
-        setOpenRescheduleFormDialog(true);
-      } else {
-        setIsNotify(true);
-        setNotifyMessage({
-          text: NOT_AUTHORIZED_MESSAGE,
-          type: 'warning',
-        });
-      }
-    } else if (option === 'Detail') {
-      if (listingRolePermission(dataRole, 'Appointment Detail')) {
-        navigate(`../detail/${actionMenuItemid?.id}`);
-      } else {
-        setIsNotify(true);
-        setNotifyMessage({
-          text: NOT_AUTHORIZED_MESSAGE,
-          type: 'warning',
-        });
-      }
-    }
-    else if (option === 'Print Details') {
-      if (listingRolePermission(dataRole, 'Appointment Detail')) {
-        setPrintEnabled(true);
-      } else {
-        setPrintEnabled(false);
-        setIsNotify(true);
-        setNotifyMessage({
-          text: NOT_AUTHORIZED_MESSAGE,
-          type: 'warning',
-        });
+        }
+      } else if (option === 'Reschedule') {
+        if (listingRolePermission(dataRole, 'Appointment Reschedule')) {
+          setOpenRescheduleFormDialog(true);
+        } else {
+          setIsNotify(true);
+          setNotifyMessage({
+            text: NOT_AUTHORIZED_MESSAGE,
+            type: 'warning',
+          });
+        }
+      } else if (option === 'Detail') {
+        if (listingRolePermission(dataRole, 'Appointment Detail')) {
+          navigate(`../detail/${actionMenuItemid?.id}`);
+        } else {
+          setIsNotify(true);
+          setNotifyMessage({
+            text: NOT_AUTHORIZED_MESSAGE,
+            type: 'warning',
+          });
+        }
       }
     }
   };
@@ -567,7 +569,7 @@ function AppointmentVisitPage() {
                         <td>
                           <div className="flex flex-row-reverse items-center">
                             <IconButton
-                              disabled={item.status === 'Cancelled'}
+                              // disabled={item.status === 'Cancelled'}
                               className="btn-dot"
                               aria-label="more"
                               id="long-button"

@@ -95,7 +95,7 @@ function AppointmentVisitDetailPage() {
     }
   }, [emptyVariable]);
 
-  const [isPrintEnabled, setPrintEnabled] = useState<any>(false);
+  const [isPrintEnabled, setPrintEnabled] = useState<any>([false]);
 
   return isLoader ? (
     <Loader />
@@ -115,6 +115,7 @@ function AppointmentVisitDetailPage() {
             </div>
             <div>
               <CustomPrintLayout
+                index={0}
                 isPrintEnabled={isPrintEnabled}
                 setPrintEnabled={setPrintEnabled}
                 data={list} />

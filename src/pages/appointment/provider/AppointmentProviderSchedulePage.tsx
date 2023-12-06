@@ -112,7 +112,9 @@ function AppointmentProviderSchedulePage() {
   };
 
   const handleFormClickOpen = () => {
-    if (listingRolePermission(dataRole, 'Appointment Provider Schedule Create')) {
+    if (listingRolePermission(dataRole, 'Appointment Provider Schedule Create') && listingRolePermission(dataRole, 'Appointment Provider Schedule List')) {
+      console.log("done1");
+
       // setOpenFormDialog(true);
       if (list.appointmentProviderSchedule?.length < 7) {
         navigate(`../add-schedule/${id}`);
@@ -480,12 +482,7 @@ function AppointmentProviderSchedulePage() {
   };
 
   const handleSwitchChange = (event: any, switchId: string) => {
-    if (
-      listingRolePermission(
-        dataRole,
-        'Appointment Provider Schedule Update Status'
-      )
-    ) {
+    if (listingRolePermission(dataRole, 'Appointment Provider Schedule Update Status')) {
       const data = {
         switchId,
         isActive: event.target.checked,
@@ -534,7 +531,7 @@ function AppointmentProviderSchedulePage() {
                 Provider Details
               </span>
             </div>
-            {list ? (
+            {list?.name ? (
               <div className="grid w-full gap-3 xl:grid-cols-8 2xl:grid-cols-12">
                 <div className="col-span-4 flex w-full justify-between py-[2rem]">
                   <div className="flex flex-col px-5">
@@ -631,7 +628,7 @@ function AppointmentProviderSchedulePage() {
             ) : (
               <div>
                 <div className="col-span-12 grid items-center justify-center">
-                  <p>No Shop Owner Found!</p>
+                  <span className='text-sm font-semibold my-4'>No Shop Owner Found!</span>
                 </div>
               </div>
             )}
