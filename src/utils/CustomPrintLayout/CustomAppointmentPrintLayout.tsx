@@ -51,44 +51,68 @@ const CustomPrintLayouts = forwardRef<any, any>((props: any, ref: any) => {
                     <div className="print-title">
                         Your Appointment is Confirmed!
                     </div>
+                    <div className="print-row rowss">
+                        <div className="col-1">
+                            <span className=''><strong>Slip#: aaa0000000133</strong></span>
+                        </div>
+                        <div className="col-2">
+                            <div className="print-single-row print-date date-right">
+                                {dayjs(detailItems?.createdDate).isValid()
+                                    ? dayjs(detailItems?.createdDate)?.format(
+                                        'YYYY-MM-DD hh:mm:ss'
+                                    )
+                                    : '--'}
+                            </div>
+                        </div>
+                    </div>
                     <div className="print-line">
                     </div>
-                    <div className="print-single-row print-date">
+                    {/* <div className="print-single-row print-date">
                         {dayjs(detailItems?.createdDate).isValid()
                             ? dayjs(detailItems?.createdDate)?.format(
                                 'YYYY-MM-DD hh:mm:ss'
                             )
                             : '--'}
-                    </div>
+                    </div> */}
                     <div className="print-single-row">
                         <div className="">
                             <span>
                                 <strong>Appointee : {detailItems?.name}</strong>
                             </span>
+                            <br/>
+                        </div>
+                    </div>
+                    <div className="print-row rowss">
+                        <div className="col-1">
+                            <span className=''><strong>Services</strong></span>
+                        </div>
+                        <div className="col-2">
+                            <span className=''><strong>Fees</strong></span>
                         </div>
                     </div>
                     <div className="print-row">
                         <div className="col-1">
-                            <span className=''>Services</span><br />
+                            {/* <span className=''>Services</span> */}
+
                             <span>
                                 {detailItems?.appointmentService?.map((item: any) => {
                                     return (
                                         <>
-                                            <strong>{item.name}</strong>
-                                            <br />
+                                           <span>{item.name}</span>
+                                          
                                         </>
                                     )
                                 })}
                             </span>
                         </div>
                         <div className="col-2">
-                            <span>Fees</span> <br />
+                            {/* <span>Fees</span> */}
                             <span>
                                 {detailItems?.appointmentService?.map((item: any) => {
                                     return (
                                         <>
-                                            ${item.fees}
-                                            <br />
+                                          <span>  ${item.fees}</span>
+                                          
                                         </>
                                     )
                                 })}
@@ -100,7 +124,7 @@ const CustomPrintLayouts = forwardRef<any, any>((props: any, ref: any) => {
                     <div className="print-row">
                         <div className="col-1">
                             <span>
-                                <strong>Total</strong>
+                               Total
                             </span>
                         </div>
                         <div className="col-2">
@@ -120,7 +144,7 @@ const CustomPrintLayouts = forwardRef<any, any>((props: any, ref: any) => {
                     <div className="print-row">
                         <div className="col-1">
                             <span>
-                                <strong>HST {detailItems?.gstPercentage} %</strong>
+                                HST {detailItems?.gstPercentage} %
                             </span>
                         </div>
                         <div className="col-2">
@@ -133,7 +157,7 @@ const CustomPrintLayouts = forwardRef<any, any>((props: any, ref: any) => {
                     <div className="print-row">
                         <div className="col-1">
                             <span>
-                                <strong>Grand Total</strong>
+                               Grand Total
                             </span>
                         </div>
                         <div className="col-2">
