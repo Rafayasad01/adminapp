@@ -41,7 +41,7 @@ import AppointmentVisitCreatePopup from './AppointmentVisitCreatePopup';
 import AppointmentVisitUpdatePopup from './AppointmentVisitUpdatePopup';
 import AppointmentVisitReschedulePopup from './AppointmentVisitReschedulePopup';
 import CustomButton from '../../../components/common/CustomButton';
-import CustomPrintLayout from '../../../utils/CustomPrintLayout/CustomPrintLayout';
+import CustomPrintLayout from '../../../utils/CustomPrintLayout/CustomAppointmentPrintLayout';
 // import MyPrintComponent from './print';
 // Extend dayjs with necessary plugins
 dayjs.extend(utc);

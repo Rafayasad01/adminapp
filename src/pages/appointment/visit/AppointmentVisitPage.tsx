@@ -28,7 +28,7 @@ import { listingRolePermission } from '../../../utils/helper';
 import AppointmentVisitCreatePopup from './AppointmentVisitCreatePopup';
 import AppointmentVisitReschedulePopup from './AppointmentVisitReschedulePopup';
 import AppointmentVisitUpdatePopup from './AppointmentVisitUpdatePopup';
-import CustomPrintLayout from '../../../utils/CustomPrintLayout/CustomPrintLayout';
+import CustomPrintLayout from '../../../utils/CustomPrintLayout/CustomAppointmentPrintLayout';
 // Extend dayjs with necessary plugins
 dayjs.extend(utc);
 dayjs.extend(timezone);
