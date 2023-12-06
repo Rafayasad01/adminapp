@@ -588,7 +588,7 @@ function OrderDetailsPage() {
                       )}
 
                       <div
-                        className={`relative mx-2 inline flex ${
+                        className={`relative mx-2 flex ${
                           item.isStatus ? item.value.color : 'text-neutral-500'
                         } `}
                       >

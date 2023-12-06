@@ -1,7 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@100;200;300;400;500;600;700&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 
 html,
 body {
@@ -1025,16 +1027,20 @@ label+.css-1aa5qj0-MuiInputBase-root-MuiInput-root {
 .print-area {
   max-width: 400px;
   margin: auto;
-  padding: 0;
+  padding: 0 23px;
+  font-family: "Roboto Mono" !important;
 }
+
 .print-area .print-logo {
   width: 150px;
   margin: 0 auto 18px;
 }
+
 .print-area .print-logo img {
   max-width: 100%;
   object-fit: contain;
 }
+
 .print-area .print-title {
   margin-bottom: 12px;
   max-width: 143px;
@@ -1046,29 +1052,44 @@ label+.css-1aa5qj0-MuiInputBase-root-MuiInput-root {
   font-weight: 600;
   line-height: normal;
 }
-.print-area .print-date {
+
+
+
+.print-area .print-single-row {
   width: 100%;
-  max-width: 113px;
   margin: auto;
   color: #000;
   font-size: 10px;
   font-style: normal;
+  text-align: start;
   font-weight: 600;
   line-height: 117.182%;
 }
+
+.print-area .print-date {
+  
+  text-align: center;
+  margin-bottom: 10px;
+  
+}
+
 .print-area .print-row {
   width: 100%;
   display: flex;
   justify-content: space-between;
   margin: 11px 0;
+  align-items: center;
 }
+
 .print-area .print-row .col-1 {
   width: 50%;
 }
+
 .print-area .print-row .col-2 {
   width: 50%;
   text-align: end;
 }
+
 .print-area .print-row .col-1 span strong {
   color: #000;
   font-size: 10px;
@@ -1076,6 +1097,7 @@ label+.css-1aa5qj0-MuiInputBase-root-MuiInput-root {
   font-weight: 600;
   line-height: 117.182%;
 }
+
 .print-area .print-row .col-2 span strong {
   color: #000;
   font-size: 10px;
@@ -1083,33 +1105,39 @@ label+.css-1aa5qj0-MuiInputBase-root-MuiInput-root {
   font-weight: 600;
   line-height: 117.182%;
 }
+
 .print-area .print-row {
   width: 100%;
   display: flex;
   justify-content: space-between;
-  margin: 11px 0;
+  margin: 0;
 }
+
 .print-area .print-row .col-1 {
   width: 50%;
 }
+
 .print-area .print-row .col-2 {
   width: 50%;
   text-align: end;
 }
-.print-area .print-row .col-1 span strong {
+
+.print-area .print-row .col-1 span {
   color: #000;
   font-size: 10px;
   font-style: normal;
   font-weight: 500;
   line-height: 117.182%;
 }
-.print-area .print-row .col-2 span strong {
+
+.print-area .print-row .col-2 span {
   color: #000;
   font-size: 10px;
   font-style: normal;
   font-weight: 600;
   line-height: 117.182%;
 }
+
 .print-area .print-row .col-1 label {
   color: #000;
   font-family: Open Sans;
@@ -1119,6 +1147,7 @@ label+.css-1aa5qj0-MuiInputBase-root-MuiInput-root {
   line-height: 117.182%;
   display: block;
 }
+
 .print-area .print-row .col-2 span {
   color: #000;
   font-family: Open Sans;
@@ -1127,10 +1156,12 @@ label+.css-1aa5qj0-MuiInputBase-root-MuiInput-root {
   font-weight: 500;
   line-height: 117.182%;
 }
+
 .print-area .text-area {
   width: 100%;
   margin: 12px 0 8px;
 }
+
 .print-area .text-area textarea {
   width: 100%;
   height: 61px;
@@ -1142,13 +1173,16 @@ label+.css-1aa5qj0-MuiInputBase-root-MuiInput-root {
   text-transform: lowercase;
   line-height: normal;
 }
+
 .print-area .print-banker {
   width: 100%;
 }
+
 .print-area .print-banker ul {
   margin: 0;
   padding: 0;
 }
+
 .print-area .print-banker ul li {
   list-style: none;
   display: flex;
@@ -1156,6 +1190,7 @@ label+.css-1aa5qj0-MuiInputBase-root-MuiInput-root {
   justify-content: space-between;
   margin-bottom: 5px;
 }
+
 .print-area .print-banker ul li span {
   color: #000;
   font-family: Open Sans;
@@ -1164,6 +1199,7 @@ label+.css-1aa5qj0-MuiInputBase-root-MuiInput-root {
   font-weight: 600;
   line-height: 117.182%;
 }
+
 .print-area .print-banker ul li label {
   color: #000;
   font-family: Open Sans;
@@ -1172,6 +1208,7 @@ label+.css-1aa5qj0-MuiInputBase-root-MuiInput-root {
   font-weight: 500;
   line-height: 117.182%;
 }
+
 .print-quote {
   margin: 15px auto;
   width: 100%;
@@ -1183,23 +1220,32 @@ label+.css-1aa5qj0-MuiInputBase-root-MuiInput-root {
   font-weight: 600;
   line-height: 117.182%;
 }
+
 .print-area .print-barccode {
   text-align: center;
+  display: flex;
+  justify-content: center;
   width: 100%;
 }
+
 .print-area .print-line {
   height: 1px;
   padding: 1px 0;
   margin: 7px 0;
   border-top: 2px dotted #000;
 }
+
 .print-area .straight {
   border-top: 1px solid #6A6A6A;
 }
+
 .print-area ::placeholder {
   color: #000;
-  opacity: 1; /* Firefox */
-  }
-  .print-area ::-ms-input-placeholder { /* Edge 12-18 */
+  opacity: 1;
+  /* Firefox */
+}
+
+.print-area ::-ms-input-placeholder {
+  /* Edge 12-18 */
   color: #000;
-  }
+}
