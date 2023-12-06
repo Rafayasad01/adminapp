@@ -48,58 +48,54 @@ const CustomPrintLayouts = forwardRef<any, any>((props: any, ref: any) => {
                         <img src={authState?.user?.tenantConfig?.logo} width="150" height="25" alt="logo" />
                     </div>
                     <div className="print-title">
-                        Your Appointment is Confirmed!
+                        Your Order is Confirmed!
+                    </div>
+                   
+                    <div className="print-row rowss">
+                        <div className="col-1">
+                            <span className=''><strong>Order: ORD0000000133</strong></span>
+                        </div>
+                        <div className="col-2">
+                            <div className="print-single-row print-date date-right">
+                                {dayjs(detailItems?.createdDate).isValid()
+                                    ? dayjs(detailItems?.createdDate)?.format(
+                                        'YYYY-MM-DD hh:mm:ss'
+                                    )
+                                    : '--'}
+                            </div>
+                        </div>
                     </div>
                     <div className="print-line">
                     </div>
                     <div className="print-single-row print-date">
-                        {dayjs(detailItems?.createdDate).isValid()
-                            ? dayjs(detailItems?.createdDate)?.format(
-                                'YYYY-MM-DD hh:mm:ss'
-                            )
-                            : '--'}
+                        <table>
+                            <tr>
+                                <th>Items</th>
+                                <th>Qty</th>
+                                <th>Tax</th>
+                                <th>Price</th>
+                            </tr>
+                            <tr>
+                                <td>Jacket</td>
+                                <td>02</td>
+                                <td>90</td>
+                                <td>122</td>
+                            </tr>
+                            <tr>
+                                <td>Blue Jeans</td>
+                                <td>01</td>
+                                <td>50</td>
+                                <td>101</td>
+                            </tr>
+                        </table>
                     </div>
-                    <div className="print-single-row">
-                        <div className="">
-                            <span>
-                                <strong>Appointee : {detailItems?.name}</strong>
-                            </span>
-                        </div>
-                    </div>
-                    <div className="print-row">
-                        <div className="col-1">
-                            <span className=''>Services</span><br />
-                            <span>
-                                {detailItems?.appointmentService?.map((item: any) => {
-                                    return (
-                                        <>
-                                            <strong>{item.name}</strong>
-                                            <br />
-                                        </>
-                                    )
-                                })}
-                            </span>
-                        </div>
-                        <div className="col-2">
-                            <span>Fees</span> <br />
-                            <span>
-                                {detailItems?.appointmentService?.map((item: any) => {
-                                    return (
-                                        <>
-                                            ${item.fees}
-                                            <br />
-                                        </>
-                                    )
-                                })}
-                            </span>
-                        </div>
-                    </div>
+                 
                     <div className="print-line straight">
                     </div>
                     <div className="print-row">
                         <div className="col-1">
                             <span>
-                                <strong>Total</strong>
+                                Total
                             </span>
                         </div>
                         <div className="col-2">
@@ -119,7 +115,7 @@ const CustomPrintLayouts = forwardRef<any, any>((props: any, ref: any) => {
                     <div className="print-row">
                         <div className="col-1">
                             <span>
-                                <strong>HST {detailItems?.gstPercentage} %</strong>
+                                HST {detailItems?.gstPercentage} %
                             </span>
                         </div>
                         <div className="col-2">
@@ -132,7 +128,7 @@ const CustomPrintLayouts = forwardRef<any, any>((props: any, ref: any) => {
                     <div className="print-row">
                         <div className="col-1">
                             <span>
-                                <strong>Grand Total</strong>
+                                Grand Total
                             </span>
                         </div>
                         <div className="col-2">

@@ -848,7 +848,7 @@ table.schedule-table>tbody>tr.days-off>td {
   font-size: var(--fs-16);
   font-weight: var(--fw-600);
   color: var(--white);
-  line-height: 1;
+  line-height: 117.182%;
 }
 
 .left-sidebar .sidebar-footer-content .share-via .social-icons {
@@ -1053,8 +1053,6 @@ label+.css-1aa5qj0-MuiInputBase-root-MuiInput-root {
   line-height: normal;
 }
 
-
-
 .print-area .print-single-row {
   width: 100%;
   margin: auto;
@@ -1072,12 +1070,15 @@ label+.css-1aa5qj0-MuiInputBase-root-MuiInput-root {
   margin-bottom: 10px;
   
 }
+.print-area .rowss .col-2 .date-right{
+  padding-left: 50px;
+}
 
 .print-area .print-row {
   width: 100%;
   display: flex;
   justify-content: space-between;
-  margin: 11px 0;
+  margin: 0;
   align-items: center;
 }
 
@@ -1090,44 +1091,21 @@ label+.css-1aa5qj0-MuiInputBase-root-MuiInput-root {
   text-align: end;
 }
 
-.print-area .print-row .col-1 span strong {
-  color: #000;
-  font-size: 10px;
-  font-style: normal;
-  font-weight: 600;
-  line-height: 117.182%;
-}
 
-.print-area .print-row .col-2 span strong {
-  color: #000;
-  font-size: 10px;
-  font-style: normal;
-  font-weight: 600;
-  line-height: 117.182%;
+.print-area span{
+  display: block;
 }
-
-.print-area .print-row {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  margin: 0;
+.print-area .rowss{
+  margin-bottom: 8px;
 }
-
-.print-area .print-row .col-1 {
-  width: 50%;
-}
-
-.print-area .print-row .col-2 {
-  width: 50%;
-  text-align: end;
-}
-
 .print-area .print-row .col-1 span {
   color: #000;
   font-size: 10px;
   font-style: normal;
   font-weight: 500;
   line-height: 117.182%;
+  display: block;
+  margin-bottom: 4px;
 }
 
 .print-area .print-row .col-2 span {
@@ -1136,43 +1114,11 @@ label+.css-1aa5qj0-MuiInputBase-root-MuiInput-root {
   font-style: normal;
   font-weight: 600;
   line-height: 117.182%;
-}
-
-.print-area .print-row .col-1 label {
-  color: #000;
-  font-family: Open Sans;
-  font-size: 10px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: 117.182%;
   display: block;
+  margin-bottom: 4px;
 }
 
-.print-area .print-row .col-2 span {
-  color: #000;
-  font-family: Open Sans;
-  font-size: 10px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: 117.182%;
-}
 
-.print-area .text-area {
-  width: 100%;
-  margin: 12px 0 8px;
-}
-
-.print-area .text-area textarea {
-  width: 100%;
-  height: 61px;
-  background: #EFEFEF;
-  border: none;
-  outline: 0;
-  color: #000;
-  font-size: 10px;
-  text-transform: lowercase;
-  line-height: normal;
-}
 
 .print-area .print-banker {
   width: 100%;
@@ -1193,16 +1139,15 @@ label+.css-1aa5qj0-MuiInputBase-root-MuiInput-root {
 
 .print-area .print-banker ul li span {
   color: #000;
-  font-family: Open Sans;
   font-size: 10px;
   font-style: normal;
   font-weight: 600;
   line-height: 117.182%;
+  display: block;
 }
 
 .print-area .print-banker ul li label {
   color: #000;
-  font-family: Open Sans;
   font-size: 10px;
   font-style: normal;
   font-weight: 500;
@@ -1214,7 +1159,6 @@ label+.css-1aa5qj0-MuiInputBase-root-MuiInput-root {
   width: 100%;
   text-align: center;
   color: #000;
-  font-family: Open Sans;
   font-size: 10px;
   font-style: normal;
   font-weight: 600;
@@ -1230,7 +1174,7 @@ label+.css-1aa5qj0-MuiInputBase-root-MuiInput-root {
 
 .print-area .print-line {
   height: 1px;
-  padding: 1px 0;
+  padding: 2px 0;
   margin: 7px 0;
   border-top: 2px dotted #000;
 }
@@ -1248,4 +1192,51 @@ label+.css-1aa5qj0-MuiInputBase-root-MuiInput-root {
 .print-area ::-ms-input-placeholder {
   /* Edge 12-18 */
   color: #000;
+}
+
+.print-area table {
+  width: 100%;
+}
+
+.print-area table tr th {
+  text-align: left;
+  color: #000;
+  font-family: Open Sans;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 117.182%;
+  padding-bottom: 10px;
+  width: 25%;
+}
+.print-area table tr th:nth-child(2) {
+  text-align: center;
+}
+.print-area table tr th:nth-child(3) {
+  text-align: center;
+}
+.print-area table tr {
+  width: 100%;
+}
+
+.print-area table tr td {
+  color: #000;
+  font-family: Open Sans;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 117.182%;
+  text-align: left;
+}
+.print-area table tr th:nth-child(4){
+  text-align:right;
+}
+.print-area table tr td:nth-child(2){
+  text-align:center;
+}
+.print-area table tr td:nth-child(3){
+  text-align:center;
+}
+.print-area table tr td:nth-child(4){
+  text-align:right;
 }
