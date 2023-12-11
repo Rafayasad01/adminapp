@@ -111,7 +111,7 @@ function BranchDetailPage() {
           <div className="grid w-full grid-cols-12 rounded-lg bg-[#F0F0F0] p-3">
             <div className="col-span-4 my-5">
               <div className="flex justify-between">
-                <div className=''>
+                <div className="">
                   <p className="text-sm font-semibold text-[#1A1A1A]">
                     Branch Owner
                   </p>
