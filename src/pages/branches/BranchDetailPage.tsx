@@ -109,9 +109,9 @@ function BranchDetailPage() {
         <TopBar title="Branch User Detail" isNestedRoute />
         <div className="px-5">
           <div className="grid w-full grid-cols-12 rounded-lg bg-[#F0F0F0] p-3">
-            <div className="col-span-4">
+            <div className="col-span-4 my-5">
               <div className="flex justify-between">
-                <div>
+                <div className=''>
                   <p className="text-sm font-semibold text-[#1A1A1A]">
                     Branch Owner
                   </p>
@@ -193,7 +193,7 @@ function BranchDetailPage() {
                 </div>
               </div>
             </div>
-            <div className="col-span-8 border-l-[1px] border-[#949EAE] px-10">
+            <div className="col-span-8 my-5 border-l-[1px] border-[#949EAE] px-10">
               <p className="text-sm font-semibold text-[#1A1A1A]">
                 Branch Users
               </p>
@@ -201,7 +201,7 @@ function BranchDetailPage() {
                 <div className="grid grid-cols-12 gap-6">
                   {userDetail.branchUsers?.map((item: any, index: number) => {
                     return (
-                      <div key={index} className="col-span-6 2xl:col-span-3">
+                      <div key={index} className="col-span-6 2xl:col-span-4">
                         <CustomCard
                           title={`${item.firstName} ${item.lastName}`}
                           avatar={item.avatar}
