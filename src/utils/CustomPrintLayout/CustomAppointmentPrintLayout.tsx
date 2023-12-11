@@ -40,7 +40,7 @@ const CustomPrintLayouts = forwardRef<any, any>((props: any, ref: any) => {
     fetchData();
   }, []);
 
-  const qrCodeValue = `Tracking Id: ${detailItems?.id} \n Name: ${detailItems?.name}`;
+  const qrCodeValue = `Tracking Id: ${detailItems?.id} \n\nShop Name: ${authState?.user?.tenantName} \nShop Email: ${authState?.user?.username}`;
 
   return (
     <div style={{ display: 'none' }}>
@@ -65,8 +65,8 @@ const CustomPrintLayouts = forwardRef<any, any>((props: any, ref: any) => {
               <div className="print-single-row print-date date-right">
                 {dayjs(detailItems?.createdDate).isValid()
                   ? dayjs(detailItems?.createdDate)?.format(
-                      'YYYY-MM-DD hh:mm:ss'
-                    )
+                    'YYYY-MM-DD hh:mm:ss'
+                  )
                   : '--'}
               </div>
             </div>
@@ -143,7 +143,7 @@ const CustomPrintLayouts = forwardRef<any, any>((props: any, ref: any) => {
           )}
           <div className="print-row">
             <div className="col-1">
-              <span>HST {detailItems?.gstPercentage} %</span>
+              <span>HST {detailItems?.gstPercentage}%</span>
             </div>
             <div className="col-2">
               <span>${detailItems?.gstAmount}</span>
@@ -175,7 +175,7 @@ const CustomPrintLayouts = forwardRef<any, any>((props: any, ref: any) => {
 
           <div className="print-quote">Thank you</div>
           <div className="print-barccode flex w-full items-center justify-center text-center">
-            <QRCodeSVG level="M" size={52} value={qrCodeValue} />
+            <QRCodeSVG level="M" size={55} value={qrCodeValue} />
           </div>
         </div>
       </div>
