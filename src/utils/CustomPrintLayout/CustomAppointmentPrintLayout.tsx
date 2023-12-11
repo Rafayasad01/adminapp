@@ -65,8 +65,8 @@ const CustomPrintLayouts = forwardRef<any, any>((props: any, ref: any) => {
               <div className="print-single-row print-date date-right">
                 {dayjs(detailItems?.createdDate).isValid()
                   ? dayjs(detailItems?.createdDate)?.format(
-                    'YYYY-MM-DD hh:mm:ss'
-                  )
+                      'YYYY-MM-DD hh:mm:ss'
+                    )
                   : '--'}
               </div>
             </div>

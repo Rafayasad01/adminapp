@@ -157,7 +157,7 @@ function AppointmentVisitDetailPage() {
                   <span className="text-sm">
                     {list?.appointmentTime
                       ? dayjs(list?.appointmentTime).isValid() &&
-                      dayjs(list?.appointmentTime).format('hh:mm A')
+                        dayjs(list?.appointmentTime).format('hh:mm A')
                       : '--'}
                   </span>
                 </div>
@@ -166,7 +166,7 @@ function AppointmentVisitDetailPage() {
                   <span className="text-sm">
                     {list?.appointmentTime
                       ? dayjs(list?.appointmentTime).isValid() &&
-                      dayjs(list?.appointmentTime).format('YYYY-MM-DD')
+                        dayjs(list?.appointmentTime).format('YYYY-MM-DD')
                       : '--'}
                   </span>
                 </div>
@@ -224,11 +224,11 @@ function AppointmentVisitDetailPage() {
                   <span className="text-sm">
                     {list?.appointmentProvider?.createdDate
                       ? dayjs(
-                        list?.appointmentProvider?.createdDate
-                      ).isValid() &&
-                      dayjs(list?.appointmentProvider?.createdDate).format(
-                        'hh:mm A'
-                      )
+                          list?.appointmentProvider?.createdDate
+                        ).isValid() &&
+                        dayjs(list?.appointmentProvider?.createdDate).format(
+                          'hh:mm A'
+                        )
                       : '--'}
                   </span>
                 </div>
@@ -267,8 +267,8 @@ function AppointmentVisitDetailPage() {
                               <span className="text-xs font-normal text-[#6A6A6A]">
                                 {dayjs(item.createdDate).isValid()
                                   ? dayjs(item.createdDate)?.format(
-                                    'MMMM DD, YYYY'
-                                  )
+                                      'MMMM DD, YYYY'
+                                    )
                                   : '--'}
                               </span>
                             </div>
