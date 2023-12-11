@@ -169,40 +169,56 @@ function SuperAdminShopPage() {
   };
 
   const handleSwitchChange = (event: any, id: string) => {
+    setIsLoader(true);
     const data = {
       isActive: event.target.checked,
       // trialMode: event.target.checked,
       updatedBy: authState.user.id,
     };
-    Service.updateShopStatus(id, data).then((updateItem) => {
-      if (updateItem.data.success) {
-        setList((newArr: any) => {
-          return newArr.map((item: any) => {
-            if (item.id === id) {
-              item.isActive = updateItem.data.data.isActive;
-              // item.trialMode = updateItem.data.data.trialMode;
-            }
-            return { ...item };
+    Service.updateShopStatus(id, data)
+      .then((updateItem) => {
+        if (updateItem.data.success) {
+          setIsLoader(false);
+          setList((newArr: any) => {
+            return newArr.map((item: any) => {
+              if (item.id === id) {
+                item.isActive = updateItem.data.data.isActive;
+                // item.trialMode = updateItem.data.data.trialMode;
+              }
+              return { ...item };
+            });
           });
+        } else {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: updateItem.data.message,
+            type: 'error',
+          });
+        }
+      })
+      .catch((err) => {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
         });
-      }
-    });
+      });
   };
 
-  const handleTrailModeStatus = (status: any, trialMode: boolean, trialStartDate: any): any => {
-    console.log("TTTMM", trialMode);
-
+  const handleTrailModeStatus = (status: any, trialMode: boolean): any => {
+    console.log('TTTMM', trialMode, status);
+    let textMsg = '';
     if (trialMode) {
-      return "Started"
+      textMsg = 'Started';
+    } else if (status) {
+      textMsg = 'Not Started';
     } else {
-      if (trialStartDate && !status) {
-        return "Expired"
-      } else {
-        return "Not Started"
-      }
+      textMsg = 'End';
     }
-    return null;
-  }
+    return textMsg;
+  };
 
   return isLoader ? (
     <Loader />
@@ -288,10 +304,26 @@ function SuperAdminShopPage() {
                           </div>
                         </td>
                         <td>
-                          <span className={
-                            handleTrailModeStatus(item.status, item.trialMode, item.trailStartDate) === "Started" ? "badge badge-success" :
-                              handleTrailModeStatus(item.status, item.trialMode, item.trailStartDate) === "Not Started" ? "badge badge-primary"
-                                : "badge badge-danger"}>{handleTrailModeStatus(item.status, item.trialMode, item.trailStartDate)}</span>
+                          <span
+                            className={
+                              handleTrailModeStatus(
+                                item.isActive,
+                                item.trialMode
+                              ) === 'Started'
+                                ? 'badge badge-success'
+                                : handleTrailModeStatus(
+                                    item.isActive,
+                                    item.trialMode
+                                  ) === 'Not Started'
+                                ? 'badge badge-primary'
+                                : 'badge badge-danger'
+                            }
+                          >
+                            {handleTrailModeStatus(
+                              item.isActive,
+                              item.trialMode
+                            )}
+                          </span>
                         </td>
                         <td>
                           {dayjs(item.trailStartDate).isValid() ? (

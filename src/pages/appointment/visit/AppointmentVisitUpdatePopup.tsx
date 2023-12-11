@@ -160,7 +160,10 @@ function AppointmentVisitUpdatePopup({
         {isLoader ? (
           <Loader />
         ) : (
-          <form className="overflow-auto px-2" onSubmit={handleSubmit(onSubmit)}>
+          <form
+            className="overflow-auto px-2"
+            onSubmit={handleSubmit(onSubmit)}
+          >
             <div className="FormHeader">
               <span className="Title">Update Appointment</span>
             </div>

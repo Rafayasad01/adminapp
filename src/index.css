@@ -1105,7 +1105,7 @@ label+.css-1aa5qj0-MuiInputBase-root-MuiInput-root {
   font-weight: 500;
   line-height: 117.182%;
   display: block;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
 }
 
 .print-area .print-row .col-2 span {
@@ -1115,7 +1115,7 @@ label+.css-1aa5qj0-MuiInputBase-root-MuiInput-root {
   font-weight: 600;
   line-height: 117.182%;
   display: block;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
 }
 
 
@@ -1135,6 +1135,7 @@ label+.css-1aa5qj0-MuiInputBase-root-MuiInput-root {
   align-items: center;
   justify-content: space-between;
   margin-bottom: 5px;
+  font-family: "Roboto Mono" !important;
 }
 
 .print-area .print-banker ul li span {
@@ -1201,13 +1202,13 @@ label+.css-1aa5qj0-MuiInputBase-root-MuiInput-root {
 .print-area table tr th {
   text-align: left;
   color: #000;
-  font-family: Open Sans;
+  font-family: "Roboto Mono" !important;
   font-size: 10px;
   font-style: normal;
   font-weight: 600;
   line-height: 117.182%;
   padding-bottom: 10px;
-  width: 25%;
+  /* width: 33%; */
 }
 .print-area table tr th:nth-child(2) {
   text-align: center;
@@ -1221,22 +1222,181 @@ label+.css-1aa5qj0-MuiInputBase-root-MuiInput-root {
 
 .print-area table tr td {
   color: #000;
-  font-family: Open Sans;
   font-size: 10px;
   font-style: normal;
   font-weight: 500;
   line-height: 117.182%;
   text-align: left;
 }
-.print-area table tr th:nth-child(4){
+.print-area table tr th:nth-child(3){
   text-align:right;
 }
 .print-area table tr td:nth-child(2){
   text-align:center;
 }
-.print-area table tr td:nth-child(3){
+/* .print-area table tr td:nth-child(3){
   text-align:center;
-}
-.print-area table tr td:nth-child(4){
+} */
+.print-area table tr td:nth-child(3){
   text-align:right;
+}
+
+
+
+/* invocie css */
+.print-invoice{
+  margin-top: 5rem;
+  width: 100%;
+  max-width: 100%;
+}
+
+.print-invoice .rounded-lg {
+  border-radius: 0.375rem;
+}
+
+.print-invoice .bg-white {
+  background-color: #ffffff;
+}
+
+/* .print-invoice .shadow-lg {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+} */
+
+.print-invoice .px-7 {
+  padding-left: 1.75rem;
+  padding-right: 1.75rem;
+}
+
+.print-invoice .py-3 {
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+}
+
+.print-invoice .py-5 {
+  padding-top: 1.25rem;
+  padding-bottom: 1.25rem;
+}
+
+.print-invoice .text-2xl {
+  font-size: 1.5rem;
+}
+
+.print-invoice .font-bold {
+  font-weight: bold;
+}
+
+.print-invoice .text-xl {
+  font-size: 1.25rem;
+}
+
+.print-invoice .text-sm {
+  font-size: 0.875rem;
+}
+
+.print-invoice .text-base {
+  font-size: 1rem;
+}
+
+.print-invoice .text {
+  color: #252733;
+}
+
+.print-invoice .grid {
+  display: grid;
+}
+
+.print-invoice .grid-cols-12 {
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+}
+
+.print-invoice .col-span-5 {
+  grid-column: span 6 / span 6;
+}
+
+.print-invoice .col-span-1 {
+  border-left-width: 1px;
+}
+
+.print-invoice .border {
+  border-color: #a6bac8;
+}
+
+.print-invoice .p-3 {
+  padding: 0.75rem;
+}
+
+.print-invoice .p-4 {
+  padding: 1rem;
+}
+
+.print-invoice .my-4 {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.print-invoice .flex {
+  display: flex;
+}
+
+.print-invoice .justify-between {
+  justify-content: space-between;
+}
+
+.print-invoice .items-center {
+  align-items: center;
+}
+
+.print-invoice .my-2 {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.print-invoice .mb-2 {
+  margin-bottom: 0.5rem;
+}
+
+.print-invoice .mb-4 {
+  margin-bottom: 1rem;
+}
+
+.print-invoice .text-base {
+  font-size: 1rem;
+}
+
+.print-invoice .font-open-sans {
+  font-family: 'Open Sans', sans-serif;
+}
+
+.print-invoice .uppercase {
+  text-transform: uppercase;
+}
+
+.print-invoice .grid-cols-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.print-invoice .col-span-6 {
+  grid-column: span 6 / span 6;
+}
+
+.print-invoice .col-span-12 {
+  grid-column: span 12 / span 12;
+}
+
+.print-invoice .table-auto {
+  width: auto;
+  table-layout: auto;
+}
+
+.print-invoice .table-border {
+  border-collapse: collapse;
+  border-spacing: 0;
+  width: 100%;
+}
+
+.print-invoice .table-auto th,
+.print-invoice .table-auto td {
+  border: 1px solid #e2e8f0;
+  padding: 0.75rem;
+  text-align: left;
 }

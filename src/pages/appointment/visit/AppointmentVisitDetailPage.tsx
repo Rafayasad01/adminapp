@@ -19,8 +19,8 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import { useParams } from 'react-router-dom';
-import TopBar from '../../../components/common/TopBar';
 import PrintOutlinedIcon from '@mui/icons-material/PrintOutlined';
+import TopBar from '../../../components/common/TopBar';
 import ActionMenu from '../../../components/common/ActionMenu';
 import CustomDialog from '../../../components/common/CustomDialog';
 import CustomText from '../../../components/common/CustomText';
@@ -109,16 +109,19 @@ function AppointmentVisitDetailPage() {
       <TopBar isNestedRoute title="Appointment" />
       <div className="container m-auto mt-5">
         <div className="w-full rounded-lg bg-white shadow-lg">
-          <div className='px-7 py-3 flex justify-between'>
+          <div className="flex justify-between px-7 py-3">
             <div>
-              <span className='font-open-sans text-2xl font-bold text-[#252733]'>Details</span>
+              <span className="font-open-sans text-2xl font-bold text-[#252733]">
+                Details
+              </span>
             </div>
             <div>
               <CustomPrintLayout
                 index={0}
                 isPrintEnabled={isPrintEnabled}
                 setPrintEnabled={setPrintEnabled}
-                data={list} />
+                data={list}
+              />
             </div>
           </div>
           <div className="grid grid-cols-12 gap-4 px-4 py-5">
@@ -154,7 +157,7 @@ function AppointmentVisitDetailPage() {
                   <span className="text-sm">
                     {list?.appointmentTime
                       ? dayjs(list?.appointmentTime).isValid() &&
-                      dayjs(list?.appointmentTime).format('hh:mm A')
+                        dayjs(list?.appointmentTime).format('hh:mm A')
                       : '--'}
                   </span>
                 </div>
@@ -163,7 +166,7 @@ function AppointmentVisitDetailPage() {
                   <span className="text-sm">
                     {list?.appointmentTime
                       ? dayjs(list?.appointmentTime).isValid() &&
-                      dayjs(list?.appointmentTime).format('YYYY-MM-DD')
+                        dayjs(list?.appointmentTime).format('YYYY-MM-DD')
                       : '--'}
                   </span>
                 </div>
@@ -221,11 +224,11 @@ function AppointmentVisitDetailPage() {
                   <span className="text-sm">
                     {list?.appointmentProvider?.createdDate
                       ? dayjs(
-                        list?.appointmentProvider?.createdDate
-                      ).isValid() &&
-                      dayjs(list?.appointmentProvider?.createdDate).format(
-                        'hh:mm A'
-                      )
+                          list?.appointmentProvider?.createdDate
+                        ).isValid() &&
+                        dayjs(list?.appointmentProvider?.createdDate).format(
+                          'hh:mm A'
+                        )
                       : '--'}
                   </span>
                 </div>
@@ -264,8 +267,8 @@ function AppointmentVisitDetailPage() {
                               <span className="text-xs font-normal text-[#6A6A6A]">
                                 {dayjs(item.createdDate).isValid()
                                   ? dayjs(item.createdDate)?.format(
-                                    'MMMM DD, YYYY'
-                                  )
+                                      'MMMM DD, YYYY'
+                                    )
                                   : '--'}
                               </span>
                             </div>

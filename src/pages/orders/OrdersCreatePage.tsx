@@ -42,6 +42,7 @@ import Service from '../../services/adminapp/adminOrders';
 import { useAppSelector } from '../../redux/redux-hooks';
 import Loader from '../../components/common/Loader2';
 import Notify from '../../components/common/Notify';
+import CustomButton from '../../components/common/CustomButton';
 
 function OrdersCreatePage() {
   const [catList, setCatList] = useState<any>([]);
@@ -73,6 +74,7 @@ function OrdersCreatePage() {
   const [isLoader, setIsLoader] = useState(true);
   const [isNotify, setIsNotify] = useState(false);
   const [notifyMessage, setNotifyMessage] = useState({});
+  const [loginDetails, setLoginDetails] = useState<any>(null);
   const authState: any = useAppSelector((state: any) => state?.authState);
 
   const totalAmount = itemList.reduce(
@@ -83,79 +85,114 @@ function OrdersCreatePage() {
     totalAmount * (authState.user.tenantConfig.gstPercentage / 100);
   const grandTotal = gstAmount + totalAmount;
 
-  const onSubmit = () => {
-    if (itemList?.length > 0 && totalAmount > 0) {
-      setIsLoader(true);
-      const anonIdentidier = authState?.user?.username?.split('@')[0];
-      const payload = {
-        identifier:
-          isExistingUser !== 'true'
-            ? `${anonIdentidier}@shop.com`
-            : userIdentifier,
-      };
-
-      AppUserService.appLogin(payload)
-        .then((res) => {
-          if (res.data.success) {
-            const cartPayload = {
-              tenant: res.data.data.tenant,
-              appUser: res.data.data.id,
-            };
-            Service.OrderGetCart(cartPayload).then((item: any) => {
-              // console.log('ITTTTTTEM', item);
-              if (item.data.success) {
-                const updatedCartPayload = {
-                  cartId: item.data.data.cart.id,
-                  appUser: item.data.data.cart.appUser,
-                  tenant: item.data.data.cart.tenant,
-                  appUserAddress: res.data.data.appUserAddress.id,
-                  pickupDateTime: new Date(),
-                  dropDateTime: new Date(),
-                  promoCode: '',
-                  products: itemList?.map((items: any) => ({
-                    id: items.id,
-                    quantity: items.quantity,
-                  })),
-                };
-                Service.OrderUpdateCart(updatedCartPayload).then((cartRes) => {
-                  if (res.data.success) {
-                    const orderPlace = {
-                      cartId: cartRes.data.data.cart.id,
-                      tenant: cartRes.data.data.cart.tenant,
-                      appUser: cartRes.data.data.cart.appUser,
-                    };
-                    Service.OrderPlace(updatedCartPayload).then((orderItem) => {
-                      if (res.data.success) {
-                        setIsLoader(false);
-                        // console.log('Order place', orderItem);
-                        navigate(-1);
-                      }
-                      // console.log('Cart REs', cartRes);
-                    });
-                  }
-                  // console.log('Cart REs', cartRes);
-                });
-              }
-            });
-          }
-          // console.log('RESS', res.data);
-        })
-        .catch((err) => console.log('Err', err));
-    }
-    else if (itemList?.length <= 0) {
-      setIsLoader(false);
-      setIsNotify(true);
-      setNotifyMessage({
-        text: "Select atleast one category item",
-        type: 'info',
+  const handleLogin = () => {
+    setIsLoader(true);
+    const anonIdentidier = authState?.user?.username?.split('@')[0];
+    const payload = {
+      identifier:
+        isExistingUser !== 'true'
+          ? `${anonIdentidier}@shop.com`
+          : userIdentifier,
+    };
+    AppUserService.appLogin(payload)
+      .then((res) => {
+        if (res.data.success) {
+          setIsLoader(false);
+          setLoginDetails(res.data);
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: res.data.message,
+            type: 'success',
+          });
+        } else {
+          setLoginDetails(null);
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: res.data.message,
+            type: 'error',
+          });
+        }
+      })
+      .catch((err) => {
+        setLoginDetails(null);
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
+        });
       });
-    }
-    else if (totalAmount <= 0) {
+  };
+
+  const onSubmit = () => {
+    if (loginDetails !== null) {
+      if (itemList?.length > 0 && totalAmount > 0) {
+        setIsLoader(true);
+        const cartPayload = {
+          tenant: loginDetails?.data?.tenant,
+          appUser: loginDetails?.data?.id,
+        };
+        Service.OrderGetCart(cartPayload)
+          .then((item: any) => {
+            // console.log('ITTTTTTEM', item);
+            if (item.data.success) {
+              const updatedCartPayload = {
+                cartId: item.data.data.cart.id,
+                appUser: item.data.data.cart.appUser,
+                tenant: item.data.data.cart.tenant,
+                appUserAddress: loginDetails?.data?.appUserAddress.id,
+                pickupDateTime: new Date(),
+                dropDateTime: new Date(),
+                promoCode: '',
+                products: itemList?.map((items: any) => ({
+                  id: items.id,
+                  quantity: items.quantity,
+                })),
+              };
+              Service.OrderUpdateCart(updatedCartPayload).then((cartRes) => {
+                if (loginDetails?.success) {
+                  const orderPlace = {
+                    cartId: cartRes.data.data.cart.id,
+                    tenant: cartRes.data.data.cart.tenant,
+                    appUser: cartRes.data.data.cart.appUser,
+                  };
+                  Service.OrderPlace(updatedCartPayload).then((orderItem) => {
+                    if (loginDetails?.success) {
+                      setIsLoader(false);
+                      // console.log('Order place', orderItem);
+                      navigate(-1);
+                    }
+                    // console.log('Cart REs', cartRes);
+                  });
+                }
+                // console.log('Cart REs', cartRes);
+              });
+            }
+          })
+          .catch((err: any) => console.log('Err', err));
+      } else if (itemList?.length <= 0) {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: 'Select atleast one category item',
+          type: 'info',
+        });
+      } else if (totalAmount <= 0) {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: 'Total amount is $0.00, increase your quantity',
+          type: 'info',
+        });
+      }
+    } else {
       setIsLoader(false);
       setIsNotify(true);
       setNotifyMessage({
-        text: "Total amount is $0.00, increase your quantity",
-        type: 'info',
+        text: 'User details not found!',
+        type: 'error',
       });
     }
   };
@@ -314,7 +351,7 @@ function OrdersCreatePage() {
               <div className="mx-2">
                 <FormControl className="FormControl" variant="standard">
                   <CustomDropDown
-                    border='1px'
+                    border="1px"
                     validateRequired
                     customWidth="2xl:w-[300px] w-[200px]"
                     id="category"
@@ -326,14 +363,14 @@ function OrdersCreatePage() {
                     options={{ roles: catList }}
                     customClassInputTitle="font-bold"
                     inputTitle=""
-                    defaultValue='Select Category'
+                    defaultValue="Select Category"
                   />
                 </FormControl>
               </div>
               <div>
                 <FormControl className="FormControl" variant="standard">
                   <CustomMultipleSelectBox
-                    border='1px'
+                    border="1px"
                     callback={handleMultipleSelectCallback}
                     validateRequired
                     customWidth="2xl:w-[300px] w-[200px]"
@@ -345,7 +382,7 @@ function OrdersCreatePage() {
                     options={{ roles: catItemList }}
                     customClassInputTitle="font-bold"
                     inputTitle=""
-                    defaultVal='-- Select Category items --'
+                    defaultVal="-- Select Category items --"
                   />
                 </FormControl>
               </div>
@@ -503,56 +540,74 @@ function OrdersCreatePage() {
                 </RadioGroup>
               </FormControl>
               <Divider flexItem className="my-5" />
-              <FormControl className="">
-                <FormLabel
-                  id="demo-row-radio-buttons-group-label"
-                  className="font-open-sans text-xl font-semibold text-[#1A1A1A]"
-                >
-                  User
-                </FormLabel>
-                <RadioGroup
-                  row
-                  aria-labelledby="demo-row-radio-buttons-group-label"
-                  name="row-radio-buttons-group"
-                  value={isExistingUser}
-                  onClick={handleUserChange}
-                >
-                  <FormControlLabel
-                    sx={{
-                      color: '#6A6A6A',
-                      fontFamily: 'Open Sans',
-                      fonWeight: 400,
-                      fonSize: '14px',
-                    }}
-                    value={false}
-                    control={
-                      <Radio
-                        className="text-sm text-[#1D1D1D]"
-                        icon={<RadioButtonUncheckedOutlinedIcon />}
-                        checkedIcon={<CheckCircleOutlinedIcon />}
+              <div className="flex items-center justify-between">
+                <div>
+                  <FormControl className="">
+                    <FormLabel
+                      id="demo-row-radio-buttons-group-label"
+                      className="font-open-sans text-xl font-semibold text-[#1A1A1A]"
+                    >
+                      User
+                    </FormLabel>
+                    <RadioGroup
+                      row
+                      aria-labelledby="demo-row-radio-buttons-group-label"
+                      name="row-radio-buttons-group"
+                      value={isExistingUser}
+                      onClick={handleUserChange}
+                    >
+                      <FormControlLabel
+                        sx={{
+                          color: '#6A6A6A',
+                          fontFamily: 'Open Sans',
+                          fonWeight: 400,
+                          fonSize: '14px',
+                        }}
+                        value={false}
+                        control={
+                          <Radio
+                            className="text-sm text-[#1D1D1D]"
+                            icon={<RadioButtonUncheckedOutlinedIcon />}
+                            checkedIcon={<CheckCircleOutlinedIcon />}
+                          />
+                        }
+                        label="Anonymous User"
                       />
-                    }
-                    label="Anonymous User"
-                  />
-                  <FormControlLabel
-                    sx={{
-                      color: '#6A6A6A',
-                      fontFamily: 'Open Sans',
-                      fonWeight: 400,
-                      fonSize: '14px',
-                    }}
-                    value
-                    control={
-                      <Radio
-                        className="text-[#1D1D1D]"
-                        icon={<RadioButtonUncheckedOutlinedIcon />}
-                        checkedIcon={<CheckCircleOutlinedIcon />}
+                      <FormControlLabel
+                        sx={{
+                          color: '#6A6A6A',
+                          fontFamily: 'Open Sans',
+                          fonWeight: 400,
+                          fonSize: '14px',
+                        }}
+                        value
+                        control={
+                          <Radio
+                            className="text-[#1D1D1D]"
+                            icon={<RadioButtonUncheckedOutlinedIcon />}
+                            checkedIcon={<CheckCircleOutlinedIcon />}
+                          />
+                        }
+                        label="Exist User"
                       />
-                    }
-                    label="Exist User"
+                    </RadioGroup>
+                  </FormControl>
+                </div>
+                <div>
+                  <CustomButton
+                    onclick={handleLogin}
+                    buttonType="button"
+                    title="Login"
+                    className="btn-black-fill"
+                    sx={{
+                      padding: '0.375rem 2rem !important',
+                      width: '100%',
+                      height: '35px',
+                    }}
                   />
-                </RadioGroup>
-              </FormControl>
+                </div>
+              </div>
+
               {/* {console.log("isExx", isExistingUser)} */}
               {isExistingUser === 'true' && (
                 <div className="w-full rounded-xl border border-solid border-[#E4E4E4] py-1 pl-3">
@@ -613,11 +668,13 @@ function OrdersCreatePage() {
                 </div>
               </div>
               <Button
-                disabled={isLoader}
+                disabled={isLoader || loginDetails === null}
                 type="button"
                 onClick={onSubmit}
                 color="inherit"
-                className="w-full rounded-lg bg-neutral-900 font-open-sans text-base font-semibold text-gray-50"
+                className={`w-full rounded-lg ${
+                  loginDetails === null ? 'bg-neutral-400' : 'bg-neutral-900'
+                } font-open-sans text-base font-semibold text-gray-50`}
               >
                 {isLoader ? (
                   <CircularProgress size="25px" color="inherit" />

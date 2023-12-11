@@ -8,6 +8,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import TablePagination from '@mui/material/TablePagination';
 import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
+import Switch from '@mui/material/Switch';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
@@ -191,6 +192,8 @@ function BranchPage() {
   };
 
   const editHandler = (id: string) => {
+    console.log('EVENT DOUBLE HITT');
+
     setIsLoader(true);
     Service.editBranch(id)
       .then((item: any) => {
@@ -252,6 +255,59 @@ function BranchPage() {
           type: 'error',
         });
       });
+  };
+  console.log('EVENT HITT', openEditFormDialog);
+
+  const handleSwitchChange = (event: any, id: string) => {
+    setOpenEditFormDialog(false);
+    setIsLoader(true);
+    const data = {
+      isActive: event.target.checked,
+      // trialMode: event.target.checked,
+      updatedBy: authState.user.id,
+    };
+    Service.updateBranchStatus(data, id)
+      .then((updateItem) => {
+        if (updateItem.data.success) {
+          setIsLoader(false);
+          setList((newArr: any) => {
+            return newArr.map((item: any) => {
+              if (item.id === id) {
+                item.isActive = updateItem.data.data.isActive;
+                // item.trialMode = updateItem.data.data.trialMode;
+              }
+              return { ...item };
+            });
+          });
+        } else {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: updateItem.data.message,
+            type: 'error',
+          });
+        }
+      })
+      .catch((err) => {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
+        });
+      });
+  };
+
+  const handleTrailModeStatus = (status: any, trialMode: boolean): any => {
+    let textMsg = '';
+    if (trialMode) {
+      textMsg = 'Started';
+    } else if (status) {
+      textMsg = 'Not Started';
+    } else {
+      textMsg = 'End';
+    }
+    return textMsg;
   };
 
   return isLoader ? (
@@ -362,6 +418,35 @@ function BranchPage() {
                           {item.maxUserLimit} - {item.userCounts}
                         </td>
                         <td>
+                          <span
+                            className={
+                              handleTrailModeStatus(
+                                item.isActive,
+                                item.trialMode
+                              ) === 'Started'
+                                ? 'badge badge-success'
+                                : handleTrailModeStatus(
+                                    item.isActive,
+                                    item.trialMode
+                                  ) === 'Not Started'
+                                ? 'badge badge-primary'
+                                : 'badge badge-danger'
+                            }
+                          >
+                            {handleTrailModeStatus(
+                              item.isActive,
+                              item.trialMode
+                            )}
+                          </span>
+                        </td>
+                        {/* <td>
+                          {item.trialMode ? (
+                            <span className="badge badge-success">ON</span>
+                          ) : (
+                            <span className="badge badge-danger">OFF</span>
+                          )}
+                        </td> */}
+                        <td>
                           {dayjs(item.trailStartDate).isValid() ? (
                             <>
                               {dayjs(item.trailStartDate)?.format(
@@ -372,13 +457,6 @@ function BranchPage() {
                             </>
                           ) : (
                             '--'
-                          )}
-                        </td>
-                        <td>
-                          {item.trialMode ? (
-                            <span className="badge badge-success">ON</span>
-                          ) : (
-                            <span className="badge badge-danger">OFF</span>
                           )}
                         </td>
                         <td>
@@ -404,6 +482,13 @@ function BranchPage() {
                             >
                               <EditIcon />
                             </IconButton>
+                            <Switch
+                              checked={item.isActive}
+                              onChange={(
+                                event: React.ChangeEvent<HTMLInputElement>
+                              ) => handleSwitchChange(event, item.id)}
+                              inputProps={{ 'aria-label': 'controlled' }}
+                            />
                           </div>
                         </td>
                       </tr>

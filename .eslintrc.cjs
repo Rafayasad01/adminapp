@@ -40,6 +40,11 @@ module.exports = {
     "jsx-a11y/no-static-element-interactions": "off",
     "react/no-unstable-nested-components": "off",
     "prefer-destructuring": "off",
+    "react/prop-types": "off",
+    "react/button-has-type": "off",
+    "react/no-unused-prop-types": "off",
+    "react/display-name": "off",
+    "import/no-duplicates": "off",
     // '@typescript-eslint/no-unused-vars': 'off',
     // 'no-console': 'off',
     'prettier/prettier': [

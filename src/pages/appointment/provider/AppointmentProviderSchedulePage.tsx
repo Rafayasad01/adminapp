@@ -112,8 +112,11 @@ function AppointmentProviderSchedulePage() {
   };
 
   const handleFormClickOpen = () => {
-    if (listingRolePermission(dataRole, 'Appointment Provider Schedule Create') && listingRolePermission(dataRole, 'Appointment Provider Schedule List')) {
-      console.log("done1");
+    if (
+      listingRolePermission(dataRole, 'Appointment Provider Schedule Create') &&
+      listingRolePermission(dataRole, 'Appointment Provider Schedule List')
+    ) {
+      console.log('done1');
 
       // setOpenFormDialog(true);
       if (list.appointmentProviderSchedule?.length < 7) {
@@ -264,7 +267,9 @@ function AppointmentProviderSchedulePage() {
 
   const manuHandler = (option: string) => {
     if (option === 'Edit') {
-      if (listingRolePermission(dataRole, 'Appointment Provider Schedule Edit')) {
+      if (
+        listingRolePermission(dataRole, 'Appointment Provider Schedule Edit')
+      ) {
         setIsLoader(true);
         Service.ProviderScheduleEdit(actionMenuItemid).then((item: any) => {
           if (item.data.success) {
@@ -282,7 +287,9 @@ function AppointmentProviderSchedulePage() {
         });
       }
     } else if (option === 'Delete') {
-      if (listingRolePermission(dataRole, 'Appointment Provider Schedule Delete')) {
+      if (
+        listingRolePermission(dataRole, 'Appointment Provider Schedule Delete')
+      ) {
         setIsLoader(true);
         const data = {
           id: actionMenuItemid,
@@ -482,9 +489,14 @@ function AppointmentProviderSchedulePage() {
   };
 
   const handleSwitchChange = (event: any, switchId: string) => {
-    if (listingRolePermission(dataRole, 'Appointment Provider Schedule Update Status')) {
+    if (
+      listingRolePermission(
+        dataRole,
+        'Appointment Provider Schedule Update Status'
+      )
+    ) {
       const data = {
-        switchId,
+        id: switchId,
         isActive: event.target.checked,
         updatedBy: authState.user.id,
       };
@@ -628,7 +640,9 @@ function AppointmentProviderSchedulePage() {
             ) : (
               <div>
                 <div className="col-span-12 grid items-center justify-center">
-                  <span className='text-sm font-semibold my-4'>No Shop Owner Found!</span>
+                  <span className="my-4 text-sm font-semibold">
+                    No Shop Owner Found!
+                  </span>
                 </div>
               </div>
             )}
@@ -678,8 +692,8 @@ function AppointmentProviderSchedulePage() {
                                 <span className="text-xs font-normal text-[#6A6A6A]">
                                   {dayjs(item.createdDate).isValid()
                                     ? dayjs(item.createdDate)?.format(
-                                      'MMMM DD, YYYY'
-                                    )
+                                        'MMMM DD, YYYY'
+                                      )
                                     : '--'}
                                 </span>
                               </div>
@@ -798,7 +812,7 @@ function AppointmentProviderSchedulePage() {
           setOpenFormDialog={setOpenEditFormDialog}
           formData={editFormDetails}
           callback={updateFormHandler}
-        // setActionMenuItemid={setActionMenuItemid}
+          // setActionMenuItemid={setActionMenuItemid}
         />
       )}
     </>

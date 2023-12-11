@@ -9,6 +9,8 @@ import LocalShippingOutlinedIcon from '@mui/icons-material/LocalShippingOutlined
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
+import PrintOutlinedIcon from '@mui/icons-material/PrintOutlined';
+import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -32,6 +34,8 @@ import { listingRolePermission } from '../../utils/helper';
 import PermissionPopup from '../../utils/PermissionPopup';
 import { useAppSelector } from '../../redux/redux-hooks';
 import ShopIcon from '../../components/icons/ShopIcon';
+import CustomOrderPrintLayoutCash from '../../utils/CustomPrintLayout/CustomOrderPrintLayoutCash';
+import CustomOrderPrintLayoutInvoice from '../../utils/CustomPrintLayout/CustomOrderPrintLayoutInvoice';
 
 function OrderDetailsPage() {
   const navigate = useNavigate();
@@ -47,6 +51,7 @@ function OrderDetailsPage() {
   const [orderStatuses, setOrderStatuses] = useState<any>([]);
   const [isCancelled, setIsCancelled] = useState<boolean>(false);
   const [cancelled, setCancelled] = useState<boolean>(false);
+  const [isPrintEnabled, setPrintEnabled] = useState<any>([false]);
   const [nextBtn, setNextBtn] = useState<any>(null);
   const [currentStatus, setCurrentStatus] = useState<any>(null);
   const [isLoader, setIsLoader] = useState(true);
@@ -338,6 +343,26 @@ function OrderDetailsPage() {
                 >
                   Cancel Order
                 </Button>
+              </div>
+              <div className="flex justify-end">
+                <div>
+                  <div>
+                    <CustomOrderPrintLayoutCash
+                      isPrintEnabled={isPrintEnabled}
+                      setPrintEnabled={setPrintEnabled}
+                      data={viewData}
+                    />
+                    {/* <button><PrintOutlinedIcon /> Order Slip</button> */}
+                  </div>
+                  <div className="my-2 mx-1">
+                    <CustomOrderPrintLayoutInvoice
+                      isPrintEnabled={isPrintEnabled}
+                      setPrintEnabled={setPrintEnabled}
+                      data={viewData}
+                    />
+                    {/* <button><DescriptionOutlinedIcon /> Invoice Slip</button> */}
+                  </div>
+                </div>
               </div>
               <hr className="my-4 h-[1px] w-full bg-neutral-200" />
               <div className="grid grid-cols-2">
