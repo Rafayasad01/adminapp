@@ -29,7 +29,7 @@ import AppointmentVisitCreatePopup from './AppointmentVisitCreatePopup';
 import AppointmentVisitReschedulePopup from './AppointmentVisitReschedulePopup';
 import AppointmentVisitUpdatePopup from './AppointmentVisitUpdatePopup';
 import CustomPrintLayout from '../../../utils/CustomPrintLayout/CustomAppointmentPrintLayout';
-import CustomOrderPrintLayoutCash from '../../../utils/CustomPrintLayout/CustomOrderPrintLayoutCash';
+import CustomOrderPrintLayoutCash from '../../../utils/CustomPrintLayout/CustomAppointmentPrintLayout';
 // Extend dayjs with necessary plugins
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -53,7 +53,7 @@ function AppointmentVisitPage() {
   const [actionMenuAnchorEl, setActionMenuAnchorEl] =
     useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
-  const actionMenuOptions = ['Print Details', 'Detail', 'Reschedule', 'Edit', 'Cancel'];
+  const actionMenuOptions = ['Detail', 'Reschedule', 'Edit', 'Cancel'];
 
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
@@ -98,7 +98,7 @@ function AppointmentVisitPage() {
       const newPage = 0;
       setSearch(searchTxt);
       setPage(newPage);
-      Service.ServiceSearchList(
+      Service.VisitSearchList(
         authState.user.tenant,
         searchTxt,
         newPage,
@@ -164,7 +164,19 @@ function AppointmentVisitPage() {
   };
 
   const manuHandler = (option: string) => {
-    if (option === 'Edit') {
+    if (actionMenuItemid?.status === 'Cancelled') {
+      if (option === 'Detail') {
+        if (listingRolePermission(dataRole, 'Appointment Detail')) {
+          navigate(`../detail/${actionMenuItemid?.id}`);
+        } else {
+          setIsNotify(true);
+          setNotifyMessage({
+            text: NOT_AUTHORIZED_MESSAGE,
+            type: 'warning',
+          });
+        }
+      }
+    } else if (option === 'Edit') {
       if (listingRolePermission(dataRole, 'Appointment Edit')) {
         setIsLoader(true);
         Service.VisitEdit(actionMenuItemid?.id)
@@ -259,18 +271,6 @@ function AppointmentVisitPage() {
         });
       }
     }
-    else if (option === 'Print Details') {
-      if (listingRolePermission(dataRole, 'Appointment Detail')) {
-        setPrintEnabled(true);
-      } else {
-        setPrintEnabled(false);
-        setIsNotify(true);
-        setNotifyMessage({
-          text: NOT_AUTHORIZED_MESSAGE,
-          type: 'warning',
-        });
-      }
-    }
   };
 
   useEffect(() => {
@@ -282,7 +282,7 @@ function AppointmentVisitPage() {
             setIsLoader(false);
             setList(item.data.data.list);
             setTotal(item.data.data.total);
-            setPrintEnabled(item.data.data.list.map((item: any) => false))
+            setPrintEnabled(item.data.data.list.map((items: any) => false));
           } else {
             setIsLoader(false);
             setIsNotify(true);
@@ -430,11 +430,7 @@ function AppointmentVisitPage() {
       });
   };
 
-  const handlePrintItem = () => {
-
-  }
-
-
+  const handlePrintItem = () => {};
 
   return isLoader ? (
     <Loader />
@@ -526,8 +522,8 @@ function AppointmentVisitPage() {
                               <span className="text-xs font-normal text-[#6A6A6A]">
                                 {dayjs(item.createdDate).isValid()
                                   ? dayjs(item.createdDate)?.format(
-                                    'MMM DD, YYYY'
-                                  )
+                                      'MMM DD, YYYY'
+                                    )
                                   : '--'}
                               </span>
                             </div>
@@ -555,12 +551,13 @@ function AppointmentVisitPage() {
                         </td>
                         <td>
                           <span
-                            className={`${item.status === 'Cancelled'
-                              ? 'badge badge-danger'
-                              : item.status === 'Reschedule'
+                            className={`${
+                              item.status === 'Cancelled'
+                                ? 'badge badge-danger'
+                                : item.status === 'Reschedule'
                                 ? 'badge badge-success'
                                 : 'badge badge-success'
-                              }`}
+                            }`}
                           >
                             {item.status}
                           </span>
@@ -568,7 +565,7 @@ function AppointmentVisitPage() {
                         <td>
                           <div className="flex flex-row-reverse items-center">
                             <IconButton
-                              disabled={item.status === 'Cancelled'}
+                              // disabled={item.status === 'Cancelled'}
                               className="btn-dot"
                               aria-label="more"
                               id="long-button"
@@ -595,7 +592,6 @@ function AppointmentVisitPage() {
                                 data={item}
                                 index={index}
                               />
-                            
                             </div>
                           </div>
                         </td>

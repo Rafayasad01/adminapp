@@ -432,16 +432,8 @@ function SuperAdminShopDetailPage() {
                           <div className="flex">
                             <div className="">
                               <IconButton
-                                title="View Branch"
-                                className="m-0"
-                                onClick={() => openBranchModal(tenant)}
-                              >
-                                <PreviewIcon />
-                              </IconButton>
-                            </div>
-                            <div className="">
-                              <IconButton
-                                title="User Detail"
+                                disabled={detail.isActive === false && true}
+                                title="Shop User Detail"
                                 className="m-0"
                                 onClick={() => getUserById(tenant, 'shop')}
                               >
@@ -450,16 +442,8 @@ function SuperAdminShopDetailPage() {
                             </div>
                             <div className="">
                               <IconButton
-                                title="Branch Category"
-                                className="m-0"
-                                onClick={() => getCategoryById(tenant)}
-                              >
-                                <ViewListIcon />
-                              </IconButton>
-                            </div>
-                            <div className="">
-                              <IconButton
-                                title="Branch Setting"
+                                disabled={detail.isActive === false && true}
+                                title="Shop Setting"
                                 className="m-0"
                                 onClick={() => getSettingById(tenant)}
                               >
@@ -468,7 +452,8 @@ function SuperAdminShopDetailPage() {
                             </div>
                             <div>
                               <IconButton
-                                title="Edit Branch"
+                                disabled={detail.isActive === false && true}
+                                title="Edit Shop"
                                 className="m-0 pl-1"
                                 onClick={() => editHandler(tenant, 'owner')}
                               >
@@ -645,19 +630,11 @@ function SuperAdminShopDetailPage() {
                                 </div>
                                 <div className="h-full flex-col justify-between">
                                   <div className="flex">
-                                    <div className="flex items-center justify-end">
-                                      <IconButton
-                                        title="View Branch"
-                                        className="m-0"
-                                        onClick={(event) =>
-                                          openBranchModal(item.id)
-                                        }
-                                      >
-                                        <PreviewIcon />
-                                      </IconButton>
-                                    </div>
                                     <div className="">
                                       <IconButton
+                                        disabled={
+                                          item.isActive === false && true
+                                        }
                                         title="User Detail"
                                         className="m-0"
                                         onClick={() =>
@@ -669,15 +646,9 @@ function SuperAdminShopDetailPage() {
                                     </div>
                                     <div className="flex items-center justify-end">
                                       <IconButton
-                                        title="Branch Category"
-                                        className="m-0"
-                                        onClick={() => getCategoryById(item.id)}
-                                      >
-                                        <ViewListIcon />
-                                      </IconButton>
-                                    </div>
-                                    <div className="flex items-center justify-end">
-                                      <IconButton
+                                        disabled={
+                                          item.isActive === false && true
+                                        }
                                         title="Branch Setting"
                                         className="m-0"
                                         onClick={() => getSettingById(item.id)}
@@ -687,6 +658,9 @@ function SuperAdminShopDetailPage() {
                                     </div>
                                     <div className="flex items-center justify-end">
                                       <IconButton
+                                        disabled={
+                                          item.isActive === false && true
+                                        }
                                         title="Edit Branch"
                                         className="m-0"
                                         onClick={() =>

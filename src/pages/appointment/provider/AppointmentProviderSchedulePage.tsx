@@ -112,7 +112,12 @@ function AppointmentProviderSchedulePage() {
   };
 
   const handleFormClickOpen = () => {
-    if (listingRolePermission(dataRole, 'Appointment Provider Schedule Create')) {
+    if (
+      listingRolePermission(dataRole, 'Appointment Provider Schedule Create') &&
+      listingRolePermission(dataRole, 'Appointment Provider Schedule List')
+    ) {
+      console.log('done1');
+
       // setOpenFormDialog(true);
       if (list.appointmentProviderSchedule?.length < 7) {
         navigate(`../add-schedule/${id}`);
@@ -262,7 +267,9 @@ function AppointmentProviderSchedulePage() {
 
   const manuHandler = (option: string) => {
     if (option === 'Edit') {
-      if (listingRolePermission(dataRole, 'Appointment Provider Schedule Edit')) {
+      if (
+        listingRolePermission(dataRole, 'Appointment Provider Schedule Edit')
+      ) {
         setIsLoader(true);
         Service.ProviderScheduleEdit(actionMenuItemid).then((item: any) => {
           if (item.data.success) {
@@ -280,7 +287,9 @@ function AppointmentProviderSchedulePage() {
         });
       }
     } else if (option === 'Delete') {
-      if (listingRolePermission(dataRole, 'Appointment Provider Schedule Delete')) {
+      if (
+        listingRolePermission(dataRole, 'Appointment Provider Schedule Delete')
+      ) {
         setIsLoader(true);
         const data = {
           id: actionMenuItemid,
@@ -487,7 +496,7 @@ function AppointmentProviderSchedulePage() {
       )
     ) {
       const data = {
-        switchId,
+        id: switchId,
         isActive: event.target.checked,
         updatedBy: authState.user.id,
       };
@@ -534,7 +543,7 @@ function AppointmentProviderSchedulePage() {
                 Provider Details
               </span>
             </div>
-            {list ? (
+            {list?.name ? (
               <div className="grid w-full gap-3 xl:grid-cols-8 2xl:grid-cols-12">
                 <div className="col-span-4 flex w-full justify-between py-[2rem]">
                   <div className="flex flex-col px-5">
@@ -631,7 +640,9 @@ function AppointmentProviderSchedulePage() {
             ) : (
               <div>
                 <div className="col-span-12 grid items-center justify-center">
-                  <p>No Shop Owner Found!</p>
+                  <span className="my-4 text-sm font-semibold">
+                    No Shop Owner Found!
+                  </span>
                 </div>
               </div>
             )}
@@ -681,8 +692,8 @@ function AppointmentProviderSchedulePage() {
                                 <span className="text-xs font-normal text-[#6A6A6A]">
                                   {dayjs(item.createdDate).isValid()
                                     ? dayjs(item.createdDate)?.format(
-                                      'MMMM DD, YYYY'
-                                    )
+                                        'MMMM DD, YYYY'
+                                      )
                                     : '--'}
                                 </span>
                               </div>
@@ -801,7 +812,7 @@ function AppointmentProviderSchedulePage() {
           setOpenFormDialog={setOpenEditFormDialog}
           formData={editFormDetails}
           callback={updateFormHandler}
-        // setActionMenuItemid={setActionMenuItemid}
+          // setActionMenuItemid={setActionMenuItemid}
         />
       )}
     </>

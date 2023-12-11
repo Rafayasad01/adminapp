@@ -8,7 +8,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import React, { useEffect, useState } from 'react';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import { useNavigate } from 'react-router-dom';
-
+import WysiwygOutlinedIcon from '@mui/icons-material/WysiwygOutlined';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 // import Pagination from '@mui/material/Pagination';
 // import Stack from '@mui/material/Stack';
@@ -252,7 +252,7 @@ function OrdersPage() {
         displayMessage={notifyMessage}
       />
       <TopBar title="Orders" />
-      <div className="container mt-5">
+      <div className="container m-auto mt-5">
         <div className="w-full rounded-lg bg-white shadow-lg">
           <div className="grid grid-cols-12 px-4 py-5">
             <div className="col-span-7">
@@ -378,7 +378,15 @@ function OrdersPage() {
                         </td>
                         <td>{Item.orderNumber}</td>
                         <td>
-                          <IconButton
+                          <div className="flex flex-row-reverse">
+                            <IconButton
+                              className="icon-btn"
+                              onClick={() => navigate(`./detail/${Item.id}`)}
+                            >
+                              <WysiwygOutlinedIcon />
+                            </IconButton>
+                          </div>
+                          {/* <IconButton
                             className="btn-dot"
                             aria-label="more"
                             id="long-button"
@@ -393,7 +401,7 @@ function OrdersPage() {
                             }}
                           >
                             <MoreVertIcon />
-                          </IconButton>
+                          </IconButton> */}
                         </td>
                       </tr>
                     );

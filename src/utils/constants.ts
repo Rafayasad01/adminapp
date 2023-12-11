@@ -27,6 +27,7 @@ export const ORDER_STATUS_IN_CANCELLED = 'Cancelled';
 export const ORDER_STATUS_PENDING = 'Pending';
 export const CART_STATUS_NEW = 'New';
 export const CART_STATUS_PROCESSING = 'Processing';
+export const CART_STATUS_COMPELETED = 'Completed';
 export const ORDER_DELIVERY_STATUS_NOT_ASSIGN = 'Not Assign';
 export const ORDER_DELIVERY_STATUS_NEW = 'New';
 export const ORDER_DELIVERY_STATUS_PICKED_UP = 'PickedUp';

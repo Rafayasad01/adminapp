@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import IconButton from '@mui/material/IconButton';
 import Divider from '@mui/material/Divider';
-
+import WysiwygOutlinedIcon from '@mui/icons-material/WysiwygOutlined';
 import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -15,7 +15,11 @@ import dayjs from 'dayjs';
 import TablePagination from '@mui/material/TablePagination';
 import cart from '../../services/adminapp/adminCarts';
 import ActionMenu from '../../components/common/ActionMenu';
-import { CART_STATUS_NEW, CART_STATUS_PROCESSING } from '../../utils/constants';
+import {
+  CART_STATUS_COMPELETED,
+  CART_STATUS_NEW,
+  CART_STATUS_PROCESSING,
+} from '../../utils/constants';
 import TopBar from '../../components/common/TopBar';
 import { useAppSelector } from '../../redux/redux-hooks';
 import Loader from '../../components/common/Loader';
@@ -135,10 +139,13 @@ function CartsPage() {
   };
 
   const getStatusTag = (status: string) => {
+    console.log('STATAT', status);
     let tag = '';
     if (status === CART_STATUS_NEW) {
       tag = 'blue';
     } else if (status === CART_STATUS_PROCESSING) {
+      tag = 'green';
+    } else if (status === CART_STATUS_COMPELETED) {
       tag = 'green';
     }
     return tag;
@@ -325,7 +332,15 @@ function CartsPage() {
                           </span>
                         </td>
                         <td>
-                          <IconButton
+                          <div className="flex flex-row-reverse">
+                            <IconButton
+                              className="icon-btn"
+                              onClick={() => navigate(`./view/${item.id}`)}
+                            >
+                              <WysiwygOutlinedIcon />
+                            </IconButton>
+                          </div>
+                          {/* <IconButton
                             className="btn-dot"
                             aria-label="more"
                             id="long-button"
@@ -340,7 +355,7 @@ function CartsPage() {
                             }}
                           >
                             <MoreVertIcon />
-                          </IconButton>
+                          </IconButton> */}
                         </td>
                       </tr>
                     );

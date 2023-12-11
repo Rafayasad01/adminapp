@@ -42,6 +42,10 @@ const updateBranch = (data: any, tenantID: string) => {
   return network.post(`${BRANCH_PREFIX}/update/${tenantID}`, data);
 };
 
+const updateBranchStatus = (data: any, tenantID: string) => {
+  return network.post(`${BRANCH_PREFIX}/update/status/${tenantID}`, data);
+};
+
 export default {
   getListService,
   getDetailService,
@@ -51,4 +55,5 @@ export default {
   insertBranch,
   editBranch,
   updateBranch,
+  updateBranchStatus,
 };

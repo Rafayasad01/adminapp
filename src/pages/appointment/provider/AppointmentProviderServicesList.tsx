@@ -101,7 +101,9 @@ function AppointmentProviderServicesList() {
 
   const handleFormClickOpen = () => {
     setIsLoader(true);
-    if (listingRolePermission(dataRole, 'Appointment Provider Service Create')) {
+    if (
+      listingRolePermission(dataRole, 'Appointment Provider Service Create')
+    ) {
       Service.ServiceProviderLov(authState.user.tenant)
         .then((item: any) => {
           if (item.data.success) {
@@ -127,6 +129,7 @@ function AppointmentProviderServicesList() {
           });
         });
     } else {
+      setIsLoader(false);
       setIsNotify(true);
       setNotifyMessage({
         text: NOT_AUTHORIZED_MESSAGE,
@@ -142,7 +145,7 @@ function AppointmentProviderServicesList() {
       setSearch(searchTxt);
       setPage(newPage);
       Service.ServiceSearchList(
-        authState.user.tenant,
+        providerId,
         searchTxt,
         newPage,
         rowsPerPage
@@ -208,7 +211,9 @@ function AppointmentProviderServicesList() {
 
   const manuHandler = (option: string) => {
     if (option === 'Edit') {
-      if (listingRolePermission(dataRole, 'Appointment Provider Service Edit')) {
+      if (
+        listingRolePermission(dataRole, 'Appointment Provider Service Edit')
+      ) {
         setIsLoader(true);
         Service.ServiceEdit(actionMenuItemid).then((item: any) => {
           if (item.data.success) {
@@ -228,7 +233,9 @@ function AppointmentProviderServicesList() {
         });
       }
     } else if (option === 'Delete') {
-      if (listingRolePermission(dataRole, 'Appointment Provider Service Delete')) {
+      if (
+        listingRolePermission(dataRole, 'Appointment Provider Service Delete')
+      ) {
         setIsLoader(true);
         const data = {
           updatedBy: authState.user.id,
@@ -295,6 +302,11 @@ function AppointmentProviderServicesList() {
         });
     } else {
       setIsLoader(false);
+      setIsNotify(true);
+      setNotifyMessage({
+        text: NOT_AUTHORIZED_MESSAGE,
+        type: 'warning',
+      });
     }
   }, [emptyVariable]);
 
@@ -395,7 +407,9 @@ function AppointmentProviderServicesList() {
       setOpenFormDialog(false);
       createFormHandler(data);
     } else if (openEditFormDialog) {
-      if (listingRolePermission(dataRole, 'Appointment Provider Service Update')) {
+      if (
+        listingRolePermission(dataRole, 'Appointment Provider Service Update')
+      ) {
         setOpenEditFormDialog(false);
         updateFormHandler(data);
       } else {
@@ -409,7 +423,12 @@ function AppointmentProviderServicesList() {
   };
 
   const handleSwitchChange = (event: any, id: string) => {
-    if (listingRolePermission(dataRole, 'Appointment Provider Service Update Status')) {
+    if (
+      listingRolePermission(
+        dataRole,
+        'Appointment Provider Service Update Status'
+      )
+    ) {
       const data = {
         isActive: event.target.checked,
         updatedBy: authState.user.id,
@@ -520,8 +539,8 @@ function AppointmentProviderServicesList() {
                               <span className="text-xs font-normal text-[#6A6A6A]">
                                 {dayjs(item.createdDate).isValid()
                                   ? dayjs(item.createdDate)?.format(
-                                    'MMMM DD, YYYY'
-                                  )
+                                      'MMMM DD, YYYY'
+                                    )
                                   : '--'}
                               </span>
                             </div>

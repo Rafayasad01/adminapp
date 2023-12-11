@@ -346,7 +346,9 @@ function AppointmentProviderPage() {
         });
       }
     } else if (option === 'Schedule') {
-      if (listingRolePermission(dataRole, 'Appointment Provider Schedule View')) {
+      if (
+        listingRolePermission(dataRole, 'Appointment Provider Schedule View')
+      ) {
         navigate(`../schedule/${actionMenuItemid}`);
       } else {
         setIsNotify(true);
@@ -356,7 +358,9 @@ function AppointmentProviderPage() {
         });
       }
     } else if (option === 'Services') {
-      if (listingRolePermission(dataRole, 'Appointment Provider Service View')) {
+      if (
+        listingRolePermission(dataRole, 'Appointment Provider Service View')
+      ) {
         navigate(`../services/${actionMenuItemid}`);
       } else {
         setIsNotify(true);
@@ -651,8 +655,8 @@ function AppointmentProviderPage() {
                               <span className="text-xs font-normal text-[#6A6A6A]">
                                 {dayjs(item.createdDate).isValid()
                                   ? dayjs(item.createdDate)?.format(
-                                    'MMMM DD, YYYY'
-                                  )
+                                      'MMMM DD, YYYY'
+                                    )
                                   : '--'}
                               </span>
                             </div>
