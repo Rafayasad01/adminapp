@@ -317,7 +317,7 @@ function SuperAdminUserPage() {
                   list.map((item: any, index: number) => {
                     return (
                       <tr key={index}>
-                        <td>
+                        <td className="">
                           <div className="avatar flex flex-row items-center">
                             {item.avatar ? (
                               <Avatar

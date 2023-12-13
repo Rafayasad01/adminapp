@@ -19,14 +19,16 @@ import Loader from '../../components/common/Loader';
 import Notify from '../../components/common/Notify';
 import TopBar from '../../components/common/TopBar';
 import { useAppSelector } from '../../redux/redux-hooks';
-import Service from '../../services/adminapp/adminCustomer';
+import Service from '../../services/adminapp/adminAppUser';
 import PermissionPopup from '../../utils/PermissionPopup';
 import { NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
 import { CheckRolePermission, listingRolePermission } from '../../utils/helper';
-import CustomersCreatePopup from './CustomersCreatePopup';
-import CustomersEditPopup from './CustomersEditPopup';
+import AppUserUpdatePopup from './AppUserUpdatePopup';
+import AppUserCreatePopup from './AppUserCreatePopup';
+// import CustomersCreatePopup from './CustomersCreatePopup';
+// import CustomersEditPopup from './CustomersEditPopup';
 
-function CustomersPage() {
+function AppUsersPage() {
   const authState: any = useAppSelector((state) => state?.authState);
   const dataRole = useAppSelector(
     (state: any) => state?.persisitReducer?.roleState?.role?.permissions
@@ -42,7 +44,7 @@ function CustomersPage() {
   const [actionMenuAnchorEl, setActionMenuAnchorEl] =
     useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
-  const actionMenuOptions = ['Detail', 'Address', 'Edit', 'Delete'];
+  const actionMenuOptions = ['Detail', 'Edit', 'Delete'];
   const [emptyVariable] = useState(null);
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
@@ -53,6 +55,17 @@ function CustomersPage() {
   const [dialogText, setDialogText] = useState<any>(
     'Are you sure you want to delete this customer ?'
   );
+
+  const appUserRoleLov = [
+    {
+      id: 'Driver',
+      name: 'Driver',
+    },
+    {
+      id: 'App',
+      name: 'App User',
+    },
+  ];
 
   const handleFormClickOpen = () => {
     if (listingRolePermission(dataRole, 'Customer Create')) {
@@ -72,7 +85,7 @@ function CustomersPage() {
       const newPage = 0;
       setSearch(searchTxt);
       setPage(newPage);
-      Service.searchService(
+      Service.appListSearch(
         authState.user.tenant,
         searchTxt,
         newPage,
@@ -90,14 +103,14 @@ function CustomersPage() {
     setPage(newPage);
     // offset? ,limit rowsperpage hoga ofset page * rowsperPage
     if (search === '' || search === null || search === undefined) {
-      Service.getListService(authState.user.tenant, newPage, rowsPerPage).then(
+      Service.appList(authState.user.tenant, newPage, rowsPerPage).then(
         (item) => {
           setList(item.data.data.list);
           setTotal(item.data.data.total);
         }
       );
     } else {
-      Service.searchService(
+      Service.appListSearch(
         authState.user.tenant,
         search,
         newPage,
@@ -116,14 +129,14 @@ function CustomersPage() {
     setRowsPerPage(newRowperPage);
     setPage(newPage);
     if (search === '' || search === null || search === undefined) {
-      Service.getListService(authState.user.tenant, newPage, rowsPerPage).then(
+      Service.appList(authState.user.tenant, newPage, rowsPerPage).then(
         (item) => {
           setList(item.data.data.list);
           setTotal(item.data.data.total);
         }
       );
     } else {
-      Service.searchService(
+      Service.appListSearch(
         authState.user.tenant,
         search,
         newPage,
@@ -138,11 +151,10 @@ function CustomersPage() {
   const deleteHandler = (id: string) => {
     setIsLoader(true);
     const data = {
-      is_active: false,
-      is_deleted: true,
+      id,
       updated_by: authState.user.id,
     };
-    Service.deleteService(actionMenuItemid, data)
+    Service.appUserDelete(data)
       .then((item: any) => {
         if (item.data.success) {
           setIsLoader(false);
@@ -173,12 +185,21 @@ function CustomersPage() {
   };
 
   const manuHandler = (option: string) => {
+    setIsLoader(true);
     if (option === 'Edit') {
       if (listingRolePermission(dataRole, 'Customer Update')) {
-        Service.getService(actionMenuItemid).then((item: any) => {
+        Service.appUserEdit(actionMenuItemid).then((item: any) => {
           if (item.data.success) {
-            setEditFormData(item.data.data);
+            setIsLoader(false);
             setOpenEditFormDialog(true);
+            setEditFormData(item.data.data);
+          } else {
+            setIsLoader(false);
+            setIsNotify(true);
+            setNotifyMessage({
+              text: item.data.message,
+              type: 'error',
+            });
           }
         });
       } else {
@@ -200,11 +221,10 @@ function CustomersPage() {
       if (listingRolePermission(dataRole, 'Customer Delete')) {
         setIsLoader(true);
         const data = {
-          is_active: false,
-          is_deleted: true,
-          updated_by: authState.user.id,
+          id: actionMenuItemid,
+          updatedBy: authState.user.id,
         };
-        Service.deleteService(actionMenuItemid, data)
+        Service.appUserDelete(data)
           .then((item: any) => {
             if (item.data.success) {
               setIsLoader(false);
@@ -218,9 +238,16 @@ function CustomersPage() {
                   (newItem: any) => newItem.id !== item.data.data.id
                 );
               });
+            } else {
+              setIsLoader(false);
+              setIsNotify(true);
+              setNotifyMessage({
+                text: item.data.message,
+                type: 'error',
+              });
             }
           })
-          .catch((err) => {
+          .catch((err: Error) => {
             setIsLoader(false);
             setIsNotify(true);
             setNotifyMessage({
@@ -242,13 +269,13 @@ function CustomersPage() {
         navigate,
         `detail/${actionMenuItemid}`
       );
-      // navigate(`detail/${actionMenuItemid}`);
+      navigate(`detail/${actionMenuItemid}`);
     }
   };
 
   useEffect(() => {
     if (listingRolePermission(dataRole, 'Customer List')) {
-      Service.getListService(authState.user.tenant, page, rowsPerPage)
+      Service.appList(authState.user.tenant, page, rowsPerPage)
         .then((item: any) => {
           if (item.data.success) {
             setIsLoader(false);
@@ -269,19 +296,20 @@ function CustomersPage() {
 
   const createFormHandler = (data: any) => {
     setIsLoader(true);
-    const formData = new FormData();
-    formData.append('first_name', data.first_name);
-    formData.append('last_name', data.last_name);
-    formData.append('password', data.password);
-    formData.append('email', data.email);
-    formData.append('phone', data.phone);
-    formData.append('address', data.address);
-    formData.append('postal_code', data.postal_code);
-    formData.append('tenant', authState.user.tenant);
-    formData.append('created_by', authState.user.id);
-    formData.append('updated_by', authState.user.id);
-    if (data.avatar !== null) formData.append('avatar', data.avatar);
-    Service.create(formData)
+    const formData = {
+      firstName: data.firstName,
+      lastName: data.lastName,
+      password: data.password,
+      email: data.email,
+      phone: data.phone ? data.phone : null,
+      address: data.address,
+      userType: data.appuserRole,
+      postalCode: data.postalCode ? data.postalCode : null,
+      licenseNumber: data.licenseNumber ? data.licenseNumber : null,
+      tenant: authState.user.tenant,
+      createdBy: authState.user.id,
+    };
+    Service.appCreateUser(formData)
       .then((item) => {
         if (item.data.success) {
           setIsLoader(false);
@@ -312,14 +340,17 @@ function CustomersPage() {
 
   const updateFormHandler = (data: any) => {
     setIsLoader(true);
-    const formData = new FormData();
-    formData.append('first_name', data.first_name);
-    formData.append('last_name', data.last_name);
-    formData.append('phone', data.phone);
-    formData.append('postal_code', data.postal_code);
-    formData.append('updated_by', authState.user.id);
-    if (data.avatar !== null) formData.append('avatar', data.avatar);
-    Service.updateService(actionMenuItemid, formData)
+    const formData = {
+      id: actionMenuItemid,
+      firstName: data.firstName,
+      lastName: data.lastName,
+      phone: data.phone ? data.phone : null,
+      userType: data.appuserRole,
+      postalCode: data.postalCode ? data.postalCode : null,
+      licenseNumber: data.licenseNumber ? data.licenseNumber : null,
+      updatedBy: authState.user.id,
+    };
+    Service.appUpdateUser(formData)
       .then((item) => {
         if (item.data.success) {
           setIsLoader(false);
@@ -330,11 +361,13 @@ function CustomersPage() {
           });
           for (let i = 0; i < list.length; i += 1) {
             if (list[i].id === item.data.data.id) {
-              list[i].firstName = item.data.data.first_name;
-              list[i].lastName = item.data.data.last_name;
+              list[i].firstName = item.data.data.firstName;
+              list[i].lastName = item.data.data.lastName;
               list[i].phone = item.data.data.phone;
-              list[i].postalCode = item.data.data.postal_code;
-              if (data.avatar !== null) list[i].avatar = item.data.data.avatar;
+              list[i].postalCode = item.data.data.postalCode;
+              list[i].licenseNumber = item.data.data.licenseNumber;
+              list[i].userType = item.data.data.userType;
+              // if (data.avatar !== null) list[i].avatar = item.data.data.avatar;
             }
           }
         } else {
@@ -359,10 +392,11 @@ function CustomersPage() {
   const handleSwitchChange = (event: any, id: string) => {
     if (listingRolePermission(dataRole, 'Customer Update Status')) {
       const data = {
-        is_active: event.target.checked,
-        updated_by: authState.user.id,
+        id,
+        isActive: event.target.checked,
+        updatedBy: authState.user.id,
       };
-      Service.updateStatus(id, data).then((updateItem) => {
+      Service.appUpdateStatus(data).then((updateItem) => {
         if (updateItem.data.success) {
           setList((newArr: any) => {
             return newArr.map((item: any) => {
@@ -392,13 +426,13 @@ function CustomersPage() {
         setIsOpen={setIsNotify}
         displayMessage={notifyMessage}
       />
-      <TopBar title="Customers" />
-      <div className="container mt-5">
+      <TopBar title="App Users" />
+      <div className="container m-auto mt-5">
         <div className="w-full rounded-lg bg-white shadow-lg">
           <div className="grid grid-cols-12 px-4 py-5">
             <div className="col-span-7">
               <span className="font-open-sans text-xl font-semibold text-[#252733]">
-                All Customers
+                All App Users
               </span>
             </div>
             <div className="col-span-5">
@@ -451,6 +485,7 @@ function CustomersPage() {
                   <th>Email</th>
                   <th>Phone</th>
                   <th>Postal Code</th>
+                  <th>User Type</th>
                   <th>Status</th>
                   <th>&nbsp;</th>
                 </tr>
@@ -497,7 +532,8 @@ function CustomersPage() {
                         </td>
                         <td>{item.email}</td>
                         <td>{item.phone}</td>
-                        <td>{item.postalCode}</td>
+                        <td>{item.postalCode ? item.postalCode : '--'}</td>
+                        <td>{item.userType}</td>
                         <td>
                           {item.isActive ? (
                             <span className="badge badge-success">ACTIVE</span>
@@ -573,14 +609,15 @@ function CustomersPage() {
           callback={manuHandler}
         />
       )}
-      <CustomersCreatePopup
+      <AppUserCreatePopup
         setIsNotify={setIsNotify}
         setNotifyMessage={setNotifyMessage}
         openFormDialog={openFormDialog}
         setOpenFormDialog={setOpenFormDialog}
         callback={createFormHandler}
+        appUserRoleLov={appUserRoleLov}
       />
-      <CustomersEditPopup
+      <AppUserUpdatePopup
         setIsNotify={setIsNotify}
         setNotifyMessage={setNotifyMessage}
         openFormDialog={openEditFormDialog}
@@ -589,9 +626,10 @@ function CustomersPage() {
         setEditFormData={setEditFormData}
         callback={updateFormHandler}
         setActionMenuItemid={setActionMenuItemid}
+        appUserRoleLov={appUserRoleLov}
       />
     </>
   );
 }
 
-export default CustomersPage;
+export default AppUsersPage;

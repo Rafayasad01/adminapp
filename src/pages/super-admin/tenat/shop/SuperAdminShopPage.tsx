@@ -113,59 +113,61 @@ function SuperAdminShopPage() {
   }, [emptyVariable]);
 
   const createFormHandler = (data: any) => {
-    setIsLoader(true);
-    const formData = new FormData();
-    formData.append('tenantName', data.tenantName);
-    formData.append('email', data.email);
-    formData.append('firstName', data.firstName);
-    formData.append('address', data.address);
-    formData.append('lastName', data.lastName);
-    formData.append('trialMode', data.trialMode);
-    formData.append('developmentDomain', data.developmentDomain);
-    formData.append('liveDomain', data.liveDomain);
-    formData.append('role', data.role);
-    formData.append('maxBranchLimit', data.maxBranchLimit);
-    formData.append('maxUserLimit', data.maxUserLimit);
-    formData.append(
-      'trialModeLimit',
-      data.trialModeLimit ? data.trialModeLimit : 0
-    );
-    if (data.tenantName && data.email && data.firstName && data.lastName) {
-      Service.createShop(formData)
-        .then((item: any) => {
-          if (item.data.success) {
-            setIsLoader(false);
-            setIsNotify(true);
-            setNotifyMessage({
-              text: item.data.message,
-              type: 'success',
-            });
-            setList([item.data.data, ...list]);
-          } else {
-            setIsLoader(false);
-            setIsNotify(true);
-            setNotifyMessage({
-              text: item.data.message,
-              type: 'error',
-            });
-          }
-        })
-        .catch((err) => {
-          setIsLoader(false);
-          setIsNotify(true);
-          setNotifyMessage({
-            text: err.message,
-            type: 'error',
-          });
-        });
-    } else {
-      setIsLoader(false);
-      setIsNotify(true);
-      setNotifyMessage({
-        text: 'All fields are required!',
-        type: 'error',
-      });
-    }
+    console.log('data', data);
+
+    // setIsLoader(true);
+    // const formData = new FormData();
+    // formData.append('tenantName', data.tenantName);
+    // formData.append('email', data.email);
+    // formData.append('firstName', data.firstName);
+    // formData.append('address', data.address);
+    // formData.append('lastName', data.lastName);
+    // formData.append('trialMode', data.trialMode);
+    // formData.append('developmentDomain', data.developmentDomain);
+    // formData.append('liveDomain', data.liveDomain);
+    // formData.append('role', data.role);
+    // formData.append('maxBranchLimit', data.maxBranchLimit);
+    // formData.append('maxUserLimit', data.maxUserLimit);
+    // formData.append(
+    //   'trialModeLimit',
+    //   data.trialModeLimit ? data.trialModeLimit : 0
+    // );
+    // if (data.tenantName && data.email && data.firstName && data.lastName) {
+    //   Service.createShop(formData)
+    //     .then((item: any) => {
+    //       if (item.data.success) {
+    //         setIsLoader(false);
+    //         setIsNotify(true);
+    //         setNotifyMessage({
+    //           text: item.data.message,
+    //           type: 'success',
+    //         });
+    //         setList([item.data.data, ...list]);
+    //       } else {
+    //         setIsLoader(false);
+    //         setIsNotify(true);
+    //         setNotifyMessage({
+    //           text: item.data.message,
+    //           type: 'error',
+    //         });
+    //       }
+    //     })
+    //     .catch((err) => {
+    //       setIsLoader(false);
+    //       setIsNotify(true);
+    //       setNotifyMessage({
+    //         text: err.message,
+    //         type: 'error',
+    //       });
+    //     });
+    // } else {
+    //   setIsLoader(false);
+    //   setIsNotify(true);
+    //   setNotifyMessage({
+    //     text: 'All fields are required!',
+    //     type: 'error',
+    //   });
+    // }
   };
 
   const handleSwitchChange = (event: any, id: string) => {

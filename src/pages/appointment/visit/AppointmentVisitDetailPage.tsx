@@ -303,14 +303,20 @@ function AppointmentVisitDetailPage() {
                   <div className="mb-2 text-base font-bold uppercase">
                     Total Cost
                   </div>
-                  <div className="mb-2 flex justify-between text-sm font-medium">
-                    <span>Sub Total Amount :</span>
-                    <span className="font-bold">${list.subTotalAmount}</span>
-                  </div>
-                  <div className="mb-2 flex justify-between text-sm font-medium">
-                    <span>Urgent Fee :</span>
-                    <span className="font-bold">${list.urgentFee}</span>
-                  </div>
+                  {list.urgentFee > 0 && (
+                    <>
+                      <div className="mb-2 flex justify-between text-sm font-medium">
+                        <span>Sub Total Amount :</span>
+                        <span className="font-bold">
+                          ${list.subTotalAmount}
+                        </span>
+                      </div>
+                      <div className="mb-2 flex justify-between text-sm font-medium">
+                        <span>Urgent Fee :</span>
+                        <span className="font-bold">${list.urgentFee}</span>
+                      </div>
+                    </>
+                  )}
                   <div className="mb-2 flex justify-between text-sm font-medium">
                     <span>Total Amount :</span>
                     <span className="font-bold">${list.totalAmount}</span>

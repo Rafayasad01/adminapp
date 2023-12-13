@@ -36,7 +36,7 @@ function CustomDropDown({
 }: Props) {
   return (
     <div className="">
-      <div className="" style={{ paddingBottom: '3px' }}>
+      <div className="" style={{ paddingBottom: '5px', display: 'flex' }}>
         <span className={`FormLabel ${customClassInputTitle}`}>
           {inputTitle}
         </span>

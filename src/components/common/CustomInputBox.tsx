@@ -68,6 +68,7 @@ function CustomInputBox({
         className={`FormInput ${customClass}`}
         placeholder={placeholder}
         id={id}
+        autoComplete="new-password"
         type={
           typeImportant ? inputType : showPassVisibility ? inputType : 'text'
         }

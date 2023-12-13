@@ -260,6 +260,7 @@ function CustomTable({
                             inputProps={{ 'aria-label': 'controlled' }}
                           />
                           <CustomButton
+                            disabled={item.isActive === false && true}
                             buttonType="dots"
                             isMenuOpen={actionMenuOpen}
                             onclick={(event: React.MouseEvent<HTMLElement>) => {

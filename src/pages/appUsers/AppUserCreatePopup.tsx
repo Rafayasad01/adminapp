@@ -13,6 +13,7 @@ import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
 import '../../assets/css/PopupStyle.css';
 import { useForm } from 'react-hook-form';
 import { AppUser } from '../../interfaces/app-user.interface';
+import CustomDropDown from '../../components/common/CustomDropDown';
 
 type Props = {
   openFormDialog: boolean;
@@ -20,14 +21,16 @@ type Props = {
   callback: (...args: any[]) => any;
   setIsNotify: any;
   setNotifyMessage: any;
+  appUserRoleLov?: any;
 };
 
-function CustomersCreatePopup({
+function AppUserCreatePopup({
   openFormDialog,
   setOpenFormDialog,
   callback,
   setIsNotify,
   setNotifyMessage,
+  appUserRoleLov,
 }: Props) {
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -53,23 +56,23 @@ function CustomersCreatePopup({
   };
 
   const onSubmit = (data: AppUser) => {
-    if (
-      data.first_name &&
-      data.last_name &&
-      data.address &&
-      data.phone &&
-      data.password
-    ) {
-      data.avatar = avatar;
-      setOpenFormDialog(false);
-      callback(data);
-    } else {
-      setIsNotify(true);
-      setNotifyMessage({
-        text: 'All fields are required, Except avater image!',
-        type: 'error',
-      });
-    }
+    console.log('SUB DATA', data);
+    setOpenFormDialog(false);
+    callback(data);
+    // if (
+    //     data.firstName &&
+    //     data.lastName &&
+    //     data.address &&
+    //     data.password
+    // ) {
+    //     // data.avatar = avatar;
+    // } else {
+    //     setIsNotify(true);
+    //     setNotifyMessage({
+    //         text: 'All fields are required, Except avater image!',
+    //         type: 'error',
+    //     });
+    // }
   };
 
   return (
@@ -84,7 +87,7 @@ function CustomersCreatePopup({
       <div className="Content">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="FormHeader">
-            <span className="Title">Add Customer</span>
+            <span className="Title">Add App User</span>
           </div>
           <div className="FormBody">
             <div className="FormFields">
@@ -92,30 +95,34 @@ function CustomersCreatePopup({
                 <label className="FormLabel">First Name</label>
                 <Input
                   className="FormInput"
-                  id="first_name"
+                  id="firstName"
                   placeholder="Vincent"
                   disableUnderline
-                  {...register('first_name', {
+                  {...register('firstName', {
                     required: 'First name is required',
                   })}
                 />
-                {errors.first_name && (
-                  <span role="alert">{errors.first_name?.message}</span>
+                {errors.firstName && (
+                  <span role="alert" className="error-color">
+                    *{errors.firstName?.message}
+                  </span>
                 )}
               </FormControl>
               <FormControl className="FormControl" variant="standard">
                 <label className="FormLabel">Last Name</label>
                 <Input
                   className="FormInput"
-                  id="last_name"
+                  id="lastName"
                   placeholder="Boyd"
                   disableUnderline
-                  {...register('last_name', {
+                  {...register('lastName', {
                     required: 'Last name is required',
                   })}
                 />
-                {errors.last_name && (
-                  <span role="alert">{errors.last_name?.message}</span>
+                {errors.lastName && (
+                  <span role="alert" className="error-color">
+                    *{errors.lastName?.message}
+                  </span>
                 )}
               </FormControl>
             </div>
@@ -127,25 +134,26 @@ function CustomersCreatePopup({
                   id="phone"
                   placeholder="+1 536 569"
                   disableUnderline
-                  {...register('phone', {
-                    required: 'Phone number is required',
-                  })}
+                  {...register('phone')}
                 />
-                {errors.phone && (
-                  <span role="alert">{errors.phone?.message}</span>
-                )}
+                {/* {errors.phone && (
+                                    <span role="alert" className='error-color'>*{errors.phone?.message}</span>
+                                )} */}
               </FormControl>
               <FormControl className="FormControl" variant="standard">
                 <label className="FormLabel">Email Address</label>
                 <Input
                   className="FormInput"
-                  id="name"
+                  id="email"
                   placeholder="Vincent.96@gmail.com"
+                  autoComplete="new-password"
                   disableUnderline
                   {...register('email', { required: 'Email is required' })}
                 />
                 {errors.email && (
-                  <span role="alert">{errors.email?.message}</span>
+                  <span role="alert" className="error-color">
+                    *{errors.email?.message}
+                  </span>
                 )}
               </FormControl>
             </div>
@@ -157,6 +165,7 @@ function CustomersCreatePopup({
                   className="FormInput"
                   id="password"
                   placeholder="**********"
+                  autoComplete="new-password"
                   type={showPassword ? 'text' : 'password'}
                   {...register('password', {
                     required: 'Password is required',
@@ -175,81 +184,123 @@ function CustomersCreatePopup({
                   disableUnderline
                 />
                 {errors.password && (
-                  <span role="alert">{errors.password?.message}</span>
+                  <span role="alert" className="error-color">
+                    *{errors.password?.message}
+                  </span>
                 )}
               </FormControl>
               <FormControl className="FormControl" variant="standard">
                 <label className="FormLabel">Postal Code</label>
                 <Input
                   className="FormInput"
-                  id="postal_code"
+                  id="postalCode"
                   placeholder="M6G 596"
                   disableUnderline
-                  {...register('postal_code')}
+                  {...register('postalCode')}
                 />
+                {/* {errors.postalCode && (
+                                    <span role="alert" className='error-color'>*{errors.postalCode?.message}</span>
+                                )} */}
               </FormControl>
             </div>
-            <div className="FormField">
+            <div className="FormFields">
+              <FormControl className="FormControl" variant="standard">
+                <CustomDropDown
+                  validateRequired
+                  id="appuserRole"
+                  control={control}
+                  error={errors}
+                  register={register}
+                  options={{ roles: appUserRoleLov }}
+                  customClassInputTitle="font-bold"
+                  inputTitle="User Type"
+                  defaultValue="Select type"
+                />
+              </FormControl>
               <FormControl className="FormControl" variant="standard">
                 <label className="FormLabel">Address</label>
                 <Input
                   className="FormInput"
                   id="address"
                   disableUnderline
+                  placeholder="1401 Lavaca Street"
                   {...register('address', { required: 'Address is required' })}
                 />
                 {errors.address && (
-                  <span role="alert">{errors.address?.message}</span>
+                  <span role="alert" className="error-color">
+                    *{errors.address?.message}
+                  </span>
                 )}
               </FormControl>
             </div>
-            <div className="FormField">
-              <label className="FormLabel">Upload Image</label>
-              <div className="ImageBox">
-                <input
-                  accept="image/*"
-                  style={{ display: 'none' }}
-                  id="raised-button-file"
-                  type="file"
-                  {...register('avatar')}
-                  onChange={(
-                    event: React.InputHTMLAttributes<HTMLInputElement>
-                  ) => {
-                    handleFileChange(event);
-                  }}
-                  onClick={(
-                    event: React.InputHTMLAttributes<HTMLInputElement>
-                  ) => {
-                    handleFileOnClick(event);
-                  }}
-                />
-                <label htmlFor="raised-button-file" className="ImageLabel">
-                  <Button component="span" className="ImageBtn">
-                    <FileUploadOutlinedIcon sx={{ marginRight: '0.5rem' }} />
-                    Upload image
-                  </Button>
-                </label>
-                {avatar ? (
-                  <div className="ShowImageBox">
-                    <label className="ShowImageLabel">{avatar.name}</label>
-                    <IconButton
-                      className="btn-dot"
-                      onClick={() => setAvatar(null)}
-                    >
-                      <CloseOutlinedIcon
-                        sx={{
-                          color: '#1D1D1D',
-                          fontSize: '1rem',
-                          lineHeight: '1.5rem',
-                        }}
-                      />
-                    </IconButton>
-                  </div>
-                ) : (
-                  ''
-                )}
+            {watch('appuserRole') === 'Driver' && (
+              <div className="FormField">
+                <FormControl className="FormControl" variant="standard">
+                  <label className="FormLabel">License Number</label>
+                  <Input
+                    className="FormInput"
+                    id="licenseNumber"
+                    disableUnderline
+                    placeholder="Enter license number"
+                    {...register('licenseNumber', {
+                      required: 'licenseNumber is required',
+                    })}
+                  />
+                  {errors.licenseNumber && (
+                    <span role="alert" className="error-color">
+                      *{errors.licenseNumber?.message}
+                    </span>
+                  )}
+                </FormControl>
               </div>
-            </div>
+            )}
+            {/* <div className="FormField">
+                            <label className="FormLabel">Upload Image</label>
+                            <div className="ImageBox">
+                                <input
+                                    accept="image/*"
+                                    style={{ display: 'none' }}
+                                    id="raised-button-file"
+                                    type="file"
+                                    {...register('avatar')}
+                                    onChange={(
+                                        event: React.InputHTMLAttributes<HTMLInputElement>
+                                    ) => {
+                                        handleFileChange(event);
+                                    }}
+                                    onClick={(
+                                        event: React.InputHTMLAttributes<HTMLInputElement>
+                                    ) => {
+                                        handleFileOnClick(event);
+                                    }}
+                                />
+                                <label htmlFor="raised-button-file" className="ImageLabel">
+                                    <Button component="span" className="ImageBtn">
+                                        <FileUploadOutlinedIcon sx={{ marginRight: '0.5rem' }} />
+                                        Upload image
+                                    </Button>
+                                </label>
+                                {avatar ? (
+                                    <div className="ShowImageBox">
+                                        <label className="ShowImageLabel">{avatar.name}</label>
+                                        <IconButton
+                                            className="btn-dot"
+                                            onClick={() => setAvatar(null)}
+                                        >
+                                            <CloseOutlinedIcon
+                                                sx={{
+                                                    color: '#1D1D1D',
+                                                    fontSize: '1rem',
+                                                    lineHeight: '1.5rem',
+                                                }}
+                                            />
+                                        </IconButton>
+                                    </div>
+                                ) : (
+                                    ''
+                                )}
+                            </div>
+                        </div> */}
           </div>
           <div className="FormFooter">
             <Button
@@ -277,4 +328,4 @@ function CustomersCreatePopup({
   );
 }
 
-export default CustomersCreatePopup;
+export default AppUserCreatePopup;

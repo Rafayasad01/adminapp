@@ -18,13 +18,6 @@ import CategoriesPage from '../pages/categories/CategoriesPage';
 import CategoriesServicesFaqPage from '../pages/categories/CategoriesServicesFaqPage';
 import CategoriesServicesPage from '../pages/categories/CategoriesServicesPage';
 import ComplainsPage from '../pages/complain/ComplainsPage';
-import CustomersAddressPage from '../pages/customers/CustomersAddressPage';
-import CustomersDetailPage from '../pages/customers/CustomersDetailPage';
-import CustomersPage from '../pages/customers/CustomersPage';
-import DriversAddressPage from '../pages/drivers/DriversAddressPage';
-import DriversDetailPage from '../pages/drivers/DriversDetailPage';
-import DriversPage from '../pages/drivers/DriversPage';
-import DriversSchedulePage from '../pages/drivers/DriversSchedulePage';
 import EmployeePage from '../pages/employees/EmployeePage';
 import HomePage from '../pages/home/HomePage';
 import LocationsPage from '../pages/locations/LocationsPage';
@@ -51,16 +44,18 @@ import SuperAdminPermissionPageDetails from '../pages/super-admin/role-permissio
 import SuperAdminRolePermissionsPage from '../pages/super-admin/role-permissions/SuperAdminRolePermissionsPage';
 import SuperAdminShopDetailPage from '../pages/super-admin/tenat/shop/SuperAdminShopDetailPage';
 
-import SuperAdminUserPage from '../pages/super-admin/tenat/user/SuperAdminUserPage';
-import ShopAdminUserDetailPage from '../pages/super-admin/tenat/user/SuperAdminUserDetailPage';
-import VouchersPage from '../pages/vouchers/VouchersPage';
-import SuperAdminShopPage from '../pages/super-admin/tenat/shop/SuperAdminShopPage';
+import AppUserDetailPage from '../pages/appUsers/AppUserDetailPage';
+import AppUsersPage from '../pages/appUsers/AppUsersPage';
+import AppointmentProviderAddSchedulePage from '../pages/appointment/provider/AppointmentProviderAddSchedulePage';
 import AppointmentProviderPage from '../pages/appointment/provider/AppointmentProviderPage';
 import AppointmentProviderSchedulePage from '../pages/appointment/provider/AppointmentProviderSchedulePage';
-import AppointmentProviderAddSchedulePage from '../pages/appointment/provider/AppointmentProviderAddSchedulePage';
+import AppointmentProviderServicesList from '../pages/appointment/provider/AppointmentProviderServicesList';
 import AppointmentVisitDetailPage from '../pages/appointment/visit/AppointmentVisitDetailPage';
 import BannersPage from '../pages/banners/BannersPage';
-import AppointmentProviderServicesList from '../pages/appointment/provider/AppointmentProviderServicesList';
+import SuperAdminShopPage from '../pages/super-admin/tenat/shop/SuperAdminShopPage';
+import ShopAdminUserDetailPage from '../pages/super-admin/tenat/user/SuperAdminUserDetailPage';
+import SuperAdminUserPage from '../pages/super-admin/tenat/user/SuperAdminUserPage';
+import VouchersPage from '../pages/vouchers/VouchersPage';
 
 export const routeObjects: RouteObject[] = [
   {
@@ -266,28 +261,6 @@ export const routeObjects: RouteObject[] = [
             ],
           },
           {
-            path: 'drivers',
-            children: [
-              {
-                index: true,
-                element: <DriversPage />,
-                // element: CAN("canView", "Driver List") ? < DriversPage /> : <p>not authorized</p>,
-              },
-              {
-                path: 'detail/:driverId',
-                element: <DriversDetailPage />,
-              },
-              {
-                path: 'address/:driverId',
-                element: <DriversAddressPage />,
-              },
-              {
-                path: 'schedule/:driverId',
-                element: <DriversSchedulePage />,
-              },
-            ],
-          },
-          {
             path: 'complains',
             children: [
               {
@@ -324,21 +297,17 @@ export const routeObjects: RouteObject[] = [
             ],
           },
           {
-            path: 'customers',
+            path: 'app-user',
             children: [
               {
                 index: true,
-                element: <CustomersPage />,
+                element: <AppUsersPage />,
                 // element: CAN("canView", "Customer List") ? <CustomersPage /> : <p>not authorized</p>,
               },
               {
-                path: 'detail/:customerId',
-                element: <CustomersDetailPage />,
-              },
-              {
-                path: 'address/:customerId',
-                element: <CustomersAddressPage />,
-              },
+                path: 'detail/:appuserId',
+                element: <AppUserDetailPage />,
+              }
             ],
           },
           {
@@ -347,15 +316,7 @@ export const routeObjects: RouteObject[] = [
               {
                 index: true,
                 element: <EmployeePage />
-              },
-              {
-                path: 'detail/:customerId',
-                element: <CustomersDetailPage />,
-              },
-              {
-                path: 'address/:customerId',
-                element: <CustomersAddressPage />,
-              },
+              }
             ],
           },
           {
@@ -368,11 +329,7 @@ export const routeObjects: RouteObject[] = [
               {
                 path: 'detail/:branchId',
                 element: <BranchDetailPage />,
-              },
-              {
-                path: 'address/:customerId',
-                element: <CustomersAddressPage />,
-              },
+              }
             ],
           },
           {
