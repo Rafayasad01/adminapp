@@ -266,7 +266,7 @@ function AppUserAddressTabPage({ addressList, appUserId, setAddress }: Props) {
         displayMessage={notifyMessage}
       />
       <div>
-        <div className="col-span-12 rounded-lg bg-[#fff] px-4 py-5 shadow-lg">
+        <div className="col-span-12 rounded-lg bg-[#fff] px-4 py-5">
           <div className="grid grid-cols-12 px-4 py-5">
             <div className="col-span-7">
               <span className="font-open-sans text-xl font-semibold text-[#252733]">
@@ -286,76 +286,60 @@ function AppUserAddressTabPage({ addressList, appUserId, setAddress }: Props) {
             </div>
           </div>
           {list?.length > 0 ? (
-            <>
-              <div className="mt-3 grid grid-cols-none">
-                <table className="table-border table-auto">
-                  <thead>
-                    <tr>
-                      <th className="w-[50%]">address</th>
-                      <th>latitude</th>
-                      <th>longitude</th>
-                      <th>type</th>
-                      <th>status</th>
-                      <th>&nbsp;</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {list?.map((item: any, index: number) => {
-                      return (
-                        <tr key={item.id}>
-                          <td>{item.address}</td>
-                          <td>{item.latitude}</td>
-                          <td>{item.longitude}</td>
-                          <td>{item.type}</td>
-                          <td>
-                            {item.isActive ? (
-                              <span className="badge badge-success">
-                                ACTIVE
-                              </span>
-                            ) : (
-                              <span className="badge badge-danger">
-                                INACTIVE
-                              </span>
-                            )}
-                          </td>
-                          <td>
-                            <div className="flex items-center justify-end">
-                              <Switch
-                                disabled={item.isActive && true}
-                                checked={item.isActive}
-                                onChange={(
-                                  event: React.ChangeEvent<HTMLInputElement>
-                                ) => handleSwitchChange(event, item.id)}
-                                inputProps={{ 'aria-label': 'controlled' }}
-                              />
-                              <div>
-                                <IconButton
-                                  onClick={() => handleEdit(item.id)}
-                                  className="mr-0"
-                                  aria-label="update"
-                                >
-                                  <EditIcon />
-                                </IconButton>
-                              </div>
-                            </div>
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
-              {/* <div className="mt-3 flex w-[100%] justify-center py-3">
-                            <TablePagination
-                                component="div"
-                                count={total}
-                                page={page}
-                                onPageChange={handleChangePage}
-                                rowsPerPage={rowsPerPage}
-                                onRowsPerPageChange={handleChangeRowsPerPage}
+            <div className="mt-3 grid grid-cols-none">
+              <table className="table-border table-auto">
+                <thead>
+                  <tr>
+                    <th className="w-[50%]">address</th>
+                    <th>latitude</th>
+                    <th>longitude</th>
+                    <th>type</th>
+                    <th>status</th>
+                    <th>&nbsp;</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {list?.map((item: any, index: number) => {
+                    return (
+                      <tr key={item.id}>
+                        <td>{item.address}</td>
+                        <td>{item.latitude}</td>
+                        <td>{item.longitude}</td>
+                        <td>{item.type}</td>
+                        <td>
+                          {item.isActive ? (
+                            <span className="badge badge-success">ACTIVE</span>
+                          ) : (
+                            <span className="badge badge-danger">INACTIVE</span>
+                          )}
+                        </td>
+                        <td>
+                          <div className="flex items-center justify-end">
+                            <Switch
+                              disabled={item.isActive && true}
+                              checked={item.isActive}
+                              onChange={(
+                                event: React.ChangeEvent<HTMLInputElement>
+                              ) => handleSwitchChange(event, item.id)}
+                              inputProps={{ 'aria-label': 'controlled' }}
                             />
-                        </div> */}
-            </>
+                            <div>
+                              <IconButton
+                                onClick={() => handleEdit(item.id)}
+                                className="mr-0"
+                                aria-label="update"
+                              >
+                                <EditIcon />
+                              </IconButton>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
           ) : (
             <CustomText noroundedborders text="No Address Records" />
           )}
