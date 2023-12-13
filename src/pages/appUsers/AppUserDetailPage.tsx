@@ -219,36 +219,34 @@ function AppUserDetailPage() {
           </div>
           <div className="mt-3 grid grid-cols-12">
             <div className="col-span-12 rounded-lg bg-[#fff] px-4 py-5 shadow-lg">
-              <div className="custom-tab">
+              {detail?.userType === 'Driver' && (
                 <Tabs value={selectedTab} onChange={handleTabChange}>
                   <Tab
                     label="address"
                     value="ADDRESS"
                     // onClick={() => navigate(`./detail/${appuserId}`)}
                   />
-                  {detail?.userType === 'Driver' && (
-                    <Tab
-                      label="Schedule"
-                      value="SCHEDULE"
-                      // onClick={() => navigate('../shop')}
-                    />
-                  )}
+                  <Tab
+                    label="Schedule"
+                    value="SCHEDULE"
+                    // onClick={() => navigate('../shop')}
+                  />
                 </Tabs>
-                {selectedTab === 'ADDRESS' && (
-                  <AppUserAddressTabPage
-                    addressList={detail?.appUserAddress}
-                    appUserId={appuserId}
-                    setAddress={setAddress}
-                  />
-                )}
-                {selectedTab === 'SCHEDULE' && (
-                  <AppUserScheduleTabPage
-                    appUserId={appuserId}
-                    scheduleList={detail?.appDriverWorkingSchedule}
-                    filteredWeekdays={filteredWeekDays}
-                  />
-                )}
-              </div>
+              )}
+              {selectedTab === 'ADDRESS' && (
+                <AppUserAddressTabPage
+                  addressList={detail?.appUserAddress}
+                  appUserId={appuserId}
+                  setAddress={setAddress}
+                />
+              )}
+              {selectedTab === 'SCHEDULE' && (
+                <AppUserScheduleTabPage
+                  appUserId={appuserId}
+                  scheduleList={detail?.appDriverWorkingSchedule}
+                  filteredWeekdays={filteredWeekDays}
+                />
+              )}
             </div>
           </div>
         </div>

@@ -248,11 +248,11 @@ function AppUserScheduleTabPage({
         displayMessage={notifyMessage}
       />
       <div>
-        <div className="col-span-12 rounded-lg bg-[#fff] px-4 py-5 shadow-lg">
+        <div className="col-span-12 rounded-lg bg-[#fff] px-4 py-5">
           <div className="grid grid-cols-12 px-4 py-5">
             <div className="col-span-7">
               <span className="font-open-sans text-xl font-semibold text-[#252733]">
-                All Address
+                All Schedules
               </span>
             </div>
             <div className="col-span-5">
