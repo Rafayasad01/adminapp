@@ -101,7 +101,7 @@ function BranchUpdatePopup({
         <div className="Content p-5">
           <form className="" onSubmit={handleSubmit(onSubmit)}>
             <div>
-              <span className="Title">Edit Shop</span>
+              <span className="Title">Edit Branch</span>
             </div>
             <div className="FormBody">
               <div className="FormFields">

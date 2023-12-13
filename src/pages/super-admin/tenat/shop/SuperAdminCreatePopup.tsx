@@ -72,6 +72,13 @@ function SuperAdminTenantCreatePopup({
     debouceRequest(val);
   };
 
+  const formatNumber = (value: any) => {
+    console.log('VAAA', value);
+    const formattedValue = value.toString().replace(/B(?=(d{3})+(?!d))/g, ',');
+    console.log('VAAA2', value);
+    return formattedValue;
+  };
+
   return (
     <Dialog
       open={openFormDialog}
@@ -89,62 +96,129 @@ function SuperAdminTenantCreatePopup({
           <div className="FormBody">
             <div className="FormFields">
               <FormControl className="FormControl" variant="standard">
-                <label className="FormLabel">Shop Name</label>
+                <label className="FormLabel">
+                  Shop Name{' '}
+                  <span className="text-xs text-gray-400">
+                    ( max 15 characters )
+                  </span>
+                </label>
                 <Input
                   className="FormInput"
                   type="text"
                   id="tenantName"
                   placeholder="Enter shop name"
                   disableUnderline
-                  {...register('tenantName', { required: true })}
+                  {...register('tenantName', {
+                    required: true,
+                    validate: (value) => value.length <= 15,
+                  })}
                   onChange={(val: any) => shopFieldHangler(val.target.value)}
                 />
                 {errors.tenantName?.type === 'required' && (
-                  <span role="alert">Shop name is required</span>
+                  <span role="alert" className="error-color">
+                    *Shop name is required
+                  </span>
+                )}
+                {errors.tenantName?.type === 'validate' && (
+                  <span role="alert" className="error-color">
+                    *Maximum length exceeded
+                  </span>
                 )}
               </FormControl>
               <FormControl className="FormControl" variant="standard">
                 <label className="FormLabel">Email</label>
                 <Input
                   className="FormInput"
-                  {...register('email', { required: true })}
+                  {...register('email', {
+                    required: true,
+                    pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
+                  })}
                   type="text"
                   id="email"
                   placeholder="Enter email"
                   disableUnderline
                 />
                 {errors.email?.type === 'required' && (
-                  <span role="alert">Email is required</span>
+                  <span role="alert" className="error-color">
+                    *Email is required
+                  </span>
+                )}
+                {errors.email?.type === 'pattern' && (
+                  <span role="alert" className="error-color">
+                    *Invalid email format
+                  </span>
                 )}
               </FormControl>
             </div>
             <div className="FormFields">
               <FormControl className="FormControl" variant="standard">
-                <label className="FormLabel">First Name</label>
+                <label className="FormLabel">
+                  First Name{' '}
+                  <span className="text-xs text-gray-400">
+                    ( max 10 characters )
+                  </span>
+                </label>
                 <Input
                   className="FormInput"
-                  {...register('firstName', { required: true })}
+                  {...register('firstName', {
+                    required: true,
+                    pattern: /^[A-Za-z]+$/i,
+                    validate: (value) => value.length <= 10,
+                  })}
                   type="text"
                   id="firstName"
                   placeholder="Enter first name"
                   disableUnderline
                 />
                 {errors.firstName?.type === 'required' && (
-                  <span role="alert">First name is required</span>
+                  <span role="alert" className="error-color">
+                    *First name is required
+                  </span>
+                )}
+                {errors.firstName?.type === 'pattern' && (
+                  <span role="alert" className="error-color">
+                    *Invalid characters
+                  </span>
+                )}
+                {errors.firstName?.type === 'validate' && (
+                  <span role="alert" className="error-color">
+                    *Maximum length exceeded
+                  </span>
                 )}
               </FormControl>
               <FormControl className="FormControl" variant="standard">
-                <label className="FormLabel">Last Name</label>
+                <label className="FormLabel">
+                  Last Name{' '}
+                  <span className="text-xs text-gray-400">
+                    ( max 10 characters )
+                  </span>
+                </label>
                 <Input
                   className="FormInput"
-                  {...register('lastName', { required: true })}
+                  {...register('lastName', {
+                    required: true,
+                    pattern: /^[A-Za-z]+$/i,
+                    validate: (value) => value.length <= 10,
+                  })}
                   type="text"
                   id="lastName"
                   placeholder="Enter last name"
                   disableUnderline
                 />
                 {errors.lastName?.type === 'required' && (
-                  <span role="alert">Last name is required</span>
+                  <span role="alert" className="error-color">
+                    *Last name is required
+                  </span>
+                )}
+                {errors.lastName?.type === 'pattern' && (
+                  <span role="alert" className="error-color">
+                    *Invalid characters
+                  </span>
+                )}
+                {errors.lastName?.type === 'validate' && (
+                  <span role="alert" className="error-color">
+                    *Maximum length exceeded
+                  </span>
                 )}
               </FormControl>
             </div>
@@ -153,28 +227,45 @@ function SuperAdminTenantCreatePopup({
                 <label className="FormLabel">Max branch limits</label>
                 <Input
                   className="FormInput"
-                  {...register('maxBranchLimit', { required: true })}
+                  {...register('maxBranchLimit', {
+                    required: 'Branch limit is required',
+                    validate: (value: any) =>
+                      parseInt(value, 10) >= 0 ||
+                      'Branch limit must be a non-negative number',
+                  })}
                   type="number"
                   id="maxBranchLimits"
                   placeholder="Enter max branch limits"
                   disableUnderline
                 />
-                {errors.maxBranchLimit?.type === 'required' && (
-                  <span role="alert">branch limit is required</span>
+                {errors?.maxBranchLimit && (
+                  <span role="alert" className="error-color">
+                    *{errors?.maxBranchLimit?.message}
+                  </span>
                 )}
+                {/* {errors.maxBranchLimit?.type === 'validate' && (
+                  <span role="alert" className='error-color'>*Branch limit must be a non-negative number</span>
+                )} */}
               </FormControl>
               <FormControl className="FormControl" variant="standard">
                 <label className="FormLabel">Max User Limits</label>
                 <Input
                   className="FormInput"
-                  {...register('maxUserLimit', { required: true })}
+                  {...register('maxUserLimit', {
+                    required: 'User limit is required',
+                    validate: (value: any) =>
+                      parseInt(value, 10) >= 0 ||
+                      'User limit must be a non-negative number',
+                  })}
                   type="number"
                   id="maxUserLimits"
                   placeholder="Enter max user limits"
                   disableUnderline
                 />
-                {errors.maxUserLimit?.type === 'required' && (
-                  <span role="alert">User limits is required</span>
+                {errors?.maxUserLimit && (
+                  <span role="alert" className="error-color">
+                    *{errors?.maxUserLimit?.message}
+                  </span>
                 )}
               </FormControl>
             </div>
@@ -199,7 +290,9 @@ function SuperAdminTenantCreatePopup({
                   {...register('address', { required: true })}
                 />
                 {errors.address?.type === 'required' && (
-                  <span role="alert">address is required</span>
+                  <span role="alert" className="error-color">
+                    *address is required
+                  </span>
                 )}
               </FormControl>
             </div>
@@ -278,16 +371,23 @@ function SuperAdminTenantCreatePopup({
                   <Input
                     className="FormInput"
                     {...register('trialModeLimit', {
-                      required: watch('trialMode') === true && true,
+                      required:
+                        watch('trialMode') === true &&
+                        'Trail Mode limit is required',
                       value: 15,
+                      validate: (value: any) =>
+                        parseInt(value, 10) >= 0 ||
+                        'Trail mode must be a non-negative number',
                     })}
                     type="number"
                     id="trialModeLimit"
                     placeholder="Enter Trail Mode limit in days"
                     disableUnderline
                   />
-                  {errors.trialModeLimit?.type === 'required' && (
-                    <span role="alert">Trail Mode limit is required</span>
+                  {errors?.trialModeLimit && (
+                    <span role="alert" className="error-color">
+                      *{errors?.trialModeLimit?.message}
+                    </span>
                   )}
                 </FormControl>
               </div>

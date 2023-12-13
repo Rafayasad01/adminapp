@@ -77,16 +77,10 @@ const links = [
     icon: <CategoryIcon />,
   },
   {
-    name: 'Customers',
-    path: 'customers',
+    name: 'App user',
+    path: 'app-user',
     permission: 'Customer List',
     icon: <PersonOutlineOutlinedIcon fontSize="inherit" />,
-  },
-  {
-    name: 'Drivers',
-    path: 'drivers',
-    permission: 'Driver List',
-    icon: <DriverIcon />,
   },
   {
     name: 'Employees',

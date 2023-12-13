@@ -14,6 +14,7 @@ type Props = {
   type?: any;
   isMenuOpen?: boolean;
   sx?: any;
+  disabled?: boolean;
 };
 
 function CustomButton({
@@ -27,6 +28,7 @@ function CustomButton({
   title,
   isMenuOpen,
   sx,
+  disabled,
 }: Props) {
   if (buttonType === 'button') {
     return (
@@ -44,6 +46,7 @@ function CustomButton({
   if (buttonType === 'dots') {
     return (
       <IconButton
+        disabled={disabled}
         className="btn-dot"
         aria-label="more"
         id="long-button"

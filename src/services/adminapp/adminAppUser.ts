@@ -6,6 +6,97 @@ const appLogin = (data: any) => {
   return network.post(`${APP_PREFIX}/login`, data);
 };
 
+const appCreateUser = (data: any) => {
+  return network.post(`${APP_PREFIX}/create`, data);
+};
+
+const appUpdateUser = (data: any) => {
+  return network.post(`${APP_PREFIX}/update`, data);
+};
+
+const appUpdateStatus = (data: any) => {
+  return network.post(`${APP_PREFIX}/update/status`, data);
+};
+
+const appUserDelete = (data: any) => {
+  return network.post(`${APP_PREFIX}/delete`, data);
+};
+
+const appList = (tenantId: string, page: number, size: number) => {
+  return network.get(`${APP_PREFIX}/list/${tenantId}/${page}/${size}`);
+};
+
+const appListSearch = (
+  tenantId: string,
+  search: string,
+  page: number,
+  size: number
+) => {
+  return network.get(
+    `${APP_PREFIX}/list/${tenantId}/${search}/${page}/${size}`
+  );
+};
+
+const appUserDetails = (appUserId: any) => {
+  return network.get(`${APP_PREFIX}/detail/${appUserId}`);
+};
+
+const appUserEdit = (appUserId: string) => {
+  return network.get(`${APP_PREFIX}/edit/${appUserId}`);
+};
+
+// address
+
+const appUserAddressCreate = (data: any) => {
+  return network.post(`${APP_PREFIX}/address/create`, data);
+};
+
+const appUserAddressUpdate = (data: any) => {
+  return network.post(`${APP_PREFIX}/address/update`, data);
+};
+
+const appUserAddressUpdateStatus = (data: any) => {
+  return network.post(`${APP_PREFIX}/address/update/status`, data);
+};
+
+const appUserAddressEdit = (addressId: string) => {
+  return network.get(`${APP_PREFIX}/address/edit/${addressId}`);
+};
+
+// Schedule
+
+const appUserScheduleCreate = (data: any) => {
+  return network.post(`${APP_PREFIX}/schedule/create`, data);
+};
+
+const appUserScheduleUpdate = (data: any) => {
+  return network.post(`${APP_PREFIX}/schedule/update`, data);
+};
+
+const appUserScheduleUpdateStatus = (data: any) => {
+  return network.post(`${APP_PREFIX}/schedule/update/status`, data);
+};
+
+const appUserScheduleEdit = (addressId: string) => {
+  return network.get(`${APP_PREFIX}/schedule/edit/${addressId}`);
+};
+
 export default {
   appLogin,
+  appList,
+  appListSearch,
+  appUserDetails,
+  appUserEdit,
+  appCreateUser,
+  appUpdateUser,
+  appUpdateStatus,
+  appUserDelete,
+  appUserAddressCreate,
+  appUserAddressUpdate,
+  appUserAddressEdit,
+  appUserAddressUpdateStatus,
+  appUserScheduleCreate,
+  appUserScheduleUpdate,
+  appUserScheduleUpdateStatus,
+  appUserScheduleEdit,
 };

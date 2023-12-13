@@ -60,7 +60,7 @@ function SuperAdminSettingDialog({
             Setting Details
           </span>
           <div className="grid w-full grid-cols-12 gap-3">
-            <div className="col-span-4">
+            <div className="col-span-6">
               <div className="flex flex-col py-[2rem] px-5">
                 <div className="flex w-full flex-col">
                   <span className="font-open-sans text-base font-semibold not-italic text-[#1A1A1A]">
@@ -162,7 +162,7 @@ function SuperAdminSettingDialog({
                 </div>
               </div>
             </div>
-            <div className="col-span-4">
+            <div className="col-span-6">
               <div className="flex flex-col py-[2rem] px-5">
                 <div className="flex w-full flex-col">
                   <span className="font-open-sans text-base font-semibold not-italic text-[#1A1A1A]">
@@ -251,6 +251,14 @@ function SuperAdminSettingDialog({
                           name={WHATSAPP as AssetsImages}
                         />
                       )}
+                      {detail.instagram === null &&
+                        detail.linkedin === null &&
+                        detail.twitter === null &&
+                        detail.youtube === null &&
+                        detail.whatsapp === null &&
+                        detail.facebook === null && (
+                          <span>No Links uploaded yet</span>
+                        )}
                     </div>
                   </div>
                 </div>

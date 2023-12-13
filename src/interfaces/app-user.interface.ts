@@ -12,14 +12,16 @@ export interface AppUserDriverExt {
 }
 
 export interface AppUser {
-  first_name: string;
-  last_name: string;
+  firstName: string;
+  lastName: string;
   password: string;
   email: string;
   phone: number;
-  postal_code: string;
+  postalCode: string;
   address: string;
+  appuserRole: string;
   avatar: string;
+  licenseNumber: string;
 }
 
 export interface AppUserAddress {
@@ -36,4 +38,10 @@ export interface AppUserEmployees {
   last_name: string;
   email: string;
   password: string;
+}
+
+export interface AppSchedule {
+  weekName: any;
+  startDateTime: string;
+  endDateTime: string;
 }

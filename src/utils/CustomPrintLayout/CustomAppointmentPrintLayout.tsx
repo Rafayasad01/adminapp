@@ -123,24 +123,34 @@ const CustomPrintLayouts = forwardRef<any, any>((props: any, ref: any) => {
             </div>
           </div>
           <div className="print-line straight" />
+          {detailItems?.urgentFee > 0 && (
+            <>
+              <div className="print-row">
+                <div className="col-1">
+                  <span>Sub Total</span>
+                </div>
+                <div className="col-2">
+                  <span>${detailItems?.subTotalAmount}</span>
+                </div>
+              </div>
+              <div className="print-row">
+                <div className="col-1">
+                  <span>Urgent Fee</span>
+                </div>
+                <div className="col-2">
+                  <span>${detailItems?.urgentFee}</span>
+                </div>
+              </div>
+            </>
+          )}
           <div className="print-row">
             <div className="col-1">
               <span>Total</span>
             </div>
             <div className="col-2">
-              <span>${detailItems?.subTotalAmount}</span>
+              <span>${detailItems?.totalAmount}</span>
             </div>
           </div>
-          {detailItems?.urgentFee > 0 && (
-            <div className="print-row">
-              <div className="col-1">
-                <span>Urgent Fee</span>
-              </div>
-              <div className="col-2">
-                <span>${detailItems?.urgentFee}</span>
-              </div>
-            </div>
-          )}
           <div className="print-row">
             <div className="col-1">
               <span>HST {detailItems?.gstPercentage}%</span>
@@ -149,7 +159,6 @@ const CustomPrintLayouts = forwardRef<any, any>((props: any, ref: any) => {
               <span>${detailItems?.gstAmount}</span>
             </div>
           </div>
-
           <div className="print-line straight" />
           <div className="print-row">
             <div className="col-1">
