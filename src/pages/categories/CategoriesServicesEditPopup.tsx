@@ -11,7 +11,12 @@ import { useForm } from 'react-hook-form';
 
 import '../../assets/css/PopupStyle.css';
 import { CategoryService } from '../../interfaces/category.interface';
-import { INVALID_CHAR, MAX_LENGTH_EXCEEDED, PATTERN, VALIDATE_NON_NEGATIVE_NUM } from '../../utils/constants';
+import {
+  INVALID_CHAR,
+  MAX_LENGTH_EXCEEDED,
+  PATTERN,
+  VALIDATE_NON_NEGATIVE_NUM,
+} from '../../utils/constants';
 import ErrorSpanBox from '../../components/common/ErrorSpanBox';
 
 type Props = {
@@ -43,22 +48,22 @@ function CategoriesServicesEditPopup({
   } = useForm<CategoryService>();
   const onSubmit = (data: CategoryService) => {
     if (image !== null) {
-      let res = {
+      const res = {
         name: data.name,
         desc: data.desc,
         price: data.price,
         quantity: data.quantity,
-        icon: image
-      }
+        icon: image,
+      };
       setOpenFormDialog(false);
       callback(res);
     } else if (data.desc && data.name && data.price && data.quantity) {
-      let res = {
+      const res = {
         name: data.name,
         desc: data.desc,
         price: data.price,
-        quantity: data.quantity
-      }
+        quantity: data.quantity,
+      };
       setOpenFormDialog(false);
       callback(res);
     } else {
@@ -112,12 +117,12 @@ function CategoriesServicesEditPopup({
                 <Input
                   className="FormInput"
                   id="name"
-                  placeholder='Enter service name'
+                  placeholder="Enter service name"
                   {...register('name', {
                     required: 'Name is required',
                     value: formData.name,
                     pattern: PATTERN.CHAR_NUM_SPACE,
-                    validate: (value) => value.length <= 100
+                    validate: (value) => value.length <= 100,
                   })}
                   disableUnderline
                 />
@@ -139,7 +144,7 @@ function CategoriesServicesEditPopup({
                   className="FormInput"
                   id="name"
                   type="number"
-                  placeholder='Enter minimum order quantity'
+                  placeholder="Enter minimum order quantity"
                   {...register('quantity', {
                     required: 'Quantity is required in numbers',
                     validate: (value: any) => VALIDATE_NON_NEGATIVE_NUM(value),
@@ -164,9 +169,7 @@ function CategoriesServicesEditPopup({
                   })}
                   disableUnderline
                 />
-                {errors.price && (
-                  <ErrorSpanBox error={errors.price?.message} />
-                )}
+                {errors.price && <ErrorSpanBox error={errors.price?.message} />}
               </FormControl>
             </div>
             <div className="FormField">
@@ -187,7 +190,7 @@ function CategoriesServicesEditPopup({
                     value: formData.desc,
                     pattern: {
                       value: PATTERN.CHAR_NUM_SPACE_DOT_AT,
-                      message: INVALID_CHAR
+                      message: INVALID_CHAR,
                     },
                     minLength: {
                       value: 1,
@@ -199,9 +202,7 @@ function CategoriesServicesEditPopup({
                     },
                   })}
                 />
-                {errors.desc && (
-                  <ErrorSpanBox error={errors.desc?.message} />
-                )}
+                {errors.desc && <ErrorSpanBox error={errors.desc?.message} />}
               </FormControl>
             </div>
             <div className="FormField">

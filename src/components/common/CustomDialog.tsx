@@ -159,7 +159,7 @@ function CustomDialog({
                               {...items.register(items.id, {
                                 pattern: {
                                   value: items.pattern,
-                                  message: INVALID_CHAR
+                                  message: INVALID_CHAR,
                                 },
                                 required:
                                   items.notRequired === true
@@ -188,7 +188,7 @@ function CustomDialog({
                           setTimePickerValue={items.setTime}
                           id={items.id}
                           errors={items.error}
-                        // setError={setError}
+                          // setError={setError}
                         />
                       ) : null
                     }
@@ -271,7 +271,7 @@ function CustomDialog({
                           setTimePickerValue={items.setTime}
                           id={items.id}
                           errors={items.error}
-                        // setError={setError}
+                          // setError={setError}
                         />
                       </Fragment>
                     );
@@ -280,8 +280,8 @@ function CustomDialog({
                 {(weekDays?.length < 0 ||
                   startTime === null ||
                   endTime === null) && (
-                    <ErrorSpanBox error='schedule is required' />
-                  )}
+                  <ErrorSpanBox error="schedule is required" />
+                )}
               </div>
             )}
           </div>

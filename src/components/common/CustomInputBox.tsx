@@ -51,7 +51,7 @@ function CustomInputBox({
   requiredType,
   maxLetterLimit,
 }: Props) {
-  console.log("errrrerr", error)
+  console.log('errrrerr', error);
   return (
     <>
       <div className="flex">
@@ -90,8 +90,8 @@ function CustomInputBox({
           required: requiredType
             ? false
             : inputType === 'hidden'
-              ? false
-              : `${inputTitle?.toLocaleLowerCase()} is required`,
+            ? false
+            : `${inputTitle?.toLocaleLowerCase()} is required`,
           value: value || '',
         })}
         endAdornment={
@@ -100,7 +100,7 @@ function CustomInputBox({
               <IconButton
                 style={{ padding: 0 }}
                 aria-label="toggle password visibility"
-                onClick={onclick || (() => { })}
+                onClick={onclick || (() => {})}
               >
                 {showPassVisibility ? <VisibilityOff /> : <Visibility />}
               </IconButton>
@@ -109,8 +109,7 @@ function CustomInputBox({
         }
       />
       {error && (
-        <ErrorSpanBox error={`${error.message ? `${error.message}` : ''
-          }`} />
+        <ErrorSpanBox error={`${error.message ? `${error.message}` : ''}`} />
       )}
     </>
   );

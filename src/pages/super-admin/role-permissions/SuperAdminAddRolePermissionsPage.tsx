@@ -16,7 +16,12 @@ import CustomButton from '../../../components/common/CustomButton';
 import Service from '../../../services/superadmin/RolePermissions';
 import Loader from '../../../components/common/Loader';
 import Notify from '../../../components/common/Notify';
-import { INVALID_CHAR, MAX_LENGTH_EXCEEDED, PATTERN, setText } from '../../../utils/constants';
+import {
+  INVALID_CHAR,
+  MAX_LENGTH_EXCEEDED,
+  PATTERN,
+  setText,
+} from '../../../utils/constants';
 import ErrorSpanBox from '../../../components/common/ErrorSpanBox';
 
 function SuperAdminAddRolePermissionsPage() {
@@ -163,15 +168,15 @@ function SuperAdminAddRolePermissionsPage() {
                   {...register('roleName', {
                     required: true,
                     pattern: PATTERN.CHAR_NUM_SPACE,
-                    validate: (value) => value.length <= 100
+                    validate: (value) => value.length <= 100,
                   })}
                   type="text"
                   id="roleName"
                   placeholder="Enter Role name"
                   disableUnderline
                 />
-                {errors.roleName?.type === "required" && (
-                  <ErrorSpanBox error='Shop name is required' />
+                {errors.roleName?.type === 'required' && (
+                  <ErrorSpanBox error="Shop name is required" />
                 )}
                 {errors.roleName?.type === 'pattern' && (
                   <ErrorSpanBox error={INVALID_CHAR} />
@@ -190,7 +195,7 @@ function SuperAdminAddRolePermissionsPage() {
                   {...register('roleDescription', {
                     pattern: {
                       value: PATTERN.CHAR_NUM_SPACE_DOT_AT,
-                      message: INVALID_CHAR
+                      message: INVALID_CHAR,
                     },
                     minLength: {
                       value: 1,
@@ -199,7 +204,7 @@ function SuperAdminAddRolePermissionsPage() {
                     maxLength: {
                       value: 250,
                       message: MAX_LENGTH_EXCEEDED,
-                    }
+                    },
                   })}
                   placeholder="Enter Role description"
                   className="w-[280px] rounded-lg border-2 border-[#949EAE] p-3 outline-none"

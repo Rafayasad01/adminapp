@@ -11,7 +11,11 @@ import TextField from '@mui/material/TextField';
 import '../../../assets/css/PopupStyle.css';
 import { AppImage } from '../../../interfaces/app.interface';
 import CustomButton from '../../../components/common/CustomButton';
-import { INVALID_CHAR, MAX_LENGTH_EXCEEDED, PATTERN } from '../../../utils/constants';
+import {
+  INVALID_CHAR,
+  MAX_LENGTH_EXCEEDED,
+  PATTERN,
+} from '../../../utils/constants';
 import ErrorSpanBox from '../../../components/common/ErrorSpanBox';
 
 type Props = {
@@ -124,8 +128,8 @@ function SuperAdminAppImageEditPopup({
                         value: formData?.name,
                       })}
                     />
-                    {errors.name?.type === "required" && (
-                      <ErrorSpanBox error='Image name is required' />
+                    {errors.name?.type === 'required' && (
+                      <ErrorSpanBox error="Image name is required" />
                     )}
                     {errors.name?.type === 'pattern' && (
                       <ErrorSpanBox error={INVALID_CHAR} />
@@ -152,7 +156,7 @@ function SuperAdminAppImageEditPopup({
                         value: formData?.desc,
                         pattern: {
                           value: PATTERN.CHAR_NUM_SPACE_DOT_AT,
-                          message: INVALID_CHAR
+                          message: INVALID_CHAR,
                         },
                         minLength: {
                           value: 1,

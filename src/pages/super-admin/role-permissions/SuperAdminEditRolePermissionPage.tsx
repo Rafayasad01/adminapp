@@ -131,7 +131,7 @@ function SuperAdminEditRolePermissionsPage() {
   };
 
   const handleSelectAllChange = (checked: any) => {
-    console.log("SELE CHEK", checked);
+    console.log('SELE CHEK', checked);
     const updatedData = list.map((category: any) => ({
       ...category,
       data: category.data.map((detail: any) => ({

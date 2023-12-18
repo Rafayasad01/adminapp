@@ -17,7 +17,13 @@ import dayjs from 'dayjs';
 import CustomDropDown from '../../components/common/CustomDropDown';
 import Service from '../../services/adminapp/adminAppointment';
 import { Tenant } from '../../interfaces/superadmin/tenant.interface';
-import { DOMAIN_PREFIX, DOMAIN_PROTOCOL, INVALID_CHAR, MAX_LENGTH_EXCEEDED, PATTERN } from '../../utils/constants';
+import {
+  DOMAIN_PREFIX,
+  DOMAIN_PROTOCOL,
+  INVALID_CHAR,
+  MAX_LENGTH_EXCEEDED,
+  PATTERN,
+} from '../../utils/constants';
 import TimePicker from '../../components/common/TimePicker';
 import {
   AppointmentProviderScheduleTime,
@@ -119,8 +125,8 @@ function BannersCreatePopup({
                   validate: (value) => value.length <= 100,
                 })}
               />
-              {errors.bannerName?.type === "required" && (
-                <ErrorSpanBox error='Banner name is required' />
+              {errors.bannerName?.type === 'required' && (
+                <ErrorSpanBox error="Banner name is required" />
               )}
               {errors.bannerName?.type === 'pattern' && (
                 <ErrorSpanBox error={INVALID_CHAR} />
@@ -149,18 +155,16 @@ function BannersCreatePopup({
                 />
               </div>
             ) : // ) : detail && detail.logo ? (
-              //     <div className="col-span-6 flex items-center xl:justify-center 2xl:justify-start">
-              //         <img
-              //             className="max-h-[100px] max-w-[150px] rounded-md"
-              //             src={detail.logo}
-              //             alt="Shop Logo"
-              //         />
-              //     </div>
-              null}
+            //     <div className="col-span-6 flex items-center xl:justify-center 2xl:justify-start">
+            //         <img
+            //             className="max-h-[100px] max-w-[150px] rounded-md"
+            //             src={detail.logo}
+            //             alt="Shop Logo"
+            //         />
+            //     </div>
+            null}
           </div>
-          {selectedImg === null &&
-            <ErrorSpanBox error={"Image is required"} />
-          }
+          {selectedImg === null && <ErrorSpanBox error="Image is required" />}
           <div className="FormFooter">
             <Button
               className="btn-black-outline"

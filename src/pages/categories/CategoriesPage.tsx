@@ -271,7 +271,7 @@ function CategoriesPage() {
   };
 
   const updateFormHandler = (data: any) => {
-    console.log('data::::::', data)
+    console.log('data::::::', data);
     setIsLoader(true);
     const formData = new FormData();
     formData.append('name', data.name);

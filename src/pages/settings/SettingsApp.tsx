@@ -129,7 +129,7 @@ function SettingsApp() {
   };
 
   const onSubmit = (data: Setting) => {
-    console.log("SETTTING DATA", data);
+    console.log('SETTTING DATA', data);
 
     if (listingRolePermission(dataRole, 'Setting Update')) {
       // setIsLoader(true);
@@ -289,7 +289,7 @@ function SettingsApp() {
                     {...register('name', {
                       pattern: PATTERN.CHAR_NUM_SPACE_DASH,
                       validate: (value) => value.length <= 150,
-                      value: detail ? detail.name : ''
+                      value: detail ? detail.name : '',
                     })}
                   />
                   {errors.name?.type === 'pattern' && (
@@ -332,13 +332,13 @@ function SettingsApp() {
                       pattern: PATTERN.PHONE,
                       maxLength: {
                         value: 15,
-                        message: MAX_LENGTH_EXCEEDED
+                        message: MAX_LENGTH_EXCEEDED,
                       },
-                      value: detail ? detail.gstPercentage : ''
+                      value: detail ? detail.gstPercentage : '',
                     })}
-                    type='text'
+                    type="text"
                   />
-                  {errors.gstPercentage?.type === "pattern" && (
+                  {errors.gstPercentage?.type === 'pattern' && (
                     <ErrorSpanBox error={INVALID_CHAR} />
                   )}
                   {errors.gstPercentage?.type === 'maxLength' && (
@@ -363,7 +363,7 @@ function SettingsApp() {
                     })}
                   />
                   {errors.minOrderAmount?.type === 'pattern' && (
-                    <ErrorSpanBox error={"Enter a valid amount"} />
+                    <ErrorSpanBox error="Enter a valid amount" />
                   )}
                 </FormControl>
                 <FormControl className="FormControl" variant="standard">
@@ -382,7 +382,7 @@ function SettingsApp() {
                     })}
                   />
                   {errors.deliveryFee?.type === 'pattern' && (
-                    <ErrorSpanBox error={"Enter a valid delivery fee"} />
+                    <ErrorSpanBox error="Enter a valid delivery fee" />
                   )}
                 </FormControl>
               </div>

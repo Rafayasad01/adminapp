@@ -124,11 +124,11 @@ function SuperAdminShopDetailsDialog({
             <div className="flex justify-between">
               <div className="mt-4 flex w-full flex-col">
                 <span className="font-open-sans text-base font-medium not-italic text-[#1A1A1A]">
-                  Trail Start Date
+                  Trial Start Date
                 </span>
                 <div className="mt-1 font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
-                  {dayjs(items.trailStartDate).isValid() ? (
-                    <>{getDate(items.trailStartDate)}</>
+                  {dayjs(items.trialStartDate).isValid() ? (
+                    <>{getDate(items.trialStartDate)}</>
                   ) : (
                     '--'
                   )}
@@ -139,8 +139,8 @@ function SuperAdminShopDetailsDialog({
                   Trial End Time
                 </span>
                 <div className="mt-1 font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
-                  {dayjs(items.trailStartDate).isValid() ? (
-                    <>{getRemainingTime(items.trailStartDate)}</>
+                  {dayjs(items.trialStartDate).isValid() ? (
+                    <>{getRemainingTime(items.trialStartDate)}</>
                   ) : (
                     '--'
                   )}

@@ -376,11 +376,11 @@ function SuperAdminShopDetailPage() {
     return `${formatDate} ${toString} ${timeZone}`;
   };
 
-  const getRemainingTime = (time: any) => {
-    const addTime = dayjs(time).add(15, 'days');
+  const getRemainingTime = (data: any) => {
+    const addTime = dayjs(data.trialStartDate).add(data.trialModeLimit, 'days');
     const endTime: any = dayjs(addTime).format('YYYY-MM-DD HH:mm:ss');
     const diffBetween = dayjs.duration(dayjs().diff(endTime));
-    const remainingTime = Math.abs(diffBetween.days());
+    const remainingTime = Math.abs(Math.round(diffBetween.asDays()));
     let dayTxt = 'day';
     if (remainingTime > 1) {
       dayTxt = 'days';
@@ -508,11 +508,11 @@ function SuperAdminShopDetailPage() {
                         <div className="flex justify-between">
                           <div className="mt-4 flex w-full flex-col">
                             <span className="font-open-sans text-base font-semibold not-italic text-[#1A1A1A]">
-                              Trail Start Date
+                              Trial Start Date
                             </span>
                             <div className="mt-1 font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
-                              {dayjs(detail.trailStartDate).isValid() ? (
-                                <>{getDate(detail.trailStartDate)}</>
+                              {dayjs(detail.trialStartDate).isValid() ? (
+                                <>{getDate(detail.trialStartDate)}</>
                               ) : (
                                 '--'
                               )}
@@ -523,8 +523,8 @@ function SuperAdminShopDetailPage() {
                               Trial End Time
                             </span>
                             <div className="mt-1 font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
-                              {dayjs(detail.trailStartDate).isValid() ? (
-                                <>{getRemainingTime(detail.trailStartDate)}</>
+                              {dayjs(detail.trialStartDate).isValid() ? (
+                                <>{getRemainingTime(detail)}</>
                               ) : (
                                 '--'
                               )}

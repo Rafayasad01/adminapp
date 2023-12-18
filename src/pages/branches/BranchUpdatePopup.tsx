@@ -14,7 +14,13 @@ import '../../assets/css/PopupStyle.css';
 import { debounce } from '@mui/material/utils';
 import kabakCase from 'lodash/kebabCase';
 import { Tenant } from '../../interfaces/superadmin/tenant.interface';
-import { DOMAIN_PREFIX, DOMAIN_PROTOCOL, INVALID_CHAR, MAX_LENGTH_EXCEEDED, PATTERN } from '../../utils/constants';
+import {
+  DOMAIN_PREFIX,
+  DOMAIN_PROTOCOL,
+  INVALID_CHAR,
+  MAX_LENGTH_EXCEEDED,
+  PATTERN,
+} from '../../utils/constants';
 import ErrorSpanBox from '../../components/common/ErrorSpanBox';
 
 dayjs.extend(duration);
@@ -121,8 +127,8 @@ function BranchUpdatePopup({
                     disableUnderline
                     onChange={(val: any) => shopFieldHangler(val.target.value)}
                   />
-                  {errors.firstName?.type === "required" && (
-                    <ErrorSpanBox error='Shop name is required' />
+                  {errors.firstName?.type === 'required' && (
+                    <ErrorSpanBox error="Shop name is required" />
                   )}
                   {errors.firstName?.type === 'pattern' && (
                     <ErrorSpanBox error={INVALID_CHAR} />
@@ -146,8 +152,8 @@ function BranchUpdatePopup({
                     id="email"
                     disableUnderline
                   />
-                  {errors.email?.type === "required" && (
-                    <ErrorSpanBox error='Email is required' />
+                  {errors.email?.type === 'required' && (
+                    <ErrorSpanBox error="Email is required" />
                   )}
                   {errors.email?.type === 'pattern' && (
                     <ErrorSpanBox error={INVALID_CHAR} />
@@ -172,8 +178,8 @@ function BranchUpdatePopup({
                     id="firstName"
                     disableUnderline
                   />
-                  {errors.firstName?.type === "required" && (
-                    <ErrorSpanBox error='First name is required' />
+                  {errors.firstName?.type === 'required' && (
+                    <ErrorSpanBox error="First name is required" />
                   )}
                   {errors.firstName?.type === 'pattern' && (
                     <ErrorSpanBox error={INVALID_CHAR} />
@@ -196,8 +202,8 @@ function BranchUpdatePopup({
                     id="lastName"
                     disableUnderline
                   />
-                  {errors.lastName?.type === "required" && (
-                    <ErrorSpanBox error='Last name is required' />
+                  {errors.lastName?.type === 'required' && (
+                    <ErrorSpanBox error="Last name is required" />
                   )}
                   {errors.lastName?.type === 'pattern' && (
                     <ErrorSpanBox error={INVALID_CHAR} />

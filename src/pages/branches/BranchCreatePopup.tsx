@@ -10,7 +10,13 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import '../../assets/css/PopupStyle.css';
 import { Tenant } from '../../interfaces/superadmin/tenant.interface';
-import { DOMAIN_PREFIX, DOMAIN_PROTOCOL, INVALID_CHAR, MAX_LENGTH_EXCEEDED, PATTERN } from '../../utils/constants';
+import {
+  DOMAIN_PREFIX,
+  DOMAIN_PROTOCOL,
+  INVALID_CHAR,
+  MAX_LENGTH_EXCEEDED,
+  PATTERN,
+} from '../../utils/constants';
 import ErrorSpanBox from '../../components/common/ErrorSpanBox';
 
 type Props = {
@@ -105,8 +111,8 @@ function BranchCreatePopup({
                   disableUnderline
                   onChange={(val: any) => shopFieldHangler(val.target.value)}
                 />
-                {errors.firstName?.type === "required" && (
-                  <ErrorSpanBox error='Shop name is required' />
+                {errors.firstName?.type === 'required' && (
+                  <ErrorSpanBox error="Shop name is required" />
                 )}
                 {errors.firstName?.type === 'pattern' && (
                   <ErrorSpanBox error={INVALID_CHAR} />
@@ -129,8 +135,8 @@ function BranchCreatePopup({
                   placeholder="Enter email"
                   disableUnderline
                 />
-                {errors.email?.type === "required" && (
-                  <ErrorSpanBox error='Email is required' />
+                {errors.email?.type === 'required' && (
+                  <ErrorSpanBox error="Email is required" />
                 )}
                 {errors.email?.type === 'pattern' && (
                   <ErrorSpanBox error={INVALID_CHAR} />
@@ -155,8 +161,8 @@ function BranchCreatePopup({
                   placeholder="Enter first name"
                   disableUnderline
                 />
-                {errors.firstName?.type === "required" && (
-                  <ErrorSpanBox error='First name is required' />
+                {errors.firstName?.type === 'required' && (
+                  <ErrorSpanBox error="First name is required" />
                 )}
                 {errors.firstName?.type === 'pattern' && (
                   <ErrorSpanBox error={INVALID_CHAR} />
@@ -179,8 +185,8 @@ function BranchCreatePopup({
                   placeholder="Enter last name"
                   disableUnderline
                 />
-                {errors.lastName?.type === "required" && (
-                  <ErrorSpanBox error='Last name is required' />
+                {errors.lastName?.type === 'required' && (
+                  <ErrorSpanBox error="Last name is required" />
                 )}
                 {errors.lastName?.type === 'pattern' && (
                   <ErrorSpanBox error={INVALID_CHAR} />
@@ -196,7 +202,7 @@ function BranchCreatePopup({
                 <Input
                   className="FormInput"
                   {...register('address', {
-                    required: "Address is required",
+                    required: 'Address is required',
                     pattern: PATTERN.CHAR_NUM_SPACE_DOT_AT,
                     validate: (value) => value.length <= 250,
                   })}

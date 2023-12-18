@@ -11,7 +11,11 @@ import { useForm } from 'react-hook-form';
 import '../../assets/css/PopupStyle.css';
 import TextField from '@mui/material/TextField';
 import { Category } from '../../interfaces/category.interface';
-import { INVALID_CHAR, MAX_LENGTH_EXCEEDED, PATTERN } from '../../utils/constants';
+import {
+  INVALID_CHAR,
+  MAX_LENGTH_EXCEEDED,
+  PATTERN,
+} from '../../utils/constants';
 import ErrorSpanBox from '../../components/common/ErrorSpanBox';
 
 type Props = {
@@ -90,13 +94,13 @@ function CategoriesCreatePopup({
                     pattern: PATTERN.CHAR_NUM_SPACE,
                     validate: (value) => value.length <= 100,
                   })}
-                  placeholder='Enter Category Name'
+                  placeholder="Enter Category Name"
                   type="text"
                   id="name"
                   disableUnderline
                 />
                 {errors.name?.type === 'required' && (
-                  <ErrorSpanBox error='Category name is required' />
+                  <ErrorSpanBox error="Category name is required" />
                 )}
                 {errors.name?.type === 'pattern' && (
                   <ErrorSpanBox error={INVALID_CHAR} />
@@ -122,7 +126,7 @@ function CategoriesCreatePopup({
                   {...register('desc', {
                     pattern: {
                       value: PATTERN.CHAR_NUM_SPACE_DOT_AT,
-                      message: INVALID_CHAR
+                      message: INVALID_CHAR,
                     },
                     required: 'Description is required',
                     minLength: {
@@ -135,9 +139,7 @@ function CategoriesCreatePopup({
                     },
                   })}
                 />
-                {errors.desc && (
-                  <ErrorSpanBox error={errors.desc?.message} />
-                )}
+                {errors.desc && <ErrorSpanBox error={errors.desc?.message} />}
               </FormControl>
             </div>
             <div className="FormField">

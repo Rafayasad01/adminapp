@@ -12,7 +12,11 @@ import '../../../assets/css/PopupStyle.css';
 import TextField from '@mui/material/TextField';
 import { AppImage } from '../../../interfaces/app.interface';
 import CustomButton from '../../../components/common/CustomButton';
-import { INVALID_CHAR, MAX_LENGTH_EXCEEDED, PATTERN } from '../../../utils/constants';
+import {
+  INVALID_CHAR,
+  MAX_LENGTH_EXCEEDED,
+  PATTERN,
+} from '../../../utils/constants';
 import ErrorSpanBox from '../../../components/common/ErrorSpanBox';
 // import { Category } from '../../interfaces/category.interface';
 
@@ -100,8 +104,8 @@ function SuperAdminAppImageCreatePopup({
                 placeholder="Write Image Name"
                 disableUnderline
               />
-              {errors.name?.type === "required" && (
-                <ErrorSpanBox error='Image name is required' />
+              {errors.name?.type === 'required' && (
+                <ErrorSpanBox error="Image name is required" />
               )}
               {errors.name?.type === 'pattern' && (
                 <ErrorSpanBox error={INVALID_CHAR} />
@@ -127,7 +131,7 @@ function SuperAdminAppImageCreatePopup({
                 {...register('desc', {
                   pattern: {
                     value: PATTERN.CHAR_NUM_SPACE_DOT_AT,
-                    message: INVALID_CHAR
+                    message: INVALID_CHAR,
                   },
                   minLength: {
                     value: 1,
@@ -139,9 +143,7 @@ function SuperAdminAppImageCreatePopup({
                   },
                 })}
               />
-              {errors.desc && (
-                <ErrorSpanBox error={errors.desc?.message} />
-              )}
+              {errors.desc && <ErrorSpanBox error={errors.desc?.message} />}
             </FormControl>
           </div>
           <div className="FormField">

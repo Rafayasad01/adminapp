@@ -289,7 +289,7 @@ function CategoriesServicesPage() {
               }
             }
           }
-        }else{
+        } else {
           setIsLoader(false);
           setIsNotify(true);
           setNotifyMessage({

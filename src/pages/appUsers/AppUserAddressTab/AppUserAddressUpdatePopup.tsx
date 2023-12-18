@@ -12,7 +12,11 @@ import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
 import { useForm } from 'react-hook-form';
 import { AppUserAddress } from '../../../interfaces/app-user.interface';
 import CustomDropDown from '../../../components/common/CustomDropDown';
-import { INVALID_CHAR, MAX_LENGTH_EXCEEDED, PATTERN } from '../../../utils/constants';
+import {
+  INVALID_CHAR,
+  MAX_LENGTH_EXCEEDED,
+  PATTERN,
+} from '../../../utils/constants';
 import ErrorSpanBox from '../../../components/common/ErrorSpanBox';
 
 type Props = {
