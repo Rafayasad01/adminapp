@@ -15,7 +15,13 @@ import { useForm } from 'react-hook-form';
 import '../../../../assets/css/PopupStyle.css';
 import CustomDropDown from '../../../../components/common/CustomDropDown';
 import { Tenant } from '../../../../interfaces/superadmin/tenant.interface';
-import { DOMAIN_PREFIX, DOMAIN_PROTOCOL, INVALID_CHAR, MAX_LENGTH_EXCEEDED, PATTERN } from '../../../../utils/constants';
+import {
+  DOMAIN_PREFIX,
+  DOMAIN_PROTOCOL,
+  INVALID_CHAR,
+  MAX_LENGTH_EXCEEDED,
+  PATTERN,
+} from '../../../../utils/constants';
 import ErrorSpanBox from '../../../../components/common/ErrorSpanBox';
 
 type Props = {
@@ -80,7 +86,7 @@ function SuperAdminTenantCreatePopup({
     return formattedValue;
   };
 
-  console.log("ERRORS", errors)
+  console.log('ERRORS', errors);
 
   return (
     <Dialog
@@ -92,7 +98,7 @@ function SuperAdminTenantCreatePopup({
       }}
     >
       <div className="Content">
-        <form onSubmit={handleSubmit(onSubmit)} className='overflow-auto px-2'>
+        <form onSubmit={handleSubmit(onSubmit)} className="overflow-auto px-2">
           <div className="FormHeader">
             <span className="Title">{type ? 'Add Branch' : 'Add Shop'}</span>
           </div>
@@ -118,8 +124,8 @@ function SuperAdminTenantCreatePopup({
                   })}
                   onChange={(val: any) => shopFieldHangler(val.target.value)}
                 />
-                {errors.tenantName?.type === "required" && (
-                  <ErrorSpanBox error='Shop name is required' />
+                {errors.tenantName?.type === 'required' && (
+                  <ErrorSpanBox error="Shop name is required" />
                 )}
                 {errors.tenantName?.type === 'pattern' && (
                   <ErrorSpanBox error={INVALID_CHAR} />
@@ -142,8 +148,8 @@ function SuperAdminTenantCreatePopup({
                   placeholder="Enter email"
                   disableUnderline
                 />
-                {errors.email?.type === "required" && (
-                  <ErrorSpanBox error='Email is required' />
+                {errors.email?.type === 'required' && (
+                  <ErrorSpanBox error="Email is required" />
                 )}
                 {errors.email?.type === 'pattern' && (
                   <ErrorSpanBox error={INVALID_CHAR} />
@@ -173,8 +179,8 @@ function SuperAdminTenantCreatePopup({
                   placeholder="Enter first name"
                   disableUnderline
                 />
-                {errors.firstName?.type === "required" && (
-                  <ErrorSpanBox error='First name is required' />
+                {errors.firstName?.type === 'required' && (
+                  <ErrorSpanBox error="First name is required" />
                 )}
                 {errors.firstName?.type === 'pattern' && (
                   <ErrorSpanBox error={INVALID_CHAR} />
@@ -202,8 +208,8 @@ function SuperAdminTenantCreatePopup({
                   placeholder="Enter last name"
                   disableUnderline
                 />
-                {errors.lastName?.type === "required" && (
-                  <ErrorSpanBox error='Last name is required' />
+                {errors.lastName?.type === 'required' && (
+                  <ErrorSpanBox error="Last name is required" />
                 )}
                 {errors.lastName?.type === 'pattern' && (
                   <ErrorSpanBox error={INVALID_CHAR} />
@@ -352,27 +358,27 @@ function SuperAdminTenantCreatePopup({
                     {...register('trialMode')}
                   />
                 }
-                label="Trail Mode"
+                label="Trial Mode"
               />
             </div>
             {watch('trialMode') === true && (
               <div>
                 <FormControl className="FormControl" variant="standard">
-                  <label className="FormLabel">Trail Mode Limit ( Days )</label>
+                  <label className="FormLabel">Trial Mode Limit ( Days )</label>
                   <Input
                     className="FormInput"
                     {...register('trialModeLimit', {
                       required:
                         watch('trialMode') === true &&
-                        'Trail Mode limit is required in numbers',
+                        'Trial Mode limit is required in numbers',
                       value: 15,
                       validate: (value: any) =>
                         parseInt(value, 10) >= 0 ||
-                        'Trail mode must be a non-negative number',
+                        'Trial mode must be a non-negative number',
                     })}
                     type="number"
                     id="trialModeLimit"
-                    placeholder="Enter Trail Mode limit in days"
+                    placeholder="Enter Trial Mode limit in days"
                     disableUnderline
                   />
                   {errors?.trialModeLimit && (

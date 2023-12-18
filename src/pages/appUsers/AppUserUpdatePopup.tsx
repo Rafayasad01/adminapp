@@ -8,7 +8,12 @@ import { useForm } from 'react-hook-form';
 import '../../assets/css/PopupStyle.css';
 import ErrorSpanBox from '../../components/common/ErrorSpanBox';
 import { AppUser } from '../../interfaces/app-user.interface';
-import { INVALID_CHAR, MAX_LENGTH_EXCEEDED, PATTERN, PH_MINI_LENGTH } from '../../utils/constants';
+import {
+  INVALID_CHAR,
+  MAX_LENGTH_EXCEEDED,
+  PATTERN,
+  PH_MINI_LENGTH,
+} from '../../utils/constants';
 
 type Props = {
   openFormDialog: boolean;
@@ -119,8 +124,8 @@ function AppUserUpdatePopup({
                         value: formData?.firstName,
                       })}
                     />
-                    {errors.firstName?.type === "required" && (
-                      <ErrorSpanBox error='First name is required' />
+                    {errors.firstName?.type === 'required' && (
+                      <ErrorSpanBox error="First name is required" />
                     )}
                     {errors.firstName?.type === 'pattern' && (
                       <ErrorSpanBox error={INVALID_CHAR} />
@@ -143,8 +148,8 @@ function AppUserUpdatePopup({
                         value: formData?.lastName,
                       })}
                     />
-                    {errors.lastName?.type === "required" && (
-                      <ErrorSpanBox error='Last name is required' />
+                    {errors.lastName?.type === 'required' && (
+                      <ErrorSpanBox error="Last name is required" />
                     )}
                     {errors.lastName?.type === 'pattern' && (
                       <ErrorSpanBox error={INVALID_CHAR} />
@@ -168,11 +173,11 @@ function AppUserUpdatePopup({
                         pattern: PATTERN.PHONE,
                         maxLength: {
                           value: 15,
-                          message: MAX_LENGTH_EXCEEDED
+                          message: MAX_LENGTH_EXCEEDED,
                         },
                       })}
                     />
-                    {errors.phone?.type === "pattern" && (
+                    {errors.phone?.type === 'pattern' && (
                       <ErrorSpanBox error={INVALID_CHAR} />
                     )}
                     {errors.phone?.type === 'maxLength' && (

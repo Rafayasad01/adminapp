@@ -113,61 +113,48 @@ function SuperAdminShopPage() {
   }, [emptyVariable]);
 
   const createFormHandler = (data: any) => {
-    console.log('data', data);
-
-    // setIsLoader(true);
-    // const formData = new FormData();
-    // formData.append('tenantName', data.tenantName);
-    // formData.append('email', data.email);
-    // formData.append('firstName', data.firstName);
-    // formData.append('address', data.address);
-    // formData.append('lastName', data.lastName);
-    // formData.append('trialMode', data.trialMode);
-    // formData.append('developmentDomain', data.developmentDomain);
-    // formData.append('liveDomain', data.liveDomain);
-    // formData.append('role', data.role);
-    // formData.append('maxBranchLimit', data.maxBranchLimit);
-    // formData.append('maxUserLimit', data.maxUserLimit);
-    // formData.append(
-    //   'trialModeLimit',
-    //   data.trialModeLimit ? data.trialModeLimit : 0
-    // );
-    // if (data.tenantName && data.email && data.firstName && data.lastName) {
-    //   Service.createShop(formData)
-    //     .then((item: any) => {
-    //       if (item.data.success) {
-    //         setIsLoader(false);
-    //         setIsNotify(true);
-    //         setNotifyMessage({
-    //           text: item.data.message,
-    //           type: 'success',
-    //         });
-    //         setList([item.data.data, ...list]);
-    //       } else {
-    //         setIsLoader(false);
-    //         setIsNotify(true);
-    //         setNotifyMessage({
-    //           text: item.data.message,
-    //           type: 'error',
-    //         });
-    //       }
-    //     })
-    //     .catch((err) => {
-    //       setIsLoader(false);
-    //       setIsNotify(true);
-    //       setNotifyMessage({
-    //         text: err.message,
-    //         type: 'error',
-    //       });
-    //     });
-    // } else {
-    //   setIsLoader(false);
-    //   setIsNotify(true);
-    //   setNotifyMessage({
-    //     text: 'All fields are required!',
-    //     type: 'error',
-    //   });
-    // }
+    setIsLoader(true);
+    let trialLimit = 0;
+    if (data.trialModeLimit) {
+      trialLimit = data.trialModeLimit;
+    }
+    data.trialModeLimit = trialLimit;
+    if (data.tenantName && data.email && data.firstName && data.lastName) {
+      Service.createShop(data)
+        .then((item: any) => {
+          if (item.data.success) {
+            setIsLoader(false);
+            setIsNotify(true);
+            setNotifyMessage({
+              text: item.data.message,
+              type: 'success',
+            });
+            setList([item.data.data, ...list]);
+          } else {
+            setIsLoader(false);
+            setIsNotify(true);
+            setNotifyMessage({
+              text: item.data.message,
+              type: 'error',
+            });
+          }
+        })
+        .catch((err) => {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: err.message,
+            type: 'error',
+          });
+        });
+    } else {
+      setIsLoader(false);
+      setIsNotify(true);
+      setNotifyMessage({
+        text: 'All fields are required!',
+        type: 'error',
+      });
+    }
   };
 
   const handleSwitchChange = (event: any, id: string) => {
@@ -209,7 +196,7 @@ function SuperAdminShopPage() {
       });
   };
 
-  const handleTrailModeStatus = (status: any, trialMode: boolean): any => {
+  const handletrialModeStatus = (status: any, trialMode: boolean): any => {
     console.log('TTTMM', trialMode, status);
     let textMsg = '';
     if (trialMode) {
@@ -282,9 +269,9 @@ function SuperAdminShopPage() {
             <table className="table-border table-auto">
               <thead>
                 <tr>
-                  <th style={{ width: "25%" }}>Name</th>
+                  <th style={{ width: '25%' }}>Name</th>
                   <th>Trial Mode</th>
-                  <th>Trail Start Date</th>
+                  <th>Trial Start Date</th>
                   <th>Status</th>
                   <th>Branches</th>
                   <th>Employees</th>
@@ -308,33 +295,33 @@ function SuperAdminShopPage() {
                         <td>
                           <span
                             className={
-                              handleTrailModeStatus(
+                              handletrialModeStatus(
                                 item.isActive,
                                 item.trialMode
                               ) === 'Started'
                                 ? 'badge badge-success'
-                                : handleTrailModeStatus(
-                                  item.isActive,
-                                  item.trialMode
-                                ) === 'Not Started'
-                                  ? 'badge badge-primary'
-                                  : 'badge badge-danger'
+                                : handletrialModeStatus(
+                                    item.isActive,
+                                    item.trialMode
+                                  ) === 'Not Started'
+                                ? 'badge badge-primary'
+                                : 'badge badge-danger'
                             }
                           >
-                            {handleTrailModeStatus(
+                            {handletrialModeStatus(
                               item.isActive,
                               item.trialMode
                             )}
                           </span>
                         </td>
                         <td>
-                          {dayjs(item.trailStartDate).isValid() ? (
+                          {dayjs(item.trialStartDate).isValid() ? (
                             <>
-                              {dayjs(item.trailStartDate)?.format(
+                              {dayjs(item.trialStartDate)?.format(
                                 'ddd, MMM DD, YYYY'
                               )}
                               <br />
-                              {dayjs(item.trailStartDate)?.format('hh:mm:ss A')}
+                              {dayjs(item.trialStartDate)?.format('hh:mm:ss A')}
                             </>
                           ) : (
                             '--'

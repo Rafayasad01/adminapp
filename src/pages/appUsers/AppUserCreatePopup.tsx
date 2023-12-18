@@ -14,7 +14,13 @@ import '../../assets/css/PopupStyle.css';
 import { useForm } from 'react-hook-form';
 import { AppUser } from '../../interfaces/app-user.interface';
 import CustomDropDown from '../../components/common/CustomDropDown';
-import { INVALID_CHAR, MAX_LENGTH_EXCEEDED, PATTERN, PH_MINI_LENGTH, VALIDATE_NON_NEGATIVE_NUM } from '../../utils/constants';
+import {
+  INVALID_CHAR,
+  MAX_LENGTH_EXCEEDED,
+  PATTERN,
+  PH_MINI_LENGTH,
+  VALIDATE_NON_NEGATIVE_NUM,
+} from '../../utils/constants';
 import ErrorSpanBox from '../../components/common/ErrorSpanBox';
 
 type Props = {
@@ -44,7 +50,7 @@ function AppUserCreatePopup({
     watch,
     formState: { errors },
     control,
-    trigger
+    trigger,
   } = useForm<AppUser>();
 
   const handleFormClose = () => setOpenFormDialog(false);
@@ -77,7 +83,7 @@ function AppUserCreatePopup({
     //     });
     // }
   };
-  console.log("errrr", errors);
+  console.log('errrr', errors);
 
   return (
     <Dialog
@@ -108,8 +114,8 @@ function AppUserCreatePopup({
                     validate: (value) => value.length <= 50,
                   })}
                 />
-                {errors.firstName?.type === "required" && (
-                  <ErrorSpanBox error='First name is required' />
+                {errors.firstName?.type === 'required' && (
+                  <ErrorSpanBox error="First name is required" />
                 )}
                 {errors.firstName?.type === 'pattern' && (
                   <ErrorSpanBox error={INVALID_CHAR} />
@@ -131,8 +137,8 @@ function AppUserCreatePopup({
                     validate: (value) => value.length <= 50,
                   })}
                 />
-                {errors.lastName?.type === "required" && (
-                  <ErrorSpanBox error='Last name is required' />
+                {errors.lastName?.type === 'required' && (
+                  <ErrorSpanBox error="Last name is required" />
                 )}
                 {errors.lastName?.type === 'pattern' && (
                   <ErrorSpanBox error={INVALID_CHAR} />
@@ -154,12 +160,12 @@ function AppUserCreatePopup({
                     pattern: PATTERN.PHONE,
                     maxLength: {
                       value: 15,
-                      message: MAX_LENGTH_EXCEEDED
+                      message: MAX_LENGTH_EXCEEDED,
                     },
                   })}
-                  type='text'
+                  type="text"
                 />
-                {errors.phone?.type === "pattern" && (
+                {errors.phone?.type === 'pattern' && (
                   <ErrorSpanBox error={INVALID_CHAR} />
                 )}
                 {errors.phone?.type === 'maxLength' && (
@@ -180,8 +186,8 @@ function AppUserCreatePopup({
                     validate: (value) => value.length <= 100,
                   })}
                 />
-                {errors.email?.type === "required" && (
-                  <ErrorSpanBox error='Email is required' />
+                {errors.email?.type === 'required' && (
+                  <ErrorSpanBox error="Email is required" />
                 )}
                 {errors.email?.type === 'pattern' && (
                   <ErrorSpanBox error={INVALID_CHAR} />
@@ -219,7 +225,7 @@ function AppUserCreatePopup({
                   }
                   disableUnderline
                 />
-                {errors.password?.type === "required" && (
+                {errors.password?.type === 'required' && (
                   <ErrorSpanBox error={errors.password?.message} />
                 )}
                 {errors.password?.type === 'pattern' && (
@@ -302,7 +308,7 @@ function AppUserCreatePopup({
                       validate: (value) => value.length <= 50,
                     })}
                   />
-                  {errors.licenseNumber?.type === "required" && (
+                  {errors.licenseNumber?.type === 'required' && (
                     <ErrorSpanBox error={errors.licenseNumber?.message} />
                   )}
                   {errors.address?.type === 'pattern' && (

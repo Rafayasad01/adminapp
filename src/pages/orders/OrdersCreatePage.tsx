@@ -343,7 +343,7 @@ function OrdersCreatePage() {
       catItemList.filter((el: any) => {
         if (el.id === item) {
           const oldItem = itemList.find((item2: any) => item2.id === item);
-          if (temp.some((item: any) => item.id === el.id)) {
+          if (temp.some((tempItem: any) => tempItem.id === el.id)) {
             return el;
           }
           temp.push({ ...el, ...oldItem, quantity: 1 });
@@ -694,8 +694,9 @@ function OrdersCreatePage() {
                 type="button"
                 onClick={onSubmit}
                 color="inherit"
-                className={`w-full rounded-lg ${loginDetails === null ? 'bg-neutral-400' : 'bg-neutral-900'
-                  } font-open-sans text-base font-semibold text-gray-50`}
+                className={`w-full rounded-lg ${
+                  loginDetails === null ? 'bg-neutral-400' : 'bg-neutral-900'
+                } font-open-sans text-base font-semibold text-gray-50`}
               >
                 {isLoader ? (
                   <CircularProgress size="25px" color="inherit" />

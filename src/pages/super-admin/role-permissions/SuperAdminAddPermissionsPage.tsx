@@ -10,7 +10,12 @@ import CustomButton from '../../../components/common/CustomButton';
 import Service from '../../../services/superadmin/RolePermissions';
 import Loader from '../../../components/common/Loader';
 import Notify from '../../../components/common/Notify';
-import { INVALID_CHAR, MAX_LENGTH_EXCEEDED, PATTERN, setText } from '../../../utils/constants';
+import {
+  INVALID_CHAR,
+  MAX_LENGTH_EXCEEDED,
+  PATTERN,
+  setText,
+} from '../../../utils/constants';
 import { Permissions } from '../../../interfaces/superadmin/permissions.interface';
 import CustomInputBox from '../../../components/common/CustomInputBox';
 import CustomCheckBox from '../../../components/common/CustomCheckBox';
@@ -34,7 +39,6 @@ function SuperAdminAddPermissionsPage() {
     control,
     formState: { errors },
   } = useForm<Permissions>();
-  
 
   const inputFieldsData: any = [
     {
@@ -247,7 +251,7 @@ function SuperAdminAddPermissionsPage() {
     }
   };
 
-  console.log("EERORR", errors)
+  console.log('EERORR', errors);
 
   return isLoader ? (
     <Loader />
@@ -278,8 +282,8 @@ function SuperAdminAddPermissionsPage() {
                     placeholder="Enter Module name"
                     disableUnderline
                   />
-                  {errors.moduleName?.type === "required" && (
-                    <ErrorSpanBox error='Module name is required' />
+                  {errors.moduleName?.type === 'required' && (
+                    <ErrorSpanBox error="Module name is required" />
                   )}
                   {errors.moduleName?.type === 'pattern' && (
                     <ErrorSpanBox error={INVALID_CHAR} />
@@ -320,7 +324,7 @@ function SuperAdminAddPermissionsPage() {
                   {...register('moduleDesc', {
                     pattern: {
                       value: PATTERN.CHAR_NUM_SPACE_DOT_AT,
-                      message: INVALID_CHAR
+                      message: INVALID_CHAR,
                     },
                     minLength: {
                       value: 1,

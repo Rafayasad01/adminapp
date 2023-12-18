@@ -8,7 +8,11 @@ import { useForm } from 'react-hook-form';
 import '../../assets/css/PopupStyle.css';
 import TextField from '@mui/material/TextField';
 import { Notification } from '../../interfaces/notification.interface';
-import { INVALID_CHAR, MAX_LENGTH_EXCEEDED, PATTERN } from '../../utils/constants';
+import {
+  INVALID_CHAR,
+  MAX_LENGTH_EXCEEDED,
+  PATTERN,
+} from '../../utils/constants';
 import ErrorSpanBox from '../../components/common/ErrorSpanBox';
 
 type Props = {
@@ -62,12 +66,12 @@ function NotificationCreatePopup({
                     validate: (value) => value.length <= 150,
                   })}
                   type="text"
-                  placeholder='Enter your notification title'
+                  placeholder="Enter your notification title"
                   id="title"
                   disableUnderline
                 />
-                {errors.title?.type === "required" && (
-                  <ErrorSpanBox error='Title is required' />
+                {errors.title?.type === 'required' && (
+                  <ErrorSpanBox error="Title is required" />
                 )}
                 {errors.title?.type === 'pattern' && (
                   <ErrorSpanBox error={INVALID_CHAR} />
@@ -94,7 +98,7 @@ function NotificationCreatePopup({
                     required: 'Message is required',
                     pattern: {
                       value: PATTERN.CHAR_NUM_SPACE_DOT_AT,
-                      message: INVALID_CHAR
+                      message: INVALID_CHAR,
                     },
                     minLength: {
                       value: 5,

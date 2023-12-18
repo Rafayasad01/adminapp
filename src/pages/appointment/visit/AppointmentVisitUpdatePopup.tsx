@@ -17,7 +17,14 @@ import dayjs from 'dayjs';
 import CustomDropDown from '../../../components/common/CustomDropDown';
 import Service from '../../../services/adminapp/adminAppointment';
 import { Tenant } from '../../../interfaces/superadmin/tenant.interface';
-import { DOMAIN_PREFIX, DOMAIN_PROTOCOL, INVALID_CHAR, MAX_LENGTH_EXCEEDED, PATTERN, PH_MINI_LENGTH } from '../../../utils/constants';
+import {
+  DOMAIN_PREFIX,
+  DOMAIN_PROTOCOL,
+  INVALID_CHAR,
+  MAX_LENGTH_EXCEEDED,
+  PATTERN,
+  PH_MINI_LENGTH,
+} from '../../../utils/constants';
 import TimePicker from '../../../components/common/TimePicker';
 import {
   AppointmentProviderScheduleTime,
@@ -185,8 +192,8 @@ function AppointmentVisitUpdatePopup({
                       value: formData?.name,
                     })}
                   />
-                  {errors.visitName?.type === "required" && (
-                    <ErrorSpanBox error='visit name is required' />
+                  {errors.visitName?.type === 'required' && (
+                    <ErrorSpanBox error="visit name is required" />
                   )}
                   {errors.visitName?.type === 'pattern' && (
                     <ErrorSpanBox error={INVALID_CHAR} />
@@ -204,7 +211,7 @@ function AppointmentVisitUpdatePopup({
                       pattern: PATTERN.PHONE,
                       maxLength: {
                         value: 15,
-                        message: MAX_LENGTH_EXCEEDED
+                        message: MAX_LENGTH_EXCEEDED,
                       },
                       value: formData?.phone,
                     })}
@@ -213,7 +220,7 @@ function AppointmentVisitUpdatePopup({
                     placeholder="Enter phone number"
                     disableUnderline
                   />
-                  {errors.phone?.type === "pattern" && (
+                  {errors.phone?.type === 'pattern' && (
                     <ErrorSpanBox error={INVALID_CHAR} />
                   )}
                   {errors.phone?.type === 'maxLength' && (
@@ -319,7 +326,7 @@ function AppointmentVisitUpdatePopup({
                     {...register('note', {
                       pattern: {
                         value: PATTERN.CHAR_NUM_SPACE_DOT_AT,
-                        message: INVALID_CHAR
+                        message: INVALID_CHAR,
                       },
                       minLength: {
                         value: 1,
@@ -331,9 +338,7 @@ function AppointmentVisitUpdatePopup({
                       },
                     })}
                   />
-                  {errors.note && (
-                    <ErrorSpanBox error={errors.note?.message} />
-                  )}
+                  {errors.note && <ErrorSpanBox error={errors.note?.message} />}
                 </FormControl>
               </div>
             </div>

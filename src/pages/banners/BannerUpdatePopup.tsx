@@ -160,13 +160,13 @@ function BannerUpdatePopup({
             {/* {file === null || selectedImg === null && */}
             {/* } */}
           </div>
-          {file === null && selectedImg === null &&
+          {file === null && selectedImg === null && (
             <div>
               <span role="alert" className="error-color">
                 *Edit requires upload new image
               </span>
             </div>
-          }
+          )}
           <div className="FormFooter">
             <Button
               className="btn-black-outline"

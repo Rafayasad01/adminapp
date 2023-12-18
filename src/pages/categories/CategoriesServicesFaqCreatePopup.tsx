@@ -8,7 +8,11 @@ import { useForm } from 'react-hook-form';
 import '../../assets/css/PopupStyle.css';
 import TextareaAutosize from '@mui/base/TextareaAutosize';
 import { CategoryServiceFaq } from '../../interfaces/category.interface';
-import { INVALID_CHAR, MAX_LENGTH_EXCEEDED, PATTERN } from '../../utils/constants';
+import {
+  INVALID_CHAR,
+  MAX_LENGTH_EXCEEDED,
+  PATTERN,
+} from '../../utils/constants';
 import ErrorSpanBox from '../../components/common/ErrorSpanBox';
 
 type Props = {
@@ -64,7 +68,7 @@ function CategoriesServicesFaqCreatePopup({
                   {...register('question', {
                     required: 'Question is required',
                     pattern: PATTERN.CHAR_NUM_SPACE,
-                    validate: (value) => value.length <= 250
+                    validate: (value) => value.length <= 250,
                   })}
                 />
                 {errors.question?.type === 'required' && (
@@ -82,7 +86,7 @@ function CategoriesServicesFaqCreatePopup({
               <FormControl className="FormControl" variant="standard">
                 <label className="FormLabel">Answer</label>
                 <TextareaAutosize
-                  className="FormTextarea outline-none pt-3"
+                  className="FormTextarea pt-3 outline-none"
                   id="outlined-multiline-static"
                   minRows={5}
                   maxRows={15}
@@ -92,7 +96,7 @@ function CategoriesServicesFaqCreatePopup({
                     required: 'Answer is required',
                     pattern: {
                       value: PATTERN.CHAR_NUM_SPACE_DOT_AT,
-                      message: INVALID_CHAR
+                      message: INVALID_CHAR,
                     },
                     minLength: {
                       value: 1,

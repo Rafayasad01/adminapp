@@ -233,8 +233,8 @@ function BranchPage() {
             if (list[i].id === item.data.data.id) {
               list[i].name = item.data.data.tenantName;
               list[i].isActive = item.data.data.isActive;
-              list[i].trailMode = item.data.data.trailMode;
-              list[i].trailStartDate = item.data.data.trailStartDate;
+              list[i].trialMode = item.data.data.trialMode;
+              list[i].trialStartDate = item.data.data.trialStartDate;
             }
           }
           reset();
@@ -298,7 +298,7 @@ function BranchPage() {
       });
   };
 
-  const handleTrailModeStatus = (status: any, trialMode: boolean): any => {
+  const handleTrialModeStatus = (status: any, trialMode: boolean): any => {
     let textMsg = '';
     if (trialMode) {
       textMsg = 'Started';
@@ -388,7 +388,7 @@ function BranchPage() {
                   <th>Branch Name</th>
                   <th>Employee Limit</th>
                   <th>Trial Mode</th>
-                  <th>Trail Start Date</th>
+                  <th>Trial Start Date</th>
                   <th>Status</th>
                   <th>&nbsp;</th>
                 </tr>
@@ -420,12 +420,12 @@ function BranchPage() {
                         <td>
                           <span
                             className={
-                              handleTrailModeStatus(
+                              handleTrialModeStatus(
                                 item.isActive,
                                 item.trialMode
                               ) === 'Started'
                                 ? 'badge badge-success'
-                                : handleTrailModeStatus(
+                                : handleTrialModeStatus(
                                     item.isActive,
                                     item.trialMode
                                   ) === 'Not Started'
@@ -433,7 +433,7 @@ function BranchPage() {
                                 : 'badge badge-danger'
                             }
                           >
-                            {handleTrailModeStatus(
+                            {handleTrialModeStatus(
                               item.isActive,
                               item.trialMode
                             )}
@@ -447,13 +447,13 @@ function BranchPage() {
                           )}
                         </td> */}
                         <td>
-                          {dayjs(item.trailStartDate).isValid() ? (
+                          {dayjs(item.trialStartDate).isValid() ? (
                             <>
-                              {dayjs(item.trailStartDate)?.format(
+                              {dayjs(item.trialStartDate)?.format(
                                 'ddd, MMM DD, YYYY'
                               )}
                               <br />
-                              {dayjs(item.trailStartDate)?.format('hh:mm:ss A')}
+                              {dayjs(item.trialStartDate)?.format('hh:mm:ss A')}
                             </>
                           ) : (
                             '--'

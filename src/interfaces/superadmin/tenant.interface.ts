@@ -6,7 +6,7 @@ export interface Tenant {
   lastName: string;
   trialMode: boolean;
   trialUpdateMode: boolean;
-  trailStartDate: string;
+  trialStartDate: string;
   developmentDomain: string;
   liveDomain: string;
   maxBranchLimit: number;

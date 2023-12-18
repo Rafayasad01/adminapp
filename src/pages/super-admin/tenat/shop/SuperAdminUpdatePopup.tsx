@@ -18,7 +18,13 @@ import { useForm } from 'react-hook-form';
 import '../../../../assets/css/PopupStyle.css';
 import CustomDropDown from '../../../../components/common/CustomDropDown';
 import { Tenant } from '../../../../interfaces/superadmin/tenant.interface';
-import { DOMAIN_PREFIX, DOMAIN_PROTOCOL, INVALID_CHAR, MAX_LENGTH_EXCEEDED, PATTERN } from '../../../../utils/constants';
+import {
+  DOMAIN_PREFIX,
+  DOMAIN_PROTOCOL,
+  INVALID_CHAR,
+  MAX_LENGTH_EXCEEDED,
+  PATTERN,
+} from '../../../../utils/constants';
 import ErrorSpanBox from '../../../../components/common/ErrorSpanBox';
 
 dayjs.extend(duration);
@@ -81,17 +87,17 @@ function SuperAdminUpdatePopup({
       setValue('firstName', item.backofficeUser.firstName);
       setValue('lastName', item.backofficeUser.lastName);
       setValue('trialMode', item.trialMode);
-      setValue('trailStartDate', item.trailStartDate);
+      setValue('trialStartDate', item.trialStartDate);
       setValue('developmentDomain', item.tenantConfig.developmentDomain);
       setValue('liveDomain', item.tenantConfig.liveDomain);
     }
   }, [item]);
 
-  const getRemainingTime = (time: any) => {
-    const addTime = dayjs(time).add(15, 'days');
+  const getRemainingTime = (data: any) => {
+    const addTime = dayjs(data.trialStartDate).add(data.trialModeLimit, 'days');
     const endTime: any = dayjs(addTime).format('YYYY-MM-DD HH:mm:ss');
     const diffBetween = dayjs.duration(dayjs().diff(endTime));
-    const remainingTime = Math.abs(diffBetween.days());
+    const remainingTime = Math.abs(Math.round(diffBetween.asDays()));
     let dayTxt = 'day';
     if (remainingTime > 1) {
       dayTxt = 'days';
@@ -152,8 +158,8 @@ function SuperAdminUpdatePopup({
                     })}
                     onChange={(val: any) => shopFieldHangler(val.target.value)}
                   />
-                  {errors.tenantName?.type === "required" && (
-                    <ErrorSpanBox error='Shop name is required' />
+                  {errors.tenantName?.type === 'required' && (
+                    <ErrorSpanBox error="Shop name is required" />
                   )}
                   {errors.tenantName?.type === 'pattern' && (
                     <ErrorSpanBox error={INVALID_CHAR} />
@@ -177,8 +183,8 @@ function SuperAdminUpdatePopup({
                     id="email"
                     disableUnderline
                   />
-                  {errors.email?.type === "required" && (
-                    <ErrorSpanBox error='Email is required' />
+                  {errors.email?.type === 'required' && (
+                    <ErrorSpanBox error="Email is required" />
                   )}
                   {errors.email?.type === 'pattern' && (
                     <ErrorSpanBox error={INVALID_CHAR} />
@@ -204,8 +210,8 @@ function SuperAdminUpdatePopup({
                     id="firstName"
                     disableUnderline
                   />
-                  {errors.firstName?.type === "required" && (
-                    <ErrorSpanBox error='First name is required' />
+                  {errors.firstName?.type === 'required' && (
+                    <ErrorSpanBox error="First name is required" />
                   )}
                   {errors.firstName?.type === 'pattern' && (
                     <ErrorSpanBox error={INVALID_CHAR} />
@@ -229,8 +235,8 @@ function SuperAdminUpdatePopup({
                     id="lastName"
                     disableUnderline
                   />
-                  {errors.lastName?.type === "required" && (
-                    <ErrorSpanBox error='Last name is required' />
+                  {errors.lastName?.type === 'required' && (
+                    <ErrorSpanBox error="Last name is required" />
                   )}
                   {errors.lastName?.type === 'pattern' && (
                     <ErrorSpanBox error={INVALID_CHAR} />
@@ -367,7 +373,7 @@ function SuperAdminUpdatePopup({
                         {...register('trialUpdateMode')}
                       />
                     }
-                    label={item.trialMode ? 'Re Again Trail' : 'Trail Mode'}
+                    label={item.trialMode ? 'Re Again Trial' : 'Trial Mode'}
                   />
                   {item.trialMode ? (
                     <span className="badge badge-success badge-w-100">
@@ -384,20 +390,22 @@ function SuperAdminUpdatePopup({
                 <div>
                   <FormControl className="FormControl" variant="standard">
                     <label className="FormLabel">
-                      Trail Mode Limit ( Days )
+                      Trial Mode Limit ( Days )
                     </label>
                     <Input
                       className="FormInput"
                       {...register('trialModeLimit', {
-                        required: watch('trialMode') === true && 'Trail Mode limit is required in numbers',
+                        required:
+                          watch('trialMode') === true &&
+                          'Trial Mode limit is required in numbers',
                         value: item.trialModeLimit ? item.trialModeLimit : 15,
                         validate: (value: any) =>
                           parseInt(value, 10) >= 0 ||
-                          'Trail mode must be a non-negative number',
+                          'Trial mode must be a non-negative number',
                       })}
                       type="number"
                       id="trialModeLimit"
-                      placeholder="Enter Trail Mode limit in days"
+                      placeholder="Enter Trial Mode limit in days"
                       disableUnderline
                     />
                     {errors?.trialModeLimit && (
@@ -408,26 +416,24 @@ function SuperAdminUpdatePopup({
                   </FormControl>
                 </div>
               )}
-              {dayjs(item.trailStartDate).isValid() && (
+              {dayjs(item.trialStartDate).isValid() && (
                 <div className="FormField">
                   <FormControl className="FormControl" variant="standard">
                     <TextField
                       className="FormInput"
                       sx={{ padding: 0 }}
-                      id="trailStartDate"
+                      id="trialStartDate"
                       InputProps={{
                         endAdornment: (
                           <InputAdornment position="end">
-                            {item.trailStartDate && (
-                              <span>
-                                {getRemainingTime(item.trailStartDate)}
-                              </span>
+                            {item.trialStartDate && (
+                              <span>{getRemainingTime(item)}</span>
                             )}
                           </InputAdornment>
                         ),
                       }}
                       variant="outlined"
-                      value={dayjs(item.trailStartDate).format(
+                      value={dayjs(item.trialStartDate).format(
                         'YYYY-MM-DD HH:mm:ss'
                       )}
                     />

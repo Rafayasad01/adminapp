@@ -12,7 +12,11 @@ import { Category } from '../../interfaces/category.interface';
 import category from '../../services/adminapp/adminCategory';
 
 import '../../assets/css/PopupStyle.css';
-import { INVALID_CHAR, MAX_LENGTH_EXCEEDED, PATTERN } from '../../utils/constants';
+import {
+  INVALID_CHAR,
+  MAX_LENGTH_EXCEEDED,
+  PATTERN,
+} from '../../utils/constants';
 import ErrorSpanBox from '../../components/common/ErrorSpanBox';
 
 type Props = {
@@ -45,21 +49,20 @@ function CategoriesEditPopup({
   } = useForm<Category>();
 
   const onSubmit = (data: Category) => {
-    console.log("IMAGE", image);
+    console.log('IMAGE', image);
     if (image !== null) {
-      let res = {
+      const res = {
         name: data.name,
         desc: data.desc,
-        icon: image
-      }
+        icon: image,
+      };
       setOpenFormDialog(false);
       callback(res);
-    }
-    else if (data.desc && data.name) {
-      let res = {
+    } else if (data.desc && data.name) {
+      const res = {
         name: data.name,
-        desc: data.desc
-      }
+        desc: data.desc,
+      };
       setOpenFormDialog(false);
       callback(res);
     } else {
@@ -119,7 +122,7 @@ function CategoriesEditPopup({
                       className="FormInput"
                       type="text"
                       id="name"
-                      placeholder='Enter Category Name'
+                      placeholder="Enter Category Name"
                       disableUnderline
                       {...register('name', {
                         required: true,
@@ -129,7 +132,7 @@ function CategoriesEditPopup({
                       })}
                     />
                     {errors.name?.type === 'required' && (
-                      <ErrorSpanBox error={"Category name is required"} />
+                      <ErrorSpanBox error="Category name is required" />
                     )}
                     {errors.name?.type === 'pattern' && (
                       <ErrorSpanBox error={INVALID_CHAR} />
@@ -155,7 +158,7 @@ function CategoriesEditPopup({
                       {...register('desc', {
                         pattern: {
                           value: PATTERN.CHAR_NUM_SPACE_DOT_AT,
-                          message: INVALID_CHAR
+                          message: INVALID_CHAR,
                         },
                         required: 'Description is required',
                         value: formData.desc,

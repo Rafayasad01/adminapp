@@ -343,8 +343,8 @@ function SuperAdminAppImagePage() {
               <thead>
                 <tr>
                   <th>Avatar</th>
-                  <th style={{ width: "20%" }}>Name</th>
-                  <th style={{ width: "50%" }}>Description</th>
+                  <th style={{ width: '20%' }}>Name</th>
+                  <th style={{ width: '50%' }}>Description</th>
                   <th>Created Date</th>
                   <th>Status</th>
                   <th>&nbsp;</th>
@@ -388,7 +388,7 @@ function SuperAdminAppImagePage() {
                           </div>
                         </td>
                         <td>{item.name}</td>
-                        <td>{item.desc !== "null" ? item.desc : '--'}</td>
+                        <td>{item.desc !== 'null' ? item.desc : '--'}</td>
                         <td>
                           {dayjs(item.createdDate).isValid()
                             ? dayjs(item.createdDate)?.format('MMMM DD, YYYY')

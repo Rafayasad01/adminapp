@@ -17,7 +17,14 @@ import dayjs from 'dayjs';
 import CustomDropDown from '../../../components/common/CustomDropDown';
 import Service from '../../../services/adminapp/adminAppointment';
 import { Tenant } from '../../../interfaces/superadmin/tenant.interface';
-import { DOMAIN_PREFIX, DOMAIN_PROTOCOL, INVALID_CHAR, MAX_LENGTH_EXCEEDED, PATTERN, PH_MINI_LENGTH } from '../../../utils/constants';
+import {
+  DOMAIN_PREFIX,
+  DOMAIN_PROTOCOL,
+  INVALID_CHAR,
+  MAX_LENGTH_EXCEEDED,
+  PATTERN,
+  PH_MINI_LENGTH,
+} from '../../../utils/constants';
 import TimePicker from '../../../components/common/TimePicker';
 import {
   AppointmentProviderScheduleTime,
@@ -69,9 +76,10 @@ function AppointmentVisitReschedulePopup({
 
   const onSubmit = (data: AppointmentVisit) => {
     console.log('dataSS', data, startTime);
-    const formattedDate = `${dayjs(data.appointmentDate).isValid() &&
+    const formattedDate = `${
+      dayjs(data.appointmentDate).isValid() &&
       dayjs(data.appointmentDate)?.format('YYYY-MM-DD')
-      } ${dayjs(startTime).isValid() && dayjs(startTime)?.format('HH:mm:ss')}`;
+    } ${dayjs(startTime).isValid() && dayjs(startTime)?.format('HH:mm:ss')}`;
     const currentDate = dayjs();
     const formattedCurrentDate = currentDate.format('YYYY-MM-DD');
     const visitorDetails = {
@@ -221,8 +229,8 @@ function AppointmentVisitReschedulePopup({
                       validate: (value) => value.length <= 150,
                     })}
                   />
-                  {errors.visitName?.type === "required" && (
-                    <ErrorSpanBox error='visit name is required' />
+                  {errors.visitName?.type === 'required' && (
+                    <ErrorSpanBox error="visit name is required" />
                   )}
                   {errors.visitName?.type === 'pattern' && (
                     <ErrorSpanBox error={INVALID_CHAR} />
@@ -240,7 +248,7 @@ function AppointmentVisitReschedulePopup({
                       pattern: PATTERN.PHONE,
                       maxLength: {
                         value: 15,
-                        message: MAX_LENGTH_EXCEEDED
+                        message: MAX_LENGTH_EXCEEDED,
                       },
                     })}
                     type="text"
@@ -248,7 +256,7 @@ function AppointmentVisitReschedulePopup({
                     placeholder="Enter phone number"
                     disableUnderline
                   />
-                  {errors.phone?.type === "pattern" && (
+                  {errors.phone?.type === 'pattern' && (
                     <ErrorSpanBox error={INVALID_CHAR} />
                   )}
                   {errors.phone?.type === 'maxLength' && (
@@ -346,7 +354,7 @@ function AppointmentVisitReschedulePopup({
                       required: 'Description is required',
                       pattern: {
                         value: PATTERN.CHAR_NUM_SPACE_DOT_AT,
-                        message: INVALID_CHAR
+                        message: INVALID_CHAR,
                       },
                       minLength: {
                         value: 1,
@@ -358,9 +366,7 @@ function AppointmentVisitReschedulePopup({
                       },
                     })}
                   />
-                  {errors.note && (
-                    <ErrorSpanBox error={errors.note?.message} />
-                  )}
+                  {errors.note && <ErrorSpanBox error={errors.note?.message} />}
                 </FormControl>
               </div>
               <div className="mt-2">
@@ -409,7 +415,7 @@ function AppointmentVisitReschedulePopup({
                       timePickerValue={startTime}
                       setTimePickerValue={setStartTime}
                       id="startTime"
-                    // setError={setError}
+                      // setError={setError}
                     />
                   </FormControl>
                   <FormControl className="FormControl" variant="standard">
