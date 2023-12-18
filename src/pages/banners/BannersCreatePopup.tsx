@@ -17,7 +17,7 @@ import dayjs from 'dayjs';
 import CustomDropDown from '../../components/common/CustomDropDown';
 import Service from '../../services/adminapp/adminAppointment';
 import { Tenant } from '../../interfaces/superadmin/tenant.interface';
-import { DOMAIN_PREFIX, DOMAIN_PROTOCOL } from '../../utils/constants';
+import { DOMAIN_PREFIX, DOMAIN_PROTOCOL, INVALID_CHAR, MAX_LENGTH_EXCEEDED, PATTERN } from '../../utils/constants';
 import TimePicker from '../../components/common/TimePicker';
 import {
   AppointmentProviderScheduleTime,
@@ -30,6 +30,7 @@ import Loader from '../../components/common/Loader2';
 import DragDropFile from '../settings/DragDropFile';
 import CustomButton from '../../components/common/CustomButton';
 import { CreateBanner } from '../../interfaces/app.banner';
+import ErrorSpanBox from '../../components/common/ErrorSpanBox';
 
 type Props = {
   roles?: any;
@@ -77,12 +78,9 @@ function BannersCreatePopup({
       name: data.bannerName,
     };
     if (selectedImg || file) {
-      console.log('de', details);
-
       callback(details, file);
     } else {
-      setIsNotify(true);
-      setNotifyMessage('Banner image is required');
+      setOpenFormDialog(true);
     }
   };
 
@@ -115,12 +113,20 @@ function BannersCreatePopup({
                 id="bannerName"
                 placeholder="Enter banner name"
                 disableUnderline
-                {...register('bannerName', { required: true })}
+                {...register('bannerName', {
+                  required: true,
+                  pattern: PATTERN.CHAR_NUM_SPACE,
+                  validate: (value) => value.length <= 100,
+                })}
               />
-              {errors.bannerName?.type === 'required' && (
-                <span role="alert" style={{ color: 'red', fontSize: '12px' }}>
-                  * Banner name is required
-                </span>
+              {errors.bannerName?.type === "required" && (
+                <ErrorSpanBox error='Banner name is required' />
+              )}
+              {errors.bannerName?.type === 'pattern' && (
+                <ErrorSpanBox error={INVALID_CHAR} />
+              )}
+              {errors.bannerName?.type === 'validate' && (
+                <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
               )}
             </FormControl>
           </div>
@@ -143,15 +149,18 @@ function BannersCreatePopup({
                 />
               </div>
             ) : // ) : detail && detail.logo ? (
-            //     <div className="col-span-6 flex items-center xl:justify-center 2xl:justify-start">
-            //         <img
-            //             className="max-h-[100px] max-w-[150px] rounded-md"
-            //             src={detail.logo}
-            //             alt="Shop Logo"
-            //         />
-            //     </div>
-            null}
+              //     <div className="col-span-6 flex items-center xl:justify-center 2xl:justify-start">
+              //         <img
+              //             className="max-h-[100px] max-w-[150px] rounded-md"
+              //             src={detail.logo}
+              //             alt="Shop Logo"
+              //         />
+              //     </div>
+              null}
           </div>
+          {selectedImg === null &&
+            <ErrorSpanBox error={"Image is required"} />
+          }
           <div className="FormFooter">
             <Button
               className="btn-black-outline"

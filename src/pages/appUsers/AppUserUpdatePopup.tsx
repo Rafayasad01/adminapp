@@ -8,6 +8,7 @@ import { useForm } from 'react-hook-form';
 import '../../assets/css/PopupStyle.css';
 import ErrorSpanBox from '../../components/common/ErrorSpanBox';
 import { AppUser } from '../../interfaces/app-user.interface';
+import { INVALID_CHAR, MAX_LENGTH_EXCEEDED, PATTERN, PH_MINI_LENGTH } from '../../utils/constants';
 
 type Props = {
   openFormDialog: boolean;
@@ -113,19 +114,19 @@ function AppUserUpdatePopup({
                       disableUnderline
                       {...register('firstName', {
                         required: 'First name is required',
-                        pattern: /^[A-Za-z]+$/i,
-                        validate: (value) => value.length <= 10,
+                        pattern: PATTERN.CHAR_NUM_SPACE,
+                        validate: (value) => value.length <= 50,
                         value: formData?.firstName,
                       })}
                     />
-                    {errors.firstName?.type === 'required' && (
-                      <ErrorSpanBox error={errors.firstName?.message} />
+                    {errors.firstName?.type === "required" && (
+                      <ErrorSpanBox error='First name is required' />
                     )}
                     {errors.firstName?.type === 'pattern' && (
-                      <ErrorSpanBox error="Invalid characters" />
+                      <ErrorSpanBox error={INVALID_CHAR} />
                     )}
                     {errors.firstName?.type === 'validate' && (
-                      <ErrorSpanBox error="Maximum length exceeded" />
+                      <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
                     )}
                   </FormControl>
                   <FormControl className="FormControl" variant="standard">
@@ -137,19 +138,19 @@ function AppUserUpdatePopup({
                       disableUnderline
                       {...register('lastName', {
                         required: 'Last name is required',
-                        pattern: /^[A-Za-z]+$/i,
-                        validate: (value) => value.length <= 10,
+                        pattern: PATTERN.CHAR_NUM_SPACE,
+                        validate: (value) => value.length <= 50,
                         value: formData?.lastName,
                       })}
                     />
-                    {errors.lastName?.type === 'required' && (
-                      <ErrorSpanBox error={errors.lastName?.message} />
+                    {errors.lastName?.type === "required" && (
+                      <ErrorSpanBox error='Last name is required' />
                     )}
                     {errors.lastName?.type === 'pattern' && (
-                      <ErrorSpanBox error="Invalid characters" />
+                      <ErrorSpanBox error={INVALID_CHAR} />
                     )}
                     {errors.lastName?.type === 'validate' && (
-                      <ErrorSpanBox error="Maximum length exceeded" />
+                      <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
                     )}
                   </FormControl>
                 </div>
@@ -164,16 +165,18 @@ function AppUserUpdatePopup({
                       disableUnderline
                       {...register('phone', {
                         value: formData?.phone,
+                        pattern: PATTERN.PHONE,
                         maxLength: {
                           value: 15,
-                          message: 'Phone number cannot exceed 15 numbers',
+                          message: MAX_LENGTH_EXCEEDED
                         },
                       })}
                     />
+                    {errors.phone?.type === "pattern" && (
+                      <ErrorSpanBox error={INVALID_CHAR} />
+                    )}
                     {errors.phone?.type === 'maxLength' && (
-                      <span role="alert" className="error-color">
-                        *{errors.phone?.message}
-                      </span>
+                      <ErrorSpanBox error={PH_MINI_LENGTH} />
                     )}
                   </FormControl>
                   <FormControl className="FormControl" variant="standard">
@@ -186,16 +189,15 @@ function AppUserUpdatePopup({
                       disableUnderline
                       {...register('postalCode', {
                         value: formData?.postalCode,
-                        maxLength: {
-                          value: 6,
-                          message: 'Postel code cannot exceed 6',
-                        },
+                        pattern: PATTERN.CHAR_NUM_SPACE,
+                        validate: (value) => value.length <= 15,
                       })}
                     />
-                    {errors.postalCode?.type === 'maxLength' && (
-                      <span role="alert" className="error-color">
-                        *{errors.postalCode?.message}
-                      </span>
+                    {errors.postalCode?.type === 'pattern' && (
+                      <ErrorSpanBox error={INVALID_CHAR} />
+                    )}
+                    {errors.postalCode?.type === 'validate' && (
+                      <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
                     )}
                   </FormControl>
                 </div>
@@ -242,7 +244,7 @@ function AppUserUpdatePopup({
                                             inputTitle="App User Role"
                                         />
                                     </FormControl> */}
-                  {watch('appuserRole') === 'Driver' && (
+                  {formData?.userType === 'Driver' && (
                     <FormControl className="FormControl" variant="standard">
                       <label className="FormLabel">License Number</label>
                       <Input
@@ -252,8 +254,16 @@ function AppUserUpdatePopup({
                         placeholder="Enter license number"
                         {...register('licenseNumber', {
                           value: formData?.licenseNumber,
+                          pattern: PATTERN.CHAR_NUM_SPACE,
+                          validate: (value) => value.length <= 50,
                         })}
                       />
+                      {errors.address?.type === 'pattern' && (
+                        <ErrorSpanBox error={INVALID_CHAR} />
+                      )}
+                      {errors.address?.type === 'validate' && (
+                        <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
+                      )}
                     </FormControl>
                   )}
                 </div>

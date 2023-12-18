@@ -12,6 +12,8 @@ import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
 import { useForm } from 'react-hook-form';
 import { AppUserAddress } from '../../../interfaces/app-user.interface';
 import CustomDropDown from '../../../components/common/CustomDropDown';
+import { INVALID_CHAR, MAX_LENGTH_EXCEEDED, PATTERN } from '../../../utils/constants';
+import ErrorSpanBox from '../../../components/common/ErrorSpanBox';
 
 type Props = {
   openFormDialog: boolean;
@@ -116,15 +118,13 @@ function AppUserAddressUpdatePopup({
                       {...register('latitude', {
                         value: formData?.latitude,
                         pattern: {
-                          value: /^[+-]?([0-9]*[.])?[0-9]+$/,
+                          value: PATTERN.POINT_NUM,
                           message: 'Enter a valid latitude',
                         },
                       })}
                     />
                     {errors.latitude?.type === 'pattern' && (
-                      <span role="alert" className="error-color">
-                        *{errors.latitude?.message}
-                      </span>
+                      <ErrorSpanBox error={errors.latitude?.message} />
                     )}
                   </FormControl>
                   <FormControl className="FormControl" variant="standard">
@@ -137,15 +137,13 @@ function AppUserAddressUpdatePopup({
                       {...register('longitude', {
                         value: formData?.longitude,
                         pattern: {
-                          value: /^[+-]?([0-9]*[.])?[0-9]+$/,
+                          value: PATTERN.POINT_NUM,
                           message: 'Enter a valid longitude',
                         },
                       })}
                     />
                     {errors.longitude?.type === 'pattern' && (
-                      <span role="alert" className="error-color">
-                        *{errors.longitude?.message}
-                      </span>
+                      <ErrorSpanBox error={errors.longitude?.message} />
                     )}
                   </FormControl>
                 </div>
@@ -160,12 +158,18 @@ function AppUserAddressUpdatePopup({
                       {...register('address', {
                         value: formData?.address,
                         required: 'Address is required',
+                        pattern: PATTERN.CHAR_NUM_SPACE_DOT_AT,
+                        validate: (value) => value.length <= 250,
                       })}
                     />
-                    {errors.address && (
-                      <span role="alert" className="error-color">
-                        *{errors.address?.message}
-                      </span>
+                    {errors.address?.type === 'required' && (
+                      <ErrorSpanBox error={errors.address?.message} />
+                    )}
+                    {errors.address?.type === 'pattern' && (
+                      <ErrorSpanBox error={INVALID_CHAR} />
+                    )}
+                    {errors.address?.type === 'validate' && (
+                      <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
                     )}
                   </FormControl>
                   <FormControl className="FormControl" variant="standard">

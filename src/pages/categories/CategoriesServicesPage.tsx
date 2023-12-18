@@ -267,7 +267,7 @@ function CategoriesServicesPage() {
     formData.append('price', data.price);
     formData.append('desc', data.desc);
     formData.append('updated_by', authState.user.id);
-    if (data.icon !== null) formData.append('icon', data.icon);
+    if (data.icon) formData.append('icon', data.icon);
     category
       .updateCategoryService(actionMenuItemid, formData)
       .then((updateItem: any) => {
@@ -289,6 +289,13 @@ function CategoriesServicesPage() {
               }
             }
           }
+        }else{
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: updateItem.data.message,
+            type: 'error',
+          });
         }
       })
       .catch((err) => {

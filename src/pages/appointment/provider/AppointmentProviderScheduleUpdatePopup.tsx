@@ -139,7 +139,7 @@ function AppointmentProviderScheduleUpdatePopup({
             </Button>
             <Input
               type="submit"
-              value="Add"
+              value="Update"
               className="btn-black-fill"
               disableUnderline
               sx={{

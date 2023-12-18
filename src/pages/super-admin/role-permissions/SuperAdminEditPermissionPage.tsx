@@ -141,6 +141,7 @@ function SuperAdminEditPermissionsPage() {
   };
 
   const onSubmit = (data: any) => {
+    setIsLoader(true);
     const parent: any = {
       name: data.moduleName || '',
       desc: data.moduleDesc || '',
@@ -203,6 +204,7 @@ function SuperAdminEditPermissionsPage() {
     }
     if (hasDuplicate) {
       console.log('run1');
+      setIsLoader(false);
       setIsNotify(true);
       setNotifyMessage({
         text: displayText,
@@ -212,6 +214,7 @@ function SuperAdminEditPermissionsPage() {
       const allNames = parent.data.map((item: any) => item.name);
       if (hasDuplicates(allNames)) {
         console.log('run2');
+        setIsLoader(false);
         setIsNotify(true);
         setNotifyMessage({
           text: displayText,
@@ -221,6 +224,7 @@ function SuperAdminEditPermissionsPage() {
         Service.updatePermissionService(id, parent)
           .then((item: any) => {
             if (item.data.success) {
+              setIsLoader(false);
               reset();
               setText(item.data.message);
               navigate('../list');
@@ -400,7 +404,7 @@ function SuperAdminEditPermissionsPage() {
                             id={`name${mainEl.id}`}
                             inputTitle="Permission Name"
                             inputType="text"
-                            error={errors}
+                            error={errors[mainEl.id]}
                             value={mainEl.fields.name}
                           />
                         </FormControl>
@@ -412,7 +416,7 @@ function SuperAdminEditPermissionsPage() {
                             id={`desc${mainEl.id}`}
                             inputTitle="Permission Description"
                             inputType="text"
-                            error={errors}
+                            error={errors[mainEl.id]}
                             value={mainEl.fields.desc}
                           />
                         </FormControl>
@@ -437,7 +441,7 @@ function SuperAdminEditPermissionsPage() {
                             id={`action${mainEl.id}`}
                             inputTitle="Action"
                             inputType="text"
-                            error={errors}
+                            error={errors[mainEl.id]}
                             value={mainEl.fields.action}
                           />
                         </FormControl>

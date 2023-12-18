@@ -24,7 +24,7 @@ import { AppUserEmployees } from '../../../interfaces/app-user.interface';
 import { useAppSelector } from '../../../redux/redux-hooks';
 import Service from '../../../services/adminapp/adminAppointment';
 import PermissionPopup from '../../../utils/PermissionPopup';
-import { NOT_AUTHORIZED_MESSAGE } from '../../../utils/constants';
+import { MAX_LENGTH_EXCEEDED, NOT_AUTHORIZED_MESSAGE, PATTERN } from '../../../utils/constants';
 import { listingRolePermission } from '../../../utils/helper';
 import { AppointmentProvider } from '../../../interfaces/app.appointment';
 
@@ -78,6 +78,8 @@ function AppointmentProviderPage() {
       register,
       error: errors.providerName,
       type: 'text',
+      pattern: PATTERN.CHAR_NUM_SPACE,
+      maxLetterLimit: 150,
     },
     {
       fieldName: 'Address',
@@ -87,6 +89,8 @@ function AppointmentProviderPage() {
       error: errors.address,
       type: 'text',
       notRequired: true,
+      pattern: PATTERN.CHAR_NUM_SPACE_DOT_AT,
+      maxLetterLimit: 100
     },
     {
       fieldName: 'Email',
@@ -95,6 +99,8 @@ function AppointmentProviderPage() {
       register,
       error: errors.email,
       type: 'text',
+      pattern: PATTERN.CHAR_NUM_SPACE_DOT_AT,
+      maxLetterLimit: 100
     },
     {
       fieldName: 'Phone',
@@ -102,8 +108,9 @@ function AppointmentProviderPage() {
       placeholder: 'Enter Phone',
       register,
       error: errors.phone,
-      maxLetterLimit: 11,
       type: 'text',
+      pattern: PATTERN.PHONE,
+      maxLetterLimit: 15
     },
     {
       fieldName: 'Cnic',
@@ -113,7 +120,8 @@ function AppointmentProviderPage() {
       error: errors.cnic,
       type: 'text',
       disable: openEditFormDialog && true,
-      maxLetterLimit: 13,
+      maxLetterLimit: 15,
+      pattern: PATTERN.ONLY_NUM
     },
     {
       fieldName: 'Urgent Fees',
@@ -122,7 +130,8 @@ function AppointmentProviderPage() {
       register,
       error: errors.urgentFee,
       type: 'text',
-      maxLetterLimit: 3,
+      maxLetterLimit: 5,
+      pattern: PATTERN.ONLY_NUM
     },
   ];
 
@@ -655,8 +664,8 @@ function AppointmentProviderPage() {
                               <span className="text-xs font-normal text-[#6A6A6A]">
                                 {dayjs(item.createdDate).isValid()
                                   ? dayjs(item.createdDate)?.format(
-                                      'MMMM DD, YYYY'
-                                    )
+                                    'MMMM DD, YYYY'
+                                  )
                                   : '--'}
                               </span>
                             </div>

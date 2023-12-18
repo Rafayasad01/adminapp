@@ -282,7 +282,7 @@ function SuperAdminShopPage() {
             <table className="table-border table-auto">
               <thead>
                 <tr>
-                  <th>Name</th>
+                  <th style={{ width: "25%" }}>Name</th>
                   <th>Trial Mode</th>
                   <th>Trail Start Date</th>
                   <th>Status</th>
@@ -314,11 +314,11 @@ function SuperAdminShopPage() {
                               ) === 'Started'
                                 ? 'badge badge-success'
                                 : handleTrailModeStatus(
-                                    item.isActive,
-                                    item.trialMode
-                                  ) === 'Not Started'
-                                ? 'badge badge-primary'
-                                : 'badge badge-danger'
+                                  item.isActive,
+                                  item.trialMode
+                                ) === 'Not Started'
+                                  ? 'badge badge-primary'
+                                  : 'badge badge-danger'
                             }
                           >
                             {handleTrailModeStatus(

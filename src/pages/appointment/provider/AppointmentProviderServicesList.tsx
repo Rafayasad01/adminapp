@@ -14,7 +14,7 @@ import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
-import { weekDays, NOT_AUTHORIZED_MESSAGE } from '../../../utils/constants';
+import { weekDays, NOT_AUTHORIZED_MESSAGE, PATTERN } from '../../../utils/constants';
 import TopBar from '../../../components/common/TopBar';
 import ActionMenu from '../../../components/common/ActionMenu';
 import CustomDialog from '../../../components/common/CustomDialog';
@@ -79,6 +79,8 @@ function AppointmentProviderServicesList() {
       register,
       error: errors.serviceName,
       type: 'text',
+      pattern: PATTERN.CHAR_NUM_SPACE,
+      maxLetterLimit: 150,
     },
     {
       fieldName: 'Service Fees',
@@ -87,6 +89,8 @@ function AppointmentProviderServicesList() {
       register,
       error: errors.fees,
       type: 'text',
+      maxLetterLimit: 5,
+      pattern: PATTERN.ONLY_NUM
     },
     {
       fieldName: 'Service Description',
@@ -96,6 +100,8 @@ function AppointmentProviderServicesList() {
       error: errors.serviceDesc,
       type: 'textarea',
       notRequired: true,
+      pattern: PATTERN.CHAR_NUM_SPACE_DOT_AT,
+      maxLetterLimit: 250
     },
   ];
 
@@ -539,8 +545,8 @@ function AppointmentProviderServicesList() {
                               <span className="text-xs font-normal text-[#6A6A6A]">
                                 {dayjs(item.createdDate).isValid()
                                   ? dayjs(item.createdDate)?.format(
-                                      'MMMM DD, YYYY'
-                                    )
+                                    'MMMM DD, YYYY'
+                                  )
                                   : '--'}
                               </span>
                             </div>

@@ -5,6 +5,8 @@ import InputAdornment from '@mui/material/InputAdornment';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Visibility from '@mui/icons-material/Visibility';
 import IconButton from '@mui/material/IconButton';
+import ErrorSpanBox from './ErrorSpanBox';
+import { INVALID_CHAR } from '../../utils/constants';
 
 type Props = {
   register: any;
@@ -25,9 +27,11 @@ type Props = {
   placeholder?: string;
   requiredType?: boolean;
   maxLetterLimit?: number;
+  pattern?: any;
 };
 
 function CustomInputBox({
+  pattern,
   register,
   id,
   value,
@@ -47,6 +51,7 @@ function CustomInputBox({
   requiredType,
   maxLetterLimit,
 }: Props) {
+  console.log("errrrerr", error)
   return (
     <>
       <div className="flex">
@@ -74,6 +79,10 @@ function CustomInputBox({
         }
         disableUnderline
         {...register(id, {
+          pattern: {
+            value: pattern,
+            message: INVALID_CHAR,
+          },
           maxLength: {
             value: maxLetterLimit,
             message: `${inputTitle} should be ${maxLetterLimit} number long.`,
@@ -81,8 +90,8 @@ function CustomInputBox({
           required: requiredType
             ? false
             : inputType === 'hidden'
-            ? false
-            : `${inputTitle?.toLocaleLowerCase()} is required`,
+              ? false
+              : `${inputTitle?.toLocaleLowerCase()} is required`,
           value: value || '',
         })}
         endAdornment={
@@ -91,7 +100,7 @@ function CustomInputBox({
               <IconButton
                 style={{ padding: 0 }}
                 aria-label="toggle password visibility"
-                onClick={onclick || (() => {})}
+                onClick={onclick || (() => { })}
               >
                 {showPassVisibility ? <VisibilityOff /> : <Visibility />}
               </IconButton>
@@ -100,9 +109,8 @@ function CustomInputBox({
         }
       />
       {error && (
-        <span className="text-sm" role="alert">{`${
-          error.message ? `* ${error.message}` : ''
-        }`}</span>
+        <ErrorSpanBox error={`${error.message ? `${error.message}` : ''
+          }`} />
       )}
     </>
   );

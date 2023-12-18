@@ -14,6 +14,8 @@ import '../../assets/css/PopupStyle.css';
 import { useForm } from 'react-hook-form';
 import { AppUser } from '../../interfaces/app-user.interface';
 import CustomDropDown from '../../components/common/CustomDropDown';
+import { INVALID_CHAR, MAX_LENGTH_EXCEEDED, PATTERN, PH_MINI_LENGTH, VALIDATE_NON_NEGATIVE_NUM } from '../../utils/constants';
+import ErrorSpanBox from '../../components/common/ErrorSpanBox';
 
 type Props = {
   openFormDialog: boolean;
@@ -42,6 +44,7 @@ function AppUserCreatePopup({
     watch,
     formState: { errors },
     control,
+    trigger
   } = useForm<AppUser>();
 
   const handleFormClose = () => setOpenFormDialog(false);
@@ -74,6 +77,7 @@ function AppUserCreatePopup({
     //     });
     // }
   };
+  console.log("errrr", errors);
 
   return (
     <Dialog
@@ -96,16 +100,22 @@ function AppUserCreatePopup({
                 <Input
                   className="FormInput"
                   id="firstName"
-                  placeholder="Vincent"
+                  placeholder="Enter your first name"
                   disableUnderline
                   {...register('firstName', {
                     required: 'First name is required',
+                    pattern: PATTERN.CHAR_NUM_SPACE,
+                    validate: (value) => value.length <= 50,
                   })}
                 />
-                {errors.firstName && (
-                  <span role="alert" className="error-color">
-                    *{errors.firstName?.message}
-                  </span>
+                {errors.firstName?.type === "required" && (
+                  <ErrorSpanBox error='First name is required' />
+                )}
+                {errors.firstName?.type === 'pattern' && (
+                  <ErrorSpanBox error={INVALID_CHAR} />
+                )}
+                {errors.firstName?.type === 'validate' && (
+                  <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
                 )}
               </FormControl>
               <FormControl className="FormControl" variant="standard">
@@ -113,16 +123,22 @@ function AppUserCreatePopup({
                 <Input
                   className="FormInput"
                   id="lastName"
-                  placeholder="Boyd"
+                  placeholder="Enter your last name"
                   disableUnderline
                   {...register('lastName', {
                     required: 'Last name is required',
+                    pattern: PATTERN.CHAR_NUM_SPACE,
+                    validate: (value) => value.length <= 50,
                   })}
                 />
-                {errors.lastName && (
-                  <span role="alert" className="error-color">
-                    *{errors.lastName?.message}
-                  </span>
+                {errors.lastName?.type === "required" && (
+                  <ErrorSpanBox error='Last name is required' />
+                )}
+                {errors.lastName?.type === 'pattern' && (
+                  <ErrorSpanBox error={INVALID_CHAR} />
+                )}
+                {errors.lastName?.type === 'validate' && (
+                  <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
                 )}
               </FormControl>
             </div>
@@ -132,28 +148,46 @@ function AppUserCreatePopup({
                 <Input
                   className="FormInput"
                   id="phone"
-                  placeholder="+1 536 569"
+                  placeholder="Enter your phone number"
                   disableUnderline
-                  {...register('phone')}
+                  {...register('phone', {
+                    pattern: PATTERN.PHONE,
+                    maxLength: {
+                      value: 15,
+                      message: MAX_LENGTH_EXCEEDED
+                    },
+                  })}
+                  type='text'
                 />
-                {/* {errors.phone && (
-                                    <span role="alert" className='error-color'>*{errors.phone?.message}</span>
-                                )} */}
+                {errors.phone?.type === "pattern" && (
+                  <ErrorSpanBox error={INVALID_CHAR} />
+                )}
+                {errors.phone?.type === 'maxLength' && (
+                  <ErrorSpanBox error={PH_MINI_LENGTH} />
+                )}
               </FormControl>
               <FormControl className="FormControl" variant="standard">
                 <label className="FormLabel">Email Address</label>
                 <Input
                   className="FormInput"
                   id="email"
-                  placeholder="Vincent.96@gmail.com"
+                  placeholder="Enter your email"
                   autoComplete="new-password"
                   disableUnderline
-                  {...register('email', { required: 'Email is required' })}
+                  {...register('email', {
+                    required: 'Email is required',
+                    pattern: PATTERN.CHAR_NUM_SPACE_DOT_AT,
+                    validate: (value) => value.length <= 100,
+                  })}
                 />
-                {errors.email && (
-                  <span role="alert" className="error-color">
-                    *{errors.email?.message}
-                  </span>
+                {errors.email?.type === "required" && (
+                  <ErrorSpanBox error='Email is required' />
+                )}
+                {errors.email?.type === 'pattern' && (
+                  <ErrorSpanBox error={INVALID_CHAR} />
+                )}
+                {errors.email?.type === 'validate' && (
+                  <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
                 )}
               </FormControl>
             </div>
@@ -164,11 +198,13 @@ function AppUserCreatePopup({
                   style={{ paddingRight: '0' }}
                   className="FormInput"
                   id="password"
-                  placeholder="**********"
+                  placeholder="Enter your password"
                   autoComplete="new-password"
                   type={showPassword ? 'text' : 'password'}
                   {...register('password', {
                     required: 'Password is required',
+                    pattern: PATTERN.PASSWORD,
+                    validate: (value) => value.length <= 100,
                   })}
                   endAdornment={
                     <InputAdornment position="end">
@@ -183,10 +219,14 @@ function AppUserCreatePopup({
                   }
                   disableUnderline
                 />
-                {errors.password && (
-                  <span role="alert" className="error-color">
-                    *{errors.password?.message}
-                  </span>
+                {errors.password?.type === "required" && (
+                  <ErrorSpanBox error={errors.password?.message} />
+                )}
+                {errors.password?.type === 'pattern' && (
+                  <ErrorSpanBox error={INVALID_CHAR} />
+                )}
+                {errors.password?.type === 'validate' && (
+                  <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
                 )}
               </FormControl>
               <FormControl className="FormControl" variant="standard">
@@ -194,13 +234,19 @@ function AppUserCreatePopup({
                 <Input
                   className="FormInput"
                   id="postalCode"
-                  placeholder="M6G 596"
+                  placeholder="Enter your postal code"
                   disableUnderline
-                  {...register('postalCode')}
+                  {...register('postalCode', {
+                    pattern: PATTERN.CHAR_NUM_SPACE,
+                    validate: (value) => value.length <= 15,
+                  })}
                 />
-                {/* {errors.postalCode && (
-                                    <span role="alert" className='error-color'>*{errors.postalCode?.message}</span>
-                                )} */}
+                {errors.postalCode?.type === 'pattern' && (
+                  <ErrorSpanBox error={INVALID_CHAR} />
+                )}
+                {errors.postalCode?.type === 'validate' && (
+                  <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
+                )}
               </FormControl>
             </div>
             <div className="FormFields">
@@ -224,12 +270,20 @@ function AppUserCreatePopup({
                   id="address"
                   disableUnderline
                   placeholder="1401 Lavaca Street"
-                  {...register('address', { required: 'Address is required' })}
+                  {...register('address', {
+                    required: 'Address is required',
+                    pattern: PATTERN.CHAR_NUM_SPACE_DOT_AT,
+                    validate: (value) => value.length <= 250,
+                  })}
                 />
-                {errors.address && (
-                  <span role="alert" className="error-color">
-                    *{errors.address?.message}
-                  </span>
+                {errors.address?.type === 'required' && (
+                  <ErrorSpanBox error={errors.address?.message} />
+                )}
+                {errors.address?.type === 'pattern' && (
+                  <ErrorSpanBox error={INVALID_CHAR} />
+                )}
+                {errors.address?.type === 'validate' && (
+                  <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
                 )}
               </FormControl>
             </div>
@@ -244,12 +298,18 @@ function AppUserCreatePopup({
                     placeholder="Enter license number"
                     {...register('licenseNumber', {
                       required: 'licenseNumber is required',
+                      pattern: PATTERN.CHAR_NUM_SPACE,
+                      validate: (value) => value.length <= 50,
                     })}
                   />
-                  {errors.licenseNumber && (
-                    <span role="alert" className="error-color">
-                      *{errors.licenseNumber?.message}
-                    </span>
+                  {errors.licenseNumber?.type === "required" && (
+                    <ErrorSpanBox error={errors.licenseNumber?.message} />
+                  )}
+                  {errors.address?.type === 'pattern' && (
+                    <ErrorSpanBox error={INVALID_CHAR} />
+                  )}
+                  {errors.address?.type === 'validate' && (
+                    <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
                   )}
                 </FormControl>
               </div>
