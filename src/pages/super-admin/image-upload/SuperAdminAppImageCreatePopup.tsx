@@ -12,6 +12,8 @@ import '../../../assets/css/PopupStyle.css';
 import TextField from '@mui/material/TextField';
 import { AppImage } from '../../../interfaces/app.interface';
 import CustomButton from '../../../components/common/CustomButton';
+import { INVALID_CHAR, MAX_LENGTH_EXCEEDED, PATTERN } from '../../../utils/constants';
+import ErrorSpanBox from '../../../components/common/ErrorSpanBox';
 // import { Category } from '../../interfaces/category.interface';
 
 type Props = {
@@ -43,6 +45,7 @@ function SuperAdminAppImageCreatePopup({
   const onSubmit = (data: AppImage) => {
     // console.log('onSubmit called');
     // console.log('data', data);
+    data.avatar = image;
     if (data.name && data.avatar) {
       if (data.avatar && Object.keys(data?.avatar).length > 0) {
         data.avatar = image;
@@ -87,16 +90,24 @@ function SuperAdminAppImageCreatePopup({
               <label className="FormLabel">Image Name</label>
               <Input
                 className="FormInput"
-                {...register('name', { required: true })}
+                {...register('name', {
+                  required: true,
+                  pattern: PATTERN.CHAR_NUM_SPACE,
+                  validate: (value) => value.length <= 100,
+                })}
                 type="text"
                 id="name"
                 placeholder="Write Image Name"
                 disableUnderline
               />
-              {errors.name?.type === 'required' && (
-                <span role="alert" className="mt-1 text-sm">
-                  * Image name is required
-                </span>
+              {errors.name?.type === "required" && (
+                <ErrorSpanBox error='Image name is required' />
+              )}
+              {errors.name?.type === 'pattern' && (
+                <ErrorSpanBox error={INVALID_CHAR} />
+              )}
+              {errors.name?.type === 'validate' && (
+                <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
               )}
             </FormControl>
           </div>
@@ -104,7 +115,7 @@ function SuperAdminAppImageCreatePopup({
             <FormControl className="FormControl" variant="standard">
               <label className="FormLabel">
                 Image Description{' '}
-                <span className="SubLabel">Write 05-50 Characters</span>
+                <span className="SubLabel">Write ( 01-250 ) Characters</span>
               </label>
               <TextField
                 className="FormTextarea"
@@ -113,9 +124,24 @@ function SuperAdminAppImageCreatePopup({
                 rows={4}
                 defaultValue=""
                 placeholder="Write Image Description"
-                {...register('desc')}
+                {...register('desc', {
+                  pattern: {
+                    value: PATTERN.CHAR_NUM_SPACE_DOT_AT,
+                    message: INVALID_CHAR
+                  },
+                  minLength: {
+                    value: 1,
+                    message: 'Minimum Five Characters',
+                  },
+                  maxLength: {
+                    value: 250,
+                    message: MAX_LENGTH_EXCEEDED,
+                  },
+                })}
               />
-              {errors.desc && <span role="alert">{errors.desc?.message}</span>}
+              {errors.desc && (
+                <ErrorSpanBox error={errors.desc?.message} />
+              )}
             </FormControl>
           </div>
           <div className="FormField">
@@ -169,8 +195,8 @@ function SuperAdminAppImageCreatePopup({
               )}
             </div>
             {image === null && (
-              <span role="alert" className="mt-1 text-sm">
-                * Image is required
+              <span role="alert" className="error-color">
+                *Image is required
               </span>
             )}
           </div>

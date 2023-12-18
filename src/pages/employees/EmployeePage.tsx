@@ -26,7 +26,7 @@ import { AppUserEmployees } from '../../interfaces/app-user.interface';
 import { useAppSelector } from '../../redux/redux-hooks';
 import Service from '../../services/adminapp/adminEmployee';
 import PermissionPopup from '../../utils/PermissionPopup';
-import { NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
+import { NOT_AUTHORIZED_MESSAGE, PATTERN } from '../../utils/constants';
 import { listingRolePermission } from '../../utils/helper';
 
 function EmployeePage() {
@@ -77,6 +77,8 @@ function EmployeePage() {
       register,
       error: errors.first_name,
       type: 'text',
+      pattern: PATTERN.CHAR_NUM_SPACE,
+      maxLetterLimit: 50,
     },
     {
       fieldName: 'Last Name',
@@ -85,6 +87,8 @@ function EmployeePage() {
       register,
       error: errors.last_name,
       type: 'text',
+      pattern: PATTERN.CHAR_NUM_SPACE,
+      maxLetterLimit: 50,
     },
     {
       fieldName: 'Email Address',
@@ -93,6 +97,8 @@ function EmployeePage() {
       register,
       error: errors.email,
       type: 'text',
+      pattern: PATTERN.CHAR_NUM_SPACE_DOT_AT,
+      maxLetterLimit: 100,
       disable: openEditFormDialog,
     },
     {
@@ -104,6 +110,8 @@ function EmployeePage() {
       type: 'password',
       onclick: handleClickShowPassword,
       showPassVisibility: showPassword,
+      pattern: PATTERN.PASSWORD,
+      maxLetterLimit: 100,
     },
   ];
 
@@ -564,8 +572,8 @@ function EmployeePage() {
                               <span className="text-xs font-normal text-[#6A6A6A]">
                                 {dayjs(item.createdDate).isValid()
                                   ? dayjs(item.createdDate)?.format(
-                                      'MMMM DD, YYYY'
-                                    )
+                                    'MMMM DD, YYYY'
+                                  )
                                   : '--'}
                               </span>
                             </div>

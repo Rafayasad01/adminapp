@@ -16,7 +16,8 @@ import CustomButton from '../../../components/common/CustomButton';
 import Service from '../../../services/superadmin/RolePermissions';
 import Loader from '../../../components/common/Loader';
 import Notify from '../../../components/common/Notify';
-import { setText } from '../../../utils/constants';
+import { INVALID_CHAR, MAX_LENGTH_EXCEEDED, PATTERN, setText } from '../../../utils/constants';
+import ErrorSpanBox from '../../../components/common/ErrorSpanBox';
 
 function SuperAdminAddRolePermissionsPage() {
   const navigate = useNavigate();
@@ -159,14 +160,24 @@ function SuperAdminAddRolePermissionsPage() {
                 <label className="pb-2 font-bold">Role</label>
                 <Input
                   className="FormInput m-0 h-[40px] w-[280px] rounded-lg border-2 border-[#949EAE] px-3 outline-none"
-                  {...register('roleName', { required: true })}
+                  {...register('roleName', {
+                    required: true,
+                    pattern: PATTERN.CHAR_NUM_SPACE,
+                    validate: (value) => value.length <= 100
+                  })}
                   type="text"
                   id="roleName"
                   placeholder="Enter Role name"
                   disableUnderline
                 />
-                {errors.roleName?.type === 'required' && (
-                  <span role="alert">Role name is required</span>
+                {errors.roleName?.type === "required" && (
+                  <ErrorSpanBox error='Shop name is required' />
+                )}
+                {errors.roleName?.type === 'pattern' && (
+                  <ErrorSpanBox error={INVALID_CHAR} />
+                )}
+                {errors.roleName?.type === 'validate' && (
+                  <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
                 )}
               </FormControl>
             </div>
@@ -176,10 +187,26 @@ function SuperAdminAddRolePermissionsPage() {
                 <TextareaAutosize
                   minRows={3}
                   maxRows={6}
-                  {...register('roleDescription')}
+                  {...register('roleDescription', {
+                    pattern: {
+                      value: PATTERN.CHAR_NUM_SPACE_DOT_AT,
+                      message: INVALID_CHAR
+                    },
+                    minLength: {
+                      value: 1,
+                      message: 'Minimum Five Characters',
+                    },
+                    maxLength: {
+                      value: 250,
+                      message: MAX_LENGTH_EXCEEDED,
+                    }
+                  })}
                   placeholder="Enter Role description"
                   className="w-[280px] rounded-lg border-2 border-[#949EAE] p-3 outline-none"
                 />
+                {errors.roleDescription && (
+                  <ErrorSpanBox error={errors.roleDescription?.message} />
+                )}
               </FormControl>
             </div>
             <div className="mt-5">

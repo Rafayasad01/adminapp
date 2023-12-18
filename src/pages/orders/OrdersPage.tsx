@@ -135,21 +135,23 @@ function OrdersPage() {
   };
 
   const handleClickSearch = (event: any) => {
-    const searchTxt = event.target.value as string;
-    setSearch(searchTxt);
-    setPage(0);
-    order
-      .searchService(authState.user.tenant, searchTxt, page, rowsPerPage)
-      .then((item) => {
-        setList(
-          item.data.data.list.map((newItem: any) => ({
-            ...newItem,
-            isSelected: false,
-            orderStatus: newItem.status,
-          }))
-        );
-        setTotal(item.data.data.total);
-      });
+    if (event.key === 'Enter') {
+      const searchTxt = event.target.value as string;
+      setSearch(searchTxt);
+      setPage(0);
+      order
+        .searchService(authState.user.tenant, searchTxt, page, rowsPerPage)
+        .then((item) => {
+          setList(
+            item.data.data.list.map((newItem: any) => ({
+              ...newItem,
+              isSelected: false,
+              orderStatus: newItem.status,
+            }))
+          );
+          setTotal(item.data.data.total);
+        });
+    }
   };
 
   // const handleStatusChange = (event: SelectChangeEvent) => {

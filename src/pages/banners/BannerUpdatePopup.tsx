@@ -72,24 +72,27 @@ function BannerUpdatePopup({
   const [selectedImg, setSelectedImg] = useState<any>(null);
 
   const onSubmit = (data: any) => {
-    console.log('dataSSSelected==>', selectedImg, file, data);
-    const details = {
-      id: formData.id,
-      name: data.bannerName,
-      banner: file !== null ? file : formData.banner,
-    };
-    if (selectedImg || file || formData.banner) {
-      callback(details);
+    if (file !== null || selectedImg !== null) {
+      const details = {
+        id: formData.id,
+        name: data.bannerName,
+        banner: file !== null ? file : formData.banner,
+      };
+      if (selectedImg || file !== null || formData.banner) {
+        callback(details);
+      } else {
+        setIsNotify(true);
+        setNotifyMessage('Banner image is required');
+      }
     } else {
-      setIsNotify(true);
-      setNotifyMessage('Banner image is required');
+      setOpenFormDialog(true);
     }
   };
 
   const handleFormClose = () => {
     setOpenFormDialog(false);
   };
-  console.log('sssssssssssssFORMDATA', formData);
+  console.log('sssssssssssssFORMDATA', file, selectedImg);
 
   return (
     <Dialog
@@ -154,7 +157,16 @@ function BannerUpdatePopup({
                 />
               </div>
             ) : null}
+            {/* {file === null || selectedImg === null && */}
+            {/* } */}
           </div>
+          {file === null && selectedImg === null &&
+            <div>
+              <span role="alert" className="error-color">
+                *Edit requires upload new image
+              </span>
+            </div>
+          }
           <div className="FormFooter">
             <Button
               className="btn-black-outline"

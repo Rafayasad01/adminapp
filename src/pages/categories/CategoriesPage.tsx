@@ -271,12 +271,13 @@ function CategoriesPage() {
   };
 
   const updateFormHandler = (data: any) => {
+    console.log('data::::::', data)
     setIsLoader(true);
     const formData = new FormData();
     formData.append('name', data.name);
     formData.append('desc', data.desc);
     formData.append('updated_by', authState.user.id);
-    if (data.icon !== null) formData.append('icon', data.icon);
+    if (data.icon) formData.append('icon', data.icon);
     category
       .updateCategory(actionMenuItemid, formData)
       .then((updateItem: any) => {

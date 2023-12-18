@@ -265,7 +265,7 @@ function SuperAdminShopDetailPage() {
   const updateFormBranchHandler = (id: string, data: any) => {
     setIsLoader(true);
     if (data.trialUpdateMode) setIsTrialMode(true);
-    console.log('formDATA1', data);
+    // console.log('formDATA1', data);
     const formData = {
       tenantName: data.tenantName,
       // email: data.email,
@@ -440,7 +440,7 @@ function SuperAdminShopDetailPage() {
                                 <AccountBoxIcon />
                               </IconButton>
                             </div>
-                            <div className="">
+                            {/* <div className="">
                               <IconButton
                                 disabled={detail.isActive === false && true}
                                 title="Shop Setting"
@@ -449,7 +449,7 @@ function SuperAdminShopDetailPage() {
                               >
                                 <SettingsIcon />
                               </IconButton>
-                            </div>
+                            </div> */}
                             <div>
                               <IconButton
                                 disabled={detail.isActive === false && true}
@@ -601,7 +601,7 @@ function SuperAdminShopDetailPage() {
                           return (
                             <div
                               key={index}
-                              className="h-[200px] rounded-2xl shadow-xl xl:col-span-6 2xl:col-span-4"
+                              className="h-[200px] rounded-2xl shadow xl:col-span-6 2xl:col-span-4"
                             >
                               <div className="flex h-full w-full justify-between py-[2rem]">
                                 <div className="flex h-full flex-col justify-between px-5">
@@ -629,7 +629,7 @@ function SuperAdminShopDetailPage() {
                                   </div>
                                 </div>
                                 <div className="h-full flex-col justify-between">
-                                  <div className="flex">
+                                  <div className="flex justify-end">
                                     <div className="">
                                       <IconButton
                                         disabled={
@@ -644,7 +644,7 @@ function SuperAdminShopDetailPage() {
                                         <AccountBoxIcon />
                                       </IconButton>
                                     </div>
-                                    <div className="flex items-center justify-end">
+                                    {/* <div className="flex items-center justify-end">
                                       <IconButton
                                         disabled={
                                           item.isActive === false && true
@@ -655,7 +655,7 @@ function SuperAdminShopDetailPage() {
                                       >
                                         <SettingsIcon />
                                       </IconButton>
-                                    </div>
+                                    </div> */}
                                     <div className="flex items-center justify-end">
                                       <IconButton
                                         disabled={

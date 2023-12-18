@@ -14,7 +14,8 @@ import '../../assets/css/PopupStyle.css';
 import { debounce } from '@mui/material/utils';
 import kabakCase from 'lodash/kebabCase';
 import { Tenant } from '../../interfaces/superadmin/tenant.interface';
-import { DOMAIN_PREFIX, DOMAIN_PROTOCOL } from '../../utils/constants';
+import { DOMAIN_PREFIX, DOMAIN_PROTOCOL, INVALID_CHAR, MAX_LENGTH_EXCEEDED, PATTERN } from '../../utils/constants';
+import ErrorSpanBox from '../../components/common/ErrorSpanBox';
 
 dayjs.extend(duration);
 dayjs.extend(isBetween);
@@ -111,6 +112,8 @@ function BranchUpdatePopup({
                     className="FormInput"
                     {...register('tenantName', {
                       required: true,
+                      pattern: PATTERN.CHAR_NUM_SPACE,
+                      validate: (value) => value.length <= 150,
                       value: item.name,
                     })}
                     type="text"
@@ -118,8 +121,14 @@ function BranchUpdatePopup({
                     disableUnderline
                     onChange={(val: any) => shopFieldHangler(val.target.value)}
                   />
-                  {errors.tenantName?.type === 'required' && (
-                    <span role="alert">Shop name is required</span>
+                  {errors.firstName?.type === "required" && (
+                    <ErrorSpanBox error='Shop name is required' />
+                  )}
+                  {errors.firstName?.type === 'pattern' && (
+                    <ErrorSpanBox error={INVALID_CHAR} />
+                  )}
+                  {errors.firstName?.type === 'validate' && (
+                    <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
                   )}
                 </FormControl>
                 <FormControl className="FormControl" variant="standard">
@@ -129,14 +138,22 @@ function BranchUpdatePopup({
                     className="FormInput"
                     {...register('email', {
                       required: true,
+                      pattern: PATTERN.CHAR_NUM_SPACE_DOT_AT,
+                      validate: (value) => value.length <= 100,
                       value: item.email,
                     })}
                     type="text"
                     id="email"
                     disableUnderline
                   />
-                  {errors.email?.type === 'required' && (
-                    <span role="alert">Email is required</span>
+                  {errors.email?.type === "required" && (
+                    <ErrorSpanBox error='Email is required' />
+                  )}
+                  {errors.email?.type === 'pattern' && (
+                    <ErrorSpanBox error={INVALID_CHAR} />
+                  )}
+                  {errors.email?.type === 'validate' && (
+                    <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
                   )}
                 </FormControl>
               </div>
@@ -147,14 +164,22 @@ function BranchUpdatePopup({
                     className="FormInput"
                     {...register('firstName', {
                       required: true,
+                      pattern: PATTERN.CHAR_NUM_SPACE,
+                      validate: (value) => value.length <= 50,
                       value: item.firstName,
                     })}
                     type="text"
                     id="firstName"
                     disableUnderline
                   />
-                  {errors.firstName?.type === 'required' && (
-                    <span role="alert">First name is required</span>
+                  {errors.firstName?.type === "required" && (
+                    <ErrorSpanBox error='First name is required' />
+                  )}
+                  {errors.firstName?.type === 'pattern' && (
+                    <ErrorSpanBox error={INVALID_CHAR} />
+                  )}
+                  {errors.firstName?.type === 'validate' && (
+                    <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
                   )}
                 </FormControl>
                 <FormControl className="FormControl" variant="standard">
@@ -163,14 +188,22 @@ function BranchUpdatePopup({
                     className="FormInput"
                     {...register('lastName', {
                       required: true,
+                      pattern: PATTERN.CHAR_NUM_SPACE,
+                      validate: (value) => value.length <= 50,
                       value: item.lastName,
                     })}
                     type="text"
                     id="lastName"
                     disableUnderline
                   />
-                  {errors.lastName?.type === 'required' && (
-                    <span role="alert">Last name is required</span>
+                  {errors.lastName?.type === "required" && (
+                    <ErrorSpanBox error='Last name is required' />
+                  )}
+                  {errors.lastName?.type === 'pattern' && (
+                    <ErrorSpanBox error={INVALID_CHAR} />
+                  )}
+                  {errors.lastName?.type === 'validate' && (
+                    <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
                   )}
                 </FormControl>
               </div>

@@ -8,6 +8,8 @@ import { useForm } from 'react-hook-form';
 import '../../assets/css/PopupStyle.css';
 import TextField from '@mui/material/TextField';
 import { Notification } from '../../interfaces/notification.interface';
+import { INVALID_CHAR, MAX_LENGTH_EXCEEDED, PATTERN } from '../../utils/constants';
+import ErrorSpanBox from '../../components/common/ErrorSpanBox';
 
 type Props = {
   openFormDialog: boolean;
@@ -54,13 +56,24 @@ function NotificationCreatePopup({
                 <label className="FormLabel">Title</label>
                 <Input
                   className="FormInput"
-                  {...register('title', { required: true })}
+                  {...register('title', {
+                    required: true,
+                    pattern: PATTERN.CHAR_NUM_SPACE,
+                    validate: (value) => value.length <= 150,
+                  })}
                   type="text"
+                  placeholder='Enter your notification title'
                   id="title"
                   disableUnderline
                 />
-                {errors.title?.type === 'required' && (
-                  <span role="alert">Title is required</span>
+                {errors.title?.type === "required" && (
+                  <ErrorSpanBox error='Title is required' />
+                )}
+                {errors.title?.type === 'pattern' && (
+                  <ErrorSpanBox error={INVALID_CHAR} />
+                )}
+                {errors.title?.type === 'validate' && (
+                  <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
                 )}
               </FormControl>
             </div>
@@ -68,7 +81,7 @@ function NotificationCreatePopup({
               <FormControl className="FormControl" variant="standard">
                 <label className="FormLabel">
                   Message{' '}
-                  <span className="SubLabel">Write 25-250 Characters</span>
+                  <span className="SubLabel">Write 05-250 Characters</span>
                 </label>
                 <TextField
                   className="FormTextarea"
@@ -77,10 +90,24 @@ function NotificationCreatePopup({
                   rows={4}
                   defaultValue=""
                   placeholder="Write Description"
-                  {...register('message', { required: true })}
+                  {...register('message', {
+                    required: 'Message is required',
+                    pattern: {
+                      value: PATTERN.CHAR_NUM_SPACE_DOT_AT,
+                      message: INVALID_CHAR
+                    },
+                    minLength: {
+                      value: 5,
+                      message: 'Minimum Five Characters',
+                    },
+                    maxLength: {
+                      value: 250,
+                      message: MAX_LENGTH_EXCEEDED,
+                    },
+                  })}
                 />
-                {errors.message?.type === 'required' && (
-                  <span role="alert">Message is required</span>
+                {errors.message && (
+                  <ErrorSpanBox error={errors.message?.message} />
                 )}
               </FormControl>
             </div>

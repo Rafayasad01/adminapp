@@ -29,12 +29,17 @@ import {
   DOMAIN_PROTOCOL,
   FACEBOOK,
   INSTAGRAM,
+  INVALID_CHAR,
   LINKEDIN,
+  MAX_LENGTH_EXCEEDED,
+  PATTERN,
+  PH_MINI_LENGTH,
   TWITTER,
   WHATSAPP,
   YOUTUBE,
 } from '../../utils/constants';
 import { listingRolePermission } from '../../utils/helper';
+import ErrorSpanBox from '../../components/common/ErrorSpanBox';
 
 type AssetsImages = keyof typeof assets.images;
 
@@ -124,8 +129,10 @@ function SettingsApp() {
   };
 
   const onSubmit = (data: Setting) => {
+    console.log("SETTTING DATA", data);
+
     if (listingRolePermission(dataRole, 'Setting Update')) {
-      setIsLoader(true);
+      // setIsLoader(true);
       const formData = new FormData();
       formData.append('name', data.name ? data.name : '');
       formData.append('desc', data.name ? data.name : '');
@@ -151,36 +158,36 @@ function SettingsApp() {
       // formData.append('color3', color3);
       if (file !== null) formData.append('logo', file);
 
-      Service.updateService(authState.user.tenant, formData)
-        .then((item: any) => {
-          const { success, message, data: itemData } = item.data;
-          if (success) {
-            dispatch(setLogo(itemData.logo));
-            setIsLoader(false);
-            setIsNotify(true);
-            setNotifyMessage({
-              text: message,
-              type: 'success',
-            });
-            setData(itemData);
-            setDetail(itemData);
-          } else {
-            setIsLoader(false);
-            setIsNotify(true);
-            setNotifyMessage({
-              text: message,
-              type: 'error',
-            });
-          }
-        })
-        .catch((err) => {
-          setIsLoader(false);
-          setIsNotify(true);
-          setNotifyMessage({
-            text: err.message,
-            type: 'error',
-          });
-        });
+      // Service.updateService(authState.user.tenant, formData)
+      //   .then((item: any) => {
+      //     const { success, message, data: itemData } = item.data;
+      //     if (success) {
+      //       dispatch(setLogo(itemData.logo));
+      //       setIsLoader(false);
+      //       setIsNotify(true);
+      //       setNotifyMessage({
+      //         text: message,
+      //         type: 'success',
+      //       });
+      //       setData(itemData);
+      //       setDetail(itemData);
+      //     } else {
+      //       setIsLoader(false);
+      //       setIsNotify(true);
+      //       setNotifyMessage({
+      //         text: message,
+      //         type: 'error',
+      //       });
+      //     }
+      //   })
+      //   .catch((err) => {
+      //     setIsLoader(false);
+      //     setIsNotify(true);
+      //     setNotifyMessage({
+      //       text: err.message,
+      //       type: 'error',
+      //     });
+      //   });
     }
   };
 
@@ -279,8 +286,18 @@ function SettingsApp() {
                     id="name"
                     placeholder="UrLaundry"
                     disableUnderline
-                    {...register('name', { value: detail ? detail.name : '' })}
+                    {...register('name', {
+                      pattern: PATTERN.CHAR_NUM_SPACE_DASH,
+                      validate: (value) => value.length <= 150,
+                      value: detail ? detail.name : ''
+                    })}
                   />
+                  {errors.name?.type === 'pattern' && (
+                    <ErrorSpanBox error={INVALID_CHAR} />
+                  )}
+                  {errors.name?.type === 'validate' && (
+                    <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
+                  )}
                 </FormControl>
               </div>
               <div className="FormFields mb-4">
@@ -292,9 +309,17 @@ function SettingsApp() {
                     placeholder="warning@urlaundry.com"
                     disableUnderline
                     {...register('email', {
+                      pattern: PATTERN.CHAR_NUM_SPACE_DOT_AT,
+                      validate: (value) => value.length <= 100,
                       value: detail ? detail.email : '',
                     })}
                   />
+                  {errors.email?.type === 'pattern' && (
+                    <ErrorSpanBox error={INVALID_CHAR} />
+                  )}
+                  {errors.email?.type === 'validate' && (
+                    <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
+                  )}
                 </FormControl>
                 <FormControl className="FormControl" variant="standard">
                   <label className="FormLabel">Tax</label>
@@ -304,9 +329,21 @@ function SettingsApp() {
                     placeholder="1%"
                     disableUnderline
                     {...register('gstPercentage', {
-                      value: detail ? detail.gstPercentage : '',
+                      pattern: PATTERN.PHONE,
+                      maxLength: {
+                        value: 15,
+                        message: MAX_LENGTH_EXCEEDED
+                      },
+                      value: detail ? detail.gstPercentage : ''
                     })}
+                    type='text'
                   />
+                  {errors.gstPercentage?.type === "pattern" && (
+                    <ErrorSpanBox error={INVALID_CHAR} />
+                  )}
+                  {errors.gstPercentage?.type === 'maxLength' && (
+                    <ErrorSpanBox error={PH_MINI_LENGTH} />
+                  )}
                 </FormControl>
               </div>
               <div className="FormFields mb-4">
@@ -319,8 +356,15 @@ function SettingsApp() {
                     disableUnderline
                     {...register('minOrderAmount', {
                       value: detail ? detail.minOrderAmount : '',
+                      pattern: {
+                        value: PATTERN.POINT_NUM,
+                        message: 'Enter a valid amount',
+                      },
                     })}
                   />
+                  {errors.minOrderAmount?.type === 'pattern' && (
+                    <ErrorSpanBox error={"Enter a valid amount"} />
+                  )}
                 </FormControl>
                 <FormControl className="FormControl" variant="standard">
                   <label className="FormLabel">Delivery fee</label>
@@ -331,8 +375,15 @@ function SettingsApp() {
                     disableUnderline
                     {...register('deliveryFee', {
                       value: detail ? detail.deliveryFee : '',
+                      pattern: {
+                        value: PATTERN.POINT_NUM,
+                        message: 'Enter a valid delivery fee',
+                      },
                     })}
                   />
+                  {errors.deliveryFee?.type === 'pattern' && (
+                    <ErrorSpanBox error={"Enter a valid delivery fee"} />
+                  )}
                 </FormControl>
               </div>
               <div className="FormField mb-4">

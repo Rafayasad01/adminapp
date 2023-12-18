@@ -10,12 +10,13 @@ import CustomButton from '../../../components/common/CustomButton';
 import Service from '../../../services/superadmin/RolePermissions';
 import Loader from '../../../components/common/Loader';
 import Notify from '../../../components/common/Notify';
-import { setText } from '../../../utils/constants';
+import { INVALID_CHAR, MAX_LENGTH_EXCEEDED, PATTERN, setText } from '../../../utils/constants';
 import { Permissions } from '../../../interfaces/superadmin/permissions.interface';
 import CustomInputBox from '../../../components/common/CustomInputBox';
 import CustomCheckBox from '../../../components/common/CustomCheckBox';
 import { useAppSelector } from '../../../redux/redux-hooks';
 import assets from '../../../assets';
+import ErrorSpanBox from '../../../components/common/ErrorSpanBox';
 
 function SuperAdminAddPermissionsPage() {
   const authState: any = useAppSelector((state) => state?.authState);
@@ -23,7 +24,7 @@ function SuperAdminAddPermissionsPage() {
   const [isLoader, setIsLoader] = useState<boolean>(false);
   const [isNotify, setIsNotify] = useState(false);
   const [notifyMessage, setNotifyMessage] = useState({});
-  const [count, setCount] = useState(0);
+  const [count, setCount] = useState<any>(0);
 
   const {
     register,
@@ -33,28 +34,35 @@ function SuperAdminAddPermissionsPage() {
     control,
     formState: { errors },
   } = useForm<Permissions>();
+  
 
-  const inputFieldsData = [
+  const inputFieldsData: any = [
     {
       fieldName: 'Permission Name',
       id: `name${count}`,
       register,
-      error: errors.name,
+      error: errors,
       type: 'text',
+      pattern: PATTERN.CHAR_NUM_SPACE,
+      maxLetterLimit: 50,
     },
     {
       fieldName: 'Permission Description',
       id: `desc${count}`,
       register,
-      error: errors.desc,
+      error: errors,
       type: 'text',
+      pattern: PATTERN.CHAR_NUM_SPACE_DOT_AT,
+      maxLetterLimit: 50,
     },
     {
       fieldName: 'Action',
       id: `action${count}`,
       register,
-      error: errors.action,
+      error: errors,
       type: 'text',
+      pattern: PATTERN.ACTION_WITHOUT_SPACE,
+      maxLetterLimit: 50,
     },
     {
       fieldName: 'Show on menu',
@@ -85,6 +93,8 @@ function SuperAdminAddPermissionsPage() {
           register,
           error: errors.name,
           type: 'text',
+          pattern: PATTERN.CHAR_NUM_SPACE,
+          maxLetterLimit: 50,
         },
         {
           fieldName: 'Permission Description',
@@ -92,6 +102,8 @@ function SuperAdminAddPermissionsPage() {
           register,
           error: errors.desc,
           type: 'text',
+          pattern: PATTERN.CHAR_NUM_SPACE_DOT_AT,
+          maxLetterLimit: 50,
         },
         {
           fieldName: 'Action',
@@ -99,6 +111,8 @@ function SuperAdminAddPermissionsPage() {
           register,
           error: errors.action,
           type: 'text',
+          pattern: PATTERN.ACTION_WITHOUT_SPACE,
+          maxLetterLimit: 50,
         },
         {
           fieldName: 'Show on menu',
@@ -233,6 +247,8 @@ function SuperAdminAddPermissionsPage() {
     }
   };
 
+  console.log("EERORR", errors)
+
   return isLoader ? (
     <Loader />
   ) : (
@@ -252,14 +268,24 @@ function SuperAdminAddPermissionsPage() {
                   <label className="pb-2 font-bold">Module Name</label>
                   <Input
                     className="FormInput m-0 h-[40px] w-[350px] rounded-lg border-2 border-[#949EAE] px-3 outline-none"
-                    {...register('moduleName', { required: true })}
+                    {...register('moduleName', {
+                      required: true,
+                      pattern: PATTERN.CHAR_NUM_SPACE,
+                      validate: (value) => value.length <= 100,
+                    })}
                     type="text"
                     id="moduleName"
                     placeholder="Enter Module name"
                     disableUnderline
                   />
-                  {errors.moduleName?.type === 'required' && (
-                    <span role="alert">Role name is required</span>
+                  {errors.moduleName?.type === "required" && (
+                    <ErrorSpanBox error='Module name is required' />
+                  )}
+                  {errors.moduleName?.type === 'pattern' && (
+                    <ErrorSpanBox error={INVALID_CHAR} />
+                  )}
+                  {errors.moduleName?.type === 'validate' && (
+                    <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
                   )}
                 </FormControl>
               </div>
@@ -291,10 +317,26 @@ function SuperAdminAddPermissionsPage() {
                 <TextareaAutosize
                   minRows={3}
                   maxRows={6}
-                  {...register('moduleDesc')}
+                  {...register('moduleDesc', {
+                    pattern: {
+                      value: PATTERN.CHAR_NUM_SPACE_DOT_AT,
+                      message: INVALID_CHAR
+                    },
+                    minLength: {
+                      value: 1,
+                      message: 'Minimum Five Characters',
+                    },
+                    maxLength: {
+                      value: 250,
+                      message: MAX_LENGTH_EXCEEDED,
+                    },
+                  })}
                   placeholder="Enter Module description"
                   className="w-[507px] rounded-lg border-2 border-[#949EAE] p-3 outline-none"
                 />
+                {errors.moduleDesc && (
+                  <ErrorSpanBox error={errors.moduleDesc?.message} />
+                )}
               </FormControl>
             </div>
             <div className="grid gap-4 xl:grid-cols-4 2xl:grid-cols-3">
@@ -314,6 +356,7 @@ function SuperAdminAddPermissionsPage() {
                           </div>
                         )}
                         {mainEl.fields?.map((item: any, index: number) => {
+                          // console.log(item);
                           return (
                             <FormControl
                               key={index}
@@ -330,6 +373,8 @@ function SuperAdminAddPermissionsPage() {
                                 </div>
                               ) : (
                                 <CustomInputBox
+                                  pattern={item.pattern}
+                                  maxLetterLimit={item.maxLetterLimit}
                                   value={item.value}
                                   customFontClass="font-bold"
                                   customClass="border-2 rounded-lg px-4"
@@ -337,7 +382,7 @@ function SuperAdminAddPermissionsPage() {
                                   id={`${item.id}`}
                                   inputTitle={item.fieldName}
                                   inputType={item.type}
-                                  error={`${item.error}`}
+                                  error={errors[item.id]}
                                   typeImportant={item.typeImportant}
                                 />
                               )}

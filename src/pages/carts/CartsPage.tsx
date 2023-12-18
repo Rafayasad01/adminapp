@@ -95,16 +95,18 @@ function CartsPage() {
   };
 
   const handleClickSearch = (event: any) => {
-    const searchTxt = event.target.value as string;
-    const newPage = 0;
-    setSearch(searchTxt);
-    setPage(newPage);
-    cart
-      .searchService(authState.user.tenant, searchTxt, newPage, rowsPerPage)
-      .then((item) => {
-        setList(item.data.data.list.map((newItem: any) => ({ ...newItem })));
-        setTotal(item.data.data.total);
-      });
+    if (event.key === 'Enter') {
+      const searchTxt = event.target.value as string;
+      const newPage = 0;
+      setSearch(searchTxt);
+      setPage(newPage);
+      cart
+        .searchService(authState.user.tenant, searchTxt, newPage, rowsPerPage)
+        .then((item) => {
+          setList(item.data.data.list.map((newItem: any) => ({ ...newItem })));
+          setTotal(item.data.data.total);
+        });
+    }
   };
 
   useEffect(() => {
@@ -173,8 +175,8 @@ function CartsPage() {
                 All Carts
               </span>
             </div>
-            <div className="col-span-6">
-              <div className="flex flex-row gap-3">
+            <div className="col-span-9">
+              <div className="flex justify-end">
                 <FormControl
                   className="search-grey-outline placeholder-grey w-60"
                   variant="filled"

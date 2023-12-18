@@ -7,6 +7,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import { StaticDatePicker } from '@mui/x-date-pickers/StaticDatePicker';
+import ErrorSpanBox from './ErrorSpanBox';
 
 type Props = {
   register?: any;
@@ -49,14 +50,12 @@ function CustomDateTimePicker({
               fontSize: '12px',
             }}
             onChange={handleChange}
-            // defaultValue={dayjs('2022-04-17')}
+          // defaultValue={dayjs('2022-04-17')}
           />
         </DemoItem>
       </DemoContainer>
       {isTrue && value === undefined && (
-        <span className="text-xs" role="alert">
-          *{`${inputTitle} is required`}
-        </span>
+        <ErrorSpanBox error={`${inputTitle} is required`} />
       )}
     </LocalizationProvider>
   );

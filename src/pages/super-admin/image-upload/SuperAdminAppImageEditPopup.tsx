@@ -11,6 +11,8 @@ import TextField from '@mui/material/TextField';
 import '../../../assets/css/PopupStyle.css';
 import { AppImage } from '../../../interfaces/app.interface';
 import CustomButton from '../../../components/common/CustomButton';
+import { INVALID_CHAR, MAX_LENGTH_EXCEEDED, PATTERN } from '../../../utils/constants';
+import ErrorSpanBox from '../../../components/common/ErrorSpanBox';
 
 type Props = {
   openDialog: boolean;
@@ -117,13 +119,19 @@ function SuperAdminAppImageEditPopup({
                       disableUnderline
                       {...register('name', {
                         required: true,
+                        pattern: PATTERN.CHAR_NUM_SPACE,
+                        validate: (value) => value.length <= 100,
                         value: formData?.name,
                       })}
                     />
-                    {errors.name?.type === 'required' && (
-                      <span role="alert" className="text-sm">
-                        * Image name is required
-                      </span>
+                    {errors.name?.type === "required" && (
+                      <ErrorSpanBox error='Image name is required' />
+                    )}
+                    {errors.name?.type === 'pattern' && (
+                      <ErrorSpanBox error={INVALID_CHAR} />
+                    )}
+                    {errors.name?.type === 'validate' && (
+                      <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
                     )}
                   </FormControl>
                 </div>
@@ -131,7 +139,7 @@ function SuperAdminAppImageEditPopup({
                   <FormControl className="FormControl" variant="standard">
                     <label className="FormLabel">
                       Message{' '}
-                      <span className="SubLabel">Write 05-50 Characters</span>
+                      <span className="SubLabel">Write 01-250 Characters</span>
                     </label>
                     <TextField
                       className="FormTextarea"
@@ -140,8 +148,25 @@ function SuperAdminAppImageEditPopup({
                       rows={4}
                       defaultValue=""
                       placeholder="Write Image Description"
-                      {...register('desc', { value: formData?.desc })}
+                      {...register('desc', {
+                        value: formData?.desc,
+                        pattern: {
+                          value: PATTERN.CHAR_NUM_SPACE_DOT_AT,
+                          message: INVALID_CHAR
+                        },
+                        minLength: {
+                          value: 1,
+                          message: 'Minimum Five Characters',
+                        },
+                        maxLength: {
+                          value: 250,
+                          message: MAX_LENGTH_EXCEEDED,
+                        },
+                      })}
                     />
+                    {errors.desc && (
+                      <ErrorSpanBox error={errors.desc?.message} />
+                    )}
                   </FormControl>
                 </div>
                 <div className="FormField">

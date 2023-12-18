@@ -6,8 +6,9 @@ export interface Permissions {
   permissionSequence: any;
   action: string;
   permissionType: string;
-  showOnMenu: boolean;
+  showOnMenu: any;
   permissionParent: string;
   createdBy: string;
   updatedBy: string;
+  [key: string]: string;
 }

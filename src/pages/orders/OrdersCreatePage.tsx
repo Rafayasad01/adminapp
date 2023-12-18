@@ -315,25 +315,47 @@ function OrdersCreatePage() {
     setUserIdentifier(event.target.value);
   };
 
+  // const handleMultipleSelectCallback = () => {
+  //   const watchArr = watch('categoriesItem');
+  //   const temp: any = [];
+
+  //   watchArr?.forEach((item: any) => {
+  //     catItemList.filter((el: any) => {
+  //       if (el.id === item) {
+  //         const oldItem = itemList.find((item2: any) => item2.id === item);
+  //         temp.push({ ...el, ...oldItem });
+  //       }
+  //       return el;
+  //     });
+  //   });
+  //   setItemList(temp);
+
+  //   const total = itemList.reduce(
+  //     (p: any, c: any) => p + Number(c.price) * Number(c.quantity),
+  //     0
+  //   );
+  // };
+
   const handleMultipleSelectCallback = () => {
     const watchArr = watch('categoriesItem');
-    const temp: any = [];
-
+    const temp: any = itemList;
     watchArr?.forEach((item: any) => {
       catItemList.filter((el: any) => {
         if (el.id === item) {
           const oldItem = itemList.find((item2: any) => item2.id === item);
-          temp.push({ ...el, ...oldItem });
+          if (temp.some((item: any) => item.id === el.id)) {
+            return el;
+          }
+          temp.push({ ...el, ...oldItem, quantity: 1 });
         }
         return el;
       });
     });
     setItemList(temp);
-
-    const total = itemList.reduce(
-      (p: any, c: any) => p + Number(c.price) * Number(c.quantity),
-      0
-    );
+    // const total = itemList.reduce(
+    //   (p: any, c: any) => p + Number(c.price) * Number(c.quantity),
+    //   0
+    // );
   };
 
   return (
@@ -672,9 +694,8 @@ function OrdersCreatePage() {
                 type="button"
                 onClick={onSubmit}
                 color="inherit"
-                className={`w-full rounded-lg ${
-                  loginDetails === null ? 'bg-neutral-400' : 'bg-neutral-900'
-                } font-open-sans text-base font-semibold text-gray-50`}
+                className={`w-full rounded-lg ${loginDetails === null ? 'bg-neutral-400' : 'bg-neutral-900'
+                  } font-open-sans text-base font-semibold text-gray-50`}
               >
                 {isLoader ? (
                   <CircularProgress size="25px" color="inherit" />

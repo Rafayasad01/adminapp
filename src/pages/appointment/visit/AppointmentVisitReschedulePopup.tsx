@@ -17,7 +17,7 @@ import dayjs from 'dayjs';
 import CustomDropDown from '../../../components/common/CustomDropDown';
 import Service from '../../../services/adminapp/adminAppointment';
 import { Tenant } from '../../../interfaces/superadmin/tenant.interface';
-import { DOMAIN_PREFIX, DOMAIN_PROTOCOL } from '../../../utils/constants';
+import { DOMAIN_PREFIX, DOMAIN_PROTOCOL, INVALID_CHAR, MAX_LENGTH_EXCEEDED, PATTERN, PH_MINI_LENGTH } from '../../../utils/constants';
 import TimePicker from '../../../components/common/TimePicker';
 import {
   AppointmentProviderScheduleTime,
@@ -27,6 +27,7 @@ import CustomMultipleSelectBox from '../../../components/common/CustomMultipleSe
 import { useAppSelector } from '../../../redux/redux-hooks';
 import CustomDateTimePicker from '../../../components/common/CustomDateTimePicker';
 import Loader from '../../../components/common/Loader2';
+import ErrorSpanBox from '../../../components/common/ErrorSpanBox';
 
 type Props = {
   roles?: any;
@@ -68,10 +69,9 @@ function AppointmentVisitReschedulePopup({
 
   const onSubmit = (data: AppointmentVisit) => {
     console.log('dataSS', data, startTime);
-    const formattedDate = `${
-      dayjs(data.appointmentDate).isValid() &&
+    const formattedDate = `${dayjs(data.appointmentDate).isValid() &&
       dayjs(data.appointmentDate)?.format('YYYY-MM-DD')
-    } ${dayjs(startTime).isValid() && dayjs(startTime)?.format('HH:mm:ss')}`;
+      } ${dayjs(startTime).isValid() && dayjs(startTime)?.format('HH:mm:ss')}`;
     const currentDate = dayjs();
     const formattedCurrentDate = currentDate.format('YYYY-MM-DD');
     const visitorDetails = {
@@ -215,34 +215,44 @@ function AppointmentVisitReschedulePopup({
                     id="visitName"
                     placeholder="Enter name"
                     disableUnderline
-                    {...register('visitName', { required: true })}
+                    {...register('visitName', {
+                      required: true,
+                      pattern: PATTERN.CHAR_NUM_SPACE,
+                      validate: (value) => value.length <= 150,
+                    })}
                   />
-                  {errors.visitName?.type === 'required' && (
-                    <span
-                      role="alert"
-                      style={{ color: 'red', fontSize: '12px' }}
-                    >
-                      *Name is required
-                    </span>
+                  {errors.visitName?.type === "required" && (
+                    <ErrorSpanBox error='visit name is required' />
+                  )}
+                  {errors.visitName?.type === 'pattern' && (
+                    <ErrorSpanBox error={INVALID_CHAR} />
+                  )}
+                  {errors.visitName?.type === 'validate' && (
+                    <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
                   )}
                 </FormControl>
                 <FormControl className="FormControl" variant="standard">
                   <label className="FormLabel">Phone</label>
                   <Input
                     className="FormInput"
-                    {...register('phone', { required: true })}
+                    {...register('phone', {
+                      required: true,
+                      pattern: PATTERN.PHONE,
+                      maxLength: {
+                        value: 15,
+                        message: MAX_LENGTH_EXCEEDED
+                      },
+                    })}
                     type="text"
                     id="phone"
                     placeholder="Enter phone number"
                     disableUnderline
                   />
-                  {errors.phone?.type === 'required' && (
-                    <span
-                      role="alert"
-                      style={{ color: 'red', fontSize: '12px' }}
-                    >
-                      *Phone Number is required
-                    </span>
+                  {errors.phone?.type === "pattern" && (
+                    <ErrorSpanBox error={INVALID_CHAR} />
+                  )}
+                  {errors.phone?.type === 'maxLength' && (
+                    <ErrorSpanBox error={PH_MINI_LENGTH} />
                   )}
                 </FormControl>
               </div>
@@ -323,7 +333,7 @@ function AppointmentVisitReschedulePopup({
                 <FormControl className="FormControl" variant="standard">
                   <label className="FormLabel">
                     Note{' '}
-                    <span className="SubLabel">Write 05-50 Characters</span>
+                    <span className="SubLabel">Write 01-250 Characters</span>
                   </label>
                   <TextField
                     className="FormTextarea"
@@ -334,23 +344,22 @@ function AppointmentVisitReschedulePopup({
                     placeholder="Write Description"
                     {...register('note', {
                       required: 'Description is required',
+                      pattern: {
+                        value: PATTERN.CHAR_NUM_SPACE_DOT_AT,
+                        message: INVALID_CHAR
+                      },
                       minLength: {
-                        value: 5,
+                        value: 1,
                         message: 'Minimum Five Characters',
                       },
                       maxLength: {
-                        value: 50,
-                        message: 'Too Many Characters',
+                        value: 250,
+                        message: MAX_LENGTH_EXCEEDED,
                       },
                     })}
                   />
                   {errors.note && (
-                    <span
-                      role="alert"
-                      style={{ color: 'red', fontSize: '12px' }}
-                    >
-                      *{errors.note?.message}
-                    </span>
+                    <ErrorSpanBox error={errors.note?.message} />
                   )}
                 </FormControl>
               </div>
@@ -400,7 +409,7 @@ function AppointmentVisitReschedulePopup({
                       timePickerValue={startTime}
                       setTimePickerValue={setStartTime}
                       id="startTime"
-                      // setError={setError}
+                    // setError={setError}
                     />
                   </FormControl>
                   <FormControl className="FormControl" variant="standard">

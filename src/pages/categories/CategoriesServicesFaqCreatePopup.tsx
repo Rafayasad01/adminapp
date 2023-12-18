@@ -8,6 +8,8 @@ import { useForm } from 'react-hook-form';
 import '../../assets/css/PopupStyle.css';
 import TextareaAutosize from '@mui/base/TextareaAutosize';
 import { CategoryServiceFaq } from '../../interfaces/category.interface';
+import { INVALID_CHAR, MAX_LENGTH_EXCEEDED, PATTERN } from '../../utils/constants';
+import ErrorSpanBox from '../../components/common/ErrorSpanBox';
 
 type Props = {
   openFormDialog: boolean;
@@ -61,10 +63,18 @@ function CategoriesServicesFaqCreatePopup({
                   disableUnderline
                   {...register('question', {
                     required: 'Question is required',
+                    pattern: PATTERN.CHAR_NUM_SPACE,
+                    validate: (value) => value.length <= 250
                   })}
                 />
-                {errors.question && (
-                  <span role="alert">{errors.question?.message}</span>
+                {errors.question?.type === 'required' && (
+                  <ErrorSpanBox error={errors.question?.message} />
+                )}
+                {errors.question?.type === 'pattern' && (
+                  <ErrorSpanBox error={INVALID_CHAR} />
+                )}
+                {errors.question?.type === 'validate' && (
+                  <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
                 )}
               </FormControl>
             </div>
@@ -72,16 +82,30 @@ function CategoriesServicesFaqCreatePopup({
               <FormControl className="FormControl" variant="standard">
                 <label className="FormLabel">Answer</label>
                 <TextareaAutosize
-                  className="FormTextarea"
+                  className="FormTextarea outline-none pt-3"
                   id="outlined-multiline-static"
                   minRows={5}
                   maxRows={15}
                   defaultValue=""
                   placeholder="Write answer here..."
-                  {...register('answer', { required: 'Answer is required' })}
+                  {...register('answer', {
+                    required: 'Answer is required',
+                    pattern: {
+                      value: PATTERN.CHAR_NUM_SPACE_DOT_AT,
+                      message: INVALID_CHAR
+                    },
+                    minLength: {
+                      value: 1,
+                      message: 'Minimum One Characters',
+                    },
+                    maxLength: {
+                      value: 250,
+                      message: MAX_LENGTH_EXCEEDED,
+                    },
+                  })}
                 />
                 {errors.answer && (
-                  <span role="alert">{errors.answer?.message}</span>
+                  <ErrorSpanBox error={errors.answer?.message} />
                 )}
               </FormControl>
             </div>

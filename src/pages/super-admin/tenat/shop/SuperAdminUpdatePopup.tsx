@@ -18,7 +18,8 @@ import { useForm } from 'react-hook-form';
 import '../../../../assets/css/PopupStyle.css';
 import CustomDropDown from '../../../../components/common/CustomDropDown';
 import { Tenant } from '../../../../interfaces/superadmin/tenant.interface';
-import { DOMAIN_PREFIX, DOMAIN_PROTOCOL } from '../../../../utils/constants';
+import { DOMAIN_PREFIX, DOMAIN_PROTOCOL, INVALID_CHAR, MAX_LENGTH_EXCEEDED, PATTERN } from '../../../../utils/constants';
+import ErrorSpanBox from '../../../../components/common/ErrorSpanBox';
 
 dayjs.extend(duration);
 dayjs.extend(isBetween);
@@ -146,11 +147,19 @@ function SuperAdminUpdatePopup({
                     {...register('tenantName', {
                       required: true,
                       value: item.name,
+                      pattern: PATTERN.CHAR_NUM_SPACE,
+                      validate: (value) => value.length <= 150,
                     })}
                     onChange={(val: any) => shopFieldHangler(val.target.value)}
                   />
-                  {errors.tenantName?.type === 'required' && (
-                    <span role="alert">Shop name is required</span>
+                  {errors.tenantName?.type === "required" && (
+                    <ErrorSpanBox error='Shop name is required' />
+                  )}
+                  {errors.tenantName?.type === 'pattern' && (
+                    <ErrorSpanBox error={INVALID_CHAR} />
+                  )}
+                  {errors.tenantName?.type === 'validate' && (
+                    <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
                   )}
                 </FormControl>
                 <FormControl className="FormControl" variant="standard">
@@ -160,14 +169,22 @@ function SuperAdminUpdatePopup({
                     className="FormInput"
                     {...register('email', {
                       required: true,
+                      pattern: PATTERN.CHAR_NUM_SPACE_DOT_AT,
+                      validate: (value) => value.length <= 100,
                       value: item.email,
                     })}
                     type="text"
                     id="email"
                     disableUnderline
                   />
-                  {errors.email?.type === 'required' && (
-                    <span role="alert">Email is required</span>
+                  {errors.email?.type === "required" && (
+                    <ErrorSpanBox error='Email is required' />
+                  )}
+                  {errors.email?.type === 'pattern' && (
+                    <ErrorSpanBox error={INVALID_CHAR} />
+                  )}
+                  {errors.email?.type === 'validate' && (
+                    <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
                   )}
                 </FormControl>
               </div>
@@ -179,14 +196,22 @@ function SuperAdminUpdatePopup({
                     className="FormInput"
                     {...register('firstName', {
                       required: true,
+                      pattern: PATTERN.CHAR_NUM_SPACE,
+                      validate: (value) => value.length <= 50,
                       value: item.firstName,
                     })}
                     type="text"
                     id="firstName"
                     disableUnderline
                   />
-                  {errors.firstName?.type === 'required' && (
-                    <span role="alert">First name is required</span>
+                  {errors.firstName?.type === "required" && (
+                    <ErrorSpanBox error='First name is required' />
+                  )}
+                  {errors.firstName?.type === 'pattern' && (
+                    <ErrorSpanBox error={INVALID_CHAR} />
+                  )}
+                  {errors.firstName?.type === 'validate' && (
+                    <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
                   )}
                 </FormControl>
                 <FormControl className="FormControl" variant="standard">
@@ -196,14 +221,22 @@ function SuperAdminUpdatePopup({
                     className="FormInput"
                     {...register('lastName', {
                       required: true,
+                      pattern: PATTERN.CHAR_NUM_SPACE,
+                      validate: (value) => value.length <= 50,
                       value: item.lastName,
                     })}
                     type="text"
                     id="lastName"
                     disableUnderline
                   />
-                  {errors.lastName?.type === 'required' && (
-                    <span role="alert">Last name is required</span>
+                  {errors.lastName?.type === "required" && (
+                    <ErrorSpanBox error='Last name is required' />
+                  )}
+                  {errors.lastName?.type === 'pattern' && (
+                    <ErrorSpanBox error={INVALID_CHAR} />
+                  )}
+                  {errors.lastName?.type === 'validate' && (
+                    <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
                   )}
                 </FormControl>
               </div>
@@ -213,16 +246,21 @@ function SuperAdminUpdatePopup({
                   <Input
                     className="FormInput"
                     {...register('maxBranchLimit', {
-                      required: true,
                       value: item.maxBranchLimit,
+                      required: 'Branch limit is required in numbers',
+                      validate: (value: any) =>
+                        parseInt(value, 10) >= 0 ||
+                        'Branch limit must be a non-negative number',
                     })}
                     type="number"
                     id="maxBranchLimits"
                     placeholder="Enter max branch limits"
                     disableUnderline
                   />
-                  {errors.maxBranchLimit?.type === 'required' && (
-                    <span role="alert">branch limit is required</span>
+                  {errors?.maxBranchLimit && (
+                    <span role="alert" className="error-color">
+                      *{errors?.maxBranchLimit?.message}
+                    </span>
                   )}
                 </FormControl>
                 <FormControl className="FormControl" variant="standard">
@@ -230,16 +268,21 @@ function SuperAdminUpdatePopup({
                   <Input
                     className="FormInput"
                     {...register('maxUserLimit', {
-                      required: true,
                       value: item.maxUserLimit,
+                      required: 'User limit is required in numbers',
+                      validate: (value: any) =>
+                        parseInt(value, 10) >= 0 ||
+                        'User limit must be a non-negative number',
                     })}
                     type="number"
                     id="maxUserLimits"
                     placeholder="Enter max user limits"
                     disableUnderline
                   />
-                  {errors.maxUserLimit?.type === 'required' && (
-                    <span role="alert">User limits is required</span>
+                  {errors?.maxUserLimit && (
+                    <span role="alert" className="error-color">
+                      *{errors?.maxUserLimit?.message}
+                    </span>
                   )}
                 </FormControl>
               </div>
@@ -346,16 +389,21 @@ function SuperAdminUpdatePopup({
                     <Input
                       className="FormInput"
                       {...register('trialModeLimit', {
-                        required: watch('trialMode') === true && true,
+                        required: watch('trialMode') === true && 'Trail Mode limit is required in numbers',
                         value: item.trialModeLimit ? item.trialModeLimit : 15,
+                        validate: (value: any) =>
+                          parseInt(value, 10) >= 0 ||
+                          'Trail mode must be a non-negative number',
                       })}
                       type="number"
                       id="trialModeLimit"
                       placeholder="Enter Trail Mode limit in days"
                       disableUnderline
                     />
-                    {errors.trialModeLimit?.type === 'required' && (
-                      <span role="alert">Trail Mode limit is required</span>
+                    {errors?.trialModeLimit && (
+                      <span role="alert" className="error-color">
+                        *{errors?.trialModeLimit?.message}
+                      </span>
                     )}
                   </FormControl>
                 </div>

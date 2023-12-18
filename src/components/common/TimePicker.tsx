@@ -12,6 +12,7 @@ import IconButton from '@mui/material/IconButton';
 import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
 import FormControl from '@mui/material/FormControl';
 import '../../assets/css/PopupStyle.css';
+import ErrorSpanBox from './ErrorSpanBox';
 
 const darkTheme = createTheme({
   palette: {
@@ -101,9 +102,7 @@ function TimePicker({
           disableUnderline
         />
         {isTrue && timePickerValue === null && (
-          <span style={{ fontSize: '12px' }} role="alert">
-            {`*${timePickerLabel} is required`}
-          </span>
+          <ErrorSpanBox error={`${timePickerLabel} is required`} />
         )}
       </FormControl>
 

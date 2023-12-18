@@ -11,6 +11,8 @@ import { useForm } from 'react-hook-form';
 import '../../assets/css/PopupStyle.css';
 import TextField from '@mui/material/TextField';
 import { Category } from '../../interfaces/category.interface';
+import { INVALID_CHAR, MAX_LENGTH_EXCEEDED, PATTERN } from '../../utils/constants';
+import ErrorSpanBox from '../../components/common/ErrorSpanBox';
 
 type Props = {
   openFormDialog: boolean;
@@ -83,13 +85,24 @@ function CategoriesCreatePopup({
                 <label className="FormLabel">Category Name</label>
                 <Input
                   className="FormInput"
-                  {...register('name', { required: true })}
+                  {...register('name', {
+                    required: true,
+                    pattern: PATTERN.CHAR_NUM_SPACE,
+                    validate: (value) => value.length <= 100,
+                  })}
+                  placeholder='Enter Category Name'
                   type="text"
                   id="name"
                   disableUnderline
                 />
                 {errors.name?.type === 'required' && (
-                  <span role="alert">Category name is required</span>
+                  <ErrorSpanBox error='Category name is required' />
+                )}
+                {errors.name?.type === 'pattern' && (
+                  <ErrorSpanBox error={INVALID_CHAR} />
+                )}
+                {errors.name?.type === 'validate' && (
+                  <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
                 )}
               </FormControl>
             </div>
@@ -97,7 +110,7 @@ function CategoriesCreatePopup({
               <FormControl className="FormControl" variant="standard">
                 <label className="FormLabel">
                   Message{' '}
-                  <span className="SubLabel">Write 05-50 Characters</span>
+                  <span className="SubLabel">Write 01-250 Characters</span>
                 </label>
                 <TextField
                   className="FormTextarea"
@@ -107,19 +120,23 @@ function CategoriesCreatePopup({
                   defaultValue=""
                   placeholder="Write Description"
                   {...register('desc', {
+                    pattern: {
+                      value: PATTERN.CHAR_NUM_SPACE_DOT_AT,
+                      message: INVALID_CHAR
+                    },
                     required: 'Description is required',
                     minLength: {
-                      value: 5,
-                      message: 'Minimum Five Characters',
+                      value: 1,
+                      message: 'Minimum One Characters',
                     },
                     maxLength: {
-                      value: 50,
-                      message: 'Too Many Characters',
+                      value: 250,
+                      message: MAX_LENGTH_EXCEEDED,
                     },
                   })}
                 />
                 {errors.desc && (
-                  <span role="alert">{errors.desc?.message}</span>
+                  <ErrorSpanBox error={errors.desc?.message} />
                 )}
               </FormControl>
             </div>
@@ -171,7 +188,7 @@ function CategoriesCreatePopup({
                 )}
               </div>
               {image === null && errors.icon && (
-                <span role="alert">{errors.icon?.message}</span>
+                <ErrorSpanBox error={errors.icon?.message} />
               )}
             </div>
           </div>

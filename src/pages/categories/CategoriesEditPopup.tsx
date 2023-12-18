@@ -12,6 +12,8 @@ import { Category } from '../../interfaces/category.interface';
 import category from '../../services/adminapp/adminCategory';
 
 import '../../assets/css/PopupStyle.css';
+import { INVALID_CHAR, MAX_LENGTH_EXCEEDED, PATTERN } from '../../utils/constants';
+import ErrorSpanBox from '../../components/common/ErrorSpanBox';
 
 type Props = {
   openFormDialog: boolean;
@@ -31,6 +33,7 @@ function CategoriesEditPopup({
   setNotifyMessage,
 }: Props) {
   const [image, setImage] = useState<any>(null);
+  const [imageName, setImageName] = useState<any>(null);
 
   const {
     register,
@@ -42,10 +45,23 @@ function CategoriesEditPopup({
   } = useForm<Category>();
 
   const onSubmit = (data: Category) => {
-    if (data.desc && image && data.name) {
-      data.icon = image;
+    console.log("IMAGE", image);
+    if (image !== null) {
+      let res = {
+        name: data.name,
+        desc: data.desc,
+        icon: image
+      }
       setOpenFormDialog(false);
-      callback(data);
+      callback(res);
+    }
+    else if (data.desc && data.name) {
+      let res = {
+        name: data.name,
+        desc: data.desc
+      }
+      setOpenFormDialog(false);
+      callback(res);
     } else {
       setIsNotify(true);
       setNotifyMessage({
@@ -61,6 +77,7 @@ function CategoriesEditPopup({
 
   const handleFileChange = (event: any) => {
     setImage(event.target.files[0]);
+    setImageName(event.target.files[0].name);
   };
 
   const handleFileOnClick = (event: any) => {
@@ -74,9 +91,9 @@ function CategoriesEditPopup({
     if (regexExp.test(icon)) {
       icon = icon.split('-').splice(5)[0].at(0);
     }
-    // setImageName(icon);
-    setImage({ name: icon });
+    setImageName(icon);
   }, [formData]);
+  console.log(image);
 
   return (
     <Dialog
@@ -102,14 +119,23 @@ function CategoriesEditPopup({
                       className="FormInput"
                       type="text"
                       id="name"
+                      placeholder='Enter Category Name'
                       disableUnderline
                       {...register('name', {
                         required: true,
+                        pattern: PATTERN.CHAR_NUM_SPACE,
+                        validate: (value) => value.length <= 100,
                         value: formData.name,
                       })}
                     />
                     {errors.name?.type === 'required' && (
-                      <span role="alert">Category name is required</span>
+                      <ErrorSpanBox error={"Category name is required"} />
+                    )}
+                    {errors.name?.type === 'pattern' && (
+                      <ErrorSpanBox error={INVALID_CHAR} />
+                    )}
+                    {errors.name?.type === 'validate' && (
+                      <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
                     )}
                   </FormControl>
                 </div>
@@ -117,7 +143,7 @@ function CategoriesEditPopup({
                   <FormControl className="FormControl" variant="standard">
                     <label className="FormLabel">
                       Message{' '}
-                      <span className="SubLabel">Write 05-50 Characters</span>
+                      <span className="SubLabel">Write 01-250 Characters</span>
                     </label>
                     <TextField
                       className="FormTextarea"
@@ -127,20 +153,24 @@ function CategoriesEditPopup({
                       defaultValue=""
                       placeholder="Write Description"
                       {...register('desc', {
+                        pattern: {
+                          value: PATTERN.CHAR_NUM_SPACE_DOT_AT,
+                          message: INVALID_CHAR
+                        },
                         required: 'Description is required',
                         value: formData.desc,
                         minLength: {
-                          value: 5,
-                          message: 'Minimum Five Characters',
+                          value: 1,
+                          message: 'Minimum One Characters',
                         },
                         maxLength: {
-                          value: 50,
-                          message: 'Too Many Characters',
+                          value: 250,
+                          message: MAX_LENGTH_EXCEEDED,
                         },
                       })}
                     />
                     {errors.desc && (
-                      <span role="alert">{errors.desc?.message}</span>
+                      <ErrorSpanBox error={errors.desc?.message} />
                     )}
                   </FormControl>
                 </div>
@@ -173,12 +203,12 @@ function CategoriesEditPopup({
                       </Button>
                     </label>
 
-                    {image ? (
+                    {imageName ? (
                       <div className="ShowImageBox">
-                        <label className="ShowImageLabel">{image.name}</label>
+                        <label className="ShowImageLabel">{imageName}</label>
                         <IconButton
                           className="btn-dot"
-                          onClick={() => setImage(null)}
+                          onClick={() => setImageName(null)}
                         >
                           <CloseOutlinedIcon
                             sx={{
@@ -194,7 +224,7 @@ function CategoriesEditPopup({
                     )}
                   </div>
                   {image === null && errors.icon && (
-                    <span role="alert">{errors.icon?.message}</span>
+                    <ErrorSpanBox error={errors.icon?.message} />
                   )}
                 </div>
               </div>

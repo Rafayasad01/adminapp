@@ -179,7 +179,7 @@ function SuperAdminAppImagePage() {
     setIsLoader(true);
     const formData = new FormData();
     formData.append('name', data.name);
-    formData.append('desc', data.desc);
+    formData.append('desc', data.desc ? data.desc : null);
     formData.append('avatar', data.avatar);
     formData.append('createdBy', authState.user.id);
     if (data.name && data.avatar) {
@@ -343,8 +343,8 @@ function SuperAdminAppImagePage() {
               <thead>
                 <tr>
                   <th>Avatar</th>
-                  <th>Name</th>
-                  <th>Description</th>
+                  <th style={{ width: "20%" }}>Name</th>
+                  <th style={{ width: "50%" }}>Description</th>
                   <th>Created Date</th>
                   <th>Status</th>
                   <th>&nbsp;</th>
@@ -388,7 +388,7 @@ function SuperAdminAppImagePage() {
                           </div>
                         </td>
                         <td>{item.name}</td>
-                        <td>{item.desc}</td>
+                        <td>{item.desc !== "null" ? item.desc : '--'}</td>
                         <td>
                           {dayjs(item.createdDate).isValid()
                             ? dayjs(item.createdDate)?.format('MMMM DD, YYYY')

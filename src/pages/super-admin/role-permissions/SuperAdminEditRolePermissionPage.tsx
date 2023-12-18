@@ -48,6 +48,10 @@ function SuperAdminEditRolePermissionsPage() {
         setName(item.data.data.name);
         setDesc(item.data.data.desc);
         setList(item.data.data.data);
+        const allStatusTrue = item.data.data.data.every((el: any) => {
+          return el.data.every((el_status: any) => el_status.status);
+        });
+        setSelectAll(allStatusTrue);
         // console.log('item.data.data::::::', item.data.data);
       } else {
         setIsLoader(false);
@@ -97,6 +101,7 @@ function SuperAdminEditRolePermissionsPage() {
           });
         });
     } else {
+      setIsLoader(false);
       setIsNotify(true);
       setNotifyMessage({
         text: 'Select atleast one checkbox',
@@ -126,6 +131,7 @@ function SuperAdminEditRolePermissionsPage() {
   };
 
   const handleSelectAllChange = (checked: any) => {
+    console.log("SELE CHEK", checked);
     const updatedData = list.map((category: any) => ({
       ...category,
       data: category.data.map((detail: any) => ({

@@ -12,6 +12,8 @@ import CustomInputBox from './CustomInputBox';
 import CustomDropDown from './CustomDropDown';
 import TimePicker from './TimePicker';
 import WorkDaysForm from '../../pages/settings/WorkDaysForm';
+import ErrorSpanBox from './ErrorSpanBox';
+import { INVALID_CHAR, MAX_LENGTH_EXCEEDED } from '../../utils/constants';
 
 type Props = {
   openFormDialog: boolean;
@@ -119,6 +121,7 @@ function CustomDialog({
                           variant="standard"
                         >
                           <CustomInputBox
+                            pattern={items.pattern}
                             maxLetterLimit={items.maxLetterLimit}
                             requiredType={items.notRequired}
                             disable={items.disable}
@@ -143,7 +146,7 @@ function CustomDialog({
                             <label className="FormLabel">
                               Message{' '}
                               <span className="SubLabel">
-                                Write 05-50 Characters
+                                Write 01-250 Characters
                               </span>
                             </label>
                             <TextField
@@ -154,24 +157,26 @@ function CustomDialog({
                               defaultValue=""
                               placeholder="Write Description"
                               {...items.register(items.id, {
+                                pattern: {
+                                  value: items.pattern,
+                                  message: INVALID_CHAR
+                                },
                                 required:
                                   items.notRequired === true
                                     ? false
                                     : `${items.fieldName} is required`,
                                 minLength: {
-                                  value: 5,
+                                  value: 1,
                                   message: 'Minimum Five Characters',
                                 },
                                 maxLength: {
-                                  value: 50,
-                                  message: 'Too Many Characters',
+                                  value: 250,
+                                  message: MAX_LENGTH_EXCEEDED,
                                 },
                               })}
                             />
                             {items.error && (
-                              <span role="alert" className="text-sm">
-                                *{items.error.message}
-                              </span>
+                              <ErrorSpanBox error={items.error.message} />
                             )}
                           </FormControl>
                         </div>
@@ -183,7 +188,7 @@ function CustomDialog({
                           setTimePickerValue={items.setTime}
                           id={items.id}
                           errors={items.error}
-                          // setError={setError}
+                        // setError={setError}
                         />
                       ) : null
                     }
@@ -266,7 +271,7 @@ function CustomDialog({
                           setTimePickerValue={items.setTime}
                           id={items.id}
                           errors={items.error}
-                          // setError={setError}
+                        // setError={setError}
                         />
                       </Fragment>
                     );
@@ -275,10 +280,8 @@ function CustomDialog({
                 {(weekDays?.length < 0 ||
                   startTime === null ||
                   endTime === null) && (
-                  <span role="alert" className="text-sm">
-                    *schedule is required
-                  </span>
-                )}
+                    <ErrorSpanBox error='schedule is required' />
+                  )}
               </div>
             )}
           </div>
