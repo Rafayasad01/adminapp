@@ -23,13 +23,12 @@ import TopBar from '../../../components/common/TopBar';
 import { AppointmentVisit } from '../../../interfaces/app.appointment';
 import { useAppSelector } from '../../../redux/redux-hooks';
 import Service from '../../../services/adminapp/adminAppointment';
+import CustomOrderPrintLayoutCash from '../../../utils/CustomPrintLayout/CustomAppointmentPrintLayout';
 import { NOT_AUTHORIZED_MESSAGE } from '../../../utils/constants';
 import { listingRolePermission } from '../../../utils/helper';
 import AppointmentVisitCreatePopup from './AppointmentVisitCreatePopup';
 import AppointmentVisitReschedulePopup from './AppointmentVisitReschedulePopup';
 import AppointmentVisitUpdatePopup from './AppointmentVisitUpdatePopup';
-import CustomPrintLayout from '../../../utils/CustomPrintLayout/CustomAppointmentPrintLayout';
-import CustomOrderPrintLayoutCash from '../../../utils/CustomPrintLayout/CustomAppointmentPrintLayout';
 // Extend dayjs with necessary plugins
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -66,18 +65,11 @@ function AppointmentVisitPage() {
   const [dialogText, setDialogText] = useState<any>(
     'Are you sure you want to delete this customer ?'
   );
-  const [showPassword, setShowPassword] = useState(true);
   const [isPrintEnabled, setPrintEnabled] = useState<any>([]);
 
   const {
-    register,
-    handleSubmit,
-    watch,
     reset,
-    getValues,
-    setValue,
     formState: { errors },
-    control,
   } = useForm<AppointmentVisit>();
 
   const handleFormClickOpen = () => {

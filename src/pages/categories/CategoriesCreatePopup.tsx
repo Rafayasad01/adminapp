@@ -1,22 +1,22 @@
-import React, { useState } from 'react';
-import Dialog from '@mui/material/Dialog';
-import Button from '@mui/material/Button';
-import FormControl from '@mui/material/FormControl';
-import Input from '@mui/material/Input';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import FormControl from '@mui/material/FormControl';
 import IconButton from '@mui/material/IconButton';
+import Input from '@mui/material/Input';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
-import '../../assets/css/PopupStyle.css';
 import TextField from '@mui/material/TextField';
+import '../../assets/css/PopupStyle.css';
+import ErrorSpanBox from '../../components/common/ErrorSpanBox';
 import { Category } from '../../interfaces/category.interface';
 import {
   INVALID_CHAR,
   MAX_LENGTH_EXCEEDED,
   PATTERN,
 } from '../../utils/constants';
-import ErrorSpanBox from '../../components/common/ErrorSpanBox';
 
 type Props = {
   openFormDialog: boolean;
@@ -55,6 +55,7 @@ function CategoriesCreatePopup({
       });
     }
   };
+  console.log('IMGAEEE', image);
 
   const handleFormClose = () => {
     setOpenFormDialog(false);
@@ -91,8 +92,8 @@ function CategoriesCreatePopup({
                   className="FormInput"
                   {...register('name', {
                     required: true,
-                    pattern: PATTERN.CHAR_NUM_SPACE,
-                    validate: (value) => value.length <= 100,
+                    pattern: PATTERN.CHAR_SPACE_DASH,
+                    validate: (value) => value.length <= 150,
                   })}
                   placeholder="Enter Category Name"
                   type="text"
@@ -124,10 +125,6 @@ function CategoriesCreatePopup({
                   defaultValue=""
                   placeholder="Write Description"
                   {...register('desc', {
-                    pattern: {
-                      value: PATTERN.CHAR_NUM_SPACE_DOT_AT,
-                      message: INVALID_CHAR,
-                    },
                     required: 'Description is required',
                     minLength: {
                       value: 1,
@@ -189,9 +186,7 @@ function CategoriesCreatePopup({
                   ''
                 )}
               </div>
-              {image === null && errors.icon && (
-                <ErrorSpanBox error={errors.icon?.message} />
-              )}
+              {image === null && <ErrorSpanBox error={errors.icon?.message} />}
             </div>
           </div>
           <div className="FormFooter">

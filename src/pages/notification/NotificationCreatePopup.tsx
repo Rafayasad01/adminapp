@@ -1,19 +1,19 @@
-import React from 'react';
-import Dialog from '@mui/material/Dialog';
 import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
 import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
+import React from 'react';
 import { useForm } from 'react-hook-form';
 
-import '../../assets/css/PopupStyle.css';
 import TextField from '@mui/material/TextField';
+import '../../assets/css/PopupStyle.css';
+import ErrorSpanBox from '../../components/common/ErrorSpanBox';
 import { Notification } from '../../interfaces/notification.interface';
 import {
   INVALID_CHAR,
   MAX_LENGTH_EXCEEDED,
   PATTERN,
 } from '../../utils/constants';
-import ErrorSpanBox from '../../components/common/ErrorSpanBox';
 
 type Props = {
   openFormDialog: boolean;
@@ -62,7 +62,7 @@ function NotificationCreatePopup({
                   className="FormInput"
                   {...register('title', {
                     required: true,
-                    pattern: PATTERN.CHAR_NUM_SPACE,
+                    pattern: PATTERN.CHAR_SPACE_DASH,
                     validate: (value) => value.length <= 150,
                   })}
                   type="text"
@@ -96,10 +96,6 @@ function NotificationCreatePopup({
                   placeholder="Write Description"
                   {...register('message', {
                     required: 'Message is required',
-                    pattern: {
-                      value: PATTERN.CHAR_NUM_SPACE_DOT_AT,
-                      message: INVALID_CHAR,
-                    },
                     minLength: {
                       value: 5,
                       message: 'Minimum Five Characters',

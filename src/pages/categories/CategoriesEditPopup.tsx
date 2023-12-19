@@ -1,23 +1,22 @@
-import React, { useState, useEffect } from 'react';
-import Dialog from '@mui/material/Dialog';
-import Button from '@mui/material/Button';
-import FormControl from '@mui/material/FormControl';
-import Input from '@mui/material/Input';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import FormControl from '@mui/material/FormControl';
 import IconButton from '@mui/material/IconButton';
-import { useForm } from 'react-hook-form';
+import Input from '@mui/material/Input';
 import TextField from '@mui/material/TextField';
+import React, { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { Category } from '../../interfaces/category.interface';
-import category from '../../services/adminapp/adminCategory';
 
 import '../../assets/css/PopupStyle.css';
+import ErrorSpanBox from '../../components/common/ErrorSpanBox';
 import {
   INVALID_CHAR,
   MAX_LENGTH_EXCEEDED,
   PATTERN,
 } from '../../utils/constants';
-import ErrorSpanBox from '../../components/common/ErrorSpanBox';
 
 type Props = {
   openFormDialog: boolean;
@@ -126,8 +125,8 @@ function CategoriesEditPopup({
                       disableUnderline
                       {...register('name', {
                         required: true,
-                        pattern: PATTERN.CHAR_NUM_SPACE,
-                        validate: (value) => value.length <= 100,
+                        pattern: PATTERN.CHAR_SPACE_DASH,
+                        validate: (value) => value.length <= 150,
                         value: formData.name,
                       })}
                     />
@@ -156,10 +155,6 @@ function CategoriesEditPopup({
                       defaultValue=""
                       placeholder="Write Description"
                       {...register('desc', {
-                        pattern: {
-                          value: PATTERN.CHAR_NUM_SPACE_DOT_AT,
-                          message: INVALID_CHAR,
-                        },
                         required: 'Description is required',
                         value: formData.desc,
                         minLength: {

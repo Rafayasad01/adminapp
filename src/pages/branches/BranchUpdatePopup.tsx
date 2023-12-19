@@ -9,10 +9,10 @@ import duration from 'dayjs/plugin/duration';
 import isBetween from 'dayjs/plugin/isBetween';
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-
-import '../../assets/css/PopupStyle.css';
 import { debounce } from '@mui/material/utils';
 import kabakCase from 'lodash/kebabCase';
+import '../../assets/css/PopupStyle.css';
+import ErrorSpanBox from '../../components/common/ErrorSpanBox';
 import { Tenant } from '../../interfaces/superadmin/tenant.interface';
 import {
   DOMAIN_PREFIX,
@@ -21,7 +21,6 @@ import {
   MAX_LENGTH_EXCEEDED,
   PATTERN,
 } from '../../utils/constants';
-import ErrorSpanBox from '../../components/common/ErrorSpanBox';
 
 dayjs.extend(duration);
 dayjs.extend(isBetween);
@@ -46,10 +45,8 @@ function BranchUpdatePopup({
   const {
     register,
     handleSubmit,
-    watch,
     setValue,
     formState: { errors },
-    control,
   } = useForm<Tenant>();
   const onSubmit = (data: Tenant) => {
     // console.log("onsubmiot", data,item);
@@ -98,12 +95,6 @@ function BranchUpdatePopup({
         className=""
         disableScrollLock
         scroll="paper"
-        PaperProps={
-          {
-            // className: 'Dialog',
-            // style: { maxWidth: '100%', maxHeight: 'auto' },
-          }
-        }
       >
         <div className="Content p-5">
           <form className="" onSubmit={handleSubmit(onSubmit)}>
@@ -118,7 +109,7 @@ function BranchUpdatePopup({
                     className="FormInput"
                     {...register('tenantName', {
                       required: true,
-                      pattern: PATTERN.CHAR_NUM_SPACE,
+                      pattern: PATTERN.CHAR_SPACE_DASH,
                       validate: (value) => value.length <= 150,
                       value: item.name,
                     })}
@@ -127,13 +118,13 @@ function BranchUpdatePopup({
                     disableUnderline
                     onChange={(val: any) => shopFieldHangler(val.target.value)}
                   />
-                  {errors.firstName?.type === 'required' && (
+                  {errors.tenantName?.type === 'required' && (
                     <ErrorSpanBox error="Shop name is required" />
                   )}
-                  {errors.firstName?.type === 'pattern' && (
+                  {errors.tenantName?.type === 'pattern' && (
                     <ErrorSpanBox error={INVALID_CHAR} />
                   )}
-                  {errors.firstName?.type === 'validate' && (
+                  {errors.tenantName?.type === 'validate' && (
                     <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
                   )}
                 </FormControl>
@@ -144,7 +135,7 @@ function BranchUpdatePopup({
                     className="FormInput"
                     {...register('email', {
                       required: true,
-                      pattern: PATTERN.CHAR_NUM_SPACE_DOT_AT,
+                      pattern: PATTERN.CHAR_NUM_DOT_AT,
                       validate: (value) => value.length <= 100,
                       value: item.email,
                     })}
@@ -170,8 +161,8 @@ function BranchUpdatePopup({
                     className="FormInput"
                     {...register('firstName', {
                       required: true,
-                      pattern: PATTERN.CHAR_NUM_SPACE,
-                      validate: (value) => value.length <= 50,
+                      pattern: PATTERN.CHAR_SPACE_DASH,
+                      validate: (value) => value.length <= 150,
                       value: item.firstName,
                     })}
                     type="text"
@@ -194,8 +185,8 @@ function BranchUpdatePopup({
                     className="FormInput"
                     {...register('lastName', {
                       required: true,
-                      pattern: PATTERN.CHAR_NUM_SPACE,
-                      validate: (value) => value.length <= 50,
+                      pattern: PATTERN.CHAR_SPACE_DASH,
+                      validate: (value) => value.length <= 150,
                       value: item.lastName,
                     })}
                     type="text"

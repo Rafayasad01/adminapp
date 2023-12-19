@@ -1,22 +1,22 @@
-import React, { useState, useEffect } from 'react';
-import Dialog from '@mui/material/Dialog';
-import Button from '@mui/material/Button';
-import FormControl from '@mui/material/FormControl';
-import Input from '@mui/material/Input';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import FormControl from '@mui/material/FormControl';
 import IconButton from '@mui/material/IconButton';
-import { useForm } from 'react-hook-form';
+import Input from '@mui/material/Input';
 import TextField from '@mui/material/TextField';
+import React, { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import '../../../assets/css/PopupStyle.css';
-import { AppImage } from '../../../interfaces/app.interface';
 import CustomButton from '../../../components/common/CustomButton';
+import ErrorSpanBox from '../../../components/common/ErrorSpanBox';
+import { AppImage } from '../../../interfaces/app.interface';
 import {
   INVALID_CHAR,
   MAX_LENGTH_EXCEEDED,
   PATTERN,
 } from '../../../utils/constants';
-import ErrorSpanBox from '../../../components/common/ErrorSpanBox';
 
 type Props = {
   openDialog: boolean;
@@ -123,7 +123,7 @@ function SuperAdminAppImageEditPopup({
                       disableUnderline
                       {...register('name', {
                         required: true,
-                        pattern: PATTERN.CHAR_NUM_SPACE,
+                        pattern: PATTERN.CHAR_SPACE_DASH,
                         validate: (value) => value.length <= 100,
                         value: formData?.name,
                       })}
@@ -155,7 +155,7 @@ function SuperAdminAppImageEditPopup({
                       {...register('desc', {
                         value: formData?.desc,
                         pattern: {
-                          value: PATTERN.CHAR_NUM_SPACE_DOT_AT,
+                          value: PATTERN.CHAR_NUM_DOT_AT,
                           message: INVALID_CHAR,
                         },
                         minLength: {

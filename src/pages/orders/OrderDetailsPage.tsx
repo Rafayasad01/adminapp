@@ -102,6 +102,7 @@ function OrderDetailsPage() {
     });
     setCurrentStatus(laststatus);
     setOrderStatuses(newResult);
+    console.log('orderStatuses', newResult);
   };
 
   useEffect(() => {
@@ -112,6 +113,7 @@ function OrderDetailsPage() {
           setIsLoader(false);
           if (item) {
             setData(item.data.data);
+            console.log('ITEMSS', item.data.data);
           }
         })
         .catch((err) => {
@@ -596,6 +598,7 @@ function OrderDetailsPage() {
             <div className="flex flex-col gap-4 px-4 py-4">
               {orderStatuses &&
                 orderStatuses.map((item: any, index: number) => {
+                  // console.log(item)
                   if (item.key === ORDER_STATUS_IN_CANCELLED && isCancelled) {
                     return null;
                   }
@@ -645,8 +648,8 @@ function OrderDetailsPage() {
                       </div>
                       <div className="flex-grow" />
                       <div className="font-open-sans text-sm font-normal text-neutral-500">
-                        {dayjs(item.createdDate).format(
-                          'MMM DD, YY | HH:mm:ssA'
+                        {dayjs(viewData?.updatedDate).format(
+                          'MMM DD, YY | HH:mm:ss A'
                         )}
                       </div>
                     </div>

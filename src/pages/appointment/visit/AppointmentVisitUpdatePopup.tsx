@@ -1,40 +1,25 @@
-import React, { useState, useEffect, Fragment } from 'react';
-import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined';
-import RadioButtonUncheckedOutlinedIcon from '@mui/icons-material/RadioButtonUncheckedOutlined';
 import Button from '@mui/material/Button';
-import Checkbox from '@mui/material/Checkbox';
 import Dialog from '@mui/material/Dialog';
 import FormControl from '@mui/material/FormControl';
-import FormControlLabel from '@mui/material/FormControlLabel';
 import Input from '@mui/material/Input';
-import InputAdornment from '@mui/material/InputAdornment';
 import TextField from '@mui/material/TextField';
-import { debounce } from '@mui/material/utils';
-import kabakCase from 'lodash/kebabCase';
+import dayjs from 'dayjs';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import '../../../assets/css/PopupStyle.css';
-import dayjs from 'dayjs';
 import CustomDropDown from '../../../components/common/CustomDropDown';
+import CustomMultipleSelectBox from '../../../components/common/CustomMultipleSelect';
+import ErrorSpanBox from '../../../components/common/ErrorSpanBox';
+import Loader from '../../../components/common/Loader2';
+import { AppointmentVisit } from '../../../interfaces/app.appointment';
+import { useAppSelector } from '../../../redux/redux-hooks';
 import Service from '../../../services/adminapp/adminAppointment';
-import { Tenant } from '../../../interfaces/superadmin/tenant.interface';
 import {
-  DOMAIN_PREFIX,
-  DOMAIN_PROTOCOL,
   INVALID_CHAR,
   MAX_LENGTH_EXCEEDED,
   PATTERN,
   PH_MINI_LENGTH,
 } from '../../../utils/constants';
-import TimePicker from '../../../components/common/TimePicker';
-import {
-  AppointmentProviderScheduleTime,
-  AppointmentVisit,
-} from '../../../interfaces/app.appointment';
-import CustomMultipleSelectBox from '../../../components/common/CustomMultipleSelect';
-import { useAppSelector } from '../../../redux/redux-hooks';
-import CustomDateTimePicker from '../../../components/common/CustomDateTimePicker';
-import Loader from '../../../components/common/Loader2';
-import ErrorSpanBox from '../../../components/common/ErrorSpanBox';
 
 type Props = {
   roles?: any;
@@ -48,13 +33,11 @@ type Props = {
 };
 
 function AppointmentVisitUpdatePopup({
-  roles,
   openFormDialog,
   setOpenFormDialog,
   callback,
   setIsNotify,
   setNotifyMessage,
-  type,
   formData,
 }: Props) {
   const {
@@ -62,18 +45,13 @@ function AppointmentVisitUpdatePopup({
     handleSubmit,
     watch,
     setValue,
-    getValues,
     formState: { errors },
     control,
   } = useForm<AppointmentVisit>();
 
-  const authState: any = useAppSelector((state: any) => state?.authState);
   const [isLoader, setIsLoader] = React.useState(true);
-  const [providerlov, setProviderLov] = useState<any>();
   const [servicelov, setServiceLov] = useState<any>();
   const [schedule, setSchedule] = useState<any>();
-  const [startTime, setStartTime] = useState<dayjs.Dayjs | any>(null);
-  const [endTime, setEndTime] = useState<dayjs.Dayjs | any>(null);
 
   const onSubmit = (data: AppointmentVisit) => {
     const visitorDetails = {
@@ -187,7 +165,7 @@ function AppointmentVisitUpdatePopup({
                     disableUnderline
                     {...register('visitName', {
                       required: true,
-                      pattern: PATTERN.CHAR_NUM_SPACE,
+                      pattern: PATTERN.CHAR_SPACE_DASH,
                       validate: (value) => value.length <= 150,
                       value: formData?.name,
                     })}
@@ -325,7 +303,7 @@ function AppointmentVisitUpdatePopup({
                     placeholder="Write Description"
                     {...register('note', {
                       pattern: {
-                        value: PATTERN.CHAR_NUM_SPACE_DOT_AT,
+                        value: PATTERN.CHAR_NUM_DOT_AT,
                         message: INVALID_CHAR,
                       },
                       minLength: {

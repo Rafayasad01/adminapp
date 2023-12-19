@@ -1,11 +1,6 @@
-import React, { useState, useEffect } from 'react';
 import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import SendOutlinedIcon from '@mui/icons-material/SendOutlined';
-import dayjs from 'dayjs';
 import Dialog from '@mui/material/Dialog';
-import Loader2 from '../../../../components/common/Loader2';
-import Service from '../../../../services/superadmin/Tenant';
+import dayjs from 'dayjs';
 
 type Props = {
   items: any;
@@ -21,16 +16,6 @@ function SuperAdminUserDialog({
   const handleFormClose = () => {
     setOpenFormDialog(false);
   };
-
-  // const sentEmailHandler = (id: string) => {
-  //   setIsLoader(true);
-  //   Service.sentToEmailShop(id).then((item: any) => {
-  //     if (item.data.success) {
-  //       // setDetail({ ...detail, sendToEmail: true });
-  //       setIsLoader(false);
-  //     }
-  //   });
-  // };
 
   return (
     items[0] && (

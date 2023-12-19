@@ -17,6 +17,7 @@ import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import '../../../../assets/css/PopupStyle.css';
 import CustomDropDown from '../../../../components/common/CustomDropDown';
+import ErrorSpanBox from '../../../../components/common/ErrorSpanBox';
 import { Tenant } from '../../../../interfaces/superadmin/tenant.interface';
 import {
   DOMAIN_PREFIX,
@@ -24,8 +25,8 @@ import {
   INVALID_CHAR,
   MAX_LENGTH_EXCEEDED,
   PATTERN,
+  VALIDATE_NON_NEGATIVE_NUM,
 } from '../../../../utils/constants';
-import ErrorSpanBox from '../../../../components/common/ErrorSpanBox';
 
 dayjs.extend(duration);
 dayjs.extend(isBetween);
@@ -153,7 +154,7 @@ function SuperAdminUpdatePopup({
                     {...register('tenantName', {
                       required: true,
                       value: item.name,
-                      pattern: PATTERN.CHAR_NUM_SPACE,
+                      pattern: PATTERN.CHAR_SPACE_DASH,
                       validate: (value) => value.length <= 150,
                     })}
                     onChange={(val: any) => shopFieldHangler(val.target.value)}
@@ -175,7 +176,7 @@ function SuperAdminUpdatePopup({
                     className="FormInput"
                     {...register('email', {
                       required: true,
-                      pattern: PATTERN.CHAR_NUM_SPACE_DOT_AT,
+                      pattern: PATTERN.CHAR_NUM_DOT_AT,
                       validate: (value) => value.length <= 100,
                       value: item.email,
                     })}
@@ -202,7 +203,7 @@ function SuperAdminUpdatePopup({
                     className="FormInput"
                     {...register('firstName', {
                       required: true,
-                      pattern: PATTERN.CHAR_NUM_SPACE,
+                      pattern: PATTERN.CHAR_SPACE_DASH,
                       validate: (value) => value.length <= 50,
                       value: item.firstName,
                     })}
@@ -227,7 +228,7 @@ function SuperAdminUpdatePopup({
                     className="FormInput"
                     {...register('lastName', {
                       required: true,
-                      pattern: PATTERN.CHAR_NUM_SPACE,
+                      pattern: PATTERN.CHAR_SPACE_DASH,
                       validate: (value) => value.length <= 50,
                       value: item.lastName,
                     })}
@@ -255,8 +256,7 @@ function SuperAdminUpdatePopup({
                       value: item.maxBranchLimit,
                       required: 'Branch limit is required in numbers',
                       validate: (value: any) =>
-                        parseInt(value, 10) >= 0 ||
-                        'Branch limit must be a non-negative number',
+                        VALIDATE_NON_NEGATIVE_NUM(value),
                     })}
                     type="number"
                     id="maxBranchLimits"
@@ -277,8 +277,7 @@ function SuperAdminUpdatePopup({
                       value: item.maxUserLimit,
                       required: 'User limit is required in numbers',
                       validate: (value: any) =>
-                        parseInt(value, 10) >= 0 ||
-                        'User limit must be a non-negative number',
+                        VALIDATE_NON_NEGATIVE_NUM(value),
                     })}
                     type="number"
                     id="maxUserLimits"
@@ -400,8 +399,7 @@ function SuperAdminUpdatePopup({
                           'Trial Mode limit is required in numbers',
                         value: item.trialModeLimit ? item.trialModeLimit : 15,
                         validate: (value: any) =>
-                          parseInt(value, 10) >= 0 ||
-                          'Trial mode must be a non-negative number',
+                          VALIDATE_NON_NEGATIVE_NUM(value),
                       })}
                       type="number"
                       id="trialModeLimit"

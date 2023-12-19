@@ -1,25 +1,19 @@
-import React, { useState } from 'react';
-import Dialog from '@mui/material/Dialog';
 import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
 import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
-import InputAdornment from '@mui/material/InputAdornment';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import Visibility from '@mui/icons-material/Visibility';
-import IconButton from '@mui/material/IconButton';
-import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
-import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
+import React, { useState } from 'react';
 
-import '../../../assets/css/PopupStyle.css';
 import { useForm } from 'react-hook-form';
-import { AppUserAddress } from '../../../interfaces/app-user.interface';
+import '../../../assets/css/PopupStyle.css';
 import CustomDropDown from '../../../components/common/CustomDropDown';
+import ErrorSpanBox from '../../../components/common/ErrorSpanBox';
+import { AppUserAddress } from '../../../interfaces/app-user.interface';
 import {
   INVALID_CHAR,
   MAX_LENGTH_EXCEEDED,
   PATTERN,
 } from '../../../utils/constants';
-import ErrorSpanBox from '../../../components/common/ErrorSpanBox';
 // import CustomDropDown from '../../components/common/CustomDropDown';
 
 type Props = {
@@ -146,8 +140,8 @@ function AppUserAddressCreatePopup({
                   disableUnderline
                   {...register('address', {
                     required: 'Address is required',
-                    pattern: PATTERN.CHAR_NUM_SPACE_DOT_AT,
-                    validate: (value) => value.length <= 250,
+                    pattern: PATTERN.ADDRESS_ONLY,
+                    validate: (value) => value.length <= 150,
                   })}
                 />
                 {errors.address?.type === 'required' && (

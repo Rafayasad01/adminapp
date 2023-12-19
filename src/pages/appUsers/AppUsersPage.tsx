@@ -23,8 +23,8 @@ import Service from '../../services/adminapp/adminAppUser';
 import PermissionPopup from '../../utils/PermissionPopup';
 import { NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
 import { CheckRolePermission, listingRolePermission } from '../../utils/helper';
-import AppUserUpdatePopup from './AppUserUpdatePopup';
 import AppUserCreatePopup from './AppUserCreatePopup';
+import AppUserUpdatePopup from './AppUserUpdatePopup';
 // import CustomersCreatePopup from './CustomersCreatePopup';
 // import CustomersEditPopup from './CustomersEditPopup';
 

@@ -1,7 +1,6 @@
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import SearchIcon from '@mui/icons-material/Search';
-import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import FormControl from '@mui/material/FormControl';
@@ -14,27 +13,18 @@ import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
-import {
-  weekDays,
-  NOT_AUTHORIZED_MESSAGE,
-  PATTERN,
-} from '../../../utils/constants';
-import TopBar from '../../../components/common/TopBar';
 import ActionMenu from '../../../components/common/ActionMenu';
 import CustomDialog from '../../../components/common/CustomDialog';
 import CustomText from '../../../components/common/CustomText';
 import Loader from '../../../components/common/Loader';
 import Notify from '../../../components/common/Notify';
-import { AppUserEmployees } from '../../../interfaces/app-user.interface';
+import TopBar from '../../../components/common/TopBar';
 import { useAppSelector } from '../../../redux/redux-hooks';
 import Service from '../../../services/adminapp/adminAppointment';
-import PermissionPopup from '../../../utils/PermissionPopup';
+import { NOT_AUTHORIZED_MESSAGE, PATTERN } from '../../../utils/constants';
 
+import { AppointmentService } from '../../../interfaces/app.appointment';
 import { listingRolePermission } from '../../../utils/helper';
-import {
-  AppointmentProvider,
-  AppointmentService,
-} from '../../../interfaces/app.appointment';
 
 function AppointmentProviderServicesList() {
   const { providerId } = useParams();
@@ -67,12 +57,9 @@ function AppointmentProviderServicesList() {
   const {
     register,
     handleSubmit,
-    watch,
     reset,
-    getValues,
     setValue,
     formState: { errors },
-    control,
   } = useForm<AppointmentService>();
 
   const inputFieldsData = [
@@ -83,7 +70,7 @@ function AppointmentProviderServicesList() {
       register,
       error: errors.serviceName,
       type: 'text',
-      pattern: PATTERN.CHAR_NUM_SPACE,
+      pattern: PATTERN.CHAR_SPACE_DASH,
       maxLetterLimit: 150,
     },
     {
@@ -94,7 +81,7 @@ function AppointmentProviderServicesList() {
       error: errors.fees,
       type: 'text',
       maxLetterLimit: 5,
-      pattern: PATTERN.ONLY_NUM,
+      pattern: PATTERN.POINT_NUM,
     },
     {
       fieldName: 'Service Description',
@@ -104,7 +91,7 @@ function AppointmentProviderServicesList() {
       error: errors.serviceDesc,
       type: 'textarea',
       notRequired: true,
-      pattern: PATTERN.CHAR_NUM_SPACE_DOT_AT,
+      pattern: PATTERN.ALLOW_ALL,
       maxLetterLimit: 250,
     },
   ];

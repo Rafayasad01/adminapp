@@ -1,14 +1,12 @@
-import React, { useState, useEffect } from 'react';
 import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
+import React, { useState } from 'react';
 // import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Avatar from '@mui/material/Avatar';
 import Dialog from '@mui/material/Dialog';
 import assets from '../../../../assets';
-import Loader2 from '../../../../components/common/Loader2';
-import Service from '../../../../services/superadmin/Tenant';
 
 type Props = {
   setOpenFormDialog: any;

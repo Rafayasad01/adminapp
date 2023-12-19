@@ -1,63 +1,36 @@
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import SearchIcon from '@mui/icons-material/Search';
-import Avatar from '@mui/material/Avatar';
-import Divider from '@mui/material/Divider';
-import FormControl from '@mui/material/FormControl';
-import IconButton from '@mui/material/IconButton';
-import Input from '@mui/material/Input';
-import InputAdornment from '@mui/material/InputAdornment';
-import Switch from '@mui/material/Switch';
-import TablePagination from '@mui/material/TablePagination';
-import dayjs from 'dayjs';
-import React, { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
+import IconButton from '@mui/material/IconButton';
+import Switch from '@mui/material/Switch';
+import React, { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import TopBar from '../../components/common/TopBar';
-// import CustomersCreatePopup from './CustomersCreatePopup';
-// import CustomersEditPopup from './CustomersEditPopup';
-import ActionMenu from '../../components/common/ActionMenu';
-import CustomDialog from '../../components/common/CustomDialog';
-import CustomText from '../../components/common/CustomText';
 import Loader from '../../components/common/Loader';
 import Notify from '../../components/common/Notify';
 import { AppUserEmployees } from '../../interfaces/app-user.interface';
 import { useAppSelector } from '../../redux/redux-hooks';
 import Service from '../../services/adminapp/adminBanner';
-import PermissionPopup from '../../utils/PermissionPopup';
 import { NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
 import { listingRolePermission } from '../../utils/helper';
-import BannersCreatePopup from './BannersCreatePopup';
-import assets from '../../assets';
-import CustomCheckBox from '../../components/common/CustomCheckBox';
 import BannerUpdatePopup from './BannerUpdatePopup';
+import BannersCreatePopup from './BannersCreatePopup';
 
 function BannersPage() {
   const authState: any = useAppSelector((state: any) => state?.authState);
   const dataRole = useAppSelector(
     (state: any) => state?.persisitReducer?.roleState?.role?.permissions
   );
-  const [search, setSearch] = useState<any>('');
   const [emptyVariable] = useState(null);
-  const [page, setPage] = useState(0);
-  const [total, setTotal] = useState(0);
   const [list, setList] = useState<any>([]);
   const [editFormData, setEditFormData] = useState<any>();
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [actionMenuItemid, setActionMenuItemid] = React.useState('');
   const [actionMenuAnchorEl, setActionMenuAnchorEl] =
     useState<null | HTMLElement>(null);
-  const actionMenuOpen = Boolean(actionMenuAnchorEl);
-  const actionMenuOptions = ['Edit', 'Delete'];
-
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
   const [isLoader, setIsLoader] = React.useState(true);
@@ -69,17 +42,9 @@ function BannersPage() {
   );
   const [showPassword, setShowPassword] = useState(true);
   const {
-    register,
-    handleSubmit,
-    watch,
     reset,
-    getValues,
-    setValue,
     formState: { errors },
-    control,
   } = useForm<AppUserEmployees>();
-
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
 
   const handleFormClickOpen = () => {
     if (listingRolePermission(dataRole, 'Banners Create')) {

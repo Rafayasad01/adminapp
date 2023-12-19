@@ -1,16 +1,7 @@
-import React, { useRef, Ref, forwardRef, useEffect, useState } from 'react';
-import ReactToPrint, { useReactToPrint } from 'react-to-print';
-import PrintOutlinedIcon from '@mui/icons-material/PrintOutlined';
-import dayjs from 'dayjs';
-import Barcode from 'react-barcode';
-import { QRCodeSVG } from 'qrcode.react';
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
-import CustomButton from '../../components/common/CustomButton';
-import AppointmentVisitDetailPage from '../../pages/appointment/visit/AppointmentVisitDetailPage';
-import assets from '../../assets';
-import Service from '../../services/adminapp/adminAppointment';
-import promiseHandler from '../helper';
-import { useAppSelector } from '../../redux/redux-hooks';
+import dayjs from 'dayjs';
+import { forwardRef, useRef } from 'react';
+import { useReactToPrint } from 'react-to-print';
 import CustomText from '../../components/common/CustomText';
 
 interface Props {
@@ -74,17 +65,8 @@ const CustomPrintLayouts = forwardRef<any, any>((props: any, ref: any) => {
                         : '--'}
                     </span>
                   </div>
-                  {/* <div className="my-2">
-                                        <p className="text-sm font-semibold">
-                                            Patient Contact Number
-                                        </p>
-                                        <span className="text-sm">
-                                            {list?.phone ? list?.phone : '--'}
-                                        </span>
-                                    </div> */}
                 </div>
               </div>
-              {/* <div className="col-span-1 border-l-[1px] border-[#A6BAC8]" /> */}
               <div className="col-span-6 p-3">
                 <span className="font-open-sans text-xl font-bold text-[#252733]">
                   Order Information
@@ -102,7 +84,6 @@ const CustomPrintLayouts = forwardRef<any, any>((props: any, ref: any) => {
                       </span>
                     </div>
                   </div>
-                  {/* <div className='grid grid-cols-2 items-center'> */}
                   <div className="">
                     <p className="text-sm font-semibold">Pick-up Date Time</p>
                     <span className="text-sm">
@@ -141,7 +122,7 @@ const CustomPrintLayouts = forwardRef<any, any>((props: any, ref: any) => {
                   {props?.data ? (
                     props?.data?.orderItems?.map((item: any, index: number) => {
                       return (
-                        <tr key={item.id}>
+                        <tr key={index}>
                           <td>
                             <div className="avatar flex flex-row items-center">
                               <div className="">
@@ -215,8 +196,6 @@ function CustomOrderPrintLayoutSlip({
   isPrintEnabled,
   setPrintEnabled,
 }: Props) {
-  console.log('DATAAAAAAAA', data);
-
   const ref = useRef<any>(null);
   const handlePrint = useReactToPrint({
     content: () => ref.current,

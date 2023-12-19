@@ -1,42 +1,19 @@
-import React, { useState, useEffect, Fragment } from 'react';
-import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined';
-import RadioButtonUncheckedOutlinedIcon from '@mui/icons-material/RadioButtonUncheckedOutlined';
 import Button from '@mui/material/Button';
-import Checkbox from '@mui/material/Checkbox';
 import Dialog from '@mui/material/Dialog';
 import FormControl from '@mui/material/FormControl';
-import FormControlLabel from '@mui/material/FormControlLabel';
 import Input from '@mui/material/Input';
-import InputAdornment from '@mui/material/InputAdornment';
-import TextField from '@mui/material/TextField';
-import { debounce } from '@mui/material/utils';
-import kabakCase from 'lodash/kebabCase';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import '../../assets/css/PopupStyle.css';
-import dayjs from 'dayjs';
-import CustomDropDown from '../../components/common/CustomDropDown';
-import Service from '../../services/adminapp/adminAppointment';
-import { Tenant } from '../../interfaces/superadmin/tenant.interface';
+import CustomButton from '../../components/common/CustomButton';
+import ErrorSpanBox from '../../components/common/ErrorSpanBox';
+import { CreateBanner } from '../../interfaces/app.banner';
 import {
-  DOMAIN_PREFIX,
-  DOMAIN_PROTOCOL,
   INVALID_CHAR,
   MAX_LENGTH_EXCEEDED,
   PATTERN,
 } from '../../utils/constants';
-import TimePicker from '../../components/common/TimePicker';
-import {
-  AppointmentProviderScheduleTime,
-  AppointmentVisit,
-} from '../../interfaces/app.appointment';
-import CustomMultipleSelectBox from '../../components/common/CustomMultipleSelect';
-import { useAppSelector } from '../../redux/redux-hooks';
-import CustomDateTimePicker from '../../components/common/CustomDateTimePicker';
-import Loader from '../../components/common/Loader2';
 import DragDropFile from '../settings/DragDropFile';
-import CustomButton from '../../components/common/CustomButton';
-import { CreateBanner } from '../../interfaces/app.banner';
-import ErrorSpanBox from '../../components/common/ErrorSpanBox';
 
 type Props = {
   roles?: any;
@@ -50,31 +27,16 @@ type Props = {
 };
 
 function BannersCreatePopup({
-  roles,
   openFormDialog,
   setOpenFormDialog,
   callback,
-  setIsNotify,
-  setNotifyMessage,
-  type,
-  formData,
 }: Props) {
   const {
     register,
     handleSubmit,
-    watch,
-    setValue,
-    setError,
     formState: { errors },
-    control,
   } = useForm<CreateBanner>();
 
-  const authState: any = useAppSelector((state: any) => state?.authState);
-  const [isLoader, setIsLoader] = React.useState(false);
-  const [providerlov, setProviderLov] = useState<any>();
-  const [servicelov, setServiceLov] = useState<any>();
-  const [schedule, setSchedule] = useState<any>();
-  const [startTime, setStartTime] = useState<dayjs.Dayjs | any>(null);
   const [file, setFile] = useState<any>(null);
   const [selectedImg, setSelectedImg] = useState<any>(null);
 
@@ -121,8 +83,8 @@ function BannersCreatePopup({
                 disableUnderline
                 {...register('bannerName', {
                   required: true,
-                  pattern: PATTERN.CHAR_NUM_SPACE,
-                  validate: (value) => value.length <= 100,
+                  pattern: PATTERN.CHAR_SPACE_DASH,
+                  validate: (value) => value.length <= 150,
                 })}
               />
               {errors.bannerName?.type === 'required' && (
@@ -154,15 +116,7 @@ function BannersCreatePopup({
                   alt="Shop Logo"
                 />
               </div>
-            ) : // ) : detail && detail.logo ? (
-            //     <div className="col-span-6 flex items-center xl:justify-center 2xl:justify-start">
-            //         <img
-            //             className="max-h-[100px] max-w-[150px] rounded-md"
-            //             src={detail.logo}
-            //             alt="Shop Logo"
-            //         />
-            //     </div>
-            null}
+            ) : null}
           </div>
           {selectedImg === null && <ErrorSpanBox error="Image is required" />}
           <div className="FormFooter">

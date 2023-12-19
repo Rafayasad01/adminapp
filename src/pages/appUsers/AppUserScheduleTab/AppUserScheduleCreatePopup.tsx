@@ -1,28 +1,18 @@
-import '../../../index.css';
-import { useEffect, useState } from 'react';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
 import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
-import TextareaAutosize from '@mui/material/TextareaAutosize';
-import { useForm, Controller } from 'react-hook-form';
-import { useNavigate, useParams } from 'react-router-dom';
 import dayjs from 'dayjs';
-import Dialog from '@mui/material/Dialog';
-import Button from '@mui/material/Button';
-import TopBar from '../../../components/common/TopBar';
-import CustomButton from '../../../components/common/CustomButton';
-import Service from '../../../services/adminapp/adminAppUser';
-import Loader from '../../../components/common/Loader';
-import Notify from '../../../components/common/Notify';
-import { setText, weekDays } from '../../../utils/constants';
-import { Permissions } from '../../../interfaces/superadmin/permissions.interface';
-import CustomInputBox from '../../../components/common/CustomInputBox';
-import CustomCheckBox from '../../../components/common/CustomCheckBox';
-import { useAppSelector } from '../../../redux/redux-hooks';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useNavigate, useParams } from 'react-router-dom';
 import assets from '../../../assets';
 import CustomDropDown from '../../../components/common/CustomDropDown';
 import TimePicker from '../../../components/common/CustomTimePicker';
-import { AppointmentProviderSchedule } from '../../../interfaces/app.appointment';
+import Loader from '../../../components/common/Loader';
+import '../../../index.css';
 import { AppSchedule } from '../../../interfaces/app-user.interface';
+import { useAppSelector } from '../../../redux/redux-hooks';
 
 type Props = {
   openFormDialog: boolean;
@@ -38,20 +28,14 @@ function AppUserScheduleCreatePage({
   openFormDialog,
   setOpenFormDialog,
   callback,
-  setIsNotify,
-  setNotifyMessage,
   filteredWeekdays,
   appUserId,
 }: Props) {
-  const { id } = useParams();
   const authState: any = useAppSelector((state) => state?.authState);
-  const navigate = useNavigate();
   const [isLoader, setIsLoader] = useState<boolean>(false);
   const [count, setCount] = useState(0);
   const [startTime, setStartTime] = useState<dayjs.Dayjs | any>(null);
   const [endTime, setEndTime] = useState<dayjs.Dayjs | any>(null);
-  const [daytimeObjects, setDayTimeObjects] = useState<any>([]);
-  const [daytimeCount, setDaytimeCount] = useState(0);
 
   const {
     register,
@@ -64,7 +48,7 @@ function AppUserScheduleCreatePage({
     setError,
     formState: { errors },
   } = useForm<AppSchedule>();
-  console.log('ss', startTime);
+  // console.log('ss', startTime);
 
   const handleFormClose = () => setOpenFormDialog(false);
 
@@ -153,8 +137,6 @@ function AppUserScheduleCreatePage({
     ]);
   };
 
-  // console.log("add more data", timeObjects);
-
   const unRegisterValues = (unRegId: any) => {
     return unregister(unRegId);
   };
@@ -170,10 +152,6 @@ function AppUserScheduleCreatePage({
       (item: any, filterIndex: number) => filterIndex !== index
     );
     setPermissionList(filteredData);
-  };
-
-  const hasDuplicates = (array: any) => {
-    return new Set(array).size !== array.length;
   };
 
   const onSubmit = (data: any) => {

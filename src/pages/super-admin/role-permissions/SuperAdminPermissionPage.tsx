@@ -1,23 +1,23 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import IconButton from '@mui/material/IconButton';
+import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
+import EditIcon from '@mui/icons-material/Edit';
+import SearchIcon from '@mui/icons-material/Search';
+import WysiwygOutlinedIcon from '@mui/icons-material/WysiwygOutlined';
+import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import FormControl from '@mui/material/FormControl';
+import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
-import Button from '@mui/material/Button';
-import SearchIcon from '@mui/icons-material/Search';
-import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
-import TablePagination from '@mui/material/TablePagination';
 import Switch from '@mui/material/Switch';
-import EditIcon from '@mui/icons-material/Edit';
-import WysiwygOutlinedIcon from '@mui/icons-material/WysiwygOutlined';
-import { useAppSelector } from '../../../redux/redux-hooks';
-import TopBar from '../../../components/common/TopBar';
-import Loader from '../../../components/common/Loader';
-import Service from '../../../services/superadmin/RolePermissions';
-import Notify from '../../../components/common/Notify';
+import TablePagination from '@mui/material/TablePagination';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import CustomText from '../../../components/common/CustomText';
+import Loader from '../../../components/common/Loader';
+import Notify from '../../../components/common/Notify';
+import TopBar from '../../../components/common/TopBar';
+import { useAppSelector } from '../../../redux/redux-hooks';
+import Service from '../../../services/superadmin/RolePermissions';
 import { TEXT_STORE_KEY, setText } from '../../../utils/constants';
 import SuperAdminPermissionPagePopup from './SuperAdminPermissionPagePopup';
 
@@ -36,20 +36,6 @@ function SuperAdminPermissionPage() {
   const [openDialog, setOpenDialog] = useState(false);
   const [heading, setHeading] = useState<string>('');
   const [childList, setChildList] = useState<any>();
-
-  // const handleClickSearch = (event: any) => {
-  //   const searchTxt = event.target.value as string;
-  //   const newPage = 0;
-  //   setSearch(searchTxt);
-  //   setPage(newPage);
-  //   Service.getPermissionSearchService(searchTxt, newPage, rowsPerPage).then(
-  //     (item) => {
-  //       console.log('item:::::', item);
-  //       setList(item.data.data.list);
-  //       // setTotal(item.data.data.total);
-  //     }
-  //   );
-  // };
 
   const handleClickSearch = (event: any) => {
     setSearch(event.target.value);

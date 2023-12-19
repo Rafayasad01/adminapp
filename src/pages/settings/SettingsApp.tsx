@@ -19,10 +19,10 @@ import SocialLinksPopup from './SocialLinksPopup';
 import assets from '../../assets';
 import '../../assets/css/PopupStyle.css';
 import ColorPicker from '../../components/common/ColorPicker';
+import ErrorSpanBox from '../../components/common/ErrorSpanBox';
 import Loader from '../../components/common/Loader';
 import MapAddress from '../../components/common/MapAddress';
 import Notify from '../../components/common/Notify';
-import { setLogo } from '../../redux/features/appStateSlice';
 import Service from '../../services/adminapp/admin';
 import {
   DOMAIN_PREFIX,
@@ -39,7 +39,7 @@ import {
   YOUTUBE,
 } from '../../utils/constants';
 import { listingRolePermission } from '../../utils/helper';
-import ErrorSpanBox from '../../components/common/ErrorSpanBox';
+import { setLogo } from '../../redux/features/appStateSlice';
 
 type AssetsImages = keyof typeof assets.images;
 
@@ -158,36 +158,36 @@ function SettingsApp() {
       // formData.append('color3', color3);
       if (file !== null) formData.append('logo', file);
 
-      // Service.updateService(authState.user.tenant, formData)
-      //   .then((item: any) => {
-      //     const { success, message, data: itemData } = item.data;
-      //     if (success) {
-      //       dispatch(setLogo(itemData.logo));
-      //       setIsLoader(false);
-      //       setIsNotify(true);
-      //       setNotifyMessage({
-      //         text: message,
-      //         type: 'success',
-      //       });
-      //       setData(itemData);
-      //       setDetail(itemData);
-      //     } else {
-      //       setIsLoader(false);
-      //       setIsNotify(true);
-      //       setNotifyMessage({
-      //         text: message,
-      //         type: 'error',
-      //       });
-      //     }
-      //   })
-      //   .catch((err) => {
-      //     setIsLoader(false);
-      //     setIsNotify(true);
-      //     setNotifyMessage({
-      //       text: err.message,
-      //       type: 'error',
-      //     });
-      //   });
+      Service.updateService(authState.user.tenant, formData)
+        .then((item: any) => {
+          const { success, message, data: itemData } = item.data;
+          if (success) {
+            dispatch(setLogo(itemData.logo));
+            setIsLoader(false);
+            setIsNotify(true);
+            setNotifyMessage({
+              text: message,
+              type: 'success',
+            });
+            setData(itemData);
+            setDetail(itemData);
+          } else {
+            setIsLoader(false);
+            setIsNotify(true);
+            setNotifyMessage({
+              text: message,
+              type: 'error',
+            });
+          }
+        })
+        .catch((err) => {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: err.message,
+            type: 'error',
+          });
+        });
     }
   };
 
@@ -227,7 +227,7 @@ function SettingsApp() {
     }
   }, [emptyVariable]);
 
-  console.log('detail', selectedImg, detail?.logo);
+  // console.log('detail', selectedImg, detail?.logo);
 
   return isLoader ? (
     <Loader />
@@ -287,7 +287,7 @@ function SettingsApp() {
                     placeholder="UrLaundry"
                     disableUnderline
                     {...register('name', {
-                      pattern: PATTERN.CHAR_NUM_SPACE_DASH,
+                      pattern: PATTERN.CHAR_SPACE_DASH,
                       validate: (value) => value.length <= 150,
                       value: detail ? detail.name : '',
                     })}
@@ -309,8 +309,8 @@ function SettingsApp() {
                     placeholder="warning@urlaundry.com"
                     disableUnderline
                     {...register('email', {
-                      pattern: PATTERN.CHAR_NUM_SPACE_DOT_AT,
-                      validate: (value) => value.length <= 100,
+                      pattern: PATTERN.CHAR_NUM_DOT_AT,
+                      validate: (value) => value.length <= 150,
                       value: detail ? detail.email : '',
                     })}
                   />
@@ -329,7 +329,7 @@ function SettingsApp() {
                     placeholder="1%"
                     disableUnderline
                     {...register('gstPercentage', {
-                      pattern: PATTERN.PHONE,
+                      pattern: PATTERN.POINT_NUM,
                       maxLength: {
                         value: 15,
                         message: MAX_LENGTH_EXCEEDED,

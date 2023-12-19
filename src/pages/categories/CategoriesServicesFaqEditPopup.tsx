@@ -1,12 +1,12 @@
-import React from 'react';
-import Dialog from '@mui/material/Dialog';
 import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
 import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
+import React from 'react';
 import { useForm } from 'react-hook-form';
 
-import '../../assets/css/PopupStyle.css';
 import TextareaAutosize from '@mui/base/TextareaAutosize';
+import '../../assets/css/PopupStyle.css';
 import { CategoryServiceFaq } from '../../interfaces/category.interface';
 
 type Props = {

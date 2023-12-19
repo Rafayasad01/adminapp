@@ -167,8 +167,8 @@ function SuperAdminAddRolePermissionsPage() {
                   className="FormInput m-0 h-[40px] w-[280px] rounded-lg border-2 border-[#949EAE] px-3 outline-none"
                   {...register('roleName', {
                     required: true,
-                    pattern: PATTERN.CHAR_NUM_SPACE,
-                    validate: (value) => value.length <= 100,
+                    pattern: PATTERN.CHAR_SPACE_DASH,
+                    validate: (value) => value.length <= 150,
                   })}
                   type="text"
                   id="roleName"
@@ -176,7 +176,7 @@ function SuperAdminAddRolePermissionsPage() {
                   disableUnderline
                 />
                 {errors.roleName?.type === 'required' && (
-                  <ErrorSpanBox error="Shop name is required" />
+                  <ErrorSpanBox error="Role name is required" />
                 )}
                 {errors.roleName?.type === 'pattern' && (
                   <ErrorSpanBox error={INVALID_CHAR} />
@@ -193,10 +193,6 @@ function SuperAdminAddRolePermissionsPage() {
                   minRows={3}
                   maxRows={6}
                   {...register('roleDescription', {
-                    pattern: {
-                      value: PATTERN.CHAR_NUM_SPACE_DOT_AT,
-                      message: INVALID_CHAR,
-                    },
                     minLength: {
                       value: 1,
                       message: 'Minimum Five Characters',

@@ -1,14 +1,11 @@
-import React, { useState, useEffect } from 'react';
 import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
-// import Typography from '@mui/material/Typography';
+import React, { useState } from 'react';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Avatar from '@mui/material/Avatar';
 import Dialog from '@mui/material/Dialog';
 import assets from '../../assets';
-import Loader2 from '../../components/common/Loader2';
-import Service from '../../services/superadmin/Tenant';
 
 type Props = {
   setOpenFormDialog: any;
@@ -32,8 +29,6 @@ function BranchCategoryPopup({
   const [expanded2, setExpanded2] = React.useState<string | false>(
     'subCategory0'
   );
-  // const [categories, setCategories] = useState<any>([]);
-  // const [subCategories, setSubCategories] = useState<any>([]);
 
   const handleChange =
     (panel: string, item: any) =>

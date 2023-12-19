@@ -1,15 +1,13 @@
-import { useParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
 import Avatar from '@mui/material/Avatar';
-import assets from '../../../../assets';
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import CustomAvatarWithName from '../../../../components/common/CustomAvatarWithName';
-import TopBar from '../../../../components/common/TopBar';
-import StarBadgeIcon from '../../../../components/icons/StarBadge';
-import Service from '../../../../services/superadmin/Tenant';
 import Loader from '../../../../components/common/Loader';
-import { formatName } from '../../../../utils/helper';
+import TopBar from '../../../../components/common/TopBar';
 import StarBadgeGreen from '../../../../components/icons/StarBadgeGreen';
 import StarBadgeRed from '../../../../components/icons/StarBadgeRed';
+import Service from '../../../../services/superadmin/Tenant';
+import { formatName } from '../../../../utils/helper';
 
 function ShopAdminUserDetailPage() {
   const { id } = useParams();

@@ -1,24 +1,23 @@
+import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
+import EditIcon from '@mui/icons-material/Edit';
 import SearchIcon from '@mui/icons-material/Search';
 import WysiwygOutlinedIcon from '@mui/icons-material/WysiwygOutlined';
+import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import FormControl from '@mui/material/FormControl';
 import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
+import Switch from '@mui/material/Switch';
 import TablePagination from '@mui/material/TablePagination';
 import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
-import Switch from '@mui/material/Switch';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
-import Button from '@mui/material/Button';
-import EditIcon from '@mui/icons-material/Edit';
-import TopBar from '../../components/common/TopBar';
-import CustomDialog from '../../components/common/CustomDialog';
 import CustomText from '../../components/common/CustomText';
 import Loader from '../../components/common/Loader';
 import Notify from '../../components/common/Notify';
+import TopBar from '../../components/common/TopBar';
 import { AppUserEmployees } from '../../interfaces/app-user.interface';
 import { useAppSelector } from '../../redux/redux-hooks';
 import Service from '../../services/adminapp/adminBranch';
@@ -47,14 +46,8 @@ function BranchPage() {
   const [totalBranches, setTotalBranches] = useState<number>(0);
 
   const {
-    register,
-    handleSubmit,
-    watch,
     reset,
-    getValues,
-    setValue,
     formState: { errors },
-    control,
   } = useForm<AppUserEmployees>();
 
   const handleClickSearch = (event: any) => {
