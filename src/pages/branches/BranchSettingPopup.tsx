@@ -1,8 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
 import Avatar from '@mui/material/Avatar';
-import Link from '@mui/material/Link';
 import Dialog from '@mui/material/Dialog';
-import Loader2 from '../../components/common/Loader2';
+import Link from '@mui/material/Link';
 import assets from '../../assets';
 import {
   DOMAIN_PREFIX,
@@ -14,7 +12,6 @@ import {
   WHATSAPP,
   YOUTUBE,
 } from '../../utils/constants';
-import Service from '../../services/superadmin/Tenant';
 
 type Props = {
   setOpenFormDialog: any;

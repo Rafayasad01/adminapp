@@ -10,12 +10,18 @@ import CustomButton from '../../../components/common/CustomButton';
 import Service from '../../../services/superadmin/RolePermissions';
 import Loader from '../../../components/common/Loader';
 import Notify from '../../../components/common/Notify';
-import { setText } from '../../../utils/constants';
+import {
+  INVALID_CHAR,
+  MAX_LENGTH_EXCEEDED,
+  PATTERN,
+  setText,
+} from '../../../utils/constants';
 import { Permissions } from '../../../interfaces/superadmin/permissions.interface';
 import CustomInputBox from '../../../components/common/CustomInputBox';
 import CustomCheckBox from '../../../components/common/CustomCheckBox';
 import { useAppSelector } from '../../../redux/redux-hooks';
 import assets from '../../../assets';
+import ErrorSpanBox from '../../../components/common/ErrorSpanBox';
 
 function SuperAdminEditPermissionsPage() {
   const { id } = useParams();
@@ -249,6 +255,8 @@ function SuperAdminEditPermissionsPage() {
     }
   };
 
+  console.log('ERRORS', errors);
+
   return isLoader ? (
     <Loader />
   ) : (
@@ -271,6 +279,8 @@ function SuperAdminEditPermissionsPage() {
                     className="FormInput m-0 h-[40px] w-[350px] rounded-lg border-2 border-[#949EAE] px-3 outline-none"
                     {...register('moduleName', {
                       required: true,
+                      pattern: PATTERN.CHAR_SPACE_DASH,
+                      validate: (value) => value.length <= 150,
                       value: dataObj?.name,
                     })}
                     type="text"
@@ -279,7 +289,13 @@ function SuperAdminEditPermissionsPage() {
                     disableUnderline
                   />
                   {errors.moduleName?.type === 'required' && (
-                    <span role="alert">Role name is required</span>
+                    <ErrorSpanBox error="Module name is required" />
+                  )}
+                  {errors.moduleName?.type === 'pattern' && (
+                    <ErrorSpanBox error={INVALID_CHAR} />
+                  )}
+                  {errors.moduleName?.type === 'validate' && (
+                    <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
                   )}
                 </FormControl>
               </div>
@@ -311,10 +327,23 @@ function SuperAdminEditPermissionsPage() {
                 <TextareaAutosize
                   minRows={3}
                   maxRows={6}
-                  {...register('moduleDesc', { value: dataObj?.desc })}
+                  {...register('moduleDesc', {
+                    value: dataObj?.desc,
+                    minLength: {
+                      value: 1,
+                      message: 'Minimum Five Characters',
+                    },
+                    maxLength: {
+                      value: 250,
+                      message: MAX_LENGTH_EXCEEDED,
+                    },
+                  })}
                   placeholder="Enter Module description"
                   className="w-[507px] rounded-lg border-2 border-[#949EAE] p-3 outline-none"
                 />
+                {errors.moduleDesc && (
+                  <ErrorSpanBox error={errors.moduleDesc?.message} />
+                )}
               </FormControl>
             </div>
             <div className="grid gap-4 xl:grid-cols-4 2xl:grid-cols-3">
@@ -401,10 +430,11 @@ function SuperAdminEditPermissionsPage() {
                             customFontClass="font-bold"
                             customClass="border-2 rounded-lg px-4"
                             register={register}
+                            pattern={PATTERN.CHAR_SPACE_DASH}
                             id={`name${mainEl.id}`}
                             inputTitle="Permission Name"
                             inputType="text"
-                            error={errors[mainEl.id]}
+                            error={errors[`name${[mainEl.id]}`]}
                             value={mainEl.fields.name}
                           />
                         </FormControl>
@@ -412,11 +442,12 @@ function SuperAdminEditPermissionsPage() {
                           <CustomInputBox
                             customFontClass="font-bold"
                             customClass="border-2 rounded-lg px-4"
+                            pattern={PATTERN.CHAR_SPACE_DASH}
                             register={register}
                             id={`desc${mainEl.id}`}
                             inputTitle="Permission Description"
                             inputType="text"
-                            error={errors[mainEl.id]}
+                            error={errors[`desc${[mainEl.id]}`]}
                             value={mainEl.fields.desc}
                           />
                         </FormControl>
@@ -439,9 +470,10 @@ function SuperAdminEditPermissionsPage() {
                             customClass="border-2 rounded-lg px-4"
                             register={register}
                             id={`action${mainEl.id}`}
+                            pattern={PATTERN.ACTION_WITHOUT_SPACE}
                             inputTitle="Action"
                             inputType="text"
-                            error={errors[mainEl.id]}
+                            error={errors[`action${[mainEl.id]}`]}
                             value={mainEl.fields.action}
                           />
                         </FormControl>

@@ -9,6 +9,7 @@ import kabakCase from 'lodash/kebabCase';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import '../../assets/css/PopupStyle.css';
+import ErrorSpanBox from '../../components/common/ErrorSpanBox';
 import { Tenant } from '../../interfaces/superadmin/tenant.interface';
 import {
   DOMAIN_PREFIX,
@@ -17,7 +18,6 @@ import {
   MAX_LENGTH_EXCEEDED,
   PATTERN,
 } from '../../utils/constants';
-import ErrorSpanBox from '../../components/common/ErrorSpanBox';
 
 type Props = {
   openFormDialog: boolean;
@@ -39,10 +39,8 @@ function BranchCreatePopup({
   const {
     register,
     handleSubmit,
-    watch,
     setValue,
     formState: { errors },
-    control,
   } = useForm<Tenant>();
 
   const onSubmit = (data: Tenant) => {
@@ -102,7 +100,7 @@ function BranchCreatePopup({
                   className="FormInput"
                   {...register('tenantName', {
                     required: true,
-                    pattern: PATTERN.CHAR_NUM_SPACE,
+                    pattern: PATTERN.CHAR_SPACE_DASH,
                     validate: (value) => value.length <= 150,
                   })}
                   type="text"
@@ -111,13 +109,13 @@ function BranchCreatePopup({
                   disableUnderline
                   onChange={(val: any) => shopFieldHangler(val.target.value)}
                 />
-                {errors.firstName?.type === 'required' && (
+                {errors.tenantName?.type === 'required' && (
                   <ErrorSpanBox error="Shop name is required" />
                 )}
-                {errors.firstName?.type === 'pattern' && (
+                {errors.tenantName?.type === 'pattern' && (
                   <ErrorSpanBox error={INVALID_CHAR} />
                 )}
-                {errors.firstName?.type === 'validate' && (
+                {errors.tenantName?.type === 'validate' && (
                   <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
                 )}
               </FormControl>
@@ -127,7 +125,7 @@ function BranchCreatePopup({
                   className="FormInput"
                   {...register('email', {
                     required: true,
-                    pattern: PATTERN.CHAR_NUM_SPACE_DOT_AT,
+                    pattern: PATTERN.CHAR_NUM_DOT_AT,
                     validate: (value) => value.length <= 100,
                   })}
                   type="text"
@@ -153,8 +151,8 @@ function BranchCreatePopup({
                   className="FormInput"
                   {...register('firstName', {
                     required: true,
-                    pattern: PATTERN.CHAR_NUM_SPACE,
-                    validate: (value) => value.length <= 50,
+                    pattern: PATTERN.CHAR_SPACE_DASH,
+                    validate: (value) => value.length <= 150,
                   })}
                   type="text"
                   id="firstName"
@@ -177,8 +175,8 @@ function BranchCreatePopup({
                   className="FormInput"
                   {...register('lastName', {
                     required: true,
-                    pattern: PATTERN.CHAR_NUM_SPACE,
-                    validate: (value) => value.length <= 50,
+                    pattern: PATTERN.CHAR_SPACE_DASH,
+                    validate: (value) => value.length <= 150,
                   })}
                   type="text"
                   id="lastName"
@@ -203,7 +201,7 @@ function BranchCreatePopup({
                   className="FormInput"
                   {...register('address', {
                     required: 'Address is required',
-                    pattern: PATTERN.CHAR_NUM_SPACE_DOT_AT,
+                    pattern: PATTERN.ADDRESS_ONLY,
                     validate: (value) => value.length <= 250,
                   })}
                   type="text"

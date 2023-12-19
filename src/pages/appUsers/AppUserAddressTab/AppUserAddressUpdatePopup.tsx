@@ -1,23 +1,17 @@
-import React, { useState } from 'react';
-import Dialog from '@mui/material/Dialog';
 import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
 import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
-import InputAdornment from '@mui/material/InputAdornment';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import Visibility from '@mui/icons-material/Visibility';
-import IconButton from '@mui/material/IconButton';
-import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
-import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { AppUserAddress } from '../../../interfaces/app-user.interface';
 import CustomDropDown from '../../../components/common/CustomDropDown';
+import ErrorSpanBox from '../../../components/common/ErrorSpanBox';
+import { AppUserAddress } from '../../../interfaces/app-user.interface';
 import {
   INVALID_CHAR,
   MAX_LENGTH_EXCEEDED,
   PATTERN,
 } from '../../../utils/constants';
-import ErrorSpanBox from '../../../components/common/ErrorSpanBox';
 
 type Props = {
   openFormDialog: boolean;
@@ -36,14 +30,8 @@ function AppUserAddressUpdatePopup({
   formData,
   setEditFormData,
   callback,
-  setIsNotify,
-  setNotifyMessage,
   appUserAddressTypeLov,
 }: Props) {
-  const [showPassword, setShowPassword] = useState(false);
-  const [avatar, setAvatar] = useState<any>(null);
-
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
   const {
     register,
     handleSubmit,
@@ -58,40 +46,10 @@ function AppUserAddressUpdatePopup({
     setEditFormData(null);
   };
 
-  const handleFileChange = (event: any) => {
-    setAvatar(event.target.files[0]);
-  };
-
-  const handleFileOnClick = (event: any) => {
-    event.target.value = null;
-    setAvatar(null);
-  };
-
   const onSubmit = (data: AppUserAddress) => {
     setOpenFormDialog(false);
     callback(data, formData?.id);
-    // if (data.firstName && data.lastName && data.phone) {
-    //     // data.avatar = avatar;
-    //     setEditFormData(null);
-    // } else {
-    //     setIsNotify(true);
-    //     setNotifyMessage({
-    //         text: 'All fields are required, Except avater image!',
-    //         type: 'error',
-    //     });
-    // }
   };
-
-  // useEffect(() => {
-  //     if (formData && formData.avatar !== null) {
-  //         let newAvatar = formData.avatar.split('/').slice(-1)[0];
-  //         const regexExp = /[a-z,0-9,-]{36}/;
-  //         if (regexExp.test(newAvatar)) {
-  //             newAvatar = newAvatar.split('-').splice(5)[0].at(0);
-  //         }
-  //         setAvatar({ name: newAvatar });
-  //     }
-  // }, [formData]);
 
   return (
     <Dialog
@@ -162,7 +120,7 @@ function AppUserAddressUpdatePopup({
                       {...register('address', {
                         value: formData?.address,
                         required: 'Address is required',
-                        pattern: PATTERN.CHAR_NUM_SPACE_DOT_AT,
+                        pattern: PATTERN.CHAR_NUM_DOT_AT,
                         validate: (value) => value.length <= 250,
                       })}
                     />

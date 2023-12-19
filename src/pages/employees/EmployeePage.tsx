@@ -13,7 +13,6 @@ import TablePagination from '@mui/material/TablePagination';
 import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
 import TopBar from '../../components/common/TopBar';
 // import CustomersCreatePopup from './CustomersCreatePopup';
 // import CustomersEditPopup from './CustomersEditPopup';
@@ -77,8 +76,8 @@ function EmployeePage() {
       register,
       error: errors.first_name,
       type: 'text',
-      pattern: PATTERN.CHAR_NUM_SPACE,
-      maxLetterLimit: 50,
+      pattern: PATTERN.CHAR_SPACE_DASH,
+      maxLetterLimit: 100,
     },
     {
       fieldName: 'Last Name',
@@ -87,8 +86,8 @@ function EmployeePage() {
       register,
       error: errors.last_name,
       type: 'text',
-      pattern: PATTERN.CHAR_NUM_SPACE,
-      maxLetterLimit: 50,
+      pattern: PATTERN.CHAR_SPACE_DASH,
+      maxLetterLimit: 100,
     },
     {
       fieldName: 'Email Address',
@@ -97,7 +96,7 @@ function EmployeePage() {
       register,
       error: errors.email,
       type: 'text',
-      pattern: PATTERN.CHAR_NUM_SPACE_DOT_AT,
+      pattern: PATTERN.CHAR_NUM_DOT_AT,
       maxLetterLimit: 100,
       disable: openEditFormDialog,
     },
@@ -684,23 +683,6 @@ function EmployeePage() {
           setOpenFormDialog={setOpenEditFormDialog}
         />
       )}
-      {/* <CustomersCreatePopup
-        setIsNotify={setIsNotify}
-        setNotifyMessage={setNotifyMessage}
-        openFormDialog={openFormDialog}
-        setOpenFormDialog={setOpenFormDialog}
-        callback={createFormHandler}
-      />
-      <CustomersEditPopup
-        setIsNotify={setIsNotify}
-        setNotifyMessage={setNotifyMessage}
-        openFormDialog={openEditFormDialog}
-        setOpenFormDialog={setOpenEditFormDialog}
-        formData={editFormData}
-        setEditFormData={setEditFormData}
-        callback={updateFormHandler}
-        setActionMenuItemid={setActionMenuItemid}
-      /> */}
     </>
   );
 }

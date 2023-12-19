@@ -117,22 +117,28 @@ export const weekDays = [
 
 // patterns
 export const PATTERN = {
-  CHAR_NUM_SPACE_DOT_AT: /^[A-Za-z0-9\s.@]+$/,
-  CHAR_NUM_SPACE: /^[A-Za-z0-9\s]+$/,
-  CHAR_NUM_SPACE_DASH: /^[A-Za-z0-9\s-]+$/,
+  // CHAR_NUM_DOT_AT: /^[A-Za-z0-9\s.@]+$/,
+
+  CHAR_NUM_DOT_AT: /^[A-Za-z0-9.@]+$/, // used for email fields
+  CHAR_SPACE_DASH: /^[A-Za-z\s-]+$/, // used for textfield fields
+  ADDRESS_ONLY: /^[A-Za-z0-9\s@.,#-]+$/, // used for textfield address
+  CHAR_NUM_DASH: /^[A-Za-z0-9-]+$/, // used for only num,chars,dash like; postal code
   NUM_PLUS_MINUS: /^[+-\d\s]+$/,
   ACTION_WITHOUT_SPACE: /^[a-zA-Z0-9/-]+$/,
   PASSWORD: /^[^\s]+$/,
-  PHONE: /^[\d()+-]*\d[\d()+-]*$/,
-  ONLY_NUM: /^\d+$/, //use for string type text
+  NUM_DASH: /^[0-9-]+$/, // used for num,dash type text
+  PHONE: /^[\d()+-]*\d[\d()+-]*$/, // used for phone type text
+  ONLY_NUM: /^\d+$/, // used for string type text
+  ALLOW_ALL: /^[\s\S]+$/, // userd for allowed all
   POINT_NUM: /^[+-]?([0-9]*[.])?[0-9]+$/,
-}
+  CHAR_NUM_MINUS_AT_SPACE: /^[a-zA-Z0-9@ -]+$/,
+  CHAR_NUM_MIN_AT_HASH_COM_DOT_SPA: /^[a-zA-Z0-9@,\-.# ]+$/,
+};
 
 export const MAX_LENGTH_EXCEEDED = 'Maximum length exceeded';
 export const INVALID_CHAR = 'Invalid characters';
 export const PH_MINI_LENGTH = 'Minimum length should be 15';
 
 export const VALIDATE_NON_NEGATIVE_NUM = (value: any) => {
-  return parseInt(value, 10) >= 0 ||
-    'Must be a non-negative number'
-}
+  return parseInt(value, 10) >= 0 || 'Must be a non-negative number';
+};

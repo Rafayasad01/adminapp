@@ -1,36 +1,24 @@
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import SearchIcon from '@mui/icons-material/Search';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import Divider from '@mui/material/Divider';
-import FormControl from '@mui/material/FormControl';
-import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit';
-import Input from '@mui/material/Input';
-import InputAdornment from '@mui/material/InputAdornment';
+import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
 import Switch from '@mui/material/Switch';
-import TablePagination from '@mui/material/TablePagination';
 import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
-import TopBar from '../../../components/common/TopBar';
 import ActionMenu from '../../../components/common/ActionMenu';
 import CustomDialog from '../../../components/common/CustomDialog';
 import CustomText from '../../../components/common/CustomText';
 import Loader from '../../../components/common/Loader';
 import Notify from '../../../components/common/Notify';
-import { AppUserEmployees } from '../../../interfaces/app-user.interface';
+import TopBar from '../../../components/common/TopBar';
+import { AppointmentProviderSchedule } from '../../../interfaces/app.appointment';
 import { useAppSelector } from '../../../redux/redux-hooks';
 import Service from '../../../services/adminapp/adminAppointment';
 import PermissionPopup from '../../../utils/PermissionPopup';
 import { NOT_AUTHORIZED_MESSAGE } from '../../../utils/constants';
 import { listingRolePermission } from '../../../utils/helper';
-import {
-  AppointmentProvider,
-  AppointmentProviderSchedule,
-} from '../../../interfaces/app.appointment';
 import AppointmentProviderScheduleUpdatePopup from './AppointmentProviderScheduleUpdatePopup';
 
 function AppointmentProviderSchedulePage() {
@@ -43,10 +31,8 @@ function AppointmentProviderSchedulePage() {
   const [startTime, setStartTime] = useState<dayjs.Dayjs | any>(null);
   const [endTime, setEndTime] = useState<dayjs.Dayjs | any>(null);
   const [weekDays, setWeekDays] = useState<any>([]);
-  const [search, setSearch] = useState<any>('');
   const [emptyVariable] = useState(null);
   const [page, setPage] = useState(0);
-  const [total, setTotal] = useState(0);
   const [list, setList] = useState<any>([]);
   const [editFormDetails, setEditFormDetails] = useState<any>();
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -65,7 +51,6 @@ function AppointmentProviderSchedulePage() {
   const [dialogText, setDialogText] = useState<any>(
     'Are you sure you want to delete this customer ?'
   );
-  const [showPassword, setShowPassword] = useState(true);
   const {
     register,
     handleSubmit,
@@ -133,77 +118,6 @@ function AppointmentProviderSchedulePage() {
       setNotifyMessage({
         text: NOT_AUTHORIZED_MESSAGE,
         type: 'warning',
-      });
-    }
-  };
-
-  const handleClickSearch = (event: any) => {
-    if (event.key === 'Enter') {
-      const searchTxt = event.target.value as string;
-      const newPage = 0;
-      setSearch(searchTxt);
-      setPage(newPage);
-      Service.ProviderSearchList(
-        authState.user.tenant,
-        searchTxt,
-        newPage,
-        rowsPerPage
-      ).then((item) => {
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      });
-    }
-  };
-
-  const handleChangePage = (
-    event: React.MouseEvent<HTMLButtonElement> | null,
-    newPage: number
-  ) => {
-    setPage(newPage);
-    // offset? ,limit rowsperpage hoga ofset page * rowsperPage
-    if (search === '' || search === null || search === undefined) {
-      Service.ProviderList(authState.user.tenant, newPage, rowsPerPage).then(
-        (item) => {
-          setList(item.data.data.list);
-          setTotal(item.data.data.total);
-        }
-      );
-    } else {
-      Service.ProviderSearchList(
-        authState.user.tenant,
-        search,
-        newPage,
-        rowsPerPage
-      ).then((item) => {
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      });
-    }
-  };
-
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const newRowperPage = parseInt(event.target.value, 10);
-    const newPage = 0;
-    setRowsPerPage(newRowperPage);
-    setPage(newPage);
-    if (search === '' || search === null || search === undefined) {
-      Service.ProviderList(authState.user.tenant, newPage, rowsPerPage).then(
-        (item) => {
-          setList(item.data.data.list);
-          setTotal(item.data.data.total);
-        }
-      );
-    } else {
-      Service.ProviderSearchList(
-        authState.user.tenant,
-        search,
-        newPage,
-        rowsPerPage
-      ).then((item) => {
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
       });
     }
   };
@@ -730,26 +644,6 @@ function AppointmentProviderSchedulePage() {
                               >
                                 <EditIcon />
                               </IconButton>
-                              {/* <IconButton
-                                                            className="btn-dot"
-                                                            aria-label="more"
-                                                            id="long-button"
-                                                            aria-controls={
-                                                                actionMenuOpen ? 'long-menu' : undefined
-                                                            }
-                                                            aria-expanded={
-                                                                actionMenuOpen ? 'true' : undefined
-                                                            }
-                                                            aria-haspopup="true"
-                                                            onClick={(
-                                                                event: React.MouseEvent<HTMLElement>
-                                                            ) => {
-                                                                setActionMenuItemid(item.id);
-                                                                setActionMenuAnchorEl(event.currentTarget);
-                                                            }}
-                                                        >
-                                                            <MoreVertIcon />
-                                                        </IconButton> */}
                               <Switch
                                 checked={item.isActive}
                                 onChange={(

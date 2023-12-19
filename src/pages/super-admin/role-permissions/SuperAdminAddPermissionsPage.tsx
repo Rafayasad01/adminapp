@@ -1,27 +1,27 @@
-import '../../../index.css';
-import { useEffect, useState } from 'react';
 import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
 import TextareaAutosize from '@mui/material/TextareaAutosize';
-import { useForm, Controller } from 'react-hook-form';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import TopBar from '../../../components/common/TopBar';
+import assets from '../../../assets';
 import CustomButton from '../../../components/common/CustomButton';
-import Service from '../../../services/superadmin/RolePermissions';
+import CustomCheckBox from '../../../components/common/CustomCheckBox';
+import CustomInputBox from '../../../components/common/CustomInputBox';
+import ErrorSpanBox from '../../../components/common/ErrorSpanBox';
 import Loader from '../../../components/common/Loader';
 import Notify from '../../../components/common/Notify';
+import TopBar from '../../../components/common/TopBar';
+import '../../../index.css';
+import { Permissions } from '../../../interfaces/superadmin/permissions.interface';
+import { useAppSelector } from '../../../redux/redux-hooks';
+import Service from '../../../services/superadmin/RolePermissions';
 import {
   INVALID_CHAR,
   MAX_LENGTH_EXCEEDED,
   PATTERN,
   setText,
 } from '../../../utils/constants';
-import { Permissions } from '../../../interfaces/superadmin/permissions.interface';
-import CustomInputBox from '../../../components/common/CustomInputBox';
-import CustomCheckBox from '../../../components/common/CustomCheckBox';
-import { useAppSelector } from '../../../redux/redux-hooks';
-import assets from '../../../assets';
-import ErrorSpanBox from '../../../components/common/ErrorSpanBox';
 
 function SuperAdminAddPermissionsPage() {
   const authState: any = useAppSelector((state) => state?.authState);
@@ -47,8 +47,8 @@ function SuperAdminAddPermissionsPage() {
       register,
       error: errors,
       type: 'text',
-      pattern: PATTERN.CHAR_NUM_SPACE,
-      maxLetterLimit: 50,
+      pattern: PATTERN.CHAR_SPACE_DASH,
+      maxLetterLimit: 150,
     },
     {
       fieldName: 'Permission Description',
@@ -56,8 +56,8 @@ function SuperAdminAddPermissionsPage() {
       register,
       error: errors,
       type: 'text',
-      pattern: PATTERN.CHAR_NUM_SPACE_DOT_AT,
-      maxLetterLimit: 50,
+      pattern: PATTERN.CHAR_SPACE_DASH,
+      maxLetterLimit: 150,
     },
     {
       fieldName: 'Action',
@@ -66,7 +66,7 @@ function SuperAdminAddPermissionsPage() {
       error: errors,
       type: 'text',
       pattern: PATTERN.ACTION_WITHOUT_SPACE,
-      maxLetterLimit: 50,
+      maxLetterLimit: 150,
     },
     {
       fieldName: 'Show on menu',
@@ -97,8 +97,8 @@ function SuperAdminAddPermissionsPage() {
           register,
           error: errors.name,
           type: 'text',
-          pattern: PATTERN.CHAR_NUM_SPACE,
-          maxLetterLimit: 50,
+          pattern: PATTERN.CHAR_SPACE_DASH,
+          maxLetterLimit: 150,
         },
         {
           fieldName: 'Permission Description',
@@ -106,8 +106,8 @@ function SuperAdminAddPermissionsPage() {
           register,
           error: errors.desc,
           type: 'text',
-          pattern: PATTERN.CHAR_NUM_SPACE_DOT_AT,
-          maxLetterLimit: 50,
+          pattern: PATTERN.CHAR_SPACE_DASH,
+          maxLetterLimit: 150,
         },
         {
           fieldName: 'Action',
@@ -116,7 +116,7 @@ function SuperAdminAddPermissionsPage() {
           error: errors.action,
           type: 'text',
           pattern: PATTERN.ACTION_WITHOUT_SPACE,
-          maxLetterLimit: 50,
+          maxLetterLimit: 150,
         },
         {
           fieldName: 'Show on menu',
@@ -156,7 +156,7 @@ function SuperAdminAddPermissionsPage() {
 
   const onSubmit = (data: any) => {
     // console.log("DDDDDDDDDDDD", data)
-    // setIsLoader(true);
+    setIsLoader(true);
     const parent: any = {
       name: data.moduleName || '',
       desc: data.moduleDesc || '',
@@ -230,6 +230,7 @@ function SuperAdminAddPermissionsPage() {
               reset();
               setText(item.data.message);
               navigate('../list');
+              setIsLoader(false);
             } else {
               setIsLoader(false);
               setIsNotify(true);
@@ -274,8 +275,8 @@ function SuperAdminAddPermissionsPage() {
                     className="FormInput m-0 h-[40px] w-[350px] rounded-lg border-2 border-[#949EAE] px-3 outline-none"
                     {...register('moduleName', {
                       required: true,
-                      pattern: PATTERN.CHAR_NUM_SPACE,
-                      validate: (value) => value.length <= 100,
+                      pattern: PATTERN.CHAR_SPACE_DASH,
+                      validate: (value) => value.length <= 150,
                     })}
                     type="text"
                     id="moduleName"
@@ -322,10 +323,6 @@ function SuperAdminAddPermissionsPage() {
                   minRows={3}
                   maxRows={6}
                   {...register('moduleDesc', {
-                    pattern: {
-                      value: PATTERN.CHAR_NUM_SPACE_DOT_AT,
-                      message: INVALID_CHAR,
-                    },
                     minLength: {
                       value: 1,
                       message: 'Minimum Five Characters',

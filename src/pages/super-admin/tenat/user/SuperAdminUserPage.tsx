@@ -1,29 +1,25 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
-import Switch from '@mui/material/Switch';
-import IconButton from '@mui/material/IconButton';
+import SearchIcon from '@mui/icons-material/Search';
+import WysiwygOutlinedIcon from '@mui/icons-material/WysiwygOutlined';
+import Avatar from '@mui/material/Avatar';
 import Divider from '@mui/material/Divider';
 import FormControl from '@mui/material/FormControl';
+import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
-import Button from '@mui/material/Button';
-import SearchIcon from '@mui/icons-material/Search';
-import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
-import WysiwygOutlinedIcon from '@mui/icons-material/WysiwygOutlined';
 import TablePagination from '@mui/material/TablePagination';
-import EditIcon from '@mui/icons-material/Edit';
 import dayjs from 'dayjs';
-import Avatar from '@mui/material/Avatar';
+import React, { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+import CustomDialog from '../../../../components/common/CustomDialog';
 import CustomText from '../../../../components/common/CustomText';
-import TopBar from '../../../../components/common/TopBar';
-import { Shop } from '../../../../interfaces/superadmin/shop.interface';
-import Service from '../../../../services/superadmin/Tenant';
 import Loader from '../../../../components/common/Loader';
 import Notify from '../../../../components/common/Notify';
-import CustomDialog from '../../../../components/common/CustomDialog';
+import TopBar from '../../../../components/common/TopBar';
+import { Shop } from '../../../../interfaces/superadmin/shop.interface';
 import { useAppSelector } from '../../../../redux/redux-hooks';
+import Service from '../../../../services/superadmin/Tenant';
 
 function SuperAdminUserPage() {
   const authState: any = useAppSelector((state) => state?.authState);
@@ -117,29 +113,6 @@ function SuperAdminUserPage() {
       });
   };
 
-  const handleFormClickOpen = () => {
-    setOpenFormDialog(true);
-  };
-
-  const handleSwitchChange = (event: any, id: string) => {
-    const data = {
-      isActive: event.target.checked,
-      updatedBy: authState.user.id,
-    };
-    Service.updateUserStatus(id, data).then((updateItem) => {
-      if (updateItem.data.success) {
-        setList((newArr: any) => {
-          return newArr.map((item: any) => {
-            if (item.id === id) {
-              item.isActive = updateItem.data.data.isActive;
-            }
-            return { ...item };
-          });
-        });
-      }
-    });
-  };
-
   const handleClickSearch = (event: any) => {
     const searchTxt = event.target.value as string;
     const newPage = 0;
@@ -186,6 +159,7 @@ function SuperAdminUserPage() {
       });
     }
   };
+
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -204,26 +178,6 @@ function SuperAdminUserPage() {
         setTotal(item.data.data.total);
       });
     }
-  };
-
-  const editHandler = (id: string) => {
-    setIsLoader(true);
-    setOpenEditFormDialog(true);
-    Service.getUser(id).then((item: any) => {
-      if (item.data.success) {
-        setDataById(item.data.data);
-        setValue('role', item.data.data.role ? item.data.data.role : 'none');
-        setIsLoader(false);
-        setOpenEditFormDialog(true);
-      } else {
-        setIsLoader(false);
-        setIsNotify(true);
-        setNotifyMessage({
-          text: item.data.message,
-          type: 'error',
-        });
-      }
-    });
   };
 
   useEffect(() => {

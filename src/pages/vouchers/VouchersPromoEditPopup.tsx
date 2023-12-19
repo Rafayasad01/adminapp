@@ -1,22 +1,23 @@
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable @typescript-eslint/ban-types */
-import React, { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import Dialog from '@mui/material/Dialog';
 import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
 import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
-import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
 import Switch from '@mui/material/Switch';
+import React, { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
 
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import dayjs, { Dayjs } from 'dayjs';
 
 import '../../assets/css/PopupStyle.css';
-import DatePickerField from './DatePickerField';
 import { useAppSelector } from '../../redux/redux-hooks';
+import DatePickerField from './DatePickerField';
+import ErrorSpanBox from '../../components/common/ErrorSpanBox';
 
 type Props = {
   vouchersPromoEditDialog: boolean;
@@ -153,16 +154,7 @@ function VouchersPromoEditPopup({
                     <MenuItem value="Percentage">Percentage</MenuItem>
                   </Select>
                   {errors.discountType?.type === 'required' && (
-                    <span
-                      role="alert"
-                      style={{
-                        fontSize: '0.75rem',
-                        lineHeight: '1rem',
-                        color: 'rgb(220 38 38 / 1)',
-                      }}
-                    >
-                      Offer Type is required
-                    </span>
+                    <ErrorSpanBox error="Offer Type is required" />
                   )}
                 </FormControl>
               </div>
@@ -179,16 +171,7 @@ function VouchersPromoEditPopup({
                     disableUnderline
                   />
                   {errors.name?.type === 'required' && (
-                    <span
-                      role="alert"
-                      style={{
-                        fontSize: '0.75rem',
-                        lineHeight: '1rem',
-                        color: 'rgb(220 38 38 / 1)',
-                      }}
-                    >
-                      Coupon Code is required
-                    </span>
+                    <ErrorSpanBox error="Coupon Code is required" />
                   )}
                 </FormControl>
               </div>
@@ -219,16 +202,7 @@ function VouchersPromoEditPopup({
                     disableUnderline
                   />
                   {errors.value?.type === 'required' && (
-                    <span
-                      role="alert"
-                      style={{
-                        fontSize: '0.75rem',
-                        lineHeight: '1rem',
-                        color: 'rgb(220 38 38 / 1)',
-                      }}
-                    >
-                      Offer Value is required
-                    </span>
+                    <ErrorSpanBox error="Offer Value is required" />
                   )}
                 </FormControl>
                 <FormControl className="FormControl" variant="standard">
@@ -243,16 +217,7 @@ function VouchersPromoEditPopup({
                     disableUnderline
                   />
                   {errors.minProduct?.type === 'required' && (
-                    <span
-                      role="alert"
-                      style={{
-                        fontSize: '0.75rem',
-                        lineHeight: '1rem',
-                        color: 'rgb(220 38 38 / 1)',
-                      }}
-                    >
-                      Min Products is required
-                    </span>
+                    <ErrorSpanBox error="Min Products is required" />
                   )}
                 </FormControl>
               </div>
@@ -269,16 +234,7 @@ function VouchersPromoEditPopup({
                     disableUnderline
                   />
                   {errors.minAmount?.type === 'required' && (
-                    <span
-                      role="alert"
-                      style={{
-                        fontSize: '0.75rem',
-                        lineHeight: '1rem',
-                        color: 'rgb(220 38 38 / 1)',
-                      }}
-                    >
-                      Min Amount is required
-                    </span>
+                    <ErrorSpanBox error="Min Amount is required" />
                   )}
                 </FormControl>
                 <FormControl className="FormControl" variant="standard">
@@ -293,16 +249,7 @@ function VouchersPromoEditPopup({
                     disableUnderline
                   />
                   {errors.maxRedeem?.type === 'required' && (
-                    <span
-                      role="alert"
-                      style={{
-                        fontSize: '0.75rem',
-                        lineHeight: '1rem',
-                        color: 'rgb(220 38 38 / 1)',
-                      }}
-                    >
-                      Max Redeem is required
-                    </span>
+                    <ErrorSpanBox error="Max Redeem is required" />
                   )}
                 </FormControl>
               </div>

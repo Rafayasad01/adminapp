@@ -1,27 +1,11 @@
-import React, { useEffect } from 'react';
 import Dialog from '@mui/material/Dialog';
-import Button from '@mui/material/Button';
-import FormControl from '@mui/material/FormControl';
-import Input from '@mui/material/Input';
-import { useForm } from 'react-hook-form';
-import EditIcon from '@mui/icons-material/Edit';
-import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import Switch from '@mui/material/Switch';
-import Checkbox from '@mui/material/Checkbox';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined';
-import RadioButtonUncheckedOutlinedIcon from '@mui/icons-material/RadioButtonUncheckedOutlined';
-import TextField from '@mui/material/TextField';
-import InputAdornment from '@mui/material/InputAdornment';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 import isBetween from 'dayjs/plugin/isBetween';
+import React from 'react';
 
 import '../../assets/css/PopupStyle.css';
-import IconButton from '@mui/material/IconButton';
-import { Tenant } from '../../interfaces/superadmin/tenant.interface';
-import { DOMAIN_PREFIX, DOMAIN_PROTOCOL } from '../../utils/constants';
-import CustomDropDown from '../../components/common/CustomDropDown';
 
 dayjs.extend(duration);
 dayjs.extend(isBetween);
@@ -38,8 +22,6 @@ function BranchPreviewPopup({
   openFormDialog,
   setOpenFormDialog,
   items,
-  setIsNotify,
-  setNotifyMessage,
 }: Props) {
   const handleFormClose = () => {
     setOpenFormDialog(false);

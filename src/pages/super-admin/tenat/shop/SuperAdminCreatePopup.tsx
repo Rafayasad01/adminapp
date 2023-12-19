@@ -14,6 +14,7 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import '../../../../assets/css/PopupStyle.css';
 import CustomDropDown from '../../../../components/common/CustomDropDown';
+import ErrorSpanBox from '../../../../components/common/ErrorSpanBox';
 import { Tenant } from '../../../../interfaces/superadmin/tenant.interface';
 import {
   DOMAIN_PREFIX,
@@ -21,8 +22,8 @@ import {
   INVALID_CHAR,
   MAX_LENGTH_EXCEEDED,
   PATTERN,
+  VALIDATE_NON_NEGATIVE_NUM,
 } from '../../../../utils/constants';
-import ErrorSpanBox from '../../../../components/common/ErrorSpanBox';
 
 type Props = {
   roles?: any;
@@ -79,14 +80,7 @@ function SuperAdminTenantCreatePopup({
     debouceRequest(val);
   };
 
-  const formatNumber = (value: any) => {
-    console.log('VAAA', value);
-    const formattedValue = value.toString().replace(/B(?=(d{3})+(?!d))/g, ',');
-    console.log('VAAA2', value);
-    return formattedValue;
-  };
-
-  console.log('ERRORS', errors);
+  // console.log('ERRORS', errors);
 
   return (
     <Dialog
@@ -119,7 +113,7 @@ function SuperAdminTenantCreatePopup({
                   disableUnderline
                   {...register('tenantName', {
                     required: true,
-                    pattern: PATTERN.CHAR_NUM_SPACE,
+                    pattern: PATTERN.CHAR_SPACE_DASH,
                     validate: (value) => value.length <= 150,
                   })}
                   onChange={(val: any) => shopFieldHangler(val.target.value)}
@@ -140,7 +134,7 @@ function SuperAdminTenantCreatePopup({
                   className="FormInput"
                   {...register('email', {
                     required: true,
-                    pattern: PATTERN.CHAR_NUM_SPACE_DOT_AT,
+                    pattern: PATTERN.CHAR_NUM_DOT_AT,
                     validate: (value) => value.length <= 100,
                   })}
                   type="text"
@@ -171,7 +165,7 @@ function SuperAdminTenantCreatePopup({
                   className="FormInput"
                   {...register('firstName', {
                     required: true,
-                    pattern: PATTERN.CHAR_NUM_SPACE,
+                    pattern: PATTERN.CHAR_SPACE_DASH,
                     validate: (value) => value.length <= 50,
                   })}
                   type="text"
@@ -200,7 +194,7 @@ function SuperAdminTenantCreatePopup({
                   className="FormInput"
                   {...register('lastName', {
                     required: true,
-                    pattern: PATTERN.CHAR_NUM_SPACE,
+                    pattern: PATTERN.CHAR_SPACE_DASH,
                     validate: (value) => value.length <= 50,
                   })}
                   type="text"
@@ -226,9 +220,7 @@ function SuperAdminTenantCreatePopup({
                   className="FormInput"
                   {...register('maxBranchLimit', {
                     required: 'Branch limit is required in numbers',
-                    validate: (value: any) =>
-                      parseInt(value, 10) >= 0 ||
-                      'Branch limit must be a non-negative number',
+                    validate: (value: any) => VALIDATE_NON_NEGATIVE_NUM(value),
                   })}
                   type="number"
                   id="maxBranchLimits"
@@ -250,9 +242,7 @@ function SuperAdminTenantCreatePopup({
                   className="FormInput"
                   {...register('maxUserLimit', {
                     required: 'User limit is required in numbers',
-                    validate: (value: any) =>
-                      parseInt(value, 10) >= 0 ||
-                      'User limit must be a non-negative number',
+                    validate: (value: any) => VALIDATE_NON_NEGATIVE_NUM(value),
                   })}
                   type="number"
                   id="maxUserLimits"
@@ -284,12 +274,20 @@ function SuperAdminTenantCreatePopup({
                   id="address"
                   placeholder="Enter shop address"
                   disableUnderline
-                  {...register('address', { required: true })}
+                  {...register('address', {
+                    required: true,
+                    pattern: PATTERN?.ADDRESS_ONLY,
+                    validate: (value) => value.length <= 200,
+                  })}
                 />
                 {errors.address?.type === 'required' && (
-                  <span role="alert" className="error-color">
-                    *Address is required
-                  </span>
+                  <ErrorSpanBox error="Address is required" />
+                )}
+                {errors.address?.type === 'pattern' && (
+                  <ErrorSpanBox error={INVALID_CHAR} />
+                )}
+                {errors.address?.type === 'validate' && (
+                  <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
                 )}
               </FormControl>
             </div>
@@ -373,8 +371,7 @@ function SuperAdminTenantCreatePopup({
                         'Trial Mode limit is required in numbers',
                       value: 15,
                       validate: (value: any) =>
-                        parseInt(value, 10) >= 0 ||
-                        'Trial mode must be a non-negative number',
+                        VALIDATE_NON_NEGATIVE_NUM(value),
                     })}
                     type="number"
                     id="trialModeLimit"

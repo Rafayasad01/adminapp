@@ -1,25 +1,20 @@
-import '../../../index.css';
-import { useEffect, useState } from 'react';
 import FormControl from '@mui/material/FormControl';
-import Input from '@mui/material/Input';
-import TextareaAutosize from '@mui/material/TextareaAutosize';
-import { useForm, Controller } from 'react-hook-form';
-import { useNavigate, useParams } from 'react-router-dom';
 import dayjs from 'dayjs';
-import TopBar from '../../../components/common/TopBar';
-import CustomButton from '../../../components/common/CustomButton';
-import Service from '../../../services/adminapp/adminAppointment';
-import Loader from '../../../components/common/Loader';
-import Notify from '../../../components/common/Notify';
-import { setText, weekDays } from '../../../utils/constants';
-import { Permissions } from '../../../interfaces/superadmin/permissions.interface';
-import CustomInputBox from '../../../components/common/CustomInputBox';
-import CustomCheckBox from '../../../components/common/CustomCheckBox';
-import { useAppSelector } from '../../../redux/redux-hooks';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useNavigate, useParams } from 'react-router-dom';
 import assets from '../../../assets';
+import CustomButton from '../../../components/common/CustomButton';
 import CustomDropDown from '../../../components/common/CustomDropDown';
 import TimePicker from '../../../components/common/CustomTimePicker';
+import Loader from '../../../components/common/Loader';
+import Notify from '../../../components/common/Notify';
+import TopBar from '../../../components/common/TopBar';
+import '../../../index.css';
 import { AppointmentProviderSchedule } from '../../../interfaces/app.appointment';
+import { useAppSelector } from '../../../redux/redux-hooks';
+import Service from '../../../services/adminapp/adminAppointment';
+import { setText, weekDays } from '../../../utils/constants';
 
 function AppointmentProviderAddSchedulePage() {
   const { id } = useParams();
@@ -31,8 +26,6 @@ function AppointmentProviderAddSchedulePage() {
   const [count, setCount] = useState(0);
   const [startTime, setStartTime] = useState<dayjs.Dayjs | any>(null);
   const [endTime, setEndTime] = useState<dayjs.Dayjs | any>(null);
-  const [daytimeObjects, setDayTimeObjects] = useState<any>([]);
-  const [daytimeCount, setDaytimeCount] = useState(0);
 
   const {
     register,
@@ -149,10 +142,6 @@ function AppointmentProviderAddSchedulePage() {
       (item: any, filterIndex: number) => filterIndex !== index
     );
     setPermissionList(filteredData);
-  };
-
-  const hasDuplicates = (array: any) => {
-    return new Set(array).size !== array.length;
   };
 
   const onSubmit = (data: any) => {

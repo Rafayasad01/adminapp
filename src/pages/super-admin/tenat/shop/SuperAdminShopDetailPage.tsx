@@ -1,26 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import AccountBoxIcon from '@mui/icons-material/AccountBox';
+import EditIcon from '@mui/icons-material/Edit';
+import IconButton from '@mui/material/IconButton';
 import Switch from '@mui/material/Switch';
 import dayjs from 'dayjs';
-import EditIcon from '@mui/icons-material/Edit';
-import SettingsIcon from '@mui/icons-material/Settings';
-import PreviewIcon from '@mui/icons-material/Preview';
-import AccountBoxIcon from '@mui/icons-material/AccountBox';
-import ViewListIcon from '@mui/icons-material/ViewList';
-import IconButton from '@mui/material/IconButton';
-import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
-import Button from '@mui/material/Button';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import Service from '../../../../services/superadmin/Tenant';
 import Loader2 from '../../../../components/common/Loader2';
-import SuperAdminUpdatePopup from './SuperAdminUpdatePopup';
 import Notify from '../../../../components/common/Notify';
-import SuperAdminCreatePopup from './SuperAdminCreatePopup';
-import SuperAdminShopDetailsDialog from './SuperAdminShopDetailsDialog';
-import SuperAdminSettingDialog from './SuperAdminSettingDialog';
-import SuperAdminCategoryDialog from './SuperAdminCategoryDialog';
-import { useAppSelector } from '../../../../redux/redux-hooks';
-import SuperAdminUserDialog from './SuperAdminUserDialog';
 import TopBar from '../../../../components/common/TopBar';
+import { useAppSelector } from '../../../../redux/redux-hooks';
+import Service from '../../../../services/superadmin/Tenant';
+import SuperAdminCategoryDialog from './SuperAdminCategoryDialog';
+import SuperAdminCreatePopup from './SuperAdminCreatePopup';
+import SuperAdminSettingDialog from './SuperAdminSettingDialog';
+import SuperAdminShopDetailsDialog from './SuperAdminShopDetailsDialog';
+import SuperAdminUpdatePopup from './SuperAdminUpdatePopup';
+import SuperAdminUserDialog from './SuperAdminUserDialog';
 
 function SuperAdminShopDetailPage() {
   const params = useParams();
@@ -105,53 +100,6 @@ function SuperAdminShopDetailPage() {
           type: 'error',
         });
       });
-  };
-
-  const getSettingById = (id: any) => {
-    setIsLoader(true);
-    Service.detailShopSetting(id)
-      .then((item: any) => {
-        if (item.data.success) {
-          setSettingDetail(item.data.data.tenantConfig);
-          setOpenSettingDialog(true);
-          setIsLoader(false);
-        } else {
-          setIsLoader(false);
-        }
-      })
-      .catch((err) => {
-        setIsLoader(false);
-        setOpenSettingDialog(false);
-      });
-  };
-
-  const getCategoryById = (id: any) => {
-    setIsLoader(true);
-    Service.detailShopCategory(id)
-      .then((item: any) => {
-        if (item.data.success) {
-          setCategories(item.data.data);
-          setSubCategories(item.data.data[0].homeCatItem);
-          setOpenCategoryDialog(true);
-          setIsLoader(false);
-        } else {
-          setIsLoader(false);
-          setIsNotify(true);
-          setNotifyMessage({
-            text: item.data.message,
-            type: 'error',
-          });
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-        setIsLoader(false);
-      });
-  };
-
-  const openBranchModal = (id: any) => {
-    setIsLoader(true);
-    getShopService(id, setBranchDialog);
   };
 
   const editHandler = (id: any, identifierType: string) => {
@@ -260,7 +208,7 @@ function SuperAdminShopDetailPage() {
       });
   };
 
-  console.log('DETAILS DATA', detail);
+  // console.log('DETAILS DATA', detail);
 
   const updateFormBranchHandler = (id: string, data: any) => {
     setIsLoader(true);
@@ -347,27 +295,6 @@ function SuperAdminShopDetailPage() {
         });
       });
   }, [emptyVariable]);
-
-  const handleFormClickOpenNewBranch = () => {
-    if (detail.maxBranchLimit <= detail.branches?.length) {
-      setIsNotify(true);
-      setNotifyMessage({
-        text: 'Branch Limit is full',
-        type: 'error',
-      });
-    } else {
-      setIsLoader(true);
-      Service.getRoleListLOV()
-        .then((item) => {
-          setIsLoader(false);
-          setRoleList(item.data.data);
-          setOpenFormDialog(true);
-        })
-        .catch((err) => {
-          setIsLoader(false);
-        });
-    }
-  };
 
   const getDate = (date: any) => {
     const formatDate = dayjs(date)?.format('ddd MMM DD YYYY HH:mm:ss');

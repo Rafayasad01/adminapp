@@ -1,49 +1,17 @@
-import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import SearchIcon from '@mui/icons-material/Search';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import Divider from '@mui/material/Divider';
-import FormControl from '@mui/material/FormControl';
-import IconButton from '@mui/material/IconButton';
-import Input from '@mui/material/Input';
-import InputAdornment from '@mui/material/InputAdornment';
-import Switch from '@mui/material/Switch';
-import TablePagination from '@mui/material/TablePagination';
-// import dayjs from 'dayjs';
-import React, { useEffect, useState, useRef } from 'react';
-import { format } from 'date-fns';
-import ReactToPrint, { useReactToPrint } from 'react-to-print';
-import { useForm } from 'react-hook-form';
 import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
+import utc from 'dayjs/plugin/utc';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import PrintOutlinedIcon from '@mui/icons-material/PrintOutlined';
-import TopBar from '../../../components/common/TopBar';
-import ActionMenu from '../../../components/common/ActionMenu';
-import CustomDialog from '../../../components/common/CustomDialog';
 import CustomText from '../../../components/common/CustomText';
 import Loader from '../../../components/common/Loader';
 import Notify from '../../../components/common/Notify';
-import { AppUserEmployees } from '../../../interfaces/app-user.interface';
+import TopBar from '../../../components/common/TopBar';
 import { useAppSelector } from '../../../redux/redux-hooks';
 import Service from '../../../services/adminapp/adminAppointment';
-import PermissionPopup from '../../../utils/PermissionPopup';
-import { NOT_AUTHORIZED_MESSAGE } from '../../../utils/constants';
-import { listingRolePermission } from '../../../utils/helper';
-import {
-  AppointmentProvider,
-  AppointmentService,
-  AppointmentVisit,
-} from '../../../interfaces/app.appointment';
-import AppointmentVisitCreatePopup from './AppointmentVisitCreatePopup';
-import AppointmentVisitUpdatePopup from './AppointmentVisitUpdatePopup';
-import AppointmentVisitReschedulePopup from './AppointmentVisitReschedulePopup';
-import CustomButton from '../../../components/common/CustomButton';
 import CustomPrintLayout from '../../../utils/CustomPrintLayout/CustomAppointmentPrintLayout';
-// import MyPrintComponent from './print';
-// Extend dayjs with necessary plugins
+import { listingRolePermission } from '../../../utils/helper';
+
 dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.tz.setDefault('UTC');
@@ -59,11 +27,6 @@ function AppointmentVisitDetailPage() {
   const [isLoader, setIsLoader] = React.useState(true);
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
-
-  // const componentRef = useRef();
-  // const handlePrint = useReactToPrint({
-  //   content: (): any => componentRef.current,
-  // });
 
   useEffect(() => {
     if (listingRolePermission(dataRole, 'Employee List')) {

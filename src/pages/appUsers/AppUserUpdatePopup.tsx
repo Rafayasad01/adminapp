@@ -2,8 +2,7 @@ import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
-import React, { useState } from 'react';
-
+import React from 'react';
 import { useForm } from 'react-hook-form';
 import '../../assets/css/PopupStyle.css';
 import ErrorSpanBox from '../../components/common/ErrorSpanBox';
@@ -33,22 +32,12 @@ function AppUserUpdatePopup({
   formData,
   setEditFormData,
   callback,
-  setIsNotify,
-  setNotifyMessage,
   setActionMenuItemid,
-  appUserRoleLov,
 }: Props) {
-  const [showPassword, setShowPassword] = useState(false);
-  const [avatar, setAvatar] = useState<any>(null);
-
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
   const {
     register,
     handleSubmit,
-    watch,
-    setValue,
     formState: { errors },
-    control,
   } = useForm<AppUser>();
 
   const handleFormClose = () => {
@@ -57,40 +46,14 @@ function AppUserUpdatePopup({
     setEditFormData(null);
   };
 
-  const handleFileChange = (event: any) => {
-    setAvatar(event.target.files[0]);
-  };
-
-  const handleFileOnClick = (event: any) => {
-    event.target.value = null;
-    setAvatar(null);
-  };
-
   const onSubmit = (data: AppUser) => {
-    if (data.firstName && data.lastName && data.phone) {
+    if (data.firstName && data.lastName) {
       // data.avatar = avatar;
       setOpenFormDialog(false);
       callback(data);
       setEditFormData(null);
-    } else {
-      setIsNotify(true);
-      setNotifyMessage({
-        text: 'All fields are required, Except avater image!',
-        type: 'error',
-      });
     }
   };
-
-  // useEffect(() => {
-  //     if (formData && formData.avatar !== null) {
-  //         let newAvatar = formData.avatar.split('/').slice(-1)[0];
-  //         const regexExp = /[a-z,0-9,-]{36}/;
-  //         if (regexExp.test(newAvatar)) {
-  //             newAvatar = newAvatar.split('-').splice(5)[0].at(0);
-  //         }
-  //         setAvatar({ name: newAvatar });
-  //     }
-  // }, [formData]);
 
   return (
     <Dialog
@@ -119,8 +82,8 @@ function AppUserUpdatePopup({
                       disableUnderline
                       {...register('firstName', {
                         required: 'First name is required',
-                        pattern: PATTERN.CHAR_NUM_SPACE,
-                        validate: (value) => value.length <= 50,
+                        pattern: PATTERN.CHAR_SPACE_DASH,
+                        validate: (value) => value.length <= 100,
                         value: formData?.firstName,
                       })}
                     />
@@ -143,8 +106,8 @@ function AppUserUpdatePopup({
                       disableUnderline
                       {...register('lastName', {
                         required: 'Last name is required',
-                        pattern: PATTERN.CHAR_NUM_SPACE,
-                        validate: (value) => value.length <= 50,
+                        pattern: PATTERN.CHAR_SPACE_DASH,
+                        validate: (value) => value.length <= 100,
                         value: formData?.lastName,
                       })}
                     />
@@ -194,7 +157,7 @@ function AppUserUpdatePopup({
                       disableUnderline
                       {...register('postalCode', {
                         value: formData?.postalCode,
-                        pattern: PATTERN.CHAR_NUM_SPACE,
+                        pattern: PATTERN.CHAR_NUM_DASH,
                         validate: (value) => value.length <= 15,
                       })}
                     />
@@ -237,18 +200,6 @@ function AppUserUpdatePopup({
                   </FormControl>
                 </div>
                 <div className="FormFields">
-                  {/* <FormControl className="FormControl" variant="standard">
-                                        <CustomDropDown
-                                            validateRequired
-                                            id="appuserRole"
-                                            control={control}
-                                            error={errors}
-                                            register={register}
-                                            options={{ roles: appUserRoleLov, role: formData?.userType }}
-                                            customClassInputTitle="font-bold"
-                                            inputTitle="App User Role"
-                                        />
-                                    </FormControl> */}
                   {formData?.userType === 'Driver' && (
                     <FormControl className="FormControl" variant="standard">
                       <label className="FormLabel">License Number</label>
@@ -259,14 +210,14 @@ function AppUserUpdatePopup({
                         placeholder="Enter license number"
                         {...register('licenseNumber', {
                           value: formData?.licenseNumber,
-                          pattern: PATTERN.CHAR_NUM_SPACE,
+                          pattern: PATTERN.NUM_DASH,
                           validate: (value) => value.length <= 50,
                         })}
                       />
-                      {errors.address?.type === 'pattern' && (
+                      {errors.licenseNumber?.type === 'pattern' && (
                         <ErrorSpanBox error={INVALID_CHAR} />
                       )}
-                      {errors.address?.type === 'validate' && (
+                      {errors.licenseNumber?.type === 'validate' && (
                         <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
                       )}
                     </FormControl>

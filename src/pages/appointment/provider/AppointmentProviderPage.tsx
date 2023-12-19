@@ -1,7 +1,6 @@
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import SearchIcon from '@mui/icons-material/Search';
-import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import FormControl from '@mui/material/FormControl';
@@ -14,23 +13,18 @@ import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import TopBar from '../../../components/common/TopBar';
 import ActionMenu from '../../../components/common/ActionMenu';
 import CustomDialog from '../../../components/common/CustomDialog';
 import CustomText from '../../../components/common/CustomText';
 import Loader from '../../../components/common/Loader';
 import Notify from '../../../components/common/Notify';
-import { AppUserEmployees } from '../../../interfaces/app-user.interface';
+import TopBar from '../../../components/common/TopBar';
+import { AppointmentProvider } from '../../../interfaces/app.appointment';
 import { useAppSelector } from '../../../redux/redux-hooks';
 import Service from '../../../services/adminapp/adminAppointment';
 import PermissionPopup from '../../../utils/PermissionPopup';
-import {
-  MAX_LENGTH_EXCEEDED,
-  NOT_AUTHORIZED_MESSAGE,
-  PATTERN,
-} from '../../../utils/constants';
+import { NOT_AUTHORIZED_MESSAGE, PATTERN } from '../../../utils/constants';
 import { listingRolePermission } from '../../../utils/helper';
-import { AppointmentProvider } from '../../../interfaces/app.appointment';
 
 function AppointmentProviderPage() {
   const navigate = useNavigate();
@@ -82,7 +76,7 @@ function AppointmentProviderPage() {
       register,
       error: errors.providerName,
       type: 'text',
-      pattern: PATTERN.CHAR_NUM_SPACE,
+      pattern: PATTERN.CHAR_SPACE_DASH,
       maxLetterLimit: 150,
     },
     {
@@ -93,8 +87,8 @@ function AppointmentProviderPage() {
       error: errors.address,
       type: 'text',
       notRequired: true,
-      pattern: PATTERN.CHAR_NUM_SPACE_DOT_AT,
-      maxLetterLimit: 100,
+      pattern: PATTERN.ADDRESS_ONLY,
+      maxLetterLimit: 250,
     },
     {
       fieldName: 'Email',
@@ -103,7 +97,7 @@ function AppointmentProviderPage() {
       register,
       error: errors.email,
       type: 'text',
-      pattern: PATTERN.CHAR_NUM_SPACE_DOT_AT,
+      pattern: PATTERN.CHAR_NUM_DOT_AT,
       maxLetterLimit: 100,
     },
     {
@@ -135,7 +129,7 @@ function AppointmentProviderPage() {
       error: errors.urgentFee,
       type: 'text',
       maxLetterLimit: 5,
-      pattern: PATTERN.ONLY_NUM,
+      pattern: PATTERN.POINT_NUM,
     },
   ];
 

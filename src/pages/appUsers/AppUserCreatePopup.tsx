@@ -1,27 +1,24 @@
-import React, { useState } from 'react';
-import Dialog from '@mui/material/Dialog';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
 import FormControl from '@mui/material/FormControl';
+import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import Visibility from '@mui/icons-material/Visibility';
-import IconButton from '@mui/material/IconButton';
-import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
-import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
+import React, { useState } from 'react';
 
-import '../../assets/css/PopupStyle.css';
 import { useForm } from 'react-hook-form';
-import { AppUser } from '../../interfaces/app-user.interface';
+import '../../assets/css/PopupStyle.css';
 import CustomDropDown from '../../components/common/CustomDropDown';
+import ErrorSpanBox from '../../components/common/ErrorSpanBox';
+import { AppUser } from '../../interfaces/app-user.interface';
 import {
   INVALID_CHAR,
   MAX_LENGTH_EXCEEDED,
   PATTERN,
   PH_MINI_LENGTH,
-  VALIDATE_NON_NEGATIVE_NUM,
 } from '../../utils/constants';
-import ErrorSpanBox from '../../components/common/ErrorSpanBox';
 
 type Props = {
   openFormDialog: boolean;
@@ -36,52 +33,24 @@ function AppUserCreatePopup({
   openFormDialog,
   setOpenFormDialog,
   callback,
-  setIsNotify,
-  setNotifyMessage,
   appUserRoleLov,
 }: Props) {
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
-
-  const [avatar, setAvatar] = useState<any>(null);
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors },
     control,
-    trigger,
   } = useForm<AppUser>();
 
   const handleFormClose = () => setOpenFormDialog(false);
 
-  const handleFileChange = (event: any) => {
-    setAvatar(event.target.files[0]);
-  };
-
-  const handleFileOnClick = (event: any) => {
-    event.target.value = null;
-    setAvatar(null);
-  };
-
   const onSubmit = (data: AppUser) => {
-    console.log('SUB DATA', data);
+    // console.log('SUB DATA', data);
     setOpenFormDialog(false);
     callback(data);
-    // if (
-    //     data.firstName &&
-    //     data.lastName &&
-    //     data.address &&
-    //     data.password
-    // ) {
-    //     // data.avatar = avatar;
-    // } else {
-    //     setIsNotify(true);
-    //     setNotifyMessage({
-    //         text: 'All fields are required, Except avater image!',
-    //         type: 'error',
-    //     });
-    // }
   };
   console.log('errrr', errors);
 
@@ -110,8 +79,8 @@ function AppUserCreatePopup({
                   disableUnderline
                   {...register('firstName', {
                     required: 'First name is required',
-                    pattern: PATTERN.CHAR_NUM_SPACE,
-                    validate: (value) => value.length <= 50,
+                    pattern: PATTERN.CHAR_SPACE_DASH,
+                    validate: (value) => value.length <= 100,
                   })}
                 />
                 {errors.firstName?.type === 'required' && (
@@ -133,8 +102,8 @@ function AppUserCreatePopup({
                   disableUnderline
                   {...register('lastName', {
                     required: 'Last name is required',
-                    pattern: PATTERN.CHAR_NUM_SPACE,
-                    validate: (value) => value.length <= 50,
+                    pattern: PATTERN.CHAR_SPACE_DASH,
+                    validate: (value) => value.length <= 100,
                   })}
                 />
                 {errors.lastName?.type === 'required' && (
@@ -182,8 +151,8 @@ function AppUserCreatePopup({
                   disableUnderline
                   {...register('email', {
                     required: 'Email is required',
-                    pattern: PATTERN.CHAR_NUM_SPACE_DOT_AT,
-                    validate: (value) => value.length <= 100,
+                    pattern: PATTERN.CHAR_NUM_DOT_AT,
+                    validate: (value) => value.length <= 150,
                   })}
                 />
                 {errors.email?.type === 'required' && (
@@ -210,7 +179,7 @@ function AppUserCreatePopup({
                   {...register('password', {
                     required: 'Password is required',
                     pattern: PATTERN.PASSWORD,
-                    validate: (value) => value.length <= 100,
+                    validate: (value) => value.length <= 150,
                   })}
                   endAdornment={
                     <InputAdornment position="end">
@@ -243,7 +212,7 @@ function AppUserCreatePopup({
                   placeholder="Enter your postal code"
                   disableUnderline
                   {...register('postalCode', {
-                    pattern: PATTERN.CHAR_NUM_SPACE,
+                    pattern: PATTERN.CHAR_NUM_DASH,
                     validate: (value) => value.length <= 15,
                   })}
                 />
@@ -278,7 +247,7 @@ function AppUserCreatePopup({
                   placeholder="1401 Lavaca Street"
                   {...register('address', {
                     required: 'Address is required',
-                    pattern: PATTERN.CHAR_NUM_SPACE_DOT_AT,
+                    pattern: PATTERN.ADDRESS_ONLY,
                     validate: (value) => value.length <= 250,
                   })}
                 />
@@ -304,17 +273,17 @@ function AppUserCreatePopup({
                     placeholder="Enter license number"
                     {...register('licenseNumber', {
                       required: 'licenseNumber is required',
-                      pattern: PATTERN.CHAR_NUM_SPACE,
+                      pattern: PATTERN.NUM_DASH,
                       validate: (value) => value.length <= 50,
                     })}
                   />
                   {errors.licenseNumber?.type === 'required' && (
                     <ErrorSpanBox error={errors.licenseNumber?.message} />
                   )}
-                  {errors.address?.type === 'pattern' && (
+                  {errors.licenseNumber?.type === 'pattern' && (
                     <ErrorSpanBox error={INVALID_CHAR} />
                   )}
-                  {errors.address?.type === 'validate' && (
+                  {errors.licenseNumber?.type === 'validate' && (
                     <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
                   )}
                 </FormControl>

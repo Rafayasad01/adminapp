@@ -1,14 +1,8 @@
-import React, { useRef, Ref, forwardRef, useEffect, useState } from 'react';
-import ReactToPrint, { useReactToPrint } from 'react-to-print';
 import PrintOutlinedIcon from '@mui/icons-material/PrintOutlined';
 import dayjs from 'dayjs';
-import Barcode from 'react-barcode';
 import { QRCodeSVG } from 'qrcode.react';
-import CustomButton from '../../components/common/CustomButton';
-import AppointmentVisitDetailPage from '../../pages/appointment/visit/AppointmentVisitDetailPage';
-import assets from '../../assets';
-import Service from '../../services/adminapp/adminAppointment';
-import promiseHandler from '../helper';
+import { forwardRef, useRef } from 'react';
+import { useReactToPrint } from 'react-to-print';
 import { useAppSelector } from '../../redux/redux-hooks';
 
 interface Props {
@@ -20,7 +14,6 @@ interface Props {
 
 const CustomPrintLayouts = forwardRef<any, any>((props: any, ref: any) => {
   // console.log("A1", props.dataId);
-  const [detailItems, setDetaiItems] = useState<any>();
   const authState: any = useAppSelector((state: any) => state?.authState);
   const qrCodeValue = `Tracking Id: ${props?.data?.id} \n\nShop Name: ${authState?.user?.tenantName} \nShop Email: ${authState?.user?.username}`;
 
@@ -83,16 +76,6 @@ const CustomPrintLayouts = forwardRef<any, any>((props: any, ref: any) => {
               <span>${props?.data?.totalAmount}</span>
             </div>
           </div>
-          {/* {detailItems?.urgentFee > 0 &&
-                        <div className='print-row'>
-                            <div className="col-1">
-                                <span>Urgent Fee</span>
-                            </div>
-                            <div className="col-2">
-                                <span>${detailItems?.urgentFee}</span>
-                            </div>
-                        </div>
-                    } */}
           <div className="print-row">
             <div className="col-1">
               <span>HST {props?.data?.gstPercentage}%</span>
@@ -114,8 +97,6 @@ const CustomPrintLayouts = forwardRef<any, any>((props: any, ref: any) => {
           <div className="print-line" />
           <div className="print-banker">
             <ul>
-              {/* <li><span>Bank Name: HBL</span></li>
-                            <li><span>Account Number:000***********</span></li> */}
               <li>
                 <span>
                   Client Name : {props?.data?.user?.firstName}
@@ -134,8 +115,6 @@ const CustomPrintLayouts = forwardRef<any, any>((props: any, ref: any) => {
           <div className="print-quote">Thank you</div>
           <div className="print-barccode flex w-full items-center justify-center text-center">
             <QRCodeSVG level="M" size={55} value={qrCodeValue} />
-            {/* <img src={assets.images.logoBlack} alt="barcode" width="178" height="47" /> */}
-            {/* <img src="img/barcode.png" alt="barcode" width="178" height="47" /> */}
           </div>
         </div>
       </div>

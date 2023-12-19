@@ -1,17 +1,10 @@
-import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
-import Switch from '@mui/material/Switch';
-import TablePagination from '@mui/material/TablePagination';
-import React, { useEffect, useState } from 'react';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
+import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import ActionMenu from '../../components/common/ActionMenu';
-import CustomText from '../../components/common/CustomText';
 import Loader from '../../components/common/Loader';
 import MapAddress from '../../components/common/MapAddress';
 import Notify from '../../components/common/Notify';
@@ -19,28 +12,21 @@ import TopBar from '../../components/common/TopBar';
 import { useAppSelector } from '../../redux/redux-hooks';
 import Service from '../../services/adminapp/adminAppUser';
 import PermissionPopup from '../../utils/PermissionPopup';
-import { NOT_AUTHORIZED_MESSAGE, weekDays } from '../../utils/constants';
+import { weekDays } from '../../utils/constants';
 import { listingRolePermission } from '../../utils/helper';
 import AppUserAddressTabPage from './AppUserAddressTab/AppUserAddressTabPage';
 import AppUserScheduleTabPage from './AppUserScheduleTab/AppUserScheduleTabPage';
 
 function AppUserDetailPage() {
-  const authState: any = useAppSelector((state) => state?.authState);
   const dataRole = useAppSelector(
     (state: any) => state?.persisitReducer?.roleState?.role?.permissions
   );
-  const params = useParams();
   const navigate = useNavigate();
   const [detail, setDetail] = useState<any>(null);
   const [filteredWeekDays, setFilteredWeekDays] = useState<any>(null);
-  const [search, setSearch] = useState('');
-  const [page, setPage] = useState(0);
   const [total, setTotal] = useState(0);
   const [list, setList] = useState<any>([]);
   const [address, setAddress] = useState<string>('');
-  const [editFormData, setEditFormData] = useState<any>(null);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const [actionMenuItemid, setActionMenuItemid] = React.useState('');
   const [cancelDialogOpen, setCancelDialogOpen] = useState<boolean>(false);
   const [dialogText, setDialogText] = useState<any>(
     'Are you sure you want to delete this driver address ?'
@@ -50,8 +36,6 @@ function AppUserDetailPage() {
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
   const actionMenuOptions = ['Edit', 'Delete'];
   const [emptyVariable] = useState(null);
-  const [openFormDialog, setOpenFormDialog] = useState(false);
-  const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
 
   const [isLoader, setIsLoader] = React.useState(true);
   const [isNotify, setIsNotify] = React.useState(false);

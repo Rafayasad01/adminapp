@@ -1,14 +1,11 @@
-import React, { useRef, Ref, forwardRef, useEffect, useState } from 'react';
-import ReactToPrint, { useReactToPrint } from 'react-to-print';
 import PrintOutlinedIcon from '@mui/icons-material/PrintOutlined';
 import dayjs from 'dayjs';
-import Barcode from 'react-barcode';
 import { QRCodeSVG } from 'qrcode.react';
-import CustomButton from '../../components/common/CustomButton';
-import assets from '../../assets';
+import { forwardRef, useEffect, useRef, useState } from 'react';
+import { useReactToPrint } from 'react-to-print';
+import { useAppSelector } from '../../redux/redux-hooks';
 import Service from '../../services/adminapp/adminAppointment';
 import promiseHandler from '../helper';
-import { useAppSelector } from '../../redux/redux-hooks';
 
 interface Props {
   index: any;
@@ -72,13 +69,6 @@ const CustomPrintLayouts = forwardRef<any, any>((props: any, ref: any) => {
             </div>
           </div>
           <div className="print-line" />
-          {/* <div className="print-single-row print-date">
-                        {dayjs(detailItems?.createdDate).isValid()
-                            ? dayjs(detailItems?.createdDate)?.format(
-                                'YYYY-MM-DD hh:mm:ss'
-                            )
-                            : '--'}
-                    </div> */}
           <div className="print-single-row">
             <div className="">
               <span>
@@ -101,8 +91,6 @@ const CustomPrintLayouts = forwardRef<any, any>((props: any, ref: any) => {
           </div>
           <div className="print-row">
             <div className="col-1">
-              {/* <span className=''>Services</span> */}
-
               <span>
                 {detailItems?.appointmentService?.map(
                   (item: any, index: number) => {
@@ -112,7 +100,6 @@ const CustomPrintLayouts = forwardRef<any, any>((props: any, ref: any) => {
               </span>
             </div>
             <div className="col-2">
-              {/* <span>Fees</span> */}
               <span>
                 {detailItems?.appointmentService?.map(
                   (item: any, index: number) => {

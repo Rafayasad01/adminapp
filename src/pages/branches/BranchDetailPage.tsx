@@ -1,22 +1,19 @@
-import { useParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import Avatar from '@mui/material/Avatar';
 import SettingsIcon from '@mui/icons-material/Settings';
 import ViewListIcon from '@mui/icons-material/ViewList';
+import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
 import dayjs from 'dayjs';
-import assets from '../../assets';
-import CustomAvatarWithName from '../../components/common/CustomAvatarWithName';
-import TopBar from '../../components/common/TopBar';
-import StarBadgeIcon from '../../components/icons/StarBadge';
-import Service from '../../services/adminapp/adminBranch';
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import CustomCard from '../../components/common/CustomCard';
 import Loader from '../../components/common/Loader';
-import { formatName } from '../../utils/helper';
+import TopBar from '../../components/common/TopBar';
 import StarBadgeGreen from '../../components/icons/StarBadgeGreen';
 import StarBadgeRed from '../../components/icons/StarBadgeRed';
+import Service from '../../services/adminapp/adminBranch';
+import { formatName } from '../../utils/helper';
 import BranchCategoryPopup from './BranchCategoryPopup';
 import BranchSettingPopup from './BranchSettingPopup';
-import CustomCard from '../../components/common/CustomCard';
 
 function BranchDetailPage() {
   const { branchId } = useParams();
