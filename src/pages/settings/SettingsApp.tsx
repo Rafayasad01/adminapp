@@ -35,6 +35,7 @@ import {
   PATTERN,
   PH_MINI_LENGTH,
   TWITTER,
+  VALIDATE_NON_NEGATIVE_NUM,
   WHATSAPP,
   YOUTUBE,
 } from '../../utils/constants';
@@ -54,7 +55,7 @@ function Item(props: { value: any; name: AssetsImages }) {
 
 function HelpingIcon(elements: any) {
   const { links } = elements;
-  console.log('links', links);
+  // console.log('links', links);
 
   const filtered = links?.filter((el: string) => el !== null);
   if (filtered?.length < 6) {
@@ -117,20 +118,22 @@ function SettingsApp() {
       'liveDomain',
       item.liveDomain ? item.liveDomain : item.live_domain
     );
-    setValue('facebook', item.facebook ? item.facebook : '');
+    setValue('facebook', item.facebook !== 'null' ? item.facebook : '');
     setValue('instagram', item.instagram ? item.instagram : '');
-    setValue('linkedin', item.linkedin ? item.linkedin : '');
+    setValue('linkedin', item.linkedin !== 'null' ? item.linkedin : '');
     setValue('twitter', item.twitter ? item.twitter : '');
     setValue('youtube', item.youtube ? item.youtube : '');
     setValue('whatsapp', item.whatsapp ? item.whatsapp : '');
+    setValue('address', item.address ? item.address : '');
+    setValue('userLimit', item.userLimit ? item.userLimit : '');
     setColor1(item.color1);
     setColor2(item.color2);
     // setColor3(item.color3);
   };
 
-  const onSubmit = (data: Setting) => {
+  const onSubmit = (data: any) => {
     console.log('SETTTING DATA', data);
-
+    setIsLoader(true);
     if (listingRolePermission(dataRole, 'Setting Update')) {
       // setIsLoader(true);
       const formData = new FormData();
@@ -146,6 +149,7 @@ function SettingsApp() {
         data.minOrderAmount ? data.minOrderAmount : 0
       );
       formData.append('deliveryFee', data.deliveryFee ? data.deliveryFee : 0);
+      formData.append('address', data.address ? data.address : '');
       formData.append('facebook', detail ? detail.facebook : '');
       formData.append('instagram', detail ? detail.instagram : '');
       formData.append('linkedin', detail ? detail.linkedin : '');
@@ -156,13 +160,17 @@ function SettingsApp() {
       formData.append('color1', color1);
       formData.append('color2', color2);
       // formData.append('color3', color3);
+      if (authState?.user?.userType === 'ShopUser')
+        formData.append('userLimit', data.userLimit ? data.userLimit : '');
       if (file !== null) formData.append('logo', file);
 
       Service.updateService(authState.user.tenant, formData)
         .then((item: any) => {
           const { success, message, data: itemData } = item.data;
           if (success) {
-            dispatch(setLogo(itemData.logo));
+            if (itemData?.logo) {
+              dispatch(setLogo(itemData.logo));
+            }
             setIsLoader(false);
             setIsNotify(true);
             setNotifyMessage({
@@ -258,7 +266,12 @@ function SettingsApp() {
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="grid grid-cols-12 items-center">
                 <div className="col-span-5 mb-4">
-                  <DragDropFile setFile={setFile} setImg={setSelectedImg} />
+                  <DragDropFile
+                    setIsNotify={setIsNotify}
+                    setNotifyMessage={setNotifyMessage}
+                    setFile={setFile}
+                    setImg={setSelectedImg}
+                  />
                 </div>
                 {selectedImg ? (
                   <div className="col-span-6 flex items-center xl:justify-center 2xl:justify-start">
@@ -278,7 +291,7 @@ function SettingsApp() {
                   </div>
                 ) : null}
               </div>
-              <div className="FormField mb-4">
+              <div className="FormFields mb-4">
                 <FormControl className="FormControl" variant="standard">
                   <label className="FormLabel">App Name</label>
                   <Input
@@ -299,6 +312,26 @@ function SettingsApp() {
                     <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
                   )}
                 </FormControl>
+                <FormControl className="FormControl" variant="standard">
+                  <label className="FormLabel">Address</label>
+                  <Input
+                    className="FormInput"
+                    id="address"
+                    placeholder="Enter Address"
+                    disableUnderline
+                    {...register('address', {
+                      pattern: PATTERN.ADDRESS_ONLY,
+                      validate: (value) => value.length <= 250,
+                      value: detail ? detail.address : '',
+                    })}
+                  />
+                  {errors.address?.type === 'pattern' && (
+                    <ErrorSpanBox error={INVALID_CHAR} />
+                  )}
+                  {errors.address?.type === 'validate' && (
+                    <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
+                  )}
+                </FormControl>
               </div>
               <div className="FormFields mb-4">
                 <FormControl className="FormControl" variant="standard">
@@ -306,11 +339,12 @@ function SettingsApp() {
                   <Input
                     className="FormInput"
                     id="email"
+                    type="text"
                     placeholder="warning@urlaundry.com"
                     disableUnderline
                     {...register('email', {
                       pattern: PATTERN.CHAR_NUM_DOT_AT,
-                      validate: (value) => value.length <= 150,
+                      validate: (value) => detail?.email && value.length <= 150,
                       value: detail ? detail.email : '',
                     })}
                   />
@@ -346,7 +380,7 @@ function SettingsApp() {
                   )}
                 </FormControl>
               </div>
-              <div className="FormFields mb-4">
+              <div className="mb-4 flex">
                 <FormControl className="FormControl" variant="standard">
                   <label className="FormLabel">Min order Amount</label>
                   <Input
@@ -385,6 +419,26 @@ function SettingsApp() {
                     <ErrorSpanBox error="Enter a valid delivery fee" />
                   )}
                 </FormControl>
+                {authState?.user?.userType === 'ShopUser' && (
+                  <FormControl className="FormControl" variant="standard">
+                    <label className="FormLabel">Employee Limit</label>
+                    <Input
+                      className="FormInput"
+                      {...register('userLimit', {
+                        validate: (value: any) =>
+                          VALIDATE_NON_NEGATIVE_NUM(value),
+                      })}
+                      defaultValue={0}
+                      type="number"
+                      id="userLimits"
+                      placeholder="Enter max user limits"
+                      disableUnderline
+                    />
+                    {errors?.userLimit && (
+                      <ErrorSpanBox error={errors?.userLimit?.message} />
+                    )}
+                  </FormControl>
+                )}
               </div>
               <div className="FormField mb-4">
                 <FormControl className="FormControl" variant="standard">

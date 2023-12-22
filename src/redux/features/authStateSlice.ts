@@ -13,6 +13,7 @@ type User = {
   avatar: string;
   branchLimit: number;
   employeeLimit: number;
+  userLimit: number;
 };
 
 type AuthState = {

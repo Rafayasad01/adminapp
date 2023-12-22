@@ -156,7 +156,7 @@ function AppUserUpdatePopup({
                       type="number"
                       disableUnderline
                       {...register('postalCode', {
-                        value: formData?.postalCode,
+                        value: formData?.postalCode ? formData?.postalCode : '',
                         pattern: PATTERN.CHAR_NUM_DASH,
                         validate: (value) => value.length <= 15,
                       })}

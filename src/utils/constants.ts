@@ -119,7 +119,7 @@ export const weekDays = [
 export const PATTERN = {
   // CHAR_NUM_DOT_AT: /^[A-Za-z0-9\s.@]+$/,
 
-  CHAR_NUM_DOT_AT: /^[A-Za-z0-9.@]+$/, // used for email fields
+  CHAR_NUM_DOT_AT: /^[A-Za-z0-9.@_-]+$/, // used for email fields
   CHAR_SPACE_DASH: /^[A-Za-z\s-]+$/, // used for textfield fields
   ADDRESS_ONLY: /^[A-Za-z0-9\s@.,#-]+$/, // used for textfield address
   CHAR_NUM_DASH: /^[A-Za-z0-9-]+$/, // used for only num,chars,dash like; postal code
@@ -142,3 +142,5 @@ export const PH_MINI_LENGTH = 'Minimum length should be 15';
 export const VALIDATE_NON_NEGATIVE_NUM = (value: any) => {
   return parseInt(value, 10) >= 0 || 'Must be a non-negative number';
 };
+
+export const imageAllowedTypes = ['image/png', 'image/jpeg', 'image/jpg'];

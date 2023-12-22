@@ -32,6 +32,7 @@ function BranchPage() {
     (state: any) => state?.persisitReducer?.roleState?.role?.permissions
   );
   const [search, setSearch] = useState<any>('');
+  const [maxTotalEmployeeLimit, setTotalMaxEmployeeLimit] = useState();
   const [emptyVariable] = useState(null);
   const [page, setPage] = useState(0);
   const [total, setTotal] = useState(0);
@@ -130,6 +131,7 @@ function BranchPage() {
             setList(item.data.data.list);
             setTotal(item.data.data.total);
             setTotalBranches(item.data.data.list.length);
+            setTotalMaxEmployeeLimit(item.data.data.totalEmployees);
           } else {
             setIsLoader(false);
             setIsNotify(true);
@@ -164,6 +166,7 @@ function BranchPage() {
             type: 'success',
           });
           setList([item.data.data, ...list]);
+          setTotal((prev) => prev + 1);
           reset();
         } else {
           setIsLoader(false);
@@ -185,8 +188,7 @@ function BranchPage() {
   };
 
   const editHandler = (id: string) => {
-    console.log('EVENT DOUBLE HITT');
-
+    // console.log('EVENT DOUBLE HITT');
     setIsLoader(true);
     Service.editBranch(id)
       .then((item: any) => {
@@ -228,6 +230,7 @@ function BranchPage() {
               list[i].isActive = item.data.data.isActive;
               list[i].trialMode = item.data.data.trialMode;
               list[i].trialStartDate = item.data.data.trialStartDate;
+              list[i].userLimit = item.data.data.userLimit;
             }
           }
           reset();
@@ -267,7 +270,7 @@ function BranchPage() {
             return newArr.map((item: any) => {
               if (item.id === id) {
                 item.isActive = updateItem.data.data.isActive;
-                // item.trialMode = updateItem.data.data.trialMode;
+                item.trialMode = updateItem.data.data.trialMode;
               }
               return { ...item };
             });
@@ -316,13 +319,30 @@ function BranchPage() {
       <div className="container m-auto mt-5">
         <div className="w-full rounded-lg bg-white shadow-lg">
           <div className="grid grid-cols-12 px-4 py-5">
-            <div className="col-span-7">
+            <div className="col-span-5">
               <span className="font-open-sans text-xl font-semibold text-[#252733]">
                 All Branches
               </span>
             </div>
-            <div className="col-span-5">
-              <div className="flex flex-row justify-end gap-3">
+            <div className="col-span-7">
+              <div className="flex flex-row items-center justify-end gap-3">
+                <div className="flex-col items-center justify-center">
+                  <p className="text-sm">Max Employees Limit</p>
+                  <div className="mt-2 flex justify-center">
+                    <span className="badge badge-primary text-xs">
+                      {authState.user.maxEmployeeLimit} -{' '}
+                      {maxTotalEmployeeLimit}
+                    </span>
+                  </div>
+                </div>
+                <div className="flex-col items-center justify-center px-3">
+                  <p className="text-sm">Max branches Limit</p>
+                  <div className="mt-2 flex justify-center">
+                    <span className="badge badge-success text-xs">
+                      {authState.user.branchLimit} - {total}
+                    </span>
+                  </div>
+                </div>
                 <FormControl
                   className="search-grey-outline placeholder-grey w-60"
                   variant="filled"
@@ -408,7 +428,7 @@ function BranchPage() {
                           </div>
                         </td>
                         <td>
-                          {item.maxUserLimit} - {item.userCounts}
+                          {item.userLimit} - {item.userCounts}
                         </td>
                         <td>
                           <span

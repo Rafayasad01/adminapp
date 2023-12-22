@@ -30,6 +30,8 @@ function BannersCreatePopup({
   openFormDialog,
   setOpenFormDialog,
   callback,
+  setIsNotify,
+  setNotifyMessage,
 }: Props) {
   const {
     register,
@@ -41,7 +43,7 @@ function BannersCreatePopup({
   const [selectedImg, setSelectedImg] = useState<any>(null);
 
   const onSubmit = (data: any) => {
-    console.log('dataSSSelected==>', selectedImg, file, data);
+    // console.log('dataSSSelected==>', selectedImg, file, data);
     const details = {
       name: data.bannerName,
     };
@@ -101,11 +103,11 @@ function BannersCreatePopup({
           <div className="my-3 grid grid-cols-10 gap-6">
             <div className="col-span-4 flex items-center">
               <DragDropFile
-                // setError={setError}
-                // error={errors}
                 customWidth="w-[px]"
                 setFile={setFile}
                 setImg={setSelectedImg}
+                setIsNotify={setIsNotify}
+                setNotifyMessage={setNotifyMessage}
               />
             </div>
             {selectedImg ? (

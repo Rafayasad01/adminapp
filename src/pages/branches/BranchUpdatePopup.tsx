@@ -20,6 +20,7 @@ import {
   INVALID_CHAR,
   MAX_LENGTH_EXCEEDED,
   PATTERN,
+  VALIDATE_NON_NEGATIVE_NUM,
 } from '../../utils/constants';
 
 dayjs.extend(duration);
@@ -129,28 +130,22 @@ function BranchUpdatePopup({
                   )}
                 </FormControl>
                 <FormControl className="FormControl" variant="standard">
-                  <label className="FormLabel">Email</label>
+                  <label className="FormLabel">User Limits</label>
                   <Input
-                    disabled
                     className="FormInput"
-                    {...register('email', {
-                      required: true,
-                      pattern: PATTERN.CHAR_NUM_DOT_AT,
-                      validate: (value) => value.length <= 100,
-                      value: item.email,
+                    {...register('userLimit', {
+                      value: item.userLimit,
+                      required: 'User limit is required in numbers',
+                      validate: (value: any) =>
+                        VALIDATE_NON_NEGATIVE_NUM(value),
                     })}
-                    type="text"
-                    id="email"
+                    type="number"
+                    id="userLimit"
+                    placeholder="Enter user limits"
                     disableUnderline
                   />
-                  {errors.email?.type === 'required' && (
-                    <ErrorSpanBox error="Email is required" />
-                  )}
-                  {errors.email?.type === 'pattern' && (
-                    <ErrorSpanBox error={INVALID_CHAR} />
-                  )}
-                  {errors.email?.type === 'validate' && (
-                    <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
+                  {errors?.userLimit && (
+                    <ErrorSpanBox error={errors?.userLimit?.message} />
                   )}
                 </FormControl>
               </div>
@@ -200,6 +195,33 @@ function BranchUpdatePopup({
                     <ErrorSpanBox error={INVALID_CHAR} />
                   )}
                   {errors.lastName?.type === 'validate' && (
+                    <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
+                  )}
+                </FormControl>
+              </div>
+              <div className="FormField">
+                <FormControl className="FormControl" variant="standard">
+                  <label className="FormLabel">Email</label>
+                  <Input
+                    disabled
+                    className="FormInput"
+                    {...register('email', {
+                      required: true,
+                      pattern: PATTERN.CHAR_NUM_DOT_AT,
+                      validate: (value) => value.length <= 100,
+                      value: item.email,
+                    })}
+                    type="text"
+                    id="email"
+                    disableUnderline
+                  />
+                  {errors.email?.type === 'required' && (
+                    <ErrorSpanBox error="Email is required" />
+                  )}
+                  {errors.email?.type === 'pattern' && (
+                    <ErrorSpanBox error={INVALID_CHAR} />
+                  )}
+                  {errors.email?.type === 'validate' && (
                     <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
                   )}
                 </FormControl>
