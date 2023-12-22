@@ -16,6 +16,7 @@ import {
   INVALID_CHAR,
   MAX_LENGTH_EXCEEDED,
   PATTERN,
+  imageAllowedTypes,
 } from '../../../utils/constants';
 
 type Props = {
@@ -64,8 +65,20 @@ function SuperAdminAppImageCreatePopup({
   };
 
   const handleFileChange = (event: any) => {
-    setImage(event.target.files[0]);
-    setValue('avatar', event.target.files[0]);
+    const selectedFile = event.target.files[0];
+    if (selectedFile) {
+      const fileType = selectedFile.type;
+      if (imageAllowedTypes.includes(fileType)) {
+        setImage(selectedFile);
+        setValue('avatar', selectedFile);
+      } else {
+        setIsNotify(true);
+        setNotifyMessage({
+          text: 'Only .png, .jpg, and .jpeg files are allowed',
+          type: 'error',
+        });
+      }
+    }
   };
 
   const handleFileOnClick = (event: any) => {
@@ -144,10 +157,10 @@ function SuperAdminAppImageCreatePopup({
             <label className="FormLabel">Upload Image</label>
             <div className="ImageBox">
               <input
-                accept="image/*"
                 style={{ display: 'none' }}
                 {...register('avatar')}
                 id="raised-button-file"
+                accept=".png, .jpg, .jpeg"
                 type="file"
                 onChange={(
                   event: React.InputHTMLAttributes<HTMLInputElement>
@@ -190,11 +203,7 @@ function SuperAdminAppImageCreatePopup({
                 ''
               )}
             </div>
-            {image === null && (
-              <span role="alert" className="error-color">
-                *Image is required
-              </span>
-            )}
+            {image === null && <ErrorSpanBox error="Image is required" />}
           </div>
 
           <div className="FormFooter">

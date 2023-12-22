@@ -258,7 +258,6 @@ function OrdersCreatePage() {
 
   useEffect(() => {
     // setIsLoader(true);
-    setCatItemList([]);
     if (watch('category') !== 'none' && watch('category') !== undefined) {
       Service.OrderCatItemList(watch('category'))
         .then((item: any) => {
@@ -306,7 +305,7 @@ function OrdersCreatePage() {
           });
         });
     }
-  }, [watch('category')]);
+  }, [watch('category'), watch('categoriesItem')]);
 
   // console.log("ID", watch("categoriesItem"));
 
@@ -339,6 +338,7 @@ function OrdersCreatePage() {
   const handleMultipleSelectCallback = () => {
     const watchArr = watch('categoriesItem');
     const temp: any = itemList;
+    // console.log("Watch Arr",watchArr,catItemList,itemList);
     watchArr?.forEach((item: any) => {
       catItemList.filter((el: any) => {
         if (el.id === item) {
@@ -392,6 +392,7 @@ function OrdersCreatePage() {
               <div>
                 <FormControl className="FormControl" variant="standard">
                   <CustomMultipleSelectBox
+                    valuesBoxBgColor="bg-transparent"
                     border="1px"
                     callback={handleMultipleSelectCallback}
                     validateRequired

@@ -11,6 +11,7 @@ export interface Tenant {
   liveDomain: string;
   maxBranchLimit: number;
   maxUserLimit: number;
+  userLimit: number;
   trialModeLimit: number;
   role: string;
 }

@@ -336,9 +336,9 @@ function Sidebar() {
             justifyContent="center"
           >
             {userData?.isSuperAdmin ? (
-              <img className="mt-9 max-w-[150px]" src={assets.images.logo} alt="" />
+              <img className="mt-9 max-w-[100px]" src={assets.images.logo} alt="" />
             ) : logo ? (
-              <img className="mt-9 max-w-[150px]" src={logo} alt="logo" />
+              <img className="mt-9 max-w-[100px]" src={logo} alt="logo" />
             ) : (
               <div className="flex w-full items-center justify-start rounded-2xl p-3 text-white">
                 <img

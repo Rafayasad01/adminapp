@@ -81,6 +81,8 @@ function SuperAdminUpdatePopup({
     setOpenFormDialog(false);
   };
 
+  console.log(watch('trialMode'));
+
   useEffect(() => {
     if (item) {
       setValue('tenantName', item.name);
@@ -104,6 +106,8 @@ function SuperAdminUpdatePopup({
       dayTxt = 'days';
     }
     let remainingTxt;
+    console.log(remainingTime, addTime, endTime, diffBetween);
+
     if (remainingTime <= 0) {
       remainingTxt = 'Expired';
     } else {
@@ -359,6 +363,7 @@ function SuperAdminUpdatePopup({
                   <FormControlLabel
                     control={
                       <Checkbox
+                        defaultChecked={item.trialMode}
                         icon={
                           <RadioButtonUncheckedOutlinedIcon
                             style={{ color: '#1D1D1D' }}
@@ -369,12 +374,12 @@ function SuperAdminUpdatePopup({
                             style={{ color: '#1D1D1D' }}
                           />
                         }
-                        {...register('trialUpdateMode')}
+                        {...register('trialMode')}
                       />
                     }
-                    label={item.trialMode ? 'Re Again Trial' : 'Trial Mode'}
+                    label="Trial Mode"
                   />
-                  {item.trialMode ? (
+                  {/* {item.trialMode ? (
                     <span className="badge badge-success badge-w-100">
                       Enabled
                     </span>
@@ -382,10 +387,10 @@ function SuperAdminUpdatePopup({
                     <span className="badge badge-danger badge-w-100">
                       Disabled
                     </span>
-                  )}
+                  )} */}
                 </div>
               </div>
-              {watch('trialUpdateMode') === true && (
+              {watch('trialMode') === true && (
                 <div>
                   <FormControl className="FormControl" variant="standard">
                     <label className="FormLabel">
@@ -418,15 +423,14 @@ function SuperAdminUpdatePopup({
                 <div className="FormField">
                   <FormControl className="FormControl" variant="standard">
                     <TextField
+                      disabled
                       className="FormInput"
                       sx={{ padding: 0 }}
                       id="trialStartDate"
                       InputProps={{
                         endAdornment: (
                           <InputAdornment position="end">
-                            {item.trialStartDate && (
-                              <span>{getRemainingTime(item)}</span>
-                            )}
+                            <span>{getRemainingTime(item)}</span>
                           </InputAdornment>
                         ),
                       }}

@@ -33,9 +33,11 @@ type Props = {
   callback?: (...args: any[]) => any;
   defaultVal?: string;
   border?: string;
+  valuesBoxBgColor?: string;
 };
 
 function CustomMultipleSelectBox({
+  valuesBoxBgColor,
   callback,
   setValue,
   customClassInputTitle,
@@ -113,7 +115,11 @@ function CustomMultipleSelectBox({
               </MenuItem>
               {/* <MenuItem value={[]}>-- Select Services --</MenuItem> */}
               {options?.roles?.map((item: any, index: number) => (
-                <MenuItem key={index} value={item.id}>
+                <MenuItem
+                  className={valuesBoxBgColor || ''}
+                  key={index}
+                  value={item.id}
+                >
                   {item.name}
                 </MenuItem>
               ))}

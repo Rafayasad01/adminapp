@@ -41,8 +41,8 @@ function SuperAdminShopDetailPage() {
   const [isTrialMode, setIsTrialMode] = React.useState<boolean>(false);
 
   const getUserById = (id: any, type: any) => {
-    setIsLoader(true);
     let service;
+    setIsLoader(true);
     if (type === 'shop') {
       service = Service.detailShopUser(id);
     } else {
@@ -52,8 +52,10 @@ function SuperAdminShopDetailPage() {
       .then((item: any) => {
         console.log('item.data.data::::::', item.data.data);
         if (item.data.success) {
-          setFormDetail(item.data.data);
           setUserDialog(true);
+          type === 'shop'
+            ? setFormDetail([item.data.data])
+            : setFormDetail(item.data.data);
           setIsLoader(false);
         } else {
           setIsLoader(false);
@@ -219,8 +221,7 @@ function SuperAdminShopDetailPage() {
       // email: data.email,
       firstName: data.firstName,
       lastName: data.lastName,
-      trialMode: formDetail?.trialMode,
-      trialUpdateMode: data.trialUpdateMode,
+      trialMode: data.trialMode,
       developmentDomain: data.developmentDomain,
       trialModeLimit: data.trialModeLimit ? data.trialModeLimit : 0,
       liveDomain: data.liveDomain,
@@ -321,6 +322,8 @@ function SuperAdminShopDetailPage() {
     return remainingTxt;
   };
 
+  console.log('SHOP', userDialog);
+
   return (
     <>
       <TopBar isNestedRoute title="Shop Detail" />
@@ -390,8 +393,8 @@ function SuperAdminShopDetailPage() {
                           </div>
                         </div>
 
-                        <div className="grid w-[100%] grid-cols-2">
-                          <div className="mt-4 flex w-full flex-col">
+                        <div className="grid w-[100%] grid-cols-4">
+                          <div className="col-span-2 mt-4">
                             <span className="font-open-sans text-base font-semibold not-italic text-[#1A1A1A]">
                               Created Date
                             </span>
@@ -403,8 +406,8 @@ function SuperAdminShopDetailPage() {
                               )}
                             </div>
                           </div>
-                          <div className="mt-4 flex w-full flex-col items-center">
-                            <span className="font-open-sans text-base font-semibold not-italic text-[#1A1A1A]">
+                          <div className="col-span-2 mt-4 flex flex-col items-end justify-center">
+                            <span className="px-[9px] font-open-sans text-base font-semibold not-italic text-[#1A1A1A]">
                               Status
                             </span>
                             <div className="mt-1 font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
@@ -432,8 +435,8 @@ function SuperAdminShopDetailPage() {
                           </div>
                         )}
 
-                        <div className="flex justify-between">
-                          <div className="mt-4 flex w-full flex-col">
+                        <div className="grid w-[100%] grid-cols-4">
+                          <div className="col-span-2 mt-4">
                             <span className="font-open-sans text-base font-semibold not-italic text-[#1A1A1A]">
                               Trial Start Date
                             </span>
@@ -445,7 +448,7 @@ function SuperAdminShopDetailPage() {
                               )}
                             </div>
                           </div>
-                          <div className="mt-4 flex w-full flex-col items-center">
+                          <div className="col-span-2 mt-4 flex flex-col items-end justify-center">
                             <span className="font-open-sans text-base font-semibold not-italic text-[#1A1A1A]">
                               Trial End Time
                             </span>
@@ -459,44 +462,76 @@ function SuperAdminShopDetailPage() {
                           </div>
                         </div>
 
-                        <div className="grid w-[100%] grid-cols-2">
-                          <div className="mt-4 flex w-full flex-col">
+                        <div className="grid w-[100%] grid-cols-6">
+                          <div className="col-span-2 mt-4 ">
                             <span className="font-open-sans text-base font-semibold not-italic text-[#1A1A1A]">
-                              Branch
+                              Employees
                             </span>
-                            <div className="mt-1 w-16 text-center font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
-                              <span className="badge badge-primary">
+                            <div className="mt-1 flex w-[90px] items-center justify-center font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
+                              <span className="badge badge-primary w-full text-xs">
+                                {detail.userCounts}
+                              </span>
+                            </div>
+                          </div>
+                          <div className="col-span-2 mt-4 flex flex-col items-center justify-center">
+                            <span className="font-open-sans text-base font-semibold not-italic text-[#1A1A1A]">
+                              Branches
+                            </span>
+                            <div className="mt-1 flex w-[100px] items-center justify-center text-center font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
+                              <span className="badge badge-primary w-full text-xs">
                                 {detail.maxBranchLimit} -{' '}
                                 {detail.branches?.length}
                               </span>
                             </div>
                           </div>
-                          <div className="mt-4 flex w-full flex-col items-center">
+                          <div className="col-span-2 mt-4 flex flex-col items-end justify-center">
                             <span className="font-open-sans text-base font-semibold not-italic text-[#1A1A1A]">
-                              Employees
+                              Total Employees
                             </span>
-                            <div className="mt-1 font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
-                              <span className="badge badge-primary">
-                                {detail.maxUserLimit} - {detail.userCounts}
+                            <div className="mt-1 flex w-[100px] items-center justify-center font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
+                              <span className="badge badge-primary w-full px-4 text-xs">
+                                {detail.maxUserLimit} - {detail.totalUserCounts}
                               </span>
                             </div>
                           </div>
                         </div>
 
-                        <div className="mt-4 flex w-full flex-col">
-                          <span className="font-open-sans text-base font-semibold not-italic text-[#1A1A1A]">
-                            Trial Mode
-                          </span>
-                          <div className="mt-1 font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
-                            <Switch
-                              checked={detail?.trialMode}
-                              inputProps={{ 'aria-label': 'controlled' }}
-                              disabled
-                            />
+                        <div className="grid w-[100%] grid-cols-4">
+                          <div className="col-span-2 mt-4">
+                            <span className="font-open-sans text-base font-semibold not-italic text-[#1A1A1A]">
+                              Address
+                            </span>
+                            <div className="mt-1 font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
+                              {detail?.tenantExt
+                                ? detail?.tenantExt?.shopAddress
+                                : '--'}
+                            </div>
+                          </div>
+                          <div className="col-span-2 mt-4 flex flex-col items-end justify-center">
+                            <span className="font-open-sans text-base font-semibold not-italic text-[#1A1A1A]">
+                              Trial Mode
+                            </span>
+                            <div className="mt-1 font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
+                              {detail?.trialMode ? (
+                                <span className="badge badge-success text-xs">
+                                  started
+                                </span>
+                              ) : (
+                                <span className="badge badge-danger text-xs">
+                                  not started
+                                </span>
+                              )}
+                              {/* <Switch
+                                checked={detail?.trialMode}
+                                inputProps={{ 'aria-label': 'controlled' }}
+                                disabled
+                              /> */}
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
+
                     {/* <div className="flex justify-end px-5 xl:col-span-4 2xl:col-span-8">
                       <div className="mt-5">
                         <Button
@@ -528,9 +563,9 @@ function SuperAdminShopDetailPage() {
                           return (
                             <div
                               key={index}
-                              className="h-[200px] rounded-2xl shadow xl:col-span-6 2xl:col-span-4"
+                              className="rounded-2xl shadow xl:col-span-6 2xl:col-span-4"
                             >
-                              <div className="flex h-full w-full justify-between py-[2rem]">
+                              <div className="flex h-full w-full justify-between py-[1rem]">
                                 <div className="flex h-full flex-col justify-between px-5">
                                   <div className="flex w-full flex-col">
                                     <span className="font-open-sans text-base font-semibold not-italic text-[#1A1A1A]">
@@ -540,15 +575,23 @@ function SuperAdminShopDetailPage() {
                                       {item.name}
                                     </div>
                                   </div>
-
+                                  <div className="mt-1 flex w-full flex-col">
+                                    <span className="font-open-sans text-base font-semibold not-italic text-[#1A1A1A]">
+                                      Address
+                                    </span>
+                                    <div className="mt-1 font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
+                                      {item.tenantExt?.shopAddress
+                                        ? item.tenantExt?.shopAddress
+                                        : '--'}
+                                    </div>
+                                  </div>
                                   <div className="flex w-[100%]">
-                                    <div className="mt-4 flex w-full flex-col">
+                                    <div className="mt-1 flex w-full flex-col">
                                       <span className="font-open-sans text-base font-semibold not-italic text-[#1A1A1A]">
                                         Employees
                                       </span>
-                                      <div className="mt-1 font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
-                                        <span className="badge badge-primary">
-                                          {item.maxUserLimit} -{' '}
+                                      <div className="mt-1 flex w-[90px] items-center justify-center font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
+                                        <span className="badge badge-primary w-full text-xs">
                                           {item.userCounts}
                                         </span>
                                       </div>
@@ -560,7 +603,7 @@ function SuperAdminShopDetailPage() {
                                     <div className="">
                                       <IconButton
                                         disabled={
-                                          item.isActive === false && true
+                                          detail.isActive === false && true
                                         }
                                         title="User Detail"
                                         className="m-0"
@@ -583,7 +626,7 @@ function SuperAdminShopDetailPage() {
                                         <SettingsIcon />
                                       </IconButton>
                                     </div> */}
-                                    <div className="flex items-center justify-end">
+                                    {/* <div className="flex items-center justify-end">
                                       <IconButton
                                         disabled={
                                           item.isActive === false && true
@@ -596,7 +639,7 @@ function SuperAdminShopDetailPage() {
                                       >
                                         <EditIcon />
                                       </IconButton>
-                                    </div>
+                                    </div> */}
                                   </div>
                                   <div className="flex h-[100%] items-center justify-end px-3 font-open-sans font-normal">
                                     {item.isActive ? (
@@ -608,7 +651,7 @@ function SuperAdminShopDetailPage() {
                                         Disabled
                                       </span>
                                     )}
-                                    <div>
+                                    {/* <div>
                                       <Switch
                                         checked={item.isActive}
                                         onChange={(
@@ -618,7 +661,7 @@ function SuperAdminShopDetailPage() {
                                           'aria-label': 'controlled',
                                         }}
                                       />
-                                    </div>
+                                    </div> */}
                                   </div>
                                 </div>
                               </div>

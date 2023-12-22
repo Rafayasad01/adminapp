@@ -16,6 +16,7 @@ import {
   INVALID_CHAR,
   MAX_LENGTH_EXCEEDED,
   PATTERN,
+  imageAllowedTypes,
 } from '../../utils/constants';
 
 type Props = {
@@ -55,14 +56,25 @@ function CategoriesCreatePopup({
       });
     }
   };
-  console.log('IMGAEEE', image);
 
   const handleFormClose = () => {
     setOpenFormDialog(false);
   };
 
   const handleFileChange = (event: any) => {
-    setImage(event.target.files[0]);
+    const selectedFile = event.target.files[0];
+    if (selectedFile) {
+      const fileType = selectedFile.type;
+      if (imageAllowedTypes.includes(fileType)) {
+        setImage(event.target.files[0]);
+      } else {
+        setIsNotify(true);
+        setNotifyMessage({
+          text: 'Only .png, .jpg, and .jpeg files are allowed',
+          type: 'error',
+        });
+      }
+    }
   };
 
   const handleFileOnClick = (event: any) => {

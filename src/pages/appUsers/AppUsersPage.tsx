@@ -391,6 +391,7 @@ function AppUsersPage() {
 
   const handleSwitchChange = (event: any, id: string) => {
     if (listingRolePermission(dataRole, 'Customer Update Status')) {
+      setIsLoader(true);
       const data = {
         id,
         isActive: event.target.checked,
@@ -398,6 +399,7 @@ function AppUsersPage() {
       };
       Service.appUpdateStatus(data).then((updateItem) => {
         if (updateItem.data.success) {
+          setIsLoader(false);
           setList((newArr: any) => {
             return newArr.map((item: any) => {
               if (item.id === updateItem.data.data.id) {
@@ -409,6 +411,7 @@ function AppUsersPage() {
         }
       });
     } else {
+      setIsLoader(false);
       setIsNotify(true);
       setNotifyMessage({
         text: NOT_AUTHORIZED_MESSAGE,

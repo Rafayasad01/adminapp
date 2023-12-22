@@ -4,6 +4,7 @@ import FormControl from '@mui/material/FormControl';
 
 import '../../assets/css/PopupStyle.css';
 import assets from '../../assets';
+import { imageAllowedTypes } from '../../utils/constants';
 
 type Props = {
   setFile: any;
@@ -11,14 +12,16 @@ type Props = {
   customWidth?: string;
   setError?: any;
   error?: any;
+  setIsNotify?: any;
+  setNotifyMessage?: any;
 };
 
 function DragDropFile({
-  setError,
-  error,
   setFile,
   setImg,
   customWidth,
+  setIsNotify,
+  setNotifyMessage,
 }: Props) {
   const [dragActive, setDragActive] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -51,13 +54,24 @@ function DragDropFile({
       handleFile(e.dataTransfer.files);
     }
     const droppedFile = e.dataTransfer.files[0]; // Get the dropped file
-    setFile(droppedFile);
-    const reader = new FileReader();
-    reader.onload = () => {
-      setImg(reader.result as string);
-      setImageUrl(reader.result as string);
-    };
-    reader.readAsDataURL(droppedFile);
+    if (droppedFile) {
+      const fileType = droppedFile.type;
+      if (imageAllowedTypes.includes(fileType)) {
+        setFile(droppedFile);
+        const reader = new FileReader();
+        reader.onload = () => {
+          setImg(reader.result as string);
+          setImageUrl(reader.result as string);
+        };
+        reader.readAsDataURL(droppedFile);
+      } else {
+        setIsNotify(true);
+        setNotifyMessage({
+          text: 'Only .png, .jpg, and .jpeg files are allowed',
+          type: 'error',
+        });
+      }
+    }
   };
 
   const handleChange = (e: any) => {
@@ -67,22 +81,20 @@ function DragDropFile({
     }
     const uploadedFile = e.target.files?.[0];
     if (uploadedFile) {
-      if (isSVGFile(uploadedFile)) {
-        console.log('ss');
-      } else {
-        // setError("bannerImage", {
-        //   type: "manual",
-        //   message: ""
-        // })
+      const fileType = uploadedFile.type;
+      if (imageAllowedTypes.includes(fileType)) {
         const reader = new FileReader();
         reader.onload = () => {
           setImg(reader.result as string);
           setImageUrl(reader.result as string);
         };
         reader.readAsDataURL(uploadedFile);
-        // Optionally, you can send the file to a server here
-        // For simplicity, I'll just log the file details
-        console.log('File uploaded:', uploadedFile);
+      } else {
+        setIsNotify(true);
+        setNotifyMessage({
+          text: 'Only .png, .jpg, and .jpeg files are allowed',
+          type: 'error',
+        });
       }
     }
   };

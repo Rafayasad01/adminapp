@@ -51,6 +51,13 @@ function HomePage() {
             type: 'error',
           });
         }
+      }).catch((err) => {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
+        });
       })
   }, [emptyVariable])
 

@@ -9,6 +9,7 @@ export interface SocialMedia {
 
 export interface Setting {
   name: string;
+  address: string;
   desc: string;
   color1: string;
   color2: string;
@@ -26,6 +27,7 @@ export interface Setting {
   whatsapp: string;
   developmentDomain: string;
   liveDomain: string;
+  userLimit: number;
 }
 
 export interface AppImage {

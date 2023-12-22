@@ -17,7 +17,9 @@ import {
   INVALID_CHAR,
   MAX_LENGTH_EXCEEDED,
   PATTERN,
+  VALIDATE_NON_NEGATIVE_NUM,
 } from '../../utils/constants';
+import { useAppSelector } from '../../redux/redux-hooks';
 
 type Props = {
   openFormDialog: boolean;
@@ -43,6 +45,8 @@ function BranchCreatePopup({
     formState: { errors },
   } = useForm<Tenant>();
 
+  const authState: any = useAppSelector((state: any) => state?.authState);
+
   const onSubmit = (data: Tenant) => {
     // console.log("dataCREATE", data);
     const details = {
@@ -53,9 +57,12 @@ function BranchCreatePopup({
       liveDomain: data.liveDomain,
       tenantName: data.tenantName,
       address: data.address,
+      userLimit: data.userLimit,
+      userId: authState.user.id,
     };
     if (data.tenantName) {
       setOpenFormDialog(false);
+      // console.log("detailss",details);
       callback(details);
     } else {
       setIsNotify(true);
@@ -194,7 +201,7 @@ function BranchCreatePopup({
                 )}
               </FormControl>
             </div>
-            <div className="FormField">
+            <div className="FormFields">
               <FormControl className="FormControl" variant="standard">
                 <label className="FormLabel">Shop Address</label>
                 <Input
@@ -217,6 +224,23 @@ function BranchCreatePopup({
                 )}
                 {errors.address?.type === 'validate' && (
                   <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
+                )}
+              </FormControl>
+              <FormControl className="FormControl" variant="standard">
+                <label className="FormLabel">User Limits</label>
+                <Input
+                  className="FormInput"
+                  {...register('userLimit', {
+                    required: 'User limit is required in numbers',
+                    validate: (value: any) => VALIDATE_NON_NEGATIVE_NUM(value),
+                  })}
+                  type="number"
+                  id="userLimit"
+                  placeholder="Enter user limits"
+                  disableUnderline
+                />
+                {errors?.userLimit && (
+                  <ErrorSpanBox error={errors?.userLimit?.message} />
                 )}
               </FormControl>
             </div>

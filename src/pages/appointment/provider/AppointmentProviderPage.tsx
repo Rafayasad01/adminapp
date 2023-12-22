@@ -29,7 +29,7 @@ import { listingRolePermission } from '../../../utils/helper';
 function AppointmentProviderPage() {
   const navigate = useNavigate();
   const authState: any = useAppSelector((state: any) => state?.authState);
-  const dataRole = useAppSelector(
+  const dataRole: any = useAppSelector(
     (state: any) => state?.persisitReducer?.roleState?.role?.permissions
   );
   const [startTime, setStartTime] = useState<dayjs.Dayjs | any>(null);
@@ -162,15 +162,15 @@ function AppointmentProviderPage() {
 
   const handleFormClickOpen = () => {
     if (listingRolePermission(dataRole, 'Appointment Provider Create')) {
-      if (total < authState.user.employeeLimit) {
-        setOpenFormDialog(true);
-      } else {
-        setIsNotify(true);
-        setNotifyMessage({
-          text: 'Employees limit has been excceed',
-          type: 'warning',
-        });
-      }
+      // if (total < authState.user.employeeLimit) {
+      setOpenFormDialog(true);
+      // } else {
+      //   setIsNotify(true);
+      //   setNotifyMessage({
+      //     text: 'Employees limit has been excceed',
+      //     type: 'warning',
+      //   });
+      // }
     } else {
       setIsNotify(true);
       setNotifyMessage({
@@ -334,6 +334,13 @@ function AppointmentProviderPage() {
                 return newArr.filter(
                   (newItem: any) => newItem.id !== item.data.data.id
                 );
+              });
+            } else {
+              setIsLoader(false);
+              setIsNotify(true);
+              setNotifyMessage({
+                text: item.data.message,
+                type: 'error',
               });
             }
           })
