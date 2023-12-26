@@ -23,11 +23,11 @@ function VouchersReferralCreatePopup({
   const handleFormClose = () => setVouchersReferralDialog(false);
   const [checked, setChecked] = React.useState(true);
 
-  const handleChange = () =>
-    // event: SelectChangeEvent
-    {
-      // setSelectShop(event.target.value as string);
-    };
+  // const handleChange = () =>
+  //   // event: SelectChangeEvent
+  //   {
+  //     // setSelectShop(event.target.value as string);
+  //   };
 
   const handleSwitchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setChecked(event.target.checked);
@@ -55,9 +55,9 @@ function VouchersReferralCreatePopup({
                 labelId="demo-simple-select-label"
                 value="Promo"
                 disableUnderline
-                onChange={(event) => {
-                  handleChange(event);
-                }}
+                // onChange={(event) => {
+                //   handleChange(event);
+                // }}
               >
                 <MenuItem value="Promo">Promo</MenuItem>
               </Select>
@@ -69,9 +69,9 @@ function VouchersReferralCreatePopup({
                 labelId="demo-simple-select-label"
                 value="Amount"
                 disableUnderline
-                onChange={(event) => {
-                  handleChange(event);
-                }}
+                // onChange={(event) => {
+                //   handleChange(event);
+                // }}
               >
                 <MenuItem value="Amount">Amount</MenuItem>
               </Select>

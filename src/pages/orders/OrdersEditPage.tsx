@@ -51,11 +51,12 @@ function OrdersCreatePage() {
     setPaymentMethod((event.target as HTMLInputElement).value);
   };
 
-  const handleClickSearch = () =>
-    // event: any
-    {
-      // setSearch(event.target.value as string);
-    };
+  // const handleClickSearch = () =>
+  //   // event: any
+  //   {
+  //     // setSearch(event.target.value as string);
+  //   };
+
   const handleCategoryChange = (event: SelectChangeEvent) => {
     setCategory(event.target.value as string);
   };
@@ -90,14 +91,14 @@ function OrdersCreatePage() {
                   id="search"
                   type="text"
                   placeholder="Select Customer"
-                  onKeyDown={() =>
-                    // event: React.KeyboardEvent<
-                    //   HTMLInputElement | HTMLTextAreaElement>
-                    {
-                      handleClickSearch();
-                      // event
-                    }
-                  }
+                  // onKeyDown={() =>
+                  //   // event: React.KeyboardEvent<
+                  //   //   HTMLInputElement | HTMLTextAreaElement>
+                  //   {
+                  //     handleClickSearch();
+                  //     // event
+                  //   }
+                  // }
                   endAdornment={
                     <InputAdornment position="end">
                       <Divider
@@ -371,13 +372,13 @@ function OrdersCreatePage() {
                     id="search"
                     type="text"
                     placeholder="Type Addess"
-                    onKeyDown={(
-                      event: React.KeyboardEvent<
-                        HTMLInputElement | HTMLTextAreaElement
-                      >
-                    ) => {
-                      handleClickSearch(event);
-                    }}
+                    // onKeyDown={(
+                    //   event: React.KeyboardEvent<
+                    //     HTMLInputElement | HTMLTextAreaElement
+                    //   >
+                    // ) => {
+                    //   handleClickSearch(event);
+                    // }}
                     endAdornment={
                       <InputAdornment position="end">
                         <IconButton aria-label="toggle password visibility">
