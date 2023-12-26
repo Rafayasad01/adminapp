@@ -22,7 +22,7 @@ import { NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
 import { listingRolePermission } from '../../utils/helper';
 import VouchersPromoCreatePopup from './VouchersPromoCreatePopup';
 import VouchersPromoEditPopup from './VouchersPromoEditPopup';
-import VouchersReferralCreatePopup from './VouchersReferralCreatePopup';
+// import VouchersReferralCreatePopup from './VouchersReferralCreatePopup';
 
 const options = ['Edit', 'Delete'];
 function VouchersPage() {
@@ -39,7 +39,7 @@ function VouchersPage() {
   const [rowsPerPage, setRowsPerPage] = React.useState<number>(10);
   const [vouchersPromoDialog, setVouchersPromoDialog] = useState(false);
   const [vouchersPromoEditDialog, setVouchersPromoEditDialog] = useState(false);
-  const [vouchersReferralDialog, setVouchersReferralDialog] = useState(false);
+  // const [vouchersReferralDialog, setVouchersReferralDialog] = useState(false);
   const [editItem, setEditItem] = useState<any>(null);
   const [deleteItemId, setDeleteItemId] = useState<string>('');
   const [isLoader, setIsLoader] = React.useState(true);
@@ -162,11 +162,11 @@ function VouchersPage() {
             setTotal(response.data.data.totalResults);
           } else {
             setIsLoader(false);
-            setIsNotify(true);
-            setNotifyMessage({
-              text: response.data.message,
-              type: 'error',
-            });
+            // setIsNotify(true);
+            // setNotifyMessage({
+            //   text: response.data.message,
+            //   type: 'error',
+            // });
           }
         })
         .catch((error) => {
@@ -273,7 +273,7 @@ function VouchersPage() {
         setVouchersReferralDialog={setVouchersReferralDialog}
       /> */}
       <TopBar title="Vouchers" />
-      <div className="container mt-5">
+      <div className="container m-auto mt-5">
         <div className="w-full rounded-lg bg-white shadow-lg">
           <div className="grid grid-cols-12 px-4 py-5">
             <div className="col-span-7">
