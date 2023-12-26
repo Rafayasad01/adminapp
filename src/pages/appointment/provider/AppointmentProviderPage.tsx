@@ -53,19 +53,13 @@ function AppointmentProviderPage() {
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
   const [cancelDialogOpen, setCancelDialogOpen] = useState<boolean>(false);
-  const [dialogText, setDialogText] = useState<any>(
-    'Are you sure you want to delete this customer ?'
-  );
-  const [showPassword, setShowPassword] = useState(true);
   const {
     register,
     handleSubmit,
     watch,
     reset,
-    getValues,
     setValue,
     formState: { errors },
-    control,
   } = useForm<AppointmentProvider>();
 
   const inputFieldsData = [
@@ -251,41 +245,41 @@ function AppointmentProviderPage() {
     }
   };
 
-  const deleteHandler = (id: string) => {
-    setIsLoader(true);
-    const data = {
-      updatedBy: authState.user.id,
-    };
-    console.log(actionMenuItemid);
+  // const deleteHandler = (id: string) => {
+  //   setIsLoader(true);
+  //   const data = {
+  //     updatedBy: authState.user.id,
+  //   };
+  //   // console.log(actionMenuItemid);
 
-    // Service.deleteService(actionMenuItemid, data)
-    //   .then((item: any) => {
-    //     if (item.data.success) {
-    //       setIsLoader(false);
-    //       setIsNotify(true);
-    //       setNotifyMessage({
-    //         text: item.data.message,
-    //         type: 'success',
-    //       });
-    //       setList((newArr: any) => {
-    //         return newArr.filter(
-    //           (newItem: any) => newItem.id !== item.data.data.id
-    //         );
-    //       });
-    //     }
-    //   })
-    //   .catch((err) => {
-    //     setIsLoader(false);
-    //     setIsNotify(true);
-    //     setNotifyMessage({
-    //       text: err.message,
-    //       type: 'error',
-    //     });
-    //   });
-  };
+  //   // Service.deleteService(actionMenuItemid, data)
+  //   //   .then((item: any) => {
+  //   //     if (item.data.success) {
+  //   //       setIsLoader(false);
+  //   //       setIsNotify(true);
+  //   //       setNotifyMessage({
+  //   //         text: item.data.message,
+  //   //         type: 'success',
+  //   //       });
+  //   //       setList((newArr: any) => {
+  //   //         return newArr.filter(
+  //   //           (newItem: any) => newItem.id !== item.data.data.id
+  //   //         );
+  //   //       });
+  //   //     }
+  //   //   })
+  //   //   .catch((err) => {
+  //   //     setIsLoader(false);
+  //   //     setIsNotify(true);
+  //   //     setNotifyMessage({
+  //   //       text: err.message,
+  //   //       type: 'error',
+  //   //     });
+  //   //   });
+  // };
 
   const statusCancelHandler = () => {
-    deleteHandler(actionMenuItemid);
+    // deleteHandler(actionMenuItemid);
   };
 
   const manuHandler = (option: string) => {
@@ -320,7 +314,7 @@ function AppointmentProviderPage() {
         const data = {
           updatedBy: authState.user.id,
         };
-        console.log(actionMenuItemid);
+        // console.log(actionMenuItemid);
         Service.ProviderDelete(actionMenuItemid, data)
           .then((item: any) => {
             if (item.data.success) {
@@ -437,7 +431,7 @@ function AppointmentProviderPage() {
       createdBy: authState.user.id,
       tenant: authState.user.tenant,
     };
-    console.log('final data', userData);
+    // console.log('final data', userData);
     Service.ProviderCreate(userData)
       .then((item) => {
         if (item.data.success) {
@@ -744,7 +738,7 @@ function AppointmentProviderPage() {
           type="shock"
           open={cancelDialogOpen}
           setOpen={setCancelDialogOpen}
-          dialogText={dialogText}
+          // dialogText={dialogText}
           callback={statusCancelHandler}
         />
       )}

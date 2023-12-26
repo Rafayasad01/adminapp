@@ -61,16 +61,9 @@ function AppointmentVisitPage() {
   const [isLoader, setIsLoader] = React.useState(true);
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
-  const [cancelDialogOpen, setCancelDialogOpen] = useState<boolean>(false);
-  const [dialogText, setDialogText] = useState<any>(
-    'Are you sure you want to delete this customer ?'
-  );
   const [isPrintEnabled, setPrintEnabled] = useState<any>([]);
 
-  const {
-    reset,
-    formState: { errors },
-  } = useForm<AppointmentVisit>();
+  const { reset } = useForm<AppointmentVisit>();
 
   const handleFormClickOpen = () => {
     if (listingRolePermission(dataRole, 'Appointment Create')) {
@@ -216,7 +209,7 @@ function AppointmentVisitPage() {
                 text: item.data.message,
                 type: 'success',
               });
-              console.log('statat', item.data.data);
+              // console.log('statat', item.data.data);
               setList((newArr: any) => {
                 return newArr.map((items: any) => {
                   if (items.id === item.data.data.appointmentId) {
@@ -270,11 +263,11 @@ function AppointmentVisitPage() {
       Service.VisitList(authState.user.tenant, page, rowsPerPage)
         .then((item: any) => {
           if (item.data.success) {
-            console.log('item.data.data.list::::::', item.data.data.list);
+            // console.log('item.data.data.list::::::', item.data.data.list);
             setIsLoader(false);
             setList(item.data.data.list);
             setTotal(item.data.data.total);
-            setPrintEnabled(item.data.data.list.map((items: any) => false));
+            setPrintEnabled(item.data.data.list.map(() => false));
           } else {
             setIsLoader(false);
             setIsNotify(true);
@@ -298,7 +291,7 @@ function AppointmentVisitPage() {
   }, [emptyVariable]);
 
   const createFormHandler = (data: any, type: string) => {
-    console.log('dataaaaCREATE', data, type);
+    // console.log('dataaaaCREATE', data, type);
     setIsLoader(true);
     if (type === 'create') {
       Service.VisitCreate(data)
@@ -336,7 +329,7 @@ function AppointmentVisitPage() {
         });
     } else {
       data.appointmentId = actionMenuItemid?.id;
-      console.log('daTA', data);
+      // console.log('daTA', data);
       Service.VisitReschedule(data)
         .then((item: any) => {
           if (item.data.success) {
@@ -374,12 +367,12 @@ function AppointmentVisitPage() {
   };
 
   const updateFormHandler = (data: any) => {
-    console.log('datata', data);
+    // console.log('datata', data);
     setIsLoader(true);
     Service.VisitUpdate(data)
       .then((item) => {
         if (item.data.success) {
-          console.log('UPDATED', item.data.data);
+          // console.log('UPDATED', item.data.data);
           setOpenEditFormDialog(false);
           setIsLoader(false);
           setIsNotify(true);
@@ -421,8 +414,6 @@ function AppointmentVisitPage() {
         });
       });
   };
-
-  const handlePrintItem = () => {};
 
   return isLoader ? (
     <Loader />

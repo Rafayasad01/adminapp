@@ -1,5 +1,4 @@
 import network from '../../utils/network';
-import { BACKOFFICE_PREFIX } from '../../utils/constants';
 
 const BANNER_PREFIX = 'banner';
 

@@ -22,8 +22,6 @@ function SuperAdminShopDetailsDialog({
   openFormDialog,
   setOpenFormDialog,
   items,
-  setIsNotify,
-  setNotifyMessage,
 }: Props) {
   const handleFormClose = () => {
     setOpenFormDialog(false);

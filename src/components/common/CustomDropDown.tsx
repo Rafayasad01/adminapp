@@ -23,8 +23,6 @@ function CustomDropDown({
   inputTitle,
   customWidth,
   options,
-  register,
-  error,
   control,
   id,
   validateRequired,

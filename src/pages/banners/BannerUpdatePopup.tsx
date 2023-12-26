@@ -58,7 +58,7 @@ function BannerUpdatePopup({
   const handleFormClose = () => {
     setOpenFormDialog(false);
   };
-  console.log('sssssssssssssFORMDATA', file, selectedImg);
+  // console.log('sssssssssssssFORMDATA', file, selectedImg);
 
   return (
     <Dialog

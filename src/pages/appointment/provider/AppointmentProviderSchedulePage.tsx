@@ -32,11 +32,9 @@ function AppointmentProviderSchedulePage() {
   const [endTime, setEndTime] = useState<dayjs.Dayjs | any>(null);
   const [weekDays, setWeekDays] = useState<any>([]);
   const [emptyVariable] = useState(null);
-  const [page, setPage] = useState(0);
   const [list, setList] = useState<any>([]);
   const [editFormDetails, setEditFormDetails] = useState<any>();
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const [actionMenuItemid, setActionMenuItemid] = React.useState('');
+  const [actionMenuItemid] = React.useState('');
   const [actionMenuAnchorEl, setActionMenuAnchorEl] =
     useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
@@ -48,7 +46,7 @@ function AppointmentProviderSchedulePage() {
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
   const [cancelDialogOpen, setCancelDialogOpen] = useState<boolean>(false);
-  const [dialogText, setDialogText] = useState<any>(
+  const [dialogText] = useState<any>(
     'Are you sure you want to delete this customer ?'
   );
   const {
@@ -56,10 +54,8 @@ function AppointmentProviderSchedulePage() {
     handleSubmit,
     watch,
     reset,
-    getValues,
     setValue,
     formState: { errors },
-    control,
   } = useForm<AppointmentProviderSchedule>();
 
   const inputScheduleData = [
@@ -101,8 +97,7 @@ function AppointmentProviderSchedulePage() {
       listingRolePermission(dataRole, 'Appointment Provider Schedule Create') &&
       listingRolePermission(dataRole, 'Appointment Provider Schedule List')
     ) {
-      console.log('done1');
-
+      // console.log('done1');
       // setOpenFormDialog(true);
       if (list.appointmentProviderSchedule?.length < 7) {
         navigate(`../add-schedule/${id}`);
@@ -122,42 +117,42 @@ function AppointmentProviderSchedulePage() {
     }
   };
 
-  const deleteHandler = (delId: string) => {
-    setIsLoader(true);
-    const data = {
-      updatedBy: authState.user.id,
-    };
-    console.log(actionMenuItemid);
+  // const deleteHandler = (delId: string) => {
+  //   setIsLoader(true);
+  //   const data = {
+  //     updatedBy: authState.user.id,
+  //   };
+  //   // console.log(actionMenuItemid);
 
-    // Service.deleteService(actionMenuItemid, data)
-    //   .then((item: any) => {
-    //     if (item.data.success) {
-    //       setIsLoader(false);
-    //       setIsNotify(true);
-    //       setNotifyMessage({
-    //         text: item.data.message,
-    //         type: 'success',
-    //       });
-    //       setList((newArr: any) => {
-    //         return newArr.filter(
-    //           (newItem: any) => newItem.id !== item.data.data.id
-    //         );
-    //       });
-    //     }
-    //   })
-    //   .catch((err) => {
-    //     setIsLoader(false);
-    //     setIsNotify(true);
-    //     setNotifyMessage({
-    //       text: err.message,
-    //       type: 'error',
-    //     });
-    //   });
-  };
+  //   // Service.deleteService(actionMenuItemid, data)
+  //   //   .then((item: any) => {
+  //   //     if (item.data.success) {
+  //   //       setIsLoader(false);
+  //   //       setIsNotify(true);
+  //   //       setNotifyMessage({
+  //   //         text: item.data.message,
+  //   //         type: 'success',
+  //   //       });
+  //   //       setList((newArr: any) => {
+  //   //         return newArr.filter(
+  //   //           (newItem: any) => newItem.id !== item.data.data.id
+  //   //         );
+  //   //       });
+  //   //     }
+  //   //   })
+  //   //   .catch((err) => {
+  //   //     setIsLoader(false);
+  //   //     setIsNotify(true);
+  //   //     setNotifyMessage({
+  //   //       text: err.message,
+  //   //       type: 'error',
+  //   //     });
+  //   //   });
+  // };
 
-  const statusCancelHandler = () => {
-    deleteHandler(actionMenuItemid);
-  };
+  // const statusCancelHandler = () => {
+  //   deleteHandler(actionMenuItemid);
+  // };
 
   const editHandler = (editId: string) => {
     if (listingRolePermission(dataRole, 'Appointment Provider Schedule Edit')) {
@@ -249,7 +244,7 @@ function AppointmentProviderSchedulePage() {
 
   useEffect(() => {
     if (listingRolePermission(dataRole, 'Appointment Provider Schedule List')) {
-      Service.ProviderScheduleList(id, page, rowsPerPage)
+      Service.ProviderScheduleList(id)
         .then((item: any) => {
           if (item.data.success) {
             setIsLoader(false);
@@ -281,7 +276,7 @@ function AppointmentProviderSchedulePage() {
     }
   }, [emptyVariable]);
 
-  const createFormHandler = (data: any) => {
+  const createFormHandler = () => {
     // setIsLoader(true);
     const userData = {
       startTime: startTime.format('YYYY-MM-DD HH:mm:ss'),
@@ -341,7 +336,7 @@ function AppointmentProviderSchedulePage() {
     Service.ProviderScheduleUpdate(details)
       .then((item) => {
         if (item.data.success) {
-          console.log('itemmmm', item.data.data);
+          // console.log('itemmmm', item.data.data);
           reset();
           setStartTime('');
           setEndTime('');
@@ -392,10 +387,10 @@ function AppointmentProviderSchedulePage() {
       });
   };
 
-  const onSubmitDialogBox = (data: any) => {
+  const onSubmitDialogBox = () => {
     if (openFormDialog && weekDays && startTime && endTime) {
       setOpenFormDialog(false);
-      createFormHandler(data);
+      createFormHandler();
     } else if (openEditFormDialog) {
       setOpenEditFormDialog(false);
       // updateFormHandler(data);
@@ -596,7 +591,7 @@ function AppointmentProviderSchedulePage() {
                   list.appointmentProviderSchedule?.map(
                     (item: any, index: number) => {
                       return (
-                        <tr key={item.id}>
+                        <tr key={index}>
                           <td>
                             <div className="avatar flex flex-row items-center">
                               <div className="flex flex-col items-start justify-start">
@@ -671,7 +666,7 @@ function AppointmentProviderSchedulePage() {
           open={cancelDialogOpen}
           setOpen={setCancelDialogOpen}
           dialogText={dialogText}
-          callback={statusCancelHandler}
+          callback={() => null}
         />
       )}
       {actionMenuAnchorEl && (

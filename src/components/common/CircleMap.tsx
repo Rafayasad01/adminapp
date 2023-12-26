@@ -2,8 +2,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Loader } from '@googlemaps/js-api-loader';
 
-import assets from '../../assets';
-
 type Props = {
   center: google.maps.LatLngLiteral;
   zoom: number;
@@ -22,7 +20,7 @@ function CircleMap({ center, zoom, radius }: Props) {
   const mapRef = useRef(null);
 
   useEffect(() => {
-    loader.load().then(async (e) => {
+    loader.load().then(async () => {
       if (!mapRef.current) {
         return;
       }
@@ -39,13 +37,13 @@ function CircleMap({ center, zoom, radius }: Props) {
       const { google } = window;
       const newMap = new google.maps.Map(mapRef.current, options);
       setMap(newMap);
-      const marker = new google.maps.Marker({
-        position: center,
-        map,
-        title: 'Location',
-        icon: assets.images.iconMap,
-        animation: google.maps.Animation.DROP,
-      });
+      // const marker = new google.maps.Marker({
+      //   position: center,
+      //   map,
+      //   title: 'Location',
+      //   icon: assets.images.iconMap,
+      //   animation: google.maps.Animation.DROP,
+      // });
 
       const newCircle = new google.maps.Circle({
         strokeColor: '#1D1D1D',

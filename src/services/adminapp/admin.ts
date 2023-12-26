@@ -1,7 +1,7 @@
 import network from '../../utils/network';
 import { SETTING_PREFIX, BACKOFFICE_PREFIX } from '../../utils/constants';
 
-import { NewPassword, UserLogin } from '../../interfaces/auth.interface';
+import { UserLogin } from '../../interfaces/auth.interface';
 
 const getService = (tenant: string) => {
   return network.get(`${SETTING_PREFIX}/get/${tenant}`);

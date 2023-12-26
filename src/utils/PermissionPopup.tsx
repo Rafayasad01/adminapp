@@ -7,7 +7,7 @@ import popupStyle from '../assets/css/PermissionPopup.module.css';
 type Props = {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  dialogText: string;
+  dialogText?: string;
   type?: string;
   callback: (...args: any[]) => any;
 };

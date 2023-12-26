@@ -50,7 +50,7 @@ function CategoriesPage() {
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
   const [cancelDialogOpen, setCancelDialogOpen] = useState<boolean>(false);
-  const [dialogText, setDialogText] = useState<any>(
+  const [dialogText] = useState<any>(
     'Are you sure you want to delete this Category ?'
   );
 
@@ -271,7 +271,7 @@ function CategoriesPage() {
   };
 
   const updateFormHandler = (data: any) => {
-    console.log('data::::::', data);
+    // console.log('data::::::', data);
     setIsLoader(true);
     const formData = new FormData();
     formData.append('name', data.name);

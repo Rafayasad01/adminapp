@@ -42,7 +42,7 @@ function SuperAdminAppImagePage() {
   const [childData, setChildData] = useState<any>();
 
   const handleClickSearch = (event: any) => {
-    console.log('search event', event.target.value);
+    // console.log('search event', event.target.value);
     setSearch(event.target.value as string);
     // const searchTxt = event.target.value as string;
     // const newPage = 0;
@@ -222,8 +222,7 @@ function SuperAdminAppImagePage() {
 
   const updateFormHandler = (data: any) => {
     setIsLoader(true);
-    console.log('data2222222', data);
-
+    // console.log('data2222222', data);
     const formData = new FormData();
     formData.append('name', data.name);
     formData.append('desc', data.desc);

@@ -40,9 +40,7 @@ function SuperAdminAppImageCreatePopup({
     register,
     handleSubmit,
     setValue,
-    watch,
     formState: { errors },
-    control,
   } = useForm<AppImage>();
 
   const onSubmit = (data: AppImage) => {

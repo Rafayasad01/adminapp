@@ -295,7 +295,7 @@ function OrdersAssignPage() {
                 {list &&
                   list.map((item: any, index: number) => {
                     return (
-                      <tr key={item.id}>
+                      <tr key={index}>
                         <td>
                           <div className="avatar flex flex-row items-center">
                             {item.avatar ? (

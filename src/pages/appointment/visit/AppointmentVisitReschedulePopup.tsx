@@ -60,10 +60,9 @@ function AppointmentVisitReschedulePopup({
   const [servicelov, setServiceLov] = useState<any>();
   const [schedule, setSchedule] = useState<any>();
   const [startTime, setStartTime] = useState<dayjs.Dayjs | any>(null);
-  const [endTime, setEndTime] = useState<dayjs.Dayjs | any>(null);
 
   const onSubmit = (data: AppointmentVisit) => {
-    console.log('dataSS', data, startTime);
+    // console.log('dataSS', data, startTime);
     const formattedDate = `${
       dayjs(data.appointmentDate).isValid() &&
       dayjs(data.appointmentDate)?.format('YYYY-MM-DD')
@@ -82,7 +81,7 @@ function AppointmentVisitReschedulePopup({
       tenant: authState.user.tenant,
       isUrgent: data.isUrgent,
     };
-    console.log('visitorDetails', visitorDetails);
+    // console.log('visitorDetails', visitorDetails);
     if (startTime && data.appointmentDate) {
       callback(visitorDetails, 'reschedule');
     } else {
@@ -104,7 +103,7 @@ function AppointmentVisitReschedulePopup({
       Service.VisitProviderById(watch('appointmentProvider'))
         .then((item: any) => {
           if (item.data.success) {
-            console.log('visit', item.data.data);
+            // console.log('visit', item.data.data);
             setSchedule(item.data.data);
             setIsLoader(false);
             Service.VisitServiceLovByProviderId(item.data.data.id)
@@ -151,7 +150,7 @@ function AppointmentVisitReschedulePopup({
       Service.VisitLov(authState.user.tenant)
         .then((item: any) => {
           if (item.data.success) {
-            console.log('visit', item.data.data);
+            // console.log('visit', item.data.data);
             setProviderLov(item.data.data);
             setIsLoader(false);
           } else {
@@ -177,7 +176,7 @@ function AppointmentVisitReschedulePopup({
   const handleFormClose = () => {
     setOpenFormDialog(false);
   };
-  console.log('sssssssssssss', watch('appointmentProvider'));
+  // console.log('sssssssssssss', watch('appointmentProvider'));
 
   return (
     <Dialog

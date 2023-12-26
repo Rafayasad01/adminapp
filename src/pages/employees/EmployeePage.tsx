@@ -51,19 +51,17 @@ function EmployeePage() {
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
   const [cancelDialogOpen, setCancelDialogOpen] = useState<boolean>(false);
-  const [dialogText, setDialogText] = useState<any>(
+  const [dialogText] = useState<any>(
     'Are you sure you want to delete this customer ?'
   );
   const [showPassword, setShowPassword] = useState(true);
   const {
     register,
     handleSubmit,
-    watch,
     reset,
     getValues,
     setValue,
     formState: { errors },
-    control,
   } = useForm<AppUserEmployees>();
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -205,41 +203,41 @@ function EmployeePage() {
     }
   };
 
-  const deleteHandler = (id: string) => {
-    setIsLoader(true);
-    const data = {
-      updatedBy: authState.user.id,
-    };
-    console.log(actionMenuItemid);
+  // const deleteHandler = (id: string) => {
+  //   setIsLoader(true);
+  //   // const data = {
+  //   //   updatedBy: authState.user.id,
+  //   // };
+  //   // console.log(actionMenuItemid);
 
-    // Service.deleteService(actionMenuItemid, data)
-    //   .then((item: any) => {
-    //     if (item.data.success) {
-    //       setIsLoader(false);
-    //       setIsNotify(true);
-    //       setNotifyMessage({
-    //         text: item.data.message,
-    //         type: 'success',
-    //       });
-    //       setList((newArr: any) => {
-    //         return newArr.filter(
-    //           (newItem: any) => newItem.id !== item.data.data.id
-    //         );
-    //       });
-    //     }
-    //   })
-    //   .catch((err) => {
-    //     setIsLoader(false);
-    //     setIsNotify(true);
-    //     setNotifyMessage({
-    //       text: err.message,
-    //       type: 'error',
-    //     });
-    //   });
-  };
+  //   // Service.deleteService(actionMenuItemid, data)
+  //   //   .then((item: any) => {
+  //   //     if (item.data.success) {
+  //   //       setIsLoader(false);
+  //   //       setIsNotify(true);
+  //   //       setNotifyMessage({
+  //   //         text: item.data.message,
+  //   //         type: 'success',
+  //   //       });
+  //   //       setList((newArr: any) => {
+  //   //         return newArr.filter(
+  //   //           (newItem: any) => newItem.id !== item.data.data.id
+  //   //         );
+  //   //       });
+  //   //     }
+  //   //   })
+  //   //   .catch((err) => {
+  //   //     setIsLoader(false);
+  //   //     setIsNotify(true);
+  //   //     setNotifyMessage({
+  //   //       text: err.message,
+  //   //       type: 'error',
+  //   //     });
+  //   //   });
+  // };
 
   const statusCancelHandler = () => {
-    deleteHandler(actionMenuItemid);
+    // deleteHandler(actionMenuItemid);
   };
 
   const manuHandler = (option: string) => {
@@ -270,7 +268,7 @@ function EmployeePage() {
         const data = {
           updatedBy: authState.user.id,
         };
-        console.log(actionMenuItemid);
+        // console.log(actionMenuItemid);
         Service.deleteService(actionMenuItemid, data)
           .then((item: any) => {
             if (item.data.success) {
@@ -378,12 +376,12 @@ function EmployeePage() {
       updatedBy: authState.user.id,
       tenant: authState.user.tenant,
     };
-    console.log('User', userData);
+    // console.log('User', userData);
 
     Service.updateService(getValues('user_id'), userData)
       .then((item) => {
         if (item.data.success) {
-          console.log('LISSST', list, item.data.data, getValues('user_id'));
+          // console.log('LISSST', list, item.data.data, getValues('user_id'));
           setIsLoader(false);
           setIsNotify(true);
           setNotifyMessage({
@@ -426,7 +424,7 @@ function EmployeePage() {
       data.email &&
       data.password
     ) {
-      console.log('data', data);
+      // console.log('data', data);
       setOpenFormDialog(false);
       createFormHandler(data);
     } else if (
@@ -435,7 +433,7 @@ function EmployeePage() {
       data.last_name &&
       data.email
     ) {
-      console.log('dataEdit', data);
+      // console.log('dataEdit', data);
       setOpenEditFormDialog(false);
       updateFormHandler(data);
     }

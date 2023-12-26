@@ -20,7 +20,7 @@ function ShopAdminUserDetailPage() {
       if (item.data.success) {
         setIsLoader(false);
         setUserDetail(item.data.data);
-        console.log('item', item.data);
+        // console.log('item', item.data);
         // console.log('item', item.data.data)
       } else {
         setIsLoader(false);

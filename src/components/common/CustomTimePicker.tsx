@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import ThemeProvider from '@mui/material/styles/ThemeProvider';
 import createTheme from '@mui/material/styles/createTheme';
 import Popover from '@mui/material/Popover';
@@ -37,10 +37,8 @@ type Props = {
 function CustomTimePicker({
   timePickerLabel,
   timePickerSubLabel,
-  timePickerValue,
   setTimePickerValue,
   errors,
-  index,
   setError,
   id,
   register,
@@ -48,7 +46,7 @@ function CustomTimePicker({
   watch,
 }: Props) {
   const [timePicker, setTimePicker] = useState<HTMLButtonElement | null>(null);
-  const buttonElement = useRef(null);
+  // const buttonElement = useRef(null);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setTimePicker(event.currentTarget);
     setError(id, {

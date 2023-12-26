@@ -11,6 +11,7 @@ import cartService from '../../services/adminapp/adminCarts';
 import { CART_STATUS_NEW } from '../../utils/constants';
 import ProcessingIcon from '../../components/icons/ProcessingIcon';
 import Loader from '../../components/common/Loader';
+import Notify from '../../components/common/Notify';
 
 function CartDetailsPage() {
   const [viewData, setViewData] = useState<any>({});
@@ -44,6 +45,11 @@ function CartDetailsPage() {
     <Loader />
   ) : (
     <>
+      <Notify
+        isOpen={isNotify}
+        setIsOpen={setIsNotify}
+        displayMessage={notifyMessage}
+      />
       <TopBar isNestedRoute title="View Cart" />
       <div className="container py-3">
         <div className="flex-center flex justify-center">

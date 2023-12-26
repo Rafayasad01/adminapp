@@ -40,12 +40,10 @@ function CategoriesServicesCreatePopup({
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
-    control,
   } = useForm<CategoryService>();
   const onSubmit = (data: CategoryService) => {
-    if (data.desc && image && data.name && data.price && data.quantity) {
+    if (data.desc && image && data.name && data.price) {
       data.icon = image;
       setOpenFormDialog(false);
       callback(data);
@@ -81,7 +79,7 @@ function CategoriesServicesCreatePopup({
     setImage(null);
   };
 
-  console.log('errors', errors);
+  // console.log('errors', errors);
 
   return (
     <Dialog
@@ -98,7 +96,7 @@ function CategoriesServicesCreatePopup({
             <span className="Title">Add Services</span>
           </div>
           <div className="FormBody">
-            <div className="FormField">
+            <div className="FormFields">
               <FormControl className="FormControl" variant="standard">
                 <label className="FormLabel">Service Name</label>
                 <Input
@@ -120,25 +118,6 @@ function CategoriesServicesCreatePopup({
                 )}
                 {errors.name?.type === 'validate' && (
                   <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
-                )}
-              </FormControl>
-            </div>
-            <div className="FormFields">
-              <FormControl className="FormControl" variant="standard">
-                <label className="FormLabel">Min Order Quantity</label>
-                <Input
-                  className="FormInput"
-                  id="name"
-                  type="number"
-                  placeholder="Enter minimum order quantity"
-                  {...register('quantity', {
-                    validate: (value: any) => VALIDATE_NON_NEGATIVE_NUM(value),
-                    required: 'Quantity is required in numbers',
-                  })}
-                  disableUnderline
-                />
-                {errors.quantity && (
-                  <ErrorSpanBox error={errors.quantity?.message} />
                 )}
               </FormControl>
               <FormControl className="FormControl" variant="standard">

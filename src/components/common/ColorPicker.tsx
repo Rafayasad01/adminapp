@@ -5,8 +5,6 @@ import Popover from '@mui/material/Popover';
 import IconButton from '@mui/material/IconButton';
 import FormControl from '@mui/material/FormControl';
 import { SketchPicker } from 'react-color';
-import ColorLensOutlinedIcon from '@mui/icons-material/ColorLensOutlined';
-
 import '../../assets/css/PopupStyle.css';
 
 const darkTheme = createTheme({
@@ -46,7 +44,7 @@ function ColorPicker({
     setColorPicker(buttonElement.current);
   };
 
-  const handleChangeComplete = (color: any, event: any) => {
+  const handleChangeComplete = (color: any) => {
     // console.log('color::::::', color);
     // console.log('event::::::', event);
     setColorPickerValue(color.hex);

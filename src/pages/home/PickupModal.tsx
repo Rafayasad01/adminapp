@@ -10,7 +10,7 @@ type Props = {
   data: any;
 };
 
-function PickupModal({ open, setOpen, data }: Props) {
+function PickupModal({ open, setOpen }: Props) {
   const handleClose = () => setOpen(false);
   return (
     <Modal

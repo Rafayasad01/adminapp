@@ -2,7 +2,6 @@ import '../../../index.css';
 import { useEffect, useState } from 'react';
 import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
-import InputAdornment from '@mui/material/InputAdornment';
 import Checkbox from '@mui/material/Checkbox';
 import TextareaAutosize from '@mui/material/TextareaAutosize';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -26,7 +25,6 @@ import ErrorSpanBox from '../../../components/common/ErrorSpanBox';
 
 function SuperAdminAddRolePermissionsPage() {
   const navigate = useNavigate();
-  const [updatedList, setUpdatedList] = useState<any>();
   const [list, setList] = useState<any>();
   const [isLoader, setIsLoader] = useState<boolean>(true);
   const [selectAll, setSelectAll] = useState(false);
@@ -37,10 +35,8 @@ function SuperAdminAddRolePermissionsPage() {
   const {
     register,
     handleSubmit,
-    watch,
     reset,
     formState: { errors },
-    control,
   } = useForm<RolePermissions>();
 
   useEffect(() => {
@@ -54,13 +50,18 @@ function SuperAdminAddRolePermissionsPage() {
       })
       .catch((error) => {
         setIsLoader(false);
-        console.log('error::::::::', error);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: error.message,
+          type: 'success',
+        });
+        // console.log('error::::::::', error);
       });
   }, [emptyVariable]);
   // console.log("list", list);
 
   const onSubmit = (data: RolePermissions) => {
-    setIsLoader(true);
+    // setIsLoader(true);
     const finalData = {
       name: data.roleName,
       desc: data.roleDescription,
@@ -84,7 +85,7 @@ function SuperAdminAddRolePermissionsPage() {
             }));
             setList(clearedData);
             reset();
-            // setIsLoader(false);
+            setIsLoader(false);
             setText(item.data.message);
             navigate('../list');
           } else {
@@ -124,14 +125,14 @@ function SuperAdminAddRolePermissionsPage() {
     // console.log("updated", updatedData);
   };
 
-  const handleCategorySelectAll = (categoryIndex: number, checked: any) => {
-    const updatedData = [...list];
-    updatedData[categoryIndex].data.forEach((detail: any) => {
-      detail.status = checked;
-    });
-    setList(updatedData);
-    // console.log("updateds", updatedData);
-  };
+  // const handleCategorySelectAll = (categoryIndex: number, checked: any) => {
+  //   const updatedData = [...list];
+  //   updatedData[categoryIndex].data.forEach((detail: any) => {
+  //     detail.status = checked;
+  //   });
+  //   setList(updatedData);
+  //   // console.log("updateds", updatedData);
+  // };
 
   const handleSelectAllChange = (checked: any) => {
     const updatedData = list.map((category: any) => ({

@@ -28,23 +28,12 @@ function BannersPage() {
   const [emptyVariable] = useState(null);
   const [list, setList] = useState<any>([]);
   const [editFormData, setEditFormData] = useState<any>();
-  const [actionMenuItemid, setActionMenuItemid] = React.useState('');
-  const [actionMenuAnchorEl, setActionMenuAnchorEl] =
-    useState<null | HTMLElement>(null);
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
   const [isLoader, setIsLoader] = React.useState(true);
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
-  const [cancelDialogOpen, setCancelDialogOpen] = useState<boolean>(false);
-  const [dialogText, setDialogText] = useState<any>(
-    'Are you sure you want to delete this customer ?'
-  );
-  const [showPassword, setShowPassword] = useState(true);
-  const {
-    reset,
-    formState: { errors },
-  } = useForm<AppUserEmployees>();
+  const { reset } = useForm<AppUserEmployees>();
 
   const handleFormClickOpen = () => {
     if (listingRolePermission(dataRole, 'Banners Create')) {
@@ -58,42 +47,42 @@ function BannersPage() {
     }
   };
 
-  const deleteHandler = (id: string) => {
-    setIsLoader(true);
-    const data = {
-      updatedBy: authState.user.id,
-    };
-    console.log(actionMenuItemid);
+  // const deleteHandler = (id: string) => {
+  //   setIsLoader(true);
+  //   const data = {
+  //     updatedBy: authState.user.id,
+  //   };
+  //   // console.log(actionMenuItemid);
 
-    // Service.deleteService(actionMenuItemid, data)
-    //   .then((item: any) => {
-    //     if (item.data.success) {
-    //       setIsLoader(false);
-    //       setIsNotify(true);
-    //       setNotifyMessage({
-    //         text: item.data.message,
-    //         type: 'success',
-    //       });
-    //       setList((newArr: any) => {
-    //         return newArr.filter(
-    //           (newItem: any) => newItem.id !== item.data.data.id
-    //         );
-    //       });
-    //     }
-    //   })
-    //   .catch((err) => {
-    //     setIsLoader(false);
-    //     setIsNotify(true);
-    //     setNotifyMessage({
-    //       text: err.message,
-    //       type: 'error',
-    //     });
-    //   });
-  };
+  //   // Service.deleteService(actionMenuItemid, data)
+  //   //   .then((item: any) => {
+  //   //     if (item.data.success) {
+  //   //       setIsLoader(false);
+  //   //       setIsNotify(true);
+  //   //       setNotifyMessage({
+  //   //         text: item.data.message,
+  //   //         type: 'success',
+  //   //       });
+  //   //       setList((newArr: any) => {
+  //   //         return newArr.filter(
+  //   //           (newItem: any) => newItem.id !== item.data.data.id
+  //   //         );
+  //   //       });
+  //   //     }
+  //   //   })
+  //   //   .catch((err) => {
+  //   //     setIsLoader(false);
+  //   //     setIsNotify(true);
+  //   //     setNotifyMessage({
+  //   //       text: err.message,
+  //   //       type: 'error',
+  //   //     });
+  //   //   });
+  // };
 
-  const statusCancelHandler = () => {
-    deleteHandler(actionMenuItemid);
-  };
+  // const statusCancelHandler = () => {
+  //   deleteHandler(actionMenuItemid);
+  // };
 
   useEffect(() => {
     if (listingRolePermission(dataRole, 'Banners List')) {
@@ -101,7 +90,7 @@ function BannersPage() {
         .then((item: any) => {
           if (item.data.success) {
             setIsLoader(false);
-            console.log('bannerss lsit', item.data.data);
+            // console.log('bannerss lsit', item.data.data);
             setList(item.data.data);
             // setTotal(item.data.data.total);
           }
@@ -181,7 +170,7 @@ function BannersPage() {
       Service.updateBanners(formDetails)
         .then((item) => {
           if (item.data.success) {
-            console.log('UPDATED', item.data.data);
+            // console.log('UPDATED', item.data.data);
             setOpenEditFormDialog(false);
             setIsLoader(false);
             setIsNotify(true);

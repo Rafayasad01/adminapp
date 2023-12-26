@@ -56,7 +56,7 @@ const ProviderDelete = (providerId: any, data: any) => {
 };
 
 // provider schedule
-const ProviderScheduleList = (providerID: any, page: number, size: number) => {
+const ProviderScheduleList = (providerID: any) => {
   return network.get(
     `${APPOINTMENT_PREFIX}/${PROVIDER_PREFIX}/${SCHEDULE_PREFIX}/list/${providerID}`
   );

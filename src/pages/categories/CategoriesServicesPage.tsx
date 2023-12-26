@@ -49,7 +49,7 @@ function CategoriesServicesPage() {
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
   const [cancelDialogOpen, setCancelDialogOpen] = useState<boolean>(false);
-  const [dialogText, setDialogText] = useState<any>(
+  const [dialogText] = useState<any>(
     'Are you sure you want to delete this service ?'
   );
 
@@ -140,6 +140,11 @@ function CategoriesServicesPage() {
         })
         .catch((error) => {
           setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: error.message,
+            type: 'error',
+          });
           // console.log('error::::::::', error);
         });
     }
@@ -225,7 +230,6 @@ function CategoriesServicesPage() {
     const formData = new FormData();
     formData.append('name', data.name);
     formData.append('icon', data.icon);
-    formData.append('quantity', data.quantity);
     formData.append('price', data.price);
     formData.append('desc', data.desc);
     formData.append('created_by', authState.user.id);
@@ -263,7 +267,7 @@ function CategoriesServicesPage() {
     setIsLoader(true);
     const formData = new FormData();
     formData.append('name', data.name);
-    formData.append('quantity', data.quantity);
+    // formData.append('quantity', data.quantity);
     formData.append('price', data.price);
     formData.append('desc', data.desc);
     formData.append('updated_by', authState.user.id);
@@ -399,9 +403,9 @@ function CategoriesServicesPage() {
             <table className="table-border table-auto">
               <thead>
                 <tr>
-                  <th className="w-56">Item Name</th>
-                  <th className="w-80">Description</th>
-                  <th>Min Quantity</th>
+                  <th className="w-[20%]">Item Name</th>
+                  <th className="w-[50%]">Description</th>
+                  {/* <th>Min Quantity</th> */}
                   <th>Price</th>
                   <th>Status</th>
                   <th>&nbsp;</th>
@@ -423,7 +427,7 @@ function CategoriesServicesPage() {
                           </div>
                         </td>
                         <td>{item.desc ? item.desc : '--'}</td>
-                        <td>{item.quantity}</td>
+                        {/* <td>{item.quantity}</td> */}
                         <td>{item.price}</td>
                         <td>
                           {item.isActive ? (

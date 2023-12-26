@@ -2,7 +2,7 @@ import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
-import React, { useState } from 'react';
+import React from 'react';
 
 import { useForm } from 'react-hook-form';
 import '../../../assets/css/PopupStyle.css';
@@ -29,35 +29,32 @@ function AppUserAddressCreatePopup({
   openFormDialog,
   setOpenFormDialog,
   callback,
-  setIsNotify,
-  setNotifyMessage,
   appUserAddressTypeLov,
 }: Props) {
-  const [showPassword, setShowPassword] = useState(false);
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
+  // const [showPassword, setShowPassword] = useState(false);
+  // const handleClickShowPassword = () => setShowPassword((show) => !show);
 
-  const [avatar, setAvatar] = useState<any>(null);
+  // const [avatar, setAvatar] = useState<any>(null);
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
     control,
   } = useForm<AppUserAddress>();
 
   const handleFormClose = () => setOpenFormDialog(false);
 
-  const handleFileChange = (event: any) => {
-    setAvatar(event.target.files[0]);
-  };
+  // const handleFileChange = (event: any) => {
+  //   setAvatar(event.target.files[0]);
+  // };
 
-  const handleFileOnClick = (event: any) => {
-    event.target.value = null;
-    setAvatar(null);
-  };
+  // const handleFileOnClick = (event: any) => {
+  //   event.target.value = null;
+  //   setAvatar(null);
+  // };
 
   const onSubmit = (data: AppUserAddress) => {
-    console.log('SUB DATA', data);
+    // console.log('SUB DATA', data);
     setOpenFormDialog(false);
     callback(data);
     // if (

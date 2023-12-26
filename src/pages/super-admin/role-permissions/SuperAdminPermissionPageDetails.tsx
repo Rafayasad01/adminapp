@@ -1,25 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import IconButton from '@mui/material/IconButton';
 import Divider from '@mui/material/Divider';
 import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
-import Button from '@mui/material/Button';
 import SearchIcon from '@mui/icons-material/Search';
-import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import TablePagination from '@mui/material/TablePagination';
 import Switch from '@mui/material/Switch';
-import EditIcon from '@mui/icons-material/Edit';
-import WysiwygOutlinedIcon from '@mui/icons-material/WysiwygOutlined';
 import { useAppSelector } from '../../../redux/redux-hooks';
 import TopBar from '../../../components/common/TopBar';
 import Loader from '../../../components/common/Loader';
 import Service from '../../../services/superadmin/RolePermissions';
 import Notify from '../../../components/common/Notify';
 import CustomText from '../../../components/common/CustomText';
-import { TEXT_STORE_KEY, setText } from '../../../utils/constants';
-import SuperAdminPermissionPagePopup from './SuperAdminPermissionPagePopup';
 
 function SuperAdminPermissionPageDetails() {
   const authState: any = useAppSelector((state) => state?.authState);
@@ -27,7 +21,6 @@ function SuperAdminPermissionPageDetails() {
   const { state } = useLocation();
 
   const [emptyVariable] = useState(null);
-  const navigate = useNavigate();
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(0);
   const [total, setTotal] = useState(0);
@@ -36,9 +29,6 @@ function SuperAdminPermissionPageDetails() {
   const [isLoader, setIsLoader] = React.useState(false);
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
-  const [openDialog, setOpenDialog] = useState(false);
-  const [heading, setHeading] = useState<string>('');
-  const [childList, setChildList] = useState<any>();
 
   const handleClickSearch = (event: any) => {
     setSearch(event.target.value);

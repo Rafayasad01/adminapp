@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import IconButton from '@mui/material/IconButton';
 import Divider from '@mui/material/Divider';
 import Menu from '@mui/material/Menu';
@@ -28,9 +27,8 @@ const options = ['Edit', 'Delete'];
 const ITEM_HEIGHT = 48;
 
 function LocationsPage() {
-  const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [search, setSearch] = useState('');
+  // const [search, setSearch] = useState('');
   const [openDialog, setOpenDialog] = useState(false);
   const [isCheckedAll, setIsCheckedAll] = useState(false);
 
@@ -65,9 +63,11 @@ function LocationsPage() {
       setOpenDialog(true);
     }
   };
-  const handleClickSearch = (event: any) => {
-    setSearch(event.target.value as string);
-  };
+  const handleClickSearch = () =>
+    // event: any
+    {
+      // setSearch(event.target.value as string);
+    };
   return (
     <>
       <LocationsAddPopup
@@ -98,13 +98,15 @@ function LocationsPage() {
                     id="search"
                     type="text"
                     placeholder="Search"
-                    onKeyDown={(
-                      event: React.KeyboardEvent<
-                        HTMLInputElement | HTMLTextAreaElement
-                      >
-                    ) => {
-                      handleClickSearch(event);
-                    }}
+                    onKeyDown={() =>
+                      // event: React.KeyboardEvent<
+                      //   HTMLInputElement | HTMLTextAreaElement
+                      // >
+                      {
+                        handleClickSearch();
+                        // event
+                      }
+                    }
                     endAdornment={
                       <InputAdornment position="end">
                         <Divider

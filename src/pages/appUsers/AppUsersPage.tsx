@@ -52,7 +52,7 @@ function AppUsersPage() {
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
   const [cancelDialogOpen, setCancelDialogOpen] = useState<boolean>(false);
-  const [dialogText, setDialogText] = useState<any>(
+  const [dialogText] = useState<any>(
     'Are you sure you want to delete this customer ?'
   );
 

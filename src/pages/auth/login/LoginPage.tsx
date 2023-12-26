@@ -8,7 +8,6 @@ import InputAdornment from '@mui/material/InputAdornment';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import CircularProgress from '@mui/material/CircularProgress';
-import { useDispatch } from 'react-redux';
 import auth from '../../../services/adminapp/admin';
 import { UserLogin } from '../../../interfaces/auth.interface';
 import AlertBox from '../../../utils/Alert';
@@ -19,7 +18,6 @@ import { login } from '../../../redux/features/authStateSlice';
 import assets from '../../../assets';
 import { setRolePermissions } from '../../../redux/features/permissionsStateSlice';
 import { setItemState, setLogo } from '../../../redux/features/appStateSlice';
-import RoleIcon from '../../../components/icons/RoleIcon';
 
 function LoginPage() {
   const dispatch = useAppDispatch();

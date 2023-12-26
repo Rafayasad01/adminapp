@@ -9,8 +9,6 @@ import LocalShippingOutlinedIcon from '@mui/icons-material/LocalShippingOutlined
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
-import PrintOutlinedIcon from '@mui/icons-material/PrintOutlined';
-import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -102,7 +100,7 @@ function OrderDetailsPage() {
     });
     setCurrentStatus(laststatus);
     setOrderStatuses(newResult);
-    console.log('orderStatuses', newResult);
+    // console.log('orderStatuses', newResult);
   };
 
   useEffect(() => {
@@ -113,7 +111,7 @@ function OrderDetailsPage() {
           setIsLoader(false);
           if (item) {
             setData(item.data.data);
-            console.log('ITEMSS', item.data.data);
+            // console.log('ITEMSS', item.data.data);
           }
         })
         .catch((err) => {

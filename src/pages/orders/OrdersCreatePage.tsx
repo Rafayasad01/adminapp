@@ -1,26 +1,14 @@
 import { useState, useEffect } from 'react';
 import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
-import InputAdornment from '@mui/material/InputAdornment';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
-import MenuItem from '@mui/material/MenuItem';
-import Select from '@mui/material/Select';
-
 import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import dayjs from 'dayjs';
-import { SelectChangeEvent } from '@mui/material';
 import CircularProgress from '@mui/material/CircularProgress';
-
-import SearchIcon from '@mui/icons-material/Search';
-import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
 import RemoveCircleOutlineOutlinedIcon from '@mui/icons-material/RemoveCircleOutlineOutlined';
-import CalendarTodayOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined';
-import PlaceOutlinedIcon from '@mui/icons-material/PlaceOutlined';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -29,18 +17,15 @@ import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined';
 import RadioButtonUncheckedOutlinedIcon from '@mui/icons-material/RadioButtonUncheckedOutlined';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import DatePickerButton from './DatePickerButton';
 import AppUserService from '../../services/adminapp/adminAppUser';
 
 import TopBar from '../../components/common/TopBar';
 import DeleteIcon from '../../components/icons/DeleteIcon';
-import assets from '../../assets';
 import CustomDropDown from '../../components/common/CustomDropDown';
 import CustomMultipleSelectBox from '../../components/common/CustomMultipleSelect';
 import { Order } from '../../interfaces/order.interface';
 import Service from '../../services/adminapp/adminOrders';
 import { useAppSelector } from '../../redux/redux-hooks';
-import Loader from '../../components/common/Loader2';
 import Notify from '../../components/common/Notify';
 import CustomButton from '../../components/common/CustomButton';
 
@@ -48,22 +33,14 @@ function OrdersCreatePage() {
   const [catList, setCatList] = useState<any>([]);
   const [catItemList, setCatItemList] = useState<any>([]);
   const [itemList, setItemList] = useState<any>([]);
-  const [search, setSearch] = useState('');
-  const [category, setCategory] = useState('categories');
-  const [service, setService] = useState('services');
-  const [quantity, setQuantity] = useState(0);
-  const [paymentMethod, setPaymentMethod] = useState('CASH_ON_DELIVERY');
-  const [pickUpTime, setPickUpTime] = useState<dayjs.Dayjs | null>(null);
-  const [dropOffTime, setDropOffTime] = useState<dayjs.Dayjs | null>(null);
+  const [paymentMethod] = useState('CASH_ON_DELIVERY');
 
-  const [cashCheck, setCashCheck] = useState(false);
+  // const [cashCheck, setCashCheck] = useState(false);
   const [isExistingUser, setIsExistingUser] = useState<any>('false');
   const [userIdentifier, setUserIdentifier] = useState<any>('false');
-  const [existCheck, setExistCheck] = useState(false);
 
   const {
     register,
-    handleSubmit,
     watch,
     setValue,
     formState: { errors },
@@ -151,14 +128,14 @@ function OrdersCreatePage() {
                   quantity: items.quantity,
                 })),
               };
-              Service.OrderUpdateCart(updatedCartPayload).then((cartRes) => {
+              Service.OrderUpdateCart(updatedCartPayload).then(() => {
                 if (loginDetails?.success) {
-                  const orderPlace = {
-                    cartId: cartRes.data.data.cart.id,
-                    tenant: cartRes.data.data.cart.tenant,
-                    appUser: cartRes.data.data.cart.appUser,
-                  };
-                  Service.OrderPlace(updatedCartPayload).then((orderItem) => {
+                  // const orderPlace = {
+                  //   cartId: cartRes.data.data.cart.id,
+                  //   tenant: cartRes.data.data.cart.tenant,
+                  //   appUser: cartRes.data.data.cart.appUser,
+                  // };
+                  Service.OrderPlace(updatedCartPayload).then(() => {
                     if (loginDetails?.success) {
                       setIsLoader(false);
                       // console.log('Order place', orderItem);
@@ -171,7 +148,14 @@ function OrdersCreatePage() {
               });
             }
           })
-          .catch((err: any) => console.log('Err', err));
+          .catch((err: any) => {
+            setIsNotify(true);
+            setNotifyMessage({
+              text: err.message,
+              type: 'error',
+            });
+            // console.log('Err', err)
+          });
       } else if (itemList?.length <= 0) {
         setIsLoader(false);
         setIsNotify(true);
@@ -197,19 +181,21 @@ function OrdersCreatePage() {
     }
   };
 
-  const handlePickUpTimeChange = (value: dayjs.Dayjs | null) => {
-    setPickUpTime(value);
-  };
-  const handleDropOffTimeChange = (value: dayjs.Dayjs | null) => {
-    setDropOffTime(value);
-  };
+  // const handlePickUpTimeChange = (value: dayjs.Dayjs | null) => {
+  //   setPickUpTime(value);
+  // };
+  // const handleDropOffTimeChange = (value: dayjs.Dayjs | null) => {
+  //   setDropOffTime(value);
+  // };
 
-  const handlePaymentChange = (event: any) => {
-    setCashCheck(event.target.value);
-  };
+  const handlePaymentChange = () =>
+    // event: any
+    {
+      // setCashCheck(event.target.value);
+    };
 
   const handleUserChange = (event: any) => {
-    console.log('enven', event);
+    // console.log('enven', event);
     setIsExistingUser(event.target.value);
   };
 
@@ -217,16 +203,16 @@ function OrdersCreatePage() {
   //   setPaymentMethod((event.target as HTMLInputElement).value);
   // };
 
-  const handleClickSearch = (event: any) => {
-    setSearch(event.target.value as string);
-  };
-  const handleCategoryChange = (event: SelectChangeEvent) => {
-    setCategory(event.target.value as string);
-  };
+  // const handleClickSearch = (event: any) => {
+  //   setSearch(event.target.value as string);
+  // };
+  // const handleCategoryChange = (event: SelectChangeEvent) => {
+  //   setCategory(event.target.value as string);
+  // };
 
-  const handleServiceChange = (event: SelectChangeEvent) => {
-    setService(event.target.value as string);
-  };
+  // const handleServiceChange = (event: SelectChangeEvent) => {
+  //   setService(event.target.value as string);
+  // };
   const removeQuantity = (index: number) => {
     const item = itemList[index];
     const qty = item.quantity - 1;
@@ -309,10 +295,10 @@ function OrdersCreatePage() {
 
   // console.log("ID", watch("categoriesItem"));
 
-  const handleUserInput = (event: any) => {
-    console.log('enven', event.target.value);
-    setUserIdentifier(event.target.value);
-  };
+  // const handleUserInput = (event: any) => {
+  //   // console.log('enven', event.target.value);
+  //   setUserIdentifier(event.target.value);
+  // };
 
   // const handleMultipleSelectCallback = () => {
   //   const watchArr = watch('categoriesItem');

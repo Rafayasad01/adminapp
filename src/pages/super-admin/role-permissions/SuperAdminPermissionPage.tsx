@@ -34,8 +34,8 @@ function SuperAdminPermissionPage() {
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
   const [openDialog, setOpenDialog] = useState(false);
-  const [heading, setHeading] = useState<string>('');
-  const [childList, setChildList] = useState<any>();
+  const [heading] = useState<string>('');
+  const [childList] = useState<any>();
 
   const handleClickSearch = (event: any) => {
     setSearch(event.target.value);
@@ -127,7 +127,12 @@ function SuperAdminPermissionPage() {
       })
       .catch((error) => {
         setIsLoader(false);
-        console.error('error::::::::', error);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: error.message,
+          type: 'success',
+        });
+        // console.error('error::::::::', error);
       });
   }, [emptyVariable]);
 

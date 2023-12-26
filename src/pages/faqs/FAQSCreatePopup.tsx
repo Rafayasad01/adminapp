@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Dialog from '@mui/material/Dialog';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
 import TextField from '@mui/material/TextField';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
+import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 
 import '../../assets/css/PopupStyle.css';
@@ -15,12 +15,14 @@ type Props = {
 };
 
 function FAQSCreatePopup({ faqsAddForm, setFaqsAddForm }: Props) {
-  const [quantity, setQuantity] = useState('status');
+  // const [quantity, setQuantity] = useState('status');
   const handleFormClose = () => setFaqsAddForm(false);
 
-  const handleQuantityChange = (event: SelectChangeEvent) => {
-    setQuantity(event.target.value as string);
-  };
+  const handleQuantityChange = () =>
+    // event: SelectChangeEvent
+    {
+      // setQuantity(event.target.value as string);
+    };
 
   return (
     <Dialog
@@ -44,9 +46,13 @@ function FAQSCreatePopup({ faqsAddForm, setFaqsAddForm }: Props) {
                 labelId="demo-simple-select-label"
                 value="Select Services"
                 disableUnderline
-                onChange={(event) => {
-                  handleQuantityChange(event);
-                }}
+                onChange={() =>
+                  // event
+                  {
+                    handleQuantityChange();
+                    // event
+                  }
+                }
               >
                 <MenuItem value="Select Services">Select Services</MenuItem>
               </Select>

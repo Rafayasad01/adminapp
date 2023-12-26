@@ -37,8 +37,6 @@ function TimePicker({
   timePickerSubLabel,
   timePickerValue,
   setTimePickerValue,
-  errors,
-  setError,
   id,
   isTrue,
 }: Props) {

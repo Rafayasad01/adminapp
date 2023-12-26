@@ -21,7 +21,6 @@ type Props = {
 };
 
 function AppUserScheduleUpdatePopup({
-  roles,
   openFormDialog,
   setOpenFormDialog,
   callback,
@@ -29,14 +28,11 @@ function AppUserScheduleUpdatePopup({
   setNotifyMessage,
   formData,
 }: Props) {
-  const {
-    handleSubmit,
-    formState: { errors },
-  } = useForm<AppointmentProviderScheduleTime>();
+  const { handleSubmit } = useForm<AppointmentProviderScheduleTime>();
   const [startTime, setStartTime] = useState<dayjs.Dayjs | any>(null);
   const [endTime, setEndTime] = useState<dayjs.Dayjs | any>(null);
 
-  const onSubmit = (data: AppointmentProviderScheduleTime) => {
+  const onSubmit = () => {
     const time = {
       startTime:
         dayjs(startTime).isValid() &&

@@ -34,6 +34,8 @@ function DatePickerField({
   id,
 }: Props) {
   const [datePicker, setDatePicker] = useState<HTMLButtonElement | null>(null);
+  // const currentDate = dayjs();
+  // const formattedDate = currentDate.format('YYYY-MM-DD');
   const buttonElement = useRef(null);
   const handleClick = () => {
     setDatePicker(buttonElement.current);
@@ -89,7 +91,6 @@ function DatePickerField({
         <ThemeProvider theme={darkTheme}>
           <StaticDatePicker
             displayStaticWrapperAs="desktop"
-            defaultValue={dayjs('2022-04-17')}
             onAccept={handleChange}
           />
         </ThemeProvider>

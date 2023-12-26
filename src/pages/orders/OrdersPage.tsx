@@ -9,7 +9,6 @@ import React, { useEffect, useState } from 'react';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import { useNavigate } from 'react-router-dom';
 import WysiwygOutlinedIcon from '@mui/icons-material/WysiwygOutlined';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
 // import Pagination from '@mui/material/Pagination';
 // import Stack from '@mui/material/Stack';
 import TablePagination from '@mui/material/TablePagination';
@@ -43,7 +42,7 @@ function OrdersPage() {
   const [total, setTotal] = useState(0);
   const [list, setList] = useState<any>([]);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const [actionMenuItemid, setActionMenuItemid] = React.useState('');
+  const [actionMenuItemid] = React.useState('');
   const [isLoader, setIsLoader] = useState(true);
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
@@ -130,9 +129,9 @@ function OrdersPage() {
     // });
   };
 
-  const addRouteHandler = () => {
-    navigate('create');
-  };
+  // const addRouteHandler = () => {
+  //   navigate('create');
+  // };
 
   const handleClickSearch = (event: any) => {
     if (event.key === 'Enter') {
@@ -321,7 +320,7 @@ function OrdersPage() {
                 {list &&
                   list.map((Item: any, index: number) => {
                     return (
-                      <tr key={Item.id}>
+                      <tr key={index}>
                         <td>
                           <div className="flex flex-col">
                             <span className="text-sm font-semibold text-[#1A1A1A]">

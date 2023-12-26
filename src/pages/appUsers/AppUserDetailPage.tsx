@@ -3,7 +3,7 @@ import Divider from '@mui/material/Divider';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import ActionMenu from '../../components/common/ActionMenu';
 import Loader from '../../components/common/Loader';
 import MapAddress from '../../components/common/MapAddress';
@@ -21,14 +21,14 @@ function AppUserDetailPage() {
   const dataRole = useAppSelector(
     (state: any) => state?.persisitReducer?.roleState?.role?.permissions
   );
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const [detail, setDetail] = useState<any>(null);
   const [filteredWeekDays, setFilteredWeekDays] = useState<any>(null);
-  const [total, setTotal] = useState(0);
-  const [list, setList] = useState<any>([]);
+  // const [total, setTotal] = useState(0);
+  // const [list, setList] = useState<any>([]);
   const [address, setAddress] = useState<string>('');
   const [cancelDialogOpen, setCancelDialogOpen] = useState<boolean>(false);
-  const [dialogText, setDialogText] = useState<any>(
+  const [dialogText] = useState<any>(
     'Are you sure you want to delete this driver address ?'
   );
   const [actionMenuAnchorEl, setActionMenuAnchorEl] =
@@ -70,11 +70,11 @@ function AppUserDetailPage() {
                 (newItem: any) => newItem.isActive === true
               );
               if (activeAddress.length > 0) {
-                console.log(activeAddress[0].address);
+                // console.log(activeAddress[0].address);
                 setAddress(activeAddress[0].address);
               }
-              setList(item.data.data.appUserAddress.reverse());
-              setTotal(Number(item.data.data.total));
+              // setList(item.data.data.appUserAddress.reverse());
+              // setTotal(Number(item.data.data.total));
             }
           } else {
             setIsLoader(false);

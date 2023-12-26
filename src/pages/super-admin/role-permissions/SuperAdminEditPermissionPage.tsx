@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
 import TextareaAutosize from '@mui/material/TextareaAutosize';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
 import TopBar from '../../../components/common/TopBar';
 import CustomButton from '../../../components/common/CustomButton';
@@ -38,7 +38,6 @@ function SuperAdminEditPermissionsPage() {
     register,
     unregister,
     handleSubmit,
-    watch,
     reset,
     control,
     formState: { errors },
@@ -70,10 +69,7 @@ function SuperAdminEditPermissionsPage() {
     return unregister(unregId);
   };
 
-  const handleRemovePermission = (
-    removePermissionId: number,
-    index: number
-  ) => {
+  const handleRemovePermission = (removePermissionId: number) => {
     // console.log('TEMPid', id);
     const updatedPermissions = permissionList.filter(
       (item: any) => item.id !== removePermissionId
@@ -209,7 +205,7 @@ function SuperAdminEditPermissionsPage() {
       )}) already existss`;
     }
     if (hasDuplicate) {
-      console.log('run1');
+      // console.log('run1');
       setIsLoader(false);
       setIsNotify(true);
       setNotifyMessage({
@@ -219,7 +215,7 @@ function SuperAdminEditPermissionsPage() {
     } else {
       const allNames = parent.data.map((item: any) => item.name);
       if (hasDuplicates(allNames)) {
-        console.log('run2');
+        // console.log('run2');
         setIsLoader(false);
         setIsNotify(true);
         setNotifyMessage({
@@ -255,7 +251,7 @@ function SuperAdminEditPermissionsPage() {
     }
   };
 
-  console.log('ERRORS', errors);
+  // console.log('ERRORS', errors);
 
   return isLoader ? (
     <Loader />
@@ -354,9 +350,7 @@ function SuperAdminEditPermissionsPage() {
                       <div className="grid-col-12 relative grid rounded-lg border-2 p-5">
                         {/* {mainIndex > 0 && */}
                         <div
-                          onClick={() =>
-                            handleRemovePermission(mainEl.id, mainIndex)
-                          }
+                          onClick={() => handleRemovePermission(mainEl.id)}
                           className="absolute right-[-10px] top-[-10px] cursor-pointer"
                         >
                           <img src={assets.images.removeIcon} alt="cancel" />

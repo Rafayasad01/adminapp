@@ -22,7 +22,7 @@ function AppointmentVisitDetailPage() {
     (state: any) => state?.persisitReducer?.roleState?.role?.permissions
   );
   const [emptyVariable] = useState(null);
-  const [total, setTotal] = useState(0);
+  // const [total, setTotal] = useState(0);
   const [list, setList] = useState<any>([]);
   const [isLoader, setIsLoader] = React.useState(true);
   const [isNotify, setIsNotify] = React.useState(false);
@@ -35,7 +35,7 @@ function AppointmentVisitDetailPage() {
           if (item.data.success) {
             setIsLoader(false);
             setList(item.data.data);
-            setTotal(item.data.data.total);
+            // setTotal(item.data.data.total);
           } else {
             setIsLoader(false);
             setIsNotify(true);
@@ -223,7 +223,7 @@ function AppointmentVisitDetailPage() {
                 {list ? (
                   list?.appointmentService?.map((item: any, index: number) => {
                     return (
-                      <tr key={item.id}>
+                      <tr key={index}>
                         <td>
                           <div className="avatar flex flex-row items-center">
                             <div className="">

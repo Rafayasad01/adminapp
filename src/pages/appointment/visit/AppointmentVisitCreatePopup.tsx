@@ -62,14 +62,14 @@ function AppointmentVisitCreatePopup({
   const [startTime, setStartTime] = useState<dayjs.Dayjs | any>(null);
 
   const onSubmit = (data: AppointmentVisit) => {
-    console.log('dataSS', data);
+    // console.log('dataSS', data);
     const formattedDate = `${
       dayjs(data.appointmentDate).isValid() &&
       dayjs(data.appointmentDate)?.format('YYYY-MM-DD')
     } ${dayjs(startTime).isValid() && dayjs(startTime)?.format('HH:mm:ss')}`;
     const currentDate = dayjs();
     const formattedCurrentDate = currentDate.format('YYYY-MM-DD HH:mm:ss');
-    console.log('formmm', formattedDate, formattedCurrentDate);
+    // console.log('formmm', formattedDate, formattedCurrentDate);
     const visitorDetails = {
       name: data.visitName,
       phone: data.phone,
@@ -82,7 +82,7 @@ function AppointmentVisitCreatePopup({
       tenant: authState.user.tenant,
       isUrgent: data.isUrgent,
     };
-    console.log('visitorDetails', visitorDetails);
+    // console.log('visitorDetails', visitorDetails);
     callback(visitorDetails, 'create');
   };
 
@@ -96,7 +96,7 @@ function AppointmentVisitCreatePopup({
       Service.VisitProviderById(watch('appointmentProvider'))
         .then((item: any) => {
           if (item.data.success) {
-            console.log('visit', item.data.data);
+            // console.log('visit', item.data.data);
             setSchedule(item.data.data);
             setIsLoader(false);
             Service.VisitServiceLovByProviderId(item.data.data.id)
@@ -143,7 +143,7 @@ function AppointmentVisitCreatePopup({
       Service.VisitLov(authState.user.tenant)
         .then((item: any) => {
           if (item.data.success) {
-            console.log('visit', item.data.data);
+            // console.log('visit', item.data.data);
             setProviderLov(item.data.data);
             setIsLoader(false);
           } else {
@@ -170,7 +170,7 @@ function AppointmentVisitCreatePopup({
     setOpenFormDialog(false);
   };
 
-  console.log('sssssssssssss', watch('appointmentService'));
+  // console.log('sssssssssssss', watch('appointmentService'));
 
   return (
     <Dialog

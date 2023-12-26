@@ -14,6 +14,7 @@ import Service from '../../services/adminapp/adminBranch';
 import { formatName } from '../../utils/helper';
 import BranchCategoryPopup from './BranchCategoryPopup';
 import BranchSettingPopup from './BranchSettingPopup';
+import Notify from '../../components/common/Notify';
 
 function BranchDetailPage() {
   const { branchId } = useParams();
@@ -27,17 +28,6 @@ function BranchDetailPage() {
   const [isNotify, setIsNotify] = useState(false);
   const [notifyMessage, setNotifyMessage] = useState({});
   const [emptyVariable] = useState(null);
-
-  const demo = [
-    {
-      name: 'asad',
-      email: 'asad@gmi',
-    },
-    {
-      name: 'rafay',
-      email: 'rafay@gma',
-    },
-  ];
 
   const getSettingById = () => {
     setIsLoader(true);
@@ -54,6 +44,11 @@ function BranchDetailPage() {
       .catch((err) => {
         setIsLoader(false);
         setOpenSettingDialog(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
+        });
       });
   };
 
@@ -76,8 +71,13 @@ function BranchDetailPage() {
         }
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
         setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
+        });
       });
   };
 
@@ -87,7 +87,7 @@ function BranchDetailPage() {
         if (item.data.success) {
           setIsLoader(false);
           setUserDetail(item.data.data);
-          console.log('item', item.data);
+          // console.log('item', item.data);
           // console.log('item', item.data.data)
         } else {
           setIsLoader(false);
@@ -95,6 +95,11 @@ function BranchDetailPage() {
       })
       .catch((err) => {
         setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
+        });
       });
   }, [emptyVariable]);
 
@@ -103,6 +108,11 @@ function BranchDetailPage() {
   ) : (
     userDetail && (
       <>
+        <Notify
+          isOpen={isNotify}
+          setIsOpen={setIsNotify}
+          displayMessage={notifyMessage}
+        />
         <TopBar title="Branch User Detail" isNestedRoute />
         <div className="px-5">
           <div className="grid w-full grid-cols-12 rounded-lg bg-[#F0F0F0] p-3">

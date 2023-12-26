@@ -38,7 +38,7 @@ function AppointmentProviderAddSchedulePage() {
     setError,
     formState: { errors },
   } = useForm<AppointmentProviderSchedule>();
-  console.log('ss', startTime);
+  // console.log('ss', startTime);
 
   const inputFieldsData = [
     {
@@ -83,8 +83,8 @@ function AppointmentProviderAddSchedulePage() {
   ]);
 
   const handleAddMore = () => {
-    const newStartTime = dayjs();
-    const newEndTime = dayjs();
+    // const newStartTime = dayjs();
+    // const newEndTime = dayjs();
     const tempCount = count + 1;
     setCount(tempCount);
     const newId = tempCount;
@@ -166,7 +166,7 @@ function AppointmentProviderAddSchedulePage() {
     Service.ProviderScheduleCreate(parent)
       .then((item: any) => {
         if (item.data.success) {
-          console.log('CREATED', item.data);
+          // console.log('CREATED', item.data);
           reset();
           setText(item.data.message);
           navigate(-1);

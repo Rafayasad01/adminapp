@@ -81,7 +81,7 @@ function SuperAdminUpdatePopup({
     setOpenFormDialog(false);
   };
 
-  console.log(watch('trialMode'));
+  // console.log(watch('trialMode'));
 
   useEffect(() => {
     if (item) {
@@ -97,7 +97,10 @@ function SuperAdminUpdatePopup({
   }, [item]);
 
   const getRemainingTime = (data: any) => {
-    const addTime = dayjs(data.trialStartDate).add(data.trialModeLimit, 'days');
+    const addTime = dayjs(data.trialStartDate).add(
+      Number(data.trialModeLimit) - 1,
+      'days'
+    );
     const endTime: any = dayjs(addTime).format('YYYY-MM-DD HH:mm:ss');
     const diffBetween = dayjs.duration(dayjs().diff(endTime));
     const remainingTime = Math.abs(Math.round(diffBetween.asDays()));
@@ -106,7 +109,7 @@ function SuperAdminUpdatePopup({
       dayTxt = 'days';
     }
     let remainingTxt;
-    console.log(remainingTime, addTime, endTime, diffBetween);
+    // console.log(remainingTime, addTime, endTime, diffBetween);
 
     if (remainingTime <= 0) {
       remainingTxt = 'Expired';

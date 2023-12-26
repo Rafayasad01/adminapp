@@ -21,15 +21,15 @@ const CustomPrintLayouts = forwardRef<any, any>((props: any, ref: any) => {
   const authState: any = useAppSelector((state: any) => state?.authState);
   useEffect(() => {
     const fetchData = async () => {
-      const [res, err] = await promiseHandler(
+      const [res] = await promiseHandler(
         Service.VisitDetailById(props.dataId.id)
       );
       if (!res) {
-        console.log('err', err);
+        // console.log('err', err);
         return;
       }
       if (!res.data.success) {
-        console.log('err', res.data.message);
+        // console.log('err', res.data.message);
       }
       setDetaiItems(res?.data.data);
       setTimeout(() => props.handlePrint(), 0);
@@ -185,7 +185,7 @@ function CustomPrintLayout({
   isPrintEnabled,
   setPrintEnabled,
 }: Props) {
-  console.log('datata==>', data);
+  // console.log('datata==>', data);
   const ref = useRef<any>(null);
   const handlePrint = useReactToPrint({
     content: () => ref.current,
@@ -197,7 +197,7 @@ function CustomPrintLayout({
         return previous;
       }),
   });
-  console.log('prev', isPrintEnabled[index]);
+  // console.log('prev', isPrintEnabled[index]);
   const trigger = () => {
     setPrintEnabled((prev: any) => {
       const previous = [...prev];
@@ -205,7 +205,7 @@ function CustomPrintLayout({
       return previous;
     });
   };
-  console.log('A2', index);
+  // console.log('A2', index);
 
   // if (isPrintEnabled[index]) {
   //     return <CustomPrintLayouts ref={ref} dataItem={data} />

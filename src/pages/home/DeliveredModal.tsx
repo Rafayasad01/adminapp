@@ -10,7 +10,7 @@ type Props = {
   data: any;
 };
 
-function DeliveredModal({ open, setOpen, data }: Props) {
+function DeliveredModal({ open, setOpen }: Props) {
   const handleClose = () => setOpen(false);
   return (
     <Modal
