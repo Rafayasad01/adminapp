@@ -29,9 +29,7 @@ function CategoriesServicesFaqCreatePopup({
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
-    control,
   } = useForm<CategoryServiceFaq>();
   const onSubmit = (data: CategoryServiceFaq) => {
     setOpenFormDialog(false);

@@ -19,7 +19,7 @@ function MarkersMap({ markers, zoom }: Props) {
   const mapRef = useRef<HTMLDivElement>(null);
   const markerRef = useRef<google.maps.Marker>();
   useEffect(() => {
-    loader.load().then(async (e) => {
+    loader.load().then(async () => {
       if (!mapRef.current) {
         return;
       }

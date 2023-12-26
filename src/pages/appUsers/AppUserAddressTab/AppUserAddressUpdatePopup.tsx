@@ -2,7 +2,7 @@ import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
-import React, { useState } from 'react';
+import React from 'react';
 import { useForm } from 'react-hook-form';
 import CustomDropDown from '../../../components/common/CustomDropDown';
 import ErrorSpanBox from '../../../components/common/ErrorSpanBox';
@@ -35,8 +35,6 @@ function AppUserAddressUpdatePopup({
   const {
     register,
     handleSubmit,
-    watch,
-    setValue,
     formState: { errors },
     control,
   } = useForm<AppUserAddress>();

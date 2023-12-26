@@ -1,10 +1,6 @@
-import * as React from 'react';
-import { Theme, useTheme } from '@mui/material/styles';
 import OutlinedInput from '@mui/material/OutlinedInput';
-import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
+import Select from '@mui/material/Select';
 import { Controller } from 'react-hook-form';
 
 const ITEM_HEIGHT = 48;
@@ -39,21 +35,17 @@ type Props = {
 function CustomMultipleSelectBox({
   valuesBoxBgColor,
   callback,
-  setValue,
   customClassInputTitle,
   control,
   id,
-  value,
-  error,
   validateRequired,
   inputTitle,
   customWidth,
   options,
-  register,
   defaultVal,
   border,
 }: Props) {
-  console.log('optionsss', options);
+  // console.log('optionsss', options);
   return (
     <div>
       <div className="" style={{ paddingBottom: '3px' }}>

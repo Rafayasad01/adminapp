@@ -42,14 +42,11 @@ function CategoriesEditPopup({
   const {
     register,
     handleSubmit,
-    watch,
-    getValues,
     formState: { errors },
-    control,
   } = useForm<Category>();
 
   const onSubmit = (data: Category) => {
-    console.log('IMAGE', image);
+    // console.log('IMAGE', image);
     if (image !== null) {
       const res = {
         name: data.name,
@@ -108,7 +105,7 @@ function CategoriesEditPopup({
     }
     setImageName(icon);
   }, [formData]);
-  console.log(image);
+  // console.log(image);
 
   return (
     <Dialog

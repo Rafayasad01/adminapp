@@ -46,10 +46,7 @@ function BranchPage() {
   const [notifyMessage, setNotifyMessage] = React.useState({});
   const [totalBranches, setTotalBranches] = useState<number>(0);
 
-  const {
-    reset,
-    formState: { errors },
-  } = useForm<AppUserEmployees>();
+  const { reset } = useForm<AppUserEmployees>();
 
   const handleClickSearch = (event: any) => {
     if (event.key === 'Enter') {
@@ -209,7 +206,7 @@ function BranchPage() {
   };
 
   const updateFormHandler = (id: string, data: any) => {
-    console.log('DATA', data);
+    // console.log('DATA', data);
     setIsLoader(true);
     delete data.email;
     data.userId = authState?.user?.id;
@@ -252,7 +249,7 @@ function BranchPage() {
         });
       });
   };
-  console.log('EVENT HITT', openEditFormDialog);
+  // console.log('EVENT HITT', openEditFormDialog);
 
   const handleSwitchChange = (event: any, id: string) => {
     setOpenEditFormDialog(false);
@@ -304,6 +301,18 @@ function BranchPage() {
       textMsg = 'End';
     }
     return textMsg;
+  };
+
+  const handleAddNew = () => {
+    if (totalBranches >= authState.user.branchLimit) {
+      setIsNotify(true);
+      setNotifyMessage({
+        text: 'Branch limit has been reached',
+        type: 'error',
+      });
+    } else {
+      setOpenFormDialog(true);
+    }
   };
 
   return isLoader ? (
@@ -376,18 +385,7 @@ function BranchPage() {
                 <Button
                   variant="contained"
                   className="btn-black-fill btn-icon"
-                  onClick={() => {
-                    if (totalBranches >= authState.user.branchLimit) {
-                      setIsNotify(true);
-                      setNotifyMessage({
-                        text: 'Branch limit has been reached',
-                        type: 'error',
-                      });
-                      return;
-                    }
-                    setOpenFormDialog(true);
-                  }}
-                  disabled={totalBranches >= authState.user.branchLimit}
+                  onClick={handleAddNew}
                 >
                   <AddOutlinedIcon /> Add New
                 </Button>
@@ -398,7 +396,7 @@ function BranchPage() {
             <table className="table-border table-auto">
               <thead>
                 <tr>
-                  <th>Branch Name</th>
+                  <th>Name</th>
                   <th>Employee Limit</th>
                   <th>Trial Mode</th>
                   <th>Trial Start Date</th>
@@ -410,7 +408,7 @@ function BranchPage() {
                 {list &&
                   list.map((item: any, index: number) => {
                     return (
-                      <tr key={item.id}>
+                      <tr key={index}>
                         <td>
                           <div className="avatar flex flex-row items-center">
                             <div className="flex flex-col items-start justify-start">

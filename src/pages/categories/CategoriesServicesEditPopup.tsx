@@ -43,9 +43,7 @@ function CategoriesServicesEditPopup({
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
-    control,
   } = useForm<CategoryService>();
   const onSubmit = (data: CategoryService) => {
     if (image !== null) {
@@ -53,12 +51,11 @@ function CategoriesServicesEditPopup({
         name: data.name,
         desc: data.desc,
         price: data.price,
-        quantity: data.quantity,
         icon: image,
       };
       setOpenFormDialog(false);
       callback(res);
-    } else if (data.desc && data.name && data.price && data.quantity) {
+    } else if (data.desc && data.name && data.price) {
       const res = {
         name: data.name,
         desc: data.desc,
@@ -124,7 +121,7 @@ function CategoriesServicesEditPopup({
             <span className="Title">Edit Services</span>
           </div>
           <div className="FormBody">
-            <div className="FormField">
+            <div className="FormFields">
               <FormControl className="FormControl" variant="standard">
                 <label className="FormLabel">Service Name</label>
                 <Input
@@ -149,8 +146,23 @@ function CategoriesServicesEditPopup({
                   <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
                 )}
               </FormControl>
+              <FormControl className="FormControl" variant="standard">
+                <label className="FormLabel">Price</label>
+                <Input
+                  className="FormInput"
+                  id="name"
+                  type="number"
+                  {...register('price', {
+                    required: 'Price is required in numbers',
+                    validate: (value: any) => VALIDATE_NON_NEGATIVE_NUM(value),
+                    value: formData.price,
+                  })}
+                  disableUnderline
+                />
+                {errors.price && <ErrorSpanBox error={errors.price?.message} />}
+              </FormControl>
             </div>
-            <div className="FormFields">
+            {/* <div className="FormFields">
               <FormControl className="FormControl" variant="standard">
                 <label className="FormLabel">Min Order Quantity</label>
                 <Input
@@ -169,22 +181,8 @@ function CategoriesServicesEditPopup({
                   <ErrorSpanBox error={errors.quantity?.message} />
                 )}
               </FormControl>
-              <FormControl className="FormControl" variant="standard">
-                <label className="FormLabel">Price</label>
-                <Input
-                  className="FormInput"
-                  id="name"
-                  type="number"
-                  {...register('price', {
-                    required: 'Price is required in numbers',
-                    validate: (value: any) => VALIDATE_NON_NEGATIVE_NUM(value),
-                    value: formData.price,
-                  })}
-                  disableUnderline
-                />
-                {errors.price && <ErrorSpanBox error={errors.price?.message} />}
-              </FormControl>
-            </div>
+             
+            </div> */}
             <div className="FormField">
               <FormControl className="FormControl" variant="standard">
                 <label className="FormLabel">

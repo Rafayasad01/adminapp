@@ -21,7 +21,7 @@ type Props = {
 };
 
 function AppUserAddressTabPage({ addressList, appUserId, setAddress }: Props) {
-  const [emptyVariable, setEmptyVariable] = useState<any>('');
+  const [emptyVariable] = useState<any>('');
   const authState: any = useAppSelector((state) => state?.authState);
   const [list, setList] = useState<any>();
   const dataRole = useAppSelector(
@@ -158,7 +158,7 @@ function AppUserAddressTabPage({ addressList, appUserId, setAddress }: Props) {
         if (updateItem.data.success) {
           setList((newArr: any) => {
             return newArr.map((item: any) => {
-              console.log('ITEMMMMMMMM', item);
+              // console.log('ITEMMMMMMMM', item);
               if (item.id === updateItem.data.data.id) {
                 item.isActive = updateItem.data.data.isActive;
                 setAddress(item.address);
@@ -288,7 +288,7 @@ function AppUserAddressTabPage({ addressList, appUserId, setAddress }: Props) {
                 <tbody>
                   {list?.map((item: any, index: number) => {
                     return (
-                      <tr key={item.id}>
+                      <tr key={index}>
                         <td>{item.address}</td>
                         <td>{item.latitude}</td>
                         <td>{item.longitude}</td>

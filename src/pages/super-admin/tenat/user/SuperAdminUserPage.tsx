@@ -10,108 +10,28 @@ import InputAdornment from '@mui/material/InputAdornment';
 import TablePagination from '@mui/material/TablePagination';
 import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import CustomDialog from '../../../../components/common/CustomDialog';
 import CustomText from '../../../../components/common/CustomText';
 import Loader from '../../../../components/common/Loader';
 import Notify from '../../../../components/common/Notify';
 import TopBar from '../../../../components/common/TopBar';
-import { Shop } from '../../../../interfaces/superadmin/shop.interface';
-import { useAppSelector } from '../../../../redux/redux-hooks';
 import Service from '../../../../services/superadmin/Tenant';
 
 function SuperAdminUserPage() {
-  const authState: any = useAppSelector((state) => state?.authState);
+  // const authState: any = useAppSelector((state) => state?.authState);
   const navigate = useNavigate();
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(0);
   const [total, setTotal] = useState(0);
   const [list, setList] = useState<any>([]);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const [openFormDialog, setOpenFormDialog] = useState(false);
-  const [avatar, setAvatar] = useState<any>(null);
+  // const [openFormDialog, setOpenFormDialog] = useState(false);
   const [isLoader, setIsLoader] = React.useState(true);
   const [isNotify, setIsNotify] = React.useState(false);
-  const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
+  // const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
-  const [dataById, setDataById] = React.useState<any>();
+  // const [dataById, setDataById] = React.useState<any>();
   const [emptyVariable] = useState(null);
-
-  const {
-    register,
-    handleSubmit,
-    watch,
-    reset,
-    getValues,
-    setValue,
-    formState: { errors },
-    control,
-  } = useForm<Shop>();
-
-  const inputFieldsData = [
-    {
-      fieldName: 'Role',
-      id: 'role',
-      register,
-      control,
-      error: errors,
-      type: 'select',
-      options: dataById,
-      validateRequired: true,
-    },
-  ];
-
-  const onSubmitDialogBox = (data: any) => {
-    console.log('data', data);
-    setIsLoader(true);
-    const updateddata = {
-      userLimits: data.userLimits,
-      role: data.role,
-      updatedBy: authState.user.id,
-    };
-    Service.updateUser(dataById?.id, updateddata)
-      .then((updateItem) => {
-        if (updateItem.data.success) {
-          // console.log("updateItem", updateItem);
-          const filterRolename = dataById?.roles.filter(
-            (el: any) => el.id === updateItem.data.data.role
-          );
-          setList((newArr: any) => {
-            return newArr.map((item: any) => {
-              if (item.id === dataById?.id) {
-                item.role = filterRolename[0].name;
-                item.userLimits = updateItem.data.data.userLimits;
-              }
-              return { ...item };
-            });
-          });
-          setOpenEditFormDialog(false);
-          setIsLoader(false);
-          setIsNotify(true);
-          setNotifyMessage({
-            text: updateItem.data.message,
-            type: 'success',
-          });
-        } else {
-          setOpenEditFormDialog(false);
-          setIsLoader(false);
-          setIsNotify(true);
-          setNotifyMessage({
-            text: updateItem.data.message,
-            type: 'error',
-          });
-        }
-      })
-      .catch((err) => {
-        setIsLoader(false);
-        setIsNotify(true);
-        setNotifyMessage({
-          text: err.message,
-          type: 'error',
-        });
-      });
-  };
 
   const handleClickSearch = (event: any) => {
     const searchTxt = event.target.value as string;
@@ -373,7 +293,7 @@ function SuperAdminUserPage() {
           </div>
         </div>
       </div>
-      <CustomDialog
+      {/* <CustomDialog
         DialogHeader="Edit Shop User"
         type="edit"
         singleField
@@ -384,8 +304,8 @@ function SuperAdminUserPage() {
         onSubmit={onSubmitDialogBox}
         openFormDialog={openEditFormDialog}
         setOpenFormDialog={setOpenEditFormDialog}
-        setAvater={setAvatar}
-      />
+        setAvater={() => null}
+      /> */}
     </>
   );
 }

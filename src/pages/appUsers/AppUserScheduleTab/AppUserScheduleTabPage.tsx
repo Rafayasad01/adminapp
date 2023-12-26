@@ -80,7 +80,7 @@ function AppUserScheduleTabPage({
       });
   };
 
-  const updateFormHandler = (data: any, id: string) => {
+  const updateFormHandler = (data: any) => {
     setIsLoader(true);
     data.updatedBy = authState.user.id;
     Service.appUserScheduleUpdate(data)
@@ -256,7 +256,7 @@ function AppUserScheduleTabPage({
                   <tbody>
                     {list?.map((item: any, index: number) => {
                       return (
-                        <tr key={item.id}>
+                        <tr key={index}>
                           <td>{item.workDay}</td>
                           <td>
                             {' '}

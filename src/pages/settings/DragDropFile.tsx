@@ -25,15 +25,11 @@ function DragDropFile({
 }: Props) {
   const [dragActive, setDragActive] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
-  const [imageUrl, setImageUrl] = useState<any>();
+  // const [imageUrl, setImageUrl] = useState<any>();
 
   const handleFile = (files: any) => {
     // console.log(files);
     setFile(files[0]);
-  };
-
-  const isSVGFile = (file: any) => {
-    return file.type.startsWith('image/svg+xml');
   };
 
   const handleDrag = (e: any) => {
@@ -61,7 +57,7 @@ function DragDropFile({
         const reader = new FileReader();
         reader.onload = () => {
           setImg(reader.result as string);
-          setImageUrl(reader.result as string);
+          // setImageUrl(reader.result as string);
         };
         reader.readAsDataURL(droppedFile);
       } else {
@@ -86,7 +82,7 @@ function DragDropFile({
         const reader = new FileReader();
         reader.onload = () => {
           setImg(reader.result as string);
-          setImageUrl(reader.result as string);
+          // setImageUrl(reader.result as string);
         };
         reader.readAsDataURL(uploadedFile);
       } else {

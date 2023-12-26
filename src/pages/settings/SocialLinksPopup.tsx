@@ -3,7 +3,6 @@ import Dialog from '@mui/material/Dialog';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
-import { SelectChangeEvent } from '@mui/material/Select';
 import '../../assets/css/PopupStyle.css';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
@@ -28,11 +27,7 @@ function SocialLinksPopup({
   setDetail,
   setIsLoader,
 }: Props) {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<SocialMedia>();
+  const { register, handleSubmit } = useForm<SocialMedia>();
   const dispatch = useDispatch();
   const authState: any = useAppSelector((state) => state?.authState);
 
@@ -44,7 +39,7 @@ function SocialLinksPopup({
 
   const onSubmit = (data: SocialMedia) => {
     setIsLoader(true);
-    console.log('data', data);
+    // console.log('data', data);
     setOpenDialog(false);
     const formData = {
       facebook: data.facebook ? data.facebook : null,
@@ -64,7 +59,7 @@ function SocialLinksPopup({
             text: item.data.message,
             type: 'success',
           });
-          console.log('item', item.data.data);
+          // console.log('item', item.data.data);
           const tenantConfig: any = {
             facebook: item.data.data.facebook,
             instagram: item.data.data.instagram,

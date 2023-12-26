@@ -51,7 +51,7 @@ function CustomInputBox({
   requiredType,
   maxLetterLimit,
 }: Props) {
-  console.log('errrrerr', error);
+  // console.log('errrrerr', error);
   return (
     <>
       <div className="flex">

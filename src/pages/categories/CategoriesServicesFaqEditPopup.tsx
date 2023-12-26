@@ -4,7 +4,6 @@ import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
 import React from 'react';
 import { useForm } from 'react-hook-form';
-
 import TextareaAutosize from '@mui/base/TextareaAutosize';
 import '../../assets/css/PopupStyle.css';
 import { CategoryServiceFaq } from '../../interfaces/category.interface';
@@ -25,9 +24,7 @@ function CategoriesServicesFaqEditPopup({
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
-    control,
   } = useForm<CategoryServiceFaq>();
   const onSubmit = (data: CategoryServiceFaq) => {
     setOpenFormDialog(false);

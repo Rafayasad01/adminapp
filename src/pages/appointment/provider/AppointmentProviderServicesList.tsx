@@ -43,17 +43,12 @@ function AppointmentProviderServicesList() {
     useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
   const actionMenuOptions = ['Edit', 'Delete'];
-  const [providerLov, setProviderLov] = useState<any>();
+  // const [providerLov, setProviderLov] = useState<any>();
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
   const [isLoader, setIsLoader] = React.useState(true);
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
-  const [cancelDialogOpen, setCancelDialogOpen] = useState<boolean>(false);
-  const [dialogText, setDialogText] = useState<any>(
-    'Are you sure you want to delete this customer ?'
-  );
-  const [showPassword, setShowPassword] = useState(true);
   const {
     register,
     handleSubmit,
@@ -104,7 +99,7 @@ function AppointmentProviderServicesList() {
       Service.ServiceProviderLov(authState.user.tenant)
         .then((item: any) => {
           if (item.data.success) {
-            setProviderLov(item.data.data);
+            // setProviderLov(item.data.data);
             setIsLoader(false);
             setOpenFormDialog(true);
           } else {
@@ -237,7 +232,7 @@ function AppointmentProviderServicesList() {
         const data = {
           updatedBy: authState.user.id,
         };
-        console.log(actionMenuItemid);
+        // console.log(actionMenuItemid);
         Service.ServiceDelete(actionMenuItemid, data)
           .then((item: any) => {
             if (item.data.success) {
@@ -308,7 +303,7 @@ function AppointmentProviderServicesList() {
   }, [emptyVariable]);
 
   const createFormHandler = (data: any) => {
-    console.log('==>', data);
+    // console.log('==>', data);
     setIsLoader(true);
     const userData = {
       name: data.serviceName,

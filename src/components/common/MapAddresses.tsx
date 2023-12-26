@@ -16,10 +16,10 @@ const loader = new Loader({
 function MapAddresses({ addresses, zoom }: Props) {
   const mapRef = useRef<HTMLDivElement>(null);
   const [map, setMap] = useState<google.maps.Map>();
-  const [markers, setMarkers] = useState<google.maps.Marker[]>([]);
+  // const [markers, setMarkers] = useState<google.maps.Marker[]>([]);
 
   useEffect(() => {
-    loader.load().then(async (e) => {
+    loader.load().then(async () => {
       if (!mapRef.current) {
         return;
       }
@@ -61,7 +61,7 @@ function MapAddresses({ addresses, zoom }: Props) {
               newMarkers.push(marker);
               map.setCenter(location);
             } else {
-              console.error('Invalid geocoder response for address:', address);
+              // console.error('Invalid geocoder response for address:', address);
             }
           } else {
             // console.error('Geocode was not successful for the following reason:', status);
@@ -69,7 +69,7 @@ function MapAddresses({ addresses, zoom }: Props) {
         });
       });
 
-      setMarkers(newMarkers);
+      // setMarkers(newMarkers);
     }
   }, [map, addresses]);
 

@@ -7,7 +7,7 @@ import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
 import IconButton from '@mui/material/IconButton';
 import TextField from '@mui/material/TextField';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
+import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 
 import '../../assets/css/PopupStyle.css';
@@ -18,7 +18,7 @@ type Props = {
 };
 
 function ComplainsCreatePopup({ openFormDialog, setOpenFormDialog }: Props) {
-  const [selectShop, setSelectShop] = useState('status');
+  // const [selectShop, setSelectShop] = useState('status');
   const [isImage, setIsImage] = useState('');
   const handleFormClose = () => setOpenFormDialog(false);
   const handleRemoveImage = () => {
@@ -29,9 +29,9 @@ function ComplainsCreatePopup({ openFormDialog, setOpenFormDialog }: Props) {
     setIsImage(event.target.files[0].name);
   };
 
-  const handleChange = (event: SelectChangeEvent) => {
-    setSelectShop(event.target.value as string);
-  };
+  // const handleChange = (event: SelectChangeEvent) => {
+  //   // setSelectShop(event.target.value as string);
+  // };
 
   return (
     <Dialog
@@ -55,9 +55,9 @@ function ComplainsCreatePopup({ openFormDialog, setOpenFormDialog }: Props) {
                 labelId="demo-simple-select-label"
                 value="UrLaundry"
                 disableUnderline
-                onChange={(event) => {
-                  handleChange(event);
-                }}
+                // onChange={(event) => {
+                //   handleChange(event);
+                // }}
               >
                 <MenuItem value="UrLaundry">UrLaundry</MenuItem>
               </Select>

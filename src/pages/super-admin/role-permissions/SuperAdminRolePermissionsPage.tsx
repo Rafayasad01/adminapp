@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import IconButton from '@mui/material/IconButton';
 import Divider from '@mui/material/Divider';
 import FormControl from '@mui/material/FormControl';
@@ -38,7 +38,7 @@ function SuperAdminRolePermissionsPage() {
   };
 
   const handleClickSearch = (event: any) => {
-    console.log('evenet', event);
+    // console.log('evenet', event);
     const searchTxt = event.target.value as string;
     const newPage = 0;
     setSearch(searchTxt);
@@ -61,7 +61,7 @@ function SuperAdminRolePermissionsPage() {
         setTotal(item.data.data.total);
       });
     } else {
-      console.log('search functionality here');
+      // console.log('search functionality here');
       Service.roleSearchService(search, newPage, rowsPerPage).then((item) => {
         setList(item.data.data.list);
         setTotal(item.data.data.total);
@@ -82,7 +82,7 @@ function SuperAdminRolePermissionsPage() {
         setTotal(item.data.data.total);
       });
     } else {
-      console.log('serach functionality here');
+      // console.log('serach functionality here');
       Service.roleSearchService(search, newPage, rowsPerPage).then((item) => {
         setList(item.data.data.list);
         setTotal(item.data.data.total);
@@ -112,6 +112,11 @@ function SuperAdminRolePermissionsPage() {
       })
       .catch((error) => {
         setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: error.message,
+          type: 'success',
+        });
         // console.log('error::::::::', error);
       });
   }, [emptyVariable]);

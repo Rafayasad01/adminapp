@@ -54,7 +54,7 @@ function SuperAdminTenantCreatePopup({
   } = useForm<Tenant>();
 
   const onSubmit = (data: Tenant) => {
-    console.log('submmit Tenant==>', data);
+    // console.log('submmit Tenant==>', data);
     if (data.tenantName) {
       setOpenFormDialog(false);
       callback(data);

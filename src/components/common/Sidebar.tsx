@@ -11,7 +11,7 @@ import InstagramIcon from '@mui/icons-material/Instagram';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import CorporateFareIcon from '@mui/icons-material/CorporateFare';
-import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
+// import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
 import PeopleOutlineOutlinedIcon from '@mui/icons-material/PeopleOutlineOutlined';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
@@ -38,7 +38,6 @@ import { MODULE_EMPLOYEEES } from '../../utils/constants';
 import ArrowDown from '../icons/ArrowDown';
 import ArrowUp from '../icons/ArrowUp';
 import CategoryIcon from '../icons/CategoryIcon';
-import DriverIcon from '../icons/DriverIcon';
 import OrderIcon from '../icons/OrderIcon';
 import PermissionIcon from '../icons/PermissionIcon';
 import RoleIcon from '../icons/RoleIcon';
@@ -48,7 +47,6 @@ import UserPermission from '../icons/UserPermission';
 import VoucherIcon from '../icons/VoucherIcon';
 import AppointmentIcon from '../icons/appointmentIcon';
 import VisitIcon from '../icons/visitIcon';
-import ServiceIcon from '../icons/serviceIcon';
 import ProviderIcon from '../icons/providerIcon';
 
 const links = [
@@ -120,12 +118,12 @@ const links = [
       },
     ],
   },
-  {
-    name: 'Notifications',
-    path: 'notification',
-    permission: 'Notification List',
-    icon: <NotificationsOutlinedIcon fontSize="inherit" />,
-  },
+  // {
+  //   name: 'Notifications',
+  //   path: 'notification',
+  //   permission: 'Notification List',
+  //   icon: <NotificationsOutlinedIcon fontSize="inherit" />,
+  // },
   {
     name: 'Vouchers',
     path: 'vouchers',

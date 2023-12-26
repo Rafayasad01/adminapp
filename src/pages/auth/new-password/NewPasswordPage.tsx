@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import FormControl from '@mui/material/FormControl';
 import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
@@ -48,7 +48,6 @@ function NewPasswordPage() {
     setError,
     clearErrors,
     formState: { errors },
-    control,
   } = useForm<NewPassword>();
 
   const onSubmit = (data: NewPassword) => {

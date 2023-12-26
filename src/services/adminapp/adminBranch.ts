@@ -1,5 +1,4 @@
 import network from '../../utils/network';
-import { BACKOFFICE_PREFIX } from '../../utils/constants';
 
 const BRANCH_PREFIX = 'branch';
 

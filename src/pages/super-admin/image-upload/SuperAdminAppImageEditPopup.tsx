@@ -44,21 +44,18 @@ function SuperAdminAppImageEditPopup({
     register,
     handleSubmit,
     setValue,
-    watch,
-    getValues,
     formState: { errors },
-    control,
   } = useForm<AppImage>();
 
   const onSubmit = (data: AppImage) => {
-    console.log('DATATATA', data);
-    if (type === 'edit' && data.name) {
+    // console.log('DATATATA', data);
+    if (type === 'edit' && data.name && image) {
       if (data.avatar && Object.keys(data?.avatar).length > 0) {
         data.avatar = image;
       }
       callback(data);
       setOpenDialog(false);
-    } else if (data.name && data.avatar) {
+    } else if (data.name && data.avatar && image) {
       if (data.avatar && Object.keys(data?.avatar).length > 0) {
         data.avatar = image;
       }
@@ -97,7 +94,7 @@ function SuperAdminAppImageEditPopup({
 
   useEffect(() => {
     const icon = formData?.avatar.split('/').slice(-1)[0];
-    console.log('ss', icon);
+    // console.log('ss', icon);
 
     const regexExp = /[a-z,0-9,-]{36}/;
     let tempicon = icon;
@@ -238,9 +235,9 @@ function SuperAdminAppImageEditPopup({
                       ''
                     )}
                   </div>
-                  {/* {image === null && (
-                    <span role="alert">Image is required</span>
-                  )} */}
+                  {image === null && (
+                    <ErrorSpanBox error="New image is required" />
+                  )}
                 </div>
               </div>
               <div className="FormFooter">

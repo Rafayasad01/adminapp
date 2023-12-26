@@ -9,8 +9,6 @@ import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
 // import { SelectChangeEvent } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
-
-import MoreVertIcon from '@mui/icons-material/MoreVert';
 import dayjs from 'dayjs';
 import TablePagination from '@mui/material/TablePagination';
 import cart from '../../services/adminapp/adminCarts';
@@ -40,7 +38,7 @@ function CartsPage() {
   const [total, setTotal] = useState(0);
   const [list, setList] = useState<any>([]);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const [actionMenuItemid, setActionMenuItemid] = React.useState('');
+  const [actionMenuItemid] = React.useState('');
   const [actionMenuAnchorEl, setActionMenuAnchorEl] =
     useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
@@ -118,7 +116,7 @@ function CartsPage() {
         setList(item.data.data.list.map((newItem: any) => ({ ...newItem })));
         setTotal(item.data.data.total);
       })
-      .catch((err) => {
+      .catch(() => {
         setIsLoader(false);
       });
   }, [emptyVariable]);
@@ -141,7 +139,7 @@ function CartsPage() {
   };
 
   const getStatusTag = (status: string) => {
-    console.log('STATAT', status);
+    // console.log('STATAT', status);
     let tag = '';
     if (status === CART_STATUS_NEW) {
       tag = 'blue';
@@ -261,7 +259,7 @@ function CartsPage() {
                   list.map((item: any, index: number) => {
                     // console.log(order);
                     return (
-                      <tr key={item.id}>
+                      <tr key={index}>
                         <td>
                           {item.user.firstName ? (
                             <div className="flex flex-col">

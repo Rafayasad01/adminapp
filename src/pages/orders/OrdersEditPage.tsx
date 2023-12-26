@@ -32,7 +32,7 @@ import DeleteIcon from '../../components/icons/DeleteIcon';
 import assets from '../../assets';
 
 function OrdersCreatePage() {
-  const [search, setSearch] = useState('');
+  // const [search, setSearch] = useState('');
   const [category, setCategory] = useState('categories');
   const [service, setService] = useState('services');
   const [quantity, setQuantity] = useState(0);
@@ -51,9 +51,11 @@ function OrdersCreatePage() {
     setPaymentMethod((event.target as HTMLInputElement).value);
   };
 
-  const handleClickSearch = (event: any) => {
-    setSearch(event.target.value as string);
-  };
+  const handleClickSearch = () =>
+    // event: any
+    {
+      // setSearch(event.target.value as string);
+    };
   const handleCategoryChange = (event: SelectChangeEvent) => {
     setCategory(event.target.value as string);
   };
@@ -88,13 +90,14 @@ function OrdersCreatePage() {
                   id="search"
                   type="text"
                   placeholder="Select Customer"
-                  onKeyDown={(
-                    event: React.KeyboardEvent<
-                      HTMLInputElement | HTMLTextAreaElement
-                    >
-                  ) => {
-                    handleClickSearch(event);
-                  }}
+                  onKeyDown={() =>
+                    // event: React.KeyboardEvent<
+                    //   HTMLInputElement | HTMLTextAreaElement>
+                    {
+                      handleClickSearch();
+                      // event
+                    }
+                  }
                   endAdornment={
                     <InputAdornment position="end">
                       <Divider

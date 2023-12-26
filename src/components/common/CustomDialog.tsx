@@ -6,7 +6,6 @@ import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
 import IconButton from '@mui/material/IconButton';
 import TextField from '@mui/material/TextField';
-import { AppUserDriverExt } from '../../interfaces/app-user.interface';
 import CustomButton from './CustomButton';
 import CustomInputBox from './CustomInputBox';
 import CustomDropDown from './CustomDropDown';
@@ -90,7 +89,7 @@ function CustomDialog({
           </div>
           <div className="FormBody">
             <div className={singleField ? 'FormField' : 'FormFields'}>
-              {inputFieldsData?.map((items: any, index: number, array: any) => {
+              {inputFieldsData?.map((items: any, index: number) => {
                 return (
                   <Fragment key={index}>
                     {

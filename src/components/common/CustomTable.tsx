@@ -45,7 +45,6 @@ function CustomTable({
   isAddButton,
   actions,
   search,
-  setSearch,
   service,
   handleFormClickOpen,
   handleClickSearch,
@@ -90,6 +89,11 @@ function CustomTable({
         })
         .catch((err: Error) => {
           // console.log('error', err);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: err.message,
+            type: 'error',
+          });
         });
     } else {
       setIsNotify(true);

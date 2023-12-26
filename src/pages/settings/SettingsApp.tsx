@@ -76,7 +76,7 @@ function SettingsApp() {
   const [selectedImg, setSelectedImg] = useState<any>(null);
   const [color1, setColor1] = useState<any>('#1A1A1A');
   const [color2, setColor2] = useState<any>('#1A1A1A');
-  const [color3, setColor3] = useState<any>('#1A1A1A');
+  // const [color3, setColor3] = useState<any>('#1A1A1A');
   const [detail, setDetail] = useState<Setting>();
   const [address, setAddress] = useState<any>(null);
   const [isLoader, setIsLoader] = useState(true);
@@ -90,7 +90,6 @@ function SettingsApp() {
     watch,
     setValue,
     formState: { errors },
-    control,
   } = useForm<Setting>();
 
   const setData = (item: any) => {
@@ -132,7 +131,7 @@ function SettingsApp() {
   };
 
   const onSubmit = (data: any) => {
-    console.log('SETTTING DATA', data);
+    // console.log('SETTTING DATA', data);
     setIsLoader(true);
     if (listingRolePermission(dataRole, 'Setting Update')) {
       // setIsLoader(true);

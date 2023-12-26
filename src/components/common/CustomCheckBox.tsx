@@ -10,7 +10,7 @@ type Props = {
   index?: number;
 };
 
-function CustomCheckBox({ item, control, index }: Props) {
+function CustomCheckBox({ item, control }: Props) {
   return (
     <Controller
       name={`${item.id}`}

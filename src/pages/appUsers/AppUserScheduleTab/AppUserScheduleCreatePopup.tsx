@@ -5,7 +5,6 @@ import Input from '@mui/material/Input';
 import dayjs from 'dayjs';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useNavigate, useParams } from 'react-router-dom';
 import assets from '../../../assets';
 import CustomDropDown from '../../../components/common/CustomDropDown';
 import TimePicker from '../../../components/common/CustomTimePicker';
@@ -41,7 +40,6 @@ function AppUserScheduleCreatePage({
     register,
     unregister,
     handleSubmit,
-    reset,
     control,
     setValue,
     watch,
@@ -95,8 +93,8 @@ function AppUserScheduleCreatePage({
   ]);
 
   const handleAddMore = () => {
-    const newStartTime = dayjs();
-    const newEndTime = dayjs();
+    // const newStartTime = dayjs();
+    // const newEndTime = dayjs();
     const tempCount = count + 1;
     setCount(tempCount);
     const newId = tempCount;
@@ -155,7 +153,7 @@ function AppUserScheduleCreatePage({
   };
 
   const onSubmit = (data: any) => {
-    console.log('data3', data);
+    // console.log('data3', data);
     setIsLoader(true);
     const parent: any = {
       createdBy: authState.user.id,

@@ -1,19 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Dialog from '@mui/material/Dialog';
-import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
-import Input from '@mui/material/Input';
-import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
-import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
 import IconButton from '@mui/material/IconButton';
 import TextField from '@mui/material/TextField';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
-import MenuItem from '@mui/material/MenuItem';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import LocalSeeOutlinedIcon from '@mui/icons-material/LocalSeeOutlined';
 import ChatIcon from '../../components/icons/ChatIcon';
 import BackArrowIcon from '../../components/icons/BackArrowIcon';
-
 import '../../assets/css/PopupStyle.css';
 import assets from '../../assets/index';
 import SendIcon from '../../components/icons/SendIcon';

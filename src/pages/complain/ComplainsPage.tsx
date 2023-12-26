@@ -34,7 +34,7 @@ const ITEM_HEIGHT = 48;
 function ComplainsPage() {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [search, setSearch] = useState('');
+  // const [search, setSearch] = useState('');
   const [openDialog, setOpenDialog] = useState(false);
   const [isCheckedAll, setIsCheckedAll] = useState(false);
 
@@ -76,9 +76,11 @@ function ComplainsPage() {
       setOpenDialog(true);
     }
   };
-  const handleClickSearch = (event: any) => {
-    setSearch(event.target.value as string);
-  };
+  const handleClickSearch = () =>
+    // event: any
+    {
+      // setSearch(event.target.value as string);
+    };
 
   return (
     <>
@@ -114,13 +116,15 @@ function ComplainsPage() {
                     id="search"
                     type="text"
                     placeholder="Search"
-                    onKeyDown={(
-                      event: React.KeyboardEvent<
-                        HTMLInputElement | HTMLTextAreaElement
-                      >
-                    ) => {
-                      handleClickSearch(event);
-                    }}
+                    onKeyDown={() =>
+                      // event: React.KeyboardEvent<
+                      //   HTMLInputElement | HTMLTextAreaElement
+                      // >
+                      {
+                        handleClickSearch();
+                        // event
+                      }
+                    }
                     endAdornment={
                       <InputAdornment position="end">
                         <Divider

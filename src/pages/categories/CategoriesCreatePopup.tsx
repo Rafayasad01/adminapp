@@ -39,9 +39,7 @@ function CategoriesCreatePopup({
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
-    control,
   } = useForm<Category>();
   const onSubmit = (data: Category) => {
     if (data.desc && image && data.name) {

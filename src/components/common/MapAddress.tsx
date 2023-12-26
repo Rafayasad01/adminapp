@@ -16,7 +16,7 @@ const loader = new Loader({
 function MapAddress({ address, zoom }: Props) {
   const mapRef = useRef<HTMLDivElement>(null);
   const [map, setMap] = useState<google.maps.Map>();
-  const [marker, setMarker] = useState<google.maps.Marker>();
+  // const [marker, setMarker] = useState<google.maps.Marker>();
   const [isError, setIsError] = useState<boolean>(false);
 
   const center: google.maps.LatLngLiteral = {
@@ -25,7 +25,7 @@ function MapAddress({ address, zoom }: Props) {
   };
 
   useEffect(() => {
-    loader.load().then(async (e) => {
+    loader.load().then(async () => {
       const options: google.maps.MapOptions = {
         center,
         zoom,
@@ -51,15 +51,15 @@ function MapAddress({ address, zoom }: Props) {
           setIsError(false);
           const { location } = results[0].geometry;
           if (location && location.lat() && location.lng()) {
-            const newMarker = new google.maps.Marker({
-              position: location,
-              map,
-              title: address,
-              icon: assets.images.iconMap,
-              draggable: false,
-              animation: google.maps.Animation.DROP,
-            });
-            setMarker(newMarker);
+            // const newMarker = new google.maps.Marker({
+            //   position: location,
+            //   map,
+            //   title: address,
+            //   icon: assets.images.iconMap,
+            //   draggable: false,
+            //   animation: google.maps.Animation.DROP,
+            // });
+            // setMarker(newMarker);
             map.setCenter(location);
           } else {
             setIsError(true);

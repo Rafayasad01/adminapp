@@ -45,6 +45,11 @@ function SuperAdminShopPage() {
       })
       .catch((err) => {
         setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'success',
+        });
       });
   };
 
@@ -107,6 +112,11 @@ function SuperAdminShopPage() {
       })
       .catch((error) => {
         setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: error.message,
+          type: 'success',
+        });
         // console.log('error::::::::', error);
       });
   }, [emptyVariable]);
@@ -196,7 +206,7 @@ function SuperAdminShopPage() {
   };
 
   const handletrialModeStatus = (status: any, trialMode: boolean): any => {
-    console.log('TTTMM', trialMode, status);
+    // console.log('TTTMM', trialMode, status);
     let textMsg = '';
     if (trialMode) {
       textMsg = 'Started';

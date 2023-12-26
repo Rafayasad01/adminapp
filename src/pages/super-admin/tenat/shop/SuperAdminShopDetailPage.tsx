@@ -1,14 +1,12 @@
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import EditIcon from '@mui/icons-material/Edit';
 import IconButton from '@mui/material/IconButton';
-import Switch from '@mui/material/Switch';
 import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Loader2 from '../../../../components/common/Loader2';
 import Notify from '../../../../components/common/Notify';
 import TopBar from '../../../../components/common/TopBar';
-import { useAppSelector } from '../../../../redux/redux-hooks';
 import Service from '../../../../services/superadmin/Tenant';
 import SuperAdminCategoryDialog from './SuperAdminCategoryDialog';
 import SuperAdminCreatePopup from './SuperAdminCreatePopup';
@@ -20,12 +18,11 @@ import SuperAdminUserDialog from './SuperAdminUserDialog';
 function SuperAdminShopDetailPage() {
   const params = useParams();
   const tenant = params.id ?? '';
-  const authState: any = useAppSelector((state) => state?.authState);
-  const [emptyVariable, setEmptyVariable] = useState('');
+  const [emptyVariable] = useState('');
   const [identifier, setIdentifier] = useState('');
   const [isLoader, setIsLoader] = useState(true);
   const [detail, setDetail] = useState<any>(null);
-  const [settingDetail, setSettingDetail] = useState<any>(null);
+  const [settingDetail] = useState<any>(null);
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
   const [openSettingDialog, setOpenSettingDialog] = useState(false);
@@ -35,10 +32,10 @@ function SuperAdminShopDetailPage() {
   const [formDetail, setFormDetail] = useState<any>(null);
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
-  const [rolelist, setRoleList] = useState<any>([]);
+  const [rolelist] = useState<any>([]);
   const [categories, setCategories] = useState<any>([]);
   const [subCategories, setSubCategories] = useState<any>([]);
-  const [isTrialMode, setIsTrialMode] = React.useState<boolean>(false);
+  // const [isTrialMode, setIsTrialMode] = React.useState<boolean>(false);
 
   const getUserById = (id: any, type: any) => {
     let service;
@@ -50,7 +47,7 @@ function SuperAdminShopDetailPage() {
     }
     service
       .then((item: any) => {
-        console.log('item.data.data::::::', item.data.data);
+        // console.log('item.data.data::::::', item.data.data);
         if (item.data.success) {
           setUserDialog(true);
           type === 'shop'
@@ -127,13 +124,13 @@ function SuperAdminShopDetailPage() {
       'trialModeLimit',
       data.trialModeLimit ? data.trialModeLimit : 0
     );
-    console.log('formdata 2', formData);
+    // console.log('formdata 2', formData);
 
     if (data.tenantName && data.email && data.firstName && data.lastName) {
       Service.createShopBranch(formData, tenant)
         .then((item: any) => {
           if (item.data.success) {
-            console.log('ITEMMM', item.data);
+            // console.log('ITEMMM', item.data);
             setIsLoader(false);
             setDetail((prevDetail: any) => ({
               ...prevDetail,
@@ -171,50 +168,50 @@ function SuperAdminShopDetailPage() {
     }
   };
 
-  const handleSwitchChange = (event: any, id: string) => {
-    setIsLoader(true);
-    const data = {
-      isActive: event.target.checked,
-      // trialMode: event.target.checked,
-      updatedBy: authState.user.id,
-    };
-    Service.updateShopStatus(id, data)
-      .then((updateItem) => {
-        if (updateItem.data.success) {
-          const newTempArr = detail.branches.map((item: any) => {
-            console.log('itemss', item);
-            if (item.id === id) {
-              item.isActive = updateItem.data.data.isActive;
-              // item.trialMode = updateItem.data.data.trialMode;
-            }
-            return { ...item };
-          });
-          setDetail({ ...detail, newTempArr });
-          setIsLoader(false);
-        } else {
-          setIsLoader(false);
-          setIsNotify(true);
-          setNotifyMessage({
-            text: updateItem.data.message,
-            type: 'error',
-          });
-        }
-      })
-      .catch((err) => {
-        setIsLoader(false);
-        setIsNotify(true);
-        setNotifyMessage({
-          text: err.message,
-          type: 'error',
-        });
-      });
-  };
+  // const handleSwitchChange = (event: any, id: string) => {
+  //   setIsLoader(true);
+  //   const data = {
+  //     isActive: event.target.checked,
+  //     // trialMode: event.target.checked,
+  //     updatedBy: authState.user.id,
+  //   };
+  //   Service.updateShopStatus(id, data)
+  //     .then((updateItem) => {
+  //       if (updateItem.data.success) {
+  //         const newTempArr = detail.branches.map((item: any) => {
+  //           // console.log('itemss', item);
+  //           if (item.id === id) {
+  //             item.isActive = updateItem.data.data.isActive;
+  //             // item.trialMode = updateItem.data.data.trialMode;
+  //           }
+  //           return { ...item };
+  //         });
+  //         setDetail({ ...detail, newTempArr });
+  //         setIsLoader(false);
+  //       } else {
+  //         setIsLoader(false);
+  //         setIsNotify(true);
+  //         setNotifyMessage({
+  //           text: updateItem.data.message,
+  //           type: 'error',
+  //         });
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       setIsLoader(false);
+  //       setIsNotify(true);
+  //       setNotifyMessage({
+  //         text: err.message,
+  //         type: 'error',
+  //       });
+  //     });
+  // };
 
   // console.log('DETAILS DATA', detail);
 
   const updateFormBranchHandler = (id: string, data: any) => {
     setIsLoader(true);
-    if (data.trialUpdateMode) setIsTrialMode(true);
+    // if (data.trialUpdateMode) setIsTrialMode(true);
     // console.log('formDATA1', data);
     const formData = {
       tenantName: data.tenantName,
@@ -229,7 +226,7 @@ function SuperAdminShopDetailPage() {
       maxBranchLimit: data.maxBranchLimit,
       maxUserLimit: data.maxUserLimit,
     };
-    console.log('formDATA2', formData);
+    // console.log('formDATA2', formData);
     if (data.tenantName && data.email && data.firstName && data.lastName) {
       Service.updateShop(id, formData)
         .then((items: any) => {
@@ -305,7 +302,10 @@ function SuperAdminShopDetailPage() {
   };
 
   const getRemainingTime = (data: any) => {
-    const addTime = dayjs(data.trialStartDate).add(data.trialModeLimit, 'days');
+    const addTime = dayjs(data.trialStartDate).add(
+      Number(data.trialModeLimit) - 1,
+      'days'
+    );
     const endTime: any = dayjs(addTime).format('YYYY-MM-DD HH:mm:ss');
     const diffBetween = dayjs.duration(dayjs().diff(endTime));
     const remainingTime = Math.abs(Math.round(diffBetween.asDays()));
@@ -322,7 +322,7 @@ function SuperAdminShopDetailPage() {
     return remainingTxt;
   };
 
-  console.log('SHOP', userDialog);
+  // console.log('SHOP', userDialog);
 
   return (
     <>

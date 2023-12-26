@@ -8,9 +8,9 @@ function SuperAdminDragDropFile() {
   const [dragActive, setDragActive] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const handleFile = (files: any) => {
-    // console.log(files);
-  };
+  // const handleFile = (files: any) => {
+  //   // console.log(files);
+  // };
 
   const handleDrag = (e: any) => {
     e.preventDefault();
@@ -27,14 +27,14 @@ function SuperAdminDragDropFile() {
     e.stopPropagation();
     setDragActive(false);
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      handleFile(e.dataTransfer.files);
+      // handleFile(e.dataTransfer.files);
     }
   };
 
   const handleChange = (e: any) => {
     e.preventDefault();
     if (e.target.files && e.target.files[0]) {
-      handleFile(e.target.files);
+      // handleFile(e.target.files);
     }
   };
 

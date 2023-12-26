@@ -1,7 +1,7 @@
 import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
-import React, { useState } from 'react';
+import React from 'react';
 // import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Avatar from '@mui/material/Avatar';
@@ -23,9 +23,8 @@ function SuperAdminCategoryDialog({
   categories,
   subCategories,
   setSubCategories,
-  setCategories,
 }: Props) {
-  const [isLoader, setIsLoader] = useState(true);
+  // const [isLoader, setIsLoader] = useState(true);
   const [expanded, setExpanded] = React.useState<string | false>('category0');
   const [expanded2, setExpanded2] = React.useState<string | false>(
     'subCategory0'
@@ -42,8 +41,7 @@ function SuperAdminCategoryDialog({
     };
 
   const handleChange2 =
-    (panel: string, item: any) =>
-    (event: React.SyntheticEvent, isExpanded: boolean) => {
+    (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
       setExpanded2(isExpanded ? panel : false);
     };
 
@@ -160,7 +158,7 @@ function SuperAdminCategoryDialog({
                   <Accordion
                     key={index}
                     expanded={expanded2 === `subCategory${index}`}
-                    onChange={handleChange2(`subCategory${index}`, item)}
+                    onChange={handleChange2(`subCategory${index}`)}
                     sx={{
                       border:
                         expanded2 === `subCategory${index}`

@@ -207,7 +207,7 @@ function SuperAdminAddPermissionsPage() {
       )}) already existss`;
     }
     if (hasDuplicate) {
-      console.log('run1');
+      // console.log('run1');
       setIsNotify(true);
       setNotifyMessage({
         text: displayText,
@@ -216,7 +216,7 @@ function SuperAdminAddPermissionsPage() {
     } else {
       const allNames = parent.data.map((item: any) => item.name);
       if (hasDuplicates(allNames)) {
-        console.log('run2');
+        // console.log('run2');
         setIsNotify(true);
         setNotifyMessage({
           text: displayText,
@@ -226,7 +226,7 @@ function SuperAdminAddPermissionsPage() {
         Service.createPermissionService(parent)
           .then((item: any) => {
             if (item.data.success) {
-              console.log('CREATED', item.data);
+              // console.log('CREATED', item.data);
               reset();
               setText(item.data.message);
               navigate('../list');
@@ -252,7 +252,7 @@ function SuperAdminAddPermissionsPage() {
     }
   };
 
-  console.log('EERORR', errors);
+  // console.log('EERORR', errors);
 
   return isLoader ? (
     <Loader />

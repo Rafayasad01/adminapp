@@ -3,10 +3,7 @@
 import { useState, useEffect } from 'react';
 
 import IconButton from '@mui/material/IconButton';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
 import PickupModal from './PickupModal';
-import TotalSaleChart from './TotalSaleChart';
-import OrderItemsChart from './OrderItemsChart';
 import DeliveryModal from './DeliveryModal';
 import OverdueModal from './OverdueModal';
 import DeliveredModal from './DeliveredModal';
@@ -113,7 +110,7 @@ function HomePage() {
           <h4 className="text">Coming Soon</h4>
         </div>
       </div> */}
-        {console.log("COUNT", count)}
+        {/* {console.log("COUNT", count)} */}
         <div className="container m-auto mt-3">
           <div className="mt-2 flex-1 grid grid-cols-4 gap-3">
             <div className="flex h-24 flex-row rounded-lg bg-white shadow-lg">

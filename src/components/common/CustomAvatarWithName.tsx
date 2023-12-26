@@ -25,8 +25,6 @@ function CustomAvatarWithName({
   title,
   subTitle,
   center,
-  customWidth,
-  customHeight,
   badgeText,
 }: Props) {
   const { email, role } = details;

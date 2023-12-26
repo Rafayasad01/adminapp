@@ -4,9 +4,9 @@ import Dialog from '@mui/material/Dialog';
 import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
 import MenuItem from '@mui/material/MenuItem';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
+import Select from '@mui/material/Select';
 import Switch from '@mui/material/Switch';
-import React, { useState } from 'react';
+import React from 'react';
 
 import '../../assets/css/PopupStyle.css';
 
@@ -19,13 +19,15 @@ function VouchersReferralCreatePopup({
   vouchersReferralDialog,
   setVouchersReferralDialog,
 }: Props) {
-  const [selectShop, setSelectShop] = useState('status');
+  // const [selectShop, setSelectShop] = useState('status');
   const handleFormClose = () => setVouchersReferralDialog(false);
   const [checked, setChecked] = React.useState(true);
 
-  const handleChange = (event: SelectChangeEvent) => {
-    setSelectShop(event.target.value as string);
-  };
+  const handleChange = () =>
+    // event: SelectChangeEvent
+    {
+      // setSelectShop(event.target.value as string);
+    };
 
   const handleSwitchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setChecked(event.target.checked);

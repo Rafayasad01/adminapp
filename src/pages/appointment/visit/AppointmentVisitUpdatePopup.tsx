@@ -12,7 +12,6 @@ import CustomMultipleSelectBox from '../../../components/common/CustomMultipleSe
 import ErrorSpanBox from '../../../components/common/ErrorSpanBox';
 import Loader from '../../../components/common/Loader2';
 import { AppointmentVisit } from '../../../interfaces/app.appointment';
-import { useAppSelector } from '../../../redux/redux-hooks';
 import Service from '../../../services/adminapp/adminAppointment';
 import {
   INVALID_CHAR,
@@ -62,7 +61,7 @@ function AppointmentVisitUpdatePopup({
       appointmentService: data.appointmentService,
       note: data.note,
     };
-    console.log('visitorDetails', visitorDetails);
+    // console.log('visitorDetails', visitorDetails);
     callback(visitorDetails);
   };
 
@@ -75,13 +74,13 @@ function AppointmentVisitUpdatePopup({
       )
         .then((item: any) => {
           if (item.data.success) {
-            console.log('visitTTTT', item.data.data);
+            // console.log('visitTTTT', item.data.data);
             setSchedule(item.data.data);
             setIsLoader(false);
             Service.VisitServiceLovByProviderId(item.data.data.id)
               .then((items: any) => {
                 if (items.data.success) {
-                  console.log('visit Services', items.data.data);
+                  // console.log('visit Services', items.data.data);
                   setServiceLov(items.data.data);
                   setIsLoader(false);
                 } else {
@@ -121,17 +120,17 @@ function AppointmentVisitUpdatePopup({
     }
   }, [watch('appointmentProvider') !== undefined]);
 
-  console.log(
-    '===>',
-    formData?.services,
-    servicelov,
-    formData?.appointmentService
-  );
+  // console.log(
+  //   '===>',
+  //   formData?.services,
+  //   servicelov,
+  //   formData?.appointmentService
+  // );
 
   const handleFormClose = () => {
     setOpenFormDialog(false);
   };
-  console.log('appointmentProvider', watch('appointmentProvider'));
+  // console.log('appointmentProvider', watch('appointmentProvider'));
 
   return (
     <Dialog

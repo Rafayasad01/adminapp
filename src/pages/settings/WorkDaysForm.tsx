@@ -29,7 +29,7 @@ function WorkDaysForm({ onlyweeksformat, setWeekDays }: Props) {
     newDevices: any
   ) => {
     if (newDevices.length) {
-      console.log('devices', newDevices);
+      // console.log('devices', newDevices);
       setDevices(newDevices);
       setWeekDays(newDevices);
     }
