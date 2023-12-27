@@ -55,7 +55,7 @@ function CategoriesEditPopup({
       };
       setOpenFormDialog(false);
       callback(res);
-    } else if (data.desc && data.name) {
+    } else if (data.desc && data.name && imageName) {
       const res = {
         name: data.name,
         desc: data.desc,
@@ -231,8 +231,8 @@ function CategoriesEditPopup({
                       ''
                     )}
                   </div>
-                  {image === null && errors.icon && (
-                    <ErrorSpanBox error={errors.icon?.message} />
+                  {image === null && imageName === null && (
+                    <ErrorSpanBox error="Image is required" />
                   )}
                 </div>
               </div>
