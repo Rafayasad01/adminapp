@@ -179,6 +179,7 @@ function SettingsApp() {
             setData(itemData);
             setDetail(itemData);
           } else {
+            setValue('userLimit', Number(detail?.userLimit));
             setIsLoader(false);
             setIsNotify(true);
             setNotifyMessage({
@@ -188,6 +189,7 @@ function SettingsApp() {
           }
         })
         .catch((err) => {
+          setValue('userLimit', Number(detail?.userLimit));
           setIsLoader(false);
           setIsNotify(true);
           setNotifyMessage({
@@ -343,7 +345,7 @@ function SettingsApp() {
                     disableUnderline
                     {...register('email', {
                       pattern: PATTERN.CHAR_NUM_DOT_AT,
-                      validate: (value) => value.length <= 150,
+                      validate: (value) => value?.length <= 150,
                       value: detail?.email ? detail.email : '',
                     })}
                   />
