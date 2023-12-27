@@ -33,6 +33,7 @@ function BranchPage() {
   );
   const [search, setSearch] = useState<any>('');
   const [maxTotalEmployeeLimit, setTotalMaxEmployeeLimit] = useState();
+  const [maxTotalEmployees, setTotalMaxEmployees] = useState();
   const [emptyVariable] = useState(null);
   const [page, setPage] = useState(0);
   const [total, setTotal] = useState(0);
@@ -128,7 +129,8 @@ function BranchPage() {
             setList(item.data.data.list);
             setTotal(item.data.data.total);
             setTotalBranches(item.data.data.list.length);
-            setTotalMaxEmployeeLimit(item.data.data.totalEmployees);
+            setTotalMaxEmployeeLimit(item.data.data.totalEmployeeLimits);
+            setTotalMaxEmployees(item.data.data.totalEmployees);
           } else {
             setIsLoader(false);
             setIsNotify(true);
@@ -335,6 +337,14 @@ function BranchPage() {
             </div>
             <div className="col-span-7">
               <div className="flex flex-row items-center justify-end gap-3">
+                <div className="flex-col items-center justify-center px-3">
+                  <p className="text-sm">Total Employees</p>
+                  <div className="mt-2 flex justify-center">
+                    <span className="badge badge-success text-xs">
+                      {maxTotalEmployees}
+                    </span>
+                  </div>
+                </div>
                 <div className="flex-col items-center justify-center">
                   <p className="text-sm">Max Employees Limit</p>
                   <div className="mt-2 flex justify-center">
