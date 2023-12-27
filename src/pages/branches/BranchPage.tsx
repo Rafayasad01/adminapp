@@ -337,27 +337,31 @@ function BranchPage() {
             </div>
             <div className="col-span-7">
               <div className="flex flex-row items-center justify-end gap-3">
-                <div className="flex-col items-center justify-center px-3">
-                  <p className="text-sm">Total Employees</p>
+                <div className="flex-col items-center justify-center px-2">
+                  <p className="text-sm font-semibold">Total Employees</p>
                   <div className="mt-2 flex justify-center">
-                    <span className="badge badge-success text-xs">
-                      {maxTotalEmployees}
-                    </span>
+                    {maxTotalEmployees ? (
+                      <span className="badge badge-danger w-full text-sm">
+                        {maxTotalEmployees}
+                      </span>
+                    ) : (
+                      '--'
+                    )}
                   </div>
                 </div>
                 <div className="flex-col items-center justify-center">
-                  <p className="text-sm">Max Employees Limit</p>
+                  <p className="text-sm font-semibold">Max Employees Limit</p>
                   <div className="mt-2 flex justify-center">
-                    <span className="badge badge-primary text-xs">
+                    <span className="badge badge-primary w-full text-sm">
                       {authState.user.maxEmployeeLimit} -{' '}
                       {maxTotalEmployeeLimit}
                     </span>
                   </div>
                 </div>
-                <div className="flex-col items-center justify-center px-3">
-                  <p className="text-sm">Max branches Limit</p>
+                <div className="flex-col items-center justify-center px-2">
+                  <p className="text-sm font-semibold">Max branches Limit</p>
                   <div className="mt-2 flex justify-center">
-                    <span className="badge badge-success text-xs">
+                    <span className="badge badge-success w-full text-sm">
                       {authState.user.branchLimit} - {total}
                     </span>
                   </div>
