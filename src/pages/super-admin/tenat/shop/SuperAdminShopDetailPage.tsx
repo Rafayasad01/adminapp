@@ -450,7 +450,7 @@ function SuperAdminShopDetailPage() {
                           </div>
                           <div className="col-span-2 mt-4 flex flex-col items-end justify-center">
                             <span className="font-open-sans text-base font-semibold not-italic text-[#1A1A1A]">
-                              Trial End Time
+                              Trial End Date
                             </span>
                             <div className="mt-1 font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
                               {dayjs(detail.trialStartDate).isValid() ? (

@@ -124,14 +124,14 @@ function SettingsApp() {
     setValue('youtube', item.youtube ? item.youtube : '');
     setValue('whatsapp', item.whatsapp ? item.whatsapp : '');
     setValue('address', item.address ? item.address : '');
-    setValue('userLimit', item.userLimit ? item.userLimit : '');
+    // setValue('userLimit', item.userLimit ? item.userLimit : '');
     setColor1(item.color1);
     setColor2(item.color2);
     // setColor3(item.color3);
   };
 
   const onSubmit = (data: any) => {
-    // console.log('SETTTING DATA', data);
+    console.log('SETTTING DATA', data);
     setIsLoader(true);
     if (listingRolePermission(dataRole, 'Setting Update')) {
       // setIsLoader(true);
@@ -160,7 +160,7 @@ function SettingsApp() {
       formData.append('color2', color2);
       // formData.append('color3', color3);
       if (authState?.user?.userType === 'ShopUser')
-        formData.append('userLimit', data.userLimit ? data.userLimit : '');
+        formData.append('userLimit', data.userLimit ? data.userLimit : 0);
       if (file !== null) formData.append('logo', file);
 
       Service.updateService(authState.user.tenant, formData)
@@ -343,8 +343,8 @@ function SettingsApp() {
                     disableUnderline
                     {...register('email', {
                       pattern: PATTERN.CHAR_NUM_DOT_AT,
-                      validate: (value) => detail?.email && value.length <= 150,
-                      value: detail ? detail.email : '',
+                      validate: (value) => value.length <= 150,
+                      value: detail?.email ? detail.email : '',
                     })}
                   />
                   {errors.email?.type === 'pattern' && (
@@ -424,6 +424,7 @@ function SettingsApp() {
                     <Input
                       className="FormInput"
                       {...register('userLimit', {
+                        value: detail ? detail.userLimit : 0,
                         validate: (value: any) =>
                           VALIDATE_NON_NEGATIVE_NUM(value),
                       })}
