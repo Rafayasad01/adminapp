@@ -73,7 +73,7 @@ function BannerUpdatePopup({
         {/* {isLoader ? <Loader /> : */}
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="FormHeader">
-            <span className="Title">Add Banner Image</span>
+            <span className="Title">Update Banner Image</span>
           </div>
           <div className="mt-3">
             <FormControl className="FormControl" variant="standard">
@@ -145,7 +145,7 @@ function BannerUpdatePopup({
             </Button>
             <CustomButton
               buttonType="button"
-              title="Add"
+              title="Update"
               type="submit"
               className="btn-black-fill"
               sx={{

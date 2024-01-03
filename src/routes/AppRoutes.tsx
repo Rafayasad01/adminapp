@@ -56,6 +56,7 @@ import SuperAdminShopPage from '../pages/super-admin/tenat/shop/SuperAdminShopPa
 import ShopAdminUserDetailPage from '../pages/super-admin/tenat/user/SuperAdminUserDetailPage';
 import SuperAdminUserPage from '../pages/super-admin/tenat/user/SuperAdminUserPage';
 import VouchersPage from '../pages/vouchers/VouchersPage';
+import DriverHistory from '../pages/orders/DriverHistory';
 
 export const routeObjects: RouteObject[] = [
   {
@@ -257,6 +258,10 @@ export const routeObjects: RouteObject[] = [
               {
                 path: 'assign/:orderId',
                 element: <OrdersAssignPage />,
+              },
+              {
+                path: 'view-driver',
+                element: <DriverHistory />,
               },
             ],
           },

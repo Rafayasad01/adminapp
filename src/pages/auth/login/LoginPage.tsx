@@ -36,34 +36,41 @@ function LoginPage() {
     event.preventDefault();
   };
   const loginHandler = async () => {
+    setIsLoader(true);
     const userData: UserLogin = {
       username: email,
       password,
     };
-    setIsLoader(true);
-    const user: any = await auth.loginService(userData);
-    if (user && user.data.success) {
-      setIsLoader(false);
-      const newUserData = user.data.data;
-      setToken(newUserData.token);
-      dispatch(setRolePermissions(newUserData.role));
-      delete newUserData.role;
-      dispatch(login(newUserData));
-      dispatch(setItemState(newUserData));
-      if (newUserData?.tenantConfig) {
-        dispatch(setLogo(user?.data?.data?.tenantConfig?.logo));
-      }
-      if (newUserData.isSuperAdmin) {
-        navigate('../../../main');
+    await auth.loginService(userData).then((user) => {
+      if (user && user.data.success) {
+        setIsLoader(false);
+        const newUserData = user.data.data;
+        setToken(newUserData.token);
+        dispatch(setRolePermissions(newUserData.role));
+        delete newUserData.role;
+        dispatch(login(newUserData));
+        dispatch(setItemState(newUserData));
+        if (newUserData?.tenantConfig) {
+          dispatch(setLogo(user?.data?.data?.tenantConfig?.logo));
+        }
+        if (newUserData.isSuperAdmin) {
+          navigate('../../../main');
+        } else {
+          navigate('../../../dashboard');
+        }
       } else {
-        navigate('../../../dashboard');
+        setIsLoader(false);
+        setAlertMsg(user.data.message);
+        setAlertSeverity('error');
+        setShowAlert(true);
       }
-    } else {
+    }).catch((err) => {
       setIsLoader(false);
-      setAlertMsg(user.data.message);
+      setAlertMsg(err.message);
       setAlertSeverity('error');
       setShowAlert(true);
-    }
+    })
+
   };
 
   return (
@@ -77,8 +84,8 @@ function LoginPage() {
         />
       )}
       <div className="flex h-full w-full items-center justify-center">
-        <div className="flex w-96 flex-col items-center justify-center rounded-xl bg-gray-50 p-5">
-          <img className="my-4" src={assets.images.logoBlack} alt="" />
+        <div className="flex w-96 flex-col items-center justify-center rounded-xl bg-[#fff] p-5">
+          <img className="my-4" src={assets.images.logoBlackPng} alt="" />
           <div className="form-group w-full">
             <label htmlFor="email" className="font-sans">
               Email

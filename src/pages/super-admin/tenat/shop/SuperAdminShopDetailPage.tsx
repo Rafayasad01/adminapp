@@ -225,6 +225,9 @@ function SuperAdminShopDetailPage() {
       role: data.role,
       maxBranchLimit: data.maxBranchLimit,
       maxUserLimit: data.maxUserLimit,
+      loyaltyCoinConversionRate:  data.enableLoyaltyProgram ? data.loyaltyCoinConversionRate ? data.loyaltyCoinConversionRate : 0 : 0,
+      requiredCoinsToRedeem:  data.enableLoyaltyProgram ? data.requiredCoinsToRedeem ? data.requiredCoinsToRedeem : 0 : 0,
+      enableLoyaltyProgram: data.enableLoyaltyProgram
     };
     // console.log('formDATA2', formData);
     if (data.tenantName && data.email && data.firstName && data.lastName) {

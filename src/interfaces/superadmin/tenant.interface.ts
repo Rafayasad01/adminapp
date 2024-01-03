@@ -14,4 +14,7 @@ export interface Tenant {
   userLimit: number;
   trialModeLimit: number;
   role: string;
+  enableLoyaltyProgram: boolean;
+  loyaltyCoinConversionRate: string;
+  requiredCoinsToRedeem: string;
 }

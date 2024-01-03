@@ -96,7 +96,7 @@ function CategoriesServicesCreatePopup({
             <span className="Title">Add Services</span>
           </div>
           <div className="FormBody">
-            <div className="FormFields">
+            <div className="FormField">
               <FormControl className="FormControl" variant="standard">
                 <label className="FormLabel">Service Name</label>
                 <Input
@@ -120,6 +120,8 @@ function CategoriesServicesCreatePopup({
                   <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
                 )}
               </FormControl>
+            </div>
+            <div className="FormFields">
               <FormControl className="FormControl" variant="standard">
                 <label className="FormLabel">Price</label>
                 <Input
@@ -130,10 +132,35 @@ function CategoriesServicesCreatePopup({
                   {...register('price', {
                     required: 'Price is required in numbers',
                     validate: (value: any) => VALIDATE_NON_NEGATIVE_NUM(value),
+                    maxLength: {
+                      value: 10,
+                      message: "Length should not be excceed from 10 numbers."
+                    }
                   })}
                   disableUnderline
                 />
                 {errors.price && <ErrorSpanBox error={errors.price?.message} />}
+              </FormControl>
+              <FormControl className="FormControl" variant="standard">
+                <label className="FormLabel">Loyality Coins</label>
+                <Input
+                  className="FormInput"
+                  id="coins"
+                  placeholder="Enter Coins"
+                  {...register('coins', {
+                    pattern: {
+                      value: PATTERN.POINT_NUM,
+                      message: 'Enter a valid coins in numbers',
+                    },
+                    maxLength: {
+                      value: 10,
+                      message: "Length should not be excceed from 10 numbers."
+                    },
+                    validate: (value: any) => VALIDATE_NON_NEGATIVE_NUM(value),
+                  })}
+                  disableUnderline
+                />
+                {errors.coins && <ErrorSpanBox error={errors.coins?.message} />}
               </FormControl>
             </div>
             <div className="FormField">
