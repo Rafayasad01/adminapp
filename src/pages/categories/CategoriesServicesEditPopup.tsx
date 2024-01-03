@@ -121,7 +121,7 @@ function CategoriesServicesEditPopup({
             <span className="Title">Edit Services</span>
           </div>
           <div className="FormBody">
-            <div className="FormFields">
+            <div className="FormField">
               <FormControl className="FormControl" variant="standard">
                 <label className="FormLabel">Service Name</label>
                 <Input
@@ -146,6 +146,8 @@ function CategoriesServicesEditPopup({
                   <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
                 )}
               </FormControl>
+            </div>
+            <div className="FormFields">
               <FormControl className="FormControl" variant="standard">
                 <label className="FormLabel">Price</label>
                 <Input
@@ -160,6 +162,28 @@ function CategoriesServicesEditPopup({
                   disableUnderline
                 />
                 {errors.price && <ErrorSpanBox error={errors.price?.message} />}
+              </FormControl>
+              <FormControl className="FormControl" variant="standard">
+                <label className="FormLabel">Loyality Coins</label>
+                <Input
+                  className="FormInput"
+                  id="coins"
+                  placeholder="Enter Coins"
+                  {...register('coins', {
+                    // value: formData?.coins,
+                    pattern: {
+                      value: PATTERN.POINT_NUM,
+                      message: 'Enter a valid coins in numbers',
+                    },
+                    maxLength: {
+                      value: 10,
+                      message: "Length should not be excceed from 10 numbers."
+                    },
+                    validate: (value: any) => formData?.coins && VALIDATE_NON_NEGATIVE_NUM(value),
+                  })}
+                  disableUnderline
+                />
+                {errors.coins && <ErrorSpanBox error={errors.coins?.message} />}
               </FormControl>
             </div>
             {/* <div className="FormFields">

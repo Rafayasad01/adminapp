@@ -1001,6 +1001,10 @@ label+.css-1aa5qj0-MuiInputBase-root-MuiInput-root {
   max-width: none;
 }
 
+.customheight{
+  max-width: 25rem !important;
+  margin: auto;
+}
 .custom-width-80 {
   width: 80% !important;
 }

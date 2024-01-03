@@ -62,9 +62,12 @@ function SuperAdminUpdatePopup({
     formState: { errors },
     control,
   } = useForm<Tenant>();
-  const onSubmit = (data: Tenant) => {
-    // console.log("onsubmiot", data,item);
-
+  const onSubmit = (data: Partial<Tenant>) => {
+    console.log("onsubmiot", data);
+    if (data.enableLoyaltyProgram === false) {
+      delete data.loyaltyCoinConversionRate;
+      delete data.requiredCoinsToRedeem;
+    }
     if (data.tenantName) {
       setOpenFormDialog(false);
       callback(item.id, data);
@@ -442,6 +445,77 @@ function SuperAdminUpdatePopup({
                         'YYYY-MM-DD HH:mm:ss'
                       )}
                     />
+                  </FormControl>
+                </div>
+              )}
+              <div className="FormField">
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      defaultChecked={item.tenantExt.enableLoyaltyProgram}
+                      icon={
+                        <RadioButtonUncheckedOutlinedIcon
+                          style={{ color: '#1D1D1D' }}
+                        />
+                      }
+                      checkedIcon={
+                        <CheckCircleOutlinedIcon style={{ color: '#1D1D1D' }} />
+                      }
+                      {...register('enableLoyaltyProgram')}
+                    />
+                  }
+                  label="Loyality Program"
+                />
+              </div>
+              {watch('enableLoyaltyProgram') === true && (
+                <div className='FormFields'>
+                  <FormControl className="FormControl" variant="standard">
+                    <label className="FormLabel">Loyality Conversion Rate</label>
+                    <Input
+                      id="loyaltyCoinConversionRate"
+                      placeholder="Enter Conversion Rate"
+                      type="number"
+                      className="FormInput"
+                      {...register('loyaltyCoinConversionRate', {
+                        value: item?.tenantExt?.loyaltyCoinConversionRate,
+                        required:
+                          watch('enableLoyaltyProgram') === true &&
+                          'Loyality rate is required in numbers',
+                        validate: (value: any) => VALIDATE_NON_NEGATIVE_NUM(value),
+                        maxLength: {
+                          value: 10,
+                          message: MAX_LENGTH_EXCEEDED
+                        }
+                      })}
+                      disableUnderline
+                    />
+                    {errors?.loyaltyCoinConversionRate && (
+                      <ErrorSpanBox error={errors?.loyaltyCoinConversionRate?.message} />
+                    )}
+                  </FormControl>
+                  <FormControl className="FormControl" variant="standard">
+                    <label className="FormLabel">Minimum Loyality Coins</label>
+                    <Input
+                      id="requiredCoinsToRedeem"
+                      placeholder="Enter Minimum Loyality coins"
+                      type="number"
+                      className="FormInput"
+                      {...register('requiredCoinsToRedeem', {
+                        value: item?.tenantExt?.requiredCoinsToRedeem,
+                        required:
+                          watch('enableLoyaltyProgram') === true &&
+                          'Loyality coins is required in numbers',
+                        validate: (value: any) => VALIDATE_NON_NEGATIVE_NUM(value),
+                        maxLength: {
+                          value: 10,
+                          message: MAX_LENGTH_EXCEEDED
+                        }
+                      })}
+                      disableUnderline
+                    />
+                    {errors?.requiredCoinsToRedeem && (
+                      <ErrorSpanBox error={errors?.requiredCoinsToRedeem?.message} />
+                    )}
                   </FormControl>
                 </div>
               )}

@@ -3,6 +3,10 @@ import Dialog from '@mui/material/Dialog';
 import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined';
+import RadioButtonUncheckedOutlinedIcon from '@mui/icons-material/RadioButtonUncheckedOutlined'
+import Checkbox from '@mui/material/Checkbox';
 import TextField from '@mui/material/TextField';
 import { debounce } from '@mui/material/utils';
 import kabakCase from 'lodash/kebabCase';
@@ -20,6 +24,7 @@ import {
   VALIDATE_NON_NEGATIVE_NUM,
 } from '../../utils/constants';
 import { useAppSelector } from '../../redux/redux-hooks';
+import CustomButton from '../../components/common/CustomButton';
 
 type Props = {
   openFormDialog: boolean;
@@ -42,6 +47,7 @@ function BranchCreatePopup({
     register,
     handleSubmit,
     setValue,
+    watch,
     formState: { errors },
   } = useForm<Tenant>();
 
@@ -59,10 +65,13 @@ function BranchCreatePopup({
       address: data.address,
       userLimit: data.userLimit,
       userId: authState.user.id,
+      enableLoyaltyProgram: data.enableLoyaltyProgram,
+      loyaltyCoinConversionRate: data.enableLoyaltyProgram ? data.loyaltyCoinConversionRate : 0,
+      requiredCoinsToRedeem: data.enableLoyaltyProgram ? data.requiredCoinsToRedeem : 0,
     };
+    console.log("detailss", details);
     if (data.tenantName) {
       setOpenFormDialog(false);
-      // console.log("detailss",details);
       callback(details);
     } else {
       setIsNotify(true);
@@ -89,13 +98,15 @@ function BranchCreatePopup({
     <Dialog
       open={openFormDialog}
       onClose={handleFormClose}
+      // scroll='paper'
+      // disableScrollLock
       PaperProps={{
         className: 'Dialog',
-        style: { maxWidth: '100%', maxHeight: 'auto' },
+        style: { maxWidth: '100%', minHeight: '410px', height: '490px' },
       }}
     >
-      <div className="Content">
-        <form onSubmit={handleSubmit(onSubmit)}>
+      <div className="Content p-3">
+        <form onSubmit={handleSubmit(onSubmit)} className="overflow-auto px-2">
           <div className="FormHeader">
             <span className="Title">{type ? 'Add Branch' : 'Add Shop'}</span>
           </div>
@@ -227,7 +238,7 @@ function BranchCreatePopup({
                 )}
               </FormControl>
               <FormControl className="FormControl" variant="standard">
-                <label className="FormLabel">User Limits</label>
+                <label className="FormLabel">Employees Limits</label>
                 <Input
                   className="FormInput"
                   {...register('userLimit', {
@@ -294,6 +305,74 @@ function BranchCreatePopup({
                 />
               </FormControl>
             </div>
+            <div className="FormField">
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    icon={
+                      <RadioButtonUncheckedOutlinedIcon
+                        style={{ color: '#1D1D1D' }}
+                      />
+                    }
+                    checkedIcon={
+                      <CheckCircleOutlinedIcon style={{ color: '#1D1D1D' }} />
+                    }
+                    {...register('enableLoyaltyProgram')}
+                  />
+                }
+                label="Loyality Program"
+              />
+            </div>
+            {watch('enableLoyaltyProgram') === true && (
+              <div className='FormFields'>
+                <FormControl className="FormControl" variant="standard">
+                  <label className="FormLabel">Loyality Conversion Rate</label>
+                  <Input
+                    id="loyaltyCoinConversionRate"
+                    placeholder="Enter Conversion Rate"
+                    type="number"
+                    className="FormInput"
+                    {...register('loyaltyCoinConversionRate', {
+                      required:
+                        watch('enableLoyaltyProgram') === true &&
+                        'Loyality rate is required in numbers',
+                      validate: (value: any) => VALIDATE_NON_NEGATIVE_NUM(value),
+                      maxLength: {
+                        value: 10,
+                        message: MAX_LENGTH_EXCEEDED
+                      }
+                    })}
+                    disableUnderline
+                  />
+                  {errors?.loyaltyCoinConversionRate && (
+                    <ErrorSpanBox error={errors?.loyaltyCoinConversionRate?.message} />
+                  )}
+                </FormControl>
+                <FormControl className="FormControl" variant="standard">
+                  <label className="FormLabel">Minimum Loyality Coins</label>
+                  <Input
+                    id="requiredCoinsToRedeem"
+                    placeholder="Enter Minimum Loyality coins"
+                    type="number"
+                    className="FormInput"
+                    {...register('requiredCoinsToRedeem', {
+                      required:
+                        watch('enableLoyaltyProgram') === true &&
+                        'Loyality coins is required in numbers',
+                      validate: (value: any) => VALIDATE_NON_NEGATIVE_NUM(value),
+                      maxLength: {
+                        value: 10,
+                        message: MAX_LENGTH_EXCEEDED
+                      }
+                    })}
+                    disableUnderline
+                  />
+                  {errors?.requiredCoinsToRedeem && (
+                    <ErrorSpanBox error={errors?.requiredCoinsToRedeem?.message} />
+                  )}
+                </FormControl>
+              </div>
+            )}
           </div>
           <div className="FormFooter">
             <Button
@@ -307,7 +386,18 @@ function BranchCreatePopup({
             >
               Cancel
             </Button>
-            <Input
+            <CustomButton
+              buttonType="button"
+              title={'Add'}
+              type="submit"
+              className="btn-black-fill"
+              sx={{
+                padding: '0.375rem 2rem !important',
+                width: '90%',
+                height: '35px',
+              }}
+            />
+            {/* <Input
               type="submit"
               value="Add"
               className="btn-black-fill"
@@ -315,7 +405,7 @@ function BranchCreatePopup({
               sx={{
                 padding: '0.375rem 2rem !important',
               }}
-            />
+            /> */}
           </div>
         </form>
       </div>

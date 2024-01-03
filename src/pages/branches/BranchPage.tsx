@@ -166,6 +166,7 @@ function BranchPage() {
           });
           setList([item.data.data, ...list]);
           setTotal((prev) => prev + 1);
+          setTotalMaxEmployeeLimit((prev) => prev + item.data.data.userLimit);
           reset();
         } else {
           setIsLoader(false);
@@ -330,12 +331,12 @@ function BranchPage() {
       <div className="container m-auto mt-5">
         <div className="w-full rounded-lg bg-white shadow-lg">
           <div className="grid grid-cols-12 px-4 py-5">
-            <div className="col-span-5">
+            <div className="col-span-2">
               <span className="font-open-sans text-xl font-semibold text-[#252733]">
                 All Branches
               </span>
             </div>
-            <div className="col-span-7">
+            <div className="col-span-10">
               <div className="flex flex-row items-center justify-end gap-3">
                 <div className="flex-col items-center justify-center px-2">
                   <p className="text-sm font-semibold">Total Employees</p>
@@ -354,7 +355,7 @@ function BranchPage() {
                   <div className="mt-2 flex justify-center">
                     <span className="badge badge-primary w-full text-sm">
                       {authState.user.maxEmployeeLimit} -{' '}
-                      {maxTotalEmployeeLimit}
+                      {maxTotalEmployeeLimit ? maxTotalEmployeeLimit : 0}
                     </span>
                   </div>
                 </div>
@@ -398,10 +399,10 @@ function BranchPage() {
                 </FormControl>
                 <Button
                   variant="contained"
-                  className="btn-black-fill btn-icon"
+                  className="btn-black-fill"
                   onClick={handleAddNew}
                 >
-                  <AddOutlinedIcon /> Add New
+                  <AddOutlinedIcon /><span>Add New</span>
                 </Button>
               </div>
             </div>
@@ -432,8 +433,8 @@ function BranchPage() {
                               <span className="text-xs font-normal text-[#6A6A6A]">
                                 {dayjs(item.createdDate).isValid()
                                   ? dayjs(item.createdDate)?.format(
-                                      'MMMM DD, YYYY'
-                                    )
+                                    'MMMM DD, YYYY'
+                                  )
                                   : '--'}
                               </span>
                             </div>
@@ -451,11 +452,11 @@ function BranchPage() {
                               ) === 'Started'
                                 ? 'badge badge-success'
                                 : handleTrialModeStatus(
-                                    item.isActive,
-                                    item.trialMode
-                                  ) === 'Not Started'
-                                ? 'badge badge-primary'
-                                : 'badge badge-danger'
+                                  item.isActive,
+                                  item.trialMode
+                                ) === 'Not Started'
+                                  ? 'badge badge-primary'
+                                  : 'badge badge-danger'
                             }
                           >
                             {handleTrialModeStatus(

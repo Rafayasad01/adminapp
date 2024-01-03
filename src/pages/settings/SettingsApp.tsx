@@ -23,6 +23,7 @@ import ErrorSpanBox from '../../components/common/ErrorSpanBox';
 import Loader from '../../components/common/Loader';
 import MapAddress from '../../components/common/MapAddress';
 import Notify from '../../components/common/Notify';
+import { setEmployeeLimit, setLogo } from '../../redux/features/appStateSlice';
 import Service from '../../services/adminapp/admin';
 import {
   DOMAIN_PREFIX,
@@ -40,7 +41,6 @@ import {
   YOUTUBE,
 } from '../../utils/constants';
 import { listingRolePermission } from '../../utils/helper';
-import { setLogo } from '../../redux/features/appStateSlice';
 
 type AssetsImages = keyof typeof assets.images;
 
@@ -57,7 +57,7 @@ function HelpingIcon(elements: any) {
   const { links } = elements;
   // console.log('links', links);
 
-  const filtered = links?.filter((el: string) => el !== null);
+  const filtered = links?.filter((el: string) => el !== "null");
   if (filtered?.length < 6) {
     return <PlusIcon />;
   }
@@ -131,7 +131,7 @@ function SettingsApp() {
   };
 
   const onSubmit = (data: any) => {
-    console.log('SETTTING DATA', data);
+    // console.log('SETTTING DATA', data);
     setIsLoader(true);
     if (listingRolePermission(dataRole, 'Setting Update')) {
       // setIsLoader(true);
@@ -159,16 +159,19 @@ function SettingsApp() {
       formData.append('color1', color1);
       formData.append('color2', color2);
       // formData.append('color3', color3);
-      if (authState?.user?.userType === 'ShopUser')
-        formData.append('userLimit', data.userLimit ? data.userLimit : 0);
+      if (authState?.user?.userType === 'ShopUser') formData.append('userLimit', data.userLimit ? data.userLimit : 0);
       if (file !== null) formData.append('logo', file);
 
       Service.updateService(authState.user.tenant, formData)
         .then((item: any) => {
           const { success, message, data: itemData } = item.data;
           if (success) {
+            setAddress(itemData?.address);
             if (itemData?.logo) {
               dispatch(setLogo(itemData.logo));
+            }
+            if (itemData?.userLimit) {
+              dispatch(setEmployeeLimit(itemData.userLimit));
             }
             setIsLoader(false);
             setIsNotify(true);
@@ -209,6 +212,7 @@ function SettingsApp() {
             setIsLoader(false);
             setData(item.data.data);
             setDetail(item.data.data);
+            setAddress(item.data.data.address);
           } else {
             setIsLoader(false);
             setIsNotify(true);
@@ -227,16 +231,16 @@ function SettingsApp() {
           });
         });
     }
-    if (listingRolePermission(dataRole, 'Setting Address')) {
-      Service.getAddressService(authState.user.tenant).then((item: any) => {
-        if (item.data.success) {
-          setAddress(item.data.data);
-        }
-      });
-    }
+    // if (listingRolePermission(dataRole, 'Setting Address')) {
+    //   Service.getAddressService(authState.user.tenant).then((item: any) => {
+    //     if (item.data.success) {
+    //       setAddress(item.data.data.address);
+    //     }
+    //   });
+    // }
   }, [emptyVariable]);
 
-  // console.log('detail', selectedImg, detail?.logo);
+  console.log('detail', address, watch("address"));
 
   return isLoader ? (
     <Loader />
@@ -478,37 +482,37 @@ function SettingsApp() {
                 <FormControl className="FormControl" variant="standard">
                   <label className="FormLabel">Social Links</label>
                   <div className="mt-2 flex flex-row items-center gap-3">
-                    {detail && detail.facebook && (
+                    {detail && detail.facebook && detail.facebook !== "null" && (
                       <Item
                         value={detail.facebook}
                         name={FACEBOOK as AssetsImages}
                       />
                     )}
-                    {detail && detail.instagram && (
+                    {detail && detail.instagram && detail.instagram !== "null" && (
                       <Item
                         value={detail.instagram}
                         name={INSTAGRAM as AssetsImages}
                       />
                     )}
-                    {detail && detail.linkedin && (
+                    {detail && detail.linkedin && detail.linkedin !== "null" && (
                       <Item
                         value={detail.linkedin}
                         name={LINKEDIN as AssetsImages}
                       />
                     )}
-                    {detail && detail.twitter && (
+                    {detail && detail.twitter && detail.twitter !== "null" && (
                       <Item
                         value={detail.twitter}
                         name={TWITTER as AssetsImages}
                       />
                     )}
-                    {detail && detail.youtube && (
+                    {detail && detail.youtube && detail.youtube !== "null" && (
                       <Item
                         value={detail.youtube}
                         name={YOUTUBE as AssetsImages}
                       />
                     )}
-                    {detail && detail.whatsapp && (
+                    {detail && detail.whatsapp && detail.whatsapp !== "null" && (
                       <Item
                         value={detail.whatsapp}
                         name={WHATSAPP as AssetsImages}
@@ -568,7 +572,7 @@ function SettingsApp() {
         </div>
         <div className="col-span-6 min-h-[500px] rounded-lg bg-white shadow-lg">
           {address ? (
-            <MapAddress address={address.address} zoom={10} />
+            <MapAddress address={address} zoom={10} />
           ) : (
             <div className="no-map-location">
               <div className="content">

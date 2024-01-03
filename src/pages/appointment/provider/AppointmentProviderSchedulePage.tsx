@@ -598,13 +598,6 @@ function AppointmentProviderSchedulePage() {
                                 <span className="text-sm font-semibold">
                                   {`${item.workDay}`}
                                 </span>
-                                <span className="text-xs font-normal text-[#6A6A6A]">
-                                  {dayjs(item.createdDate).isValid()
-                                    ? dayjs(item.createdDate)?.format(
-                                        'MMMM DD, YYYY'
-                                      )
-                                    : '--'}
-                                </span>
                               </div>
                             </div>
                           </td>
@@ -701,7 +694,7 @@ function AppointmentProviderSchedulePage() {
           setOpenFormDialog={setOpenEditFormDialog}
           formData={editFormDetails}
           callback={updateFormHandler}
-          // setActionMenuItemid={setActionMenuItemid}
+        // setActionMenuItemid={setActionMenuItemid}
         />
       )}
     </>

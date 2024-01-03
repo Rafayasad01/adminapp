@@ -46,6 +46,7 @@ function SuperAdminTenantCreatePopup({
 }: Props) {
   const {
     register,
+    unregister,
     handleSubmit,
     watch,
     setValue,
@@ -53,8 +54,12 @@ function SuperAdminTenantCreatePopup({
     control,
   } = useForm<Tenant>();
 
-  const onSubmit = (data: Tenant) => {
-    // console.log('submmit Tenant==>', data);
+  const onSubmit = (data: Partial<Tenant>) => {
+    // console.log("datA", data);
+    if (data.enableLoyaltyProgram === false) {
+      delete data.loyaltyCoinConversionRate;
+      delete data.requiredCoinsToRedeem;
+    }
     if (data.tenantName) {
       setOpenFormDialog(false);
       callback(data);
@@ -382,6 +387,76 @@ function SuperAdminTenantCreatePopup({
                     <span role="alert" className="error-color">
                       *{errors?.trialModeLimit?.message}
                     </span>
+                  )}
+                </FormControl>
+              </div>
+            )}
+            <div className="FormField">
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    icon={
+                      <RadioButtonUncheckedOutlinedIcon
+                        style={{ color: '#1D1D1D' }}
+                      />
+                    }
+                    checkedIcon={
+                      <CheckCircleOutlinedIcon style={{ color: '#1D1D1D' }} />
+                    }
+                    {...register('enableLoyaltyProgram')}
+                  />
+                }
+                label="Loyality Program"
+              />
+            </div>
+            {watch('enableLoyaltyProgram') === true && (
+              <div className='FormFields'>
+                <FormControl className="FormControl" variant="standard">
+                  <label className="FormLabel">Loyality Conversion Rate</label>
+                  <Input
+                    id="loyaltyCoinConversionRate"
+                    placeholder="Enter Conversion Rate"
+                    type="number"
+                    className="FormInput"
+                    defaultValue={0}
+                    {...register('loyaltyCoinConversionRate', {
+                      required:
+                        watch('enableLoyaltyProgram') === true &&
+                        'Loyality rate is required in numbers',
+                      validate: (value: any) => VALIDATE_NON_NEGATIVE_NUM(value),
+                      maxLength: {
+                        value: 10,
+                        message: MAX_LENGTH_EXCEEDED
+                      }
+                    })}
+                    disableUnderline
+                  />
+                  {errors?.loyaltyCoinConversionRate && (
+                    <ErrorSpanBox error={errors?.loyaltyCoinConversionRate?.message} />
+                  )}
+                </FormControl>
+                <FormControl className="FormControl" variant="standard">
+                  <label className="FormLabel">Minimum Loyality Coins</label>
+                  <Input
+                    id="requiredCoinsToRedeem"
+                    placeholder="Enter Minimum Loyality coins"
+                    type="number"
+                    className="FormInput"
+                    defaultValue={0}
+                    {...register('requiredCoinsToRedeem', {
+                      required:
+                        watch('enableLoyaltyProgram') === true &&
+                        'Loyality coins is required in numbers',
+                      validate: (value: any) => VALIDATE_NON_NEGATIVE_NUM(value),
+                      maxLength: {
+                        value: 10,
+                        message: MAX_LENGTH_EXCEEDED
+                      }
+                    })}
+                    disableUnderline
+                  />
+                  {errors?.requiredCoinsToRedeem && (
+                    <ErrorSpanBox error={errors?.requiredCoinsToRedeem?.message} />
                   )}
                 </FormControl>
               </div>

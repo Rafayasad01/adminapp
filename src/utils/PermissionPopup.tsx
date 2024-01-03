@@ -1,6 +1,7 @@
 import Dialog from '@mui/material/Dialog';
 import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
 import SentimentSatisfiedAltOutlinedIcon from '@mui/icons-material/SentimentSatisfiedAltOutlined';
+import ThumbUpAltOutlinedIcon from '@mui/icons-material/ThumbUpAltOutlined';
 import Button from '@mui/material/Button';
 import popupStyle from '../assets/css/PermissionPopup.module.css';
 
@@ -28,14 +29,17 @@ function PermissionPopup({ open, setOpen, dialogText, callback, type }: Props) {
     <Dialog
       onClose={onCloseHandler}
       open={open}
+      className='customheight'
       PaperProps={{
         className: popupStyle.Dialog,
-        style: { maxWidth: '100%', maxHeight: 'auto' },
+        style: {},
       }}
     >
       <div className={popupStyle.Content}>
         {type === 'shock' ? (
           <SentimentVeryDissatisfiedIcon className={popupStyle.Icon} />
+        ) : type === 'thumb' ? (
+          <ThumbUpAltOutlinedIcon className={popupStyle.Icon} />
         ) : (
           <SentimentSatisfiedAltOutlinedIcon className={popupStyle.Icon} />
         )}

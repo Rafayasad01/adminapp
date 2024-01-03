@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { useRoutes } from 'react-router-dom';
 import { routeObjects } from './routes/AppRoutes';
 

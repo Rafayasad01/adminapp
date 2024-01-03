@@ -4,6 +4,10 @@ import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
 import TextField from '@mui/material/TextField';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined';
+import RadioButtonUncheckedOutlinedIcon from '@mui/icons-material/RadioButtonUncheckedOutlined'
+import Checkbox from '@mui/material/Checkbox';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 import isBetween from 'dayjs/plugin/isBetween';
@@ -22,6 +26,7 @@ import {
   PATTERN,
   VALIDATE_NON_NEGATIVE_NUM,
 } from '../../utils/constants';
+import CustomButton from '../../components/common/CustomButton';
 
 dayjs.extend(duration);
 dayjs.extend(isBetween);
@@ -47,11 +52,15 @@ function BranchUpdatePopup({
     register,
     handleSubmit,
     setValue,
+    watch,
     formState: { errors },
   } = useForm<Tenant>();
-  const onSubmit = (data: Tenant) => {
+  const onSubmit = (data: Partial<Tenant>) => {
     // console.log("onsubmiot", data,item);
-
+    if (data.enableLoyaltyProgram === false) {
+      delete data.loyaltyCoinConversionRate;
+      delete data.requiredCoinsToRedeem;
+    }
     if (data.tenantName) {
       setOpenFormDialog(false);
       callback(item.id, data);
@@ -76,8 +85,11 @@ function BranchUpdatePopup({
       setValue('lastName', item.backofficeUser.lastName);
       setValue('developmentDomain', item.tenantConfig.developmentDomain);
       setValue('liveDomain', item.tenantConfig.liveDomain);
+      setValue('enableLoyaltyProgram', item.tenantExt.enableLoyaltyProgram);
     }
   }, [item]);
+
+  console.log("ITEM", item.tenantExt.enableLoyaltyProgram);
 
   const debouceRequest = debounce((value) => {
     setValue('developmentDomain', `dev.${kabakCase(value)}`);
@@ -130,7 +142,7 @@ function BranchUpdatePopup({
                   )}
                 </FormControl>
                 <FormControl className="FormControl" variant="standard">
-                  <label className="FormLabel">User Limits</label>
+                  <label className="FormLabel">Employees Limits</label>
                   <Input
                     className="FormInput"
                     {...register('userLimit', {
@@ -276,6 +288,77 @@ function BranchUpdatePopup({
                   />
                 </FormControl>
               </div>
+              <div className="FormField">
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      defaultChecked={item.tenantExt.enableLoyaltyProgram}
+                      icon={
+                        <RadioButtonUncheckedOutlinedIcon
+                          style={{ color: '#1D1D1D' }}
+                        />
+                      }
+                      checkedIcon={
+                        <CheckCircleOutlinedIcon style={{ color: '#1D1D1D' }} />
+                      }
+                      {...register('enableLoyaltyProgram')}
+                    />
+                  }
+                  label="Loyality Program"
+                />
+              </div>
+              {watch('enableLoyaltyProgram') === true && (
+                <div className='FormFields'>
+                  <FormControl className="FormControl" variant="standard">
+                    <label className="FormLabel">Loyality Conversion Rate</label>
+                    <Input
+                      id="loyaltyCoinConversionRate"
+                      placeholder="Enter Conversion Rate"
+                      type="number"
+                      className="FormInput"
+                      {...register('loyaltyCoinConversionRate', {
+                        value: item?.tenantExt?.loyaltyCoinConversionRate,
+                        required:
+                          watch('enableLoyaltyProgram') === true &&
+                          'Loyality rate is required in numbers',
+                        validate: (value: any) => VALIDATE_NON_NEGATIVE_NUM(value),
+                        maxLength: {
+                          value: 10,
+                          message: MAX_LENGTH_EXCEEDED
+                        }
+                      })}
+                      disableUnderline
+                    />
+                    {errors?.loyaltyCoinConversionRate && (
+                      <ErrorSpanBox error={errors?.loyaltyCoinConversionRate?.message} />
+                    )}
+                  </FormControl>
+                  <FormControl className="FormControl" variant="standard">
+                    <label className="FormLabel">Minimum Loyality Coins</label>
+                    <Input
+                      id="requiredCoinsToRedeem"
+                      placeholder="Enter Minimum Loyality coins"
+                      type="number"
+                      className="FormInput"
+                      {...register('requiredCoinsToRedeem', {
+                        value: item?.tenantExt?.requiredCoinsToRedeem,
+                        required:
+                          watch('enableLoyaltyProgram') === true &&
+                          'Loyality coins is required in numbers',
+                        validate: (value: any) => VALIDATE_NON_NEGATIVE_NUM(value),
+                        maxLength: {
+                          value: 10,
+                          message: MAX_LENGTH_EXCEEDED
+                        }
+                      })}
+                      disableUnderline
+                    />
+                    {errors?.requiredCoinsToRedeem && (
+                      <ErrorSpanBox error={errors?.requiredCoinsToRedeem?.message} />
+                    )}
+                  </FormControl>
+                </div>
+              )}
             </div>
             <div className="FormFooter">
               <Button
@@ -289,7 +372,18 @@ function BranchUpdatePopup({
               >
                 Cancel
               </Button>
-              <Input
+              <CustomButton
+                buttonType="button"
+                title={'Update'}
+                type="submit"
+                className="btn-black-fill"
+                sx={{
+                  padding: '0.375rem 2rem !important',
+                  width: '90%',
+                  height: '35px',
+                }}
+              />
+              {/* <Input
                 type="submit"
                 value="Update"
                 className="btn-black-fill"
@@ -297,7 +391,7 @@ function BranchUpdatePopup({
                 sx={{
                   padding: '0.375rem 2rem !important',
                 }}
-              />
+              /> */}
             </div>
           </form>
         </div>

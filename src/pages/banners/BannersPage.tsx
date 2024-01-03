@@ -357,7 +357,7 @@ function BannersPage() {
                     <Card className="w-[500px] rounded-lg border-[2px] shadow-none">
                       <div className="m-5 flex h-[150px] items-center justify-center">
                         <img
-                          className="max-w-[200px]"
+                          className="max-w-[250px] max-h-[160px]"
                           src={item.banner}
                           alt={item.name}
                         />
