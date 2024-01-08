@@ -1,7 +1,5 @@
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
-import FormControl from '@mui/material/FormControl';
-import Input from '@mui/material/Input';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import '../../assets/css/PopupStyle.css';
@@ -29,19 +27,17 @@ function BannerUpdatePopup({
   formData,
 }: Props) {
   const {
-    register,
     handleSubmit,
-    formState: { errors },
+    // formState: {},
   } = useForm<CreateBanner>();
 
   const [file, setFile] = useState<any>(null);
   const [selectedImg, setSelectedImg] = useState<any>(null);
 
-  const onSubmit = (data: any) => {
+  const onSubmit = () => {
     if (file !== null || selectedImg !== null) {
       const details = {
         id: formData.id,
-        name: data.bannerName,
         banner: file !== null ? file : formData.banner,
       };
       if (selectedImg || file !== null || formData.banner) {
@@ -75,7 +71,7 @@ function BannerUpdatePopup({
           <div className="FormHeader">
             <span className="Title">Update Banner Image</span>
           </div>
-          <div className="mt-3">
+          {/* <div className="mt-3">
             <FormControl className="FormControl" variant="standard">
               <label className="FormLabel">Banner Name</label>
               <Input
@@ -95,7 +91,7 @@ function BannerUpdatePopup({
                 </span>
               )}
             </FormControl>
-          </div>
+          </div> */}
           <div className="my-3 grid grid-cols-10 gap-6">
             <div className="col-span-4 flex items-center">
               <DragDropFile

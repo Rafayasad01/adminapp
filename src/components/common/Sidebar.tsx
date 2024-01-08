@@ -11,7 +11,7 @@ import InstagramIcon from '@mui/icons-material/Instagram';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import CorporateFareIcon from '@mui/icons-material/CorporateFare';
-// import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
+import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
 import PeopleOutlineOutlinedIcon from '@mui/icons-material/PeopleOutlineOutlined';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
@@ -118,12 +118,12 @@ const links = [
       },
     ],
   },
-  // {
-  //   name: 'Notifications',
-  //   path: 'notification',
-  //   permission: 'Notification List',
-  //   icon: <NotificationsOutlinedIcon fontSize="inherit" />,
-  // },
+  {
+    name: 'Notifications',
+    path: 'notification',
+    permission: 'Notification List',
+    icon: <NotificationsOutlinedIcon fontSize="inherit" />,
+  },
   {
     name: 'Vouchers',
     path: 'vouchers',
@@ -190,7 +190,7 @@ function Sidebar() {
   const appItems = useAppSelector((state: any) => state?.persisitReducer?.appState?.UserItems);
   const logo = useAppSelector((state: any) => state?.persisitReducer?.appState?.logo);
 
-  console.log("appItems", appItems);
+  // console.log("appItems", appItems);
 
   const [list, setList] = useState<any>(null);
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
@@ -335,14 +335,14 @@ function Sidebar() {
             justifyContent="center"
           >
             {userData?.isSuperAdmin ? (
-              <img className="mt-9 max-w-[100px]" src={assets.images.logo} alt="" />
+              <img className="mt-9 max-w-[150px]" src={assets.images.urApplogoWhite} alt="" />
             ) : logo ? (
               <img className="mt-9 max-w-[100px]" src={logo} alt="logo" />
             ) : (
               <div className="flex w-full items-center justify-start rounded-2xl p-3 text-white">
                 <img
                   className="mt-2 max-w-[150px]"
-                  src={assets.images.defaultLogo}
+                  src={assets.images.urApplogoWhite}
                   alt="logo"
                 />
               </div>

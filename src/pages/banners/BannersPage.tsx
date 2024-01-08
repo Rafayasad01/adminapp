@@ -108,11 +108,10 @@ function BannersPage() {
     }
   }, [emptyVariable]);
 
-  const createFormHandler = (details: any, file: any) => {
+  const createFormHandler = (file: any) => {
     if (listingRolePermission(dataRole, 'Banners Create')) {
       setIsLoader(true);
       const formData = new FormData();
-      formData.append('name', details.name);
       formData.append('banner', file);
       formData.append('createdBy', authState.user.id);
       formData.append('tenant', authState.user.tenant);
@@ -163,7 +162,6 @@ function BannersPage() {
     if (listingRolePermission(dataRole, 'Banners Update')) {
       setIsLoader(true);
       const formDetails = new FormData();
-      formDetails.append('name', data.name);
       formDetails.append('banner', data.banner);
       formDetails.append('bannerId', data.id);
       formDetails.append('updatedBy', authState.user.id);
@@ -357,16 +355,13 @@ function BannersPage() {
                     <Card className="w-[500px] rounded-lg border-[2px] shadow-none">
                       <div className="m-5 flex h-[150px] items-center justify-center">
                         <img
-                          className="max-w-[250px] max-h-[160px]"
+                          className="max-h-[160px] max-w-[250px]"
                           src={item.banner}
                           alt={item.name}
                         />
                       </div>
                       <CardContent className="mt-5">
                         <hr />
-                        <p className="my-2 font-open-sans text-xl font-semibold uppercase text-[#252733]">
-                          {item.name}
-                        </p>
                       </CardContent>
                       <CardActions className="">
                         <div className="flex w-full items-center justify-between">

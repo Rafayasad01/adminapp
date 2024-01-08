@@ -134,8 +134,8 @@ function CategoriesServicesCreatePopup({
                     validate: (value: any) => VALIDATE_NON_NEGATIVE_NUM(value),
                     maxLength: {
                       value: 10,
-                      message: "Length should not be excceed from 10 numbers."
-                    }
+                      message: 'Length should not be excceed from 10 numbers.',
+                    },
                   })}
                   disableUnderline
                 />
@@ -145,22 +145,24 @@ function CategoriesServicesCreatePopup({
                 <label className="FormLabel">Loyality Coins</label>
                 <Input
                   className="FormInput"
-                  id="coins"
-                  placeholder="Enter Coins"
-                  {...register('coins', {
+                  id="loyaltyCoins"
+                  placeholder="Enter loyalty Coins"
+                  {...register('loyaltyCoins', {
                     pattern: {
                       value: PATTERN.POINT_NUM,
-                      message: 'Enter a valid coins in numbers',
+                      message: 'Enter a valid loyalty coins in numbers',
                     },
                     maxLength: {
                       value: 10,
-                      message: "Length should not be excceed from 10 numbers."
+                      message: 'Length should not be excceed from 10 numbers.',
                     },
                     validate: (value: any) => VALIDATE_NON_NEGATIVE_NUM(value),
                   })}
                   disableUnderline
                 />
-                {errors.coins && <ErrorSpanBox error={errors.coins?.message} />}
+                {errors.loyaltyCoins && (
+                  <ErrorSpanBox error={errors.loyaltyCoins?.message} />
+                )}
               </FormControl>
             </div>
             <div className="FormField">

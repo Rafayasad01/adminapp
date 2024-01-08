@@ -1,6 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined';
 import EditIcon from '@mui/icons-material/Edit';
+import RadioButtonUncheckedOutlinedIcon from '@mui/icons-material/RadioButtonUncheckedOutlined';
 import Button from '@mui/material/Button';
+import Checkbox from '@mui/material/Checkbox';
 import FormControl from '@mui/material/FormControl';
 import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
@@ -10,6 +13,7 @@ import Tabs from '@mui/material/Tabs';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
+import FormControlLabel from '@mui/material/FormControlLabel';
 import PlusIcon from '../../components/icons/PlusIcon';
 import { Setting } from '../../interfaces/app.interface';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
@@ -57,7 +61,7 @@ function HelpingIcon(elements: any) {
   const { links } = elements;
   // console.log('links', links);
 
-  const filtered = links?.filter((el: string) => el !== "null");
+  const filtered = links?.filter((el: string) => el !== 'null' && el !== null);
   if (filtered?.length < 6) {
     return <PlusIcon />;
   }
@@ -124,6 +128,14 @@ function SettingsApp() {
     setValue('youtube', item.youtube ? item.youtube : '');
     setValue('whatsapp', item.whatsapp ? item.whatsapp : '');
     setValue('address', item.address ? item.address : '');
+    if (
+      item.enableLoyaltyProgram === 'true' ||
+      item.enableLoyaltyProgram === true
+    ) {
+      setValue('enableLoyaltyProgram', true);
+    }
+    setValue('loyaltyCoinConversionRate', item.loyaltyCoinConversionRate);
+    setValue('requiredCoinsToRedeem', item.requiredCoinsToRedeem);
     // setValue('userLimit', item.userLimit ? item.userLimit : '');
     setColor1(item.color1);
     setColor2(item.color2);
@@ -159,13 +171,22 @@ function SettingsApp() {
       formData.append('color1', color1);
       formData.append('color2', color2);
       // formData.append('color3', color3);
-      if (authState?.user?.userType === 'ShopUser') formData.append('userLimit', data.userLimit ? data.userLimit : 0);
+      formData.append('enableLoyaltyProgram', data.enableLoyaltyProgram);
+      formData.append(
+        'loyaltyCoinConversionRate',
+        data.loyaltyCoinConversionRate
+      );
+      formData.append('requiredCoinsToRedeem', data.requiredCoinsToRedeem);
+      if (authState?.user?.userType === 'ShopUser')
+        formData.append('userLimit', data.userLimit ? data.userLimit : 0);
       if (file !== null) formData.append('logo', file);
 
       Service.updateService(authState.user.tenant, formData)
         .then((item: any) => {
           const { success, message, data: itemData } = item.data;
           if (success) {
+            // console.log(itemData, 'itemData');
+
             setAddress(itemData?.address);
             if (itemData?.logo) {
               dispatch(setLogo(itemData.logo));
@@ -240,7 +261,11 @@ function SettingsApp() {
     // }
   }, [emptyVariable]);
 
-  console.log('detail', address, watch("address"));
+  // console.log(
+  //   'ENABLE',
+  //   watch('enableLoyaltyProgram'),
+  //   detail?.enableLoyaltyProgram
+  // );
 
   return isLoader ? (
     <Loader />
@@ -478,46 +503,134 @@ function SettingsApp() {
                   />
                 </FormControl>
               </div>
+
+              <div className="FormField">
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      icon={
+                        <RadioButtonUncheckedOutlinedIcon
+                          style={{ color: '#1D1D1D' }}
+                        />
+                      }
+                      checkedIcon={
+                        <CheckCircleOutlinedIcon style={{ color: '#1D1D1D' }} />
+                      }
+                      {...register('enableLoyaltyProgram')}
+                      checked={watch('enableLoyaltyProgram')}
+                    />
+                  }
+                  label="Loyality Program"
+                />
+              </div>
+              {watch('enableLoyaltyProgram') === true && (
+                <div className="FormFields">
+                  <FormControl className="FormControl" variant="standard">
+                    <label className="FormLabel">
+                      Loyality Conversion Rate
+                    </label>
+                    <Input
+                      id="loyaltyCoinConversionRate"
+                      placeholder="Enter Conversion Rate"
+                      type="number"
+                      className="FormInput"
+                      defaultValue={0}
+                      {...register('loyaltyCoinConversionRate', {
+                        required:
+                          watch('enableLoyaltyProgram') === true &&
+                          'Loyality rate is required in numbers',
+                        validate: (value: any) =>
+                          VALIDATE_NON_NEGATIVE_NUM(value),
+                        maxLength: {
+                          value: 10,
+                          message: MAX_LENGTH_EXCEEDED,
+                        },
+                      })}
+                      disableUnderline
+                    />
+                    {errors?.loyaltyCoinConversionRate && (
+                      <ErrorSpanBox
+                        error={errors?.loyaltyCoinConversionRate?.message}
+                      />
+                    )}
+                  </FormControl>
+                  <FormControl className="FormControl" variant="standard">
+                    <label className="FormLabel">Minimum Loyality Coins</label>
+                    <Input
+                      id="requiredCoinsToRedeem"
+                      placeholder="Enter Minimum Loyality coins"
+                      type="number"
+                      className="FormInput"
+                      defaultValue={0}
+                      {...register('requiredCoinsToRedeem', {
+                        required:
+                          watch('enableLoyaltyProgram') === true &&
+                          'Loyality coins is required in numbers',
+                        validate: (value: any) =>
+                          VALIDATE_NON_NEGATIVE_NUM(value),
+                        maxLength: {
+                          value: 10,
+                          message: MAX_LENGTH_EXCEEDED,
+                        },
+                      })}
+                      disableUnderline
+                    />
+                    {errors?.requiredCoinsToRedeem && (
+                      <ErrorSpanBox
+                        error={errors?.requiredCoinsToRedeem?.message}
+                      />
+                    )}
+                  </FormControl>
+                </div>
+              )}
               <div className="FormField mb-4">
                 <FormControl className="FormControl" variant="standard">
                   <label className="FormLabel">Social Links</label>
                   <div className="mt-2 flex flex-row items-center gap-3">
-                    {detail && detail.facebook && detail.facebook !== "null" && (
-                      <Item
-                        value={detail.facebook}
-                        name={FACEBOOK as AssetsImages}
-                      />
-                    )}
-                    {detail && detail.instagram && detail.instagram !== "null" && (
-                      <Item
-                        value={detail.instagram}
-                        name={INSTAGRAM as AssetsImages}
-                      />
-                    )}
-                    {detail && detail.linkedin && detail.linkedin !== "null" && (
-                      <Item
-                        value={detail.linkedin}
-                        name={LINKEDIN as AssetsImages}
-                      />
-                    )}
-                    {detail && detail.twitter && detail.twitter !== "null" && (
+                    {detail &&
+                      detail.facebook &&
+                      detail.facebook !== 'null' && (
+                        <Item
+                          value={detail.facebook}
+                          name={FACEBOOK as AssetsImages}
+                        />
+                      )}
+                    {detail &&
+                      detail.instagram &&
+                      detail.instagram !== 'null' && (
+                        <Item
+                          value={detail.instagram}
+                          name={INSTAGRAM as AssetsImages}
+                        />
+                      )}
+                    {detail &&
+                      detail.linkedin &&
+                      detail.linkedin !== 'null' && (
+                        <Item
+                          value={detail.linkedin}
+                          name={LINKEDIN as AssetsImages}
+                        />
+                      )}
+                    {detail && detail.twitter && detail.twitter !== 'null' && (
                       <Item
                         value={detail.twitter}
                         name={TWITTER as AssetsImages}
                       />
                     )}
-                    {detail && detail.youtube && detail.youtube !== "null" && (
+                    {detail && detail.youtube && detail.youtube !== 'null' && (
                       <Item
                         value={detail.youtube}
                         name={YOUTUBE as AssetsImages}
                       />
                     )}
-                    {detail && detail.whatsapp && detail.whatsapp !== "null" && (
-                      <Item
-                        value={detail.whatsapp}
-                        name={WHATSAPP as AssetsImages}
-                      />
-                    )}
+                    {detail &&
+                      detail.whatsapp &&
+                      detail.whatsapp !== 'null' && (
+                        <Item
+                          value={detail.whatsapp}
+                          name={WHATSAPP as AssetsImages}
+                        />
+                      )}
                     <IconButton
                       className="p-0 text-[1.675rem]"
                       onClick={() => setOpenSocialMediaPopup(true)}

@@ -28,6 +28,9 @@ export interface Setting {
   developmentDomain: string;
   liveDomain: string;
   userLimit: number;
+  enableLoyaltyProgram: boolean;
+  loyaltyCoinConversionRate: string;
+  requiredCoinsToRedeem: string;
 }
 
 export interface AppImage {

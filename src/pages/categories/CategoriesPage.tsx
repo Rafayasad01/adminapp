@@ -12,6 +12,7 @@ import TablePagination from '@mui/material/TablePagination';
 import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Dialog from '@mui/material/Dialog';
 import assets from '../../assets';
 import ActionMenu from '../../components/common/ActionMenu';
 import CustomText from '../../components/common/CustomText';
@@ -53,6 +54,8 @@ function CategoriesPage() {
   const [dialogText] = useState<any>(
     'Are you sure you want to delete this Category ?'
   );
+  const [isModalImage, setIsModalImage] = useState(false);
+  const [modalImage, setModalImage] = useState('');
 
   const handleFormClickOpen = () => {
     if (listingRolePermission(dataRole, 'Category Create')) {
@@ -343,6 +346,16 @@ function CategoriesPage() {
     }
   };
 
+  const openModal = (avatar: string) => {
+    setModalImage(avatar);
+    setIsModalImage(true);
+  };
+
+  const closeModal = () => {
+    setModalImage('');
+    setIsModalImage(false);
+  };
+
   return isLoader ? (
     <Loader />
   ) : (
@@ -353,7 +366,7 @@ function CategoriesPage() {
         displayMessage={notifyMessage}
       />
       <TopBar title="Categories" />
-      <div className="container mt-5">
+      <div className="cs-dialog container mt-5">
         <div className="w-full rounded-lg bg-white shadow-lg">
           <div className="grid grid-cols-12 px-4 py-5">
             <div className="col-span-7">
@@ -403,6 +416,7 @@ function CategoriesPage() {
               </div>
             </div>
           </div>
+
           <div className="mt-3 grid grid-cols-none">
             <table className="table-border table-auto">
               <thead>
@@ -421,7 +435,13 @@ function CategoriesPage() {
                         <td>
                           <div className="avatar flex flex-row items-center">
                             {item.icon ? (
-                              <img src={item.icon} alt="" />
+                              <button onClick={() => openModal(item.icon)}>
+                                <img
+                                  className="cursor-pointer"
+                                  src={item.icon}
+                                  alt={item.name}
+                                />
+                              </button>
                             ) : (
                               <img
                                 src={assets.tempImages.avatarDryCLean}
@@ -538,6 +558,31 @@ function CategoriesPage() {
           formData={editFormData}
           callback={updateFormHandler}
         />
+      )}
+      {modalImage && (
+        <Dialog
+          open={isModalImage}
+          onClose={closeModal}
+          PaperProps={{
+            className: '',
+            style: {
+              maxWidth: '20%',
+              minHeight: '35%',
+              borderRadius: '100%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            },
+          }}
+        >
+          <div className="flex h-[100%] items-center justify-center">
+            <img
+              className="max-h-[200px] max-w-[350px]"
+              src={modalImage}
+              alt=""
+            />
+          </div>
+        </Dialog>
       )}
     </>
   );

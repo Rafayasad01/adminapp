@@ -18,7 +18,12 @@ import '../../assets/css/PopupStyle.css';
 import ErrorSpanBox from '../../components/common/ErrorSpanBox';
 import { useAppSelector } from '../../redux/redux-hooks';
 import DatePickerField from './DatePickerField';
-import { INVALID_CHAR, MAX_LENGTH_EXCEEDED, PATTERN, VALIDATE_NON_NEGATIVE_NUM } from '../../utils/constants';
+import {
+  INVALID_CHAR,
+  MAX_LENGTH_EXCEEDED,
+  PATTERN,
+  VALIDATE_NON_NEGATIVE_NUM,
+} from '../../utils/constants';
 
 type Props = {
   vouchersPromoDialog: boolean;
@@ -170,7 +175,7 @@ function VouchersPromoCreatePopup({
                   <Input
                     {...register('name', {
                       required: true,
-                      pattern: PATTERN.CHAR_SPACE_DASH,
+                      pattern: PATTERN.CHAR_NUM_DASH,
                       validate: (value) => value.length <= 100,
                     })}
                     className="FormInput"
@@ -210,7 +215,8 @@ function VouchersPromoCreatePopup({
                   <Input
                     {...register('value', {
                       required: 'Offer Value is required in numbers',
-                      validate: (value: any) => VALIDATE_NON_NEGATIVE_NUM(value),
+                      validate: (value: any) =>
+                        VALIDATE_NON_NEGATIVE_NUM(value),
                     })}
                     className="FormInput"
                     id="value"
@@ -228,7 +234,8 @@ function VouchersPromoCreatePopup({
                   <Input
                     {...register('minProduct', {
                       required: 'Min Products is required in numbers',
-                      validate: (value: any) => VALIDATE_NON_NEGATIVE_NUM(value),
+                      validate: (value: any) =>
+                        VALIDATE_NON_NEGATIVE_NUM(value),
                     })}
                     className="FormInput"
                     id="minProduct"
@@ -248,7 +255,8 @@ function VouchersPromoCreatePopup({
                   <Input
                     {...register('minAmount', {
                       required: 'Min Amount is required in numbers',
-                      validate: (value: any) => VALIDATE_NON_NEGATIVE_NUM(value),
+                      validate: (value: any) =>
+                        VALIDATE_NON_NEGATIVE_NUM(value),
                     })}
                     className="FormInput"
                     id="minAmount"
@@ -266,7 +274,8 @@ function VouchersPromoCreatePopup({
                   <Input
                     {...register('maxRedeem', {
                       required: 'Max Redeem is required in numbers',
-                      validate: (value: any) => VALIDATE_NON_NEGATIVE_NUM(value),
+                      validate: (value: any) =>
+                        VALIDATE_NON_NEGATIVE_NUM(value),
                     })}
                     className="FormInput"
                     id="maxRedeem"

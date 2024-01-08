@@ -1001,10 +1001,11 @@ label+.css-1aa5qj0-MuiInputBase-root-MuiInput-root {
   max-width: none;
 }
 
-.customheight{
+.customheight {
   max-width: 25rem !important;
   margin: auto;
 }
+
 .custom-width-80 {
   width: 80% !important;
 }
@@ -1456,4 +1457,49 @@ label+.css-1aa5qj0-MuiInputBase-root-MuiInput-root {
 .error-color {
   color: red;
   font-size: 12px;
+}
+
+/* image modal */
+.modal-image {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  justify-content: center;
+  align-items: center;
+}
+
+/* Style for the modal content (the image) */
+.modal-content-image {
+  max-width: 80%;
+  max-height: 80%;
+}
+
+/* Style for the close button */
+.close-image {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  color: #fff;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+/* .css-yiavyu-MuiBackdrop-root-MuiDialog-backdrop  {
+} */
+/* .MuiModal-root.css-zw3mfo-MuiModal-root-MuiDialog-root .MuiBackdrop-root.MuiModal-backdrop.css-yiavyu-MuiBackdrop-root-MuiDialog-backdrop .css-hz1bth-MuiDialog-container .custom-image-dialog{
+  background-color: red !important;
+} */
+
+ /* .css-yiavyu-MuiBackdrop-root-MuiDialog-backdrop{
+  background-color: #7a1d1d !important;
+} */
+
+/* .MuiBackdrop-root.MuiModal-backdrop.css-yiavyu-MuiBackdrop-root-MuiDialog-backdrop {
+  background: ;
+} */
+.MuiBackdrop-root.MuiModal-backdrop .MuiDialog-container.MuiDialog-scrollPaper.css-hz1bth-MuiDialog-container{
+  background: aquamarine;
 }

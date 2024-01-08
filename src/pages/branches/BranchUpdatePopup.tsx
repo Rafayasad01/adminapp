@@ -4,10 +4,6 @@ import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined';
-import RadioButtonUncheckedOutlinedIcon from '@mui/icons-material/RadioButtonUncheckedOutlined'
-import Checkbox from '@mui/material/Checkbox';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 import isBetween from 'dayjs/plugin/isBetween';
@@ -52,15 +48,14 @@ function BranchUpdatePopup({
     register,
     handleSubmit,
     setValue,
-    watch,
     formState: { errors },
   } = useForm<Tenant>();
   const onSubmit = (data: Partial<Tenant>) => {
     // console.log("onsubmiot", data,item);
-    if (data.enableLoyaltyProgram === false) {
-      delete data.loyaltyCoinConversionRate;
-      delete data.requiredCoinsToRedeem;
-    }
+    // if (data.enableLoyaltyProgram === false) {
+    //   delete data.loyaltyCoinConversionRate;
+    //   delete data.requiredCoinsToRedeem;
+    // }
     if (data.tenantName) {
       setOpenFormDialog(false);
       callback(item.id, data);
@@ -85,11 +80,11 @@ function BranchUpdatePopup({
       setValue('lastName', item.backofficeUser.lastName);
       setValue('developmentDomain', item.tenantConfig.developmentDomain);
       setValue('liveDomain', item.tenantConfig.liveDomain);
-      setValue('enableLoyaltyProgram', item.tenantExt.enableLoyaltyProgram);
+      // setValue('enableLoyaltyProgram', item.tenantExt.enableLoyaltyProgram);
     }
   }, [item]);
 
-  console.log("ITEM", item.tenantExt.enableLoyaltyProgram);
+  // console.log('ITEM', item.tenantExt.enableLoyaltyProgram);
 
   const debouceRequest = debounce((value) => {
     setValue('developmentDomain', `dev.${kabakCase(value)}`);
@@ -288,7 +283,7 @@ function BranchUpdatePopup({
                   />
                 </FormControl>
               </div>
-              <div className="FormField">
+              {/* <div className="FormField">
                 <FormControlLabel
                   control={
                     <Checkbox
@@ -358,7 +353,7 @@ function BranchUpdatePopup({
                     )}
                   </FormControl>
                 </div>
-              )}
+              )} */}
             </div>
             <div className="FormFooter">
               <Button
@@ -374,7 +369,7 @@ function BranchUpdatePopup({
               </Button>
               <CustomButton
                 buttonType="button"
-                title={'Update'}
+                title="Update"
                 type="submit"
                 className="btn-black-fill"
                 sx={{

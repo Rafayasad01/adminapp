@@ -206,42 +206,42 @@ function BranchSettingPopup({
                   </span>
                   <div className="mt-1 font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
                     <div className="mt-2 flex flex-row items-center gap-3">
-                      {detail.facebook && (
+                      {detail.facebook !== 'null' && (
                         <Item
                           key={detail.facebook}
                           value={detail.facebook}
                           name={FACEBOOK as AssetsImages}
                         />
                       )}
-                      {detail.instagram && (
+                      {detail.instagram !== 'null' && (
                         <Item
                           key={detail.instagram}
                           value={detail.instagram}
                           name={INSTAGRAM as AssetsImages}
                         />
                       )}
-                      {detail.linkedin && (
+                      {detail.linkedin !== 'null' && (
                         <Item
                           key={detail.linkedin}
                           value={detail.linkedin}
                           name={LINKEDIN as AssetsImages}
                         />
                       )}
-                      {detail.twitter && (
+                      {detail.twitter !== 'null' && (
                         <Item
                           key={detail.twitter}
                           value={detail.twitter}
                           name={TWITTER as AssetsImages}
                         />
                       )}
-                      {detail.youtube && (
+                      {detail.youtube !== 'null' && (
                         <Item
                           key={detail.youtube}
                           value={detail.youtube}
                           name={YOUTUBE as AssetsImages}
                         />
                       )}
-                      {detail.whatsapp && (
+                      {detail.whatsapp !== 'null' && (
                         <Item
                           key={detail.whatsapp}
                           value={detail.whatsapp}
