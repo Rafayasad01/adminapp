@@ -9,10 +9,8 @@ export interface CategoryService {
   desc: string;
   icon: string;
   price: number;
-  coins: string;
+  loyaltyCoins: string;
   quantity: number;
-  created_by: string;
-  updated_by: string;
 }
 
 export interface CategoryServiceFaq {

@@ -2,6 +2,8 @@
 import logo from './images/ur-laundry-logo.svg';
 import logoBlack from './images/ur-laundry-logo-black.svg';
 import logoBlackPng from './images/ur-laundry-logo-blackpng.png';
+import urApplogo from './images/ur-laundry-logo.png';
+import urApplogoWhite from './images/ur-laundry-logo-white.png';
 import iconDeliveryToday from './images/icon-delivery-today.svg';
 import iconDeliveredToday from './images/icon-delivered-today.svg';
 import iconPickup from './images/icon-pickup.svg';
@@ -54,6 +56,8 @@ const assets = {
     logo,
     logoBlack,
     logoBlackPng,
+    urApplogo,
+    urApplogoWhite,
     iconDeliveryToday,
     iconDeliveredToday,
     iconPickup,

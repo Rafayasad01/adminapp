@@ -351,16 +351,18 @@ function BranchPage() {
                   </div>
                 </div>
                 <div className="flex-col items-center justify-center">
-                  <p className="text-sm font-semibold">Max Employees Limit</p>
+                  <p className="text-sm font-semibold">
+                    Employees Distribution
+                  </p>
                   <div className="mt-2 flex justify-center">
                     <span className="badge badge-primary w-full text-sm">
                       {authState.user.maxEmployeeLimit} -{' '}
-                      {maxTotalEmployeeLimit ? maxTotalEmployeeLimit : 0}
+                      {maxTotalEmployeeLimit || 0}
                     </span>
                   </div>
                 </div>
                 <div className="flex-col items-center justify-center px-2">
-                  <p className="text-sm font-semibold">Max branches Limit</p>
+                  <p className="text-sm font-semibold">Branches Distribution</p>
                   <div className="mt-2 flex justify-center">
                     <span className="badge badge-success w-full text-sm">
                       {authState.user.branchLimit} - {total}
@@ -368,7 +370,7 @@ function BranchPage() {
                   </div>
                 </div>
                 <FormControl
-                  className="search-grey-outline placeholder-grey w-60"
+                  className="search-grey-outline placeholder-grey w-48 2xl:w-60"
                   variant="filled"
                 >
                   <Input
@@ -402,7 +404,8 @@ function BranchPage() {
                   className="btn-black-fill"
                   onClick={handleAddNew}
                 >
-                  <AddOutlinedIcon /><span>Add New</span>
+                  <AddOutlinedIcon />
+                  <span>Add New</span>
                 </Button>
               </div>
             </div>
@@ -433,8 +436,8 @@ function BranchPage() {
                               <span className="text-xs font-normal text-[#6A6A6A]">
                                 {dayjs(item.createdDate).isValid()
                                   ? dayjs(item.createdDate)?.format(
-                                    'MMMM DD, YYYY'
-                                  )
+                                      'MMMM DD, YYYY'
+                                    )
                                   : '--'}
                               </span>
                             </div>
@@ -452,11 +455,11 @@ function BranchPage() {
                               ) === 'Started'
                                 ? 'badge badge-success'
                                 : handleTrialModeStatus(
-                                  item.isActive,
-                                  item.trialMode
-                                ) === 'Not Started'
-                                  ? 'badge badge-primary'
-                                  : 'badge badge-danger'
+                                    item.isActive,
+                                    item.trialMode
+                                  ) === 'Not Started'
+                                ? 'badge badge-primary'
+                                : 'badge badge-danger'
                             }
                           >
                             {handleTrialModeStatus(

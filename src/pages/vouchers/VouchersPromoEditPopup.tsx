@@ -18,6 +18,7 @@ import '../../assets/css/PopupStyle.css';
 import { useAppSelector } from '../../redux/redux-hooks';
 import DatePickerField from './DatePickerField';
 import ErrorSpanBox from '../../components/common/ErrorSpanBox';
+import { PATTERN, VALIDATE_NON_NEGATIVE_NUM } from '../../utils/constants';
 
 type Props = {
   vouchersPromoEditDialog: boolean;
@@ -162,7 +163,11 @@ function VouchersPromoEditPopup({
                 <FormControl className="FormControl" variant="standard">
                   <label className="FormLabel">Coupon Code</label>
                   <Input
-                    {...register('name', { required: true })}
+                    {...register('name', {
+                      required: true,
+                      pattern: PATTERN.CHAR_NUM_DASH,
+                      validate: (value) => value.length <= 100,
+                    })}
                     className="FormInput"
                     id="name"
                     name="name"
@@ -193,7 +198,12 @@ function VouchersPromoEditPopup({
                 <FormControl className="FormControl" variant="standard">
                   <label className="FormLabel">Offer Value</label>
                   <Input
-                    {...register('value', { required: true })}
+                    {...register('value', {
+                      required: 'Offer Value is required in numbers',
+                      validate: (value: any) =>
+                        VALIDATE_NON_NEGATIVE_NUM(value),
+                    })}
+                    type="number"
                     className="FormInput"
                     id="value"
                     name="value"
@@ -201,14 +211,19 @@ function VouchersPromoEditPopup({
                     placeholder="Offer Value"
                     disableUnderline
                   />
-                  {errors.value?.type === 'required' && (
-                    <ErrorSpanBox error="Offer Value is required" />
+                  {errors?.value && (
+                    <ErrorSpanBox error={errors?.value?.message} />
                   )}
                 </FormControl>
                 <FormControl className="FormControl" variant="standard">
                   <label className="FormLabel">Min Products</label>
                   <Input
-                    {...register('minProduct', { required: true })}
+                    {...register('minProduct', {
+                      required: 'Min Products is required in numbers',
+                      validate: (value: any) =>
+                        VALIDATE_NON_NEGATIVE_NUM(value),
+                    })}
+                    type="number"
                     className="FormInput"
                     id="minProduct"
                     name="minProduct"
@@ -216,8 +231,8 @@ function VouchersPromoEditPopup({
                     placeholder="Min Products"
                     disableUnderline
                   />
-                  {errors.minProduct?.type === 'required' && (
-                    <ErrorSpanBox error="Min Products is required" />
+                  {errors?.minProduct && (
+                    <ErrorSpanBox error={errors?.minProduct?.message} />
                   )}
                 </FormControl>
               </div>
@@ -225,7 +240,12 @@ function VouchersPromoEditPopup({
                 <FormControl className="FormControl" variant="standard">
                   <label className="FormLabel">Min Amount</label>
                   <Input
-                    {...register('minAmount', { required: true })}
+                    {...register('minAmount', {
+                      required: 'Min Amount is required in numbers',
+                      validate: (value: any) =>
+                        VALIDATE_NON_NEGATIVE_NUM(value),
+                    })}
+                    type="number"
                     className="FormInput"
                     id="minAmount"
                     name="minAmount"
@@ -233,14 +253,19 @@ function VouchersPromoEditPopup({
                     placeholder="Min Amount"
                     disableUnderline
                   />
-                  {errors.minAmount?.type === 'required' && (
-                    <ErrorSpanBox error="Min Amount is required" />
+                  {errors?.minAmount && (
+                    <ErrorSpanBox error={errors?.minAmount?.message} />
                   )}
                 </FormControl>
                 <FormControl className="FormControl" variant="standard">
                   <label className="FormLabel">Max Redeem</label>
                   <Input
-                    {...register('maxRedeem', { required: true })}
+                    {...register('maxRedeem', {
+                      required: 'Max Redeem is required in numbers',
+                      validate: (value: any) =>
+                        VALIDATE_NON_NEGATIVE_NUM(value),
+                    })}
+                    type="number"
                     className="FormInput"
                     id="maxRedeem"
                     name="maxRedeem"
@@ -248,8 +273,8 @@ function VouchersPromoEditPopup({
                     placeholder="Max Redeem"
                     disableUnderline
                   />
-                  {errors.maxRedeem?.type === 'required' && (
-                    <ErrorSpanBox error="Max Redeem is required" />
+                  {errors?.maxRedeem && (
+                    <ErrorSpanBox error={errors?.maxRedeem?.message} />
                   )}
                 </FormControl>
               </div>

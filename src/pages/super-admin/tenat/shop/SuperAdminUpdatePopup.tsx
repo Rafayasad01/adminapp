@@ -26,6 +26,7 @@ import {
   MAX_LENGTH_EXCEEDED,
   PATTERN,
   VALIDATE_NON_NEGATIVE_NUM,
+  VALIDATE_NON_NEGATIVE_NUM_AND_CHECK_LENGTH,
 } from '../../../../utils/constants';
 
 dayjs.extend(duration);
@@ -63,11 +64,7 @@ function SuperAdminUpdatePopup({
     control,
   } = useForm<Tenant>();
   const onSubmit = (data: Partial<Tenant>) => {
-    console.log("onsubmiot", data);
-    if (data.enableLoyaltyProgram === false) {
-      delete data.loyaltyCoinConversionRate;
-      delete data.requiredCoinsToRedeem;
-    }
+    // console.log('onsubmiot', data);
     if (data.tenantName) {
       setOpenFormDialog(false);
       callback(item.id, data);
@@ -410,7 +407,7 @@ function SuperAdminUpdatePopup({
                           'Trial Mode limit is required in numbers',
                         value: item.trialModeLimit ? item.trialModeLimit : 15,
                         validate: (value: any) =>
-                          VALIDATE_NON_NEGATIVE_NUM(value),
+                          VALIDATE_NON_NEGATIVE_NUM_AND_CHECK_LENGTH(value),
                       })}
                       type="number"
                       id="trialModeLimit"
@@ -448,7 +445,7 @@ function SuperAdminUpdatePopup({
                   </FormControl>
                 </div>
               )}
-              <div className="FormField">
+              {/* <div className="FormField">
                 <FormControlLabel
                   control={
                     <Checkbox
@@ -518,7 +515,7 @@ function SuperAdminUpdatePopup({
                     )}
                   </FormControl>
                 </div>
-              )}
+              )} */}
             </div>
             <div className="FormFooter">
               <Button

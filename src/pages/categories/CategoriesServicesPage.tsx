@@ -11,6 +11,7 @@ import Switch from '@mui/material/Switch';
 import TablePagination from '@mui/material/TablePagination';
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import Dialog from '@mui/material/Dialog';
 import ActionMenu from '../../components/common/ActionMenu';
 import CustomText from '../../components/common/CustomText';
 import Loader from '../../components/common/Loader';
@@ -52,6 +53,8 @@ function CategoriesServicesPage() {
   const [dialogText] = useState<any>(
     'Are you sure you want to delete this service ?'
   );
+  const [isModalImage, setIsModalImage] = useState(false);
+  const [modalImage, setModalImage] = useState('');
 
   const categoryId = params.categoryId ?? '';
 
@@ -153,9 +156,9 @@ function CategoriesServicesPage() {
   const deleteHandler = (id: string) => {
     setIsLoader(true);
     const data = {
-      is_active: false,
-      is_deleted: true,
-      updated_by: authState.user.id,
+      isActive: false,
+      isDeleted: true,
+      updatedBy: authState.user.id,
     };
     category
       .deleteCategoryService(id, data)
@@ -227,13 +230,14 @@ function CategoriesServicesPage() {
 
   const createFormHandler = (data: any) => {
     setIsLoader(true);
+
     const formData = new FormData();
     formData.append('name', data.name);
+    formData.append('loyaltyCoins', data.loyaltyCoins);
     formData.append('icon', data.icon);
     formData.append('price', data.price);
     formData.append('desc', data.desc);
-    formData.append('created_by', authState.user.id);
-    formData.append('updated_by', authState.user.id);
+    formData.append('createdBy', authState.user.id);
     category
       .categoryServiceCreate(categoryId, formData)
       .then((item) => {
@@ -267,10 +271,10 @@ function CategoriesServicesPage() {
     setIsLoader(true);
     const formData = new FormData();
     formData.append('name', data.name);
-    // formData.append('quantity', data.quantity);
+    formData.append('loyaltyCoins', data.loyaltyCoins);
     formData.append('price', data.price);
     formData.append('desc', data.desc);
-    formData.append('updated_by', authState.user.id);
+    formData.append('updatedBy', authState.user.id);
     if (data.icon) formData.append('icon', data.icon);
     category
       .updateCategoryService(actionMenuItemid, formData)
@@ -286,6 +290,7 @@ function CategoriesServicesPage() {
             if (list[i].id === updateItem.data.data.id) {
               list[i].name = updateItem.data.data.name;
               list[i].quantity = updateItem.data.data.quantity;
+              list[i].loyaltyCoins = updateItem.data.data.loyaltyCoins;
               list[i].price = updateItem.data.data.price;
               list[i].desc = updateItem.data.data.desc;
               if (updateItem.data.data.icon) {
@@ -314,12 +319,14 @@ function CategoriesServicesPage() {
 
   const handleSwitchChange = (event: any, id: string) => {
     if (listingRolePermission(dataRole, 'Category Service Update Status')) {
+      // setIsLoader(true);
       const data = {
-        is_active: event.target.checked,
-        updated_by: authState.user.id,
+        isActive: event.target.checked,
+        updatedBy: authState.user.id,
       };
       category.updateCategoryServiceStatus(id, data).then((updateItem) => {
         if (updateItem.data.success) {
+          // setIsLoader(false);
           setList((newArr: any) => {
             return newArr.map((item: any) => {
               if (item.id === id) {
@@ -339,6 +346,16 @@ function CategoriesServicesPage() {
     }
   };
 
+  const openModal = (avatar: string) => {
+    setModalImage(avatar);
+    setIsModalImage(true);
+  };
+
+  const closeModal = () => {
+    setModalImage('');
+    setIsModalImage(false);
+  };
+
   return isLoader ? (
     <Loader />
   ) : (
@@ -349,7 +366,7 @@ function CategoriesServicesPage() {
         displayMessage={notifyMessage}
       />
       <TopBar isNestedRoute title="Items" />
-      <div className="container mt-5">
+      <div className="container m-auto mt-5">
         <div className="w-full rounded-lg bg-white shadow-lg">
           <div className="grid grid-cols-12 px-4 py-5">
             <div className="col-span-7">
@@ -406,6 +423,7 @@ function CategoriesServicesPage() {
                   <th className="w-[20%]">Item Name</th>
                   <th className="w-[50%]">Description</th>
                   {/* <th>Min Quantity</th> */}
+                  <th>Coins</th>
                   <th>Price</th>
                   <th>Status</th>
                   <th>&nbsp;</th>
@@ -418,7 +436,13 @@ function CategoriesServicesPage() {
                       <tr key={item.id}>
                         <td>
                           <div className="avatar flex flex-row items-center">
-                            <img src={item.icon} alt="" />
+                            <button onClick={() => openModal(item.icon)}>
+                              <img
+                                className="cursor-pointer"
+                                src={item.icon}
+                                alt={item.name}
+                              />
+                            </button>
                             <div className="flex flex-col items-start justify-start">
                               <span className="text-sm font-semibold">
                                 {item.name}
@@ -428,6 +452,7 @@ function CategoriesServicesPage() {
                         </td>
                         <td>{item.desc ? item.desc : '--'}</td>
                         {/* <td>{item.quantity}</td> */}
+                        <td>{Number(item.loyaltyCoins).toFixed(0)}</td>
                         <td>{item.price}</td>
                         <td>
                           {item.isActive ? (
@@ -524,6 +549,31 @@ function CategoriesServicesPage() {
           setOpenFormDialog={setOpenEditFormDialog}
           callback={updateFormHandler}
         />
+      )}
+      {modalImage && (
+        <Dialog
+          open={isModalImage}
+          onClose={closeModal}
+          PaperProps={{
+            className: '',
+            style: {
+              maxWidth: '20%',
+              minHeight: '35%',
+              borderRadius: '100%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            },
+          }}
+        >
+          <div className="flex h-[100%] items-center justify-center">
+            <img
+              className="max-h-[200px] max-w-[350px]"
+              src={modalImage}
+              alt=""
+            />
+          </div>
+        </Dialog>
       )}
     </>
   );

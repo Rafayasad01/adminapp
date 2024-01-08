@@ -1,18 +1,18 @@
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
-import FormControl from '@mui/material/FormControl';
-import Input from '@mui/material/Input';
+// import FormControl from '@mui/material/FormControl';
+// import Input from '@mui/material/Input';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import '../../assets/css/PopupStyle.css';
 import CustomButton from '../../components/common/CustomButton';
 import ErrorSpanBox from '../../components/common/ErrorSpanBox';
 import { CreateBanner } from '../../interfaces/app.banner';
-import {
-  INVALID_CHAR,
-  MAX_LENGTH_EXCEEDED,
-  PATTERN,
-} from '../../utils/constants';
+// import {
+//   INVALID_CHAR,
+//   MAX_LENGTH_EXCEEDED,
+//   PATTERN,
+// } from '../../utils/constants';
 import DragDropFile from '../settings/DragDropFile';
 
 type Props = {
@@ -34,21 +34,18 @@ function BannersCreatePopup({
   setNotifyMessage,
 }: Props) {
   const {
-    register,
+    // register,
     handleSubmit,
-    formState: { errors },
+    // formState: { errors },
   } = useForm<CreateBanner>();
 
   const [file, setFile] = useState<any>(null);
   const [selectedImg, setSelectedImg] = useState<any>(null);
 
-  const onSubmit = (data: any) => {
+  const onSubmit = () => {
     // console.log('dataSSSelected==>', selectedImg, file, data);
-    const details = {
-      name: data.bannerName,
-    };
     if (selectedImg || file) {
-      callback(details, file);
+      callback(file);
     } else {
       setOpenFormDialog(true);
     }
@@ -74,7 +71,7 @@ function BannersCreatePopup({
           <div className="FormHeader">
             <span className="Title">Add Banner Image</span>
           </div>
-          <div className="mt-3">
+          {/* <div className="mt-3">
             <FormControl className="FormControl" variant="standard">
               <label className="FormLabel">Banner Name</label>
               <Input
@@ -99,7 +96,7 @@ function BannersCreatePopup({
                 <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
               )}
             </FormControl>
-          </div>
+          </div> */}
           <div className="my-3 grid grid-cols-10 gap-6">
             <div className="col-span-4 flex items-center">
               <DragDropFile

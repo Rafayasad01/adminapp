@@ -51,6 +51,7 @@ function CategoriesServicesEditPopup({
         name: data.name,
         desc: data.desc,
         price: data.price,
+        loyaltyCoins: data.loyaltyCoins,
         icon: image,
       };
       setOpenFormDialog(false);
@@ -60,6 +61,7 @@ function CategoriesServicesEditPopup({
         name: data.name,
         desc: data.desc,
         price: data.price,
+        loyaltyCoins: data.loyaltyCoins,
         quantity: data.quantity,
       };
       setOpenFormDialog(false);
@@ -167,23 +169,28 @@ function CategoriesServicesEditPopup({
                 <label className="FormLabel">Loyality Coins</label>
                 <Input
                   className="FormInput"
-                  id="coins"
-                  placeholder="Enter Coins"
-                  {...register('coins', {
-                    // value: formData?.coins,
+                  id="loyaltyCoins"
+                  placeholder="Enter loyalty Coins"
+                  type="number"
+                  {...register('loyaltyCoins', {
+                    value: formData?.loyaltyCoins,
                     pattern: {
                       value: PATTERN.POINT_NUM,
-                      message: 'Enter a valid coins in numbers',
+                      message: 'Enter a valid loyalty coins in numbers',
                     },
                     maxLength: {
                       value: 10,
-                      message: "Length should not be excceed from 10 numbers."
+                      message: 'Length should not be excceed from 10 numbers.',
                     },
-                    validate: (value: any) => formData?.coins && VALIDATE_NON_NEGATIVE_NUM(value),
+                    validate: (value: any) =>
+                      formData?.loyaltyCoins &&
+                      VALIDATE_NON_NEGATIVE_NUM(value),
                   })}
                   disableUnderline
                 />
-                {errors.coins && <ErrorSpanBox error={errors.coins?.message} />}
+                {errors.loyaltyCoins && (
+                  <ErrorSpanBox error={errors.loyaltyCoins?.message} />
+                )}
               </FormControl>
             </div>
             {/* <div className="FormFields">

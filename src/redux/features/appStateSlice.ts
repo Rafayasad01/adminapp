@@ -1,10 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-type AppUserItems = {
-  UserItems: {
-    employeeLimit: any;
-  };
-};
+// type AppUserItems = {
+//   UserItems: {
+//     employeeLimit: any;
+//   };
+// };
 
 type AppUserLogo = {
   logo: string;
@@ -19,7 +19,7 @@ const initialState: AppState = {
   UserItems: {
     employeeLimit: 0,
   },
-  logo: null
+  logo: null,
 };
 
 export const appStateSlice = createSlice({
@@ -36,11 +36,15 @@ export const appStateSlice = createSlice({
       state.logo = JSON.parse(JSON.stringify(action.payload));
     },
     setEmployeeLimit: (state, action: PayloadAction<any>) => {
-      state.UserItems = { ...state.UserItems, employeeLimit: Number(action.payload) };
-    }
+      state.UserItems = {
+        ...state.UserItems,
+        employeeLimit: Number(action.payload),
+      };
+    },
   },
 });
 
-export const { setItemState, setLogo, setEmployeeLimit } = appStateSlice.actions;
+export const { setItemState, setLogo, setEmployeeLimit } =
+  appStateSlice.actions;
 
 export default appStateSlice.reducer;

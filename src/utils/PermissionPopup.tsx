@@ -29,7 +29,7 @@ function PermissionPopup({ open, setOpen, dialogText, callback, type }: Props) {
     <Dialog
       onClose={onCloseHandler}
       open={open}
-      className='customheight'
+      className="customheight"
       PaperProps={{
         className: popupStyle.Dialog,
         style: {},

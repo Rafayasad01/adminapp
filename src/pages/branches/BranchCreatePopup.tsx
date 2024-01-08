@@ -3,10 +3,6 @@ import Dialog from '@mui/material/Dialog';
 import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined';
-import RadioButtonUncheckedOutlinedIcon from '@mui/icons-material/RadioButtonUncheckedOutlined'
-import Checkbox from '@mui/material/Checkbox';
 import TextField from '@mui/material/TextField';
 import { debounce } from '@mui/material/utils';
 import kabakCase from 'lodash/kebabCase';
@@ -47,7 +43,6 @@ function BranchCreatePopup({
     register,
     handleSubmit,
     setValue,
-    watch,
     formState: { errors },
   } = useForm<Tenant>();
 
@@ -65,11 +60,11 @@ function BranchCreatePopup({
       address: data.address,
       userLimit: data.userLimit,
       userId: authState.user.id,
-      enableLoyaltyProgram: data.enableLoyaltyProgram,
-      loyaltyCoinConversionRate: data.enableLoyaltyProgram ? data.loyaltyCoinConversionRate : 0,
-      requiredCoinsToRedeem: data.enableLoyaltyProgram ? data.requiredCoinsToRedeem : 0,
+      // enableLoyaltyProgram: data.enableLoyaltyProgram,
+      // loyaltyCoinConversionRate: data.enableLoyaltyProgram ? data.loyaltyCoinConversionRate : 0,
+      // requiredCoinsToRedeem: data.enableLoyaltyProgram ? data.requiredCoinsToRedeem : 0,
     };
-    console.log("detailss", details);
+    // console.log('detailss', details);
     if (data.tenantName) {
       setOpenFormDialog(false);
       callback(details);
@@ -102,7 +97,7 @@ function BranchCreatePopup({
       // disableScrollLock
       PaperProps={{
         className: 'Dialog',
-        style: { maxWidth: '100%', minHeight: '410px', height: '490px' },
+        style: { maxWidth: '100%', minHeight: '410px', height: '500px' },
       }}
     >
       <div className="Content p-3">
@@ -305,7 +300,7 @@ function BranchCreatePopup({
                 />
               </FormControl>
             </div>
-            <div className="FormField">
+            {/* <div className="FormField">
               <FormControlLabel
                 control={
                   <Checkbox
@@ -372,7 +367,7 @@ function BranchCreatePopup({
                   )}
                 </FormControl>
               </div>
-            )}
+            )} */}
           </div>
           <div className="FormFooter">
             <Button
@@ -388,7 +383,7 @@ function BranchCreatePopup({
             </Button>
             <CustomButton
               buttonType="button"
-              title={'Add'}
+              title="Add"
               type="submit"
               className="btn-black-fill"
               sx={{
