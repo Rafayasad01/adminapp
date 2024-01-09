@@ -45,3 +45,20 @@ export interface AppSchedule {
   startDateTime: string;
   endDateTime: string;
 }
+export interface EditProfile {
+  firstName: string;
+  lastName: string;
+  avatar: any;
+  address: string;
+  country: string;
+  state: string;
+  city: string;
+  zipCode: string;
+  phone: string;
+}
+
+export interface Password {
+  currentPassword: string;
+  newPassword: string;
+  reNewPassword: string;
+}

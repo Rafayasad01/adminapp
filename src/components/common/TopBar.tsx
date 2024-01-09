@@ -3,12 +3,19 @@ import AppBar from '@mui/material/AppBar';
 import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
 import Toolbar from '@mui/material/Toolbar';
+import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
+import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 // import { blac } from '@mui/material/colors';
 import { useNavigate } from 'react-router-dom';
-
+import { useDispatch } from 'react-redux';
+import { NavLink } from 'react-router-dom';
 import BackArrowIcon from '../icons/BackArrowIcon';
 import ShopIcon from '../icons/ShopIcon';
 import { useAppSelector } from '../../redux/redux-hooks';
+import { useEffect, useRef, useState } from 'react';
+import { logout } from '../../redux/features/authStateSlice';
+import { setItemState, setLogo } from '../../redux/features/appStateSlice';
+import { setRolePermissions } from '../../redux/features/permissionsStateSlice';
 
 type Props = {
   title?: string;
@@ -18,9 +25,32 @@ type Props = {
 function TopBar({ title, isNestedRoute = false }: Props) {
   const userData = useAppSelector((state: any) => state?.authState?.user);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const divRef = useRef<HTMLDivElement>(null);
+  const [profileToggler, setProfileToggler] = useState(false);
   const backHandler = () => {
     navigate(-1);
   };
+
+  const logOut = () => {
+    dispatch(logout());
+    dispatch(setItemState(null));
+    dispatch(setLogo(null));
+    dispatch(setRolePermissions({ id: '', name: '', permissions: [] }));
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event: any) => {
+      if (divRef.current && !divRef.current.contains(event.target)) {
+        setProfileToggler(false);
+      }
+    };
+    document.body.addEventListener('click', handleClickOutside);
+    return () => {
+      document.body.removeEventListener('click', handleClickOutside);
+    };
+  }, [])
+
   return (
     <AppBar
       position="relative"
@@ -53,7 +83,7 @@ function TopBar({ title, isNestedRoute = false }: Props) {
               <hr className="divider vertical ml-4" />
             </div>
           )}
-          <div className="header-user-box ml-3.5">
+          <div ref={divRef} className="header-user-box ml-3.5 cursor-pointer" onClick={() => setProfileToggler(!profileToggler)}>
             <span>{`${userData.firstName} ${userData.lastName}`}</span>
             {userData?.avatar ? (
               <Avatar
@@ -71,6 +101,26 @@ function TopBar({ title, isNestedRoute = false }: Props) {
           </div>
         </div>
       </Toolbar>
+      {profileToggler &&
+        <div className='flex items-end justify-end'>
+          <div className='bg-white 2xl:w-[11%] xl:w-[17%] p-1 rounded-md shadow-lg'>
+            <div onClick={() => navigate('../profile')} className='p-1 topbar-dd rounded-md text-black text-sm flex items-center cursor-pointer'>
+              <PersonOutlineOutlinedIcon className='w-4' />
+              <p className='mx-2'>View Profile</p>
+            </div>
+            <div className='text-black text-sm flex items-center topbar-dd rounded-md mt-1 p-1'>
+              <NavLink
+                className="logout-link w-full"
+                to="/admin"
+                onClick={() => logOut()}
+              >
+                <LogoutOutlinedIcon className="w-4" />
+                <span className='mx-2'>Logout</span>
+              </NavLink>
+            </div>
+          </div>
+        </div>
+      }
     </AppBar>
   );
 }
