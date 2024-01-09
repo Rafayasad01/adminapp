@@ -30,7 +30,6 @@ type Props = {
 interface UpdateVoucherPayload {
   discountType: 'Amount' | 'Percentage';
   value: number;
-  minProduct: number;
   minAmount: number;
   maxRedeem: number;
   validFrom: string;
@@ -86,7 +85,6 @@ function VouchersPromoEditPopup({
       discountType: data.discountType as 'Amount' | 'Percentage',
       name: data.name,
       value: +data.value,
-      minProduct: +data.minProduct,
       minAmount: +data.minAmount,
       maxRedeem: +data.maxRedeem,
       isActive: data.isActive,
@@ -213,26 +211,6 @@ function VouchersPromoEditPopup({
                   />
                   {errors?.value && (
                     <ErrorSpanBox error={errors?.value?.message} />
-                  )}
-                </FormControl>
-                <FormControl className="FormControl" variant="standard">
-                  <label className="FormLabel">Min Products</label>
-                  <Input
-                    {...register('minProduct', {
-                      required: 'Min Products is required in numbers',
-                      validate: (value: any) =>
-                        VALIDATE_NON_NEGATIVE_NUM(value),
-                    })}
-                    type="number"
-                    className="FormInput"
-                    id="minProduct"
-                    name="minProduct"
-                    defaultValue={item.minProduct}
-                    placeholder="Min Products"
-                    disableUnderline
-                  />
-                  {errors?.minProduct && (
-                    <ErrorSpanBox error={errors?.minProduct?.message} />
                   )}
                 </FormControl>
               </div>
