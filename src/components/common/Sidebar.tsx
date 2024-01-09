@@ -9,7 +9,7 @@ import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined
 import FacebookIcon from '@mui/icons-material/Facebook';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
-import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
+// import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import CorporateFareIcon from '@mui/icons-material/CorporateFare';
 import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
 import PeopleOutlineOutlinedIcon from '@mui/icons-material/PeopleOutlineOutlined';
@@ -29,10 +29,7 @@ import { NavLink } from 'react-router-dom';
 import CollectionsOutlinedIcon from '@mui/icons-material/CollectionsOutlined';
 import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined';
 import assets from '../../assets';
-import { setItemState, setLogo } from '../../redux/features/appStateSlice';
-import { logout } from '../../redux/features/authStateSlice';
-import { setRolePermissions } from '../../redux/features/permissionsStateSlice';
-import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
+import { useAppSelector } from '../../redux/redux-hooks';
 import CAN, { defineRules } from '../../services/permissions/permissions';
 import { MODULE_EMPLOYEEES } from '../../utils/constants';
 import ArrowDown from '../icons/ArrowDown';
@@ -198,13 +195,13 @@ function Sidebar() {
   const dataRole = useAppSelector((state: any) => state);
   const [emptyVariable] = useState(null);
 
-  const dispatch = useAppDispatch();
-  const logOut = () => {
-    dispatch(logout());
-    dispatch(setItemState(null));
-    dispatch(setLogo(null));
-    dispatch(setRolePermissions({ id: '', name: '', permissions: [] }));
-  };
+  // const dispatch = useAppDispatch();
+  // const logOut = () => {
+  //   dispatch(logout());
+  //   dispatch(setItemState(null));
+  //   dispatch(setLogo(null));
+  //   dispatch(setRolePermissions({ id: '', name: '', permissions: [] }));
+  // };
   // console.log("ei",expandedIndex);
 
   const handleToggle = (index: number) => {
@@ -457,7 +454,7 @@ function Sidebar() {
             <hr className="mt-2" /> */}
             </div>
           )}
-          {authState ? (
+          {/* {authState ? (
             <NavLink
               className="logout-link"
               to="/admin"
@@ -468,7 +465,7 @@ function Sidebar() {
             </NavLink>
           ) : (
             ''
-          )}
+          )} */}
         </div>
       </List>
     </Drawer>
