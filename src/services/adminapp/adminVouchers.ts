@@ -23,10 +23,18 @@ const updateVoucher = (tenant: string, id: string, data: any) => {
 const deleteVoucher = (tenant: string, id: string) => {
   return network.post(`voucher/delete/${tenant}/${id}`, {});
 };
+const updateStatus = (data: any) => {
+  return network.post(`voucher/update/status`, data);
+};
+const orderVoucherPromotionList = (tenantId: string, appUserId: string) => {
+  return network.get(`voucher/promotion/${tenantId}/${appUserId}`);
+};
 
 export default {
   listVouchers,
   createVoucher,
   updateVoucher,
   deleteVoucher,
+  updateStatus,
+  orderVoucherPromotionList
 };

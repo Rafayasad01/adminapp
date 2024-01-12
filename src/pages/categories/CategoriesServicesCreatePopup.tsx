@@ -105,7 +105,7 @@ function CategoriesServicesCreatePopup({
                   placeholder="Enter service name"
                   {...register('name', {
                     required: 'Name is required',
-                    pattern: PATTERN.CHAR_SPACE_DASH,
+                    pattern: PATTERN.CHAR_NUM_SPACE_DASH,
                     validate: (value) => value.length <= 150,
                   })}
                   disableUnderline
@@ -169,7 +169,7 @@ function CategoriesServicesCreatePopup({
               <FormControl className="FormControl" variant="standard">
                 <label className="FormLabel">
                   Message{' '}
-                  <span className="SubLabel">Write 01-250 Characters</span>
+                  <span className="SubLabel">Write 01-350 Characters</span>
                 </label>
                 <TextField
                   className="FormTextarea"
@@ -185,7 +185,7 @@ function CategoriesServicesCreatePopup({
                       message: 'Minimum One Characters',
                     },
                     maxLength: {
-                      value: 250,
+                      value: 350,
                       message: MAX_LENGTH_EXCEEDED,
                     },
                   })}

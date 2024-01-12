@@ -17,9 +17,11 @@ type Props = {
   setValue?: any;
   alternativeId?: string;
   border?: string;
+  disabled?: boolean;
 };
 
 function CustomDropDown({
+  disabled,
   inputTitle,
   customWidth,
   options,
@@ -47,15 +49,16 @@ function CustomDropDown({
           rules={
             validateRequired
               ? {
-                  validate: (value) => {
-                    return value !== 'none' || 'Select an option';
-                  },
-                }
+                validate: (value) => {
+                  return value !== 'none' || 'Select an option';
+                },
+              }
               : {}
           }
           render={({ field, fieldState }) => (
             <>
               <Select
+                disabled={disabled}
                 fullWidth
                 variant="outlined"
                 style={{

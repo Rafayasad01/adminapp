@@ -1,6 +1,6 @@
 // export const BASE_URL = import.meta.env.VITE_SERVICE_BASE_URL;
-export const BASE_URL = 'https://dev.urapptech.com/api/v1/admin/';
-// export const BASE_URL = 'http://192.168.8.68:3200/api/v1/admin/';
+// export const BASE_URL = 'https://dev.urapptech.com/api/v1/admin/';
+export const BASE_URL = 'http://192.168.8.68:3200/api/v1/admin/';
 // export const GOOGLE_MAP_KEY = import.meta.env.VITE_GOOGLE_MAP_KEY;
 export const MODULE_EMPLOYEEES = 'Employees';
 export const PROFILE_PREFIX = 'profile';
@@ -122,6 +122,7 @@ export const PATTERN = {
 
   CHAR_NUM_DOT_AT: /^[A-Za-z0-9.@_-]+$/, // used for email fields
   CHAR_SPACE_DASH: /^[A-Za-z\s-]+$/, // used for textfield fields
+  CHAR_NUM_SPACE_DASH: /^[A-Za-z0-9\s-]+$/, // used for textfield fields
   ADDRESS_ONLY: /^[A-Za-z0-9\s@.,#-]+$/, // used for textfield address
   CHAR_NUM_DASH: /^[A-Za-z0-9-]+$/, // used for only num,chars,dash like; postal code
   NUM_PLUS_MINUS: /^[+-\d\s]+$/,
@@ -144,16 +145,16 @@ export const VALIDATE_NON_NEGATIVE_NUM = (value: any) => {
   return parseInt(value, 10) >= 0 || 'Must be a non-negative number';
 };
 
-export const VALIDATE_NON_NEGATIVE_NUM_AND_CHECK_LENGTH = (value: any) => {
+export const VALIDATE_NON_NEGATIVE_NUM_AND_CHECK_LENGTH = (value: any, length: number) => {
   const parsedValue = parseInt(value, 10);
 
-  if (parsedValue >= 0 && parsedValue > 14) {
+  if (parsedValue >= 0 && parsedValue > length) {
     return true; // Validation passes
   }
   if (parsedValue < 0) {
     return 'Must be a non-negative number';
   }
-  return 'Must be greater than 15';
+  return `Must be greater than ${length}`;
 };
 
 export const imageAllowedTypes = ['image/png', 'image/jpeg', 'image/jpg'];
