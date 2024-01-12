@@ -16,17 +16,20 @@ import { weekDays } from '../../utils/constants';
 import { listingRolePermission } from '../../utils/helper';
 import AppUserAddressTabPage from './AppUserAddressTab/AppUserAddressTabPage';
 import AppUserScheduleTabPage from './AppUserScheduleTab/AppUserScheduleTabPage';
+import AppUserPromotionTab from './AppUserRewardHistoryTabs/AppUserPromotionTab';
+import AppUserLoyaltyTab from './AppUserRewardHistoryTabs/AppUserLoyaltyTab';
 
 function AppUserRewardHistory() {
   const dataRole = useAppSelector(
     (state: any) => state?.persisitReducer?.roleState?.role?.permissions
   );
   // const navigate = useNavigate();
-  const [detail, setDetail] = useState<any>(null);
+  const [list, setList] = useState<any>(null);
   const [filteredWeekDays, setFilteredWeekDays] = useState<any>(null);
   const [page, setPage] = useState(0);
   const [total, setTotal] = useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [search, setSearch] = React.useState('');
   // const [total, setTotal] = useState(0);
   // const [list, setList] = useState<any>([]);
   const [address, setAddress] = useState<string>('');
@@ -51,34 +54,45 @@ function AppUserRewardHistory() {
     setSelectedTab(newValue);
   };
 
-  useEffect(() => {
-    if (listingRolePermission(dataRole, 'Driver Address Detail')) {
-      Service.appUserVocuherHistoryList(userId, page, rowsPerPage)
-        .then((item: any) => {
-          if (item.data.success) {
-            setIsLoader(false);
-            setDetail(item.data.data);
-            setTotal(item.data.data.total);
-          }
-          else {
-            setIsLoader(false);
-            setIsNotify(true);
-            setNotifyMessage({
-              text: item.data.message,
-              type: 'error',
-            });
-          }
-        })
-        .catch((err) => {
+  const apiExecution = (service: any) => {
+    service(userId, page, rowsPerPage)
+      .then((item: any) => {
+        if (item.data.success) {
+          setIsLoader(false);
+          setList(item.data.data.list);
+          setTotal(item.data.data.total);
+        } else {
           setIsLoader(false);
           setIsNotify(true);
           setNotifyMessage({
-            text: err.message,
+            text: item.data.message,
             type: 'error',
           });
+        }
+      })
+      .catch((err: any) => {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
         });
+      });
+  };
+
+  useEffect(() => {
+    setList([]);
+    setIsLoader(true);
+    if (listingRolePermission(dataRole, 'Driver Address Detail')) {
+      if (selectedTab === 'PROMOTION HISTORY') {
+        apiExecution(Service.appUserVocuherHistoryList);
+      } else {
+        apiExecution(Service.appUserLoyaltyHistoryList);
+      }
+    } else {
+      setIsLoader(false);
     }
-  }, [emptyVariable]);
+  }, [emptyVariable, selectedTab]);
 
   return isLoader ? (
     <Loader />
@@ -90,47 +104,55 @@ function AppUserRewardHistory() {
         displayMessage={notifyMessage}
       />
       <TopBar isNestedRoute title="Reward History" />
-      {detail && (
-        <div className="container m-auto mt-5">
-          <div className="mt-3 grid grid-cols-12">
-            <div className="col-span-12 rounded-lg bg-[#fff] px-4 py-5 shadow-lg">
-              <Tabs value={selectedTab} onChange={handleTabChange}>
-                <Tab
-                  label="promotion history"
-                  value="PROMOTION HISTORY"
-                />
-                <Tab
-                  label="loyalty history"
-                  value="LOYALTY HISTORY"
-                />
-              </Tabs>
-              {selectedTab === 'PROMOTION HISTORY' && (
-                <></>
-                // <AppUserAddressTabPage
-                //   addressList={detail?.appUserAddress}
-                //   appUserId={userId}
-                //   setAddress={setAddress}
-                // />
-              )}
-              {selectedTab === 'LOYALTY HISTORY' && (
-                <></>
-                // <AppUserScheduleTabPage
-                //   appUserId={userId}
-                //   scheduleList={detail?.appDriverWorkingSchedule}
-                //   filteredWeekdays={filteredWeekDays}
-                // />
-              )}
-            </div>
+      <div className="container m-auto mt-5">
+        <div className="mt-3 grid grid-cols-12">
+          <div className="col-span-12 rounded-lg bg-[#fff] px-4 py-5 shadow-lg">
+            <Tabs value={selectedTab} onChange={handleTabChange}>
+              <Tab label="promotion history" value="PROMOTION HISTORY" />
+              <Tab label="loyalty history" value="LOYALTY HISTORY" />
+            </Tabs>
+            {selectedTab === 'PROMOTION HISTORY' && (
+              <AppUserPromotionTab
+                list={list}
+                total={total}
+                page={page}
+                rowsPerPage={rowsPerPage}
+                search={search}
+                setList={setList}
+                setPage={setPage}
+                setTotal={setTotal}
+                setRowsPerPage={setRowsPerPage}
+              />
+            )}
+            {selectedTab === 'LOYALTY HISTORY' && (
+              <AppUserLoyaltyTab
+                list={list}
+                total={total}
+                page={page}
+                rowsPerPage={rowsPerPage}
+                search={search}
+                setList={setList}
+                setPage={setPage}
+                setTotal={setTotal}
+                setRowsPerPage={setRowsPerPage}
+              />
+              // <AppUserScheduleTabPage
+              //   appUserId={userId}
+              //   scheduleList={detail?.appDriverWorkingSchedule}
+              //   filteredWeekdays={filteredWeekDays}
+              // />
+            )}
           </div>
         </div>
-      )}
+      </div>
+
       {cancelDialogOpen && (
         <PermissionPopup
           type="shock"
           open={cancelDialogOpen}
           setOpen={setCancelDialogOpen}
           dialogText={dialogText}
-          callback={() => { }}
+          callback={() => {}}
         />
       )}
       {actionMenuAnchorEl && (
@@ -139,7 +161,7 @@ function AppUserRewardHistory() {
           anchorEl={actionMenuAnchorEl}
           setAnchorEl={setActionMenuAnchorEl}
           options={actionMenuOptions}
-          callback={() => { }}
+          callback={() => {}}
         />
       )}
     </>

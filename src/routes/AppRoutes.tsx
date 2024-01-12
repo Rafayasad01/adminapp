@@ -58,6 +58,8 @@ import SuperAdminUserPage from '../pages/super-admin/tenat/user/SuperAdminUserPa
 import VouchersPage from '../pages/vouchers/VouchersPage';
 import DriverHistory from '../pages/orders/DriverHistory';
 import AppUserRewardHistory from '../pages/appUsers/AppUserRewardHistory';
+import AppUserPromotionDetailPage from '../pages/appUsers/AppUserRewardHistoryTabs/AppUserPromotionDetailPage';
+import AppUserLoyaltyDetailPage from '../pages/appUsers/AppUserRewardHistoryTabs/AppUserLoyaltyDetailPage';
 
 export const routeObjects: RouteObject[] = [
   {
@@ -315,8 +317,23 @@ export const routeObjects: RouteObject[] = [
                 element: <AppUserDetailPage />,
               },
               {
-                path: 'reward-history/:userId',
-                element: <AppUserRewardHistory />,
+                path: 'reward',
+                // element: <AppUserRewardHistory />,
+                children: [
+                  { index: true, element: <Navigate to="history/:userId" replace /> },
+                  {
+                    path: 'history/:userId',
+                    element: <AppUserRewardHistory />,
+                  },
+                  {
+                    path: 'history/voucher/detail/:historyId',
+                    element: <AppUserPromotionDetailPage />,
+                  },
+                  {
+                    path: 'history/loyalty/detail/:loyaltyId',
+                    element: <AppUserLoyaltyDetailPage />,
+                  }
+                ]
               }
             ],
           },

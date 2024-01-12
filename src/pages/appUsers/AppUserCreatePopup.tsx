@@ -35,7 +35,7 @@ function AppUserCreatePopup({
   setOpenFormDialog,
   callback,
   appUserRoleLov,
-  selectedTab
+  selectedTab,
 }: Props) {
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -55,7 +55,7 @@ function AppUserCreatePopup({
     callback(data);
   };
   // console.log('errrr', errors);
-  
+
   return (
     <Dialog
       open={openFormDialog}

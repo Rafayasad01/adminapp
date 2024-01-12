@@ -46,6 +46,9 @@ module.exports = {
     'react/display-name': 'off',
     'import/no-duplicates': 'off',
     '@typescript-eslint/no-non-null-assertion': 'off',
+    "react-hooks/no-new":'off',
+    "no-new":'off',
+
     // '@typescript-eslint/no-unused-vars': 'off',
     // 'no-console': 'off',
     'prettier/prettier': [

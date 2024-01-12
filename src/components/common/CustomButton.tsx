@@ -39,12 +39,12 @@ function CustomButton({
         sx={sx && sx}
         variant="contained"
         className={className}
-        onClick={onclick || (() => { })}
+        onClick={onclick || (() => {})}
       >
         {/* {disabled ? <Loader /> : */}
-          <>
-            {icon && icon} {title}
-          </>
+        <>
+          {icon && icon} {title}
+        </>
         {/* } */}
       </Button>
     );

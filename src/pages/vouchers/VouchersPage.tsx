@@ -10,6 +10,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import TablePagination from '@mui/material/TablePagination';
 import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
+import Switch from '@mui/material/Switch';
 import ActionMenu from '../../components/common/ActionMenu';
 import CustomText from '../../components/common/CustomText';
 import Loader from '../../components/common/Loader';
@@ -22,7 +23,6 @@ import { NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
 import { listingRolePermission } from '../../utils/helper';
 import VouchersPromoCreatePopup from './VouchersPromoCreatePopup';
 import VouchersPromoEditPopup from './VouchersPromoEditPopup';
-import Switch from '@mui/material/Switch';
 // import VouchersReferralCreatePopup from './VouchersReferralCreatePopup';
 
 const options = ['Edit', 'Delete'];
@@ -251,7 +251,7 @@ function VouchersPage() {
     setIsLoader(true);
     if (listingRolePermission(dataRole, 'Category Update Status')) {
       const data = {
-        id: id,
+        id,
         isActive: event.target.checked,
         updatedBy: authState.user.id,
       };
@@ -408,16 +408,37 @@ function VouchersPage() {
                         <td>${Number(item.minAmount)}</td>
                         <td>{item.discountType}</td>
                         <td>
-                          {item.isUnlimitedRedeem ? '0' : `${item.maxRedeem} - ${item.redeemCount}`}
+                          {item.isUnlimitedRedeem
+                            ? '0'
+                            : `${item.maxRedeem} - ${item.redeemCount}`}
                         </td>
-                        <td><span className={`${item.isUnlimitedRedeem ? 'badge badge-success' : 'badge badge-primary'}`}>{item.isUnlimitedRedeem ? 'unlimited' : 'limited'}</span></td>
+                        <td>
+                          <span
+                            className={`${
+                              item.isUnlimitedRedeem
+                                ? 'badge badge-success'
+                                : 'badge badge-primary'
+                            }`}
+                          >
+                            {item.isUnlimitedRedeem ? 'unlimited' : 'limited'}
+                          </span>
+                        </td>
                         <td>{item.maxUserRedeem}</td>
                         <td>
-                          {item.status === "Expired" || item.status === "Deleted" ? (
-                            <span className="badge badge-danger">{item.status}</span>
-                          ) : item.status === "Inactive" ? (
-                            <span className="badge badge-primary">{item.status}</span>
-                          ) : <span className="badge badge-success">{item.status}</span>}
+                          {item.status === 'Expired' ||
+                          item.status === 'Deleted' ? (
+                            <span className="badge badge-danger">
+                              {item.status}
+                            </span>
+                          ) : item.status === 'Inactive' ? (
+                            <span className="badge badge-primary">
+                              {item.status}
+                            </span>
+                          ) : (
+                            <span className="badge badge-success">
+                              {item.status}
+                            </span>
+                          )}
                         </td>
                         <td>
                           <div className="flex flex-row-reverse">
@@ -433,7 +454,10 @@ function VouchersPage() {
                               <MoreVertIcon />
                             </IconButton>
                             <Switch
-                              disabled={item.status === "Expired" || item.status === "Deleted" && true}
+                              disabled={
+                                item.status === 'Expired' ||
+                                (item.status === 'Deleted' && true)
+                              }
                               checked={item.isActive}
                               onChange={(
                                 event: React.ChangeEvent<HTMLInputElement>

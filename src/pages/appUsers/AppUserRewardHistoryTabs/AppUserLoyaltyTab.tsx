@@ -29,7 +29,7 @@ type Props = {
   search: string;
 };
 
-function AppUserPromotionTab({
+function AppUserLoyaltyTab({
   list,
   setList,
   total,
@@ -113,44 +113,30 @@ function AppUserPromotionTab({
         <table className="table-border table-auto">
           <thead>
             <tr>
-              <th className="w-[15%]">Order Number</th>
-              <th>Amount</th>
-              <th className="">Voucher Code</th>
-              <th>Value</th>
-              <th>Amount Type</th>
-              <th>Avail Date</th>
+              <th className="w-[20%]">Order Number</th>
+              <th>Coins</th>
+              <th>Grand Total</th>
+              <th>Created Date</th>
               <th>&nbsp;</th>
             </tr>
           </thead>
           <tbody>
             {list &&
-              list?.map((item: any, index: number) => {
+              list.map((item: any, index: number) => {
                 return (
                   <tr key={index}>
                     <td>
                       <div>{item?.appOrder[0]?.orderNumber}</div>
                     </td>
                     <td>
+                      <div>{item?.coins}</div>
+                    </td>
+                    <td>
                       <div>${item?.appOrder[0]?.grandTotal}</div>
                     </td>
                     <td>
-                      <div>{item?.adminVoucher?.voucherCode}</div>
-                    </td>
-                    <td>
                       <div>
-                        {item?.adminVoucher?.discountType === 'Amount'
-                          ? `${Number(item?.adminVoucher?.value).toFixed(0)}`
-                          : `${Number(item?.adminVoucher?.value).toFixed(0)}%`}
-                      </div>
-                    </td>
-                    <td>
-                      <div>{item?.adminVoucher?.discountType}</div>
-                    </td>
-                    <td>
-                      <div>
-                        {dayjs(item?.adminVoucher?.createdDate).format(
-                          'MMMM DD, YYYY'
-                        )}
+                        {dayjs(item.createdDate).format('MMMM DD, YYYY')}
                       </div>
                     </td>
                     <td>
@@ -158,7 +144,7 @@ function AppUserPromotionTab({
                         <IconButton
                           className="icon-btn"
                           onClick={() =>
-                            navigate(`../history/voucher/detail/${item.id}`)
+                            navigate(`../history/loyalty/detail/${item.id}`)
                           }
                         >
                           <WysiwygOutlinedIcon />
@@ -197,4 +183,4 @@ function AppUserPromotionTab({
   );
 }
 
-export default AppUserPromotionTab;
+export default AppUserLoyaltyTab;
