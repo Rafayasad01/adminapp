@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import FormControl from '@mui/material/FormControl';
+// import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
@@ -18,6 +19,7 @@ import RadioButtonUncheckedOutlinedIcon from '@mui/icons-material/RadioButtonUnc
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import AppUserService from '../../services/adminapp/adminAppUser';
+import VoucherService from '../../services/adminapp/adminVouchers';
 
 import TopBar from '../../components/common/TopBar';
 import DeleteIcon from '../../components/icons/DeleteIcon';
@@ -28,16 +30,23 @@ import Service from '../../services/adminapp/adminOrders';
 import { useAppSelector } from '../../redux/redux-hooks';
 import Notify from '../../components/common/Notify';
 import CustomButton from '../../components/common/CustomButton';
+import InputAdornment from '@mui/material/InputAdornment';
+import PromoCodeIcon from '../../components/icons/PromoCode';
+import PromotionListPopup from './PromotionListPopup';
+import assets from '../../assets';
+import { map } from 'lodash';
 
 function OrdersCreatePage() {
   const [catList, setCatList] = useState<any>([]);
   const [catItemList, setCatItemList] = useState<any>([]);
   const [itemList, setItemList] = useState<any>([]);
+  const [promoCode, setPromoCode] = useState<any>();
   const [paymentMethod] = useState('CASH_ON_DELIVERY');
+  const [isOpenPromoDialog, setIsOpenPromoDialog] = useState(false);
 
   // const [cashCheck, setCashCheck] = useState(false);
   const [isExistingUser, setIsExistingUser] = useState<any>('false');
-  const [userIdentifier, setUserIdentifier] = useState<any>('false');
+  const [userIdentifier, setUserIdentifier] = useState<any>('');
 
   const {
     register,
@@ -49,9 +58,11 @@ function OrdersCreatePage() {
 
   const navigate = useNavigate();
   const [isLoader, setIsLoader] = useState(true);
+  const [isLoginLoader, setIsLoginLoader] = useState(false);
   const [isNotify, setIsNotify] = useState(false);
   const [notifyMessage, setNotifyMessage] = useState({});
   const [loginDetails, setLoginDetails] = useState<any>(null);
+  const [promoList, setPromoList] = useState<any>(null);
   const authState: any = useAppSelector((state: any) => state?.authState);
 
   const totalAmount = itemList.reduce(
@@ -60,31 +71,64 @@ function OrdersCreatePage() {
   );
   const gstAmount =
     totalAmount * (authState.user.tenantConfig.gstPercentage / 100);
-  const grandTotal = gstAmount + totalAmount;
+
+  const discountedValue: any = promoList?.filter((val: any) => val.voucherCode === promoCode)[0];
+
+  const discountedPercentageValue: any = ((discountedValue?.value / 100) * totalAmount)?.toFixed(2);
+
+  const discountedValueByType = discountedValue?.discountType === "Amount" ? Number(discountedValue?.value) : discountedPercentageValue
+
+  const discountedTotalAmount: any = totalAmount - discountedValueByType
+
+  const grandTotal = discountedTotalAmount ? discountedTotalAmount + gstAmount : totalAmount + gstAmount;
 
   const handleLogin = () => {
-    setIsLoader(true);
+    setIsLoginLoader(true);
     const anonIdentidier = authState?.user?.username?.split('@')[0];
     const payload = {
       identifier:
         isExistingUser !== 'true'
           ? `${anonIdentidier}@shop.com`
-          : userIdentifier,
+          : userIdentifier ? userIdentifier : 'false',
     };
-    AppUserService.appLogin(payload)
+    let service;
+    if (isExistingUser === "true") {
+      service = AppUserService.appLogin
+    } else {
+      service = AppUserService.appAnonymousLogin
+    }
+    service(payload)
       .then((res) => {
         if (res.data.success) {
-          setIsLoader(false);
-          setLoginDetails(res.data);
-          setIsLoader(false);
+          setIsLoginLoader(false);
+          setLoginDetails(res.data.data);
           setIsNotify(true);
           setNotifyMessage({
             text: res.data.message,
             type: 'success',
           });
+          VoucherService.orderVoucherPromotionList(authState.user.tenant, res.data.data.id)
+            .then((resp) => {
+              if (resp.data.success) {
+                setPromoList(resp.data.data)
+              } else {
+                setIsNotify(true);
+                setNotifyMessage({
+                  text: resp.data.message,
+                  type: 'error',
+                });
+                setPromoList([])
+              }
+            }).catch((err) => {
+              setIsNotify(true);
+              setNotifyMessage({
+                text: err.message,
+                type: 'error',
+              });
+            })
         } else {
           setLoginDetails(null);
-          setIsLoader(false);
+          setIsLoginLoader(false);
           setIsNotify(true);
           setNotifyMessage({
             text: res.data.message,
@@ -94,7 +138,7 @@ function OrdersCreatePage() {
       })
       .catch((err) => {
         setLoginDetails(null);
-        setIsLoader(false);
+        setIsLoginLoader(false);
         setIsNotify(true);
         setNotifyMessage({
           text: err.message,
@@ -108,8 +152,8 @@ function OrdersCreatePage() {
       if (itemList?.length > 0 && totalAmount > 0) {
         setIsLoader(true);
         const cartPayload = {
-          tenant: loginDetails?.data?.tenant,
-          appUser: loginDetails?.data?.id,
+          tenant: loginDetails?.tenant,
+          appUser: loginDetails?.id
         };
         Service.OrderGetCart(cartPayload)
           .then((item: any) => {
@@ -119,27 +163,38 @@ function OrdersCreatePage() {
                 cartId: item.data.data.cart.id,
                 appUser: item.data.data.cart.appUser,
                 tenant: item.data.data.cart.tenant,
-                appUserAddress: loginDetails?.data?.appUserAddress.id,
+                appUserAddress: loginDetails?.appUserAddress.id,
                 pickupDateTime: new Date(),
                 dropDateTime: new Date(),
-                promoCode: '',
+                voucherCode: promoCode ? promoCode : '',
                 products: itemList?.map((items: any) => ({
                   id: items.id,
                   quantity: items.quantity,
                 })),
               };
-              Service.OrderUpdateCart(updatedCartPayload).then(() => {
-                if (loginDetails?.success) {
-                  // const orderPlace = {
-                  //   cartId: cartRes.data.data.cart.id,
-                  //   tenant: cartRes.data.data.cart.tenant,
-                  //   appUser: cartRes.data.data.cart.appUser,
-                  // };
-                  Service.OrderPlace(updatedCartPayload).then(() => {
-                    if (loginDetails?.success) {
+              Service.OrderUpdateCart(updatedCartPayload).then((updateCartRes) => {
+                if (updateCartRes.data.success) {
+                  const newOrderPlace = {
+                    cartId: item.data.data.cart.id,
+                    tenant: item.data.data.cart.tenant,
+                    appUser: item.data.data.cart.appUser
+                  }
+                  Service.OrderPlace(newOrderPlace).then((orderPlaceRes) => {
+                    if (orderPlaceRes.data.success) {
                       setIsLoader(false);
-                      // console.log('Order place', orderItem);
+                      setIsNotify(true);
+                      setNotifyMessage({
+                        text: orderPlaceRes.data.message,
+                        type: 'success',
+                      });
                       navigate(-1);
+                    } else {
+                      setIsLoader(false);
+                      setIsNotify(true);
+                      setNotifyMessage({
+                        text: orderPlaceRes.data.message,
+                        type: 'error',
+                      });
                     }
                     // console.log('Cart REs', cartRes);
                   });
@@ -189,10 +244,10 @@ function OrdersCreatePage() {
   // };
 
   const handlePaymentChange = () =>
-    // event: any
-    {
-      // setCashCheck(event.target.value);
-    };
+  // event: any
+  {
+    // setCashCheck(event.target.value);
+  };
 
   const handleUserChange = (event: any) => {
     // console.log('enven', event);
@@ -213,6 +268,7 @@ function OrdersCreatePage() {
   // const handleServiceChange = (event: SelectChangeEvent) => {
   //   setService(event.target.value as string);
   // };
+
   const removeQuantity = (index: number) => {
     const item = itemList[index];
     const qty = item.quantity - 1;
@@ -227,6 +283,7 @@ function OrdersCreatePage() {
       });
     }
   };
+
   const addQuantity = (index: number) => {
     const item = itemList[index];
     const qty = item.quantity + 1;
@@ -293,8 +350,6 @@ function OrdersCreatePage() {
     }
   }, [watch('category'), watch('categoriesItem')]);
 
-  // console.log("ID", watch("categoriesItem"));
-
   // const handleUserInput = (event: any) => {
   //   // console.log('enven', event.target.value);
   //   setUserIdentifier(event.target.value);
@@ -344,6 +399,9 @@ function OrdersCreatePage() {
     // );
   };
 
+  console.log("itemList", itemList);
+
+
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <Notify
@@ -355,46 +413,63 @@ function OrdersCreatePage() {
       <div className="container">
         <div className="grid grid-cols-12 gap-3 py-2">
           <div className="col-span-7 rounded-lg bg-white py-5 px-4 shadow-lg">
-            <div className="flex items-center justify-center">
-              <div className="mx-2">
-                <FormControl className="FormControl" variant="standard">
-                  <CustomDropDown
-                    border="1px"
-                    validateRequired
-                    customWidth="2xl:w-[300px] w-[200px]"
-                    id="category"
-                    alternativeId="categoriesItem"
-                    control={control}
-                    error={errors}
-                    register={register}
-                    setValue={setValue}
-                    options={{ roles: catList }}
-                    customClassInputTitle="font-bold"
-                    inputTitle=""
-                    defaultValue="Select Category"
-                  />
-                </FormControl>
+            <div className="flex items-center justify-between">
+              <div className='flex items-center'>
+                <div className="mx-2">
+                  <FormControl className="FormControl" variant="standard">
+                    <CustomDropDown
+                      border="1px"
+                      validateRequired
+                      customWidth="2xl:w-[300px] w-[200px]"
+                      id="category"
+                      alternativeId="categoriesItem"
+                      control={control}
+                      error={errors}
+                      register={register}
+                      setValue={setValue}
+                      options={{ roles: catList }}
+                      customClassInputTitle="font-bold"
+                      inputTitle=""
+                      defaultValue="Select Category"
+                    />
+                  </FormControl>
+                </div>
+                <div>
+                  <FormControl className="FormControl" variant="standard">
+                    <CustomMultipleSelectBox
+                      valuesBoxBgColor="bg-transparent"
+                      border="1px"
+                      callback={handleMultipleSelectCallback}
+                      validateRequired
+                      customWidth="2xl:w-[300px] w-[200px]"
+                      id="categoriesItem"
+                      control={control}
+                      error={errors}
+                      setValue={setValue}
+                      register={register}
+                      options={{ roles: catItemList }}
+                      customClassInputTitle="font-bold"
+                      inputTitle=""
+                      defaultVal="-- Select Category items --"
+                    />
+                  </FormControl>
+                </div>
               </div>
-              <div>
-                <FormControl className="FormControl" variant="standard">
-                  <CustomMultipleSelectBox
-                    valuesBoxBgColor="bg-transparent"
-                    border="1px"
-                    callback={handleMultipleSelectCallback}
-                    validateRequired
-                    customWidth="2xl:w-[300px] w-[200px]"
-                    id="categoriesItem"
-                    control={control}
-                    error={errors}
-                    setValue={setValue}
-                    register={register}
-                    options={{ roles: catItemList }}
-                    customClassInputTitle="font-bold"
-                    inputTitle=""
-                    defaultVal="-- Select Category items --"
-                  />
-                </FormControl>
-              </div>
+              {promoList?.length > 0 &&
+                <div onClick={() => setIsOpenPromoDialog(true)} className='cursor-pointer'>
+                  <img src={assets.images.ReferralCodeIcon} alt='referral-code' className='h-10 w-10' />
+                  {/* <CustomButton
+                    title='Promotion List'
+                    buttonType='button'
+                    className="btn-black-fill"
+                    onclick={() => setIsOpenPromoDialog(true)}
+                    sx={{
+                      marginRight: '0.5rem',
+                      padding: '0.375rem 1.5rem !important',
+                    }}
+                  /> */}
+                </div>
+              }
             </div>
             <div className="col-span-12 mt-3">
               <table className="avatar-table no-border-table table-auto">
@@ -604,10 +679,11 @@ function OrdersCreatePage() {
                 </div>
                 <div>
                   <CustomButton
+                    disabled={isLoginLoader || itemList?.length <= 0}
                     onclick={handleLogin}
                     buttonType="button"
                     title="Login"
-                    className="btn-black-fill"
+                    className={`${itemList?.length <= 0 ? "btn-gray-fill" : "btn-black-fill"}`}
                     sx={{
                       padding: '0.375rem 2rem !important',
                       width: '100%',
@@ -638,6 +714,40 @@ function OrdersCreatePage() {
                 </div>
               )}
               <Divider flexItem className="my-5" />
+              {promoList?.length > 0 && (
+                <>
+                  <div className="flex items-center justify-between py-2">
+                    <div className="font-open-sans font-bold text-neutral-900">
+                      Add Promo Code
+                    </div>
+                    <div className="font-open-sans text-base font-bold text-neutral-900">
+                      <div className="border-[1px] border-[#A3A3A3] rounded-md">
+                        <FormControl className="FormControl" variant="standard">
+                          <Input
+                            // {...register('name', {
+                            //   required: true,
+                            //   pattern: PATTERN.CHAR_NUM_DASH,
+                            //   validate: (value) => value.length <= 100,
+                            // })}
+                            onChange={(val) => setPromoCode(val.target.value)}
+                            className="FormInput text-sm px-1"
+                            id="PromoCode"
+                            name="PromoCode"
+                            placeholder="Enter Promo Code"
+                            disableUnderline
+                            startAdornment={(
+                              <InputAdornment position="start">
+                                <PromoCodeIcon />
+                              </InputAdornment>
+                            )}
+                          />
+                        </FormControl>
+                      </div>
+                    </div>
+                  </div>
+                  <Divider flexItem className="my-5" />
+                </>
+              )}
               <div className="my-4">
                 <div className="font-open-sans text-lg font-semibold text-neutral-900">
                   Total Amount
@@ -650,17 +760,29 @@ function OrdersCreatePage() {
                     ${totalAmount.toFixed(2)}
                   </div>
                 </div>
-                {/* <div className="flex items-center justify-between py-2">
+                <div className="flex items-center justify-between py-2">
                   <div className="font-open-sans text-xs font-normal text-neutral-900">
-                    Discount
+                    Discount {discountedValue?.discountType === "Percentage" ? `(${Number(discountedValue?.value).toFixed(0)}%)` : ''}
                   </div>
                   <div className="font-open-sans text-sm font-bold text-neutral-900">
-                    $0.00
+                    ${discountedValue?.value > 0 && promoCode ?
+                      discountedValue?.discountType === "Amount" ?
+                        Number(discountedValue?.value).toFixed(2) :
+                        `${discountedPercentageValue}`
+                      : '0.00'}
+                  </div>
+                </div>
+                {/* <div className="flex items-center justify-between py-2">
+                  <div className="font-open-sans text-xs font-normal text-neutral-900">
+                    Total Discounted Amount
+                  </div>
+                  <div className="font-open-sans text-sm font-bold text-neutral-900">
+                    ${discountedTotalAmount ? discountedTotalAmount.toFixed(2) : "0.00"}
                   </div>
                 </div> */}
                 <div className="flex items-center justify-between py-2">
                   <div className="font-open-sans text-xs font-normal text-neutral-900">
-                    GST {authState.user.tenantConfig.gstPercentage}%
+                    GST ({authState.user.tenantConfig.gstPercentage}%)
                   </div>
                   <div className="font-open-sans text-sm font-bold text-neutral-900">
                     ${gstAmount.toFixed(2)}
@@ -673,7 +795,7 @@ function OrdersCreatePage() {
                   Grand Total
                 </div>
                 <div className="font-open-sans text-sm font-bold text-neutral-900">
-                  ${grandTotal.toFixed(2)}
+                  ${grandTotal ? grandTotal.toFixed(2) : '0.00'}
                 </div>
               </div>
               <Button
@@ -681,11 +803,11 @@ function OrdersCreatePage() {
                 type="button"
                 onClick={onSubmit}
                 color="inherit"
-                className={`w-full rounded-lg ${
-                  loginDetails === null ? 'bg-neutral-400' : 'bg-neutral-900'
-                } font-open-sans text-base font-semibold text-gray-50`}
+                className={`w-full rounded-lg 
+                ${loginDetails === null ? 'bg-neutral-400' : 'bg-neutral-900'
+                  } font-open-sans text-base font-semibold text-gray-50`}
               >
-                {isLoader ? (
+                {isLoader && loginDetails !== null ? (
                   <CircularProgress size="25px" color="inherit" />
                 ) : (
                   <span>Submit</span>
@@ -695,6 +817,11 @@ function OrdersCreatePage() {
           </div>
         </div>
       </div>
+      <PromotionListPopup
+        promoList={promoList}
+        openFormDialog={isOpenPromoDialog}
+        setOpenFormDialog={setIsOpenPromoDialog}
+      />
     </LocalizationProvider>
   );
 }

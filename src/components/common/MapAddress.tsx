@@ -51,14 +51,14 @@ function MapAddress({ address, zoom }: Props) {
           setIsError(false);
           const { location } = results[0].geometry;
           if (location && location.lat() && location.lng()) {
-            // const newMarker = new google.maps.Marker({
-            //   position: location,
-            //   map,
-            //   title: address,
-            //   icon: assets.images.iconMap,
-            //   draggable: false,
-            //   animation: google.maps.Animation.DROP,
-            // });
+            new google.maps.Marker({
+              position: location,
+              map,
+              title: address,
+              icon: assets.images.iconMap,
+              draggable: false,
+              animation: google.maps.Animation.DROP,
+            });
             // setMarker(newMarker);
             map.setCenter(location);
           } else {

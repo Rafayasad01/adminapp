@@ -27,6 +27,7 @@ import twitter from './images/Twitter.svg';
 import youtube from './images/Youtube.svg';
 import whatsapp from './images/Whatsapp.svg';
 import imageIcon from './images/image-icon.png';
+import ReferralCodeIcon from './images/referral-code.png';
 
 import activeShopsIcon from './images/active-shops-icon.svg';
 import inactiveShopsIcon from './images/inactive-shops-icon.svg';
@@ -89,7 +90,8 @@ const assets = {
     addImg,
     userPermissionIcon,
     dummyimg,
-    defaultLogo
+    defaultLogo,
+    ReferralCodeIcon
   },
   tempImages: {
     wash,

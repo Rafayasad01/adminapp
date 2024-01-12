@@ -53,12 +53,12 @@ const links = [
     permission: 'Dashboard List',
     icon: <GridViewOutlinedIcon fontSize="inherit" />,
   },
-  {
-    name: 'Carts',
-    path: 'carts',
-    permission: 'Cart List',
-    icon: <ShoppingCartOutlinedIcon fontSize="inherit" />,
-  },
+  // {
+  //   name: 'Carts',
+  //   path: 'carts',
+  //   permission: 'Cart List',
+  //   icon: <ShoppingCartOutlinedIcon fontSize="inherit" />,
+  // },
   {
     name: 'Orders',
     path: 'orders',

@@ -379,7 +379,7 @@ function SuperAdminTenantCreatePopup({
                         'Trial Mode limit is required in numbers',
                       value: 15,
                       validate: (value: any) =>
-                        VALIDATE_NON_NEGATIVE_NUM_AND_CHECK_LENGTH(value),
+                        VALIDATE_NON_NEGATIVE_NUM_AND_CHECK_LENGTH(value, 10),
                     })}
                     type="number"
                     id="trialModeLimit"

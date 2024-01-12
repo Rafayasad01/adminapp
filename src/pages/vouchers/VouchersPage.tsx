@@ -22,6 +22,7 @@ import { NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
 import { listingRolePermission } from '../../utils/helper';
 import VouchersPromoCreatePopup from './VouchersPromoCreatePopup';
 import VouchersPromoEditPopup from './VouchersPromoEditPopup';
+import Switch from '@mui/material/Switch';
 // import VouchersReferralCreatePopup from './VouchersReferralCreatePopup';
 
 const options = ['Edit', 'Delete'];
@@ -246,6 +247,44 @@ function VouchersPage() {
       });
   };
 
+  const handleSwitchChange = (event: any, id: string) => {
+    setIsLoader(true);
+    if (listingRolePermission(dataRole, 'Category Update Status')) {
+      const data = {
+        id: id,
+        isActive: event.target.checked,
+        updatedBy: authState.user.id,
+      };
+      Service.updateStatus(data).then((updateItem) => {
+        if (updateItem.data.success) {
+          setIsLoader(false);
+          setList((newArr: any) => {
+            return newArr.map((item: any) => {
+              if (item.id === id) {
+                item.isActive = updateItem.data.data.isActive;
+                item.status = updateItem.data.data.status;
+              }
+              return { ...item };
+            });
+          });
+        } else {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: updateItem.data.message,
+            type: 'error',
+          });
+        }
+      });
+    } else {
+      setIsNotify(true);
+      setNotifyMessage({
+        text: NOT_AUTHORIZED_MESSAGE,
+        type: 'warning',
+      });
+    }
+  };
+
   return isLoader ? (
     <Loader />
   ) : (
@@ -336,6 +375,8 @@ function VouchersPage() {
                   <th>Min Amount</th>
                   <th>Type</th>
                   <th>Redeem</th>
+                  <th>Limitation</th>
+                  <th>User Redeem</th>
                   <th>Status</th>
                   <th>&nbsp;</th>
                 </tr>
@@ -349,7 +390,7 @@ function VouchersPage() {
                           <div className="avatar flex flex-row items-center">
                             <div className="flex flex-col items-start justify-start">
                               <span className="text-sm font-semibold">
-                                {item.name}
+                                {item.voucherCode}
                               </span>
                               <span className="text-xs font-normal text-[#6A6A6A]">
                                 {item.type}
@@ -367,14 +408,16 @@ function VouchersPage() {
                         <td>${Number(item.minAmount)}</td>
                         <td>{item.discountType}</td>
                         <td>
-                          {item.maxRedeem} - {item.redeemCount}
+                          {item.isUnlimitedRedeem ? '0' : `${item.maxRedeem} - ${item.redeemCount}`}
                         </td>
+                        <td><span className={`${item.isUnlimitedRedeem ? 'badge badge-success' : 'badge badge-primary'}`}>{item.isUnlimitedRedeem ? 'unlimited' : 'limited'}</span></td>
+                        <td>{item.maxUserRedeem}</td>
                         <td>
-                          {item.isActive ? (
-                            <span className="badge badge-success">ACTIVE</span>
-                          ) : (
-                            <span className="badge badge-danger">INACTIVE</span>
-                          )}
+                          {item.status === "Expired" || item.status === "Deleted" ? (
+                            <span className="badge badge-danger">{item.status}</span>
+                          ) : item.status === "Inactive" ? (
+                            <span className="badge badge-primary">{item.status}</span>
+                          ) : <span className="badge badge-success">{item.status}</span>}
                         </td>
                         <td>
                           <div className="flex flex-row-reverse">
@@ -389,6 +432,14 @@ function VouchersPage() {
                             >
                               <MoreVertIcon />
                             </IconButton>
+                            <Switch
+                              disabled={item.status === "Expired" || item.status === "Deleted" && true}
+                              checked={item.isActive}
+                              onChange={(
+                                event: React.ChangeEvent<HTMLInputElement>
+                              ) => handleSwitchChange(event, item.id)}
+                              inputProps={{ 'aria-label': 'controlled' }}
+                            />
                           </div>
                         </td>
                       </tr>

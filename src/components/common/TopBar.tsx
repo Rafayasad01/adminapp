@@ -102,9 +102,9 @@ function TopBar({ title, isNestedRoute = false }: Props) {
         </div>
       </Toolbar>
       {profileToggler &&
-        <div className='flex items-end justify-end'>
+        <div className='flex items-end justify-end absolute w-[98%] h-[135px] z-10'>
           <div className='bg-white 2xl:w-[11%] xl:w-[17%] p-1 rounded-md shadow-lg'>
-            <div onClick={() => navigate('../profile')} className='p-1 topbar-dd rounded-md text-black text-sm flex items-center cursor-pointer'>
+            <div onClick={() => navigate('/admin/dashboard/profile', { replace: true })} className='p-1 topbar-dd rounded-md text-black text-sm flex items-center cursor-pointer'>
               <PersonOutlineOutlinedIcon className='w-4' />
               <p className='mx-2'>View Profile</p>
             </div>

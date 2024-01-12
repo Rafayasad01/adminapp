@@ -7,8 +7,11 @@ import Input from '@mui/material/Input';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import Switch from '@mui/material/Switch';
-import React, { useState } from 'react';
-
+import React, { useEffect, useState } from 'react';
+import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import RadioButtonUncheckedOutlinedIcon from '@mui/icons-material/RadioButtonUncheckedOutlined';
+import Checkbox from '@mui/material/Checkbox';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import dayjs, { Dayjs } from 'dayjs';
@@ -23,6 +26,7 @@ import {
   MAX_LENGTH_EXCEEDED,
   PATTERN,
   VALIDATE_NON_NEGATIVE_NUM,
+  VALIDATE_NON_NEGATIVE_NUM_AND_CHECK_LENGTH,
 } from '../../utils/constants';
 
 type Props = {
@@ -35,24 +39,28 @@ interface CreateVoucherPayload {
   discountType: 'Amount' | 'Percentage';
   value: number;
   minAmount: number;
-  maxRedeem: number;
+  maxRedeem: any;
   validFrom: string;
   validTill: string;
   isActive: boolean;
   type: 'Referral' | 'Promo';
   backOfficeUser: string;
-  name: string;
+  voucherCode: string;
+  isUnlimitedRedeem: boolean;
+  maxUserRedeem: string;
 }
 
 interface CreateVoucherFromData {
   type: string;
   discountType: string;
-  name: string;
+  voucherCode: string;
   value: string;
   minProduct: string;
   minAmount: string;
-  maxRedeem: string;
+  maxRedeem: any;
   isActive: boolean;
+  isUnlimitedRedeem: boolean;
+  maxUserRedeem: string;
 }
 
 function VouchersPromoCreatePopup({
@@ -64,6 +72,8 @@ function VouchersPromoCreatePopup({
     register,
     handleSubmit,
     reset,
+    setValue,
+    watch,
     formState: { errors },
   } = useForm<CreateVoucherFromData>();
 
@@ -83,18 +93,28 @@ function VouchersPromoCreatePopup({
     const createVoucherPayload: CreateVoucherPayload = {
       type: data.type as 'Referral' | 'Promo',
       discountType: data.discountType as 'Amount' | 'Percentage',
-      name: data.name,
+      voucherCode: data.voucherCode,
       value: +data.value,
       minAmount: +data.minAmount,
-      maxRedeem: +data.maxRedeem,
+      maxRedeem: data.isUnlimitedRedeem ? 0 : data.maxRedeem,
       isActive: data.isActive,
       backOfficeUser: authState.user.id,
       validFrom: validFromDate?.toISOString() ?? '',
       validTill: validTillDate?.toISOString() ?? '',
+      isUnlimitedRedeem: data.isUnlimitedRedeem,
+      maxUserRedeem: data.maxUserRedeem
     };
     callback(createVoucherPayload);
-    reset();
+    // reset();
   };
+
+  useEffect(() => {
+    if (watch("isUnlimitedRedeem")) {
+      setValue("maxRedeem", 0)
+    } else {
+      setValue("maxUserRedeem", '0')
+    }
+  }, [watch("isUnlimitedRedeem")])
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -167,32 +187,6 @@ function VouchersPromoCreatePopup({
                   )}
                 </FormControl>
               </div>
-              <div className="FormField">
-                <FormControl className="FormControl" variant="standard">
-                  <label className="FormLabel">Coupon Code</label>
-                  <Input
-                    {...register('name', {
-                      required: true,
-                      pattern: PATTERN.CHAR_NUM_DASH,
-                      validate: (value) => value.length <= 100,
-                    })}
-                    className="FormInput"
-                    id="name"
-                    name="name"
-                    placeholder="Coupon Code"
-                    disableUnderline
-                  />
-                  {errors.name?.type === 'required' && (
-                    <ErrorSpanBox error="Coupon Code is required" />
-                  )}
-                  {errors.name?.type === 'pattern' && (
-                    <ErrorSpanBox error={INVALID_CHAR} />
-                  )}
-                  {errors.name?.type === 'validate' && (
-                    <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
-                  )}
-                </FormControl>
-              </div>
               <div className="FormFields">
                 <DatePickerField
                   datePickerLabel="Valid From"
@@ -208,6 +202,30 @@ function VouchersPromoCreatePopup({
                 />
               </div>
               <div className="FormFields">
+                <FormControl className="FormControl" variant="standard">
+                  <label className="FormLabel">Voucher Code</label>
+                  <Input
+                    {...register('voucherCode', {
+                      required: true,
+                      pattern: PATTERN.CHAR_NUM_DASH,
+                      validate: (value) => value.length <= 100,
+                    })}
+                    className="FormInput"
+                    id="voucherCode"
+                    name="voucherCode"
+                    placeholder="Voucher Code"
+                    disableUnderline
+                  />
+                  {errors.voucherCode?.type === 'required' && (
+                    <ErrorSpanBox error="Coupon Code is required" />
+                  )}
+                  {errors.voucherCode?.type === 'pattern' && (
+                    <ErrorSpanBox error={INVALID_CHAR} />
+                  )}
+                  {errors.voucherCode?.type === 'validate' && (
+                    <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
+                  )}
+                </FormControl>
                 <FormControl className="FormControl" variant="standard">
                   <label className="FormLabel">Offer Value</label>
                   <Input
@@ -248,14 +266,16 @@ function VouchersPromoCreatePopup({
                     <ErrorSpanBox error={errors?.minAmount?.message} />
                   )}
                 </FormControl>
+                {/* {watch('isUnlimitedRedeem') === true && */}
                 <FormControl className="FormControl" variant="standard">
                   <label className="FormLabel">Max Redeem</label>
                   <Input
                     {...register('maxRedeem', {
-                      required: 'Max Redeem is required in numbers',
+                      required: watch('isUnlimitedRedeem') === false ? 'Max Redeem is required in numbers' : false,
                       validate: (value: any) =>
-                        VALIDATE_NON_NEGATIVE_NUM(value),
+                        VALIDATE_NON_NEGATIVE_NUM_AND_CHECK_LENGTH(value, 0),
                     })}
+                    disabled={watch('isUnlimitedRedeem')}
                     className="FormInput"
                     id="maxRedeem"
                     name="maxRedeem"
@@ -264,9 +284,10 @@ function VouchersPromoCreatePopup({
                     disableUnderline
                   />
                   {errors?.maxRedeem && (
-                    <ErrorSpanBox error={errors?.maxRedeem?.message} />
+                    <ErrorSpanBox error={(errors?.maxRedeem?.message)?.toString()} />
                   )}
                 </FormControl>
+                {/* } */}
               </div>
               <div className="FormField">
                 <FormControl className="FormControl" variant="standard">
@@ -281,6 +302,48 @@ function VouchersPromoCreatePopup({
                   />
                 </FormControl>
               </div>
+              <div className="FormField">
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      icon={
+                        <RadioButtonUncheckedOutlinedIcon
+                          style={{ color: '#1D1D1D' }}
+                        />
+                      }
+                      checkedIcon={
+                        <CheckCircleOutlinedIcon style={{ color: '#1D1D1D' }} />
+                      }
+                      {...register('isUnlimitedRedeem')}
+                    />
+                  }
+                  label="Enable Max Users Offer"
+                />
+              </div>
+              {watch('isUnlimitedRedeem') === true && (
+                <div>
+                  <FormControl className="FormControl" variant="standard">
+                    <label className="FormLabel">Max User Redeem</label>
+                    <Input
+                      className="FormInput"
+                      {...register('maxUserRedeem', {
+                        required:
+                          watch('isUnlimitedRedeem') === true &&
+                          'Max users redeem is required in numbers',
+                        validate: (value: any) =>
+                          VALIDATE_NON_NEGATIVE_NUM(value),
+                      })}
+                      type="number"
+                      id="maxUserRedeem"
+                      placeholder="Enter Max User Redeem limit"
+                      disableUnderline
+                    />
+                    {errors?.maxUserRedeem && (
+                      <ErrorSpanBox error={errors?.maxUserRedeem?.message} />
+                    )}
+                  </FormControl>
+                </div>
+              )}
             </div>
             <div className="FormFooter">
               <Button
@@ -306,8 +369,8 @@ function VouchersPromoCreatePopup({
             </div>
           </form>
         </div>
-      </Dialog>
-    </LocalizationProvider>
+      </Dialog >
+    </LocalizationProvider >
   );
 }
 

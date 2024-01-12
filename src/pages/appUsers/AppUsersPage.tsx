@@ -11,6 +11,8 @@ import InputAdornment from '@mui/material/InputAdornment';
 import Switch from '@mui/material/Switch';
 import TablePagination from '@mui/material/TablePagination';
 import dayjs from 'dayjs';
+import Tab from '@mui/material/Tab';
+import Tabs from '@mui/material/Tabs';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ActionMenu from '../../components/common/ActionMenu';
@@ -25,6 +27,8 @@ import { NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
 import { CheckRolePermission, listingRolePermission } from '../../utils/helper';
 import AppUserCreatePopup from './AppUserCreatePopup';
 import AppUserUpdatePopup from './AppUserUpdatePopup';
+import AppUserTab from './AppUserTab';
+import AppUserOtherTab from './AppUserOtherTab';
 // import CustomersCreatePopup from './CustomersCreatePopup';
 // import CustomersEditPopup from './CustomersEditPopup';
 
@@ -33,18 +37,17 @@ function AppUsersPage() {
   const dataRole = useAppSelector(
     (state: any) => state?.persisitReducer?.roleState?.role?.permissions
   );
-  const navigate = useNavigate();
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(0);
-  const [total, setTotal] = useState(0);
   const [list, setList] = useState<any>([]);
   const [editFormData, setEditFormData] = useState<any>(null);
+  const [total, setTotal] = useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const [actionMenuItemid, setActionMenuItemid] = React.useState('');
-  const [actionMenuAnchorEl, setActionMenuAnchorEl] =
-    useState<null | HTMLElement>(null);
-  const actionMenuOpen = Boolean(actionMenuAnchorEl);
-  const actionMenuOptions = ['Detail', 'Edit', 'Delete'];
+  const [actionMenuItemid, setActionMenuItemid] = React.useState<any>('');
+  // const [actionMenuAnchorEl, setActionMenuAnchorEl] =
+  //   useState<null | HTMLElement>(null);
+  // const actionMenuOpen = Boolean(actionMenuAnchorEl);
+  // const actionMenuOptions = ['Detail', 'History', 'Edit', 'Delete'];
   const [emptyVariable] = useState(null);
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
@@ -55,8 +58,13 @@ function AppUsersPage() {
   const [dialogText] = useState<any>(
     'Are you sure you want to delete this customer ?'
   );
+  const [selectedTab, setSelectedTab] = useState('APP USER');
 
-  const appUserRoleLov = [
+  const handleTabChange = (event: any, newValue: any) => {
+    setSelectedTab(newValue);
+  };
+
+  let appUserRoleLov = [
     {
       id: 'Driver',
       name: 'Driver',
@@ -87,58 +95,8 @@ function AppUsersPage() {
       setPage(newPage);
       Service.appListSearch(
         authState.user.tenant,
+        selectedTab === "APP USER" ? 'App' : 'Other',
         searchTxt,
-        newPage,
-        rowsPerPage
-      ).then((item) => {
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      });
-    }
-  };
-  const handleChangePage = (
-    event: React.MouseEvent<HTMLButtonElement> | null,
-    newPage: number
-  ) => {
-    setPage(newPage);
-    // offset? ,limit rowsperpage hoga ofset page * rowsperPage
-    if (search === '' || search === null || search === undefined) {
-      Service.appList(authState.user.tenant, newPage, rowsPerPage).then(
-        (item) => {
-          setList(item.data.data.list);
-          setTotal(item.data.data.total);
-        }
-      );
-    } else {
-      Service.appListSearch(
-        authState.user.tenant,
-        search,
-        newPage,
-        rowsPerPage
-      ).then((item) => {
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      });
-    }
-  };
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const newRowperPage = parseInt(event.target.value, 10);
-    const newPage = 0;
-    setRowsPerPage(newRowperPage);
-    setPage(newPage);
-    if (search === '' || search === null || search === undefined) {
-      Service.appList(authState.user.tenant, newPage, rowsPerPage).then(
-        (item) => {
-          setList(item.data.data.list);
-          setTotal(item.data.data.total);
-        }
-      );
-    } else {
-      Service.appListSearch(
-        authState.user.tenant,
-        search,
         newPage,
         rowsPerPage
       ).then((item) => {
@@ -181,106 +139,20 @@ function AppUsersPage() {
   };
 
   const statusCancelHandler = () => {
-    deleteHandler(actionMenuItemid);
-  };
-
-  const manuHandler = (option: string) => {
-    setIsLoader(true);
-    if (option === 'Edit') {
-      if (listingRolePermission(dataRole, 'Customer Update')) {
-        Service.appUserEdit(actionMenuItemid).then((item: any) => {
-          if (item.data.success) {
-            setIsLoader(false);
-            setOpenEditFormDialog(true);
-            setEditFormData(item.data.data);
-          } else {
-            setIsLoader(false);
-            setIsNotify(true);
-            setNotifyMessage({
-              text: item.data.message,
-              type: 'error',
-            });
-          }
-        });
-      } else {
-        setIsNotify(true);
-        setNotifyMessage({
-          text: NOT_AUTHORIZED_MESSAGE,
-          type: 'warning',
-        });
-      }
-    } else if (option === 'Address') {
-      CheckRolePermission(
-        'Customer Address Detail',
-        dataRole,
-        navigate,
-        `address/${actionMenuItemid}`
-      );
-      // navigate(`address/${actionMenuItemid}`);
-    } else if (option === 'Delete') {
-      if (listingRolePermission(dataRole, 'Customer Delete')) {
-        setIsLoader(true);
-        const data = {
-          id: actionMenuItemid,
-          updatedBy: authState.user.id,
-        };
-        Service.appUserDelete(data)
-          .then((item: any) => {
-            if (item.data.success) {
-              setIsLoader(false);
-              setIsNotify(true);
-              setNotifyMessage({
-                text: item.data.message,
-                type: 'success',
-              });
-              setList((newArr: any) => {
-                return newArr.filter(
-                  (newItem: any) => newItem.id !== item.data.data.id
-                );
-              });
-            } else {
-              setIsLoader(false);
-              setIsNotify(true);
-              setNotifyMessage({
-                text: item.data.message,
-                type: 'error',
-              });
-            }
-          })
-          .catch((err: Error) => {
-            setIsLoader(false);
-            setIsNotify(true);
-            setNotifyMessage({
-              text: err.message,
-              type: 'error',
-            });
-          });
-      } else {
-        setIsNotify(true);
-        setNotifyMessage({
-          text: NOT_AUTHORIZED_MESSAGE,
-          type: 'warning',
-        });
-      }
-    } else if (option === 'Detail') {
-      CheckRolePermission(
-        'Customer Detail',
-        dataRole,
-        navigate,
-        `detail/${actionMenuItemid}`
-      );
-      navigate(`detail/${actionMenuItemid}`);
-    }
+    deleteHandler(actionMenuItemid?.id);
   };
 
   useEffect(() => {
+    setIsLoader(true);
     if (listingRolePermission(dataRole, 'Customer List')) {
-      Service.appList(authState.user.tenant, page, rowsPerPage)
+      Service.appList(authState.user.tenant, selectedTab === "APP USER" ? 'App' : 'Other', page, rowsPerPage)
         .then((item: any) => {
           if (item.data.success) {
             setIsLoader(false);
             setList(item.data.data.list);
             setTotal(item.data.data.total);
+          } else {
+            setIsLoader(false);
           }
         })
         .catch((err) => {
@@ -291,11 +163,13 @@ function AppUsersPage() {
             type: 'error',
           });
         });
+    } else {
+      setIsLoader(false);
     }
-  }, [emptyVariable]);
+  }, [emptyVariable, selectedTab]);
 
   const createFormHandler = (data: any) => {
-    setIsLoader(true);
+    // setIsLoader(true);
     const formData = {
       firstName: data.firstName,
       lastName: data.lastName,
@@ -309,6 +183,13 @@ function AppUsersPage() {
       tenant: authState.user.tenant,
       createdBy: authState.user.id,
     };
+
+    let dataRender = false;
+    if (data.appuserRole === 'Driver' && selectedTab === 'OTHER') {
+      dataRender = true
+    } else if (data.appuserRole === 'App' && selectedTab === 'APP USER') {
+      dataRender = true
+    }
     Service.appCreateUser(formData)
       .then((item) => {
         if (item.data.success) {
@@ -318,7 +199,9 @@ function AppUsersPage() {
             text: item.data.message,
             type: 'success',
           });
-          setList([...list, item.data.data]);
+          if (dataRender) {
+            setList([...list, item.data.data]);
+          }
         } else {
           setIsLoader(false);
           setIsNotify(true);
@@ -341,7 +224,7 @@ function AppUsersPage() {
   const updateFormHandler = (data: any) => {
     setIsLoader(true);
     const formData = {
-      id: actionMenuItemid,
+      id: actionMenuItemid?.id,
       firstName: data.firstName,
       lastName: data.lastName,
       phone: data.phone ? data.phone : null,
@@ -350,6 +233,12 @@ function AppUsersPage() {
       licenseNumber: data.licenseNumber ? data.licenseNumber : null,
       updatedBy: authState.user.id,
     };
+    let dataRender = false;
+    if (data.appuserRole === 'Driver' && selectedTab === 'OTHER') {
+      dataRender = true
+    } else if (data.appuserRole === 'App' && selectedTab === 'APP USER') {
+      dataRender = true
+    }
     Service.appUpdateUser(formData)
       .then((item) => {
         if (item.data.success) {
@@ -359,15 +248,17 @@ function AppUsersPage() {
             text: item.data.message,
             type: 'success',
           });
-          for (let i = 0; i < list.length; i += 1) {
-            if (list[i].id === item.data.data.id) {
-              list[i].firstName = item.data.data.firstName;
-              list[i].lastName = item.data.data.lastName;
-              list[i].phone = item.data.data.phone;
-              list[i].postalCode = item.data.data.postalCode;
-              list[i].licenseNumber = item.data.data.licenseNumber;
-              list[i].userType = item.data.data.userType;
-              // if (data.avatar !== null) list[i].avatar = item.data.data.avatar;
+          if (dataRender) {
+            for (let i = 0; i < list.length; i += 1) {
+              if (list[i].id === item.data.data.id) {
+                list[i].firstName = item.data.data.firstName;
+                list[i].lastName = item.data.data.lastName;
+                list[i].phone = item.data.data.phone;
+                list[i].postalCode = item.data.data.postalCode;
+                list[i].licenseNumber = item.data.data.licenseNumber;
+                list[i].userType = item.data.data.userType;
+                // if (data.avatar !== null) list[i].avatar = item.data.data.avatar;
+              }
             }
           }
         } else {
@@ -387,37 +278,6 @@ function AppUsersPage() {
           type: 'error',
         });
       });
-  };
-
-  const handleSwitchChange = (event: any, id: string) => {
-    if (listingRolePermission(dataRole, 'Customer Update Status')) {
-      setIsLoader(true);
-      const data = {
-        id,
-        isActive: event.target.checked,
-        updatedBy: authState.user.id,
-      };
-      Service.appUpdateStatus(data).then((updateItem) => {
-        if (updateItem.data.success) {
-          setIsLoader(false);
-          setList((newArr: any) => {
-            return newArr.map((item: any) => {
-              if (item.id === updateItem.data.data.id) {
-                item.isActive = updateItem.data.data.isActive;
-              }
-              return { ...item };
-            });
-          });
-        }
-      });
-    } else {
-      setIsLoader(false);
-      setIsNotify(true);
-      setNotifyMessage({
-        text: NOT_AUTHORIZED_MESSAGE,
-        type: 'warning',
-      });
-    }
   };
 
   return isLoader ? (
@@ -480,118 +340,62 @@ function AppUsersPage() {
               </div>
             </div>
           </div>
-          <div className="mt-3 grid grid-cols-none">
-            <table className="table-border table-auto">
-              <thead>
-                <tr>
-                  <th>Customer</th>
-                  <th>Email</th>
-                  <th>Phone</th>
-                  <th>Postal Code</th>
-                  <th>User Type</th>
-                  <th>Status</th>
-                  <th>&nbsp;</th>
-                </tr>
-              </thead>
-              <tbody>
-                {list &&
-                  list.map((item: any, index: number) => {
-                    return (
-                      <tr key={item.id}>
-                        <td>
-                          <div className="avatar flex flex-row items-center">
-                            {item.avatar ? (
-                              <img src={item.avatar} alt="" />
-                            ) : (
-                              <Avatar
-                                className="avatar flex flex-row items-center"
-                                sx={{
-                                  bgcolor: '#1D1D1D',
-                                  width: 35,
-                                  height: 35,
-                                  textTransform: 'uppercase',
-                                  fontSize: '14px',
-                                  marginRight: '10px',
-                                }}
-                              >
-                                {item.firstName?.charAt(0)}
-                                {item.lastName?.charAt(0)}
-                              </Avatar>
-                            )}
-
-                            <div className="flex flex-col items-start justify-start">
-                              <span className="text-sm font-semibold">
-                                {`${item.firstName} ${item.lastName}`}
-                              </span>
-                              <span className="text-xs font-normal text-[#6A6A6A]">
-                                {dayjs(item.createdDate).isValid()
-                                  ? dayjs(item.createdDate)?.format(
-                                      'MMMM DD, YYYY'
-                                    )
-                                  : '--'}
-                              </span>
-                            </div>
-                          </div>
-                        </td>
-                        <td>{item.email}</td>
-                        <td>{item.phone}</td>
-                        <td>{item.postalCode ? item.postalCode : '--'}</td>
-                        <td>{item.userType}</td>
-                        <td>
-                          {item.isActive ? (
-                            <span className="badge badge-success">ACTIVE</span>
-                          ) : (
-                            <span className="badge badge-danger">INACTIVE</span>
-                          )}
-                        </td>
-                        <td>
-                          <div className="flex flex-row-reverse">
-                            <IconButton
-                              className="btn-dot"
-                              aria-label="more"
-                              id="long-button"
-                              aria-controls={
-                                actionMenuOpen ? 'long-menu' : undefined
-                              }
-                              aria-expanded={
-                                actionMenuOpen ? 'true' : undefined
-                              }
-                              aria-haspopup="true"
-                              onClick={(
-                                event: React.MouseEvent<HTMLElement>
-                              ) => {
-                                setActionMenuItemid(list[index].id);
-                                setActionMenuAnchorEl(event.currentTarget);
-                              }}
-                            >
-                              <MoreVertIcon />
-                            </IconButton>
-                            <Switch
-                              checked={item.isActive}
-                              onChange={(
-                                event: React.ChangeEvent<HTMLInputElement>
-                              ) => handleSwitchChange(event, list[index].id)}
-                              inputProps={{ 'aria-label': 'controlled' }}
-                            />
-                          </div>
-                        </td>
-                      </tr>
-                    );
-                  })}
-              </tbody>
-            </table>
-          </div>
-          {list?.length < 1 ? (
-            <CustomText noroundedborders text="No Records Found" />
-          ) : null}
-          <TablePagination
-            component="div"
-            count={total}
-            page={page}
-            onPageChange={handleChangePage}
-            rowsPerPage={rowsPerPage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-          />
+          <Tabs value={selectedTab} onChange={handleTabChange}>
+            <Tab
+              label="app user"
+              value="APP USER"
+            />
+            <Tab
+              label="other"
+              value="OTHER"
+            />
+          </Tabs>
+          {selectedTab === 'APP USER' && (
+            <AppUserTab
+              isLoader={isLoader}
+              setIsLoader={setIsLoader}
+              list={list}
+              setList={setList}
+              total={total}
+              setTotal={setTotal}
+              page={page}
+              search={search}
+              setPage={setPage}
+              rowsPerPage={rowsPerPage}
+              setRowsPerPage={setRowsPerPage}
+              actionMenuItemid={actionMenuItemid}
+              setActionMenuItemid={setActionMenuItemid}
+              setEditFormData={setEditFormData}
+              setOpenEditFormDialog={setOpenEditFormDialog}
+              isNotify={isNotify}
+              setIsNotify={setIsNotify}
+              notifyMessage={notifyMessage}
+              setNotifyMessage={setNotifyMessage}
+            />
+          )}
+          {selectedTab === 'OTHER' && (
+            <AppUserOtherTab
+              isLoader={isLoader}
+              setIsLoader={setIsLoader}
+              list={list}
+              setList={setList}
+              total={total}
+              setTotal={setTotal}
+              page={page}
+              search={search}
+              setPage={setPage}
+              rowsPerPage={rowsPerPage}
+              setRowsPerPage={setRowsPerPage}
+              actionMenuItemid={actionMenuItemid}
+              setActionMenuItemid={setActionMenuItemid}
+              setEditFormData={setEditFormData}
+              setOpenEditFormDialog={setOpenEditFormDialog}
+              isNotify={isNotify}
+              setIsNotify={setIsNotify}
+              notifyMessage={notifyMessage}
+              setNotifyMessage={setNotifyMessage}
+            />
+          )}
         </div>
       </div>
       {cancelDialogOpen && (
@@ -603,15 +407,6 @@ function AppUsersPage() {
           callback={statusCancelHandler}
         />
       )}
-      {actionMenuAnchorEl && (
-        <ActionMenu
-          open={actionMenuOpen}
-          anchorEl={actionMenuAnchorEl}
-          setAnchorEl={setActionMenuAnchorEl}
-          options={actionMenuOptions}
-          callback={manuHandler}
-        />
-      )}
       <AppUserCreatePopup
         setIsNotify={setIsNotify}
         setNotifyMessage={setNotifyMessage}
@@ -619,6 +414,7 @@ function AppUsersPage() {
         setOpenFormDialog={setOpenFormDialog}
         callback={createFormHandler}
         appUserRoleLov={appUserRoleLov}
+        selectedTab={selectedTab}
       />
       <AppUserUpdatePopup
         setIsNotify={setIsNotify}

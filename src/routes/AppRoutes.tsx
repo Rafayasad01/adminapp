@@ -57,6 +57,7 @@ import ShopAdminUserDetailPage from '../pages/super-admin/tenat/user/SuperAdminU
 import SuperAdminUserPage from '../pages/super-admin/tenat/user/SuperAdminUserPage';
 import VouchersPage from '../pages/vouchers/VouchersPage';
 import DriverHistory from '../pages/orders/DriverHistory';
+import AppUserRewardHistory from '../pages/appUsers/AppUserRewardHistory';
 
 export const routeObjects: RouteObject[] = [
   {
@@ -312,6 +313,10 @@ export const routeObjects: RouteObject[] = [
               {
                 path: 'detail/:appuserId',
                 element: <AppUserDetailPage />,
+              },
+              {
+                path: 'reward-history/:userId',
+                element: <AppUserRewardHistory />,
               }
             ],
           },
