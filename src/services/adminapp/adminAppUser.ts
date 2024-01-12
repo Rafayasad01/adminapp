@@ -26,8 +26,15 @@ const appUserDelete = (data: any) => {
   return network.post(`${APP_PREFIX}/delete`, data);
 };
 
-const appList = (tenantId: string, userType: string, page: number, size: number) => {
-  return network.get(`${APP_PREFIX}/list/${tenantId}/${userType}/${page}/${size}`);
+const appList = (
+  tenantId: string,
+  userType: string,
+  page: number,
+  size: number
+) => {
+  return network.get(
+    `${APP_PREFIX}/list/${tenantId}/${userType}/${page}/${size}`
+  );
 };
 
 const appListSearch = (
@@ -88,14 +95,37 @@ const appUserScheduleEdit = (addressId: string) => {
 
 // reward history
 
-const appUserVocuherHistoryList = (appUserId: any, page: number, size: number) => {
-  return network.get(`voucher/history/list/${appUserId}/${page}/${size}`);
+const appUserVocuherHistoryList = (
+  appUserId: any,
+  page: number,
+  size: number
+) => {
+  return network.get(
+    `${APP_PREFIX}/voucher/history/list/${appUserId}/${page}/${size}`
+  );
 };
 
 const appUserVocuherHistoryDetails = (voucherHistoryId: any) => {
-  return network.get(`voucher/history/detail/${voucherHistoryId}`);
+  return network.get(
+    `${APP_PREFIX}/voucher/history/detail/${voucherHistoryId}`
+  );
 };
 
+const appUserLoyaltyHistoryList = (
+  appUserId: any,
+  page: number,
+  size: number
+) => {
+  return network.get(
+    `${APP_PREFIX}/loyalty/history/list/${appUserId}/${page}/${size}`
+  );
+};
+
+const appUserLoyaltyHistoryDetails = (loyaltyHistoryId: any) => {
+  return network.get(
+    `${APP_PREFIX}/loyalty/history/detail/${loyaltyHistoryId}`
+  );
+};
 
 export default {
   appLogin,
@@ -116,6 +146,8 @@ export default {
   appUserScheduleUpdate,
   appUserScheduleUpdateStatus,
   appUserScheduleEdit,
+  appUserVocuherHistoryList,
+  appUserLoyaltyHistoryList,
   appUserVocuherHistoryDetails,
-  appUserVocuherHistoryList
+  appUserLoyaltyHistoryDetails,
 };

@@ -102,19 +102,19 @@ function VouchersPromoCreatePopup({
       validFrom: validFromDate?.toISOString() ?? '',
       validTill: validTillDate?.toISOString() ?? '',
       isUnlimitedRedeem: data.isUnlimitedRedeem,
-      maxUserRedeem: data.maxUserRedeem
+      maxUserRedeem: data.maxUserRedeem,
     };
     callback(createVoucherPayload);
     // reset();
   };
 
   useEffect(() => {
-    if (watch("isUnlimitedRedeem")) {
-      setValue("maxRedeem", 0)
+    if (watch('isUnlimitedRedeem')) {
+      setValue('maxRedeem', 0);
     } else {
-      setValue("maxUserRedeem", '0')
+      setValue('maxUserRedeem', '0');
     }
-  }, [watch("isUnlimitedRedeem")])
+  }, [watch('isUnlimitedRedeem')]);
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -271,7 +271,10 @@ function VouchersPromoCreatePopup({
                   <label className="FormLabel">Max Redeem</label>
                   <Input
                     {...register('maxRedeem', {
-                      required: watch('isUnlimitedRedeem') === false ? 'Max Redeem is required in numbers' : false,
+                      required:
+                        watch('isUnlimitedRedeem') === false
+                          ? 'Max Redeem is required in numbers'
+                          : false,
                       validate: (value: any) =>
                         VALIDATE_NON_NEGATIVE_NUM_AND_CHECK_LENGTH(value, 0),
                     })}
@@ -284,7 +287,9 @@ function VouchersPromoCreatePopup({
                     disableUnderline
                   />
                   {errors?.maxRedeem && (
-                    <ErrorSpanBox error={(errors?.maxRedeem?.message)?.toString()} />
+                    <ErrorSpanBox
+                      error={errors?.maxRedeem?.message?.toString()}
+                    />
                   )}
                 </FormControl>
                 {/* } */}
@@ -369,8 +374,8 @@ function VouchersPromoCreatePopup({
             </div>
           </form>
         </div>
-      </Dialog >
-    </LocalizationProvider >
+      </Dialog>
+    </LocalizationProvider>
   );
 }
 

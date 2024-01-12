@@ -22,7 +22,11 @@ import '../../assets/css/PopupStyle.css';
 import { useAppSelector } from '../../redux/redux-hooks';
 import DatePickerField from './DatePickerField';
 import ErrorSpanBox from '../../components/common/ErrorSpanBox';
-import { PATTERN, VALIDATE_NON_NEGATIVE_NUM, VALIDATE_NON_NEGATIVE_NUM_AND_CHECK_LENGTH } from '../../utils/constants';
+import {
+  PATTERN,
+  VALIDATE_NON_NEGATIVE_NUM,
+  VALIDATE_NON_NEGATIVE_NUM_AND_CHECK_LENGTH,
+} from '../../utils/constants';
 
 type Props = {
   vouchersPromoEditDialog: boolean;
@@ -102,18 +106,19 @@ function VouchersPromoEditPopup({
       validFrom: validFromDate?.toISOString() ?? '',
       validTill: validTillDate?.toISOString() ?? '',
       isUnlimitedRedeem: data.isUnlimitedRedeem,
-      maxUserRedeem: data.isUnlimitedRedeem === false ? "0" : data.maxUserRedeem
+      maxUserRedeem:
+        data.isUnlimitedRedeem === false ? '0' : data.maxUserRedeem,
     };
     callback(item.id, updateVoucherPayload);
   };
 
   useEffect(() => {
-    if (watch("isUnlimitedRedeem")) {
-      setValue("maxRedeem", 0)
+    if (watch('isUnlimitedRedeem')) {
+      setValue('maxRedeem', 0);
     } else {
-      setValue("maxUserRedeem", '0')
+      setValue('maxUserRedeem', '0');
     }
-  }, [watch("isUnlimitedRedeem")])
+  }, [watch('isUnlimitedRedeem')]);
 
   useEffect(() => {
     reset(item);
@@ -257,7 +262,10 @@ function VouchersPromoEditPopup({
                   <label className="FormLabel">Max Redeem</label>
                   <Input
                     {...register('maxRedeem', {
-                      required: watch('isUnlimitedRedeem') === false ? 'Max Redeem is required in numbers' : false,
+                      required:
+                        watch('isUnlimitedRedeem') === false
+                          ? 'Max Redeem is required in numbers'
+                          : false,
                       validate: (value: any) =>
                         VALIDATE_NON_NEGATIVE_NUM_AND_CHECK_LENGTH(value, 0),
                     })}
@@ -271,7 +279,9 @@ function VouchersPromoEditPopup({
                     disableUnderline
                   />
                   {errors?.maxRedeem && (
-                    <ErrorSpanBox error={(errors?.maxRedeem?.message)?.toString()} />
+                    <ErrorSpanBox
+                      error={errors?.maxRedeem?.message?.toString()}
+                    />
                   )}
                 </FormControl>
               </div>
@@ -331,7 +341,6 @@ function VouchersPromoEditPopup({
                   </FormControl>
                 </div>
               )}
-
             </div>
             <div className="FormFooter">
               <Button

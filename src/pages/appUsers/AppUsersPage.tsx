@@ -64,7 +64,7 @@ function AppUsersPage() {
     setSelectedTab(newValue);
   };
 
-  let appUserRoleLov = [
+  const appUserRoleLov = [
     {
       id: 'Driver',
       name: 'Driver',
@@ -95,7 +95,7 @@ function AppUsersPage() {
       setPage(newPage);
       Service.appListSearch(
         authState.user.tenant,
-        selectedTab === "APP USER" ? 'App' : 'Other',
+        selectedTab === 'APP USER' ? 'App' : 'Other',
         searchTxt,
         newPage,
         rowsPerPage
@@ -145,7 +145,12 @@ function AppUsersPage() {
   useEffect(() => {
     setIsLoader(true);
     if (listingRolePermission(dataRole, 'Customer List')) {
-      Service.appList(authState.user.tenant, selectedTab === "APP USER" ? 'App' : 'Other', page, rowsPerPage)
+      Service.appList(
+        authState.user.tenant,
+        selectedTab === 'APP USER' ? 'App' : 'Other',
+        page,
+        rowsPerPage
+      )
         .then((item: any) => {
           if (item.data.success) {
             setIsLoader(false);
@@ -186,9 +191,9 @@ function AppUsersPage() {
 
     let dataRender = false;
     if (data.appuserRole === 'Driver' && selectedTab === 'OTHER') {
-      dataRender = true
+      dataRender = true;
     } else if (data.appuserRole === 'App' && selectedTab === 'APP USER') {
-      dataRender = true
+      dataRender = true;
     }
     Service.appCreateUser(formData)
       .then((item) => {
@@ -235,9 +240,9 @@ function AppUsersPage() {
     };
     let dataRender = false;
     if (data.appuserRole === 'Driver' && selectedTab === 'OTHER') {
-      dataRender = true
+      dataRender = true;
     } else if (data.appuserRole === 'App' && selectedTab === 'APP USER') {
-      dataRender = true
+      dataRender = true;
     }
     Service.appUpdateUser(formData)
       .then((item) => {
@@ -341,14 +346,8 @@ function AppUsersPage() {
             </div>
           </div>
           <Tabs value={selectedTab} onChange={handleTabChange}>
-            <Tab
-              label="app user"
-              value="APP USER"
-            />
-            <Tab
-              label="other"
-              value="OTHER"
-            />
+            <Tab label="app user" value="APP USER" />
+            <Tab label="other" value="OTHER" />
           </Tabs>
           {selectedTab === 'APP USER' && (
             <AppUserTab

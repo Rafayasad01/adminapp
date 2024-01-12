@@ -8,9 +8,13 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Visibility from '@mui/icons-material/Visibility';
 import IconButton from '@mui/material/IconButton';
 import '../../assets/css/PopupStyle.css';
-import { Password } from '../../interfaces/app-user.interface';
 import { useForm } from 'react-hook-form';
-import { INVALID_CHAR, MAX_LENGTH_EXCEEDED, PATTERN } from '../../utils/constants';
+import { Password } from '../../interfaces/app-user.interface';
+import {
+  INVALID_CHAR,
+  MAX_LENGTH_EXCEEDED,
+  PATTERN,
+} from '../../utils/constants';
 import ErrorSpanBox from '../../components/common/ErrorSpanBox';
 
 type Props = {
@@ -26,7 +30,7 @@ function ProfileChangePasswordPopup({
   setChangePassword,
   callback,
   setIsNotify,
-  setNotifyMessage
+  setNotifyMessage,
 }: Props) {
   const {
     register,
@@ -51,9 +55,9 @@ function ProfileChangePasswordPopup({
     } else {
       callback(data);
     }
-  }
+  };
 
-  console.log("ERRORES", errors);
+  console.log('ERRORES', errors);
 
   return (
     <Dialog
@@ -76,7 +80,7 @@ function ProfileChangePasswordPopup({
                 <Input
                   className="FormInput"
                   {...register('currentPassword', {
-                    required: "Current Password is required",
+                    required: 'Current Password is required',
                     pattern: PATTERN.PASSWORD,
                     validate: (value) => value.length <= 50,
                   })}
@@ -84,17 +88,23 @@ function ProfileChangePasswordPopup({
                   id="currentPassword"
                   placeholder="Enter Your Current Password"
                   disableUnderline
-                  endAdornment={(
+                  endAdornment={
                     <InputAdornment position="end">
                       <IconButton
                         style={{ padding: 0 }}
                         aria-label="toggle password visibility"
-                        onClick={() => setCurrentPassToggler(!currentPassToggler)}
+                        onClick={() =>
+                          setCurrentPassToggler(!currentPassToggler)
+                        }
                       >
-                        {currentPassToggler ? <VisibilityOff /> : <Visibility />}
+                        {currentPassToggler ? (
+                          <VisibilityOff />
+                        ) : (
+                          <Visibility />
+                        )}
                       </IconButton>
                     </InputAdornment>
-                  )}
+                  }
                 />
                 {errors.currentPassword?.type === 'required' && (
                   <ErrorSpanBox error={errors.currentPassword?.message} />
@@ -113,7 +123,7 @@ function ProfileChangePasswordPopup({
                 <Input
                   className="FormInput"
                   {...register('newPassword', {
-                    required: "New Password is required",
+                    required: 'New Password is required',
                     pattern: PATTERN.PASSWORD,
                     validate: (value) => value.length <= 50,
                   })}
@@ -121,7 +131,7 @@ function ProfileChangePasswordPopup({
                   id="newPassword"
                   placeholder="Enter Your New Password"
                   disableUnderline
-                  endAdornment={(
+                  endAdornment={
                     <InputAdornment position="end">
                       <IconButton
                         style={{ padding: 0 }}
@@ -131,7 +141,7 @@ function ProfileChangePasswordPopup({
                         {newPassToggler ? <VisibilityOff /> : <Visibility />}
                       </IconButton>
                     </InputAdornment>
-                  )}
+                  }
                 />
                 {errors.newPassword?.type === 'required' && (
                   <ErrorSpanBox error={errors.newPassword?.message} />
@@ -150,7 +160,7 @@ function ProfileChangePasswordPopup({
                 <Input
                   className="FormInput"
                   {...register('reNewPassword', {
-                    required: "Re New Password is required",
+                    required: 'Re New Password is required',
                     pattern: PATTERN.PASSWORD,
                     validate: (value) => value.length <= 50,
                   })}
@@ -158,7 +168,7 @@ function ProfileChangePasswordPopup({
                   type={reNewPassToggler ? 'password' : 'text'}
                   placeholder="Re-Enter Your New Password"
                   disableUnderline
-                  endAdornment={(
+                  endAdornment={
                     <InputAdornment position="end">
                       <IconButton
                         style={{ padding: 0 }}
@@ -168,7 +178,7 @@ function ProfileChangePasswordPopup({
                         {reNewPassToggler ? <VisibilityOff /> : <Visibility />}
                       </IconButton>
                     </InputAdornment>
-                  )}
+                  }
                 />
                 {errors.reNewPassword?.type === 'required' && (
                   <ErrorSpanBox error={errors.reNewPassword?.message} />
@@ -195,7 +205,7 @@ function ProfileChangePasswordPopup({
               Cancel
             </Button>
             <Button
-              type='submit'
+              type="submit"
               className="btn-black-fill"
               sx={{
                 padding: '0.375rem 2rem !important',
@@ -206,7 +216,7 @@ function ProfileChangePasswordPopup({
           </div>
         </form>
       </div>
-    </Dialog >
+    </Dialog>
   );
 }
 

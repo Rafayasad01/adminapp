@@ -49,10 +49,10 @@ function CustomDropDown({
           rules={
             validateRequired
               ? {
-                validate: (value) => {
-                  return value !== 'none' || 'Select an option';
-                },
-              }
+                  validate: (value) => {
+                    return value !== 'none' || 'Select an option';
+                  },
+                }
               : {}
           }
           render={({ field, fieldState }) => (

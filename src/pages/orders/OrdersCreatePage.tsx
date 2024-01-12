@@ -18,6 +18,8 @@ import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined';
 import RadioButtonUncheckedOutlinedIcon from '@mui/icons-material/RadioButtonUncheckedOutlined';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
+import InputAdornment from '@mui/material/InputAdornment';
+import { map } from 'lodash';
 import AppUserService from '../../services/adminapp/adminAppUser';
 import VoucherService from '../../services/adminapp/adminVouchers';
 
@@ -30,11 +32,9 @@ import Service from '../../services/adminapp/adminOrders';
 import { useAppSelector } from '../../redux/redux-hooks';
 import Notify from '../../components/common/Notify';
 import CustomButton from '../../components/common/CustomButton';
-import InputAdornment from '@mui/material/InputAdornment';
 import PromoCodeIcon from '../../components/icons/PromoCode';
 import PromotionListPopup from './PromotionListPopup';
 import assets from '../../assets';
-import { map } from 'lodash';
 
 function OrdersCreatePage() {
   const [catList, setCatList] = useState<any>([]);
@@ -72,15 +72,24 @@ function OrdersCreatePage() {
   const gstAmount =
     totalAmount * (authState.user.tenantConfig.gstPercentage / 100);
 
-  const discountedValue: any = promoList?.filter((val: any) => val.voucherCode === promoCode)[0];
+  const discountedValue: any = promoList?.filter(
+    (val: any) => val.voucherCode === promoCode
+  )[0];
 
-  const discountedPercentageValue: any = ((discountedValue?.value / 100) * totalAmount)?.toFixed(2);
+  const discountedPercentageValue: string | undefined = (
+    (discountedValue?.value ?? 0 / 100) * totalAmount
+  )?.toFixed(2);
 
-  const discountedValueByType = discountedValue?.discountType === "Amount" ? Number(discountedValue?.value) : discountedPercentageValue
+  const discountedValueByType: any =
+    discountedValue?.discountType === 'Amount'
+      ? Number(discountedValue?.value)
+      : discountedPercentageValue;
 
-  const discountedTotalAmount: any = totalAmount - discountedValueByType
+  const discountedTotalAmount: any = totalAmount - discountedValueByType;
 
-  const grandTotal = discountedTotalAmount ? discountedTotalAmount + gstAmount : totalAmount + gstAmount;
+  const grandTotal = discountedTotalAmount
+    ? discountedTotalAmount + gstAmount
+    : totalAmount + gstAmount;
 
   const handleLogin = () => {
     setIsLoginLoader(true);
@@ -89,13 +98,13 @@ function OrdersCreatePage() {
       identifier:
         isExistingUser !== 'true'
           ? `${anonIdentidier}@shop.com`
-          : userIdentifier ? userIdentifier : 'false',
+          : userIdentifier || 'false',
     };
     let service;
-    if (isExistingUser === "true") {
-      service = AppUserService.appLogin
+    if (isExistingUser === 'true') {
+      service = AppUserService.appLogin;
     } else {
-      service = AppUserService.appAnonymousLogin
+      service = AppUserService.appAnonymousLogin;
     }
     service(payload)
       .then((res) => {
@@ -107,25 +116,29 @@ function OrdersCreatePage() {
             text: res.data.message,
             type: 'success',
           });
-          VoucherService.orderVoucherPromotionList(authState.user.tenant, res.data.data.id)
+          VoucherService.orderVoucherPromotionList(
+            authState.user.tenant,
+            res.data.data.id
+          )
             .then((resp) => {
               if (resp.data.success) {
-                setPromoList(resp.data.data)
+                setPromoList(resp.data.data);
               } else {
                 setIsNotify(true);
                 setNotifyMessage({
                   text: resp.data.message,
                   type: 'error',
                 });
-                setPromoList([])
+                setPromoList([]);
               }
-            }).catch((err) => {
+            })
+            .catch((err) => {
               setIsNotify(true);
               setNotifyMessage({
                 text: err.message,
                 type: 'error',
               });
-            })
+            });
         } else {
           setLoginDetails(null);
           setIsLoginLoader(false);
@@ -153,7 +166,7 @@ function OrdersCreatePage() {
         setIsLoader(true);
         const cartPayload = {
           tenant: loginDetails?.tenant,
-          appUser: loginDetails?.id
+          appUser: loginDetails?.id,
         };
         Service.OrderGetCart(cartPayload)
           .then((item: any) => {
@@ -166,41 +179,43 @@ function OrdersCreatePage() {
                 appUserAddress: loginDetails?.appUserAddress.id,
                 pickupDateTime: new Date(),
                 dropDateTime: new Date(),
-                voucherCode: promoCode ? promoCode : '',
+                voucherCode: promoCode || '',
                 products: itemList?.map((items: any) => ({
                   id: items.id,
                   quantity: items.quantity,
                 })),
               };
-              Service.OrderUpdateCart(updatedCartPayload).then((updateCartRes) => {
-                if (updateCartRes.data.success) {
-                  const newOrderPlace = {
-                    cartId: item.data.data.cart.id,
-                    tenant: item.data.data.cart.tenant,
-                    appUser: item.data.data.cart.appUser
+              Service.OrderUpdateCart(updatedCartPayload).then(
+                (updateCartRes) => {
+                  if (updateCartRes.data.success) {
+                    const newOrderPlace = {
+                      cartId: item.data.data.cart.id,
+                      tenant: item.data.data.cart.tenant,
+                      appUser: item.data.data.cart.appUser,
+                    };
+                    Service.OrderPlace(newOrderPlace).then((orderPlaceRes) => {
+                      if (orderPlaceRes.data.success) {
+                        setIsLoader(false);
+                        setIsNotify(true);
+                        setNotifyMessage({
+                          text: orderPlaceRes.data.message,
+                          type: 'success',
+                        });
+                        navigate(-1);
+                      } else {
+                        setIsLoader(false);
+                        setIsNotify(true);
+                        setNotifyMessage({
+                          text: orderPlaceRes.data.message,
+                          type: 'error',
+                        });
+                      }
+                      // console.log('Cart REs', cartRes);
+                    });
                   }
-                  Service.OrderPlace(newOrderPlace).then((orderPlaceRes) => {
-                    if (orderPlaceRes.data.success) {
-                      setIsLoader(false);
-                      setIsNotify(true);
-                      setNotifyMessage({
-                        text: orderPlaceRes.data.message,
-                        type: 'success',
-                      });
-                      navigate(-1);
-                    } else {
-                      setIsLoader(false);
-                      setIsNotify(true);
-                      setNotifyMessage({
-                        text: orderPlaceRes.data.message,
-                        type: 'error',
-                      });
-                    }
-                    // console.log('Cart REs', cartRes);
-                  });
+                  // console.log('Cart REs', cartRes);
                 }
-                // console.log('Cart REs', cartRes);
-              });
+              );
             }
           })
           .catch((err: any) => {
@@ -244,10 +259,10 @@ function OrdersCreatePage() {
   // };
 
   const handlePaymentChange = () =>
-  // event: any
-  {
-    // setCashCheck(event.target.value);
-  };
+    // event: any
+    {
+      // setCashCheck(event.target.value);
+    };
 
   const handleUserChange = (event: any) => {
     // console.log('enven', event);
@@ -399,8 +414,7 @@ function OrdersCreatePage() {
     // );
   };
 
-  console.log("itemList", itemList);
-
+  console.log('itemList', itemList);
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -414,7 +428,7 @@ function OrdersCreatePage() {
         <div className="grid grid-cols-12 gap-3 py-2">
           <div className="col-span-7 rounded-lg bg-white py-5 px-4 shadow-lg">
             <div className="flex items-center justify-between">
-              <div className='flex items-center'>
+              <div className="flex items-center">
                 <div className="mx-2">
                   <FormControl className="FormControl" variant="standard">
                     <CustomDropDown
@@ -455,9 +469,16 @@ function OrdersCreatePage() {
                   </FormControl>
                 </div>
               </div>
-              {promoList?.length > 0 &&
-                <div onClick={() => setIsOpenPromoDialog(true)} className='cursor-pointer'>
-                  <img src={assets.images.ReferralCodeIcon} alt='referral-code' className='h-10 w-10' />
+              {promoList?.length > 0 && (
+                <div
+                  onClick={() => setIsOpenPromoDialog(true)}
+                  className="cursor-pointer"
+                >
+                  <img
+                    src={assets.images.ReferralCodeIcon}
+                    alt="referral-code"
+                    className="h-10 w-10"
+                  />
                   {/* <CustomButton
                     title='Promotion List'
                     buttonType='button'
@@ -469,7 +490,7 @@ function OrdersCreatePage() {
                     }}
                   /> */}
                 </div>
-              }
+              )}
             </div>
             <div className="col-span-12 mt-3">
               <table className="avatar-table no-border-table table-auto">
@@ -683,7 +704,9 @@ function OrdersCreatePage() {
                     onclick={handleLogin}
                     buttonType="button"
                     title="Login"
-                    className={`${itemList?.length <= 0 ? "btn-gray-fill" : "btn-black-fill"}`}
+                    className={`${
+                      itemList?.length <= 0 ? 'btn-gray-fill' : 'btn-black-fill'
+                    }`}
                     sx={{
                       padding: '0.375rem 2rem !important',
                       width: '100%',
@@ -721,7 +744,7 @@ function OrdersCreatePage() {
                       Add Promo Code
                     </div>
                     <div className="font-open-sans text-base font-bold text-neutral-900">
-                      <div className="border-[1px] border-[#A3A3A3] rounded-md">
+                      <div className="rounded-md border-[1px] border-[#A3A3A3]">
                         <FormControl className="FormControl" variant="standard">
                           <Input
                             // {...register('name', {
@@ -730,16 +753,16 @@ function OrdersCreatePage() {
                             //   validate: (value) => value.length <= 100,
                             // })}
                             onChange={(val) => setPromoCode(val.target.value)}
-                            className="FormInput text-sm px-1"
+                            className="FormInput px-1 text-sm"
                             id="PromoCode"
                             name="PromoCode"
                             placeholder="Enter Promo Code"
                             disableUnderline
-                            startAdornment={(
+                            startAdornment={
                               <InputAdornment position="start">
                                 <PromoCodeIcon />
                               </InputAdornment>
-                            )}
+                            }
                           />
                         </FormControl>
                       </div>
@@ -762,13 +785,17 @@ function OrdersCreatePage() {
                 </div>
                 <div className="flex items-center justify-between py-2">
                   <div className="font-open-sans text-xs font-normal text-neutral-900">
-                    Discount {discountedValue?.discountType === "Percentage" ? `(${Number(discountedValue?.value).toFixed(0)}%)` : ''}
+                    Discount{' '}
+                    {discountedValue?.discountType === 'Percentage'
+                      ? `(${Number(discountedValue?.value).toFixed(0)}%)`
+                      : ''}
                   </div>
                   <div className="font-open-sans text-sm font-bold text-neutral-900">
-                    ${discountedValue?.value > 0 && promoCode ?
-                      discountedValue?.discountType === "Amount" ?
-                        Number(discountedValue?.value).toFixed(2) :
-                        `${discountedPercentageValue}`
+                    $
+                    {discountedValue?.value > 0 && promoCode
+                      ? discountedValue?.discountType === 'Amount'
+                        ? Number(discountedValue?.value).toFixed(2)
+                        : `${discountedPercentageValue}`
                       : '0.00'}
                   </div>
                 </div>
@@ -804,8 +831,9 @@ function OrdersCreatePage() {
                 onClick={onSubmit}
                 color="inherit"
                 className={`w-full rounded-lg 
-                ${loginDetails === null ? 'bg-neutral-400' : 'bg-neutral-900'
-                  } font-open-sans text-base font-semibold text-gray-50`}
+                ${
+                  loginDetails === null ? 'bg-neutral-400' : 'bg-neutral-900'
+                } font-open-sans text-base font-semibold text-gray-50`}
               >
                 {isLoader && loginDetails !== null ? (
                   <CircularProgress size="25px" color="inherit" />

@@ -36,5 +36,5 @@ export default {
   updateVoucher,
   deleteVoucher,
   updateStatus,
-  orderVoucherPromotionList
+  orderVoucherPromotionList,
 };
