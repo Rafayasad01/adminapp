@@ -103,7 +103,7 @@ function AppUserPromotionDetailPage() {
                       Order Number
                     </span>
                     <span className="font-open-sans text-sm font-medium text-[#6A6A6A]">
-                      {detail.appOrder.orderNumber ?? '--'}
+                      {detail.appOrder[0].orderNumber ?? '--'}
                     </span>
                   </div>
                   <div className="flex w-full flex-col">
@@ -111,7 +111,7 @@ function AppUserPromotionDetailPage() {
                       Pickup Date Time
                     </span>
                     <span className="font-open-sans text-sm font-normal text-[#6A6A6A]">
-                      {dayjs(detail.appOrder.pickupDateTime).format(
+                      {dayjs(detail.appOrder[0].pickupDateTime).format(
                         'MMMM DD, YYYY'
                       )}
                     </span>
@@ -121,7 +121,7 @@ function AppUserPromotionDetailPage() {
                       Drop Date Time
                     </span>
                     <span className="font-open-sans text-sm font-normal text-[#6A6A6A]">
-                      {dayjs(detail.appOrder.dropDateTime).format(
+                      {dayjs(detail.appOrder[0].dropDateTime).format(
                         'MMMM DD, YYYY'
                       )}
                     </span>
@@ -132,7 +132,7 @@ function AppUserPromotionDetailPage() {
                         Status
                       </span>
                       <span className="font-open-sans text-sm font-normal text-[#6A6A6A]">
-                        {detail.appOrder.status ?? '--'}
+                        {detail.appOrder[0].status ?? '--'}
                       </span>
                     </div>
                     <div className="col-span-4 flex w-full flex-col">
@@ -140,7 +140,7 @@ function AppUserPromotionDetailPage() {
                         Payment Status
                       </span>
                       <span className="font-open-sans text-sm font-normal text-[#6A6A6A]">
-                        {detail.appOrder.paymentStatus ?? '--'}
+                        {detail.appOrder[0].paymentStatus ?? '--'}
                       </span>
                     </div>
                     <div className="col-span-4 flex w-full flex-col">
@@ -148,7 +148,7 @@ function AppUserPromotionDetailPage() {
                         Payment Type
                       </span>
                       <span className="font-open-sans text-sm font-normal text-[#6A6A6A]">
-                        {detail.appOrder.paymentType ?? '--'}
+                        {detail.appOrder[0].paymentType ?? '--'}
                       </span>
                     </div>
                   </div>
@@ -158,7 +158,7 @@ function AppUserPromotionDetailPage() {
                         Total Amount
                       </span>
                       <span className="font-open-sans text-sm font-normal text-[#6A6A6A]">
-                        ${detail.appOrder.totalAmount ?? '0'}
+                        ${detail.appOrder[0].totalAmount ?? '0'}
                       </span>
                     </div>
                     <div className="col-span-4 flex w-full flex-col">
@@ -166,7 +166,7 @@ function AppUserPromotionDetailPage() {
                         Discount
                       </span>
                       <span className="font-open-sans text-sm font-normal text-[#6A6A6A]">
-                        ${detail.appOrder.discount ?? '0'}
+                        ${detail.appOrder[0].discount ?? '0'}
                       </span>
                     </div>
                     <div className="col-span-4 flex w-full flex-col">
@@ -174,7 +174,7 @@ function AppUserPromotionDetailPage() {
                         GST Percentage
                       </span>
                       <span className="font-open-sans text-sm font-normal text-[#6A6A6A]">
-                        {detail.appOrder.gstPercentage ?? '0'}%
+                        {detail.appOrder[0].gstPercentage ?? '0'}%
                       </span>
                     </div>
                   </div>
@@ -184,7 +184,7 @@ function AppUserPromotionDetailPage() {
                         GST Amount
                       </span>
                       <span className="font-open-sans text-sm font-normal text-[#6A6A6A]">
-                        ${detail.appOrder.gstAmount ?? '0'}
+                        ${detail.appOrder[0].gstAmount ?? '0'}
                       </span>
                     </div>
                     <div className="col-span-4 flex w-full flex-col">
@@ -192,7 +192,7 @@ function AppUserPromotionDetailPage() {
                         Grand Total
                       </span>
                       <span className="font-open-sans text-sm font-normal text-[#6A6A6A]">
-                        ${detail.appOrder.grandTotal ?? '0'}
+                        ${detail.appOrder[0].grandTotal ?? '0'}
                       </span>
                     </div>
                   </div>
