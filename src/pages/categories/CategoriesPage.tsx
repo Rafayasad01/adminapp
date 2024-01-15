@@ -366,7 +366,7 @@ function CategoriesPage() {
         displayMessage={notifyMessage}
       />
       <TopBar title="Categories" />
-      <div className="cs-dialog container mt-5">
+      <div className="cs-dialog container mt-5 mx-auto w-full">
         <div className="w-full rounded-lg bg-white shadow-lg">
           <div className="grid grid-cols-12 px-4 py-5">
             <div className="col-span-7">
