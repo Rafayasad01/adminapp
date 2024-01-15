@@ -1400,3 +1400,32 @@ label+.css-1aa5qj0-MuiInputBase-root-MuiInput-root {
   padding: 0.75rem;
   text-align: left;
 }
+
+.bor-right{
+border-right: 1px solid #000;
+
+}
+.iv-padding{
+  padding: 10px 20px;
+}
+.iv-item-right{
+  display: flex;
+  justify-content: end;
+}
+.iv-tot-cost{
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 15px;
+}
+.iv-mtop{
+  margin-top: 20px;
+}
+.iv-mbot{
+  margin-bottom: 20px;
+}
+.iv-notes{
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 15px;
+  max-width: 80%;
+}

@@ -47,10 +47,10 @@ const CustomPrintLayouts = forwardRef<any, any>((props: any, ref: any) => {
   return (
     <div style={{ display: 'none' }}>
       <div ref={ref}>
-        <div className="print-invoice container m-auto mt-5">
+        <div className="print-invoice container m-auto mt-5 iv-padding">
           <div className="w-full rounded-lg bg-white shadow-lg">
-            <div className="flex justify-between px-7 py-3">
-              <div>
+            <div className="flex  px-[10px] py-3 justify-center">
+              <div className='c'>
                 <span
                   className="font-open-sans text-2xl font-bold text-[#252733]"
                   style={{ fontSize: '24px' }}
@@ -60,7 +60,7 @@ const CustomPrintLayouts = forwardRef<any, any>((props: any, ref: any) => {
               </div>
             </div>
             <div className="grid grid-cols-12 gap-4 px-4 py-5">
-              <div className="col-span-5 p-3">
+              <div className="col-span-5 p-3 bor-right">
                 <div className="">
                   <span className="font-open-sans text-xl font-bold text-[#252733]">
                     Client Information
@@ -120,7 +120,7 @@ const CustomPrintLayouts = forwardRef<any, any>((props: any, ref: any) => {
                         {props?.data?.orderNumber}
                       </span>
                     </div>
-                    <div className="">
+                    <div className="iv-item-right">
                       <span className="badge badge-success">
                         {props?.data?.status}
                       </span>
@@ -150,7 +150,7 @@ const CustomPrintLayouts = forwardRef<any, any>((props: any, ref: any) => {
             </div>
 
             <div className="p-4">
-              <p className="text-xl font-semibold">Order Item Details</p>
+              <p className="text-xl font-semibold iv-mbot">Order Item Details</p>
               <table className="table-border table-auto">
                 <thead>
                   <tr>
@@ -188,9 +188,21 @@ const CustomPrintLayouts = forwardRef<any, any>((props: any, ref: any) => {
                   ) : null}
                 </tbody>
               </table>
-              <div className="mt-10 grid grid-cols-12 gap-4">
-                <div className="col-span-12">
-                  <div className="rounded-md border-[1px] border-[#a6bac8] p-4">
+              <div className="mt-10 grid grid-cols-12 gap-4 custom--invoice">
+              <div className="col-span-5 iv-mtop">
+                  <div className="rounded-md iv-notes">
+                    <div className="mb-2 text-base font-bold uppercase">
+                      Notes 
+                    </div>
+                    <div className="mb-2 flex justify-between text-sm font-medium">
+                      <span>Lorem ipsum content here</span>
+                     
+                    </div>
+                   
+                  </div>
+                </div>
+                <div className="col-span-6 ">
+                  <div className="rounded-md  iv-tot-cost  iv-mtop">
                     <div className="mb-2 text-base font-bold uppercase">
                       Total Order Cost
                     </div>
@@ -201,7 +213,7 @@ const CustomPrintLayouts = forwardRef<any, any>((props: any, ref: any) => {
                       </span>
                     </div>
                     <div className="mb-2 flex justify-between text-sm font-medium">
-                      <span>GST Percentage :</span>
+                      <span>HST Percentage :</span>
                       <span className="font-bold">
                         ${props?.data?.gstPercentage}%
                       </span>
