@@ -38,6 +38,9 @@ export const authStateSlice = createSlice({
   reducers: {
     login: (state, action: PayloadAction<User>) => {
       state.user = action.payload;
+      const root = document.getElementById('root');
+      root?.style.setProperty('--theme-bg-color',state.user?.tenantConfig?.color1)
+      root?.style.setProperty('--theme-text-color',state.user?.tenantConfig?.color2)
       localStorage.setItem('user', JSON.stringify(action.payload));
     },
     logout: (state) => {

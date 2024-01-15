@@ -54,16 +54,19 @@ function TopBar({ title, isNestedRoute = false }: Props) {
   return (
     <AppBar
       position="relative"
-      className="w-full bg-gray-50 px-5 text-gray-50 shadow-none"
+      className="w-full bg-gray-50 pt-4 pb-0 px-0 text-gray-50 shadow-none"
     >
-      <Toolbar className="toolbar-style flex">
+      <Toolbar className="toolbar-style flex relative container mx-auto">
         {isNestedRoute ? (
-          <IconButton className="back-btn mr-2 p-0" onClick={backHandler}>
+          <IconButton className="back-btn mr-2 p-0  left-0 pr-5" onClick={backHandler}>
             <BackArrowIcon />
           </IconButton>
         ) : null}
+        <div className='container mx-auto flex justify-between items-center'>
+
+       
         <div className="title ml-1">{title}</div>
-        <div className="flex-grow">&nbsp;</div>
+        {/* <div className="flex-grow">&nbsp;</div> */}
         <div className="flex items-center text-cyan-900">
           {/* <IconButton className="icon-btn mr-3.5 p-0">
             <NotificationsNoneIcon />
@@ -98,6 +101,7 @@ function TopBar({ title, isNestedRoute = false }: Props) {
                 0
               )}`}</Avatar>
             )}
+          </div>
           </div>
         </div>
       </Toolbar>
