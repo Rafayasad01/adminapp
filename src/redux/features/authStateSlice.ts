@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { setThemeColor } from '../../utils/setThemeColor';
 
 type User = {
   id: string;
@@ -21,9 +22,11 @@ type AuthState = {
 };
 
 function getUser() {
-  const user = localStorage.getItem('user');
-  if (user) {
-    return JSON.parse(user);
+  const stringifiedUser = localStorage.getItem('user');
+  if (stringifiedUser) {
+    const user = JSON.parse(stringifiedUser);
+    setThemeColor(user.tenantConfig);
+    return user;
   }
   return null;
 }
@@ -38,18 +41,24 @@ export const authStateSlice = createSlice({
   reducers: {
     login: (state, action: PayloadAction<User>) => {
       state.user = action.payload;
-      const root = document.getElementById('root');
-      root?.style.setProperty('--theme-bg-color',state.user?.tenantConfig?.color1)
-      root?.style.setProperty('--theme-text-color',state.user?.tenantConfig?.color2)
+      setThemeColor(state.user?.tenantConfig);
       localStorage.setItem('user', JSON.stringify(action.payload));
     },
     logout: (state) => {
       state.user = null;
       localStorage.removeItem('user');
     },
+    setTenantConfig: (state, action: PayloadAction<any>) => {
+      if (!state.user) {
+        return;
+      }
+      state.user.tenantConfig = action.payload;
+      setThemeColor(action.payload);
+      localStorage.setItem('user', JSON.stringify(state.user));
+    },
   },
 });
 
-export const { login, logout } = authStateSlice.actions;
+export const { login, logout, setTenantConfig } = authStateSlice.actions;
 
 export default authStateSlice.reducer;
