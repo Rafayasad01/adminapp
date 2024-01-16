@@ -5,6 +5,7 @@ import RadioButtonUncheckedOutlinedIcon from '@mui/icons-material/RadioButtonUnc
 import Button from '@mui/material/Button';
 import Checkbox from '@mui/material/Checkbox';
 import FormControl from '@mui/material/FormControl';
+import FormControlLabel from '@mui/material/FormControlLabel';
 import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
 import Link from '@mui/material/Link';
@@ -13,13 +14,6 @@ import Tabs from '@mui/material/Tabs';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import PlusIcon from '../../components/icons/PlusIcon';
-import { Setting } from '../../interfaces/app.interface';
-import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
-import DragDropFile from './DragDropFile';
-import SocialLinksPopup from './SocialLinksPopup';
-
 import assets from '../../assets';
 import '../../assets/css/PopupStyle.css';
 import ColorPicker from '../../components/common/ColorPicker';
@@ -27,7 +21,11 @@ import ErrorSpanBox from '../../components/common/ErrorSpanBox';
 import Loader from '../../components/common/Loader';
 import MapAddress from '../../components/common/MapAddress';
 import Notify from '../../components/common/Notify';
+import PlusIcon from '../../components/icons/PlusIcon';
+import { Setting } from '../../interfaces/app.interface';
 import { setEmployeeLimit, setLogo } from '../../redux/features/appStateSlice';
+import { setTenantConfig } from '../../redux/features/authStateSlice';
+import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 import Service from '../../services/adminapp/admin';
 import {
   DOMAIN_PREFIX,
@@ -45,6 +43,8 @@ import {
   YOUTUBE,
 } from '../../utils/constants';
 import { listingRolePermission } from '../../utils/helper';
+import DragDropFile from './DragDropFile';
+import SocialLinksPopup from './SocialLinksPopup';
 
 type AssetsImages = keyof typeof assets.images;
 
@@ -188,6 +188,7 @@ function SettingsApp() {
             // console.log(itemData, 'itemData');
 
             setAddress(itemData?.address);
+            dispatch(setTenantConfig(itemData));
             if (itemData?.logo) {
               dispatch(setLogo(itemData.logo));
             }
@@ -292,7 +293,7 @@ function SettingsApp() {
               /> */}
             </Tabs>
           </div>
-          <div className="Content w-full py-5 px-4">
+          <div className="Content w-full px-4 py-5">
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="grid grid-cols-12 items-center">
                 <div className="col-span-5 mb-4">
