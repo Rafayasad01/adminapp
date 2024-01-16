@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { setThemeColor } from '../../utils/setThemeColor';
+import { getItem, removeItem, setItem } from '../../utils/storage';
 
 type User = {
   id: string;
@@ -22,13 +23,11 @@ type AuthState = {
 };
 
 function getUser() {
-  const stringifiedUser = localStorage.getItem('user');
-  if (stringifiedUser) {
-    const user = JSON.parse(stringifiedUser);
+  const user = getItem<any>('USER');
+  if (user) {
     setThemeColor(user.tenantConfig);
-    return user;
   }
-  return null;
+  return user;
 }
 
 const initialState: AuthState = {
@@ -42,11 +41,11 @@ export const authStateSlice = createSlice({
     login: (state, action: PayloadAction<User>) => {
       state.user = action.payload;
       setThemeColor(state.user?.tenantConfig);
-      localStorage.setItem('user', JSON.stringify(action.payload));
+      setItem('USER', action.payload);
     },
     logout: (state) => {
       state.user = null;
-      localStorage.removeItem('user');
+      removeItem('USER');
     },
     setTenantConfig: (state, action: PayloadAction<any>) => {
       if (!state.user) {
@@ -54,7 +53,7 @@ export const authStateSlice = createSlice({
       }
       state.user.tenantConfig = action.payload;
       setThemeColor(action.payload);
-      localStorage.setItem('user', JSON.stringify(state.user));
+      setItem('USER', state.user);
     },
   },
 });
