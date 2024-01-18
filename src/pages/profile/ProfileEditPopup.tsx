@@ -72,7 +72,7 @@ function ProfileEditPopup({
   };
 
   useEffect(() => {
-    let icon = formData?.avatar.split('/').slice(-1)[0];
+    let icon = formData?.avatar?.split('/')?.slice(-1)[0];
     const regexExp = /[a-z,0-9,-]{36}/;
     if (regexExp.test(icon)) {
       icon = icon.split('-').splice(5)[0].at(0);
@@ -86,7 +86,6 @@ function ProfileEditPopup({
     } else {
       data.avatar = null;
     }
-    console.log('DADA', data);
     callback(data);
   };
 
@@ -170,7 +169,7 @@ function ProfileEditPopup({
                     register={register}
                     options={{
                       roles: countries,
-                      role: formData?.tenantExt?.country,
+                      role: formData?.backofficeUserExt?.country,
                     }}
                     customClassInputTitle="font-bold"
                     inputTitle="Select Country"
@@ -183,7 +182,7 @@ function ProfileEditPopup({
                 <Input
                   className="FormInput"
                   {...register('state', {
-                    value: formData?.tenantExt?.state,
+                    value: formData?.backofficeUserExt?.state,
                     pattern: PATTERN.CHAR_SPACE_DASH,
                     validate: (value) => value.length <= 100,
                   })}
@@ -206,7 +205,7 @@ function ProfileEditPopup({
                 <Input
                   className="FormInput"
                   {...register('city', {
-                    value: formData?.tenantExt?.city,
+                    value: formData?.backofficeUserExt?.city,
                     pattern: PATTERN.CHAR_SPACE_DASH,
                     validate: (value) => value.length <= 100,
                   })}
@@ -227,7 +226,7 @@ function ProfileEditPopup({
                 <Input
                   className="FormInput"
                   {...register('zipCode', {
-                    value: formData?.tenantExt?.zipCode,
+                    value: formData?.backofficeUserExt?.zipCode,
                     pattern: PATTERN.PHONE,
                     maxLength: {
                       value: 15,
@@ -253,7 +252,7 @@ function ProfileEditPopup({
                 <Input
                   className="FormInput"
                   {...register('phone', {
-                    value: formData?.tenantExt?.phone,
+                    value: formData?.backofficeUserExt?.phone,
                     pattern: PATTERN.PHONE,
                     maxLength: {
                       value: 15,
@@ -280,7 +279,7 @@ function ProfileEditPopup({
                   disableUnderline
                   placeholder="Enter Address"
                   {...register('address', {
-                    value: formData?.tenantExt?.address,
+                    value: formData?.backofficeUserExt?.address,
                     pattern: PATTERN.ADDRESS_ONLY,
                     validate: (value) => value.length <= 250,
                   })}

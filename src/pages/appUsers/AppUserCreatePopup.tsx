@@ -6,7 +6,7 @@ import FormControl from '@mui/material/FormControl';
 import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import { useForm } from 'react-hook-form';
 import '../../assets/css/PopupStyle.css';
@@ -35,7 +35,6 @@ function AppUserCreatePopup({
   setOpenFormDialog,
   callback,
   appUserRoleLov,
-  selectedTab,
 }: Props) {
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => setShowPassword((show) => !show);

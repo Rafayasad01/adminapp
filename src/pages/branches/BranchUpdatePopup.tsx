@@ -145,6 +145,10 @@ function BranchUpdatePopup({
                       required: 'User limit is required in numbers',
                       validate: (value: any) =>
                         VALIDATE_NON_NEGATIVE_NUM(value),
+                      maxLength: {
+                        value: 20,
+                        message: MAX_LENGTH_EXCEEDED,
+                      },
                     })}
                     type="number"
                     id="userLimit"

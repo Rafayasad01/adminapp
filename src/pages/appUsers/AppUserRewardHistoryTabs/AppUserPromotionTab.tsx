@@ -1,21 +1,15 @@
-import Switch from '@mui/material/Switch';
 import TablePagination from '@mui/material/TablePagination';
+import FormControl from '@mui/material/FormControl';
+import Input from '@mui/material/Input';
 import dayjs from 'dayjs';
-import Avatar from '@mui/material/Avatar';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
+import Divider from '@mui/material/Divider';
+import SearchIcon from '@mui/icons-material/Search';
 import IconButton from '@mui/material/IconButton';
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import WysiwygOutlinedIcon from '@mui/icons-material/WysiwygOutlined';
+import InputAdornment from '@mui/material/InputAdornment';
 import CustomText from '../../../components/common/CustomText';
-import {
-  CheckRolePermission,
-  listingRolePermission,
-} from '../../../utils/helper';
 import Service from '../../../services/adminapp/adminAppUser';
-import { useAppSelector } from '../../../redux/redux-hooks';
-import { NOT_AUTHORIZED_MESSAGE } from '../../../utils/constants';
-import ActionMenu from '../../../components/common/ActionMenu';
 
 type Props = {
   list: any;
@@ -27,10 +21,13 @@ type Props = {
   setRowsPerPage: any;
   setList: any;
   search: string;
+  setSearch: any;
+  userId: any;
 };
 
 function AppUserPromotionTab({
   list,
+  userId,
   setList,
   total,
   page,
@@ -39,12 +36,10 @@ function AppUserPromotionTab({
   setTotal,
   setRowsPerPage,
   search,
+  setSearch,
 }: Props) {
   const navigate = useNavigate();
-  const authState: any = useAppSelector((state) => state?.authState);
-  const dataRole = useAppSelector(
-    (state: any) => state?.persisitReducer?.roleState?.role?.permissions
-  );
+  // const authState: any = useAppSelector((state) => state?.authState);
 
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
@@ -53,19 +48,15 @@ function AppUserPromotionTab({
     setPage(newPage);
     // offset? ,limit rowsperpage hoga ofset page * rowsperPage
     if (search === '' || search === null || search === undefined) {
-      Service.appList(
-        authState.user.tenant,
-        'Other',
-        newPage,
-        rowsPerPage
-      ).then((item) => {
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      });
+      Service.appUserVocuherHistoryList(userId, newPage, rowsPerPage).then(
+        (item) => {
+          setList(item.data.data.list);
+          setTotal(item.data.data.total);
+        }
+      );
     } else {
-      Service.appListSearch(
-        authState.user.tenant,
-        'Other',
+      Service.appUserSearchVocuherHistoryList(
+        userId,
         search,
         newPage,
         rowsPerPage
@@ -84,19 +75,15 @@ function AppUserPromotionTab({
     setRowsPerPage(newRowperPage);
     setPage(newPage);
     if (search === '' || search === null || search === undefined) {
-      Service.appList(
-        authState.user.tenant,
-        'Other',
-        newPage,
-        rowsPerPage
-      ).then((item) => {
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      });
+      Service.appUserVocuherHistoryList(userId, newPage, rowsPerPage).then(
+        (item) => {
+          setList(item.data.data.list);
+          setTotal(item.data.data.total);
+        }
+      );
     } else {
-      Service.appListSearch(
-        authState.user.tenant,
-        'Other',
+      Service.appUserSearchVocuherHistoryList(
+        userId,
         search,
         newPage,
         rowsPerPage
@@ -107,17 +94,67 @@ function AppUserPromotionTab({
     }
   };
 
+  const handleClickSearch = (event: any) => {
+    if (event.key === 'Enter') {
+      const searchTxt = event.target.value as string;
+      const newPage = 0;
+      setSearch(searchTxt);
+      setPage(newPage);
+      Service.appUserSearchVocuherHistoryList(
+        userId,
+        searchTxt,
+        newPage,
+        rowsPerPage
+      ).then((item) => {
+        setList(item.data.data.list);
+        setTotal(item.data.data.total);
+      });
+    }
+  };
+
+  const ConvertToAmount: any = (totalAmount: any, PercentageValue: any) => {
+    return `$${(totalAmount * (PercentageValue / 100)).toFixed(0)}`;
+  };
+
   return (
     <>
-      <div className="mt-3 grid grid-cols-none">
+      <div className="mt-1 grid grid-cols-none">
+        <div className="my-3 flex items-center justify-end">
+          <FormControl
+            className="search-grey-outline placeholder-grey w-60"
+            variant="filled"
+          >
+            <Input
+              className="input-with-icon after:border-b-neutral-900"
+              id="search"
+              type="text"
+              placeholder="Search"
+              onKeyDown={(
+                event: React.KeyboardEvent<
+                  HTMLInputElement | HTMLTextAreaElement
+                >
+              ) => {
+                handleClickSearch(event);
+              }}
+              endAdornment={
+                <InputAdornment position="end">
+                  <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
+                  <IconButton aria-label="toggle password visibility">
+                    <SearchIcon className="text-[#6A6A6A]" />
+                  </IconButton>
+                </InputAdornment>
+              }
+              disableUnderline
+            />
+          </FormControl>
+        </div>
         <table className="table-border table-auto">
           <thead>
             <tr>
-              <th className="w-[15%]">Order Number</th>
-              <th>Amount</th>
               <th className="">Voucher Code</th>
-              <th>Value</th>
-              <th>Amount Type</th>
+              <th>Discount</th>
+              <th>Amount</th>
+              <th className="w-[15%]">Order Number</th>
               <th>Avail Date</th>
               <th>&nbsp;</th>
             </tr>
@@ -128,23 +165,26 @@ function AppUserPromotionTab({
                 return (
                   <tr key={index}>
                     <td>
-                      <div>{item?.appOrder[0]?.orderNumber}</div>
+                      <div>{item?.adminVoucher?.voucherCode}</div>
+                    </td>
+                    <td>
+                      {item?.adminVoucher?.discountType === 'Amount'
+                        ? `$${Number(item?.adminVoucher?.value).toFixed(0)}`
+                        : ConvertToAmount(
+                            Number(item?.adminVoucher?.value).toFixed(0),
+                            Number(item?.appOrder[0]?.totalAmount)
+                          )}
+                      {/* <div>
+                        {item?.adminVoucher?.discountType === 'Amount'
+                          ? `$${Number(item?.adminVoucher?.value).toFixed(0)}`
+                          : `${Number(item?.adminVoucher?.value).toFixed(0)}%`}
+                      </div> */}
                     </td>
                     <td>
                       <div>${item?.appOrder[0]?.grandTotal}</div>
                     </td>
                     <td>
-                      <div>{item?.adminVoucher?.voucherCode}</div>
-                    </td>
-                    <td>
-                      <div>
-                        {item?.adminVoucher?.discountType === 'Amount'
-                          ? `${Number(item?.adminVoucher?.value).toFixed(0)}`
-                          : `${Number(item?.adminVoucher?.value).toFixed(0)}%`}
-                      </div>
-                    </td>
-                    <td>
-                      <div>{item?.adminVoucher?.discountType}</div>
+                      <div>{item?.appOrder[0]?.orderNumber}</div>
                     </td>
                     <td>
                       <div>

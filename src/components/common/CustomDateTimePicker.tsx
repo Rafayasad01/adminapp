@@ -1,4 +1,4 @@
-import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
+import { DemoItem } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
@@ -14,6 +14,8 @@ type Props = {
   setValue?: any;
   isTrue?: boolean;
   value?: any;
+  defaultValue?: any;
+  minDate?: any;
 };
 
 function CustomDateTimePicker({
@@ -22,29 +24,30 @@ function CustomDateTimePicker({
   setValue,
   id,
   inputTitle,
+  minDate,
 }: Props) {
   const handleChange = (date: any) => {
-    setValue(id, date.format('YYYY-MM-DD'), { shouldValidate: true });
+    // console.log('daaa', date);
+    setValue(id, date);
   };
 
   // console.log('sAASA', isTrue, value);
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <DemoContainer components={['DateTimePicker', 'DateTimePicker']}>
-        <DemoItem label={inputTitle}>
-          <DesktopDatePicker
-            sx={{
-              border: '1px solid #e5d3d3',
-              padding: 'px',
-              borderRadius: '5px',
-              fontSize: '12px',
-            }}
-            onChange={handleChange}
-            // defaultValue={dayjs('2022-04-17')}
-          />
-        </DemoItem>
-      </DemoContainer>
+      <DemoItem label={inputTitle}>
+        <DesktopDatePicker
+          sx={{
+            border: '1px solid #e5d3d3',
+            padding: 'px',
+            borderRadius: '5px',
+            fontSize: '12px',
+          }}
+          value={value}
+          onChange={handleChange}
+          minDate={minDate}
+        />
+      </DemoItem>
       {isTrue && value === undefined && (
         <ErrorSpanBox error={`${inputTitle} is required`} />
       )}

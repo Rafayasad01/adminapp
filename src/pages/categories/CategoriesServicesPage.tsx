@@ -555,11 +555,11 @@ function CategoriesServicesPage() {
           open={isModalImage}
           onClose={closeModal}
           PaperProps={{
-            className: '',
+            className: 'max-w-[25%] 2xl:min-h-[35%] xl:min-h-[45%]',
             style: {
-              maxWidth: '20%',
-              minHeight: '35%',
-              borderRadius: '100%',
+              // maxWidth: '20%',
+              // minHeight: '35%',
+              borderRadius: '5%',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -568,7 +568,7 @@ function CategoriesServicesPage() {
         >
           <div className="flex h-[100%] items-center justify-center">
             <img
-              className="max-h-[200px] max-w-[350px]"
+              className="max-w-[250px] xl:max-h-[100px] 2xl:max-h-[150px]"
               src={modalImage}
               alt=""
             />

@@ -108,6 +108,13 @@ function SuperAdminShopPage() {
           setList(item.data.data.list);
           setTotal(item.data.data.total);
           setIsLoader(false);
+        } else {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'error',
+          });
         }
       })
       .catch((error) => {
@@ -115,7 +122,7 @@ function SuperAdminShopPage() {
         setIsNotify(true);
         setNotifyMessage({
           text: error.message,
-          type: 'success',
+          type: 'error',
         });
         // console.log('error::::::::', error);
       });

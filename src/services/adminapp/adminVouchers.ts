@@ -1,4 +1,3 @@
-import { AxiosResponse } from 'axios';
 import network from '../../utils/network';
 
 const listVouchers = (

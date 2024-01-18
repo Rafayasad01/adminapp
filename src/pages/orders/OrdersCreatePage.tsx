@@ -19,7 +19,7 @@ import RadioButtonUncheckedOutlinedIcon from '@mui/icons-material/RadioButtonUnc
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import InputAdornment from '@mui/material/InputAdornment';
-import { map } from 'lodash';
+import dayjs from 'dayjs';
 import AppUserService from '../../services/adminapp/adminAppUser';
 import VoucherService from '../../services/adminapp/adminVouchers';
 
@@ -35,8 +35,18 @@ import CustomButton from '../../components/common/CustomButton';
 import PromoCodeIcon from '../../components/icons/PromoCode';
 import PromotionListPopup from './PromotionListPopup';
 import assets from '../../assets';
+import CustomDateTimePicker from '../../components/common/CustomDateTimePicker';
 
 function OrdersCreatePage() {
+  const dropOffDate: any = useAppSelector(
+    (state: any) =>
+      state?.persisitReducer?.appState?.UserItems?.tenantConfig
+        ?.minimumDeliveryTime
+  );
+  const currentDate = dayjs();
+  const DeliveryDate = currentDate.add(dropOffDate, 'day');
+
+  // const [address, setAddress] = useState<any>();
   const [catList, setCatList] = useState<any>([]);
   const [catItemList, setCatItemList] = useState<any>([]);
   const [itemList, setItemList] = useState<any>([]);
@@ -45,7 +55,7 @@ function OrdersCreatePage() {
   const [isOpenPromoDialog, setIsOpenPromoDialog] = useState(false);
 
   // const [cashCheck, setCashCheck] = useState(false);
-  const [isExistingUser, setIsExistingUser] = useState<any>('false');
+  const [isExistingUser, setIsExistingUser] = useState<any>('Anonymous User');
   const [userIdentifier, setUserIdentifier] = useState<any>('');
 
   const {
@@ -64,7 +74,6 @@ function OrdersCreatePage() {
   const [loginDetails, setLoginDetails] = useState<any>(null);
   const [promoList, setPromoList] = useState<any>(null);
   const authState: any = useAppSelector((state: any) => state?.authState);
-
   const totalAmount = itemList.reduce(
     (p: any, c: any) => p + Number(c.price) * Number(c.quantity),
     0
@@ -72,9 +81,10 @@ function OrdersCreatePage() {
   const gstAmount =
     totalAmount * (authState.user.tenantConfig.gstPercentage / 100);
 
-  const discountedValue: any = promoList?.filter(
-    (val: any) => val.voucherCode === promoCode
-  )[0];
+  const discountedValue: any =
+    itemList?.length <= 0
+      ? '0.00'
+      : promoList?.filter((val: any) => val.voucherCode === promoCode)[0];
 
   const discountedPercentageValue: string | undefined = (
     (discountedValue?.value ?? 0 / 100) * totalAmount
@@ -91,17 +101,24 @@ function OrdersCreatePage() {
     ? discountedTotalAmount + gstAmount
     : totalAmount + gstAmount;
 
+  const specificVoucher = promoList?.find(
+    (el: any) => el.voucherCode === promoCode
+  );
+
+  const checkVoucherMinAmount =
+    specificVoucher && Number(totalAmount) > Number(specificVoucher.minAmount);
+
   const handleLogin = () => {
     setIsLoginLoader(true);
     const anonIdentidier = authState?.user?.username?.split('@')[0];
     const payload = {
       identifier:
-        isExistingUser !== 'true'
+        isExistingUser !== 'Exist User'
           ? `${anonIdentidier}@shop.com`
           : userIdentifier || 'false',
     };
     let service;
-    if (isExistingUser === 'true') {
+    if (isExistingUser === 'Exist User') {
       service = AppUserService.appLogin;
     } else {
       service = AppUserService.appAnonymousLogin;
@@ -109,6 +126,12 @@ function OrdersCreatePage() {
     service(payload)
       .then((res) => {
         if (res.data.success) {
+          // console.log(res.data.data);
+          // if(res.data.data.userType === "Shop"){
+          //   setAddress(authState?.tenantConfig?.shopAddress);
+          // }else{
+          //   setAddress(res.data.daaa.);
+          // }
           setIsLoginLoader(false);
           setLoginDetails(res.data.data);
           setIsNotify(true);
@@ -170,7 +193,6 @@ function OrdersCreatePage() {
         };
         Service.OrderGetCart(cartPayload)
           .then((item: any) => {
-            // console.log('ITTTTTTEM', item);
             if (item.data.success) {
               const updatedCartPayload = {
                 cartId: item.data.data.cart.id,
@@ -178,8 +200,10 @@ function OrdersCreatePage() {
                 tenant: item.data.data.cart.tenant,
                 appUserAddress: loginDetails?.appUserAddress.id,
                 pickupDateTime: new Date(),
-                dropDateTime: new Date(),
-                voucherCode: promoCode || '',
+                dropDateTime: watch('deliveryDropOffDate')
+                  ? watch('deliveryDropOffDate').format('YYYY-MM-DD HH:mm:ss')
+                  : DeliveryDate.format('YYYY-MM-DD HH:mm:ss'),
+                voucherCode: checkVoucherMinAmount ? promoCode : '' || '',
                 products: itemList?.map((items: any) => ({
                   id: items.id,
                   quantity: items.quantity,
@@ -265,7 +289,6 @@ function OrdersCreatePage() {
     };
 
   const handleUserChange = (event: any) => {
-    // console.log('enven', event);
     setIsExistingUser(event.target.value);
   };
 
@@ -414,7 +437,25 @@ function OrdersCreatePage() {
     // );
   };
 
-  console.log('itemList', itemList);
+  // const checkVoucherMinAmount = promoList?.filter((el: any) => {
+  //   if (el.voucherCode === promoCode) {
+  //     if (Number(totalAmount) > Number(el.minAmount)) {
+  //       return true;
+  //     } else {
+  //       return false;
+  //     }
+  //   }
+  // });
+
+  useEffect(() => {
+    if (!checkVoucherMinAmount && promoCode) {
+      setIsNotify(true);
+      setNotifyMessage({
+        text: 'Your Selected items amount is not enough to avail this voucher',
+        type: 'info',
+      });
+    }
+  }, [checkVoucherMinAmount]);
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -583,6 +624,74 @@ function OrdersCreatePage() {
           </div>
           <div className="col-span-5 rounded-lg bg-white py-5 shadow-lg">
             <div className="w-full px-4">
+              <FormControl className="w-full">
+                <FormLabel
+                  id="demo-row-radio-buttons-group-label"
+                  className="font-open-sans text-xl font-semibold text-[#1A1A1A]"
+                >
+                  Delivery Date
+                </FormLabel>
+                <div className="mt-3 flex items-center">
+                  <div>
+                    <p className="text-sm">Delivery Pickup Date</p>
+                    <span className="text-sm font-semibold">
+                      {dayjs().format('MMMM DD, YYYY')}
+                    </span>
+                    {/* <CustomDateTimePicker
+                      register={register}
+                      defaultValue={dayjs()}
+                      minDate={dayjs()}
+                      id="deliveryPickupDate"
+                      error={errors.deliveryPickupDate}
+                      inputTitle="Delivery Pickup Date"
+                      setValue={setValue}
+                      value={dayjs()}
+                    /> */}
+                  </div>
+                  <div className="mx-10">
+                    <CustomDateTimePicker
+                      register={register}
+                      defaultValue={dayjs()}
+                      minDate={dayjs()}
+                      id="deliveryDropOffDate"
+                      error={errors.deliveryDropOffDate}
+                      inputTitle="Delivery Dropoff Date"
+                      setValue={setValue}
+                      value={
+                        watch('deliveryDropOffDate')
+                          ? watch('deliveryDropOffDate')
+                          : DeliveryDate
+                      }
+                    />
+                  </div>
+                </div>
+                <div className="my-2">
+                  <span className="text-sm font-semibold">
+                    {dropOffDate
+                      ? `Standard delivery time is ${dropOffDate} days.`
+                      : ''}
+                  </span>
+                </div>
+                {watch('deliveryDropOffDate') &&
+                  watch('deliveryDropOffDate').format('MM/DD/YYYY') !==
+                    DeliveryDate.format('MM/DD/YYYY') && (
+                    <div className="">
+                      <span className="text-sm font-semibold">
+                        {`${
+                          watch('deliveryDropOffDate').format('MM/DD/YYYY') >
+                            DeliveryDate.format('MM/DD/YYYY') ||
+                          DeliveryDate === null
+                            ? 'New'
+                            : 'Urgent'
+                        } delivery time is ${watch(
+                          'deliveryDropOffDate'
+                        )?.format('MMMM DD, YYYY')}.`}
+                      </span>
+                    </div>
+                  )}
+              </FormControl>
+            </div>
+            <div className="w-full px-4">
               {/* <FormControl className="w-full" variant="filled">
                 <label className="mb-1 ml-1 w-full font-open-sans text-xl font-semibold">
                   Address
@@ -611,6 +720,7 @@ function OrdersCreatePage() {
                   />
                 </div>
               </FormControl> */}
+              <Divider flexItem className="mt-5" />
               <FormControl className="mt-4">
                 <FormLabel
                   id="demo-row-radio-buttons-group-label"
@@ -658,7 +768,7 @@ function OrdersCreatePage() {
                       row
                       aria-labelledby="demo-row-radio-buttons-group-label"
                       name="row-radio-buttons-group"
-                      value={isExistingUser}
+                      value={isExistingUser || ''}
                       onClick={handleUserChange}
                     >
                       <FormControlLabel
@@ -668,7 +778,7 @@ function OrdersCreatePage() {
                           fonWeight: 400,
                           fonSize: '14px',
                         }}
-                        value={false}
+                        value="Anonymous User"
                         control={
                           <Radio
                             className="text-sm text-[#1D1D1D]"
@@ -685,7 +795,7 @@ function OrdersCreatePage() {
                           fonWeight: 400,
                           fonSize: '14px',
                         }}
-                        value
+                        value="Exist User"
                         control={
                           <Radio
                             className="text-[#1D1D1D]"
@@ -717,7 +827,7 @@ function OrdersCreatePage() {
               </div>
 
               {/* {console.log("isExx", isExistingUser)} */}
-              {isExistingUser === 'true' && (
+              {isExistingUser === 'Exist User' && (
                 <div className="w-full rounded-xl border border-solid border-[#E4E4E4] py-1 pl-3">
                   <Input
                     className="input-with-icon after:border-b-neutral-900"
@@ -791,12 +901,18 @@ function OrdersCreatePage() {
                       : ''}
                   </div>
                   <div className="font-open-sans text-sm font-bold text-neutral-900">
-                    $
-                    {discountedValue?.value > 0 && promoCode
-                      ? discountedValue?.discountType === 'Amount'
-                        ? Number(discountedValue?.value).toFixed(2)
-                        : `${discountedPercentageValue}`
-                      : '0.00'}
+                    {promoCode
+                      ? checkVoucherMinAmount
+                        ? `$
+                      ${
+                        discountedValue?.value > 0 && promoCode
+                          ? discountedValue?.discountType === 'Amount'
+                            ? Number(discountedValue?.value).toFixed(2)
+                            : `${discountedPercentageValue}`
+                          : '0.00'
+                      }`
+                        : 'N/A'
+                      : '$0.00'}
                   </div>
                 </div>
                 {/* <div className="flex items-center justify-between py-2">
@@ -826,13 +942,17 @@ function OrdersCreatePage() {
                 </div>
               </div>
               <Button
-                disabled={isLoader || loginDetails === null}
+                disabled={
+                  isLoader || loginDetails === null || itemList?.length <= 0
+                }
                 type="button"
                 onClick={onSubmit}
                 color="inherit"
                 className={`w-full rounded-lg 
                 ${
-                  loginDetails === null ? 'bg-neutral-400' : 'bg-neutral-900'
+                  loginDetails === null || itemList?.length <= 0
+                    ? 'bg-neutral-400'
+                    : 'bg-neutral-900'
                 } font-open-sans text-base font-semibold text-gray-50`}
               >
                 {isLoader && loginDetails !== null ? (

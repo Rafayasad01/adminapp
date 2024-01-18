@@ -13,6 +13,7 @@ type AppUserLogo = {
 type AppState = {
   UserItems: any;
   logo: AppUserLogo | null;
+  profileAvatar: string | any;
 };
 
 const initialState: AppState = {
@@ -20,6 +21,7 @@ const initialState: AppState = {
     employeeLimit: 0,
   },
   logo: null,
+  profileAvatar: null,
 };
 
 export const appStateSlice = createSlice({
@@ -30,10 +32,22 @@ export const appStateSlice = createSlice({
     //   state.appState = JSON.parse(JSON.stringify(action.payload));
     // },
     setItemState: (state, action: PayloadAction<any>) => {
-      state.UserItems = JSON.parse(JSON.stringify(action.payload));
+      state.UserItems = {
+        ...state.UserItems,
+        ...action.payload,
+      };
+    },
+    setTenantConfig: (state, action: PayloadAction<any>) => {
+      state.UserItems = {
+        ...state.UserItems,
+        tenantConfig: action.payload,
+      };
     },
     setLogo: (state, action: PayloadAction<any>) => {
       state.logo = JSON.parse(JSON.stringify(action.payload));
+    },
+    setProfileAvatar: (state, action: PayloadAction<any>) => {
+      state.profileAvatar = JSON.parse(JSON.stringify(action.payload));
     },
     setEmployeeLimit: (state, action: PayloadAction<any>) => {
       state.UserItems = {
@@ -44,7 +58,12 @@ export const appStateSlice = createSlice({
   },
 });
 
-export const { setItemState, setLogo, setEmployeeLimit } =
-  appStateSlice.actions;
+export const {
+  setItemState,
+  setLogo,
+  setEmployeeLimit,
+  setTenantConfig,
+  setProfileAvatar,
+} = appStateSlice.actions;
 
 export default appStateSlice.reducer;

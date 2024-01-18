@@ -45,11 +45,8 @@ function AppUserOtherTab({
   rowsPerPage,
   setIsNotify,
   setNotifyMessage,
-  isNotify,
-  notifyMessage,
   list,
   setList,
-  isLoader,
   setIsLoader,
   actionMenuItemid,
   setActionMenuItemid,
@@ -311,33 +308,35 @@ function AppUserOtherTab({
                         <span className="badge badge-danger">INACTIVE</span>
                       )}
                     </td>
-                    <td>
-                      <div className="flex flex-row-reverse">
-                        <IconButton
-                          className="btn-dot"
-                          aria-label="more"
-                          id="long-button"
-                          aria-controls={
-                            actionMenuOpen ? 'long-menu' : undefined
-                          }
-                          aria-expanded={actionMenuOpen ? 'true' : undefined}
-                          aria-haspopup="true"
-                          onClick={(event: React.MouseEvent<HTMLElement>) => {
-                            setActionMenuItemid(list[index]);
-                            setActionMenuAnchorEl(event.currentTarget);
-                          }}
-                        >
-                          <MoreVertIcon />
-                        </IconButton>
-                        <Switch
-                          checked={item.isActive}
-                          onChange={(
-                            event: React.ChangeEvent<HTMLInputElement>
-                          ) => handleSwitchChange(event, list[index].id)}
-                          inputProps={{ 'aria-label': 'controlled' }}
-                        />
-                      </div>
-                    </td>
+                    {item.userType !== 'Shop' && (
+                      <td>
+                        <div className="flex flex-row-reverse">
+                          <IconButton
+                            className="btn-dot"
+                            aria-label="more"
+                            id="long-button"
+                            aria-controls={
+                              actionMenuOpen ? 'long-menu' : undefined
+                            }
+                            aria-expanded={actionMenuOpen ? 'true' : undefined}
+                            aria-haspopup="true"
+                            onClick={(event: React.MouseEvent<HTMLElement>) => {
+                              setActionMenuItemid(list[index]);
+                              setActionMenuAnchorEl(event.currentTarget);
+                            }}
+                          >
+                            <MoreVertIcon />
+                          </IconButton>
+                          <Switch
+                            checked={item.isActive}
+                            onChange={(
+                              event: React.ChangeEvent<HTMLInputElement>
+                            ) => handleSwitchChange(event, list[index].id)}
+                            inputProps={{ 'aria-label': 'controlled' }}
+                          />
+                        </div>
+                      </td>
+                    )}
                   </tr>
                 );
               })}

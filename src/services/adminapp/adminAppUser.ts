@@ -105,6 +105,17 @@ const appUserVocuherHistoryList = (
   );
 };
 
+const appUserSearchVocuherHistoryList = (
+  appUserId: any,
+  search: string,
+  page: number,
+  size: number
+) => {
+  return network.get(
+    `${APP_PREFIX}/voucher/history/list/${appUserId}/${search}/${page}/${size}`
+  );
+};
+
 const appUserVocuherHistoryDetails = (voucherHistoryId: any) => {
   return network.get(
     `${APP_PREFIX}/voucher/history/detail/${voucherHistoryId}`
@@ -147,6 +158,7 @@ export default {
   appUserScheduleUpdateStatus,
   appUserScheduleEdit,
   appUserVocuherHistoryList,
+  appUserSearchVocuherHistoryList,
   appUserLoyaltyHistoryList,
   appUserVocuherHistoryDetails,
   appUserLoyaltyHistoryDetails,

@@ -32,7 +32,7 @@ function BranchPage() {
     (state: any) => state?.persisitReducer?.roleState?.role?.permissions
   );
   const [search, setSearch] = useState<any>('');
-  const [maxTotalEmployeeLimit, setTotalMaxEmployeeLimit] = useState();
+  const [maxTotalEmployeeLimit, setTotalMaxEmployeeLimit] = useState<any>();
   const [maxTotalEmployees, setTotalMaxEmployees] = useState();
   const [emptyVariable] = useState(null);
   const [page, setPage] = useState(0);
@@ -46,7 +46,7 @@ function BranchPage() {
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
   const [totalBranches, setTotalBranches] = useState<number>(0);
-
+  const [storeLimitVal, setStateLimitVal] = useState(0);
   const { reset } = useForm<AppUserEmployees>();
 
   const handleClickSearch = (event: any) => {
@@ -129,7 +129,7 @@ function BranchPage() {
             setList(item.data.data.list);
             setTotal(item.data.data.total);
             setTotalBranches(item.data.data.list.length);
-            setTotalMaxEmployeeLimit(item.data.data.totalEmployeeLimits);
+            setTotalMaxEmployeeLimit(item.data.data.totalEmployeeLimitCounts);
             setTotalMaxEmployees(item.data.data.totalEmployees);
           } else {
             setIsLoader(false);
@@ -166,7 +166,9 @@ function BranchPage() {
           });
           setList([item.data.data, ...list]);
           setTotal((prev) => prev + 1);
-          setTotalMaxEmployeeLimit((prev) => prev + item.data.data.userLimit);
+          setTotalMaxEmployeeLimit(
+            (prev: any) => prev + item.data.data.userLimit
+          );
           reset();
         } else {
           setIsLoader(false);
@@ -188,11 +190,11 @@ function BranchPage() {
   };
 
   const editHandler = (id: string) => {
-    // console.log('EVENT DOUBLE HITT');
     setIsLoader(true);
     Service.editBranch(id)
       .then((item: any) => {
         if (item.data.success) {
+          setStateLimitVal(item.data.data.userLimit);
           setFormDetail(item.data.data);
           setOpenEditFormDialog(true);
           setIsLoader(false);
@@ -209,10 +211,10 @@ function BranchPage() {
   };
 
   const updateFormHandler = (id: string, data: any) => {
-    // console.log('DATA', data);
     setIsLoader(true);
     delete data.email;
     data.userId = authState?.user?.id;
+    const temp = Number(maxTotalEmployeeLimit) - storeLimitVal;
     Service.updateBranch(data, id)
       .then((item: any) => {
         if (item.data.success) {
@@ -222,6 +224,7 @@ function BranchPage() {
             text: item.data.message,
             type: 'success',
           });
+          setTotalMaxEmployeeLimit(Number(data.userLimit) + temp);
           setFormDetail(item.data.data);
           setOpenEditFormDialog(false);
           for (let i = 0; i < list.length; i += 1) {
@@ -341,13 +344,9 @@ function BranchPage() {
                 <div className="flex-col items-center justify-center px-2">
                   <p className="text-sm font-semibold">Total Employees</p>
                   <div className="mt-2 flex justify-center">
-                    {maxTotalEmployees ? (
-                      <span className="badge badge-danger w-full text-sm">
-                        {maxTotalEmployees}
-                      </span>
-                    ) : (
-                      '--'
-                    )}
+                    <span className="badge badge-danger w-full text-sm">
+                      {maxTotalEmployees ?? '0'}
+                    </span>
                   </div>
                 </div>
                 <div className="flex-col items-center justify-center">

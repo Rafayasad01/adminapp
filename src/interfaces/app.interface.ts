@@ -15,9 +15,12 @@ export interface Setting {
   color2: string;
   color3: string;
   logo: string;
+  banner: string;
   gstPercentage: any;
   email: string;
   minOrderAmount: any;
+  minimumDeliveryTime: number;
+  deliveryUrgentFees: string;
   deliveryFee: any;
   facebook: string;
   instagram: string;
