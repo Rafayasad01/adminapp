@@ -60,6 +60,7 @@ import DriverHistory from '../pages/orders/DriverHistory';
 import AppUserRewardHistory from '../pages/appUsers/AppUserRewardHistory';
 import AppUserPromotionDetailPage from '../pages/appUsers/AppUserRewardHistoryTabs/AppUserPromotionDetailPage';
 import AppUserLoyaltyDetailPage from '../pages/appUsers/AppUserRewardHistoryTabs/AppUserLoyaltyDetailPage';
+import SettingConfig from '../pages/settings/SettingConfig';
 
 export const routeObjects: RouteObject[] = [
   {
@@ -438,6 +439,10 @@ export const routeObjects: RouteObject[] = [
                   {
                     path: 'shop',
                     element: <SettingsShopScheduling />,
+                  },
+                  {
+                    path: 'config',
+                    element: <SettingConfig />,
                   },
                 ],
               },

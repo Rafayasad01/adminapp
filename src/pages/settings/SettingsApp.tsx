@@ -7,17 +7,16 @@ import Checkbox from '@mui/material/Checkbox';
 import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import IconButton from '@mui/material/IconButton';
-import TextField from '@mui/material/TextField';
 import Input from '@mui/material/Input';
 import Link from '@mui/material/Link';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
+import TextField from '@mui/material/TextField';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import assets from '../../assets';
 import '../../assets/css/PopupStyle.css';
-import ColorPicker from '../../components/common/ColorPicker';
 import ErrorSpanBox from '../../components/common/ErrorSpanBox';
 import Loader from '../../components/common/Loader';
 import MapAddress from '../../components/common/MapAddress';
@@ -81,16 +80,12 @@ function SettingsApp() {
   const [selectedImg, setSelectedImg] = useState<any>(null);
   const [themeFile, setThemeFile] = useState<any>(null);
   const [themeSelectedImg, setThemeSelectedImg] = useState<any>(null);
-  const [color1, setColor1] = useState<any>('#1A1A1A');
-  const [color2, setColor2] = useState<any>('#1A1A1A');
-  const [color3, setColor3] = useState<any>('#1A1A1A');
   const [detail, setDetail] = useState<Setting>();
   const [address, setAddress] = useState<any>(null);
   const [isLoader, setIsLoader] = useState(true);
   const [isNotify, setIsNotify] = useState(false);
   const [notifyMessage, setNotifyMessage] = useState({});
   const [emptyVariable] = useState(null);
-
   const {
     register,
     handleSubmit,
@@ -142,10 +137,6 @@ function SettingsApp() {
     }
     setValue('loyaltyCoinConversionRate', item.loyaltyCoinConversionRate);
     setValue('requiredCoinsToRedeem', item.requiredCoinsToRedeem);
-    // setValue('userLimit', item.userLimit ? item.userLimit : '');
-    setColor1(item.color1);
-    setColor2(item.color2);
-    setColor3(item.color3);
   };
 
   const onSubmit = (data: any) => {
@@ -182,9 +173,9 @@ function SettingsApp() {
       formData.append('youtube', detail ? detail.youtube : '');
       formData.append('whatsapp', detail ? detail.whatsapp : '');
       formData.append('updatedBy', authState.user.id);
-      formData.append('color1', color1);
-      formData.append('color2', color2);
-      formData.append('color3', color3);
+      // formData.append('color1', color1);
+      // formData.append('color2', color2);
+      // formData.append('color3', color3);
       formData.append('enableLoyaltyProgram', data.enableLoyaltyProgram);
       formData.append(
         'loyaltyCoinConversionRate',
@@ -300,6 +291,11 @@ function SettingsApp() {
                 label="App Settings"
                 value="APP_SETTINGS"
                 onClick={() => navigate('../app')}
+              />
+              <Tab
+                label="System Configuration"
+                value="SYSTEM_CONFIGURATION"
+                onClick={() => navigate('../config')}
               />
               {/* <Tab
                 label="Shop Scheduling"
@@ -774,7 +770,7 @@ function SettingsApp() {
                   </div>
                 </FormControl>
               </div>
-              <div className="FormMultipleFields mb-4">
+              {/* <div className="FormMultipleFields mb-4">
                 <ColorPicker
                   colorPickerLabel="Theme Color"
                   colorPickerValue={color1 || '#1A1A1A'}
@@ -793,7 +789,7 @@ function SettingsApp() {
                   setColorPickerValue={setColor3}
                   id="color3"
                 />
-              </div>
+              </div> */}
               <div className="FormField">
                 <Button
                   type="submit"

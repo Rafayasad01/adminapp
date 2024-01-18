@@ -54,7 +54,6 @@ function LoginPage() {
           dispatch(setItemState(newUserData));
           if (newUserData?.tenantConfig) {
             dispatch(setLogo(user?.data?.data?.tenantConfig?.logo));
-           
           }
           if (newUserData.isSuperAdmin) {
             navigate('../../../main');
