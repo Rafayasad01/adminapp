@@ -1,21 +1,11 @@
-import Switch from '@mui/material/Switch';
 import TablePagination from '@mui/material/TablePagination';
 import dayjs from 'dayjs';
-import Avatar from '@mui/material/Avatar';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
 import IconButton from '@mui/material/IconButton';
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import WysiwygOutlinedIcon from '@mui/icons-material/WysiwygOutlined';
 import CustomText from '../../../components/common/CustomText';
-import {
-  CheckRolePermission,
-  listingRolePermission,
-} from '../../../utils/helper';
 import Service from '../../../services/adminapp/adminAppUser';
 import { useAppSelector } from '../../../redux/redux-hooks';
-import { NOT_AUTHORIZED_MESSAGE } from '../../../utils/constants';
-import ActionMenu from '../../../components/common/ActionMenu';
 
 type Props = {
   list: any;
@@ -27,6 +17,7 @@ type Props = {
   setRowsPerPage: any;
   setList: any;
   search: string;
+  setSearch: any;
 };
 
 function AppUserLoyaltyTab({
@@ -42,9 +33,6 @@ function AppUserLoyaltyTab({
 }: Props) {
   const navigate = useNavigate();
   const authState: any = useAppSelector((state) => state?.authState);
-  const dataRole = useAppSelector(
-    (state: any) => state?.persisitReducer?.roleState?.role?.permissions
-  );
 
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,

@@ -1,22 +1,16 @@
 import Avatar from '@mui/material/Avatar';
 import Divider from '@mui/material/Divider';
-import Tab from '@mui/material/Tab';
-import Tabs from '@mui/material/Tabs';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import dayjs from 'dayjs';
 import ActionMenu from '../../../components/common/ActionMenu';
 import Loader from '../../../components/common/Loader';
-import MapAddress from '../../../components/common/MapAddress';
 import Notify from '../../../components/common/Notify';
 import TopBar from '../../../components/common/TopBar';
 import { useAppSelector } from '../../../redux/redux-hooks';
 import Service from '../../../services/adminapp/adminAppUser';
 import PermissionPopup from '../../../utils/PermissionPopup';
-import { weekDays } from '../../../utils/constants';
 import { listingRolePermission } from '../../../utils/helper';
-import AppUserAddressTabPage from '../AppUserAddressTab/AppUserAddressTabPage';
-import AppUserScheduleTabPage from '../AppUserScheduleTab/AppUserScheduleTabPage';
 
 function AppUserPromotionDetailPage() {
   const dataRole = useAppSelector(
@@ -24,10 +18,9 @@ function AppUserPromotionDetailPage() {
   );
   // const navigate = useNavigate();
   const [detail, setDetail] = useState<any>(null);
-  const [filteredWeekDays, setFilteredWeekDays] = useState<any>(null);
   // const [total, setTotal] = useState(0);
   // const [list, setList] = useState<any>([]);
-  const [address, setAddress] = useState<string>('');
+  // const [address, setAddress] = useState<string>('');
   const [cancelDialogOpen, setCancelDialogOpen] = useState<boolean>(false);
   const [dialogText] = useState<any>(
     'Are you sure you want to delete this driver address ?'
@@ -41,13 +34,13 @@ function AppUserPromotionDetailPage() {
   const [isLoader, setIsLoader] = React.useState(true);
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
-  const [selectedTab, setSelectedTab] = useState('ADDRESS');
+  // const [selectedTab, setSelectedTab] = useState('ADDRESS');
 
   const { historyId } = useParams();
 
-  const handleTabChange = (event: any, newValue: any) => {
-    setSelectedTab(newValue);
-  };
+  // const handleTabChange = (event: any, newValue: any) => {
+  //   setSelectedTab(newValue);
+  // };
 
   useEffect(() => {
     if (listingRolePermission(dataRole, 'Driver Address Detail')) {
@@ -272,7 +265,7 @@ function AppUserPromotionDetailPage() {
                       {detail.items &&
                         detail.items.map((item: any, index: number) => {
                           return (
-                            <tr key={item.id}>
+                            <tr key={index}>
                               <td>
                                 <div className="avatar flex flex-row items-center">
                                   {item.homeCatItem.icon ? (

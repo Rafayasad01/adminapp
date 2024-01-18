@@ -1,25 +1,8 @@
-import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
-import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
-import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import ContentCopyOutlinedIcon from '@mui/icons-material/ContentCopyOutlined';
-import FormControl from '@mui/material/FormControl';
-import IconButton from '@mui/material/IconButton';
-import Input from '@mui/material/Input';
-import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
-
-import TextField from '@mui/material/TextField';
+import React from 'react';
 import '../../assets/css/PopupStyle.css';
 import dayjs from 'dayjs';
-import ErrorSpanBox from '../../components/common/ErrorSpanBox';
-import { Category } from '../../interfaces/category.interface';
-import {
-  INVALID_CHAR,
-  MAX_LENGTH_EXCEEDED,
-  PATTERN,
-  imageAllowedTypes,
-} from '../../utils/constants';
 
 type Props = {
   openFormDialog: boolean;

@@ -7,6 +7,7 @@ import Checkbox from '@mui/material/Checkbox';
 import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import IconButton from '@mui/material/IconButton';
+import TextField from '@mui/material/TextField';
 import Input from '@mui/material/Input';
 import Link from '@mui/material/Link';
 import Tab from '@mui/material/Tab';
@@ -78,9 +79,11 @@ function SettingsApp() {
   const [openSocialMediaPopup, setOpenSocialMediaPopup] = useState(false);
   const [file, setFile] = useState<any>(null);
   const [selectedImg, setSelectedImg] = useState<any>(null);
+  const [themeFile, setThemeFile] = useState<any>(null);
+  const [themeSelectedImg, setThemeSelectedImg] = useState<any>(null);
   const [color1, setColor1] = useState<any>('#1A1A1A');
   const [color2, setColor2] = useState<any>('#1A1A1A');
-  // const [color3, setColor3] = useState<any>('#1A1A1A');
+  const [color3, setColor3] = useState<any>('#1A1A1A');
   const [detail, setDetail] = useState<Setting>();
   const [address, setAddress] = useState<any>(null);
   const [isLoader, setIsLoader] = useState(true);
@@ -100,7 +103,10 @@ function SettingsApp() {
     // console.log('itesmssss', item);
 
     setValue('name', item.name);
+    setValue('desc', item.desc);
     setValue('email', item.email);
+    setValue('deliveryUrgentFees', item.deliveryUrgentFees);
+    setValue('minimumDeliveryTime', Number(item.minimumDeliveryTime));
     setValue(
       'gstPercentage',
       item.gstPercentage ? item.gstPercentage : item.gst_percentage
@@ -139,7 +145,7 @@ function SettingsApp() {
     // setValue('userLimit', item.userLimit ? item.userLimit : '');
     setColor1(item.color1);
     setColor2(item.color2);
-    // setColor3(item.color3);
+    setColor3(item.color3);
   };
 
   const onSubmit = (data: any) => {
@@ -149,7 +155,7 @@ function SettingsApp() {
       // setIsLoader(true);
       const formData = new FormData();
       formData.append('name', data.name ? data.name : '');
-      formData.append('desc', data.name ? data.name : '');
+      formData.append('desc', data.desc ? data.desc : '');
       formData.append(
         'gstPercentage',
         data.gstPercentage ? data.gstPercentage : ''
@@ -160,6 +166,14 @@ function SettingsApp() {
         data.minOrderAmount ? data.minOrderAmount : 0
       );
       formData.append('deliveryFee', data.deliveryFee ? data.deliveryFee : 0);
+      formData.append(
+        'minimumDeliveryTime',
+        data.minimumDeliveryTime ? data.minimumDeliveryTime : 0
+      );
+      formData.append(
+        'deliveryUrgentFees',
+        data.deliveryUrgentFees ? data.deliveryUrgentFees : 0
+      );
       formData.append('address', data.address ? data.address : '');
       formData.append('facebook', detail ? detail.facebook : '');
       formData.append('instagram', detail ? detail.instagram : '');
@@ -170,7 +184,7 @@ function SettingsApp() {
       formData.append('updatedBy', authState.user.id);
       formData.append('color1', color1);
       formData.append('color2', color2);
-      // formData.append('color3', color3);
+      formData.append('color3', color3);
       formData.append('enableLoyaltyProgram', data.enableLoyaltyProgram);
       formData.append(
         'loyaltyCoinConversionRate',
@@ -180,13 +194,14 @@ function SettingsApp() {
       if (authState?.user?.userType === 'ShopUser')
         formData.append('userLimit', data.userLimit ? data.userLimit : 0);
       if (file !== null) formData.append('logo', file);
+      if (themeFile !== null) formData.append('banner', themeFile);
 
       Service.updateService(authState.user.tenant, formData)
         .then((item: any) => {
           const { success, message, data: itemData } = item.data;
           if (success) {
-            // console.log(itemData, 'itemData');
-
+            // console.log({ tenantConfig: itemData });
+            dispatch(setTenantConfig(itemData));
             setAddress(itemData?.address);
             dispatch(setTenantConfig(itemData));
             if (itemData?.logo) {
@@ -295,6 +310,9 @@ function SettingsApp() {
           </div>
           <div className="Content w-full px-4 py-5">
             <form onSubmit={handleSubmit(onSubmit)}>
+              <div className="mb-3 text-base">
+                <span className="">Upload Vendor Image</span>
+              </div>
               <div className="grid grid-cols-12 items-center">
                 <div className="col-span-5 mb-4">
                   <DragDropFile
@@ -318,6 +336,36 @@ function SettingsApp() {
                       className="max-h-[100px] max-w-[150px] rounded-md"
                       src={detail.logo}
                       alt="Shop Logo"
+                    />
+                  </div>
+                ) : null}
+              </div>
+              <div className="mb-3 text-base">
+                <span className="">Upload Theme Image</span>
+              </div>
+              <div className="grid grid-cols-12 items-center">
+                <div className="col-span-5 mb-4">
+                  <DragDropFile
+                    setIsNotify={setIsNotify}
+                    setNotifyMessage={setNotifyMessage}
+                    setFile={setThemeFile}
+                    setImg={setThemeSelectedImg}
+                  />
+                </div>
+                {themeSelectedImg ? (
+                  <div className="col-span-6 flex items-center xl:justify-center 2xl:justify-start">
+                    <img
+                      className="max-h-[100px] max-w-[150px] rounded-md"
+                      src={themeSelectedImg}
+                      alt="theme Logo"
+                    />
+                  </div>
+                ) : detail && detail?.banner ? (
+                  <div className="col-span-6 flex items-center xl:justify-center 2xl:justify-start">
+                    <img
+                      className="max-h-[100px] max-w-[150px] rounded-md"
+                      src={detail.banner}
+                      alt="theme Logo"
                     />
                   </div>
                 ) : null}
@@ -362,6 +410,34 @@ function SettingsApp() {
                   {errors.address?.type === 'validate' && (
                     <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
                   )}
+                </FormControl>
+              </div>
+              <div className="FormField">
+                <FormControl className="FormControl" variant="standard">
+                  <label className="FormLabel">
+                    Description{' '}
+                    <span className="SubLabel">Write 01-350 Characters</span>
+                  </label>
+                  <TextField
+                    className="FormTextarea"
+                    id="desc"
+                    multiline
+                    rows={4}
+                    defaultValue=""
+                    placeholder="Write Description"
+                    {...register('desc', {
+                      required: 'Description is required',
+                      minLength: {
+                        value: 1,
+                        message: 'Minimum One Characters',
+                      },
+                      maxLength: {
+                        value: 250,
+                        message: MAX_LENGTH_EXCEEDED,
+                      },
+                    })}
+                  />
+                  {errors.desc && <ErrorSpanBox error={errors.desc?.message} />}
                 </FormControl>
               </div>
               <div className="FormFields mb-4">
@@ -432,7 +508,7 @@ function SettingsApp() {
                   )}
                 </FormControl>
                 <FormControl className="FormControl" variant="standard">
-                  <label className="FormLabel">Delivery fee</label>
+                  <label className="FormLabel">Rider Delivery Charges</label>
                   <Input
                     className="FormInput"
                     id="name"
@@ -471,6 +547,54 @@ function SettingsApp() {
                     )}
                   </FormControl>
                 )}
+              </div>
+              <div className="FormFields">
+                <FormControl className="FormControl" variant="standard">
+                  <label className="FormLabel">Minimum Delivery Days</label>
+                  <Input
+                    id="minimumDeliveryTime"
+                    placeholder="Enter minimum delivery time"
+                    type="number"
+                    className="FormInput"
+                    defaultValue={0}
+                    {...register('minimumDeliveryTime', {
+                      validate: (value: any) =>
+                        VALIDATE_NON_NEGATIVE_NUM(value),
+                      maxLength: {
+                        value: 10,
+                        message: MAX_LENGTH_EXCEEDED,
+                      },
+                    })}
+                    disableUnderline
+                  />
+                  {errors?.minimumDeliveryTime && (
+                    <ErrorSpanBox
+                      error={errors?.minimumDeliveryTime?.message}
+                    />
+                  )}
+                </FormControl>
+                <FormControl className="FormControl" variant="standard">
+                  <label className="FormLabel">Delivery Urgent Day Fees</label>
+                  <Input
+                    id="deliveryUrgentFees"
+                    placeholder="Enter Delivery Urgent Fees"
+                    type="number"
+                    className="FormInput"
+                    defaultValue={0}
+                    {...register('deliveryUrgentFees', {
+                      validate: (value: any) =>
+                        VALIDATE_NON_NEGATIVE_NUM(value),
+                      maxLength: {
+                        value: 10,
+                        message: MAX_LENGTH_EXCEEDED,
+                      },
+                    })}
+                    disableUnderline
+                  />
+                  {errors?.deliveryUrgentFees && (
+                    <ErrorSpanBox error={errors?.deliveryUrgentFees?.message} />
+                  )}
+                </FormControl>
               </div>
               <div className="FormField mb-4">
                 <FormControl className="FormControl" variant="standard">
@@ -663,12 +787,12 @@ function SettingsApp() {
                   setColorPickerValue={setColor2}
                   id="color2"
                 />
-                {/* <ColorPicker
-                  colorPickerLabel="Color3"
+                <ColorPicker
+                  colorPickerLabel="Page Color"
                   colorPickerValue={color3 || '#1A1A1A'}
                   setColorPickerValue={setColor3}
                   id="color3"
-                /> */}
+                />
               </div>
               <div className="FormField">
                 <Button

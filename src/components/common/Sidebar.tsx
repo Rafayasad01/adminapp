@@ -14,7 +14,7 @@ import CorporateFareIcon from '@mui/icons-material/CorporateFare';
 import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
 import PeopleOutlineOutlinedIcon from '@mui/icons-material/PeopleOutlineOutlined';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
-import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
+// import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import ViewCarouselOutlinedIcon from '@mui/icons-material/ViewCarouselOutlined';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
@@ -27,7 +27,7 @@ import Toolbar from '@mui/material/Toolbar';
 import { NavLink } from 'react-router-dom';
 // import HeadphonesOutlinedIcon from '@mui/icons-material/HeadphonesOutlined'
 import CollectionsOutlinedIcon from '@mui/icons-material/CollectionsOutlined';
-import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined';
+// import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined';
 import assets from '../../assets';
 import { useAppSelector } from '../../redux/redux-hooks';
 import CAN, { defineRules } from '../../services/permissions/permissions';
@@ -39,7 +39,7 @@ import OrderIcon from '../icons/OrderIcon';
 import PermissionIcon from '../icons/PermissionIcon';
 import RoleIcon from '../icons/RoleIcon';
 import ShopIcon from '../icons/ShopIcon';
-import TenantIcon from '../icons/TenantIcon';
+// import TenantIcon from '../icons/TenantIcon';
 import UserPermission from '../icons/UserPermission';
 import VoucherIcon from '../icons/VoucherIcon';
 import AppointmentIcon from '../icons/appointmentIcon';
@@ -147,22 +147,27 @@ const superAdminlinks = [
     icon: <CollectionsOutlinedIcon fontSize="inherit" />,
   },
   {
-    name: 'tenant',
-    path: 'tenant',
-    icon: <TenantIcon />,
-    childLinks: [
-      {
-        name: 'shops',
-        path: 'tenant/shop',
-        icon: <ShopIcon />,
-      },
-      {
-        name: 'users',
-        path: 'tenant/user',
-        icon: <GroupsOutlinedIcon className="w-[20px]" />,
-      },
-    ],
+    name: 'shops',
+    path: 'tenant/shop',
+    icon: <ShopIcon />,
   },
+  // {
+  //   name: 'tenant',
+  //   path: 'tenant',
+  //   icon: <TenantIcon />,
+  //   childLinks: [
+  //     {
+  //       name: 'shops',
+  //       path: 'tenant/shop',
+  //       icon: <ShopIcon />,
+  //     },
+  //     {
+  //       name: 'users',
+  //       path: 'tenant/user',
+  //       icon: <GroupsOutlinedIcon className="w-[20px]" />,
+  //     },
+  //   ],
+  // },
   {
     name: 'user permissions',
     path: 'role',
@@ -187,7 +192,7 @@ function Sidebar() {
   const appItems = useAppSelector((state: any) => state?.persisitReducer?.appState?.UserItems);
   const logo = useAppSelector((state: any) => state?.persisitReducer?.appState?.logo);
 
-  // console.log("appItems", appItems);
+  // console.log("appItems", logo);
 
   const [list, setList] = useState<any>(null);
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);

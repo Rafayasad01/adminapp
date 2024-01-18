@@ -24,6 +24,9 @@ type Props = {
 
 function TopBar({ title, isNestedRoute = false }: Props) {
   const userData = useAppSelector((state: any) => state?.authState?.user);
+  const ProfileAvatar = useAppSelector((state: any) => state?.persisitReducer?.appState?.profileAvatar);
+  // console.log("PRAV", ProfileAvatar);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const divRef = useRef<HTMLDivElement>(null);
@@ -88,13 +91,18 @@ function TopBar({ title, isNestedRoute = false }: Props) {
           )}
           <div ref={divRef} className="header-user-box ml-3.5 cursor-pointer" onClick={() => setProfileToggler(!profileToggler)}>
             <span>{`${userData.firstName} ${userData.lastName}`}</span>
-            {userData?.avatar ? (
+            {ProfileAvatar ? (
+              <Avatar
+                sx={{ width: 56, height: 56 }}
+                alt="user image"
+                src={ProfileAvatar}
+              />
+            ) : userData?.avatar ? (
               <Avatar
                 sx={{ width: 56, height: 56 }}
                 alt="user image"
                 src={userData.avatar}
-              />
-            ) : (
+              />) : (
               <Avatar
                 sx={{ bgcolor: 'black', fontSize: '18px' }}
               >{`${userData.firstName?.charAt(0)}${userData.lastName?.charAt(
@@ -106,13 +114,15 @@ function TopBar({ title, isNestedRoute = false }: Props) {
         </div>
       </Toolbar>
       {profileToggler &&
-        <div className='flex items-end justify-end absolute w-[98%] h-[135px] z-10'>
+        <div className={`flex items-end justify-end absolute w-[98%] ${userData?.isSuperAdmin === false ? 'h-[135px]' : 'h-[105px] '} z-10`}>
           <div className='bg-white 2xl:w-[11%] xl:w-[17%] p-1 rounded-md shadow-lg'>
-            <div onClick={() => navigate('/admin/dashboard/profile', { replace: true })} className='p-1 topbar-dd rounded-md text-black text-sm flex items-center cursor-pointer'>
-              <PersonOutlineOutlinedIcon className='w-4' />
-              <p className='mx-2'>View Profile</p>
-            </div>
-            <div className='text-black text-sm flex items-center topbar-dd rounded-md mt-1 p-1'>
+            {userData?.isSuperAdmin === false &&
+              <div onClick={() => navigate('/admin/dashboard/profile', { replace: true })} className='p-1 topbar-dd rounded-md text-black text-sm flex items-center cursor-pointer'>
+                <PersonOutlineOutlinedIcon className='w-4' />
+                <p className='mx-2'>View Profile</p>
+              </div>
+            }
+            <div className={`text-black text-sm flex items-center topbar-dd rounded-md ${userData?.isSuperAdmin === false && 'mt-1'}  p-1`}>
               <NavLink
                 className="logout-link w-full"
                 to="/admin"

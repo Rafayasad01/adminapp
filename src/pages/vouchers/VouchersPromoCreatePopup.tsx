@@ -71,7 +71,6 @@ function VouchersPromoCreatePopup({
   const {
     register,
     handleSubmit,
-    reset,
     setValue,
     watch,
     formState: { errors },
