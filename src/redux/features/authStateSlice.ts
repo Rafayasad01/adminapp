@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { setThemeColor } from '../../utils/setThemeColor';
+import setThemeColor from '../../utils/setThemeColor';
 import { getItem, removeItem, setItem } from '../../utils/storage';
 
 type User = {

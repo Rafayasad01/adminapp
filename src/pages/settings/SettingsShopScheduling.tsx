@@ -47,10 +47,15 @@ function SettingsShopScheduling() {
                 onClick={() => navigate('../app')}
               />
               <Tab
+                label="System Configuration"
+                value="SYSTEM_CONFIGURATION"
+                onClick={() => navigate('../config')}
+              />
+              {/* <Tab
                 label="Shop Scheduling"
                 value="SHOP_SCHEDULING"
                 onClick={() => navigate('../shop')}
-              />
+              /> */}
             </Tabs>
           </div>
           <div className="Content w-full py-5 px-4">
