@@ -23,6 +23,8 @@ module.exports = {
         'text-color': ' #6A6A6A',
         'dark-blue': '#4283F4',
         'light-gray': '#F8F8F8',
+        'color-1' : 'var(--theme-bg-color)',
+        'color-2' : 'var(--theme-text-color)',
       },
     },
   },

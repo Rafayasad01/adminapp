@@ -1,3 +1,5 @@
+import { setItem } from './storage';
+
 // export const BASE_URL = import.meta.env.VITE_SERVICE_BASE_URL;
 // export const BASE_URL = 'https://dev.urapptech.com/api/v1/admin/';
 export const BASE_URL = 'http://192.168.8.68:3200/api/v1/admin/';
@@ -57,10 +59,9 @@ export const WHATSAPP = 'whatsapp';
 export const DOMAIN_PREFIX = '.urapptech.com';
 export const DOMAIN_PROTOCOL = 'https://';
 export const NOT_AUTHORIZED_MESSAGE = 'You dont have permission for this.';
-// LocalStorage my token save kara lyty
 export const TOKEN_STORE_KEY = 'APP_AUTH_TOKEN';
 export const setToken = (data: string) => {
-  localStorage.setItem(TOKEN_STORE_KEY, JSON.stringify(data));
+  setItem('AUTH_TOKEN', data);
 };
 
 let TEXT_STORE_KEY = '';

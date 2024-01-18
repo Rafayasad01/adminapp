@@ -1,7 +1,8 @@
 import axios from 'axios';
-import { BASE_URL, TOKEN_STORE_KEY } from './constants';
+import { BASE_URL } from './constants';
+import { getItem } from './storage';
 
-const token = JSON.parse(localStorage.getItem(TOKEN_STORE_KEY)!);
+const token = getItem<string>('AUTH_TOKEN');
 
 const post = <T = any>(endPoint: string, data: T) => {
   return axios.post(`${BASE_URL}${endPoint}`, data, {

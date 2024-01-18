@@ -334,7 +334,7 @@ function CustomTable({
           </table>
         </div>
         {list?.length < 1 ? (
-          <div className="flex w-full items-center justify-center bg-gray-200 py-5">
+          <div className="flex w-[90%] mx-auto items-center justify-center bg-gray-200 py-5 ">
             <p>No Records Found</p>
           </div>
         ) : null}

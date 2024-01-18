@@ -1,4 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { setThemeColor } from '../../utils/setThemeColor';
+import { getItem, removeItem, setItem } from '../../utils/storage';
 
 type User = {
   id: string;
@@ -21,11 +23,11 @@ type AuthState = {
 };
 
 function getUser() {
-  const user = localStorage.getItem('user');
+  const user = getItem<any>('USER');
   if (user) {
-    return JSON.parse(user);
+    setThemeColor(user.tenantConfig);
   }
-  return null;
+  return user;
 }
 
 const initialState: AuthState = {
@@ -38,15 +40,24 @@ export const authStateSlice = createSlice({
   reducers: {
     login: (state, action: PayloadAction<User>) => {
       state.user = action.payload;
-      localStorage.setItem('user', JSON.stringify(action.payload));
+      setThemeColor(state.user?.tenantConfig);
+      setItem('USER', action.payload);
     },
     logout: (state) => {
       state.user = null;
-      localStorage.removeItem('user');
+      removeItem('USER');
+    },
+    setTenantConfig: (state, action: PayloadAction<any>) => {
+      if (!state.user) {
+        return;
+      }
+      state.user.tenantConfig = action.payload;
+      setThemeColor(action.payload);
+      setItem('USER', state.user);
     },
   },
 });
 
-export const { login, logout } = authStateSlice.actions;
+export const { login, logout, setTenantConfig } = authStateSlice.actions;
 
 export default authStateSlice.reducer;

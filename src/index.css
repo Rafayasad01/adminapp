@@ -1486,7 +1486,10 @@ label+.css-1aa5qj0-MuiInputBase-root-MuiInput-root {
   font-size: 24px;
   cursor: pointer;
 }
-
+.toolbar-style{
+margin-left: auto !important;
+margin-right: auto !important;
+}
 /* .css-yiavyu-MuiBackdrop-root-MuiDialog-backdrop  {
 } */
 /* .MuiModal-root.css-zw3mfo-MuiModal-root-MuiDialog-root .MuiBackdrop-root.MuiModal-backdrop.css-yiavyu-MuiBackdrop-root-MuiDialog-backdrop .css-hz1bth-MuiDialog-container .custom-image-dialog{

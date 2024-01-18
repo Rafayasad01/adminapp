@@ -320,7 +320,7 @@ function Sidebar() {
       variant="permanent"
       PaperProps={{
         className:
-          'left-sidebar box-border w-64 border-r-0 bg-stone-900 text-gray-50',
+          'left-sidebar box-border w-64 border-r-0 bg-color-1  text-gray-50',
       }}
     >
       <List disablePadding>
@@ -337,9 +337,9 @@ function Sidebar() {
             justifyContent="center"
           >
             {userData?.isSuperAdmin ? (
-              <img className="mt-9 max-w-[150px]" src={assets.images.urApplogoWhite} alt="" />
+              <img className="mt-9 max-w-[150px] h-[29px]" src={assets.images.urApplogoWhite} alt="" />
             ) : logo ? (
-              <img className="mt-9 max-w-[100px]" src={logo} alt="logo" />
+              <img className="mt-9 max-w-[150px] h-[29px]" src={logo} alt="logo" />
             ) : (
               <div className="flex w-full items-center justify-start rounded-2xl p-3 text-white">
                 <img
