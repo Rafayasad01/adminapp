@@ -268,7 +268,7 @@ function BannersPage() {
     if (listingRolePermission(dataRole, 'Banners Delete')) {
       setIsLoader(true);
       const deleteObj = {
-        updatedBy: authState.user.id
+        updatedBy: authState.user.id,
       };
       Service.deleteBanner(deleteObj, id)
         .then((item: any) => {
@@ -310,7 +310,7 @@ function BannersPage() {
     if (listingRolePermission(dataRole, 'Banners Update Status')) {
       const data = {
         isActive: event.target.checked,
-        updatedBy: authState.user.id
+        updatedBy: authState.user.id,
       };
       Service.BannerUpdateStatus(data, id).then((updateItem) => {
         if (updateItem.data.success) {
@@ -382,40 +382,53 @@ function BannersPage() {
                       <CardContent className="mt-5">
                         <hr />
                       </CardContent>
-                      <div className='px-4 flex items-center justify-between'>
+                      <div className="flex items-center justify-between px-4">
                         <div>
-                          <span className='text-lg font-semibold'>{item.name}</span>
+                          <span className="text-lg font-semibold">
+                            {item.name}
+                          </span>
                         </div>
                         <div>
-                          <span className='text-lg font-semibold'>{item.bannerType}</span>
+                          <span className="text-lg font-semibold">
+                            {item.bannerType}
+                          </span>
                         </div>
                       </div>
-                      {item.shortDesc &&
+                      {/* {item.shortDesc && (
                         <>
                           <CardContent className="">
                             <hr />
                           </CardContent>
-                          <div className='px-3'>
-                            <p className='text-base font-semibold'>Short Description</p>
+                          <div className="px-3">
+                            <p className="text-base font-semibold">
+                              Short Description
+                            </p>
                           </div>
-                          <div className='px-3'>
-                            <p className='text-sm'>{item.shortDesc}</p>
+                          <div className="px-3">
+                            <p className="text-sm">{item.shortDesc}</p>
                           </div>
                         </>
-                      }
-                      {item.pageDetail &&
+                      )}
+                      {item.pageDetail && (
                         <>
                           <CardContent className="">
                             <hr />
                           </CardContent>
-                          <div className='px-3'>
-                            <p className='text-base font-semibold'>Page Detail Description</p>
+                          <div className="px-3">
+                            <p className="text-base font-semibold">
+                              Page Detail Description
+                            </p>
                           </div>
-                          <div className='px-3'>
-                            <p className='text-sm'>{item.pageDetail}</p>
+                          <div className="px-3">
+                            <p
+                              className="text-sm"
+                              dangerouslySetInnerHTML={{
+                                __html: item.pageDetail,
+                              }}
+                            />
                           </div>
                         </>
-                      }
+                      )} */}
                       <CardActions className="">
                         <div className="flex w-full items-center justify-between">
                           <div>
