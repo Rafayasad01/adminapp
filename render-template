@@ -1,0 +1,8 @@
+to render template data in react use
+HTML_DATA is template received from database
+
+<p className="text-sm" dangerouslySetInnerHTML={{__html: HTML_DATA}} />
+
+to render template data in angular use
+HTML_DATA is template received from database
+<span [innerHTML]="HTML_DATA"></span>
