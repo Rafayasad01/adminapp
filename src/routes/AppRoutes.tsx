@@ -61,6 +61,8 @@ import AppUserRewardHistory from '../pages/appUsers/AppUserRewardHistory';
 import AppUserPromotionDetailPage from '../pages/appUsers/AppUserRewardHistoryTabs/AppUserPromotionDetailPage';
 import AppUserLoyaltyDetailPage from '../pages/appUsers/AppUserRewardHistoryTabs/AppUserLoyaltyDetailPage';
 import SettingConfig from '../pages/settings/SettingConfig';
+import SuperAdminThemeConfigPage from '../pages/super-admin/theme-configurations/SuperAdminThemeConfigPage';
+import SuperAdminThemeCreatePage from '../pages/super-admin/theme-configurations/SuperAdminThemeCreatePage';
 
 export const routeObjects: RouteObject[] = [
   {
@@ -206,7 +208,21 @@ export const routeObjects: RouteObject[] = [
                 ]
               }
             ]
-          }
+          },
+          {
+            path: 'theme-configuration',
+            children: [
+              { index: true, element: <Navigate to="list" replace /> },
+              {
+                path: 'list',
+                element: <SuperAdminThemeConfigPage />,
+              },
+              {
+                path: 'create',
+                element: <SuperAdminThemeCreatePage />,
+              },
+            ]
+          },
         ],
       },
       {
