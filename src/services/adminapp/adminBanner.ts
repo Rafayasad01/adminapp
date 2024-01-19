@@ -14,16 +14,16 @@ const editBanners = (bannerID: string) => {
   return network.get(`${BANNER_PREFIX}/find/${bannerID}`);
 };
 
-const updateBanners = (data: any) => {
-  return network.postMultipart(`${BANNER_PREFIX}/update`, data);
+const updateBanners = (data: any, bannerID: string) => {
+  return network.postMultipart(`${BANNER_PREFIX}/update/${bannerID}`, data);
 };
 
-const deleteBanner = (data: any) => {
-  return network.post(`${BANNER_PREFIX}/delete`, data);
+const deleteBanner = (data: any, id: any) => {
+  return network.post(`${BANNER_PREFIX}/delete/${id}`, data);
 };
 
-const BannerUpdateStatus = (data: any) => {
-  return network.post(`${BANNER_PREFIX}/update/status`, data);
+const BannerUpdateStatus = (data: any, id: any) => {
+  return network.post(`${BANNER_PREFIX}/update/status/${id}`, data);
 };
 
 const BannerDelete = (data: any) => {

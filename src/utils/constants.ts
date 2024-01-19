@@ -162,3 +162,18 @@ export const VALIDATE_NON_NEGATIVE_NUM_AND_CHECK_LENGTH = (
 };
 
 export const imageAllowedTypes = ['image/png', 'image/jpeg', 'image/jpg'];
+
+export const BANNER_TYPE = [
+  {
+    id: "Slider",
+    name: "Slider"
+  },
+  {
+    id: "Onboard",
+    name: "On Board"
+  },
+  {
+    id: "Splash",
+    name: "Splash Screen"
+  }
+]

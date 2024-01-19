@@ -108,11 +108,16 @@ function BannersPage() {
     }
   }, [emptyVariable]);
 
-  const createFormHandler = (file: any) => {
+  const createFormHandler = (bannerData: any) => {
     if (listingRolePermission(dataRole, 'Banners Create')) {
       setIsLoader(true);
       const formData = new FormData();
-      formData.append('banner', file);
+      formData.append('name', bannerData.name ?? '');
+      formData.append('bannerType', bannerData.bannerType);
+      formData.append('shortDesc', bannerData.shortDesc ?? '');
+      formData.append('pageDetail', bannerData.pageDetail ?? '');
+      formData.append('link', bannerData.link ?? '');
+      formData.append('banner', bannerData.bannerImg);
       formData.append('createdBy', authState.user.id);
       formData.append('tenant', authState.user.tenant);
       Service.createBanner(formData)
@@ -162,10 +167,15 @@ function BannersPage() {
     if (listingRolePermission(dataRole, 'Banners Update')) {
       setIsLoader(true);
       const formDetails = new FormData();
-      formDetails.append('banner', data.banner);
-      formDetails.append('bannerId', data.id);
+      formDetails.append('name', data.name ?? '');
+      formDetails.append('bannerType', data.bannerType);
+      formDetails.append('shortDesc', data.shortDesc ?? '');
+      formDetails.append('pageDetail', data.pageDetail ?? '');
+      formDetails.append('link', data.link ?? '');
+      if (data.bannerImg !== null) formDetails.append('banner', data.bannerImg);
+      // formDetails.append('bannerId', data.id);
       formDetails.append('updatedBy', authState.user.id);
-      Service.updateBanners(formDetails)
+      Service.updateBanners(formDetails, editFormData?.id)
         .then((item) => {
           if (item.data.success) {
             // console.log('UPDATED', item.data.data);
@@ -180,6 +190,10 @@ function BannersPage() {
               if (list[i].id === item.data.data.id) {
                 list[i].name = item.data.data.name;
                 list[i].banner = item.data.data.banner;
+                list[i].bannerType = item.data.data.bannerType;
+                list[i].shortDesc = item.data.data.shortDesc;
+                list[i].pageDetail = item.data.data.pageDetail;
+                list[i].link = item.data.data.link;
               }
             }
             reset();
@@ -223,6 +237,13 @@ function BannersPage() {
             setIsLoader(false);
             setOpenEditFormDialog(true);
             setEditFormData(item.data.data);
+          } else {
+            setIsLoader(false);
+            setIsNotify(true);
+            setNotifyMessage({
+              text: item.data.message,
+              type: 'error',
+            });
           }
         })
         .catch((err) => {
@@ -247,10 +268,9 @@ function BannersPage() {
     if (listingRolePermission(dataRole, 'Banners Delete')) {
       setIsLoader(true);
       const deleteObj = {
-        updatedBy: authState.user.id,
-        bannerId: id,
+        updatedBy: authState.user.id
       };
-      Service.deleteBanner(deleteObj)
+      Service.deleteBanner(deleteObj, id)
         .then((item: any) => {
           if (item.data.success) {
             setIsLoader(false);
@@ -290,10 +310,9 @@ function BannersPage() {
     if (listingRolePermission(dataRole, 'Banners Update Status')) {
       const data = {
         isActive: event.target.checked,
-        updatedBy: authState.user.id,
-        bannerId: id,
+        updatedBy: authState.user.id
       };
-      Service.BannerUpdateStatus(data).then((updateItem) => {
+      Service.BannerUpdateStatus(data, id).then((updateItem) => {
         if (updateItem.data.success) {
           setList((newArr: any) => {
             return newArr.map((item: any) => {
@@ -363,6 +382,40 @@ function BannersPage() {
                       <CardContent className="mt-5">
                         <hr />
                       </CardContent>
+                      <div className='px-4 flex items-center justify-between'>
+                        <div>
+                          <span className='text-lg font-semibold'>{item.name}</span>
+                        </div>
+                        <div>
+                          <span className='text-lg font-semibold'>{item.bannerType}</span>
+                        </div>
+                      </div>
+                      {item.shortDesc &&
+                        <>
+                          <CardContent className="">
+                            <hr />
+                          </CardContent>
+                          <div className='px-3'>
+                            <p className='text-base font-semibold'>Short Description</p>
+                          </div>
+                          <div className='px-3'>
+                            <p className='text-sm'>{item.shortDesc}</p>
+                          </div>
+                        </>
+                      }
+                      {item.pageDetail &&
+                        <>
+                          <CardContent className="">
+                            <hr />
+                          </CardContent>
+                          <div className='px-3'>
+                            <p className='text-base font-semibold'>Page Detail Description</p>
+                          </div>
+                          <div className='px-3'>
+                            <p className='text-sm'>{item.pageDetail}</p>
+                          </div>
+                        </>
+                      }
                       <CardActions className="">
                         <div className="flex w-full items-center justify-between">
                           <div>
