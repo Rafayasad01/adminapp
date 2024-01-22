@@ -39,6 +39,7 @@ import OrderIcon from '../icons/OrderIcon';
 import PermissionIcon from '../icons/PermissionIcon';
 import RoleIcon from '../icons/RoleIcon';
 import ShopIcon from '../icons/ShopIcon';
+import ServiceIcon from '../icons/serviceIcon';
 // import TenantIcon from '../icons/TenantIcon';
 import UserPermission from '../icons/UserPermission';
 import VoucherIcon from '../icons/VoucherIcon';
@@ -184,6 +185,11 @@ const superAdminlinks = [
         icon: <RoleIcon />,
       },
     ],
+  },
+  {
+    name: 'Theme Configuration',
+    path: 'theme-configuration',
+    icon: <ServiceIcon />,
   },
 ];
 

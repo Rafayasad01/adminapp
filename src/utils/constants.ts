@@ -60,6 +60,8 @@ export const DOMAIN_PREFIX = '.urapptech.com';
 export const DOMAIN_PROTOCOL = 'https://';
 export const NOT_AUTHORIZED_MESSAGE = 'You dont have permission for this.';
 export const TOKEN_STORE_KEY = 'APP_AUTH_TOKEN';
+export const SYSTEM_CONFIG_PREFIX = 'theme';
+export const THEME_PREFIX = 'theme';
 export const setToken = (data: string) => {
   setItem('AUTH_TOKEN', data);
 };
@@ -163,6 +165,17 @@ export const VALIDATE_NON_NEGATIVE_NUM_AND_CHECK_LENGTH = (
 
 export const imageAllowedTypes = ['image/png', 'image/jpeg', 'image/jpg'];
 
+
+export const THEME_COLORS  = [
+  'background',
+  'faded',
+  'foreground',
+  'primary',
+  'secondary',
+  'secondary2'
+];
+
+export const CATEGORY_COLORS_COUNT  = 7; 
 export const BANNER_TYPE = [
   {
     id: "Slider",
