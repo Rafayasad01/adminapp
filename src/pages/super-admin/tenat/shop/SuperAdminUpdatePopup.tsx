@@ -7,13 +7,14 @@ import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
+import Service from '../../../../services/superadmin/theme';
 import TextField from '@mui/material/TextField';
 import { debounce } from '@mui/material/utils';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 import isBetween from 'dayjs/plugin/isBetween';
 import kabakCase from 'lodash/kebabCase';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import '../../../../assets/css/PopupStyle.css';
 import CustomDropDown from '../../../../components/common/CustomDropDown';
@@ -28,6 +29,7 @@ import {
   VALIDATE_NON_NEGATIVE_NUM,
   VALIDATE_NON_NEGATIVE_NUM_AND_CHECK_LENGTH,
 } from '../../../../utils/constants';
+import CustomMultipleSelectBox from '../../../../components/common/CustomMultipleSelect';
 
 dayjs.extend(duration);
 dayjs.extend(isBetween);
@@ -42,6 +44,8 @@ type Props = {
   roles?: any;
   role?: any;
   type?: any;
+  isLoader?: boolean;
+  setIsLoader?: any;
 };
 
 function SuperAdminUpdatePopup({
@@ -54,6 +58,8 @@ function SuperAdminUpdatePopup({
   roles,
   role,
   type,
+  isLoader,
+  setIsLoader
 }: Props) {
   const {
     register,
@@ -63,6 +69,8 @@ function SuperAdminUpdatePopup({
     formState: { errors },
     control,
   } = useForm<Tenant>();
+  const [lovList, setLovList] = useState<any>();
+
   const onSubmit = (data: Partial<Tenant>) => {
     // console.log('onsubmiot', data);
     if (data.tenantName) {
@@ -93,7 +101,36 @@ function SuperAdminUpdatePopup({
       setValue('trialStartDate', item.trialStartDate);
       setValue('developmentDomain', item.tenantConfig.developmentDomain);
       setValue('liveDomain', item.tenantConfig.liveDomain);
+      setValue('theme', item.theme);
     }
+    Service.lovList()
+      .then((item: any) => {
+        if (item.data.success) {
+          let temp = item.data.data.list.map((el: any) => {
+            return {
+              id: el.id,
+              name: el.key
+            }
+          })
+          setLovList(temp);
+          setIsLoader(false);
+        } else {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'error',
+          });
+        }
+      })
+      .catch((error) => {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: error.message,
+          type: 'error',
+        });
+      })
   }, [item]);
 
   const getRemainingTime = (data: any) => {
@@ -298,7 +335,7 @@ function SuperAdminUpdatePopup({
                   )}
                 </FormControl>
               </div>
-              <div className="FormField mb-4">
+              <div className="FormFields mb-4">
                 <FormControl className="FormControl" variant="standard">
                   <CustomDropDown
                     validateRequired
@@ -308,6 +345,20 @@ function SuperAdminUpdatePopup({
                     register={register}
                     options={{ roles, role }}
                     inputTitle="Role"
+                  />
+                </FormControl>
+                <FormControl className="FormControl" variant="standard">
+                  <CustomMultipleSelectBox
+                    validateRequired
+                    id="theme"
+                    control={control}
+                    error={errors}
+                    setValue={setValue}
+                    register={register}
+                    options={{ roles: lovList }}
+                    customClassInputTitle="font-bold"
+                    inputTitle="Theme"
+                    defaultVal='-- Select Theme --'
                   />
                 </FormControl>
               </div>

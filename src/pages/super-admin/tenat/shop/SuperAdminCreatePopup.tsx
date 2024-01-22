@@ -7,10 +7,11 @@ import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
+import Service from '../../../../services/superadmin/theme';
 import TextField from '@mui/material/TextField';
 import { debounce } from '@mui/material/utils';
 import kabakCase from 'lodash/kebabCase';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import '../../../../assets/css/PopupStyle.css';
 import CustomDropDown from '../../../../components/common/CustomDropDown';
@@ -25,6 +26,8 @@ import {
   VALIDATE_NON_NEGATIVE_NUM,
   VALIDATE_NON_NEGATIVE_NUM_AND_CHECK_LENGTH,
 } from '../../../../utils/constants';
+import { previousDay } from 'date-fns';
+import CustomMultipleSelectBox from '../../../../components/common/CustomMultipleSelect';
 
 type Props = {
   roles?: any;
@@ -34,6 +37,8 @@ type Props = {
   setIsNotify: any;
   setNotifyMessage: any;
   type?: boolean;
+  isLoader?: boolean;
+  setIsLoader?: any;
 };
 
 function SuperAdminTenantCreatePopup({
@@ -44,6 +49,8 @@ function SuperAdminTenantCreatePopup({
   setIsNotify,
   setNotifyMessage,
   type,
+  isLoader,
+  setIsLoader
 }: Props) {
   const {
     register,
@@ -53,23 +60,59 @@ function SuperAdminTenantCreatePopup({
     formState: { errors },
     control,
   } = useForm<Tenant>();
+  const [lovList, setLovList] = useState<any>();
+
+  useEffect(() => {
+    Service.lovList()
+      .then((item: any) => {
+        if (item.data.success) {
+          let temp = item.data.data.list.map((el: any) => {
+            return {
+              id: el.id,
+              name: el.key
+            }
+          })
+          setLovList(temp);
+          setIsLoader(false);
+        } else {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'error',
+          });
+        }
+      })
+      .catch((error) => {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: error.message,
+          type: 'error',
+        });
+        // console.log('error::::::::', error);
+      });
+  }, [])
+
+  console.log("PPPPPPPPPPPPPPLOV", lovList);
+
 
   const onSubmit = (data: Partial<Tenant>) => {
-    // console.log("datA", data);
+    console.log("datA", data);
     // if (data.enableLoyaltyProgram === false) {
     //   delete data.loyaltyCoinConversionRate;
     //   delete data.requiredCoinsToRedeem;
     // }
-    if (data.tenantName) {
-      setOpenFormDialog(false);
-      callback(data);
-    } else {
-      setIsNotify(true);
-      setNotifyMessage({
-        text: 'All fields are required!',
-        type: 'error',
-      });
-    }
+    // if (data.tenantName) {
+    //   setOpenFormDialog(false);
+    //   callback(data);
+    // } else {
+    //   setIsNotify(true);
+    //   setNotifyMessage({
+    //     text: 'All fields are required!',
+    //     type: 'error',
+    //   });
+    // }
   };
 
   const handleFormClose = () => {
@@ -272,7 +315,7 @@ function SuperAdminTenantCreatePopup({
                 )}
               </FormControl>
             </div>
-            <div className="FormFields mb-4">
+            <div className="FormFields">
               <CustomDropDown
                 validateRequired
                 id="role"
@@ -282,6 +325,20 @@ function SuperAdminTenantCreatePopup({
                 options={{ roles }}
                 inputTitle="Role"
               />
+              <CustomMultipleSelectBox
+                validateRequired
+                id="theme"
+                control={control}
+                error={errors}
+                setValue={setValue}
+                register={register}
+                options={{ roles: lovList }}
+                customClassInputTitle="font-bold"
+                inputTitle="Theme"
+                defaultVal='-- Select Theme --'
+              />
+            </div>
+            <div className="FormField mb-4">
               <FormControl className="FormControl" variant="standard">
                 <label className="FormLabel">Address</label>
                 <Input

@@ -14,4 +14,5 @@ export interface Tenant {
   userLimit: number;
   trialModeLimit: number;
   role: string;
+  theme: any;
 }

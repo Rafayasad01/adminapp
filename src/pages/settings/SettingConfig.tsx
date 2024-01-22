@@ -12,7 +12,7 @@ import Notify from '../../components/common/Notify';
 function SettingsConfig() {
   const navigate = useNavigate();
   const [address] = useState<any>(null);
-  const [isLoader] = useState(true);
+  const [isLoader] = useState(false);
   const [isNotify, setIsNotify] = useState(false);
   const [notifyMessage] = useState({});
 
