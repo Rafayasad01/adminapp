@@ -63,6 +63,7 @@ import AppUserLoyaltyDetailPage from '../pages/appUsers/AppUserRewardHistoryTabs
 import SettingConfig from '../pages/settings/SettingConfig';
 import SuperAdminThemeConfigPage from '../pages/super-admin/theme-configurations/SuperAdminThemeConfigPage';
 import SuperAdminThemeCreatePage from '../pages/super-admin/theme-configurations/SuperAdminThemeCreatePage';
+import SuperAdminThemeEditPage from '../pages/super-admin/theme-configurations/SuperAdminThemeEditPage';
 
 export const routeObjects: RouteObject[] = [
   {
@@ -220,6 +221,10 @@ export const routeObjects: RouteObject[] = [
               {
                 path: 'create',
                 element: <SuperAdminThemeCreatePage />,
+              },
+              {
+                path: 'edit/:id',
+                element: <SuperAdminThemeEditPage />,
               },
             ]
           },

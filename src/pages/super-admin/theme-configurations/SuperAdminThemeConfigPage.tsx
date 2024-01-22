@@ -62,12 +62,11 @@ function SuperAdminThemeConfigPage() {
    * Handle the change of the current search field in the theme config list.
    * @param e Event object containing the event data of input key up event
    */
-  const handleSearch = (e: any) => {
-    const { value } = e.target;
-    setSearch(_.toString(value).trim());
+  const handleSearch = (v: string) => {
+    setSearch(_.toString(v).trim());
     setPage(0);
 
-    fetchThemeConfigList(0, rowsPerPage, value);
+    fetchThemeConfigList(0, rowsPerPage, v);
   };
 
   /**
@@ -131,7 +130,7 @@ function SuperAdminThemeConfigPage() {
             <div className="col-span-5">
               <div className="flex flex-row justify-end gap-3">
                 {/* Search Control */}
-                <SearchControl onKeyUp={handleSearch} />
+                <SearchControl onSearch={handleSearch} />
 
                 <Button
                   variant="contained"
@@ -187,7 +186,7 @@ function SuperAdminThemeConfigPage() {
                       <div className="flex flex-row-reverse">
                         <IconButton
                           className="icon-btn mr-3.5 p-0"
-                          onClick={() => navigate(`../detail/${2}`)}
+                          onClick={() => navigate(`../edit/${item?.id}`)}
                         >
                           <EditIcon />
                         </IconButton>

@@ -1,8 +1,28 @@
 import { Divider, FormControl, IconButton, Input, InputAdornment } from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
+import { memo, useState, ChangeEvent } from "react";
 
+interface SearchControlProps {
+  onSearch?: (value: string) => void;
+}
 
-const SearchControl = ({ onKeyUp=(e:React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {} }) => {
+const SearchControl: React.FC<SearchControlProps> = ({ onSearch = () => {} }) => {
+  const [searchText, setSearchText] = useState<string>('');
+
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.value;
+    setSearchText(newValue);
+
+    // Check if the input is empty and call onSearch
+    if (newValue.trim() === '') {
+      onSearch(newValue);
+    }
+  };
+
+  const handleSearch = () => {
+    onSearch(searchText);
+  };
+
   return (
     <FormControl
       className="search-grey-outline placeholder-grey w-60"
@@ -13,11 +33,12 @@ const SearchControl = ({ onKeyUp=(e:React.KeyboardEvent<HTMLInputElement | HTMLT
         id="search"
         type="text"
         placeholder="Search"
-        onKeyUp={onKeyUp}
+        value={searchText}
+        onChange={handleInputChange}
         endAdornment={
           <InputAdornment position="end">
             <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
-            <IconButton aria-label="toggle password visibility">
+            <IconButton onClick={handleSearch} aria-label="toggle password visibility">
               <SearchIcon className="text-[#6A6A6A]" />
             </IconButton>
           </InputAdornment>
@@ -28,5 +49,4 @@ const SearchControl = ({ onKeyUp=(e:React.KeyboardEvent<HTMLInputElement | HTMLT
   );
 };
 
-
-export default SearchControl;
+export default memo(SearchControl);

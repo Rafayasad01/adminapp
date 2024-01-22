@@ -18,7 +18,7 @@ const searchTheme = (search: string, page: number, size: number) => {
 };
 
 const updateTheme = (id: any, data: any) => {
-  return network.postMultipart(`${THEME_PREFIX}/update/${id}`, data);
+  return network.post(`${THEME_PREFIX}/update/${id}`, data);
 };
 
 export default {
