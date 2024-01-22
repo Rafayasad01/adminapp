@@ -748,6 +748,8 @@ function SuperAdminShopDetailPage() {
                     openFormDialog={openEditFormDialog}
                     setOpenFormDialog={setOpenEditFormDialog}
                     callback={updateFormBranchHandler}
+                    isLoader={isLoader}
+                    setIsLoader={setIsLoader}
                   />
                 )}
               </div>
