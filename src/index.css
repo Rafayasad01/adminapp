@@ -4,7 +4,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 html,
 body {
   @apply font-open-sans !important;
@@ -45,7 +44,7 @@ select {
   margin-right: 3rem;
   padding: 1rem;
   padding-right: 3rem;
-  outline: none
+  outline: none;
 }
 
 .MuiInput-root {
@@ -75,7 +74,7 @@ select {
 }
 
 .form-group {
-  @apply py-1.5 px-5 !important;
+  @apply px-5 py-1.5 !important;
 }
 
 .form-group label {
@@ -83,11 +82,11 @@ select {
 }
 
 .form-group input {
-  @apply rounded-xl border-none bg-[#fff] py-1.5 px-4 font-open-sans text-sm font-normal text-[#1a1a1a] opacity-70 !important;
+  @apply rounded-xl border-none bg-[#fff] px-4 py-1.5 font-open-sans text-sm font-normal text-[#1a1a1a] opacity-70 !important;
 }
 
 .form-group .MuiFormControl-root {
-  @apply my-0 mx-0 py-0 px-0 !important;
+  @apply mx-0 my-0 px-0 py-0 !important;
 }
 
 .form-group .MuiInputBase-root {
@@ -102,28 +101,28 @@ table {
   @apply w-full;
 }
 
-table>thead>tr>td,
-table>thead>tr>th {
+table > thead > tr > td,
+table > thead > tr > th {
   @apply py-5 pl-4 pr-1 text-left font-open-sans text-xs font-normal text-[#1a1a1a];
 }
 
-table>tbody>tr>td,
-table>tbody>tr>th {
+table > tbody > tr > td,
+table > tbody > tr > th {
   @apply py-5 pl-4 pr-1 text-left font-open-sans text-xs font-normal text-[#1a1a1a];
 }
 
-table>tbody>tr:nth-child(odd) {
+table > tbody > tr:nth-child(odd) {
   @apply bg-[#f8f8f8];
 }
 
-.avatar-table>thead>tr>td,
-.avatar-table>thead>tr>th {
-  @apply py-2.5 pr-1 pl-5;
+.avatar-table > thead > tr > td,
+.avatar-table > thead > tr > th {
+  @apply py-2.5 pl-5 pr-1;
 }
 
-.avatar-table>tbody>tr>td,
-.avatar-table>tbody>tr>th {
-  @apply py-2.5 pr-1 pl-5;
+.avatar-table > tbody > tr > td,
+.avatar-table > tbody > tr > th {
+  @apply py-2.5 pl-5 pr-1;
 }
 
 table .avatar {
@@ -134,24 +133,24 @@ table .avatar img {
   @apply mr-2.5 h-10 w-10 rounded-full object-cover;
 }
 
-table.table-border>thead>tr>th {
+table.table-border > thead > tr > th {
   @apply border-b-2 border-solid border-[#dfe0eb] font-open-sans text-sm font-semibold text-[#1a1a1a];
   /* border-bottom: 1.5px solid #dfe0eb; */
 }
 
-table.table-border>tbody>tr {
+table.table-border > tbody > tr {
   @apply relative border-b border-solid border-[#DFE0EB] !important;
 }
 
-table.table-border>tbody>tr:nth-child(odd) {
+table.table-border > tbody > tr:nth-child(odd) {
   @apply bg-transparent;
 }
 
-table.no-border-table>tbody>tr:nth-child(odd) {
+table.no-border-table > tbody > tr:nth-child(odd) {
   @apply bg-transparent;
 }
 
-table>tbody>tr:last-child {
+table > tbody > tr:last-child {
   border-bottom: none !important;
 }
 
@@ -160,7 +159,7 @@ table>tbody>tr:last-child {
 }
 
 .badge {
-  @apply rounded-[100px] py-0.5 px-2.5 text-center font-open-sans text-[10px] font-semibold uppercase text-[#fff];
+  @apply rounded-[100px] px-2.5 py-0.5 text-center font-open-sans text-[10px] font-semibold uppercase text-[#fff];
 }
 
 .badge-primary {
@@ -201,7 +200,7 @@ table>tbody>tr:last-child {
 }
 
 .modal {
-  @apply absolute top-1/2 left-1/2 h-[500px] translate-y-[-50%] translate-x-[-50%] rounded-xl bg-[#fff] p-3 shadow-lg;
+  @apply absolute left-1/2 top-1/2 h-[500px] translate-x-[-50%] translate-y-[-50%] rounded-xl bg-[#fff] p-3 shadow-lg;
 }
 
 .modal.w-60 {
@@ -221,7 +220,7 @@ table>tbody>tr:last-child {
 }
 
 .modal-header {
-  @apply my-0 mx-1 flex flex-row items-center justify-between;
+  @apply mx-1 my-0 flex flex-row items-center justify-between;
 }
 
 .modal-header .header-heading-box {
@@ -257,7 +256,7 @@ table>tbody>tr:last-child {
 }
 
 .modal-body .custom-box {
-  @apply my-0 mx-1;
+  @apply mx-1 my-0;
 }
 
 /* width */
@@ -327,7 +326,7 @@ table>tbody>tr:last-child {
 }
 
 .toolbar-style {
-  @apply ml-0 py-0 px-0 !important;
+  @apply ml-0 px-0 py-0 !important;
 }
 
 .toolbar-style .css-i4bv87-MuiSvgIcon-root {
@@ -375,13 +374,15 @@ table>tbody>tr:last-child {
   text-transform: capitalize;
 }
 
-.report-page .css-1yk1gt9-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root {
+.report-page
+  .css-1yk1gt9-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root {
   background: rgba(29, 29, 29, 0.05);
   border-radius: 10px;
   border-radius: 10px !important;
 }
 
-.report-page .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input {
+.report-page
+  .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input {
   padding: 10px 15px !important;
   margin-right: 15px !important;
   font-family: 'Open Sans' !important;
@@ -479,11 +480,11 @@ table>tbody>tr:last-child {
 }
 
 #long-menu ul {
-  @apply py-0 px-2.5 !important;
+  @apply px-2.5 py-0 !important;
 }
 
 #long-menu li {
-  @apply border-b-[1px] border-solid border-[#e4e4e4] py-1 px-0 font-open-sans text-[11px] font-normal text-[#6a6a6a] !important;
+  @apply border-b-[1px] border-solid border-[#e4e4e4] px-0 py-1 font-open-sans text-[11px] font-normal text-[#6a6a6a] !important;
 }
 
 #long-menu li:hover {
@@ -653,7 +654,7 @@ table>tbody>tr:last-child {
   color: #1a1a1a !important;
 }
 
-.rdrDay .rdrDayNumber>span {
+.rdrDay .rdrDayNumber > span {
   font-family: 'Open Sans';
   font-style: normal;
   font-weight: 400;
@@ -663,7 +664,7 @@ table>tbody>tr:last-child {
   color: #1a1a1a;
 }
 
-.rdrDayPassive .rdrDayNumber>span {
+.rdrDayPassive .rdrDayNumber > span {
   color: #e4e4e4 !important;
 }
 
@@ -684,7 +685,7 @@ table>tbody>tr:last-child {
   border-radius: 5px;
 }
 
-.rdrDayToday:not(.rdrDayPassive).rdrDayToday .rdrInRange~.rdrDayNumber span {
+.rdrDayToday:not(.rdrDayPassive).rdrDayToday .rdrInRange ~ .rdrDayNumber span {
   color: #fff !important;
 }
 
@@ -701,10 +702,10 @@ table>tbody>tr:last-child {
   color: #fff !important;
 }
 
-.rdrDay:not(.rdrDayPassive) .rdrInRange~.rdrDayNumber span,
-.rdrDay:not(.rdrDayPassive) .rdrStartEdge~.rdrDayNumber span,
-.rdrDay:not(.rdrDayPassive) .rdrEndEdge~.rdrDayNumber span,
-.rdrDay:not(.rdrDayPassive) .rdrSelected~.rdrDayNumber span {
+.rdrDay:not(.rdrDayPassive) .rdrInRange ~ .rdrDayNumber span,
+.rdrDay:not(.rdrDayPassive) .rdrStartEdge ~ .rdrDayNumber span,
+.rdrDay:not(.rdrDayPassive) .rdrEndEdge ~ .rdrDayNumber span,
+.rdrDay:not(.rdrDayPassive) .rdrSelected ~ .rdrDayNumber span {
   color: #1a1a1a !important;
 }
 
@@ -712,7 +713,7 @@ table>tbody>tr:last-child {
 
 /* Schedulling Table Style*/
 
-table.schedule-table>thead>tr>th {
+table.schedule-table > thead > tr > th {
   font-family: 'Open Sans';
   font-style: normal;
   font-weight: 600;
@@ -724,13 +725,13 @@ table.schedule-table>thead>tr>th {
   padding-bottom: 0;
 }
 
-table.schedule-table>tbody>tr>td {
+table.schedule-table > tbody > tr > td {
   background: #ffffff;
   border-top: 1px solid #c9c9c9;
   border-bottom: 1px solid #c9c9c9;
 }
 
-table.schedule-table>tbody>tr>td:nth-child(1) {
+table.schedule-table > tbody > tr > td:nth-child(1) {
   border: none;
   font-family: 'DM Sans';
   font-style: normal;
@@ -741,25 +742,25 @@ table.schedule-table>tbody>tr>td:nth-child(1) {
   background: transparent !important;
 }
 
-table.schedule-table>tbody>tr>td:nth-child(2) {
+table.schedule-table > tbody > tr > td:nth-child(2) {
   border-left: 1px solid #c9c9c9;
   border-top-left-radius: 10px !important;
   border-bottom-left-radius: 10px !important;
 }
 
-table.schedule-table>tbody>tr>td:last-child {
+table.schedule-table > tbody > tr > td:last-child {
   border-top-right-radius: 10px !important;
   border-bottom-right-radius: 10px !important;
   border-right: 1px solid #c9c9c9;
 }
 
-table.schedule-table>tbody>tr>td {
+table.schedule-table > tbody > tr > td {
   padding-top: 0.375rem;
   padding-bottom: 0.375rem;
   border-spacing: 0.125rem 0.125rem;
 }
 
-table.schedule-table>tbody>tr.days-off>td {
+table.schedule-table > tbody > tr.days-off > td {
   background: rgba(241, 43, 44, 0.2);
   border-color: #f12b2c;
 }
@@ -924,7 +925,7 @@ table.schedule-table>tbody>tr.days-off>td {
   border-radius: 5px;
 }
 
-.css-13bvbr1-MuiStack-root>:not(style)+:not(style) {
+.css-13bvbr1-MuiStack-root > :not(style) + :not(style) {
   margin-top: 1% !important;
 }
 
@@ -933,19 +934,28 @@ table.schedule-table>tbody>tr.days-off>td {
   padding: 6px !important;
 }
 
-label+.css-1aa5qj0-MuiInputBase-root-MuiInput-root {
+label + .css-1aa5qj0-MuiInputBase-root-MuiInput-root {
   margin-top: 0% !important;
 }
 
-.category-tab-content .sub-category .accordian-summary[aria-expanded="false"] .avatar {
+.category-tab-content
+  .sub-category
+  .accordian-summary[aria-expanded='false']
+  .avatar {
   display: none !important;
 }
 
-.category-tab-content .sub-category .accordian-summary[aria-expanded="false"] .badge {
+.category-tab-content
+  .sub-category
+  .accordian-summary[aria-expanded='false']
+  .badge {
   display: none !important;
 }
 
-.category-tab-content .sub-category .accordian-summary[aria-expanded="false"] .item-detail {
+.category-tab-content
+  .sub-category
+  .accordian-summary[aria-expanded='false']
+  .item-detail {
   display: none !important;
 }
 
@@ -959,7 +969,7 @@ label+.css-1aa5qj0-MuiInputBase-root-MuiInput-root {
 }
 
 .category-tab-content .accordian-detail {
-  border-top: 0.5px solid #949EAE;
+  border-top: 0.5px solid #949eae;
   padding: 10px 0;
 }
 
@@ -971,7 +981,10 @@ label+.css-1aa5qj0-MuiInputBase-root-MuiInput-root {
   margin: 10px 0 !important;
 }
 
-.category-tab-content .sub-category .accordian-summary[aria-expanded="true"] .MuiAccordionSummary-expandIconWrapper {
+.category-tab-content
+  .sub-category
+  .accordian-summary[aria-expanded='true']
+  .MuiAccordionSummary-expandIconWrapper {
   margin-top: -25px;
 }
 
@@ -1010,10 +1023,11 @@ label+.css-1aa5qj0-MuiInputBase-root-MuiInput-root {
   width: 80% !important;
 }
 
-@media screen and (min-width: 1024px) {}
+@media screen and (min-width: 1024px) {
+}
 
-
-@media only screen and (max-width: 1023.98px) and (min-width: 768px) {}
+@media only screen and (max-width: 1023.98px) and (min-width: 768px) {
+}
 
 @media only screen and (max-width: 1023.98px) {
   .left-sidebar {
@@ -1026,18 +1040,17 @@ label+.css-1aa5qj0-MuiInputBase-root-MuiInput-root {
   body.sidebar-opened .left-sidebar {
     transform: translateX(0);
   }
-
-
 }
 
-@media only screen and (max-width: 767.98px) {}
+@media only screen and (max-width: 767.98px) {
+}
 
 /* print-css */
 .print-area {
   max-width: 400px;
   margin: auto;
   padding: 0 23px;
-  font-family: "Roboto Mono" !important;
+  font-family: 'Roboto Mono' !important;
 }
 
 .print-area .print-logo {
@@ -1074,10 +1087,8 @@ label+.css-1aa5qj0-MuiInputBase-root-MuiInput-root {
 }
 
 .print-area .print-date {
-
   text-align: center;
   margin-bottom: 10px;
-
 }
 
 .print-area .rowss .col-2 .date-right {
@@ -1100,7 +1111,6 @@ label+.css-1aa5qj0-MuiInputBase-root-MuiInput-root {
   width: 50%;
   text-align: end;
 }
-
 
 .print-area span {
   display: block;
@@ -1130,8 +1140,6 @@ label+.css-1aa5qj0-MuiInputBase-root-MuiInput-root {
   margin-bottom: 6px;
 }
 
-
-
 .print-area .print-banker {
   width: 100%;
 }
@@ -1147,7 +1155,7 @@ label+.css-1aa5qj0-MuiInputBase-root-MuiInput-root {
   align-items: center;
   justify-content: space-between;
   margin-bottom: 5px;
-  font-family: "Roboto Mono" !important;
+  font-family: 'Roboto Mono' !important;
 }
 
 .print-area .print-banker ul li span {
@@ -1193,7 +1201,7 @@ label+.css-1aa5qj0-MuiInputBase-root-MuiInput-root {
 }
 
 .print-area .straight {
-  border-top: 1px solid #6A6A6A;
+  border-top: 1px solid #6a6a6a;
 }
 
 .print-area ::placeholder {
@@ -1214,7 +1222,7 @@ label+.css-1aa5qj0-MuiInputBase-root-MuiInput-root {
 .print-area table tr th {
   text-align: left;
   color: #000;
-  font-family: "Roboto Mono" !important;
+  font-family: 'Roboto Mono' !important;
   font-size: 10px;
   font-style: normal;
   font-weight: 600;
@@ -1258,8 +1266,6 @@ label+.css-1aa5qj0-MuiInputBase-root-MuiInput-root {
 .print-area table tr td:nth-child(3) {
   text-align: right;
 }
-
-
 
 /* invocie css */
 .print-invoice {
@@ -1486,9 +1492,9 @@ label+.css-1aa5qj0-MuiInputBase-root-MuiInput-root {
   font-size: 24px;
   cursor: pointer;
 }
-.toolbar-style{
-margin-left: auto !important;
-margin-right: auto !important;
+.toolbar-style {
+  margin-left: auto !important;
+  margin-right: auto !important;
 }
 /* .css-yiavyu-MuiBackdrop-root-MuiDialog-backdrop  {
 } */
@@ -1503,11 +1509,12 @@ margin-right: auto !important;
 /* .MuiBackdrop-root.MuiModal-backdrop.css-yiavyu-MuiBackdrop-root-MuiDialog-backdrop {
   background: ;
 } */
-.MuiBackdrop-root.MuiModal-backdrop .MuiDialog-container.MuiDialog-scrollPaper.css-hz1bth-MuiDialog-container {
+.MuiBackdrop-root.MuiModal-backdrop
+  .MuiDialog-container.MuiDialog-scrollPaper.css-hz1bth-MuiDialog-container {
   background: aquamarine;
 }
 
 .topbar-dd:hover {
-  background-color: #E8E8E8;
-  transition: .4s;
+  background-color: #e8e8e8;
+  transition: 0.4s;
 }

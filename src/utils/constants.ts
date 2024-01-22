@@ -176,3 +176,17 @@ export const THEME_COLORS  = [
 ];
 
 export const CATEGORY_COLORS_COUNT  = 7; 
+export const BANNER_TYPE = [
+  {
+    id: "Slider",
+    name: "Slider"
+  },
+  {
+    id: "Onboard",
+    name: "On Board"
+  },
+  {
+    id: "Splash",
+    name: "Splash Screen"
+  }
+]
