@@ -2,10 +2,14 @@ import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
+import TextField from '@mui/material/TextField';
 import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 import '../../assets/css/PopupStyle.css';
 import CustomButton from '../../components/common/CustomButton';
+import CustomDropDown from '../../components/common/CustomDropDown';
 import ErrorSpanBox from '../../components/common/ErrorSpanBox';
 import { CreateBanner } from '../../interfaces/app.banner';
 import {
@@ -15,8 +19,6 @@ import {
   PATTERN,
 } from '../../utils/constants';
 import DragDropFile from '../settings/DragDropFile';
-import TextField from '@mui/material/TextField';
-import CustomDropDown from '../../components/common/CustomDropDown';
 
 type Props = {
   roles?: any;
@@ -47,15 +49,15 @@ function BannersCreatePopup({
   const [selectedImg, setSelectedImg] = useState<any>(null);
 
   const onSubmit = (data: CreateBanner) => {
-    if (selectedImg || file && data.bannerType) {
-      let bannerData = {
+    if (selectedImg || (file && data.bannerType)) {
+      const bannerData = {
         name: data.name,
         shortDesc: data.shortDesc,
         pageDetail: data.pageDetail,
         bannerType: data.bannerType,
         link: data.link,
         bannerImg: file,
-      }
+      };
       // console.log('dataSSSelected==>', bannerData);
       callback(bannerData);
     } else {
@@ -77,13 +79,13 @@ function BannersCreatePopup({
         style: { maxWidth: '100%', maxHeight: 'auto' },
       }}
     >
-      <div className="Content">
+      <div className="Content !flex-row overflow-y-scroll">
         {/* {isLoader ? <Loader /> : */}
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="FormHeader">
             <span className="Title">Add Banner Image</span>
           </div>
-          <div className="mt-3 FormFields">
+          <div className="FormFields mt-3">
             <FormControl className="FormControl" variant="standard">
               <label className="FormLabel">Banner Name</label>
               <Input
@@ -107,7 +109,7 @@ function BannersCreatePopup({
             <div className="">
               <CustomDropDown
                 validateRequired
-                id={"bannerType"}
+                id="bannerType"
                 control={control}
                 error={errors}
                 register={register}
@@ -188,28 +190,40 @@ function BannersCreatePopup({
                   },
                 })}
               />
-              {errors.shortDesc && <ErrorSpanBox error={errors.shortDesc?.message} />}
+              {errors.shortDesc && (
+                <ErrorSpanBox error={errors.shortDesc?.message} />
+              )}
             </FormControl>
           </div>
           <div className="FormField">
             <FormControl className="FormControl" variant="standard">
-              <label className="FormLabel">
-                Page Detail Description{' '}
-                {/* <span className="SubLabel">Write 01-350 Characters</span> */}
-              </label>
-              <TextField
-                className="FormTextarea"
-                id="pageDetail"
-                multiline
-                rows={4}
+              <Controller
+                name="pageDetail"
+                control={control}
                 defaultValue=""
-                placeholder="Write Page Detail Description"
-                {...register('pageDetail')}
+                render={({ field }) => (
+                  <>
+                    <label htmlFor={field.name} className="FormLabel mb-2">
+                      Page Detail Description
+                    </label>
+                    <ReactQuill
+                      theme="snow"
+                      className="h-40"
+                      id={field.name}
+                      onBlur={field.onBlur}
+                      onChange={field.onChange}
+                      ref={field.ref}
+                      value={field.value}
+                    />
+                    {errors.pageDetail && (
+                      <ErrorSpanBox error={errors.pageDetail?.message} />
+                    )}
+                  </>
+                )}
               />
-              {errors.pageDetail && <ErrorSpanBox error={errors.pageDetail?.message} />}
             </FormControl>
           </div>
-          <div className="FormFooter">
+          <div className="FormFooter pb-4 pt-10">
             <Button
               className="btn-black-outline"
               type="submit"
@@ -234,7 +248,6 @@ function BannersCreatePopup({
             />
           </div>
         </form>
-        {/* } */}
       </div>
     </Dialog>
   );

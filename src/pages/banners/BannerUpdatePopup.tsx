@@ -1,22 +1,24 @@
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
-import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import '../../assets/css/PopupStyle.css';
-import CustomButton from '../../components/common/CustomButton';
-import { CreateBanner } from '../../interfaces/app.banner';
-import DragDropFile from '../settings/DragDropFile';
 import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
+import TextField from '@mui/material/TextField';
+import React, { useEffect, useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
+import '../../assets/css/PopupStyle.css';
+import CustomButton from '../../components/common/CustomButton';
+import CustomDropDown from '../../components/common/CustomDropDown';
+import ErrorSpanBox from '../../components/common/ErrorSpanBox';
+import { CreateBanner } from '../../interfaces/app.banner';
 import {
   BANNER_TYPE,
   INVALID_CHAR,
   MAX_LENGTH_EXCEEDED,
   PATTERN,
 } from '../../utils/constants';
-import CustomDropDown from '../../components/common/CustomDropDown';
-import ErrorSpanBox from '../../components/common/ErrorSpanBox';
-import TextField from '@mui/material/TextField';
+import DragDropFile from '../settings/DragDropFile';
 
 type Props = {
   roles?: any;
@@ -41,6 +43,7 @@ function BannerUpdatePopup({
     register,
     handleSubmit,
     control,
+    setValue,
     formState: { errors },
   } = useForm<CreateBanner>();
 
@@ -48,18 +51,18 @@ function BannerUpdatePopup({
   const [selectedImg, setSelectedImg] = useState<any>(null);
 
   const onSubmit = (data: CreateBanner) => {
-    let bannerData = {
+    const bannerData = {
       name: data.name,
       shortDesc: data.shortDesc,
       pageDetail: data.pageDetail,
       bannerType: data.bannerType,
       link: data.link,
       bannerImg: file !== null ? file : formData.banner,
-    }
+    };
     if (file === null || selectedImg === null) {
       bannerData.bannerImg = null;
     }
-    console.log("bannerData", bannerData);
+    console.log('bannerData', bannerData);
     callback(bannerData);
     // if (file !== null || selectedImg !== null) {
     //   const details = {
@@ -77,6 +80,10 @@ function BannerUpdatePopup({
     // }
   };
 
+  useEffect(() => {
+    setValue('pageDetail', formData.pageDetail);
+  }, []);
+
   const handleFormClose = () => {
     setOpenFormDialog(false);
   };
@@ -91,13 +98,13 @@ function BannerUpdatePopup({
         style: { maxWidth: '100%', maxHeight: 'auto' },
       }}
     >
-      <div className="Content">
+      <div className="Content !flex-row overflow-y-scroll">
         {/* {isLoader ? <Loader /> : */}
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="FormHeader">
             <span className="Title">Update Banner</span>
           </div>
-          <div className="mt-3 FormFields">
+          <div className="FormFields mt-3">
             <FormControl className="FormControl" variant="standard">
               <label className="FormLabel">Banner Name</label>
               <Input
@@ -120,11 +127,11 @@ function BannerUpdatePopup({
             <div className="">
               <CustomDropDown
                 validateRequired
-                id={"bannerType"}
+                id="bannerType"
                 control={control}
                 error={errors}
                 register={register}
-                options={{ roles: BANNER_TYPE, role: formData?.bannerType, }}
+                options={{ roles: BANNER_TYPE, role: formData?.bannerType }}
                 customClassInputTitle="font-bold"
                 inputTitle="Select Banner Type"
                 defaultValue="Select Your Banner Type"
@@ -210,27 +217,38 @@ function BannerUpdatePopup({
                   },
                 })}
               />
-              {errors.shortDesc && <ErrorSpanBox error={errors.shortDesc?.message} />}
+              {errors.shortDesc && (
+                <ErrorSpanBox error={errors.shortDesc?.message} />
+              )}
             </FormControl>
           </div>
           <div className="FormField">
             <FormControl className="FormControl" variant="standard">
-              <label className="FormLabel">
-                Page Detail Description{' '}
-                {/* <span className="SubLabel">Write 01-350 Characters</span> */}
-              </label>
-              <TextField
-                className="FormTextarea"
-                id="pageDetail"
-                multiline
-                rows={4}
+              <Controller
+                name="pageDetail"
+                control={control}
                 defaultValue=""
-                placeholder="Write Page Detail Description"
-                {...register('pageDetail', {
-                  value: formData?.pageDetail,
-                })}
+                render={({ field }) => (
+                  <>
+                    <label htmlFor={field.name} className="FormLabel mb-2">
+                      Page Detail Description
+                    </label>
+                    <ReactQuill
+                      theme="snow"
+                      className="h-40"
+                      id={field.name}
+                      onBlur={field.onBlur}
+                      onChange={field.onChange}
+                      ref={field.ref}
+                      value={field.value}
+                      defaultValue={formData.pageDetail}
+                    />
+                    {errors.pageDetail && (
+                      <ErrorSpanBox error={errors.pageDetail?.message} />
+                    )}
+                  </>
+                )}
               />
-              {errors.pageDetail && <ErrorSpanBox error={errors.pageDetail?.message} />}
             </FormControl>
           </div>
           {/* {file === null && selectedImg === null && (
@@ -240,7 +258,7 @@ function BannerUpdatePopup({
               </span>
             </div>
           )} */}
-          <div className="FormFooter">
+          <div className="FormFooter pb-4 pt-10">
             <Button
               className="btn-black-outline"
               type="submit"
