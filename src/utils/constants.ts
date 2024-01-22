@@ -62,7 +62,6 @@ export const DOMAIN_PROTOCOL = 'https://';
 export const NOT_AUTHORIZED_MESSAGE = 'You dont have permission for this.';
 export const TOKEN_STORE_KEY = 'APP_AUTH_TOKEN';
 export const SYSTEM_CONFIG_PREFIX = 'theme';
-export const THEME_PREFIX = 'theme';
 export const setToken = (data: string) => {
   setItem('AUTH_TOKEN', data);
 };

@@ -187,7 +187,7 @@ const superAdminlinks = [
     ],
   },
   {
-    name: 'Theme Configuration',
+    name: 'Theme',
     path: 'theme-configuration',
     icon: <ServiceIcon />,
   },
