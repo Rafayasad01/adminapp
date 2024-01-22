@@ -14,6 +14,7 @@ import _ from 'lodash';
 import EditIcon from '@mui/icons-material/Edit';
 import ColorRow from '../../../components/common/ColorRow';
 import ColorRowWithTooltips from '../../../components/common/ColorRowWithTooltips';
+import { useNotification } from '../../../components/Contexts/NotificationContext';
 
 function SuperAdminThemeConfigPage() {
   const authState: any = useAppSelector((state) => state?.authState);
@@ -27,8 +28,8 @@ function SuperAdminThemeConfigPage() {
   const [total, setTotal] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   //   Notify
-  const [isNotify, setIsNotify] = useState(false);
-  const [notifyMessage, setNotifyMessage] = useState({});
+  const { notification, hideNotification, showNotification } =
+    useNotification();
 
   const handleFormClickOpen = () => {};
 
@@ -103,11 +104,7 @@ function SuperAdminThemeConfigPage() {
    * @param {string} errorMessage message to display when error is encountered.
    */
   const handleErrorMessage = (errorMessage: string) => {
-    setIsNotify(true);
-    setNotifyMessage({
-      text: errorMessage,
-      type: 'error',
-    });
+    showNotification(errorMessage, 'error');
   };
 
   useEffect(() => {
@@ -210,11 +207,11 @@ function SuperAdminThemeConfigPage() {
           </div>
         </div>
       </div>
-      {isNotify && (
+      {notification && (
         <Notify
-          isOpen={isNotify}
-          setIsOpen={setIsNotify}
-          displayMessage={notifyMessage}
+          isOpen={true}
+          setIsOpen={hideNotification}
+          displayMessage={notification}
         />
       )}
     </>

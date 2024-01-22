@@ -165,28 +165,27 @@ export const VALIDATE_NON_NEGATIVE_NUM_AND_CHECK_LENGTH = (
 
 export const imageAllowedTypes = ['image/png', 'image/jpeg', 'image/jpg'];
 
-
-export const THEME_COLORS  = [
-  'background',
-  'faded',
-  'foreground',
+export const THEME_COLORS = [
   'primary',
+  'background',
+  'foreground',
   'secondary',
-  'secondary2'
+  'faded',
+  'secondary2',
 ];
 
-export const CATEGORY_COLORS_COUNT  = 7; 
+export const CATEGORY_COLORS_COUNT = 7;
 export const BANNER_TYPE = [
   {
-    id: "Slider",
-    name: "Slider"
+    id: 'Slider',
+    name: 'Slider',
   },
   {
-    id: "Onboard",
-    name: "On Board"
+    id: 'Onboard',
+    name: 'On Board',
   },
   {
-    id: "Splash",
-    name: "Splash Screen"
-  }
-]
+    id: 'Splash',
+    name: 'Splash Screen',
+  },
+];
