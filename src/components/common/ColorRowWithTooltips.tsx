@@ -10,14 +10,14 @@ const ColorRowWithTooltips = ({ colors, type }: Props) => {
   console.log('color', colors);
 
   return (
-    <div className="flex items-center">
+    <div className="flex max-w-[240px] flex-wrap items-center">
       {type === 'array'
         ? colors?.map((color: any, index: number) => {
             return (
               <div
                 key={index}
                 style={{ backgroundColor: _.toString(color.value) }}
-                className="mr-2 h-10 w-10 rounded-full border border-gray-300 shadow-md"
+                className="mr-2 h-10 w-10 cursor-pointer rounded-full border border-gray-300 shadow-md"
                 title={color?.name} // Use the title attribute for the tooltip
               ></div>
             );
@@ -26,7 +26,7 @@ const ColorRowWithTooltips = ({ colors, type }: Props) => {
             <div
               key={index}
               style={{ backgroundColor: _.toString(color) }}
-              className="relative mr-4 h-10 w-10 rounded-full border border-gray-300 shadow-md"
+              className="relative mr-2 mb-2 h-[30px] w-[30px] cursor-pointer rounded-full border border-gray-300 shadow-md"
               title={key} // Use the title attribute for the tooltip
             ></div>
           ))}
