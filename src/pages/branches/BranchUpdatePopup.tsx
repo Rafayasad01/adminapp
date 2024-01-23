@@ -51,11 +51,11 @@ function BranchUpdatePopup({
     formState: { errors },
   } = useForm<Tenant>();
   const onSubmit = (data: Partial<Tenant>) => {
-    // console.log("onsubmiot", data,item);
-    // if (data.enableLoyaltyProgram === false) {
-    //   delete data.loyaltyCoinConversionRate;
-    //   delete data.requiredCoinsToRedeem;
-    // }
+    console.log('onsubmiotupdate', data, item);
+    if (data.enableLoyaltyProgram === false) {
+      delete data.loyaltyCoinConversionRate;
+      delete data.requiredCoinsToRedeem;
+    }
     if (data.tenantName) {
       setOpenFormDialog(false);
       callback(item.id, data);
@@ -78,8 +78,8 @@ function BranchUpdatePopup({
       setValue('email', item.backofficeUser.email);
       setValue('firstName', item.backofficeUser.firstName);
       setValue('lastName', item.backofficeUser.lastName);
-      setValue('developmentDomain', item.tenantConfig.developmentDomain);
-      setValue('liveDomain', item.tenantConfig.liveDomain);
+      setValue('domainWebapp', item.systemConfig.domainWebapp);
+      setValue('domainAdminapp', item.systemConfig.domainAdminapp);
       // setValue('enableLoyaltyProgram', item.tenantExt.enableLoyaltyProgram);
     }
   }, [item]);
@@ -87,8 +87,8 @@ function BranchUpdatePopup({
   // console.log('ITEM', item.tenantExt.enableLoyaltyProgram);
 
   const debouceRequest = debounce((value) => {
-    setValue('developmentDomain', `dev.${kabakCase(value)}`);
-    setValue('liveDomain', `live.${kabakCase(value)}`);
+    setValue('domainAdminapp', `devadminapp-${kabakCase(value)}`);
+    setValue('domainWebapp', `devwebapp-${kabakCase(value)}`);
   }, 1000);
 
   const shopFieldHangler = (val: any) => {
@@ -145,6 +145,10 @@ function BranchUpdatePopup({
                       required: 'User limit is required in numbers',
                       validate: (value: any) =>
                         VALIDATE_NON_NEGATIVE_NUM(value),
+                      maxLength: {
+                        value: 20,
+                        message: MAX_LENGTH_EXCEEDED,
+                      },
                     })}
                     type="number"
                     id="userLimit"
@@ -233,9 +237,9 @@ function BranchUpdatePopup({
                   )}
                 </FormControl>
               </div>
-              <div className="FormField mb-4">
+              <div className="FormField">
                 <FormControl className="FormControl" variant="standard">
-                  <label className="FormLabel">Development Domain</label>
+                  <label className="FormLabel">Admin Domain</label>
                   <TextField
                     className="FormInput"
                     sx={{ padding: 0 }}
@@ -253,18 +257,18 @@ function BranchUpdatePopup({
                       ),
                     }}
                     variant="outlined"
-                    {...register('developmentDomain')}
+                    {...register('domainAdminapp')}
                     disabled
                   />
                 </FormControl>
               </div>
               <div className="FormField mb-4">
                 <FormControl className="FormControl" variant="standard">
-                  <label className="FormLabel">Live Domain</label>
+                  <label className="FormLabel">Web-App Domain</label>
                   <TextField
                     className="FormInput"
                     sx={{ padding: 0 }}
-                    id="live_domain"
+                    id="development_domain"
                     InputProps={{
                       startAdornment: (
                         <InputAdornment position="start">
@@ -278,7 +282,7 @@ function BranchUpdatePopup({
                       ),
                     }}
                     variant="outlined"
-                    {...register('liveDomain')}
+                    {...register('domainWebapp')}
                     disabled
                   />
                 </FormControl>

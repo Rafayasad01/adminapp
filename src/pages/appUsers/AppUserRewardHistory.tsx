@@ -1,21 +1,15 @@
-import Avatar from '@mui/material/Avatar';
-import Divider from '@mui/material/Divider';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import ActionMenu from '../../components/common/ActionMenu';
 import Loader from '../../components/common/Loader';
-import MapAddress from '../../components/common/MapAddress';
 import Notify from '../../components/common/Notify';
 import TopBar from '../../components/common/TopBar';
 import { useAppSelector } from '../../redux/redux-hooks';
 import Service from '../../services/adminapp/adminAppUser';
 import PermissionPopup from '../../utils/PermissionPopup';
-import { weekDays } from '../../utils/constants';
 import { listingRolePermission } from '../../utils/helper';
-import AppUserAddressTabPage from './AppUserAddressTab/AppUserAddressTabPage';
-import AppUserScheduleTabPage from './AppUserScheduleTab/AppUserScheduleTabPage';
 import AppUserPromotionTab from './AppUserRewardHistoryTabs/AppUserPromotionTab';
 import AppUserLoyaltyTab from './AppUserRewardHistoryTabs/AppUserLoyaltyTab';
 
@@ -25,14 +19,14 @@ function AppUserRewardHistory() {
   );
   // const navigate = useNavigate();
   const [list, setList] = useState<any>(null);
-  const [filteredWeekDays, setFilteredWeekDays] = useState<any>(null);
+  // const [filteredWeekDays, setFilteredWeekDays] = useState<any>(null);
   const [page, setPage] = useState(0);
   const [total, setTotal] = useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [search, setSearch] = React.useState('');
   // const [total, setTotal] = useState(0);
   // const [list, setList] = useState<any>([]);
-  const [address, setAddress] = useState<string>('');
+  // const [address, setAddress] = useState<string>('');
   const [cancelDialogOpen, setCancelDialogOpen] = useState<boolean>(false);
   const [dialogText] = useState<any>(
     'Are you sure you want to delete this driver address ?'
@@ -118,9 +112,11 @@ function AppUserRewardHistory() {
                 page={page}
                 rowsPerPage={rowsPerPage}
                 search={search}
+                setSearch={setSearch}
                 setList={setList}
                 setPage={setPage}
                 setTotal={setTotal}
+                userId={userId}
                 setRowsPerPage={setRowsPerPage}
               />
             )}
@@ -131,6 +127,7 @@ function AppUserRewardHistory() {
                 page={page}
                 rowsPerPage={rowsPerPage}
                 search={search}
+                setSearch={setSearch}
                 setList={setList}
                 setPage={setPage}
                 setTotal={setTotal}

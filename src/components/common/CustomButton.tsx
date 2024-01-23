@@ -2,7 +2,6 @@ import React, { Fragment } from 'react';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import Loader from './Loader2';
 
 type Props = {
   onclick?: (item?: any) => void;

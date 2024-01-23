@@ -7,11 +7,15 @@ export interface Tenant {
   trialMode: boolean;
   trialUpdateMode: boolean;
   trialStartDate: string;
-  developmentDomain: string;
-  liveDomain: string;
+  domainAdminapp: string;
+  domainWebapp: string;
+  enableLoyaltyProgram: boolean;
+  loyaltyCoinConversionRate: string;
+  requiredCoinsToRedeem: string;
   maxBranchLimit: number;
   maxUserLimit: number;
   userLimit: number;
   trialModeLimit: number;
   role: string;
+  theme: any;
 }

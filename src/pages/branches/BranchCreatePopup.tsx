@@ -51,13 +51,13 @@ function BranchCreatePopup({
   const onSubmit = (data: Tenant) => {
     // console.log("dataCREATE", data);
     const details = {
-      developmentDomain: data.developmentDomain,
       email: data.email,
       firstName: data.firstName,
       lastName: data.lastName,
-      liveDomain: data.liveDomain,
       tenantName: data.tenantName,
       address: data.address,
+      domainWebapp: data.domainWebapp,
+      domainAdminapp: data.domainAdminapp,
       userLimit: data.userLimit,
       userId: authState.user.id,
       // enableLoyaltyProgram: data.enableLoyaltyProgram,
@@ -80,9 +80,10 @@ function BranchCreatePopup({
   const handleFormClose = () => {
     setOpenFormDialog(false);
   };
+
   const debouceRequest = debounce((value) => {
-    setValue('developmentDomain', `dev.${kabakCase(value)}`);
-    setValue('liveDomain', `live.${kabakCase(value)}`);
+    setValue('domainAdminapp', `devadminapp-${kabakCase(value)}`);
+    setValue('domainWebapp', `devwebapp-${kabakCase(value)}`);
   }, 1000);
 
   const shopFieldHangler = (val: any) => {
@@ -239,6 +240,10 @@ function BranchCreatePopup({
                   {...register('userLimit', {
                     required: 'User limit is required in numbers',
                     validate: (value: any) => VALIDATE_NON_NEGATIVE_NUM(value),
+                    maxLength: {
+                      value: 20,
+                      message: MAX_LENGTH_EXCEEDED,
+                    },
                   })}
                   type="number"
                   id="userLimit"
@@ -250,9 +255,9 @@ function BranchCreatePopup({
                 )}
               </FormControl>
             </div>
-            <div className="FormField mb-4">
+            <div className="FormField">
               <FormControl className="FormControl" variant="standard">
-                <label className="FormLabel">Development Domain</label>
+                <label className="FormLabel">Admin Domain</label>
                 <TextField
                   className="FormInput"
                   sx={{ padding: 0 }}
@@ -270,18 +275,18 @@ function BranchCreatePopup({
                     ),
                   }}
                   variant="outlined"
-                  {...register('developmentDomain')}
+                  {...register('domainAdminapp')}
                   disabled
                 />
               </FormControl>
             </div>
             <div className="FormField mb-4">
               <FormControl className="FormControl" variant="standard">
-                <label className="FormLabel">Live Domain</label>
+                <label className="FormLabel">Web-App Domain</label>
                 <TextField
                   className="FormInput"
                   sx={{ padding: 0 }}
-                  id="live_domain"
+                  id="development_domain"
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">
@@ -295,7 +300,7 @@ function BranchCreatePopup({
                     ),
                   }}
                   variant="outlined"
-                  {...register('liveDomain')}
+                  {...register('domainWebapp')}
                   disabled
                 />
               </FormControl>

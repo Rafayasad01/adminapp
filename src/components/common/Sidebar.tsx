@@ -14,7 +14,7 @@ import CorporateFareIcon from '@mui/icons-material/CorporateFare';
 import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
 import PeopleOutlineOutlinedIcon from '@mui/icons-material/PeopleOutlineOutlined';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
-import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
+// import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import ViewCarouselOutlinedIcon from '@mui/icons-material/ViewCarouselOutlined';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
@@ -27,7 +27,7 @@ import Toolbar from '@mui/material/Toolbar';
 import { NavLink } from 'react-router-dom';
 // import HeadphonesOutlinedIcon from '@mui/icons-material/HeadphonesOutlined'
 import CollectionsOutlinedIcon from '@mui/icons-material/CollectionsOutlined';
-import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined';
+// import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined';
 import assets from '../../assets';
 import { useAppSelector } from '../../redux/redux-hooks';
 import CAN, { defineRules } from '../../services/permissions/permissions';
@@ -39,7 +39,8 @@ import OrderIcon from '../icons/OrderIcon';
 import PermissionIcon from '../icons/PermissionIcon';
 import RoleIcon from '../icons/RoleIcon';
 import ShopIcon from '../icons/ShopIcon';
-import TenantIcon from '../icons/TenantIcon';
+import ServiceIcon from '../icons/serviceIcon';
+// import TenantIcon from '../icons/TenantIcon';
 import UserPermission from '../icons/UserPermission';
 import VoucherIcon from '../icons/VoucherIcon';
 import AppointmentIcon from '../icons/appointmentIcon';
@@ -147,22 +148,27 @@ const superAdminlinks = [
     icon: <CollectionsOutlinedIcon fontSize="inherit" />,
   },
   {
-    name: 'tenant',
-    path: 'tenant',
-    icon: <TenantIcon />,
-    childLinks: [
-      {
-        name: 'shops',
-        path: 'tenant/shop',
-        icon: <ShopIcon />,
-      },
-      {
-        name: 'users',
-        path: 'tenant/user',
-        icon: <GroupsOutlinedIcon className="w-[20px]" />,
-      },
-    ],
+    name: 'shops',
+    path: 'tenant/shop',
+    icon: <ShopIcon />,
   },
+  // {
+  //   name: 'tenant',
+  //   path: 'tenant',
+  //   icon: <TenantIcon />,
+  //   childLinks: [
+  //     {
+  //       name: 'shops',
+  //       path: 'tenant/shop',
+  //       icon: <ShopIcon />,
+  //     },
+  //     {
+  //       name: 'users',
+  //       path: 'tenant/user',
+  //       icon: <GroupsOutlinedIcon className="w-[20px]" />,
+  //     },
+  //   ],
+  // },
   {
     name: 'user permissions',
     path: 'role',
@@ -180,14 +186,23 @@ const superAdminlinks = [
       },
     ],
   },
+  {
+    name: 'Theme',
+    path: 'theme-configuration',
+    icon: <ServiceIcon />,
+  },
 ];
 
 function Sidebar() {
   const userData = useAppSelector((state: any) => state?.authState?.user);
-  const appItems = useAppSelector((state: any) => state?.persisitReducer?.appState?.UserItems);
-  const logo = useAppSelector((state: any) => state?.persisitReducer?.appState?.logo);
+  const appItems = useAppSelector(
+    (state: any) => state?.persisitReducer?.appState?.UserItems
+  );
+  const logo = useAppSelector(
+    (state: any) => state?.persisitReducer?.appState?.logo
+  );
 
-  // console.log("appItems", appItems);
+  // console.log("appItems", logo);
 
   const [list, setList] = useState<any>(null);
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
@@ -308,14 +323,13 @@ function Sidebar() {
       });
       setList(tempList);
     }
-  }, [emptyVariable,appItems?.employeeLimit]);
+  }, [emptyVariable, appItems?.employeeLimit]);
 
   return (
     <Drawer
       variant="permanent"
       PaperProps={{
-        className:
-          'left-sidebar box-border w-64 border-r-0',
+        className: 'left-sidebar box-border w-64 border-r-0',
       }}
     >
       <List disablePadding>
@@ -332,9 +346,17 @@ function Sidebar() {
             justifyContent="center"
           >
             {userData?.isSuperAdmin ? (
-              <img className="mt-9 max-w-[150px] h-[29px]" src={assets.images.urApplogoWhite} alt="" />
+              <img
+                className="mt-9 h-[29px] max-w-[150px]"
+                src={assets.images.urApplogoWhite}
+                alt=""
+              />
             ) : logo ? (
-              <img className="mt-9 max-w-[150px] h-[29px]" src={logo} alt="logo" />
+              <img
+                className="mt-9 h-[29px] max-w-[150px]"
+                src={logo}
+                alt="logo"
+              />
             ) : (
               <div className="flex w-full items-center justify-start rounded-2xl p-3 text-white">
                 <img
@@ -373,7 +395,9 @@ function Sidebar() {
                 appItems?.tenantConfig?.instagram === null &&
                 appItems?.tenantConfig?.whatsapp === null &&
                 appItems?.tenantConfig?.linkedin === null &&
-                appItems?.tenantConfig?.youtube === null && <span className="text-sm">No Links yet</span>}
+                appItems?.tenantConfig?.youtube === null && (
+                  <span className="text-sm">No Links yet</span>
+                )}
               {appItems?.tenantConfig && (
                 <div className="social-icons grid grid-cols-6">
                   {appItems?.tenantConfig?.facebook && (

@@ -3,6 +3,7 @@ import { Navigate, Outlet } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Sidebar from '../common/Sidebar';
 import { useAppSelector } from '../../redux/redux-hooks';
+import { NotificationProvider } from '../Contexts/NotificationContext';
 
 function SuperAdminAppLayout() {
   const authState = useAppSelector((state) => state?.authState);
@@ -23,7 +24,9 @@ function SuperAdminAppLayout() {
         component="main"
         className="min-h-screen w-full flex-grow bg-gray-50 p-3"
       >
-        <Outlet />
+        <NotificationProvider>
+          <Outlet />
+        </NotificationProvider>
       </Box>
     </Box>
   );

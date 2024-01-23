@@ -35,7 +35,6 @@ function ProfileChangePasswordPopup({
   const {
     register,
     handleSubmit,
-    control,
     formState: { errors },
   } = useForm<Password>();
 
@@ -56,8 +55,6 @@ function ProfileChangePasswordPopup({
       callback(data);
     }
   };
-
-  console.log('ERRORES', errors);
 
   return (
     <Dialog

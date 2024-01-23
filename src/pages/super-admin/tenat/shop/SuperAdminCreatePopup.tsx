@@ -7,10 +7,11 @@ import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
+import Theme from '../../../../services/superadmin/theme';
 import TextField from '@mui/material/TextField';
 import { debounce } from '@mui/material/utils';
 import kabakCase from 'lodash/kebabCase';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import '../../../../assets/css/PopupStyle.css';
 import CustomDropDown from '../../../../components/common/CustomDropDown';
@@ -25,6 +26,8 @@ import {
   VALIDATE_NON_NEGATIVE_NUM,
   VALIDATE_NON_NEGATIVE_NUM_AND_CHECK_LENGTH,
 } from '../../../../utils/constants';
+import { previousDay } from 'date-fns';
+import CustomMultipleSelectBox from '../../../../components/common/CustomMultipleSelect';
 
 type Props = {
   roles?: any;
@@ -34,6 +37,8 @@ type Props = {
   setIsNotify: any;
   setNotifyMessage: any;
   type?: boolean;
+  isLoader?: boolean;
+  setIsLoader?: any;
 };
 
 function SuperAdminTenantCreatePopup({
@@ -44,6 +49,8 @@ function SuperAdminTenantCreatePopup({
   setIsNotify,
   setNotifyMessage,
   type,
+  isLoader,
+  setIsLoader,
 }: Props) {
   const {
     register,
@@ -53,13 +60,46 @@ function SuperAdminTenantCreatePopup({
     formState: { errors },
     control,
   } = useForm<Tenant>();
+  const [lovList, setLovList] = useState<any>();
+
+  useEffect(() => {
+    Theme.lovList()
+      .then((item: any) => {
+        if (item.data.success) {
+          let temp = item.data.data.list.map((el: any) => {
+            return {
+              id: el.id,
+              name: el.key,
+            };
+          });
+          setLovList(temp);
+          setIsLoader(false);
+        } else {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'error',
+          });
+        }
+      })
+      .catch((error: any) => {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: error.message,
+          type: 'error',
+        });
+        // console.log('error::::::::', error);
+      });
+  }, []);
 
   const onSubmit = (data: Partial<Tenant>) => {
     // console.log("datA", data);
-    // if (data.enableLoyaltyProgram === false) {
-    //   delete data.loyaltyCoinConversionRate;
-    //   delete data.requiredCoinsToRedeem;
-    // }
+    if (data.enableLoyaltyProgram === false) {
+      delete data.loyaltyCoinConversionRate;
+      delete data.requiredCoinsToRedeem;
+    }
     if (data.tenantName) {
       setOpenFormDialog(false);
       callback(data);
@@ -77,8 +117,8 @@ function SuperAdminTenantCreatePopup({
   };
 
   const debouceRequest = debounce((value) => {
-    setValue('developmentDomain', `dev.${kabakCase(value)}`);
-    setValue('liveDomain', `live.${kabakCase(value)}`);
+    setValue('domainAdminapp', `devadminapp-${kabakCase(value)}`);
+    setValue('domainWebapp', `devwebapp-${kabakCase(value)}`);
   }, 1000);
 
   const shopFieldHangler = (val: any) => {
@@ -229,6 +269,10 @@ function SuperAdminTenantCreatePopup({
                   {...register('maxBranchLimit', {
                     required: 'Branch limit is required in numbers',
                     validate: (value: any) => VALIDATE_NON_NEGATIVE_NUM(value),
+                    maxLength: {
+                      value: 20,
+                      message: MAX_LENGTH_EXCEEDED,
+                    },
                   })}
                   type="number"
                   id="maxBranchLimits"
@@ -251,6 +295,10 @@ function SuperAdminTenantCreatePopup({
                   {...register('maxUserLimit', {
                     required: 'User limit is required in numbers',
                     validate: (value: any) => VALIDATE_NON_NEGATIVE_NUM(value),
+                    maxLength: {
+                      value: 20,
+                      message: MAX_LENGTH_EXCEEDED,
+                    },
                   })}
                   type="number"
                   id="maxUserLimits"
@@ -264,7 +312,7 @@ function SuperAdminTenantCreatePopup({
                 )}
               </FormControl>
             </div>
-            <div className="FormFields mb-4">
+            <div className="FormFields">
               <CustomDropDown
                 validateRequired
                 id="role"
@@ -274,6 +322,20 @@ function SuperAdminTenantCreatePopup({
                 options={{ roles }}
                 inputTitle="Role"
               />
+              <CustomMultipleSelectBox
+                validateRequired
+                id="theme"
+                control={control}
+                error={errors}
+                setValue={setValue}
+                register={register}
+                options={{ roles: lovList }}
+                customClassInputTitle="font-bold"
+                inputTitle="Theme"
+                defaultVal="-- Select Theme --"
+              />
+            </div>
+            <div className="FormField">
               <FormControl className="FormControl" variant="standard">
                 <label className="FormLabel">Address</label>
                 <Input
@@ -299,9 +361,9 @@ function SuperAdminTenantCreatePopup({
                 )}
               </FormControl>
             </div>
-            <div className="FormField mb-4">
+            <div className="FormField">
               <FormControl className="FormControl" variant="standard">
-                <label className="FormLabel">Development Domain</label>
+                <label className="FormLabel">Admin Domain</label>
                 <TextField
                   className="FormInput"
                   sx={{ padding: 0 }}
@@ -319,18 +381,18 @@ function SuperAdminTenantCreatePopup({
                     ),
                   }}
                   variant="outlined"
-                  {...register('developmentDomain')}
+                  {...register('domainAdminapp')}
                   disabled
                 />
               </FormControl>
             </div>
             <div className="FormField mb-4">
               <FormControl className="FormControl" variant="standard">
-                <label className="FormLabel">Live Domain</label>
+                <label className="FormLabel">Web-App Domain</label>
                 <TextField
                   className="FormInput"
                   sx={{ padding: 0 }}
-                  id="live_domain"
+                  id="development_domain"
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">
@@ -344,7 +406,7 @@ function SuperAdminTenantCreatePopup({
                     ),
                   }}
                   variant="outlined"
-                  {...register('liveDomain')}
+                  {...register('domainWebapp')}
                   disabled
                 />
               </FormControl>

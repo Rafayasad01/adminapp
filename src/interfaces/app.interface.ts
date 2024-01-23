@@ -15,9 +15,12 @@ export interface Setting {
   color2: string;
   color3: string;
   logo: string;
+  banner: string;
   gstPercentage: any;
   email: string;
   minOrderAmount: any;
+  minimumDeliveryTime: number;
+  deliveryUrgentFees: string;
   deliveryFee: any;
   facebook: string;
   instagram: string;
@@ -25,8 +28,8 @@ export interface Setting {
   twitter: string;
   youtube: string;
   whatsapp: string;
-  developmentDomain: string;
-  liveDomain: string;
+  domainAdminapp: string;
+  domainWebapp: string;
   userLimit: number;
   enableLoyaltyProgram: boolean;
   loyaltyCoinConversionRate: string;

@@ -7,13 +7,14 @@ import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
+
 import TextField from '@mui/material/TextField';
 import { debounce } from '@mui/material/utils';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 import isBetween from 'dayjs/plugin/isBetween';
 import kabakCase from 'lodash/kebabCase';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import '../../../../assets/css/PopupStyle.css';
 import CustomDropDown from '../../../../components/common/CustomDropDown';
@@ -28,6 +29,8 @@ import {
   VALIDATE_NON_NEGATIVE_NUM,
   VALIDATE_NON_NEGATIVE_NUM_AND_CHECK_LENGTH,
 } from '../../../../utils/constants';
+import CustomMultipleSelectBox from '../../../../components/common/CustomMultipleSelect';
+import ColorRowWithTooltips from '../../../../components/common/ColorRowWithTooltips';
 
 dayjs.extend(duration);
 dayjs.extend(isBetween);
@@ -42,6 +45,10 @@ type Props = {
   roles?: any;
   role?: any;
   type?: any;
+  isLoader?: boolean;
+  setIsLoader?: any;
+  lovList?: any;
+  themeList?: any;
 };
 
 function SuperAdminUpdatePopup({
@@ -54,6 +61,10 @@ function SuperAdminUpdatePopup({
   roles,
   role,
   type,
+  lovList,
+  isLoader,
+  setIsLoader,
+  themeList,
 }: Props) {
   const {
     register,
@@ -63,8 +74,9 @@ function SuperAdminUpdatePopup({
     formState: { errors },
     control,
   } = useForm<Tenant>();
+
   const onSubmit = (data: Partial<Tenant>) => {
-    // console.log('onsubmiot', data);
+    console.log('onsubmiot', data);
     if (data.tenantName) {
       setOpenFormDialog(false);
       callback(item.id, data);
@@ -81,7 +93,7 @@ function SuperAdminUpdatePopup({
     setOpenFormDialog(false);
   };
 
-  // console.log(watch('trialMode'));
+  console.log(lovList, item.systemConfig.theme);
 
   useEffect(() => {
     if (item) {
@@ -91,8 +103,9 @@ function SuperAdminUpdatePopup({
       setValue('lastName', item.backofficeUser.lastName);
       setValue('trialMode', item.trialMode);
       setValue('trialStartDate', item.trialStartDate);
-      setValue('developmentDomain', item.tenantConfig.developmentDomain);
-      setValue('liveDomain', item.tenantConfig.liveDomain);
+      setValue('domainAdminapp', item?.systemConfig?.domainAdminapp ?? '');
+      setValue('domainWebapp', item?.systemConfig?.domainWebapp ?? '');
+      setValue('theme', item?.systemConfig?.theme ?? '');
     }
   }, [item]);
 
@@ -120,13 +133,31 @@ function SuperAdminUpdatePopup({
   };
 
   const debouceRequest = debounce((value) => {
-    setValue('developmentDomain', `dev.${kabakCase(value)}`);
-    setValue('liveDomain', `live.${kabakCase(value)}`);
+    setValue('domainAdminapp', `devadminapp-${kabakCase(value)}`);
+    setValue('domainWebapp', `devwebapp-${kabakCase(value)}`);
   }, 1000);
 
   const shopFieldHangler = (val: any) => {
     debouceRequest(val);
   };
+
+  // const filteredArray = themeList?.filter((el: any) => item?.systemConfig?.theme?.includes(el.id));
+
+  let filteredArray = item?.theme?.map((el: any) => {
+    return {
+      id: el.id,
+      name: el.key,
+      value: el.value.themeColor.primary,
+    };
+  });
+
+  // let filteredArrayIds = item?.theme?.map((el: any) => {
+  //   return {
+  //     id: el.id
+  //   }
+  // });
+
+  // console.log(filteredArrayIds);
 
   return (
     item && (
@@ -298,7 +329,7 @@ function SuperAdminUpdatePopup({
                   )}
                 </FormControl>
               </div>
-              <div className="FormField mb-4">
+              <div className="FormFields mb-4">
                 <FormControl className="FormControl" variant="standard">
                   <CustomDropDown
                     validateRequired
@@ -310,10 +341,27 @@ function SuperAdminUpdatePopup({
                     inputTitle="Role"
                   />
                 </FormControl>
-              </div>
-              <div className="FormField mb-4">
                 <FormControl className="FormControl" variant="standard">
-                  <label className="FormLabel">Development Domain</label>
+                  <CustomMultipleSelectBox
+                    validateRequired
+                    id="theme"
+                    control={control}
+                    error={errors}
+                    setValue={setValue}
+                    register={register}
+                    options={{
+                      roles: lovList,
+                      role: item?.systemConfig?.theme,
+                    }}
+                    customClassInputTitle="font-bold"
+                    inputTitle="Theme"
+                    defaultVal="-- Select Theme --"
+                  />
+                </FormControl>
+              </div>
+              <div className="FormField">
+                <FormControl className="FormControl" variant="standard">
+                  <label className="FormLabel">Admin Domain</label>
                   <TextField
                     className="FormInput"
                     sx={{ padding: 0 }}
@@ -331,18 +379,18 @@ function SuperAdminUpdatePopup({
                       ),
                     }}
                     variant="outlined"
-                    {...register('developmentDomain')}
+                    {...register('domainAdminapp')}
                     disabled
                   />
                 </FormControl>
               </div>
               <div className="FormField mb-4">
                 <FormControl className="FormControl" variant="standard">
-                  <label className="FormLabel">Live Domain</label>
+                  <label className="FormLabel">Web-App Domain</label>
                   <TextField
                     className="FormInput"
                     sx={{ padding: 0 }}
-                    id="live_domain"
+                    id="development_domain"
                     InputProps={{
                       startAdornment: (
                         <InputAdornment position="start">
@@ -356,10 +404,19 @@ function SuperAdminUpdatePopup({
                       ),
                     }}
                     variant="outlined"
-                    {...register('liveDomain')}
+                    {...register('domainWebapp')}
                     disabled
                   />
                 </FormControl>
+              </div>
+              <div>
+                <div className="mb-2">
+                  <span className="">Theme</span>
+                </div>
+                <ColorRowWithTooltips
+                  colors={filteredArray?.length > 0 ? filteredArray : []}
+                  type="array"
+                />
               </div>
               <div className="FormField">
                 <div className="MergedField">

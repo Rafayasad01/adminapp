@@ -8,12 +8,14 @@ import Loader2 from '../../../../components/common/Loader2';
 import Notify from '../../../../components/common/Notify';
 import TopBar from '../../../../components/common/TopBar';
 import Service from '../../../../services/superadmin/Tenant';
+import Theme from '../../../../services/superadmin/theme';
 import SuperAdminCategoryDialog from './SuperAdminCategoryDialog';
 import SuperAdminCreatePopup from './SuperAdminCreatePopup';
 import SuperAdminSettingDialog from './SuperAdminSettingDialog';
 import SuperAdminShopDetailsDialog from './SuperAdminShopDetailsDialog';
 import SuperAdminUpdatePopup from './SuperAdminUpdatePopup';
 import SuperAdminUserDialog from './SuperAdminUserDialog';
+import ColorRowWithTooltips from '../../../../components/common/ColorRowWithTooltips';
 
 function SuperAdminShopDetailPage() {
   const params = useParams();
@@ -36,6 +38,8 @@ function SuperAdminShopDetailPage() {
   const [categories, setCategories] = useState<any>([]);
   const [subCategories, setSubCategories] = useState<any>([]);
   // const [isTrialMode, setIsTrialMode] = React.useState<boolean>(false);
+  const [lovList, setLovList] = useState<any>();
+  const [themeList, setThemeList] = useState<any>();
 
   const getUserById = (id: any, type: any) => {
     let service;
@@ -86,7 +90,7 @@ function SuperAdminShopDetailPage() {
           setIsLoader(false);
           setIsNotify(true);
           setNotifyMessage({
-            text: 'All fields are required!',
+            text: item.data.message,
             type: 'error',
           });
         }
@@ -215,13 +219,13 @@ function SuperAdminShopDetailPage() {
     // console.log('formDATA1', data);
     const formData = {
       tenantName: data.tenantName,
-      // email: data.email,
       firstName: data.firstName,
       lastName: data.lastName,
       trialMode: data.trialMode,
-      developmentDomain: data.developmentDomain,
+      domainWebapp: data.domainWebapp,
+      domainAdminapp: data.domainAdminapp,
+      theme: data.theme,
       trialModeLimit: data.trialModeLimit ? data.trialModeLimit : 0,
-      liveDomain: data.liveDomain,
       role: data.role,
       maxBranchLimit: data.maxBranchLimit,
       maxUserLimit: data.maxUserLimit,
@@ -244,13 +248,21 @@ function SuperAdminShopDetailPage() {
           if (items.data.success) {
             Service.getShopWithBranch(tenant).then((item: any) => {
               if (item.data.success) {
+                setIsLoader(false);
                 setIsNotify(true);
                 setNotifyMessage({
                   text: item.data.message,
                   type: 'success',
                 });
+                let tempTheme = item.data.data.theme?.map((el: any) => {
+                  return {
+                    id: el.id,
+                    name: el.key,
+                    value: el.value.themeColor.primary,
+                  };
+                });
                 setDetail(item.data.data);
-                setIsLoader(false);
+                setThemeList(tempTheme);
               }
             });
           } else {
@@ -282,10 +294,45 @@ function SuperAdminShopDetailPage() {
 
   useEffect(() => {
     Service.getShopWithBranch(tenant)
-      .then((item: any) => {
+      .then(async (item: any) => {
         if (item.data.success) {
+          let temp = item.data.data.theme?.map((el: any) => {
+            return {
+              id: el.id,
+              name: el.key,
+              value: el.value.themeColor.primary,
+            };
+          });
           setDetail(item.data.data);
-          setIsLoader(false);
+          setThemeList(temp);
+          await Theme.lovList()
+            .then((item: any) => {
+              if (item.data.success) {
+                let templovlist = item.data.data.list.map((el: any) => {
+                  return {
+                    id: el.id,
+                    name: el.key,
+                  };
+                });
+                setLovList(templovlist);
+                setIsLoader(false);
+              } else {
+                setIsLoader(false);
+                setIsNotify(true);
+                setNotifyMessage({
+                  text: item.data.message,
+                  type: 'error',
+                });
+              }
+            })
+            .catch((error: any) => {
+              setIsLoader(false);
+              setIsNotify(true);
+              setNotifyMessage({
+                text: error.message,
+                type: 'error',
+              });
+            });
         } else {
           setIsLoader(false);
           setIsNotify(true);
@@ -540,6 +587,19 @@ function SuperAdminShopDetailPage() {
                             </div>
                           </div>
                         </div>
+                        <div className="grid w-[100%] grid-cols-4">
+                          <div className="col-span-2 mt-4">
+                            <span className="font-open-sans text-base font-semibold not-italic text-[#1A1A1A]">
+                              Theme
+                            </span>
+                            <div className="mt-1 font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
+                              <ColorRowWithTooltips
+                                colors={themeList ?? []}
+                                type="array"
+                              />
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
 
@@ -739,6 +799,8 @@ function SuperAdminShopDetailPage() {
 
                 {openEditFormDialog && (
                   <SuperAdminUpdatePopup
+                    lovList={lovList}
+                    themeList={themeList}
                     type={identifier}
                     role={formDetail?.backofficeUser?.role}
                     roles={formDetail?.roles}
@@ -748,6 +810,8 @@ function SuperAdminShopDetailPage() {
                     openFormDialog={openEditFormDialog}
                     setOpenFormDialog={setOpenEditFormDialog}
                     callback={updateFormBranchHandler}
+                    isLoader={isLoader}
+                    setIsLoader={setIsLoader}
                   />
                 )}
               </div>
