@@ -7,15 +7,17 @@ import Notify from '../../../components/common/Notify';
 import SuperAdminThemeForm from './SuperAdminThemeForm';
 import Loader from '../../../components/common/Loader';
 import { Theme } from '../../../interfaces/superadmin/theme.interface';
+import { useNotification } from '../../../components/Contexts/NotificationContext';
 
 const SuperAdminThemeEditPage = () => {
   const params = useParams();
   const Id = params.id ?? '';
   const [isLoader, setIsLoader] = useState(true);
-  const [isNotify, setIsNotify] = useState(false);
   const navigate = useNavigate();
-  const [notifyMessage, setNotifyMessage] = useState({});
   const [editThemeData, setEditThemeData] = useState<Theme | null>(null);
+  // Notify
+  const { notification, hideNotification, showNotification } =
+    useNotification();
 
   /**
    * Fetches theme data from the server based on the provided ID.
@@ -29,37 +31,20 @@ const SuperAdminThemeEditPage = () => {
         .then((item: any) => {
           if (item.data.success) {
             setIsLoader(false);
-            setIsNotify(true);
-            setNotifyMessage({
-              text: item.data.message,
-              type: 'success',
-            });
             setEditThemeData(item.data.data);
           } else {
             setIsLoader(false);
-            setIsNotify(true);
-            setNotifyMessage({
-              text: item.data.message,
-              type: 'error',
-            });
+            showNotification(item.data.message, 'error');
           }
         })
         .catch((err) => {
           setIsLoader(false);
-          setIsNotify(true);
-          setNotifyMessage({
-            text: err.message,
-            type: 'error',
-          });
+          showNotification(err.message, 'error');
           navigate('../list');
         });
     } else {
       setIsLoader(false);
-      setIsNotify(true);
-      setNotifyMessage({
-        text: 'Error in loading theme data.',
-        type: 'error',
-      });
+      showNotification('Error in loading theme data.', 'error');
       navigate('../list');
     }
   };
@@ -77,36 +62,20 @@ const SuperAdminThemeEditPage = () => {
         .then((item: any) => {
           if (item.data.success) {
             setIsLoader(false);
-            setIsNotify(true);
-            setNotifyMessage({
-              text: item.data.message,
-              type: 'success',
-            });
+            showNotification(item.data.message, 'success');
             navigate('../list');
           } else {
             setIsLoader(false);
-            setIsNotify(true);
-            setNotifyMessage({
-              text: item.data.message,
-              type: 'error',
-            });
+            showNotification(item.data.message, 'error');
           }
         })
         .catch((err) => {
           setIsLoader(false);
-          setIsNotify(true);
-          setNotifyMessage({
-            text: err.message,
-            type: 'error',
-          });
+          showNotification(err.message, 'error');
         });
     } else {
       setIsLoader(false);
-      setIsNotify(true);
-      setNotifyMessage({
-        text: 'All fields are required!',
-        type: 'error',
-      });
+      showNotification('All fields are required!', 'error');
     }
   };
 
@@ -118,7 +87,7 @@ const SuperAdminThemeEditPage = () => {
     <Loader />
   ) : (
     <>
-      <TopBar title="Theme" />
+      <TopBar title="Theme" isNestedRoute={true} />
       <div className="container m-auto mt-5">
         <div className="w-full rounded-lg bg-white shadow-lg">
           <div className="grid grid-cols-12 px-4 py-5">
@@ -140,11 +109,11 @@ const SuperAdminThemeEditPage = () => {
         </div>
       </div>
 
-      {isNotify && (
+      {notification && (
         <Notify
-          isOpen={isNotify}
-          setIsOpen={setIsNotify}
-          displayMessage={notifyMessage}
+          isOpen={true}
+          setIsOpen={hideNotification}
+          displayMessage={notification}
         />
       )}
     </>

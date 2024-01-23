@@ -5,12 +5,14 @@ import Service from '../../../services/superadmin/systemConfig';
 import { useNavigate } from 'react-router-dom';
 import Notify from '../../../components/common/Notify';
 import SuperAdminThemeForm from './SuperAdminThemeForm';
+import { useNotification } from '../../../components/Contexts/NotificationContext';
 
 const SuperAdminThemeCreatePage = () => {
   const [isLoader, setIsLoader] = useState(true);
-  const [isNotify, setIsNotify] = useState(false);
   const navigate = useNavigate();
-  const [notifyMessage, setNotifyMessage] = useState({});
+  // Notify
+  const { notification, hideNotification, showNotification } =
+    useNotification();
 
   /**
    * Handles the creation of a form.
@@ -25,42 +27,26 @@ const SuperAdminThemeCreatePage = () => {
         .then((item: any) => {
           if (item.data.success) {
             setIsLoader(false);
-            setIsNotify(true);
-            setNotifyMessage({
-              text: item.data.message,
-              type: 'success',
-            });
+            showNotification(item.data.message, 'success');
             navigate('../list');
           } else {
             setIsLoader(false);
-            setIsNotify(true);
-            setNotifyMessage({
-              text: item.data.message,
-              type: 'error',
-            });
+            showNotification(item.data.message, 'error');
           }
         })
         .catch((err) => {
           setIsLoader(false);
-          setIsNotify(true);
-          setNotifyMessage({
-            text: err.message,
-            type: 'error',
-          });
+          showNotification(err.message, 'error');
         });
     } else {
       setIsLoader(false);
-      setIsNotify(true);
-      setNotifyMessage({
-        text: 'All fields are required!',
-        type: 'error',
-      });
+      showNotification('All fields are required!', 'error');
     }
   };
 
   return (
     <>
-      <TopBar title="Theme" />
+      <TopBar title="Theme" isNestedRoute={true} />
       <div className="container m-auto mt-5">
         <div className="w-full rounded-lg bg-white shadow-lg">
           <div className="grid grid-cols-12 px-4 py-5">
@@ -82,11 +68,11 @@ const SuperAdminThemeCreatePage = () => {
         </div>
       </div>
 
-      {isNotify && (
+      {notification && (
         <Notify
-          isOpen={isNotify}
-          setIsOpen={setIsNotify}
-          displayMessage={notifyMessage}
+          isOpen={true}
+          setIsOpen={hideNotification}
+          displayMessage={notification}
         />
       )}
     </>

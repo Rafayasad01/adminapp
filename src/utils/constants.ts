@@ -166,15 +166,15 @@ export const VALIDATE_NON_NEGATIVE_NUM_AND_CHECK_LENGTH = (
 export const imageAllowedTypes = ['image/png', 'image/jpeg', 'image/jpg'];
 
 export const THEME_COLORS = [
-  'background',
-  'faded',
-  'foreground',
   'primary',
+  'background',
+  'foreground',
   'secondary',
+  'faded',
   'secondary2',
 ];
 
-export const CATEGORY_COLORS_COUNT = 6;
+export const CATEGORY_COLORS_COUNT = 7;
 export const BANNER_TYPE = [
   {
     id: 'Slider',
