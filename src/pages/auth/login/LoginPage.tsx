@@ -9,7 +9,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import CircularProgress from '@mui/material/CircularProgress';
 import auth from '../../../services/adminapp/admin';
-import system from '../../../services/superadmin/systemConfig';
+import system from '../../../services/superadmin/SystemConfig';
 import { UserLogin } from '../../../interfaces/auth.interface';
 import AlertBox from '../../../utils/Alert';
 import { DEFAULT_THEME_COLORS, setToken } from '../../../utils/constants';
