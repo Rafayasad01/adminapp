@@ -25,6 +25,7 @@ module.exports = {
         'light-gray': '#F8F8F8',
         'color-1' : 'var(--theme-bg-color)',
         'color-2' : 'var(--theme-text-color)',
+        'color-3' : 'var(--theme-page-color)',
       },
     },
   },

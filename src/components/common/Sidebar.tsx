@@ -195,8 +195,12 @@ const superAdminlinks = [
 
 function Sidebar() {
   const userData = useAppSelector((state: any) => state?.authState?.user);
-  const appItems = useAppSelector((state: any) => state?.persisitReducer?.appState?.UserItems);
-  const logo = useAppSelector((state: any) => state?.persisitReducer?.appState?.logo);
+  const appItems = useAppSelector(
+    (state: any) => state?.persisitReducer?.appState?.UserItems
+  );
+  const logo = useAppSelector(
+    (state: any) => state?.persisitReducer?.appState?.logo
+  );
 
   // console.log("appItems", logo);
 
@@ -319,14 +323,13 @@ function Sidebar() {
       });
       setList(tempList);
     }
-  }, [emptyVariable,appItems?.employeeLimit]);
+  }, [emptyVariable, appItems?.employeeLimit]);
 
   return (
     <Drawer
       variant="permanent"
       PaperProps={{
-        className:
-          'left-sidebar box-border w-64 border-r-0 bg-color-1  text-gray-50',
+        className: 'left-sidebar box-border w-64 border-r-0',
       }}
     >
       <List disablePadding>
@@ -343,9 +346,17 @@ function Sidebar() {
             justifyContent="center"
           >
             {userData?.isSuperAdmin ? (
-              <img className="mt-9 max-w-[150px] h-[29px]" src={assets.images.urApplogoWhite} alt="" />
+              <img
+                className="mt-9 h-[29px] max-w-[150px]"
+                src={assets.images.urApplogoWhite}
+                alt=""
+              />
             ) : logo ? (
-              <img className="mt-9 max-w-[150px] h-[29px]" src={logo} alt="logo" />
+              <img
+                className="mt-9 h-[29px] max-w-[150px]"
+                src={logo}
+                alt="logo"
+              />
             ) : (
               <div className="flex w-full items-center justify-start rounded-2xl p-3 text-white">
                 <img
@@ -384,7 +395,9 @@ function Sidebar() {
                 appItems?.tenantConfig?.instagram === null &&
                 appItems?.tenantConfig?.whatsapp === null &&
                 appItems?.tenantConfig?.linkedin === null &&
-                appItems?.tenantConfig?.youtube === null && <span className="text-sm">No Links yet</span>}
+                appItems?.tenantConfig?.youtube === null && (
+                  <span className="text-sm">No Links yet</span>
+                )}
               {appItems?.tenantConfig && (
                 <div className="social-icons grid grid-cols-6">
                   {appItems?.tenantConfig?.facebook && (
