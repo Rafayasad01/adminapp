@@ -44,6 +44,7 @@
     "react-hook-form": "^7.45.2",
     "react-quill": "^2.0.0",
     "react-redux": "^8.0.5",
+    "react-router": "^6.21.3",
     "react-router-dom": "^6.8.2",
     "react-to-print": "^2.14.15",
     "react18-otp-input": "^1.0.3",
