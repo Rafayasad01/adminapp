@@ -1,5 +1,4 @@
 function setThemeColor(tenantConfig: any) {
-  console.log('tenantConfig', tenantConfig);
   const root = document.documentElement;
   root?.style.setProperty(
     '--theme-primary',
