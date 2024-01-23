@@ -315,7 +315,7 @@ function Sidebar() {
       variant="permanent"
       PaperProps={{
         className:
-          'left-sidebar box-border w-64 border-r-0 bg-color-1  text-gray-50',
+          'left-sidebar box-border w-64 border-r-0',
       }}
     >
       <List disablePadding>

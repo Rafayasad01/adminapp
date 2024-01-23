@@ -1487,7 +1487,7 @@ label+.css-1aa5qj0-MuiInputBase-root-MuiInput-root {
   cursor: pointer;
 }
 .toolbar-style{
-margin-left: auto !important;
+margin-left: 0 !important;
 margin-right: auto !important;
 }
 /* .css-yiavyu-MuiBackdrop-root-MuiDialog-backdrop  {
@@ -1511,3 +1511,46 @@ margin-right: auto !important;
   background-color: #E8E8E8;
   transition: .4s;
 }
+.left-sidebar{
+  @apply bg-color-1 !important;
+}
+/* .left-sidebar svg{
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px 0px, rgba(0, 0, 0, 0.1) 0px 0px 1px 0px !important;
+  background: #fff !important;
+} */
+/* .left-sidebar svg, .left-sidebar svg path {
+  fill: var(--theme-text-color) !important;
+} */
+.left-sidebar .heading, .left-sidebar span, .left-sidebar a, .left-sidebar div{
+  @apply text-color-2 !important;
+}
+.left-sidebar svg path {
+  fill: #fff !important;
+  background: #fff !important;
+}
+.left-sidebar .cursor-pointer div:nth-child(2) svg path {
+  fill: none !important;
+}
+main{
+  @apply bg-color-3 !important;
+}
+.btn-black-fill, .btn-gray-fill, .MuiButton-root.text-gray-50, .MuiButton-root.text-gray-50 span {
+  @apply text-color-2 !important;
+  @apply bg-color-1 !important;
+  border-style: none !important;
+}
+.order--details .Mui-disabled{
+  @apply bg-color-1 !important;
+  opacity: 0.5 !important;
+}
+.order--details .Mui-disabled span{
+  @apply text-color-2 !important;
+  opacity: 0.8 ;
+}
+/* main button{
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px !important;
+
+} */
+/* main div, main span, main label, main select, main ul li span{
+  color: #1a1a1a !important;
+} */

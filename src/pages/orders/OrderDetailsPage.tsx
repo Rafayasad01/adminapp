@@ -271,7 +271,7 @@ function OrderDetailsPage() {
         displayMessage={notifyMessage}
       />
       <TopBar isNestedRoute title="Order Details" />
-      <div className="container py-3">
+      <div className="container py-3 order--details">
         <div className="grid w-full grid-cols-2 gap-3">
           <div className="mb-auto min-h-[600px] rounded-lg bg-[#fff] shadow-lg">
             <div className="p-4">
@@ -344,18 +344,19 @@ function OrderDetailsPage() {
                   color="inherit"
                   disabled={!!(cancelled || isCancelled)}
                 >
-                  Cancel Order
+                  <span> Cancel Order</span>
+                
                 </Button>
               </div>
-              <div className="flex items-center justify-between">
-                <div>
+              <div className="flex items-center justify-end">
+                {/* <div>
                   <CustomButton
                     title="Driver History"
                     buttonType="button"
                     className="btn-black-fill"
                     onclick={() => navigate('../view-driver')}
                   />
-                </div>
+                </div> */}
                 <div>
                   <div>
                     <CustomOrderPrintLayoutCash
@@ -598,7 +599,7 @@ function OrderDetailsPage() {
                         )
                       }
                     >
-                      {nextBtn.value.title}
+                     <span>{nextBtn.value.title}</span> 
                     </Button>
                   )}
                 </div>

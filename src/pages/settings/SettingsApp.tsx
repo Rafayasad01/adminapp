@@ -80,7 +80,7 @@ function SettingsApp() {
   const [selectedImg, setSelectedImg] = useState<any>(null);
   const [color1, setColor1] = useState<any>('#1A1A1A');
   const [color2, setColor2] = useState<any>('#1A1A1A');
-  // const [color3, setColor3] = useState<any>('#1A1A1A');
+  const [color3, setColor3] = useState<any>('#1A1A1A');
   const [detail, setDetail] = useState<Setting>();
   const [address, setAddress] = useState<any>(null);
   const [isLoader, setIsLoader] = useState(true);
@@ -139,7 +139,7 @@ function SettingsApp() {
     // setValue('userLimit', item.userLimit ? item.userLimit : '');
     setColor1(item.color1);
     setColor2(item.color2);
-    // setColor3(item.color3);
+    setColor3(item.color3);
   };
 
   const onSubmit = (data: any) => {
@@ -170,7 +170,7 @@ function SettingsApp() {
       formData.append('updatedBy', authState.user.id);
       formData.append('color1', color1);
       formData.append('color2', color2);
-      // formData.append('color3', color3);
+      formData.append('color3', color3);
       formData.append('enableLoyaltyProgram', data.enableLoyaltyProgram);
       formData.append(
         'loyaltyCoinConversionRate',
@@ -663,12 +663,12 @@ function SettingsApp() {
                   setColorPickerValue={setColor2}
                   id="color2"
                 />
-                {/* <ColorPicker
-                  colorPickerLabel="Color3"
+                <ColorPicker
+                  colorPickerLabel="Page Color"
                   colorPickerValue={color3 || '#1A1A1A'}
                   setColorPickerValue={setColor3}
                   id="color3"
-                /> */}
+                />
               </div>
               <div className="FormField">
                 <Button
