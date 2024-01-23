@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { BASE_URL } from './constants';
+import { BASE_SYSTEM_URL, BASE_URL } from './constants';
 import { getItem } from './storage';
 
 const token = getItem<string>('AUTH_TOKEN');
@@ -22,6 +22,15 @@ const get = (endPoint: string) => {
   });
 };
 
+const getSystemConfig = (endPoint: string) => {
+  return axios.get(`${BASE_SYSTEM_URL}${endPoint}`, {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: token,
+    },
+  });
+};
+
 const postMultipart = <T = any>(endPoint: string, data: T) => {
   return axios.post(`${BASE_URL}${endPoint}`, data, {
     headers: {
@@ -34,5 +43,6 @@ const postMultipart = <T = any>(endPoint: string, data: T) => {
 export default {
   post,
   get,
+  getSystemConfig,
   postMultipart,
 };

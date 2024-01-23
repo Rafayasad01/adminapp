@@ -8,7 +8,7 @@ import { Button, IconButton, Switch, TablePagination } from '@mui/material';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import CustomText from '../../../components/common/CustomText';
 import dayjs from 'dayjs';
-import Service from '../../../services/superadmin/systemConfig';
+import Service from '../../../services/superadmin/theme';
 import Notify from '../../../components/common/Notify';
 import _ from 'lodash';
 import EditIcon from '@mui/icons-material/Edit';
@@ -16,7 +16,7 @@ import ColorRow from '../../../components/common/ColorRow';
 import ColorRowWithTooltips from '../../../components/common/ColorRowWithTooltips';
 import { useNotification } from '../../../components/Contexts/NotificationContext';
 
-function SuperAdminThemeConfigPage() {
+function SuperAdminThemePage() {
   const authState: any = useAppSelector((state) => state?.authState);
   const navigate = useNavigate();
   const [list, setList] = useState<Array<any>>([]);
@@ -30,9 +30,6 @@ function SuperAdminThemeConfigPage() {
   //   Notify
   const { notification, hideNotification, showNotification } =
     useNotification();
-
-  const handleFormClickOpen = () => {};
-
   /**
    * Handles the change of the current page number.
    * @param event Mouse event
@@ -151,7 +148,7 @@ function SuperAdminThemeConfigPage() {
                 </tr>
               </thead>
               <tbody>
-                {list.map((item, index) => (
+                {list?.map((item, index) => (
                   <tr key={index}>
                     <td>
                       <div className="avatar flex flex-row items-center">
@@ -218,4 +215,4 @@ function SuperAdminThemeConfigPage() {
   );
 }
 
-export default memo(SuperAdminThemeConfigPage);
+export default memo(SuperAdminThemePage);

@@ -1,8 +1,10 @@
 import { setItem } from './storage';
 
-// export const BASE_URL = import.meta.env.VITE_SERVICE_BASE_URL;
-// export const BASE_URL = 'https://dev.urapptech.com/api/v1/admin/';
-export const BASE_URL = 'http://192.168.8.68:3200/api/v1/admin/';
+// const HOST = 'https://dev.urapptech.com'
+const HOST = 'http://192.168.8.68:3200';
+
+export const BASE_URL = `${HOST}/api/v1/admin/`;
+export const BASE_SYSTEM_URL = `${HOST}/api/v1/system/config/`;
 // export const GOOGLE_MAP_KEY = import.meta.env.VITE_GOOGLE_MAP_KEY;
 export const MODULE_EMPLOYEEES = 'Employees';
 export const PROFILE_PREFIX = 'profile';
@@ -173,6 +175,15 @@ export const THEME_COLORS = [
   'faded',
   'secondary2',
 ];
+
+export const DEFAULT_THEME_COLORS = {
+  primary: '#1D1D1D',
+  background: '#F0F0F0',
+  foreground: '#FFF',
+  secondary: '#1A1A1A',
+  faded: '#6A6A6A',
+  secondary2: '#343434',
+};
 
 export const CATEGORY_COLORS_COUNT = 6;
 export const BANNER_TYPE = [

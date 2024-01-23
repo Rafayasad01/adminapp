@@ -1,4 +1,4 @@
-type Key = 'USER' | 'AUTH_TOKEN';
+type Key = 'USER' | 'AUTH_TOKEN' | 'THEME';
 
 function addKeyPrefix(key: string) {
   const prefix = 'WEB_ADMIN';

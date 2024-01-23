@@ -80,7 +80,7 @@ function SettingsApp() {
   const [selectedImg, setSelectedImg] = useState<any>(null);
   const [themeFile, setThemeFile] = useState<any>(null);
   const [themeSelectedImg, setThemeSelectedImg] = useState<any>(null);
-  const [detail, setDetail] = useState<Setting>();
+  const [detail, setDetail] = useState<any>();
   const [address, setAddress] = useState<any>(null);
   const [isLoader, setIsLoader] = useState(true);
   const [isNotify, setIsNotify] = useState(false);
@@ -95,48 +95,85 @@ function SettingsApp() {
   } = useForm<Setting>();
 
   const setData = (item: any) => {
-    // console.log('itesmssss', item);
+    console.log('itesmssss', item);
 
-    setValue('name', item.name);
-    setValue('desc', item.desc);
-    setValue('email', item.email);
-    setValue('deliveryUrgentFees', item.deliveryUrgentFees);
-    setValue('minimumDeliveryTime', Number(item.minimumDeliveryTime));
+    // setValue('name', item.tenantConfig.name);
+    setValue('desc', item.tenantConfig.desc);
+    setValue('email', item.tenantConfig.email);
+    setValue('deliveryUrgentFees', item.tenantConfig.deliveryUrgentFees);
+    setValue(
+      'minimumDeliveryTime',
+      Number(item.tenantConfig.minimumDeliveryTime)
+    );
     setValue(
       'gstPercentage',
-      item.gstPercentage ? item.gstPercentage : item.gst_percentage
+      item.tenantConfig.gstPercentage
+        ? item.tenantConfig.gstPercentage
+        : item.gst_percentage
     );
     setValue(
       'minOrderAmount',
-      item.minOrderAmount ? item.minOrderAmount : item.min_order_amount
+      item.tenantConfig.minOrderAmount
+        ? item.tenantConfig.minOrderAmount
+        : item.min_order_amount
     );
     setValue(
       'deliveryFee',
-      item.deliveryFee ? item.deliveryFee : item.delivery_fee
+      item.tenantConfig.deliveryFee
+        ? item.tenantConfig.deliveryFee
+        : item.delivery_fee
     );
     setValue(
-      'developmentDomain',
-      item.developmentDomain ? item.developmentDomain : item.development_domain
+      'domainAdminapp',
+      item.systemConfig.domainAdminapp
+        ? item.systemConfig.domainAdminapp
+        : item.domain_adminapp
     );
     setValue(
-      'liveDomain',
-      item.liveDomain ? item.liveDomain : item.live_domain
+      'domainWebapp',
+      item.systemConfig.domainWebapp
+        ? item.systemConfig.domainWebapp
+        : item.domain_webapp
     );
-    setValue('facebook', item.facebook !== 'null' ? item.facebook : '');
-    setValue('instagram', item.instagram ? item.instagram : '');
-    setValue('linkedin', item.linkedin !== 'null' ? item.linkedin : '');
-    setValue('twitter', item.twitter ? item.twitter : '');
-    setValue('youtube', item.youtube ? item.youtube : '');
-    setValue('whatsapp', item.whatsapp ? item.whatsapp : '');
-    setValue('address', item.address ? item.address : '');
+    setValue(
+      'facebook',
+      item.tenantConfig.facebook !== 'null' ? item.tenantConfig.facebook : ''
+    );
+    setValue(
+      'instagram',
+      item.tenantConfig.instagram ? item.tenantConfig.instagram : ''
+    );
+    setValue(
+      'linkedin',
+      item.tenantConfig.linkedin !== 'null' ? item.tenantConfig.linkedin : ''
+    );
+    setValue(
+      'twitter',
+      item.tenantConfig.twitter ? item.tenantConfig.twitter : ''
+    );
+    setValue(
+      'youtube',
+      item.tenantConfig.youtube ? item.tenantConfig.youtube : ''
+    );
+    setValue(
+      'whatsapp',
+      item.tenantConfig.whatsapp ? item.tenantConfig.whatsapp : ''
+    );
+    setValue(
+      'address',
+      item.tenantConfig.shopAddress ? item.tenantConfig.shopAddress : ''
+    );
     if (
-      item.enableLoyaltyProgram === 'true' ||
-      item.enableLoyaltyProgram === true
+      item.tenantConfig.enableLoyaltyProgram === 'true' ||
+      item.tenantConfig.enableLoyaltyProgram === true
     ) {
       setValue('enableLoyaltyProgram', true);
     }
-    setValue('loyaltyCoinConversionRate', item.loyaltyCoinConversionRate);
-    setValue('requiredCoinsToRedeem', item.requiredCoinsToRedeem);
+    setValue(
+      'loyaltyCoinConversionRate',
+      item.tenantConfig.loyaltyCoinConversionRate
+    );
+    setValue('requiredCoinsToRedeem', item.tenantConfig.requiredCoinsToRedeem);
   };
 
   const onSubmit = (data: any) => {
@@ -145,7 +182,7 @@ function SettingsApp() {
     if (listingRolePermission(dataRole, 'Setting Update')) {
       // setIsLoader(true);
       const formData = new FormData();
-      formData.append('name', data.name ? data.name : '');
+      // formData.append('name', data.name ? data.name : '');
       formData.append('desc', data.desc ? data.desc : '');
       formData.append(
         'gstPercentage',
@@ -182,6 +219,8 @@ function SettingsApp() {
         data.loyaltyCoinConversionRate
       );
       formData.append('requiredCoinsToRedeem', data.requiredCoinsToRedeem);
+      formData.append('domainAdminapp', data.domainAdminapp);
+      formData.append('domainWebapp', data.domainWebapp);
       if (authState?.user?.userType === 'ShopUser')
         formData.append('userLimit', data.userLimit ? data.userLimit : 0);
       if (file !== null) formData.append('logo', file);
@@ -191,7 +230,8 @@ function SettingsApp() {
         .then((item: any) => {
           const { success, message, data: itemData } = item.data;
           if (success) {
-            // console.log({ tenantConfig: itemData });
+            console.log('message', message);
+
             dispatch(setTenantConfig(itemData));
             setAddress(itemData?.address);
             dispatch(setTenantConfig(itemData));
@@ -210,6 +250,8 @@ function SettingsApp() {
             setData(itemData);
             setDetail(itemData);
           } else {
+            console.log('message2', message);
+
             setValue('userLimit', Number(detail?.userLimit));
             setIsLoader(false);
             setIsNotify(true);
@@ -220,6 +262,7 @@ function SettingsApp() {
           }
         })
         .catch((err) => {
+          console.log('message', err.message);
           setValue('userLimit', Number(detail?.userLimit));
           setIsLoader(false);
           setIsNotify(true);
@@ -326,17 +369,17 @@ function SettingsApp() {
                       alt="Shop Logo"
                     />
                   </div>
-                ) : detail && detail.logo ? (
+                ) : detail && detail?.tenantConfig.logo ? (
                   <div className="col-span-6 flex items-center xl:justify-center 2xl:justify-start">
                     <img
                       className="max-h-[100px] max-w-[150px] rounded-md"
-                      src={detail.logo}
+                      src={detail?.tenantConfig.logo}
                       alt="Shop Logo"
                     />
                   </div>
                 ) : null}
               </div>
-              <div className="mb-3 text-base">
+              {/* <div className="mb-3 text-base">
                 <span className="">Upload Theme Image</span>
               </div>
               <div className="grid grid-cols-12 items-center">
@@ -365,28 +408,8 @@ function SettingsApp() {
                     />
                   </div>
                 ) : null}
-              </div>
-              <div className="FormFields mb-4">
-                <FormControl className="FormControl" variant="standard">
-                  <label className="FormLabel">App Name</label>
-                  <Input
-                    className="FormInput"
-                    id="name"
-                    placeholder="UrLaundry"
-                    disableUnderline
-                    {...register('name', {
-                      pattern: PATTERN.CHAR_SPACE_DASH,
-                      validate: (value) => value.length <= 150,
-                      value: detail ? detail.name : '',
-                    })}
-                  />
-                  {errors.name?.type === 'pattern' && (
-                    <ErrorSpanBox error={INVALID_CHAR} />
-                  )}
-                  {errors.name?.type === 'validate' && (
-                    <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
-                  )}
-                </FormControl>
+              </div> */}
+              <div className="FormField mb-4">
                 <FormControl className="FormControl" variant="standard">
                   <label className="FormLabel">Address</label>
                   <Input
@@ -437,7 +460,7 @@ function SettingsApp() {
                 </FormControl>
               </div>
               <div className="FormFields mb-4">
-                <FormControl className="FormControl" variant="standard">
+                {/* <FormControl className="FormControl" variant="standard">
                   <label className="FormLabel">Contact Email</label>
                   <Input
                     className="FormInput"
@@ -457,7 +480,28 @@ function SettingsApp() {
                   {errors.email?.type === 'validate' && (
                     <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
                   )}
-                </FormControl>
+                </FormControl> */}
+                {authState?.user?.userType === 'ShopUser' && (
+                  <FormControl className="FormControl" variant="standard">
+                    <label className="FormLabel">Employee Limit</label>
+                    <Input
+                      className="FormInput"
+                      {...register('userLimit', {
+                        value: detail ? detail.userLimit : 0,
+                        validate: (value: any) =>
+                          VALIDATE_NON_NEGATIVE_NUM(value),
+                      })}
+                      defaultValue={0}
+                      type="number"
+                      id="userLimits"
+                      placeholder="Enter max user limits"
+                      disableUnderline
+                    />
+                    {errors?.userLimit && (
+                      <ErrorSpanBox error={errors?.userLimit?.message} />
+                    )}
+                  </FormControl>
+                )}
                 <FormControl className="FormControl" variant="standard">
                   <label className="FormLabel">Tax</label>
                   <Input
@@ -483,7 +527,7 @@ function SettingsApp() {
                   )}
                 </FormControl>
               </div>
-              <div className="mb-4 flex">
+              <div className="FormFields">
                 <FormControl className="FormControl" variant="standard">
                   <label className="FormLabel">Min order Amount</label>
                   <Input
@@ -522,27 +566,6 @@ function SettingsApp() {
                     <ErrorSpanBox error="Enter a valid delivery fee" />
                   )}
                 </FormControl>
-                {authState?.user?.userType === 'ShopUser' && (
-                  <FormControl className="FormControl" variant="standard">
-                    <label className="FormLabel">Employee Limit</label>
-                    <Input
-                      className="FormInput"
-                      {...register('userLimit', {
-                        value: detail ? detail.userLimit : 0,
-                        validate: (value: any) =>
-                          VALIDATE_NON_NEGATIVE_NUM(value),
-                      })}
-                      defaultValue={0}
-                      type="number"
-                      id="userLimits"
-                      placeholder="Enter max user limits"
-                      disableUnderline
-                    />
-                    {errors?.userLimit && (
-                      <ErrorSpanBox error={errors?.userLimit?.message} />
-                    )}
-                  </FormControl>
-                )}
               </div>
               <div className="FormFields">
                 <FormControl className="FormControl" variant="standard">
@@ -594,14 +617,14 @@ function SettingsApp() {
               </div>
               <div className="FormField mb-4">
                 <FormControl className="FormControl" variant="standard">
-                  <label className="FormLabel">Development Domain</label>
+                  <label className="FormLabel">Admin Domain</label>
                   <Input
                     className="FormInput"
-                    id="developmentDomain"
+                    id="domainAdminapp"
                     value={
-                      watch('developmentDomain') &&
+                      watch('domainAdminapp') &&
                       `${DOMAIN_PROTOCOL}${watch(
-                        'developmentDomain'
+                        'domainAdminapp'
                       )}${DOMAIN_PREFIX}`
                     }
                     disableUnderline
@@ -611,13 +634,15 @@ function SettingsApp() {
               </div>
               <div className="FormField mb-4">
                 <FormControl className="FormControl" variant="standard">
-                  <label className="FormLabel">Live Domain</label>
+                  <label className="FormLabel">Web-App Domain</label>
                   <Input
                     className="FormInput"
-                    id="liveDomain"
+                    id="domainWebapp"
                     value={
-                      watch('liveDomain') &&
-                      `${DOMAIN_PROTOCOL}${watch('liveDomain')}${DOMAIN_PREFIX}`
+                      watch('domainWebapp') &&
+                      `${DOMAIN_PROTOCOL}${watch(
+                        'domainWebapp'
+                      )}${DOMAIN_PREFIX}`
                     }
                     disableUnderline
                     disabled
@@ -709,46 +734,50 @@ function SettingsApp() {
                   <label className="FormLabel">Social Links</label>
                   <div className="mt-2 flex flex-row items-center gap-3">
                     {detail &&
-                      detail.facebook &&
-                      detail.facebook !== 'null' && (
+                      detail.tenantConfig.facebook &&
+                      detail.tenantConfig.facebook !== 'null' && (
                         <Item
-                          value={detail.facebook}
+                          value={detail.tenantConfig.facebook}
                           name={FACEBOOK as AssetsImages}
                         />
                       )}
                     {detail &&
-                      detail.instagram &&
-                      detail.instagram !== 'null' && (
+                      detail.tenantConfig.instagram &&
+                      detail.tenantConfig.instagram !== 'null' && (
                         <Item
-                          value={detail.instagram}
+                          value={detail.tenantConfig.instagram}
                           name={INSTAGRAM as AssetsImages}
                         />
                       )}
                     {detail &&
-                      detail.linkedin &&
-                      detail.linkedin !== 'null' && (
+                      detail.tenantConfig.linkedin &&
+                      detail.tenantConfig.linkedin !== 'null' && (
                         <Item
-                          value={detail.linkedin}
+                          value={detail.tenantConfig.linkedin}
                           name={LINKEDIN as AssetsImages}
                         />
                       )}
-                    {detail && detail.twitter && detail.twitter !== 'null' && (
-                      <Item
-                        value={detail.twitter}
-                        name={TWITTER as AssetsImages}
-                      />
-                    )}
-                    {detail && detail.youtube && detail.youtube !== 'null' && (
-                      <Item
-                        value={detail.youtube}
-                        name={YOUTUBE as AssetsImages}
-                      />
-                    )}
                     {detail &&
-                      detail.whatsapp &&
-                      detail.whatsapp !== 'null' && (
+                      detail.tenantConfig.twitter &&
+                      detail.tenantConfig.twitter !== 'null' && (
                         <Item
-                          value={detail.whatsapp}
+                          value={detail.tenantConfig.twitter}
+                          name={TWITTER as AssetsImages}
+                        />
+                      )}
+                    {detail &&
+                      detail.tenantConfig.youtube &&
+                      detail.tenantConfig.youtube !== 'null' && (
+                        <Item
+                          value={detail.tenantConfig.youtube}
+                          name={YOUTUBE as AssetsImages}
+                        />
+                      )}
+                    {detail &&
+                      detail.tenantConfig.whatsapp &&
+                      detail.tenantConfig.whatsapp !== 'null' && (
+                        <Item
+                          value={detail.tenantConfig.whatsapp}
                           name={WHATSAPP as AssetsImages}
                         />
                       )}

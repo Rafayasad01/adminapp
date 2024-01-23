@@ -1,7 +1,7 @@
 import { memo, useState } from 'react';
 import TopBar from '../../../components/common/TopBar';
 import _ from 'lodash';
-import Service from '../../../services/superadmin/systemConfig';
+import Service from '../../../services/superadmin/theme';
 import { useNavigate } from 'react-router-dom';
 import Notify from '../../../components/common/Notify';
 import SuperAdminThemeForm from './SuperAdminThemeForm';

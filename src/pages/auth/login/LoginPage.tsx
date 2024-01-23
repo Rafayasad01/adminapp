@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
@@ -9,18 +9,21 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import CircularProgress from '@mui/material/CircularProgress';
 import auth from '../../../services/adminapp/admin';
+import system from '../../../services/superadmin/systemConfig';
 import { UserLogin } from '../../../interfaces/auth.interface';
 import AlertBox from '../../../utils/Alert';
-import { setToken } from '../../../utils/constants';
-import { useAppDispatch } from '../../../redux/redux-hooks';
-import { login } from '../../../redux/features/authStateSlice';
+import { DEFAULT_THEME_COLORS, setToken } from '../../../utils/constants';
+import { useAppDispatch, useAppSelector } from '../../../redux/redux-hooks';
+import { login, setTenantConfig } from '../../../redux/features/authStateSlice';
 
 import assets from '../../../assets';
 import { setRolePermissions } from '../../../redux/features/permissionsStateSlice';
 import { setItemState, setLogo } from '../../../redux/features/appStateSlice';
+import Loader from '../../../components/common/Loader';
 
 function LoginPage() {
   const dispatch = useAppDispatch();
+  const tenantColors = useAppSelector((state) => state.authState);
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
@@ -29,12 +32,37 @@ function LoginPage() {
   const [showAlert, setShowAlert] = useState(false);
   const [alertSeverity, setAlertSeverity] = useState('');
   const [isLoader, setIsLoader] = useState(false);
+  const [isPageLoader, setIsPageLoader] = useState(false);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const handleMouseDownPassword = (
     event: React.MouseEvent<HTMLButtonElement>
   ) => {
     event.preventDefault();
   };
+
+  console.log('tenantColors', tenantColors);
+
+  useEffect(() => {
+    setIsPageLoader(true);
+    // setIsPageLoader(true);
+    // let a = https://devadmin.urapptech.com/admin/auth/login
+    // const currentURL = (window.location.href).split('/')[2];
+    // console.log("currentURL", currentURL);
+    let url = 'devadminapp-development';
+    system
+      .getSystemConfig(url)
+      .then((res) => {
+        // console.log("RES", res.data.data.theme);
+        setIsPageLoader(false);
+        if (res.data.success) {
+          dispatch(setTenantConfig(res.data.data.theme.value.themeColor));
+        } else {
+          dispatch(setTenantConfig(DEFAULT_THEME_COLORS));
+        }
+      })
+      .catch((err) => console.log('err', err.message));
+  }, []);
+
   const loginHandler = async () => {
     setIsLoader(true);
     const userData: UserLogin = {
@@ -75,7 +103,9 @@ function LoginPage() {
       });
   };
 
-  return (
+  return isPageLoader ? (
+    <Loader />
+  ) : (
     <>
       {showAlert && (
         <AlertBox
