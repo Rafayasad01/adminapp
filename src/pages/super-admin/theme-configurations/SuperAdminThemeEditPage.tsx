@@ -1,7 +1,7 @@
 import { memo, useEffect, useState } from 'react';
 import TopBar from '../../../components/common/TopBar';
 import _ from 'lodash';
-import Service from '../../../services/superadmin/SystemConfig';
+import Service from '../../../services/superadmin/systemConfig';
 import { useNavigate, useParams } from 'react-router-dom';
 import Notify from '../../../components/common/Notify';
 import SuperAdminThemeForm from './SuperAdminThemeForm';
@@ -9,14 +9,13 @@ import Loader from '../../../components/common/Loader';
 import { Theme } from '../../../interfaces/superadmin/theme.interface';
 
 const SuperAdminThemeEditPage = () => {
-  
   const params = useParams();
   const Id = params.id ?? '';
   const [isLoader, setIsLoader] = useState(true);
   const [isNotify, setIsNotify] = useState(false);
   const navigate = useNavigate();
   const [notifyMessage, setNotifyMessage] = useState({});
-  const [editThemeData, setEditThemeData] = useState<Theme|null>(null);
+  const [editThemeData, setEditThemeData] = useState<Theme | null>(null);
 
   /**
    * Fetches theme data from the server based on the provided ID.
@@ -25,7 +24,7 @@ const SuperAdminThemeEditPage = () => {
    */
   const getTheme = () => {
     setIsLoader(true);
-    if (!_.isEmpty(Id) ) {
+    if (!_.isEmpty(Id)) {
       Service.getTheme(Id)
         .then((item: any) => {
           if (item.data.success) {
@@ -53,7 +52,6 @@ const SuperAdminThemeEditPage = () => {
             type: 'error',
           });
           navigate('../list');
-
         });
     } else {
       setIsLoader(false);
@@ -64,7 +62,7 @@ const SuperAdminThemeEditPage = () => {
       });
       navigate('../list');
     }
-  }
+  };
 
   /**
    * Handles the update of theme data on the server.
@@ -75,7 +73,7 @@ const SuperAdminThemeEditPage = () => {
   const updateFormHandler = (data: any) => {
     setIsLoader(true);
     if (data.key) {
-      Service.updateTheme(Id,data)
+      Service.updateTheme(Id, data)
         .then((item: any) => {
           if (item.data.success) {
             setIsLoader(false);
@@ -114,7 +112,7 @@ const SuperAdminThemeEditPage = () => {
 
   useEffect(() => {
     getTheme();
-  }, [Id])
+  }, [Id]);
 
   return isLoader ? (
     <Loader />

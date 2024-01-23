@@ -2,7 +2,7 @@ import { setItem } from './storage';
 
 // export const BASE_URL = import.meta.env.VITE_SERVICE_BASE_URL;
 // export const BASE_URL = 'https://dev.urapptech.com/api/v1/admin/';
-export const BASE_URL = 'http://192.168.8.97:3200/api/v1/admin/';
+export const BASE_URL = 'http://192.168.8.68:3200/api/v1/admin/';
 // export const GOOGLE_MAP_KEY = import.meta.env.VITE_GOOGLE_MAP_KEY;
 export const MODULE_EMPLOYEEES = 'Employees';
 export const PROFILE_PREFIX = 'profile';
@@ -165,28 +165,27 @@ export const VALIDATE_NON_NEGATIVE_NUM_AND_CHECK_LENGTH = (
 
 export const imageAllowedTypes = ['image/png', 'image/jpeg', 'image/jpg'];
 
-
-export const THEME_COLORS  = [
+export const THEME_COLORS = [
   'background',
   'faded',
   'foreground',
   'primary',
   'secondary',
-  'secondary2'
+  'secondary2',
 ];
 
-export const CATEGORY_COLORS_COUNT  = 7; 
+export const CATEGORY_COLORS_COUNT = 6;
 export const BANNER_TYPE = [
   {
-    id: "Slider",
-    name: "Slider"
+    id: 'Slider',
+    name: 'Slider',
   },
   {
-    id: "Onboard",
-    name: "On Board"
+    id: 'Onboard',
+    name: 'On Board',
   },
   {
-    id: "Splash",
-    name: "Splash Screen"
-  }
-]
+    id: 'Splash',
+    name: 'Splash Screen',
+  },
+];

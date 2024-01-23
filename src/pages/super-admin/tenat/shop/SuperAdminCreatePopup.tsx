@@ -7,7 +7,7 @@ import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
-import Service from '../../../../services/superadmin/theme';
+import Theme from '../../../../services/superadmin/theme';
 import TextField from '@mui/material/TextField';
 import { debounce } from '@mui/material/utils';
 import kabakCase from 'lodash/kebabCase';
@@ -50,7 +50,7 @@ function SuperAdminTenantCreatePopup({
   setNotifyMessage,
   type,
   isLoader,
-  setIsLoader
+  setIsLoader,
 }: Props) {
   const {
     register,
@@ -63,15 +63,15 @@ function SuperAdminTenantCreatePopup({
   const [lovList, setLovList] = useState<any>();
 
   useEffect(() => {
-    Service.lovList()
+    Theme.lovList()
       .then((item: any) => {
         if (item.data.success) {
           let temp = item.data.data.list.map((el: any) => {
             return {
               id: el.id,
-              name: el.key
-            }
-          })
+              name: el.key,
+            };
+          });
           setLovList(temp);
           setIsLoader(false);
         } else {
@@ -83,7 +83,7 @@ function SuperAdminTenantCreatePopup({
           });
         }
       })
-      .catch((error) => {
+      .catch((error: any) => {
         setIsLoader(false);
         setIsNotify(true);
         setNotifyMessage({
@@ -92,27 +92,24 @@ function SuperAdminTenantCreatePopup({
         });
         // console.log('error::::::::', error);
       });
-  }, [])
-
-  console.log("PPPPPPPPPPPPPPLOV", lovList);
-
+  }, []);
 
   const onSubmit = (data: Partial<Tenant>) => {
-    console.log("datA", data);
-    // if (data.enableLoyaltyProgram === false) {
-    //   delete data.loyaltyCoinConversionRate;
-    //   delete data.requiredCoinsToRedeem;
-    // }
-    // if (data.tenantName) {
-    //   setOpenFormDialog(false);
-    //   callback(data);
-    // } else {
-    //   setIsNotify(true);
-    //   setNotifyMessage({
-    //     text: 'All fields are required!',
-    //     type: 'error',
-    //   });
-    // }
+    // console.log("datA", data);
+    if (data.enableLoyaltyProgram === false) {
+      delete data.loyaltyCoinConversionRate;
+      delete data.requiredCoinsToRedeem;
+    }
+    if (data.tenantName) {
+      setOpenFormDialog(false);
+      callback(data);
+    } else {
+      setIsNotify(true);
+      setNotifyMessage({
+        text: 'All fields are required!',
+        type: 'error',
+      });
+    }
   };
 
   const handleFormClose = () => {
@@ -120,8 +117,8 @@ function SuperAdminTenantCreatePopup({
   };
 
   const debouceRequest = debounce((value) => {
-    setValue('developmentDomain', `dev.${kabakCase(value)}`);
-    setValue('liveDomain', `live.${kabakCase(value)}`);
+    setValue('domainAdminapp', `devadminapp-${kabakCase(value)}`);
+    setValue('domainWebapp', `devwebapp-${kabakCase(value)}`);
   }, 1000);
 
   const shopFieldHangler = (val: any) => {
@@ -335,10 +332,10 @@ function SuperAdminTenantCreatePopup({
                 options={{ roles: lovList }}
                 customClassInputTitle="font-bold"
                 inputTitle="Theme"
-                defaultVal='-- Select Theme --'
+                defaultVal="-- Select Theme --"
               />
             </div>
-            <div className="FormField mb-4">
+            <div className="FormField">
               <FormControl className="FormControl" variant="standard">
                 <label className="FormLabel">Address</label>
                 <Input
@@ -364,9 +361,9 @@ function SuperAdminTenantCreatePopup({
                 )}
               </FormControl>
             </div>
-            <div className="FormField mb-4">
+            <div className="FormField">
               <FormControl className="FormControl" variant="standard">
-                <label className="FormLabel">Development Domain</label>
+                <label className="FormLabel">Admin Domain</label>
                 <TextField
                   className="FormInput"
                   sx={{ padding: 0 }}
@@ -384,18 +381,18 @@ function SuperAdminTenantCreatePopup({
                     ),
                   }}
                   variant="outlined"
-                  {...register('developmentDomain')}
+                  {...register('domainAdminapp')}
                   disabled
                 />
               </FormControl>
             </div>
             <div className="FormField mb-4">
               <FormControl className="FormControl" variant="standard">
-                <label className="FormLabel">Live Domain</label>
+                <label className="FormLabel">Web-App Domain</label>
                 <TextField
                   className="FormInput"
                   sx={{ padding: 0 }}
-                  id="live_domain"
+                  id="development_domain"
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">
@@ -409,7 +406,7 @@ function SuperAdminTenantCreatePopup({
                     ),
                   }}
                   variant="outlined"
-                  {...register('liveDomain')}
+                  {...register('domainWebapp')}
                   disabled
                 />
               </FormControl>

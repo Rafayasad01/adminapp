@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../../../redux/redux-hooks';
 import { memo, useEffect, useState } from 'react';
 import Loader from '../../../components/common/Loader';
@@ -8,7 +8,7 @@ import { Button, IconButton, Switch, TablePagination } from '@mui/material';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import CustomText from '../../../components/common/CustomText';
 import dayjs from 'dayjs';
-import Service from '../../../services/superadmin/SystemConfig';
+import Service from '../../../services/superadmin/systemConfig';
 import Notify from '../../../components/common/Notify';
 import _ from 'lodash';
 import EditIcon from '@mui/icons-material/Edit';

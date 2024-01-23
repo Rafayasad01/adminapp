@@ -130,7 +130,7 @@ function AppointmentVisitUpdatePopup({
   const handleFormClose = () => {
     setOpenFormDialog(false);
   };
-  // console.log('appointmentProvider', watch('appointmentProvider'));
+  console.log(formData?.appointmentService);
 
   return (
     <Dialog
