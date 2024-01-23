@@ -20,6 +20,7 @@ type User = {
 
 type AuthState = {
   user: User | null;
+  theme: null;
 };
 
 function getUser() {
@@ -32,6 +33,7 @@ function getUser() {
 
 const initialState: AuthState = {
   user: getUser(),
+  theme: getItem<any>('THEME'),
 };
 
 export const authStateSlice = createSlice({
@@ -48,12 +50,9 @@ export const authStateSlice = createSlice({
       removeItem('USER');
     },
     setTenantConfig: (state, action: PayloadAction<any>) => {
-      if (!state.user) {
-        return;
-      }
-      state.user.tenantConfig = action.payload;
+      state.theme = action.payload;
       setThemeColor(action.payload);
-      setItem('USER', state.user);
+      setItem('THEME', state.theme);
     },
   },
 });

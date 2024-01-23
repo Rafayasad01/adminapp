@@ -61,9 +61,9 @@ import AppUserRewardHistory from '../pages/appUsers/AppUserRewardHistory';
 import AppUserPromotionDetailPage from '../pages/appUsers/AppUserRewardHistoryTabs/AppUserPromotionDetailPage';
 import AppUserLoyaltyDetailPage from '../pages/appUsers/AppUserRewardHistoryTabs/AppUserLoyaltyDetailPage';
 import SettingConfig from '../pages/settings/SettingConfig';
-import SuperAdminThemeConfigPage from '../pages/super-admin/theme-configurations/SuperAdminThemeConfigPage';
-import SuperAdminThemeCreatePage from '../pages/super-admin/theme-configurations/SuperAdminThemeCreatePage';
-import SuperAdminThemeEditPage from '../pages/super-admin/theme-configurations/SuperAdminThemeEditPage';
+import SuperAdminThemePage from '../pages/super-admin/theme/SuperAdminThemePage';
+import SuperAdminThemeCreatePage from '../pages/super-admin/theme/SuperAdminThemeCreatePage';
+import SuperAdminThemeEditPage from '../pages/super-admin/theme/SuperAdminThemeEditPage';
 
 export const routeObjects: RouteObject[] = [
   {
@@ -141,7 +141,7 @@ export const routeObjects: RouteObject[] = [
                   {
                     path: 'detail/:id',
                     element: <ShopAdminUserDetailPage />,
-                  }
+                  },
                 ],
               },
             ],
@@ -156,9 +156,9 @@ export const routeObjects: RouteObject[] = [
                   {
                     path: 'list',
                     element: <SuperAdminAppImagePage />,
-                  }
+                  },
                 ],
-              }
+              },
             ],
           },
           // {
@@ -166,10 +166,10 @@ export const routeObjects: RouteObject[] = [
           //   element: <SuperAdminSupportPage />,
           // },
           {
-            path: "user-permission",
+            path: 'user-permission',
             children: [
               {
-                path: "role",
+                path: 'role',
                 children: [
                   { index: true, element: <Navigate to="list" replace /> },
                   {
@@ -184,10 +184,10 @@ export const routeObjects: RouteObject[] = [
                     path: 'edit-role/:id',
                     element: <SuperAdminEditRolePermissionsPage />,
                   },
-                ]
+                ],
               },
               {
-                path: "permission",
+                path: 'permission',
                 children: [
                   { index: true, element: <Navigate to="list" replace /> },
                   {
@@ -205,10 +205,10 @@ export const routeObjects: RouteObject[] = [
                   {
                     path: 'details/:id',
                     element: <SuperAdminPermissionPageDetails />,
-                  }
-                ]
-              }
-            ]
+                  },
+                ],
+              },
+            ],
           },
           {
             path: 'theme-configuration',
@@ -216,7 +216,7 @@ export const routeObjects: RouteObject[] = [
               { index: true, element: <Navigate to="list" replace /> },
               {
                 path: 'list',
-                element: <SuperAdminThemeConfigPage />,
+                element: <SuperAdminThemePage />,
               },
               {
                 path: 'create',
@@ -226,7 +226,7 @@ export const routeObjects: RouteObject[] = [
                 path: 'edit/:id',
                 element: <SuperAdminThemeEditPage />,
               },
-            ]
+            ],
           },
         ],
       },
@@ -342,7 +342,10 @@ export const routeObjects: RouteObject[] = [
                 path: 'reward',
                 // element: <AppUserRewardHistory />,
                 children: [
-                  { index: true, element: <Navigate to="history/:userId" replace /> },
+                  {
+                    index: true,
+                    element: <Navigate to="history/:userId" replace />,
+                  },
                   {
                     path: 'history/:userId',
                     element: <AppUserRewardHistory />,
@@ -354,9 +357,9 @@ export const routeObjects: RouteObject[] = [
                   {
                     path: 'history/loyalty/detail/:loyaltyId',
                     element: <AppUserLoyaltyDetailPage />,
-                  }
-                ]
-              }
+                  },
+                ],
+              },
             ],
           },
           {
@@ -364,8 +367,8 @@ export const routeObjects: RouteObject[] = [
             children: [
               {
                 index: true,
-                element: <EmployeePage />
-              }
+                element: <EmployeePage />,
+              },
             ],
           },
           {
@@ -373,19 +376,19 @@ export const routeObjects: RouteObject[] = [
             children: [
               {
                 index: true,
-                element: <BranchPage />
+                element: <BranchPage />,
               },
               {
                 path: 'detail/:branchId',
                 element: <BranchDetailPage />,
-              }
+              },
             ],
           },
           {
-            path: "appointment",
+            path: 'appointment',
             children: [
               {
-                path: "visit",
+                path: 'visit',
                 children: [
                   { index: true, element: <Navigate to="list" replace /> },
                   {
@@ -395,11 +398,11 @@ export const routeObjects: RouteObject[] = [
                   {
                     path: 'detail/:id',
                     element: <AppointmentVisitDetailPage />,
-                  }
-                ]
+                  },
+                ],
               },
               {
-                path: "provider",
+                path: 'provider',
                 children: [
                   { index: true, element: <Navigate to="list" replace /> },
                   {
@@ -417,10 +420,10 @@ export const routeObjects: RouteObject[] = [
                   {
                     path: 'services/:providerId',
                     element: <AppointmentProviderServicesList />,
-                  }
-                ]
-              }
-            ]
+                  },
+                ],
+              },
+            ],
           },
           {
             path: 'banners',
@@ -483,22 +486,22 @@ export const routeObjects: RouteObject[] = [
             children: [
               {
                 index: true,
-                element: <NotificationPage />
+                element: <NotificationPage />,
                 // element: CAN("canView", "Notification List") ? <NotificationPage /> : <p>not authorized</p>,
               },
             ],
           },
           {
-            path: "no-auth",
+            path: 'no-auth',
             children: [
               {
                 index: true,
                 element: <NotAuthorized />,
               },
             ],
-          }
+          },
         ],
       },
     ],
-  }
+  },
 ];

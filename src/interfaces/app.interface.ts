@@ -28,8 +28,8 @@ export interface Setting {
   twitter: string;
   youtube: string;
   whatsapp: string;
-  developmentDomain: string;
-  liveDomain: string;
+  domainAdminapp: string;
+  domainWebapp: string;
   userLimit: number;
   enableLoyaltyProgram: boolean;
   loyaltyCoinConversionRate: string;
