@@ -174,7 +174,7 @@ export const THEME_COLORS = [
   'secondary2',
 ];
 
-export const CATEGORY_COLORS_COUNT = 7;
+export const CATEGORY_COLORS_COUNT = 6;
 export const BANNER_TYPE = [
   {
     id: 'Slider',
