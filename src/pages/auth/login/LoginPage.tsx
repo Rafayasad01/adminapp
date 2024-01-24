@@ -12,14 +12,19 @@ import auth from '../../../services/adminapp/admin';
 import system from '../../../services/superadmin/SystemConfig';
 import { UserLogin } from '../../../interfaces/auth.interface';
 import AlertBox from '../../../utils/Alert';
-import { DEFAULT_THEME_COLORS, setToken } from '../../../utils/constants';
+import { setToken } from '../../../utils/constants';
 import { useAppDispatch, useAppSelector } from '../../../redux/redux-hooks';
-import { login, setTenantConfig } from '../../../redux/features/authStateSlice';
+import {
+  login,
+  setSystemConfig,
+  setTenantConfig,
+} from '../../../redux/features/authStateSlice';
 
 import assets from '../../../assets';
 import { setRolePermissions } from '../../../redux/features/permissionsStateSlice';
 import { setItemState, setLogo } from '../../../redux/features/appStateSlice';
 import Loader from '../../../components/common/Loader';
+import { useNotification } from '../../../components/Contexts/NotificationContext';
 
 function LoginPage() {
   const dispatch = useAppDispatch();
@@ -39,6 +44,8 @@ function LoginPage() {
   ) => {
     event.preventDefault();
   };
+  // const { notification, hideNotification, showNotification } =
+  //   useNotification();
 
   console.log('tenantColors', tenantColors);
 
@@ -55,13 +62,26 @@ function LoginPage() {
         // console.log("RES", res.data.data.theme);
         setIsPageLoader(false);
         if (res.data.success) {
+          let systemConfigData = {
+            createdDate: res.data.data.createdDate,
+            domainAdminapp: res.data.data.domainAdminapp,
+            domainWebapp: res.data.data.domainWebapp,
+            id: res.data.data.id,
+            logoffImage: res.data.data.logoffImage,
+            tenant: res.data.data.tenant,
+          };
           dispatch(setTenantConfig(res.data.data.theme.value.themeColor));
+          dispatch(setSystemConfig(systemConfigData));
         } else {
+          setIsPageLoader(false);
+          // showNotification(res.data.message, 'error');
           console.log('404 page');
-          // dispatch(setTenantConfig(DEFAULT_THEME_COLORS));
         }
       })
-      .catch((err) => console.log('err', err.message));
+      .catch((err: Error) => {
+        setIsPageLoader(false);
+        // showNotification(err.message, 'error');
+      });
   }, []);
 
   const loginHandler = async () => {

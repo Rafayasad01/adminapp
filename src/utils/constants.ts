@@ -176,15 +176,6 @@ export const THEME_COLORS = [
   'secondary2',
 ];
 
-export const DEFAULT_THEME_COLORS = {
-  primary: '#1D1D1D',
-  background: '#F0F0F0',
-  foreground: '#FFF',
-  secondary: '#1A1A1A',
-  faded: '#6A6A6A',
-  secondary2: '#343434',
-};
-
 export const CATEGORY_COLORS_COUNT = 6;
 export const BANNER_TYPE = [
   {

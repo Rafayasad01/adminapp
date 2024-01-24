@@ -78,8 +78,6 @@ function SettingsApp() {
   const [openSocialMediaPopup, setOpenSocialMediaPopup] = useState(false);
   const [file, setFile] = useState<any>(null);
   const [selectedImg, setSelectedImg] = useState<any>(null);
-  const [themeFile, setThemeFile] = useState<any>(null);
-  const [themeSelectedImg, setThemeSelectedImg] = useState<any>(null);
   const [detail, setDetail] = useState<any>();
   const [address, setAddress] = useState<any>(null);
   const [isLoader, setIsLoader] = useState(true);
@@ -224,7 +222,7 @@ function SettingsApp() {
       if (authState?.user?.userType === 'ShopUser')
         formData.append('userLimit', data.userLimit ? data.userLimit : 0);
       if (file !== null) formData.append('logo', file);
-      if (themeFile !== null) formData.append('banner', themeFile);
+      // if (themeFile !== null) formData.append('banner', themeFile);
 
       Service.updateService(authState.user.tenant, formData)
         .then((item: any) => {
@@ -350,7 +348,7 @@ function SettingsApp() {
           <div className="Content w-full px-4 py-5">
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="mb-3 text-base">
-                <span className="">Upload Vendor Image</span>
+                <span className="">Upload Shop Logo</span>
               </div>
               <div className="grid grid-cols-12 items-center">
                 <div className="col-span-5 mb-4">
@@ -379,36 +377,6 @@ function SettingsApp() {
                   </div>
                 ) : null}
               </div>
-              {/* <div className="mb-3 text-base">
-                <span className="">Upload Theme Image</span>
-              </div>
-              <div className="grid grid-cols-12 items-center">
-                <div className="col-span-5 mb-4">
-                  <DragDropFile
-                    setIsNotify={setIsNotify}
-                    setNotifyMessage={setNotifyMessage}
-                    setFile={setThemeFile}
-                    setImg={setThemeSelectedImg}
-                  />
-                </div>
-                {themeSelectedImg ? (
-                  <div className="col-span-6 flex items-center xl:justify-center 2xl:justify-start">
-                    <img
-                      className="max-h-[100px] max-w-[150px] rounded-md"
-                      src={themeSelectedImg}
-                      alt="theme Logo"
-                    />
-                  </div>
-                ) : detail && detail?.banner ? (
-                  <div className="col-span-6 flex items-center xl:justify-center 2xl:justify-start">
-                    <img
-                      className="max-h-[100px] max-w-[150px] rounded-md"
-                      src={detail.banner}
-                      alt="theme Logo"
-                    />
-                  </div>
-                ) : null}
-              </div> */}
               <div className="FormField mb-4">
                 <FormControl className="FormControl" variant="standard">
                   <label className="FormLabel">Address</label>
