@@ -64,6 +64,7 @@ import SettingConfig from '../pages/settings/SettingConfig';
 import SuperAdminThemePage from '../pages/super-admin/theme/SuperAdminThemePage';
 import SuperAdminThemeCreatePage from '../pages/super-admin/theme/SuperAdminThemeCreatePage';
 import SuperAdminThemeEditPage from '../pages/super-admin/theme/SuperAdminThemeEditPage';
+import Page404 from '../pages/404/Page404';
 
 export const routeObjects: RouteObject[] = [
   {
@@ -240,7 +241,7 @@ export const routeObjects: RouteObject[] = [
           },
           {
             path: 'home',
-            element: <HomePage />,
+            element: <Page404 />,
           },
           {
             path: 'reports',

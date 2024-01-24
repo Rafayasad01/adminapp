@@ -51,7 +51,12 @@ import userPermissionIcon from './images/userPermission.svg';
 import addImg from './images/add.svg';
 import dummyimg from './images/super-admin-background-image.png';
 import defaultLogo from './images/defaultLogo.svg';
-
+import speechBubble from './images/Speech_Bubble.png';
+import bgLogin from './images/bg-login.png';
+import forgotBg from './images/forgot-bg.png';
+import envelopeMsg from './images/envelope-msg.png';
+import otpMSg from './images/otp-msg.png';
+import keyIcon from './images/keyIcon.png';
 const assets = {
   images: {
     logo,
@@ -91,7 +96,13 @@ const assets = {
     userPermissionIcon,
     dummyimg,
     defaultLogo,
-    ReferralCodeIcon
+    ReferralCodeIcon,
+    speechBubble,
+    bgLogin,
+    forgotBg,
+    envelopeMsg,
+    otpMSg,
+    keyIcon,
   },
   tempImages: {
     wash,

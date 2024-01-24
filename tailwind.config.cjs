@@ -4,10 +4,10 @@ module.exports = {
   important: '#root',
   theme: {
     extend: {
-      backgroundImage: {
-        'super-admin-auth-background':
-          "url('assets/images/super-admin-background-image.png')",
-      },
+      // backgroundImage: {
+      //   'super-admin-auth-background':
+      //     "url('assets/images/super-admin-background-image.png')",
+      // },
       width: {
         67: '67.666667%;',
       },

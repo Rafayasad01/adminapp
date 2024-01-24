@@ -24,7 +24,9 @@ type Props = {
 
 function TopBar({ title, isNestedRoute = false }: Props) {
   const userData = useAppSelector((state: any) => state?.authState?.user);
-  const ProfileAvatar = useAppSelector((state: any) => state?.persisitReducer?.appState?.profileAvatar);
+  const ProfileAvatar = useAppSelector(
+    (state: any) => state?.persisitReducer?.appState?.profileAvatar
+  );
   // console.log("PRAV", ProfileAvatar);
 
   const navigate = useNavigate();
@@ -52,89 +54,108 @@ function TopBar({ title, isNestedRoute = false }: Props) {
     return () => {
       document.body.removeEventListener('click', handleClickOutside);
     };
-  }, [])
+  }, []);
 
   return (
     <AppBar
       position="relative"
-      className="w-full bg-gray-50 pt-4 pb-0 px-0 text-gray-50 shadow-none"
+      className="w-full bg-transparent px-0 pt-4 pb-0 text-gray-50 shadow-none"
     >
-      <Toolbar className="toolbar-style flex relative container mx-auto">
+      <Toolbar className="toolbar-style container relative mx-auto flex">
         {isNestedRoute ? (
-          <IconButton className="back-btn mr-2 p-0  left-0 pr-5" onClick={backHandler}>
+          <IconButton
+            className="back-btn left-0 mr-2  p-0 pr-5"
+            onClick={backHandler}
+          >
             <BackArrowIcon />
           </IconButton>
         ) : null}
-        <div className='container mx-auto flex justify-between items-center'>
-
-       
-        <div className="title ml-1">{title}</div>
-        {/* <div className="flex-grow">&nbsp;</div> */}
-        <div className="flex items-center text-cyan-900">
-          {/* <IconButton className="icon-btn mr-3.5 p-0">
+        <div className="container mx-auto flex items-center justify-between">
+          <div className="title ml-1">{title}</div>
+          {/* <div className="flex-grow">&nbsp;</div> */}
+          <div className="flex items-center text-cyan-900">
+            {/* <IconButton className="icon-btn mr-3.5 p-0">
             <NotificationsNoneIcon />
           </IconButton> */}
-          {userData?.isSuperAdmin && (
-            <div className="flex items-center">
-              <span className="px-2 text-sm font-semibold">Super Admin</span>
-              <hr className="divider vertical ml-2" />
-            </div>
-          )}
-          {userData?.tenantName && (
-            <div className="flex items-center">
-              <span className="px-2 text-sm font-semibold">
-                {userData?.tenantName}
-              </span>
-              <ShopIcon color="black" />
-              <hr className="divider vertical ml-4" />
-            </div>
-          )}
-          <div ref={divRef} className="header-user-box ml-3.5 cursor-pointer" onClick={() => setProfileToggler(!profileToggler)}>
-            <span>{`${userData.firstName} ${userData.lastName}`}</span>
-            {ProfileAvatar ? (
-              <Avatar
-                sx={{ width: 56, height: 56 }}
-                alt="user image"
-                src={ProfileAvatar}
-              />
-            ) : userData?.avatar ? (
-              <Avatar
-                sx={{ width: 56, height: 56 }}
-                alt="user image"
-                src={userData.avatar}
-              />) : (
-              <Avatar
-                sx={{ bgcolor: 'black', fontSize: '18px' }}
-              >{`${userData.firstName?.charAt(0)}${userData.lastName?.charAt(
-                0
-              )}`}</Avatar>
+            {userData?.isSuperAdmin && (
+              <div className="flex items-center">
+                <span className="px-2 text-sm font-semibold">Super Admin</span>
+                <hr className="divider vertical ml-2" />
+              </div>
             )}
-          </div>
+            {userData?.tenantName && (
+              <div className="flex items-center">
+                <span className="px-2 text-sm font-semibold">
+                  {userData?.tenantName}
+                </span>
+                <ShopIcon color="black" />
+                <hr className="divider vertical ml-4" />
+              </div>
+            )}
+            <div
+              ref={divRef}
+              className="header-user-box ml-3.5 cursor-pointer"
+              onClick={() => setProfileToggler(!profileToggler)}
+            >
+              <span>{`${userData.firstName} ${userData.lastName}`}</span>
+              {ProfileAvatar ? (
+                <Avatar
+                  sx={{ width: 56, height: 56 }}
+                  alt="user image"
+                  src={ProfileAvatar}
+                />
+              ) : userData?.avatar ? (
+                <Avatar
+                  sx={{ width: 56, height: 56 }}
+                  alt="user image"
+                  src={userData.avatar}
+                />
+              ) : (
+                <Avatar
+                  sx={{ bgcolor: 'black', fontSize: '18px' }}
+                >{`${userData.firstName?.charAt(0)}${userData.lastName?.charAt(
+                  0
+                )}`}</Avatar>
+              )}
+            </div>
           </div>
         </div>
       </Toolbar>
-      {profileToggler &&
-        <div className={`flex items-end justify-end absolute w-[98%] ${userData?.isSuperAdmin === false ? 'h-[135px]' : 'h-[105px] '} z-10`}>
-          <div className='bg-white 2xl:w-[11%] xl:w-[17%] p-1 rounded-md shadow-lg'>
-            {userData?.isSuperAdmin === false &&
-              <div onClick={() => navigate('/admin/dashboard/profile', { replace: true })} className='p-1 topbar-dd rounded-md text-black text-sm flex items-center cursor-pointer'>
-                <PersonOutlineOutlinedIcon className='w-4' />
-                <p className='mx-2'>View Profile</p>
+      {profileToggler && (
+        <div
+          className={`absolute flex w-[98%] items-end justify-end ${
+            userData?.isSuperAdmin === false ? 'h-[135px]' : 'h-[105px] '
+          } z-10`}
+        >
+          <div className="rounded-md bg-white p-1 shadow-lg xl:w-[17%] 2xl:w-[11%]">
+            {userData?.isSuperAdmin === false && (
+              <div
+                onClick={() =>
+                  navigate('/admin/dashboard/profile', { replace: true })
+                }
+                className="topbar-dd flex cursor-pointer items-center rounded-md p-1 text-sm text-black"
+              >
+                <PersonOutlineOutlinedIcon className="w-4" />
+                <p className="mx-2">View Profile</p>
               </div>
-            }
-            <div className={`text-black text-sm flex items-center topbar-dd rounded-md ${userData?.isSuperAdmin === false && 'mt-1'}  p-1`}>
+            )}
+            <div
+              className={`topbar-dd flex items-center rounded-md text-sm text-black ${
+                userData?.isSuperAdmin === false && 'mt-1'
+              }  p-1`}
+            >
               <NavLink
                 className="logout-link w-full"
                 to="/admin"
                 onClick={() => logOut()}
               >
                 <LogoutOutlinedIcon className="w-4" />
-                <span className='mx-2'>Logout</span>
+                <span className="mx-2">Logout</span>
               </NavLink>
             </div>
           </div>
         </div>
-      }
+      )}
     </AppBar>
   );
 }
