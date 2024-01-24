@@ -143,16 +143,16 @@ function OrdersCreatePage() {
                 <thead>
                   <tr>
                     <th>&nbsp;</th>
-                    <th className="font-open-sans text-base font-semibold text-[#1A1A1A]">
+                    <th className="font-open-sans text-base font-semibold text-secondary">
                       Products
                     </th>
-                    <th className="font-open-sans text-base font-semibold text-[#1A1A1A]">
+                    <th className="font-open-sans text-base font-semibold text-secondary">
                       Price
                     </th>
-                    <th className="font-open-sans text-base font-semibold text-[#1A1A1A]">
+                    <th className="font-open-sans text-base font-semibold text-secondary">
                       Quantity
                     </th>
-                    <th className="font-open-sans text-base font-semibold text-[#1A1A1A]">
+                    <th className="font-open-sans text-base font-semibold text-secondary">
                       Subtotal
                     </th>
                   </tr>
@@ -200,7 +200,7 @@ function OrdersCreatePage() {
                         </IconButton>
                       </span>
                     </td>
-                    <td className="text-sm font-semibold text-[#1A1A1A]">
+                    <td className="text-sm font-semibold text-secondary">
                       $150.00
                     </td>
                   </tr>
@@ -246,7 +246,7 @@ function OrdersCreatePage() {
                         </IconButton>
                       </span>
                     </td>
-                    <td className="text-sm font-semibold text-[#1A1A1A]">
+                    <td className="text-sm font-semibold text-secondary">
                       $150.00
                     </td>
                   </tr>
@@ -292,7 +292,7 @@ function OrdersCreatePage() {
                         </IconButton>
                       </span>
                     </td>
-                    <td className="text-sm font-semibold text-[#1A1A1A]">
+                    <td className="text-sm font-semibold text-secondary">
                       $150.00
                     </td>
                   </tr>
@@ -318,10 +318,10 @@ function OrdersCreatePage() {
                   id="pick-up-date-time-picker"
                   icon={<CalendarTodayOutlinedIcon />}
                 />
-                <span className="font-open-sans text-sm font-semibold text-[#1A1A1A]">
+                <span className="font-open-sans text-sm font-semibold text-secondary">
                   {pickUpTime ? (
                     <>
-                      <div className="font-open-sans text-sm font-semibold text-[#1A1A1A]">
+                      <div className="font-open-sans text-sm font-semibold text-secondary">
                         {pickUpTime.format('MMM MM, YYYY')}
                       </div>
                       <div className="font-open-sans text-xs font-normal text-[#6A6A6A]">
@@ -342,10 +342,10 @@ function OrdersCreatePage() {
                   id="drop-off-date-time-picker"
                   icon={<CalendarTodayOutlinedIcon />}
                 />
-                <span className="font-open-sans text-sm font-semibold text-[#1A1A1A]">
+                <span className="font-open-sans text-sm font-semibold text-secondary">
                   {dropOffTime ? (
                     <>
-                      <div className="font-open-sans text-sm font-semibold text-[#1A1A1A]">
+                      <div className="font-open-sans text-sm font-semibold text-secondary">
                         {dropOffTime.format('MMM MM, YYYY')}
                       </div>
                       <div className="font-open-sans text-xs font-normal text-[#6A6A6A]">
@@ -393,7 +393,7 @@ function OrdersCreatePage() {
               <FormControl className="mt-4">
                 <FormLabel
                   id="demo-row-radio-buttons-group-label"
-                  className="font-open-sans text-xl font-semibold text-[#1A1A1A]"
+                  className="font-open-sans text-xl font-semibold text-secondary"
                 >
                   Payment
                 </FormLabel>

@@ -341,9 +341,9 @@ function Sidebar() {
           }
         >
           <Stack
-            className="h-[100%] w-full"
+            className="h-[100%] w-full pl-4"
             direction="row"
-            justifyContent="center"
+            justifyContent="left"
           >
             {userData?.isSuperAdmin ? (
               <img

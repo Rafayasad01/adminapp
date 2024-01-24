@@ -263,7 +263,7 @@ function CartsPage() {
                         <td>
                           {item.user.firstName ? (
                             <div className="flex flex-col">
-                              <span className="text-sm font-semibold text-[#1A1A1A]">
+                              <span className="text-sm font-semibold text-secondary">
                                 {item.user.firstName} {item.user.lastName}
                               </span>
                               <span className="text-xs font-normal text-[#6A6A6A]">
@@ -280,7 +280,7 @@ function CartsPage() {
                         <td>
                           {dayjs(item.pickupDateTime).isValid() ? (
                             <div className="flex flex-col">
-                              <span className="text-sm font-normal text-[#1A1A1A]">
+                              <span className="text-sm font-normal text-secondary">
                                 {dayjs(item.pickupDateTime)?.format(
                                   'hh:mm:ssA'
                                 )}{' '}
@@ -302,7 +302,7 @@ function CartsPage() {
                         <td>
                           {dayjs(item.dropDateTime).isValid() ? (
                             <div className="flex flex-col">
-                              <span className="text-sm font-normal text-[#1A1A1A]">
+                              <span className="text-sm font-normal text-secondary">
                                 {dayjs(item.dropDateTime)?.format('hh:mm:ssA')}{' '}
                                 -{' '}
                                 {dayjs(item.dropDateTime)
@@ -319,7 +319,7 @@ function CartsPage() {
                             '----'
                           )}
                         </td>
-                        <td className="text-sm font-semibold text-[#1A1A1A]">
+                        <td className="text-sm font-semibold text-secondary">
                           ${item.grandTotal}
                         </td>
                         <td>

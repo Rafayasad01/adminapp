@@ -323,7 +323,7 @@ function OrdersPage() {
                       <tr key={index}>
                         <td>
                           <div className="flex flex-col">
-                            <span className="text-sm font-semibold text-[#1A1A1A]">
+                            <span className="text-sm font-semibold text-secondary">
                               {Item.user.firstName} {Item.user.lastName}
                             </span>
                             <span className="text-xs font-normal text-[#6A6A6A]">
@@ -336,7 +336,7 @@ function OrdersPage() {
                         </td>
                         <td>
                           <div className="flex flex-col">
-                            <span className="text-sm font-normal text-[#1A1A1A]">
+                            <span className="text-sm font-normal text-secondary">
                               {dayjs(Item.pickupDateTime)?.format('hh:mm:ssA')}{' '}
                               -{' '}
                               {dayjs(Item.pickupDateTime)
@@ -352,7 +352,7 @@ function OrdersPage() {
                         </td>
                         <td>
                           <div className="flex flex-col">
-                            <span className="text-sm font-normal text-[#1A1A1A]">
+                            <span className="text-sm font-normal text-secondary">
                               {dayjs(Item.dropDateTime)?.format('hh:mm:ssA')} -{' '}
                               {dayjs(Item.dropDateTime)
                                 .add(1, 'hour')
@@ -365,7 +365,7 @@ function OrdersPage() {
                             </span>
                           </div>
                         </td>
-                        <td className="text-sm font-semibold text-[#1A1A1A]">
+                        <td className="text-sm font-semibold text-secondary">
                           ${Item.grandTotal}
                         </td>
                         <td>

@@ -115,11 +115,11 @@ function BranchDetailPage() {
         />
         <TopBar title="Branch User Detail" isNestedRoute />
         <div className="px-5">
-          <div className="grid w-full grid-cols-12 rounded-lg bg-[#F0F0F0] p-3">
+          <div className="grid w-full grid-cols-12 rounded-lg bg-foreground  p-3">
             <div className="col-span-4 my-5">
               <div className="flex justify-between">
                 <div className="">
-                  <p className="text-sm font-semibold text-[#1A1A1A]">
+                  <p className="text-sm font-semibold text-secondary">
                     Branch Owner
                   </p>
                 </div>
@@ -130,15 +130,15 @@ function BranchDetailPage() {
                       className="mx-2 p-0"
                       onClick={() => getSettingById()}
                     >
-                      <SettingsIcon />
+                      <SettingsIcon className="text-faded" />
                     </IconButton>
                   </div>
                   <IconButton
                     title="Branch Category"
-                    className="mr-3 p-0"
+                    className="mr-3 p-0 "
                     onClick={() => getCategoryById()}
                   >
-                    <ViewListIcon />
+                    <ViewListIcon className="text-faded" />
                   </IconButton>
                 </div>
               </div>
@@ -174,7 +174,7 @@ function BranchDetailPage() {
                   </div>
                   <div className="px-5">
                     <div className="flex items-center justify-center">
-                      <p className="text-sm font-semibold text-[#1A1A1A]">
+                      <p className="text-sm font-semibold text-secondary">
                         {formatName(userDetail.firstName, userDetail.lastName)}
                       </p>
                       <div className="pl-2">
@@ -186,10 +186,10 @@ function BranchDetailPage() {
                       </div>
                     </div>
                     <div className="text-center">
-                      <p className="text-sm font-medium lowercase text-[#6A6A6A]">
+                      <p className="text-sm font-medium lowercase text-secondary">
                         {userDetail.email}
                       </p>
-                      <span className="text-sm font-medium text-[#6A6A6A]">
+                      <span className="text-sm font-medium text-secondary">
                         {dayjs(userDetail.createdDate).isValid() &&
                           dayjs(userDetail.createdDate)?.format(
                             'MMMM DD, YYYY'
@@ -200,8 +200,8 @@ function BranchDetailPage() {
                 </div>
               </div>
             </div>
-            <div className="col-span-8 my-5 border-l-[1px] border-[#949EAE] px-10">
-              <p className="text-sm font-semibold text-[#1A1A1A]">
+            <div className="col-span-8 my-5 border-l-[1px] border-secondary px-10">
+              <p className="text-sm font-semibold text-secondary">
                 Branch Users
               </p>
               <div className="my-5 max-h-[100%] overflow-y-scroll">

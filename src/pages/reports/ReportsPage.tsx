@@ -86,7 +86,7 @@ function ReportsPage() {
                 </div>
                 <div className="flex flex-col">
                   <div className="flex">
-                    <span className="flex pr-2 font-open-sans text-base font-semibold text-[#1A1A1A]">
+                    <span className="flex pr-2 font-open-sans text-base font-semibold text-secondary">
                       1.3%
                     </span>
                     <IconButton className="p-0">
@@ -109,7 +109,7 @@ function ReportsPage() {
           <div className="h-80 rounded-lg bg-white shadow-lg">
             <div className="mt-4 flex flex-col px-3">
               <div className="flex items-center justify-between">
-                <span className="flex font-open-sans text-2xl font-semibold text-[#1A1A1A]">
+                <span className="flex font-open-sans text-2xl font-semibold text-secondary">
                   Most Ordered
                 </span>
                 <Select
@@ -133,7 +133,7 @@ function ReportsPage() {
           <div className="h-80 rounded-lg bg-white shadow-lg">
             <div className="mt-4 flex flex-col px-3">
               <div className="flex items-center justify-between">
-                <span className="flex font-open-sans text-xl font-semibold text-[#1A1A1A]">
+                <span className="flex font-open-sans text-xl font-semibold text-secondary">
                   Average Order Value
                 </span>
                 <Button variant="contained" className="download-btn p-0">

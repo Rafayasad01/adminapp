@@ -53,14 +53,14 @@ function BranchSettingPopup({
         }
       >
         <div className="Content p-5">
-          <span className="font-open-sans text-xl font-semibold not-italic text-[#1A1A1A]">
+          <span className="font-open-sans text-xl font-semibold not-italic text-secondary">
             Setting Details
           </span>
           <div className="grid w-full grid-cols-12 gap-3">
             <div className="col-span-4">
               <div className="flex flex-col py-[2rem] px-5">
                 <div className="flex w-full flex-col">
-                  <span className="font-open-sans text-base font-semibold not-italic text-[#1A1A1A]">
+                  <span className="font-open-sans text-base font-semibold not-italic text-secondary">
                     Logo
                   </span>
                   <div className="mt-2 font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
@@ -94,7 +94,7 @@ function BranchSettingPopup({
                   </div>
                 </div>
                 <div className="mt-4 flex w-full flex-col">
-                  <span className="font-open-sans text-base font-semibold not-italic text-[#1A1A1A]">
+                  <span className="font-open-sans text-base font-semibold not-italic text-secondary">
                     Theme Name
                   </span>
                   <div className="mt-1 font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
@@ -103,7 +103,7 @@ function BranchSettingPopup({
                 </div>
                 <div className="mt-4 flex w-full flex-row gap-3">
                   <div className="flex w-full flex-col">
-                    <span className="font-open-sans text-base font-semibold not-italic text-[#1A1A1A]">
+                    <span className="font-open-sans text-base font-semibold not-italic text-secondary">
                       Theme Color
                     </span>
                     <div className="mt-1 font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
@@ -118,7 +118,7 @@ function BranchSettingPopup({
                     </div>
                   </div>
                   <div className="flex w-full flex-col">
-                    <span className="font-open-sans text-base font-semibold not-italic text-[#1A1A1A]">
+                    <span className="font-open-sans text-base font-semibold not-italic text-secondary">
                       Text Color
                     </span>
                     <div className="mt-1 font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
@@ -134,7 +134,7 @@ function BranchSettingPopup({
                   </div>
                 </div>
                 <div className="mt-4 flex w-full flex-col">
-                  <span className="font-open-sans text-base font-semibold not-italic text-[#1A1A1A]">
+                  <span className="font-open-sans text-base font-semibold not-italic text-secondary">
                     GST Percentage
                   </span>
                   <div className="mt-1 font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
@@ -142,7 +142,7 @@ function BranchSettingPopup({
                   </div>
                 </div>
                 <div className="mt-4 flex w-full flex-col">
-                  <span className="font-open-sans text-base font-semibold not-italic text-[#1A1A1A]">
+                  <span className="font-open-sans text-base font-semibold not-italic text-secondary">
                     Email
                   </span>
                   <div className="mt-1 font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
@@ -150,7 +150,7 @@ function BranchSettingPopup({
                   </div>
                 </div>
                 <div className="mt-4 flex w-full flex-col">
-                  <span className="font-open-sans text-base font-semibold not-italic text-[#1A1A1A]">
+                  <span className="font-open-sans text-base font-semibold not-italic text-secondary">
                     Description
                   </span>
                   <div className="mt-1 font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
@@ -162,7 +162,7 @@ function BranchSettingPopup({
             <div className="col-span-4">
               <div className="flex flex-col py-[2rem] px-5">
                 <div className="flex w-full flex-col">
-                  <span className="font-open-sans text-base font-semibold not-italic text-[#1A1A1A]">
+                  <span className="font-open-sans text-base font-semibold not-italic text-secondary">
                     Minimum Order Amount
                   </span>
                   <div className="mt-1 font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
@@ -170,7 +170,7 @@ function BranchSettingPopup({
                   </div>
                 </div>
                 <div className="mt-4 flex w-full flex-col">
-                  <span className="font-open-sans text-base font-semibold not-italic text-[#1A1A1A]">
+                  <span className="font-open-sans text-base font-semibold not-italic text-secondary">
                     Delivery Fee
                   </span>
                   <div className="mt-1 font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
@@ -179,7 +179,7 @@ function BranchSettingPopup({
                 </div>
 
                 <div className="mt-4 flex w-full flex-col">
-                  <span className="font-open-sans text-base font-semibold not-italic text-[#1A1A1A]">
+                  <span className="font-open-sans text-base font-semibold not-italic text-secondary">
                     Development Domain
                   </span>
                   <div className="mt-1 font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
@@ -191,7 +191,7 @@ function BranchSettingPopup({
                   </div>
                 </div>
                 <div className="mt-4 flex w-full flex-col">
-                  <span className="font-open-sans text-base font-semibold not-italic text-[#1A1A1A]">
+                  <span className="font-open-sans text-base font-semibold not-italic text-secondary">
                     Live Domain
                   </span>
                   <div className="mt-1 font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
@@ -201,7 +201,7 @@ function BranchSettingPopup({
                   </div>
                 </div>
                 <div className="mt-4 flex w-full flex-col">
-                  <span className="font-open-sans text-base font-semibold not-italic text-[#1A1A1A]">
+                  <span className="font-open-sans text-base font-semibold not-italic text-secondary">
                     Social Media Icons
                   </span>
                   <div className="mt-1 font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">

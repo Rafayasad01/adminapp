@@ -290,7 +290,7 @@ function NotificationPage() {
                         <td>{item.description}</td>
                         <td>
                           <div className="flex flex-col">
-                            <span className="text-sm font-normal text-[#1A1A1A]">
+                            <span className="text-sm font-normal text-secondary">
                               {dayjs(item.createdDate)?.format('hh:mm:ssA')}
                             </span>
                             <span className="text-xs font-normal text-[#6A6A6A]">

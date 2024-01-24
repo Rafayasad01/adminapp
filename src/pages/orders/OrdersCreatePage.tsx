@@ -538,16 +538,16 @@ function OrdersCreatePage() {
                 <thead>
                   <tr>
                     <th>&nbsp;</th>
-                    <th className="font-open-sans text-base font-semibold text-[#1A1A1A]">
+                    <th className="font-open-sans text-base font-semibold text-secondary">
                       Products
                     </th>
-                    <th className="font-open-sans text-base font-semibold text-[#1A1A1A]">
+                    <th className="font-open-sans text-base font-semibold text-secondary">
                       Price
                     </th>
-                    <th className="font-open-sans text-base font-semibold text-[#1A1A1A]">
+                    <th className="font-open-sans text-base font-semibold text-secondary">
                       Quantity
                     </th>
-                    <th className="font-open-sans text-base font-semibold text-[#1A1A1A]">
+                    <th className="font-open-sans text-base font-semibold text-secondary">
                       Subtotal
                     </th>
                   </tr>
@@ -609,7 +609,7 @@ function OrdersCreatePage() {
                             </IconButton>
                           </span>
                         </td>
-                        <td className="text-sm font-semibold text-[#1A1A1A]">
+                        <td className="text-sm font-semibold text-secondary">
                           $
                           {(
                             Number(item?.quantity) * Number(item?.price)
@@ -627,7 +627,7 @@ function OrdersCreatePage() {
               <FormControl className="w-full">
                 <FormLabel
                   id="demo-row-radio-buttons-group-label"
-                  className="font-open-sans text-xl font-semibold text-[#1A1A1A]"
+                  className="font-open-sans text-xl font-semibold text-secondary"
                 >
                   Delivery Date
                 </FormLabel>
@@ -724,7 +724,7 @@ function OrdersCreatePage() {
               <FormControl className="mt-4">
                 <FormLabel
                   id="demo-row-radio-buttons-group-label"
-                  className="font-open-sans text-xl font-semibold text-[#1A1A1A]"
+                  className="font-open-sans text-xl font-semibold text-secondary"
                 >
                   Payment
                 </FormLabel>
@@ -760,7 +760,7 @@ function OrdersCreatePage() {
                   <FormControl className="">
                     <FormLabel
                       id="demo-row-radio-buttons-group-label"
-                      className="font-open-sans text-xl font-semibold text-[#1A1A1A]"
+                      className="font-open-sans text-xl font-semibold text-secondary"
                     >
                       User
                     </FormLabel>

@@ -82,7 +82,7 @@ select {
 }
 
 .form-group input {
-  @apply rounded-xl border-none bg-[#fff] px-4 py-1.5 font-open-sans text-sm font-normal text-[#1a1a1a] opacity-70 !important;
+  @apply rounded-xl border-none bg-[#fff] px-4 py-1.5 font-open-sans text-sm font-normal text-secondary opacity-70 !important;
 }
 
 .form-group .MuiFormControl-root {
@@ -103,12 +103,12 @@ table {
 
 table > thead > tr > td,
 table > thead > tr > th {
-  @apply py-5 pl-4 pr-1 text-left font-open-sans text-xs font-normal text-[#1a1a1a];
+  @apply py-5 pl-4 pr-1 text-left font-open-sans text-xs font-normal text-secondary;
 }
 
 table > tbody > tr > td,
 table > tbody > tr > th {
-  @apply py-5 pl-4 pr-1 text-left font-open-sans text-xs font-normal text-[#1a1a1a];
+  @apply py-5 pl-4 pr-1 text-left font-open-sans text-xs font-normal text-secondary;
 }
 
 table > tbody > tr:nth-child(odd) {
@@ -134,7 +134,7 @@ table .avatar img {
 }
 
 table.table-border > thead > tr > th {
-  @apply border-b-2 border-solid border-[#dfe0eb] font-open-sans text-sm font-semibold text-[#1a1a1a];
+  @apply border-b-2 border-solid border-[#dfe0eb] font-open-sans text-sm font-semibold text-secondary;
   /* border-bottom: 1.5px solid #dfe0eb; */
 }
 
@@ -232,7 +232,7 @@ table > tbody > tr:last-child {
 }
 
 .modal-header .modal-heading {
-  @apply font-open-sans text-xl font-semibold text-[#1a1a1a];
+  @apply font-open-sans text-xl font-semibold text-secondary;
 }
 
 .modal-header .header-close-btn {
@@ -310,7 +310,7 @@ table > tbody > tr:last-child {
 }
 
 .title {
-  @apply flex text-2xl font-semibold text-[#1A1A1A];
+  @apply flex text-2xl font-semibold text-secondary;
 }
 
 .header-user-box {
@@ -318,7 +318,7 @@ table > tbody > tr:last-child {
 }
 
 .header-user-box span {
-  @apply mr-3 text-right font-open-sans text-sm font-semibold text-[#1a1a1a];
+  @apply mr-3 text-right font-open-sans text-sm font-semibold text-secondary;
 }
 
 .header-user-box img {
@@ -334,7 +334,7 @@ table > tbody > tr:last-child {
 }
 
 .icon-btn {
-  @apply font-open-sans text-sm font-semibold text-[#1a1a1a] outline-none;
+  @apply font-open-sans text-sm font-semibold text-secondary outline-none;
   outline: none !important;
 }
 
@@ -422,7 +422,7 @@ table > tbody > tr:last-child {
 }
 
 .btn-black-outline {
-  @apply rounded-lg border border-solid border-[#1D1D1D] bg-transparent px-3 text-sm font-normal capitalize text-[#1A1A1A] shadow-none !important;
+  @apply rounded-lg border border-solid border-[#1D1D1D] bg-transparent px-3 text-sm font-normal capitalize text-secondary shadow-none !important;
 }
 
 .btn-black-fill {
@@ -446,7 +446,7 @@ table > tbody > tr:last-child {
 }
 
 .select-black-outline {
-  @apply rounded-lg font-open-sans text-sm font-normal text-[#1A1A1A] !important;
+  @apply rounded-lg font-open-sans text-sm font-normal text-secondary !important;
 }
 
 .select-black-outline fieldset {
@@ -458,7 +458,7 @@ table > tbody > tr:last-child {
 }
 
 .select-black-outline .MuiSelect-select {
-  @apply text-xs text-[#1a1a1a] !important;
+  @apply text-xs text-secondary !important;
 }
 
 .select-grey-outline .MuiSelect-select {
@@ -512,7 +512,7 @@ table > tbody > tr:last-child {
 }
 
 .custom-tab .css-1h9z7r5-MuiButtonBase-root-MuiTab-root.Mui-selected {
-  @apply font-semibold text-[#1a1a1a] !important;
+  @apply font-semibold text-secondary !important;
 }
 
 .css-1aquho2-MuiTabs-indicator {
@@ -1526,6 +1526,40 @@ label + .css-1aa5qj0-MuiInputBase-root-MuiInput-root {
   @apply text-foreground !important;
   /* opacity: 0.5; */
 }
+main {
+  @apply bg-background text-secondary !important;
+}
+.left-sidebar ul div a [aria-current]:not([aria-current='false']) {
+  @apply bg-faded;
+}
+.btn-black-fill {
+  @apply border-primary bg-primary text-foreground !important;
+}
+.btn-black-outline {
+  @apply border-primary text-primary opacity-[1] !important;
+}
+.bg-ord-del {
+  @apply bg-primary text-foreground !important;
+}
+.bg-ord-del div {
+  @apply text-foreground !important;
+}
+.btn-grey {
+  @apply bg-foreground text-secondary !important;
+}
+.text-grey {
+  @apply text-foreground !important;
+}
+.bg-grey-icon {
+  @apply bg-foreground !important;
+}
+.grey-icon {
+  @apply text-secondary !important;
+}
+
+/* header {
+  @apply bg-primary text-foreground !important;
+} */
 /* .MuiBox-root main {
   @apply bg-background !important;
 } */

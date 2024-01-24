@@ -134,7 +134,7 @@ function AppUserDetailPage() {
                   </Avatar>
                 )}
                 <div className="flex flex-col justify-start justify-items-center">
-                  <span className="font-open-sans text-xl font-semibold text-[#1A1A1A]">
+                  <span className="font-open-sans text-xl font-semibold text-secondary">
                     {`${detail.firstName} ${detail.lastName}`}
                   </span>
                   <span className="font-sm font-open-sans text-sm text-[#6A6A6A]">
@@ -152,7 +152,7 @@ function AppUserDetailPage() {
               <Divider className="mt-4" />
               <div className="flex w-full flex-col">
                 <div className="flex w-full flex-col">
-                  <span className="mt-2 font-open-sans text-base font-semibold text-[#1A1A1A]">
+                  <span className="mt-2 font-open-sans text-base font-semibold text-secondary">
                     Email
                   </span>
                   <span className="font-open-sans text-sm font-normal text-[#6A6A6A]">
@@ -160,7 +160,7 @@ function AppUserDetailPage() {
                   </span>
                 </div>
                 <div className="flex w-full flex-col">
-                  <span className="mt-3 font-open-sans text-base font-semibold text-[#1A1A1A]">
+                  <span className="mt-3 font-open-sans text-base font-semibold text-secondary">
                     User Type
                   </span>
                   <span className="font-open-sans text-sm font-normal text-[#6A6A6A]">
@@ -168,7 +168,7 @@ function AppUserDetailPage() {
                   </span>
                 </div>
                 <div className="flex w-full flex-col">
-                  <span className="mt-3 font-open-sans text-base font-semibold text-[#1A1A1A]">
+                  <span className="mt-3 font-open-sans text-base font-semibold text-secondary">
                     Availibility
                   </span>
                   <span className="font-open-sans text-sm font-normal text-[#6A6A6A]">
@@ -177,7 +177,7 @@ function AppUserDetailPage() {
                 </div>
                 {detail?.userType === 'Driver' && (
                   <div className="flex w-full flex-col">
-                    <span className="mt-3 font-open-sans text-base font-semibold text-[#1A1A1A]">
+                    <span className="mt-3 font-open-sans text-base font-semibold text-secondary">
                       License Number
                     </span>
                     <span className="font-open-sans text-sm font-normal text-[#6A6A6A]">
@@ -187,7 +187,7 @@ function AppUserDetailPage() {
                 )}
                 {detail?.postalCode && (
                   <div className="flex w-full flex-col">
-                    <span className="mt-3 font-open-sans text-base font-semibold text-[#1A1A1A]">
+                    <span className="mt-3 font-open-sans text-base font-semibold text-secondary">
                       Postal Code
                     </span>
                     <span className="font-open-sans text-sm font-normal text-[#6A6A6A]">

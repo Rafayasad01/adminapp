@@ -14,10 +14,10 @@ const Page404 = () => {
             />
           </div>
           <div className="w-[50%]">
-            <div className="mb-[10px] text-[25px] font-semibold uppercase leading-[normal] text-[#1a1a1a]">
+            <div className="mb-[10px] text-[25px] font-semibold uppercase leading-[normal] text-secondary">
               Looks like you’re lost
             </div>
-            <div className="mb-[30px] text-[18px] font-normal leading-[normal] text-[#1a1a1a] opacity-[0.3]">
+            <div className="mb-[30px] text-[18px] font-normal leading-[normal] text-secondary opacity-[0.3]">
               The page you are looking for not available!
             </div>
             <div className="flex items-center justify-start">

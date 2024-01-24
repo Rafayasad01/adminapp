@@ -57,7 +57,7 @@ export default function CustomCard({
             <div className="avatar flex flex-row items-center">
               <div className="flex flex-col items-start justify-start">
                 <span className="text-sm font-semibold">{title}</span>
-                <span className="text-xs font-normal text-[#6A6A6A]">
+                <span className="text-xs font-normal text-secondary">
                   {dayjs(createdDate).isValid()
                     ? dayjs(createdDate)?.format('MMMM DD, YYYY')
                     : '--'}
@@ -66,8 +66,8 @@ export default function CustomCard({
             </div>
           </Typography>
           <div>
-            <p className="text-sm font-bold text-[#1A1A1A]">Email</p>
-            <span className="text-sm font-normal text-[#1A1A1A]">{email}</span>
+            <p className="text-sm font-bold text-secondary">Email</p>
+            <span className="text-sm font-normal text-secondary">{email}</span>
           </div>
           <div>
             {status ? (

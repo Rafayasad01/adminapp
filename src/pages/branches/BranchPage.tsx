@@ -342,9 +342,9 @@ function BranchPage() {
             <div className="col-span-10">
               <div className="flex flex-row items-center justify-end gap-3">
                 <div className="flex-col items-center justify-center px-2">
-                  <p className="text-sm font-semibold">Total Employees</p>
+                  <p className="text-sm font-semibold ">Total Employees</p>
                   <div className="mt-2 flex justify-center">
-                    <span className="badge badge-danger w-full text-sm">
+                    <span className="badge badge-danger btn-black-outline w-full text-sm">
                       {maxTotalEmployees ?? '0'}
                     </span>
                   </div>
@@ -354,7 +354,7 @@ function BranchPage() {
                     Employees Distribution
                   </p>
                   <div className="mt-2 flex justify-center">
-                    <span className="badge badge-primary w-full text-sm">
+                    <span className="badge badge-primary btn-black-outline w-full text-sm">
                       {authState.user.maxEmployeeLimit} -{' '}
                       {maxTotalEmployeeLimit || 0}
                     </span>
@@ -363,7 +363,7 @@ function BranchPage() {
                 <div className="flex-col items-center justify-center px-2">
                   <p className="text-sm font-semibold">Branches Distribution</p>
                   <div className="mt-2 flex justify-center">
-                    <span className="badge badge-success w-full text-sm">
+                    <span className="badge badge-success btn-black-outline w-full text-sm">
                       {authState.user.branchLimit} - {total}
                     </span>
                   </div>
