@@ -241,7 +241,7 @@ export const routeObjects: RouteObject[] = [
           },
           {
             path: 'home',
-            element: <Page404 />,
+            element: <HomePage />,
           },
           {
             path: 'reports',

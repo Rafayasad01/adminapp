@@ -9,11 +9,19 @@ type Props = {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   dialogText?: string;
+  dialogDesc?: string;
   type?: string;
   callback: (...args: any[]) => any;
 };
 
-function PermissionPopup({ open, setOpen, dialogText, callback, type }: Props) {
+function PermissionPopup({
+  open,
+  setOpen,
+  dialogText,
+  dialogDesc,
+  callback,
+  type,
+}: Props) {
   const onCloseHandler = (event: object, reason: string) => {
     if (reason !== 'backdropClick') {
       setOpen(false);
@@ -45,6 +53,7 @@ function PermissionPopup({ open, setOpen, dialogText, callback, type }: Props) {
         )}
         <div className={popupStyle.Title}>Hey Wait!</div>
         <div className={popupStyle.Message}>{dialogText}</div>
+        <div className={popupStyle.DescMessage}>Note : {dialogDesc}</div>
         <div className={popupStyle.Actions}>
           <Button
             onClick={() => onEventHandler('yes')}

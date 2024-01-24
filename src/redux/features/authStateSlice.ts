@@ -21,6 +21,7 @@ type User = {
 type AuthState = {
   user: User | null;
   theme: null;
+  systemConfig: null;
 };
 
 function getUser() {
@@ -39,6 +40,7 @@ function getTheme() {
 const initialState: AuthState = {
   user: getUser(),
   theme: getTheme(),
+  systemConfig: getItem<any>('SYSTEM_CONFIG'),
 };
 
 export const authStateSlice = createSlice({
@@ -59,9 +61,14 @@ export const authStateSlice = createSlice({
       setThemeColor(action.payload);
       setItem('THEME', state.theme);
     },
+    setSystemConfig: (state, action: PayloadAction<any>) => {
+      state.systemConfig = action.payload;
+      setItem('SYSTEM_CONFIG', state.systemConfig);
+    },
   },
 });
 
-export const { login, logout, setTenantConfig } = authStateSlice.actions;
+export const { login, logout, setTenantConfig, setSystemConfig } =
+  authStateSlice.actions;
 
 export default authStateSlice.reducer;

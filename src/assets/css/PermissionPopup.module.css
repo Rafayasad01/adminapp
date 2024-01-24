@@ -13,6 +13,9 @@
 .Message {
   @apply w-3/4 text-center font-open-sans text-base font-semibold text-neutral-900 !important;
 }
+.DescMessage {
+  @apply w-3/4 text-center font-open-sans text-sm font-medium text-neutral-900 !important;
+}
 .Actions {
   @apply flex w-full items-center gap-2 !important;
 }
