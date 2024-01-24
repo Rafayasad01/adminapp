@@ -57,7 +57,8 @@ function LoginPage() {
         if (res.data.success) {
           dispatch(setTenantConfig(res.data.data.theme.value.themeColor));
         } else {
-          dispatch(setTenantConfig(DEFAULT_THEME_COLORS));
+          console.log('404 page');
+          // dispatch(setTenantConfig(DEFAULT_THEME_COLORS));
         }
       })
       .catch((err) => console.log('err', err.message));
