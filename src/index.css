@@ -1518,3 +1518,49 @@ label + .css-1aa5qj0-MuiInputBase-root-MuiInput-root {
   background-color: #e8e8e8;
   transition: 0.4s;
 }
+
+.left-sidebar {
+  @apply bg-primary text-foreground !important;
+}
+.left-sidebar .font-open-sans {
+  @apply text-foreground !important;
+  /* opacity: 0.5; */
+}
+/* .MuiBox-root main {
+  @apply bg-background !important;
+} */
+/* .MuiBox-root main header{
+  @apply bg-primary text-foreground !important;
+} */
+/* new styling */
+/* main header {
+  position: fixed !important;
+  left: 0 !important;
+  z-index: 111111;
+  top: 0;
+}
+main header .container:first-child {
+max-width: 100%;
+
+}
+main .container:nth-child(2){
+  margin-top: 0 !important;
+}
+main .container:nth-child(3){
+  margin-top: 6rem !important;
+} */
+
+.otp-v input {
+  font-size: 36px !important;
+  font-weight: 600 !important;
+  line-height: normal !important;
+  border: 1px solid #949eae !important;
+}
+.otp-v:before {
+  transition: none;
+  border-bottom: none;
+}
+.otp-v:after {
+  transition: none;
+  border-bottom: none;
+}

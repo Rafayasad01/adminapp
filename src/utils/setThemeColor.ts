@@ -1,26 +1,12 @@
-function setThemeColor(tenantConfig: any) {
+function setThemeColor(theme: any) {
+  console.log('text is here', theme);
   const root = document.documentElement;
-  root?.style.setProperty(
-    '--theme-primary',
-    tenantConfig?.primary ?? '#1D1D1D'
-  );
-  root?.style.setProperty(
-    '--theme-secondary',
-    tenantConfig?.secondary ?? '#1A1A1A'
-  );
-  root?.style.setProperty(
-    '--theme-secondary2',
-    tenantConfig?.secondary2 ?? '#343434'
-  );
-  root?.style.setProperty(
-    '--theme-foreground',
-    tenantConfig?.foreground ?? '#FFF'
-  );
-  root?.style.setProperty('--theme-faded', tenantConfig?.faded ?? '#6A6A6A');
-  root?.style.setProperty(
-    '--theme-background',
-    tenantConfig?.background ?? '#F0F0F0'
-  );
+  root?.style.setProperty('--theme-primary', theme?.primary);
+  root?.style.setProperty('--theme-secondary', theme?.secondary);
+  root?.style.setProperty('--theme-secondary2', theme?.secondary2);
+  root?.style.setProperty('--theme-foreground', theme?.foreground);
+  root?.style.setProperty('--theme-faded', theme?.faded);
+  root?.style.setProperty('--theme-background', theme?.background);
 }
 
 export default setThemeColor;
