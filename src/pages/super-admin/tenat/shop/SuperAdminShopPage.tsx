@@ -317,11 +317,11 @@ function SuperAdminShopPage() {
                               ) === 'Started'
                                 ? 'badge badge-success'
                                 : handletrialModeStatus(
-                                  item.isActive,
-                                  item.trialMode
-                                ) === 'Not Started'
-                                  ? 'badge badge-primary'
-                                  : 'badge badge-danger'
+                                    item.isActive,
+                                    item.trialMode
+                                  ) === 'Not Started'
+                                ? 'badge badge-primary'
+                                : 'badge badge-danger'
                             }
                           >
                             {handletrialModeStatus(

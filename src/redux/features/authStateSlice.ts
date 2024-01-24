@@ -26,15 +26,20 @@ type AuthState = {
 
 function getUser() {
   const user = getItem<any>('USER');
-  if (user) {
-    setThemeColor(user.tenantConfig);
-  }
   return user;
+}
+
+function getTheme() {
+  const theme = getItem<any>('THEME');
+  if (theme) {
+    setThemeColor(theme);
+  }
+  return theme;
 }
 
 const initialState: AuthState = {
   user: getUser(),
-  theme: getItem<any>('THEME'),
+  theme: getTheme(),
   systemConfig: getItem<any>('SYSTEM_CONFIG'),
 };
 

@@ -11,7 +11,7 @@ function AuthLayout() {
     return <Navigate to="../../admin/dashboard" replace />;
   }
   return (
-    <div className="h-screen bg-super-admin-auth-background bg-cover bg-no-repeat">
+    <div className="bg-super-admin-auth-background h-screen bg-[#ccc]">
       <Outlet />
     </div>
   );
