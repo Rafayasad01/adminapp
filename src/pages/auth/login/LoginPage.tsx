@@ -35,6 +35,7 @@ function LoginPage() {
   const [showAlert, setShowAlert] = useState(false);
   const [alertSeverity, setAlertSeverity] = useState('');
   const [isLoader, setIsLoader] = useState(false);
+  const [superAdmin, setSuperAdmin] = useState(false);
   const [isPageLoader, setIsPageLoader] = useState(false);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const handleMouseDownPassword = (
@@ -46,6 +47,7 @@ function LoginPage() {
   //   useNotification();
 
   //   console.log('tenantColors', tenantColors);
+  let url = 'devadminapp-development';
 
   useEffect(() => {
     setIsPageLoader(false);
@@ -53,7 +55,6 @@ function LoginPage() {
     // let a = https://devadmin.urapptech.com/admin/auth/login
     // const currentURL = (window.location.href).split('/')[2];
     // console.log("currentURL", currentURL);
-    let url = 'devadminapp-development';
     system
       .getSystemConfig(url)
       .then((res) => {
@@ -90,10 +91,24 @@ function LoginPage() {
     };
     await auth
       .loginService(userData)
-      .then((user) => {
+      .then(async (user) => {
         if (user && user.data.success) {
-          setIsLoader(false);
           const newUserData = user.data.data;
+          if (newUserData.isSuperAdmin) {
+            await system
+              .getSystemConfigDefault(url)
+              .then((resp: any) => {
+                dispatch(setTenantConfig(resp.data.data.value.themeColor));
+                setSuperAdmin(true);
+              })
+              .catch((err: Error) => {
+                setIsLoader(false);
+                setAlertMsg(err.message);
+                setAlertSeverity('error');
+                setShowAlert(true);
+              });
+          }
+          setIsLoader(false);
           setToken(newUserData.token);
           dispatch(setRolePermissions(newUserData.role));
           delete newUserData.role;
@@ -103,7 +118,7 @@ function LoginPage() {
             dispatch(setLogo(user?.data?.data?.tenantConfig?.logo));
           }
           if (newUserData.isSuperAdmin) {
-            navigate('../../../main');
+            if (superAdmin) navigate('../../../main');
           } else {
             navigate('../../../dashboard');
           }

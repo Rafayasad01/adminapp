@@ -123,9 +123,7 @@ function SettingsApp() {
     );
     setValue(
       'domainAdminapp',
-      item.systemConfig.domainAdminapp
-        ? item.systemConfig.domainAdminapp
-        : item.domain_adminapp
+      item.systemConfig.domain ? item.systemConfig.domain : item.domain_adminapp
     );
     setValue(
       'domainWebapp',
@@ -217,8 +215,8 @@ function SettingsApp() {
         data.loyaltyCoinConversionRate
       );
       formData.append('requiredCoinsToRedeem', data.requiredCoinsToRedeem);
-      formData.append('domainAdminapp', data.domainAdminapp);
-      formData.append('domainWebapp', data.domainWebapp);
+      // formData.append('domain', data.domainAdminapp);
+      // formData.append('domainWebapp', data.domainWebapp);
       if (authState?.user?.userType === 'ShopUser')
         formData.append('userLimit', data.userLimit ? data.userLimit : 0);
       if (file !== null) formData.append('logo', file);
@@ -585,10 +583,11 @@ function SettingsApp() {
               </div>
               <div className="FormField mb-4">
                 <FormControl className="FormControl" variant="standard">
-                  <label className="FormLabel">Admin Domain</label>
+                  <label className="FormLabel">Domain</label>
                   <Input
                     className="FormInput"
                     id="domainAdminapp"
+                    placeholder="Domain"
                     value={
                       watch('domainAdminapp') &&
                       `${DOMAIN_PROTOCOL}${watch(
@@ -600,24 +599,6 @@ function SettingsApp() {
                   />
                 </FormControl>
               </div>
-              <div className="FormField mb-4">
-                <FormControl className="FormControl" variant="standard">
-                  <label className="FormLabel">Web-App Domain</label>
-                  <Input
-                    className="FormInput"
-                    id="domainWebapp"
-                    value={
-                      watch('domainWebapp') &&
-                      `${DOMAIN_PROTOCOL}${watch(
-                        'domainWebapp'
-                      )}${DOMAIN_PREFIX}`
-                    }
-                    disableUnderline
-                    disabled
-                  />
-                </FormControl>
-              </div>
-
               <div className="FormField">
                 <FormControlLabel
                   control={

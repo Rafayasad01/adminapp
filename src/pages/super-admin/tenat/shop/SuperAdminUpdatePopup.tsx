@@ -76,7 +76,7 @@ function SuperAdminUpdatePopup({
   } = useForm<Tenant>();
 
   const onSubmit = (data: Partial<Tenant>) => {
-    console.log('onsubmiot', data);
+    // console.log('onsubmiot', data);
     if (data.tenantName) {
       setOpenFormDialog(false);
       callback(item.id, data);
@@ -103,8 +103,8 @@ function SuperAdminUpdatePopup({
       setValue('lastName', item.backofficeUser.lastName);
       setValue('trialMode', item.trialMode);
       setValue('trialStartDate', item.trialStartDate);
-      setValue('domainAdminapp', item?.systemConfig?.domainAdminapp ?? '');
-      setValue('domainWebapp', item?.systemConfig?.domainWebapp ?? '');
+      setValue('domain', item?.systemConfig?.domain ?? '');
+      // setValue('domainWebapp', item?.systemConfig?.domainWebapp ?? '');
       setValue('theme', item?.systemConfig?.theme ?? '');
     }
   }, [item]);
@@ -133,8 +133,8 @@ function SuperAdminUpdatePopup({
   };
 
   const debouceRequest = debounce((value) => {
-    setValue('domainAdminapp', `devadminapp-${kabakCase(value)}`);
-    setValue('domainWebapp', `devwebapp-${kabakCase(value)}`);
+    setValue('domain', `devadminapp-${kabakCase(value)}`);
+    // setValue('domainWebapp', `devwebapp-${kabakCase(value)}`);
   }, 1000);
 
   const shopFieldHangler = (val: any) => {
@@ -361,7 +361,7 @@ function SuperAdminUpdatePopup({
               </div>
               <div className="FormField">
                 <FormControl className="FormControl" variant="standard">
-                  <label className="FormLabel">Admin Domain</label>
+                  <label className="FormLabel">Domain</label>
                   <TextField
                     className="FormInput"
                     sx={{ padding: 0 }}
@@ -379,12 +379,24 @@ function SuperAdminUpdatePopup({
                       ),
                     }}
                     variant="outlined"
-                    {...register('domainAdminapp')}
-                    disabled
+                    {...register('domain', {
+                      required: true,
+                      pattern: PATTERN?.DOMAIN,
+                      validate: (value) => value.length <= 100,
+                    })}
                   />
+                  {errors.domain?.type === 'required' && (
+                    <ErrorSpanBox error="domain is required" />
+                  )}
+                  {errors.domain?.type === 'pattern' && (
+                    <ErrorSpanBox error={INVALID_CHAR} />
+                  )}
+                  {errors.domain?.type === 'validate' && (
+                    <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
+                  )}
                 </FormControl>
               </div>
-              <div className="FormField mb-4">
+              {/* <div className="FormField mb-4">
                 <FormControl className="FormControl" variant="standard">
                   <label className="FormLabel">Web-App Domain</label>
                   <TextField
@@ -408,9 +420,9 @@ function SuperAdminUpdatePopup({
                     disabled
                   />
                 </FormControl>
-              </div>
+              </div> */}
               <div>
-                <div className="mb-2">
+                <div className="my-2">
                   <span className="">Theme</span>
                 </div>
                 <ColorRowWithTooltips

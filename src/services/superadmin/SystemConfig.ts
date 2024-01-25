@@ -1,7 +1,11 @@
 import network from '../../utils/network';
 
 const getSystemConfig = (domain: string) => {
-  return network.getSystemConfig(`get/admin/${domain}`);
+  return network.getSystemConfig(`get/theme/${domain}`);
+};
+
+const getSystemConfigDefault = (domain: string) => {
+  return network.getSystemConfig(`get/default/theme/${domain}`);
 };
 
 const getSystemConfigByTenant = (tenantId: string) => {
@@ -21,4 +25,5 @@ export default {
   getSystemConfigByTenant,
   systemConfigColorChange,
   systemConfigLayoutUpdate,
+  getSystemConfigDefault,
 };

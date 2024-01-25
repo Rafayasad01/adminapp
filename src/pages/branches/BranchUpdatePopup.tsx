@@ -51,7 +51,7 @@ function BranchUpdatePopup({
     formState: { errors },
   } = useForm<Tenant>();
   const onSubmit = (data: Partial<Tenant>) => {
-    console.log('onsubmiotupdate', data, item);
+    // console.log('onsubmiotupdate', data, item);
     if (data.enableLoyaltyProgram === false) {
       delete data.loyaltyCoinConversionRate;
       delete data.requiredCoinsToRedeem;
@@ -78,8 +78,8 @@ function BranchUpdatePopup({
       setValue('email', item.backofficeUser.email);
       setValue('firstName', item.backofficeUser.firstName);
       setValue('lastName', item.backofficeUser.lastName);
-      setValue('domainWebapp', item.systemConfig.domainWebapp);
-      setValue('domainAdminapp', item.systemConfig.domainAdminapp);
+      // setValue('domainWebapp', item.systemConfig.domainWebapp);
+      setValue('domain', item.systemConfig.domain);
       // setValue('enableLoyaltyProgram', item.tenantExt.enableLoyaltyProgram);
     }
   }, [item]);
@@ -87,8 +87,8 @@ function BranchUpdatePopup({
   // console.log('ITEM', item.tenantExt.enableLoyaltyProgram);
 
   const debouceRequest = debounce((value) => {
-    setValue('domainAdminapp', `devadminapp-${kabakCase(value)}`);
-    setValue('domainWebapp', `devwebapp-${kabakCase(value)}`);
+    setValue('domain', `devadminapp-${kabakCase(value)}`);
+    // setValue('domainWebapp', `devwebapp-${kabakCase(value)}`);
   }, 1000);
 
   const shopFieldHangler = (val: any) => {
@@ -239,7 +239,7 @@ function BranchUpdatePopup({
               </div>
               <div className="FormField">
                 <FormControl className="FormControl" variant="standard">
-                  <label className="FormLabel">Admin Domain</label>
+                  <label className="FormLabel">Domain</label>
                   <TextField
                     className="FormInput"
                     sx={{ padding: 0 }}
@@ -257,12 +257,24 @@ function BranchUpdatePopup({
                       ),
                     }}
                     variant="outlined"
-                    {...register('domainAdminapp')}
-                    disabled
+                    {...register('domain', {
+                      required: true,
+                      pattern: PATTERN?.DOMAIN,
+                      validate: (value) => value.length <= 100,
+                    })}
                   />
+                  {errors.domain?.type === 'required' && (
+                    <ErrorSpanBox error="domain is required" />
+                  )}
+                  {errors.domain?.type === 'pattern' && (
+                    <ErrorSpanBox error={INVALID_CHAR} />
+                  )}
+                  {errors.domain?.type === 'validate' && (
+                    <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
+                  )}
                 </FormControl>
               </div>
-              <div className="FormField mb-4">
+              {/* <div className="FormField mb-4">
                 <FormControl className="FormControl" variant="standard">
                   <label className="FormLabel">Web-App Domain</label>
                   <TextField
@@ -286,7 +298,7 @@ function BranchUpdatePopup({
                     disabled
                   />
                 </FormControl>
-              </div>
+              </div> */}
               {/* <div className="FormField">
                 <FormControlLabel
                   control={
