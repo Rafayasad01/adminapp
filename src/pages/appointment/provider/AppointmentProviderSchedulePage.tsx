@@ -459,7 +459,7 @@ function AppointmentProviderSchedulePage() {
                     <div className="flex">
                       <div className="flex w-full items-center justify-around">
                         <div className="w-full flex-col items-center">
-                          <span className="font-open-sans text-base font-semibold not-italic text-[#1A1A1A]">
+                          <span className="font-open-sans text-base font-semibold not-italic text-secondary">
                             Provider Name
                           </span>
                           <div className="mt-1 font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
@@ -467,7 +467,7 @@ function AppointmentProviderSchedulePage() {
                           </div>
                         </div>
                         <div className="flex w-full flex-col">
-                          <span className="font-open-sans text-base font-semibold not-italic text-[#1A1A1A]">
+                          <span className="font-open-sans text-base font-semibold not-italic text-secondary">
                             Status
                           </span>
                           <div className="mt-1 font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
@@ -487,7 +487,7 @@ function AppointmentProviderSchedulePage() {
 
                     <div className="grid w-[100%] grid-cols-2 items-center justify-between">
                       <div className="mt-4 flex w-full flex-col">
-                        <span className="font-open-sans text-base font-semibold not-italic text-[#1A1A1A]">
+                        <span className="font-open-sans text-base font-semibold not-italic text-secondary">
                           Created Date
                         </span>
                         <div className="mt-1 font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
@@ -500,7 +500,7 @@ function AppointmentProviderSchedulePage() {
                       </div>
                       <div className="flex justify-between">
                         <div className="mt-4 flex w-full flex-col">
-                          <span className="font-open-sans text-base font-semibold not-italic text-[#1A1A1A]">
+                          <span className="font-open-sans text-base font-semibold not-italic text-secondary">
                             Updated Date
                           </span>
                           <div className="mt-1 font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
@@ -516,7 +516,7 @@ function AppointmentProviderSchedulePage() {
 
                     <div className="flex">
                       <div className="mt-4 flex w-full flex-col">
-                        <span className="font-open-sans text-base font-semibold not-italic text-[#1A1A1A]">
+                        <span className="font-open-sans text-base font-semibold not-italic text-secondary">
                           Email
                         </span>
                         <div className="mt-1 font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
@@ -524,7 +524,7 @@ function AppointmentProviderSchedulePage() {
                         </div>
                       </div>
                       <div className="mt-4 flex w-full flex-col">
-                        <span className="font-open-sans text-base font-semibold not-italic text-[#1A1A1A]">
+                        <span className="font-open-sans text-base font-semibold not-italic text-secondary">
                           Phone number
                         </span>
                         <div className="mt-1 font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
@@ -535,7 +535,7 @@ function AppointmentProviderSchedulePage() {
 
                     <div className="flex">
                       <div className="mt-4 flex w-full flex-col">
-                        <span className="font-open-sans text-base font-semibold not-italic text-[#1A1A1A]">
+                        <span className="font-open-sans text-base font-semibold not-italic text-secondary">
                           Cnic
                         </span>
                         <div className="mt-1 font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">

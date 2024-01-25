@@ -38,11 +38,12 @@ function CustomDateTimePicker({
       <DemoItem label={inputTitle}>
         <DesktopDatePicker
           sx={{
-            border: '1px solid #e5d3d3',
+            border: '1px solid',
             padding: 'px',
             borderRadius: '5px',
             fontSize: '12px',
           }}
+          className="border-secondary"
           value={value}
           onChange={handleChange}
           minDate={minDate}

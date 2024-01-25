@@ -28,14 +28,14 @@ function SuperAdminUserDialog({
         }}
       >
         <div className="Content">
-          <span className="font-open-sans text-xl font-semibold not-italic text-[#1A1A1A]">
+          <span className="font-open-sans text-xl font-semibold not-italic text-secondary">
             User Details
           </span>
           <div className="grid w-full grid-cols-12 gap-3 bg-transparent">
             <div className="col-span-8 my-1 mx-2">
               <div className="flex flex-col py-[1rem] px-5">
                 <div className="flex w-full flex-col">
-                  <span className="font-open-sans text-base font-semibold not-italic text-[#1A1A1A]">
+                  <span className="font-open-sans text-base font-semibold not-italic text-secondary">
                     Avatar
                   </span>
                   <div className="mt-1 font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
@@ -54,7 +54,7 @@ function SuperAdminUserDialog({
                   </div>
                 </div>
                 <div className="mt-4 flex w-full flex-col">
-                  <span className="font-open-sans text-base font-semibold not-italic text-[#1A1A1A]">
+                  <span className="font-open-sans text-base font-semibold not-italic text-secondary">
                     Name
                   </span>
                   <div className="mt-1 font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
@@ -62,7 +62,7 @@ function SuperAdminUserDialog({
                   </div>
                 </div>
                 <div className="mt-4 flex w-full flex-col">
-                  <span className="font-open-sans text-base font-semibold not-italic text-[#1A1A1A]">
+                  <span className="font-open-sans text-base font-semibold not-italic text-secondary">
                     Email
                   </span>
                   <div className="mt-1 font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
@@ -71,7 +71,7 @@ function SuperAdminUserDialog({
                 </div>
                 <div className="mt-4 grid w-full grid-cols-8 gap-6">
                   <div className="col-span-4">
-                    <span className="font-open-sans text-base font-semibold not-italic text-[#1A1A1A]">
+                    <span className="font-open-sans text-base font-semibold not-italic text-secondary">
                       Created Date
                     </span>
                     <div className="mt-1 font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
@@ -83,7 +83,7 @@ function SuperAdminUserDialog({
                     </div>
                   </div>
                   <div className="col-span-4">
-                    <span className="font-open-sans text-base font-semibold not-italic text-[#1A1A1A]">
+                    <span className="font-open-sans text-base font-semibold not-italic text-secondary">
                       Updated Date
                     </span>
                     <div className="mt-1 font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
@@ -97,7 +97,7 @@ function SuperAdminUserDialog({
                 </div>
                 <div className="grid w-full grid-cols-8 gap-6">
                   <div className="col-span-4 mt-4">
-                    <span className="font-open-sans text-base font-semibold not-italic text-[#1A1A1A]">
+                    <span className="font-open-sans text-base font-semibold not-italic text-secondary">
                       Status
                     </span>
                     <div className="mt-1 font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
@@ -109,7 +109,7 @@ function SuperAdminUserDialog({
                     </div>
                   </div>
                   <div className="col-span-4 mt-4">
-                    <span className="font-open-sans text-base font-semibold not-italic text-[#1A1A1A]">
+                    <span className="font-open-sans text-base font-semibold not-italic text-secondary">
                       Sent Email
                     </span>
                     <div className="mt-1 font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">

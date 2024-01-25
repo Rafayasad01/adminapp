@@ -538,16 +538,16 @@ function OrdersCreatePage() {
                 <thead>
                   <tr>
                     <th>&nbsp;</th>
-                    <th className="font-open-sans text-base font-semibold text-[#1A1A1A]">
+                    <th className="font-open-sans text-base font-semibold text-secondary">
                       Products
                     </th>
-                    <th className="font-open-sans text-base font-semibold text-[#1A1A1A]">
+                    <th className="font-open-sans text-base font-semibold text-secondary">
                       Price
                     </th>
-                    <th className="font-open-sans text-base font-semibold text-[#1A1A1A]">
+                    <th className="font-open-sans text-base font-semibold text-secondary">
                       Quantity
                     </th>
-                    <th className="font-open-sans text-base font-semibold text-[#1A1A1A]">
+                    <th className="font-open-sans text-base font-semibold text-secondary">
                       Subtotal
                     </th>
                   </tr>
@@ -595,7 +595,7 @@ function OrdersCreatePage() {
                               variant="standard"
                             >
                               <Input
-                                className="after:border-b-neutral-900"
+                                className="after:border-b-secondary"
                                 id="quantity"
                                 value={item?.quantity}
                                 disableUnderline
@@ -609,7 +609,7 @@ function OrdersCreatePage() {
                             </IconButton>
                           </span>
                         </td>
-                        <td className="text-sm font-semibold text-[#1A1A1A]">
+                        <td className="text-sm font-semibold text-secondary">
                           $
                           {(
                             Number(item?.quantity) * Number(item?.price)
@@ -627,7 +627,7 @@ function OrdersCreatePage() {
               <FormControl className="w-full">
                 <FormLabel
                   id="demo-row-radio-buttons-group-label"
-                  className="font-open-sans text-xl font-semibold text-[#1A1A1A]"
+                  className="font-open-sans text-xl font-semibold text-secondary"
                 >
                   Delivery Date
                 </FormLabel>
@@ -696,9 +696,9 @@ function OrdersCreatePage() {
                 <label className="mb-1 ml-1 w-full font-open-sans text-xl font-semibold">
                   Address
                 </label>
-                <div className="w-full rounded-xl border border-solid border-[#E4E4E4] py-1 pl-3">
+                <div className="w-full rounded-xl border border-solid border-foreground py-1 pl-3">
                   <Input
-                    className="input-with-icon after:border-b-neutral-900"
+                    className="input-with-icon after:border-b-secondary"
                     id="search"
                     type="text"
                     placeholder="Type Addess"
@@ -724,7 +724,7 @@ function OrdersCreatePage() {
               <FormControl className="mt-4">
                 <FormLabel
                   id="demo-row-radio-buttons-group-label"
-                  className="font-open-sans text-xl font-semibold text-[#1A1A1A]"
+                  className="font-open-sans text-xl font-semibold text-secondary"
                 >
                   Payment
                 </FormLabel>
@@ -760,7 +760,7 @@ function OrdersCreatePage() {
                   <FormControl className="">
                     <FormLabel
                       id="demo-row-radio-buttons-group-label"
-                      className="font-open-sans text-xl font-semibold text-[#1A1A1A]"
+                      className="font-open-sans text-xl font-semibold text-secondary"
                     >
                       User
                     </FormLabel>
@@ -828,9 +828,9 @@ function OrdersCreatePage() {
 
               {/* {console.log("isExx", isExistingUser)} */}
               {isExistingUser === 'Exist User' && (
-                <div className="w-full rounded-xl border border-solid border-[#E4E4E4] py-1 pl-3">
+                <div className="w-full rounded-xl border border-solid border-foreground py-1 pl-3">
                   <Input
-                    className="input-with-icon after:border-b-neutral-900"
+                    className="input-with-icon after:border-b-secondary"
                     id="search"
                     type="text"
                     placeholder="Identifier (Ex : email or phone)"
@@ -953,7 +953,7 @@ function OrdersCreatePage() {
                   loginDetails === null || itemList?.length <= 0
                     ? 'bg-neutral-400'
                     : 'bg-neutral-900'
-                } font-open-sans text-base font-semibold text-gray-50`}
+                } btn-gray-fill font-open-sans text-base font-semibold text-gray-50`}
               >
                 {isLoader && loginDetails !== null ? (
                   <CircularProgress size="25px" color="inherit" />

@@ -296,10 +296,10 @@ function AppointmentVisitReschedulePopup({
                         return (
                           <div
                             key={index}
-                            className="col-span-1 rounded-full bg-[#D9D9D9]"
+                            className="col-span-1 rounded-full bg-background"
                           >
-                            <div className="m-2 flex items-center justify-center rounded-full bg-black p-4">
-                              <p className="text-sm text-[white]">
+                            <div className="m-2 flex items-center justify-center rounded-full bg-primary p-4">
+                              <p className="text-sm text-foreground">
                                 {item.workDay.slice(0, 3)}
                               </p>
                             </div>

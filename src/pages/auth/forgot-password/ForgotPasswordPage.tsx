@@ -29,7 +29,7 @@ function ForgotPasswordPage() {
           </label>
           <FormControl className="m-1 w-full" variant="standard">
             <Input
-              className="after:border-b-neutral-900"
+              className="after:border-b-secondary"
               id="email"
               type="email"
               name="email"

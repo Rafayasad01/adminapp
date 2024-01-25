@@ -83,11 +83,11 @@ function OrdersCreatePage() {
           <div className="col-span-7 rounded-lg bg-white py-5 px-4 shadow-lg">
             <div className="col-span-12">
               <FormControl
-                className="w-full rounded-xl border border-solid border-[#E4E4E4] py-1 pl-3"
+                className="w-full rounded-xl border border-solid border-foreground py-1 pl-3"
                 variant="filled"
               >
                 <Input
-                  className="input-with-icon after:border-b-neutral-900"
+                  className="input-with-icon after:border-b-secondary"
                   id="search"
                   type="text"
                   placeholder="Select Customer"
@@ -143,16 +143,16 @@ function OrdersCreatePage() {
                 <thead>
                   <tr>
                     <th>&nbsp;</th>
-                    <th className="font-open-sans text-base font-semibold text-[#1A1A1A]">
+                    <th className="font-open-sans text-base font-semibold text-secondary">
                       Products
                     </th>
-                    <th className="font-open-sans text-base font-semibold text-[#1A1A1A]">
+                    <th className="font-open-sans text-base font-semibold text-secondary">
                       Price
                     </th>
-                    <th className="font-open-sans text-base font-semibold text-[#1A1A1A]">
+                    <th className="font-open-sans text-base font-semibold text-secondary">
                       Quantity
                     </th>
-                    <th className="font-open-sans text-base font-semibold text-[#1A1A1A]">
+                    <th className="font-open-sans text-base font-semibold text-secondary">
                       Subtotal
                     </th>
                   </tr>
@@ -186,7 +186,7 @@ function OrdersCreatePage() {
                           variant="standard"
                         >
                           <Input
-                            className="after:border-b-neutral-900"
+                            className="after:border-b-secondary"
                             id="quantity"
                             value={quantity}
                             disableUnderline
@@ -200,7 +200,7 @@ function OrdersCreatePage() {
                         </IconButton>
                       </span>
                     </td>
-                    <td className="text-sm font-semibold text-[#1A1A1A]">
+                    <td className="text-sm font-semibold text-secondary">
                       $150.00
                     </td>
                   </tr>
@@ -232,7 +232,7 @@ function OrdersCreatePage() {
                           variant="standard"
                         >
                           <Input
-                            className="after:border-b-neutral-900"
+                            className="after:border-b-secondary"
                             id="quantity"
                             value={quantity}
                             disableUnderline
@@ -246,7 +246,7 @@ function OrdersCreatePage() {
                         </IconButton>
                       </span>
                     </td>
-                    <td className="text-sm font-semibold text-[#1A1A1A]">
+                    <td className="text-sm font-semibold text-secondary">
                       $150.00
                     </td>
                   </tr>
@@ -278,7 +278,7 @@ function OrdersCreatePage() {
                           variant="standard"
                         >
                           <Input
-                            className="after:border-b-neutral-900"
+                            className="after:border-b-secondary"
                             id="quantity"
                             value={quantity}
                             disableUnderline
@@ -292,7 +292,7 @@ function OrdersCreatePage() {
                         </IconButton>
                       </span>
                     </td>
-                    <td className="text-sm font-semibold text-[#1A1A1A]">
+                    <td className="text-sm font-semibold text-secondary">
                       $150.00
                     </td>
                   </tr>
@@ -301,7 +301,7 @@ function OrdersCreatePage() {
             </div>
             <div className="col-span-12">
               <TextField
-                className="mt-4 w-full hover:border-[#E4E4E4]"
+                className="mt-4 w-full hover:border-foreground"
                 id="outlined-multiline-static"
                 multiline
                 rows={5}
@@ -318,10 +318,10 @@ function OrdersCreatePage() {
                   id="pick-up-date-time-picker"
                   icon={<CalendarTodayOutlinedIcon />}
                 />
-                <span className="font-open-sans text-sm font-semibold text-[#1A1A1A]">
+                <span className="font-open-sans text-sm font-semibold text-secondary">
                   {pickUpTime ? (
                     <>
-                      <div className="font-open-sans text-sm font-semibold text-[#1A1A1A]">
+                      <div className="font-open-sans text-sm font-semibold text-secondary">
                         {pickUpTime.format('MMM MM, YYYY')}
                       </div>
                       <div className="font-open-sans text-xs font-normal text-[#6A6A6A]">
@@ -342,10 +342,10 @@ function OrdersCreatePage() {
                   id="drop-off-date-time-picker"
                   icon={<CalendarTodayOutlinedIcon />}
                 />
-                <span className="font-open-sans text-sm font-semibold text-[#1A1A1A]">
+                <span className="font-open-sans text-sm font-semibold text-secondary">
                   {dropOffTime ? (
                     <>
-                      <div className="font-open-sans text-sm font-semibold text-[#1A1A1A]">
+                      <div className="font-open-sans text-sm font-semibold text-secondary">
                         {dropOffTime.format('MMM MM, YYYY')}
                       </div>
                       <div className="font-open-sans text-xs font-normal text-[#6A6A6A]">
@@ -366,9 +366,9 @@ function OrdersCreatePage() {
                 <label className="mb-1 ml-1 w-full font-open-sans text-xl font-semibold">
                   Address
                 </label>
-                <div className="w-full rounded-xl border border-solid border-[#E4E4E4] py-1 pl-3">
+                <div className="w-full rounded-xl border border-solid border-foreground py-1 pl-3">
                   <Input
-                    className="input-with-icon after:border-b-neutral-900"
+                    className="input-with-icon after:border-b-secondary"
                     id="search"
                     type="text"
                     placeholder="Type Addess"
@@ -393,7 +393,7 @@ function OrdersCreatePage() {
               <FormControl className="mt-4">
                 <FormLabel
                   id="demo-row-radio-buttons-group-label"
-                  className="font-open-sans text-xl font-semibold text-[#1A1A1A]"
+                  className="font-open-sans text-xl font-semibold text-secondary"
                 >
                   Payment
                 </FormLabel>

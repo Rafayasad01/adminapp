@@ -15,6 +15,7 @@ import { AppointmentProviderSchedule } from '../../../interfaces/app.appointment
 import { useAppSelector } from '../../../redux/redux-hooks';
 import Service from '../../../services/adminapp/adminAppointment';
 import { setText, weekDays } from '../../../utils/constants';
+import AddIcon from '@mui/icons-material/Add';
 
 function AppointmentProviderAddSchedulePage() {
   const { id } = useParams();
@@ -267,9 +268,9 @@ function AppointmentProviderAddSchedulePage() {
               })}
               <div
                 onClick={() => handleAddMore()}
-                className="flex h-[248px] cursor-pointer items-center justify-center rounded-lg bg-[#F0F0F0] xl:col-span-2 2xl:col-span-1"
+                className="flex h-[248px] cursor-pointer items-center justify-center rounded-lg bg-faded xl:col-span-2 2xl:col-span-1"
               >
-                <img alt="add" src={assets.images.addImg} />
+                <AddIcon className="text-6xl text-foreground" />
               </div>
             </div>
             <div className="mt-5">
@@ -277,7 +278,7 @@ function AppointmentProviderAddSchedulePage() {
                 buttonType="button"
                 type="submit"
                 title="add"
-                className="bg-[black]"
+                className="btn-black-fill"
               />
             </div>
           </form>

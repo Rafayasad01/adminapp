@@ -70,7 +70,7 @@ function ColorPicker({
         >
           <span
             style={{ backgroundColor: colorPickerValue }}
-            className="block h-[25px] w-[25px] rounded-full border border-[#D9D9D9]"
+            className="block h-[25px] w-[25px] rounded-full border border-foreground"
           />
           {/* <ColorLensOutlinedIcon
             style={{ fontSize: '40px', color: colorPickerValue }}

@@ -272,7 +272,7 @@ function SuperAdminEditPermissionsPage() {
                   <label className="pb-2 font-bold">Module Name</label>
                   <Input
                     disabled
-                    className="FormInput m-0 h-[40px] w-[350px] rounded-lg border-2 border-[#949EAE] px-3 outline-none"
+                    className="FormInput m-0 h-[40px] w-[350px] rounded-lg border-2 border-secondary px-3 outline-none"
                     {...register('moduleName', {
                       required: true,
                       pattern: PATTERN.CHAR_SPACE_DASH,
@@ -300,7 +300,7 @@ function SuperAdminEditPermissionsPage() {
                   <label className="pb-2 font-bold">Permission Type</label>
                   <Input
                     disabled
-                    className="FormInput m-0 h-[40px] w-[135px] rounded-lg border-2 border-[#949EAE] px-3 outline-none"
+                    className="FormInput m-0 h-[40px] w-[135px] rounded-lg border-2 border-secondary px-3 outline-none"
                     {...register('permissionType', {
                       required: true,
                       value: 'backend',
@@ -335,7 +335,7 @@ function SuperAdminEditPermissionsPage() {
                     },
                   })}
                   placeholder="Enter Module description"
-                  className="w-[507px] rounded-lg border-2 border-[#949EAE] p-3 outline-none"
+                  className="w-[507px] rounded-lg border-2 border-secondary p-3 outline-none"
                 />
                 {errors.moduleDesc && (
                   <ErrorSpanBox error={errors.moduleDesc?.message} />
@@ -489,7 +489,7 @@ function SuperAdminEditPermissionsPage() {
               })}
               <div
                 onClick={handleAddMore}
-                className="flex h-[266px] cursor-pointer items-center justify-center rounded-lg bg-[#F0F0F0] xl:col-span-2 2xl:col-span-1"
+                className="flex h-[266px] cursor-pointer items-center justify-center rounded-lg bg-faded xl:col-span-2 2xl:col-span-1"
               >
                 <img alt="add" src={assets.images.addImg} />
               </div>

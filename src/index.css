@@ -53,16 +53,31 @@ select {
 
 .fixed-height {
   height: 30px !important;
+  @apply border-primary !important;
 }
 
 .css-hz1bth-MuiDialog-container .custom-dialog-width {
   width: 1000px !important;
 }
 
-.MuiFormControl-root:hover,
-.MuiInputBase-root:hover,
+/* .MuiFormControl-root:hover,
+.MuiInputBase-root:hover, */
+.MuiFormControl-root.search-grey-outline,
+.MuiInputBase-formControl,
+.fixed-height {
+  border-color: rgb(26 26 26 / 30%) !important;
+}
+.FormControl textarea {
+  border-color: rgb(26 26 26 / 30%) !important;
+  border-width: 1px solid !important;
+}
+.css-1kp21md-MuiFormControl-root-MuiTextField-root {
+  @apply border-secondary !important;
+}
 .MuiOutlinedInput-notchedOutline {
-  @apply border-[#E4E4E4] !important;
+  @apply border-secondary !important;
+  opacity: 0.3 !important;
+  outline: none !important;
 }
 
 .css-ahj2mt-MuiTypography-root {
@@ -82,7 +97,7 @@ select {
 }
 
 .form-group input {
-  @apply rounded-xl border-none bg-[#fff] px-4 py-1.5 font-open-sans text-sm font-normal text-[#1a1a1a] opacity-70 !important;
+  @apply rounded-xl border-none bg-[#fff] px-4 py-1.5 font-open-sans text-sm font-normal text-secondary opacity-70 !important;
 }
 
 .form-group .MuiFormControl-root {
@@ -90,7 +105,7 @@ select {
 }
 
 .form-group .MuiInputBase-root {
-  @apply rounded-lg border border-solid border-[#e4e4e4] bg-[#fff] !important;
+  @apply rounded-lg border border-solid border-foreground bg-[#fff] !important;
 }
 
 .form-group .MuiButton-contained {
@@ -103,12 +118,12 @@ table {
 
 table > thead > tr > td,
 table > thead > tr > th {
-  @apply py-5 pl-4 pr-1 text-left font-open-sans text-xs font-normal text-[#1a1a1a];
+  @apply py-5 pl-4 pr-1 text-left font-open-sans text-xs font-normal text-secondary;
 }
 
 table > tbody > tr > td,
 table > tbody > tr > th {
-  @apply py-5 pl-4 pr-1 text-left font-open-sans text-xs font-normal text-[#1a1a1a];
+  @apply py-5 pl-4 pr-1 text-left font-open-sans text-xs font-normal text-secondary;
 }
 
 table > tbody > tr:nth-child(odd) {
@@ -134,12 +149,13 @@ table .avatar img {
 }
 
 table.table-border > thead > tr > th {
-  @apply border-b-2 border-solid border-[#dfe0eb] font-open-sans text-sm font-semibold text-[#1a1a1a];
-  /* border-bottom: 1.5px solid #dfe0eb; */
+  @apply border-b-2 border-solid border-faded font-open-sans text-sm font-semibold text-secondary;
+  border-bottom: 1.5px solid #dfe0eb !important;
 }
 
 table.table-border > tbody > tr {
-  @apply relative border-b border-solid border-[#DFE0EB] !important;
+  @apply relative border-b border-solid border-faded !important;
+  border-bottom: 1.5px solid #dfe0eb !important;
 }
 
 table.table-border > tbody > tr:nth-child(odd) {
@@ -232,7 +248,7 @@ table > tbody > tr:last-child {
 }
 
 .modal-header .modal-heading {
-  @apply font-open-sans text-xl font-semibold text-[#1a1a1a];
+  @apply font-open-sans text-xl font-semibold text-secondary;
 }
 
 .modal-header .header-close-btn {
@@ -285,8 +301,7 @@ table > tbody > tr:last-child {
   -ms-flex-negative: 0;
   flex-shrink: 0;
   border-width: 0;
-  border-style: solid;
-  border-color: rgb(201, 201, 201);
+  @apply border-solid border-foreground;
 }
 
 .vertical {
@@ -310,7 +325,7 @@ table > tbody > tr:last-child {
 }
 
 .title {
-  @apply flex text-2xl font-semibold text-[#1A1A1A];
+  @apply flex text-2xl font-semibold text-secondary;
 }
 
 .header-user-box {
@@ -318,11 +333,11 @@ table > tbody > tr:last-child {
 }
 
 .header-user-box span {
-  @apply mr-3 text-right font-open-sans text-sm font-semibold text-[#1a1a1a];
+  @apply mr-3 text-right font-open-sans text-sm font-semibold text-secondary;
 }
 
 .header-user-box img {
-  @apply h-11 w-11 rounded-full border-2 border-solid border-[#dfe0eb];
+  @apply h-11 w-11 rounded-full border-2 border-solid border-foreground;
 }
 
 .toolbar-style {
@@ -334,7 +349,7 @@ table > tbody > tr:last-child {
 }
 
 .icon-btn {
-  @apply font-open-sans text-sm font-semibold text-[#1a1a1a] outline-none;
+  @apply font-open-sans text-sm font-semibold text-secondary outline-none;
   outline: none !important;
 }
 
@@ -399,7 +414,7 @@ table > tbody > tr:last-child {
 }
 
 .search-grey-outline {
-  @apply rounded-xl border border-solid border-[#E4E4E4] py-1 pl-3 !important;
+  @apply rounded-xl border border-solid border-secondary py-1 pl-3 !important;
 }
 
 .search-grey-outline input {
@@ -422,15 +437,15 @@ table > tbody > tr:last-child {
 }
 
 .btn-black-outline {
-  @apply rounded-lg border border-solid border-[#1D1D1D] bg-transparent px-3 text-sm font-normal capitalize text-[#1A1A1A] shadow-none !important;
+  @apply rounded-lg border border-solid border-secondary bg-transparent px-3 text-sm font-normal capitalize text-secondary shadow-none !important;
 }
 
 .btn-black-fill {
-  @apply rounded-lg border border-solid border-[#1D1D1D] bg-[#1D1D1D] px-4 text-sm font-normal capitalize text-[#FFFFFF] shadow-none !important;
+  @apply rounded-lg border border-solid border-secondary bg-[#1D1D1D] px-4 text-sm font-normal capitalize text-[#FFFFFF] shadow-none !important;
 }
 
 .btn-gray-fill {
-  @apply rounded-lg border border-solid border-[#808080] bg-[#808080] px-4 text-sm font-normal capitalize text-[#FFFFFF] shadow-none !important;
+  @apply rounded-lg border border-solid border-secondary bg-[#808080] px-4 text-sm font-normal capitalize text-[#FFFFFF] shadow-none !important;
 }
 
 .btn-icon .MuiSvgIcon-root {
@@ -442,15 +457,15 @@ table > tbody > tr:last-child {
 }
 
 .select-grey-outline fieldset {
-  @apply border-[#E4E4E4] !important;
+  @apply border-foreground !important;
 }
 
 .select-black-outline {
-  @apply rounded-lg font-open-sans text-sm font-normal text-[#1A1A1A] !important;
+  @apply rounded-lg font-open-sans text-sm font-normal text-secondary !important;
 }
 
 .select-black-outline fieldset {
-  @apply border-[#1D1D1D] !important;
+  @apply border-secondary !important;
 }
 
 .MuiSelect-select {
@@ -458,7 +473,7 @@ table > tbody > tr:last-child {
 }
 
 .select-black-outline .MuiSelect-select {
-  @apply text-xs text-[#1a1a1a] !important;
+  @apply text-xs text-secondary !important;
 }
 
 .select-grey-outline .MuiSelect-select {
@@ -474,7 +489,7 @@ table > tbody > tr:last-child {
 }
 
 #long-menu .MuiMenu-paper {
-  @apply rounded-xl border border-solid border-[#e4e4e4] bg-[#fff] shadow-lg !important;
+  @apply rounded-xl border border-solid border-foreground bg-[#fff] shadow-lg !important;
 
   /* box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.06) !important; */
 }
@@ -484,7 +499,7 @@ table > tbody > tr:last-child {
 }
 
 #long-menu li {
-  @apply border-b-[1px] border-solid border-[#e4e4e4] px-0 py-1 font-open-sans text-[11px] font-normal text-[#6a6a6a] !important;
+  @apply border-b-[1px] border-solid border-foreground px-0 py-1 font-open-sans text-[11px] font-normal text-[#6a6a6a] !important;
 }
 
 #long-menu li:hover {
@@ -500,7 +515,8 @@ table > tbody > tr:last-child {
 }
 
 .custom-tab {
-  border-bottom: 0.5px solid #c9c9c9;
+  border-bottom: 0.5px solid;
+  @apply border-foreground;
 }
 
 .css-1ujnqem-MuiTabs-root {
@@ -512,7 +528,7 @@ table > tbody > tr:last-child {
 }
 
 .custom-tab .css-1h9z7r5-MuiButtonBase-root-MuiTab-root.Mui-selected {
-  @apply font-semibold text-[#1a1a1a] !important;
+  @apply font-semibold text-secondary !important;
 }
 
 .css-1aquho2-MuiTabs-indicator {
@@ -582,7 +598,7 @@ table > tbody > tr:last-child {
 }
 
 .rdrDateRangePickerWrapper.settingPage {
-  background: #ffffff;
+  @apply bg-foreground;
   box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
 }
@@ -592,7 +608,8 @@ table > tbody > tr:last-child {
 }
 
 .rdrDateRangePickerWrapper.settingPopup .rdrMonthAndYearWrapper {
-  border-bottom: 1px solid #e4e4e4;
+  border-bottom: 1px solid;
+  @apply border-foreground;
   margin-bottom: 0;
   padding-top: 0;
   height: 54px;
@@ -726,7 +743,7 @@ table.schedule-table > thead > tr > th {
 }
 
 table.schedule-table > tbody > tr > td {
-  background: #ffffff;
+  @apply bg-foreground;
   border-top: 1px solid #c9c9c9;
   border-bottom: 1px solid #c9c9c9;
 }
@@ -962,6 +979,11 @@ label + .css-1aa5qj0-MuiInputBase-root-MuiInput-root {
 .category-tab-content .MuiPaper-elevation {
   box-shadow: none !important;
   margin: 0 !important;
+  /* @apply  !important; */
+}
+.MuiPaper-root.MuiPaper-elevation.MuiPaper-rounded.MuiPaper-elevation1.MuiAccordion-root.MuiAccordion-rounded.Mui-expanded.MuiAccordion-gutters.css-1uh1gum-MuiPaper-root-MuiAccordion-root {
+  @apply bg-misc !important;
+  /* opacity: 0.5; */
 }
 
 .category-tab-content .MuiPaper-elevation::before {
@@ -1526,6 +1548,50 @@ label + .css-1aa5qj0-MuiInputBase-root-MuiInput-root {
   @apply text-foreground !important;
   /* opacity: 0.5; */
 }
+main {
+  @apply bg-background text-secondary !important;
+}
+.left-sidebar ul div a [aria-current]:not([aria-current='false']) {
+  @apply bg-faded;
+}
+.btn-black-fill,
+.btn-gray-fill {
+  @apply border-primary bg-primary text-foreground !important;
+}
+.btn-black-outline {
+  @apply border-primary text-primary opacity-[1] !important;
+}
+
+.bg-ord-del {
+  @apply bg-primary text-foreground !important;
+}
+.bg-ord-del div {
+  @apply text-foreground !important;
+}
+.btn-grey {
+  @apply bg-foreground text-secondary !important;
+}
+.text-grey {
+  @apply text-foreground !important;
+}
+.bg-grey-icon {
+  @apply bg-foreground !important;
+}
+.grey-icon {
+  @apply text-secondary !important;
+}
+.Content .FormInput,
+.Content .FormTextarea,
+.Content .FormSelect {
+  border-color: rgb(26 26 26 / 30%) !important;
+}
+/* .border-opacity{
+  border: solid rgba(106, 106, 106, 0.502) !important;
+} */
+
+/* header {
+  @apply bg-primary text-foreground !important;
+} */
 /* .MuiBox-root main {
   @apply bg-background !important;
 } */
