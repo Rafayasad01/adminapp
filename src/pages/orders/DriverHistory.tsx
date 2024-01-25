@@ -110,43 +110,43 @@ function DriverHistory() {
             <div className="my-4 grid grid-cols-12 gap-8">
               <div className="col-span-3">
                 <p className="text-sm text-[#6A6A6A]">Name</p>
-                <span className="text-md font-semibold text-[#1A1A1A]">
+                <span className="text-md font-semibold text-secondary">
                   Andrew Michael
                 </span>
               </div>
               <div className="col-span-3">
                 <p className="text-sm text-[#6A6A6A]">Email</p>
-                <span className="text-md font-semibold text-[#1A1A1A]">
+                <span className="text-md font-semibold text-secondary">
                   Andrew Michael
                 </span>
               </div>
               <div className="col-span-3">
                 <p className="text-sm text-[#6A6A6A]">Phone</p>
-                <span className="text-md font-semibold text-[#1A1A1A]">
+                <span className="text-md font-semibold text-secondary">
                   Andrew Michael
                 </span>
               </div>
               <div className="col-span-3">
                 <p className="text-sm text-[#6A6A6A]">License Number</p>
-                <span className="text-md font-semibold text-[#1A1A1A]">
+                <span className="text-md font-semibold text-secondary">
                   Andrew Michael
                 </span>
               </div>
               <div className="col-span-6">
                 <p className="text-sm text-[#6A6A6A]">Address</p>
-                <span className="text-md font-semibold text-[#1A1A1A]">
+                <span className="text-md font-semibold text-secondary">
                   Scelerisque maecenas sodales fusce placerat hac augue
                 </span>
               </div>
               <div className="col-span-3">
                 <p className="text-sm text-[#6A6A6A]">Remaining Payment</p>
-                <span className="text-md font-semibold text-[#1A1A1A]">
+                <span className="text-md font-semibold text-secondary">
                   Andrew Michael
                 </span>
               </div>
               <div className="col-span-3">
                 <p className="text-sm text-[#6A6A6A]">Total Payment</p>
-                <span className="text-md font-semibold text-[#1A1A1A]">
+                <span className="text-md font-semibold text-secondary">
                   Andrew Michael
                 </span>
               </div>

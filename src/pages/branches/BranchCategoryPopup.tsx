@@ -116,7 +116,7 @@ function BranchCategoryPopup({
                               }}
                             />
                           )}
-                          <span className="font-open-sans text-base font-semibold text-[#1A1A1A]">
+                          <span className="font-open-sans text-base font-semibold text-secondary">
                             {item.name}
                           </span>
                         </div>
@@ -133,7 +133,7 @@ function BranchCategoryPopup({
                     </AccordionSummary>
                     <AccordionDetails className="accordian-detail">
                       <div className="flex flex-col">
-                        <span className="font-open-sans text-base font-semibold text-[#1A1A1A]">
+                        <span className="font-open-sans text-base font-semibold text-secondary">
                           Description
                         </span>
                         <span className="font-open-sans text-sm font-normal text-[#6A6A6A]">
@@ -204,7 +204,7 @@ function BranchCategoryPopup({
                               }}
                             />
                           )}
-                          <span className="mr-3 font-open-sans text-sm font-semibold text-[#1A1A1A]">
+                          <span className="mr-3 font-open-sans text-sm font-semibold text-secondary">
                             {item.name}
                           </span>
                           {item.isActive ? (
@@ -214,14 +214,14 @@ function BranchCategoryPopup({
                           )}
                         </div>
                         <div className="item-detail mt-1 flex w-full flex-row items-center justify-between">
-                          <span className="ml-8 font-open-sans text-sm font-semibold text-[#1A1A1A]">
+                          <span className="ml-8 font-open-sans text-sm font-semibold text-secondary">
                             ${item.price}
                           </span>
                           <div className="">
                             <span className="text-sm font-normal text-[#6A6A6A]">
                               Quantity
                             </span>
-                            <span className="mr-1 ml-3 font-open-sans text-sm font-semibold text-[#1A1A1A]">
+                            <span className="mr-1 ml-3 font-open-sans text-sm font-semibold text-secondary">
                               {item.quantity}
                             </span>
                           </div>

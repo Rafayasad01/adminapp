@@ -181,7 +181,7 @@ function ProfilePage() {
               />
               <div className="flex w-full items-start justify-between">
                 <div className="flex flex-col justify-start justify-items-center">
-                  <span className="font-open-sans text-xl font-semibold text-[#1A1A1A]">
+                  <span className="font-open-sans text-xl font-semibold text-secondary">
                     {detail?.firstName} {detail?.lastName}
                   </span>
                   <span className="font-sm font-open-sans text-sm text-[#6A6A6A]">
@@ -193,7 +193,7 @@ function ProfilePage() {
                   </span>
                   <Button
                     variant="text"
-                    className="font-sm justify-start bg-transparent p-0 font-open-sans text-sm capitalize text-[#1A1A1A]"
+                    className="font-sm justify-start bg-transparent p-0 font-open-sans text-sm capitalize text-secondary"
                     onClick={() => setChangePassword(true)}
                   >
                     Change Password
@@ -211,7 +211,7 @@ function ProfilePage() {
             <div className="flex w-full flex-col">
               <div className="flex items-center justify-between">
                 <div className="flex w-full flex-col">
-                  <span className="mt-2 font-open-sans text-base font-semibold text-[#1A1A1A]">
+                  <span className="mt-2 font-open-sans text-base font-semibold text-secondary">
                     Email
                   </span>
                   <span className="font-open-sans text-sm font-normal text-[#6A6A6A]">
@@ -219,7 +219,7 @@ function ProfilePage() {
                   </span>
                 </div>
                 <div className="flex w-full flex-col">
-                  <span className="mt-4 font-open-sans text-base font-semibold text-[#1A1A1A]">
+                  <span className="mt-4 font-open-sans text-base font-semibold text-secondary">
                     Phone
                   </span>
                   <span className="font-open-sans text-sm font-normal text-[#6A6A6A]">
@@ -229,7 +229,7 @@ function ProfilePage() {
               </div>
               <div className="flex items-center justify-between">
                 <div className="flex w-full flex-col">
-                  <span className="mt-4 font-open-sans text-base font-semibold text-[#1A1A1A]">
+                  <span className="mt-4 font-open-sans text-base font-semibold text-secondary">
                     Country
                   </span>
                   <span className="font-open-sans text-sm font-normal text-[#6A6A6A]">
@@ -237,7 +237,7 @@ function ProfilePage() {
                   </span>
                 </div>
                 <div className="flex w-full flex-col">
-                  <span className="mt-4 font-open-sans text-base font-semibold text-[#1A1A1A]">
+                  <span className="mt-4 font-open-sans text-base font-semibold text-secondary">
                     State
                   </span>
                   <span className="font-open-sans text-sm font-normal text-[#6A6A6A]">
@@ -247,7 +247,7 @@ function ProfilePage() {
               </div>
               <div className="flex items-center justify-between">
                 <div className="flex w-full flex-col">
-                  <span className="mt-4 font-open-sans text-base font-semibold text-[#1A1A1A]">
+                  <span className="mt-4 font-open-sans text-base font-semibold text-secondary">
                     City
                   </span>
                   <span className="font-open-sans text-sm font-normal text-[#6A6A6A]">
@@ -255,7 +255,7 @@ function ProfilePage() {
                   </span>
                 </div>
                 <div className="flex w-full flex-col">
-                  <span className="mt-4 font-open-sans text-base font-semibold text-[#1A1A1A]">
+                  <span className="mt-4 font-open-sans text-base font-semibold text-secondary">
                     Zip Code
                   </span>
                   <span className="font-open-sans text-sm font-normal text-[#6A6A6A]">
@@ -264,7 +264,7 @@ function ProfilePage() {
                 </div>
               </div>
               <div className="flex w-full flex-col">
-                <span className="mt-4 font-open-sans text-base font-semibold text-[#1A1A1A]">
+                <span className="mt-4 font-open-sans text-base font-semibold text-secondary">
                   Address
                 </span>
                 <span className="font-open-sans text-sm font-normal text-[#6A6A6A]">

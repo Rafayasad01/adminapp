@@ -73,7 +73,7 @@ function CustomMultipleSelectBox({
             <Select
               variant="outlined"
               style={{
-                border: border || '1px solid rgb(201, 201, 201)',
+                border: border || '1px solid',
               }}
               className={`fixed-height ${
                 customWidth || 'w-[100%]'

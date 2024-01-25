@@ -10,7 +10,7 @@ function CustomText({ text, noroundedborders }: Props) {
         !noroundedborders && 'rounded-lg'
       } mt-5 bg-gray-200 py-5`}
     >
-      <p className="font-open-sans font-semibold text-[#1A1A1A]">{text}</p>
+      <p className="font-open-sans font-semibold text-secondary">{text}</p>
     </div>
   );
 }

@@ -29,6 +29,7 @@ module.exports = {
         'foreground' : 'var(--theme-foreground)',
         'faded' : 'var(--theme-faded)',
         'background' : 'var(--theme-background)',
+        'misc' : 'var(--theme-color)',
       },
     },
   },

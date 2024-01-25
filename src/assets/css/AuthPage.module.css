@@ -13,7 +13,7 @@
   left: 50%;
   margin-right: -50%;
   transform: translate(-50%, -50%);
-  background: #ffffff;
+  @apply bg-foreground;
   box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.06);
   border-radius: 10px;
   width: 403px;

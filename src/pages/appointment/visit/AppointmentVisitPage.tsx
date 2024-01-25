@@ -440,7 +440,7 @@ function AppointmentVisitPage() {
                   variant="filled"
                 >
                   <Input
-                    className="input-with-icon after:border-b-neutral-900"
+                    className="input-with-icon after:border-b-secondary"
                     id="search"
                     type="text"
                     placeholder="Search"
@@ -516,7 +516,7 @@ function AppointmentVisitPage() {
                         <td className="">
                           {dayjs(item.appointmentTime).isValid() ? (
                             <div className="flex flex-col">
-                              <span className="text-sm font-normal text-[#1A1A1A]">
+                              <span className="text-sm font-normal text-secondary">
                                 {dayjs(item.appointmentTime)?.format('hh:mm A')}
                               </span>
                               <span className="text-xs font-normal text-[#6A6A6A]">

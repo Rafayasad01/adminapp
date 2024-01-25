@@ -57,7 +57,7 @@ function PermissionPopup({
         <div className={popupStyle.Actions}>
           <Button
             onClick={() => onEventHandler('yes')}
-            className={popupStyle.ButtonOutlined}
+            className={`${popupStyle.ButtonOutlined} btn-black-outline`}
             type="button"
             color="inherit"
           >
@@ -65,7 +65,7 @@ function PermissionPopup({
           </Button>
           <Button
             onClick={() => onEventHandler('no')}
-            className={popupStyle.ButtonFilled}
+            className={`${popupStyle.ButtonFilled} btn-black-fill`}
             type="button"
             color="inherit"
           >

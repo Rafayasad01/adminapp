@@ -63,13 +63,13 @@ function SuperAdminShopDetailsDialog({
         }}
       >
         <div className="Content">
-          <span className="font-open-sans text-xl font-semibold not-italic text-[#1A1A1A]">
+          <span className="font-open-sans text-xl font-semibold not-italic text-secondary">
             Shop Details
           </span>
           <div className="mt-5 flex flex-col px-5">
             <div>
               <div className="flex w-full flex-col">
-                <span className="font-open-sans text-base font-medium not-italic text-[#1A1A1A]">
+                <span className="font-open-sans text-base font-medium not-italic text-secondary">
                   Shop Name
                 </span>
                 <div className="mt-1 font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
@@ -79,7 +79,7 @@ function SuperAdminShopDetailsDialog({
             </div>
             <div className="grid w-[100%] grid-cols-2">
               <div className="mt-4 flex w-full flex-col">
-                <span className="font-open-sans text-base font-medium not-italic text-[#1A1A1A]">
+                <span className="font-open-sans text-base font-medium not-italic text-secondary">
                   Created Date
                 </span>
                 <div className="mt-1 font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
@@ -94,7 +94,7 @@ function SuperAdminShopDetailsDialog({
 
             {items.desc && (
               <div className="mt-4 flex w-full flex-col">
-                <span className="font-open-sans text-base font-medium not-italic text-[#1A1A1A]">
+                <span className="font-open-sans text-base font-medium not-italic text-secondary">
                   Description
                 </span>
                 <div className="mt-1 font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
@@ -105,7 +105,7 @@ function SuperAdminShopDetailsDialog({
 
             <div className="flex justify-between">
               <div className="mt-4 flex w-full flex-col">
-                <span className="font-open-sans text-base font-medium not-italic text-[#1A1A1A]">
+                <span className="font-open-sans text-base font-medium not-italic text-secondary">
                   Trial Start Date
                 </span>
                 <div className="mt-1 font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
@@ -117,7 +117,7 @@ function SuperAdminShopDetailsDialog({
                 </div>
               </div>
               <div className="mt-4 flex w-full flex-col items-center">
-                <span className="font-open-sans text-base font-medium not-italic text-[#1A1A1A]">
+                <span className="font-open-sans text-base font-medium not-italic text-secondary">
                   Trial End Time
                 </span>
                 <div className="mt-1 font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
@@ -131,7 +131,7 @@ function SuperAdminShopDetailsDialog({
             </div>
 
             <div className="mt-4 flex w-full flex-col">
-              <span className="font-open-sans text-base font-medium not-italic text-[#1A1A1A]">
+              <span className="font-open-sans text-base font-medium not-italic text-secondary">
                 Trial Mode
               </span>
               <div className="mt-1 font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">

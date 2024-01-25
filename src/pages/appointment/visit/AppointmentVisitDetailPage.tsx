@@ -288,7 +288,7 @@ function AppointmentVisitDetailPage() {
                     <span>HST {list.gstPercentage}% :</span>
                     <span className="font-bold">${list.gstAmount}</span>
                   </div>
-                  <div className="mt-2 flex justify-between text-lg font-medium">
+                  <div className="mt-2 flex justify-between text-lg font-medium ">
                     <span>Grand Total Amount :</span>
                     <span className="font-bold">${list.grandTotal}</span>
                   </div>

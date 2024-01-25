@@ -176,7 +176,7 @@ function SuperAdminPermissionPageDetails() {
                   variant="filled"
                 >
                   <Input
-                    className="input-with-icon after:border-b-neutral-900"
+                    className="input-with-icon after:border-b-secondary"
                     id="search"
                     type="text"
                     placeholder="Search"

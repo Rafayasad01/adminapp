@@ -336,7 +336,7 @@ function OrderDetailsPage() {
                     setDialogText('Are you sure you want to cancel this Order');
                     setCancelDialogOpen(true);
                   }}
-                  className={`rounded-xl py-2 px-12 font-open-sans text-sm font-semibold ${
+                  className={`bg-ord-del rounded-xl py-2 px-12 font-open-sans text-sm font-semibold ${
                     cancelled || isCancelled
                       ? 'bg-neutral-400 text-neutral-900'
                       : 'bg-neutral-900 text-gray-50'
@@ -552,8 +552,8 @@ function OrderDetailsPage() {
                 </div>
               </div>
             </div>
-            <div className="flex items-center justify-between rounded-b-lg bg-neutral-300 py-2 px-4">
-              <div className="font-open-sans text-sm font-semibold text-neutral-900">
+            <div className="bg-ord-del flex items-center justify-between rounded-b-lg bg-neutral-300 py-2 px-4">
+              <div className="font-open-sans text-sm font-semibold text-neutral-900 ">
                 Grand Total
               </div>
               <div className="text-right font-open-sans text-sm font-semibold text-neutral-900">
@@ -562,13 +562,13 @@ function OrderDetailsPage() {
             </div>
           </div>
           <div className="mb-auto min-h-[610px] rounded-lg bg-[#fff] shadow-lg">
-            <div className="rounded-t-xl bg-neutral-300 py-2 px-4">
+            <div className="bg-ord-del rounded-t-xl bg-neutral-300 py-2 px-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center">
-                  <div className="mr-2 flex aspect-square w-9 items-center justify-center rounded-full bg-neutral-400 text-gray-50">
-                    <LocalShippingOutlinedIcon className="text-xl" />
+                  <div className="bg-grey-icon mr-2 flex aspect-square w-9 items-center justify-center rounded-full bg-neutral-400 text-gray-50">
+                    <LocalShippingOutlinedIcon className="grey-icon text-xl" />
                   </div>
-                  <div className="font-open-sans text-base font-semibold text-neutral-900">
+                  <div className="text-grey font-open-sans text-base font-semibold text-neutral-900">
                     Your order is {viewData.status}
                   </div>
                 </div>
@@ -582,7 +582,7 @@ function OrderDetailsPage() {
                         );
                         setDialogOpen(true);
                       }}
-                      className={`rounded py-2 px-12 font-open-sans text-sm font-semibold ${
+                      className={`btn-grey rounded py-2 px-12 font-open-sans text-sm font-semibold ${
                         cancelled ||
                         (isCancelled &&
                           nextBtn.key === ORDER_STATUS_IN_CANCELLED)

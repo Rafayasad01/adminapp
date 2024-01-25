@@ -164,7 +164,7 @@ function SuperAdminEditRolePermissionsPage() {
               <FormControl className="FormControl" variant="standard">
                 <label className="pb-2 font-bold">Role</label>
                 <Input
-                  className="FormInput m-0 h-[40px] w-[280px] rounded-lg border-2 border-[#949EAE] px-3 outline-none"
+                  className="FormInput m-0 h-[40px] w-[280px] rounded-lg border-2 border-secondary px-3 outline-none"
                   {...register('roleName', {
                     required: true,
                     value: name,
@@ -205,7 +205,7 @@ function SuperAdminEditRolePermissionsPage() {
                     },
                   })}
                   placeholder="Enter Role description"
-                  className="w-[280px] rounded-lg border-2 border-[#949EAE] p-3 outline-none"
+                  className="w-[280px] rounded-lg border-2 border-secondary p-3 outline-none"
                 />
                 {errors.roleDescription && (
                   <ErrorSpanBox error={errors.roleDescription?.message} />

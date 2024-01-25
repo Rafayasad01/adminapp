@@ -86,14 +86,14 @@ function AppUserLoyaltyDetailPage() {
             <div className="grid grid-cols-12 gap-3">
               <div className="rounded-lg bg-[#fff] px-4 py-5 shadow-lg xl:col-span-6 2xl:col-span-4">
                 <div className="">
-                  <p className="font-open-sans text-2xl font-semibold text-[#1A1A1A]">
+                  <p className="font-open-sans text-2xl font-semibold text-secondary">
                     App Order
                   </p>
                   <Divider className="mb-4 mt-1 w-36" />
                 </div>
                 <div className="flex w-full flex-col">
                   <div className="flex w-full flex-col">
-                    <span className="mt-2 font-open-sans text-base font-semibold text-[#1A1A1A]">
+                    <span className="mt-2 font-open-sans text-base font-semibold text-secondary">
                       Order Number
                     </span>
                     <span className="font-open-sans text-sm font-medium text-[#6A6A6A]">
@@ -101,7 +101,7 @@ function AppUserLoyaltyDetailPage() {
                     </span>
                   </div>
                   <div className="flex w-full flex-col">
-                    <span className="mt-2 font-open-sans text-base font-semibold text-[#1A1A1A]">
+                    <span className="mt-2 font-open-sans text-base font-semibold text-secondary">
                       Total Loyalty Coins
                     </span>
                     <span className="font-open-sans text-sm font-normal text-[#6A6A6A]">
@@ -110,7 +110,7 @@ function AppUserLoyaltyDetailPage() {
                   </div>
                   <div className="grid grid-cols-12">
                     <div className="col-span-4 flex w-full flex-col">
-                      <span className="mt-3 font-open-sans text-base font-semibold text-[#1A1A1A]">
+                      <span className="mt-3 font-open-sans text-base font-semibold text-secondary">
                         Status
                       </span>
                       <span className="font-open-sans text-sm font-normal text-[#6A6A6A]">
@@ -118,7 +118,7 @@ function AppUserLoyaltyDetailPage() {
                       </span>
                     </div>
                     <div className="col-span-4 flex w-full flex-col">
-                      <span className="mt-3 font-open-sans text-base font-semibold text-[#1A1A1A]">
+                      <span className="mt-3 font-open-sans text-base font-semibold text-secondary">
                         Payment Status
                       </span>
                       <span className="font-open-sans text-sm font-normal text-[#6A6A6A]">
@@ -126,7 +126,7 @@ function AppUserLoyaltyDetailPage() {
                       </span>
                     </div>
                     <div className="col-span-4 flex w-full flex-col">
-                      <span className="mt-3 font-open-sans text-base font-semibold text-[#1A1A1A]">
+                      <span className="mt-3 font-open-sans text-base font-semibold text-secondary">
                         Payment Type
                       </span>
                       <span className="font-open-sans text-sm font-normal text-[#6A6A6A]">
@@ -136,7 +136,7 @@ function AppUserLoyaltyDetailPage() {
                   </div>
                   <div className="grid grid-cols-12">
                     <div className="col-span-4 flex w-full flex-col">
-                      <span className="mt-3 font-open-sans text-base font-semibold text-[#1A1A1A]">
+                      <span className="mt-3 font-open-sans text-base font-semibold text-secondary">
                         Total Amount
                       </span>
                       <span className="font-open-sans text-sm font-normal text-[#6A6A6A]">
@@ -144,7 +144,7 @@ function AppUserLoyaltyDetailPage() {
                       </span>
                     </div>
                     <div className="col-span-4 flex w-full flex-col">
-                      <span className="mt-3 font-open-sans text-base font-semibold text-[#1A1A1A]">
+                      <span className="mt-3 font-open-sans text-base font-semibold text-secondary">
                         Discount
                       </span>
                       <span className="font-open-sans text-sm font-normal text-[#6A6A6A]">
@@ -152,7 +152,7 @@ function AppUserLoyaltyDetailPage() {
                       </span>
                     </div>
                     <div className="col-span-4 flex w-full flex-col">
-                      <span className="mt-3 font-open-sans text-base font-semibold text-[#1A1A1A]">
+                      <span className="mt-3 font-open-sans text-base font-semibold text-secondary">
                         GST Percentage
                       </span>
                       <span className="font-open-sans text-sm font-normal text-[#6A6A6A]">
@@ -162,7 +162,7 @@ function AppUserLoyaltyDetailPage() {
                   </div>
                   <div className="grid grid-cols-12">
                     <div className="col-span-4 flex w-full flex-col">
-                      <span className="mt-3 font-open-sans text-base font-semibold text-[#1A1A1A]">
+                      <span className="mt-3 font-open-sans text-base font-semibold text-secondary">
                         GST Amount
                       </span>
                       <span className="font-open-sans text-sm font-normal text-[#6A6A6A]">
@@ -170,7 +170,7 @@ function AppUserLoyaltyDetailPage() {
                       </span>
                     </div>
                     <div className="col-span-4 flex w-full flex-col">
-                      <span className="mt-3 font-open-sans text-base font-semibold text-[#1A1A1A]">
+                      <span className="mt-3 font-open-sans text-base font-semibold text-secondary">
                         Grand Total
                       </span>
                       <span className="font-open-sans text-sm font-normal text-[#6A6A6A]">

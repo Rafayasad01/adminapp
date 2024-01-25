@@ -267,7 +267,7 @@ function AppUserScheduleCreatePage({
                 })}
                 <div
                   onClick={() => handleAddMore()}
-                  className="flex h-[248px] cursor-pointer items-center justify-center rounded-lg bg-[#F0F0F0] xl:col-span-2 2xl:col-span-1"
+                  className="flex h-[248px] cursor-pointer items-center justify-center rounded-lg bg-faded xl:col-span-2 2xl:col-span-1"
                 >
                   <img alt="add" src={assets.images.addImg} />
                 </div>

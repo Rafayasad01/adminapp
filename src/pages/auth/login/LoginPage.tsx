@@ -162,7 +162,7 @@ function LoginPage() {
               </label>
               <FormControl className="m-1 w-full" variant="standard">
                 <Input
-                  className="border-1 border-solid border-[#949EAE]"
+                  className="border-1 border-solid border-secondary"
                   id="email"
                   type="email"
                   name="email"
@@ -175,7 +175,7 @@ function LoginPage() {
               <label htmlFor="password">Password</label>
               <FormControl className="m-1 w-full" variant="filled">
                 <Input
-                  className="input-with-icon after:border-b-neutral-900"
+                  className="input-with-icon after:border-b-secondary"
                   id="password"
                   type={showPassword ? 'text' : 'password'}
                   name="password"

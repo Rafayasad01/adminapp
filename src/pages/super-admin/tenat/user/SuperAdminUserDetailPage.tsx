@@ -37,7 +37,7 @@ function ShopAdminUserDetailPage() {
         <div className="px-5">
           <div className="grid w-full grid-cols-12 rounded-lg bg-[#F0F0F0] p-3">
             <div className="col-span-4">
-              <p className="text-sm font-semibold text-[#1A1A1A]">Shop Owner</p>
+              <p className="text-sm font-semibold text-secondary">Shop Owner</p>
               <div className="flex h-full items-center justify-center py-5">
                 <div className="flex items-center">
                   <div>
@@ -70,7 +70,7 @@ function ShopAdminUserDetailPage() {
                   </div>
                   <div className="px-5">
                     <div className="flex items-center justify-center">
-                      <p className="text-sm font-semibold text-[#1A1A1A]">
+                      <p className="text-sm font-semibold text-secondary">
                         {formatName(userDetail.firstName, userDetail.lastName)}
                       </p>
                       <div className="pl-2">
@@ -98,8 +98,8 @@ function ShopAdminUserDetailPage() {
                 </div>
               </div>
             </div>
-            <div className="col-span-8 border-l-[1px] border-[#949EAE] px-10">
-              <p className="text-sm font-semibold text-[#1A1A1A]">
+            <div className="col-span-8 border-l-[1px] border-secondary px-10">
+              <p className="text-sm font-semibold text-secondary">
                 Shop Branches
               </p>
               <div className="my-5">

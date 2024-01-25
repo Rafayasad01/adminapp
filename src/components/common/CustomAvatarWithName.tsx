@@ -59,7 +59,7 @@ function CustomAvatarWithName({
         )}
       </div>
       <div className="flex items-center justify-center">
-        <p className="pr-1 text-sm font-semibold capitalize text-[#1A1A1A]">
+        <p className="pr-1 text-sm font-semibold capitalize text-secondary">
           {title}
         </p>
         <div className="">

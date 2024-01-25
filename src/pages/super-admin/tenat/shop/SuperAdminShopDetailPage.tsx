@@ -399,7 +399,7 @@ function SuperAdminShopDetailPage() {
                 />
                 {detail === null && (
                   <div className="mx-5">
-                    <span className="font-open-sans text-lg font-semibold text-[#1A1A1A]">
+                    <span className="font-open-sans text-lg font-semibold text-secondary">
                       Shop Name
                     </span>
                   </div>
@@ -410,7 +410,7 @@ function SuperAdminShopDetailPage() {
                       <div className="flex flex-col px-5">
                         <div className="flex">
                           <div className="flex w-full flex-col">
-                            <span className="font-open-sans text-base font-semibold not-italic text-[#1A1A1A]">
+                            <span className="font-open-sans text-base font-semibold not-italic text-secondary">
                               Shop Name
                             </span>
                             <div className="mt-1 font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
@@ -453,7 +453,7 @@ function SuperAdminShopDetailPage() {
 
                         <div className="grid w-[100%] grid-cols-4">
                           <div className="col-span-2 mt-4">
-                            <span className="font-open-sans text-base font-semibold not-italic text-[#1A1A1A]">
+                            <span className="font-open-sans text-base font-semibold not-italic text-secondary">
                               Created Date
                             </span>
                             <div className="mt-1 font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
@@ -465,7 +465,7 @@ function SuperAdminShopDetailPage() {
                             </div>
                           </div>
                           <div className="col-span-2 mt-4 flex flex-col items-end justify-center">
-                            <span className="px-[9px] font-open-sans text-base font-semibold not-italic text-[#1A1A1A]">
+                            <span className="px-[9px] font-open-sans text-base font-semibold not-italic text-secondary">
                               Status
                             </span>
                             <div className="mt-1 font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
@@ -484,7 +484,7 @@ function SuperAdminShopDetailPage() {
 
                         {detail.desc && (
                           <div className="mt-4 flex w-full flex-col">
-                            <span className="font-open-sans text-base font-semibold not-italic text-[#1A1A1A]">
+                            <span className="font-open-sans text-base font-semibold not-italic text-secondary">
                               Description
                             </span>
                             <div className="mt-1 font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
@@ -495,7 +495,7 @@ function SuperAdminShopDetailPage() {
 
                         <div className="grid w-[100%] grid-cols-4">
                           <div className="col-span-2 mt-4">
-                            <span className="font-open-sans text-base font-semibold not-italic text-[#1A1A1A]">
+                            <span className="font-open-sans text-base font-semibold not-italic text-secondary">
                               Trial Start Date
                             </span>
                             <div className="mt-1 font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
@@ -507,7 +507,7 @@ function SuperAdminShopDetailPage() {
                             </div>
                           </div>
                           <div className="col-span-2 mt-4 flex flex-col items-end justify-center">
-                            <span className="font-open-sans text-base font-semibold not-italic text-[#1A1A1A]">
+                            <span className="font-open-sans text-base font-semibold not-italic text-secondary">
                               Trial End Date
                             </span>
                             <div className="mt-1 font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
@@ -522,7 +522,7 @@ function SuperAdminShopDetailPage() {
 
                         <div className="grid w-[100%] grid-cols-6">
                           <div className="col-span-2 mt-4 ">
-                            <span className="font-open-sans text-base font-semibold not-italic text-[#1A1A1A]">
+                            <span className="font-open-sans text-base font-semibold not-italic text-secondary">
                               Employees
                             </span>
                             <div className="mt-1 flex w-[90px] items-center justify-center font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
@@ -532,7 +532,7 @@ function SuperAdminShopDetailPage() {
                             </div>
                           </div>
                           <div className="col-span-2 mt-4 flex flex-col items-center justify-center">
-                            <span className="font-open-sans text-base font-semibold not-italic text-[#1A1A1A]">
+                            <span className="font-open-sans text-base font-semibold not-italic text-secondary">
                               Branches
                             </span>
                             <div className="mt-1 flex w-[100px] items-center justify-center text-center font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
@@ -543,7 +543,7 @@ function SuperAdminShopDetailPage() {
                             </div>
                           </div>
                           <div className="col-span-2 mt-4 flex flex-col items-end justify-center">
-                            <span className="font-open-sans text-base font-semibold not-italic text-[#1A1A1A]">
+                            <span className="font-open-sans text-base font-semibold not-italic text-secondary">
                               Total Employees
                             </span>
                             <div className="mt-1 flex w-[100px] items-center justify-center font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
@@ -556,7 +556,7 @@ function SuperAdminShopDetailPage() {
 
                         <div className="grid w-[100%] grid-cols-4">
                           <div className="col-span-2 mt-4">
-                            <span className="font-open-sans text-base font-semibold not-italic text-[#1A1A1A]">
+                            <span className="font-open-sans text-base font-semibold not-italic text-secondary">
                               Address
                             </span>
                             <div className="mt-1 font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
@@ -566,7 +566,7 @@ function SuperAdminShopDetailPage() {
                             </div>
                           </div>
                           <div className="col-span-2 mt-4 flex flex-col items-end justify-center">
-                            <span className="font-open-sans text-base font-semibold not-italic text-[#1A1A1A]">
+                            <span className="font-open-sans text-base font-semibold not-italic text-secondary">
                               Trial Mode
                             </span>
                             <div className="mt-1 font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
@@ -589,7 +589,7 @@ function SuperAdminShopDetailPage() {
                         </div>
                         <div className="grid w-[100%] grid-cols-4">
                           <div className="col-span-2 mt-4">
-                            <span className="font-open-sans text-base font-semibold not-italic text-[#1A1A1A]">
+                            <span className="font-open-sans text-base font-semibold not-italic text-secondary">
                               Theme
                             </span>
                             <div className="mt-1 font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
@@ -625,7 +625,7 @@ function SuperAdminShopDetailPage() {
                 <div>
                   <hr className="mx-5 my-3" />
                   <div className="m-5">
-                    <p className="text-lg font-semibold text-[#1A1A1A]">
+                    <p className="text-lg font-semibold text-secondary">
                       Shop Branches
                     </p>
                     <div className="mt-4 grid grid-cols-12 gap-6">
@@ -639,7 +639,7 @@ function SuperAdminShopDetailPage() {
                               <div className="flex h-full w-full justify-between py-[1rem]">
                                 <div className="flex h-full flex-col justify-between px-5">
                                   <div className="flex w-full flex-col">
-                                    <span className="font-open-sans text-base font-semibold not-italic text-[#1A1A1A]">
+                                    <span className="font-open-sans text-base font-semibold not-italic text-secondary">
                                       Shop Name
                                     </span>
                                     <div className="mt-1 font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
@@ -647,7 +647,7 @@ function SuperAdminShopDetailPage() {
                                     </div>
                                   </div>
                                   <div className="mt-1 flex w-full flex-col">
-                                    <span className="font-open-sans text-base font-semibold not-italic text-[#1A1A1A]">
+                                    <span className="font-open-sans text-base font-semibold not-italic text-secondary">
                                       Address
                                     </span>
                                     <div className="mt-1 font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
@@ -658,7 +658,7 @@ function SuperAdminShopDetailPage() {
                                   </div>
                                   <div className="flex w-[100%]">
                                     <div className="mt-1 flex w-full flex-col">
-                                      <span className="font-open-sans text-base font-semibold not-italic text-[#1A1A1A]">
+                                      <span className="font-open-sans text-base font-semibold not-italic text-secondary">
                                         Employees
                                       </span>
                                       <div className="mt-1 flex w-[90px] items-center justify-center font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
