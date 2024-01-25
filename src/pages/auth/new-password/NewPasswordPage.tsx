@@ -100,7 +100,7 @@ function NewPasswordPage() {
               <label htmlFor="password">New Password</label>
               <FormControl className="m-1 w-full" variant="filled">
                 <Input
-                  className="input-with-icon after:border-b-neutral-900"
+                  className="input-with-icon after:border-b-secondary"
                   id="password"
                   type={showPassword ? 'text' : 'password'}
                   {...register('password', {
@@ -135,7 +135,7 @@ function NewPasswordPage() {
               <label htmlFor="password">Confirm Password</label>
               <FormControl className="m-1 w-full" variant="filled">
                 <Input
-                  className="input-with-icon after:border-b-neutral-900"
+                  className="input-with-icon after:border-b-secondary"
                   id="confirm-password"
                   type={showConfirmPassword ? 'text' : 'password'}
                   {...register('confirmPassword', {

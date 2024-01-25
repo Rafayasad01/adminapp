@@ -113,7 +113,7 @@ function SuperAdminSettingDialog({
                             detail.color1 ? detail.color1 : '#1A1A1A'
                           }`,
                         }}
-                        className="block h-[25px] w-[25px] rounded-full border border-[#D9D9D9]"
+                        className="block h-[25px] w-[25px] rounded-full border border-foreground"
                       />
                     </div>
                   </div>
@@ -128,7 +128,7 @@ function SuperAdminSettingDialog({
                             detail.color2 ? detail.color2 : '#1A1A1A'
                           }`,
                         }}
-                        className="block h-[25px] w-[25px] rounded-full border border-[#D9D9D9]"
+                        className="block h-[25px] w-[25px] rounded-full border border-foreground"
                       />
                     </div>
                   </div>

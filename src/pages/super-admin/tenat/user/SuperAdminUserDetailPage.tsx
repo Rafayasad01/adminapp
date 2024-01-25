@@ -98,7 +98,7 @@ function ShopAdminUserDetailPage() {
                 </div>
               </div>
             </div>
-            <div className="col-span-8 border-l-[1px] border-[#949EAE] px-10">
+            <div className="col-span-8 border-l-[1px] border-secondary px-10">
               <p className="text-sm font-semibold text-secondary">
                 Shop Branches
               </p>

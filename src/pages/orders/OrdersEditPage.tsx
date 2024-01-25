@@ -83,11 +83,11 @@ function OrdersCreatePage() {
           <div className="col-span-7 rounded-lg bg-white py-5 px-4 shadow-lg">
             <div className="col-span-12">
               <FormControl
-                className="w-full rounded-xl border border-solid border-[#E4E4E4] py-1 pl-3"
+                className="w-full rounded-xl border border-solid border-foreground py-1 pl-3"
                 variant="filled"
               >
                 <Input
-                  className="input-with-icon after:border-b-neutral-900"
+                  className="input-with-icon after:border-b-secondary"
                   id="search"
                   type="text"
                   placeholder="Select Customer"
@@ -186,7 +186,7 @@ function OrdersCreatePage() {
                           variant="standard"
                         >
                           <Input
-                            className="after:border-b-neutral-900"
+                            className="after:border-b-secondary"
                             id="quantity"
                             value={quantity}
                             disableUnderline
@@ -232,7 +232,7 @@ function OrdersCreatePage() {
                           variant="standard"
                         >
                           <Input
-                            className="after:border-b-neutral-900"
+                            className="after:border-b-secondary"
                             id="quantity"
                             value={quantity}
                             disableUnderline
@@ -278,7 +278,7 @@ function OrdersCreatePage() {
                           variant="standard"
                         >
                           <Input
-                            className="after:border-b-neutral-900"
+                            className="after:border-b-secondary"
                             id="quantity"
                             value={quantity}
                             disableUnderline
@@ -301,7 +301,7 @@ function OrdersCreatePage() {
             </div>
             <div className="col-span-12">
               <TextField
-                className="mt-4 w-full hover:border-[#E4E4E4]"
+                className="mt-4 w-full hover:border-foreground"
                 id="outlined-multiline-static"
                 multiline
                 rows={5}
@@ -366,9 +366,9 @@ function OrdersCreatePage() {
                 <label className="mb-1 ml-1 w-full font-open-sans text-xl font-semibold">
                   Address
                 </label>
-                <div className="w-full rounded-xl border border-solid border-[#E4E4E4] py-1 pl-3">
+                <div className="w-full rounded-xl border border-solid border-foreground py-1 pl-3">
                   <Input
-                    className="input-with-icon after:border-b-neutral-900"
+                    className="input-with-icon after:border-b-secondary"
                     id="search"
                     type="text"
                     placeholder="Type Addess"

@@ -81,7 +81,7 @@ const SuperAdminThemeForm: React.FC<ThemeFormProps> = ({
               </span>
             </label>
             <Input
-              className="FormInput m-0 h-[40px] w-[350px] rounded-lg border-2 border-[#949EAE] px-3 outline-none "
+              className="FormInput m-0 h-[40px] w-[350px] rounded-lg border-2 border-secondary px-3 outline-none "
               {...register('key', {
                 required: true,
                 pattern: PATTERN.CHAR_SPACE_DASH,

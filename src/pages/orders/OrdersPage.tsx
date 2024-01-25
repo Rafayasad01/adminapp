@@ -268,7 +268,7 @@ function OrdersPage() {
                   variant="filled"
                 >
                   <Input
-                    className="input-with-icon after:border-b-neutral-900"
+                    className="input-with-icon after:border-b-secondary"
                     id="search"
                     type="text"
                     placeholder="Search"
@@ -306,8 +306,8 @@ function OrdersPage() {
           <div className="mt-3 grid grid-cols-none">
             <table className="table-border table-auto">
               <thead>
-                <tr>
-                  <th className="w-[22%]">Customers</th>
+                <tr className="border-opacity">
+                  <th className="w-[22%] ">Customers</th>
                   <th>Pickup Time</th>
                   <th>Drop-off Time</th>
                   <th>Amount</th>
