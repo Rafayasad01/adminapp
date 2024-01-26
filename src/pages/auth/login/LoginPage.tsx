@@ -12,7 +12,7 @@ import { UserLogin } from '../../../interfaces/auth.interface';
 import {
   login,
   setSystemConfig,
-  setTenantConfig,
+  setTheme,
 } from '../../../redux/features/authStateSlice';
 import { useAppDispatch, useAppSelector } from '../../../redux/redux-hooks';
 import auth from '../../../services/adminapp/admin';
@@ -27,6 +27,11 @@ import { setRolePermissions } from '../../../redux/features/permissionsStateSlic
 function LoginPage() {
   const dispatch = useAppDispatch();
   const tenantColors = useAppSelector((state) => state.authState);
+  const systemConfigData = useAppSelector(
+    (state: any) => state.authState.systemConfig
+  );
+  // console.log("systemConfigData", systemConfigData);
+
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
@@ -35,7 +40,6 @@ function LoginPage() {
   const [showAlert, setShowAlert] = useState(false);
   const [alertSeverity, setAlertSeverity] = useState('');
   const [isLoader, setIsLoader] = useState(false);
-  const [superAdmin, setSuperAdmin] = useState(false);
   const [isPageLoader, setIsPageLoader] = useState(false);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const handleMouseDownPassword = (
@@ -47,7 +51,7 @@ function LoginPage() {
   //   useNotification();
 
   //   console.log('tenantColors', tenantColors);
-  let url = 'devadminapp-development';
+  let url = 'development';
 
   useEffect(() => {
     setIsPageLoader(false);
@@ -58,18 +62,16 @@ function LoginPage() {
     system
       .getSystemConfig(url)
       .then((res) => {
-        // console.log("RES", res.data.data.theme);
         setIsPageLoader(false);
         if (res.data.success) {
           let systemConfigData = {
             createdDate: res.data.data.createdDate,
-            domainAdminapp: res.data.data.domainAdminapp,
-            domainWebapp: res.data.data.domainWebapp,
+            domain: res.data.data.domain,
             id: res.data.data.id,
             logoffImage: res.data.data.logoffImage,
             tenant: res.data.data.tenant,
           };
-          dispatch(setTenantConfig(res.data.data.theme.value.themeColor));
+          dispatch(setTheme(res.data.data.theme.value.themeColor));
           dispatch(setSystemConfig(systemConfigData));
         } else {
           setIsPageLoader(false);
@@ -94,20 +96,6 @@ function LoginPage() {
       .then(async (user) => {
         if (user && user.data.success) {
           const newUserData = user.data.data;
-          if (newUserData.isSuperAdmin) {
-            await system
-              .getSystemConfigDefault(url)
-              .then((resp: any) => {
-                dispatch(setTenantConfig(resp.data.data.value.themeColor));
-                setSuperAdmin(true);
-              })
-              .catch((err: Error) => {
-                setIsLoader(false);
-                setAlertMsg(err.message);
-                setAlertSeverity('error');
-                setShowAlert(true);
-              });
-          }
           setIsLoader(false);
           setToken(newUserData.token);
           dispatch(setRolePermissions(newUserData.role));
@@ -117,11 +105,7 @@ function LoginPage() {
           if (newUserData?.tenantConfig) {
             dispatch(setLogo(user?.data?.data?.tenantConfig?.logo));
           }
-          if (newUserData.isSuperAdmin) {
-            if (superAdmin) navigate('../../../main');
-          } else {
-            navigate('../../../dashboard');
-          }
+          navigate('../../../dashboard');
         } else {
           setIsLoader(false);
           setAlertMsg(user.data.message);
@@ -228,11 +212,19 @@ function LoginPage() {
       </div>
       <div className="w-[60%] p-3">
         <div className="mx-auto w-[800px] rounded-lg">
-          <img
-            src={assets.images.bgLogin}
-            alt="urlaundry"
-            className="h-full w-full object-contain"
-          />
+          {systemConfigData?.logoffImage ? (
+            <img
+              src={systemConfigData?.logoffImage || assets.images.bgLogin}
+              alt="urlaundry"
+              className="h-full w-full object-contain"
+            />
+          ) : (
+            <div className="flex items-center justify-center">
+              <span className="text-3xl font-semibold uppercase">
+                {systemConfigData?.domain}
+              </span>
+            </div>
+          )}
         </div>
       </div>
     </div>

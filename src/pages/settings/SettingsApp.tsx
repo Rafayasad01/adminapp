@@ -24,7 +24,7 @@ import Notify from '../../components/common/Notify';
 import PlusIcon from '../../components/icons/PlusIcon';
 import { Setting } from '../../interfaces/app.interface';
 import { setEmployeeLimit, setLogo } from '../../redux/features/appStateSlice';
-import { setTenantConfig } from '../../redux/features/authStateSlice';
+import { setTheme } from '../../redux/features/authStateSlice';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 import Service from '../../services/adminapp/admin';
 import {
@@ -228,9 +228,9 @@ function SettingsApp() {
           if (success) {
             console.log('message', message);
 
-            dispatch(setTenantConfig(itemData));
+            dispatch(setTheme(itemData));
             setAddress(itemData?.address);
-            dispatch(setTenantConfig(itemData));
+            dispatch(setTheme(itemData));
             if (itemData?.logo) {
               dispatch(setLogo(itemData.logo));
             }
