@@ -27,7 +27,7 @@ const CustomPrintLayouts = forwardRef<any, any>((props: any, ref: any) => {
               </div>
             </div>
             <div className="grid grid-cols-12 gap-4 px-4 py-5">
-              <div className="bor-right col-span-5 p-3">
+              <div className="bor-right col-span-6 p-3">
                 <div className="">
                   <span className="font-open-sans text-xl font-bold text-[#252733]">
                     Client Information
@@ -109,7 +109,7 @@ const CustomPrintLayouts = forwardRef<any, any>((props: any, ref: any) => {
               <p className="iv-mbot text-xl font-semibold">
                 Order Item Details
               </p>
-              <table className="table-border table-auto">
+              <table className="table-border w-auto table-auto">
                 <thead>
                   <tr>
                     <th>Icon</th>
@@ -147,7 +147,7 @@ const CustomPrintLayouts = forwardRef<any, any>((props: any, ref: any) => {
                 </tbody>
               </table>
               <div className="custom--invoice mt-10 grid grid-cols-12 gap-4">
-                <div className="iv-mtop col-span-5">
+                <div className="iv-mtop col-span-6">
                   <div className="iv-notes rounded-md">
                     <div className="mb-2 text-base font-bold uppercase">
                       Notes
