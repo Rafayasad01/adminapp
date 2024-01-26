@@ -3,6 +3,7 @@ import dayjs from 'dayjs';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
+import AddIcon from '@mui/icons-material/Add';
 import assets from '../../../assets';
 import CustomButton from '../../../components/common/CustomButton';
 import CustomDropDown from '../../../components/common/CustomDropDown';
@@ -15,7 +16,6 @@ import { AppointmentProviderSchedule } from '../../../interfaces/app.appointment
 import { useAppSelector } from '../../../redux/redux-hooks';
 import Service from '../../../services/adminapp/adminAppointment';
 import { setText, weekDays } from '../../../utils/constants';
-import AddIcon from '@mui/icons-material/Add';
 
 function AppointmentProviderAddSchedulePage() {
   const { id } = useParams();

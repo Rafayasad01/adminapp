@@ -124,7 +124,6 @@ export const weekDays = [
 // patterns
 export const PATTERN = {
   // CHAR_NUM_DOT_AT: /^[A-Za-z0-9\s.@]+$/,
-  DOMAIN: /^[-:\/.a-zA-Z0-9]+$/,
   CHAR_NUM_DOT_AT: /^[A-Za-z0-9.@_-]+$/, // used for email fields
   CHAR_SPACE_DASH: /^[A-Za-z\s-]+$/, // used for textfield fields
   CHAR_NUM_SPACE_DASH: /^[A-Za-z0-9\s-]+$/, // used for textfield fields

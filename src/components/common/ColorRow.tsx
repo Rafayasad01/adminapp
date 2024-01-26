@@ -1,6 +1,6 @@
 import { memo } from 'react';
 
-const ColorRow = ({ colors = [] }) => {
+function ColorRow({ colors = [] }) {
   return (
     <div className="flex max-w-[240px] flex-wrap  items-center">
       {colors.map((color: string, index: number) => (
@@ -9,10 +9,10 @@ const ColorRow = ({ colors = [] }) => {
           style={{ backgroundColor: color }}
           className="relative mr-2 mb-2 h-[30px] w-[30px] cursor-pointer rounded-full border border-gray-300 shadow-md"
           title={color} // Use the title attribute for the tooltip
-        ></div>
+        />
       ))}
     </div>
   );
-};
+}
 
 export default memo(ColorRow);

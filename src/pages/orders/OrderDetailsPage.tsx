@@ -34,7 +34,6 @@ import { useAppSelector } from '../../redux/redux-hooks';
 import ShopIcon from '../../components/icons/ShopIcon';
 import CustomOrderPrintLayoutCash from '../../utils/CustomPrintLayout/CustomOrderPrintLayoutCash';
 import CustomOrderPrintLayoutInvoice from '../../utils/CustomPrintLayout/CustomOrderPrintLayoutInvoice';
-import CustomButton from '../../components/common/CustomButton';
 
 function OrderDetailsPage() {
   const navigate = useNavigate();

@@ -3,6 +3,7 @@ import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import { useNotification } from '../../components/Contexts/NotificationContext';
 import assets from '../../assets';
 import '../../assets/css/PopupStyle.css';
@@ -13,7 +14,6 @@ import system from '../../services/adminapp/SystemConfig';
 import { useAppSelector } from '../../redux/redux-hooks';
 import ColorRowWithTooltips from '../../components/common/ColorRowWithTooltips';
 import PermissionPopup from '../../utils/PermissionPopup';
-import { useDispatch } from 'react-redux';
 import { setSystemConfig, setTheme } from '../../redux/features/authStateSlice';
 import DragDropFile from './DragDropFile';
 import CustomButton from '../../components/common/CustomButton';
@@ -21,6 +21,8 @@ import CustomButton from '../../components/common/CustomButton';
 function SettingsConfig() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { notification, hideNotification, showNotification } =
+    useNotification();
   const authState: any = useAppSelector((state) => state?.authState);
   const [data, setData] = useState<any>();
   const [allThemes, setAllThemes] = useState<any>([]);
@@ -32,17 +34,7 @@ function SettingsConfig() {
   const [address] = useState<any>(null);
   const [isLoader, setIsLoader] = useState(true);
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
-  const [themeDialogOpen, setThemeDialogOpen] = useState<boolean>(false);
-  const [detail, setDetail] = useState<any>();
   const [dialogItem, setDialogItem] = useState<any>({});
-
-  /**
-   * Handle error and show error message.
-   * @param {string} errorMessage message to display when error is encountered.
-   */
-  const handleErrorMessage = (errorMessage: string) => {
-    // showNotification(errorMessage, 'error');
-  };
 
   useEffect(() => {
     system
@@ -50,7 +42,7 @@ function SettingsConfig() {
       .then((res) => {
         if (res.data.success) {
           setIsLoader(false);
-          let temp = res.data.data.themes?.filter(
+          const temp = res.data.data.themes?.filter(
             (el: any) => el.id !== res.data.data.theme.id
           );
           setData({
@@ -59,21 +51,21 @@ function SettingsConfig() {
             logo: res.data.data.logoffImage,
           });
           setAllThemes(res.data.data.themes);
-          console.log('ress', res.data.data);
+          // console.log('ress', res.data.data);
         } else {
           setIsLoader(false);
-          // handleErrorMessage(res.data.message);
+          showNotification(res.data.message, 'error');
         }
       })
       .catch((err) => {
         setIsLoader(false);
-        // handleErrorMessage(err.message);
+        showNotification(err.message, 'error');
       });
   }, []);
 
   const clickHandler = () => {
     setIsLoader(true);
-    let themeObj = {
+    const themeObj = {
       theme: dialogItem.id,
       updatedBy: authState?.user?.id,
     };
@@ -82,7 +74,9 @@ function SettingsConfig() {
       .then((res) => {
         if (res.data.success) {
           setIsLoader(false);
-          let temp = allThemes.filter((el: any) => el.id !== res.data.data.id);
+          const temp = allThemes.filter(
+            (el: any) => el.id !== res.data.data.id
+          );
           setData((prev: any) => {
             return {
               ...prev,
@@ -93,11 +87,13 @@ function SettingsConfig() {
           dispatch(setTheme(res.data.data.value.themeColor));
         } else {
           setIsLoader(false);
+          showNotification(res.data.message, 'error');
           // handleErrorMessage(res.data.message);
         }
       })
       .catch((err) => {
         setIsLoader(false);
+        showNotification(err.message, 'error');
         // handleErrorMessage(err.message);
       });
   };
@@ -110,7 +106,7 @@ function SettingsConfig() {
       .systemConfigLayoutUpdate(authState.user.tenant, formData)
       .then((res) => {
         if (res.data.success) {
-          let systemConfigData = {
+          const systemConfigData = {
             createdDate: res.data.data[0].createdDate,
             domain: res.data.data[0].domain,
             id: res.data.data[0].id,
@@ -127,11 +123,13 @@ function SettingsConfig() {
           setIsLoader(false);
         } else {
           setIsLoader(false);
+          showNotification(res.data.message, 'error');
           // handleErrorMessage(res.data.message);
         }
       })
       .catch((err) => {
         setIsLoader(false);
+        showNotification(err.message, 'error');
         // handleErrorMessage(err.message);
       });
   };
@@ -140,6 +138,11 @@ function SettingsConfig() {
     <Loader />
   ) : (
     <>
+      <Notify
+        isOpen={isNotify}
+        setIsOpen={setIsNotify}
+        displayMessage={notifyMessage}
+      />
       <div className="grid w-full grid-cols-12 gap-3">
         <div className="col-span-6 min-h-[500px] rounded-lg bg-white py-3 shadow-lg">
           <div className="custom-tab">
@@ -166,17 +169,17 @@ function SettingsConfig() {
               <span className="font-bold">Active Theme</span>
               <div className="m-3">
                 <div>
-                  <p className="font-semibold">{'Key'}</p>
+                  <p className="font-semibold">Key</p>
                   <span className="">{data ? data?.theme?.key : ''}</span>
                 </div>
                 <div className="my-2">
-                  <p className="mb-1 font-semibold">{'Theme Colors'}</p>
+                  <p className="mb-1 font-semibold">Theme Colors</p>
                   <ColorRowWithTooltips
                     colors={data ? data?.theme?.value?.themeColor : ''}
                   />
                 </div>
                 <div className="">
-                  <p className="mb-1 font-semibold">{'Category Colors'}</p>
+                  <p className="mb-1 font-semibold">Category Colors</p>
                   <ColorRowWithTooltips
                     colors={data ? data?.theme?.value?.categoryColor : ''}
                   />
@@ -204,13 +207,13 @@ function SettingsConfig() {
                             style={{
                               backgroundColor: item.value.themeColor.primary,
                             }}
-                            className={`block h-[100%] w-[100%]`}
+                            className="block h-[100%] w-[100%]"
                           />
                           <span
                             style={{
                               backgroundColor: item.value.themeColor.background,
                             }}
-                            className={`block h-[100%] w-[100%]`}
+                            className="block h-[100%] w-[100%]"
                           />
                         </div>
                       );
@@ -300,13 +303,13 @@ function SettingsConfig() {
           callback={clickHandler}
         />
       )}
-      {/* {notification && (
+      {notification && (
         <Notify
-          isOpen={true}
+          isOpen
           setIsOpen={hideNotification}
           displayMessage={notification}
         />
-      )} */}
+      )}
     </>
   );
 }
