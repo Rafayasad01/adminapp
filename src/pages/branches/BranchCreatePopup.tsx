@@ -56,8 +56,8 @@ function BranchCreatePopup({
       lastName: data.lastName,
       tenantName: data.tenantName,
       address: data.address,
-      domainWebapp: data.domainWebapp,
-      domainAdminapp: data.domainAdminapp,
+      // domainWebapp: data.domainWebapp,
+      domain: data.domain,
       userLimit: data.userLimit,
       userId: authState.user.id,
       // enableLoyaltyProgram: data.enableLoyaltyProgram,
@@ -81,14 +81,14 @@ function BranchCreatePopup({
     setOpenFormDialog(false);
   };
 
-  const debouceRequest = debounce((value) => {
-    setValue('domainAdminapp', `devadminapp-${kabakCase(value)}`);
-    setValue('domainWebapp', `devwebapp-${kabakCase(value)}`);
-  }, 1000);
+  // const debouceRequest = debounce((value) => {
+  //   setValue('domain', `devadminapp-${kabakCase(value)}`);
+  //   // setValue('domainWebapp', `devwebapp-${kabakCase(value)}`);
+  // }, 1000);
 
-  const shopFieldHangler = (val: any) => {
-    debouceRequest(val);
-  };
+  // const shopFieldHangler = (val: any) => {
+  //   debouceRequest(val);
+  // };
 
   return (
     <Dialog
@@ -98,7 +98,7 @@ function BranchCreatePopup({
       // disableScrollLock
       PaperProps={{
         className: 'Dialog',
-        style: { maxWidth: '100%', minHeight: '410px', height: '500px' },
+        style: { maxWidth: '100%', minHeight: '400px', height: '400px' },
       }}
     >
       <div className="Content p-3">
@@ -121,7 +121,7 @@ function BranchCreatePopup({
                   id="tenantName"
                   placeholder="Enter shop name"
                   disableUnderline
-                  onChange={(val: any) => shopFieldHangler(val.target.value)}
+                  // onChange={(val: any) => shopFieldHangler(val.target.value)}
                 />
                 {errors.tenantName?.type === 'required' && (
                   <ErrorSpanBox error="Shop name is required" />
@@ -257,7 +257,7 @@ function BranchCreatePopup({
             </div>
             <div className="FormField">
               <FormControl className="FormControl" variant="standard">
-                <label className="FormLabel">Admin Domain</label>
+                <label className="FormLabel">Domain</label>
                 <TextField
                   className="FormInput"
                   sx={{ padding: 0 }}
@@ -275,12 +275,24 @@ function BranchCreatePopup({
                     ),
                   }}
                   variant="outlined"
-                  {...register('domainAdminapp')}
-                  disabled
+                  {...register('domain', {
+                    required: true,
+                    pattern: PATTERN?.DOMAIN,
+                    validate: (value) => value.length <= 100,
+                  })}
                 />
+                {errors.domain?.type === 'required' && (
+                  <ErrorSpanBox error="domain is required" />
+                )}
+                {errors.domain?.type === 'pattern' && (
+                  <ErrorSpanBox error={INVALID_CHAR} />
+                )}
+                {errors.domain?.type === 'validate' && (
+                  <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
+                )}
               </FormControl>
             </div>
-            <div className="FormField mb-4">
+            {/* <div className="FormField mb-4">
               <FormControl className="FormControl" variant="standard">
                 <label className="FormLabel">Web-App Domain</label>
                 <TextField
@@ -304,7 +316,7 @@ function BranchCreatePopup({
                   disabled
                 />
               </FormControl>
-            </div>
+            </div> */}
             {/* <div className="FormField">
               <FormControlLabel
                 control={

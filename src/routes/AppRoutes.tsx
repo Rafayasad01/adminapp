@@ -4,7 +4,6 @@ import { Navigate, RouteObject } from 'react-router-dom';
 import AppLayout from '../components/layout/AppLayout';
 import AuthLayout from '../components/layout/AuthLayout';
 import LayoutOutlet from '../components/layout/LayoutOutlet';
-import SuperAdminAppLayout from '../components/layout/SuperAdminAppLayout';
 import AppointmentVisitPage from '../pages/appointment/visit/AppointmentVisitPage';
 import ForgotPasswordPage from '../pages/auth/forgot-password/ForgotPasswordPage';
 import LoginPage from '../pages/auth/login/LoginPage';
@@ -33,18 +32,11 @@ import ReportsPage from '../pages/reports/ReportsPage';
 import SettingsApp from '../pages/settings/SettingsApp';
 import SettingsPage from '../pages/settings/SettingsPage';
 import SettingsShopScheduling from '../pages/settings/SettingsShopScheduling';
-import SuperAdminDashboardPage from '../pages/super-admin/dashboard/SuperAdminDashboardPage';
-import SuperAdminAppImagePage from '../pages/super-admin/image-upload/SuperAdminAppImagePage';
-import SuperAdminAddPermissionsPage from '../pages/super-admin/role-permissions/SuperAdminAddPermissionsPage';
-import SuperAdminAddRolePermissionsPage from '../pages/super-admin/role-permissions/SuperAdminAddRolePermissionsPage';
-import SuperAdminEditPermissionsPage from '../pages/super-admin/role-permissions/SuperAdminEditPermissionPage';
-import SuperAdminEditRolePermissionsPage from '../pages/super-admin/role-permissions/SuperAdminEditRolePermissionPage';
-import SuperAdminPermissionPage from '../pages/super-admin/role-permissions/SuperAdminPermissionPage';
-import SuperAdminPermissionPageDetails from '../pages/super-admin/role-permissions/SuperAdminPermissionPageDetails';
-import SuperAdminRolePermissionsPage from '../pages/super-admin/role-permissions/SuperAdminRolePermissionsPage';
-import SuperAdminShopDetailPage from '../pages/super-admin/tenat/shop/SuperAdminShopDetailPage';
 
 import AppUserDetailPage from '../pages/appUsers/AppUserDetailPage';
+import AppUserRewardHistory from '../pages/appUsers/AppUserRewardHistory';
+import AppUserLoyaltyDetailPage from '../pages/appUsers/AppUserRewardHistoryTabs/AppUserLoyaltyDetailPage';
+import AppUserPromotionDetailPage from '../pages/appUsers/AppUserRewardHistoryTabs/AppUserPromotionDetailPage';
 import AppUsersPage from '../pages/appUsers/AppUsersPage';
 import AppointmentProviderAddSchedulePage from '../pages/appointment/provider/AppointmentProviderAddSchedulePage';
 import AppointmentProviderPage from '../pages/appointment/provider/AppointmentProviderPage';
@@ -52,19 +44,9 @@ import AppointmentProviderSchedulePage from '../pages/appointment/provider/Appoi
 import AppointmentProviderServicesList from '../pages/appointment/provider/AppointmentProviderServicesList';
 import AppointmentVisitDetailPage from '../pages/appointment/visit/AppointmentVisitDetailPage';
 import BannersPage from '../pages/banners/BannersPage';
-import SuperAdminShopPage from '../pages/super-admin/tenat/shop/SuperAdminShopPage';
-import ShopAdminUserDetailPage from '../pages/super-admin/tenat/user/SuperAdminUserDetailPage';
-import SuperAdminUserPage from '../pages/super-admin/tenat/user/SuperAdminUserPage';
-import VouchersPage from '../pages/vouchers/VouchersPage';
 import DriverHistory from '../pages/orders/DriverHistory';
-import AppUserRewardHistory from '../pages/appUsers/AppUserRewardHistory';
-import AppUserPromotionDetailPage from '../pages/appUsers/AppUserRewardHistoryTabs/AppUserPromotionDetailPage';
-import AppUserLoyaltyDetailPage from '../pages/appUsers/AppUserRewardHistoryTabs/AppUserLoyaltyDetailPage';
 import SettingConfig from '../pages/settings/SettingConfig';
-import SuperAdminThemePage from '../pages/super-admin/theme/SuperAdminThemePage';
-import SuperAdminThemeCreatePage from '../pages/super-admin/theme/SuperAdminThemeCreatePage';
-import SuperAdminThemeEditPage from '../pages/super-admin/theme/SuperAdminThemeEditPage';
-import Page404 from '../pages/404/Page404';
+import VouchersPage from '../pages/vouchers/VouchersPage';
 
 export const routeObjects: RouteObject[] = [
   {
@@ -102,132 +84,6 @@ export const routeObjects: RouteObject[] = [
           {
             path: 'new-password',
             element: <NewPasswordPage />,
-          },
-        ],
-      },
-      {
-        path: 'main',
-        element: <SuperAdminAppLayout />,
-        children: [
-          { index: true, element: <Navigate to="dashboard" replace /> },
-          {
-            path: 'dashboard',
-            element: <SuperAdminDashboardPage />,
-          },
-          {
-            path: 'tenant',
-            children: [
-              {
-                path: 'shop',
-                children: [
-                  { index: true, element: <Navigate to="list" replace /> },
-                  {
-                    path: 'list',
-                    element: <SuperAdminShopPage />,
-                  },
-                  {
-                    path: 'detail/:id',
-                    element: <SuperAdminShopDetailPage />,
-                  },
-                ],
-              },
-              {
-                path: 'user',
-                children: [
-                  { index: true, element: <Navigate to="list" replace /> },
-                  {
-                    path: 'list',
-                    element: <SuperAdminUserPage />,
-                  },
-                  {
-                    path: 'detail/:id',
-                    element: <ShopAdminUserDetailPage />,
-                  },
-                ],
-              },
-            ],
-          },
-          {
-            path: 'app',
-            children: [
-              {
-                path: 'image-upload',
-                children: [
-                  { index: true, element: <Navigate to="list" replace /> },
-                  {
-                    path: 'list',
-                    element: <SuperAdminAppImagePage />,
-                  },
-                ],
-              },
-            ],
-          },
-          // {
-          //   path: 'support',
-          //   element: <SuperAdminSupportPage />,
-          // },
-          {
-            path: 'user-permission',
-            children: [
-              {
-                path: 'role',
-                children: [
-                  { index: true, element: <Navigate to="list" replace /> },
-                  {
-                    path: 'list',
-                    element: <SuperAdminRolePermissionsPage />,
-                  },
-                  {
-                    path: 'add-role',
-                    element: <SuperAdminAddRolePermissionsPage />,
-                  },
-                  {
-                    path: 'edit-role/:id',
-                    element: <SuperAdminEditRolePermissionsPage />,
-                  },
-                ],
-              },
-              {
-                path: 'permission',
-                children: [
-                  { index: true, element: <Navigate to="list" replace /> },
-                  {
-                    path: 'list',
-                    element: <SuperAdminPermissionPage />,
-                  },
-                  {
-                    path: 'add-permission',
-                    element: <SuperAdminAddPermissionsPage />,
-                  },
-                  {
-                    path: 'edit-permission/:id',
-                    element: <SuperAdminEditPermissionsPage />,
-                  },
-                  {
-                    path: 'details/:id',
-                    element: <SuperAdminPermissionPageDetails />,
-                  },
-                ],
-              },
-            ],
-          },
-          {
-            path: 'theme-configuration',
-            children: [
-              { index: true, element: <Navigate to="list" replace /> },
-              {
-                path: 'list',
-                element: <SuperAdminThemePage />,
-              },
-              {
-                path: 'create',
-                element: <SuperAdminThemeCreatePage />,
-              },
-              {
-                path: 'edit/:id',
-                element: <SuperAdminThemeEditPage />,
-              },
-            ],
           },
         ],
       },

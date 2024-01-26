@@ -15,8 +15,8 @@ import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined
 import PeopleOutlineOutlinedIcon from '@mui/icons-material/PeopleOutlineOutlined';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 // import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
-import ViewCarouselOutlinedIcon from '@mui/icons-material/ViewCarouselOutlined';
 import TwitterIcon from '@mui/icons-material/Twitter';
+import ViewCarouselOutlinedIcon from '@mui/icons-material/ViewCarouselOutlined';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import YouTubeIcon from '@mui/icons-material/YouTube';
 import Drawer from '@mui/material/Drawer';
@@ -26,7 +26,6 @@ import Stack from '@mui/material/Stack';
 import Toolbar from '@mui/material/Toolbar';
 import { NavLink } from 'react-router-dom';
 // import HeadphonesOutlinedIcon from '@mui/icons-material/HeadphonesOutlined'
-import CollectionsOutlinedIcon from '@mui/icons-material/CollectionsOutlined';
 // import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined';
 import assets from '../../assets';
 import { useAppSelector } from '../../redux/redux-hooks';
@@ -36,16 +35,11 @@ import ArrowDown from '../icons/ArrowDown';
 import ArrowUp from '../icons/ArrowUp';
 import CategoryIcon from '../icons/CategoryIcon';
 import OrderIcon from '../icons/OrderIcon';
-import PermissionIcon from '../icons/PermissionIcon';
-import RoleIcon from '../icons/RoleIcon';
-import ShopIcon from '../icons/ShopIcon';
-import ServiceIcon from '../icons/serviceIcon';
 // import TenantIcon from '../icons/TenantIcon';
-import UserPermission from '../icons/UserPermission';
 import VoucherIcon from '../icons/VoucherIcon';
 import AppointmentIcon from '../icons/appointmentIcon';
-import VisitIcon from '../icons/visitIcon';
 import ProviderIcon from '../icons/providerIcon';
+import VisitIcon from '../icons/visitIcon';
 
 const links = [
   {
@@ -133,63 +127,6 @@ const links = [
     path: 'settings',
     permission: 'Setting View',
     icon: <SettingsOutlinedIcon fontSize="inherit" />,
-  },
-];
-
-const superAdminlinks = [
-  {
-    name: 'Dashboard',
-    path: 'dashboard',
-    icon: <GridViewOutlinedIcon fontSize="inherit" />,
-  },
-  {
-    name: 'App Image',
-    path: 'app/image-upload',
-    icon: <CollectionsOutlinedIcon fontSize="inherit" />,
-  },
-  {
-    name: 'shops',
-    path: 'tenant/shop',
-    icon: <ShopIcon />,
-  },
-  // {
-  //   name: 'tenant',
-  //   path: 'tenant',
-  //   icon: <TenantIcon />,
-  //   childLinks: [
-  //     {
-  //       name: 'shops',
-  //       path: 'tenant/shop',
-  //       icon: <ShopIcon />,
-  //     },
-  //     {
-  //       name: 'users',
-  //       path: 'tenant/user',
-  //       icon: <GroupsOutlinedIcon className="w-[20px]" />,
-  //     },
-  //   ],
-  // },
-  {
-    name: 'user permissions',
-    path: 'role',
-    icon: <UserPermission />,
-    childLinks: [
-      {
-        name: 'Permission',
-        path: 'user-permission/permission',
-        icon: <PermissionIcon />,
-      },
-      {
-        name: 'Role',
-        path: 'user-permission/role',
-        icon: <RoleIcon />,
-      },
-    ],
-  },
-  {
-    name: 'Theme',
-    path: 'theme-configuration',
-    icon: <ServiceIcon />,
   },
 ];
 
@@ -302,10 +239,7 @@ function Sidebar() {
 
   useEffect(() => {
     defineRules(dataRole?.persisitReducer?.roleState?.role?.permissions);
-    if (authState.user.isSuperAdmin) {
-      setList(superAdminlinks);
-    } else if (dataRole?.persisitReducer?.roleState?.role?.permissions) {
-      // const tempList = links.filter(el => CAN("canView", el.permission));
+    if (dataRole?.persisitReducer?.roleState?.role?.permissions) {
       const tempList = links.filter((el) => {
         if (el.name === MODULE_EMPLOYEEES) {
           if (appItems.employeeLimit <= 0) {

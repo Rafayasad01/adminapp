@@ -45,7 +45,7 @@ function CustomMultipleSelectBox({
   defaultVal,
   border,
 }: Props) {
-  console.log('optionsss', options);
+  // console.log('optionsss', options);
   return (
     <div>
       <div className="" style={{ paddingBottom: '3px' }}>

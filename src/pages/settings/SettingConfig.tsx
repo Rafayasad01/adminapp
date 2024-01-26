@@ -9,15 +9,12 @@ import '../../assets/css/PopupStyle.css';
 import Loader from '../../components/common/Loader';
 import MapAddress from '../../components/common/MapAddress';
 import Notify from '../../components/common/Notify';
-import system from '../../services/superadmin/SystemConfig';
+import system from '../../services/adminapp/SystemConfig';
 import { useAppSelector } from '../../redux/redux-hooks';
 import ColorRowWithTooltips from '../../components/common/ColorRowWithTooltips';
 import PermissionPopup from '../../utils/PermissionPopup';
 import { useDispatch } from 'react-redux';
-import {
-  setSystemConfig,
-  setTenantConfig,
-} from '../../redux/features/authStateSlice';
+import { setSystemConfig, setTheme } from '../../redux/features/authStateSlice';
 import DragDropFile from './DragDropFile';
 import CustomButton from '../../components/common/CustomButton';
 
@@ -93,7 +90,7 @@ function SettingsConfig() {
               themes: temp,
             };
           });
-          dispatch(setTenantConfig(res.data.data.value.themeColor));
+          dispatch(setTheme(res.data.data.value.themeColor));
         } else {
           setIsLoader(false);
           // handleErrorMessage(res.data.message);
@@ -251,6 +248,16 @@ function SettingsConfig() {
                       />
                     </div>
                   ) : null}
+                </div>
+                <div className="mx-1">
+                  <span className="text-xs">
+                    Hint: Image should be 1080px by 1080px
+                  </span>
+                  <br />
+
+                  <span className="text-xs">
+                    Info: Small size Image may pixelate.
+                  </span>
                 </div>
                 {themeSelectedImg && (
                   <div className="flex items-center justify-end">

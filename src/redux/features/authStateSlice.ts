@@ -49,14 +49,13 @@ export const authStateSlice = createSlice({
   reducers: {
     login: (state, action: PayloadAction<User>) => {
       state.user = action.payload;
-      setThemeColor(state.user?.tenantConfig);
       setItem('USER', action.payload);
     },
     logout: (state) => {
       state.user = null;
       removeItem('USER');
     },
-    setTenantConfig: (state, action: PayloadAction<any>) => {
+    setTheme: (state, action: PayloadAction<any>) => {
       state.theme = action.payload;
       setThemeColor(action.payload);
       setItem('THEME', state.theme);
@@ -68,7 +67,7 @@ export const authStateSlice = createSlice({
   },
 });
 
-export const { login, logout, setTenantConfig, setSystemConfig } =
+export const { login, logout, setTheme, setSystemConfig } =
   authStateSlice.actions;
 
 export default authStateSlice.reducer;

@@ -12,11 +12,11 @@ import { UserLogin } from '../../../interfaces/auth.interface';
 import {
   login,
   setSystemConfig,
-  setTenantConfig,
+  setTheme,
 } from '../../../redux/features/authStateSlice';
 import { useAppDispatch, useAppSelector } from '../../../redux/redux-hooks';
 import auth from '../../../services/adminapp/admin';
-import system from '../../../services/superadmin/SystemConfig';
+import system from '../../../services/adminapp/SystemConfig';
 import { setToken } from '../../../utils/constants';
 
 import assets from '../../../assets';
@@ -26,7 +26,10 @@ import { setRolePermissions } from '../../../redux/features/permissionsStateSlic
 
 function LoginPage() {
   const dispatch = useAppDispatch();
-  const tenantColors = useAppSelector((state) => state.authState);
+  const systemConfigData = useAppSelector(
+    (state: any) => state.authState.systemConfig
+  );
+
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
@@ -46,6 +49,7 @@ function LoginPage() {
   //   useNotification();
 
   //   console.log('tenantColors', tenantColors);
+  let url = 'development';
 
   useEffect(() => {
     setIsPageLoader(false);
@@ -53,22 +57,21 @@ function LoginPage() {
     // let a = https://devadmin.urapptech.com/admin/auth/login
     // const currentURL = (window.location.href).split('/')[2];
     // console.log("currentURL", currentURL);
-    let url = 'devadminapp-development';
     system
       .getSystemConfig(url)
       .then((res) => {
-        // console.log("RES", res.data.data.theme);
         setIsPageLoader(false);
         if (res.data.success) {
           let systemConfigData = {
             createdDate: res.data.data.createdDate,
-            domainAdminapp: res.data.data.domainAdminapp,
-            domainWebapp: res.data.data.domainWebapp,
+            domain: res.data.data.domain,
             id: res.data.data.id,
             logoffImage: res.data.data.logoffImage,
             tenant: res.data.data.tenant,
+            shopName: res.data.data.tenantConfig.name,
+            shopLogo: res.data.data.tenantConfig.logo,
           };
-          dispatch(setTenantConfig(res.data.data.theme.value.themeColor));
+          dispatch(setTheme(res.data.data.theme.value.themeColor));
           dispatch(setSystemConfig(systemConfigData));
         } else {
           setIsPageLoader(false);
@@ -90,10 +93,10 @@ function LoginPage() {
     };
     await auth
       .loginService(userData)
-      .then((user) => {
+      .then(async (user) => {
         if (user && user.data.success) {
-          setIsLoader(false);
           const newUserData = user.data.data;
+          setIsLoader(false);
           setToken(newUserData.token);
           dispatch(setRolePermissions(newUserData.role));
           delete newUserData.role;
@@ -102,11 +105,7 @@ function LoginPage() {
           if (newUserData?.tenantConfig) {
             dispatch(setLogo(user?.data?.data?.tenantConfig?.logo));
           }
-          if (newUserData.isSuperAdmin) {
-            navigate('../../../main');
-          } else {
-            navigate('../../../dashboard');
-          }
+          navigate('../../../dashboard');
         } else {
           setIsLoader(false);
           setAlertMsg(user.data.message);
@@ -130,8 +129,11 @@ function LoginPage() {
       "
     >
       <div className="h-full w-[40%] px-[30px]">
-        <div className="w-full max-w-[200px] px-[25px] py-[40px]">
-          <img src={assets.images.urApplogo} alt="urlaundry" />
+        <div className="w-full max-w-[150px] px-[25px] py-[40px]">
+          <img
+            src={systemConfigData?.shopLogo ?? systemConfigData?.shopName}
+            alt="urlaundry"
+          />
         </div>
         <div className="pt-[150px]">
           <h1 className="mb-4 text-center text-[36px] font-bold capitalize leading-[normal] text-black">
@@ -213,11 +215,21 @@ function LoginPage() {
       </div>
       <div className="w-[60%] p-3">
         <div className="mx-auto w-[800px] rounded-lg">
-          <img
-            src={assets.images.bgLogin}
-            alt="urlaundry"
-            className="h-full w-full object-contain"
-          />
+          {systemConfigData?.logoffImage ? (
+            <img
+              src={systemConfigData?.logoffImage || assets.images.bgLogin}
+              alt="urlaundry"
+              className="h-full w-full object-contain"
+            />
+          ) : (
+            <div className="flex flex-col items-center justify-center">
+              <p className="text-xl font-semibold">Image isn't uploaded yet</p>
+              <span className="text-sm font-medium">
+                Hint: You can upload under setting module from setting config
+                tab
+              </span>
+            </div>
+          )}
         </div>
       </div>
     </div>
