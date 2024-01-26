@@ -52,7 +52,7 @@ function LoginPage() {
   let url = 'development';
 
   useEffect(() => {
-    setIsPageLoader(false);
+    setIsPageLoader(true);
     // setIsPageLoader(true);
     // let a = https://devadmin.urapptech.com/admin/auth/login
     // const currentURL = (window.location.href).split('/')[2];
