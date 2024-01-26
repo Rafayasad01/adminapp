@@ -112,8 +112,7 @@ function SettingsConfig() {
         if (res.data.success) {
           let systemConfigData = {
             createdDate: res.data.data[0].createdDate,
-            domainAdminapp: res.data.data[0].domainAdminapp,
-            domainWebapp: res.data.data[0].domainWebapp,
+            domain: res.data.data[0].domain,
             id: res.data.data[0].id,
             logoffImage: res.data.data[0].logoffImage,
             tenant: res.data.data[0].tenant,
