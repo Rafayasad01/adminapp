@@ -23,20 +23,20 @@ import assets from '../../../assets';
 import Loader from '../../../components/common/Loader';
 import { setItemState, setLogo } from '../../../redux/features/appStateSlice';
 import { setRolePermissions } from '../../../redux/features/permissionsStateSlice';
+import Notify from '../../../components/common/Notify';
+import { useNotification } from '../../../components/Contexts/NotificationContext';
 
 function LoginPage() {
   const dispatch = useAppDispatch();
-  const systemConfigData = useAppSelector(
+  const systemConfig = useAppSelector(
     (state: any) => state.authState.systemConfig
   );
-
+  const { notification, hideNotification, showNotification } =
+    useNotification();
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [alertMsg, setAlertMsg] = useState('');
-  const [showAlert, setShowAlert] = useState(false);
-  const [alertSeverity, setAlertSeverity] = useState('');
   const [isLoader, setIsLoader] = useState(false);
   const [isPageLoader, setIsPageLoader] = useState(false);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -45,11 +45,8 @@ function LoginPage() {
   ) => {
     event.preventDefault();
   };
-  // const { notification, hideNotification, showNotification } =
-  //   useNotification();
 
-  //   console.log('tenantColors', tenantColors);
-  let url = 'development';
+  const url = 'development';
 
   useEffect(() => {
     setIsPageLoader(true);
@@ -62,7 +59,7 @@ function LoginPage() {
       .then((res) => {
         setIsPageLoader(false);
         if (res.data.success) {
-          let systemConfigData = {
+          const systemConfigData = {
             createdDate: res.data.data.createdDate,
             domain: res.data.data.domain,
             id: res.data.data.id,
@@ -75,13 +72,13 @@ function LoginPage() {
           dispatch(setSystemConfig(systemConfigData));
         } else {
           setIsPageLoader(false);
-          // showNotification(res.data.message, 'error');
-          console.log('404 page');
+          showNotification(res.data.message, 'error');
+          // console.log('404 page');
         }
       })
       .catch((err: Error) => {
         setIsPageLoader(false);
-        // showNotification(err.message, 'error');
+        showNotification(err.message, 'error');
       });
   }, []);
 
@@ -108,16 +105,18 @@ function LoginPage() {
           navigate('../../../dashboard');
         } else {
           setIsLoader(false);
-          setAlertMsg(user.data.message);
-          setAlertSeverity('error');
-          setShowAlert(true);
+          showNotification(user.data.message, 'error');
+          // setAlertMsg(user.data.message);
+          // setAlertSeverity('error');
+          // setShowAlert(true);
         }
       })
       .catch((err) => {
         setIsLoader(false);
-        setAlertMsg(err.message);
-        setAlertSeverity('error');
-        setShowAlert(true);
+        showNotification(err.message, 'error');
+        // setAlertMsg(err.message);
+        // setAlertSeverity('error');
+        // setShowAlert(true);
       });
   };
 
@@ -131,7 +130,7 @@ function LoginPage() {
       <div className="h-full w-[40%] px-[30px]">
         <div className="w-full max-w-[150px] px-[25px] py-[40px]">
           <img
-            src={systemConfigData?.shopLogo ?? systemConfigData?.shopName}
+            src={systemConfig?.shopLogo ?? systemConfig?.shopName}
             alt="urlaundry"
           />
         </div>
@@ -215,15 +214,15 @@ function LoginPage() {
       </div>
       <div className="w-[60%] p-3">
         <div className="mx-auto w-[800px] rounded-lg">
-          {systemConfigData?.logoffImage ? (
+          {systemConfig?.logoffImage ? (
             <img
-              src={systemConfigData?.logoffImage || assets.images.bgLogin}
+              src={systemConfig?.logoffImage || assets.images.bgLogin}
               alt="urlaundry"
               className="h-full w-full object-contain"
             />
           ) : (
             <div className="flex flex-col items-center justify-center">
-              <p className="text-xl font-semibold">Image isn't uploaded yet</p>
+              <p className="text-xl font-semibold">Image is not uploaded yet</p>
               <span className="text-sm font-medium">
                 Hint: You can upload under setting module from setting config
                 tab
@@ -232,6 +231,13 @@ function LoginPage() {
           )}
         </div>
       </div>
+      {notification && (
+        <Notify
+          isOpen
+          setIsOpen={hideNotification}
+          displayMessage={notification}
+        />
+      )}
     </div>
   );
 }

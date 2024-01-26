@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  useMemo,
+} from 'react';
 
 interface Notification {
   text: string;
@@ -28,10 +34,13 @@ export const NotificationProvider: React.FC<{ children: ReactNode }> = ({
     setNotification(null);
   };
 
+  const contextValue = useMemo(
+    () => ({ notification, showNotification, hideNotification }),
+    [notification, showNotification, hideNotification]
+  );
+
   return (
-    <NotificationContext.Provider
-      value={{ notification, showNotification, hideNotification }}
-    >
+    <NotificationContext.Provider value={contextValue}>
       {children}
     </NotificationContext.Provider>
   );

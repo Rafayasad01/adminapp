@@ -39,6 +39,7 @@ module.exports = {
     'jsx-a11y/click-events-have-key-events': 'off',
     'jsx-a11y/no-static-element-interactions': 'off',
     'react/no-unstable-nested-components': 'off',
+    'react/function-component-definition':'off',
     'prefer-destructuring': 'off',
     'react/prop-types': 'off',
     'react/button-has-type': 'off',

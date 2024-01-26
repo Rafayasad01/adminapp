@@ -35,8 +35,6 @@ function BannerUpdatePopup({
   openFormDialog,
   setOpenFormDialog,
   callback,
-  setIsNotify,
-  setNotifyMessage,
   formData,
 }: Props) {
   const {
@@ -62,7 +60,7 @@ function BannerUpdatePopup({
     if (file === null || selectedImg === null) {
       bannerData.bannerImg = null;
     }
-    console.log('bannerData', bannerData);
+    // console.log('bannerData', bannerData);
     callback(bannerData);
     // if (file !== null || selectedImg !== null) {
     //   const details = {

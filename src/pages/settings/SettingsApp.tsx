@@ -93,7 +93,7 @@ function SettingsApp() {
   } = useForm<Setting>();
 
   const setData = (item: any) => {
-    console.log('itesmssss', item);
+    // console.log('itesmssss', item);
 
     // setValue('name', item.tenantConfig.name);
     setValue('desc', item.tenantConfig.desc);
@@ -226,7 +226,7 @@ function SettingsApp() {
         .then((item: any) => {
           const { success, message, data: itemData } = item.data;
           if (success) {
-            console.log('message', message);
+            // console.log('message', message);
 
             dispatch(setTheme(itemData));
             setAddress(itemData?.address);
@@ -246,7 +246,7 @@ function SettingsApp() {
             setData(itemData);
             setDetail(itemData);
           } else {
-            console.log('message2', message);
+            // console.log('message2', message);
 
             setValue('userLimit', Number(detail?.userLimit));
             setIsLoader(false);
@@ -258,7 +258,7 @@ function SettingsApp() {
           }
         })
         .catch((err) => {
-          console.log('message', err.message);
+          // console.log('message', err.message);
           setValue('userLimit', Number(detail?.userLimit));
           setIsLoader(false);
           setIsNotify(true);

@@ -259,7 +259,7 @@ function BranchUpdatePopup({
                     variant="outlined"
                     {...register('domain', {
                       required: true,
-                      pattern: PATTERN?.DOMAIN,
+                      pattern: PATTERN?.CHAR_NUM_DASH,
                       validate: (value) => value.length <= 100,
                     })}
                   />

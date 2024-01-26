@@ -4,13 +4,13 @@ import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
 import TextField from '@mui/material/TextField';
-import { debounce } from '@mui/material/utils';
-import kabakCase from 'lodash/kebabCase';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import '../../assets/css/PopupStyle.css';
+import CustomButton from '../../components/common/CustomButton';
 import ErrorSpanBox from '../../components/common/ErrorSpanBox';
 import { Tenant } from '../../interfaces/superadmin/tenant.interface';
+import { useAppSelector } from '../../redux/redux-hooks';
 import {
   DOMAIN_PREFIX,
   DOMAIN_PROTOCOL,
@@ -19,8 +19,6 @@ import {
   PATTERN,
   VALIDATE_NON_NEGATIVE_NUM,
 } from '../../utils/constants';
-import { useAppSelector } from '../../redux/redux-hooks';
-import CustomButton from '../../components/common/CustomButton';
 
 type Props = {
   openFormDialog: boolean;
@@ -42,7 +40,6 @@ function BranchCreatePopup({
   const {
     register,
     handleSubmit,
-    setValue,
     formState: { errors },
   } = useForm<Tenant>();
 
@@ -277,7 +274,7 @@ function BranchCreatePopup({
                   variant="outlined"
                   {...register('domain', {
                     required: true,
-                    pattern: PATTERN?.DOMAIN,
+                    pattern: PATTERN?.CHAR_NUM_DASH,
                     validate: (value) => value.length <= 100,
                   })}
                 />
