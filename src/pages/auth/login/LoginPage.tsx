@@ -16,7 +16,7 @@ import {
 } from '../../../redux/features/authStateSlice';
 import { useAppDispatch, useAppSelector } from '../../../redux/redux-hooks';
 import auth from '../../../services/adminapp/admin';
-import system from '../../../services/superadmin/SystemConfig';
+import system from '../../../services/adminapp/SystemConfig';
 import { setToken } from '../../../utils/constants';
 
 import assets from '../../../assets';
@@ -26,11 +26,9 @@ import { setRolePermissions } from '../../../redux/features/permissionsStateSlic
 
 function LoginPage() {
   const dispatch = useAppDispatch();
-  const tenantColors = useAppSelector((state) => state.authState);
   const systemConfigData = useAppSelector(
     (state: any) => state.authState.systemConfig
   );
-  // console.log("systemConfigData", systemConfigData);
 
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
@@ -70,6 +68,8 @@ function LoginPage() {
             id: res.data.data.id,
             logoffImage: res.data.data.logoffImage,
             tenant: res.data.data.tenant,
+            shopName: res.data.data.tenantConfig.name,
+            shopLogo: res.data.data.tenantConfig.logo,
           };
           dispatch(setTheme(res.data.data.theme.value.themeColor));
           dispatch(setSystemConfig(systemConfigData));
@@ -129,8 +129,11 @@ function LoginPage() {
       "
     >
       <div className="h-full w-[40%] px-[30px]">
-        <div className="w-full max-w-[200px] px-[25px] py-[40px]">
-          <img src={assets.images.urApplogo} alt="urlaundry" />
+        <div className="w-full max-w-[150px] px-[25px] py-[40px]">
+          <img
+            src={systemConfigData?.shopLogo ?? systemConfigData?.shopName}
+            alt="urlaundry"
+          />
         </div>
         <div className="pt-[150px]">
           <h1 className="mb-4 text-center text-[36px] font-bold capitalize leading-[normal] text-black">
@@ -219,9 +222,11 @@ function LoginPage() {
               className="h-full w-full object-contain"
             />
           ) : (
-            <div className="flex items-center justify-center">
-              <span className="text-3xl font-semibold uppercase">
-                {systemConfigData?.domain}
+            <div className="flex flex-col items-center justify-center">
+              <p className="text-xl font-semibold">Image isn't uploaded yet</p>
+              <span className="text-sm font-medium">
+                Hint: You can upload under setting module from setting config
+                tab
               </span>
             </div>
           )}

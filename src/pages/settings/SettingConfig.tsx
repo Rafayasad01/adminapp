@@ -9,7 +9,7 @@ import '../../assets/css/PopupStyle.css';
 import Loader from '../../components/common/Loader';
 import MapAddress from '../../components/common/MapAddress';
 import Notify from '../../components/common/Notify';
-import system from '../../services/superadmin/SystemConfig';
+import system from '../../services/adminapp/SystemConfig';
 import { useAppSelector } from '../../redux/redux-hooks';
 import ColorRowWithTooltips from '../../components/common/ColorRowWithTooltips';
 import PermissionPopup from '../../utils/PermissionPopup';
