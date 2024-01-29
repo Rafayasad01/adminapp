@@ -40,6 +40,7 @@ function ProfileEditPopup({
   const {
     register,
     handleSubmit,
+    setValue,
     control,
     formState: { errors },
   } = useForm<EditProfile>();
@@ -72,6 +73,14 @@ function ProfileEditPopup({
   };
 
   useEffect(() => {
+    setValue('firstName', formData?.firstName);
+    setValue('lastName', formData?.lastName);
+    setValue('country', formData?.country);
+    setValue('state', formData?.state);
+    setValue('city', formData?.city);
+    setValue('zipCode', formData?.zipCode);
+    setValue('phone', formData?.phone);
+    setValue('address', formData?.address);
     let icon = formData?.avatar?.split('/')?.slice(-1)[0];
     const regexExp = /[a-z,0-9,-]{36}/;
     if (regexExp.test(icon)) {
@@ -81,6 +90,7 @@ function ProfileEditPopup({
   }, [formData]);
 
   const onSubmit = (data: EditProfile) => {
+    console.log('data::::::::::', data);
     if (image) {
       data.avatar = image;
     } else {

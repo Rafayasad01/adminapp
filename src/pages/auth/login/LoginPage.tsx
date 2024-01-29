@@ -46,19 +46,30 @@ function LoginPage() {
     event.preventDefault();
   };
 
-  const url = 'development';
+  // const url = 'development';
 
   useEffect(() => {
+    const regexPattern = /localhost/;
     setIsPageLoader(true);
     // setIsPageLoader(true);
-    // let a = https://devadmin.urapptech.com/admin/auth/login
-    // const currentURL = (window.location.href).split('/')[2];
-    // console.log("currentURL", currentURL);
+    // let a = 'https://devwebapp.urapptech.com/admin/auth/login';
+    // console.log('a::::::', a);
+    // const newTxt = a.split('/')[2].split('.')[0];
+    // console.log('newTxt::::::', newTxt);
+    const currentURL = window.location.href;
+    let url = currentURL;
+    if (regexPattern.test(currentURL)) {
+      url = currentURL.split('/')[2].split(':')[0];
+    } else {
+      url = currentURL.split('/')[2].split('.')[0];
+    }
+    // console.log('url', url);
     system
       .getSystemConfig(url)
-      .then((res) => {
+      .then((res: any) => {
         setIsPageLoader(false);
         if (res.data.success) {
+          // console.log('res.data.data::::::', res.data.data);
           const systemConfigData = {
             createdDate: res.data.data.createdDate,
             domain: res.data.data.domain,
@@ -73,7 +84,7 @@ function LoginPage() {
         } else {
           setIsPageLoader(false);
           showNotification(res.data.message, 'error');
-          // console.log('404 page');
+          console.log('404 page');
         }
       })
       .catch((err: Error) => {
