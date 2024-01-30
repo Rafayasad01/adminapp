@@ -8,8 +8,8 @@ import {
   registerables,
   ScaleChartOptions,
 } from 'chart.js';
-import { Bar } from 'react-chartjs-2';
 import { _DeepPartialObject } from 'chart.js/dist/types/utils';
+import { Bar } from 'react-chartjs-2';
 
 ChartJS.register(...registerables);
 type OptionType =

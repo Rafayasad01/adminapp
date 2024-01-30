@@ -1,11 +1,11 @@
+import WysiwygOutlinedIcon from '@mui/icons-material/WysiwygOutlined';
+import IconButton from '@mui/material/IconButton';
 import TablePagination from '@mui/material/TablePagination';
 import dayjs from 'dayjs';
-import IconButton from '@mui/material/IconButton';
 import { useNavigate } from 'react-router-dom';
-import WysiwygOutlinedIcon from '@mui/icons-material/WysiwygOutlined';
 import CustomText from '../../../components/common/CustomText';
-import Service from '../../../services/adminapp/adminAppUser';
 import { useAppSelector } from '../../../redux/redux-hooks';
+import Service from '../../../services/adminapp/adminAppUser';
 
 type Props = {
   list: any;

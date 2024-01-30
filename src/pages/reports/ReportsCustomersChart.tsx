@@ -1,4 +1,3 @@
-import { Doughnut } from 'react-chartjs-2';
 import {
   ArcElement,
   Chart,
@@ -13,6 +12,7 @@ import {
   ScaleChartOptions,
 } from 'chart.js';
 import { _DeepPartialObject } from 'chart.js/dist/types/utils';
+import { Doughnut } from 'react-chartjs-2';
 
 type DoughnutOptions =
   | _DeepPartialObject<

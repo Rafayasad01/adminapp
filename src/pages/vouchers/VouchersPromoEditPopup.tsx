@@ -11,22 +11,22 @@ import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined';
-import FormControlLabel from '@mui/material/FormControlLabel';
 import RadioButtonUncheckedOutlinedIcon from '@mui/icons-material/RadioButtonUncheckedOutlined';
 import Checkbox from '@mui/material/Checkbox';
+import FormControlLabel from '@mui/material/FormControlLabel';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import dayjs, { Dayjs } from 'dayjs';
 
 import '../../assets/css/PopupStyle.css';
-import { useAppSelector } from '../../redux/redux-hooks';
-import DatePickerField from './DatePickerField';
 import ErrorSpanBox from '../../components/common/ErrorSpanBox';
+import { useAppSelector } from '../../redux/redux-hooks';
 import {
   PATTERN,
   VALIDATE_NON_NEGATIVE_NUM,
   VALIDATE_NON_NEGATIVE_NUM_AND_CHECK_LENGTH,
 } from '../../utils/constants';
+import DatePickerField from './DatePickerField';
 
 type Props = {
   vouchersPromoEditDialog: boolean;

@@ -1,3 +1,4 @@
+import SearchIcon from '@mui/icons-material/Search';
 import {
   Divider,
   FormControl,
@@ -5,8 +6,7 @@ import {
   Input,
   InputAdornment,
 } from '@mui/material';
-import SearchIcon from '@mui/icons-material/Search';
-import { memo, useState, ChangeEvent } from 'react';
+import { ChangeEvent, memo, useState } from 'react';
 
 interface SearchControlProps {
   onSearch?: (value: string) => void;

@@ -1,41 +1,41 @@
-import { useState, useEffect } from 'react';
 import FormControl from '@mui/material/FormControl';
+import { useEffect, useState } from 'react';
 // import FormControl from '@mui/material/FormControl';
-import Input from '@mui/material/Input';
-import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
-import Button from '@mui/material/Button';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import CircularProgress from '@mui/material/CircularProgress';
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
-import RemoveCircleOutlineOutlinedIcon from '@mui/icons-material/RemoveCircleOutlineOutlined';
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormLabel from '@mui/material/FormLabel';
 import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined';
 import RadioButtonUncheckedOutlinedIcon from '@mui/icons-material/RadioButtonUncheckedOutlined';
+import RemoveCircleOutlineOutlinedIcon from '@mui/icons-material/RemoveCircleOutlineOutlined';
+import Button from '@mui/material/Button';
+import CircularProgress from '@mui/material/CircularProgress';
+import Divider from '@mui/material/Divider';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormLabel from '@mui/material/FormLabel';
+import IconButton from '@mui/material/IconButton';
+import Input from '@mui/material/Input';
+import InputAdornment from '@mui/material/InputAdornment';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import dayjs from 'dayjs';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import InputAdornment from '@mui/material/InputAdornment';
-import dayjs from 'dayjs';
 import AppUserService from '../../services/adminapp/adminAppUser';
 import VoucherService from '../../services/adminapp/adminVouchers';
 
-import TopBar from '../../components/common/TopBar';
-import DeleteIcon from '../../components/icons/DeleteIcon';
+import assets from '../../assets';
+import CustomButton from '../../components/common/CustomButton';
+import CustomDateTimePicker from '../../components/common/CustomDateTimePicker';
 import CustomDropDown from '../../components/common/CustomDropDown';
 import CustomMultipleSelectBox from '../../components/common/CustomMultipleSelect';
-import { Order } from '../../interfaces/order.interface';
-import Service from '../../services/adminapp/adminOrders';
-import { useAppSelector } from '../../redux/redux-hooks';
 import Notify from '../../components/common/Notify';
-import CustomButton from '../../components/common/CustomButton';
+import TopBar from '../../components/common/TopBar';
+import DeleteIcon from '../../components/icons/DeleteIcon';
 import PromoCodeIcon from '../../components/icons/PromoCode';
+import { Order } from '../../interfaces/order.interface';
+import { useAppSelector } from '../../redux/redux-hooks';
+import Service from '../../services/adminapp/adminOrders';
 import PromotionListPopup from './PromotionListPopup';
-import assets from '../../assets';
-import CustomDateTimePicker from '../../components/common/CustomDateTimePicker';
 
 function OrdersCreatePage() {
   const dropOffDate: any = useAppSelector(
@@ -139,29 +139,31 @@ function OrdersCreatePage() {
             text: res.data.message,
             type: 'success',
           });
-          VoucherService.orderVoucherPromotionList(
-            authState.user.tenant,
-            res.data.data.id
-          )
-            .then((resp) => {
-              if (resp.data.success) {
-                setPromoList(resp.data.data);
-              } else {
+          if (isExistingUser === 'Exist User') {
+            VoucherService.orderVoucherPromotionList(
+              authState.user.tenant,
+              res.data.data.id
+            )
+              .then((resp) => {
+                if (resp.data.success) {
+                  setPromoList(resp.data.data);
+                } else {
+                  setIsNotify(true);
+                  setNotifyMessage({
+                    text: resp.data.message,
+                    type: 'error',
+                  });
+                  setPromoList([]);
+                }
+              })
+              .catch((err) => {
                 setIsNotify(true);
                 setNotifyMessage({
-                  text: resp.data.message,
+                  text: err.message,
                   type: 'error',
                 });
-                setPromoList([]);
-              }
-            })
-            .catch((err) => {
-              setIsNotify(true);
-              setNotifyMessage({
-                text: err.message,
-                type: 'error',
               });
-            });
+          }
         } else {
           setLoginDetails(null);
           setIsLoginLoader(false);

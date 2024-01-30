@@ -1,21 +1,21 @@
-import React, { useState } from 'react';
-import Dialog from '@mui/material/Dialog';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
 import FormControl from '@mui/material/FormControl';
+import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import Visibility from '@mui/icons-material/Visibility';
-import IconButton from '@mui/material/IconButton';
-import '../../assets/css/PopupStyle.css';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import '../../assets/css/PopupStyle.css';
+import ErrorSpanBox from '../../components/common/ErrorSpanBox';
 import { Password } from '../../interfaces/app-user.interface';
 import {
   INVALID_CHAR,
   MAX_LENGTH_EXCEEDED,
   PATTERN,
 } from '../../utils/constants';
-import ErrorSpanBox from '../../components/common/ErrorSpanBox';
 
 type Props = {
   changePassword: boolean;

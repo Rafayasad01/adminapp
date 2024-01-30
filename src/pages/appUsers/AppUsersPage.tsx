@@ -18,9 +18,9 @@ import PermissionPopup from '../../utils/PermissionPopup';
 import { NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
 import { listingRolePermission } from '../../utils/helper';
 import AppUserCreatePopup from './AppUserCreatePopup';
-import AppUserUpdatePopup from './AppUserUpdatePopup';
-import AppUserTab from './AppUserTab';
 import AppUserOtherTab from './AppUserOtherTab';
+import AppUserTab from './AppUserTab';
+import AppUserUpdatePopup from './AppUserUpdatePopup';
 // import CustomersCreatePopup from './CustomersCreatePopup';
 // import CustomersEditPopup from './CustomersEditPopup';
 

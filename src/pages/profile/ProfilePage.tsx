@@ -1,22 +1,22 @@
-import { useEffect, useState } from 'react';
-import Divider from '@mui/material/Divider';
-import Button from '@mui/material/Button';
 import EditIcon from '@mui/icons-material/Edit';
+import Button from '@mui/material/Button';
+import Divider from '@mui/material/Divider';
 import dayjs from 'dayjs';
+import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import TopBar from '../../components/common/TopBar';
 import assets from '../../assets';
+import TopBar from '../../components/common/TopBar';
 import ProfileChangePasswordPopup from './ProfileChangePasswordPopup';
 // import MarkersMap from '../../components/common/MarkersMap';
-// import { Marker } from '../../interfaces/map.interface';
-import ProfileEditPopup from './ProfileEditPopup';
-import { useAppSelector } from '../../redux/redux-hooks';
-import { listingRolePermission } from '../../utils/helper';
-import Service from '../../services/adminapp/adminProfile';
-import Notify from '../../components/common/Notify';
+// import  { Marker } from '../../interfaces/map.interface';
 import Loader from '../../components/common/Loader';
 import MapAddress from '../../components/common/MapAddress';
+import Notify from '../../components/common/Notify';
 import { setProfileAvatar } from '../../redux/features/appStateSlice';
+import { useAppSelector } from '../../redux/redux-hooks';
+import Service from '../../services/adminapp/adminProfile';
+import { listingRolePermission } from '../../utils/helper';
+import ProfileEditPopup from './ProfileEditPopup';
 
 // const data = [
 //   { name: 'Address1', lat: -33.890542, lng: 151.274856 },

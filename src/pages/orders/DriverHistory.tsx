@@ -1,21 +1,21 @@
-import { useState } from 'react';
 import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
-// import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+// import  { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 // import TablePagination from '@mui/material/TablePagination';
 import Avatar from '@mui/material/Avatar';
-import dayjs from 'dayjs';
 import IconButton from '@mui/material/IconButton';
+import dayjs from 'dayjs';
 // import Switch from '@mui/material/Switch';
-import CustomText from '../../components/common/CustomText';
 import CustomButton from '../../components/common/CustomButton';
+import CustomText from '../../components/common/CustomText';
 import ErrorSpanBox from '../../components/common/ErrorSpanBox';
-import { MAX_LENGTH_EXCEEDED, PATTERN } from '../../utils/constants';
-import { DriverHistoryItem } from '../../interfaces/driver.interface';
-import TopBar from '../../components/common/TopBar';
 import Loader from '../../components/common/Loader';
+import TopBar from '../../components/common/TopBar';
+import { DriverHistoryItem } from '../../interfaces/driver.interface';
 import PermissionPopup from '../../utils/PermissionPopup';
+import { MAX_LENGTH_EXCEEDED, PATTERN } from '../../utils/constants';
 
 function DriverHistory() {
   // const navigate = useNavigate();

@@ -1,5 +1,5 @@
-import network from '../../utils/network';
 import { DRIVER_PREFIX } from '../../utils/constants';
+import network from '../../utils/network';
 
 const DRIVER_SCHEDULE_PREFIX = 'schedule';
 const DRIVER_ADDRESS_PREFIX = 'address';

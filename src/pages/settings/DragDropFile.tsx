@@ -1,9 +1,9 @@
-import { useRef, useState } from 'react';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
+import { useRef, useState } from 'react';
 
-import '../../assets/css/PopupStyle.css';
 import assets from '../../assets';
+import '../../assets/css/PopupStyle.css';
 import { imageAllowedTypes } from '../../utils/constants';
 
 type Props = {

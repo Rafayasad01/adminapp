@@ -1,7 +1,7 @@
 import { setItem } from './storage';
 
 const HOST = 'https://dev.urapptech.com';
-//const HOST = 'http://192.168.8.68:3200';
+// const HOST = 'http://192.168.8.68:3200';
 
 export const BASE_URL = `${HOST}/api/v1/admin/`;
 export const BASE_SYSTEM_URL = `${HOST}/api/v1/system/config/`;

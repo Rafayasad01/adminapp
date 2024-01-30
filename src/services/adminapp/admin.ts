@@ -1,5 +1,5 @@
+import { BACKOFFICE_PREFIX, SETTING_PREFIX } from '../../utils/constants';
 import network from '../../utils/network';
-import { SETTING_PREFIX, BACKOFFICE_PREFIX } from '../../utils/constants';
 
 import { UserLogin } from '../../interfaces/auth.interface';
 

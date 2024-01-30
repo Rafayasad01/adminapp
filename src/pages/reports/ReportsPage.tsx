@@ -1,17 +1,17 @@
-import IconButton from '@mui/material/IconButton';
 import OutboundIcon from '@mui/icons-material/Outbound';
+import IconButton from '@mui/material/IconButton';
 
-import Select from '@mui/material/Select';
-import MenuItem from '@mui/material/MenuItem';
 import { SelectChangeEvent } from '@mui/material';
 import Button from '@mui/material/Button';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
 import { useState } from 'react';
-import ReportsRevenueChart from './ReportsRevenueChart';
+import TopBar from '../../components/common/TopBar';
+import ReportsAverageOrderValueChart from './ReportsAverageOrderValueChart';
 import ReportsCustomersChart from './ReportsCustomersChart';
 import ReportsMostOrderedChart from './ReportsMostOrderedChart';
+import ReportsRevenueChart from './ReportsRevenueChart';
 import ReportsTotalOrdersChart from './ReportsTotalOrdersChart';
-import ReportsAverageOrderValueChart from './ReportsAverageOrderValueChart';
-import TopBar from '../../components/common/TopBar';
 
 function ReportsPage() {
   const [year, setYear] = useState('12 months');

@@ -1,13 +1,13 @@
-import Switch from '@mui/material/Switch';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
+import Switch from '@mui/material/Switch';
 import TablePagination from '@mui/material/TablePagination';
 import dayjs from 'dayjs';
 import { useAppSelector } from '../../redux/redux-hooks';
+import { NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
+import { listingRolePermission } from '../../utils/helper';
+import CustomAvatar from './CustomAvatar';
 import CustomButton from './CustomButton';
 import CustomSearchBar from './CustomSearchBar';
-import CustomAvatar from './CustomAvatar';
-import { listingRolePermission } from '../../utils/helper';
-import { NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
 
 type Props = {
   tableHeader: string;

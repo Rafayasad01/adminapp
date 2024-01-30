@@ -1,5 +1,5 @@
-import network from '../../utils/network';
 import { BACKOFFICE_PREFIX } from '../../utils/constants';
+import network from '../../utils/network';
 
 const getListService = (userID: string, page: number, size: number) => {
   return network.get(`${BACKOFFICE_PREFIX}/list/${userID}/${page}/${size}`);

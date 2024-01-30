@@ -1,5 +1,5 @@
-import { useState } from 'react';
 import Button from '@mui/material/Button';
+import { useState } from 'react';
 import OtpInput from 'react18-otp-input';
 import assets from '../../../assets';
 

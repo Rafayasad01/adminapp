@@ -1,12 +1,11 @@
-import React, { Fragment } from 'react';
-import Input from '@mui/material/Input';
-import '../../assets/css/PopupStyle.css';
-import InputAdornment from '@mui/material/InputAdornment';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import IconButton from '@mui/material/IconButton';
-import ErrorSpanBox from './ErrorSpanBox';
+import Input from '@mui/material/Input';
+import InputAdornment from '@mui/material/InputAdornment';
+import '../../assets/css/PopupStyle.css';
 import { INVALID_CHAR } from '../../utils/constants';
+import ErrorSpanBox from './ErrorSpanBox';
 
 type Props = {
   register: any;

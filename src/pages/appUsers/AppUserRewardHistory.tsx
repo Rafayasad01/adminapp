@@ -10,8 +10,8 @@ import { useAppSelector } from '../../redux/redux-hooks';
 import Service from '../../services/adminapp/adminAppUser';
 import PermissionPopup from '../../utils/PermissionPopup';
 import { listingRolePermission } from '../../utils/helper';
-import AppUserPromotionTab from './AppUserRewardHistoryTabs/AppUserPromotionTab';
 import AppUserLoyaltyTab from './AppUserRewardHistoryTabs/AppUserLoyaltyTab';
+import AppUserPromotionTab from './AppUserRewardHistoryTabs/AppUserPromotionTab';
 
 function AppUserRewardHistory() {
   const dataRole = useAppSelector(

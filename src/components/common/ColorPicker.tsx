@@ -1,9 +1,9 @@
-import { useRef, useState } from 'react';
+import FormControl from '@mui/material/FormControl';
+import IconButton from '@mui/material/IconButton';
+import Popover from '@mui/material/Popover';
 import ThemeProvider from '@mui/material/styles/ThemeProvider';
 import createTheme from '@mui/material/styles/createTheme';
-import Popover from '@mui/material/Popover';
-import IconButton from '@mui/material/IconButton';
-import FormControl from '@mui/material/FormControl';
+import { useRef, useState } from 'react';
 import { SketchPicker } from 'react-color';
 import '../../assets/css/PopupStyle.css';
 

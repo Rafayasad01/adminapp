@@ -1,5 +1,5 @@
-import network from '../../utils/network';
 import { ORDER_PREFIX } from '../../utils/constants';
+import network from '../../utils/network';
 
 const ASSIGN_PREFIX = 'assign';
 const PLACE_PREFIX = 'place';

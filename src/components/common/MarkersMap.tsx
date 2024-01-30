@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useRef } from 'react';
 import { Loader } from '@googlemaps/js-api-loader';
+import { useEffect, useRef } from 'react';
 import { Marker } from '../../interfaces/map.interface';
 
 import assets from '../../assets';

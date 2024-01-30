@@ -1,5 +1,5 @@
-import network from '../../utils/network';
 import { CATEGORY_PREFIX } from '../../utils/constants';
+import network from '../../utils/network';
 
 const SERVICE_PREFIX = 'service';
 const SERVICE_FAQ_PREFIX = 'faq';

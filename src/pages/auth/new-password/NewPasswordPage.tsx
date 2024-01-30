@@ -1,22 +1,22 @@
-import { useState } from 'react';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import Button from '@mui/material/Button';
+import CircularProgress from '@mui/material/CircularProgress';
 import FormControl from '@mui/material/FormControl';
 import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import Button from '@mui/material/Button';
-import CircularProgress from '@mui/material/CircularProgress';
+import { useLocation, useNavigate } from 'react-router-dom';
 import assets from '../../../assets';
-import Service from '../../../services/adminapp/admin';
 import { NewPassword } from '../../../interfaces/auth.interface';
-import { useAppDispatch } from '../../../redux/redux-hooks';
-import { setToken } from '../../../utils/constants';
 import { login } from '../../../redux/features/authStateSlice';
 import { setRolePermissions } from '../../../redux/features/permissionsStateSlice';
+import { useAppDispatch } from '../../../redux/redux-hooks';
+import Service from '../../../services/adminapp/admin';
 import AlertBox from '../../../utils/Alert';
+import { setToken } from '../../../utils/constants';
 
 function NewPasswordPage() {
   const dispatch = useAppDispatch();

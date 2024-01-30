@@ -1,8 +1,8 @@
 import Avatar from '@mui/material/Avatar';
 import Divider from '@mui/material/Divider';
+import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import dayjs from 'dayjs';
 import ActionMenu from '../../../components/common/ActionMenu';
 import Loader from '../../../components/common/Loader';
 import Notify from '../../../components/common/Notify';
