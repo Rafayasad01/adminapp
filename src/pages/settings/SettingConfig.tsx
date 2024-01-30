@@ -69,7 +69,7 @@ function SettingsConfig() {
       theme: dialogItem.id,
       updatedBy: authState?.user?.id,
     };
-    console.log('themeObj:::::::', themeObj);
+    // console.log('themeObj:::::::', themeObj);
     system
       .systemConfigColorChange(authState.user.tenant, themeObj)
       .then((res) => {

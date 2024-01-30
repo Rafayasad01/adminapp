@@ -139,29 +139,31 @@ function OrdersCreatePage() {
             text: res.data.message,
             type: 'success',
           });
-          VoucherService.orderVoucherPromotionList(
-            authState.user.tenant,
-            res.data.data.id
-          )
-            .then((resp) => {
-              if (resp.data.success) {
-                setPromoList(resp.data.data);
-              } else {
+          if (isExistingUser === 'Exist User') {
+            VoucherService.orderVoucherPromotionList(
+              authState.user.tenant,
+              res.data.data.id
+            )
+              .then((resp) => {
+                if (resp.data.success) {
+                  setPromoList(resp.data.data);
+                } else {
+                  setIsNotify(true);
+                  setNotifyMessage({
+                    text: resp.data.message,
+                    type: 'error',
+                  });
+                  setPromoList([]);
+                }
+              })
+              .catch((err) => {
                 setIsNotify(true);
                 setNotifyMessage({
-                  text: resp.data.message,
+                  text: err.message,
                   type: 'error',
                 });
-                setPromoList([]);
-              }
-            })
-            .catch((err) => {
-              setIsNotify(true);
-              setNotifyMessage({
-                text: err.message,
-                type: 'error',
               });
-            });
+          }
         } else {
           setLoginDetails(null);
           setIsLoginLoader(false);

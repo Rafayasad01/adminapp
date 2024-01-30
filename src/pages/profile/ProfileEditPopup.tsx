@@ -90,7 +90,7 @@ function ProfileEditPopup({
   }, [formData]);
 
   const onSubmit = (data: EditProfile) => {
-    console.log('data::::::::::', data);
+    // console.log('data::::::::::', data);
     if (image) {
       data.avatar = image;
     } else {

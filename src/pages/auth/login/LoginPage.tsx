@@ -46,26 +46,29 @@ function LoginPage() {
     event.preventDefault();
   };
 
-  // const url = 'development';
-
-  useEffect(() => {
-    const regexPattern = /localhost/;
-    setIsPageLoader(true);
-    // setIsPageLoader(true);
+  const getDomain = () => {
+    // const regexPattern = /localhost/;
     // let a = 'https://devwebapp.urapptech.com/admin/auth/login';
     // console.log('a::::::', a);
     // const newTxt = a.split('/')[2].split('.')[0];
     // console.log('newTxt::::::', newTxt);
-    const currentURL = window.location.href;
-    let url = currentURL;
-    if (regexPattern.test(currentURL)) {
-      url = currentURL.split('/')[2].split(':')[0];
-    } else {
-      url = currentURL.split('/')[2].split('.')[0];
-    }
+    // let url = currentURL;
+    // if (regexPattern.test(currentURL)) {
+    //   url = currentURL.split('/')[2].split(':')[0];
+    // } else {
+    //   url = currentURL.split('/')[2].split('.')[0];
+    // }
     // console.log('url', url);
+
+    const domain = window.location.hostname;
+    return domain.split('.')[0];
+  };
+
+  useEffect(() => {
+    setIsPageLoader(true);
+    const currentURL = getDomain();
     system
-      .getSystemConfig(url)
+      .getSystemConfig(currentURL)
       .then((res: any) => {
         setIsPageLoader(false);
         if (res.data.success) {
@@ -84,7 +87,7 @@ function LoginPage() {
         } else {
           setIsPageLoader(false);
           showNotification(res.data.message, 'error');
-          console.log('404 page');
+          // console.log('404 page');
         }
       })
       .catch((err: Error) => {
