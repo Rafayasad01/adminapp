@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useRef, useState } from 'react';
 import { Loader } from '@googlemaps/js-api-loader';
+import { useEffect, useRef, useState } from 'react';
 
 type Props = {
   center: google.maps.LatLngLiteral;

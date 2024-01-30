@@ -1,21 +1,20 @@
 /* eslint-disable prettier/prettier */
+import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
+import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import AppBar from '@mui/material/AppBar';
 import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
 import Toolbar from '@mui/material/Toolbar';
-import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
-import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
-// import { blac } from '@mui/material/colors';
-import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { NavLink } from 'react-router-dom';
+// import  { blac } from '@mui/material/colors';
 import { useEffect, useRef, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { setItemState, setLogo } from '../../redux/features/appStateSlice';
+import { logout } from '../../redux/features/authStateSlice';
+import { setRolePermissions } from '../../redux/features/permissionsStateSlice';
+import { useAppSelector } from '../../redux/redux-hooks';
 import BackArrowIcon from '../icons/BackArrowIcon';
 import ShopIcon from '../icons/ShopIcon';
-import { useAppSelector } from '../../redux/redux-hooks';
-import { logout } from '../../redux/features/authStateSlice';
-import { setItemState, setLogo } from '../../redux/features/appStateSlice';
-import { setRolePermissions } from '../../redux/features/permissionsStateSlice';
 
 type Props = {
   title?: string;

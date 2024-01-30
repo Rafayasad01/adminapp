@@ -1,12 +1,12 @@
-import { useState } from 'react';
+import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined';
+import RadioButtonUncheckedOutlinedIcon from '@mui/icons-material/RadioButtonUncheckedOutlined';
+import Checkbox from '@mui/material/Checkbox';
 import FormControl from '@mui/material/FormControl';
+import FormControlLabel from '@mui/material/FormControlLabel';
 import Input from '@mui/material/Input';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
-import Checkbox from '@mui/material/Checkbox';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined';
-import RadioButtonUncheckedOutlinedIcon from '@mui/icons-material/RadioButtonUncheckedOutlined';
+import { useState } from 'react';
 
 function OffDaysForm() {
   const [devices, setDevices] = useState(() => []);

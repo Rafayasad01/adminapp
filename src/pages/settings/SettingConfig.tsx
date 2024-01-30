@@ -2,21 +2,21 @@
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { useNotification } from '../../components/Contexts/NotificationContext';
+import { useNavigate } from 'react-router-dom';
 import assets from '../../assets';
 import '../../assets/css/PopupStyle.css';
+import { useNotification } from '../../components/Contexts/NotificationContext';
+import ColorRowWithTooltips from '../../components/common/ColorRowWithTooltips';
+import CustomButton from '../../components/common/CustomButton';
 import Loader from '../../components/common/Loader';
 import MapAddress from '../../components/common/MapAddress';
 import Notify from '../../components/common/Notify';
-import system from '../../services/adminapp/SystemConfig';
-import { useAppSelector } from '../../redux/redux-hooks';
-import ColorRowWithTooltips from '../../components/common/ColorRowWithTooltips';
-import PermissionPopup from '../../utils/PermissionPopup';
 import { setSystemConfig, setTheme } from '../../redux/features/authStateSlice';
+import { useAppSelector } from '../../redux/redux-hooks';
+import system from '../../services/adminapp/SystemConfig';
+import PermissionPopup from '../../utils/PermissionPopup';
 import DragDropFile from './DragDropFile';
-import CustomButton from '../../components/common/CustomButton';
 
 function SettingsConfig() {
   const dispatch = useDispatch();

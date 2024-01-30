@@ -1,5 +1,5 @@
-import network from '../../utils/network';
 import { NOTIFICATION_PREFIX } from '../../utils/constants';
+import network from '../../utils/network';
 
 // const ASSIGN_PREFIX = 'assign';
 

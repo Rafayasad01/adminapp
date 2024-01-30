@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import CustomCard from '../../components/common/CustomCard';
 import Loader from '../../components/common/Loader';
+import Notify from '../../components/common/Notify';
 import TopBar from '../../components/common/TopBar';
 import StarBadgeGreen from '../../components/icons/StarBadgeGreen';
 import StarBadgeRed from '../../components/icons/StarBadgeRed';
@@ -14,7 +15,6 @@ import Service from '../../services/adminapp/adminBranch';
 import { formatName } from '../../utils/helper';
 import BranchCategoryPopup from './BranchCategoryPopup';
 import BranchSettingPopup from './BranchSettingPopup';
-import Notify from '../../components/common/Notify';
 
 function BranchDetailPage() {
   const { branchId } = useParams();

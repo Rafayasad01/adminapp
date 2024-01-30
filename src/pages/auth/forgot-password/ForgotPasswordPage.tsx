@@ -1,8 +1,8 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import assets from '../../../assets';
 
 function ForgotPasswordPage() {

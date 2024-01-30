@@ -1,18 +1,18 @@
-import '../../assets/css/PopupStyle.css';
-import React, { Fragment } from 'react';
-import Dialog from '@mui/material/Dialog';
-import FormControl from '@mui/material/FormControl';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
+import Dialog from '@mui/material/Dialog';
+import FormControl from '@mui/material/FormControl';
 import IconButton from '@mui/material/IconButton';
 import TextField from '@mui/material/TextField';
-import CustomButton from './CustomButton';
-import CustomInputBox from './CustomInputBox';
-import CustomDropDown from './CustomDropDown';
-import TimePicker from './TimePicker';
+import React, { Fragment } from 'react';
+import '../../assets/css/PopupStyle.css';
 import WorkDaysForm from '../../pages/settings/WorkDaysForm';
-import ErrorSpanBox from './ErrorSpanBox';
 import { INVALID_CHAR, MAX_LENGTH_EXCEEDED } from '../../utils/constants';
+import CustomButton from './CustomButton';
+import CustomDropDown from './CustomDropDown';
+import CustomInputBox from './CustomInputBox';
+import ErrorSpanBox from './ErrorSpanBox';
+import TimePicker from './TimePicker';
 
 type Props = {
   openFormDialog: boolean;

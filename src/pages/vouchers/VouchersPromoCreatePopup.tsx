@@ -1,26 +1,25 @@
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable @typescript-eslint/ban-types */
+import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined';
+import RadioButtonUncheckedOutlinedIcon from '@mui/icons-material/RadioButtonUncheckedOutlined';
 import Button from '@mui/material/Button';
+import Checkbox from '@mui/material/Checkbox';
 import Dialog from '@mui/material/Dialog';
 import FormControl from '@mui/material/FormControl';
+import FormControlLabel from '@mui/material/FormControlLabel';
 import Input from '@mui/material/Input';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import Switch from '@mui/material/Switch';
-import React, { useEffect, useState } from 'react';
-import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import RadioButtonUncheckedOutlinedIcon from '@mui/icons-material/RadioButtonUncheckedOutlined';
-import Checkbox from '@mui/material/Checkbox';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import dayjs, { Dayjs } from 'dayjs';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import '../../assets/css/PopupStyle.css';
 import ErrorSpanBox from '../../components/common/ErrorSpanBox';
 import { useAppSelector } from '../../redux/redux-hooks';
-import DatePickerField from './DatePickerField';
 import {
   INVALID_CHAR,
   MAX_LENGTH_EXCEEDED,
@@ -28,6 +27,7 @@ import {
   VALIDATE_NON_NEGATIVE_NUM,
   VALIDATE_NON_NEGATIVE_NUM_AND_CHECK_LENGTH,
 } from '../../utils/constants';
+import DatePickerField from './DatePickerField';
 
 type Props = {
   vouchersPromoDialog: boolean;

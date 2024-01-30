@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
 import { Loader } from '@googlemaps/js-api-loader';
+import { useEffect, useRef, useState } from 'react';
 
 import assets from '../../assets';
 

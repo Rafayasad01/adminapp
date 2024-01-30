@@ -1,7 +1,7 @@
+import { endOfWeek, startOfWeek } from 'date-fns';
+import dayjs from 'dayjs';
 import { useState } from 'react';
 import { DateRangePicker } from 'react-date-range';
-import dayjs from 'dayjs';
-import { startOfWeek, endOfWeek } from 'date-fns';
 
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file

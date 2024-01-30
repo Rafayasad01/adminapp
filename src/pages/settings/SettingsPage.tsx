@@ -1,6 +1,6 @@
 /* eslint-disable import/order */
-import TopBar from '../../components/common/TopBar';
 import { Outlet } from 'react-router-dom';
+import TopBar from '../../components/common/TopBar';
 
 function SettingsPage() {
   return (

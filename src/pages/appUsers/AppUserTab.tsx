@@ -1,17 +1,17 @@
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import Avatar from '@mui/material/Avatar';
+import IconButton from '@mui/material/IconButton';
 import Switch from '@mui/material/Switch';
 import TablePagination from '@mui/material/TablePagination';
 import dayjs from 'dayjs';
-import Avatar from '@mui/material/Avatar';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import IconButton from '@mui/material/IconButton';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import CustomText from '../../components/common/CustomText';
-import { CheckRolePermission, listingRolePermission } from '../../utils/helper';
-import Service from '../../services/adminapp/adminAppUser';
-import { useAppSelector } from '../../redux/redux-hooks';
-import { NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
 import ActionMenu from '../../components/common/ActionMenu';
+import CustomText from '../../components/common/CustomText';
+import { useAppSelector } from '../../redux/redux-hooks';
+import Service from '../../services/adminapp/adminAppUser';
+import { NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
+import { CheckRolePermission, listingRolePermission } from '../../utils/helper';
 
 type Props = {
   list: any;

@@ -1,9 +1,9 @@
 /* eslint-disable prettier/prettier */
-import { Navigate, Outlet } from 'react-router-dom';
 import Box from '@mui/material/Box';
-import Sidebar from '../common/Sidebar';
+import { Navigate, Outlet } from 'react-router-dom';
 import { useAppSelector } from '../../redux/redux-hooks';
 import { NotificationProvider } from '../Contexts/NotificationContext';
+import Sidebar from '../common/Sidebar';
 
 function AppLayout() {
   const authState = useAppSelector((state) => state?.authState);

@@ -1,5 +1,5 @@
-import network from '../../utils/network';
 import { BACKOFFICE_PREFIX, PROFILE_PREFIX } from '../../utils/constants';
+import network from '../../utils/network';
 
 const getProfile = (userId: string) => {
   return network.get(`${BACKOFFICE_PREFIX}/${PROFILE_PREFIX}/${userId}`);

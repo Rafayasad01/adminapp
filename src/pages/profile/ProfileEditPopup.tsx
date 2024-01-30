@@ -1,14 +1,17 @@
-import React, { useEffect, useState } from 'react';
-import Dialog from '@mui/material/Dialog';
-import Button from '@mui/material/Button';
-import FormControl from '@mui/material/FormControl';
-import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
+import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import FormControl from '@mui/material/FormControl';
+import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import '../../assets/css/PopupStyle.css';
-import IconButton from '@mui/material/IconButton';
+import CustomDropDown from '../../components/common/CustomDropDown';
+import ErrorSpanBox from '../../components/common/ErrorSpanBox';
 import { EditProfile } from '../../interfaces/app-user.interface';
+import Countries from '../../services/commonApis/commonApis';
 import {
   INVALID_CHAR,
   MAX_LENGTH_EXCEEDED,
@@ -16,9 +19,6 @@ import {
   PH_MINI_LENGTH,
   imageAllowedTypes,
 } from '../../utils/constants';
-import ErrorSpanBox from '../../components/common/ErrorSpanBox';
-import CustomDropDown from '../../components/common/CustomDropDown';
-import Countries from '../../services/commonApis/commonApis';
 
 type Props = {
   openFormDialog: boolean;

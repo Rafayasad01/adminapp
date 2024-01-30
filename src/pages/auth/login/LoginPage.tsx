@@ -15,16 +15,16 @@ import {
   setTheme,
 } from '../../../redux/features/authStateSlice';
 import { useAppDispatch, useAppSelector } from '../../../redux/redux-hooks';
-import auth from '../../../services/adminapp/admin';
 import system from '../../../services/adminapp/SystemConfig';
+import auth from '../../../services/adminapp/admin';
 import { setToken } from '../../../utils/constants';
 
 import assets from '../../../assets';
+import { useNotification } from '../../../components/Contexts/NotificationContext';
 import Loader from '../../../components/common/Loader';
+import Notify from '../../../components/common/Notify';
 import { setItemState, setLogo } from '../../../redux/features/appStateSlice';
 import { setRolePermissions } from '../../../redux/features/permissionsStateSlice';
-import Notify from '../../../components/common/Notify';
-import { useNotification } from '../../../components/Contexts/NotificationContext';
 
 function LoginPage() {
   const dispatch = useAppDispatch();

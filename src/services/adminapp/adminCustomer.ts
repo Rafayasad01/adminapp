@@ -1,5 +1,5 @@
-import network from '../../utils/network';
 import { CUSTOMER_PREFIX } from '../../utils/constants';
+import network from '../../utils/network';
 
 const CUSTOMER_ADDRESS_PREFIX = 'address';
 
