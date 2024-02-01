@@ -211,7 +211,7 @@ function Sidebar() {
             onClick={() => handleToggle(index)}
             className={`abc flex cursor-pointer items-center justify-between px-[30px]`}
           >
-            <div className="my-3 flex items-center">
+            <div className="ap my-3 flex items-center">
               <div className="pr-[7px]">
                 <span className="text-base leading-3">{icon}</span>
               </div>
