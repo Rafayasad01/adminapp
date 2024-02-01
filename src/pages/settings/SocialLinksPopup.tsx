@@ -70,7 +70,20 @@ function SocialLinksPopup({
           };
 
           dispatch(setItemState({ tenantConfig }));
-          setDetail(item.data.data);
+          setDetail((prev: any) => {
+            return {
+              ...prev,
+              tenantConfig: {
+                ...prev.tenantConfig,
+                facebook: item.data.data.facebook,
+                instagram: item.data.data.instagram,
+                linkedin: item.data.data.linkedin,
+                twitter: item.data.data.twitter,
+                whatsapp: item.data.data.whatsapp,
+                youtube: item.data.data.youtube,
+              },
+            };
+          });
         } else {
           setIsLoader(false);
           setIsNotify(true);
@@ -119,7 +132,7 @@ function SocialLinksPopup({
                   placeholder="Url"
                   disableUnderline
                   {...register('facebook', {
-                    value: detail ? detail.facebook : '',
+                    value: detail ? detail?.tenantConfig?.facebook : '',
                   })}
                   // onChange={(item: any) => {
                   //   setSocialLinks((newItem: any) => {
@@ -141,7 +154,7 @@ function SocialLinksPopup({
                   placeholder="Url"
                   disableUnderline
                   {...register('instagram', {
-                    value: detail ? detail.instagram : '',
+                    value: detail ? detail?.tenantConfig?.instagram : '',
                   })}
                   // onChange={(item: any) => {
                   //   setSocialLinks((newItem: any) => {
@@ -163,7 +176,7 @@ function SocialLinksPopup({
                   placeholder="Url"
                   disableUnderline
                   {...register('linkedin', {
-                    value: detail ? detail.linkedin : '',
+                    value: detail ? detail?.tenantConfig?.linkedin : '',
                   })}
                   // onChange={(item: any) => {
                   //   setSocialLinks((newItem: any) => {
@@ -185,7 +198,7 @@ function SocialLinksPopup({
                   placeholder="Url"
                   disableUnderline
                   {...register('twitter', {
-                    value: detail ? detail.twitter : '',
+                    value: detail ? detail?.tenantConfig?.twitter : '',
                   })}
                   // onChange={(item: any) => {
                   //   setSocialLinks((newItem: any) => {
@@ -207,7 +220,7 @@ function SocialLinksPopup({
                   placeholder="Url"
                   disableUnderline
                   {...register('youtube', {
-                    value: detail ? detail.youtube : '',
+                    value: detail ? detail?.tenantConfig?.youtube : '',
                   })}
                   // onChange={(item: any) => {
                   //   setSocialLinks((newItem: any) => {
@@ -228,7 +241,7 @@ function SocialLinksPopup({
                   placeholder="Url"
                   disableUnderline
                   {...register('whatsapp', {
-                    value: detail ? detail.whatsapp : '',
+                    value: detail ? detail?.tenantConfig?.whatsapp : '',
                   })}
                   // onChange={(item: any) => {
                   //   setSocialLinks((newItem: any) => {

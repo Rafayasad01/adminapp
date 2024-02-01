@@ -59,9 +59,9 @@ function Item(props: { value: any; name: AssetsImages }) {
 
 function HelpingIcon(elements: any) {
   const { links } = elements;
-  // console.log('links', links);
 
-  const filtered = links?.filter((el: string) => el !== 'null' && el !== null);
+  const filtered = links?.filter((el: string) => el !== '' && el !== null);
+  console.log('links', filtered);
   if (filtered?.length < 6) {
     return <PlusIcon />;
   }
@@ -226,13 +226,12 @@ function SettingsApp() {
         .then((item: any) => {
           const { success, message, data: itemData } = item.data;
           if (success) {
-            // console.log('message', message);
-
-            dispatch(setTheme(itemData));
+            console.log('messageDATA', itemData);
+            // dispatch(setTheme(itemData));
             setAddress(itemData?.address);
-            dispatch(setTheme(itemData));
-            if (itemData?.logo) {
-              dispatch(setLogo(itemData.logo));
+            // dispatch(setTheme(itemData));
+            if (itemData?.tenantConfig?.logo) {
+              dispatch(setLogo(itemData.tenantConfig.logo));
             }
             if (itemData?.userLimit) {
               dispatch(setEmployeeLimit(itemData.userLimit));
@@ -365,7 +364,7 @@ function SettingsApp() {
                       alt="Shop Logo"
                     />
                   </div>
-                ) : detail && detail?.tenantConfig.logo ? (
+                ) : detail && detail?.tenantConfig?.logo ? (
                   <div className="col-span-6 flex items-center xl:justify-center 2xl:justify-start">
                     <img
                       className="max-h-[100px] max-w-[150px] rounded-md"
@@ -683,50 +682,56 @@ function SettingsApp() {
                   <label className="FormLabel">Social Links</label>
                   <div className="mt-2 flex flex-row items-center gap-3">
                     {detail &&
-                      detail.tenantConfig.facebook &&
-                      detail.tenantConfig.facebook !== 'null' && (
+                      detail?.tenantConfig?.facebook &&
+                      detail?.tenantConfig?.facebook !== 'null' &&
+                      detail?.tenantConfig?.facebook !== 'undefined' && (
                         <Item
-                          value={detail.tenantConfig.facebook}
+                          value={detail?.tenantConfig?.facebook}
                           name={FACEBOOK as AssetsImages}
                         />
                       )}
                     {detail &&
-                      detail.tenantConfig.instagram &&
-                      detail.tenantConfig.instagram !== 'null' && (
+                      detail?.tenantConfig?.instagram &&
+                      detail?.tenantConfig?.instagram !== 'null' &&
+                      detail?.tenantConfig?.instagram !== 'undefined' && (
                         <Item
-                          value={detail.tenantConfig.instagram}
+                          value={detail?.tenantConfig?.instagram}
                           name={INSTAGRAM as AssetsImages}
                         />
                       )}
                     {detail &&
-                      detail.tenantConfig.linkedin &&
-                      detail.tenantConfig.linkedin !== 'null' && (
+                      detail?.tenantConfig?.linkedin &&
+                      detail?.tenantConfig?.linkedin !== 'null' &&
+                      detail?.tenantConfig?.linkedin !== 'undefined' && (
                         <Item
-                          value={detail.tenantConfig.linkedin}
+                          value={detail?.tenantConfig?.linkedin}
                           name={LINKEDIN as AssetsImages}
                         />
                       )}
                     {detail &&
-                      detail.tenantConfig.twitter &&
-                      detail.tenantConfig.twitter !== 'null' && (
+                      detail?.tenantConfig?.twitter &&
+                      detail?.tenantConfig?.twitter !== 'null' &&
+                      detail?.tenantConfig?.twitter !== 'undefined' && (
                         <Item
-                          value={detail.tenantConfig.twitter}
+                          value={detail?.tenantConfig?.twitter}
                           name={TWITTER as AssetsImages}
                         />
                       )}
                     {detail &&
-                      detail.tenantConfig.youtube &&
-                      detail.tenantConfig.youtube !== 'null' && (
+                      detail.tenantConfig?.youtube &&
+                      detail.tenantConfig?.youtube !== 'null' &&
+                      detail.tenantConfig?.youtube !== 'undefined' && (
                         <Item
-                          value={detail.tenantConfig.youtube}
+                          value={detail.tenantConfig?.youtube}
                           name={YOUTUBE as AssetsImages}
                         />
                       )}
                     {detail &&
-                      detail.tenantConfig.whatsapp &&
-                      detail.tenantConfig.whatsapp !== 'null' && (
+                      detail.tenantConfig?.whatsapp &&
+                      detail.tenantConfig?.whatsapp !== 'null' &&
+                      detail.tenantConfig?.whatsapp !== 'undefined' && (
                         <Item
-                          value={detail.tenantConfig.whatsapp}
+                          value={detail.tenantConfig?.whatsapp}
                           name={WHATSAPP as AssetsImages}
                         />
                       )}
@@ -736,12 +741,36 @@ function SettingsApp() {
                     >
                       <HelpingIcon
                         links={[
-                          detail?.facebook,
-                          detail?.instagram,
-                          detail?.linkedin,
-                          detail?.twitter,
-                          detail?.whatsapp,
-                          detail?.youtube,
+                          detail?.tenantConfig?.facebook !== 'undefined' &&
+                          detail?.tenantConfig?.facebook !== 'null' &&
+                          detail?.tenantConfig?.facebook !== ''
+                            ? detail?.tenantConfig?.facebook
+                            : '',
+                          detail?.tenantConfig?.instagram !== 'undefined' &&
+                          detail?.tenantConfig?.instagram !== 'null' &&
+                          detail?.tenantConfig?.instagram !== ''
+                            ? detail?.tenantConfig?.instagram
+                            : '',
+                          detail?.tenantConfig?.linkedin !== 'undefined' &&
+                          detail?.tenantConfig?.linkedin !== 'null' &&
+                          detail?.tenantConfig?.linkedin !== ''
+                            ? detail?.tenantConfig?.linkedin
+                            : '',
+                          detail?.tenantConfig?.twitter !== 'undefined' &&
+                          detail?.tenantConfig?.twitter !== 'null' &&
+                          detail?.tenantConfig?.twitter !== ''
+                            ? detail?.tenantConfig?.twitter
+                            : '',
+                          detail?.tenantConfig?.whatsapp !== 'undefined' &&
+                          detail?.tenantConfig?.whatsapp !== 'null' &&
+                          detail?.tenantConfig?.whatsapp !== ''
+                            ? detail?.tenantConfig?.whatsapp
+                            : '',
+                          detail?.tenantConfig?.youtube !== 'undefined' &&
+                          detail?.tenantConfig?.youtube !== 'null' &&
+                          detail?.tenantConfig?.youtube !== ''
+                            ? detail?.tenantConfig?.youtube
+                            : '',
                         ]}
                       />
                     </IconButton>

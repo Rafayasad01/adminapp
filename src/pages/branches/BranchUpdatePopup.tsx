@@ -117,7 +117,7 @@ function BranchUpdatePopup({
                     className="FormInput"
                     {...register('tenantName', {
                       required: true,
-                      pattern: PATTERN.CHAR_SPACE_DASH,
+                      pattern: PATTERN.CHAR_NUM_SPACE_DASH,
                       validate: (value) => value.length <= 150,
                       value: item.name,
                     })}

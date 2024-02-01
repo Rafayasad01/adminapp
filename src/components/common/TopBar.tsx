@@ -9,7 +9,11 @@ import Toolbar from '@mui/material/Toolbar';
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { setItemState, setLogo } from '../../redux/features/appStateSlice';
+import {
+  setItemState,
+  setLogo,
+  setRemoveItemState,
+} from '../../redux/features/appStateSlice';
 import { logout } from '../../redux/features/authStateSlice';
 import { setRolePermissions } from '../../redux/features/permissionsStateSlice';
 import { useAppSelector } from '../../redux/redux-hooks';
@@ -38,7 +42,7 @@ function TopBar({ title, isNestedRoute = false }: Props) {
 
   const logOut = () => {
     dispatch(logout());
-    dispatch(setItemState(null));
+    dispatch(setRemoveItemState());
     dispatch(setLogo(null));
     dispatch(setRolePermissions({ id: '', name: '', permissions: [] }));
   };
@@ -84,7 +88,7 @@ function TopBar({ title, isNestedRoute = false }: Props) {
             )}
             {userData?.tenantName && (
               <div className="flex items-center">
-                <span className="px-2 text-sm font-semibold">
+                <span className="px-2 text-sm font-semibold capitalize">
                   {userData?.tenantName}
                 </span>
                 <ShopIcon color="black" />
@@ -96,7 +100,7 @@ function TopBar({ title, isNestedRoute = false }: Props) {
               className="header-user-box ml-3.5 cursor-pointer"
               onClick={() => setProfileToggler(!profileToggler)}
             >
-              <span>{`${userData.firstName} ${userData.lastName}`}</span>
+              <span className="capitalize">{`${userData.firstName} ${userData.lastName}`}</span>
               {ProfileAvatar ? (
                 <Avatar
                   sx={{ width: 56, height: 56 }}

@@ -37,6 +37,9 @@ export const appStateSlice = createSlice({
         ...action.payload,
       };
     },
+    setRemoveItemState: (state) => {
+      state.UserItems = null;
+    },
     setTenantConfig: (state, action: PayloadAction<any>) => {
       state.UserItems = {
         ...state.UserItems,
@@ -60,6 +63,7 @@ export const appStateSlice = createSlice({
 
 export const {
   setItemState,
+  setRemoveItemState,
   setLogo,
   setEmployeeLimit,
   setTenantConfig,
