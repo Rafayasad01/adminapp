@@ -115,8 +115,8 @@ function HomePage() {
       {/* {console.log("COUNT", count)} */}
       <div className="container m-auto mt-3">
         <div className="mt-2 grid flex-1 grid-cols-4 gap-3">
-          <div className="flex h-24 flex-row rounded-lg bg-white shadow-lg">
-            <div className="... flex w-44 flex-col justify-center pl-3">
+          <div className="flex h-24 flex-row justify-between rounded-lg bg-white shadow-lg">
+            <div className="... flex w-44 flex-col justify-evenly pl-3">
               <h2 className="heading-color font-open-sans text-2xl font-semibold">
                 {count ? count.pickupToday : '0'}
               </h2>
@@ -137,8 +137,8 @@ function HomePage() {
               </IconButton>
             </div>
           </div>
-          <div className="flex h-24 flex-row rounded-lg bg-white shadow-lg">
-            <div className="flex w-44 flex-col justify-center pl-3">
+          <div className="flex h-24 flex-row justify-between rounded-lg bg-white shadow-lg">
+            <div className="flex w-44 flex-col justify-evenly pl-3">
               <h2 className="heading-color font-open-sans text-2xl font-semibold">
                 {count ? count.deliveryToday : '0'}
               </h2>
@@ -159,8 +159,8 @@ function HomePage() {
               </IconButton>
             </div>
           </div>
-          <div className="flex h-24 flex-row rounded-lg bg-white shadow-lg">
-            <div className="... flex w-44 flex-col justify-center pl-3">
+          <div className="flex h-24 flex-row justify-between rounded-lg bg-white shadow-lg">
+            <div className="... flex w-44 flex-col justify-evenly pl-3">
               <h2 className="heading-color font-open-sans text-2xl font-semibold">
                 {count ? count.overdue : '0'}
               </h2>
@@ -179,8 +179,8 @@ function HomePage() {
               </IconButton>
             </div>
           </div>
-          <div className="flex h-24 flex-row rounded-lg bg-white shadow-lg">
-            <div className="... flex w-44 flex-col justify-center pl-3">
+          <div className="flex h-24 flex-row justify-between rounded-lg bg-white shadow-lg">
+            <div className="... flex w-44 flex-col justify-evenly pl-3">
               <h2 className="heading-color font-open-sans text-2xl font-semibold">
                 {count ? count.deliveredToday : '0'}
               </h2>
