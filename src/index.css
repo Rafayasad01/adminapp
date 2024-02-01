@@ -64,7 +64,8 @@ select {
 .MuiInputBase-root:hover, */
 .MuiFormControl-root.search-grey-outline,
 .MuiInputBase-formControl,
-.fixed-height {
+.fixed-height,
+.border-foreground {
   border-color: rgb(26 26 26 / 30%) !important;
 }
 .FormControl textarea {
@@ -1551,9 +1552,76 @@ label + .css-1aa5qj0-MuiInputBase-root-MuiInput-root {
 main {
   @apply bg-background text-secondary !important;
 }
-.left-sidebar ul div a [aria-current]:not([aria-current='false']) {
-  @apply bg-faded;
+.left-sidebar ul div a[aria-current='page'] {
+  @apply bg-faded !important;
+  opacity: 1 !important;
 }
+/* .left-sidebar ul div a[aria-current="page"] svg {
+  @apply text-foreground !important;
+
+} */
+.left-sidebar ul div a[aria-current='page'] .text-base,
+.left-sidebar ul div a[aria-current='page'] .font-open-sans {
+  @apply text-foreground !important;
+  opacity: 1;
+}
+.left-sidebar ul div a .text-base,
+.left-sidebar ul div a .font-open-sans {
+  @apply text-foreground !important;
+  opacity: 0.7;
+}
+.left-sidebar ul div a[aria-current='page'] .abc {
+  @apply bg-faded text-foreground !important;
+  border-bottom: 4px solid var(--theme-primary);
+}
+.left-sidebar ul div a[aria-current='page'] .abc .text-base svg path {
+  fill: var(--theme-foreground);
+}
+.left-sidebar ul div .cactive a[aria-current='page'] {
+  @apply bg-primary text-foreground !important;
+  /* border-bottom: 4px solid var(--theme-primary); */
+  opacity: 1;
+}
+.left-sidebar ul div .cactive {
+  @apply bg-primary text-foreground !important;
+}
+.left-sidebar ul div .cactive a[aria-current='page'] .text-base svg path {
+  opacity: 1;
+}
+.left-sidebar ul div .cactive .text-base svg path {
+  fill: var(--theme-foreground);
+  opacity: 0.7;
+}
+.left-sidebar ul div .cactive a {
+  @apply text-foreground !important;
+  opacity: 0.7;
+}
+.arrow-icon svg path {
+  stroke: #000 !important;
+}
+/* optionss  */
+/* .left-sidebar ul div a[aria-current="page"] {
+
+  @apply bg-primary text-foreground !important;
+  border-bottom: 4px solid var(--theme-primary)
+} */
+/* .left-sidebar ul div a[aria-current="page"] svg {
+    fill: var(--theme-foreground);
+    stroke: var(--theme-foreground) !important;
+} */
+/* .left-sidebar ul div a[aria-current="page"] .abc svg path  {
+  fill: #000 !important;
+  stroke: var(--theme-primary) !important;
+} */
+
+/* .left-sidebar ul div a svg {
+  @apply text-faded !important;
+
+} */
+/* .left-sidebar ul div svg path {
+  fill: text-faded !important;
+
+} */
 .btn-black-fill,
 .btn-gray-fill {
   @apply border-primary bg-primary text-foreground !important;

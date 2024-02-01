@@ -137,121 +137,123 @@ function LoginPage() {
   return isPageLoader ? (
     <Loader />
   ) : (
-    <div
-      className="flex h-full w-full items-center justify-center bg-[#F0F0F0]
-      "
-    >
-      <div className="h-full w-[40%] px-[30px]">
-        <div className="w-full max-w-[150px] px-[25px] py-[40px]">
-          <img
-            src={systemConfig?.shopLogo ?? systemConfig?.shopName}
-            alt="urlaundry"
-          />
-        </div>
-        <div className="pt-[150px]">
-          <h1 className="mb-4 text-center text-[36px] font-bold capitalize leading-[normal] text-black">
-            log in
-          </h1>
-          <div className="">
-            <div className="form-group w-full">
-              <label
-                htmlFor="email"
-                className="mb-1 font-sans text-[14px] font-normal leading-[normal] text-[#06152B]"
-              >
-                Email
-              </label>
-              <FormControl className="m-1 w-full" variant="standard">
-                <Input
-                  className="border-1 border-solid border-secondary"
-                  id="email"
-                  type="email"
-                  name="email"
-                  onChange={(event) => setEmail(event.target.value)}
-                  disableUnderline
-                />
-              </FormControl>
-            </div>
-            <div className="form-group w-full">
-              <label htmlFor="password">Password</label>
-              <FormControl className="m-1 w-full" variant="filled">
-                <Input
-                  className="input-with-icon after:border-b-secondary"
-                  id="password"
-                  type={showPassword ? 'text' : 'password'}
-                  name="password"
-                  onChange={(event) => setPassword(event.target.value)}
-                  endAdornment={
-                    <InputAdornment position="end">
-                      <IconButton
-                        aria-label="toggle password visibility"
-                        onClick={handleClickShowPassword}
-                        onMouseDown={handleMouseDownPassword}
-                      >
-                        {showPassword ? (
-                          <VisibilityIcon />
-                        ) : (
-                          <VisibilityOffIcon />
-                        )}
-                      </IconButton>
-                    </InputAdornment>
-                  }
-                  disableUnderline
-                />
-              </FormControl>
-            </div>
-            <div className="form-group self-end">
-              <NavLink
-                className="font-open-sans text-sm font-normal text-neutral-900"
-                to="../forgot-password"
-              >
-                Forget Password?
-              </NavLink>
-            </div>
-            <div className="mt-8 w-full px-4">
-              <Button
-                disabled={!!isLoader}
-                className="w-full bg-neutral-900 px-16 py-2 text-gray-50"
-                variant="contained"
-                color="inherit"
-                title="Login"
-                onClick={loginHandler}
-              >
-                {!isLoader ? (
-                  `Login`
-                ) : (
-                  <CircularProgress color="inherit" size={24} />
-                )}
-              </Button>
+    <div className="flex  w-full items-center justify-center bg-[#F0F0F0] min-[1600px]:h-full">
+      <div className="mx-auto  flex w-full  items-start justify-around">
+        <div className="W-[30%]  px-[30px]">
+          <div className="max-h-[29px] w-full max-w-[150px] px-[25px] py-[40px]">
+            <img
+              src={systemConfig?.shopLogo ?? systemConfig?.shopName}
+              alt="urlaundry"
+              className="h-auto w-full object-contain"
+            />
+          </div>
+          <div className="pt-[150px]">
+            <h1 className="mb-4 text-center text-[36px] font-bold capitalize leading-[normal] text-black">
+              log in
+            </h1>
+            <div className="">
+              <div className="form-group w-full">
+                <label
+                  htmlFor="email"
+                  className="mb-1 font-sans text-[14px] font-normal leading-[normal] text-[#06152B]"
+                >
+                  Email
+                </label>
+                <FormControl className="m-1 w-full" variant="standard">
+                  <Input
+                    className="border-1 border-solid border-secondary"
+                    id="email"
+                    type="email"
+                    name="email"
+                    onChange={(event) => setEmail(event.target.value)}
+                    disableUnderline
+                  />
+                </FormControl>
+              </div>
+              <div className="form-group w-full">
+                <label htmlFor="password">Password</label>
+                <FormControl className="m-1 w-full" variant="filled">
+                  <Input
+                    className="input-with-icon after:border-b-secondary"
+                    id="password"
+                    type={showPassword ? 'text' : 'password'}
+                    name="password"
+                    onChange={(event) => setPassword(event.target.value)}
+                    endAdornment={
+                      <InputAdornment position="end">
+                        <IconButton
+                          aria-label="toggle password visibility"
+                          onClick={handleClickShowPassword}
+                          onMouseDown={handleMouseDownPassword}
+                        >
+                          {showPassword ? (
+                            <VisibilityIcon />
+                          ) : (
+                            <VisibilityOffIcon />
+                          )}
+                        </IconButton>
+                      </InputAdornment>
+                    }
+                    disableUnderline
+                  />
+                </FormControl>
+              </div>
+              <div className="form-group self-end">
+                <NavLink
+                  className="font-open-sans text-sm font-normal text-neutral-900"
+                  to="../forgot-password"
+                >
+                  Forget Password?
+                </NavLink>
+              </div>
+              <div className="mt-8 w-full px-4">
+                <Button
+                  disabled={!!isLoader}
+                  className="w-full bg-neutral-900 px-16 py-2 text-gray-50"
+                  variant="contained"
+                  color="inherit"
+                  title="Login"
+                  onClick={loginHandler}
+                >
+                  {!isLoader ? (
+                    `Login`
+                  ) : (
+                    <CircularProgress color="inherit" size={24} />
+                  )}
+                </Button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <div className="w-[60%] p-3">
-        <div className="mx-auto w-[800px] rounded-lg">
-          {systemConfig?.logoffImage ? (
-            <img
-              src={systemConfig?.logoffImage || assets.images.bgLogin}
-              alt="urlaundry"
-              className="h-full w-full object-contain"
-            />
-          ) : (
-            <div className="flex flex-col items-center justify-center">
-              <p className="text-xl font-semibold">Image is not uploaded yet</p>
-              <span className="text-sm font-medium">
-                Hint: You can upload under setting module from setting config
-                tab
-              </span>
-            </div>
-          )}
+        <div className="W-[70%] px-3 py-2">
+          <div className="mx-auto max-w-[800px] overflow-hidden rounded-lg min-[1600px]:max-w-[934px]">
+            {systemConfig?.logoffImage ? (
+              <img
+                src={systemConfig?.logoffImage || assets.images.bgLogin}
+                alt="urlaundry"
+                className="h-auto w-full object-contain"
+              />
+            ) : (
+              <div className="flex flex-col items-center justify-center">
+                <p className="text-xl font-semibold">
+                  Image is not uploaded yet
+                </p>
+                <span className="text-sm font-medium">
+                  Hint: You can upload under setting module from setting config
+                  tab
+                </span>
+              </div>
+            )}
+          </div>
         </div>
+        {notification && (
+          <Notify
+            isOpen
+            setIsOpen={hideNotification}
+            displayMessage={notification}
+          />
+        )}
       </div>
-      {notification && (
-        <Notify
-          isOpen
-          setIsOpen={hideNotification}
-          displayMessage={notification}
-        />
-      )}
     </div>
   );
 }

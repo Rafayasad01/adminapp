@@ -83,7 +83,7 @@ function OrdersCreatePage() {
           <div className="col-span-7 rounded-lg bg-white py-5 px-4 shadow-lg">
             <div className="col-span-12">
               <FormControl
-                className="w-full rounded-xl border border-solid border-foreground py-1 pl-3"
+                className="w-full rounded-xl border border-solid border-primary py-1 pl-3"
                 variant="filled"
               >
                 <Input
