@@ -59,12 +59,14 @@ function App() {
           dispatch(setSystemConfig(systemConfigData));
         } else {
           setIsPageLoader(false);
+          console.log('4041');
           navigate('./admin/auth/404', { replace: true });
           // showNotification(res.data.message, 'error');
           // console.log('404 page');
         }
       })
       .catch(() => {
+        console.log('4042');
         setIsPageLoader(false);
         navigate('./admin/auth/404', { replace: true });
         // showNotification(err.message, 'error');
