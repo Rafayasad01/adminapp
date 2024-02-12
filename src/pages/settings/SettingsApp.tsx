@@ -24,7 +24,7 @@ import Notify from '../../components/common/Notify';
 import PlusIcon from '../../components/icons/PlusIcon';
 import { Setting } from '../../interfaces/app.interface';
 import { setEmployeeLimit, setLogo } from '../../redux/features/appStateSlice';
-import { setTheme } from '../../redux/features/authStateSlice';
+// import { setTheme } from '../../redux/features/authStateSlice';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 import Service from '../../services/adminapp/admin';
 import {
@@ -61,7 +61,7 @@ function HelpingIcon(elements: any) {
   const { links } = elements;
 
   const filtered = links?.filter((el: string) => el !== '' && el !== null);
-  console.log('links', filtered);
+  // console.log('links', filtered);
   if (filtered?.length < 6) {
     return <PlusIcon />;
   }
@@ -226,7 +226,7 @@ function SettingsApp() {
         .then((item: any) => {
           const { success, message, data: itemData } = item.data;
           if (success) {
-            console.log('messageDATA', itemData);
+            // console.log('messageDATA', itemData);
             // dispatch(setTheme(itemData));
             setAddress(itemData?.address);
             // dispatch(setTheme(itemData));

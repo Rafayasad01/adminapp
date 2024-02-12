@@ -6,22 +6,15 @@ import FormControl from '@mui/material/FormControl';
 import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { UserLogin } from '../../../interfaces/auth.interface';
-import {
-  login,
-  setSystemConfig,
-  setTheme,
-} from '../../../redux/features/authStateSlice';
+import { login } from '../../../redux/features/authStateSlice';
 import { useAppDispatch, useAppSelector } from '../../../redux/redux-hooks';
-import system from '../../../services/adminapp/SystemConfig';
 import auth from '../../../services/adminapp/admin';
 import { setToken } from '../../../utils/constants';
-
 import assets from '../../../assets';
 import { useNotification } from '../../../components/Contexts/NotificationContext';
-import Loader from '../../../components/common/Loader';
 import Notify from '../../../components/common/Notify';
 import { setItemState, setLogo } from '../../../redux/features/appStateSlice';
 import { setRolePermissions } from '../../../redux/features/permissionsStateSlice';
@@ -38,63 +31,12 @@ function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoader, setIsLoader] = useState(false);
-  const [isPageLoader, setIsPageLoader] = useState(false);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const handleMouseDownPassword = (
     event: React.MouseEvent<HTMLButtonElement>
   ) => {
     event.preventDefault();
   };
-
-  const getDomain = () => {
-    // const regexPattern = /localhost/;
-    // let a = 'https://devwebapp.urapptech.com/admin/auth/login';
-    // console.log('a::::::', a);
-    // const newTxt = a.split('/')[2].split('.')[0];
-    // console.log('newTxt::::::', newTxt);
-    // let url = currentURL;
-    // if (regexPattern.test(currentURL)) {
-    //   url = currentURL.split('/')[2].split(':')[0];
-    // } else {
-    //   url = currentURL.split('/')[2].split('.')[0];
-    // }
-    // console.log('url', url);
-
-    const domain = window.location.hostname;
-    return domain.split('.')[0];
-  };
-
-  useEffect(() => {
-    setIsPageLoader(true);
-    const currentURL = getDomain();
-    system
-      .getSystemConfig(currentURL)
-      .then((res: any) => {
-        setIsPageLoader(false);
-        if (res.data.success) {
-          // console.log('res.data.data::::::', res.data.data);
-          const systemConfigData = {
-            createdDate: res.data.data.createdDate,
-            domain: res.data.data.domain,
-            id: res.data.data.id,
-            logoffImage: res.data.data.logoffImage,
-            tenant: res.data.data.tenant,
-            shopName: res.data.data.tenantConfig.name,
-            shopLogo: res.data.data.tenantConfig.logo,
-          };
-          dispatch(setTheme(res.data.data.theme.value.themeColor));
-          dispatch(setSystemConfig(systemConfigData));
-        } else {
-          setIsPageLoader(false);
-          showNotification(res.data.message, 'error');
-          // console.log('404 page');
-        }
-      })
-      .catch((err: Error) => {
-        setIsPageLoader(false);
-        showNotification(err.message, 'error');
-      });
-  }, []);
 
   const loginHandler = async () => {
     setIsLoader(true);
@@ -134,9 +76,7 @@ function LoginPage() {
       });
   };
 
-  return isPageLoader ? (
-    <Loader />
-  ) : (
+  return (
     <div className="flex  w-full items-center justify-center bg-[#F0F0F0] min-[1600px]:h-full">
       <div className="mx-auto  flex w-full  items-start justify-around">
         <div className="W-[30%]  px-[30px]">

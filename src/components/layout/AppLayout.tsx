@@ -6,6 +6,9 @@ import { NotificationProvider } from '../Contexts/NotificationContext';
 import Sidebar from '../common/Sidebar';
 
 function AppLayout() {
+  const systemConfig = useAppSelector(
+    (state: any) => state.authState.systemConfig
+  );
   const authState = useAppSelector((state) => state?.authState);
   if (!authState.user) {
     return <Navigate to="/admin" />;
@@ -16,9 +19,11 @@ function AppLayout() {
 
   return (
     <Box className="flex">
-      <Box component="nav" className="w-64 flex-shrink-0">
-        <Sidebar />
-      </Box>
+      {systemConfig !== null && (
+        <Box component="nav" className="w-64 flex-shrink-0">
+          <Sidebar />
+        </Box>
+      )}
       <Box
         component="main"
         className="min-h-screen w-full flex-grow bg-gray-50 p-3"

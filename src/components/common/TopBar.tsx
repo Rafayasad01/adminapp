@@ -10,7 +10,6 @@ import { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { NavLink, useNavigate } from 'react-router-dom';
 import {
-  setItemState,
   setLogo,
   setRemoveItemState,
 } from '../../redux/features/appStateSlice';
@@ -45,6 +44,7 @@ function TopBar({ title, isNestedRoute = false }: Props) {
     dispatch(setRemoveItemState());
     dispatch(setLogo(null));
     dispatch(setRolePermissions({ id: '', name: '', permissions: [] }));
+    // dispatch(setSystemConfig(null));
   };
 
   useEffect(() => {
