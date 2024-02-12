@@ -1709,3 +1709,7 @@ main .container:nth-child(3){
   transition: none;
   border-bottom: none;
 }
+.boxShadow {
+  box-shadow: none !important;
+  position: static !important;
+}

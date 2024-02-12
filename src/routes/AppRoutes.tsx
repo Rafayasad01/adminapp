@@ -47,6 +47,9 @@ import BannersPage from '../pages/banners/BannersPage';
 import DriverHistory from '../pages/orders/DriverHistory';
 import SettingConfig from '../pages/settings/SettingConfig';
 import VouchersPage from '../pages/vouchers/VouchersPage';
+import RatingPage from '../pages/rating/RatingPage';
+import RatingReviewsPage from '../pages/rating/RatingReviewsPage';
+import Page404 from '../pages/404/Page404';
 
 export const routeObjects: RouteObject[] = [
   {
@@ -84,6 +87,10 @@ export const routeObjects: RouteObject[] = [
           {
             path: 'new-password',
             element: <NewPasswordPage />,
+          },
+          {
+            path: '404',
+            element: <Page404 />,
           },
         ],
       },
@@ -229,6 +236,19 @@ export const routeObjects: RouteObject[] = [
             ],
           },
           {
+            path: 'ratings',
+            children: [
+              {
+                index: true,
+                element: <RatingPage />,
+              },
+              {
+                path: 'reviews/:itemId',
+                element: <RatingReviewsPage />,
+              },
+            ],
+          },
+          {
             path: 'branches',
             children: [
               {
@@ -354,6 +374,15 @@ export const routeObjects: RouteObject[] = [
               {
                 index: true,
                 element: <NotAuthorized />,
+              },
+            ],
+          },
+          {
+            path: 'page-not-found',
+            children: [
+              {
+                index: true,
+                element: <Page404 />,
               },
             ],
           },

@@ -58,6 +58,22 @@ const postMultipartSystemConfig = <T = any>(endPoint: string, data: T) => {
   });
 };
 
+const getWithQueryParam = (
+  endPoint: string,
+  queryParams: Record<string, string> = {}
+) => {
+  const url = new URL(endPoint, BASE_URL);
+  Object.entries(queryParams).forEach(([key, value]) => {
+    url.searchParams.append(key, value);
+  });
+  return axios.get(url.toString(), {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: token,
+    },
+  });
+};
+
 export default {
   post,
   get,
@@ -65,4 +81,5 @@ export default {
   getSystemConfig,
   postSystemConfig,
   postMultipartSystemConfig,
+  getWithQueryParam,
 };

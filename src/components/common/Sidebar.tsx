@@ -91,6 +91,12 @@ const links = [
     icon: <ViewCarouselOutlinedIcon className="w-[17px]" />,
   },
   {
+    name: 'Rating',
+    path: 'ratings',
+    permission: 'Banners List',
+    icon: <ViewCarouselOutlinedIcon className="w-[17px]" />,
+  },
+  {
     name: 'Appointment',
     path: 'appointment',
     permission: 'Appointment Parent',
@@ -139,7 +145,7 @@ function Sidebar() {
     (state: any) => state?.persisitReducer?.appState?.logo
   );
 
-  console.log('appItems', appItems);
+  // console.log('appItems', appItems);
 
   const [list, setList] = useState<any>(null);
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
@@ -199,48 +205,46 @@ function Sidebar() {
     index: number
   ) {
     return childLinks?.length > 0 ? (
-      <>
-        <NavLink
-          key={path}
-          className={({ isActive }) =>
-            isActive ? `w-full bg-opacity-5` : `w-full`
-          }
-          to={path}
+      <NavLink
+        key={path}
+        className={({ isActive }) =>
+          isActive ? `w-full bg-opacity-5` : `w-full`
+        }
+        to={path}
+      >
+        <div
+          onClick={() => handleToggle(index)}
+          className="abc flex cursor-pointer items-center justify-between px-[30px]"
         >
-          <div
-            onClick={() => handleToggle(index)}
-            className={`abc flex cursor-pointer items-center justify-between px-[30px]`}
-          >
-            <div className="ap my-3 flex items-center">
-              <div className="pr-[7px]">
-                <span className="text-base leading-3">{icon}</span>
-              </div>
-              <div className="mx-[8px] font-open-sans text-sm font-semibold capitalize">
-                {name}
-              </div>
+          <div className="ap my-3 flex items-center">
+            <div className="pr-[7px]">
+              <span className="text-base leading-3">{icon}</span>
             </div>
-            <div className="arrow-icon">
-              {expandedIndex === index ? <ArrowUp /> : <ArrowDown />}
+            <div className="mx-[8px] font-open-sans text-sm font-semibold capitalize">
+              {name}
             </div>
           </div>
+          <div className="arrow-icon">
+            {expandedIndex === index ? <ArrowUp /> : <ArrowDown />}
+          </div>
+        </div>
 
-          {expandedIndex === index &&
-            childLinks?.map((el: any, childIndex: number) => {
-              return (
-                <div key={childIndex} className="cactive flex">
-                  {NavbarLinks(
-                    el.path,
-                    el.icon,
-                    el.name,
-                    childIndex,
-                    'py-2',
-                    'pl-[45px]'
-                  )}
-                </div>
-              );
-            })}
-        </NavLink>
-      </>
+        {expandedIndex === index &&
+          childLinks?.map((el: any, childIndex: number) => {
+            return (
+              <div key={childIndex} className="cactive flex">
+                {NavbarLinks(
+                  el.path,
+                  el.icon,
+                  el.name,
+                  childIndex,
+                  'py-2',
+                  'pl-[45px]'
+                )}
+              </div>
+            );
+          })}
+      </NavLink>
     ) : (
       NavbarLinks(path, icon, name, index, 'py-3', 'pl-8')
     );
