@@ -45,7 +45,7 @@ function LoginPage() {
       password,
     };
     await auth
-      .loginService(userData)
+      .loginService(userData, systemConfig?.tenant)
       .then(async (user) => {
         if (user && user.data.success) {
           const newUserData = user.data.data;
