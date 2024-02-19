@@ -27,7 +27,7 @@ import {
   VALIDATE_NON_NEGATIVE_NUM,
   VALIDATE_NON_NEGATIVE_NUM_AND_CHECK_LENGTH,
 } from '../../utils/constants';
-import DatePickerField from './DatePickerField';
+import CustomDateTimePicker from '../../components/common/CustomDateTimePicker';
 
 type Props = {
   vouchersPromoDialog: boolean;
@@ -61,6 +61,8 @@ interface CreateVoucherFromData {
   isActive: boolean;
   isUnlimitedRedeem: boolean;
   maxUserRedeem: string;
+  validTill: string;
+  validFrom: string;
 }
 
 function VouchersPromoCreatePopup({
@@ -80,9 +82,6 @@ function VouchersPromoCreatePopup({
   const handleFormClose = () => setVouchersPromoDialog(false);
   const [checked, setChecked] = React.useState(true);
 
-  const [validFromDate, setValidFromDate] = useState<Dayjs | null>(dayjs());
-  const [validTillDate, setValidTillDate] = useState<Dayjs | null>(dayjs());
-
   const handleSwitchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setChecked(event.target.checked);
   };
@@ -98,8 +97,8 @@ function VouchersPromoCreatePopup({
       maxRedeem: data.isUnlimitedRedeem ? 0 : data.maxRedeem,
       isActive: data.isActive,
       backOfficeUser: authState.user.id,
-      validFrom: validFromDate?.toISOString() ?? '',
-      validTill: validTillDate?.toISOString() ?? '',
+      validFrom: dayjs(data.validFrom)?.format('YYYY-MM-DD HH:mm:ss'),
+      validTill: dayjs(data.validTill)?.format('YYYY-MM-DD HH:mm:ss'),
       isUnlimitedRedeem: data.isUnlimitedRedeem,
       maxUserRedeem: data.maxUserRedeem,
     };
@@ -187,18 +186,26 @@ function VouchersPromoCreatePopup({
                 </FormControl>
               </div>
               <div className="FormFields">
-                <DatePickerField
-                  datePickerLabel="Valid From"
-                  datePickerValue={validFromDate}
-                  setDatePickerValue={setValidFromDate}
-                  id="validFromDatePicker"
-                />
-                <DatePickerField
-                  datePickerLabel="Valid Till"
-                  datePickerValue={validTillDate}
-                  setDatePickerValue={setValidTillDate}
-                  id="validTillDatePicker"
-                />
+                <FormControl className="FormControl" variant="standard">
+                  <CustomDateTimePicker
+                    register={register}
+                    value={watch('validFrom')}
+                    id="validFrom"
+                    error={errors.validTill}
+                    inputTitle="Valid From"
+                    setValue={setValue}
+                  />
+                </FormControl>
+                <FormControl className="FormControl" variant="standard">
+                  <CustomDateTimePicker
+                    register={register}
+                    value={watch('validTill')}
+                    id="validTill"
+                    error={errors.validTill}
+                    inputTitle="Valid Till"
+                    setValue={setValue}
+                  />
+                </FormControl>
               </div>
               <div className="FormFields">
                 <FormControl className="FormControl" variant="standard">
