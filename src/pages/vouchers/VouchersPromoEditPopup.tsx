@@ -122,6 +122,9 @@ function VouchersPromoEditPopup({
 
   useEffect(() => {
     reset(item);
+    if (item) {
+      setChecked(item.isActive);
+    }
   }, [item, reset]);
 
   return (
