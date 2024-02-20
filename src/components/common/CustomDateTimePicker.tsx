@@ -2,6 +2,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DemoItem } from '@mui/x-date-pickers/internals/demo';
+import dayjs from 'dayjs';
 import ErrorSpanBox from './ErrorSpanBox';
 
 type Props = {
@@ -44,7 +45,7 @@ function CustomDateTimePicker({
             fontSize: '12px',
           }}
           className="border-secondary"
-          value={value}
+          value={dayjs(value)}
           onChange={handleChange}
           minDate={minDate}
         />
