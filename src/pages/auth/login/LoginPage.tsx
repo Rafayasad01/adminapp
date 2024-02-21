@@ -88,9 +88,9 @@ function LoginPage() {
   };
 
   return (
-    <div className="flex  w-full items-center justify-center bg-[#F0F0F0] min-[1600px]:h-full">
-      <div className="mx-auto  flex w-full  items-start justify-around">
-        <div className="W-[30%]  px-[30px]">
+    <div className="flex  h-full w-full items-center justify-center bg-[#F0F0F0]">
+      <div className="mx-auto  flex w-full  items-start justify-around max-[1560px]:items-center">
+        <div className="w-[30%]  self-start px-[30px]">
           <div className="max-h-[29px] w-full max-w-[150px] px-[25px] py-[40px]">
             <img
               src={systemConfig?.shopLogo ?? systemConfig?.shopName}
@@ -186,13 +186,14 @@ function LoginPage() {
             </form>
           </div>
         </div>
-        <div className="W-[70%] px-3 py-2">
-          <div className="mx-auto max-w-[800px] overflow-hidden rounded-lg min-[1600px]:max-w-[934px]">
+        <div className="w-[70%] px-3 py-2">
+          {/* <div className="mx-auto max-w-[800px] overflow-hidden rounded-lg flex justify-center items-center min-h-[800px] min-[1600px]:max-w-[934px] "> */}
+          <div className="mx-auto  flex max-h-[834px] items-center justify-center overflow-hidden rounded-lg max-[1560px]:max-h-[96vh]">
             {systemConfig?.logoffImage ? (
               <img
                 src={systemConfig?.logoffImage || assets.images.bgLogin}
                 alt="urlaundry"
-                className="h-auto w-full object-contain"
+                className="h-full w-full object-contain"
               />
             ) : (
               <div className="flex flex-col items-center justify-center">
