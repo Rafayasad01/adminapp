@@ -188,77 +188,83 @@ function NewPasswordPage() {
         className="flex h-full w-full items-center justify-center bg-[#F0F0F0]
       "
       >
-        <div className="h-full w-[40%] px-[30px]">
-          <div className="w-full max-w-[200px] px-[25px] py-[40px]">
-            <img src={assets.images.urApplogo} alt="urlaundry" />
-          </div>
-          <div className="pt-[150px]">
-            <div className=" mb-[20px] text-center">
+        <div className="mx-auto  flex w-full  items-start justify-around max-[1560px]:items-center">
+          <div className="w-[30%] self-start px-[30px]">
+            <div className="max-h-[29px] w-full max-w-[150px] px-[25px] py-[40px]">
               <img
-                src={assets.images.keyIcon}
-                alt="email"
-                className="mx-auto h-[80px] w-[80px]"
+                src={assets.images.urApplogo}
+                alt="urlaundry"
+                className="h-auto w-full object-contain"
               />
             </div>
-            <span className="block text-center text-[14px] font-normal leading-[normal] text-[#6A6A6A]">
-              Enter New Password
-            </span>
-            <div className="">
-              <div className="form-group w-full">
-                <label htmlFor="password">New Password</label>
-                <FormControl className="m-1 w-full" variant="filled">
-                  <Input
-                    className="input-with-icon after:border-b-neutral-900"
-                    id="password"
-                    type=""
-                    name="password"
-                    endAdornment={
-                      <InputAdornment position="end">
-                        <IconButton aria-label="toggle password visibility"></IconButton>
-                      </InputAdornment>
-                    }
-                    disableUnderline
-                  />
-                </FormControl>
+            <div className="pt-[150px]">
+              <div className=" mb-[20px] text-center">
+                <img
+                  src={assets.images.keyIcon}
+                  alt="email"
+                  className="mx-auto h-[80px] w-[80px]"
+                />
               </div>
-              <div className="form-group w-full">
-                <label htmlFor="password">Confirm Password</label>
-                <FormControl className="m-1 w-full" variant="filled">
-                  <Input
-                    className="input-with-icon after:border-b-neutral-900"
-                    id="password"
-                    type=""
-                    name="password"
-                    endAdornment={
-                      <InputAdornment position="end">
-                        <IconButton aria-label="toggle password visibility"></IconButton>
-                      </InputAdornment>
-                    }
-                    disableUnderline
-                  />
-                </FormControl>
-              </div>
+              <span className="block text-center text-[14px] font-normal leading-[normal] text-[#6A6A6A]">
+                Enter New Password
+              </span>
+              <div className="">
+                <div className="form-group w-full">
+                  <label htmlFor="password">New Password</label>
+                  <FormControl className="m-1 w-full" variant="filled">
+                    <Input
+                      className="input-with-icon after:border-b-neutral-900"
+                      id="password"
+                      type=""
+                      name="password"
+                      endAdornment={
+                        <InputAdornment position="end">
+                          <IconButton aria-label="toggle password visibility"></IconButton>
+                        </InputAdornment>
+                      }
+                      disableUnderline
+                    />
+                  </FormControl>
+                </div>
+                <div className="form-group w-full">
+                  <label htmlFor="password">Confirm Password</label>
+                  <FormControl className="m-1 w-full" variant="filled">
+                    <Input
+                      className="input-with-icon after:border-b-neutral-900"
+                      id="password"
+                      type=""
+                      name="password"
+                      endAdornment={
+                        <InputAdornment position="end">
+                          <IconButton aria-label="toggle password visibility"></IconButton>
+                        </InputAdornment>
+                      }
+                      disableUnderline
+                    />
+                  </FormControl>
+                </div>
 
-              <div className="mt-8 w-full px-4">
-                <Button
-                  className="w-full bg-neutral-900 px-16 py-2 text-gray-50"
-                  variant="contained"
-                  color="inherit"
-                  title="Login"
-                >
-                  Save
-                </Button>
+                <div className="mt-8 w-full px-4">
+                  <Button
+                    className="w-full bg-neutral-900 px-16 py-2 text-gray-50"
+                    variant="contained"
+                    color="inherit"
+                    title="Login"
+                  >
+                    Save
+                  </Button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <div className="w-[60%] p-3">
-          <div className="mx-auto w-[800px] rounded-lg">
-            <img
-              src={assets.images.forgotBg}
-              alt="urlaundry"
-              className="h-full w-full object-contain"
-            />
+          <div className="w-[70%] px-3 py-2">
+            <div className="mx-auto  flex max-h-[834px] items-center justify-center overflow-hidden rounded-lg max-[1560px]:max-h-[96vh]">
+              <img
+                src={assets.images.forgotBg}
+                alt="urlaundry"
+                className="h-full w-full object-contain"
+              />
+            </div>
           </div>
         </div>
       </div>

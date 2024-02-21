@@ -44,7 +44,7 @@ function App() {
       .then((res: any) => {
         setIsPageLoader(false);
         if (res.data.success) {
-          navigate('./admin/auth/', { replace: true });
+          // navigate('./admin/auth/', { replace: true });
           // console.log('res.data.data::::::', res.data.data);
           const systemConfigData = {
             createdDate: res.data.data.createdDate,
