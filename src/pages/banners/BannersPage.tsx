@@ -369,7 +369,7 @@ function BannersPage() {
                 return (
                   <div
                     key={index}
-                    className="flex items-center justify-center xl:col-span-6 2xl:col-span-3"
+                    className="flex items-center justify-center xl:col-span-4 2xl:col-span-3"
                   >
                     <Card className="w-[500px] rounded-lg border-[2px] shadow-none">
                       <div className="m-5 flex h-[150px] items-center justify-center">
@@ -389,7 +389,7 @@ function BannersPage() {
                           </span>
                         </div>
                         <div>
-                          <span className="text-lg font-semibold">
+                          <span className="text-sm font-medium">
                             {item.bannerType}
                           </span>
                         </div>

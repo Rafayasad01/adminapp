@@ -2,9 +2,10 @@ import { setItem } from './storage';
 
 // const HOST = 'https://dev.urapptech.com';
 const HOST = 'http://192.168.8.68:3200';
+const RAFAY_HOST = 'http://192.168.8.97:3200';
 
-export const BASE_URL = `${HOST}/api/v1/admin/`;
-export const BASE_SYSTEM_URL = `${HOST}/api/v1/system/config/`;
+export const BASE_URL = `${RAFAY_HOST}/api/v1/admin/`;
+export const BASE_SYSTEM_URL = `${RAFAY_HOST}/api/v1/system/config/`;
 export const MODULE_EMPLOYEEES = 'Employees';
 export const RATING = 'rating';
 export const PROFILE_PREFIX = 'profile';
