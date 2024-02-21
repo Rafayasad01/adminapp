@@ -11,7 +11,7 @@ type Props = {
 };
 
 function RatingAccordions({ data }: Props) {
-  const [expanded, setExpanded] = React.useState<string | false>(false);
+  const [expanded, setExpanded] = React.useState<string | false>(`panel0`);
 
   const handleChange =
     (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
@@ -34,7 +34,10 @@ function RatingAccordions({ data }: Props) {
                   aria-controls="panel1bh-content"
                   id="panel1bh-header"
                 >
-                  <Typography sx={{ width: '33%', flexShrink: 0 }}>
+                  <Typography
+                    className="flex-grow-1"
+                    sx={{ width: '33%', flexShrink: 0 }}
+                  >
                     {item.question}
                   </Typography>
                 </AccordionSummary>

@@ -178,6 +178,16 @@ table > tbody > tr:last-child {
   @apply text-[#c5c7cd] !important;
 }
 
+.btn-dot-appointment {
+  @apply text-black !important;
+  padding: 0% !important;
+}
+
+.css-hz1bth-MuiDialog-container .app-dialog {
+  width: 60% !important;
+  overflow: auto !important;
+}
+
 .badge {
   @apply rounded-[100px] px-2.5 py-0.5 text-center font-open-sans text-[10px] font-semibold uppercase text-[#fff];
 }
@@ -1709,7 +1719,12 @@ main .container:nth-child(3){
   transition: none;
   border-bottom: none;
 }
+
 .boxShadow {
   box-shadow: none !important;
   position: static !important;
+}
+
+.css-1m4ljmh-MuiTypography-root {
+  flex-grow: 1 !important;
 }

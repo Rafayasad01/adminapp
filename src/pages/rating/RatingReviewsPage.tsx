@@ -30,15 +30,15 @@ function RatingReviewsPage() {
   const dataRole = useAppSelector(
     (state: any) => state?.persisitReducer?.roleState?.role?.permissions
   );
-  const [search] = useState<any>('');
   const [emptyVariable] = useState(null);
+  const [search] = useState<any>('');
   const [page, setPage] = useState(0);
+  const [rowsPerPage] = React.useState(10);
   const [total, setTotal] = useState(0);
   const [list, setList] = useState<any>([]);
   const [currentList, setCurrentList] = useState<any>([]);
   const [starRatings, setStarRatings] = useState<any>();
   const [ratingDetail, setRatingDetail] = useState<any>();
-  const [rowsPerPage] = React.useState(10);
   const [isLoader, setIsLoader] = React.useState(true);
   const [isLoaderPagination, setIsLoaderPagination] = React.useState(false);
   const [isNotify, setIsNotify] = React.useState(false);
@@ -225,7 +225,7 @@ function RatingReviewsPage() {
           </div>
           <div className="mt-5 w-full rounded-xl bg-white p-5 shadow-md">
             <div className="my-5 grid grid-cols-12">
-              <div className="col-span-2">
+              <div className="xl:col-span-3 2xl:col-span-2">
                 <div className="flex items-center">
                   <span className="text-4xl font-semibold">
                     {Number(starRatings?.total) / 5}
@@ -256,7 +256,7 @@ function RatingReviewsPage() {
                 </div>
                 <div className="text-[#6A6A6A]">{total} Reviews</div>
               </div>
-              <div className="col-span-10 border-l-[1px]">
+              <div className="2xl:col-col-span-10 border-l-[1px] xl:col-span-9">
                 <div>
                   {starRatings?.list
                     .slice(1)
@@ -267,7 +267,7 @@ function RatingReviewsPage() {
                           className="mx-5 grid grid-cols-12 items-center"
                           key={index}
                         >
-                          <div className="col-span-1">
+                          <div className="xl:col-span-2 2xl:col-span-1">
                             <Rating
                               name="half-rating-read"
                               value={Number(ratings?.star)}
@@ -275,7 +275,7 @@ function RatingReviewsPage() {
                               readOnly
                             />
                           </div>
-                          <div className="col-span-3 mx-10">
+                          <div className="mx-10 xl:col-span-6 2xl:col-span-3">
                             <LinearProgressWithLabel value={ratings?.total} />
                           </div>
                         </div>
@@ -341,14 +341,6 @@ function RatingReviewsPage() {
                   buttonType="button"
                 />
               )}
-              {/* <TablePagination
-                                component="div"
-                                count={total}
-                                page={Number(page)}
-                                onPageChange={handleChangePage}
-                                rowsPerPage={Number(rowsPerPage)}
-                                onRowsPerPageChange={handleChangeRowsPerPage}
-                            /> */}
             </div>
           </div>
         </div>
@@ -360,15 +352,6 @@ function RatingReviewsPage() {
                     setOpen={setCancelDialogOpen}
                     dialogText={dialogText}
                     callback={statusCancelHandler}
-                />
-            )} */}
-      {/* {actionMenuAnchorEl && (
-                <ActionMenu
-                    open={actionMenuOpen}
-                    anchorEl={actionMenuAnchorEl}
-                    setAnchorEl={setActionMenuAnchorEl}
-                    options={actionMenuOptions}
-                    // callback={manuHandler}
                 />
             )} */}
     </>
