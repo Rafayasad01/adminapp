@@ -50,6 +50,7 @@ import VouchersPage from '../pages/vouchers/VouchersPage';
 import RatingPage from '../pages/rating/RatingPage';
 import RatingReviewsPage from '../pages/rating/RatingReviewsPage';
 import Page404 from '../pages/404/Page404';
+import AppointmentProviderByIdPage from '../pages/appointment/provider/AppointmentProviderByIdPage';
 
 export const routeObjects: RouteObject[] = [
   {
@@ -265,6 +266,10 @@ export const routeObjects: RouteObject[] = [
             path: 'appointment',
             children: [
               {
+                index: true,
+                element: <Navigate to="provider/list" replace />,
+              },
+              {
                 path: 'visit',
                 children: [
                   { index: true, element: <Navigate to="list" replace /> },
@@ -297,6 +302,10 @@ export const routeObjects: RouteObject[] = [
                   {
                     path: 'services/:providerId',
                     element: <AppointmentProviderServicesList />,
+                  },
+                  {
+                    path: 'today-appointment/:providerId',
+                    element: <AppointmentProviderByIdPage />,
                   },
                 ],
               },

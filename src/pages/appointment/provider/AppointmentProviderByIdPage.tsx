@@ -8,13 +8,14 @@ import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
 import TablePagination from '@mui/material/TablePagination';
+import WysiwygIcon from '@mui/icons-material/Wysiwyg';
 // import dayjs from 'dayjs';
 import dayjs from 'dayjs';
 import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import ActionMenu from '../../../components/common/ActionMenu';
 import CustomText from '../../../components/common/CustomText';
 import Loader from '../../../components/common/Loader';
@@ -26,16 +27,18 @@ import Service from '../../../services/adminapp/adminAppointment';
 import CustomOrderPrintLayoutCash from '../../../utils/CustomPrintLayout/CustomAppointmentPrintLayout';
 import { NOT_AUTHORIZED_MESSAGE } from '../../../utils/constants';
 import { listingRolePermission } from '../../../utils/helper';
-import AppointmentVisitCreatePopup from './AppointmentVisitCreatePopup';
-import AppointmentVisitReschedulePopup from './AppointmentVisitReschedulePopup';
-import AppointmentVisitUpdatePopup from './AppointmentVisitUpdatePopup';
+import AppointmentProviderDetailPopup from './AppointmentProviderDetailPopup';
+// import AppointmentVisitCreatePopup from './AppointmentVisitCreatePopup';
+// import AppointmentVisitReschedulePopup from './AppointmentVisitReschedulePopup';
+// import AppointmentVisitUpdatePopup from './AppointmentVisitUpdatePopup';
 // Extend dayjs with necessary plugins
 dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.tz.setDefault('UTC');
 
-function AppointmentVisitPage() {
+function AppointmentProviderByIdPage() {
   const navigate = useNavigate();
+  const { providerId } = useParams();
   const authState: any = useAppSelector((state: any) => state?.authState);
   const dataRole = useAppSelector(
     (state: any) => state?.persisitReducer?.roleState?.role?.permissions
@@ -45,14 +48,15 @@ function AppointmentVisitPage() {
   const [page, setPage] = useState(0);
   const [total, setTotal] = useState(0);
   const [list, setList] = useState<any>([]);
+  const [popUplist, setPopUpList] = useState<any>([]);
   const [editDetails, setEditDetails] = useState<any>();
 
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const [actionMenuItemid, setActionMenuItemid] = React.useState<any>();
-  const [actionMenuAnchorEl, setActionMenuAnchorEl] =
-    useState<null | HTMLElement>(null);
-  const actionMenuOpen = Boolean(actionMenuAnchorEl);
-  const actionMenuOptions = ['Detail', 'Reschedule', 'Edit', 'Cancel'];
+  // const [actionMenuItemid, setActionMenuItemid] = React.useState<any>();
+  // const [actionMenuAnchorEl, setActionMenuAnchorEl] =
+  //     useState<null | HTMLElement>(null);
+  // const actionMenuOpen = Boolean(actionMenuAnchorEl);
+  // const actionMenuOptions = ['Detail'];
 
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
@@ -83,8 +87,8 @@ function AppointmentVisitPage() {
       const newPage = 0;
       setSearch(searchTxt);
       setPage(newPage);
-      Service.VisitSearchList(
-        authState.user.tenant,
+      Service.ProviderTodaysList(
+        providerId,
         searchTxt,
         newPage,
         rowsPerPage
@@ -148,126 +152,14 @@ function AppointmentVisitPage() {
     }
   };
 
-  const manuHandler = (option: string) => {
-    if (actionMenuItemid?.status === 'Cancelled') {
-      if (option === 'Detail') {
-        if (listingRolePermission(dataRole, 'Appointment Detail')) {
-          navigate(`../detail/${actionMenuItemid?.id}`);
-        } else {
-          setIsNotify(true);
-          setNotifyMessage({
-            text: NOT_AUTHORIZED_MESSAGE,
-            type: 'warning',
-          });
-        }
-      }
-    } else if (option === 'Edit') {
-      if (listingRolePermission(dataRole, 'Appointment Edit')) {
-        setIsLoader(true);
-        Service.VisitEdit(actionMenuItemid?.id)
-          .then((item: any) => {
-            if (item.data.success) {
-              setIsLoader(false);
-              setOpenEditFormDialog(true);
-              setEditDetails(item.data.data);
-            } else {
-              setIsLoader(false);
-              setOpenEditFormDialog(false);
-              setIsNotify(true);
-              setNotifyMessage({
-                text: item.data.message,
-                type: 'error',
-              });
-            }
-          })
-          .catch((err) => {
-            setIsLoader(false);
-            setOpenEditFormDialog(false);
-            setIsNotify(true);
-            setNotifyMessage({
-              text: err.message,
-              type: 'error',
-            });
-          });
-      } else {
-        setIsLoader(false);
-        setIsNotify(true);
-        setNotifyMessage({
-          text: NOT_AUTHORIZED_MESSAGE,
-          type: 'warning',
-        });
-      }
-    } else if (option === 'Cancel') {
-      if (listingRolePermission(dataRole, 'Appointment Cancel')) {
-        setIsLoader(true);
-        Service.VisitCancel(actionMenuItemid?.id)
-          .then((item: any) => {
-            if (item.data.success) {
-              setIsLoader(false);
-              setIsNotify(true);
-              setNotifyMessage({
-                text: item.data.message,
-                type: 'success',
-              });
-              // console.log('statat', item.data.data);
-              setList((newArr: any) => {
-                return newArr.map((items: any) => {
-                  if (items.id === item.data.data.appointmentId) {
-                    items.status = item.data.data.status;
-                  }
-                  return { ...items };
-                });
-              });
-            }
-          })
-          .catch((err: Error) => {
-            setIsLoader(false);
-            setIsNotify(true);
-            setNotifyMessage({
-              text: err.message,
-              type: 'error',
-            });
-          });
-      } else {
-        setIsNotify(true);
-        setNotifyMessage({
-          text: NOT_AUTHORIZED_MESSAGE,
-          type: 'warning',
-        });
-      }
-    } else if (option === 'Reschedule') {
-      if (listingRolePermission(dataRole, 'Appointment Reschedule')) {
-        setOpenRescheduleFormDialog(true);
-      } else {
-        setIsNotify(true);
-        setNotifyMessage({
-          text: NOT_AUTHORIZED_MESSAGE,
-          type: 'warning',
-        });
-      }
-    } else if (option === 'Detail') {
-      if (listingRolePermission(dataRole, 'Appointment Detail')) {
-        navigate(`../detail/${actionMenuItemid?.id}`);
-      } else {
-        setIsNotify(true);
-        setNotifyMessage({
-          text: NOT_AUTHORIZED_MESSAGE,
-          type: 'warning',
-        });
-      }
-    }
-  };
-
   useEffect(() => {
     if (listingRolePermission(dataRole, 'Appointment List')) {
-      Service.VisitList(authState.user.tenant, page, rowsPerPage)
+      Service.ProviderTodaysList(providerId, search, page, rowsPerPage)
         .then((item: any) => {
           if (item.data.success) {
-            // console.log('item.data.data.list::::::', item.data.data.list);
             setIsLoader(false);
             setList(item.data.data.list);
             setTotal(item.data.data.total);
-            setPrintEnabled(item.data.data.list.map(() => false));
           } else {
             setIsLoader(false);
             setIsNotify(true);
@@ -290,25 +182,17 @@ function AppointmentVisitPage() {
     }
   }, [emptyVariable]);
 
-  const createFormHandler = (data: any, type: string) => {
-    // console.log('dataaaaCREATE', data, type);
+  const handleDetailDialog = (id: string) => {
     setIsLoader(true);
-    if (type === 'create') {
-      Service.VisitCreate(data)
-        .then((item) => {
+    if (listingRolePermission(dataRole, 'Employee List')) {
+      Service.VisitDetailById(id)
+        .then((item: any) => {
           if (item.data.success) {
-            setOpenFormDialog(false);
-            reset();
+            setOpenFormDialog(true);
             setIsLoader(false);
-            setIsNotify(true);
-            setNotifyMessage({
-              text: item.data.message,
-              type: 'success',
-            });
-            setList([item.data.data, ...list]);
+            setPopUpList(item.data.data);
+            // setTotal(item.data.data.total);
           } else {
-            reset();
-            setOpenFormDialog(false);
             setIsLoader(false);
             setIsNotify(true);
             setNotifyMessage({
@@ -318,8 +202,6 @@ function AppointmentVisitPage() {
           }
         })
         .catch((err) => {
-          setOpenFormDialog(false);
-          reset();
           setIsLoader(false);
           setIsNotify(true);
           setNotifyMessage({
@@ -328,91 +210,8 @@ function AppointmentVisitPage() {
           });
         });
     } else {
-      data.appointmentId = actionMenuItemid?.id;
-      // console.log('daTA', data);
-      Service.VisitReschedule(data)
-        .then((item: any) => {
-          if (item.data.success) {
-            setOpenRescheduleFormDialog(false);
-            reset();
-            setIsLoader(false);
-            setIsNotify(true);
-            setNotifyMessage({
-              text: item.data.message,
-              type: 'success',
-            });
-            setList([item.data.data, ...list]);
-          } else {
-            reset();
-            setOpenRescheduleFormDialog(false);
-            setIsLoader(false);
-            setIsNotify(true);
-            setNotifyMessage({
-              text: item.data.message,
-              type: 'error',
-            });
-          }
-        })
-        .catch((err: Error) => {
-          setOpenRescheduleFormDialog(false);
-          reset();
-          setIsLoader(false);
-          setIsNotify(true);
-          setNotifyMessage({
-            text: err.message,
-            type: 'error',
-          });
-        });
+      setIsLoader(false);
     }
-  };
-
-  const updateFormHandler = (data: any) => {
-    // console.log('datata', data);
-    setIsLoader(true);
-    Service.VisitUpdate(data)
-      .then((item) => {
-        if (item.data.success) {
-          // console.log('UPDATED', item.data.data);
-          setOpenEditFormDialog(false);
-          setIsLoader(false);
-          setIsNotify(true);
-          setNotifyMessage({
-            text: item.data.message,
-            type: 'success',
-          });
-          for (let i = 0; i < list.length; i += 1) {
-            if (list[i].id === actionMenuItemid?.id) {
-              list[i].name = item.data.data.name;
-              list[i].note = item.data.data.note;
-              list[i].phone = item.data.data.phone;
-              list[i].appointmentTime = item.data.data.appointmentTime;
-              list[i].appointmentDate = item.data.data.appointmentDate;
-              list[i].appointmentService = item.data.data.appointmentService;
-              list[i].appointmentProvider = item.data.data.appointmentProvider;
-            }
-          }
-          reset();
-        } else {
-          setOpenEditFormDialog(false);
-          reset();
-          setIsLoader(false);
-          setIsNotify(true);
-          setNotifyMessage({
-            text: item.data.message,
-            type: 'error',
-          });
-        }
-      })
-      .catch((err) => {
-        reset();
-        setOpenEditFormDialog(false);
-        setIsLoader(false);
-        setIsNotify(true);
-        setNotifyMessage({
-          text: err.message,
-          type: 'error',
-        });
-      });
   };
 
   return isLoader ? (
@@ -424,13 +223,13 @@ function AppointmentVisitPage() {
         setIsOpen={setIsNotify}
         displayMessage={notifyMessage}
       />
-      <TopBar title="Appointment" />
+      <TopBar isNestedRoute title="Today's Appointment" />
       <div className="container m-auto mt-5">
         <div className="w-full rounded-lg bg-white shadow-lg">
           <div className="grid grid-cols-12 px-4 py-5">
             <div className="xl:col-span-7 2xl:col-span-9">
               <span className="font-open-sans text-xl font-semibold text-[#252733]">
-                All Appointments
+                All Today's Appointments
               </span>
             </div>
             <div className="grid justify-end xl:col-span-5 2xl:col-span-3">
@@ -476,7 +275,7 @@ function AppointmentVisitPage() {
                 </div>
                 <Button
                   variant="contained"
-                  className="btn-black-fill btn-icon h-[35%]"
+                  className="btn-black-fill btn-icon h-[42%]"
                   onClick={handleFormClickOpen}
                 >
                   <AddOutlinedIcon /> Add New
@@ -555,36 +354,11 @@ function AppointmentVisitPage() {
                           </span>
                         </td>
                         <td>
-                          <div className="flex flex-row-reverse items-center">
-                            <IconButton
-                              // disabled={item.status === 'Cancelled'}
-                              className="btn-dot"
-                              aria-label="more"
-                              id="long-button"
-                              aria-controls={
-                                actionMenuOpen ? 'long-menu' : undefined
-                              }
-                              aria-expanded={
-                                actionMenuOpen ? 'true' : undefined
-                              }
-                              aria-haspopup="true"
-                              onClick={(
-                                event: React.MouseEvent<HTMLElement>
-                              ) => {
-                                setActionMenuItemid(item);
-                                setActionMenuAnchorEl(event.currentTarget);
-                              }}
-                            >
-                              <MoreVertIcon />
-                            </IconButton>
-                            <div>
-                              <CustomOrderPrintLayoutCash
-                                isPrintEnabled={isPrintEnabled}
-                                setPrintEnabled={setPrintEnabled}
-                                data={item}
-                                index={index}
-                              />
-                            </div>
+                          <div
+                            onClick={() => handleDetailDialog(item.id)}
+                            className="mr-5 flex cursor-pointer flex-row-reverse items-center"
+                          >
+                            <WysiwygIcon />
                           </div>
                         </td>
                       </tr>
@@ -608,6 +382,13 @@ function AppointmentVisitPage() {
           </div>
         </div>
       </div>
+      {openFormDialog && (
+        <AppointmentProviderDetailPopup
+          openFormDialog={openFormDialog}
+          setOpenFormDialog={setOpenFormDialog}
+          list={popUplist}
+        />
+      )}
       {/* {cancelDialogOpen && (
                 <PermissionPopup
                     type="shock"
@@ -617,16 +398,16 @@ function AppointmentVisitPage() {
                     callback={statusCancelHandler}
                 />
             )} */}
-      {actionMenuAnchorEl && (
-        <ActionMenu
-          open={actionMenuOpen}
-          anchorEl={actionMenuAnchorEl}
-          setAnchorEl={setActionMenuAnchorEl}
-          options={actionMenuOptions}
-          callback={manuHandler}
-        />
-      )}
-      {openFormDialog && (
+      {/* {actionMenuAnchorEl && (
+                <ActionMenu
+                    open={actionMenuOpen}
+                    anchorEl={actionMenuAnchorEl}
+                    setAnchorEl={setActionMenuAnchorEl}
+                    options={actionMenuOptions}
+                    callback={manuHandler}
+                />
+            )} */}
+      {/* {openFormDialog && (
         <AppointmentVisitCreatePopup
           setIsNotify={setIsNotify}
           setNotifyMessage={setNotifyMessage}
@@ -653,9 +434,9 @@ function AppointmentVisitPage() {
           callback={updateFormHandler}
           formData={editDetails}
         />
-      )}
+      )} */}
     </>
   );
 }
 
-export default AppointmentVisitPage;
+export default AppointmentProviderByIdPage;

@@ -214,6 +214,23 @@ const VisitDelete = (visitorId: any, data: any) => {
   );
 };
 
+//todays-appointment-visit
+const ProviderTodaysList = (
+  providerID: any,
+  search: string,
+  page: number,
+  size: number
+) => {
+  return network.getWithQueryParam(
+    `${APPOINTMENT_PREFIX}/${PROVIDER_PREFIX}/find/${providerID}`,
+    {
+      search,
+      page: page.toString(),
+      size: size.toString(),
+    }
+  );
+};
+
 // LOVs
 
 const ServiceProviderLov = (tenantID: string) => {
@@ -269,4 +286,5 @@ export default {
   VisitServiceLovByProviderId,
   VisitCancel,
   VisitReschedule,
+  ProviderTodaysList,
 };

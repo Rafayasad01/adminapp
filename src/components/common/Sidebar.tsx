@@ -103,13 +103,13 @@ const links = [
     icon: <AppointmentIcon />,
     childLinks: [
       {
-        name: 'Provider',
+        name: 'Store Employees',
         path: 'appointment/provider',
         permission: 'Appointment Category List',
         icon: <ProviderIcon />,
       },
       {
-        name: 'Visit',
+        name: 'All Appointments',
         path: 'appointment/visit',
         permission: 'Appointment Visit List',
         icon: <VisitIcon />,
