@@ -476,7 +476,7 @@ function AppointmentVisitPage() {
                 </div>
                 <Button
                   variant="contained"
-                  className="btn-black-fill btn-icon h-[35%]"
+                  className="btn-black-fill btn-icon h-[42%]"
                   onClick={handleFormClickOpen}
                 >
                   <AddOutlinedIcon /> Add New
