@@ -212,30 +212,31 @@ function Sidebar() {
     index: number
   ) {
     return childLinks?.length > 0 ? (
-      <NavLink
-        key={path}
-        className={({ isActive }) =>
-          isActive ? `w-full bg-opacity-5` : `w-full`
-        }
-        to={path}
-      >
-        <div
-          onClick={() => handleToggle(index)}
-          className="abc flex cursor-pointer items-center justify-between px-[30px]"
+      <>
+        <NavLink
+          key={path}
+          className={({ isActive }) =>
+            isActive ? `w-full bg-opacity-5` : `w-full`
+          }
+          to={path}
         >
-          <div className="ap my-3 flex items-center">
-            <div className="pr-[7px]">
-              <span className="text-base leading-3">{icon}</span>
+          <div
+            onClick={() => handleToggle(index)}
+            className="abc flex cursor-pointer items-center justify-between px-[30px]"
+          >
+            <div className="ap my-3 flex items-center">
+              <div className="pr-[7px]">
+                <span className="text-base leading-3">{icon}</span>
+              </div>
+              <div className="mx-[8px] font-open-sans text-sm font-semibold capitalize">
+                {name}
+              </div>
             </div>
-            <div className="mx-[8px] font-open-sans text-sm font-semibold capitalize">
-              {name}
+            <div className="arrow-icon">
+              {expandedIndex === index ? <ArrowUp /> : <ArrowDown />}
             </div>
           </div>
-          <div className="arrow-icon">
-            {expandedIndex === index ? <ArrowUp /> : <ArrowDown />}
-          </div>
-        </div>
-
+        </NavLink>
         {expandedIndex === index &&
           childLinks?.map((el: any, childIndex: number) => {
             return (
@@ -251,7 +252,7 @@ function Sidebar() {
               </div>
             );
           })}
-      </NavLink>
+      </>
     ) : (
       NavbarLinks(path, icon, name, index, 'py-3', 'pl-8')
     );

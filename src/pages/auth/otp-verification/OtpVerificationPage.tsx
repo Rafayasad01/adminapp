@@ -6,6 +6,7 @@ import Input from '@mui/material/Input';
 
 function OTPVerificationPage() {
   const [OTP, setOTP] = useState('');
+
   const submitHandler = () => {};
 
   return (
@@ -83,48 +84,40 @@ function OTPVerificationPage() {
               <span className="block text-center text-[14px] font-medium leading-[normal] text-[#6A6A6A]">
                 Vincent-bo@gmail.com
               </span>
-              <div className="mt-[42px] w-full text-center">
-                {/* <label htmlFor="email" className="font-sans text-[14px] text-[#06152B] font-normal leading-[normal] mb-1">
-         Email
-         </label>
-        <FormControl className="m-1 w-full" variant="standard">
-          <Input
-            className="border-[#949EAE] border-solid border-1"
-            id="email"
-            type="email"
-            name="email"
-            placeholder='haris@urlaundry.com'
-            disableUnderline
-          />
-        </FormControl> */}
-                <Input
-                  type="text"
-                  placeholder="3"
-                  className="otp-v border-1 mr-[14px] h-[60px] w-[60px] rounded-[10px] border-solid border-[#949EAE] text-[36px] font-semibold leading-[normal] text-[#1a1a1a]"
-                />
-                <Input
-                  type="text"
-                  placeholder="3"
-                  className="otp-v border-1 mr-[14px] h-[60px] w-[60px] rounded-[10px] border-solid border-[#949EAE] text-[36px] font-semibold leading-[normal] text-[#1a1a1a]"
-                />
-                <Input
-                  type="text"
-                  placeholder="3"
-                  className="otp-v border-1 mr-[14px] h-[60px] w-[60px] rounded-[10px] border-solid border-[#949EAE] text-[36px] font-semibold leading-[normal] text-[#1a1a1a]"
-                />
-                <Input
-                  type="text"
-                  placeholder="3"
-                  className="otp-v border-1 mr-2 h-[60px] w-[60px] rounded-[10px] border-solid border-[#949EAE] text-[36px] font-semibold leading-[normal] text-[#1a1a1a]"
+              <div className="mt-[42px] flex w-full items-center justify-center text-center">
+                <OtpInput
+                  placeholder="1234"
+                  className="mx-2"
+                  containerStyle="otp-container"
+                  inputStyle={{
+                    width: '3rem',
+                    aspectRatio: '1/1',
+                    borderRadius: '0.625rem',
+                    outlineStyle: 'solid',
+                    outlineWidth: '1px',
+                    outlineColor: '#E5E5E5',
+                    fontFamily: 'Open Sans',
+                    fontSize: '1.25rem',
+                    lineHeight: '1.5rem',
+                    fontWeight: 600,
+                    color: '#000000',
+                  }}
+                  focusStyle={{ outlineColor: '#000000' }}
+                  numInputs={4}
+                  onChange={(value: string) => setOTP(value)}
+                  separator={<span> </span>}
+                  isInputNum
+                  shouldAutoFocus
+                  value={OTP}
                 />
               </div>
-
               <div className="mt-[100px] w-full px-4 ">
                 <Button
                   className="w-full rounded-[10px] bg-neutral-900 px-16 py-2 text-gray-50"
                   variant="contained"
                   color="inherit"
-                  title="get code"
+                  title="Submit"
+                  onClick={submitHandler}
                 >
                   Submit
                 </Button>
