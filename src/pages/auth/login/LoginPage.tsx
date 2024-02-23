@@ -158,7 +158,7 @@ function LoginPage() {
                     )}
                   </FormControl>
                 </div>
-                <div className="form-group self-end">
+                <div className="form-group self-end text-end">
                   <NavLink
                     className="font-open-sans text-sm font-normal text-neutral-900"
                     to="../forgot-password"
