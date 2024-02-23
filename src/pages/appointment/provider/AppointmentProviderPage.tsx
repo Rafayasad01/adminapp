@@ -175,14 +175,10 @@ function AppointmentProviderPage() {
     }
   };
 
-  console.log('search', search);
-
   const handleClickSearch = (event: any) => {
     if (event.key === 'Enter') {
       const searchTxt = event.target.value as string;
       const newPage = 0;
-      console.log(searchTxt);
-
       setSearch(searchTxt);
       setPage(newPage);
       Service.ProviderSearchList(
@@ -196,92 +192,6 @@ function AppointmentProviderPage() {
       });
     }
   };
-
-  const handleChangePage = (
-    event: React.MouseEvent<HTMLButtonElement> | null,
-    newPage: number
-  ) => {
-    setPage(newPage);
-    // offset? ,limit rowsperpage hoga ofset page * rowsperPage
-    if (search === '' || search === null || search === undefined) {
-      Service.ProviderList(authState.user.tenant, newPage, rowsPerPage).then(
-        (item) => {
-          setList(item.data.data.list);
-          setTotal(item.data.data.total);
-        }
-      );
-    } else {
-      Service.ProviderSearchList(
-        authState.user.tenant,
-        search,
-        newPage,
-        rowsPerPage
-      ).then((item) => {
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      });
-    }
-  };
-
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const newRowperPage = parseInt(event.target.value, 10);
-    const newPage = 0;
-    setRowsPerPage(newRowperPage);
-    setPage(newPage);
-    if (search === '' || search === null || search === undefined) {
-      Service.ProviderList(authState.user.tenant, newPage, rowsPerPage).then(
-        (item) => {
-          setList(item.data.data.list);
-          setTotal(item.data.data.total);
-        }
-      );
-    } else {
-      Service.ProviderSearchList(
-        authState.user.tenant,
-        search,
-        newPage,
-        rowsPerPage
-      ).then((item) => {
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      });
-    }
-  };
-
-  // const deleteHandler = (id: string) => {
-  //   setIsLoader(true);
-  //   const data = {
-  //     updatedBy: authState.user.id,
-  //   };
-  //   // console.log(actionMenuItemid);
-
-  //   // Service.deleteService(actionMenuItemid, data)
-  //   //   .then((item: any) => {
-  //   //     if (item.data.success) {
-  //   //       setIsLoader(false);
-  //   //       setIsNotify(true);
-  //   //       setNotifyMessage({
-  //   //         text: item.data.message,
-  //   //         type: 'success',
-  //   //       });
-  //   //       setList((newArr: any) => {
-  //   //         return newArr.filter(
-  //   //           (newItem: any) => newItem.id !== item.data.data.id
-  //   //         );
-  //   //       });
-  //   //     }
-  //   //   })
-  //   //   .catch((err) => {
-  //   //     setIsLoader(false);
-  //   //     setIsNotify(true);
-  //   //     setNotifyMessage({
-  //   //       text: err.message,
-  //   //       type: 'error',
-  //   //     });
-  //   //   });
-  // };
 
   const statusCancelHandler = () => {
     // deleteHandler(actionMenuItemid);

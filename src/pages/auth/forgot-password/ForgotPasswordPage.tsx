@@ -110,7 +110,7 @@ function ForgotPasswordPage() {
                 </FormControl>
               </div>
 
-              <div className="mt-[100px] w-full px-4 ">
+              <div className="w-full px-4 xl:mt-[60px] 2xl:mt-[100px] ">
                 <Button
                   className="w-full bg-neutral-900 px-16 py-2 text-gray-50"
                   variant="contained"

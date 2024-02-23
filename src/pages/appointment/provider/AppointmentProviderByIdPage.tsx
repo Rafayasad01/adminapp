@@ -1,6 +1,6 @@
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
 import SearchIcon from '@mui/icons-material/Search';
+import WysiwygIcon from '@mui/icons-material/Wysiwyg';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import FormControl from '@mui/material/FormControl';
@@ -8,66 +8,42 @@ import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
 import TablePagination from '@mui/material/TablePagination';
-import WysiwygIcon from '@mui/icons-material/Wysiwyg';
-// import dayjs from 'dayjs';
 import dayjs from 'dayjs';
 import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
 import React, { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
-import ActionMenu from '../../../components/common/ActionMenu';
 import CustomText from '../../../components/common/CustomText';
 import Loader from '../../../components/common/Loader';
 import Notify from '../../../components/common/Notify';
 import TopBar from '../../../components/common/TopBar';
-import { AppointmentVisit } from '../../../interfaces/app.appointment';
 import { useAppSelector } from '../../../redux/redux-hooks';
 import Service from '../../../services/adminapp/adminAppointment';
-import CustomOrderPrintLayoutCash from '../../../utils/CustomPrintLayout/CustomAppointmentPrintLayout';
 import { NOT_AUTHORIZED_MESSAGE } from '../../../utils/constants';
 import { listingRolePermission } from '../../../utils/helper';
 import AppointmentProviderDetailPopup from './AppointmentProviderDetailPopup';
-// import AppointmentVisitCreatePopup from './AppointmentVisitCreatePopup';
-// import AppointmentVisitReschedulePopup from './AppointmentVisitReschedulePopup';
-// import AppointmentVisitUpdatePopup from './AppointmentVisitUpdatePopup';
 // Extend dayjs with necessary plugins
 dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.tz.setDefault('UTC');
 
 function AppointmentProviderByIdPage() {
-  const navigate = useNavigate();
   const { providerId } = useParams();
-  const authState: any = useAppSelector((state: any) => state?.authState);
   const dataRole = useAppSelector(
     (state: any) => state?.persisitReducer?.roleState?.role?.permissions
   );
   const [search, setSearch] = useState<any>('');
-  const [emptyVariable] = useState(null);
   const [page, setPage] = useState(0);
   const [total, setTotal] = useState(0);
   const [list, setList] = useState<any>([]);
   const [popUplist, setPopUpList] = useState<any>([]);
-  const [editDetails, setEditDetails] = useState<any>();
 
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  // const [actionMenuItemid, setActionMenuItemid] = React.useState<any>();
-  // const [actionMenuAnchorEl, setActionMenuAnchorEl] =
-  //     useState<null | HTMLElement>(null);
-  // const actionMenuOpen = Boolean(actionMenuAnchorEl);
-  // const actionMenuOptions = ['Detail'];
+  const [rowsPerPage, setRowsPerPage] = useState(10);
 
   const [openFormDialog, setOpenFormDialog] = useState(false);
-  const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
-  const [openRescheduleFormDialog, setOpenRescheduleFormDialog] =
-    useState(false);
-  const [isLoader, setIsLoader] = React.useState(true);
-  const [isNotify, setIsNotify] = React.useState(false);
-  const [notifyMessage, setNotifyMessage] = React.useState({});
-  const [isPrintEnabled, setPrintEnabled] = useState<any>([]);
-
-  const { reset } = useForm<AppointmentVisit>();
+  const [isLoader, setIsLoader] = useState(true);
+  const [isNotify, setIsNotify] = useState(false);
+  const [notifyMessage, setNotifyMessage] = useState({});
 
   const handleFormClickOpen = () => {
     if (listingRolePermission(dataRole, 'Appointment Create')) {
@@ -105,24 +81,12 @@ function AppointmentProviderByIdPage() {
   ) => {
     setPage(newPage);
     // offset? ,limit rowsperpage hoga ofset page * rowsperPage
-    if (search === '' || search === null || search === undefined) {
-      Service.VisitList(authState.user.tenant, newPage, rowsPerPage).then(
-        (item) => {
-          setList(item.data.data.list);
-          setTotal(item.data.data.total);
-        }
-      );
-    } else {
-      Service.ServiceSearchList(
-        authState.user.tenant,
-        search,
-        newPage,
-        rowsPerPage
-      ).then((item) => {
+    Service.ProviderTodaysList(providerId, search, newPage, rowsPerPage).then(
+      (item) => {
         setList(item.data.data.list);
         setTotal(item.data.data.total);
-      });
-    }
+      }
+    );
   };
 
   const handleChangeRowsPerPage = (
@@ -132,24 +96,12 @@ function AppointmentProviderByIdPage() {
     const newPage = 0;
     setRowsPerPage(newRowperPage);
     setPage(newPage);
-    if (search === '' || search === null || search === undefined) {
-      Service.VisitList(authState.user.tenant, newPage, rowsPerPage).then(
-        (item) => {
-          setList(item.data.data.list);
-          setTotal(item.data.data.total);
-        }
-      );
-    } else {
-      Service.ServiceSearchList(
-        authState.user.tenant,
-        search,
-        newPage,
-        rowsPerPage
-      ).then((item) => {
+    Service.ProviderTodaysList(providerId, search, newPage, newRowperPage).then(
+      (item) => {
         setList(item.data.data.list);
         setTotal(item.data.data.total);
-      });
-    }
+      }
+    );
   };
 
   useEffect(() => {
@@ -180,7 +132,7 @@ function AppointmentProviderByIdPage() {
     } else {
       setIsLoader(false);
     }
-  }, [emptyVariable]);
+  }, []);
 
   const handleDetailDialog = (id: string) => {
     setIsLoader(true);
