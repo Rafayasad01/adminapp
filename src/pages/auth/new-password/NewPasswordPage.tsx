@@ -197,7 +197,7 @@ function NewPasswordPage() {
                 className="h-auto w-full object-contain"
               />
             </div>
-            <div className="pt-[150px]">
+            <div className="pt-[100px]">
               <div className=" mb-[20px] text-center">
                 <img
                   src={assets.images.keyIcon}

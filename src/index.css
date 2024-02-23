@@ -1728,3 +1728,17 @@ main .container:nth-child(3){
 .css-1m4ljmh-MuiTypography-root {
   flex-grow: 1 !important;
 }
+
+.css-q0jhri-MuiInputBase-root-MuiInput-root:after,
+.css-q0jhri-MuiInputBase-root-MuiInput-root::before {
+  border-bottom: none !important;
+  left: 0;
+  bottom: 0;
+  content: '';
+}
+.css-q0jhri-MuiInputBase-root-MuiInput-root.otp-v input {
+  text-align: center;
+  border: 1px solid #949eae;
+  border-radius: 10px;
+  background-color: #fff;
+}

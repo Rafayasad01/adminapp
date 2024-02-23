@@ -83,7 +83,7 @@ function OTPVerificationPage() {
               <span className="block text-center text-[14px] font-medium leading-[normal] text-[#6A6A6A]">
                 Vincent-bo@gmail.com
               </span>
-              <div className="form-group mt-[42px] w-full text-center">
+              <div className="mt-[42px] w-full text-center">
                 {/* <label htmlFor="email" className="font-sans text-[14px] text-[#06152B] font-normal leading-[normal] mb-1">
          Email
          </label>
