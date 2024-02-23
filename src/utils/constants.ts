@@ -8,6 +8,7 @@ export const BASE_URL = `${RAFAY_HOST}/api/v1/admin/`;
 export const BASE_SYSTEM_URL = `${RAFAY_HOST}/api/v1/system/config/`;
 export const MODULE_EMPLOYEEES = 'Employees';
 export const RATING = 'rating';
+export const FAQ = 'faq';
 export const PROFILE_PREFIX = 'profile';
 export const THEME_PREFIX = 'theme';
 export const APPOINTMENT_PREFIX = 'appointment';

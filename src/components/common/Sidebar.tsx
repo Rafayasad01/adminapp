@@ -6,6 +6,7 @@ import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined
 // import FormatListBulletedOutlinedIcon from '@mui/icons-material/FormatListBulletedOutlined';
 // import PlaceOutlinedIcon from '@mui/icons-material/PlaceOutlined';
 // import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
+import QuestionAnswerOutlinedIcon from '@mui/icons-material/QuestionAnswerOutlined';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
@@ -115,6 +116,12 @@ const links = [
         icon: <VisitIcon />,
       },
     ],
+  },
+  {
+    name: 'FAQs',
+    path: 'faq',
+    permission: 'Notification List',
+    icon: <QuestionAnswerOutlinedIcon fontSize="inherit" />,
   },
   {
     name: 'Notifications',

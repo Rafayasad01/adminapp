@@ -51,6 +51,7 @@ import RatingPage from '../pages/rating/RatingPage';
 import RatingReviewsPage from '../pages/rating/RatingReviewsPage';
 import Page404 from '../pages/404/Page404';
 import AppointmentProviderByIdPage from '../pages/appointment/provider/AppointmentProviderByIdPage';
+import FaqPage from '../pages/faq/faqPage';
 
 export const routeObjects: RouteObject[] = [
   {
@@ -364,6 +365,15 @@ export const routeObjects: RouteObject[] = [
               {
                 index: true,
                 element: <ProfilePage />,
+              },
+            ],
+          },
+          {
+            path: 'faq',
+            children: [
+              {
+                index: true,
+                element: <FaqPage />,
               },
             ],
           },
