@@ -1,20 +1,18 @@
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import assets from '../../../assets';
 
 function ForgotPasswordPage() {
-  const navigate = useNavigate();
-  const [email, setEmail] = useState('');
-  const [error, setError] = useState('');
+  // const navigate = useNavigate();
+  // const [email, setEmail] = useState('');
+  // const [error, setError] = useState('');
 
-  const getCodeHandler = () => {
-    if (email && error === '') {
-      navigate('../otp-verification');
-    }
-  };
+  // const getCodeHandler = () => {
+  //   if (email && error === '') {
+  //     navigate('../otp-verification');
+  //   }
+  // };
 
   return (
     // <div className="flex h-full w-full items-center justify-center">

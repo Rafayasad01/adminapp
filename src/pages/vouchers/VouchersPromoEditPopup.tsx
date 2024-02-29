@@ -16,9 +16,10 @@ import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import dayjs, { Dayjs } from 'dayjs';
+import dayjs from 'dayjs';
 
 import '../../assets/css/PopupStyle.css';
+import CustomDateTimePicker from '../../components/common/CustomDateTimePicker';
 import ErrorSpanBox from '../../components/common/ErrorSpanBox';
 import { useAppSelector } from '../../redux/redux-hooks';
 import {
@@ -26,7 +27,6 @@ import {
   VALIDATE_NON_NEGATIVE_NUM,
   VALIDATE_NON_NEGATIVE_NUM_AND_CHECK_LENGTH,
 } from '../../utils/constants';
-import CustomDateTimePicker from '../../components/common/CustomDateTimePicker';
 
 type Props = {
   vouchersPromoEditDialog: boolean;

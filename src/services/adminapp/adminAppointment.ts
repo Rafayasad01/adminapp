@@ -214,7 +214,7 @@ const VisitDelete = (visitorId: any, data: any) => {
   );
 };
 
-//todays-appointment-visit
+// todays-appointment-visit
 const ProviderTodaysList = (
   providerID: any,
   search: string,

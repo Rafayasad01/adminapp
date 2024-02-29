@@ -34,13 +34,13 @@ function AppointmentProviderPage() {
   const [startTime, setStartTime] = useState<dayjs.Dayjs | any>(null);
   const [endTime, setEndTime] = useState<dayjs.Dayjs | any>(null);
   const [weekDays, setWeekDays] = useState<any>([]);
-  const [search, setSearch] = useState<any>('');
+  const [, setSearch] = useState<any>('');
   const [emptyVariable] = useState(null);
   const [page, setPage] = useState(0);
   const [total, setTotal] = useState(0);
   const [list, setList] = useState<any>([]);
   const [currentList, setCurrentList] = useState<any>([]);
-  const [rowsPerPage, setRowsPerPage] = React.useState(2);
+  const [rowsPerPage] = React.useState(2);
   const [actionMenuItemid, setActionMenuItemid] = React.useState('');
   const [actionMenuAnchorEl, setActionMenuAnchorEl] =
     useState<null | HTMLElement>(null);
@@ -50,7 +50,7 @@ function AppointmentProviderPage() {
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
   const [isLoader, setIsLoader] = useState(true);
-  const [isLoaderPagination, setIsLoaderPagination] = useState(false);
+  const [, setIsLoaderPagination] = useState(false);
   const [isNotify, setIsNotify] = useState(false);
   const [notifyMessage, setNotifyMessage] = useState({});
   const [cancelDialogOpen, setCancelDialogOpen] = useState<boolean>(false);
