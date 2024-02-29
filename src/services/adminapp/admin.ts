@@ -15,8 +15,8 @@ const updateMediaService = <T = any>(tenantId: string, data: T) => {
   return network.post(`${SETTING_PREFIX}/update/media/${tenantId}`, data);
 };
 
-const loginService = (userData: UserLogin, tenantId: any) => {
-  return network.post(`${BACKOFFICE_PREFIX}/login/${tenantId}`, userData);
+const loginService = (userData: UserLogin) => {
+  return network.post(`${BACKOFFICE_PREFIX}/login`, userData);
 };
 
 const getAddressService = (tenant: string) => {

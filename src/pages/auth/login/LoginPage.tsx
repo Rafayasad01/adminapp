@@ -7,19 +7,19 @@ import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
 import { useState } from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
+import { NavLink, useNavigate } from 'react-router-dom';
+import assets from '../../../assets';
+import { useNotification } from '../../../components/Contexts/NotificationContext';
+import ErrorSpanBox from '../../../components/common/ErrorSpanBox';
+import Notify from '../../../components/common/Notify';
 import { UserLogin } from '../../../interfaces/auth.interface';
+import { setItemState, setLogo } from '../../../redux/features/appStateSlice';
 import { login } from '../../../redux/features/authStateSlice';
+import { setRolePermissions } from '../../../redux/features/permissionsStateSlice';
 import { useAppDispatch, useAppSelector } from '../../../redux/redux-hooks';
 import auth from '../../../services/adminapp/admin';
 import { setToken } from '../../../utils/constants';
-import assets from '../../../assets';
-import { useNotification } from '../../../components/Contexts/NotificationContext';
-import Notify from '../../../components/common/Notify';
-import { setItemState, setLogo } from '../../../redux/features/appStateSlice';
-import { setRolePermissions } from '../../../redux/features/permissionsStateSlice';
-import ErrorSpanBox from '../../../components/common/ErrorSpanBox';
 
 interface LoginFields {
   email: string;
@@ -56,7 +56,7 @@ function LoginPage() {
       password: data.password,
     };
     await auth
-      .loginService(userData, systemConfig?.tenant)
+      .loginService(userData)
       .then(async (user) => {
         if (user && user.data.success) {
           const newUserData = user.data.data;
