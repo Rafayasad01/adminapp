@@ -1,7 +1,7 @@
 import { setItem } from './storage';
 
 // const HOST = 'https://dev.urapptech.com';
-const HOST = 'http://192.168.8.68:3200';
+// const HOST = 'http://192.168.8.68:3200';
 const RAFAY_HOST = 'http://192.168.8.97:3200';
 
 export const BASE_URL = `${RAFAY_HOST}/api/v1/admin/`;

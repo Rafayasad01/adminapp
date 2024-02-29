@@ -1,94 +1,82 @@
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import Button from '@mui/material/Button';
-import CircularProgress from '@mui/material/CircularProgress';
 import FormControl from '@mui/material/FormControl';
 import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
 import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { useLocation, useNavigate } from 'react-router-dom';
 import assets from '../../../assets';
-import { NewPassword } from '../../../interfaces/auth.interface';
-import { login } from '../../../redux/features/authStateSlice';
-import { setRolePermissions } from '../../../redux/features/permissionsStateSlice';
-import { useAppDispatch } from '../../../redux/redux-hooks';
-import Service from '../../../services/adminapp/admin';
+// import { useAppDispatch } from '../../../redux/redux-hooks';
 import AlertBox from '../../../utils/Alert';
-import { setToken } from '../../../utils/constants';
 
 function NewPasswordPage() {
-  const dispatch = useAppDispatch();
-  const navigate = useNavigate();
-  const location = useLocation();
-  const params = new URLSearchParams(location.search);
-  const code = params.get('code');
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [password, setPassword] = useState('');
-  const [alertMsg, setAlertMsg] = useState('');
+  // const dispatch = useAppDispatch();
+  // const navigate = useNavigate();
+  // const location = useLocation();
+  // const params = new URLSearchParams(location.search);
+  // const code = params.get('code');
+  // const [, setShowPassword] = useState(false);
+  // const [, setShowConfirmPassword] = useState(false);
+  // const [password] = useState('');
+  const [alertMsg] = useState('');
   const [showAlert, setShowAlert] = useState(false);
-  const [alertSeverity, setAlertSeverity] = useState('');
-  const [isLoader, setIsLoader] = useState(false);
+  const [alertSeverity] = useState('');
+  // const [, setIsLoader] = useState(false);
 
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
-  const handleClickShowConfirmPassword = () =>
-    setShowConfirmPassword((show) => !show);
+  // const handleClickShowPassword = () => setShowPassword((show) => !show);
+  // const handleClickShowConfirmPassword = () =>
+  //   setShowConfirmPassword((show) => !show);
 
-  const handleMouseDownPassword = (
-    event: React.MouseEvent<HTMLButtonElement>
-  ) => {
-    event.preventDefault();
-  };
+  // const handleMouseDownPassword = (
+  //   event: React.MouseEvent<HTMLButtonElement>
+  // ) => {
+  //   event.preventDefault();
+  // };
 
-  const {
-    register,
-    handleSubmit,
-    setError,
-    clearErrors,
-    formState: { errors },
-  } = useForm<NewPassword>();
+  // const {
+  //   setError,
+  //   clearErrors,
+  //   formState: { errors },
+  // } = useForm<NewPassword>();
 
-  const onSubmit = (data: NewPassword) => {
-    setIsLoader(true);
-    if (data && data.password) {
-      const newData = {
-        password: data.password,
-        code,
-      };
-      Service.createNewPassword(newData).then((item) => {
-        if (item.data.success) {
-          setIsLoader(false);
-          const newUserData = item.data.data;
-          setToken(newUserData.token);
-          dispatch(setRolePermissions(newUserData.role));
-          delete newUserData.role;
-          dispatch(login(newUserData));
-          if (newUserData.isSuperAdmin) {
-            navigate('../../../main');
-          } else {
-            navigate('../../../dashboard');
-          }
-        } else {
-          setIsLoader(false);
-          setAlertMsg(item.data.message);
-          setAlertSeverity('error');
-          setShowAlert(true);
-        }
-      });
-    }
-  };
+  // const onSubmit = (data: NewPassword) => {
+  //   setIsLoader(true);
+  //   if (data && data.password) {
+  //     const newData = {
+  //       password: data.password,
+  //       code,
+  //     };
+  //     Service.createNewPassword(newData).then((item) => {
+  //       if (item.data.success) {
+  //         setIsLoader(false);
+  //         const newUserData = item.data.data;
+  //         setToken(newUserData.token);
+  //         dispatch(setRolePermissions(newUserData.role));
+  //         delete newUserData.role;
+  //         dispatch(login(newUserData));
+  //         if (newUserData.isSuperAdmin) {
+  //           navigate('../../../main');
+  //         } else {
+  //           navigate('../../../dashboard');
+  //         }
+  //       } else {
+  //         setIsLoader(false);
+  //         setAlertMsg(item.data.message);
+  //         setAlertSeverity('error');
+  //         setShowAlert(true);
+  //       }
+  //     });
+  //   }
+  // };
 
-  const validatePassword = (val: any) => {
-    if (password !== val) {
-      setError('confirmPassword', {
-        message: 'Passwords do not match',
-      });
-    } else {
-      clearErrors('confirmPassword');
-    }
-  };
+  // const validatePassword = (val: any) => {
+  //   if (password !== val) {
+  //     setError('confirmPassword', {
+  //       message: 'Passwords do not match',
+  //     });
+  //   } else {
+  //     clearErrors('confirmPassword');
+  //   }
+  // };
 
   return (
     <>
@@ -219,7 +207,7 @@ function NewPasswordPage() {
                       name="password"
                       endAdornment={
                         <InputAdornment position="end">
-                          <IconButton aria-label="toggle password visibility"></IconButton>
+                          <IconButton aria-label="toggle password visibility" />
                         </InputAdornment>
                       }
                       disableUnderline
@@ -236,7 +224,7 @@ function NewPasswordPage() {
                       name="password"
                       endAdornment={
                         <InputAdornment position="end">
-                          <IconButton aria-label="toggle password visibility"></IconButton>
+                          <IconButton aria-label="toggle password visibility" />
                         </InputAdornment>
                       }
                       disableUnderline

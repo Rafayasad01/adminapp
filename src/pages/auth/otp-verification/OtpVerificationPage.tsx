@@ -2,7 +2,6 @@ import Button from '@mui/material/Button';
 import { useState } from 'react';
 import OtpInput from 'react18-otp-input';
 import assets from '../../../assets';
-import Input from '@mui/material/Input';
 
 function OTPVerificationPage() {
   const [OTP, setOTP] = useState('');

@@ -12,7 +12,7 @@ import dayjs from 'dayjs';
 import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import CustomText from '../../../components/common/CustomText';
 import Loader from '../../../components/common/Loader';
 import Notify from '../../../components/common/Notify';
@@ -181,7 +181,7 @@ function AppointmentProviderByIdPage() {
           <div className="grid grid-cols-12 px-4 py-5">
             <div className="xl:col-span-7 2xl:col-span-9">
               <span className="font-open-sans text-xl font-semibold text-[#252733]">
-                All Today's Appointments
+                All Today&lsquo;s Appointments
               </span>
             </div>
             <div className="grid justify-end xl:col-span-5 2xl:col-span-3">
@@ -250,7 +250,7 @@ function AppointmentProviderByIdPage() {
               </thead>
               <tbody>
                 {list &&
-                  list.map((item: any, index: number) => {
+                  list.map((item: any) => {
                     return (
                       <tr key={item.id}>
                         <td className="text-sm font-bold">

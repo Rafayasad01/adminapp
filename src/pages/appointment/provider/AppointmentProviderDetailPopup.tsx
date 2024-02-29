@@ -1,18 +1,11 @@
+import Dialog from '@mui/material/Dialog';
+import Divider from '@mui/material/Divider';
 import dayjs from 'dayjs';
 import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import React from 'react';
 import CustomText from '../../../components/common/CustomText';
 import Loader from '../../../components/common/Loader';
-import Notify from '../../../components/common/Notify';
-import TopBar from '../../../components/common/TopBar';
-import { useAppSelector } from '../../../redux/redux-hooks';
-import Service from '../../../services/adminapp/adminAppointment';
-import CustomPrintLayout from '../../../utils/CustomPrintLayout/CustomAppointmentPrintLayout';
-import { listingRolePermission } from '../../../utils/helper';
-import Dialog from '@mui/material/Dialog';
-import Divider from '@mui/material/Divider';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -29,16 +22,16 @@ function AppointmentProviderDetailPopup({
   setOpenFormDialog,
   list,
 }: Props) {
-  const { id } = useParams();
-  const dataRole = useAppSelector(
-    (state: any) => state?.persisitReducer?.roleState?.role?.permissions
-  );
-  const [emptyVariable] = useState(null);
+  // const { id } = useParams();
+  // const dataRole = useAppSelector(
+  //   (state: any) => state?.persisitReducer?.roleState?.role?.permissions
+  // );
+  // const [emptyVariable] = useState(null);
   // const [total, setTotal] = useState(0);
   // const [list, setList] = useState<any>([]);
-  const [isLoader, setIsLoader] = React.useState(false);
-  const [isNotify, setIsNotify] = React.useState(false);
-  const [notifyMessage, setNotifyMessage] = React.useState({});
+  const [isLoader] = React.useState(false);
+  // const [isNotify, setIsNotify] = React.useState(false);
+  // const [notifyMessage, setNotifyMessage] = React.useState({});
 
   const handleFormClose = () => {
     setOpenFormDialog(false);
@@ -74,7 +67,7 @@ function AppointmentProviderDetailPopup({
   //     }
   // }, [emptyVariable]);
 
-  const [isPrintEnabled, setPrintEnabled] = useState<any>([false]);
+  // const [isPrintEnabled, setPrintEnabled] = useState<any>([false]);
 
   return (
     <Dialog
