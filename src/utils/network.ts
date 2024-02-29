@@ -1,6 +1,27 @@
 import axios from 'axios';
+import { setLogo, setRemoveItemState } from '../redux/features/appStateSlice';
+import { logout } from '../redux/features/authStateSlice';
+import { setRolePermissions } from '../redux/features/permissionsStateSlice';
+import { store } from '../redux/store';
 import { BASE_SYSTEM_URL, BASE_URL } from './constants';
 import { getItem } from './storage';
+
+axios.interceptors.response.use(
+  function (response) {
+    return response;
+  },
+  function (error) {
+    if (error.response.status === 401) {
+      store.dispatch(logout());
+      store.dispatch(setRemoveItemState());
+      store.dispatch(setLogo(null));
+      store.dispatch(setRolePermissions({ id: '', name: '', permissions: [] }));
+    }
+    // Any status codes that falls outside the range of 2xx cause this function to trigger
+    // Do something with response error
+    return Promise.reject(error);
+  }
+);
 
 const token = () => getItem<string>('AUTH_TOKEN');
 
