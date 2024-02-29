@@ -24,6 +24,7 @@ import Service from '../../services/adminapp/adminBranch';
 import { listingRolePermission } from '../../utils/helper';
 import BranchCreatePopup from './BranchCreatePopup';
 import BranchUpdatePopup from './BranchUpdatePopup';
+import CustomButton from '../../components/common/CustomButton';
 
 function BranchPage() {
   const navigate = useNavigate();
@@ -516,6 +517,11 @@ function BranchPage() {
                                 event: React.ChangeEvent<HTMLInputElement>
                               ) => handleSwitchChange(event, item.id)}
                               inputProps={{ 'aria-label': 'controlled' }}
+                            />
+                            <CustomButton
+                              title="Control branch"
+                              buttonType="button"
+                              className="mx-5 rounded-full bg-primary text-foreground"
                             />
                           </div>
                         </td>
