@@ -9,6 +9,7 @@ import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
 import Switch from '@mui/material/Switch';
+import AirplayIcon from '@mui/icons-material/Airplay';
 import TablePagination from '@mui/material/TablePagination';
 import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
@@ -25,10 +26,16 @@ import { listingRolePermission } from '../../utils/helper';
 import BranchCreatePopup from './BranchCreatePopup';
 import BranchUpdatePopup from './BranchUpdatePopup';
 import CustomButton from '../../components/common/CustomButton';
+import { useDispatch } from 'react-redux';
+import { login } from '../../redux/features/authStateSlice';
+import { setItemState } from '../../redux/features/appStateSlice';
 
 function BranchPage() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const authState: any = useAppSelector((state: any) => state?.authState);
+  console.log('🚀 ~ BranchPage ~ authState:', authState);
+
   const dataRole = useAppSelector(
     (state: any) => state?.persisitReducer?.roleState?.role?.permissions
   );
@@ -43,7 +50,7 @@ function BranchPage() {
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
   const [formDetail, setFormDetail] = useState<any>(null);
-  const [isLoader, setIsLoader] = React.useState(true);
+  const [isLoader, setIsLoader] = React.useState(false);
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
   const [totalBranches, setTotalBranches] = useState<number>(0);
@@ -122,11 +129,13 @@ function BranchPage() {
   };
 
   useEffect(() => {
+    setIsLoader(true);
     if (listingRolePermission(dataRole, 'Employee List')) {
       Service.getListService(authState.user.tenant, page, rowsPerPage)
         .then((item: any) => {
           if (item.data.success) {
             setIsLoader(false);
+            console.log('🚀 ~ .then ~ item.data.data:', item.data.data);
             setList(item.data.data.list);
             setTotal(item.data.data.total);
             setTotalBranches(item.data.data.list.length);
@@ -152,7 +161,7 @@ function BranchPage() {
     } else {
       setIsLoader(false);
     }
-  }, [emptyVariable]);
+  }, [authState.user.tenant]);
 
   const createFormHandler = (data: any) => {
     setIsLoader(true);
@@ -322,6 +331,23 @@ function BranchPage() {
     }
   };
 
+  const handleVendor = (
+    tenantId: string,
+    name: string,
+    maxEmployeeLimit: string,
+    maxBranchLimit: string
+  ) => {
+    let userObj = {
+      ...authState.user,
+      tenant: tenantId,
+      tenantName: name,
+      maxEmployeeLimit: maxEmployeeLimit,
+      branchLimit: maxBranchLimit,
+    };
+    dispatch(login(userObj));
+    dispatch(setItemState(userObj));
+  };
+
   return isLoader ? (
     <Loader />
   ) : (
@@ -410,6 +436,23 @@ function BranchPage() {
               </div>
             </div>
           </div>
+          {authState?.user?.tenant !== authState?.shopTenantDetails.tenant && (
+            <div className="flex items-center justify-end">
+              <CustomButton
+                title="Switch to main shop"
+                buttonType="button"
+                className="mx-5 rounded-full bg-primary text-foreground"
+                onclick={() =>
+                  handleVendor(
+                    authState.shopTenantDetails.tenant,
+                    authState.shopTenantDetails.tenantName,
+                    authState.shopTenantDetails.maxEmployeeLimit,
+                    authState.shopTenantDetails.branchLimit
+                  )
+                }
+              />
+            </div>
+          )}
           <div className="mt-3 grid grid-cols-none">
             <table className="table-border table-auto">
               <thead>
@@ -419,6 +462,7 @@ function BranchPage() {
                   <th>Trial Mode</th>
                   <th>Trial Start Date</th>
                   <th>Status</th>
+                  <th>Branch Control</th>
                   <th>&nbsp;</th>
                 </tr>
               </thead>
@@ -495,6 +539,25 @@ function BranchPage() {
                             <span className="badge badge-danger">INACTIVE</span>
                           )}
                         </td>
+                        <td className="w-[8%]">
+                          {authState?.user?.tenant ===
+                            authState?.shopTenantDetails.tenant && (
+                            <div
+                              className="flex cursor-pointer justify-center"
+                              style={{ color: 'CaptionText' }}
+                              onClick={() =>
+                                handleVendor(
+                                  item.id,
+                                  item.name,
+                                  item.maxUserLimit,
+                                  item.maxBranchLimit
+                                )
+                              }
+                            >
+                              <AirplayIcon />
+                            </div>
+                          )}
+                        </td>
                         <td>
                           <div className="flex flex-row-reverse">
                             <IconButton
@@ -517,11 +580,6 @@ function BranchPage() {
                                 event: React.ChangeEvent<HTMLInputElement>
                               ) => handleSwitchChange(event, item.id)}
                               inputProps={{ 'aria-label': 'controlled' }}
-                            />
-                            <CustomButton
-                              title="Control branch"
-                              buttonType="button"
-                              className="mx-5 rounded-full bg-primary text-foreground"
                             />
                           </div>
                         </td>

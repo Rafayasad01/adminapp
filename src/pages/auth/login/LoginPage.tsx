@@ -15,7 +15,10 @@ import ErrorSpanBox from '../../../components/common/ErrorSpanBox';
 import Notify from '../../../components/common/Notify';
 import { UserLogin } from '../../../interfaces/auth.interface';
 import { setItemState, setLogo } from '../../../redux/features/appStateSlice';
-import { login } from '../../../redux/features/authStateSlice';
+import {
+  login,
+  setShopAdminTenant,
+} from '../../../redux/features/authStateSlice';
 import { setRolePermissions } from '../../../redux/features/permissionsStateSlice';
 import { useAppDispatch, useAppSelector } from '../../../redux/redux-hooks';
 import auth from '../../../services/adminapp/admin';
@@ -62,12 +65,23 @@ function LoginPage() {
           const newUserData = user.data.data;
           setIsLoader(false);
           setToken(newUserData.token);
+          // console.log("🚀 ~ .then ~ newUserData:", user.data.data)
           dispatch(setRolePermissions(newUserData.role));
           delete newUserData.role;
           dispatch(login(newUserData));
           dispatch(setItemState(newUserData));
           if (newUserData?.tenantConfig) {
             dispatch(setLogo(user?.data?.data?.tenantConfig?.logo));
+          }
+          if (newUserData?.userType === 'ShopUser') {
+            dispatch(
+              setShopAdminTenant({
+                tenant: newUserData.tenant,
+                tenantName: newUserData.tenantName,
+                maxEmployeeLimit: newUserData.maxEmployeeLimit,
+                branchLimit: newUserData.branchLimit,
+              })
+            );
           }
           navigate('../../../dashboard');
         } else {
