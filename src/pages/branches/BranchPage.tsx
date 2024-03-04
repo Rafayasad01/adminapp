@@ -15,6 +15,7 @@ import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import CustomText from '../../components/common/CustomText';
 import Loader from '../../components/common/Loader';
 import Notify from '../../components/common/Notify';
@@ -26,7 +27,6 @@ import { listingRolePermission } from '../../utils/helper';
 import BranchCreatePopup from './BranchCreatePopup';
 import BranchUpdatePopup from './BranchUpdatePopup';
 import CustomButton from '../../components/common/CustomButton';
-import { useDispatch } from 'react-redux';
 import { login } from '../../redux/features/authStateSlice';
 import { setItemState } from '../../redux/features/appStateSlice';
 
@@ -34,7 +34,7 @@ function BranchPage() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const authState: any = useAppSelector((state: any) => state?.authState);
-  console.log('🚀 ~ BranchPage ~ authState:', authState);
+  // console.log('🚀 ~ BranchPage ~ authState:', authState);
 
   const dataRole = useAppSelector(
     (state: any) => state?.persisitReducer?.roleState?.role?.permissions
@@ -42,7 +42,7 @@ function BranchPage() {
   const [search, setSearch] = useState<any>('');
   const [maxTotalEmployeeLimit, setTotalMaxEmployeeLimit] = useState<any>();
   const [maxTotalEmployees, setTotalMaxEmployees] = useState();
-  const [emptyVariable] = useState(null);
+  // const [emptyVariable] = useState(null);
   const [page, setPage] = useState(0);
   const [total, setTotal] = useState(0);
   const [list, setList] = useState<any>([]);
@@ -139,7 +139,7 @@ function BranchPage() {
         .then((item: any) => {
           if (item.data.success) {
             setIsLoader(false);
-            console.log('🚀 ~ .then ~ item.data.data:', item.data.data);
+            // console.log('🚀 ~ .then ~ item.data.data:', item.data.data);
             setList(item.data.data.list);
             setTotal(item.data.data.total);
             setTotalBranches(item.data.data.list.length);
@@ -154,7 +154,7 @@ function BranchPage() {
             });
           }
         })
-        .catch((err) => {
+        .catch((err: Error) => {
           setIsLoader(false);
           setIsNotify(true);
           setNotifyMessage({
@@ -165,7 +165,7 @@ function BranchPage() {
     } else {
       setIsLoader(false);
     }
-  }, [authState.user.tenant]);
+  }, []);
 
   const createFormHandler = (data: any) => {
     setIsLoader(true);
@@ -341,11 +341,11 @@ function BranchPage() {
     maxEmployeeLimit: string,
     maxBranchLimit: string
   ) => {
-    let userObj = {
+    const userObj = {
       ...authState.user,
       tenant: tenantId,
       tenantName: name,
-      maxEmployeeLimit: maxEmployeeLimit,
+      maxEmployeeLimit,
       branchLimit: maxBranchLimit,
     };
     dispatch(login(userObj));

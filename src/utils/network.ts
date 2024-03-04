@@ -6,11 +6,12 @@ import { store } from '../redux/store';
 import { BASE_SYSTEM_URL, BASE_URL } from './constants';
 import { getItem } from './storage';
 
+// eslint-disable-next-line func-names
 axios.interceptors.response.use(
-  function (response) {
+  function onResponse(response) {
     return response;
   },
-  function (error) {
+  function onError(error) {
     if (error.response.status === 401) {
       store.dispatch(logout());
       store.dispatch(setRemoveItemState());
