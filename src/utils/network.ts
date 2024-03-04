@@ -4,7 +4,14 @@ import { logout } from '../redux/features/authStateSlice';
 import { setRolePermissions } from '../redux/features/permissionsStateSlice';
 import { store } from '../redux/store';
 import { BASE_SYSTEM_URL, BASE_URL } from './constants';
-import { getItem } from './storage';
+import { getItem, setItem } from './storage';
+
+const setLogout = () => {
+  store.dispatch(logout());
+  store.dispatch(setRemoveItemState());
+  store.dispatch(setLogo(null));
+  store.dispatch(setRolePermissions({ id: '', name: '', permissions: [] }));
+};
 
 axios.interceptors.response.use(
   function (response) {
@@ -12,10 +19,21 @@ axios.interceptors.response.use(
   },
   function (error) {
     if (error.response.status === 401) {
-      store.dispatch(logout());
-      store.dispatch(setRemoveItemState());
-      store.dispatch(setLogo(null));
-      store.dispatch(setRolePermissions({ id: '', name: '', permissions: [] }));
+      if (error.response.data.token) {
+        setItem('AUTH_TOKEN', error.response.data.token);
+        const originalRequest = { ...error.config };
+        const newRequest = {
+          ...originalRequest,
+          headers: {
+            ...originalRequest.headers,
+            Authorization: error.response.data.token,
+          },
+        };
+        return axios(newRequest);
+      }
+      setLogout();
+    } else if (error.response.status === 403) {
+      setLogout();
     }
     // Any status codes that falls outside the range of 2xx cause this function to trigger
     // Do something with response error
