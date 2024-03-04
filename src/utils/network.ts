@@ -14,10 +14,10 @@ const setLogout = () => {
 };
 
 axios.interceptors.response.use(
-  function (response) {
+  function onResponse(response) {
     return response;
   },
-  function (error) {
+  function onError(error) {
     if (error.response.status === 401) {
       if (error.response.data.token) {
         setItem('AUTH_TOKEN', error.response.data.token);
