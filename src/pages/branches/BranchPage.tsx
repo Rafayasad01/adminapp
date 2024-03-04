@@ -131,7 +131,11 @@ function BranchPage() {
   useEffect(() => {
     setIsLoader(true);
     if (listingRolePermission(dataRole, 'Employee List')) {
-      Service.getListService(authState.user.tenant, page, rowsPerPage)
+      Service.getListService(
+        authState?.shopTenantDetails.tenant,
+        page,
+        rowsPerPage
+      )
         .then((item: any) => {
           if (item.data.success) {
             setIsLoader(false);
@@ -540,23 +544,28 @@ function BranchPage() {
                           )}
                         </td>
                         <td className="w-[8%]">
-                          {authState?.user?.tenant ===
-                            authState?.shopTenantDetails.tenant && (
-                            <div
-                              className="flex cursor-pointer justify-center"
-                              style={{ color: 'CaptionText' }}
-                              onClick={() =>
-                                handleVendor(
-                                  item.id,
-                                  item.name,
-                                  item.maxUserLimit,
-                                  item.maxBranchLimit
-                                )
-                              }
-                            >
-                              <AirplayIcon />
-                            </div>
-                          )}
+                          {/* {authState?.user?.tenant ===
+                            authState?.shopTenantDetails.tenant && ( */}
+                          <div
+                            className="flex cursor-pointer justify-center"
+                            style={{
+                              color:
+                                item.id === authState?.user?.tenant
+                                  ? 'green'
+                                  : 'black',
+                            }}
+                            onClick={() =>
+                              handleVendor(
+                                item.id,
+                                item.name,
+                                item.maxUserLimit,
+                                item.maxBranchLimit
+                              )
+                            }
+                          >
+                            <AirplayIcon />
+                          </div>
+                          {/* )} */}
                         </td>
                         <td>
                           <div className="flex flex-row-reverse">
