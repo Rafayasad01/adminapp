@@ -6,6 +6,9 @@ import { store } from '../redux/store';
 import { BASE_SYSTEM_URL, BASE_URL } from './constants';
 import { getItem, setItem } from './storage';
 
+const token = () => getItem<string>('AUTH_TOKEN');
+const refreshToken = () => getItem<string>('REFRESH_TOKEN');
+
 const setLogout = () => {
   store.dispatch(logout());
   store.dispatch(setRemoveItemState());
@@ -13,25 +16,46 @@ const setLogout = () => {
   store.dispatch(setRolePermissions({ id: '', name: '', permissions: [] }));
 };
 
-axios.interceptors.response.use(
+const networkInstance = axios.create();
+const refreshInstance = axios.create();
+
+networkInstance.interceptors.response.use(
   function onResponse(response) {
     return response;
   },
   function onError(error) {
+    const originalRequest = { ...error.config };
     if (error.response.status === 401) {
-      if (error.response.data.token) {
-        setItem('AUTH_TOKEN', error.response.data.token);
-        const originalRequest = { ...error.config };
-        const newRequest = {
-          ...originalRequest,
+      return refreshInstance
+        .get(`${BASE_URL}backofficeUser/refresh/token`, {
           headers: {
-            ...originalRequest.headers,
-            Authorization: error.response.data.token,
+            'Content-Type': 'application/json',
+            Authorization: refreshToken(),
           },
-        };
-        return axios(newRequest);
-      }
-      setLogout();
+        })
+        .then(
+          (response: any) => {
+            if (response.data.success) {
+              setItem('AUTH_TOKEN', response.data.data.accessToken);
+              setItem('REFRESH_TOKEN', response.data.data.refreshToken);
+
+              const newRequest = {
+                ...originalRequest,
+                headers: {
+                  ...originalRequest.headers,
+                  Authorization: response.data.data.accessToken,
+                },
+              };
+              return networkInstance(newRequest);
+            }
+            setLogout();
+            return Promise.reject(new Error(response.data.message));
+          },
+          (error) => {
+            setLogout();
+            return Promise.reject(error);
+          }
+        );
     } else if (error.response.status === 403) {
       setLogout();
     }
@@ -41,10 +65,8 @@ axios.interceptors.response.use(
   }
 );
 
-const token = () => getItem<string>('AUTH_TOKEN');
-
 const post = <T = any>(endPoint: string, data: T) => {
-  return axios.post(`${BASE_URL}${endPoint}`, data, {
+  return networkInstance.post(`${BASE_URL}${endPoint}`, data, {
     headers: {
       'Content-Type': 'application/json',
       Authorization: token(),
@@ -53,7 +75,7 @@ const post = <T = any>(endPoint: string, data: T) => {
 };
 
 const get = (endPoint: string) => {
-  return axios.get(`${BASE_URL}${endPoint}`, {
+  return networkInstance.get(`${BASE_URL}${endPoint}`, {
     headers: {
       'Content-Type': 'application/json',
       Authorization: token(),
@@ -62,7 +84,7 @@ const get = (endPoint: string) => {
 };
 
 const postMultipart = <T = any>(endPoint: string, data: T) => {
-  return axios.post(`${BASE_URL}${endPoint}`, data, {
+  return networkInstance.post(`${BASE_URL}${endPoint}`, data, {
     headers: {
       'Content-Type': 'multipart/form-data',
       Authorization: token(),
@@ -71,7 +93,7 @@ const postMultipart = <T = any>(endPoint: string, data: T) => {
 };
 
 const getSystemConfig = (endPoint: string) => {
-  return axios.get(`${BASE_SYSTEM_URL}${endPoint}`, {
+  return networkInstance.get(`${BASE_SYSTEM_URL}${endPoint}`, {
     headers: {
       'Content-Type': 'application/json',
       Authorization: token(),
@@ -80,7 +102,7 @@ const getSystemConfig = (endPoint: string) => {
 };
 
 const postSystemConfig = <T = any>(endPoint: string, data: T) => {
-  return axios.post(`${BASE_SYSTEM_URL}${endPoint}`, data, {
+  return networkInstance.post(`${BASE_SYSTEM_URL}${endPoint}`, data, {
     headers: {
       'Content-Type': 'application/json',
       Authorization: token(),
@@ -89,7 +111,7 @@ const postSystemConfig = <T = any>(endPoint: string, data: T) => {
 };
 
 const postMultipartSystemConfig = <T = any>(endPoint: string, data: T) => {
-  return axios.post(`${BASE_SYSTEM_URL}${endPoint}`, data, {
+  return networkInstance.post(`${BASE_SYSTEM_URL}${endPoint}`, data, {
     headers: {
       'Content-Type': 'multipart/form-data',
       Authorization: token(),
@@ -105,7 +127,7 @@ const getWithQueryParam = (
   Object.entries(queryParams).forEach(([key, value]) => {
     url.searchParams.append(key, value);
   });
-  return axios.get(url.toString(), {
+  return networkInstance.get(url.toString(), {
     headers: {
       'Content-Type': 'application/json',
       Authorization: token(),

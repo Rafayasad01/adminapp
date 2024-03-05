@@ -49,7 +49,6 @@ function NewPasswordPage() {
   //       if (item.data.success) {
   //         setIsLoader(false);
   //         const newUserData = item.data.data;
-  //         setToken(newUserData.token);
   //         dispatch(setRolePermissions(newUserData.role));
   //         delete newUserData.role;
   //         dispatch(login(newUserData));
