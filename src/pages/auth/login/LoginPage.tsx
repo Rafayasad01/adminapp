@@ -19,7 +19,7 @@ import { login } from '../../../redux/features/authStateSlice';
 import { setRolePermissions } from '../../../redux/features/permissionsStateSlice';
 import { useAppDispatch, useAppSelector } from '../../../redux/redux-hooks';
 import auth from '../../../services/adminapp/admin';
-import { setToken } from '../../../utils/constants';
+import { setItem } from '../../../utils/storage';
 
 interface LoginFields {
   email: string;
@@ -61,7 +61,8 @@ function LoginPage() {
         if (user && user.data.success) {
           const newUserData = user.data.data;
           setIsLoader(false);
-          setToken(newUserData.token);
+          setItem('AUTH_TOKEN', newUserData.accessToken);
+          setItem('REFRESH_TOKEN', newUserData.refreshToken);
           dispatch(setRolePermissions(newUserData.role));
           delete newUserData.role;
           dispatch(login(newUserData));

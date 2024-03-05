@@ -11,7 +11,6 @@ type User = {
   tenantConfig: any;
   isActive: boolean;
   isSuperAdmin: boolean;
-  token: string;
   avatar: string;
   branchLimit: number;
   employeeLimit: number;
