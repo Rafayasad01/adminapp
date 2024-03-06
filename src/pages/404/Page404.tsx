@@ -1,14 +1,26 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import assets from '../../assets';
 import CustomButton from '../../components/common/CustomButton';
 import { useAppSelector } from '../../redux/redux-hooks';
+import { BACK_TO_LOGIN } from '../../utils/constants';
 
 function Page404() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const state = location.state;
   const systemConfig = useAppSelector(
     (state: any) => state.authState.systemConfig
   );
+
+  const handleBackButt = () => {
+    if (state?.buttonname === BACK_TO_LOGIN) {
+      navigate('../../../admin/auth/login', { replace: true });
+    } else {
+      navigate('../../dashboard', { replace: true });
+    }
+  };
+
   return (
     <div className="flex h-full w-full items-center justify-center bg-[#F0F0F0]">
       <div className="container mx-auto flex items-center justify-between px-10">
@@ -29,17 +41,19 @@ function Page404() {
           {systemConfig !== null && (
             <div className="flex items-center justify-start">
               <CustomButton
-                onclick={() => navigate('../../dashboard')}
-                title="Home"
-                className="text-normal mr-5 w-[120px] bg-black py-[14px] text-[14px] leading-[normal] text-white"
+                onclick={handleBackButt}
+                title={state ? state?.buttonname && BACK_TO_LOGIN : `Home`}
+                className="text-normal mr-5 w-[150px] bg-black py-[14px] text-[14px] leading-[normal] text-white"
                 buttonType="button"
               />
-              <CustomButton
-                onclick={() => navigate(-1)}
-                title="Back"
-                className="text-normal mr-5 w-[120px] border-[1px] border-solid bg-white py-[14px] text-[14px] leading-[normal] text-black"
-                buttonType="button"
-              />
+              {state?.buttonname !== BACK_TO_LOGIN && (
+                <CustomButton
+                  onclick={() => navigate(-1)}
+                  title="Back"
+                  className="text-normal mr-5 w-[120px] border-[1px] border-solid bg-white py-[14px] text-[14px] leading-[normal] text-black"
+                  buttonType="button"
+                />
+              )}
             </div>
           )}
         </div>

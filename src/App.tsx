@@ -44,7 +44,7 @@ function App() {
       .then((res: any) => {
         setIsPageLoader(false);
         if (res.data.success) {
-          // navigate('./admin/auth/', { replace: true });
+          navigate('./admin/auth/login', { replace: true });
           // console.log('res.data.data::::::', res.data.data);
           const systemConfigData = {
             createdDate: res.data.data.createdDate,
@@ -59,8 +59,10 @@ function App() {
           dispatch(setSystemConfig(systemConfigData));
         } else {
           setIsPageLoader(false);
-          console.log('4041');
-          navigate('./admin/auth/404', { replace: true });
+          navigate('./admin/auth/404', {
+            replace: true,
+            state: { buttonname: 'back to login' },
+          });
           // showNotification(res.data.message, 'error');
           // console.log('404 page');
         }
@@ -68,7 +70,10 @@ function App() {
       .catch(() => {
         console.log('4042');
         setIsPageLoader(false);
-        navigate('./admin/auth/404', { replace: true });
+        navigate('./admin/auth/404', {
+          replace: true,
+          state: { buttonname: 'back to login' },
+        });
         // showNotification(err.message, 'error');
       });
   }, []);
