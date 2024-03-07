@@ -17,9 +17,17 @@ type User = {
   userLimit: number;
 };
 
+type ShopTenantDetails = {
+  tenant: string;
+  tenantName: string;
+  maxEmployeeLimit: string;
+  branchLimit: string;
+};
+
 type AuthState = {
   user: User | null;
   theme: null;
+  shopTenantDetails: ShopTenantDetails | null;
   systemConfig: null;
 };
 
@@ -39,6 +47,7 @@ function getTheme() {
 const initialState: AuthState = {
   user: getUser(),
   theme: getTheme(),
+  shopTenantDetails: getItem<any>('SHOP_TENANT'),
   systemConfig: getItem<any>('SYSTEM_CONFIG'),
 };
 
@@ -54,6 +63,10 @@ export const authStateSlice = createSlice({
       state.user = null;
       removeItem('USER');
     },
+    setShopAdminTenant: (state, action: PayloadAction<any>) => {
+      state.shopTenantDetails = action.payload;
+      setItem('SHOP_TENANT', action.payload);
+    },
     setTheme: (state, action: PayloadAction<any>) => {
       state.theme = action.payload;
       setThemeColor(action.payload);
@@ -66,7 +79,7 @@ export const authStateSlice = createSlice({
   },
 });
 
-export const { login, logout, setTheme, setSystemConfig } =
+export const { login, logout, setTheme, setSystemConfig, setShopAdminTenant } =
   authStateSlice.actions;
 
 export default authStateSlice.reducer;

@@ -13,7 +13,10 @@ import {
   setLogo,
   setRemoveItemState,
 } from '../../redux/features/appStateSlice';
-import { logout } from '../../redux/features/authStateSlice';
+import {
+  logout,
+  setShopAdminTenant,
+} from '../../redux/features/authStateSlice';
 import { setRolePermissions } from '../../redux/features/permissionsStateSlice';
 import { useAppSelector } from '../../redux/redux-hooks';
 import BackArrowIcon from '../icons/BackArrowIcon';
@@ -42,6 +45,7 @@ function TopBar({ title, isNestedRoute = false }: Props) {
   const logOut = () => {
     dispatch(logout());
     dispatch(setRemoveItemState());
+    dispatch(setShopAdminTenant(null));
     dispatch(setLogo(null));
     dispatch(setRolePermissions({ id: '', name: '', permissions: [] }));
     // dispatch(setSystemConfig(null));
