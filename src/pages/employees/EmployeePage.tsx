@@ -311,6 +311,8 @@ function EmployeePage() {
             setIsLoader(false);
             setList(item.data.data.list);
             setTotal(item.data.data.total);
+          } else {
+            setIsLoader(false);
           }
         })
         .catch((err) => {

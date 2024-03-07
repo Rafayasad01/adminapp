@@ -9,11 +9,13 @@ import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
 import Switch from '@mui/material/Switch';
+import AirplayIcon from '@mui/icons-material/Airplay';
 import TablePagination from '@mui/material/TablePagination';
 import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import CustomText from '../../components/common/CustomText';
 import Loader from '../../components/common/Loader';
 import Notify from '../../components/common/Notify';
@@ -24,17 +26,23 @@ import Service from '../../services/adminapp/adminBranch';
 import { listingRolePermission } from '../../utils/helper';
 import BranchCreatePopup from './BranchCreatePopup';
 import BranchUpdatePopup from './BranchUpdatePopup';
+import CustomButton from '../../components/common/CustomButton';
+import { login } from '../../redux/features/authStateSlice';
+import { setItemState } from '../../redux/features/appStateSlice';
 
 function BranchPage() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const authState: any = useAppSelector((state: any) => state?.authState);
+  // console.log('🚀 ~ BranchPage ~ authState:', authState);
+
   const dataRole = useAppSelector(
     (state: any) => state?.persisitReducer?.roleState?.role?.permissions
   );
   const [search, setSearch] = useState<any>('');
   const [maxTotalEmployeeLimit, setTotalMaxEmployeeLimit] = useState<any>();
   const [maxTotalEmployees, setTotalMaxEmployees] = useState();
-  const [emptyVariable] = useState(null);
+  // const [emptyVariable] = useState(null);
   const [page, setPage] = useState(0);
   const [total, setTotal] = useState(0);
   const [list, setList] = useState<any>([]);
@@ -42,7 +50,7 @@ function BranchPage() {
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
   const [formDetail, setFormDetail] = useState<any>(null);
-  const [isLoader, setIsLoader] = React.useState(true);
+  const [isLoader, setIsLoader] = React.useState(false);
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
   const [totalBranches, setTotalBranches] = useState<number>(0);
@@ -121,11 +129,17 @@ function BranchPage() {
   };
 
   useEffect(() => {
+    setIsLoader(true);
     if (listingRolePermission(dataRole, 'Employee List')) {
-      Service.getListService(authState.user.tenant, page, rowsPerPage)
+      Service.getListService(
+        authState?.shopTenantDetails.tenant,
+        page,
+        rowsPerPage
+      )
         .then((item: any) => {
           if (item.data.success) {
             setIsLoader(false);
+            // console.log('🚀 ~ .then ~ item.data.data:', item.data.data);
             setList(item.data.data.list);
             setTotal(item.data.data.total);
             setTotalBranches(item.data.data.list.length);
@@ -140,7 +154,7 @@ function BranchPage() {
             });
           }
         })
-        .catch((err) => {
+        .catch((err: Error) => {
           setIsLoader(false);
           setIsNotify(true);
           setNotifyMessage({
@@ -151,7 +165,7 @@ function BranchPage() {
     } else {
       setIsLoader(false);
     }
-  }, [emptyVariable]);
+  }, []);
 
   const createFormHandler = (data: any) => {
     setIsLoader(true);
@@ -321,6 +335,23 @@ function BranchPage() {
     }
   };
 
+  const handleVendor = (
+    tenantId: string,
+    name: string,
+    maxEmployeeLimit: string,
+    maxBranchLimit: string
+  ) => {
+    const userObj = {
+      ...authState.user,
+      tenant: tenantId,
+      tenantName: name,
+      maxEmployeeLimit,
+      branchLimit: maxBranchLimit,
+    };
+    dispatch(login(userObj));
+    dispatch(setItemState(userObj));
+  };
+
   return isLoader ? (
     <Loader />
   ) : (
@@ -409,6 +440,23 @@ function BranchPage() {
               </div>
             </div>
           </div>
+          {authState?.user?.tenant !== authState?.shopTenantDetails.tenant && (
+            <div className="flex items-center justify-end">
+              <CustomButton
+                title="Switch to main shop"
+                buttonType="button"
+                className="mx-5 rounded-full bg-primary text-foreground"
+                onclick={() =>
+                  handleVendor(
+                    authState.shopTenantDetails.tenant,
+                    authState.shopTenantDetails.tenantName,
+                    authState.shopTenantDetails.maxEmployeeLimit,
+                    authState.shopTenantDetails.branchLimit
+                  )
+                }
+              />
+            </div>
+          )}
           <div className="mt-3 grid grid-cols-none">
             <table className="table-border table-auto">
               <thead>
@@ -418,6 +466,7 @@ function BranchPage() {
                   <th>Trial Mode</th>
                   <th>Trial Start Date</th>
                   <th>Status</th>
+                  <th>Branch Control</th>
                   <th>&nbsp;</th>
                 </tr>
               </thead>
@@ -493,6 +542,30 @@ function BranchPage() {
                           ) : (
                             <span className="badge badge-danger">INACTIVE</span>
                           )}
+                        </td>
+                        <td className="w-[8%]">
+                          {/* {authState?.user?.tenant ===
+                            authState?.shopTenantDetails.tenant && ( */}
+                          <div
+                            className="flex cursor-pointer justify-center"
+                            style={{
+                              color:
+                                item.id === authState?.user?.tenant
+                                  ? 'green'
+                                  : 'black',
+                            }}
+                            onClick={() =>
+                              handleVendor(
+                                item.id,
+                                item.name,
+                                item.maxUserLimit,
+                                item.maxBranchLimit
+                              )
+                            }
+                          >
+                            <AirplayIcon />
+                          </div>
+                          {/* )} */}
                         </td>
                         <td>
                           <div className="flex flex-row-reverse">
