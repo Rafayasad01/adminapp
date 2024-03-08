@@ -1,26 +1,27 @@
-import { useEffect, useState } from 'react';
-import OtpInput from 'react18-otp-input';
-import assets from '../../../assets';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { useNotification } from '../../../components/Contexts/NotificationContext';
-import Notify from '../../../components/common/Notify';
-import FormControl from '@mui/material/FormControl';
-import Input from '@mui/material/Input';
-import { useForm } from 'react-hook-form';
-import ErrorSpanBox from '../../../components/common/ErrorSpanBox';
-import auth from '../../../services/adminapp/admin';
-import InputAdornment from '@mui/material/InputAdornment';
-import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import Button from '@mui/material/Button';
+import CircularProgress from '@mui/material/CircularProgress';
+import FormControl from '@mui/material/FormControl';
+import IconButton from '@mui/material/IconButton';
+import Input from '@mui/material/Input';
+import InputAdornment from '@mui/material/InputAdornment';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useLocation, useNavigate } from 'react-router-dom';
+import OtpInput from 'react18-otp-input';
+import assets from '../../../assets';
+import { useNotification } from '../../../components/Contexts/NotificationContext';
+import ErrorSpanBox from '../../../components/common/ErrorSpanBox';
+import Notify from '../../../components/common/Notify';
+import { useAppSelector } from '../../../redux/redux-hooks';
+import auth from '../../../services/adminapp/admin';
 import {
   INVALID_CHAR,
   MAX_LENGTH_EXCEEDED,
-  PASSWORD_SHOULD_SAME,
   PATTERN,
 } from '../../../utils/constants';
-import CircularProgress from '@mui/material/CircularProgress';
+
 interface Pass {
   newPassword: string;
   reNewPassword: string;
@@ -28,6 +29,9 @@ interface Pass {
 
 function OTPVerificationPage() {
   const navigate = useNavigate();
+  const systemConfig = useAppSelector(
+    (state: any) => state.authState.systemConfig
+  );
   const [OTP, setOTP] = useState('');
   const location = useLocation();
   const state = location.state;
@@ -50,7 +54,7 @@ function OTPVerificationPage() {
 
   const submitHandler = (data: Pass) => {
     setIsLoader(true);
-    let newPassObj = {
+    const newPassObj = {
       password: data.newPassword,
       email: state?.email,
       otp: OTP,
@@ -82,7 +86,7 @@ function OTPVerificationPage() {
           <div className="w-[30%] self-start px-[30px]">
             <div className="max-h-[29px] w-full max-w-[150px] px-[25px] py-[40px]">
               <img
-                src={assets.images.urApplogo}
+                src={systemConfig?.shopLogo ?? systemConfig?.shopName}
                 alt="urlaundry"
                 className="h-auto w-full object-contain"
               />
@@ -103,8 +107,9 @@ function OTPVerificationPage() {
                 <span className="block text-center text-[14px] font-semibold leading-[normal] text-[#6A6A6A]">
                   {state?.email}
                 </span>
-                <span className="block text-center text-[14px] font-normal leading-[normal] text-[#6A6A6A]">
-                  Note : Check your mail for otp code and paste it here
+                <span className="mx-10 mt-2 block text-center text-[13px] font-normal leading-[normal] text-[#6A6A6A]">
+                  Note : Please check your email for the OTP code and paste it
+                  here; otherwise, it will expire within an hour.
                 </span>
                 <div className="mt-[42px] flex w-full items-center justify-center text-center">
                   <OtpInput
@@ -267,7 +272,7 @@ function OTPVerificationPage() {
           <div className="w-[70%] px-3 py-2">
             <div className="mx-auto  flex max-h-[834px] items-center justify-center overflow-hidden rounded-lg max-[1560px]:max-h-[96vh]">
               <img
-                src={assets.images.forgotBg}
+                src={systemConfig?.logoffImage || assets.images.bgLogin}
                 alt="urlaundry"
                 className="h-full w-full object-contain"
               />
