@@ -1,8 +1,11 @@
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
-import assets from '../../../assets';
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import CircularProgress from '@mui/material/CircularProgress';
+import assets from '../../../assets';
 import auth from '../../../services/adminapp/admin';
 import ErrorSpanBox from '../../../components/common/ErrorSpanBox';
 import {
@@ -10,19 +13,19 @@ import {
   MAX_LENGTH_EXCEEDED,
   PATTERN,
 } from '../../../utils/constants';
-import { useNavigate } from 'react-router-dom';
 import Notify from '../../../components/common/Notify';
 import { useNotification } from '../../../components/Contexts/NotificationContext';
-import { useState } from 'react';
-import Loader from '../../../components/common/Loader2';
-import CircularProgress from '@mui/material/CircularProgress';
+import { useAppSelector } from '../../../redux/redux-hooks';
+
 interface Email {
   email: string;
 }
 
 function ForgotPasswordPage() {
   const navigate = useNavigate();
-
+  const systemConfig = useAppSelector(
+    (state: any) => state.authState.systemConfig
+  );
   // const [email, setEmail] = useState('');
   // const [error, setError] = useState('');
 
@@ -71,7 +74,7 @@ function ForgotPasswordPage() {
           <div className="w-[30%] self-start px-[30px]">
             <div className="max-h-[29px] w-full max-w-[150px] px-[25px] py-[40px]">
               <img
-                src={assets.images.urApplogo}
+                src={systemConfig?.shopLogo ?? systemConfig?.shopName}
                 alt="urlaundry"
                 className="h-auto w-full object-contain"
               />
@@ -147,7 +150,7 @@ function ForgotPasswordPage() {
           <div className="w-[70%] px-3 py-2">
             <div className="mx-auto  flex max-h-[834px] items-center justify-center overflow-hidden rounded-lg max-[1560px]:max-h-[96vh]">
               <img
-                src={assets.images.forgotBg}
+                src={systemConfig?.logoffImage || assets.images.bgLogin}
                 alt="urlaundry"
                 className="h-full w-full object-contain"
               />
