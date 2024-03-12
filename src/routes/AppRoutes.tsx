@@ -53,6 +53,7 @@ import Page404 from '../pages/404/Page404';
 import AppointmentProviderByIdPage from '../pages/appointment/provider/AppointmentProviderByIdPage';
 import FaqPage from '../pages/faq/faqPage';
 import MdDashboard from '../pages/home/MdDashboard';
+import ScanDiseasePage from '../pages/scanDisease/ScanDiseasePage';
 
 export const routeObjects: RouteObject[] = [
   {
@@ -403,6 +404,15 @@ export const routeObjects: RouteObject[] = [
               {
                 index: true,
                 element: <Page404 />,
+              },
+            ],
+          },
+          {
+            path: 'scan-disease',
+            children: [
+              {
+                index: true,
+                element: <ScanDiseasePage />,
               },
             ],
           },
