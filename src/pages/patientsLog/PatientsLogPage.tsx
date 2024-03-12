@@ -4,19 +4,26 @@ import { faker } from '@faker-js/faker';
 import TopBar from '../../components/common/Md-Alder/TopBar';
 import photo from '../../assets/images/Photo.png';
 import EyeIcon from '../../components/icons/EyeIcon';
+import { useNavigate } from 'react-router-dom';
 
 const PatientsLogPage = () => {
+  const navigate = useNavigate();
+
   return (
     <>
       <TopBar title="Patient Logs" />
       <div className="mt-10 py-5 pr-5">
-        <div className="rounded-2xl bg-faded p-5">
+        <div className="alder-content">
           <div className="flex items-center justify-between">
             <div>
-              <h4 className="text-lg font-medium">Patient Data</h4>
+              <h4 className="alder-content-title">Patient Data</h4>
             </div>
             <div>
-              <Button variant="contained" className="btn-black-fill btn-icon">
+              <Button
+                onClick={() => navigate('/admin/dashboard/patient-log-create')}
+                variant="contained"
+                className="btn-black-fill btn-icon"
+              >
                 <AddOutlinedIcon /> Add New Patient
               </Button>
             </div>

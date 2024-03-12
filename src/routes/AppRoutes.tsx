@@ -55,6 +55,7 @@ import FaqPage from '../pages/faq/faqPage';
 import MdDashboard from '../pages/home/MdDashboard';
 import ScanDiseasePage from '../pages/scanDisease/ScanDiseasePage';
 import PatientsLogPage from '../pages/patientsLog/PatientsLogPage';
+import PatientLogCreatePage from '../pages/patientsLog/PatientLogCreatePage';
 
 export const routeObjects: RouteObject[] = [
   {
@@ -423,6 +424,15 @@ export const routeObjects: RouteObject[] = [
               {
                 index: true,
                 element: <PatientsLogPage />,
+              },
+            ],
+          },
+          {
+            path: 'patient-log-create',
+            children: [
+              {
+                index: true,
+                element: <PatientLogCreatePage />,
               },
             ],
           },

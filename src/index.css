@@ -1768,3 +1768,26 @@ MD - AlDer Theme Styles
 .MuiPaginationItem-root.Mui-selected {
   @apply bg-faded;
 }
+
+.alder-content {
+  @apply rounded-2xl bg-faded p-5;
+}
+
+.alder-content-title {
+  @apply text-lg font-medium;
+}
+
+.alder-form-control {
+  height: 40px;
+  border: 1px solid #f1f1f1 !important;
+  padding: 25px;
+  border-radius: 10px;
+  background-color: white;
+}
+/* .alder-form-control input{
+  border: 1px solid #F1F1F1 !important;
+  padding:10px 10px;
+} */
+.alder-form-control .MuiOutlinedInput-notchedOutline {
+  border: 1px solid #f1f1f1 !important;
+}
