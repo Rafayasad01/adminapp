@@ -41,6 +41,7 @@ import VoucherIcon from '../icons/VoucherIcon';
 import AppointmentIcon from '../icons/appointmentIcon';
 import ProviderIcon from '../icons/providerIcon';
 import VisitIcon from '../icons/visitIcon';
+import FaceScanIcon from '../icons/FaceScanIcon';
 
 const links = [
   {
@@ -140,6 +141,13 @@ const links = [
     path: 'settings',
     permission: 'Setting View',
     icon: <SettingsOutlinedIcon fontSize="inherit" />,
+  },
+  {
+    name: 'Scan Disease',
+    path: 'scan-disease',
+    permission: 'Setting View',
+    // icon: <SettingsOutlinedIcon fontSize="inherit" />,
+    icon: <FaceScanIcon />,
   },
 ];
 

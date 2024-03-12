@@ -52,6 +52,7 @@ import RatingReviewsPage from '../pages/rating/RatingReviewsPage';
 import Page404 from '../pages/404/Page404';
 import AppointmentProviderByIdPage from '../pages/appointment/provider/AppointmentProviderByIdPage';
 import FaqPage from '../pages/faq/faqPage';
+import MdDashboard from '../pages/home/MdDashboard';
 
 export const routeObjects: RouteObject[] = [
   {
@@ -106,7 +107,7 @@ export const routeObjects: RouteObject[] = [
           },
           {
             path: 'home',
-            element: <HomePage />,
+            element: <MdDashboard />,
           },
           {
             path: 'reports',
