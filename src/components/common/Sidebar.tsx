@@ -28,6 +28,7 @@ import Toolbar from '@mui/material/Toolbar';
 import { NavLink } from 'react-router-dom';
 // import HeadphonesOutlinedIcon from '@mui/icons-material/HeadphonesOutlined'
 // import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined';
+import ContentPasteIcon from '@mui/icons-material/ContentPaste';
 import assets from '../../assets';
 import { useAppSelector } from '../../redux/redux-hooks';
 import CAN, { defineRules } from '../../services/permissions/permissions';
@@ -148,6 +149,13 @@ const links = [
     permission: 'Setting View',
     // icon: <SettingsOutlinedIcon fontSize="inherit" />,
     icon: <FaceScanIcon />,
+  },
+  {
+    name: 'Patient Log',
+    path: 'patient-log',
+    permission: 'Setting View',
+    // icon: <SettingsOutlinedIcon fontSize="inherit" />,
+    icon: <ContentPasteIcon />,
   },
 ];
 

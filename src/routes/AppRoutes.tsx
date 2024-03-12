@@ -54,6 +54,7 @@ import AppointmentProviderByIdPage from '../pages/appointment/provider/Appointme
 import FaqPage from '../pages/faq/faqPage';
 import MdDashboard from '../pages/home/MdDashboard';
 import ScanDiseasePage from '../pages/scanDisease/ScanDiseasePage';
+import PatientsLogPage from '../pages/patientsLog/PatientsLogPage';
 
 export const routeObjects: RouteObject[] = [
   {
@@ -413,6 +414,15 @@ export const routeObjects: RouteObject[] = [
               {
                 index: true,
                 element: <ScanDiseasePage />,
+              },
+            ],
+          },
+          {
+            path: 'patient-log',
+            children: [
+              {
+                index: true,
+                element: <PatientsLogPage />,
               },
             ],
           },

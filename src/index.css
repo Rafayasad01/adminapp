@@ -1764,3 +1764,7 @@ MD - AlDer Theme Styles
 .alder-card-border {
   @apply rounded-[15px] border border-[#F1F1F1];
 }
+
+.MuiPaginationItem-root.Mui-selected {
+  @apply bg-faded;
+}
