@@ -425,13 +425,16 @@ export const routeObjects: RouteObject[] = [
                 index: true,
                 element: <PatientsLogPage />,
               },
-            ],
-          },
-          {
-            path: 'patient-log-create',
-            children: [
               {
-                index: true,
+                path: 'create',
+                element: <PatientLogCreatePage />,
+              },
+              {
+                path: 'create',
+                element: <PatientLogCreatePage />,
+              },
+              {
+                path: 'profile',
                 element: <PatientLogCreatePage />,
               },
             ],

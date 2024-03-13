@@ -20,7 +20,7 @@ const PatientsLogPage = () => {
             </div>
             <div>
               <Button
-                onClick={() => navigate('/admin/dashboard/patient-log-create')}
+                onClick={() => navigate('create')}
                 variant="contained"
                 className="btn-black-fill btn-icon"
               >
