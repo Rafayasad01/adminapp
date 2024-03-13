@@ -1,10 +1,10 @@
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
-import { Button, Pagination, TablePagination } from '@mui/material';
+import { Button, Pagination } from '@mui/material';
 import { faker } from '@faker-js/faker';
+import { useNavigate } from 'react-router-dom';
 import TopBar from '../../components/common/Md-Alder/TopBar';
 import photo from '../../assets/images/Photo.png';
 import EyeIcon from '../../components/icons/EyeIcon';
-import { useNavigate } from 'react-router-dom';
 
 const PatientsLogPage = () => {
   const navigate = useNavigate();
