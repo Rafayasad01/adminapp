@@ -43,6 +43,7 @@ import AppointmentIcon from '../icons/appointmentIcon';
 import ProviderIcon from '../icons/providerIcon';
 import VisitIcon from '../icons/visitIcon';
 import FaceScanIcon from '../icons/FaceScanIcon';
+import PatientsIcon from '../icons/PatientsIcon';
 
 const links = [
   {
@@ -156,6 +157,13 @@ const links = [
     permission: 'Setting View',
     // icon: <SettingsOutlinedIcon fontSize="inherit" />,
     icon: <ContentPasteIcon />,
+  },
+  {
+    name: 'Create new Patient',
+    path: 'patient-log-create',
+    permission: 'Setting View',
+    // icon: <SettingsOutlinedIcon fontSize="inherit" />,
+    icon: <PatientsIcon />,
   },
 ];
 
