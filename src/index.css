@@ -1753,6 +1753,14 @@ main .container:nth-child(3){
   width: 363px !important;
 }
 
+.Content .FormField {
+  margin-top: 0% !important;
+}
+
+.Content .ImageBox {
+  margin-top: 0.1rem !important;
+}
+
 /* swiper css */
 .swiper-slide {
   width: 25% !important;
@@ -1760,6 +1768,18 @@ main .container:nth-child(3){
 
 .swiper-wrapper {
   padding-left: 150px;
+}
+
+.custom-swiper {
+  padding-left: 0px !important;
+}
+
+.custom-swiper-slide {
+  width: 100% !important;
+}
+
+.custom-swiper .swiper-wrapper {
+  padding-left: 0 !important;
 }
 
 .swiper-button-next {

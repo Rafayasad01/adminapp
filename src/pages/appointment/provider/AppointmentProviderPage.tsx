@@ -7,7 +7,7 @@ import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
 import dayjs from 'dayjs';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import ActionMenu from '../../../components/common/ActionMenu';
@@ -28,6 +28,7 @@ import {
 } from '../../../utils/constants';
 import { listingRolePermission } from '../../../utils/helper';
 import AppointmentProviderCards from './AppointmentProviderCards';
+import CustomSwiperDialog from '../../../components/common/CustomSwiperDialog';
 
 function AppointmentProviderPage() {
   const navigate = useNavigate();
@@ -61,6 +62,7 @@ function AppointmentProviderPage() {
   const [image, setImage] = useState<any>(null);
   const {
     register,
+    control,
     handleSubmit,
     watch,
     reset,
@@ -152,11 +154,13 @@ function AppointmentProviderPage() {
       error: errors.uploadImg,
       type: 'uploadImg',
       onChange: handleFileChange,
-      OnClick: handleFileChange,
+      OnClick: handleFileOnClick,
       image,
       setImage,
     },
   ];
+
+  console.log('image', image);
 
   const inputScheduleData = [
     {
@@ -468,22 +472,38 @@ function AppointmentProviderPage() {
       });
   };
 
-  const onSubmitDialogBox = (data: any) => {
-    if (openFormDialog && weekDays && startTime && endTime) {
-      setOpenFormDialog(false);
-      createFormHandler(data);
-    } else if (openEditFormDialog) {
-      if (listingRolePermission(dataRole, 'Appointment Provider Update')) {
-        setOpenEditFormDialog(false);
-        updateFormHandler(data);
-      } else {
-        setIsNotify(true);
-        setNotifyMessage({
-          text: NOT_AUTHORIZED_MESSAGE,
-          type: 'warning',
-        });
-      }
+  const swiperRef = useRef<any>(null);
+
+  const handleNextSlide = () => {
+    if (swiperRef.current) {
+      swiperRef.current.slideNext();
     }
+  };
+
+  const handlePrevSlide = () => {
+    if (swiperRef.current) {
+      swiperRef.current.slidePrev();
+    }
+  };
+
+  const onSubmitDialogBox = (data: any) => {
+    console.log('🚀 ~ onSubmitDialogBox ~ data:', data);
+    handleNextSlide();
+    // if (openFormDialog && weekDays && startTime && endTime) {
+    //   setOpenFormDialog(false);
+    //   createFormHandler(data);
+    // } else if (openEditFormDialog) {
+    //   if (listingRolePermission(dataRole, 'Appointment Provider Update')) {
+    //     setOpenEditFormDialog(false);
+    //     updateFormHandler(data);
+    //   } else {
+    //     setIsNotify(true);
+    //     setNotifyMessage({
+    //       text: NOT_AUTHORIZED_MESSAGE,
+    //       type: 'warning',
+    //     });
+    //   }
+    // }
   };
 
   const handleSwitchChange = (event: any, id: string) => {
@@ -671,8 +691,15 @@ function AppointmentProviderPage() {
         />
       )}
       {openFormDialog && (
-        <CustomDialog
-          DialogHeader="Add Provider"
+        <CustomSwiperDialog
+          control={control}
+          errors={errors}
+          register={register}
+          setValue={setValue}
+          swiperRef={swiperRef}
+          handleNextSlide={handleNextSlide}
+          DialogSliderOne="Add Barber"
+          DialogSliderTwo="Add Barber Services"
           DialogSubHeader="Select Schedule"
           inputFieldsData={inputFieldsData}
           inputScheduleData={inputScheduleData}
