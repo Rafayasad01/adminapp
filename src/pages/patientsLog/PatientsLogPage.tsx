@@ -71,7 +71,7 @@ const PatientsLogPage = () => {
                       <td>{faker.person.sex()}</td>
                       <td>{faker.date.past({ years: 1 }).toDateString()}</td>
                       <td>
-                        <Button>
+                        <Button onClick={() => navigate('profile')}>
                           <EyeIcon className="h-[25px]" />
                         </Button>
                       </td>
@@ -84,14 +84,7 @@ const PatientsLogPage = () => {
 
         <div className="mt-10">
           <div className="mt-3 flex w-[100%] justify-center py-3">
-            <Pagination
-              component="div"
-              count={10}
-              page={1}
-              onPageChange={() => {}}
-              rowsPerPage={10}
-              onRowsPerPageChange={() => {}}
-            />
+            <Pagination count={10} page={1} />
           </div>
         </div>
       </div>

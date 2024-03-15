@@ -11,6 +11,7 @@ import dayjs from 'dayjs';
 import React, { useRef, useState } from 'react';
 
 import '../../assets/css/PopupStyle.css';
+import CalendarIcon from '../../components/icons/CalendarIcon';
 
 const darkTheme = createTheme({
   palette: {
@@ -58,7 +59,7 @@ function DatePickerField({
         <label className="FormLabel">{datePickerLabel}</label>
         <Input
           ref={buttonElement}
-          className="FormInput"
+          className="FormInput alder-form-control"
           type="text"
           placeholder="MM/DD/YYYY"
           value={datePickerValue?.format('MM/DD/YYYY') ?? ''}
@@ -70,7 +71,8 @@ function DatePickerField({
                 onClick={handleClick}
                 style={{ padding: 0 }}
               >
-                <CalendarTodayOutlinedIcon sx={{ color: '#1D1D1D' }} />
+                {/* <CalendarTodayOutlinedIcon sx={{ color: '#1D1D1D' }} /> */}
+                <CalendarIcon className="scale-125" />
               </IconButton>
             </InputAdornment>
           }

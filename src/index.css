@@ -127,7 +127,7 @@ table > thead > tr > th {
 
 table > tbody > tr > td,
 table > tbody > tr > th {
-  @apply py-5 pl-4 pr-1 text-left font-open-sans text-xs font-normal text-secondary;
+  @apply py-2 pl-4 pr-1 text-left font-open-sans text-base font-medium text-secondary;
 }
 
 .avatar-table > thead > tr > td,
@@ -448,7 +448,7 @@ table > tbody > tr:last-child {
 }
 
 .btn-black-outline {
-  @apply rounded-lg border border-solid border-secondary bg-transparent px-3 text-sm font-normal capitalize text-secondary shadow-none !important;
+  @apply rounded-10 border border-solid border-secondary bg-transparent px-3 text-sm font-normal capitalize text-secondary shadow-none !important;
 }
 
 .btn-black-fill {
@@ -1784,10 +1784,37 @@ MD - AlDer Theme Styles
   border-radius: 10px;
   background-color: white;
 }
+
+.alder-form-control-date {
+  border: 1px solid #f1f1f1 !important;
+  border-radius: 10px;
+  background-color: white;
+}
+
+.alder-form-control-date > {
+  padding: 10px;
+}
 /* .alder-form-control input{
   border: 1px solid #F1F1F1 !important;
   padding:10px 10px;
 } */
-.alder-form-control .MuiOutlinedInput-notchedOutline {
+.alder-form-control .MuiOutlinedInput-notchedOutline,
+.alder-form-control-date .MuiOutlinedInput-notchedOutline {
   border: 1px solid #f1f1f1 !important;
+}
+
+.alder-tab-btn::after {
+  content: '';
+  height: 5px;
+  display: block;
+  background: var(--theme-primary);
+  position: relative;
+  border-radius: 10px;
+  bottom: -13px;
+  align-self: center;
+  width: 80px;
+}
+
+.rounded-10 {
+  border-radius: 0.6rem;
 }

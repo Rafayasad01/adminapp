@@ -56,6 +56,8 @@ import MdDashboard from '../pages/home/MdDashboard';
 import ScanDiseasePage from '../pages/scanDisease/ScanDiseasePage';
 import PatientsLogPage from '../pages/patientsLog/PatientsLogPage';
 import PatientLogCreatePage from '../pages/patientsLog/PatientLogCreatePage';
+import PatientLogProfilePage from '../pages/patientsLog/PatientLogProfilePage';
+import PatientLogVisitCreatePage from '../pages/patientsLog/PatientLogVisitCreatePage';
 
 export const routeObjects: RouteObject[] = [
   {
@@ -435,7 +437,11 @@ export const routeObjects: RouteObject[] = [
               },
               {
                 path: 'profile',
-                element: <PatientLogCreatePage />,
+                element: <PatientLogProfilePage />,
+              },
+              {
+                path: 'revisit',
+                element: <PatientLogVisitCreatePage />,
               },
             ],
           },

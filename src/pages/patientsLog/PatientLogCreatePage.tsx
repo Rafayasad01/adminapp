@@ -39,7 +39,6 @@ const PatientLogCreatePage = () => {
                 <div className="mt-5 grid grid-cols-2 gap-5">
                   <FormControl className="FormControl" variant="standard">
                     <Input
-                      variant="outlined"
                       className="FormInput alder-form-control"
                       type="text"
                       name="first_name"
@@ -50,7 +49,6 @@ const PatientLogCreatePage = () => {
 
                   <FormControl className="FormControl" variant="standard">
                     <Input
-                      variant="outlined"
                       className="FormInput alder-form-control"
                       type="text"
                       name="last_name"
@@ -78,7 +76,6 @@ const PatientLogCreatePage = () => {
 
                   <FormControl className="FormControl" variant="standard">
                     <Input
-                      variant="outlined"
                       className="FormInput alder-form-control"
                       type="tel"
                       name="phone"
@@ -89,7 +86,6 @@ const PatientLogCreatePage = () => {
 
                   <FormControl className="FormControl" variant="standard">
                     <Input
-                      variant="outlined"
                       className="FormInput alder-form-control"
                       type="email"
                       name="email"
@@ -100,7 +96,6 @@ const PatientLogCreatePage = () => {
 
                   <FormControl className="FormControl" variant="standard">
                     <Input
-                      variant="outlined"
                       className="FormInput alder-form-control"
                       type="number"
                       name="age"
@@ -127,7 +122,6 @@ const PatientLogCreatePage = () => {
 
                   <FormControl className="FormControl" variant="standard">
                     <Input
-                      variant="outlined"
                       className="FormInput alder-form-control"
                       type="text"
                       name="occupation"
@@ -192,10 +186,7 @@ const PatientLogCreatePage = () => {
                           <RefreshIcon className="mr-3" />
                           Reset{' '}
                         </Button>
-                        <Button
-                          variant="fill"
-                          className="btn-black-fill rounded-xl border-primary text-primary"
-                        >
+                        <Button className="btn-black-fill rounded-xl border-primary text-primary">
                           <SendIcon className="mr-3" />
                           Save{' '}
                         </Button>
