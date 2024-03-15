@@ -98,26 +98,6 @@ const links = [
     icon: <ViewCarouselOutlinedIcon className="w-[17px]" />,
   },
   {
-    name: 'Appointment',
-    path: 'appointment',
-    permission: 'Appointment Parent',
-    icon: <AppointmentIcon />,
-    childLinks: [
-      {
-        name: 'Store Employees',
-        path: 'appointment/provider',
-        permission: 'Appointment Category List',
-        icon: <ProviderIcon />,
-      },
-      {
-        name: 'All Appointments',
-        path: 'appointment/visit',
-        permission: 'Appointment Visit List',
-        icon: <VisitIcon />,
-      },
-    ],
-  },
-  {
     name: 'FAQs',
     path: 'faq',
     permission: 'Notification List',

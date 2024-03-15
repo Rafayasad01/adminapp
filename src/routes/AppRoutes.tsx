@@ -4,7 +4,6 @@ import { Navigate, RouteObject } from 'react-router-dom';
 import AppLayout from '../components/layout/AppLayout';
 import AuthLayout from '../components/layout/AuthLayout';
 import LayoutOutlet from '../components/layout/LayoutOutlet';
-import AppointmentVisitPage from '../pages/appointment/visit/AppointmentVisitPage';
 import ForgotPasswordPage from '../pages/auth/forgot-password/ForgotPasswordPage';
 import LoginPage from '../pages/auth/login/LoginPage';
 import NewPasswordPage from '../pages/auth/new-password/NewPasswordPage';
@@ -33,25 +32,19 @@ import SettingsApp from '../pages/settings/SettingsApp';
 import SettingsPage from '../pages/settings/SettingsPage';
 import SettingsShopScheduling from '../pages/settings/SettingsShopScheduling';
 
+import Page404 from '../pages/404/Page404';
 import AppUserDetailPage from '../pages/appUsers/AppUserDetailPage';
 import AppUserRewardHistory from '../pages/appUsers/AppUserRewardHistory';
 import AppUserLoyaltyDetailPage from '../pages/appUsers/AppUserRewardHistoryTabs/AppUserLoyaltyDetailPage';
 import AppUserPromotionDetailPage from '../pages/appUsers/AppUserRewardHistoryTabs/AppUserPromotionDetailPage';
 import AppUsersPage from '../pages/appUsers/AppUsersPage';
-import AppointmentProviderAddSchedulePage from '../pages/appointment/provider/AppointmentProviderAddSchedulePage';
-import AppointmentProviderPage from '../pages/appointment/provider/AppointmentProviderPage';
-import AppointmentProviderSchedulePage from '../pages/appointment/provider/AppointmentProviderSchedulePage';
-import AppointmentProviderServicesList from '../pages/appointment/provider/AppointmentProviderServicesList';
-import AppointmentVisitDetailPage from '../pages/appointment/visit/AppointmentVisitDetailPage';
 import BannersPage from '../pages/banners/BannersPage';
+import FaqPage from '../pages/faq/faqPage';
 import DriverHistory from '../pages/orders/DriverHistory';
-import SettingConfig from '../pages/settings/SettingConfig';
-import VouchersPage from '../pages/vouchers/VouchersPage';
 import RatingPage from '../pages/rating/RatingPage';
 import RatingReviewsPage from '../pages/rating/RatingReviewsPage';
-import Page404 from '../pages/404/Page404';
-import AppointmentProviderByIdPage from '../pages/appointment/provider/AppointmentProviderByIdPage';
-import FaqPage from '../pages/faq/faqPage';
+import SettingConfig from '../pages/settings/SettingConfig';
+import VouchersPage from '../pages/vouchers/VouchersPage';
 
 export const routeObjects: RouteObject[] = [
   {
@@ -260,55 +253,6 @@ export const routeObjects: RouteObject[] = [
               {
                 path: 'detail/:branchId',
                 element: <BranchDetailPage />,
-              },
-            ],
-          },
-          {
-            path: 'appointment',
-            children: [
-              {
-                index: true,
-                element: <Navigate to="provider/list" replace />,
-              },
-              {
-                path: 'visit',
-                children: [
-                  { index: true, element: <Navigate to="list" replace /> },
-                  {
-                    path: 'list',
-                    element: <AppointmentVisitPage />,
-                  },
-                  {
-                    path: 'detail/:id',
-                    element: <AppointmentVisitDetailPage />,
-                  },
-                ],
-              },
-              {
-                path: 'provider',
-                children: [
-                  { index: true, element: <Navigate to="list" replace /> },
-                  {
-                    path: 'list',
-                    element: <AppointmentProviderPage />,
-                  },
-                  {
-                    path: 'schedule/:id',
-                    element: <AppointmentProviderSchedulePage />,
-                  },
-                  {
-                    path: 'add-schedule/:id',
-                    element: <AppointmentProviderAddSchedulePage />,
-                  },
-                  {
-                    path: 'services/:providerId',
-                    element: <AppointmentProviderServicesList />,
-                  },
-                  {
-                    path: 'today-appointment/:providerId',
-                    element: <AppointmentProviderByIdPage />,
-                  },
-                ],
               },
             ],
           },
