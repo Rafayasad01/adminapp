@@ -13,6 +13,7 @@ import CustomDropDown from './CustomDropDown';
 import CustomInputBox from './CustomInputBox';
 import ErrorSpanBox from './ErrorSpanBox';
 import TimePicker from './TimePicker';
+import Button from '@mui/material/Button';
 
 type Props = {
   openFormDialog: boolean;
@@ -178,6 +179,63 @@ function CustomDialog({
                               <ErrorSpanBox error={items.error.message} />
                             )}
                           </FormControl>
+                        </div>
+                      ) : items.type === 'uploadImg' ? (
+                        <div className="FormField">
+                          <label className="FormLabel">Upload Image</label>
+                          <div className="ImageBox">
+                            <input
+                              accept="image/*"
+                              style={{ display: 'none' }}
+                              {...items.register(items.id)}
+                              id={items.id}
+                              type="file"
+                              onChange={(
+                                event: React.InputHTMLAttributes<HTMLInputElement>
+                              ) => {
+                                items.onChange(event);
+                              }}
+                              onClick={(
+                                event: React.InputHTMLAttributes<HTMLInputElement>
+                              ) => {
+                                items.OnClick(event);
+                              }}
+                            />
+                            <label
+                              htmlFor="raised-button-file"
+                              className="ImageLabel"
+                            >
+                              <Button component="span" className="ImageBtn">
+                                <FileUploadOutlinedIcon
+                                  sx={{ marginRight: '0.5rem' }}
+                                />
+                                Upload image
+                              </Button>
+                            </label>
+
+                            {items.image ? (
+                              <div className="ShowImageBox">
+                                <label className="ShowImageLabel">
+                                  {items.image.name}
+                                </label>
+                                <IconButton
+                                  className="btn-dot"
+                                  onClick={() => items.setImage(null)}
+                                >
+                                  <CloseOutlinedIcon
+                                    sx={{
+                                      color: '#1D1D1D',
+                                      fontSize: '1rem',
+                                      lineHeight: '1.5rem',
+                                    }}
+                                  />
+                                </IconButton>
+                              </div>
+                            ) : (
+                              ''
+                            )}
+                          </div>
+                          {/* {image === null && <ErrorSpanBox error={errors.icon?.message} />} */}
                         </div>
                       ) : items.type === 'datepicker' ? (
                         <TimePicker

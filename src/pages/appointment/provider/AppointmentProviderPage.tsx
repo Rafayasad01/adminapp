@@ -21,7 +21,11 @@ import { AppointmentProvider } from '../../../interfaces/app.appointment';
 import { useAppSelector } from '../../../redux/redux-hooks';
 import Service from '../../../services/adminapp/adminAppointment';
 import PermissionPopup from '../../../utils/PermissionPopup';
-import { NOT_AUTHORIZED_MESSAGE, PATTERN } from '../../../utils/constants';
+import {
+  NOT_AUTHORIZED_MESSAGE,
+  PATTERN,
+  imageAllowedTypes,
+} from '../../../utils/constants';
 import { listingRolePermission } from '../../../utils/helper';
 import AppointmentProviderCards from './AppointmentProviderCards';
 
@@ -40,12 +44,12 @@ function AppointmentProviderPage() {
   const [total, setTotal] = useState(0);
   const [list, setList] = useState<any>([]);
   const [currentList, setCurrentList] = useState<any>([]);
-  const [rowsPerPage] = React.useState(2);
+  const [rowsPerPage] = React.useState(2000);
   const [actionMenuItemid, setActionMenuItemid] = React.useState('');
   const [actionMenuAnchorEl, setActionMenuAnchorEl] =
     useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
-  const actionMenuOptions = ['Services', 'Schedule', 'Edit', 'Delete'];
+  const actionMenuOptions = ['Schedule', 'Edit', 'Delete'];
 
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
@@ -54,6 +58,7 @@ function AppointmentProviderPage() {
   const [isNotify, setIsNotify] = useState(false);
   const [notifyMessage, setNotifyMessage] = useState({});
   const [cancelDialogOpen, setCancelDialogOpen] = useState<boolean>(false);
+  const [image, setImage] = useState<any>(null);
   const {
     register,
     handleSubmit,
@@ -62,6 +67,29 @@ function AppointmentProviderPage() {
     setValue,
     formState: { errors },
   } = useForm<AppointmentProvider>();
+
+  // image handler
+  const handleFileChange = (event: any) => {
+    console.log('event', event);
+    const selectedFile = event.target.files[0];
+    if (selectedFile) {
+      const fileType = selectedFile.type;
+      if (imageAllowedTypes.includes(fileType)) {
+        setImage(event.target.files[0]);
+      } else {
+        setIsNotify(true);
+        setNotifyMessage({
+          text: 'Only .png, .jpg, and .jpeg files are allowed',
+          type: 'error',
+        });
+      }
+    }
+  };
+
+  const handleFileOnClick = (event: any) => {
+    event.target.value = null;
+    setImage(null);
+  };
 
   const inputFieldsData = [
     {
@@ -117,14 +145,16 @@ function AppointmentProviderPage() {
       pattern: PATTERN.ONLY_NUM,
     },
     {
-      fieldName: 'Urgent Fees',
-      id: 'urgentFee',
-      placeholder: 'Enter Urgent Fees',
+      fieldName: 'Upload',
+      id: 'uploadImg',
+      placeholder: 'Upload Profile Picture',
       register,
-      error: errors.urgentFee,
-      type: 'text',
-      maxLetterLimit: 5,
-      pattern: PATTERN.POINT_NUM,
+      error: errors.uploadImg,
+      type: 'uploadImg',
+      onChange: handleFileChange,
+      OnClick: handleFileChange,
+      image,
+      setImage,
     },
   ];
 
@@ -157,15 +187,7 @@ function AppointmentProviderPage() {
 
   const handleFormClickOpen = () => {
     if (listingRolePermission(dataRole, 'Appointment Provider Create')) {
-      // if (total < authState.user.employeeLimit) {
       setOpenFormDialog(true);
-      // } else {
-      //   setIsNotify(true);
-      //   setNotifyMessage({
-      //     text: 'Employees limit has been excceed',
-      //     type: 'warning',
-      //   });
-      // }
     } else {
       setIsNotify(true);
       setNotifyMessage({
@@ -209,7 +231,7 @@ function AppointmentProviderPage() {
             setValue('phone', item.data.data.phone);
             setValue('email', item.data.data.email);
             setValue('cnic', item.data.data.cnic);
-            setValue('urgentFee', item.data.data.urgentFee);
+            // setValue('urgentFee', item.data.data.urgentFee);
             setStartTime(item.data.data.startTime);
             setEndTime(item.data.data.endTime);
             setOpenEditFormDialog(true);

@@ -8,7 +8,7 @@ export interface AppointmentProvider {
   isActive: boolean;
   isDeleted: boolean;
   email: string;
-  urgentFee: string;
+  uploadImg: any;
 }
 
 export interface AppointmentService {
@@ -30,6 +30,7 @@ export interface AppointmentProviderScheduleTime {
 }
 
 export interface AppointmentVisit {
+  appointmentType?: any;
   isCheckTimingSlot: boolean;
   isUrgent: boolean;
   visitName: string;

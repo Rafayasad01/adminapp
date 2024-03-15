@@ -67,14 +67,14 @@ const AppointmentProviderCards = ({
                         inputProps={{ 'aria-label': 'controlled' }}
                       />
                     </div>
-                    <div
+                    {/* <div
                       className="cursor-pointer"
                       onClick={() =>
                         navigate(`../today-appointment/${item.id}`)
                       }
                     >
                       <ViewListIcon />
-                    </div>
+                    </div> */}
                     <div className="">
                       <IconButton
                         className="btn-dot-appointment"
