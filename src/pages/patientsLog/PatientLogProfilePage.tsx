@@ -55,7 +55,7 @@ const PatientLogProfilePage = () => {
                         Skin Allergy Severe
                       </td>
                       <td className="py-1 text-base font-medium">
-                        <Button>
+                        <Button onClick={() => navigate('../visit-details')}>
                           <EyeIcon className="h-[25px]" />
                         </Button>
                       </td>

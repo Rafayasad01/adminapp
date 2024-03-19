@@ -58,6 +58,7 @@ import PatientsLogPage from '../pages/patientsLog/PatientsLogPage';
 import PatientLogCreatePage from '../pages/patientsLog/PatientLogCreatePage';
 import PatientLogProfilePage from '../pages/patientsLog/PatientLogProfilePage';
 import PatientLogVisitCreatePage from '../pages/patientsLog/PatientLogVisitCreatePage';
+import PatientLogVisitDetailsPage from '../pages/patientsLog/PatientLogVisitDetailsPage';
 
 export const routeObjects: RouteObject[] = [
   {
@@ -443,6 +444,10 @@ export const routeObjects: RouteObject[] = [
               {
                 path: 'profile',
                 element: <PatientLogProfilePage />,
+              },
+              {
+                path: 'visit-details',
+                element: <PatientLogVisitDetailsPage />,
               },
               {
                 path: 'revisit',
