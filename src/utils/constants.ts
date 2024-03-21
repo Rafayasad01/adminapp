@@ -1,5 +1,5 @@
-// const HOST = 'https://dev.urapptech.com';
-const HOST = 'http://192.168.8.68:3200';
+const HOST = 'https://dev.urapptech.com';
+// const HOST = 'http://192.168.8.68:3200';
 // const HOST = 'http://192.168.8.97:3200';
 
 export const BASE_URL = `${HOST}/api/v1/admin/`;
@@ -140,6 +140,7 @@ export const PATTERN = {
 
 export const MAX_LENGTH_EXCEEDED = 'Maximum length exceeded';
 export const INVALID_CHAR = 'Invalid characters';
+export const PASSWORD_SHOULD_SAME = 'Password must same to the new one.';
 export const PH_MINI_LENGTH = 'Minimum length should be 15';
 
 export const VALIDATE_NON_NEGATIVE_NUM = (value: any) => {
