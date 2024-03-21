@@ -41,6 +41,7 @@ function CategoriesCreatePopup({
     handleSubmit,
     formState: { errors },
   } = useForm<Category>();
+
   const onSubmit = (data: Category) => {
     if (data.desc && image && data.name) {
       data.icon = image;

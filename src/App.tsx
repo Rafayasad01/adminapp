@@ -1,3 +1,4 @@
+import 'devextreme/dist/css/dx.light.css';
 /* eslint-disable no-console */
 import { useNavigate, useRoutes } from 'react-router-dom';
 import { useEffect, useState } from 'react';

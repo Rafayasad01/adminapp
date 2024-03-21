@@ -58,6 +58,12 @@ import envelopeMsg from './images/envelope-msg.png';
 import otpMSg from './images/otp-msg.png';
 import keyIcon from './images/keyIcon.png';
 
+// appointment images
+import appHead from './images/appointment-head.png';
+import appCalender from './images/appointment-calender.png';
+import appClock from './images/appointment-clock.png';
+import appProfile from './images/appointment-profile.png';
+
 const assets = {
   images: {
     logo,
@@ -104,6 +110,10 @@ const assets = {
     envelopeMsg,
     otpMSg,
     keyIcon,
+    appHead,
+    appCalender,
+    appClock,
+    appProfile,
   },
   tempImages: {
     wash,

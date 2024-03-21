@@ -1733,6 +1733,7 @@ main .container:nth-child(3){
   bottom: 0;
   content: '';
 }
+
 .css-q0jhri-MuiInputBase-root-MuiInput-root.otp-v input {
   text-align: center;
   border: 1px solid #949eae;
@@ -1817,4 +1818,67 @@ MD - AlDer Theme Styles
 
 .rounded-10 {
   border-radius: 0.6rem;
+}
+.css-8ludsl.Header-head {
+  min-height: 0 !important;
+  padding-top: 0% !important;
+}
+
+.css-1fklddj-MuiModal-root-MuiPopover-root .Layout-popover {
+  width: 363px !important;
+}
+
+.Content .FormField {
+  margin-top: 0% !important;
+}
+
+.Content .ImageBox {
+  margin-top: 0.1rem !important;
+}
+
+/* swiper css */
+.swiper-slide {
+  width: 25% !important;
+}
+
+.swiper-wrapper {
+  padding-left: 150px;
+}
+
+.custom-swiper {
+  padding-left: 0px !important;
+}
+
+.custom-swiper-slide {
+  width: 100% !important;
+}
+
+.custom-swiper .swiper-wrapper {
+  padding-left: 0 !important;
+}
+
+.swiper-button-next {
+  left: 4% !important;
+}
+
+.swiper-button-next,
+.swiper-button-prev {
+  width: 20px;
+  /* Adjust the width */
+  height: 20px;
+  /* margin-top: .1px; */
+  /* Adjust the height */
+}
+
+.swiper-button-next::after,
+.swiper-button-prev::after {
+  @apply text-primary;
+  font-size: 12px;
+  font-weight: bold;
+  margin-top: 25px;
+  /* Adjust the arrow icon size */
+}
+
+.css-1ka5eyc-MuiPaper-root-MuiMenu-paper-MuiPopover-paper {
+  @apply bg-background;
 }

@@ -10,6 +10,7 @@ type Props = {
   className?: string;
   title?: string;
   icon?: any;
+  iconRight?: any;
   buttonType: string;
   type?: any;
   isMenuOpen?: boolean;
@@ -25,6 +26,7 @@ function CustomButton({
   type,
   className,
   icon,
+  iconRight,
   title,
   isMenuOpen,
   sx,
@@ -42,7 +44,7 @@ function CustomButton({
       >
         {/* {disabled ? <Loader /> : */}
         <>
-          {icon && icon} {title}
+          {icon && icon} {title} &nbsp; {iconRight && iconRight}
         </>
         {/* } */}
       </Button>

@@ -1,4 +1,5 @@
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
+import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import SearchIcon from '@mui/icons-material/Search';
 import Button from '@mui/material/Button';
@@ -24,11 +25,19 @@ import { AppointmentVisit } from '../../../interfaces/app.appointment';
 import { useAppSelector } from '../../../redux/redux-hooks';
 import Service from '../../../services/adminapp/adminAppointment';
 import CustomOrderPrintLayoutCash from '../../../utils/CustomPrintLayout/CustomAppointmentPrintLayout';
-import { NOT_AUTHORIZED_MESSAGE } from '../../../utils/constants';
+import {
+  APPOINTMENT_TYPE,
+  NOT_AUTHORIZED_MESSAGE,
+} from '../../../utils/constants';
 import { listingRolePermission } from '../../../utils/helper';
 import AppointmentVisitCreatePopup from './AppointmentVisitCreatePopup';
 import AppointmentVisitReschedulePopup from './AppointmentVisitReschedulePopup';
 import AppointmentVisitUpdatePopup from './AppointmentVisitUpdatePopup';
+import AllAppointment from '../AllAppointment';
+import IndividualAppointment from '../IndividualAppointment';
+import CustomDropDown from '../../../components/common/CustomDropDown';
+import CustomBgDropdown from '../../../components/common/CustomBgDropdown';
+import assets from '../../../assets';
 // Extend dayjs with necessary plugins
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -62,6 +71,25 @@ function AppointmentVisitPage() {
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
   const [isPrintEnabled, setPrintEnabled] = useState<any>([]);
+  const [selectedPriorityData, setSelectedPriorityData] = useState<any>([]);
+  const [priorityData, setPriorityData] = useState<any>([
+    {
+      text: 'John',
+      id: 1,
+      imageUrl: assets.images.avatarUser,
+    },
+    {
+      text: 'Thomas',
+      id: 2,
+      imageUrl: assets.images.avatarUser,
+    },
+  ]);
+
+  // dropdown
+  const [appointmentType, setAppointmentType] = useState({
+    text: 'All Appointments',
+    icon: GroupsOutlinedIcon,
+  });
 
   const { reset } = useForm<AppointmentVisit>();
 
@@ -259,6 +287,23 @@ function AppointmentVisitPage() {
   };
 
   useEffect(() => {
+    if (appointmentType?.text === 'All Appointments') {
+      setPriorityData([
+        {
+          text: 'John',
+          id: 1,
+          imageUrl: assets.images.avatarUser,
+        },
+        {
+          text: 'Thomas',
+          id: 2,
+          imageUrl: assets.images.avatarUser,
+        },
+      ]);
+    }
+  }, [appointmentType]);
+
+  useEffect(() => {
     if (listingRolePermission(dataRole, 'Appointment List')) {
       Service.VisitList(authState.user.tenant, page, rowsPerPage)
         .then((item: any) => {
@@ -428,14 +473,23 @@ function AppointmentVisitPage() {
       <div className="container m-auto mt-5">
         <div className="w-full rounded-lg bg-white shadow-lg">
           <div className="grid grid-cols-12 px-4 py-5">
-            <div className="xl:col-span-7 2xl:col-span-9">
-              <span className="font-open-sans text-xl font-semibold text-[#252733]">
-                All Appointments
-              </span>
+            <div className="flex xl:col-span-7 2xl:col-span-9">
+              <div className="mr-6">
+                <span className="font-open-sans text-xl font-semibold text-[#252733]">
+                  All Appointments
+                </span>
+              </div>
+              <div>
+                <CustomBgDropdown
+                  appointmentType={appointmentType}
+                  setAppointmentType={setAppointmentType}
+                  options={APPOINTMENT_TYPE}
+                />
+              </div>
             </div>
             <div className="grid justify-end xl:col-span-5 2xl:col-span-3">
               <div className="flex gap-3">
-                <div className="flex flex-col justify-center">
+                {/* <div className="flex flex-col justify-center">
                   <FormControl
                     className="search-grey-outline placeholder-grey w-60"
                     variant="filled"
@@ -473,18 +527,32 @@ function AppointmentVisitPage() {
                       digit, if its greater then 0.
                     </span>
                   </div>
+                </div> */}
+                <div className="flex">
+                  <Button
+                    variant="contained"
+                    className="btn-black-fill btn-icon"
+                    onClick={handleFormClickOpen}
+                  >
+                    <AddOutlinedIcon /> Add New Appointment
+                  </Button>
                 </div>
-                <Button
-                  variant="contained"
-                  className="btn-black-fill btn-icon h-[42%]"
-                  onClick={handleFormClickOpen}
-                >
-                  <AddOutlinedIcon /> Add New
-                </Button>
               </div>
             </div>
           </div>
-          <div className="grid grid-cols-none">
+          <div className="mt-5">
+            <AllAppointment
+              appointmentType={appointmentType?.text}
+              priorityData={priorityData}
+              selectedPriorityData={selectedPriorityData}
+              setSelectedPriorityData={setSelectedPriorityData}
+              setAppointmentType={setAppointmentType}
+            />
+          </div>
+          {/* <div className='mt-5'>
+            <IndividualAppointment />
+          </div> */}
+          {/* <div className="grid grid-cols-none">
             <table className="table-border table-auto">
               <thead>
                 <tr>
@@ -605,7 +673,7 @@ function AppointmentVisitPage() {
               rowsPerPage={rowsPerPage}
               onRowsPerPageChange={handleChangeRowsPerPage}
             />
-          </div>
+          </div> */}
         </div>
       </div>
       {/* {cancelDialogOpen && (
