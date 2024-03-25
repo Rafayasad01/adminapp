@@ -59,6 +59,9 @@ import PatientLogCreatePage from '../pages/patientsLog/PatientLogCreatePage';
 import PatientLogProfilePage from '../pages/patientsLog/PatientLogProfilePage';
 import PatientLogVisitCreatePage from '../pages/patientsLog/PatientLogVisitCreatePage';
 import PatientLogVisitDetailsPage from '../pages/patientsLog/PatientLogVisitDetailsPage';
+import DoctorsCreatePage from '../pages/doctors/DoctorsCreatePage';
+import DoctorsProfilePage from '../pages/doctors/DoctorsProfilePage';
+import DoctorsEditPage from '../pages/doctors/DoctorsEditPage';
 
 export const routeObjects: RouteObject[] = [
   {
@@ -452,6 +455,33 @@ export const routeObjects: RouteObject[] = [
               {
                 path: 'revisit',
                 element: <PatientLogVisitCreatePage />,
+              },
+            ],
+          },
+          {
+            path: 'add-doctor',
+            children: [
+              {
+                index: true,
+                element: <DoctorsCreatePage />,
+              },
+            ],
+          },
+          {
+            path: 'edit-doctor',
+            children: [
+              {
+                index: true,
+                element: <DoctorsEditPage />,
+              },
+            ],
+          },
+          {
+            path: 'doctor-profile',
+            children: [
+              {
+                index: true,
+                element: <DoctorsProfilePage />,
               },
             ],
           },

@@ -29,6 +29,7 @@ import { NavLink } from 'react-router-dom';
 // import HeadphonesOutlinedIcon from '@mui/icons-material/HeadphonesOutlined'
 // import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined';
 import ContentPasteIcon from '@mui/icons-material/ContentPaste';
+import MedicationLiquidIcon from '@mui/icons-material/MedicationLiquid';
 import assets from '../../assets';
 import { useAppSelector } from '../../redux/redux-hooks';
 import CAN, { defineRules } from '../../services/permissions/permissions';
@@ -58,12 +59,12 @@ const links = [
   //   permission: 'Cart List',
   //   icon: <ShoppingCartOutlinedIcon fontSize="inherit" />,
   // },
-  {
-    name: 'Orders',
-    path: 'orders',
-    permission: 'Order List',
-    icon: <OrderIcon />,
-  },
+  // {
+  //   name: 'Orders',
+  //   path: 'orders',
+  //   permission: 'Order List',
+  //   icon: <OrderIcon />,
+  // },
   {
     name: 'Categories',
     path: 'categories',
@@ -164,6 +165,27 @@ const links = [
     permission: 'Setting View',
     // icon: <SettingsOutlinedIcon fontSize="inherit" />,
     icon: <PatientsIcon />,
+  },
+  {
+    name: 'Add new Doctor',
+    path: 'add-doctor',
+    permission: 'Setting View',
+    // icon: <SettingsOutlinedIcon fontSize="inherit" />,
+    icon: <MedicationLiquidIcon />,
+  },
+  {
+    name: 'EditDoctor',
+    path: 'edit-doctor',
+    permission: 'Setting View',
+    // icon: <SettingsOutlinedIcon fontSize="inherit" />,
+    icon: <MedicationLiquidIcon />,
+  },
+  {
+    name: 'Doctor Profile',
+    path: 'doctor-profile',
+    permission: 'Setting View',
+    // icon: <SettingsOutlinedIcon fontSize="inherit" />,
+    icon: <MedicationLiquidIcon />,
   },
 ];
 

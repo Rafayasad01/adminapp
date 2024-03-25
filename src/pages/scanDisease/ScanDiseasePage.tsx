@@ -74,7 +74,7 @@ const ScanDiseasePage = () => {
         <div className="grid grid-cols-2 gap-10">
           <div className="alder-card-border p-8 ">
             <div
-              className="flex min-h-[400px] items-center justify-center rounded-[15px] bg-[#F5F2FF]"
+              className="flex min-h-[400px] items-center justify-center rounded-[15px] bg-faded"
               onClick={handleOpenCamera}
             >
               {capturePreview ? (
@@ -128,7 +128,7 @@ const ScanDiseasePage = () => {
           </div>
           <div className="alder-card-border p-8">
             <div
-              className="flex min-h-[400px] items-center justify-center rounded-[15px] bg-[#F5F2FF]"
+              className="flex min-h-[400px] items-center justify-center rounded-[15px] bg-faded"
               onClick={() => document?.getElementById('imageInput')?.click()}
             >
               {imagePreview && (
