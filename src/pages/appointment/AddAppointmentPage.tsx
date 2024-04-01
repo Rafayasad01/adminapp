@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { useForm } from 'react-hook-form';
+import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import TopBar from '../../components/common/TopBar';
 import Notify from '../../components/common/Notify';
 import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined';
@@ -16,12 +16,23 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import '../../assets/css/PopupStyle.css';
 import ReactDOM from 'react-dom';
+import ThemeProvider from '@mui/material/styles/ThemeProvider';
 import CustomDateTimePicker from '../../components/common/CustomDateTimePicker';
+import TimePicker from '../../components/common/TimePicker';
 import CustomDropDown from '../../components/common/CustomDropDown';
 import CustomMultipleSelectBox from '../../components/common/CustomMultipleSelect';
 import CustomInputBox from '../../components/common/CustomInputBox';
 import ErrorSpanBox from '../../components/common/ErrorSpanBox';
 import Loader from '../../components/common/Loader2';
+import StoreLovService from '../../services/adminapp/adminStoreService';
+import StoreAppointmentService from '../../services/adminapp/adminStoreAppointment';
+import createTheme from '@mui/material/styles/createTheme';
+import { StaticTimePicker } from '@mui/x-date-pickers/StaticTimePicker';
+import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import { AddAppointmentForm } from '../../interfaces/app.appointment';
 import {
   GENDER,
@@ -33,22 +44,46 @@ import {
 import assets from '../../assets';
 import { SwiperSlide, Swiper } from 'swiper/react';
 
+const darkTheme = createTheme({
+  palette: {
+    primary: {
+      main: '#171717',
+    },
+  },
+});
+
 // import required modules
 import { Pagination } from 'swiper/modules';
+import CustomButton from '../../components/common/CustomButton';
 
 export default function AddAppointmentPage() {
   const [isLoader, setIsLoader] = useState(false);
   const [isNotify, setIsNotify] = useState(false);
   const [notifyMessage, setNotifyMessage] = useState({});
   const [activeBarber, setActiveBarber] = useState<any>();
+  const [activeBarberData, setActiveBarberData] = useState<any>();
+  const [catLovlist, setCatLovList] = useState();
+  const [catItemsLovlist, setCatItemsLovList] = useState<any>([]);
+  const [barberList, setBarberList] = useState<any>([]);
+  const [appointmentTime, setAppointmentTime] = useState<dayjs.Dayjs | any>(
+    null
+  );
+  const [appointmentBookedTime, setAppointmentBookedTime] = useState<any>([]);
   const {
     register,
     handleSubmit,
+    getValues,
     watch,
     setValue,
     formState: { errors },
     control,
   } = useForm<AddAppointmentForm>();
+
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: 'appointments', // Name of the array field
+    keyName: 'key',
+  });
 
   const pagination = {
     clickable: true,
@@ -57,16 +92,30 @@ export default function AddAppointmentPage() {
     },
   };
 
-  const BarberCard = (index: number) => {
+  const BarberCard = (item: any, index: number) => {
+    const onHandleBarber = async () => {
+      if (index === activeBarber) {
+        setActiveBarber(null);
+        setActiveBarberData(null);
+        setAppointmentBookedTime([]);
+      } else {
+        setActiveBarberData(item);
+        setActiveBarber(index);
+        // console.log("date",dayjs(getValues("appointmentDate"))?.format('YYYY-MM-DD'));
+        await StoreAppointmentService.getBarberBookedTimeSlots(
+          item.storeEmployee.id,
+          dayjs(getValues('appointmentDate'))?.format('YYYY-MM-DD')
+        ).then((res) => {
+          setAppointmentBookedTime(res.data.data);
+        });
+      }
+    };
+
     return (
       <div
-        onClick={() =>
-          index === activeBarber
-            ? setActiveBarber(null)
-            : setActiveBarber(index)
-        }
+        onClick={onHandleBarber}
         className={`${
-          index === activeBarber && 'bg-slate-500'
+          index === activeBarber && 'bg-background'
         } w-[100%] cursor-pointer rounded-2xl border-[1px] border-[#949EAE] px-3 py-4`}
       >
         <div className="flex items-center justify-between">
@@ -84,14 +133,101 @@ export default function AddAppointmentPage() {
           <div className="flex items-center justify-center">
             <img
               className="my-2 h-[55px] w-[55px]"
-              src={assets.images.avatarUser}
+              src={item.storeEmployee.avatar}
               alt="avatar-img"
             />
           </div>
-          <span className="text-xl font-semibold">Selena Swift</span>
+          <span className="text-xl font-semibold">
+            {item.storeEmployee.name}
+          </span>
         </div>
       </div>
     );
+  };
+
+  useEffect(() => {
+    catLovService();
+  }, []);
+
+  const catLovService = () => {
+    StoreLovService.StoreCatLov()
+      .then((res: any) => {
+        if (res.data.success) {
+          setCatLovList(res.data.data);
+        } else {
+          setIsNotify(true);
+          setNotifyMessage({
+            text: res.data.message,
+            type: 'error',
+          });
+        }
+      })
+      .catch((err: Error) => {
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
+        });
+      });
+  };
+
+  useEffect(() => {
+    if (
+      getValues('categoryId') !== undefined &&
+      getValues('categoryId') !== 'none'
+    ) {
+      getCatItems(watch('categoryId'));
+      // console.log("hit");
+    }
+  }, [watch('categoryId')]);
+
+  useEffect(() => {
+    if (
+      getValues('storeServiceCategoryItem') !== undefined &&
+      getValues('storeServiceCategoryItem') !== 'none'
+    ) {
+      getBarbers(watch('storeServiceCategoryItem'));
+    }
+  }, [watch('storeServiceCategoryItem')]);
+
+  const getBarbers = async (id: any) => {
+    await StoreAppointmentService.getBarbersList(id).then((res) => {
+      setBarberList(res.data.data);
+      // console.log("res items", res.data.data);
+    });
+  };
+  const getCatItems = async (id: any) => {
+    await StoreLovService.StoreCatItemsLov(id).then((res) => {
+      setCatItemsLovList(res.data.data);
+      // console.log("res items", res.data.data);
+    });
+  };
+
+  const addAppointmentServices = () => {
+    let obj = {
+      storeEmployeeService: watch('storeServiceCategoryItem'),
+      storeEmployee: watch('categoryId'),
+      appointmentTime:
+        dayjs(getValues('appointmentDate'))?.format('YYYY-MM-DD') +
+        ' ' +
+        dayjs(appointmentTime)?.format('HH:mm:ss'),
+    };
+    append(obj);
+  };
+
+  const onSubmit = (data: any) => {
+    delete data.storeServiceCategoryItem;
+    delete data.categoryId;
+    delete data.appointmentDate;
+    console.log('onSubmitDATA1', data);
+    StoreAppointmentService.appointmentCreate(data).then((res: any) => {
+      console.log('CREATE HIT', res.data.data);
+    });
+  };
+
+  const getName = (arr: any, id: any) => {
+    let data = arr.find((el: any) => el.id === id).name;
+    console.log(data);
   };
 
   return isLoader ? (
@@ -110,8 +246,8 @@ export default function AddAppointmentPage() {
             <span className="text-base font-bold text-[#1A1A1A]">Add Info</span>
             <hr className="my-4 border-[#949EAE]" />
             <form
-            // className="overflow-auto px-2"
-            // onSubmit={handleSubmit(onSubmit)}
+              // className="overflow-auto px-2"
+              onSubmit={handleSubmit(onSubmit)}
             >
               <div className="FormBody">
                 <div className="grid grid-cols-12 gap-4">
@@ -123,15 +259,15 @@ export default function AddAppointmentPage() {
                           variant="standard"
                         >
                           <CustomInputBox
-                            pattern={PATTERN.ONLY_NUM}
-                            maxLetterLimit={15}
-                            inputTitle={'First Name'}
-                            placeholder={'Enter first name'}
-                            id={'first_name'}
+                            maxLetterLimit={50}
+                            pattern={PATTERN.CHAR_SPACE_DASH}
+                            inputTitle={'Full Name'}
+                            placeholder={'Enter full name'}
+                            id={'name'}
                             customFontClass="font-semibold mb-1"
                             customClass="border-[2px] border-[#949EAE] rounded-xl px-2 py-1 text-sm"
                             register={register}
-                            error={errors.first_name}
+                            error={errors.name}
                             inputType={'text'}
                           />
                         </FormControl>
@@ -141,17 +277,18 @@ export default function AddAppointmentPage() {
                           className="FormControl w-full"
                           variant="standard"
                         >
-                          <CustomInputBox
-                            pattern={PATTERN.ONLY_NUM}
-                            maxLetterLimit={15}
-                            inputTitle={'Last Name'}
-                            placeholder={'Enter last name'}
-                            id={'last_name'}
-                            customFontClass="font-semibold mb-1"
-                            customClass="border-[2px] border-[#949EAE] rounded-xl px-2 py-1 text-sm"
+                          <CustomDropDown
+                            validateRequired
+                            id="gender"
+                            control={control}
+                            error={errors}
+                            setValue={setValue}
                             register={register}
-                            error={errors.last_name}
-                            inputType={'text'}
+                            options={{ roles: GENDER }}
+                            customHeight="h-[40px] rounded-xl"
+                            customClassInputTitle="font-semibold"
+                            defaultValue="Select Gender"
+                            inputTitle="Gender"
                           />
                         </FormControl>
                       </div>
@@ -182,8 +319,7 @@ export default function AddAppointmentPage() {
                           variant="standard"
                         >
                           <CustomInputBox
-                            pattern={PATTERN.ONLY_NUM}
-                            maxLetterLimit={15}
+                            pattern={PATTERN.CHAR_NUM_DOT_AT}
                             inputTitle={'Email'}
                             placeholder={'Enter email address'}
                             id={'email'}
@@ -204,16 +340,16 @@ export default function AddAppointmentPage() {
                         >
                           <CustomDropDown
                             validateRequired
-                            id="amountType"
+                            id="categoryId"
                             control={control}
                             error={errors}
                             register={register}
                             setValue={setValue}
                             customHeight="h-[40px] rounded-xl"
                             customClassInputTitle="font-semibold"
-                            inputTitle="Amount Type"
-                            options={{ roles: GENDER }}
-                            defaultValue="Select Type"
+                            inputTitle="Barber Category"
+                            options={{ roles: catLovlist }}
+                            defaultValue="Select Barber Category"
                           />
                         </FormControl>
                       </div>
@@ -222,17 +358,17 @@ export default function AddAppointmentPage() {
                           className="FormControl w-full"
                           variant="standard"
                         >
-                          <CustomMultipleSelectBox
+                          <CustomDropDown
                             validateRequired
-                            id="appointmentService"
+                            id="storeServiceCategoryItem"
                             control={control}
                             error={errors}
                             setValue={setValue}
                             register={register}
-                            options={{ roles: GENDER }}
+                            options={{ roles: catItemsLovlist }}
                             customHeight="h-[40px] rounded-xl"
                             customClassInputTitle="font-semibold"
-                            inputTitle="Appointment Services"
+                            inputTitle="Barber Services"
                           />
                         </FormControl>
                       </div>
@@ -274,33 +410,209 @@ export default function AddAppointmentPage() {
                   </div>
                 </div>
               </div>
-            </form>
-            <div className="mt-5">
-              <span className="text-base font-bold text-[#1A1A1A]">
-                Select Barber
-              </span>
-              <hr className="my-4 border-[#949EAE]" />
-              <div className="h-[300px]">
-                <Swiper
-                  slidesPerView={6}
-                  spaceBetween={30}
-                  pagination={pagination}
-                  modules={[Pagination]}
-                  className="mySwiper custom-swiper custom-swiper-slider"
-                >
-                  <SwiperSlide>{BarberCard(0)}</SwiperSlide>
-                  <SwiperSlide>{BarberCard(1)}</SwiperSlide>
-                  <SwiperSlide>{BarberCard(2)}</SwiperSlide>
-                  <SwiperSlide>{BarberCard(3)}</SwiperSlide>
-                  <SwiperSlide>{BarberCard(4)}</SwiperSlide>
-                  <SwiperSlide>{BarberCard(5)}</SwiperSlide>
-                  <SwiperSlide>{BarberCard(6)}</SwiperSlide>
-                  <SwiperSlide>{BarberCard(7)}</SwiperSlide>
-                  <SwiperSlide>{BarberCard(8)}</SwiperSlide>
-                </Swiper>
-                {/* {BarberCard()} */}
+
+              {getValues('storeServiceCategoryItem') !== undefined &&
+                getValues('storeServiceCategoryItem') !== 'none' && (
+                  <>
+                    <div className="mt-5">
+                      <span className="text-base font-bold text-[#1A1A1A]">
+                        Select Barber
+                      </span>
+                      <hr className="my-4 border-[#949EAE]" />
+                      <div className="h-[215px]">
+                        <Swiper
+                          slidesPerView={6}
+                          spaceBetween={30}
+                          pagination={pagination}
+                          modules={[Pagination]}
+                          className="mySwiper custom-swiper custom-swiper-slider"
+                        >
+                          {barberList?.map((item: any, index: number) => {
+                            return (
+                              <SwiperSlide key={index}>
+                                {BarberCard(item, index)}
+                              </SwiperSlide>
+                            );
+                          })}
+                        </Swiper>
+                      </div>
+                    </div>
+                    {activeBarberData !== null && (
+                      <div className="mt-5">
+                        <span className="text-base font-bold text-[#1A1A1A]">
+                          Avaiable's {activeBarberData?.storeEmployee?.name}{' '}
+                          Appoitment slots
+                        </span>
+                        <hr className="my-4 border-[#949EAE]" />
+                        <div className="gaps-4 grid grid-cols-12">
+                          {activeBarberData?.storeEmployeeSchedule?.map(
+                            (item: any, index: number) => {
+                              return (
+                                <div key={index} className="col-span-2 p-3">
+                                  <div className="h-[100px] flex-col">
+                                    <div>
+                                      <span className="font-semibold">
+                                        {item.workDay}
+                                      </span>
+                                    </div>
+                                    <div>
+                                      <span className="text-sm">
+                                        {dayjs(item.startTime).isValid()
+                                          ? dayjs(item.startTime)?.format(
+                                              'HH:mm A'
+                                            )
+                                          : '--'}{' '}
+                                        -{' '}
+                                        {dayjs(item.endTime).isValid()
+                                          ? dayjs(item.endTime)?.format(
+                                              'HH:mm A'
+                                            )
+                                          : '--'}
+                                      </span>
+                                    </div>
+                                  </div>
+                                </div>
+                              );
+                            }
+                          )}
+                        </div>
+                      </div>
+                    )}
+                    <div className="">
+                      <div className="mt-5">
+                        <span className="text-base font-bold text-[#1A1A1A]">
+                          Select Date & Time
+                        </span>
+                        <hr className="my-4 border-[#949EAE]" />
+                        <ThemeProvider theme={darkTheme}>
+                          <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            {/* <DemoItem label="Desktop variant"> */}
+                            <div>
+                              <span className="text-sm">
+                                Select Appointment Date
+                              </span>
+                            </div>
+                            <Controller
+                              name="appointmentDate"
+                              control={control}
+                              defaultValue={dayjs()}
+                              render={({ field }) => (
+                                <DesktopDatePicker
+                                  {...field}
+                                  onChange={(date) => field.onChange(date)}
+                                  value={field.value}
+                                />
+                              )}
+                            />
+                            {/* </DemoItem> */}
+                          </LocalizationProvider>
+                        </ThemeProvider>
+                        <div className="mt-3 flex-col">
+                          <span className="text-sm">
+                            Select Appointment Time
+                          </span>
+                          <div className="">
+                            <FormControl
+                              className="FormControl"
+                              variant="standard"
+                            >
+                              <TimePicker
+                                // timePickerLabel="Appointment Time"
+                                // timePickerSubLabel={"(Office in time)"}
+                                timePickerValue={appointmentTime}
+                                setTimePickerValue={setAppointmentTime}
+                                id="startTime"
+                                // setError={setError}
+                              />
+                            </FormControl>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="mt-5">
+                      <span className="text-base font-bold text-[#1A1A1A]">
+                        Booked Time slots
+                      </span>
+                      <hr className="my-4 border-[#949EAE]" />
+                      {appointmentBookedTime?.length === 0 && (
+                        <span className="">No Booked Appointments</span>
+                      )}
+                      <div className="gaps-4 grid grid-cols-12">
+                        {appointmentBookedTime?.map(
+                          (item: any, index: number) => {
+                            return (
+                              <div key={index} className="col-span-2 p-3">
+                                <div className="h-[100px] flex-col">
+                                  <div>
+                                    <span className="font-semibold">
+                                      {item.workDay}
+                                    </span>
+                                  </div>
+                                  <div>
+                                    <span className="text-sm">
+                                      {dayjs(item.startTime).isValid()
+                                        ? dayjs(item.startTime)?.format(
+                                            'HH:mm A'
+                                          )
+                                        : '--'}{' '}
+                                      -{' '}
+                                      {dayjs(item.endTime).isValid()
+                                        ? dayjs(item.endTime)?.format('HH:mm A')
+                                        : '--'}
+                                    </span>
+                                  </div>
+                                </div>
+                              </div>
+                            );
+                          }
+                        )}
+                      </div>
+                    </div>
+                  </>
+                )}
+              <div className="mt-3">
+                <span className="text-base font-bold text-[#1A1A1A]">
+                  Selected Barber & Service
+                </span>
+                <hr className="my-4 border-[#949EAE]" />
+                {fields?.length > 0 &&
+                  fields?.map((items: any, index: number) => {
+                    return (
+                      <div>
+                        <span>hello</span>
+                        {/* <span>{getName(catLovlist)}</span> */}
+                      </div>
+                    );
+                  })}
               </div>
-            </div>
+              <div className="mt-3 flex w-full items-center justify-end">
+                <CustomButton
+                  buttonType="button"
+                  title="Add"
+                  className="btn-black-fill"
+                  // type={'submit'}
+                  onclick={addAppointmentServices}
+                  sx={{
+                    padding: '0.375rem 2rem !important',
+                    width: '10%',
+                    marginRight: '15px',
+                    height: '35px',
+                  }}
+                />
+                <CustomButton
+                  buttonType="button"
+                  title="Submit"
+                  className="btn-black-outline"
+                  type={'submit'}
+                  // onclick={handleFormClose}
+                  sx={{
+                    padding: '0.375rem 2rem !important',
+                    width: '15%',
+                    height: '35px',
+                  }}
+                />
+              </div>
+            </form>
           </div>
         </div>
       </div>

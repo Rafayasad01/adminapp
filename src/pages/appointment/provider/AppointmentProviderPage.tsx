@@ -589,20 +589,20 @@ function AppointmentProviderPage() {
     formData.append('deletedIds', JSON.stringify(delIds));
     if (image) formData.append('avatar', image);
 
-    // StoreEmployeeService.StoreEmployeeUpdate(formData, actionMenuItemid)
-    //   .then((res) => {
-    //     console.log("res", res.data.data);
-    //     // setIsLoader(true);
-    //     // setOpenFormDialog(false);
-    //     // setList([res.data.data, ...list]);
-    //   })
-    //   .catch((err) => {
-    //     setIsNotify(true);
-    //     setNotifyMessage({
-    //       text: err.message,
-    //       type: 'error',
-    //     });
-    //   })
+    StoreEmployeeService.StoreEmployeeUpdate(formData, actionMenuItemid)
+      .then((res) => {
+        console.log('res', res.data.data);
+        // setIsLoader(true);
+        // setOpenFormDialog(false);
+        // setList([res.data.data, ...list]);
+      })
+      .catch((err) => {
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
+        });
+      });
   };
 
   const onSubmitDialogBox = async (data: any) => {
