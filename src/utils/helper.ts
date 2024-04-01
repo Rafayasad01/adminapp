@@ -1,8 +1,8 @@
 export const CheckRolePermission = (
   name: string,
   permissions: any,
-  navigate: any,
-  navTo: string
+  navigate?: any,
+  navTo?: string
 ) => {
   const isTrue = permissions?.find((el: any) => el.name === name);
   if (isTrue) {

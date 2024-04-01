@@ -16,6 +16,7 @@ type Props = {
   isMenuOpen?: boolean;
   sx?: any;
   disabled?: boolean;
+  required?: any;
 };
 
 function CustomButton({
@@ -31,6 +32,7 @@ function CustomButton({
   isMenuOpen,
   sx,
   disabled,
+  required,
 }: Props) {
   if (buttonType === 'button') {
     return (
@@ -74,7 +76,9 @@ function CustomButton({
           style={{ display: 'none' }}
           id="raised-button-file"
           type="file"
-          {...register('avatar')}
+          {...register('avatar', {
+            required: required && 'avatar is required',
+          })}
           onChange={onchange}
           onClick={onclick}
         />

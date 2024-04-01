@@ -460,7 +460,9 @@ const AllAppointment = ({
     },
   ];
 
-  const resources = [
+  console.log('selectedPriorityData', selectedPriorityData);
+  // [{ startDate: new Date() }]
+  const resources: any = [
     {
       fieldName: 'priorityId',
       title: 'Priority',
@@ -477,9 +479,9 @@ const AllAppointment = ({
       text: 'Individual Appointment',
       icon: PersonOutlinedIcon,
     });
-    let tempPriority = priorityData;
     let res = priorityData?.find((el: any) => el.text === name);
-    setSelectedPriorityData([res]);
+    let tempPriority = res === undefined ? [{ startDate: new Date() }] : [res];
+    setSelectedPriorityData(tempPriority);
   };
 
   console.log('🚀 ~ AllAppointment ~ selectedUser:', priorityData);

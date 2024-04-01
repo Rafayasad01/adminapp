@@ -451,7 +451,7 @@ table > tbody > tr:last-child {
 }
 
 .btn-black-outline {
-  @apply rounded-lg border border-solid border-secondary bg-transparent px-3 text-sm font-normal capitalize text-secondary shadow-none !important;
+  @apply w-[15%] rounded-lg border border-solid border-secondary bg-transparent px-3 text-sm font-normal capitalize text-secondary shadow-none !important;
 }
 
 .btn-black-fill {
@@ -1762,8 +1762,16 @@ main .container:nth-child(3){
 }
 
 /* swiper css */
+.swiper {
+  height: 100% !important;
+}
+
 .swiper-slide {
-  width: 25% !important;
+  width: 15% !important;
+}
+
+.custom-swiper-slider .swiper-slide {
+  width: 15% !important;
 }
 
 .swiper-wrapper {
@@ -1806,4 +1814,39 @@ main .container:nth-child(3){
 
 .css-1ka5eyc-MuiPaper-root-MuiMenu-paper-MuiPopover-paper {
   @apply bg-background;
+}
+
+/* .custom-DH {
+  height: 600px;
+} */
+
+/* Swiper pagination  */
+
+.swiper-pagination-bullet {
+  width: var(
+    --swiper-pagination-bullet-width,
+    var(--swiper-pagination-bullet-size, 30px)
+  ) !important;
+  height: var(
+    --swiper-pagination-bullet-height,
+    var(--swiper-pagination-bullet-size, 4px)
+  ) !important;
+  border-radius: var(
+    --swiper-pagination-bullet-border-radius,
+    100px
+  ) !important;
+}
+
+.swiper-pagination-bullet-active {
+  background: #000000 !important;
+  width: var(
+    --swiper-pagination-bullet-width,
+    var(--swiper-pagination-bullet-size, 50px)
+  ) !important;
+}
+
+.swiper-horizontal > .swiper-pagination-bullets .swiper-pagination-bullet,
+.swiper-pagination-horizontal.swiper-pagination-bullets
+  .swiper-pagination-bullet {
+  margin: 0 var(--swiper-pagination-bullet-horizontal-gap, 3px) !important;
 }

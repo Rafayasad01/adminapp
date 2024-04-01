@@ -5,6 +5,7 @@ import { Controller } from 'react-hook-form';
 type Props = {
   inputTitle?: string;
   customWidth?: string;
+  customHeight?: string;
   options?: any;
   register?: any;
   control?: any;
@@ -24,6 +25,7 @@ function CustomDropDown({
   disabled,
   inputTitle,
   customWidth,
+  customHeight,
   options,
   control,
   id,
@@ -66,7 +68,9 @@ function CustomDropDown({
                 style={{
                   border: border || '1px solid',
                 }}
-                className={`fixed-height ${customWidth || 'w-[100%]'}`}
+                className={`${customHeight || 'fixed-height'} ${
+                  customWidth || 'w-[100%]'
+                }`}
                 labelId="demo-simple-select-label"
                 id={id}
                 {...field}

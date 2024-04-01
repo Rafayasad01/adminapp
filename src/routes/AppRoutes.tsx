@@ -52,6 +52,10 @@ import RatingReviewsPage from '../pages/rating/RatingReviewsPage';
 import Page404 from '../pages/404/Page404';
 import AppointmentProviderByIdPage from '../pages/appointment/provider/AppointmentProviderByIdPage';
 import FaqPage from '../pages/faq/faqPage';
+import ServicesCatPage from '../pages/services/ServicesCatPage';
+import ServiceItemPage from '../pages/services/ServiceItemPage';
+import EmployeeServices from '../pages/appointment/employeeServices/EmployeeServices';
+import AddAppointmentPage from '../pages/appointment/AddAppointmentPage';
 
 export const routeObjects: RouteObject[] = [
   {
@@ -166,19 +170,18 @@ export const routeObjects: RouteObject[] = [
             ],
           },
           {
-            path: 'categories',
+            path: 'product',
             children: [
               {
                 index: true,
                 element: <CategoriesPage />,
-                // element: CAN("canView", "Category List") ? <CategoriesPage /> : <p>not authorized</p>,
               },
               {
-                path: 'service/:categoryId',
+                path: 'item/:productId',
                 element: <CategoriesServicesPage />,
               },
               {
-                path: 'service/faq/:categoryServiceId',
+                path: 'item/faq/:categoryServiceId',
                 element: <CategoriesServicesFaqPage />,
               },
             ],
@@ -251,6 +254,54 @@ export const routeObjects: RouteObject[] = [
             ],
           },
           {
+            path: 'shop-barbers',
+            children: [
+              { index: true, element: <Navigate to="list" replace /> },
+              {
+                path: 'list',
+                element: <AppointmentProviderPage />,
+              },
+              {
+                path: 'schedule/:id',
+                element: <AppointmentProviderSchedulePage />,
+              },
+              {
+                path: 'add-schedule/:id',
+                element: <AppointmentProviderAddSchedulePage />,
+              },
+              {
+                path: 'services/:providerId',
+                element: <AppointmentProviderServicesList />,
+              },
+              {
+                path: 'today-appointment/:providerId',
+                element: <AppointmentProviderByIdPage />,
+              },
+              {
+                path: 'services/list/:empId',
+                element: <EmployeeServices />,
+              },
+            ],
+          },
+          {
+            path: 'appointments',
+            children: [
+              { index: true, element: <Navigate to="list" replace /> },
+              {
+                path: 'list',
+                element: <AppointmentVisitPage />,
+              },
+              {
+                path: 'detail/:id',
+                element: <AppointmentVisitDetailPage />,
+              },
+              {
+                path: 'add-appointment',
+                element: <AddAppointmentPage />,
+              },
+            ],
+          },
+          {
             path: 'branches',
             children: [
               {
@@ -263,50 +314,163 @@ export const routeObjects: RouteObject[] = [
               },
             ],
           },
+          // nested appointment
+          // {
+          //   path: 'appointment',
+          //   children: [
+          //     {
+          //       index: true,
+          //       element: <Navigate to="provider/list" replace />,
+          //     },
+          //     {
+          //       path: 'visit',
+          //       children: [
+          //         { index: true, element: <Navigate to="list" replace /> },
+          //         {
+          //           path: 'list',
+          //           element: <AppointmentVisitPage />,
+          //         },
+          //         {
+          //           path: 'detail/:id',
+          //           element: <AppointmentVisitDetailPage />,
+          //         },
+          //       ],
+          //     },
+          //     {
+          //       path: 'provider',
+          //       children: [
+          //         { index: true, element: <Navigate to="list" replace /> },
+          //         {
+          //           path: 'list',
+          //           element: <AppointmentProviderPage />,
+          //         },
+          //         {
+          //           path: 'schedule/:id',
+          //           element: <AppointmentProviderSchedulePage />,
+          //         },
+          //         {
+          //           path: 'add-schedule/:id',
+          //           element: <AppointmentProviderAddSchedulePage />,
+          //         },
+          //         {
+          //           path: 'services/:providerId',
+          //           element: <AppointmentProviderServicesList />,
+          //         },
+          //         {
+          //           path: 'today-appointment/:providerId',
+          //           element: <AppointmentProviderByIdPage />,
+          //         },
+          //       ],
+          //     },
+          //   ],
+          // },
           {
-            path: 'appointment',
+            path: 'salon',
             children: [
               {
                 index: true,
-                element: <Navigate to="provider/list" replace />,
+                element: <Navigate to="product/list" replace />,
               },
               {
-                path: 'visit',
+                path: 'product',
                 children: [
-                  { index: true, element: <Navigate to="list" replace /> },
                   {
                     path: 'list',
-                    element: <AppointmentVisitPage />,
+                    index: true,
+                    element: <CategoriesPage />,
+                    // element: CAN("canView", "Category List") ? <CategoriesPage /> : <p>not authorized</p>,
                   },
                   {
-                    path: 'detail/:id',
-                    element: <AppointmentVisitDetailPage />,
+                    path: 'item/:productId',
+                    element: <CategoriesServicesPage />,
+                  },
+                  {
+                    path: 'item/faq/:categoryServiceId',
+                    element: <CategoriesServicesFaqPage />,
                   },
                 ],
               },
               {
-                path: 'provider',
+                path: 'orders',
                 children: [
-                  { index: true, element: <Navigate to="list" replace /> },
+                  {
+                    index: true,
+                    element: <OrdersPage />,
+                  },
+                  {
+                    path: 'create',
+                    element: <OrdersCreatePage />,
+                  },
+                  {
+                    path: 'detail/:orderId',
+                    element: <OrderDetailsPage />,
+                  },
+                  {
+                    path: 'edit/:orderId',
+                    element: <OrdersEditPage />,
+                  },
+                  {
+                    path: 'assign/:orderId',
+                    element: <OrdersAssignPage />,
+                  },
+                  {
+                    path: 'view-driver',
+                    element: <DriverHistory />,
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            path: 'user',
+            children: [
+              {
+                index: true,
+                element: <Navigate to="app-user/list" replace />,
+              },
+              {
+                path: 'app-user',
+                children: [
                   {
                     path: 'list',
-                    element: <AppointmentProviderPage />,
+                    index: true,
+                    element: <AppUsersPage />,
+                    // element: CAN("canView", "Customer List") ? <CustomersPage /> : <p>not authorized</p>,
                   },
                   {
-                    path: 'schedule/:id',
-                    element: <AppointmentProviderSchedulePage />,
+                    path: 'detail/:appuserId',
+                    element: <AppUserDetailPage />,
                   },
                   {
-                    path: 'add-schedule/:id',
-                    element: <AppointmentProviderAddSchedulePage />,
+                    path: 'reward',
+                    // element: <AppUserRewardHistory />,
+                    children: [
+                      {
+                        index: true,
+                        element: <Navigate to="history/:userId" replace />,
+                      },
+                      {
+                        path: 'history/:userId',
+                        element: <AppUserRewardHistory />,
+                      },
+                      {
+                        path: 'history/voucher/detail/:historyId',
+                        element: <AppUserPromotionDetailPage />,
+                      },
+                      {
+                        path: 'history/loyalty/detail/:loyaltyId',
+                        element: <AppUserLoyaltyDetailPage />,
+                      },
+                    ],
                   },
+                ],
+              },
+              {
+                path: 'employees',
+                children: [
                   {
-                    path: 'services/:providerId',
-                    element: <AppointmentProviderServicesList />,
-                  },
-                  {
-                    path: 'today-appointment/:providerId',
-                    element: <AppointmentProviderByIdPage />,
+                    index: true,
+                    element: <EmployeePage />,
                   },
                 ],
               },
@@ -384,6 +548,19 @@ export const routeObjects: RouteObject[] = [
                 index: true,
                 element: <NotificationPage />,
                 // element: CAN("canView", "Notification List") ? <NotificationPage /> : <p>not authorized</p>,
+              },
+            ],
+          },
+          {
+            path: 'service',
+            children: [
+              {
+                index: true,
+                element: <ServicesCatPage />,
+              },
+              {
+                path: 'services/:CatId',
+                element: <ServiceItemPage />,
               },
             ],
           },

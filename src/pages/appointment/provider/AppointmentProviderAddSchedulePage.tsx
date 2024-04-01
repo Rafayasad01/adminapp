@@ -148,8 +148,6 @@ function AppointmentProviderAddSchedulePage() {
   const onSubmit = (data: any) => {
     setIsLoader(true);
     const parent: any = {
-      createdBy: authState.user.id,
-      appointmentProvider: id,
       workDays: [],
     };
     const dataKeys = Object.keys(data).filter((key) => key.includes('name'));
@@ -164,7 +162,7 @@ function AppointmentProviderAddSchedulePage() {
       };
       parent.workDays.push(dataItem);
     });
-    Service.ProviderScheduleCreate(parent)
+    Service.ProviderScheduleCreate(id, parent)
       .then((item: any) => {
         if (item.data.success) {
           // console.log('CREATED', item.data);

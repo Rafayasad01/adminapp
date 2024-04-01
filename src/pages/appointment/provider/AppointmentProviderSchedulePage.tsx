@@ -34,7 +34,7 @@ function AppointmentProviderSchedulePage() {
   const [emptyVariable] = useState(null);
   const [list, setList] = useState<any>([]);
   const [editFormDetails, setEditFormDetails] = useState<any>();
-  const [actionMenuItemid] = React.useState('');
+  const [actionMenuItemid, setActionMenuItemid] = React.useState('');
   const [actionMenuAnchorEl, setActionMenuAnchorEl] =
     useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
@@ -99,7 +99,7 @@ function AppointmentProviderSchedulePage() {
     ) {
       // console.log('done1');
       // setOpenFormDialog(true);
-      if (list.appointmentProviderSchedule?.length < 7) {
+      if (list.storeEmployeeSchedule?.length < 7) {
         navigate(`../add-schedule/${id}`);
       } else {
         setIsNotify(true);
@@ -156,14 +156,21 @@ function AppointmentProviderSchedulePage() {
 
   const editHandler = (editId: string) => {
     if (listingRolePermission(dataRole, 'Appointment Provider Schedule Edit')) {
-      setIsLoader(true);
-      Service.ProviderScheduleEdit(editId).then((item: any) => {
-        if (item.data.success) {
-          setIsLoader(false);
-          setOpenEditFormDialog(true);
-          setEditFormDetails(item.data.data);
-        }
-      });
+      // setIsLoader(true);
+      let editFormData = list.storeEmployeeSchedule?.find(
+        (el: any) => el.id === editId
+      );
+      console.log('editFormData', editFormData);
+      setEditFormDetails(editFormData);
+      setActionMenuItemid(editFormData.id);
+      setOpenEditFormDialog(true);
+      // Service.ProviderScheduleEdit(editId).then((item: any) => {
+      //   if (item.data.success) {
+      //     setIsLoader(false);
+      //     setOpenEditFormDialog(true);
+      //     setEditFormDetails(item.data.data);
+      //   }
+      // });
     } else {
       setIsLoader(false);
       setIsNotify(true);
@@ -180,13 +187,13 @@ function AppointmentProviderSchedulePage() {
         listingRolePermission(dataRole, 'Appointment Provider Schedule Edit')
       ) {
         setIsLoader(true);
-        Service.ProviderScheduleEdit(actionMenuItemid).then((item: any) => {
-          if (item.data.success) {
-            setIsLoader(false);
-            setOpenEditFormDialog(true);
-            setEditFormDetails(item.data.data);
-          }
-        });
+        // Service.ProviderScheduleEdit(actionMenuItemid).then((item: any) => {
+        //   if (item.data.success) {
+        //     setIsLoader(false);
+        //     setOpenEditFormDialog(true);
+        //     setEditFormDetails(item.data.data);
+        //   }
+        // });
       } else {
         setIsLoader(false);
         setIsNotify(true);
@@ -285,7 +292,7 @@ function AppointmentProviderSchedulePage() {
       createdBy: authState.user.id,
     };
     // console.log("final data", userData)
-    Service.ProviderScheduleCreate(userData)
+    Service.ProviderScheduleCreate(id, userData)
       .then((item) => {
         if (item.data.success) {
           reset();
@@ -328,12 +335,10 @@ function AppointmentProviderSchedulePage() {
 
   const updateFormHandler = (data: any) => {
     setIsLoader(true);
-    // data.updatedBy = authState.user.id
     const details = {
-      updatedBy: authState.user.id,
       ...data,
     };
-    Service.ProviderScheduleUpdate(details)
+    Service.ProviderScheduleUpdate(actionMenuItemid, details)
       .then((item) => {
         if (item.data.success) {
           // console.log('itemmmm', item.data.data);
@@ -349,8 +354,8 @@ function AppointmentProviderSchedulePage() {
           setList((prevList: any) => {
             return {
               ...prevList,
-              appointmentProviderSchedule:
-                prevList.appointmentProviderSchedule?.map((items: any) => {
+              storeEmployeeSchedule: prevList.storeEmployeeSchedule?.map(
+                (items: any) => {
                   if (items.id === item.data.data.id) {
                     return {
                       ...items,
@@ -359,7 +364,8 @@ function AppointmentProviderSchedulePage() {
                     };
                   }
                   return items;
-                }),
+                }
+              ),
             };
           });
         } else {
@@ -398,6 +404,7 @@ function AppointmentProviderSchedulePage() {
   };
 
   const handleSwitchChange = (event: any, switchId: string) => {
+    setIsLoader(true);
     if (
       listingRolePermission(
         dataRole,
@@ -405,32 +412,38 @@ function AppointmentProviderSchedulePage() {
       )
     ) {
       const data = {
-        id: switchId,
         isActive: event.target.checked,
-        updatedBy: authState.user.id,
       };
-      Service.ProviderScheduleUpdateStatus(data).then((updateItem) => {
-        if (updateItem.data.success) {
-          setList((prevList: any) => {
-            return {
-              ...prevList,
-              appointmentProviderSchedule:
-                prevList.appointmentProviderSchedule?.map((item: any) => {
-                  if (item.id === updateItem.data.data.id) {
-                    return { ...item, isActive: updateItem.data.data.isActive };
+      Service.ProviderScheduleUpdateStatus(switchId, data).then(
+        (updateItem) => {
+          if (updateItem.data.success) {
+            setIsLoader(false);
+            setList((prevList: any) => {
+              return {
+                ...prevList,
+                storeEmployeeSchedule: prevList.storeEmployeeSchedule?.map(
+                  (item: any) => {
+                    if (item.id === updateItem.data.data.id) {
+                      return {
+                        ...item,
+                        isActive: updateItem.data.data.isActive,
+                      };
+                    }
+                    return item;
                   }
-                  return item;
-                }),
-            };
-          });
+                ),
+              };
+            });
+          } else {
+            setIsLoader(false);
+            setIsNotify(true);
+            setNotifyMessage({
+              text: NOT_AUTHORIZED_MESSAGE,
+              type: 'warning',
+            });
+          }
         }
-      });
-    } else {
-      setIsNotify(true);
-      setNotifyMessage({
-        text: NOT_AUTHORIZED_MESSAGE,
-        type: 'warning',
-      });
+      );
     }
   };
 
@@ -449,7 +462,7 @@ function AppointmentProviderSchedulePage() {
           <div>
             <div className="pt-4">
               <span className="p-3 font-open-sans text-xl font-semibold text-[#252733]">
-                Provider Details
+                Employee Details
               </span>
             </div>
             {list?.name ? (
@@ -460,7 +473,7 @@ function AppointmentProviderSchedulePage() {
                       <div className="flex w-full items-center justify-around">
                         <div className="w-full flex-col items-center">
                           <span className="font-open-sans text-base font-semibold not-italic text-secondary">
-                            Provider Name
+                            Employee Name
                           </span>
                           <div className="mt-1 font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
                             {list.name}
@@ -587,8 +600,8 @@ function AppointmentProviderSchedulePage() {
                 </tr>
               </thead>
               <tbody>
-                {list.appointmentProviderSchedule &&
-                  list.appointmentProviderSchedule?.map(
+                {list.storeEmployeeSchedule &&
+                  list.storeEmployeeSchedule?.map(
                     (item: any, index: number) => {
                       return (
                         <tr key={index}>

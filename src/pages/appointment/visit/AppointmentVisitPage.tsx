@@ -95,7 +95,8 @@ function AppointmentVisitPage() {
 
   const handleFormClickOpen = () => {
     if (listingRolePermission(dataRole, 'Appointment Create')) {
-      setOpenFormDialog(true);
+      navigate('../add-appointment');
+      // setOpenFormDialog(true);
     } else {
       setIsNotify(true);
       setNotifyMessage({

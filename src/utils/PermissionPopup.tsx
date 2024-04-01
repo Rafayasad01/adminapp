@@ -29,7 +29,7 @@ function PermissionPopup({
   };
   const onEventHandler = (event: any) => {
     if (event === 'yes') {
-      callback();
+      callback('yes');
     }
     setOpen(false);
   };

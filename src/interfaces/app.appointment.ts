@@ -1,5 +1,5 @@
 export interface AppointmentProvider {
-  providerName: string;
+  name: string;
   address: string;
   phone: string;
   cnic: string;
@@ -9,6 +9,12 @@ export interface AppointmentProvider {
   isDeleted: boolean;
   email: string;
   uploadImg: any;
+  services: any;
+  categoryId: any;
+  servicesId: any;
+  servicesAmount: any;
+  price: any;
+  mints: any;
 }
 
 export interface AppointmentService {
@@ -40,4 +46,15 @@ export interface AppointmentVisit {
   note: string;
   appointmentProvider: string;
   appointmentService: any;
+}
+
+export interface AddAppointmentForm {
+  first_name: string;
+  last_name: string;
+  email: string;
+  phone: string;
+  note: string;
+  gender: string;
+  appointmentService: any;
+  appointmentProvider: string;
 }

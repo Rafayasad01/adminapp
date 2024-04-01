@@ -63,6 +63,7 @@ import appHead from './images/appointment-head.png';
 import appCalender from './images/appointment-calender.png';
 import appClock from './images/appointment-clock.png';
 import appProfile from './images/appointment-profile.png';
+import Star from './images/Star.png';
 
 const assets = {
   images: {
@@ -114,6 +115,7 @@ const assets = {
     appCalender,
     appClock,
     appProfile,
+    Star,
   },
   tempImages: {
     wash,

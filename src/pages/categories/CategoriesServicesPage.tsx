@@ -56,7 +56,7 @@ function CategoriesServicesPage() {
   const [isModalImage, setIsModalImage] = useState(false);
   const [modalImage, setModalImage] = useState('');
 
-  const categoryId = params.categoryId ?? '';
+  const productId = params.productId ?? '';
 
   const handleClickSearch = (event: any) => {
     const searchTxt = event.target.value as string;
@@ -64,7 +64,7 @@ function CategoriesServicesPage() {
     setSearch(searchTxt);
     setPage(newPage);
     category
-      .searchCategoryService(categoryId, searchTxt, newPage, rowsPerPage)
+      .searchCategoryService(productId, searchTxt, newPage, rowsPerPage)
       .then((item) => {
         setList(item.data.data.list);
         setTotal(item.data.data.total);
@@ -79,14 +79,14 @@ function CategoriesServicesPage() {
     // offset? ,limit rowsperpage hoga ofset page * rowsperPage
     if (search === '' || search === null || search === undefined) {
       category
-        .getCategoryServiceList(categoryId, newPage, rowsPerPage)
+        .getCategoryServiceList(productId, newPage, rowsPerPage)
         .then((item) => {
           setList(item.data.data.list);
           setTotal(item.data.data.total);
         });
     } else {
       category
-        .searchCategoryService(categoryId, search, newPage, rowsPerPage)
+        .searchCategoryService(productId, search, newPage, rowsPerPage)
         .then((item) => {
           setList(item.data.data.list);
           setTotal(item.data.data.total);
@@ -115,14 +115,14 @@ function CategoriesServicesPage() {
     setPage(newPage);
     if (search === '' || search === null || search === undefined) {
       category
-        .getCategoryServiceList(categoryId, newPage, rowsPerPage)
+        .getCategoryServiceList(productId, newPage, rowsPerPage)
         .then((item) => {
           setList(item.data.data.list);
           setTotal(item.data.data.total);
         });
     } else {
       category
-        .searchCategoryService(categoryId, search, newPage, rowsPerPage)
+        .searchCategoryService(productId, search, newPage, rowsPerPage)
         .then((item) => {
           setList(item.data.data.list);
           setTotal(item.data.data.total);
@@ -133,7 +133,7 @@ function CategoriesServicesPage() {
   useEffect(() => {
     if (listingRolePermission(dataRole, 'Category Service List')) {
       category
-        .getCategoryServiceList(categoryId, page, rowsPerPage)
+        .getCategoryServiceList(productId, page, rowsPerPage)
         .then((item: any) => {
           if (listingRolePermission(dataRole, 'Category Service Get')) {
             setIsLoader(false);
@@ -212,7 +212,7 @@ function CategoriesServicesPage() {
         'Category Service List',
         dataRole,
         navigate,
-        `../service/faq/${actionMenuItemid}`
+        `../item/faq/${actionMenuItemid}`
       );
       // navigate(`../service/faq/${actionMenuItemid}`);
     } else if (option === 'Delete') {
@@ -239,7 +239,7 @@ function CategoriesServicesPage() {
     formData.append('desc', data.desc);
     formData.append('createdBy', authState.user.id);
     category
-      .categoryServiceCreate(categoryId, formData)
+      .categoryServiceCreate(productId, formData)
       .then((item) => {
         if (item.data.success) {
           setIsLoader(false);

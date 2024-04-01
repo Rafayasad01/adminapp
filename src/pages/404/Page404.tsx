@@ -34,12 +34,12 @@ function Page404() {
                 className="text-normal mr-5 w-[120px] bg-black py-[14px] text-[14px] leading-[normal] text-white"
                 buttonType="button"
               />
-              <CustomButton
+              {/* <CustomButton
                 onclick={() => navigate(-1)}
                 title="Back"
                 className="text-normal mr-5 w-[120px] border-[1px] border-solid bg-white py-[14px] text-[14px] leading-[normal] text-black"
                 buttonType="button"
-              />
+              /> */}
             </div>
           )}
         </div>

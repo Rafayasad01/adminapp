@@ -71,7 +71,6 @@ const SwiperComponent = ({ data, selectedUser }: Props) => {
   }, []);
 
   const handleUser = (name: string) => {
-    console.log(name);
     selectedUser(name);
   };
 
