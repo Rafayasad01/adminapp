@@ -20,7 +20,7 @@ import {
   PH_MINI_LENGTH,
 } from '../../../utils/constants';
 
-type Props = {
+type AppointmentVisitUpdatePopupProps = {
   roles?: any;
   openFormDialog: boolean;
   setOpenFormDialog: React.Dispatch<React.SetStateAction<boolean>>;
@@ -38,7 +38,7 @@ function AppointmentVisitUpdatePopup({
   setIsNotify,
   setNotifyMessage,
   formData,
-}: Props) {
+}: AppointmentVisitUpdatePopupProps) {
   const {
     register,
     handleSubmit,

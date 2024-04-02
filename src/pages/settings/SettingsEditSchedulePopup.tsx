@@ -1,23 +1,26 @@
-import React from 'react';
-import Dialog from '@mui/material/Dialog';
 import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import React from 'react';
 
 import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined';
 
-import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
+import Tabs from '@mui/material/Tabs';
 
 import '../../assets/css/PopupStyle.css';
+import OffDaysForm from './OffDaysForm';
 import SettingsDateRangePicker from './SettingsDateRangePicker';
 import WorkDaysForm from './WorkDaysForm';
-import OffDaysForm from './OffDaysForm';
 
-type Props = {
+type SettingsEditSchedulePopupProps = {
   schedulePopup: boolean;
   setSchedulePopup: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-function SettingsEditSchedulePopup({ schedulePopup, setSchedulePopup }: Props) {
+function SettingsEditSchedulePopup({
+  schedulePopup,
+  setSchedulePopup,
+}: SettingsEditSchedulePopupProps) {
   const handleFormClose = () => setSchedulePopup(false);
 
   const [tabPanel, setTabPanel] = React.useState(0);

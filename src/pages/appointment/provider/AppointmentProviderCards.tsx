@@ -11,7 +11,7 @@ import dayjs from 'dayjs';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-type Props = {
+type AppointmentProviderCardsProps = {
   data: any;
   handleSwitchChange?: any;
   actionMenuOpen?: any;
@@ -25,7 +25,7 @@ const AppointmentProviderCards = ({
   actionMenuOpen,
   setActionMenuItemid,
   setActionMenuAnchorEl,
-}: Props) => {
+}: AppointmentProviderCardsProps) => {
   const navigate = useNavigate();
   return (
     <div className="grid grid-cols-12 gap-4">

@@ -1,9 +1,8 @@
-import React, { Fragment } from 'react';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
 
-type Props = {
+type CustomButtonProps = {
   onclick?: (item?: any) => void;
   onchange?: (item?: any) => void;
   register?: any;
@@ -29,7 +28,7 @@ function CustomButton({
   isMenuOpen,
   sx,
   disabled,
-}: Props) {
+}: CustomButtonProps) {
   if (buttonType === 'button') {
     return (
       <Button

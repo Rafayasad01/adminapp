@@ -1,4 +1,5 @@
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
+import AirplayIcon from '@mui/icons-material/Airplay';
 import EditIcon from '@mui/icons-material/Edit';
 import SearchIcon from '@mui/icons-material/Search';
 import WysiwygOutlinedIcon from '@mui/icons-material/WysiwygOutlined';
@@ -9,26 +10,25 @@ import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
 import Switch from '@mui/material/Switch';
-import AirplayIcon from '@mui/icons-material/Airplay';
 import TablePagination from '@mui/material/TablePagination';
 import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import CustomButton from '../../components/common/CustomButton';
 import CustomText from '../../components/common/CustomText';
 import Loader from '../../components/common/Loader';
 import Notify from '../../components/common/Notify';
 import TopBar from '../../components/common/TopBar';
 import { AppUserEmployees } from '../../interfaces/app-user.interface';
+import { setItemState } from '../../redux/features/appStateSlice';
+import { login } from '../../redux/features/authStateSlice';
 import { useAppSelector } from '../../redux/redux-hooks';
 import Service from '../../services/adminapp/adminBranch';
 import { listingRolePermission } from '../../utils/helper';
 import BranchCreatePopup from './BranchCreatePopup';
 import BranchUpdatePopup from './BranchUpdatePopup';
-import CustomButton from '../../components/common/CustomButton';
-import { login } from '../../redux/features/authStateSlice';
-import { setItemState } from '../../redux/features/appStateSlice';
 
 function BranchPage() {
   const navigate = useNavigate();
@@ -37,7 +37,7 @@ function BranchPage() {
   // console.log('🚀 ~ BranchPage ~ authState:', authState);
 
   const dataRole = useAppSelector(
-    (state: any) => state?.persisitReducer?.roleState?.role?.permissions
+    (state: any) => state?.persistedReducer?.roleState?.role?.permissions
   );
   const [search, setSearch] = useState<any>('');
   const [maxTotalEmployeeLimit, setTotalMaxEmployeeLimit] = useState<any>();
@@ -467,7 +467,7 @@ function BranchPage() {
                   <th>Trial Start Date</th>
                   <th>Status</th>
                   <th>Branch Control</th>
-                  <th>&nbsp;</th>
+                  <th aria-label="empty table header">&nbsp;</th>
                 </tr>
               </thead>
               <tbody>
@@ -599,7 +599,7 @@ function BranchPage() {
             </table>
           </div>
           {list?.length < 1 ? (
-            <CustomText noroundedborders text="No Records Found" />
+            <CustomText noRoundedBorders text="No Records Found" />
           ) : null}
           <div className="mt-3 flex w-[100%] justify-center py-3">
             <TablePagination

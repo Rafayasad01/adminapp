@@ -14,7 +14,7 @@ const MenuProps = {
   },
 };
 
-type Props = {
+type CustomMultipleSelectBoxProps = {
   customClassInputTitle?: string;
   inputTitle: string;
   customWidth?: string;
@@ -44,7 +44,7 @@ function CustomMultipleSelectBox({
   options,
   defaultVal,
   border,
-}: Props) {
+}: CustomMultipleSelectBoxProps) {
   // console.log('optionsss', options);
   return (
     <div>
@@ -84,7 +84,7 @@ function CustomMultipleSelectBox({
               {...field}
               onChange={(event) => {
                 field.onChange(event);
-                callback && callback(event);
+                if (callback) callback(event);
               }}
               input={<OutlinedInput />}
               renderValue={(selected) => {

@@ -10,7 +10,7 @@ import React from 'react';
 
 import '../../assets/css/PopupStyle.css';
 
-type Props = {
+type VouchersReferralCreatePopupProps = {
   vouchersReferralDialog: boolean;
   setVouchersReferralDialog: React.Dispatch<React.SetStateAction<boolean>>;
 };
@@ -18,7 +18,7 @@ type Props = {
 function VouchersReferralCreatePopup({
   vouchersReferralDialog,
   setVouchersReferralDialog,
-}: Props) {
+}: VouchersReferralCreatePopupProps) {
   // const [selectShop, setSelectShop] = useState('status');
   const handleFormClose = () => setVouchersReferralDialog(false);
   const [checked, setChecked] = React.useState(true);

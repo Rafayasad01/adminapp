@@ -1,19 +1,19 @@
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
-import React from 'react';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Avatar from '@mui/material/Avatar';
 import Dialog from '@mui/material/Dialog';
+import React from 'react';
 import assets from '../../assets';
 
-type Props = {
+type BranchCategoryPopupProps = {
   setOpenFormDialog: any;
   openFormDialog: any;
   categories: any;
   subCategories: any;
   setSubCategories: any;
-  setCategories: any;
+  // setCategories: any;
 };
 
 function BranchCategoryPopup({
@@ -22,7 +22,7 @@ function BranchCategoryPopup({
   categories,
   subCategories,
   setSubCategories,
-}: Props) {
+}: BranchCategoryPopupProps) {
   // const [isLoader, setIsLoader] = useState(true);
   const [expanded, setExpanded] = React.useState<string | false>('category0');
   const [expanded2, setExpanded2] = React.useState<string | false>(
@@ -59,7 +59,7 @@ function BranchCategoryPopup({
       <div className="Content p-2">
         <div className="category-tab-content grid w-full grid-cols-12 gap-3">
           <div className="col-span-6">
-            <div className="flex flex-col py-4 px-5 font-semibold">
+            <div className="flex flex-col px-5 py-4 font-semibold">
               Category Names
             </div>
             <div className="flex max-h-[600px] flex-col px-5 py-3">
@@ -146,10 +146,10 @@ function BranchCategoryPopup({
             </div>
           </div>
           <div className="col-span-6">
-            <div className="flex flex-col py-4 px-5 font-semibold">
+            <div className="flex flex-col px-5 py-4 font-semibold">
               Sub-Category
             </div>
-            <div className="sub-category flex max-h-[600px] flex-col px-5 pt-2 pb-[2rem]">
+            <div className="sub-category flex max-h-[600px] flex-col px-5 pb-[2rem] pt-2">
               {subCategories &&
                 subCategories.map((item: any, index: number) => (
                   <Accordion
@@ -221,7 +221,7 @@ function BranchCategoryPopup({
                             <span className="text-sm font-normal text-[#6A6A6A]">
                               Quantity
                             </span>
-                            <span className="mr-1 ml-3 font-open-sans text-sm font-semibold text-secondary">
+                            <span className="ml-3 mr-1 font-open-sans text-sm font-semibold text-secondary">
                               {item.quantity}
                             </span>
                           </div>

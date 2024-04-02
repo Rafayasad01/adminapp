@@ -20,7 +20,7 @@ import {
   imageAllowedTypes,
 } from '../../utils/constants';
 
-type Props = {
+type ProfileEditPopupProps = {
   openFormDialog: boolean;
   setOpenFormDialog: React.Dispatch<React.SetStateAction<boolean>>;
   setIsNotify: any;
@@ -36,7 +36,7 @@ function ProfileEditPopup({
   setNotifyMessage,
   callback,
   formData,
-}: Props) {
+}: ProfileEditPopupProps) {
   const {
     register,
     handleSubmit,

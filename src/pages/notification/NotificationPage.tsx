@@ -18,11 +18,7 @@ import { useAppSelector } from '../../redux/redux-hooks';
 import Service from '../../services/adminapp/adminNotification';
 import AlertBox from '../../utils/Alert';
 import {
-  NOTIFICATION_STATUS_CANCELLED,
-  NOTIFICATION_STATUS_COMPLETED,
-  NOTIFICATION_STATUS_FAILED,
-  NOTIFICATION_STATUS_NEW,
-  NOTIFICATION_STATUS_SENDING,
+  NOTIFICATION_STATUS,
   NOT_AUTHORIZED_MESSAGE,
 } from '../../utils/constants';
 import { listingRolePermission } from '../../utils/helper';
@@ -32,7 +28,7 @@ import NotificationDetailPopup from './NotificationDetailPopup';
 function NotificationPage() {
   const authState: any = useAppSelector((state) => state?.authState);
   const dataRole = useAppSelector(
-    (state: any) => state?.persisitReducer?.roleState?.role?.permissions
+    (state: any) => state?.persistedReducer?.roleState?.role?.permissions
   );
   const [search, setSearch] = useState<string>('');
   const [page, setPage] = useState<number>(0);
@@ -174,15 +170,15 @@ function NotificationPage() {
 
   const getStatusTag = (status: string) => {
     let tag = '';
-    if (status === NOTIFICATION_STATUS_NEW) {
+    if (status === NOTIFICATION_STATUS.NEW) {
       tag = 'blue';
-    } else if (status === NOTIFICATION_STATUS_SENDING) {
+    } else if (status === NOTIFICATION_STATUS.SENDING) {
       tag = 'purple';
-    } else if (status === NOTIFICATION_STATUS_COMPLETED) {
+    } else if (status === NOTIFICATION_STATUS.COMPLETED) {
       tag = 'green';
     } else if (
-      status === NOTIFICATION_STATUS_FAILED ||
-      status === NOTIFICATION_STATUS_CANCELLED
+      status === NOTIFICATION_STATUS.FAILED ||
+      status === NOTIFICATION_STATUS.CANCELLED
     ) {
       tag = 'red';
     }
@@ -278,7 +274,7 @@ function NotificationPage() {
                   <th className="w-[30rem]">Message</th>
                   <th>Dated</th>
                   <th>status</th>
-                  <th>&nbsp;</th>
+                  <th aria-label="empty table header">&nbsp;</th>
                 </tr>
               </thead>
               <tbody>
@@ -309,7 +305,7 @@ function NotificationPage() {
                             {item.status}
                           </span>
                         </td>
-                        <td>
+                        <td aria-label="show detail button">
                           <IconButton
                             className="icon-btn mr-3.5 p-0"
                             onClick={() => detailButtonHandler(item, index)}
@@ -353,7 +349,7 @@ function NotificationPage() {
       {alertPopup && (
         <AlertBox
           msg={alertMsg}
-          setSeverty={alertSeverty}
+          setSeverity={alertSeverty}
           alertOpen={alertPopup}
           setAlertOpen={setAlertPopup}
         />

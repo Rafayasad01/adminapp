@@ -5,13 +5,13 @@ import { DemoItem } from '@mui/x-date-pickers/internals/demo';
 import dayjs from 'dayjs';
 import ErrorSpanBox from './ErrorSpanBox';
 
-type Props = {
+type CustomDateTimePickerProps = {
   register?: any;
   id?: any;
   error?: any;
   inputTitle?: string;
-  label?: string;
-  notRequired?: boolean;
+  // label?: string;
+  // notRequired?: boolean;
   setValue?: any;
   isTrue?: boolean;
   value?: any;
@@ -20,19 +20,19 @@ type Props = {
 };
 
 function CustomDateTimePicker({
+  register: _register,
+  defaultValue,
   value,
   isTrue,
   setValue,
   id,
   inputTitle,
   minDate,
-}: Props) {
+  error: _error,
+}: CustomDateTimePickerProps) {
   const handleChange = (date: any) => {
-    // console.log('daaa', date);
     setValue(id, date);
   };
-
-  // console.log('sAASA', isTrue, value);
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -48,6 +48,7 @@ function CustomDateTimePicker({
           value={dayjs(value)}
           onChange={handleChange}
           minDate={minDate}
+          defaultValue={defaultValue}
         />
       </DemoItem>
       {isTrue && value === undefined && (

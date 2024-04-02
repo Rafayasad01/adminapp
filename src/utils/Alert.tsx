@@ -1,7 +1,7 @@
-import React from 'react';
-import Stack from '@mui/material/Stack';
-import Snackbar from '@mui/material/Snackbar';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
+import Snackbar from '@mui/material/Snackbar';
+import Stack from '@mui/material/Stack';
+import React from 'react';
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
@@ -11,14 +11,19 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
-type Props = {
+type AlertBoxProps = {
   msg: string;
-  setSeverty: any;
+  setSeverity: any;
   alertOpen: boolean;
   setAlertOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-function AlertBox({ msg, setSeverty, alertOpen, setAlertOpen }: Props) {
+function AlertBox({
+  msg,
+  setSeverity,
+  alertOpen,
+  setAlertOpen,
+}: AlertBoxProps) {
   const handleClose = (
     event?: React.SyntheticEvent | Event,
     reason?: string
@@ -38,7 +43,7 @@ function AlertBox({ msg, setSeverty, alertOpen, setAlertOpen }: Props) {
       >
         <Alert
           onClose={handleClose}
-          severity={setSeverty}
+          severity={setSeverity}
           sx={{ width: '100%' }}
         >
           {msg}

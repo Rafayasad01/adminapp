@@ -17,18 +17,14 @@ import Loader from '../../components/common/Loader';
 import TopBar from '../../components/common/TopBar';
 import { useAppSelector } from '../../redux/redux-hooks';
 import cart from '../../services/adminapp/adminCarts';
-import {
-  CART_STATUS_COMPELETED,
-  CART_STATUS_NEW,
-  CART_STATUS_PROCESSING,
-} from '../../utils/constants';
+import { CART_STATUS } from '../../utils/constants';
 import { CheckRolePermission } from '../../utils/helper';
 
 const actionMenuOptions = ['View'];
 function CartsPage() {
   const authState: any = useAppSelector((state) => state?.authState);
   const dataRole = useAppSelector(
-    (state) => state?.persisitReducer?.roleState?.role?.permissions
+    (state) => state?.persistedReducer?.roleState?.role?.permissions
   );
 
   const navigate = useNavigate();
@@ -141,11 +137,11 @@ function CartsPage() {
   const getStatusTag = (status: string) => {
     // console.log('STATAT', status);
     let tag = '';
-    if (status === CART_STATUS_NEW) {
+    if (status === CART_STATUS.NEW) {
       tag = 'blue';
-    } else if (status === CART_STATUS_PROCESSING) {
+    } else if (status === CART_STATUS.PROCESSING) {
       tag = 'green';
-    } else if (status === CART_STATUS_COMPELETED) {
+    } else if (status === CART_STATUS.COMPLETED) {
       tag = 'green';
     }
     return tag;
@@ -251,7 +247,7 @@ function CartsPage() {
                   <th>Drop-off Time</th>
                   <th>Amount</th>
                   <th>Status</th>
-                  <th>&nbsp;</th>
+                  <th aria-label="empty table header">&nbsp;</th>
                 </tr>
               </thead>
               <tbody>
@@ -364,7 +360,7 @@ function CartsPage() {
             </table>
           </div>
           {list?.length < 1 ? (
-            <CustomText text="No Driver History Records" noroundedborders />
+            <CustomText text="No Driver History Records" noRoundedBorders />
           ) : null}
           <div className="mt-3 flex w-[100%] justify-center py-3">
             <TablePagination

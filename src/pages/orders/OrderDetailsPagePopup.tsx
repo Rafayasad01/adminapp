@@ -1,14 +1,14 @@
-import Dialog from '@mui/material/Dialog';
 import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
 import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
 import OrderDetailsPagePopupClasses from './OrderDetailsPagePopup.module.css';
 
-type Props = {
+type OrderDetailsPagePopupProps = {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-function OrderDetailsPagePopup({ open, setOpen }: Props) {
+function OrderDetailsPagePopup({ open, setOpen }: OrderDetailsPagePopupProps) {
   const onCloseHandler = (event: object, reason: string) => {
     if (reason === 'backdropClick') {
       setOpen(false);

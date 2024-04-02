@@ -20,7 +20,7 @@ import {
 } from '../../utils/constants';
 import DragDropFile from '../settings/DragDropFile';
 
-type Props = {
+type BannerUpdatePopupProps = {
   roles?: any;
   openFormDialog: boolean;
   setOpenFormDialog: React.Dispatch<React.SetStateAction<boolean>>;
@@ -36,7 +36,7 @@ function BannerUpdatePopup({
   setOpenFormDialog,
   callback,
   formData,
-}: Props) {
+}: BannerUpdatePopupProps) {
   const {
     register,
     handleSubmit,

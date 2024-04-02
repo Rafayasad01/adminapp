@@ -6,10 +6,10 @@ import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined
 // import FormatListBulletedOutlinedIcon from '@mui/icons-material/FormatListBulletedOutlined';
 // import PlaceOutlinedIcon from '@mui/icons-material/PlaceOutlined';
 // import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
-import QuestionAnswerOutlinedIcon from '@mui/icons-material/QuestionAnswerOutlined';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
+import QuestionAnswerOutlinedIcon from '@mui/icons-material/QuestionAnswerOutlined';
 // import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import CorporateFareIcon from '@mui/icons-material/CorporateFare';
 import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
@@ -31,7 +31,7 @@ import { NavLink } from 'react-router-dom';
 import assets from '../../assets';
 import { useAppSelector } from '../../redux/redux-hooks';
 import CAN, { defineRules } from '../../services/permissions/permissions';
-import { MODULE_EMPLOYEEES } from '../../utils/constants';
+import { MODULE_EMPLOYEES } from '../../utils/constants';
 import ArrowDown from '../icons/ArrowDown';
 import ArrowUp from '../icons/ArrowUp';
 import CategoryIcon from '../icons/CategoryIcon';
@@ -146,10 +146,10 @@ const links = [
 function Sidebar() {
   const userData = useAppSelector((state: any) => state?.authState?.user);
   const appItems = useAppSelector(
-    (state: any) => state?.persisitReducer?.appState?.UserItems
+    (state: any) => state?.persistedReducer?.appState?.UserItems
   );
   const logo = useAppSelector(
-    (state: any) => state?.persisitReducer?.appState?.logo
+    (state: any) => state?.persistedReducer?.appState?.logo
   );
 
   // console.log('appItems', appItems);
@@ -259,17 +259,17 @@ function Sidebar() {
   }
 
   useEffect(() => {
-    defineRules(dataRole?.persisitReducer?.roleState?.role?.permissions);
-    if (dataRole?.persisitReducer?.roleState?.role?.permissions) {
+    defineRules(dataRole?.persistedReducer?.roleState?.role?.permissions);
+    if (dataRole?.persistedReducer?.roleState?.role?.permissions) {
       const tempList = links.filter((el) => {
-        if (el.name === MODULE_EMPLOYEEES) {
+        if (el.name === MODULE_EMPLOYEES) {
           if (appItems.employeeLimit <= 0) {
             return null;
           }
         }
         return CAN('canView', el.permission as string);
       });
-      // console.log("templost", tempList);
+      // console.log("tempList", tempList);
       tempList.unshift({
         name: 'Dashboard',
         path: 'home',
@@ -303,7 +303,7 @@ function Sidebar() {
             {userData?.isSuperAdmin ? (
               <img
                 className="mt-9 h-[29px] max-w-[150px]"
-                src={assets.images.urApplogoWhite}
+                src={assets.images.urAppLogoWhite}
                 alt=""
               />
             ) : logo ? (
@@ -316,7 +316,7 @@ function Sidebar() {
               <div className="flex w-full items-center justify-start rounded-2xl p-3 text-white">
                 <img
                   className="mt-2 max-w-[150px]"
-                  src={assets.images.urApplogoWhite}
+                  src={assets.images.urAppLogoWhite}
                   alt="logo"
                 />
               </div>

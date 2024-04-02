@@ -12,12 +12,12 @@ import { useState } from 'react';
 import '../../assets/css/PopupStyle.css';
 import TimePickerField from './TimePickerField';
 
-type Props = {
-  onlyweeksformat?: boolean;
+type WorkDaysFormProps = {
+  onlyWeeksFormat?: boolean;
   setWeekDays?: any;
 };
 
-function WorkDaysForm({ onlyweeksformat, setWeekDays }: Props) {
+function WorkDaysForm({ onlyWeeksFormat, setWeekDays }: WorkDaysFormProps) {
   const [shopInTime, setShopInTime] = useState<dayjs.Dayjs | null>(null);
   const [shopOutTime, setShopOutTime] = useState<dayjs.Dayjs | null>(null);
   const [pickupTime, setPickupTime] = useState<dayjs.Dayjs | null>(null);
@@ -37,7 +37,7 @@ function WorkDaysForm({ onlyweeksformat, setWeekDays }: Props) {
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <div className={`${!onlyweeksformat && 'height-230'}`}>
+      <div className={`${!onlyWeeksFormat && 'height-230'}`}>
         <div className="FormField">
           <ToggleButtonGroup
             value={devices}
@@ -102,7 +102,7 @@ function WorkDaysForm({ onlyweeksformat, setWeekDays }: Props) {
             </ToggleButton>
           </ToggleButtonGroup>
         </div>
-        {!onlyweeksformat && (
+        {!onlyWeeksFormat && (
           <>
             <div className="FormFields">
               <TimePickerField

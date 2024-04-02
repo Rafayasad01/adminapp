@@ -14,18 +14,22 @@ import { listingRolePermission } from '../../../utils/helper';
 import AppUserAddressCreatePopup from './AppUserAddressCreatePopup';
 import AppUserAddressUpdatePopup from './AppUserAddressUpdatePopup';
 
-type Props = {
+type AppUserAddressTabPageProps = {
   addressList?: any;
   appUserId?: any;
   setAddress?: any;
 };
 
-function AppUserAddressTabPage({ addressList, appUserId, setAddress }: Props) {
+function AppUserAddressTabPage({
+  addressList,
+  appUserId,
+  setAddress,
+}: AppUserAddressTabPageProps) {
   const [emptyVariable] = useState<any>('');
   const authState: any = useAppSelector((state) => state?.authState);
   const [list, setList] = useState<any>();
   const dataRole = useAppSelector(
-    (state: any) => state?.persisitReducer?.roleState?.role?.permissions
+    (state: any) => state?.persistedReducer?.roleState?.role?.permissions
   );
   const [isLoader, setIsLoader] = React.useState(true);
   const [isNotify, setIsNotify] = React.useState(false);
@@ -282,7 +286,7 @@ function AppUserAddressTabPage({ addressList, appUserId, setAddress }: Props) {
                     <th>longitude</th>
                     <th>type</th>
                     <th>status</th>
-                    <th>&nbsp;</th>
+                    <th aria-label="empty table header">&nbsp;</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -328,7 +332,7 @@ function AppUserAddressTabPage({ addressList, appUserId, setAddress }: Props) {
               </table>
             </div>
           ) : (
-            <CustomText noroundedborders text="No Address Records" />
+            <CustomText noRoundedBorders text="No Address Records" />
           )}
         </div>
       </div>

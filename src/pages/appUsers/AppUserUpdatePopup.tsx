@@ -14,7 +14,7 @@ import {
   PH_MINI_LENGTH,
 } from '../../utils/constants';
 
-type Props = {
+type AppUserUpdatePopupProps = {
   openFormDialog: boolean;
   setOpenFormDialog: React.Dispatch<React.SetStateAction<boolean>>;
   formData: any;
@@ -33,7 +33,7 @@ function AppUserUpdatePopup({
   setEditFormData,
   callback,
   setActionMenuItemid,
-}: Props) {
+}: AppUserUpdatePopupProps) {
   const {
     register,
     handleSubmit,

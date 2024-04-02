@@ -27,7 +27,7 @@ import AppUserUpdatePopup from './AppUserUpdatePopup';
 function AppUsersPage() {
   const authState: any = useAppSelector((state) => state?.authState);
   const dataRole = useAppSelector(
-    (state: any) => state?.persisitReducer?.roleState?.role?.permissions
+    (state: any) => state?.persistedReducer?.roleState?.role?.permissions
   );
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(0);

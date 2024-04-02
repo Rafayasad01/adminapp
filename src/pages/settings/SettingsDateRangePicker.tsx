@@ -6,11 +6,13 @@ import { DateRangePicker } from 'react-date-range';
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
 
-type Props = {
+type SettingsDateRangePickerProps = {
   calendarStyle: string;
 };
 
-function SettingsDateRangePicker({ calendarStyle }: Props) {
+function SettingsDateRangePicker({
+  calendarStyle,
+}: SettingsDateRangePickerProps) {
   const [dateRange, setDateRange] = useState([
     {
       startDate: startOfWeek(new Date()), // start of the current week (Monday)

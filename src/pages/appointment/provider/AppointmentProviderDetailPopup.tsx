@@ -11,7 +11,7 @@ dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.tz.setDefault('UTC');
 
-type Props = {
+type AppointmentProviderDetailPopupProps = {
   openFormDialog: boolean;
   setOpenFormDialog: React.Dispatch<React.SetStateAction<boolean>>;
   list: any;
@@ -21,10 +21,10 @@ function AppointmentProviderDetailPopup({
   openFormDialog,
   setOpenFormDialog,
   list,
-}: Props) {
+}: AppointmentProviderDetailPopupProps) {
   // const { id } = useParams();
   // const dataRole = useAppSelector(
-  //   (state: any) => state?.persisitReducer?.roleState?.role?.permissions
+  //   (state: any) => state?.persistedReducer?.roleState?.role?.permissions
   // );
   // const [emptyVariable] = useState(null);
   // const [total, setTotal] = useState(0);
@@ -271,7 +271,7 @@ function AppointmentProviderDetailPopup({
                       }
                     )
                   ) : list?.appointmentService?.length < 1 ? (
-                    <CustomText noroundedborders text="No Records Found" />
+                    <CustomText noRoundedBorders text="No Records Found" />
                   ) : null}
                 </tbody>
               </table>

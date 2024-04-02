@@ -30,7 +30,7 @@ import CategoriesEditPopup from './CategoriesEditPopup';
 function CategoriesPage() {
   const authState: any = useAppSelector((state) => state?.authState);
   const dataRole = useAppSelector(
-    (state) => state?.persisitReducer?.roleState?.role?.permissions
+    (state) => state?.persistedReducer?.roleState?.role?.permissions
   );
   const navigate = useNavigate();
   const [search, setSearch] = useState('');
@@ -424,7 +424,7 @@ function CategoriesPage() {
                   <th>Category Name</th>
                   <th>Created Date</th>
                   <th>Status</th>
-                  <th>&nbsp;</th>
+                  <th aria-label="empty table header">&nbsp;</th>
                 </tr>
               </thead>
               <tbody>
@@ -508,7 +508,7 @@ function CategoriesPage() {
             </table>
           </div>
           {list?.length < 1 ? (
-            <CustomText noroundedborders text="No Records Found" />
+            <CustomText noRoundedBorders text="No Records Found" />
           ) : null}
           <div className="mt-3 flex w-[100%] justify-center py-3">
             <TablePagination

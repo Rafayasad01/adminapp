@@ -7,7 +7,7 @@ import '../../assets/css/PopupStyle.css';
 import { INVALID_CHAR } from '../../utils/constants';
 import ErrorSpanBox from './ErrorSpanBox';
 
-type Props = {
+type CustomInputBoxProps = {
   register: any;
   id: any;
   inputTitle?: string;
@@ -49,8 +49,8 @@ function CustomInputBox({
   customClass,
   requiredType,
   maxLetterLimit,
-}: Props) {
-  // console.log('errrrerr', error);
+}: CustomInputBoxProps) {
+  // console.log('error', error);
   return (
     <>
       <div className="flex">

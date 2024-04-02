@@ -15,7 +15,7 @@ import AppUserPromotionTab from './AppUserRewardHistoryTabs/AppUserPromotionTab'
 
 function AppUserRewardHistory() {
   const dataRole = useAppSelector(
-    (state: any) => state?.persisitReducer?.roleState?.role?.permissions
+    (state: any) => state?.persistedReducer?.roleState?.role?.permissions
   );
   // const navigate = useNavigate();
   const [list, setList] = useState<any>(null);

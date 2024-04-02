@@ -20,7 +20,7 @@ const darkTheme = createTheme({
   },
 });
 
-type Props = {
+type DatePickerFieldProps = {
   datePickerLabel: string;
   datePickerValue: dayjs.Dayjs | null;
   setDatePickerValue: React.Dispatch<React.SetStateAction<dayjs.Dayjs | null>>;
@@ -32,7 +32,7 @@ function DatePickerField({
   datePickerValue,
   setDatePickerValue,
   id,
-}: Props) {
+}: DatePickerFieldProps) {
   const [datePicker, setDatePicker] = useState<HTMLButtonElement | null>(null);
   // const currentDate = dayjs();
   // const formattedDate = currentDate.format('YYYY-MM-DD');

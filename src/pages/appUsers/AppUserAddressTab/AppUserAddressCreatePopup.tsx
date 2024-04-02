@@ -16,7 +16,7 @@ import {
 } from '../../../utils/constants';
 // import CustomDropDown from '../../components/common/CustomDropDown';
 
-type Props = {
+type AppUserAddressCreatePopupProps = {
   openFormDialog: boolean;
   setOpenFormDialog: React.Dispatch<React.SetStateAction<boolean>>;
   callback: (...args: any[]) => any;
@@ -30,7 +30,7 @@ function AppUserAddressCreatePopup({
   setOpenFormDialog,
   callback,
   appUserAddressTypeLov,
-}: Props) {
+}: AppUserAddressCreatePopupProps) {
   // const [showPassword, setShowPassword] = useState(false);
   // const handleClickShowPassword = () => setShowPassword((show) => !show);
 

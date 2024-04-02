@@ -1,16 +1,16 @@
-import * as React from 'react';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
-import Typography from '@mui/material/Typography';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Divider from '@mui/material/Divider';
+import Typography from '@mui/material/Typography';
+import * as React from 'react';
 
-type Props = {
+type RatingAccordionsProps = {
   data: Array<object>;
 };
 
-function RatingAccordions({ data }: Props) {
+function RatingAccordions({ data }: RatingAccordionsProps) {
   const [expanded, setExpanded] = React.useState<string | false>(`panel0`);
 
   const handleChange =

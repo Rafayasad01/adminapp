@@ -29,7 +29,7 @@ function CategoriesServicesFaqPage() {
   const params = useParams();
   const authState: any = useAppSelector((state) => state?.authState);
   const dataRole = useAppSelector(
-    (state) => state?.persisitReducer?.roleState?.role?.permissions
+    (state) => state?.persistedReducer?.roleState?.role?.permissions
   );
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(0);
@@ -389,7 +389,7 @@ function CategoriesServicesFaqPage() {
                   <th className="w-[28rem]">Answer</th>
                   <th>Dated</th>
                   <th>Status</th>
-                  <th>&nbsp;</th>
+                  <th aria-label="empty table header">&nbsp;</th>
                 </tr>
               </thead>
               <tbody>
@@ -459,7 +459,7 @@ function CategoriesServicesFaqPage() {
             </table>
           </div>
           {list?.length < 1 ? (
-            <CustomText noroundedborders text="No Records Found" />
+            <CustomText noRoundedBorders text="No Records Found" />
           ) : null}
           <div className="mt-3 flex w-[100%] justify-center py-3">
             <TablePagination

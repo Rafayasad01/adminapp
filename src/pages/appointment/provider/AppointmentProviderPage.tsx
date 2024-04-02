@@ -29,7 +29,7 @@ function AppointmentProviderPage() {
   const navigate = useNavigate();
   const authState: any = useAppSelector((state: any) => state?.authState);
   const dataRole: any = useAppSelector(
-    (state: any) => state?.persisitReducer?.roleState?.role?.permissions
+    (state: any) => state?.persistedReducer?.roleState?.role?.permissions
   );
   const [startTime, setStartTime] = useState<dayjs.Dayjs | any>(null);
   const [endTime, setEndTime] = useState<dayjs.Dayjs | any>(null);
@@ -608,7 +608,7 @@ function AppointmentProviderPage() {
             />
           </div>
           {list?.length < 1 ? (
-            <CustomText noroundedborders text="No Records Found" />
+            <CustomText noRoundedBorders text="No Records Found" />
           ) : null}
           <div className="mt-3 flex w-[100%] justify-end py-3">
             {list?.length > rowsPerPage && (
@@ -669,7 +669,7 @@ function AppointmentProviderPage() {
         <CustomDialog
           DialogHeader="Edit Provider"
           type="edit"
-          specailCase={false}
+          specialCase={false}
           reset={reset}
           inputFieldsData={inputFieldsData}
           handleSubmit={handleSubmit}

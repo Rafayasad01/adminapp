@@ -1,18 +1,18 @@
-import React, { useState } from 'react';
-import Dialog from '@mui/material/Dialog';
-import Button from '@mui/material/Button';
-import FormControl from '@mui/material/FormControl';
-import Input from '@mui/material/Input';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import FormControl from '@mui/material/FormControl';
 import IconButton from '@mui/material/IconButton';
+import Input from '@mui/material/Input';
+import React, { useState } from 'react';
 
-import '../../assets/css/PopupStyle.css';
-import TextField from '@mui/material/TextField';
-import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
+import TextField from '@mui/material/TextField';
+import '../../assets/css/PopupStyle.css';
 
-type Props = {
+type ComplainsEditPopupProps = {
   openEditFormDialog: boolean;
   setOpenEditFormDialog: React.Dispatch<React.SetStateAction<boolean>>;
 };
@@ -20,7 +20,7 @@ type Props = {
 function ComplainsEditPopup({
   openEditFormDialog,
   setOpenEditFormDialog,
-}: Props) {
+}: ComplainsEditPopupProps) {
   // const [selectShop, setSelectShop] = useState('status');
   const [isImage, setIsImage] = useState('');
   const handleFormClose = () => setOpenEditFormDialog(false);

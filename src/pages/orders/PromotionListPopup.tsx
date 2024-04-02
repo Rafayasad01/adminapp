@@ -1,10 +1,10 @@
-import Dialog from '@mui/material/Dialog';
 import ContentCopyOutlinedIcon from '@mui/icons-material/ContentCopyOutlined';
+import Dialog from '@mui/material/Dialog';
+import dayjs from 'dayjs';
 import React from 'react';
 import '../../assets/css/PopupStyle.css';
-import dayjs from 'dayjs';
 
-type Props = {
+type PromotionListPopupProps = {
   openFormDialog: boolean;
   setOpenFormDialog: React.Dispatch<React.SetStateAction<boolean>>;
   promoList: any;
@@ -14,7 +14,7 @@ function PromotionListPopup({
   openFormDialog,
   setOpenFormDialog,
   promoList,
-}: Props) {
+}: PromotionListPopupProps) {
   const handleFormClose = () => {
     setOpenFormDialog(false);
   };
@@ -106,7 +106,7 @@ function PromotionListPopup({
                               </span>
                             </div>
                           </td>
-                          <td>
+                          <td aria-label="print code button">
                             <div onClick={() => PrintCode(item.voucherCode)}>
                               <ContentCopyOutlinedIcon className="cursor-pointer" />
                             </div>

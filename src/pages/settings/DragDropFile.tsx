@@ -6,12 +6,12 @@ import assets from '../../assets';
 import '../../assets/css/PopupStyle.css';
 import { imageAllowedTypes } from '../../utils/constants';
 
-type Props = {
+type DragDropFileProps = {
   setFile: any;
   setImg: any;
   customWidth?: string;
-  setError?: any;
-  error?: any;
+  // setError?: any;
+  // error?: any;
   setIsNotify?: any;
   setNotifyMessage?: any;
 };
@@ -22,7 +22,7 @@ function DragDropFile({
   customWidth,
   setIsNotify,
   setNotifyMessage,
-}: Props) {
+}: DragDropFileProps) {
   const [dragActive, setDragActive] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   // const [imageUrl, setImageUrl] = useState<any>();

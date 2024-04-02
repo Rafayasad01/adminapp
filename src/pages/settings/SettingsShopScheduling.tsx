@@ -58,7 +58,7 @@ function SettingsShopScheduling() {
               /> */}
             </Tabs>
           </div>
-          <div className="Content w-full py-5 px-4">
+          <div className="Content w-full px-4 py-5">
             <div className="flex flex-col gap-0">
               <div className="flex justify-end">
                 <Button
@@ -69,24 +69,26 @@ function SettingsShopScheduling() {
                   <AddOutlinedIcon /> Add Schedule
                 </Button>
               </div>
-              <div className="grid grid-cols-12 gap-y-0 gap-x-4">
+              <div className="grid grid-cols-12 gap-x-4 gap-y-0">
                 <div className="col-span-8">
                   <div className="class">
                     <table className="schedule-table table-border table-auto border-separate border-spacing-y-[1.4rem]">
                       <thead>
                         <tr>
-                          <th className="w-16">&nbsp;</th>
+                          <th aria-label="empty table header" className="w-16">
+                            &nbsp;
+                          </th>
                           <th>Shop Time</th>
                           <th>Pick & Drop</th>
                           <th>Days Off</th>
-                          <th>&nbsp;</th>
+                          <th aria-label="empty table header">&nbsp;</th>
                         </tr>
                       </thead>
                       <tbody>
                         <tr className="days-off">
                           <td>Sun</td>
-                          <td>&nbsp;</td>
-                          <td>&nbsp;</td>
+                          <td aria-label="empty table header">&nbsp;</td>
+                          <td aria-label="empty table header">&nbsp;</td>
                           <td>Day Off</td>
                           <td>
                             <div className="flex justify-end pr-3">
@@ -109,7 +111,7 @@ function SettingsShopScheduling() {
                           <td>Mon</td>
                           <td>9:30-7:30</td>
                           <td>10:30-6:30</td>
-                          <td>&nbsp;</td>
+                          <td aria-label="empty table header">&nbsp;</td>
                           <td>
                             <div className="flex justify-end pr-3">
                               <IconButton
@@ -131,7 +133,7 @@ function SettingsShopScheduling() {
                           <td>Tue</td>
                           <td>9:30-7:30</td>
                           <td>10:30-6:30</td>
-                          <td>&nbsp;</td>
+                          <td aria-label="empty table header">&nbsp;</td>
                           <td>
                             <div className="flex justify-end pr-3">
                               <IconButton
@@ -152,7 +154,7 @@ function SettingsShopScheduling() {
                         <tr className="days-off">
                           <td>Wed</td>
                           <td>Public Holiday</td>
-                          <td>&nbsp;</td>
+                          <td aria-label="empty table header">&nbsp;</td>
                           <td>Day Off</td>
                           <td>
                             <div className="flex justify-end pr-3">
@@ -175,7 +177,7 @@ function SettingsShopScheduling() {
                           <td>Thu</td>
                           <td>9:30-7:30</td>
                           <td>10:30-6:30</td>
-                          <td>&nbsp;</td>
+                          <td aria-label="empty table header">&nbsp;</td>
                           <td>
                             <div className="flex justify-end pr-3">
                               <IconButton
@@ -197,7 +199,7 @@ function SettingsShopScheduling() {
                           <td>Fri</td>
                           <td>9:30-7:30</td>
                           <td>10:30-6:30</td>
-                          <td>&nbsp;</td>
+                          <td aria-label="empty table header">&nbsp;</td>
                           <td>
                             <div className="flex justify-end pr-3">
                               <IconButton
@@ -217,8 +219,8 @@ function SettingsShopScheduling() {
                         </tr>
                         <tr className="days-off">
                           <td>Sat</td>
-                          <td>&nbsp;</td>
-                          <td>&nbsp;</td>
+                          <td aria-label="empty table header">&nbsp;</td>
+                          <td aria-label="empty table header">&nbsp;</td>
                           <td>Day Off</td>
                           <td>
                             <div className="flex justify-end pr-3">

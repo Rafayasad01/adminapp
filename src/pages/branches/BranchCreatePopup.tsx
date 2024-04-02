@@ -20,7 +20,7 @@ import {
   VALIDATE_NON_NEGATIVE_NUM,
 } from '../../utils/constants';
 
-type Props = {
+type BranchCreatePopupProps = {
   openFormDialog: boolean;
   setOpenFormDialog: React.Dispatch<React.SetStateAction<boolean>>;
   callback: (...args: any[]) => any;
@@ -36,7 +36,7 @@ function BranchCreatePopup({
   setIsNotify,
   setNotifyMessage,
   type,
-}: Props) {
+}: BranchCreatePopupProps) {
   const {
     register,
     handleSubmit,

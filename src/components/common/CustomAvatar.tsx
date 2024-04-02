@@ -1,22 +1,22 @@
-import React from 'react';
 import Avatar from '@mui/material/Avatar';
+import cn from '../../utils/class-names';
 
-type Props = {
+type CustomAvatarProps = {
   backgroundColor?: string;
   firstName: string;
   lastName: string;
-  classname?: string;
+  className?: string;
 };
 
 function CustomAvatar({
   firstName,
   lastName,
   backgroundColor,
-  classname,
-}: Props) {
+  className,
+}: CustomAvatarProps) {
   return (
     <Avatar
-      className={`avatar flex flex-row items-center ${classname && classname}`}
+      className={cn(`avatar flex flex-row items-center`, className)}
       sx={{
         bgcolor: backgroundColor || '#1D1D1D',
         width: 35,

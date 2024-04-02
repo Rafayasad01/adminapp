@@ -27,7 +27,7 @@ import {
 dayjs.extend(duration);
 dayjs.extend(isBetween);
 
-type Props = {
+type BranchUpdatePopupProps = {
   openFormDialog: boolean;
   setOpenFormDialog: React.Dispatch<React.SetStateAction<boolean>>;
   item: any;
@@ -43,7 +43,7 @@ function BranchUpdatePopup({
   callback,
   setIsNotify,
   setNotifyMessage,
-}: Props) {
+}: BranchUpdatePopupProps) {
   const {
     register,
     handleSubmit,

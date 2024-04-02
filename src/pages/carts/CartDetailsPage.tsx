@@ -11,7 +11,7 @@ import Notify from '../../components/common/Notify';
 import TopBar from '../../components/common/TopBar';
 import ProcessingIcon from '../../components/icons/ProcessingIcon';
 import cartService from '../../services/adminapp/adminCarts';
-import { CART_STATUS_NEW } from '../../utils/constants';
+import { CART_STATUS } from '../../utils/constants';
 
 function CartDetailsPage() {
   const [viewData, setViewData] = useState<any>({});
@@ -56,7 +56,7 @@ function CartDetailsPage() {
           <div className="mb-auto min-h-[600px] w-[60%] rounded-lg bg-[#fff] shadow-lg">
             <div className="p-4">
               <div className="flex items-center">
-                {viewData && viewData.status === CART_STATUS_NEW ? (
+                {viewData && viewData.status === CART_STATUS.NEW ? (
                   <div className="relative mr-2 inline-flex text-blue-500">
                     <CircularProgress
                       thickness={1.5}
@@ -74,7 +74,7 @@ function CartDetailsPage() {
                       value={100}
                       color="inherit"
                     />
-                    <div className="absolute top-0 left-0 bottom-0 right-0 flex items-center justify-center">
+                    <div className="absolute bottom-0 left-0 right-0 top-0 flex items-center justify-center">
                       <AssignmentTurnedInOutlinedIcon className="text-xl" />
                     </div>
                   </div>
@@ -96,7 +96,7 @@ function CartDetailsPage() {
                       value={100}
                       color="inherit"
                     />
-                    <div className="absolute top-0 left-0 bottom-0 right-0 flex items-center justify-center">
+                    <div className="absolute bottom-0 left-0 right-0 top-0 flex items-center justify-center">
                       <div className="text-xl">
                         <ProcessingIcon />
                       </div>
@@ -122,7 +122,7 @@ function CartDetailsPage() {
                   </div>
                   <div
                     className={`font-open-sans text-sm font-semibold ${
-                      viewData.status === CART_STATUS_NEW
+                      viewData.status === CART_STATUS.NEW
                         ? 'text-blue-500'
                         : 'text-green-500'
                     }`}
@@ -255,7 +255,7 @@ function CartDetailsPage() {
                 </div>
               </div>
             </div>
-            <div className="flex items-center justify-between rounded-b-lg bg-neutral-300 py-2 px-4">
+            <div className="flex items-center justify-between rounded-b-lg bg-neutral-300 px-4 py-2">
               <div className="font-open-sans text-sm font-semibold text-neutral-900">
                 Grand Total
               </div>

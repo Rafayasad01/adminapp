@@ -31,7 +31,7 @@ import { listingRolePermission } from '../../utils/helper';
 function EmployeePage() {
   const authState: any = useAppSelector((state: any) => state?.authState);
   const dataRole = useAppSelector(
-    (state: any) => state?.persisitReducer?.roleState?.role?.permissions
+    (state: any) => state?.persistedReducer?.roleState?.role?.permissions
   );
   const [search, setSearch] = useState<any>('');
   const [emptyVariable] = useState(null);
@@ -535,7 +535,7 @@ function EmployeePage() {
                   <th>Employee</th>
                   <th>Email</th>
                   <th>Status</th>
-                  <th>&nbsp;</th>
+                  <th aria-label="empty tale header">&nbsp;</th>
                 </tr>
               </thead>
               <tbody>
@@ -626,7 +626,7 @@ function EmployeePage() {
             </table>
           </div>
           {list?.length < 1 ? (
-            <CustomText noroundedborders text="No Records Found" />
+            <CustomText noRoundedBorders text="No Records Found" />
           ) : null}
           <div className="mt-3 flex w-[100%] justify-center py-3">
             <TablePagination
@@ -672,7 +672,7 @@ function EmployeePage() {
         <CustomDialog
           DialogHeader="Edit Employee"
           type="edit"
-          specailCase={false}
+          specialCase={false}
           reset={reset}
           inputFieldsData={inputFieldsData?.filter(
             (item) => item.id !== 'password'

@@ -1,19 +1,3 @@
-import { SelectChangeEvent } from '@mui/material';
-import Button from '@mui/material/Button';
-import Divider from '@mui/material/Divider';
-import FormControl from '@mui/material/FormControl';
-import IconButton from '@mui/material/IconButton';
-import Input from '@mui/material/Input';
-import InputAdornment from '@mui/material/InputAdornment';
-import MenuItem from '@mui/material/MenuItem';
-import Select from '@mui/material/Select';
-import TextField from '@mui/material/TextField';
-import { useState } from 'react';
-
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import dayjs from 'dayjs';
-
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
 import CalendarTodayOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined';
 import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined';
@@ -21,15 +5,28 @@ import PlaceOutlinedIcon from '@mui/icons-material/PlaceOutlined';
 import RadioButtonUncheckedOutlinedIcon from '@mui/icons-material/RadioButtonUncheckedOutlined';
 import RemoveCircleOutlineOutlinedIcon from '@mui/icons-material/RemoveCircleOutlineOutlined';
 import SearchIcon from '@mui/icons-material/Search';
+import { SelectChangeEvent } from '@mui/material';
+import Button from '@mui/material/Button';
+import Divider from '@mui/material/Divider';
+import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormLabel from '@mui/material/FormLabel';
+import IconButton from '@mui/material/IconButton';
+import Input from '@mui/material/Input';
+import InputAdornment from '@mui/material/InputAdornment';
+import MenuItem from '@mui/material/MenuItem';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
-import DatePickerButton from './DatePickerButton';
-
+import Select from '@mui/material/Select';
+import TextField from '@mui/material/TextField';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import dayjs from 'dayjs';
+import { useState } from 'react';
 import assets from '../../assets';
 import TopBar from '../../components/common/TopBar';
 import DeleteIcon from '../../components/icons/DeleteIcon';
+import DatePickerButton from './DatePickerButton';
 
 function OrdersCreatePage() {
   // const [search, setSearch] = useState('');
@@ -80,7 +77,7 @@ function OrdersCreatePage() {
       <TopBar isNestedRoute title="Edit Order" />
       <div className="container mt-3">
         <div className="grid grid-cols-12 gap-3 py-5">
-          <div className="col-span-7 rounded-lg bg-white py-5 px-4 shadow-lg">
+          <div className="col-span-7 rounded-lg bg-white px-4 py-5 shadow-lg">
             <div className="col-span-12">
               <FormControl
                 className="w-full rounded-xl border border-solid border-primary py-1 pl-3"
@@ -142,7 +139,7 @@ function OrdersCreatePage() {
               <table className="avatar-table no-border-table table-auto">
                 <thead>
                   <tr>
-                    <th>&nbsp;</th>
+                    <th aria-label="empty table header">&nbsp;</th>
                     <th className="font-open-sans text-base font-semibold text-secondary">
                       Products
                     </th>
@@ -251,7 +248,7 @@ function OrdersCreatePage() {
                     </td>
                   </tr>
                   <tr>
-                    <td>
+                    <td aria-label="delete item">
                       <IconButton
                         className="p-0 text-neutral-900"
                         onClick={() => null}
@@ -265,7 +262,7 @@ function OrdersCreatePage() {
                       </span>
                     </td>
                     <td>$50.00</td>
-                    <td>
+                    <td aria-label="add and remove quantity button and quantity display">
                       <span className="flex w-full flex-row items-center justify-start">
                         <IconButton
                           className="p-0 text-neutral-900"

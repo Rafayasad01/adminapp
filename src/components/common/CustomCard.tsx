@@ -1,12 +1,11 @@
-import * as React from 'react';
+import Avatar from '@mui/material/Avatar';
 import Card from '@mui/material/Card';
+import CardActionArea from '@mui/material/CardActionArea';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
-import CardActionArea from '@mui/material/CardActionArea';
-import Avatar from '@mui/material/Avatar';
 import dayjs from 'dayjs';
 
-type Props = {
+type CustomCardProps = {
   title: string;
   avatar: any;
   email: string;
@@ -20,7 +19,7 @@ export default function CustomCard({
   email,
   createdDate,
   status,
-}: Props) {
+}: CustomCardProps) {
   return (
     <Card
       sx={{ maxWidth: 300, maxHeight: '100%' }}

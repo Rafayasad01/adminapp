@@ -5,7 +5,7 @@ import { Marker } from '../../interfaces/map.interface';
 
 import assets from '../../assets';
 
-type Props = {
+type MarkersMapProps = {
   markers: Marker[];
   zoom: number;
 };
@@ -15,7 +15,7 @@ const loader = new Loader({
   version: 'weekly',
 });
 
-function MarkersMap({ markers, zoom }: Props) {
+function MarkersMap({ markers, zoom }: MarkersMapProps) {
   const mapRef = useRef<HTMLDivElement>(null);
   const markerRef = useRef<google.maps.Marker>();
   useEffect(() => {

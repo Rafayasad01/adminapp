@@ -1,10 +1,8 @@
-import React from 'react';
-
-type Props = {
+type CustomErrorMessageProps = {
   text: string;
 };
 
-function CustomErrorMessage({ text }: Props) {
+function CustomErrorMessage({ text }: CustomErrorMessageProps) {
   return (
     <span style={{ fontSize: '14px', color: 'red' }} role="alert">
       {text}

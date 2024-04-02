@@ -2,7 +2,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import { Controller } from 'react-hook-form';
 
-type Props = {
+type CustomDropDownProps = {
   inputTitle: string;
   customWidth?: string;
   options?: any;
@@ -33,7 +33,7 @@ function CustomDropDown({
   setValue,
   alternativeId,
   border,
-}: Props) {
+}: CustomDropDownProps) {
   return (
     <div className="">
       <div className="" style={{ paddingBottom: '5px', display: 'flex' }}>
@@ -69,7 +69,7 @@ function CustomDropDown({
                 id={id}
                 {...field}
                 onChange={(event) => {
-                  alternativeId && setValue(alternativeId, []);
+                  if (alternativeId) setValue(alternativeId, []);
                   field.onChange(event);
                 }}
               >

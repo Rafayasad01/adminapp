@@ -22,10 +22,10 @@ import {
   PATTERN,
 } from '../../../utils/constants';
 
-interface Pass {
+type Pass = {
   newPassword: string;
   reNewPassword: string;
-}
+};
 
 function OTPVerificationPage() {
   const navigate = useNavigate();

@@ -1,4 +1,4 @@
-export interface Permissions {
+export type Permissions = {
   moduleName: string;
   moduleDesc: string;
   name: string;
@@ -11,4 +11,4 @@ export interface Permissions {
   createdBy: string;
   updatedBy: string;
   [key: string]: string;
-}
+};
