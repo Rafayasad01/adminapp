@@ -50,19 +50,19 @@ const links = [
     icon: <GridViewOutlinedIcon fontSize="inherit" />,
   },
   {
-    name: 'Barber Services',
+    name: 'Shop Services',
     path: 'service',
     permission: 'Category List',
     icon: <GridViewOutlinedIcon fontSize="inherit" />,
   },
   {
-    name: 'Shop Barbers',
+    name: 'Shop Employees',
     path: 'shop-barbers',
     permission: 'Category List',
     icon: <ProviderIcon />,
   },
   {
-    name: 'Appointments',
+    name: 'Bookings',
     path: 'appointments',
     permission: 'Category List',
     icon: <VisitIcon />,
@@ -86,7 +86,7 @@ const links = [
   //       icon: <ProviderIcon />,
   //     },
   //     {
-  //       name: 'All Appointments',
+  //       name: 'All Bookings',
   //       path: 'appointment/visit',
   //       permission: 'Appointment Visit List',
   //       icon: <VisitIcon />,

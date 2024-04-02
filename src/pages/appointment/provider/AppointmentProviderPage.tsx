@@ -116,7 +116,7 @@ function AppointmentProviderPage() {
 
   const inputFieldsData = [
     {
-      fieldName: 'Provider Name',
+      fieldName: 'Employee Name',
       id: 'name',
       placeholder: 'Enter provider name',
       register,
@@ -758,13 +758,13 @@ function AppointmentProviderPage() {
         setIsOpen={setIsNotify}
         displayMessage={notifyMessage}
       />
-      <TopBar title="Barber" />
+      <TopBar title="Employee" />
       <div className="container m-auto mt-5">
         <div className="w-full rounded-lg bg-white shadow-lg">
           <div className="grid grid-cols-12 px-4 py-5">
             <div className="col-span-7">
               <span className="font-open-sans text-xl font-semibold text-[#252733]">
-                All Barbers
+                All Employee
               </span>
             </div>
             <div className="col-span-5">
@@ -877,7 +877,7 @@ function AppointmentProviderPage() {
           handleNextSlide={handleNextSlide}
           handlePrevSlide={handlePrevSlide}
           ServicesFields={fields}
-          DialogSliderOne="Add Barber"
+          DialogSliderOne="Add Employee"
           DialogSliderTwo="Add Barber Services"
           DialogSubHeader="Select Schedule"
           inputFieldsData={inputFieldsData}

@@ -467,7 +467,7 @@ const AllAppointment = ({
       fieldName: 'priorityId',
       title: 'Priority',
       instances:
-        appointmentType === 'All Appointments'
+        appointmentType === 'All Bookings'
           ? priorityData
           : selectedPriorityData,
     },

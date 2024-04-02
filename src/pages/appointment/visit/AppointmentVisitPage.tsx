@@ -87,7 +87,7 @@ function AppointmentVisitPage() {
 
   // dropdown
   const [appointmentType, setAppointmentType] = useState({
-    text: 'All Appointments',
+    text: 'All Bookings',
     icon: GroupsOutlinedIcon,
   });
 
@@ -288,7 +288,7 @@ function AppointmentVisitPage() {
   };
 
   useEffect(() => {
-    if (appointmentType?.text === 'All Appointments') {
+    if (appointmentType?.text === 'All Bookings') {
       setPriorityData([
         {
           text: 'John',
@@ -470,14 +470,14 @@ function AppointmentVisitPage() {
         setIsOpen={setIsNotify}
         displayMessage={notifyMessage}
       />
-      <TopBar title="Appointment" />
+      <TopBar title="Booking" />
       <div className="container m-auto mt-5">
         <div className="w-full rounded-lg bg-white shadow-lg">
           <div className="grid grid-cols-12 px-4 py-5">
             <div className="flex xl:col-span-7 2xl:col-span-9">
               <div className="mr-6">
                 <span className="font-open-sans text-xl font-semibold text-[#252733]">
-                  All Appointments
+                  All Bookings
                 </span>
               </div>
               <div>
@@ -535,7 +535,7 @@ function AppointmentVisitPage() {
                     className="btn-black-fill btn-icon"
                     onClick={handleFormClickOpen}
                   >
-                    <AddOutlinedIcon /> Add New Appointment
+                    <AddOutlinedIcon /> Add New Booking
                   </Button>
                 </div>
               </div>

@@ -250,7 +250,7 @@ export default function AddAppointmentPage() {
         setIsOpen={setIsNotify}
         displayMessage={notifyMessage}
       />
-      <TopBar isNestedRoute title="Fill Appointment Form" />
+      <TopBar isNestedRoute title="Booking Form" />
       <div className="container m-auto mt-5">
         <div className="w-full rounded-lg bg-white shadow-lg">
           <div className="p-3">
@@ -358,7 +358,7 @@ export default function AddAppointmentPage() {
                             setValue={setValue}
                             customHeight="h-[40px] rounded-xl"
                             customClassInputTitle="font-semibold"
-                            inputTitle="Barber Category"
+                            inputTitle="Employee Category"
                             options={{ roles: catLovlist }}
                             defaultValue="Select Barber Category"
                           />
@@ -379,7 +379,7 @@ export default function AddAppointmentPage() {
                             options={{ roles: catItemsLovlist }}
                             customHeight="h-[40px] rounded-xl"
                             customClassInputTitle="font-semibold"
-                            inputTitle="Barber Services"
+                            inputTitle="Employee Services"
                           />
                         </FormControl>
                       </div>
@@ -427,7 +427,7 @@ export default function AddAppointmentPage() {
                   <>
                     <div className="mt-5">
                       <span className="text-base font-bold text-[#1A1A1A]">
-                        Select Barber
+                        Select Employee
                       </span>
                       <hr className="my-4 border-[#949EAE]" />
                       <div
@@ -534,7 +534,7 @@ export default function AddAppointmentPage() {
                           <div className="mx-5">
                             <div className="flex-col">
                               <span className="text-sm">
-                                Select Appointment Time
+                                Select Booking Time
                               </span>
                               <div className="">
                                 <FormControl
@@ -597,10 +597,14 @@ export default function AddAppointmentPage() {
                   </>
                 )}
               <div className="mt-3">
-                <span className="text-base font-bold text-[#1A1A1A]">
-                  Selected Barber & Service
-                </span>
-                {fields?.length > 0 && <hr className="my-4 border-[#949EAE]" />}
+                {fields?.length > 0 && (
+                  <>
+                    <span className="text-base font-bold text-[#1A1A1A]">
+                      Selected Employees & Service
+                    </span>
+                    <hr className="my-4 border-[#949EAE]" />
+                  </>
+                )}
                 {fields?.length > 0 &&
                   fields?.map((items: any, index: number) => {
                     return (
