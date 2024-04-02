@@ -124,7 +124,7 @@ function VouchersPromoCreatePopup({
           style: { maxWidth: '100%', maxHeight: 'auto' },
         }}
       >
-        <div className="Content">
+        <div className="Content !flex-row overflow-y-scroll">
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="FormHeader">
               <span className="Title">Add Voucher</span>

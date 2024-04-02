@@ -20,14 +20,15 @@ import Loader from '../../components/common/Loader';
 import Notify from '../../components/common/Notify';
 import TopBar from '../../components/common/TopBar';
 import { useAppSelector } from '../../redux/redux-hooks';
-import category from '../../services/adminapp/adminCategory';
-import PermissionPopup from '../../utils/PermissionPopup';
+import category from '../../services/adminapp/adminStoreService';
 import { NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
 import { CheckRolePermission, listingRolePermission } from '../../utils/helper';
-import CategoriesCreatePopup from './CategoriesCreatePopup';
-import CategoriesEditPopup from './CategoriesEditPopup';
+import ServiceCatCreatePopup from './ServiceCatCreatePopup';
+import ServiceCatEditPopup from './ServiceCatEditPopup';
+// import CategoriesCreatePopup from './CategoriesCreatePopup';
+// import CategoriesEditPopup from './CategoriesEditPopup';
 
-function CategoriesPage() {
+function ServicesPage() {
   const authState: any = useAppSelector((state) => state?.authState);
   const dataRole = useAppSelector(
     (state) => state?.persistedReducer?.roleState?.role?.permissions
@@ -50,10 +51,10 @@ function CategoriesPage() {
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
-  const [cancelDialogOpen, setCancelDialogOpen] = useState<boolean>(false);
-  const [dialogText] = useState<any>(
+  const [, setCancelDialogOpen] = useState<boolean>(false);
+  /* const [dialogText] = useState<any>(
     'Are you sure you want to delete this Category ?'
-  );
+  ); */
   const [isModalImage, setIsModalImage] = useState(false);
   const [modalImage, setModalImage] = useState('');
 
@@ -72,7 +73,7 @@ function CategoriesPage() {
   useEffect(() => {
     if (listingRolePermission(dataRole, 'Category List')) {
       category
-        .getListService(authState.user.tenant, page, rowsPerPage)
+        .StoreCatList(search, page, rowsPerPage)
         .then((item: any) => {
           setIsLoader(false);
           setList(item.data.data.list);
@@ -85,22 +86,21 @@ function CategoriesPage() {
             text: error.message,
             type: 'error',
           });
-          // console.log('error::::::::', error);
         });
     }
   }, [emptyVariable]);
 
   const handleClickSearch = (event: any) => {
-    const searchTxt = event.target.value as string;
-    const newPage = 0;
-    setSearch(searchTxt);
-    setPage(newPage);
-    category
-      .searchService(authState.user.tenant, searchTxt, newPage, rowsPerPage)
-      .then((item) => {
+    if (event.key === 'Enter') {
+      const searchTxt = event.target.value as string;
+      const newPage = 0;
+      setSearch(searchTxt);
+      setPage(newPage);
+      category.StoreCatList(searchTxt, newPage, rowsPerPage).then((item) => {
         setList(item.data.data.list);
         setTotal(item.data.data.total);
       });
+    }
   };
 
   const handleChangePage = (
@@ -108,23 +108,14 @@ function CategoriesPage() {
     newPage: number
   ) => {
     setPage(newPage);
-    // offset? ,limit rowsperpage hoga ofset page * rowsperPage
-    if (search === '' || search === null || search === undefined) {
-      category
-        .getListService(authState.user.tenant, newPage, rowsPerPage)
-        .then((item) => {
-          setList(item.data.data.list);
-          setTotal(item.data.data.total);
-        });
-    } else {
-      category
-        .searchService(authState.user.tenant, search, newPage, rowsPerPage)
-        .then((item) => {
-          setList(item.data.data.list);
-          setTotal(item.data.data.total);
-        });
-    }
+    category
+      .StoreCatList(authState.user.tenant, newPage, rowsPerPage)
+      .then((item: any) => {
+        setList(item.data.data.list);
+        setTotal(item.data.data.total);
+      });
   };
+
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -132,71 +123,62 @@ function CategoriesPage() {
     const newPage = 0;
     setRowsPerPage(newRowperPage);
     setPage(newPage);
-    if (search === '' || search === null || search === undefined) {
-      category
-        .getListService(authState.user.tenant, newPage, rowsPerPage)
-        .then((item) => {
-          setList(item.data.data.list);
-          setTotal(item.data.data.total);
-        });
-    } else {
-      category
-        .searchService(authState.user.tenant, search, newPage, rowsPerPage)
-        .then((item) => {
-          setList(item.data.data.list);
-          setTotal(item.data.data.total);
-        });
-    }
-  };
-
-  const deleteHandler = (id: string) => {
-    setIsLoader(true);
-    const data = {
-      is_active: false,
-      is_deleted: true,
-      updated_by: authState.user.id,
-    };
     category
-      .deleteCategory(id, data)
-      .then((updateItem) => {
-        if (updateItem.data.success) {
-          setIsLoader(false);
-          setIsNotify(true);
-          setNotifyMessage({
-            text: updateItem.data.message,
-            type: 'success',
-          });
-          setList((newArr: any) => {
-            return newArr.filter((item: any) => item.id !== id);
-          });
-          let newtotal = total;
-          setTotal((newtotal -= 1));
-        }
-      })
-      .catch((err) => {
-        setIsLoader(false);
-        setIsNotify(true);
-        setNotifyMessage({
-          text: err.message,
-          type: 'error',
-        });
+      .StoreCatList(authState.user.tenant, newPage, rowsPerPage)
+      .then((item) => {
+        setList(item.data.data.list);
+        setTotal(item.data.data.total);
       });
   };
 
-  const statusCancelHandler = () => {
-    deleteHandler(actionMenuItemid);
-  };
+  // const deleteHandler = (id: string) => {
+  //     setIsLoader(true);
+  //     const data = {
+  //         is_active: false,
+  //         is_deleted: true,
+  //         updated_by: authState.user.id,
+  //     };
+  //     category
+  //         .deleteCategory(id, data)
+  //         .then((updateItem) => {
+  //             if (updateItem.data.success) {
+  //                 setIsLoader(false);
+  //                 setIsNotify(true);
+  //                 setNotifyMessage({
+  //                     text: updateItem.data.message,
+  //                     type: 'success',
+  //                 });
+  //                 setList((newArr: any) => {
+  //                     return newArr.filter((item: any) => item.id !== id);
+  //                 });
+  //                 let newtotal = total;
+  //                 setTotal((newtotal -= 1));
+  //             }
+  //         })
+  //         .catch((err) => {
+  //             setIsLoader(false);
+  //             setIsNotify(true);
+  //             setNotifyMessage({
+  //                 text: err.message,
+  //                 type: 'error',
+  //             });
+  //         });
+  // };
+
+  // const statusCancelHandler = () => {
+  //     deleteHandler(actionMenuItemid);
+  // };
 
   const manuHandler = (option: string) => {
     if (option === 'Edit') {
       if (listingRolePermission(dataRole, 'Category Update')) {
-        category.getCategory(actionMenuItemid).then((item: any) => {
-          if (item.data.success) {
-            // console.log('tem.data.data:::::::', item.data.data);
-            setEditFormData(item.data.data);
-            setOpenEditFormDialog(true);
-          }
-        });
+        console.log('actionMenuItemid', actionMenuItemid, list);
+        const foundEditFormData = list?.find(
+          (el: any) => el.id === actionMenuItemid
+        );
+        setActionMenuItemid(foundEditFormData.id);
+        setEditFormData(foundEditFormData);
+        setOpenEditFormDialog(true);
       } else {
         setIsNotify(true);
         setNotifyMessage({
@@ -210,7 +192,7 @@ function CategoriesPage() {
         'Category Service Get',
         dataRole,
         navigate,
-        `item/${actionMenuItemid}`
+        `services/${actionMenuItemid}`
       );
     } else if (option === 'Delete') {
       if (listingRolePermission(dataRole, 'Category Delete')) {
@@ -226,63 +208,51 @@ function CategoriesPage() {
   };
 
   const createFormHandler = (data: any) => {
+    console.log('data==>', data);
     setIsLoader(true);
     const formData = new FormData();
     formData.append('name', data.name);
-    formData.append('desc', data.desc);
-    formData.append('icon', data.icon);
-    formData.append('tenant', authState.user.tenant);
-    formData.append('created_by', authState.user.id);
-    formData.append('updated_by', authState.user.id);
-    if (data.name && data.desc && data.icon) {
-      category
-        .create(formData)
-        .then((item) => {
-          if (item.data.success) {
-            setIsLoader(false);
-            setIsNotify(true);
-            setNotifyMessage({
-              text: item.data.message,
-              type: 'success',
-            });
-            setList([item.data.data, ...list]);
-          } else {
-            setIsLoader(false);
-            setIsNotify(true);
-            setNotifyMessage({
-              text: item.data.message,
-              type: 'error',
-            });
-          }
-        })
-        .catch((err) => {
+    formData.append('description', data.description);
+    formData.append('avatar', data.avatar);
+    category
+      .StoreCatCreate(formData)
+      .then((item: any) => {
+        if (item.data.success) {
+          setOpenFormDialog(false);
           setIsLoader(false);
           setIsNotify(true);
           setNotifyMessage({
-            text: err.message,
+            text: item.data.message,
+            type: 'success',
+          });
+          setList([item.data.data, ...list]);
+        } else {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
             type: 'error',
           });
+        }
+      })
+      .catch((err: Error) => {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
         });
-    } else {
-      setIsLoader(false);
-      setIsNotify(true);
-      setNotifyMessage({
-        text: 'All fields are required!',
-        type: 'error',
       });
-    }
   };
 
   const updateFormHandler = (data: any) => {
-    // console.log('data::::::', data);
     setIsLoader(true);
     const formData = new FormData();
     formData.append('name', data.name);
-    formData.append('desc', data.desc);
-    formData.append('updated_by', authState.user.id);
-    if (data.icon) formData.append('icon', data.icon);
+    formData.append('description', data.description);
+    if (data.avatar) formData.append('avatar', data.avatar);
     category
-      .updateCategory(actionMenuItemid, formData)
+      .StoreCatUpdate(actionMenuItemid, formData)
       .then((updateItem: any) => {
         if (updateItem.data.success) {
           setIsLoader(false);
@@ -294,9 +264,9 @@ function CategoriesPage() {
           for (let i = 0; i < list.length; i += 1) {
             if (list[i].id === updateItem.data.data.id) {
               list[i].name = updateItem.data.data.name;
-              list[i].desc = updateItem.data.data.desc;
-              if (updateItem.data.data.icon) {
-                list[i].icon = updateItem.data.data.icon;
+              list[i].description = updateItem.data.data.description;
+              if (updateItem.data.data.avatar) {
+                list[i].avatar = updateItem.data.data.avatar;
               }
             }
           }
@@ -322,10 +292,9 @@ function CategoriesPage() {
   const handleSwitchChange = (event: any, id: string) => {
     if (listingRolePermission(dataRole, 'Category Update Status')) {
       const data = {
-        is_active: event.target.checked,
-        updated_by: authState.user.id,
+        isActive: event.target.checked,
       };
-      category.updateStatus(id, data).then((updateItem) => {
+      category.StoreCatUpdateStatus(id, data).then((updateItem) => {
         if (updateItem.data.success) {
           setList((newArr: any) => {
             return newArr.map((item: any) => {
@@ -365,7 +334,7 @@ function CategoriesPage() {
         setIsOpen={setIsNotify}
         displayMessage={notifyMessage}
       />
-      <TopBar title="Categories" />
+      <TopBar title="Barber Category" />
       <div className="cs-dialog container mx-auto mt-5 w-full">
         <div className="w-full rounded-lg bg-white shadow-lg">
           <div className="grid grid-cols-12 px-4 py-5">
@@ -421,10 +390,11 @@ function CategoriesPage() {
             <table className="table-border table-auto">
               <thead>
                 <tr>
-                  <th>Category Name</th>
+                  <th>Name</th>
+                  <th className="w-[30%]">Description</th>
                   <th>Created Date</th>
                   <th>Status</th>
-                  <th aria-label="empty table header">&nbsp;</th>
+                  <th>&nbsp;</th>
                 </tr>
               </thead>
               <tbody>
@@ -434,11 +404,11 @@ function CategoriesPage() {
                       <tr key={index}>
                         <td>
                           <div className="avatar flex flex-row items-center">
-                            {item.icon ? (
+                            {item.avatar ? (
                               <button onClick={() => openModal(item.icon)}>
                                 <img
                                   className="cursor-pointer"
-                                  src={item.icon}
+                                  src={item.avatar}
                                   alt={item.name}
                                 />
                               </button>
@@ -455,6 +425,7 @@ function CategoriesPage() {
                             </div>
                           </div>
                         </td>
+                        <td>{item.description ? item.description : '--'}</td>
                         <td>
                           {dayjs(item.createdDate).isValid()
                             ? dayjs(item.createdDate)?.format(
@@ -508,7 +479,7 @@ function CategoriesPage() {
             </table>
           </div>
           {list?.length < 1 ? (
-            <CustomText noRoundedBorders text="No Records Found" />
+            <CustomText noroundedborders text="No Records Found" />
           ) : null}
           <div className="mt-3 flex w-[100%] justify-center py-3">
             <TablePagination
@@ -522,15 +493,15 @@ function CategoriesPage() {
           </div>
         </div>
       </div>
-      {cancelDialogOpen && (
-        <PermissionPopup
-          type="shock"
-          open={cancelDialogOpen}
-          setOpen={setCancelDialogOpen}
-          dialogText={dialogText}
-          callback={statusCancelHandler}
-        />
-      )}
+      {/* {cancelDialogOpen && (
+                <PermissionPopup
+                    type="shock"
+                    open={cancelDialogOpen}
+                    setOpen={setCancelDialogOpen}
+                    dialogText={dialogText}
+                    callback={statusCancelHandler}
+                />
+            )} */}
       {actionMenuAnchorEl && (
         <ActionMenu
           open={actionMenuOpen}
@@ -541,7 +512,7 @@ function CategoriesPage() {
         />
       )}
       {openFormDialog && (
-        <CategoriesCreatePopup
+        <ServiceCatCreatePopup
           setIsNotify={setIsNotify}
           setNotifyMessage={setNotifyMessage}
           openFormDialog={openFormDialog}
@@ -549,8 +520,9 @@ function CategoriesPage() {
           callback={createFormHandler}
         />
       )}
+
       {openEditFormDialog && (
-        <CategoriesEditPopup
+        <ServiceCatEditPopup
           setIsNotify={setIsNotify}
           setNotifyMessage={setNotifyMessage}
           openFormDialog={openEditFormDialog}
@@ -588,4 +560,4 @@ function CategoriesPage() {
   );
 }
 
-export default CategoriesPage;
+export default ServicesPage;

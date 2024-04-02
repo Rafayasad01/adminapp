@@ -1,21 +1,25 @@
 /* eslint-disable prettier/prettier */
-import GridViewOutlinedIcon from '@mui/icons-material/GridViewOutlined';
-import { Fragment, useEffect, useState } from 'react';
-// import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
-import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
-// import FormatListBulletedOutlinedIcon from '@mui/icons-material/FormatListBulletedOutlined';
-// import PlaceOutlinedIcon from '@mui/icons-material/PlaceOutlined';
+
+// import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined';
+// import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 // import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
+// import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
+// import PlaceOutlinedIcon from '@mui/icons-material/PlaceOutlined';
+// import FormatListBulletedOutlinedIcon from '@mui/icons-material/FormatListBulletedOutlined';
+// import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
+// import TenantIcon from '../icons/TenantIcon';
+// import HeadphonesOutlinedIcon from '@mui/icons-material/HeadphonesOutlined'
+// import AppointmentIcon from '../icons/appointmentIcon';
+import CorporateFareIcon from '@mui/icons-material/CorporateFare';
 import FacebookIcon from '@mui/icons-material/Facebook';
+import GridViewOutlinedIcon from '@mui/icons-material/GridViewOutlined';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
-import QuestionAnswerOutlinedIcon from '@mui/icons-material/QuestionAnswerOutlined';
-// import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
-import CorporateFareIcon from '@mui/icons-material/CorporateFare';
 import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
 import PeopleOutlineOutlinedIcon from '@mui/icons-material/PeopleOutlineOutlined';
+import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
+import QuestionAnswerOutlinedIcon from '@mui/icons-material/QuestionAnswerOutlined';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
-// import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import ViewCarouselOutlinedIcon from '@mui/icons-material/ViewCarouselOutlined';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
@@ -25,9 +29,8 @@ import IconButton from '@mui/material/IconButton';
 import List from '@mui/material/List';
 import Stack from '@mui/material/Stack';
 import Toolbar from '@mui/material/Toolbar';
+import { Fragment, useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
-// import HeadphonesOutlinedIcon from '@mui/icons-material/HeadphonesOutlined'
-// import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined';
 import assets from '../../assets';
 import { useAppSelector } from '../../redux/redux-hooks';
 import CAN, { defineRules } from '../../services/permissions/permissions';
@@ -36,9 +39,7 @@ import ArrowDown from '../icons/ArrowDown';
 import ArrowUp from '../icons/ArrowUp';
 import CategoryIcon from '../icons/CategoryIcon';
 import OrderIcon from '../icons/OrderIcon';
-// import TenantIcon from '../icons/TenantIcon';
 import VoucherIcon from '../icons/VoucherIcon';
-import AppointmentIcon from '../icons/appointmentIcon';
 import ProviderIcon from '../icons/providerIcon';
 import VisitIcon from '../icons/visitIcon';
 
@@ -49,36 +50,114 @@ const links = [
     permission: 'Dashboard List',
     icon: <GridViewOutlinedIcon fontSize="inherit" />,
   },
+  {
+    name: 'Barber Services',
+    path: 'service',
+    permission: 'Category List',
+    icon: <GridViewOutlinedIcon fontSize="inherit" />,
+  },
+  {
+    name: 'Shop Barbers',
+    path: 'shop-barbers',
+    permission: 'Category List',
+    icon: <ProviderIcon />,
+  },
+  {
+    name: 'Appointments',
+    path: 'appointments',
+    permission: 'Category List',
+    icon: <VisitIcon />,
+  },
   // {
   //   name: 'Carts',
   //   path: 'carts',
   //   permission: 'Cart List',
   //   icon: <ShoppingCartOutlinedIcon fontSize="inherit" />,
   // },
+  // {
+  //   name: 'Appointment',
+  //   path: 'appointment',
+  //   permission: 'Appointment Parent',
+  //   icon: <AppointmentIcon />,
+  //   childLinks: [
+  //     {
+  //       name: 'Shop Barbers',
+  //       path: 'appointment/provider',
+  //       permission: 'Appointment Category List',
+  //       icon: <ProviderIcon />,
+  //     },
+  //     {
+  //       name: 'All Appointments',
+  //       path: 'appointment/visit',
+  //       permission: 'Appointment Visit List',
+  //       icon: <VisitIcon />,
+  //     },
+  //   ],
+  // },
+  // {
+  //   name: 'Salon',
+  //   path: 'salon',
+  //   permission: 'Appointment Parent',
+  //   icon: <AppointmentIcon />,
+  //   childLinks: [
+  //     {
+  //       name: 'Products',
+  //       path: 'salon/product/list',
+  //       permission: 'Appointment Visit List',
+  //       icon: <CategoryIcon />,
+  //     },
+  //     {
+  //       name: 'Order',
+  //       path: 'salon/orders',
+  //       permission: 'Appointment Category List',
+  //       icon: <OrderIcon />,
+  //     },
+  //   ],
+  // },
+  {
+    name: 'User',
+    path: 'user',
+    permission: 'Appointment Parent',
+    icon: <PersonOutlineOutlinedIcon fontSize="inherit" />,
+    childLinks: [
+      {
+        name: 'App User',
+        path: 'user/app-user/list',
+        permission: 'Customer List',
+        icon: <PersonOutlineOutlinedIcon fontSize="inherit" />,
+      },
+      {
+        name: 'Admin Users',
+        path: 'user/employees',
+        permission: 'Employee List',
+        icon: <PeopleOutlineOutlinedIcon className="w-[17px]" />,
+      },
+    ],
+  },
+  {
+    name: 'Products',
+    path: 'product',
+    permission: 'Category List',
+    icon: <CategoryIcon />,
+  },
   {
     name: 'Orders',
     path: 'orders',
     permission: 'Order List',
     icon: <OrderIcon />,
   },
-  {
-    name: 'Categories',
-    path: 'categories',
-    permission: 'Category List',
-    icon: <CategoryIcon />,
-  },
-  {
-    name: 'App user',
-    path: 'app-user',
-    permission: 'Customer List',
-    icon: <PersonOutlineOutlinedIcon fontSize="inherit" />,
-  },
-  {
-    name: 'Employees',
-    path: 'employees',
-    permission: 'Employee List',
-    icon: <PeopleOutlineOutlinedIcon className="w-[17px]" />,
-  },
+  // {
+  //   name: 'App user',
+  //   path: 'app-user',
+  //   permission: 'Customer List',
+  //   icon: <PersonOutlineOutlinedIcon fontSize="inherit" />,
+  // },
+  // {
+  //   name: 'Admin Employees',
+  //   path: 'employees',
+  //   permission: 'Employee List',
+  //   icon: <PeopleOutlineOutlinedIcon className="w-[17px]" />,
+  // },
   {
     name: 'Branches',
     path: 'branches',
@@ -96,26 +175,6 @@ const links = [
     path: 'ratings',
     permission: 'Banners List',
     icon: <ViewCarouselOutlinedIcon className="w-[17px]" />,
-  },
-  {
-    name: 'Appointment',
-    path: 'appointment',
-    permission: 'Appointment Parent',
-    icon: <AppointmentIcon />,
-    childLinks: [
-      {
-        name: 'Store Employees',
-        path: 'appointment/provider',
-        permission: 'Appointment Category List',
-        icon: <ProviderIcon />,
-      },
-      {
-        name: 'All Appointments',
-        path: 'appointment/visit',
-        permission: 'Appointment Visit List',
-        icon: <VisitIcon />,
-      },
-    ],
   },
   {
     name: 'FAQs',

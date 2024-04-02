@@ -26,41 +26,41 @@ const getCategory = (id: string) => {
   return network.get(`${CATEGORY_PREFIX}/get/${id}`);
 };
 
-const updateCategory = (categoryId: string, data: any) => {
-  return network.postMultipart(`${CATEGORY_PREFIX}/update/${categoryId}`, data);
+const updateCategory = (productId: string, data: any) => {
+  return network.postMultipart(`${CATEGORY_PREFIX}/update/${productId}`, data);
 };
 
-const updateStatus = (categoryId: string, data: any) => {
-  return network.post(`${CATEGORY_PREFIX}/update/status/${categoryId}`, data);
+const updateStatus = (productId: string, data: any) => {
+  return network.post(`${CATEGORY_PREFIX}/update/status/${productId}`, data);
 };
 
-const deleteCategory = (categoryId: string, data: any) => {
-  return network.post(`${CATEGORY_PREFIX}/delete/${categoryId}`, data);
+const deleteCategory = (productId: string, data: any) => {
+  return network.post(`${CATEGORY_PREFIX}/delete/${productId}`, data);
 };
 
 const getCategoryServiceList = (
-  categoryId: string,
+  productId: string,
   page: number,
   size: number
 ) => {
   return network.get(
-    `${CATEGORY_PREFIX}/${SERVICE_PREFIX}/list/${categoryId}/${page}/${size}`
+    `${CATEGORY_PREFIX}/${SERVICE_PREFIX}/list/${productId}/${page}/${size}`
   );
 };
 const searchCategoryService = (
-  categoryId: string,
+  productId: string,
   search: string,
   page: number,
   size: number
 ) => {
   return network.get(
-    `${CATEGORY_PREFIX}/${SERVICE_PREFIX}/list/${categoryId}/${search}/${page}/${size}`
+    `${CATEGORY_PREFIX}/${SERVICE_PREFIX}/list/${productId}/${search}/${page}/${size}`
   );
 };
 
-const categoryServiceCreate = (categoryId: string, data: any) => {
+const categoryServiceCreate = (productId: string, data: any) => {
   return network.postMultipart(
-    `${CATEGORY_PREFIX}/${SERVICE_PREFIX}/create/${categoryId}`,
+    `${CATEGORY_PREFIX}/${SERVICE_PREFIX}/create/${productId}`,
     data
   );
 };

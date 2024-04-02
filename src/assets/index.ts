@@ -58,6 +58,13 @@ import dummyImage from './images/super-admin-background-image.png';
 import tenantIcon from './images/tenant-icon.svg';
 import userPermissionIcon from './images/userPermission.svg';
 
+// appointment images
+import appHead from './images/appointment-head.png';
+import appCalender from './images/appointment-calender.png';
+import appClock from './images/appointment-clock.png';
+import appProfile from './images/appointment-profile.png';
+import Star from './images/Star.png';
+
 const assets = {
   images: {
     logo,
@@ -104,6 +111,11 @@ const assets = {
     envelopeMsg,
     otpMSg,
     keyIcon,
+    appHead,
+    appCalender,
+    appClock,
+    appProfile,
+    Star,
   },
   tempImages: {
     wash,

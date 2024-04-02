@@ -97,12 +97,12 @@ networkInstance.interceptors.response.use(
           }
         );
     }
-    // if (error.response.status === 403) {
-    //   setLogout();
-    // }
+    if (error.response.status === 403) {
+      setLogout();
+    }
     // Any status codes that falls outside the range of 2xx cause this function to trigger
     // Do something with response error
-    setLogout();
+    // setLogout();
     return Promise.reject(error);
   }
 );

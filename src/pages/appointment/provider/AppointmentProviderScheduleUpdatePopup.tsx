@@ -40,7 +40,6 @@ function AppointmentProviderScheduleUpdatePopup({
       endTime:
         dayjs(endTime).isValid() &&
         dayjs(endTime).format('YYYY-MM-DD HH:mm:ss'),
-      id: formData?.id,
       workDay: formData?.workDay,
     };
     if (startTime && endTime) {

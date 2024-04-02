@@ -11,7 +11,7 @@ import { useForm } from 'react-hook-form';
 import TextField from '@mui/material/TextField';
 import '../../assets/css/PopupStyle.css';
 import ErrorSpanBox from '../../components/common/ErrorSpanBox';
-import { Category } from '../../interfaces/category.interface';
+import { BarberCategory } from '../../interfaces/services.interface';
 import {
   INVALID_CHAR,
   MAX_LENGTH_EXCEEDED,
@@ -19,7 +19,7 @@ import {
   imageAllowedTypes,
 } from '../../utils/constants';
 
-type CategoriesCreatePopupProps = {
+type Props = {
   openFormDialog: boolean;
   setOpenFormDialog: React.Dispatch<React.SetStateAction<boolean>>;
   callback: (...args: any[]) => any;
@@ -27,33 +27,35 @@ type CategoriesCreatePopupProps = {
   setNotifyMessage: any;
 };
 
-function CategoriesCreatePopup({
+function ServiceCreatePopup({
   openFormDialog,
   setOpenFormDialog,
   callback,
   setIsNotify,
   setNotifyMessage,
-}: CategoriesCreatePopupProps) {
+}: Props) {
   const [image, setImage] = useState<any>(null);
 
   const {
     register,
     handleSubmit,
+    setValue,
+    clearErrors,
+    watch,
     formState: { errors },
-  } = useForm<Category>();
+  } = useForm<BarberCategory>();
 
-  const onSubmit = (data: Category) => {
-    if (data.desc && image && data.name) {
-      data.icon = image;
-      setOpenFormDialog(false);
-      callback(data);
-    } else {
-      setIsNotify(true);
-      setNotifyMessage({
-        text: 'All fields are required!',
-        type: 'error',
-      });
-    }
+  console.log('Errors', errors, watch('avatar'));
+
+  const onSubmit = (data: any) => {
+    console.log('🚀 ~ onSubmit ~ data:', data);
+    data.avatar = image;
+    const res = {
+      name: data.categoryName,
+      description: data.categoryDesc,
+      avatar: image,
+    };
+    callback(res);
   };
 
   const handleFormClose = () => {
@@ -66,6 +68,8 @@ function CategoriesCreatePopup({
       const fileType = selectedFile.type;
       if (imageAllowedTypes.includes(fileType)) {
         setImage(event.target.files[0]);
+        setValue('avatar', event.target.files[0]);
+        clearErrors('avatar');
       } else {
         setIsNotify(true);
         setNotifyMessage({
@@ -79,6 +83,7 @@ function CategoriesCreatePopup({
   const handleFileOnClick = (event: any) => {
     event.target.value = null;
     setImage(null);
+    setValue('avatar', '');
   };
 
   return (
@@ -95,68 +100,65 @@ function CategoriesCreatePopup({
           <div className="FormHeader">
             <span className="Title">Add Category</span>
           </div>
-          <div className="FormBody">
+          <div className="FormBody mt-2">
             <div className="FormField">
               <FormControl className="FormControl" variant="standard">
                 <label className="FormLabel">Category Name</label>
                 <Input
                   className="FormInput"
-                  {...register('name', {
+                  {...register('categoryName', {
                     required: true,
                     pattern: PATTERN.CHAR_SPACE_DASH,
                     validate: (value) => value.length <= 150,
                   })}
                   placeholder="Enter Category Name"
                   type="text"
-                  id="name"
+                  id="categoryName"
                   disableUnderline
                 />
-                {errors.name?.type === 'required' && (
+                {errors.categoryName?.type === 'required' && (
                   <ErrorSpanBox error="Category name is required" />
                 )}
-                {errors.name?.type === 'pattern' && (
+                {errors.categoryName?.type === 'pattern' && (
                   <ErrorSpanBox error={INVALID_CHAR} />
                 )}
-                {errors.name?.type === 'validate' && (
+                {errors.categoryName?.type === 'validate' && (
                   <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
                 )}
               </FormControl>
             </div>
             <div className="FormField">
               <FormControl className="FormControl" variant="standard">
-                <label className="FormLabel">
-                  Message{' '}
+                <label className="FormLabel mt-2">
+                  Description{' '}
                   <span className="SubLabel">Write 01-250 Characters</span>
                 </label>
                 <TextField
                   className="FormTextarea"
-                  id="message"
+                  id="categoryDesc"
                   multiline
                   rows={4}
                   defaultValue=""
                   placeholder="Write Description"
-                  {...register('desc', {
-                    required: 'Description is required',
-                    minLength: {
-                      value: 1,
-                      message: 'Minimum One Characters',
-                    },
+                  {...register('categoryDesc', {
                     maxLength: {
                       value: 250,
                       message: MAX_LENGTH_EXCEEDED,
                     },
                   })}
                 />
-                {errors.desc && <ErrorSpanBox error={errors.desc?.message} />}
+                {errors.categoryDesc && (
+                  <ErrorSpanBox error={errors.categoryDesc?.message} />
+                )}
               </FormControl>
             </div>
             <div className="FormField">
-              <label className="FormLabel">Upload Image</label>
+              <label className="FormLabel mt-2">Upload Image</label>
               <div className="ImageBox">
                 <input
                   accept="image/*"
                   style={{ display: 'none' }}
-                  {...register('icon', { required: 'Icon is required' })}
+                  {...register('avatar')}
                   id="raised-button-file"
                   type="file"
                   onChange={(
@@ -178,11 +180,14 @@ function CategoriesCreatePopup({
                 </label>
 
                 {image ? (
-                  <div className="ShowImageBox">
+                  <div className="ShowImageBox bg-background">
                     <label className="ShowImageLabel">{image.name}</label>
                     <IconButton
                       className="btn-dot"
-                      onClick={() => setImage(null)}
+                      onClick={() => {
+                        setImage(null);
+                        setValue('avatar', '');
+                      }}
                     >
                       <CloseOutlinedIcon
                         sx={{
@@ -197,7 +202,7 @@ function CategoriesCreatePopup({
                   ''
                 )}
               </div>
-              {image === null && <ErrorSpanBox error={errors.icon?.message} />}
+              {image === null && <ErrorSpanBox error="avatar is required" />}
             </div>
           </div>
           <div className="FormFooter">
@@ -228,4 +233,4 @@ function CategoriesCreatePopup({
   );
 }
 
-export default CategoriesCreatePopup;
+export default ServiceCreatePopup;

@@ -7,12 +7,11 @@ import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
 import dayjs from 'dayjs';
-import React, { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import React, { useEffect, useRef, useState } from 'react';
+import { useFieldArray, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import ActionMenu from '../../../components/common/ActionMenu';
 import CustomButton from '../../../components/common/CustomButton';
-import CustomDialog from '../../../components/common/CustomDialog';
 import CustomText from '../../../components/common/CustomText';
 import Loader from '../../../components/common/Loader';
 import Notify from '../../../components/common/Notify';
@@ -20,10 +19,18 @@ import TopBar from '../../../components/common/TopBar';
 import { AppointmentProvider } from '../../../interfaces/app.appointment';
 import { useAppSelector } from '../../../redux/redux-hooks';
 import Service from '../../../services/adminapp/adminAppointment';
+import StoreEmployeeService from '../../../services/adminapp/adminStoreEmployee';
+import StoreLovService from '../../../services/adminapp/adminStoreService';
 import PermissionPopup from '../../../utils/PermissionPopup';
-import { NOT_AUTHORIZED_MESSAGE, PATTERN } from '../../../utils/constants';
+import {
+  NOT_AUTHORIZED_MESSAGE,
+  PATTERN,
+  imageAllowedTypes,
+} from '../../../utils/constants';
 import { listingRolePermission } from '../../../utils/helper';
 import AppointmentProviderCards from './AppointmentProviderCards';
+import CustomSwiperDialog from './CustomAddSwiperDialog';
+import CustomEditSwiperDialog from './CustomEditSwiperDialog';
 
 function AppointmentProviderPage() {
   const navigate = useNavigate();
@@ -34,19 +41,18 @@ function AppointmentProviderPage() {
   const [startTime, setStartTime] = useState<dayjs.Dayjs | any>(null);
   const [endTime, setEndTime] = useState<dayjs.Dayjs | any>(null);
   const [weekDays, setWeekDays] = useState<any>([]);
-  const [, setSearch] = useState<any>('');
+  const [search, setSearch] = useState<any>('');
   const [emptyVariable] = useState(null);
   const [page, setPage] = useState(0);
   const [total, setTotal] = useState(0);
   const [list, setList] = useState<any>([]);
   const [currentList, setCurrentList] = useState<any>([]);
-  const [rowsPerPage] = React.useState(2);
+  const [rowsPerPage] = React.useState(2000);
   const [actionMenuItemid, setActionMenuItemid] = React.useState('');
   const [actionMenuAnchorEl, setActionMenuAnchorEl] =
     useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
   const actionMenuOptions = ['Services', 'Schedule', 'Edit', 'Delete'];
-
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
   const [isLoader, setIsLoader] = useState(true);
@@ -54,22 +60,65 @@ function AppointmentProviderPage() {
   const [isNotify, setIsNotify] = useState(false);
   const [notifyMessage, setNotifyMessage] = useState({});
   const [cancelDialogOpen, setCancelDialogOpen] = useState<boolean>(false);
+  const [image, setImage] = useState<any>(null);
+  const [startServiceTime, setStartServiceTime] = useState<dayjs.Dayjs | any>(
+    null
+  );
+  // lovs
+  const [catLovlist, setCatLovList] = useState<any>([]);
+  const [catItemsLovlist, setCatItemsLovList] = useState<any>([]);
+  // edit formdata
+  const [editFormData, setEditFormData] = useState<any>();
+  // delete Id's
+  const [delIds, setDelIds] = useState<any>([]);
+
   const {
     register,
+    control,
     handleSubmit,
     watch,
-    reset,
     setValue,
+    getValues,
+    setError,
     formState: { errors },
   } = useForm<AppointmentProvider>();
+
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: 'services', // Name of the array field
+    keyName: 'key',
+  });
+
+  // image handler
+  const handleFileChange = (event: any) => {
+    console.log('event', event);
+    const selectedFile = event.target.files[0];
+    if (selectedFile) {
+      const fileType = selectedFile.type;
+      if (imageAllowedTypes.includes(fileType)) {
+        setImage(event.target.files[0]);
+      } else {
+        setIsNotify(true);
+        setNotifyMessage({
+          text: 'Only .png, .jpg, and .jpeg files are allowed',
+          type: 'error',
+        });
+      }
+    }
+  };
+
+  const handleFileOnClick = (event: any) => {
+    event.target.value = null;
+    setImage(null);
+  };
 
   const inputFieldsData = [
     {
       fieldName: 'Provider Name',
-      id: 'providerName',
+      id: 'name',
       placeholder: 'Enter provider name',
       register,
-      error: errors.providerName,
+      error: errors.name,
       type: 'text',
       pattern: PATTERN.CHAR_SPACE_DASH,
       maxLetterLimit: 150,
@@ -117,14 +166,16 @@ function AppointmentProviderPage() {
       pattern: PATTERN.ONLY_NUM,
     },
     {
-      fieldName: 'Urgent Fees',
-      id: 'urgentFee',
-      placeholder: 'Enter Urgent Fees',
+      fieldName: 'Upload',
+      id: 'uploadImg',
+      placeholder: 'Upload Profile Picture',
       register,
-      error: errors.urgentFee,
-      type: 'text',
-      maxLetterLimit: 5,
-      pattern: PATTERN.POINT_NUM,
+      error: errors.uploadImg,
+      type: 'uploadImg',
+      onchange: handleFileChange,
+      Onclick: handleFileOnClick,
+      image,
+      setImage,
     },
   ];
 
@@ -155,17 +206,32 @@ function AppointmentProviderPage() {
     },
   ];
 
-  const handleFormClickOpen = () => {
+  const catLovService = () => {
+    StoreLovService.StoreCatLov()
+      .then((res) => {
+        if (res.data.success) {
+          setCatLovList(res.data.data);
+        } else {
+          setIsNotify(true);
+          setNotifyMessage({
+            text: res.data.message,
+            type: 'error',
+          });
+        }
+      })
+      .catch((err) => {
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
+        });
+      });
+  };
+
+  const handleFormClickOpen = async () => {
     if (listingRolePermission(dataRole, 'Appointment Provider Create')) {
-      // if (total < authState.user.employeeLimit) {
       setOpenFormDialog(true);
-      // } else {
-      //   setIsNotify(true);
-      //   setNotifyMessage({
-      //     text: 'Employees limit has been excceed',
-      //     type: 'warning',
-      //   });
-      // }
+      catLovService();
     } else {
       setIsNotify(true);
       setNotifyMessage({
@@ -174,6 +240,23 @@ function AppointmentProviderPage() {
       });
     }
   };
+
+  const getCatItems = async (id: any) => {
+    await StoreLovService.StoreCatItemsLov(id).then((res) => {
+      setCatItemsLovList(res.data.data);
+      // console.log("res items", res.data.data);
+    });
+  };
+
+  useEffect(() => {
+    if (
+      getValues('categoryId') !== undefined &&
+      getValues('categoryId') !== 'none'
+    ) {
+      getCatItems(watch('categoryId'));
+      // console.log("hit");
+    }
+  }, [watch('categoryId')]);
 
   const handleClickSearch = (event: any) => {
     if (event.key === 'Enter') {
@@ -201,20 +284,35 @@ function AppointmentProviderPage() {
     if (option === 'Edit') {
       if (listingRolePermission(dataRole, 'Appointment Provider Edit')) {
         setIsLoader(true);
-        Service.ProviderEdit(actionMenuItemid).then((item: any) => {
-          if (item.data.success) {
-            setIsLoader(false);
-            setValue('providerName', item.data.data.name);
-            setValue('address', item.data.data.address);
-            setValue('phone', item.data.data.phone);
-            setValue('email', item.data.data.email);
-            setValue('cnic', item.data.data.cnic);
-            setValue('urgentFee', item.data.data.urgentFee);
-            setStartTime(item.data.data.startTime);
-            setEndTime(item.data.data.endTime);
-            setOpenEditFormDialog(true);
+        StoreEmployeeService.StoreEmployeeFind(actionMenuItemid).then(
+          (item: any) => {
+            if (item.data.success) {
+              catLovService();
+              setIsLoader(false);
+              setEditFormData(item.data.data);
+              const filteredServices = item.data.data.services.map(
+                (el: any) => ({
+                  id: el.id,
+                  amount: el.amount,
+                  amountType: el.amountType,
+                  // storeEmployee: el.storeEmployee,
+                  minutes: el.minutes,
+                  storeServiceCategoryItem: el.storeServiceCategoryItem,
+                })
+              );
+              // console.log("filteredServices", filteredServices);
+              filteredServices.forEach((service: any) => {
+                append(service);
+              });
+              setValue('name', item.data.data.name);
+              setValue('address', item.data.data.address);
+              setValue('phone', item.data.data.phone);
+              setValue('email', item.data.data.email);
+              setValue('cnic', item.data.data.cnic);
+              setOpenEditFormDialog(true);
+            }
           }
-        });
+        );
       } else {
         setIsLoader(false);
         setIsNotify(true);
@@ -284,7 +382,7 @@ function AppointmentProviderPage() {
       if (
         listingRolePermission(dataRole, 'Appointment Provider Service View')
       ) {
-        navigate(`../services/${actionMenuItemid}`);
+        navigate(`../services/list/${actionMenuItemid}`);
       } else {
         setIsNotify(true);
         setNotifyMessage({
@@ -297,7 +395,7 @@ function AppointmentProviderPage() {
 
   useEffect(() => {
     if (listingRolePermission(dataRole, 'Appointment Provider List')) {
-      Service.ProviderList(authState.user.tenant, page, rowsPerPage)
+      StoreEmployeeService.StoreEmployeeList(search, page, rowsPerPage)
         .then((item: any) => {
           if (item.data.success) {
             setIsLoader(false);
@@ -330,7 +428,7 @@ function AppointmentProviderPage() {
     }
   }, [emptyVariable]);
 
-  const createFormHandler = (data: any) => {
+  /*  const createFormHandler = (data: any) => {
     // console.log("dadada", data);
     setIsLoader(true);
     const userData = {
@@ -386,9 +484,9 @@ function AppointmentProviderPage() {
           type: 'error',
         });
       });
-  };
+  }; */
 
-  const updateFormHandler = (data: any) => {
+  /* const updateFormHandler = (data: any) => {
     // console.log("dtaat updated", data);
     setIsLoader(true);
     const userData = {
@@ -444,44 +542,156 @@ function AppointmentProviderPage() {
           type: 'error',
         });
       });
+  }; */
+
+  const swiperRef = useRef<any>(null);
+
+  const handleNextSlide = () => {
+    if (swiperRef.current) {
+      swiperRef.current.slideNext();
+    }
   };
 
-  const onSubmitDialogBox = (data: any) => {
-    if (openFormDialog && weekDays && startTime && endTime) {
-      setOpenFormDialog(false);
-      createFormHandler(data);
-    } else if (openEditFormDialog) {
-      if (listingRolePermission(dataRole, 'Appointment Provider Update')) {
-        setOpenEditFormDialog(false);
-        updateFormHandler(data);
-      } else {
+  const handlePrevSlide = () => {
+    if (swiperRef.current) {
+      swiperRef.current.slidePrev();
+    }
+  };
+
+  useEffect(() => {
+    const length = Object.keys(errors)?.length;
+    if (length > 0) handlePrevSlide();
+  }, [errors]);
+
+  // console.log("delte idss", delIds);
+
+  const onSubmitUpdateDialogBox = async (data: any) => {
+    delete data.servicesName;
+    delete data.servicesAmount;
+    delete data.price;
+    delete data.categoryId;
+    delete data.servicesId;
+    delete data.mints;
+    const obj = {
+      ...data,
+      avatar: image,
+    };
+    console.log('🚀 ~ onSubmitUpdateDialogBox ~ data:2', obj);
+    const formData = new FormData();
+    formData.append('name', data.name);
+    formData.append('address', data.address);
+    formData.append('email', data.email);
+    formData.append('phone', data.phone);
+    formData.append('cnic', data.cnic);
+    formData.append('services', JSON.stringify(data.services));
+    formData.append('deletedIds', JSON.stringify(delIds));
+    if (image) formData.append('avatar', image);
+
+    StoreEmployeeService.StoreEmployeeUpdate(formData, actionMenuItemid)
+      .then((res) => {
+        console.log('res', res.data.data);
+        // setIsLoader(true);
+        // setOpenFormDialog(false);
+        // setList([res.data.data, ...list]);
+      })
+      .catch((err) => {
         setIsNotify(true);
         setNotifyMessage({
-          text: NOT_AUTHORIZED_MESSAGE,
-          type: 'warning',
+          text: err.message,
+          type: 'error',
         });
-      }
-    }
+      });
+  };
+
+  const onSubmitDialogBox = async (data: any) => {
+    // console.log('🚀 ~ onSubmitDialogBox ~ data: 1', data);
+    setIsLoader(true);
+    delete data.servicesName;
+    delete data.servicesAmount;
+    delete data.price;
+    delete data.categoryId;
+    delete data.servicesId;
+    delete data.mints;
+    /* const obj = {
+      ...data,
+      weekDays,
+      startTime,
+      endTime,
+      avatar: image,
+    }; */
+    // formdata banega
+    // console.log('🚀 ~ onSubmitDialogBox ~ data: 2', obj);
+    const formData = new FormData();
+    formData.append('name', data.name);
+    formData.append('address', data.address);
+    formData.append('email', data.email);
+    formData.append('phone', data.phone);
+    formData.append('cnic', data.cnic);
+    formData.append('avatar', image);
+    formData.append('services', JSON.stringify(data.services));
+    formData.append('workDays', JSON.stringify(weekDays));
+    formData.append(
+      'startTime',
+      dayjs(startTime).format('YYYY-MM-DD HH:mm:ss')
+    );
+    formData.append('endTime', dayjs(endTime).format('YYYY-MM-DD HH:mm:ss'));
+    // StoreEmployeeService.StoreEmployeeCreate(formData)
+    //   .then((res) => {
+    //     setIsLoader(true);
+    //     setOpenFormDialog(false);
+    //     setList([res.data.data, ...list]);
+    //     // console.log("res", res.data.data);
+    //   })
+    //   .catch((err) => {
+    //     setIsNotify(true);
+    //     setNotifyMessage({
+    //       text: err.message,
+    //       type: 'error',
+    //     });
+    //   })
+    handleNextSlide();
+    // if (openFormDialog && weekDays && startTime && endTime) {
+    //   setOpenFormDialog(false);
+    //   createFormHandler(data);
+    // } else if (openEditFormDialog) {
+    //   if (listingRolePermission(dataRole, 'Appointment Provider Update')) {
+    //     setOpenEditFormDialog(false);
+    //     updateFormHandler(data);
+    //   } else {
+    //     setIsNotify(true);
+    //     setNotifyMessage({
+    //       text: NOT_AUTHORIZED_MESSAGE,
+    //       type: 'warning',
+    //     });
+    //   }
+    // }
   };
 
   const handleSwitchChange = (event: any, id: string) => {
     if (listingRolePermission(dataRole, 'Appointment Provider Update Status')) {
       const data = {
         isActive: event.target.checked,
-        updatedBy: authState.user.id,
       };
-      Service.ProviderUpdateStatus(id, data).then((updateItem) => {
-        if (updateItem.data.success) {
-          setList((newArr: any) => {
-            return newArr.map((item: any) => {
-              if (item.id === updateItem.data.data.id) {
-                item.isActive = updateItem.data.data.isActive;
-              }
-              return { ...item };
+      StoreEmployeeService.StoreEmployeeUpdateStatus(id, data).then(
+        (updateItem) => {
+          if (updateItem.data.success) {
+            setList((newArr: any) => {
+              return newArr.map((item: any) => {
+                if (item.id === updateItem.data.data.id) {
+                  item.isActive = updateItem.data.data.isActive;
+                }
+                return { ...item };
+              });
             });
-          });
+          } else {
+            setIsNotify(true);
+            setNotifyMessage({
+              text: updateItem.data.message,
+              type: 'error',
+            });
+          }
         }
-      });
+      );
     } else {
       setIsNotify(true);
       setNotifyMessage({
@@ -546,13 +756,13 @@ function AppointmentProviderPage() {
         setIsOpen={setIsNotify}
         displayMessage={notifyMessage}
       />
-      <TopBar title="Provider" />
+      <TopBar title="Barber" />
       <div className="container m-auto mt-5">
         <div className="w-full rounded-lg bg-white shadow-lg">
           <div className="grid grid-cols-12 px-4 py-5">
             <div className="col-span-7">
               <span className="font-open-sans text-xl font-semibold text-[#252733]">
-                All Provider
+                All Barbers
               </span>
             </div>
             <div className="col-span-5">
@@ -649,8 +859,24 @@ function AppointmentProviderPage() {
         />
       )}
       {openFormDialog && (
-        <CustomDialog
-          DialogHeader="Add Provider"
+        <CustomSwiperDialog
+          control={control}
+          errors={errors}
+          setError={setError}
+          register={register}
+          setValue={setValue}
+          getValues={getValues}
+          watch={watch}
+          append={append}
+          remove={remove}
+          swiperRef={swiperRef}
+          setIsNotify={setIsNotify}
+          setNotifyMessage={setNotifyMessage}
+          handleNextSlide={handleNextSlide}
+          handlePrevSlide={handlePrevSlide}
+          ServicesFields={fields}
+          DialogSliderOne="Add Barber"
+          DialogSliderTwo="Add Barber Services"
           DialogSubHeader="Select Schedule"
           inputFieldsData={inputFieldsData}
           inputScheduleData={inputScheduleData}
@@ -663,19 +889,54 @@ function AppointmentProviderPage() {
           weekDays={weekDays}
           startTime={startTime}
           endTime={endTime}
+          setStartServiceTime={setStartServiceTime}
+          startServiceTime={startServiceTime}
+          catLov={catLovlist}
+          catItemsLov={catItemsLovlist}
         />
       )}
       {openEditFormDialog && (
-        <CustomDialog
-          DialogHeader="Edit Provider"
-          type="edit"
-          specialCase={false}
-          reset={reset}
+        // <CustomDialog
+        //   DialogHeader="Edit Provider"
+        //   type="edit"
+        //   specailCase={false}
+        //   reset={reset}
+        //   inputFieldsData={inputFieldsData}
+        //   handleSubmit={handleSubmit}
+        //   onSubmit={onSubmitDialogBox}
+        //   openFormDialog={openEditFormDialog}
+        //   setOpenFormDialog={setOpenEditFormDialog}
+        // />
+        <CustomEditSwiperDialog
+          editFormData={editFormData}
+          control={control}
+          errors={errors}
+          setError={setError}
+          register={register}
+          setValue={setValue}
+          getValues={getValues}
+          watch={watch}
+          append={append}
+          remove={remove}
+          swiperRef={swiperRef}
+          setIsNotify={setIsNotify}
+          setNotifyMessage={setNotifyMessage}
+          handleNextSlide={handleNextSlide}
+          handlePrevSlide={handlePrevSlide}
+          ServicesFields={fields}
+          DialogSliderOne="Edit Barber"
+          DialogSliderTwo="Edit Barber Services"
           inputFieldsData={inputFieldsData}
+          inputScheduleData={inputScheduleData}
           handleSubmit={handleSubmit}
-          onSubmit={onSubmitDialogBox}
+          onSubmit={onSubmitUpdateDialogBox}
           openFormDialog={openEditFormDialog}
           setOpenFormDialog={setOpenEditFormDialog}
+          setStartServiceTime={setStartServiceTime}
+          startServiceTime={startServiceTime}
+          catLov={catLovlist}
+          catItemsLov={catItemsLovlist}
+          setDelIds={setDelIds}
         />
       )}
       {/* <CustomersCreatePopup

@@ -1,5 +1,5 @@
 export interface AppointmentProvider {
-  providerName: string;
+  name: string;
   address: string;
   phone: string;
   cnic: string;
@@ -8,7 +8,13 @@ export interface AppointmentProvider {
   isActive: boolean;
   isDeleted: boolean;
   email: string;
-  urgentFee: string;
+  uploadImg: any;
+  services: any;
+  categoryId: any;
+  servicesId: any;
+  servicesAmount: any;
+  price: any;
+  mints: any;
 }
 
 export interface AppointmentService {
@@ -30,6 +36,7 @@ export interface AppointmentProviderScheduleTime {
 }
 
 export interface AppointmentVisit {
+  appointmentType?: any;
   isCheckTimingSlot: boolean;
   isUrgent: boolean;
   visitName: string;
@@ -39,4 +46,15 @@ export interface AppointmentVisit {
   note: string;
   appointmentProvider: string;
   appointmentService: any;
+}
+
+export interface AddAppointmentForm {
+  name: string;
+  email: string;
+  phone: string;
+  note: string;
+  gender: string;
+  appointmentDate: any;
+  categoryId: any;
+  storeServiceCategoryItem: any;
 }

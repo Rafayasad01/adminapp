@@ -9,11 +9,13 @@ type CustomButtonProps = {
   className?: string;
   title?: string;
   icon?: any;
+  iconRight?: any;
   buttonType: string;
   type?: any;
   isMenuOpen?: boolean;
   sx?: any;
   disabled?: boolean;
+  required?: any;
 };
 
 function CustomButton({
@@ -24,10 +26,12 @@ function CustomButton({
   type,
   className,
   icon,
+  iconRight,
   title,
   isMenuOpen,
   sx,
   disabled,
+  required,
 }: CustomButtonProps) {
   if (buttonType === 'button') {
     return (
@@ -41,7 +45,7 @@ function CustomButton({
       >
         {/* {disabled ? <Loader /> : */}
         <>
-          {icon && icon} {title}
+          {icon && icon} {title} &nbsp; {iconRight && iconRight}
         </>
         {/* } */}
       </Button>
@@ -71,7 +75,9 @@ function CustomButton({
           style={{ display: 'none' }}
           id="raised-button-file"
           type="file"
-          {...register('avatar')}
+          {...register('avatar', {
+            required: required && 'avatar is required',
+          })}
           onChange={onchange}
           onClick={onclick}
         />

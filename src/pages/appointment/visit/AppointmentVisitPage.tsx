@@ -1,31 +1,27 @@
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import SearchIcon from '@mui/icons-material/Search';
+import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined';
 import Button from '@mui/material/Button';
-import Divider from '@mui/material/Divider';
-import FormControl from '@mui/material/FormControl';
-import IconButton from '@mui/material/IconButton';
-import Input from '@mui/material/Input';
-import InputAdornment from '@mui/material/InputAdornment';
-import TablePagination from '@mui/material/TablePagination';
-// import dayjs from 'dayjs';
 import dayjs from 'dayjs';
 import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
+import assets from '../../../assets';
 import ActionMenu from '../../../components/common/ActionMenu';
-import CustomText from '../../../components/common/CustomText';
+import CustomBgDropdown from '../../../components/common/CustomBgDropdown';
 import Loader from '../../../components/common/Loader';
 import Notify from '../../../components/common/Notify';
 import TopBar from '../../../components/common/TopBar';
 import { AppointmentVisit } from '../../../interfaces/app.appointment';
 import { useAppSelector } from '../../../redux/redux-hooks';
 import Service from '../../../services/adminapp/adminAppointment';
-import CustomOrderPrintLayoutCash from '../../../utils/CustomPrintLayout/CustomAppointmentPrintLayout';
-import { NOT_AUTHORIZED_MESSAGE } from '../../../utils/constants';
+import {
+  APPOINTMENT_TYPE,
+  NOT_AUTHORIZED_MESSAGE,
+} from '../../../utils/constants';
 import { listingRolePermission } from '../../../utils/helper';
+import AllAppointment from '../AllAppointment';
 import AppointmentVisitCreatePopup from './AppointmentVisitCreatePopup';
 import AppointmentVisitReschedulePopup from './AppointmentVisitReschedulePopup';
 import AppointmentVisitUpdatePopup from './AppointmentVisitUpdatePopup';
@@ -40,15 +36,15 @@ function AppointmentVisitPage() {
   const dataRole = useAppSelector(
     (state: any) => state?.persistedReducer?.roleState?.role?.permissions
   );
-  const [search, setSearch] = useState<any>('');
+  // const [search, setSearch] = useState<any>('');
   const [emptyVariable] = useState(null);
-  const [page, setPage] = useState(0);
-  const [total, setTotal] = useState(0);
+  const [page /* setPage */] = useState(0);
+  const [, /* total */ setTotal] = useState(0);
   const [list, setList] = useState<any>([]);
   const [editDetails, setEditDetails] = useState<any>();
 
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const [actionMenuItemid, setActionMenuItemid] = React.useState<any>();
+  const [rowsPerPage /* setRowsPerPage */] = React.useState(10);
+  const [actionMenuItemId /* setActionMenuItemId */] = React.useState<any>();
   const [actionMenuAnchorEl, setActionMenuAnchorEl] =
     useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
@@ -61,13 +57,33 @@ function AppointmentVisitPage() {
   const [isLoader, setIsLoader] = React.useState(true);
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
-  const [isPrintEnabled, setPrintEnabled] = useState<any>([]);
+  const [, /* isPrintEnabled */ setPrintEnabled] = useState<any>([]);
+  const [selectedPriorityData, setSelectedPriorityData] = useState<any>([]);
+  const [priorityData, setPriorityData] = useState<any>([
+    {
+      text: 'John',
+      id: 1,
+      imageUrl: assets.images.avatarUser,
+    },
+    {
+      text: 'Thomas',
+      id: 2,
+      imageUrl: assets.images.avatarUser,
+    },
+  ]);
+
+  // dropdown
+  const [appointmentType, setAppointmentType] = useState({
+    text: 'All Appointments',
+    icon: GroupsOutlinedIcon,
+  });
 
   const { reset } = useForm<AppointmentVisit>();
 
   const handleFormClickOpen = () => {
     if (listingRolePermission(dataRole, 'Appointment Create')) {
-      setOpenFormDialog(true);
+      navigate('../add-appointment');
+      // setOpenFormDialog(true);
     } else {
       setIsNotify(true);
       setNotifyMessage({
@@ -77,7 +93,7 @@ function AppointmentVisitPage() {
     }
   };
 
-  const handleClickSearch = (event: any) => {
+  /* const handleClickSearch = (event: any) => {
     if (event.key === 'Enter') {
       const searchTxt = event.target.value as string;
       const newPage = 0;
@@ -93,9 +109,9 @@ function AppointmentVisitPage() {
         setTotal(item.data.data.total);
       });
     }
-  };
+  }; */
 
-  const handleChangePage = (
+  /* const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number
   ) => {
@@ -119,9 +135,9 @@ function AppointmentVisitPage() {
         setTotal(item.data.data.total);
       });
     }
-  };
+  }; */
 
-  const handleChangeRowsPerPage = (
+  /* const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const newRowperPage = parseInt(event.target.value, 10);
@@ -146,13 +162,13 @@ function AppointmentVisitPage() {
         setTotal(item.data.data.total);
       });
     }
-  };
+  }; */
 
   const manuHandler = (option: string) => {
-    if (actionMenuItemid?.status === 'Cancelled') {
+    if (actionMenuItemId?.status === 'Cancelled') {
       if (option === 'Detail') {
         if (listingRolePermission(dataRole, 'Appointment Detail')) {
-          navigate(`../detail/${actionMenuItemid?.id}`);
+          navigate(`../detail/${actionMenuItemId?.id}`);
         } else {
           setIsNotify(true);
           setNotifyMessage({
@@ -164,7 +180,7 @@ function AppointmentVisitPage() {
     } else if (option === 'Edit') {
       if (listingRolePermission(dataRole, 'Appointment Edit')) {
         setIsLoader(true);
-        Service.VisitEdit(actionMenuItemid?.id)
+        Service.VisitEdit(actionMenuItemId?.id)
           .then((item: any) => {
             if (item.data.success) {
               setIsLoader(false);
@@ -200,7 +216,7 @@ function AppointmentVisitPage() {
     } else if (option === 'Cancel') {
       if (listingRolePermission(dataRole, 'Appointment Cancel')) {
         setIsLoader(true);
-        Service.VisitCancel(actionMenuItemid?.id)
+        Service.VisitCancel(actionMenuItemId?.id)
           .then((item: any) => {
             if (item.data.success) {
               setIsLoader(false);
@@ -247,7 +263,7 @@ function AppointmentVisitPage() {
       }
     } else if (option === 'Detail') {
       if (listingRolePermission(dataRole, 'Appointment Detail')) {
-        navigate(`../detail/${actionMenuItemid?.id}`);
+        navigate(`../detail/${actionMenuItemId?.id}`);
       } else {
         setIsNotify(true);
         setNotifyMessage({
@@ -257,6 +273,23 @@ function AppointmentVisitPage() {
       }
     }
   };
+
+  useEffect(() => {
+    if (appointmentType?.text === 'All Appointments') {
+      setPriorityData([
+        {
+          text: 'John',
+          id: 1,
+          imageUrl: assets.images.avatarUser,
+        },
+        {
+          text: 'Thomas',
+          id: 2,
+          imageUrl: assets.images.avatarUser,
+        },
+      ]);
+    }
+  }, [appointmentType]);
 
   useEffect(() => {
     if (listingRolePermission(dataRole, 'Appointment List')) {
@@ -328,7 +361,7 @@ function AppointmentVisitPage() {
           });
         });
     } else {
-      data.appointmentId = actionMenuItemid?.id;
+      data.appointmentId = actionMenuItemId?.id;
       // console.log('daTA', data);
       Service.VisitReschedule(data)
         .then((item: any) => {
@@ -381,7 +414,7 @@ function AppointmentVisitPage() {
             type: 'success',
           });
           for (let i = 0; i < list.length; i += 1) {
-            if (list[i].id === actionMenuItemid?.id) {
+            if (list[i].id === actionMenuItemId?.id) {
               list[i].name = item.data.data.name;
               list[i].note = item.data.data.note;
               list[i].phone = item.data.data.phone;
@@ -428,14 +461,23 @@ function AppointmentVisitPage() {
       <div className="container m-auto mt-5">
         <div className="w-full rounded-lg bg-white shadow-lg">
           <div className="grid grid-cols-12 px-4 py-5">
-            <div className="xl:col-span-7 2xl:col-span-9">
-              <span className="font-open-sans text-xl font-semibold text-[#252733]">
-                All Appointments
-              </span>
+            <div className="flex xl:col-span-7 2xl:col-span-9">
+              <div className="mr-6">
+                <span className="font-open-sans text-xl font-semibold text-[#252733]">
+                  All Appointments
+                </span>
+              </div>
+              <div>
+                <CustomBgDropdown
+                  appointmentType={appointmentType}
+                  setAppointmentType={setAppointmentType}
+                  options={APPOINTMENT_TYPE}
+                />
+              </div>
             </div>
             <div className="grid justify-end xl:col-span-5 2xl:col-span-3">
               <div className="flex gap-3">
-                <div className="flex flex-col justify-center">
+                {/* <div className="flex flex-col justify-center">
                   <FormControl
                     className="search-grey-outline placeholder-grey w-60"
                     variant="filled"
@@ -473,18 +515,32 @@ function AppointmentVisitPage() {
                       digit, if its greater then 0.
                     </span>
                   </div>
+                </div> */}
+                <div className="flex">
+                  <Button
+                    variant="contained"
+                    className="btn-black-fill btn-icon"
+                    onClick={handleFormClickOpen}
+                  >
+                    <AddOutlinedIcon /> Add New Appointment
+                  </Button>
                 </div>
-                <Button
-                  variant="contained"
-                  className="btn-black-fill btn-icon h-[42%]"
-                  onClick={handleFormClickOpen}
-                >
-                  <AddOutlinedIcon /> Add New
-                </Button>
               </div>
             </div>
           </div>
-          <div className="grid grid-cols-none">
+          <div className="mt-5">
+            <AllAppointment
+              appointmentType={appointmentType?.text}
+              priorityData={priorityData}
+              selectedPriorityData={selectedPriorityData}
+              setSelectedPriorityData={setSelectedPriorityData}
+              setAppointmentType={setAppointmentType}
+            />
+          </div>
+          {/* <div className='mt-5'>
+            <IndividualAppointment />
+          </div> */}
+          {/* <div className="grid grid-cols-none">
             <table className="table-border table-auto">
               <thead>
                 <tr>
@@ -605,7 +661,7 @@ function AppointmentVisitPage() {
               rowsPerPage={rowsPerPage}
               onRowsPerPageChange={handleChangeRowsPerPage}
             />
-          </div>
+          </div> */}
         </div>
       </div>
       {/* {cancelDialogOpen && (

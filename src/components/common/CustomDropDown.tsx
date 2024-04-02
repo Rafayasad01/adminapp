@@ -3,8 +3,9 @@ import Select from '@mui/material/Select';
 import { Controller } from 'react-hook-form';
 
 type CustomDropDownProps = {
-  inputTitle: string;
+  inputTitle?: string;
   customWidth?: string;
+  customHeight?: string;
   options?: any;
   register?: any;
   control?: any;
@@ -24,6 +25,7 @@ function CustomDropDown({
   disabled,
   inputTitle,
   customWidth,
+  customHeight,
   options,
   control,
   id,
@@ -36,11 +38,13 @@ function CustomDropDown({
 }: CustomDropDownProps) {
   return (
     <div className="">
-      <div className="" style={{ paddingBottom: '5px', display: 'flex' }}>
-        <span className={`FormLabel ${customClassInputTitle}`}>
-          {inputTitle}
-        </span>
-      </div>
+      {inputTitle && (
+        <div className="" style={{ paddingBottom: '5px', display: 'flex' }}>
+          <span className={`FormLabel ${customClassInputTitle}`}>
+            {inputTitle}
+          </span>
+        </div>
+      )}
       <div className="">
         <Controller
           name={id}
@@ -64,7 +68,9 @@ function CustomDropDown({
                 style={{
                   border: border || '1px solid',
                 }}
-                className={`fixed-height ${customWidth || 'w-[100%]'}`}
+                className={`${customHeight || 'fixed-height'} ${
+                  customWidth || 'w-[100%]'
+                }`}
                 labelId="demo-simple-select-label"
                 id={id}
                 {...field}

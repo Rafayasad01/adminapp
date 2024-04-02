@@ -2,14 +2,12 @@ import BadgeOutlinedIcon from '@mui/icons-material/BadgeOutlined';
 import LocalPhoneOutlinedIcon from '@mui/icons-material/LocalPhoneOutlined';
 import MailOutlineOutlinedIcon from '@mui/icons-material/MailOutlineOutlined';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import ViewListIcon from '@mui/icons-material/ViewList';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import IconButton from '@mui/material/IconButton';
 import Switch from '@mui/material/Switch';
 import dayjs from 'dayjs';
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 
 type AppointmentProviderCardsProps = {
   data: any;
@@ -26,7 +24,6 @@ const AppointmentProviderCards = ({
   setActionMenuItemid,
   setActionMenuAnchorEl,
 }: AppointmentProviderCardsProps) => {
-  const navigate = useNavigate();
   return (
     <div className="grid grid-cols-12 gap-4">
       {data?.map((item: any, index: number) => {
@@ -67,14 +64,14 @@ const AppointmentProviderCards = ({
                         inputProps={{ 'aria-label': 'controlled' }}
                       />
                     </div>
-                    <div
+                    {/* <div
                       className="cursor-pointer"
                       onClick={() =>
                         navigate(`../today-appointment/${item.id}`)
                       }
                     >
                       <ViewListIcon />
-                    </div>
+                    </div> */}
                     <div className="">
                       <IconButton
                         className="btn-dot-appointment"

@@ -1,3 +1,4 @@
+import 'devextreme/dist/css/dx.light.css';
 /* eslint-disable no-console */
 import { useEffect, useState } from 'react';
 import { useErrorBoundary } from 'react-error-boundary';

@@ -13,13 +13,12 @@ import Notify from '../../../components/common/Notify';
 import TopBar from '../../../components/common/TopBar';
 import '../../../index.css';
 import { AppointmentProviderSchedule } from '../../../interfaces/app.appointment';
-import { useAppSelector } from '../../../redux/redux-hooks';
 import Service from '../../../services/adminapp/adminAppointment';
 import { setText, weekDays } from '../../../utils/constants';
 
 function AppointmentProviderAddSchedulePage() {
   const { id } = useParams();
-  const authState: any = useAppSelector((state) => state?.authState);
+  // const authState = useAppSelector((state) => state?.authState);
   const navigate = useNavigate();
   const [isLoader, setIsLoader] = useState<boolean>(false);
   const [isNotify, setIsNotify] = useState(false);
@@ -148,8 +147,6 @@ function AppointmentProviderAddSchedulePage() {
   const onSubmit = (data: any) => {
     setIsLoader(true);
     const parent: any = {
-      createdBy: authState.user.id,
-      appointmentProvider: id,
       workDays: [],
     };
     const dataKeys = Object.keys(data).filter((key) => key.includes('name'));
@@ -164,7 +161,7 @@ function AppointmentProviderAddSchedulePage() {
       };
       parent.workDays.push(dataItem);
     });
-    Service.ProviderScheduleCreate(parent)
+    Service.ProviderScheduleCreate(id, parent)
       .then((item: any) => {
         if (item.data.success) {
           // console.log('CREATED', item.data);

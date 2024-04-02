@@ -23,7 +23,7 @@ const darkTheme = createTheme({
 });
 
 type TimePickerProps = {
-  timePickerLabel: string;
+  timePickerLabel?: string;
   timePickerSubLabel?: string;
   timePickerValue: dayjs.Dayjs | null;
   setTimePickerValue: React.Dispatch<React.SetStateAction<dayjs.Dayjs | null>>;
@@ -69,7 +69,7 @@ function TimePicker({
     <>
       <FormControl className="FormControl" variant="standard">
         <label className="FormLabel">
-          {timePickerLabel}{' '}
+          {timePickerLabel ?? ''}{' '}
           {timePickerSubLabel ? (
             <span className="SubLabel">{timePickerSubLabel}</span>
           ) : (
@@ -80,7 +80,7 @@ function TimePicker({
           ref={buttonElement}
           className="FormInput"
           type="text"
-          placeholder="HH:MM A"
+          placeholder="Select time"
           value={
             (timePickerValue &&
               dayjs(timePickerValue).isValid() &&

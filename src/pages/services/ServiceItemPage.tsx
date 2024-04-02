@@ -10,29 +10,27 @@ import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
 import Switch from '@mui/material/Switch';
 import TablePagination from '@mui/material/TablePagination';
-import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import assets from '../../assets';
+import { useParams } from 'react-router-dom';
 import ActionMenu from '../../components/common/ActionMenu';
 import CustomText from '../../components/common/CustomText';
 import Loader from '../../components/common/Loader';
 import Notify from '../../components/common/Notify';
 import TopBar from '../../components/common/TopBar';
 import { useAppSelector } from '../../redux/redux-hooks';
-import category from '../../services/adminapp/adminCategory';
-import PermissionPopup from '../../utils/PermissionPopup';
+import categoryItem from '../../services/adminapp/adminStoreService';
 import { NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
-import { CheckRolePermission, listingRolePermission } from '../../utils/helper';
-import CategoriesCreatePopup from './CategoriesCreatePopup';
-import CategoriesEditPopup from './CategoriesEditPopup';
+import { listingRolePermission } from '../../utils/helper';
+import ServiceItemCreatePopup from './ServiceItemCreatePopup';
+import ServiceItemEditPopup from './ServiceItemEditPopup';
+// import ServicesCreatePopup from './CategoriesServicesCreatePopup';
+// import ServicesEditPopup from './CategoriesServicesEditPopup';
 
-function CategoriesPage() {
-  const authState: any = useAppSelector((state) => state?.authState);
+function ServiceItemPage() {
+  const params = useParams();
   const dataRole = useAppSelector(
     (state) => state?.persistedReducer?.roleState?.role?.permissions
   );
-  const navigate = useNavigate();
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(0);
   const [total, setTotal] = useState(0);
@@ -40,25 +38,56 @@ function CategoriesPage() {
   const [editFormData, setEditFormData] = useState<any>(null);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [actionMenuItemid, setActionMenuItemid] = React.useState('');
-  const [isLoader, setIsLoader] = React.useState(true);
   const [actionMenuAnchorEl, setActionMenuAnchorEl] =
     useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
-  const actionMenuOptions = ['Items', 'Edit', 'Delete'];
+  const actionMenuOptions = ['Edit', 'Delete'];
   const [emptyVariable] = useState(null);
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
+  const [isLoader, setIsLoader] = React.useState(true);
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
-  const [cancelDialogOpen, setCancelDialogOpen] = useState<boolean>(false);
-  const [dialogText] = useState<any>(
-    'Are you sure you want to delete this Category ?'
-  );
+  const [, setCancelDialogOpen] = useState<boolean>(false);
+  /* const [dialogText] = useState<any>(
+    'Are you sure you want to delete this service ?'
+  ); */
   const [isModalImage, setIsModalImage] = useState(false);
   const [modalImage, setModalImage] = useState('');
 
-  const handleFormClickOpen = () => {
-    if (listingRolePermission(dataRole, 'Category Create')) {
+  const CatId = params.CatId ?? '';
+
+  const handleClickSearch = (event: any) => {
+    if (event.key === 'Enter') {
+      const searchTxt = event.target.value as string;
+      const newPage = 0;
+      setSearch(searchTxt);
+      setPage(newPage);
+      categoryItem
+        .StoreCatItemsList(CatId, searchTxt, newPage, rowsPerPage)
+        .then((item) => {
+          setList(item.data.data.list);
+          setTotal(item.data.data.total);
+        });
+    }
+  };
+
+  const handleChangePage = (
+    event: React.MouseEvent<HTMLButtonElement> | null,
+    newPage: number
+  ) => {
+    setPage(newPage);
+    // offset? ,limit rowsperpage hoga ofset page * rowsperPage
+    categoryItem
+      .StoreCatItemsList(CatId, search, newPage, rowsPerPage)
+      .then((item) => {
+        setList(item.data.data.list);
+        setTotal(item.data.data.total);
+      });
+  };
+
+  const handleAddNew = () => {
+    if (listingRolePermission(dataRole, 'Category Service Create')) {
       setOpenFormDialog(true);
     } else {
       setIsNotify(true);
@@ -69,14 +98,31 @@ function CategoriesPage() {
     }
   };
 
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const newRowperPage = parseInt(event.target.value, 10);
+    const newPage = 0;
+    setRowsPerPage(newRowperPage);
+    setPage(newPage);
+    categoryItem
+      .StoreCatItemsList(CatId, search, newPage, rowsPerPage)
+      .then((item) => {
+        setList(item.data.data.list);
+        setTotal(item.data.data.total);
+      });
+  };
+
   useEffect(() => {
-    if (listingRolePermission(dataRole, 'Category List')) {
-      category
-        .getListService(authState.user.tenant, page, rowsPerPage)
+    if (listingRolePermission(dataRole, 'Category Service List')) {
+      categoryItem
+        .StoreCatItemsList(CatId, search, page, rowsPerPage)
         .then((item: any) => {
-          setIsLoader(false);
-          setList(item.data.data.list);
-          setTotal(item.data.data.total);
+          if (listingRolePermission(dataRole, 'Category Service Get')) {
+            setIsLoader(false);
+            setList(item.data.data.list);
+            setTotal(item.data.data.total);
+          }
         })
         .catch((error) => {
           setIsLoader(false);
@@ -85,118 +131,57 @@ function CategoriesPage() {
             text: error.message,
             type: 'error',
           });
-          // console.log('error::::::::', error);
         });
     }
   }, [emptyVariable]);
 
-  const handleClickSearch = (event: any) => {
-    const searchTxt = event.target.value as string;
-    const newPage = 0;
-    setSearch(searchTxt);
-    setPage(newPage);
-    category
-      .searchService(authState.user.tenant, searchTxt, newPage, rowsPerPage)
-      .then((item) => {
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      });
-  };
+  // const deleteHandler = (id: string) => {
+  //     setIsLoader(true);
+  //     const data = {
+  //         isActive: false,
+  //         isDeleted: true,
+  //         updatedBy: authState.user.id,
+  //     };
+  //     categoryItem
+  //         .deleteCategoryService(id, data)
+  //         .then((updateItem) => {
+  //             if (updateItem.data.success) {
+  //                 setIsLoader(false);
+  //                 setIsNotify(true);
+  //                 setNotifyMessage({
+  //                     text: updateItem.data.message,
+  //                     type: 'success',
+  //                 });
+  //                 setList((newArr: any) => {
+  //                     return newArr.filter((item: any) => item.id !== id);
+  //                 });
+  //                 let newtotal = total;
+  //                 setTotal((newtotal -= 1));
+  //             }
+  //         })
+  //         .catch((err) => {
+  //             setIsLoader(false);
+  //             setIsNotify(true);
+  //             setNotifyMessage({
+  //                 text: err.message,
+  //                 type: 'error',
+  //             });
+  //         });
+  // };
 
-  const handleChangePage = (
-    event: React.MouseEvent<HTMLButtonElement> | null,
-    newPage: number
-  ) => {
-    setPage(newPage);
-    // offset? ,limit rowsperpage hoga ofset page * rowsperPage
-    if (search === '' || search === null || search === undefined) {
-      category
-        .getListService(authState.user.tenant, newPage, rowsPerPage)
-        .then((item) => {
-          setList(item.data.data.list);
-          setTotal(item.data.data.total);
-        });
-    } else {
-      category
-        .searchService(authState.user.tenant, search, newPage, rowsPerPage)
-        .then((item) => {
-          setList(item.data.data.list);
-          setTotal(item.data.data.total);
-        });
-    }
-  };
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const newRowperPage = parseInt(event.target.value, 10);
-    const newPage = 0;
-    setRowsPerPage(newRowperPage);
-    setPage(newPage);
-    if (search === '' || search === null || search === undefined) {
-      category
-        .getListService(authState.user.tenant, newPage, rowsPerPage)
-        .then((item) => {
-          setList(item.data.data.list);
-          setTotal(item.data.data.total);
-        });
-    } else {
-      category
-        .searchService(authState.user.tenant, search, newPage, rowsPerPage)
-        .then((item) => {
-          setList(item.data.data.list);
-          setTotal(item.data.data.total);
-        });
-    }
-  };
-
-  const deleteHandler = (id: string) => {
-    setIsLoader(true);
-    const data = {
-      is_active: false,
-      is_deleted: true,
-      updated_by: authState.user.id,
-    };
-    category
-      .deleteCategory(id, data)
-      .then((updateItem) => {
-        if (updateItem.data.success) {
-          setIsLoader(false);
-          setIsNotify(true);
-          setNotifyMessage({
-            text: updateItem.data.message,
-            type: 'success',
-          });
-          setList((newArr: any) => {
-            return newArr.filter((item: any) => item.id !== id);
-          });
-          let newtotal = total;
-          setTotal((newtotal -= 1));
-        }
-      })
-      .catch((err) => {
-        setIsLoader(false);
-        setIsNotify(true);
-        setNotifyMessage({
-          text: err.message,
-          type: 'error',
-        });
-      });
-  };
-
-  const statusCancelHandler = () => {
-    deleteHandler(actionMenuItemid);
-  };
+  // const statusCancelHandler = () => {
+  //     deleteHandler(actionMenuItemid);
+  // };
 
   const manuHandler = (option: string) => {
     if (option === 'Edit') {
-      if (listingRolePermission(dataRole, 'Category Update')) {
-        category.getCategory(actionMenuItemid).then((item: any) => {
-          if (item.data.success) {
-            // console.log('tem.data.data:::::::', item.data.data);
-            setEditFormData(item.data.data);
-            setOpenEditFormDialog(true);
-          }
-        });
+      if (listingRolePermission(dataRole, 'Category Service Update')) {
+        const foundEditFormData = list?.find(
+          (el: any) => el.id === actionMenuItemid
+        );
+        setActionMenuItemid(foundEditFormData.id);
+        setEditFormData(foundEditFormData);
+        setOpenEditFormDialog(true);
       } else {
         setIsNotify(true);
         setNotifyMessage({
@@ -204,16 +189,8 @@ function CategoriesPage() {
           type: 'warning',
         });
       }
-    } else if (option === 'Items') {
-      // navigate(`../item/${actionMenuItemid}`);
-      CheckRolePermission(
-        'Category Service Get',
-        dataRole,
-        navigate,
-        `item/${actionMenuItemid}`
-      );
     } else if (option === 'Delete') {
-      if (listingRolePermission(dataRole, 'Category Delete')) {
+      if (listingRolePermission(dataRole, 'Category Service Delete')) {
         setCancelDialogOpen(true);
       } else {
         setIsNotify(true);
@@ -229,60 +206,49 @@ function CategoriesPage() {
     setIsLoader(true);
     const formData = new FormData();
     formData.append('name', data.name);
-    formData.append('desc', data.desc);
-    formData.append('icon', data.icon);
-    formData.append('tenant', authState.user.tenant);
-    formData.append('created_by', authState.user.id);
-    formData.append('updated_by', authState.user.id);
-    if (data.name && data.desc && data.icon) {
-      category
-        .create(formData)
-        .then((item) => {
-          if (item.data.success) {
-            setIsLoader(false);
-            setIsNotify(true);
-            setNotifyMessage({
-              text: item.data.message,
-              type: 'success',
-            });
-            setList([item.data.data, ...list]);
-          } else {
-            setIsLoader(false);
-            setIsNotify(true);
-            setNotifyMessage({
-              text: item.data.message,
-              type: 'error',
-            });
-          }
-        })
-        .catch((err) => {
+    formData.append('price', data.price);
+    formData.append('description', data.description);
+    formData.append('avatar', data.avatar);
+    formData.append('storeServiceCategory', CatId);
+    categoryItem
+      .StoreCatItemsCreate(formData)
+      .then((item) => {
+        if (item.data.success) {
           setIsLoader(false);
           setIsNotify(true);
           setNotifyMessage({
-            text: err.message,
+            text: item.data.message,
+            type: 'success',
+          });
+          setList([item.data.data, ...list]);
+        } else {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
             type: 'error',
           });
+        }
+      })
+      .catch((err) => {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
         });
-    } else {
-      setIsLoader(false);
-      setIsNotify(true);
-      setNotifyMessage({
-        text: 'All fields are required!',
-        type: 'error',
       });
-    }
   };
 
   const updateFormHandler = (data: any) => {
-    // console.log('data::::::', data);
     setIsLoader(true);
     const formData = new FormData();
     formData.append('name', data.name);
-    formData.append('desc', data.desc);
-    formData.append('updated_by', authState.user.id);
-    if (data.icon) formData.append('icon', data.icon);
-    category
-      .updateCategory(actionMenuItemid, formData)
+    formData.append('price', data.price);
+    formData.append('description', data.description);
+    if (data.avatar) formData.append('avatar', data.avatar);
+    categoryItem
+      .StoreCatItemsUpdate(actionMenuItemid, formData)
       .then((updateItem: any) => {
         if (updateItem.data.success) {
           setIsLoader(false);
@@ -294,9 +260,10 @@ function CategoriesPage() {
           for (let i = 0; i < list.length; i += 1) {
             if (list[i].id === updateItem.data.data.id) {
               list[i].name = updateItem.data.data.name;
-              list[i].desc = updateItem.data.data.desc;
-              if (updateItem.data.data.icon) {
-                list[i].icon = updateItem.data.data.icon;
+              list[i].description = updateItem.data.data.description;
+              list[i].price = updateItem.data.data.price;
+              if (updateItem.data.data.avatar) {
+                list[i].avatar = updateItem.data.data.avatar;
               }
             }
           }
@@ -320,13 +287,14 @@ function CategoriesPage() {
   };
 
   const handleSwitchChange = (event: any, id: string) => {
-    if (listingRolePermission(dataRole, 'Category Update Status')) {
+    if (listingRolePermission(dataRole, 'Category Service Update Status')) {
+      // setIsLoader(true);
       const data = {
-        is_active: event.target.checked,
-        updated_by: authState.user.id,
+        isActive: event.target.checked,
       };
-      category.updateStatus(id, data).then((updateItem) => {
+      categoryItem.StoreCatItemsUpdateStatus(id, data).then((updateItem) => {
         if (updateItem.data.success) {
+          // setIsLoader(false);
           setList((newArr: any) => {
             return newArr.map((item: any) => {
               if (item.id === id) {
@@ -365,13 +333,13 @@ function CategoriesPage() {
         setIsOpen={setIsNotify}
         displayMessage={notifyMessage}
       />
-      <TopBar title="Categories" />
-      <div className="cs-dialog container mx-auto mt-5 w-full">
+      <TopBar isNestedRoute title="Services" />
+      <div className="container m-auto mt-5">
         <div className="w-full rounded-lg bg-white shadow-lg">
           <div className="grid grid-cols-12 px-4 py-5">
             <div className="col-span-7">
               <span className="font-open-sans text-xl font-semibold text-[#252733]">
-                All Categories
+                All Services
               </span>
             </div>
             <div className="col-span-5">
@@ -409,45 +377,39 @@ function CategoriesPage() {
                 <Button
                   variant="contained"
                   className="btn-black-fill btn-icon"
-                  onClick={handleFormClickOpen}
+                  onClick={handleAddNew}
                 >
                   <AddOutlinedIcon /> Add New
                 </Button>
               </div>
             </div>
           </div>
-
           <div className="mt-3 grid grid-cols-none">
             <table className="table-border table-auto">
               <thead>
                 <tr>
-                  <th>Category Name</th>
-                  <th>Created Date</th>
+                  <th className="w-[20%]">Item Name</th>
+                  <th className="w-[50%]">Description</th>
+                  {/* <th>Min Quantity</th> */}
+                  <th>Price</th>
                   <th>Status</th>
-                  <th aria-label="empty table header">&nbsp;</th>
+                  <th>&nbsp;</th>
                 </tr>
               </thead>
               <tbody>
                 {list &&
                   list.map((item: any, index: number) => {
                     return (
-                      <tr key={index}>
+                      <tr key={item.id}>
                         <td>
                           <div className="avatar flex flex-row items-center">
-                            {item.icon ? (
-                              <button onClick={() => openModal(item.icon)}>
-                                <img
-                                  className="cursor-pointer"
-                                  src={item.icon}
-                                  alt={item.name}
-                                />
-                              </button>
-                            ) : (
+                            <button onClick={() => openModal(item.icon)}>
                               <img
-                                src={assets.tempImages.avatarDryCLean}
-                                alt=""
+                                className="cursor-pointer"
+                                src={item.avatar}
+                                alt={item.name}
                               />
-                            )}
+                            </button>
                             <div className="flex flex-col items-start justify-start">
                               <span className="text-sm font-semibold">
                                 {item.name}
@@ -455,13 +417,9 @@ function CategoriesPage() {
                             </div>
                           </div>
                         </td>
-                        <td>
-                          {dayjs(item.createdDate).isValid()
-                            ? dayjs(item.createdDate)?.format(
-                                'ddd, MMM DD, YYYY hh:mm:ssA'
-                              )
-                            : '--'}
-                        </td>
+                        <td>{item.description ? item.description : '--'}</td>
+                        {/* <td>{item.quantity}</td> */}
+                        <td>{item.price}</td>
                         <td>
                           {item.isActive ? (
                             <span className="badge badge-success">Enabled</span>
@@ -469,7 +427,6 @@ function CategoriesPage() {
                             <span className="badge badge-danger">Disabled</span>
                           )}
                         </td>
-
                         <td>
                           <div className="flex flex-row-reverse">
                             <IconButton
@@ -486,14 +443,14 @@ function CategoriesPage() {
                               onClick={(
                                 event: React.MouseEvent<HTMLElement>
                               ) => {
-                                setActionMenuItemid(list[index].id);
+                                setActionMenuItemid(item.id);
                                 setActionMenuAnchorEl(event.currentTarget);
                               }}
                             >
                               <MoreVertIcon />
                             </IconButton>
                             <Switch
-                              checked={item.isActive}
+                              checked={!!item.isActive}
                               onChange={(
                                 event: React.ChangeEvent<HTMLInputElement>
                               ) => handleSwitchChange(event, list[index].id)}
@@ -522,15 +479,15 @@ function CategoriesPage() {
           </div>
         </div>
       </div>
-      {cancelDialogOpen && (
-        <PermissionPopup
-          type="shock"
-          open={cancelDialogOpen}
-          setOpen={setCancelDialogOpen}
-          dialogText={dialogText}
-          callback={statusCancelHandler}
-        />
-      )}
+      {/* {cancelDialogOpen && (
+                <PermissionPopup
+                    type="shock"
+                    open={cancelDialogOpen}
+                    setOpen={setCancelDialogOpen}
+                    dialogText={dialogText}
+                    callback={statusCancelHandler}
+                />
+            )} */}
       {actionMenuAnchorEl && (
         <ActionMenu
           open={actionMenuOpen}
@@ -541,7 +498,7 @@ function CategoriesPage() {
         />
       )}
       {openFormDialog && (
-        <CategoriesCreatePopup
+        <ServiceItemCreatePopup
           setIsNotify={setIsNotify}
           setNotifyMessage={setNotifyMessage}
           openFormDialog={openFormDialog}
@@ -550,12 +507,12 @@ function CategoriesPage() {
         />
       )}
       {openEditFormDialog && (
-        <CategoriesEditPopup
+        <ServiceItemEditPopup
           setIsNotify={setIsNotify}
           setNotifyMessage={setNotifyMessage}
           openFormDialog={openEditFormDialog}
-          setOpenFormDialog={setOpenEditFormDialog}
           formData={editFormData}
+          setOpenFormDialog={setOpenEditFormDialog}
           callback={updateFormHandler}
         />
       )}
@@ -566,8 +523,8 @@ function CategoriesPage() {
           PaperProps={{
             className: 'max-w-[25%] 2xl:min-h-[35%] xl:min-h-[45%]',
             style: {
-              // maxWidth: '25%',
-              // minHeight: '45%',
+              // maxWidth: '20%',
+              // minHeight: '35%',
               borderRadius: '5%',
               display: 'flex',
               alignItems: 'center',
@@ -588,4 +545,4 @@ function CategoriesPage() {
   );
 }
 
-export default CategoriesPage;
+export default ServiceItemPage;

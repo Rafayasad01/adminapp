@@ -146,11 +146,11 @@ function AppUserTab({
         'Customer Detail',
         dataRole,
         navigate,
-        `detail/${actionMenuItemid?.id}`
+        `../detail/${actionMenuItemid?.id}`
       );
-      navigate(`detail/${actionMenuItemid?.id}`);
+      // navigate(`detail/${actionMenuItemid?.id}`);
     } else if (option === 'Reward History') {
-      navigate(`./reward/history/${actionMenuItemid?.id}`);
+      navigate(`../reward/history/${actionMenuItemid?.id}`);
     }
   };
 

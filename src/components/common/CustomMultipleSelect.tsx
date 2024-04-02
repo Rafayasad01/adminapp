@@ -18,6 +18,7 @@ type CustomMultipleSelectBoxProps = {
   customClassInputTitle?: string;
   inputTitle: string;
   customWidth?: string;
+  customHeight?: string;
   options?: any;
   register?: any;
   control?: any;
@@ -41,6 +42,7 @@ function CustomMultipleSelectBox({
   validateRequired,
   inputTitle,
   customWidth,
+  customHeight,
   options,
   defaultVal,
   border,
@@ -48,7 +50,7 @@ function CustomMultipleSelectBox({
   // console.log('optionsss', options);
   return (
     <div>
-      <div className="" style={{ paddingBottom: '3px' }}>
+      <div className="" style={{ paddingBottom: '5px' }}>
         <span className={`FormLabel ${customClassInputTitle}`}>
           {inputTitle}
         </span>
@@ -75,7 +77,7 @@ function CustomMultipleSelectBox({
               style={{
                 border: border || '1px solid',
               }}
-              className={`fixed-height ${
+              className={`${customHeight || 'fixed-height'} ${
                 customWidth || 'w-[100%]'
               } outline-none`}
               multiple

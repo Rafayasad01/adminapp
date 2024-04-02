@@ -1,3 +1,6 @@
+import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined';
+import PersonOutlinedIcon from '@mui/icons-material/PersonOutlined';
+
 // const HOST = 'https://dev.urapptech.com';
 // const HOST = 'http://192.168.8.68:3200';
 // const HOST = 'http://192.168.8.97:3200';
@@ -8,6 +11,7 @@ export const BASE_SYSTEM_URL = `${HOST}/api/v1/system/config/`;
 export const MODULE_EMPLOYEES = 'Employees';
 export const RATING = 'rating';
 export const FAQ = 'faq';
+export const EMPLOYEE_PREFIX = 'employee';
 export const PROFILE_PREFIX = 'profile';
 export const THEME_PREFIX = 'theme';
 export const APPOINTMENT_PREFIX = 'appointment';
@@ -19,6 +23,8 @@ export const CART_PREFIX = 'cart';
 export const DRIVER_PREFIX = 'driver';
 export const CUSTOMER_PREFIX = 'customer';
 export const CATEGORY_PREFIX = 'category';
+export const SERVICE_PREFIX = 'service';
+export const STORE_PREFIX = 'store';
 export const SETTING_PREFIX = 'setting';
 export const NOTIFICATION_PREFIX = 'notification';
 export const TENANT_PREFIX = 'tenant';
@@ -382,5 +388,59 @@ export const BANNER_TYPE = [
   {
     id: 'Splash',
     name: 'Splash Screen',
+  },
+];
+
+export const APPOINTMENT_TYPE = [
+  {
+    id: 'allAppointments',
+    name: 'All Appointments',
+    imageIcon: GroupsOutlinedIcon,
+  },
+  {
+    id: 'individualAppointment',
+    name: 'Individual Appointment',
+    imageIcon: PersonOutlinedIcon,
+  },
+];
+
+export const BARBER_SERVICES = [
+  {
+    id: 'slider',
+    name: 'Slider',
+  },
+  {
+    id: 'onboard',
+    name: 'On Board',
+  },
+  {
+    id: 'splash',
+    name: 'Splash Screen',
+  },
+];
+
+export const BARBER_SERVICES_AMOUNT = [
+  {
+    id: 'Percentage',
+    name: 'Percentage',
+  },
+  {
+    id: 'Amount',
+    name: 'Amount',
+  },
+];
+
+export const GENDER = [
+  {
+    id: 'Male',
+    name: 'Male',
+  },
+  {
+    id: 'Female',
+    name: 'Female',
+  },
+  {
+    id: 'Other',
+    name: 'Other',
   },
 ];
