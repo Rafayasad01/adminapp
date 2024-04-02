@@ -479,8 +479,9 @@ const AllAppointment = ({
       text: 'Individual Appointment',
       icon: PersonOutlinedIcon,
     });
-    let res = priorityData?.find((el: any) => el.text === name);
-    let tempPriority = res === undefined ? [{ startDate: new Date() }] : [res];
+    const res = priorityData?.find((el: any) => el.text === name);
+    const tempPriority =
+      res === undefined ? [{ startDate: new Date() }] : [res];
     setSelectedPriorityData(tempPriority);
   };
 

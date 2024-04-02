@@ -6,6 +6,7 @@ import IconButton from '@mui/material/IconButton';
 import TextField from '@mui/material/TextField';
 import React, { Fragment } from 'react';
 import '../../assets/css/PopupStyle.css';
+import Button from '@mui/material/Button';
 import WorkDaysForm from '../../pages/settings/WorkDaysForm';
 import { INVALID_CHAR, MAX_LENGTH_EXCEEDED } from '../../utils/constants';
 import CustomButton from './CustomButton';
@@ -13,7 +14,6 @@ import CustomDropDown from './CustomDropDown';
 import CustomInputBox from './CustomInputBox';
 import ErrorSpanBox from './ErrorSpanBox';
 import TimePicker from './TimePicker';
-import Button from '@mui/material/Button';
 
 type Props = {
   openFormDialog: boolean;

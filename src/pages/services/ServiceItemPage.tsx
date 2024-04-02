@@ -178,9 +178,11 @@ function ServiceItemPage() {
   const manuHandler = (option: string) => {
     if (option === 'Edit') {
       if (listingRolePermission(dataRole, 'Category Service Update')) {
-        let editFormData = list?.find((el: any) => el.id === actionMenuItemid);
-        setActionMenuItemid(editFormData.id);
-        setEditFormData(editFormData);
+        const editFormDatas = list?.find(
+          (el: any) => el.id === actionMenuItemid
+        );
+        setActionMenuItemid(editFormDatas.id);
+        setEditFormData(editFormDatas);
         setOpenEditFormDialog(true);
       } else {
         setIsNotify(true);

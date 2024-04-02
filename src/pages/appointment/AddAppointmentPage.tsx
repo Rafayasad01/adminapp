@@ -1,48 +1,42 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { Controller, useFieldArray, useForm } from 'react-hook-form';
-import TopBar from '../../components/common/TopBar';
-import Notify from '../../components/common/Notify';
-import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined';
-import RadioButtonUncheckedOutlinedIcon from '@mui/icons-material/RadioButtonUncheckedOutlined';
-import Button from '@mui/material/Button';
-import Checkbox from '@mui/material/Checkbox';
-import Dialog from '@mui/material/Dialog';
+import CloseIcon from '@mui/icons-material/Close';
 import FormControl from '@mui/material/FormControl';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Input from '@mui/material/Input';
 import TextField from '@mui/material/TextField';
+import ThemeProvider from '@mui/material/styles/ThemeProvider';
+import createTheme from '@mui/material/styles/createTheme';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import dayjs from 'dayjs';
+import timezone from 'dayjs/plugin/timezone';
+import utc from 'dayjs/plugin/utc';
+import { useEffect, useState } from 'react';
+import { Controller, useFieldArray, useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+import { Pagination } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import assets from '../../assets';
 import '../../assets/css/PopupStyle.css';
-import ReactDOM from 'react-dom';
-import ThemeProvider from '@mui/material/styles/ThemeProvider';
-import CustomDateTimePicker from '../../components/common/CustomDateTimePicker';
-import TimePicker from '../../components/common/TimePicker';
+import Notify from '../../components/common/Notify';
+import TopBar from '../../components/common/TopBar';
+import { AddAppointmentForm } from '../../interfaces/app.appointment';
+import { GENDER, MAX_LENGTH_EXCEEDED, PATTERN } from '../../utils/constants';
+
+// import required modules
+import CustomButton from '../../components/common/CustomButton';
 import CustomDropDown from '../../components/common/CustomDropDown';
-import CustomMultipleSelectBox from '../../components/common/CustomMultipleSelect';
 import CustomInputBox from '../../components/common/CustomInputBox';
 import ErrorSpanBox from '../../components/common/ErrorSpanBox';
 import Loader from '../../components/common/Loader2';
-import StoreLovService from '../../services/adminapp/adminStoreService';
+import TimePicker from '../../components/common/TimePicker';
 import StoreAppointmentService from '../../services/adminapp/adminStoreAppointment';
-import createTheme from '@mui/material/styles/createTheme';
-import { StaticTimePicker } from '@mui/x-date-pickers/StaticTimePicker';
-import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
-import { AddAppointmentForm } from '../../interfaces/app.appointment';
-import {
-  GENDER,
-  INVALID_CHAR,
-  MAX_LENGTH_EXCEEDED,
-  PATTERN,
-  PH_MINI_LENGTH,
-} from '../../utils/constants';
-import assets from '../../assets';
-import { SwiperSlide, Swiper } from 'swiper/react';
+import StoreLovService from '../../services/adminapp/adminStoreService';
+
+// Extend dayjs with necessary plugins
+dayjs.extend(utc);
+dayjs.extend(timezone);
+dayjs.tz.setDefault('UTC');
 
 const darkTheme = createTheme({
   palette: {
@@ -52,18 +46,16 @@ const darkTheme = createTheme({
   },
 });
 
-// import required modules
-import { Pagination } from 'swiper/modules';
-import CustomButton from '../../components/common/CustomButton';
-
 export default function AddAppointmentPage() {
+  const navigate = useNavigate();
   const [isLoader, setIsLoader] = useState(false);
   const [isNotify, setIsNotify] = useState(false);
   const [notifyMessage, setNotifyMessage] = useState({});
   const [activeBarber, setActiveBarber] = useState<any>();
   const [activeBarberData, setActiveBarberData] = useState<any>();
-  const [catLovlist, setCatLovList] = useState();
+  const [catLovlist, setCatLovList] = useState<any>();
   const [catItemsLovlist, setCatItemsLovList] = useState<any>([]);
+  const [usedCatItemsLovlist, setusedCatItemsLovList] = useState<any>([]);
   const [barberList, setBarberList] = useState<any>([]);
   const [appointmentTime, setAppointmentTime] = useState<dayjs.Dayjs | any>(
     null
@@ -87,8 +79,8 @@ export default function AddAppointmentPage() {
 
   const pagination = {
     clickable: true,
-    renderBullet: function (index: number, className: any) {
-      return '<span class="' + className + '">' + '</span>';
+    renderBullet(index: number, className: any) {
+      return `<span class="${className}"></span>`;
     },
   };
 
@@ -145,10 +137,6 @@ export default function AddAppointmentPage() {
     );
   };
 
-  useEffect(() => {
-    catLovService();
-  }, []);
-
   const catLovService = () => {
     StoreLovService.StoreCatLov()
       .then((res: any) => {
@@ -172,6 +160,32 @@ export default function AddAppointmentPage() {
   };
 
   useEffect(() => {
+    catLovService();
+  }, []);
+
+  const getBarbers = async (id: any) => {
+    await StoreAppointmentService.getBarbersList(id).then((res) => {
+      setBarberList(res.data.data);
+      setActiveBarberData(null);
+      setActiveBarber(null);
+      // console.log("res items", res.data.data);
+    });
+  };
+
+  const getCatItems = async (id: any) => {
+    await StoreLovService.StoreCatItemsLov(id).then((res) => {
+      setCatItemsLovList(res.data.data);
+      const uniqueData = res.data.data.filter(
+        (item: any) =>
+          !usedCatItemsLovlist.some(
+            (existingItem: any) => existingItem.id === item.id
+          )
+      );
+      setusedCatItemsLovList([...usedCatItemsLovlist, ...uniqueData]);
+    });
+  };
+
+  useEffect(() => {
     if (
       getValues('categoryId') !== undefined &&
       getValues('categoryId') !== 'none'
@@ -190,27 +204,15 @@ export default function AddAppointmentPage() {
     }
   }, [watch('storeServiceCategoryItem')]);
 
-  const getBarbers = async (id: any) => {
-    await StoreAppointmentService.getBarbersList(id).then((res) => {
-      setBarberList(res.data.data);
-      // console.log("res items", res.data.data);
-    });
-  };
-  const getCatItems = async (id: any) => {
-    await StoreLovService.StoreCatItemsLov(id).then((res) => {
-      setCatItemsLovList(res.data.data);
-      // console.log("res items", res.data.data);
-    });
-  };
-
   const addAppointmentServices = () => {
-    let obj = {
-      storeEmployeeService: watch('storeServiceCategoryItem'),
-      storeEmployee: watch('categoryId'),
-      appointmentTime:
-        dayjs(getValues('appointmentDate'))?.format('YYYY-MM-DD') +
-        ' ' +
-        dayjs(appointmentTime)?.format('HH:mm:ss'),
+    const obj = {
+      barber: activeBarberData.storeEmployee.name,
+      amount: activeBarberData.amount,
+      storeServiceCategoryItem: watch('storeServiceCategoryItem'),
+      storeEmployee: activeBarberData.storeEmployee.id,
+      appointmentTime: `${dayjs(getValues('appointmentDate'))?.format(
+        'YYYY-MM-DD'
+      )} ${dayjs(appointmentTime)?.format('HH:mm:ss')}`,
     };
     append(obj);
   };
@@ -219,16 +221,25 @@ export default function AddAppointmentPage() {
     delete data.storeServiceCategoryItem;
     delete data.categoryId;
     delete data.appointmentDate;
-    console.log('onSubmitDATA1', data);
-    StoreAppointmentService.appointmentCreate(data).then((res: any) => {
-      console.log('CREATE HIT', res.data.data);
+    const updatedAppointmentArray = data.appointments.map((item: any) => {
+      const { amount, barber, ...rest } = item;
+      return rest;
     });
+    data.appointments = updatedAppointmentArray;
+    console.log('onSubmitDATA1', data);
+    // StoreAppointmentService.appointmentCreate(data).then((res: any) => {
+    //   navigate('../appointment')
+    //   console.log('CREATE HIT', res.data.data);
+    // });
   };
 
-  const getName = (arr: any, id: any) => {
-    let data = arr.find((el: any) => el.id === id).name;
-    console.log(data);
+  const getCatItemName = (id: any) => {
+    let tempAr: any[] = [];
+    tempAr = usedCatItemsLovlist;
+    return tempAr?.find((el: any) => el.id === id)?.name;
   };
+
+  // console.log("barberList", barberList);
 
   return isLoader ? (
     <Loader />
@@ -261,14 +272,14 @@ export default function AddAppointmentPage() {
                           <CustomInputBox
                             maxLetterLimit={50}
                             pattern={PATTERN.CHAR_SPACE_DASH}
-                            inputTitle={'Full Name'}
-                            placeholder={'Enter full name'}
-                            id={'name'}
+                            inputTitle="Full Name"
+                            placeholder="Enter full name"
+                            id="name"
                             customFontClass="font-semibold mb-1"
                             customClass="border-[2px] border-[#949EAE] rounded-xl px-2 py-1 text-sm"
                             register={register}
                             error={errors.name}
-                            inputType={'text'}
+                            inputType="text"
                           />
                         </FormControl>
                       </div>
@@ -302,14 +313,14 @@ export default function AddAppointmentPage() {
                           <CustomInputBox
                             pattern={PATTERN.ONLY_NUM}
                             maxLetterLimit={15}
-                            inputTitle={'Phone'}
-                            placeholder={'Enter phone number'}
-                            id={'phone'}
+                            inputTitle="Phone"
+                            placeholder="Enter phone number"
+                            id="phone"
                             customFontClass="font-semibold mb-1"
                             customClass="border-[2px] border-[#949EAE] rounded-xl px-2 py-1 text-sm"
                             register={register}
                             error={errors.phone}
-                            inputType={'text'}
+                            inputType="text"
                           />
                         </FormControl>
                       </div>
@@ -320,14 +331,14 @@ export default function AddAppointmentPage() {
                         >
                           <CustomInputBox
                             pattern={PATTERN.CHAR_NUM_DOT_AT}
-                            inputTitle={'Email'}
-                            placeholder={'Enter email address'}
-                            id={'email'}
+                            inputTitle="Email"
+                            placeholder="Enter email address"
+                            id="email"
                             customFontClass="font-semibold mb-1"
                             customClass="border-[2px] border-[#949EAE] rounded-xl px-2 py-1 text-sm"
                             register={register}
                             error={errors.email}
-                            inputType={'text'}
+                            inputType="text"
                           />
                         </FormControl>
                       </div>
@@ -419,7 +430,11 @@ export default function AddAppointmentPage() {
                         Select Barber
                       </span>
                       <hr className="my-4 border-[#949EAE]" />
-                      <div className="h-[215px]">
+                      <div
+                        className={
+                          barberList?.length === 0 ? 'h-[0px]' : 'h-[215px]'
+                        }
+                      >
                         <Swiper
                           slidesPerView={6}
                           spaceBetween={30}
@@ -437,10 +452,16 @@ export default function AddAppointmentPage() {
                         </Swiper>
                       </div>
                     </div>
+                    {barberList?.length === 0 && (
+                      <span>
+                        There are currently no barbers available to provide this
+                        service.
+                      </span>
+                    )}
                     {activeBarberData !== null && (
                       <div className="mt-5">
                         <span className="text-base font-bold text-[#1A1A1A]">
-                          Avaiable's {activeBarberData?.storeEmployee?.name}{' '}
+                          Avaiable {activeBarberData?.storeEmployee?.name}{' '}
                           Appoitment slots
                         </span>
                         <hr className="my-4 border-[#949EAE]" />
@@ -484,47 +505,53 @@ export default function AddAppointmentPage() {
                           Select Date & Time
                         </span>
                         <hr className="my-4 border-[#949EAE]" />
-                        <ThemeProvider theme={darkTheme}>
-                          <LocalizationProvider dateAdapter={AdapterDayjs}>
-                            {/* <DemoItem label="Desktop variant"> */}
-                            <div>
-                              <span className="text-sm">
-                                Select Appointment Date
-                              </span>
-                            </div>
-                            <Controller
-                              name="appointmentDate"
-                              control={control}
-                              defaultValue={dayjs()}
-                              render={({ field }) => (
-                                <DesktopDatePicker
-                                  {...field}
-                                  onChange={(date) => field.onChange(date)}
-                                  value={field.value}
+                        <div className="flex items-center">
+                          <div>
+                            <ThemeProvider theme={darkTheme}>
+                              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                {/* <DemoItem label="Desktop variant"> */}
+                                <div>
+                                  <span className="text-sm">
+                                    Select Appointment Date
+                                  </span>
+                                </div>
+                                <Controller
+                                  name="appointmentDate"
+                                  control={control}
+                                  defaultValue={dayjs()}
+                                  render={({ field }) => (
+                                    <DesktopDatePicker
+                                      {...field}
+                                      onChange={(date) => field.onChange(date)}
+                                      value={field.value}
+                                    />
+                                  )}
                                 />
-                              )}
-                            />
-                            {/* </DemoItem> */}
-                          </LocalizationProvider>
-                        </ThemeProvider>
-                        <div className="mt-3 flex-col">
-                          <span className="text-sm">
-                            Select Appointment Time
-                          </span>
-                          <div className="">
-                            <FormControl
-                              className="FormControl"
-                              variant="standard"
-                            >
-                              <TimePicker
-                                // timePickerLabel="Appointment Time"
-                                // timePickerSubLabel={"(Office in time)"}
-                                timePickerValue={appointmentTime}
-                                setTimePickerValue={setAppointmentTime}
-                                id="startTime"
-                                // setError={setError}
-                              />
-                            </FormControl>
+                                {/* </DemoItem> */}
+                              </LocalizationProvider>
+                            </ThemeProvider>
+                          </div>
+                          <div className="mx-5">
+                            <div className="flex-col">
+                              <span className="text-sm">
+                                Select Appointment Time
+                              </span>
+                              <div className="">
+                                <FormControl
+                                  className="FormControl"
+                                  variant="standard"
+                                >
+                                  <TimePicker
+                                    // timePickerLabel="Appointment Time"
+                                    // timePickerSubLabel={"(Office in time)"}
+                                    timePickerValue={appointmentTime}
+                                    setTimePickerValue={setAppointmentTime}
+                                    id="startTime"
+                                    // setError={setError}
+                                  />
+                                </FormControl>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -544,14 +571,9 @@ export default function AddAppointmentPage() {
                               <div key={index} className="col-span-2 p-3">
                                 <div className="h-[100px] flex-col">
                                   <div>
-                                    <span className="font-semibold">
-                                      {item.workDay}
-                                    </span>
-                                  </div>
-                                  <div>
                                     <span className="text-sm">
-                                      {dayjs(item.startTime).isValid()
-                                        ? dayjs(item.startTime)?.format(
+                                      {dayjs(item.appointmentTime).isValid()
+                                        ? dayjs(item.appointmentTime)?.format(
                                             'HH:mm A'
                                           )
                                         : '--'}{' '}
@@ -574,17 +596,46 @@ export default function AddAppointmentPage() {
                 <span className="text-base font-bold text-[#1A1A1A]">
                   Selected Barber & Service
                 </span>
-                <hr className="my-4 border-[#949EAE]" />
+                {fields?.length > 0 && <hr className="my-4 border-[#949EAE]" />}
                 {fields?.length > 0 &&
                   fields?.map((items: any, index: number) => {
                     return (
-                      <div>
-                        <span>hello</span>
-                        {/* <span>{getName(catLovlist)}</span> */}
+                      <div className="my-4 grid grid-cols-12" key={index}>
+                        <div className="col-span-1">
+                          <div
+                            onClick={() => remove(index)}
+                            className="flex w-[40%] cursor-pointer items-center justify-center rounded-2xl bg-background p-2"
+                          >
+                            <CloseIcon />
+                          </div>
+                        </div>
+                        <div className="col-span-2">
+                          <p className="font-semibold">Barber</p>
+                          <span>{items.barber}</span>
+                        </div>
+                        <div className="col-span-2 mx-7">
+                          <p className="font-semibold">Service</p>
+                          <span>
+                            {getCatItemName(items.storeServiceCategoryItem)}
+                          </span>
+                        </div>
+                        <div className="col-span-2">
+                          <p className="font-semibold">Appointment Amount</p>
+                          <span>{items.amount}</span>
+                        </div>
+                        <div className="col-span-2 mx-7">
+                          <p className="font-semibold">Appointment Date</p>
+                          <span>{items.appointmentTime.split(' ')[0]}</span>
+                        </div>
+                        <div className="col-span-2">
+                          <p className="font-semibold">Appointment Time</p>
+                          <span>{items.appointmentTime.split(' ')[1]}</span>
+                        </div>
                       </div>
                     );
                   })}
               </div>
+              <hr className="my-4 border-[#949EAE]" />
               <div className="mt-3 flex w-full items-center justify-end">
                 <CustomButton
                   buttonType="button"
@@ -603,7 +654,7 @@ export default function AddAppointmentPage() {
                   buttonType="button"
                   title="Submit"
                   className="btn-black-outline"
-                  type={'submit'}
+                  type="submit"
                   // onclick={handleFormClose}
                   sx={{
                     padding: '0.375rem 2rem !important',

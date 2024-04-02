@@ -213,10 +213,12 @@ function EmployeeServices() {
     if (option === 'Edit') {
       if (listingRolePermission(dataRole, 'Category Update')) {
         console.log('actionMenuItemid', actionMenuItemid, list);
-        let editFormData = list?.find((el: any) => el.id === actionMenuItemid);
+        const editFormDatas = list?.find(
+          (el: any) => el.id === actionMenuItemid
+        );
         catLovService();
-        setActionMenuItemid(editFormData.id);
-        setEditFormData(editFormData);
+        setActionMenuItemid(editFormDatas.id);
+        setEditFormData(editFormDatas);
         setOpenEditFormDialog(true);
       } else {
         setIsNotify(true);
@@ -350,7 +352,7 @@ function EmployeeServices() {
     setIsLoader(true);
     if (listingRolePermission(dataRole, 'Category Update Status')) {
       const data = {
-        isDeleted: isDel ? true : false,
+        isDeleted: !!isDel,
       };
       employee
         .StoreEmployeeServiceDelete(actionMenuItemid, data)

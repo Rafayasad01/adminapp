@@ -203,7 +203,7 @@ function ServiceCreatePopup({
                   ''
                 )}
               </div>
-              {image === null && <ErrorSpanBox error={'avatar is required'} />}
+              {image === null && <ErrorSpanBox error="avatar is required" />}
             </div>
           </div>
           <div className="FormFooter">

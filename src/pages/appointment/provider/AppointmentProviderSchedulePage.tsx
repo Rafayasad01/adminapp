@@ -157,7 +157,7 @@ function AppointmentProviderSchedulePage() {
   const editHandler = (editId: string) => {
     if (listingRolePermission(dataRole, 'Appointment Provider Schedule Edit')) {
       // setIsLoader(true);
-      let editFormData = list.storeEmployeeSchedule?.find(
+      const editFormData = list.storeEmployeeSchedule?.find(
         (el: any) => el.id === editId
       );
       console.log('editFormData', editFormData);

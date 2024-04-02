@@ -110,7 +110,7 @@ function ServiceItemEditPopup({
   };
 
   useEffect(() => {
-    let icon = formData?.avatar?.split('/')?.slice(-1)[0];
+    const icon = formData?.avatar?.split('/')?.slice(-1)[0];
     setImageName(icon);
   }, []);
   // console.log('errors', errors);

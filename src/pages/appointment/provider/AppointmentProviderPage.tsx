@@ -243,6 +243,13 @@ function AppointmentProviderPage() {
     }
   };
 
+  const getCatItems = async (id: any) => {
+    await StoreLovService.StoreCatItemsLov(id).then((res) => {
+      setCatItemsLovList(res.data.data);
+      // console.log("res items", res.data.data);
+    });
+  };
+
   useEffect(() => {
     if (
       getValues('categoryId') !== undefined &&
@@ -252,13 +259,6 @@ function AppointmentProviderPage() {
       // console.log("hit");
     }
   }, [watch('categoryId')]);
-
-  const getCatItems = async (id: any) => {
-    await StoreLovService.StoreCatItemsLov(id).then((res) => {
-      setCatItemsLovList(res.data.data);
-      // console.log("res items", res.data.data);
-    });
-  };
 
   const handleClickSearch = (event: any) => {
     if (event.key === 'Enter') {
@@ -561,7 +561,7 @@ function AppointmentProviderPage() {
   };
 
   useEffect(() => {
-    let length = Object.keys(errors)?.length;
+    const length = Object.keys(errors)?.length;
     if (length > 0) handlePrevSlide();
   }, [errors]);
 
@@ -574,7 +574,7 @@ function AppointmentProviderPage() {
     delete data.categoryId;
     delete data.servicesId;
     delete data.mints;
-    let obj = {
+    const obj = {
       ...data,
       avatar: image,
     };
@@ -614,11 +614,11 @@ function AppointmentProviderPage() {
     delete data.categoryId;
     delete data.servicesId;
     delete data.mints;
-    let obj = {
+    const obj = {
       ...data,
-      weekDays: weekDays,
-      startTime: startTime,
-      endTime: endTime,
+      weekDays,
+      startTime,
+      endTime,
       avatar: image,
     };
     // formdata banega

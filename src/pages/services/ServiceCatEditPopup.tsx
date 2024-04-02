@@ -115,7 +115,7 @@ function ServiceCatEditPopup({
   };
 
   useEffect(() => {
-    let icon = formData?.avatar?.split('/')?.slice(-1)[0];
+    const icon = formData?.avatar?.split('/')?.slice(-1)[0];
     setImageName(icon);
   }, []);
 

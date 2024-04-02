@@ -9,6 +9,11 @@ type Props = {
 };
 
 const SwiperComponent = ({ data, selectedUser }: Props) => {
+  function getDirection() {
+    const windowWidth = window.innerWidth;
+    return windowWidth <= 760 ? 'vertical' : 'horizontal';
+  }
+
   useEffect(() => {
     const swiper = new Swiper('.swiper', {
       slidesPerView: 4,
@@ -18,20 +23,20 @@ const SwiperComponent = ({ data, selectedUser }: Props) => {
         prevEl: '.swiper-button-prev',
       },
       on: {
-        resize: function () {
+        resize() {
           swiper.changeDirection(getDirection());
         },
-        reachEnd: function () {
+        reachEnd() {
           document
             .querySelector('.swiper-button-next')
             ?.classList.add('swiper-button-disabled');
         },
-        reachBeginning: function () {
+        reachBeginning() {
           document
             .querySelector('.swiper-button-prev')
             ?.classList.add('swiper-button-disabled');
         },
-        fromEdge: function () {
+        fromEdge() {
           document
             .querySelector('.swiper-button-next')
             ?.classList.remove('swiper-button-disabled');
@@ -41,11 +46,6 @@ const SwiperComponent = ({ data, selectedUser }: Props) => {
         },
       },
     });
-
-    function getDirection() {
-      const windowWidth = window.innerWidth;
-      return windowWidth <= 760 ? 'vertical' : 'horizontal';
-    }
 
     // Event handler for clicking the right arrow button
     const handleNextButtonClick = () => {
@@ -101,8 +101,8 @@ const SwiperComponent = ({ data, selectedUser }: Props) => {
           );
         })}
       </div>
-      <div className="swiper-button-next"></div>
-      <div className="swiper-button-prev"></div>
+      <div className="swiper-button-next" />
+      <div className="swiper-button-prev" />
     </div>
   );
 };

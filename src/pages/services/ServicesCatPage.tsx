@@ -173,9 +173,11 @@ function ServicesPage() {
     if (option === 'Edit') {
       if (listingRolePermission(dataRole, 'Category Update')) {
         console.log('actionMenuItemid', actionMenuItemid, list);
-        let editFormData = list?.find((el: any) => el.id === actionMenuItemid);
-        setActionMenuItemid(editFormData.id);
-        setEditFormData(editFormData);
+        const editFormDatas = list?.find(
+          (el: any) => el.id === actionMenuItemid
+        );
+        setActionMenuItemid(editFormDatas.id);
+        setEditFormData(editFormDatas);
         setOpenEditFormDialog(true);
       } else {
         setIsNotify(true);

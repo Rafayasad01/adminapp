@@ -3,10 +3,10 @@ import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CloseIcon from '@mui/icons-material/Close';
-import assets from '../../assets';
 import Avatar from '@mui/material/Avatar';
 import StarIcon from '@mui/icons-material/Star';
 import dayjs from 'dayjs';
+import assets from '../../assets';
 
 type Props = {
   appointmentData?: any;

@@ -56,5 +56,6 @@ export interface AddAppointmentForm {
   gender: string;
   appointmentDate: any;
   categoryId: any;
+  storeEmployee: any;
   storeServiceCategoryItem: any;
 }

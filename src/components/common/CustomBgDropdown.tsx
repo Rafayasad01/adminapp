@@ -60,7 +60,7 @@ const CustomBgDropdown = ({
             value={item.name}
             onClick={() => handleMenuItemClick(item)}
           >
-            {<item.imageIcon className="mr-2 text-xl" />}
+            <item.imageIcon className="mr-2 text-xl" />
             {item.name}
           </MenuItem>
         ))}

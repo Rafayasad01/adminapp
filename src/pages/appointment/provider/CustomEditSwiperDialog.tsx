@@ -10,19 +10,6 @@ import IconButton from '@mui/material/IconButton';
 import TextField from '@mui/material/TextField';
 import React, { Fragment, useEffect, useRef, useState } from 'react';
 import '../../../assets/css/PopupStyle.css';
-import WorkDaysForm from '../../settings/WorkDaysForm';
-import {
-  BARBER_SERVICES,
-  BARBER_SERVICES_AMOUNT,
-  INVALID_CHAR,
-  MAX_LENGTH_EXCEEDED,
-  PATTERN,
-} from '../../../utils/constants';
-import CustomButton from '../../../components/common/CustomButton';
-import CustomDropDown from '../../../components/common/CustomDropDown';
-import CustomInputBox from '../../../components/common/CustomInputBox';
-import ErrorSpanBox from '../../../components/common/ErrorSpanBox';
-import CustomTimePicker from '../../../components/common/TimePicker';
 import Button from '@mui/material/Button';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import dayjs from 'dayjs';
@@ -32,6 +19,19 @@ import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { renderTimeViewClock } from '@mui/x-date-pickers/timeViewRenderers';
+import CustomTimePicker from '../../../components/common/TimePicker';
+import ErrorSpanBox from '../../../components/common/ErrorSpanBox';
+import CustomInputBox from '../../../components/common/CustomInputBox';
+import CustomDropDown from '../../../components/common/CustomDropDown';
+import CustomButton from '../../../components/common/CustomButton';
+import {
+  BARBER_SERVICES,
+  BARBER_SERVICES_AMOUNT,
+  INVALID_CHAR,
+  MAX_LENGTH_EXCEEDED,
+  PATTERN,
+} from '../../../utils/constants';
+import WorkDaysForm from '../../settings/WorkDaysForm';
 
 type Props = {
   setDelIds?: any;
@@ -139,7 +139,7 @@ function CustomEditSwiperDialog({
   };
 
   const handleServices = () => {
-    let obj = {
+    const obj = {
       storeServiceCategoryItem: watch('servicesId'),
       minutes: watch('mints'),
       amountType: watch('servicesAmount'),
@@ -200,7 +200,9 @@ function CustomEditSwiperDialog({
           spaceBetween={50}
           slidesPerView={1}
           // navigation={true}
-          onSwiper={(swiper: any) => (swiperRef.current = swiper)}
+          onSwiper={(swiper: any) => {
+            swiperRef.current = swiper;
+          }}
         >
           <SwiperSlide className="custom-swiper-slide w-full">
             <div className="FormHeader">
@@ -431,7 +433,7 @@ function CustomEditSwiperDialog({
               />
               <CustomButton
                 buttonType="button"
-                title={'Next'}
+                title="Next"
                 iconRight={<EastIcon className="text-base" />}
                 onclick={handleNextSlide}
                 // type={'submit'}
@@ -509,13 +511,13 @@ function CustomEditSwiperDialog({
                     <CustomInputBox
                       pattern={PATTERN.ONLY_NUM}
                       maxLetterLimit={15}
-                      inputTitle={'Price'}
-                      placeholder={'Enter Service Amount'}
-                      id={'price'}
+                      inputTitle="Price"
+                      placeholder="Enter Service Amount"
+                      id="price"
                       requiredType
                       register={register}
                       // error={errors.price}
-                      inputType={'text'}
+                      inputType="text"
                     />
                   </FormControl>
                 </div>
@@ -525,13 +527,13 @@ function CustomEditSwiperDialog({
                       <CustomInputBox
                         pattern={PATTERN.ONLY_NUM}
                         maxLetterLimit={4}
-                        inputTitle={'Service Time (Minutes)'}
-                        placeholder={'Enter time (Minutes)'}
-                        id={'mints'}
+                        inputTitle="Service Time (Minutes)"
+                        placeholder="Enter time (Minutes)"
+                        id="mints"
                         requiredType
                         register={register}
                         // error={errors.price}
-                        inputType={'text'}
+                        inputType="text"
                       />
                     </FormControl>
                   </FormControl>
@@ -566,13 +568,11 @@ function CustomEditSwiperDialog({
                         </div>
                         <div>RS{item.amount}.00</div>
                         <div>
-                          {
-                            <ClearOutlinedIcon
-                              className="cursor-pointer"
-                              onClick={() => handleRemove(index, item.id)}
-                              fontSize="small"
-                            />
-                          }
+                          <ClearOutlinedIcon
+                            className="cursor-pointer"
+                            onClick={() => handleRemove(index, item.id)}
+                            fontSize="small"
+                          />
                         </div>
                       </div>
                     </div>
@@ -594,9 +594,9 @@ function CustomEditSwiperDialog({
               />
               <CustomButton
                 buttonType="button"
-                title={'Submit'}
+                title="Submit"
                 // onclick={handleNextSlide}
-                type={'submit'}
+                type="submit"
                 className="btn-black-fill"
                 sx={{
                   padding: '0.375rem 2rem !important',

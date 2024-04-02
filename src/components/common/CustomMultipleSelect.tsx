@@ -18,7 +18,7 @@ type Props = {
   customClassInputTitle?: string;
   inputTitle: string;
   customWidth?: string;
-  customHeight?: String;
+  customHeight?: string;
   options?: any;
   register?: any;
   control?: any;

@@ -1,6 +1,5 @@
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
-import StoreLovService from '../../../services/adminapp/adminStoreService';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import FormControl from '@mui/material/FormControl';
@@ -10,6 +9,7 @@ import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import TextField from '@mui/material/TextField';
+import StoreLovService from '../../../services/adminapp/adminStoreService';
 import '../../../assets/css/PopupStyle.css';
 import ErrorSpanBox from '../../../components/common/ErrorSpanBox';
 import { BarberItemServices } from '../../../interfaces/services.interface';
@@ -56,6 +56,12 @@ function EmployeeServiceEditPopup({
 
   const [catItemsLovlist, setCatItemsLovList] = useState<any>([]);
 
+  const getCatItems = async (id: any) => {
+    await StoreLovService.StoreCatItemsLov(id).then((res) => {
+      setCatItemsLovList(res.data.data);
+    });
+  };
+
   useEffect(() => {
     if (
       getValues('categoryId') !== undefined &&
@@ -65,12 +71,6 @@ function EmployeeServiceEditPopup({
       // console.log("hit");
     }
   }, [watch('categoryId')]);
-
-  const getCatItems = async (id: any) => {
-    await StoreLovService.StoreCatItemsLov(id).then((res) => {
-      setCatItemsLovList(res.data.data);
-    });
-  };
 
   const onSubmit = (data: BarberItemServices) => {
     console.log('🚀 ~ onSubmit ~ data:', data);
@@ -161,12 +161,12 @@ function EmployeeServiceEditPopup({
                     value={formData?.amount}
                     pattern={PATTERN.ONLY_NUM}
                     maxLetterLimit={15}
-                    inputTitle={'Price'}
-                    placeholder={'Enter Service Amount'}
-                    id={'amount'}
+                    inputTitle="Price"
+                    placeholder="Enter Service Amount"
+                    id="amount"
                     register={register}
                     error={errors.amount}
-                    inputType={'text'}
+                    inputType="text"
                   />
                 </FormControl>
               </div>
@@ -176,12 +176,12 @@ function EmployeeServiceEditPopup({
                     value={formData?.minutes}
                     pattern={PATTERN.ONLY_NUM}
                     maxLetterLimit={4}
-                    inputTitle={'Service Time (Minutes)'}
-                    placeholder={'Enter time (Minutes)'}
-                    id={'minutes'}
+                    inputTitle="Service Time (Minutes)"
+                    placeholder="Enter time (Minutes)"
+                    id="minutes"
                     register={register}
                     error={errors.minutes}
-                    inputType={'text'}
+                    inputType="text"
                   />
                 </FormControl>
               </div>
