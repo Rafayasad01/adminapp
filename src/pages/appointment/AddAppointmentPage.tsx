@@ -567,20 +567,24 @@ export default function AddAppointmentPage() {
                       <div className="gaps-4 grid grid-cols-12">
                         {appointmentBookedTime?.map(
                           (item: any, index: number) => {
+                            const servicetime = Number(item.serviceTime);
+                            const apptimeDayjs = dayjs(item.appointmentTime);
+                            const endTime = apptimeDayjs.add(
+                              servicetime,
+                              'minute'
+                            );
+                            const formattedEndTime = endTime.format('HH:mm A');
                             return (
                               <div key={index} className="col-span-2 p-3">
-                                <div className="h-[100px] flex-col">
-                                  <div>
+                                <div className="flex-col rounded-xl bg-background">
+                                  <div className="flex items-center justify-center p-3">
                                     <span className="text-sm">
                                       {dayjs(item.appointmentTime).isValid()
                                         ? dayjs(item.appointmentTime)?.format(
                                             'HH:mm A'
                                           )
                                         : '--'}{' '}
-                                      -{' '}
-                                      {dayjs(item.endTime).isValid()
-                                        ? dayjs(item.endTime)?.format('HH:mm A')
-                                        : '--'}
+                                      - {formattedEndTime}
                                     </span>
                                   </div>
                                 </div>
