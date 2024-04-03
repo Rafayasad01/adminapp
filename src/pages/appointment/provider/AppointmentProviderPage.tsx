@@ -685,21 +685,6 @@ function AppointmentProviderPage() {
         });
       });
     // handleNextSlide();
-    // if (openFormDialog && weekDays && startTime && endTime) {
-    //   setOpenFormDialog(false);
-    //   createFormHandler(data);
-    // } else if (openEditFormDialog) {
-    //   if (listingRolePermission(dataRole, 'Appointment Provider Update')) {
-    //     setOpenEditFormDialog(false);
-    //     updateFormHandler(data);
-    //   } else {
-    //     setIsNotify(true);
-    //     setNotifyMessage({
-    //       text: NOT_AUTHORIZED_MESSAGE,
-    //       type: 'warning',
-    //     });
-    //   }
-    // }
   };
 
   const handleSwitchChange = (event: any, id: string) => {
