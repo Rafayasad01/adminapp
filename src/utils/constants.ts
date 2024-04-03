@@ -198,7 +198,7 @@ export const BANNER_TYPE = [
 export const APPOINTMENT_TYPE = [
   {
     id: 'allAppointments',
-    name: 'All Bookings',
+    name: 'All Appointments',
     imageIcon: GroupsOutlinedIcon,
   },
   {

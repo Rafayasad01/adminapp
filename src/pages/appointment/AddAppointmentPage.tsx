@@ -108,14 +108,14 @@ export default function AddAppointmentPage() {
           dayjs(getValues('appointmentDate'))?.format('YYYY-MM-DD')
         );
         // console.log("date",dayjs(getValues("appointmentDate"))?.format('YYYY-MM-DD'));
-        await StoreAppointmentService.getBarberBookedTimeSlots(
-          item.storeEmployee.id,
-          dayjs(getValues('appointmentDate'))?.format('YYYY-MM-DD')
-        ).then((res) => {
-          if (res.data.success) {
-            setAppointmentBookedTime(res.data.data);
-          }
-        });
+        // await StoreAppointmentService.getBarberBookedTimeSlots(
+        //   item.storeEmployee.id,
+        //   dayjs(getValues('appointmentDate'))?.format('YYYY-MM-DD')
+        // ).then((res) => {
+        //   if (res.data.success) {
+        //     setAppointmentBookedTime(res.data.data);
+        //   }
+        // });
       }
     };
 
@@ -257,6 +257,7 @@ export default function AddAppointmentPage() {
   };
 
   const onSubmit = (data: any) => {
+    setIsLoader(true);
     delete data.storeServiceCategoryItem;
     delete data.categoryId;
     delete data.appointmentDate;
@@ -266,10 +267,26 @@ export default function AddAppointmentPage() {
     });
     data.appointments = updatedAppointmentArray;
     console.log('onSubmitDATA1', data);
-    // StoreAppointmentService.appointmentCreate(data).then((res: any) => {
-    //   navigate('../appointment')
-    //   console.log('CREATE HIT', res.data.data);
-    // });
+    StoreAppointmentService.appointmentCreate(data).then((res: any) => {
+      if (res.data.success) {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: res.data.message,
+          type: 'success',
+        });
+        setTimeout(() => {
+          navigate(-1);
+        }, 500);
+      } else {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: res.data.message,
+          type: 'error',
+        });
+      }
+    });
   };
 
   const getCatItemName = (id: any) => {
@@ -279,7 +296,20 @@ export default function AddAppointmentPage() {
   };
 
   const handleDateChange = (date: any, field: any) => {
-    field.onChange(date); // Call field.onChange with the selected date
+    console.log('HIT', date, activeBarberData);
+    if (activeBarberData) {
+      field.onChange(date);
+      getBookedTimeSlots(
+        activeBarberData.storeEmployee.id,
+        dayjs(date)?.format('YYYY-MM-DD')
+      );
+    } else {
+      setIsNotify(true);
+      setNotifyMessage({
+        text: 'First select barber before selecting appointment date & time',
+        type: 'error',
+      });
+    }
   };
 
   // console.log("barberList", barberList);
@@ -565,6 +595,7 @@ export default function AddAppointmentPage() {
                                   render={({ field }) => (
                                     <DesktopDatePicker
                                       {...field}
+                                      disabled={!activeBarberData}
                                       onChange={(date) =>
                                         handleDateChange(date, field)
                                       }
@@ -589,11 +620,13 @@ export default function AddAppointmentPage() {
                                   variant="standard"
                                 >
                                   <TimePicker
+                                    disabled={!activeBarberData}
                                     // timePickerLabel="Appointment Time"
                                     // timePickerSubLabel={"(Office in time)"}
                                     timePickerValue={appointmentTime}
                                     setTimePickerValue={setAppointmentTime}
                                     id="startTime"
+
                                     // setError={setError}
                                   />
                                 </FormControl>
