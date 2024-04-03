@@ -84,6 +84,16 @@ export default function AddAppointmentPage() {
     },
   };
 
+  const getBookedTimeSlots = async (id: any, date: any) => {
+    await StoreAppointmentService.getBarberBookedTimeSlots(id, date).then(
+      (res) => {
+        if (res.data.success) {
+          setAppointmentBookedTime(res.data.data);
+        }
+      }
+    );
+  };
+
   const BarberCard = (item: any, index: number) => {
     const onHandleBarber = async () => {
       if (index === activeBarber) {
@@ -93,12 +103,18 @@ export default function AddAppointmentPage() {
       } else {
         setActiveBarberData(item);
         setActiveBarber(index);
+        getBookedTimeSlots(
+          item.storeEmployee.id,
+          dayjs(getValues('appointmentDate'))?.format('YYYY-MM-DD')
+        );
         // console.log("date",dayjs(getValues("appointmentDate"))?.format('YYYY-MM-DD'));
         await StoreAppointmentService.getBarberBookedTimeSlots(
           item.storeEmployee.id,
           dayjs(getValues('appointmentDate'))?.format('YYYY-MM-DD')
         ).then((res) => {
-          setAppointmentBookedTime(res.data.data);
+          if (res.data.success) {
+            setAppointmentBookedTime(res.data.data);
+          }
         });
       }
     };
@@ -174,14 +190,23 @@ export default function AddAppointmentPage() {
 
   const getCatItems = async (id: any) => {
     await StoreLovService.StoreCatItemsLov(id).then((res) => {
-      setCatItemsLovList(res.data.data);
-      const uniqueData = res.data.data.filter(
-        (item: any) =>
-          !usedCatItemsLovlist.some(
-            (existingItem: any) => existingItem.id === item.id
-          )
-      );
-      setusedCatItemsLovList([...usedCatItemsLovlist, ...uniqueData]);
+      if (res.data.success) {
+        setCatItemsLovList(res.data.data);
+        const uniqueData = res.data.data.filter(
+          (item: any) =>
+            !usedCatItemsLovlist.some(
+              (existingItem: any) => existingItem.id === item.id
+            )
+        );
+        setusedCatItemsLovList([...usedCatItemsLovlist, ...uniqueData]);
+      } else {
+        setCatItemsLovList([]);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: res.data.message,
+          type: 'error',
+        });
+      }
     });
   };
 
@@ -190,6 +215,7 @@ export default function AddAppointmentPage() {
       getValues('categoryId') !== undefined &&
       getValues('categoryId') !== 'none'
     ) {
+      setBarberList([]);
       getCatItems(watch('categoryId'));
       // console.log("hit");
     }
@@ -206,15 +232,28 @@ export default function AddAppointmentPage() {
 
   const addAppointmentServices = () => {
     const obj = {
-      barber: activeBarberData.storeEmployee.name,
-      amount: activeBarberData.amount,
+      barber: activeBarberData?.storeEmployee?.name,
+      amount: activeBarberData?.amount,
       storeServiceCategoryItem: watch('storeServiceCategoryItem'),
-      storeEmployee: activeBarberData.storeEmployee.id,
+      storeEmployee: activeBarberData?.storeEmployee?.id,
       appointmentTime: `${dayjs(getValues('appointmentDate'))?.format(
         'YYYY-MM-DD'
       )} ${dayjs(appointmentTime)?.format('HH:mm:ss')}`,
     };
-    append(obj);
+    if (
+      watch('storeServiceCategoryItem') &&
+      activeBarberData &&
+      getValues('appointmentDate') &&
+      appointmentTime
+    ) {
+      append(obj);
+    } else {
+      setIsNotify(true);
+      setNotifyMessage({
+        text: 'Please select your preferred barber, category , desired services, and appointment date & time for scheduling.',
+        type: 'error',
+      });
+    }
   };
 
   const onSubmit = (data: any) => {
@@ -239,6 +278,10 @@ export default function AddAppointmentPage() {
     return tempAr?.find((el: any) => el.id === id)?.name;
   };
 
+  const handleDateChange = (date: any, field: any) => {
+    field.onChange(date); // Call field.onChange with the selected date
+  };
+
   // console.log("barberList", barberList);
 
   return isLoader ? (
@@ -250,7 +293,7 @@ export default function AddAppointmentPage() {
         setIsOpen={setIsNotify}
         displayMessage={notifyMessage}
       />
-      <TopBar isNestedRoute title="Booking Form" />
+      <TopBar isNestedRoute title="Fill Appointment Form" />
       <div className="container m-auto mt-5">
         <div className="w-full rounded-lg bg-white shadow-lg">
           <div className="p-3">
@@ -358,7 +401,7 @@ export default function AddAppointmentPage() {
                             setValue={setValue}
                             customHeight="h-[40px] rounded-xl"
                             customClassInputTitle="font-semibold"
-                            inputTitle="Employee Category"
+                            inputTitle="Barber Category"
                             options={{ roles: catLovlist }}
                             defaultValue="Select Barber Category"
                           />
@@ -379,7 +422,7 @@ export default function AddAppointmentPage() {
                             options={{ roles: catItemsLovlist }}
                             customHeight="h-[40px] rounded-xl"
                             customClassInputTitle="font-semibold"
-                            inputTitle="Employee Services"
+                            inputTitle="Barber Services"
                           />
                         </FormControl>
                       </div>
@@ -427,7 +470,7 @@ export default function AddAppointmentPage() {
                   <>
                     <div className="mt-5">
                       <span className="text-base font-bold text-[#1A1A1A]">
-                        Select Employee
+                        Select Barber
                       </span>
                       <hr className="my-4 border-[#949EAE]" />
                       <div
@@ -522,8 +565,12 @@ export default function AddAppointmentPage() {
                                   render={({ field }) => (
                                     <DesktopDatePicker
                                       {...field}
-                                      onChange={(date) => field.onChange(date)}
+                                      onChange={(date) =>
+                                        handleDateChange(date, field)
+                                      }
+                                      // onChange={(date) => field.onChange(date)}
                                       value={field.value}
+                                      minDate={dayjs()}
                                     />
                                   )}
                                 />
@@ -534,7 +581,7 @@ export default function AddAppointmentPage() {
                           <div className="mx-5">
                             <div className="flex-col">
                               <span className="text-sm">
-                                Select Booking Time
+                                Select Appointment Time
                               </span>
                               <div className="">
                                 <FormControl
@@ -597,14 +644,10 @@ export default function AddAppointmentPage() {
                   </>
                 )}
               <div className="mt-3">
-                {fields?.length > 0 && (
-                  <>
-                    <span className="text-base font-bold text-[#1A1A1A]">
-                      Selected Employees & Service
-                    </span>
-                    <hr className="my-4 border-[#949EAE]" />
-                  </>
-                )}
+                <span className="text-base font-bold text-[#1A1A1A]">
+                  Selected Barber & Service
+                </span>
+                {fields?.length > 0 && <hr className="my-4 border-[#949EAE]" />}
                 {fields?.length > 0 &&
                   fields?.map((items: any, index: number) => {
                     return (

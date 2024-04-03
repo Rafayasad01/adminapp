@@ -116,7 +116,7 @@ function AppointmentProviderPage() {
 
   const inputFieldsData = [
     {
-      fieldName: 'Employee Name',
+      fieldName: 'Provider Name',
       id: 'name',
       placeholder: 'Enter provider name',
       register,
@@ -312,6 +312,13 @@ function AppointmentProviderPage() {
               setValue('email', item.data.data.email);
               setValue('cnic', item.data.data.cnic);
               setOpenEditFormDialog(true);
+            } else {
+              setIsLoader(false);
+              setIsNotify(true);
+              setNotifyMessage({
+                text: item.data.message,
+                type: 'error',
+              });
             }
           }
         );
@@ -568,17 +575,13 @@ function AppointmentProviderPage() {
   // console.log("delte idss", delIds);
 
   const onSubmitUpdateDialogBox = async (data: any) => {
+    setIsLoader(true);
     delete data.servicesName;
     delete data.servicesAmount;
     delete data.price;
     delete data.categoryId;
     delete data.servicesId;
     delete data.mints;
-    const obj = {
-      ...data,
-      avatar: image,
-    };
-    console.log('🚀 ~ onSubmitUpdateDialogBox ~ data:2', obj);
     const formData = new FormData();
     formData.append('name', data.name);
     formData.append('address', data.address);
@@ -588,13 +591,29 @@ function AppointmentProviderPage() {
     formData.append('services', JSON.stringify(data.services));
     formData.append('deletedIds', JSON.stringify(delIds));
     if (image) formData.append('avatar', image);
-
     StoreEmployeeService.StoreEmployeeUpdate(formData, actionMenuItemid)
       .then((res) => {
-        console.log('res', res.data.data);
-        // setIsLoader(true);
-        // setOpenFormDialog(false);
-        // setList([res.data.data, ...list]);
+        if (res.data.success) {
+          setIsLoader(false);
+          setEditFormData(false);
+          console.log('res', res.data.data);
+          for (let i = 0; i < list.length; i += 1) {
+            if (list[i].id === res.data.data.id) {
+              list[i].name = res.data.data.name;
+              list[i].address = res.data.data.address;
+              list[i].email = res.data.data.email;
+              list[i].phone = res.data.data.phone;
+              list[i].cnic = res.data.data.cnic;
+            }
+          }
+        } else {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: res.data.message,
+            type: 'error',
+          });
+        }
       })
       .catch((err) => {
         setIsNotify(true);
@@ -614,13 +633,6 @@ function AppointmentProviderPage() {
     delete data.categoryId;
     delete data.servicesId;
     delete data.mints;
-    const obj = {
-      ...data,
-      weekDays,
-      startTime,
-      endTime,
-      avatar: image,
-    };
     // formdata banega
     // console.log('🚀 ~ onSubmitDialogBox ~ data: 2', obj);
     const formData = new FormData();
@@ -629,7 +641,7 @@ function AppointmentProviderPage() {
     formData.append('email', data.email);
     formData.append('phone', data.phone);
     formData.append('cnic', data.cnic);
-    formData.append('avatar', image);
+    if (image) formData.append('avatar', image);
     formData.append('services', JSON.stringify(data.services));
     formData.append('workDays', JSON.stringify(weekDays));
     formData.append(
@@ -637,21 +649,30 @@ function AppointmentProviderPage() {
       dayjs(startTime).format('YYYY-MM-DD HH:mm:ss')
     );
     formData.append('endTime', dayjs(endTime).format('YYYY-MM-DD HH:mm:ss'));
-    // StoreEmployeeService.StoreEmployeeCreate(formData)
-    //   .then((res) => {
-    //     setIsLoader(true);
-    //     setOpenFormDialog(false);
-    //     setList([res.data.data, ...list]);
-    //     // console.log("res", res.data.data);
-    //   })
-    //   .catch((err) => {
-    //     setIsNotify(true);
-    //     setNotifyMessage({
-    //       text: err.message,
-    //       type: 'error',
-    //     });
-    //   })
-    handleNextSlide();
+    StoreEmployeeService.StoreEmployeeCreate(formData)
+      .then((res) => {
+        if (res.data.success) {
+          setIsLoader(false);
+          setOpenFormDialog(false);
+          setList([res.data.data, ...list]);
+        } else {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: res.data.message,
+            type: 'error',
+          });
+        }
+      })
+      .catch((err) => {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
+        });
+      });
+    // handleNextSlide();
     // if (openFormDialog && weekDays && startTime && endTime) {
     //   setOpenFormDialog(false);
     //   createFormHandler(data);
@@ -758,13 +779,13 @@ function AppointmentProviderPage() {
         setIsOpen={setIsNotify}
         displayMessage={notifyMessage}
       />
-      <TopBar title="Employee" />
+      <TopBar title="Barber" />
       <div className="container m-auto mt-5">
         <div className="w-full rounded-lg bg-white shadow-lg">
           <div className="grid grid-cols-12 px-4 py-5">
             <div className="col-span-7">
               <span className="font-open-sans text-xl font-semibold text-[#252733]">
-                All Employee
+                All Barbers
               </span>
             </div>
             <div className="col-span-5">
@@ -877,7 +898,7 @@ function AppointmentProviderPage() {
           handleNextSlide={handleNextSlide}
           handlePrevSlide={handlePrevSlide}
           ServicesFields={fields}
-          DialogSliderOne="Add Employee"
+          DialogSliderOne="Add Barber"
           DialogSliderTwo="Add Barber Services"
           DialogSubHeader="Select Schedule"
           inputFieldsData={inputFieldsData}
