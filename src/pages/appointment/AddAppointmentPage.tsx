@@ -190,6 +190,7 @@ export default function AddAppointmentPage() {
       getValues('categoryId') !== undefined &&
       getValues('categoryId') !== 'none'
     ) {
+      setBarberList([]);
       getCatItems(watch('categoryId'));
       // console.log("hit");
     }
@@ -206,15 +207,28 @@ export default function AddAppointmentPage() {
 
   const addAppointmentServices = () => {
     const obj = {
-      barber: activeBarberData.storeEmployee.name,
-      amount: activeBarberData.amount,
+      barber: activeBarberData?.storeEmployee?.name,
+      amount: activeBarberData?.amount,
       storeServiceCategoryItem: watch('storeServiceCategoryItem'),
-      storeEmployee: activeBarberData.storeEmployee.id,
+      storeEmployee: activeBarberData?.storeEmployee?.id,
       appointmentTime: `${dayjs(getValues('appointmentDate'))?.format(
         'YYYY-MM-DD'
       )} ${dayjs(appointmentTime)?.format('HH:mm:ss')}`,
     };
-    append(obj);
+    if (
+      watch('storeServiceCategoryItem') &&
+      activeBarberData &&
+      getValues('appointmentDate') &&
+      appointmentTime
+    ) {
+      append(obj);
+    } else {
+      setIsNotify(true);
+      setNotifyMessage({
+        text: 'Please select your preferred barber, category , desired services, and appointment date & time for scheduling.',
+        type: 'error',
+      });
+    }
   };
 
   const onSubmit = (data: any) => {

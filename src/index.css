@@ -1068,10 +1068,10 @@ label + .css-1aa5qj0-MuiInputBase-root-MuiInput-root {
 
 @media only screen and (max-width: 1023.98px) {
   .left-sidebar {
-    width: 250px !important;
+    /* width: 250px !important; */
     padding: 20px 0 !important;
-    top: 80px !important;
-    transform: translateX(-300px);
+    top: 0px !important;
+    transform: unset;
   }
 
   body.sidebar-opened .left-sidebar {
