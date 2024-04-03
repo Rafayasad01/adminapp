@@ -1,8 +1,8 @@
 import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined';
 import PersonOutlinedIcon from '@mui/icons-material/PersonOutlined';
 
-const HOST = 'https://dev.urapptech.com';
-// const HOST = 'http://192.168.8.68:3200';
+// const HOST = 'https://dev.urapptech.com';
+const HOST = 'http://192.168.8.68:3200';
 // const HOST = 'http://192.168.8.97:3200';
 
 export const BASE_URL = `${HOST}/api/v1/admin/`;

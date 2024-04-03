@@ -23,6 +23,7 @@ const darkTheme = createTheme({
 });
 
 type Props = {
+  disabled?: boolean;
   timePickerLabel?: string;
   timePickerSubLabel?: string;
   timePickerValue: dayjs.Dayjs | null;
@@ -33,6 +34,7 @@ type Props = {
   isTrue?: boolean;
 };
 function TimePicker({
+  disabled,
   timePickerLabel,
   timePickerSubLabel,
   timePickerValue,
@@ -40,6 +42,8 @@ function TimePicker({
   id,
   isTrue,
 }: Props) {
+  console.log('disss', disabled);
+
   const [timePicker, setTimePicker] = useState<HTMLButtonElement | null>(null);
   const buttonElement = useRef(null);
   const handleClick = () => {
@@ -75,6 +79,7 @@ function TimePicker({
           )}
         </label>
         <Input
+          disabled={disabled}
           ref={buttonElement}
           className="FormInput"
           type="text"
@@ -89,6 +94,7 @@ function TimePicker({
           endAdornment={
             <InputAdornment position="end">
               <IconButton
+                disabled={disabled}
                 aria-label="toggle password visibility"
                 onClick={handleClick}
                 style={{ padding: 0 }}

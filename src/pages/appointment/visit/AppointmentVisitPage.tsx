@@ -291,13 +291,13 @@ function AppointmentVisitPage() {
     if (appointmentType?.text === 'All Appointments') {
       setPriorityData([
         {
-          text: 'John',
-          id: 1,
+          text: 'asad',
+          id: 'd382416c-4d28-4a0b-b358-31e452889b6f',
           imageUrl: assets.images.avatarUser,
         },
         {
-          text: 'Thomas',
-          id: 2,
+          text: 'rafay',
+          id: '0635acb6-ffdf-47b5-ac80-8f43766bb7bd',
           imageUrl: assets.images.avatarUser,
         },
       ]);
