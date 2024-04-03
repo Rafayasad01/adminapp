@@ -84,6 +84,16 @@ export default function AddAppointmentPage() {
     },
   };
 
+  const getBookedTimeSlots = async (id: any, date: any) => {
+    await StoreAppointmentService.getBarberBookedTimeSlots(id, date).then(
+      (res) => {
+        if (res.data.success) {
+          setAppointmentBookedTime(res.data.data);
+        }
+      }
+    );
+  };
+
   const BarberCard = (item: any, index: number) => {
     const onHandleBarber = async () => {
       if (index === activeBarber) {
@@ -93,12 +103,18 @@ export default function AddAppointmentPage() {
       } else {
         setActiveBarberData(item);
         setActiveBarber(index);
+        getBookedTimeSlots(
+          item.storeEmployee.id,
+          dayjs(getValues('appointmentDate'))?.format('YYYY-MM-DD')
+        );
         // console.log("date",dayjs(getValues("appointmentDate"))?.format('YYYY-MM-DD'));
         await StoreAppointmentService.getBarberBookedTimeSlots(
           item.storeEmployee.id,
           dayjs(getValues('appointmentDate'))?.format('YYYY-MM-DD')
         ).then((res) => {
-          setAppointmentBookedTime(res.data.data);
+          if (res.data.success) {
+            setAppointmentBookedTime(res.data.data);
+          }
         });
       }
     };
@@ -174,14 +190,23 @@ export default function AddAppointmentPage() {
 
   const getCatItems = async (id: any) => {
     await StoreLovService.StoreCatItemsLov(id).then((res) => {
-      setCatItemsLovList(res.data.data);
-      const uniqueData = res.data.data.filter(
-        (item: any) =>
-          !usedCatItemsLovlist.some(
-            (existingItem: any) => existingItem.id === item.id
-          )
-      );
-      setusedCatItemsLovList([...usedCatItemsLovlist, ...uniqueData]);
+      if (res.data.success) {
+        setCatItemsLovList(res.data.data);
+        const uniqueData = res.data.data.filter(
+          (item: any) =>
+            !usedCatItemsLovlist.some(
+              (existingItem: any) => existingItem.id === item.id
+            )
+        );
+        setusedCatItemsLovList([...usedCatItemsLovlist, ...uniqueData]);
+      } else {
+        setCatItemsLovList([]);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: res.data.message,
+          type: 'error',
+        });
+      }
     });
   };
 
@@ -251,6 +276,10 @@ export default function AddAppointmentPage() {
     let tempAr: any[] = [];
     tempAr = usedCatItemsLovlist;
     return tempAr?.find((el: any) => el.id === id)?.name;
+  };
+
+  const handleDateChange = (date: any, field: any) => {
+    field.onChange(date); // Call field.onChange with the selected date
   };
 
   // console.log("barberList", barberList);
@@ -536,8 +565,12 @@ export default function AddAppointmentPage() {
                                   render={({ field }) => (
                                     <DesktopDatePicker
                                       {...field}
-                                      onChange={(date) => field.onChange(date)}
+                                      onChange={(date) =>
+                                        handleDateChange(date, field)
+                                      }
+                                      // onChange={(date) => field.onChange(date)}
                                       value={field.value}
+                                      minDate={dayjs()}
                                     />
                                   )}
                                 />

@@ -169,10 +169,10 @@ function CustomEditSwiperDialog({
   };
 
   useEffect(() => {
-    let icon = editFormData.avatar.split('/').slice(-1)[0];
+    let icon = editFormData?.avatar?.split('/')?.slice(-1)[0];
     const regexExp = /[a-z,0-9,-]{36}/;
     if (regexExp.test(icon)) {
-      icon = icon.split('-').splice(5)[0].at(0);
+      icon = icon?.split('-')?.splice(5)[0]?.at(0);
     }
     setImageName(editFormData?.avatar);
   }, [editFormData]);
