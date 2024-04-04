@@ -40,17 +40,6 @@ const dateString = '2024-04-02T09:10:00.000Z';
 const dateStrings = '2024-04-02T09:15:00.000Z';
 const date = dayjs(dateString);
 const dates = dayjs(dateStrings);
-const formattedDate1 = date.format('ddd MMM DD YYYY HH:mm:ss [GMT]ZZ (zz)');
-const formattedDate2 = dates.format('ddd MMM DD YYYY HH:mm:ss [GMT]ZZ (zz)');
-
-const datesss = dayjs(dateString);
-
-// Extract individual components
-const year = date.year(); // Get the year (2024)
-const month = date.month(); // Get the month (3 for April, since months are zero-based in JavaScript)
-const day = date.date(); // Get the day of the month (2)
-const hour = date.hour(); // Get the hour (9)
-const minute = date.minute(); // Get the minute (10)
 
 const newDate = new Date(2018, 4, 28, 9, 30);
 console.log('newDatesdasdsasadsa', newDate);

@@ -438,122 +438,6 @@ function AppointmentProviderPage() {
     }
   }, [emptyVariable]);
 
-  const createFormHandler = (data: any) => {
-    // console.log("dadada", data);
-    setIsLoader(true);
-    const userData = {
-      name: data.providerName,
-      address: data.address ? data.address : null,
-      email: data.email ? data.email : null,
-      urgentFee: data.urgentFee ? data.urgentFee : null,
-      phone: data.phone,
-      cnic: data.cnic,
-      startTime: startTime.format('YYYY-MM-DD HH:mm:ss'),
-      endTime: endTime.format('YYYY-MM-DD HH:mm:ss'),
-      workDays: weekDays,
-      createdBy: authState.user.id,
-      tenant: authState.user.tenant,
-    };
-    // console.log('final data', userData);
-    Service.ProviderCreate(userData)
-      .then((item) => {
-        if (item.data.success) {
-          reset();
-          setStartTime('');
-          setEndTime('');
-          setWeekDays([]);
-          setIsLoader(false);
-          setIsNotify(true);
-          setNotifyMessage({
-            text: item.data.message,
-            type: 'success',
-          });
-          setList([item.data.data, ...list]);
-        } else {
-          reset();
-          setStartTime('');
-          setEndTime('');
-          setWeekDays([]);
-          setIsLoader(false);
-          setIsNotify(true);
-          setNotifyMessage({
-            text: item.data.message,
-            type: 'error',
-          });
-        }
-      })
-      .catch((err) => {
-        reset();
-        setStartTime('');
-        setEndTime('');
-        setWeekDays([]);
-        setIsLoader(false);
-        setIsNotify(true);
-        setNotifyMessage({
-          text: err.message,
-          type: 'error',
-        });
-      });
-  };
-
-  const updateFormHandler = (data: any) => {
-    // console.log("dtaat updated", data);
-    setIsLoader(true);
-    const userData = {
-      name: data.providerName,
-      address: data.address ? data.address : null,
-      urgentFee: data.urgentFee ? data.urgentFee : null,
-      email: data.email ? data.email : null,
-      phone: data.phone,
-      cnic: data.cnic,
-      updatedBy: authState.user.id,
-    };
-    Service.ProviderUpdate(actionMenuItemid, userData)
-      .then((item) => {
-        if (item.data.success) {
-          setIsLoader(false);
-          setIsNotify(true);
-          setNotifyMessage({
-            text: item.data.message,
-            type: 'success',
-          });
-          for (let i = 0; i < list.length; i += 1) {
-            if (list[i].id === actionMenuItemid) {
-              list[i].name = item.data.data.name;
-              list[i].address = item.data.data.address;
-              list[i].email = item.data.data.email;
-              list[i].phone = item.data.data.phone;
-              list[i].cnic = item.data.data.cnic;
-            }
-          }
-          reset();
-          setStartTime('');
-          setEndTime('');
-        } else {
-          reset();
-          setStartTime('');
-          setEndTime('');
-          setIsLoader(false);
-          setIsNotify(true);
-          setNotifyMessage({
-            text: item.data.message,
-            type: 'error',
-          });
-        }
-      })
-      .catch((err) => {
-        reset();
-        setStartTime('');
-        setEndTime('');
-        setIsLoader(false);
-        setIsNotify(true);
-        setNotifyMessage({
-          text: err.message,
-          type: 'error',
-        });
-      });
-  };
-
   const swiperRef = useRef<any>(null);
 
   const handleNextSlide = () => {
@@ -661,29 +545,29 @@ function AppointmentProviderPage() {
     );
     formData.append('endTime', dayjs(endTime).format('YYYY-MM-DD HH:mm:ss'));
     if (weekDays && startTime && endTime && data.services.length > 0) {
-      // StoreEmployeeService.StoreEmployeeCreate(formData)
-      //   .then((res) => {
-      //     if (res.data.success) {
-      //       setIsLoader(false);
-      //       setOpenFormDialog(false);
-      //       setList([res.data.data, ...list]);
-      //     } else {
-      //       setIsLoader(false);
-      //       setIsNotify(true);
-      //       setNotifyMessage({
-      //         text: res.data.message,
-      //         type: 'error',
-      //       });
-      //     }
-      //   })
-      //   .catch((err) => {
-      //     setIsLoader(false);
-      //     setIsNotify(true);
-      //     setNotifyMessage({
-      //       text: err.message,
-      //       type: 'error',
-      //     });
-      //   });
+      StoreEmployeeService.StoreEmployeeCreate(formData)
+        .then((res) => {
+          if (res.data.success) {
+            setIsLoader(false);
+            setOpenFormDialog(false);
+            setList([res.data.data, ...list]);
+          } else {
+            setIsLoader(false);
+            setIsNotify(true);
+            setNotifyMessage({
+              text: res.data.message,
+              type: 'error',
+            });
+          }
+        })
+        .catch((err) => {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: err.message,
+            type: 'error',
+          });
+        });
     } else {
       setIsLoader(false);
       setIsNotify(true);
