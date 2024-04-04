@@ -24,6 +24,7 @@ import TopBar from '../../../components/common/TopBar';
 import { AppointmentVisit } from '../../../interfaces/app.appointment';
 import { useAppSelector } from '../../../redux/redux-hooks';
 import Service from '../../../services/adminapp/adminAppointment';
+import EmloyeeService from '../../../services/adminapp/adminStoreEmployee';
 import CustomOrderPrintLayoutCash from '../../../utils/CustomPrintLayout/CustomAppointmentPrintLayout';
 import {
   APPOINTMENT_TYPE,
@@ -289,18 +290,38 @@ function AppointmentVisitPage() {
 
   useEffect(() => {
     if (appointmentType?.text === 'All Appointments') {
-      setPriorityData([
-        {
-          text: 'asad',
-          id: 'd382416c-4d28-4a0b-b358-31e452889b6f',
-          imageUrl: assets.images.avatarUser,
-        },
-        {
-          text: 'rafay',
-          id: '0635acb6-ffdf-47b5-ac80-8f43766bb7bd',
-          imageUrl: assets.images.avatarUser,
-        },
-      ]);
+      EmloyeeService.StoreEmployeeList(search, page, 2000)
+        .then((item: any) => {
+          setIsLoader(false);
+          console.log(item);
+          let temp = item.data.data.list.map((el: any) => ({
+            text: el.name,
+            id: el.id,
+            imageUrl: el.avatar,
+          }));
+          setPriorityData(temp);
+          // setList(item.data.data);
+        })
+        .catch((error: Error) => {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: error.message,
+            type: 'error',
+          });
+        });
+      // setPriorityData([
+      //   {
+      //     text: 'asad',
+      //     id: 'd382416c-4d28-4a0b-b358-31e452889b6f',
+      //     imageUrl: assets.images.avatarUser,
+      //   },
+      //   {
+      //     text: 'rafay',
+      //     id: '0635acb6-ffdf-47b5-ac80-8f43766bb7bd',
+      //     imageUrl: assets.images.avatarUser,
+      //   },
+      // ]);
     }
   }, [appointmentType]);
 

@@ -302,10 +302,11 @@ function AppointmentProviderPage() {
                   storeServiceCategoryItem: el.storeServiceCategoryItem,
                 })
               );
+              append(filteredServices);
               // console.log("filteredServices", filteredServices);
-              filteredServices.forEach((service: any) => {
-                append(service);
-              });
+              // [filteredServices].forEach((service: any) => {
+              //   append(service);
+              // });
               setValue('name', item.data.data.name);
               setValue('address', item.data.data.address);
               setValue('phone', item.data.data.phone);
@@ -582,11 +583,11 @@ function AppointmentProviderPage() {
     delete data.categoryId;
     delete data.servicesId;
     delete data.mints;
-    const obj = {
-      ...data,
-      avatar: image,
-    };
-    console.log('🚀 ~ onSubmitUpdateDialogBox ~ data:2', obj);
+    // const obj = {
+    //   ...data,
+    //   avatar: image,
+    // };
+    // console.log('🚀 ~ onSubmitUpdateDialogBox ~ data:2', obj);
     const formData = new FormData();
     formData.append('name', data.name);
     formData.append('address', data.address);
@@ -600,7 +601,7 @@ function AppointmentProviderPage() {
       .then((res) => {
         if (res.data.success) {
           setIsLoader(false);
-          setEditFormData(false);
+          setOpenEditFormDialog(false);
           console.log('res', res.data.data);
           for (let i = 0; i < list.length; i += 1) {
             if (list[i].id === res.data.data.id) {
@@ -631,7 +632,7 @@ function AppointmentProviderPage() {
 
   const onSubmitDialogBox = async (data: any) => {
     // console.log('🚀 ~ onSubmitDialogBox ~ data: 1', data);
-    setIsLoader(true);
+    // setIsLoader(true);
     delete data.servicesName;
     delete data.servicesAmount;
     delete data.price;
@@ -645,8 +646,6 @@ function AppointmentProviderPage() {
       endTime,
       avatar: image,
     };
-    // formdata banega
-    // console.log('🚀 ~ onSubmitDialogBox ~ data: 2', obj);
     const formData = new FormData();
     formData.append('name', data.name);
     formData.append('address', data.address);
@@ -661,29 +660,43 @@ function AppointmentProviderPage() {
       dayjs(startTime).format('YYYY-MM-DD HH:mm:ss')
     );
     formData.append('endTime', dayjs(endTime).format('YYYY-MM-DD HH:mm:ss'));
-    StoreEmployeeService.StoreEmployeeCreate(formData)
-      .then((res) => {
-        if (res.data.success) {
-          setIsLoader(false);
-          setOpenFormDialog(false);
-          setList([res.data.data, ...list]);
-        } else {
-          setIsLoader(false);
-          setIsNotify(true);
-          setNotifyMessage({
-            text: res.data.message,
-            type: 'error',
-          });
-        }
-      })
-      .catch((err) => {
-        setIsLoader(false);
-        setIsNotify(true);
-        setNotifyMessage({
-          text: err.message,
-          type: 'error',
-        });
+    if (weekDays && startTime && endTime && data.services.length > 0) {
+      // StoreEmployeeService.StoreEmployeeCreate(formData)
+      //   .then((res) => {
+      //     if (res.data.success) {
+      //       setIsLoader(false);
+      //       setOpenFormDialog(false);
+      //       setList([res.data.data, ...list]);
+      //     } else {
+      //       setIsLoader(false);
+      //       setIsNotify(true);
+      //       setNotifyMessage({
+      //         text: res.data.message,
+      //         type: 'error',
+      //       });
+      //     }
+      //   })
+      //   .catch((err) => {
+      //     setIsLoader(false);
+      //     setIsNotify(true);
+      //     setNotifyMessage({
+      //       text: err.message,
+      //       type: 'error',
+      //     });
+      //   });
+    } else {
+      setIsLoader(false);
+      setIsNotify(true);
+      setNotifyMessage({
+        text: `All fields are required
+         ${
+           data?.services?.length < 1
+             ? '& you must need to add atleast one service.'
+             : ''
+         }`,
+        type: 'error',
       });
+    }
     // handleNextSlide();
   };
 

@@ -84,16 +84,16 @@ const SwiperComponent = ({ data, selectedUser }: Props) => {
                 <div>
                   <img
                     className="w-[35px]"
-                    src={assets.images.avatarUser}
+                    src={item.imageUrl ?? assets.images.avatarUser}
                     alt="avatar-img"
                   />
                 </div>
                 <div
-                  onClick={() => handleUser(item.name)}
+                  onClick={() => handleUser(item.text)}
                   className="cursor-pointer"
                 >
                   <span className="mx-3 text-base font-semibold">
-                    {item.name}
+                    {item.text}
                   </span>
                 </div>
               </div>

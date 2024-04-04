@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -7,6 +7,8 @@ import Avatar from '@mui/material/Avatar';
 import StarIcon from '@mui/icons-material/Star';
 import dayjs from 'dayjs';
 import assets from '../../assets';
+import StoreAppointmentService from '../../services/adminapp/adminStoreAppointment';
+import Loader from './Loader2';
 
 type Props = {
   appointmentData?: any;
@@ -22,14 +24,59 @@ const AppointmentViewCard = ({
   setIsTooltipOpen,
   ...restProps
 }: Props) => {
-  console.log('🚀 ~ AppointmentViewCard ~ appointmentData:', appointmentData);
+  const [data, setData] = useState<any>(null);
+  const [isLoader, setIsLoader] = useState<boolean>(true);
+
+  // console.log('🚀 ~ AppointmentViewCard ~ appointmentData:', appointmentData);
 
   const handleClose = () => {
     setIsTooltipOpen(false);
     setAppointmentTooltipData(null);
+    setData(null);
   };
 
-  return (
+  useEffect(() => {
+    if (appointmentData) {
+      StoreAppointmentService.getAppointmentById(appointmentData.id).then(
+        (res) => {
+          const date = dayjs(res.data.data.appointmentTime).tz('Asia/Karachi');
+          const year = date.year();
+          const month = date.month();
+          const day = date.date();
+          const hour = date.hour();
+          const minute = date.minute();
+          const newDate1 = new Date(year, month, day, hour, minute);
+          const newDate2 = new Date(year, month, day, hour, minute);
+          newDate2.setMinutes(
+            newDate2.getMinutes() + Number(res.data.data.serviceTime)
+          );
+          const dateF1 = dayjs(newDate1).tz('Asia/Karachi');
+          const dateF2 = dayjs(newDate2).tz('Asia/Karachi');
+          const formattedDateWithHour1 = dateF1.format(
+            'ddd MMM DD YYYY h:mm:ss [GMT]ZZ (zz)'
+          );
+          const formattedDateWithHour2 = dateF2.format(
+            'ddd MMM DD YYYY h:mm:ss [GMT]ZZ (zz)'
+          );
+          const startDate = dayjs(formattedDateWithHour1);
+          const endDate = dayjs(formattedDateWithHour2);
+          const startDateFormat = startDate.format('HH:mm');
+          const endDateFormat = endDate.format('HH:mm');
+          console.log('SALON', formattedDateWithHour1, formattedDateWithHour2);
+          setIsLoader(false);
+          setData({
+            ...res.data.data,
+            startDateFormat,
+            endDateFormat,
+          });
+        }
+      );
+    }
+  }, [appointmentData]);
+
+  return isLoader ? (
+    <Loader />
+  ) : (
     <div className="">
       <div className="bg-[#B8DFF2] p-5 pb-16">
         <div className="flex justify-between">
@@ -62,15 +109,17 @@ const AppointmentViewCard = ({
         <hr className="border-1 border-[#1D4675]" />
         <div className="absolute left-1/2 top-[-50px] -translate-x-1/2 transform">
           <Avatar
-            alt="Remy Sharp"
-            src={assets.images.avatarUser}
+            alt="barber-pic"
+            src={data?.storeEmployee?.avatar}
             sx={{ width: 100, height: 100 }}
           />
         </div>
       </div>
       <div className="flex flex-col items-center justify-center">
         <div>
-          <span className="text-xl font-semibold">Linda Brown</span>
+          <span className="text-xl font-semibold">
+            {data?.storeEmployee?.name}
+          </span>
         </div>
         <div>
           <div className="mt-1 flex items-center justify-center rounded-full bg-[#1D1D1D] px-4 py-1 text-white">
@@ -80,13 +129,21 @@ const AppointmentViewCard = ({
         </div>
       </div>
       <div className="m-3 mt-5 rounded-xl border-[1px] border-[#949EAE] p-3">
+        <div className="my-2 flex items-center">
+          <div>
+            <img src={assets.images.appProfile} alt="app-head" />
+          </div>
+          <div className="flex items-center">
+            <span className="mx-2 text-xs text-[#6A6A6A]">{data?.name}</span>
+          </div>
+        </div>
         <div className="mt-2 flex items-center">
           <div>
             <img src={assets.images.appHead} alt="app-head" />
           </div>
           <div>
             <span className="mx-2 text-xs text-[#6A6A6A]">
-              PRP Treatment & Botox Cosmetic (unit)
+              {data?.storeServiceCategoryItem?.name}
             </span>
           </div>
         </div>
@@ -96,7 +153,9 @@ const AppointmentViewCard = ({
           </div>
           <div>
             <span className="mx-2 text-xs text-[#6A6A6A]">
-              {dayjs().isValid() ? dayjs()?.format('MMMM DD, YYYY') : '--'}
+              {dayjs(data?.appointmentTime).isValid()
+                ? dayjs(data?.appointmentTime)?.format('MMMM DD, YYYY')
+                : '--'}
             </span>
           </div>
         </div>
@@ -106,22 +165,9 @@ const AppointmentViewCard = ({
           </div>
           <div>
             <span className="mx-2 text-xs text-[#6A6A6A]">
-              10AM - 11AM (60 min)
+              {data?.startDateFormat} - {data?.endDateFormat} (
+              {data.serviceTime})
             </span>
-          </div>
-        </div>
-        <div className="my-2 flex items-center">
-          <div>
-            <img src={assets.images.appProfile} alt="app-head" />
-          </div>
-          <div className="flex items-center">
-            <Avatar
-              className="ml-2"
-              alt="Remy Sharp"
-              src={assets.images.avatarUser}
-              sx={{ width: 25, height: 25 }}
-            />
-            <span className="mx-2 text-xs text-[#6A6A6A]">W. Bailey</span>
           </div>
         </div>
       </div>
