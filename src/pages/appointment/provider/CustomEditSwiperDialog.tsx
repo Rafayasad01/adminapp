@@ -134,6 +134,9 @@ function CustomEditSwiperDialog({
       reset();
       setOpenFormDialog(false);
     } else {
+      if (ServicesFields?.length > 0) {
+        remove();
+      }
       setOpenFormDialog(false);
     }
   };
@@ -566,7 +569,10 @@ function CustomEditSwiperDialog({
                           <span className="text-sm">{item.minutes}</span>
                           <span> mints</span>
                         </div>
-                        <div>RS{item.amount}.00</div>
+                        <div>
+                          {`${item.amount === 'Percentage' ? '%' : 'RS'}`}
+                          {item.amount}.00
+                        </div>
                         <div>
                           <ClearOutlinedIcon
                             className="cursor-pointer"

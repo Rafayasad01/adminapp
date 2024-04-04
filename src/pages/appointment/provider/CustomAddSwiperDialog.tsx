@@ -428,7 +428,7 @@ function CustomSwiperDialog({
                       );
                     })}
                   </div>
-                  {(weekDays?.length < 0 ||
+                  {(weekDays?.length < 1 ||
                     startTime === null ||
                     endTime === null) && (
                     <ErrorSpanBox error="schedule is required" />

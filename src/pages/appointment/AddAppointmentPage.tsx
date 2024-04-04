@@ -234,6 +234,7 @@ export default function AddAppointmentPage() {
     const obj = {
       barber: activeBarberData?.storeEmployee?.name,
       amount: activeBarberData?.amount,
+      storeServiceCategory: watch('categoryId'),
       storeServiceCategoryItem: watch('storeServiceCategoryItem'),
       storeEmployee: activeBarberData?.storeEmployee?.id,
       appointmentTime: `${dayjs(getValues('appointmentDate'))?.format(
@@ -259,6 +260,7 @@ export default function AddAppointmentPage() {
   const onSubmit = (data: any) => {
     setIsLoader(true);
     delete data.storeServiceCategoryItem;
+    delete data.storeServiceCategory;
     delete data.categoryId;
     delete data.appointmentDate;
     const updatedAppointmentArray = data.appointments.map((item: any) => {

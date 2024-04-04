@@ -21,13 +21,18 @@ const appointmentCreate = (data: any) => {
   return network.post(`${STORE_PREFIX}/${APPOINTMENT_PREFIX}/create`, data);
 };
 
-const getAllAppointmentsWeekly = (week: any) => {
-  return network.get(`${STORE_PREFIX}/${APPOINTMENT_PREFIX}/weekly/${week}`);
+const getAllAppointments = (date: any) => {
+  return network.get(`${STORE_PREFIX}/${APPOINTMENT_PREFIX}/monthly/${date}`);
+};
+
+const getAppointmentById = (storeAppId: any) => {
+  return network.get(`${STORE_PREFIX}/${APPOINTMENT_PREFIX}/get/${storeAppId}`);
 };
 
 export default {
   getBarbersList,
   getBarberBookedTimeSlots,
   appointmentCreate,
-  getAllAppointmentsWeekly,
+  getAllAppointments,
+  getAppointmentById,
 };

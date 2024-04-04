@@ -40,17 +40,6 @@ const dateString = '2024-04-02T09:10:00.000Z';
 const dateStrings = '2024-04-02T09:15:00.000Z';
 const date = dayjs(dateString);
 const dates = dayjs(dateStrings);
-const formattedDate1 = date.format('ddd MMM DD YYYY HH:mm:ss [GMT]ZZ (zz)');
-const formattedDate2 = dates.format('ddd MMM DD YYYY HH:mm:ss [GMT]ZZ (zz)');
-
-const datesss = dayjs(dateString);
-
-// Extract individual components
-const year = date.year(); // Get the year (2024)
-const month = date.month(); // Get the month (3 for April, since months are zero-based in JavaScript)
-const day = date.date(); // Get the day of the month (2)
-const hour = date.hour(); // Get the hour (9)
-const minute = date.minute(); // Get the minute (10)
 
 const newDate = new Date(2018, 4, 28, 9, 30);
 console.log('newDatesdasdsasadsa', newDate);
@@ -101,9 +90,10 @@ const AllAppointment = ({
 }: Props) => {
   const [data, setData] = useState(appointments);
   const [isTooltipOpen, setIsTooltipOpen] = useState(false);
-  const [appointmentTooltipData, setAppointmentTooltipData] = useState(null);
+  const [appointmentTooltipData, setAppointmentTooltipData] =
+    useState<any>(null);
   const [isActiveUser, setIsActiveUser] = useState('all');
-  const currentWeek = dayjs().week();
+  const currentWeek = dayjs().format('YYYY-MM-DD');
 
   const groupOrientation = (viewName: any) => viewName.split(' ')[0];
   const grouping = [
@@ -113,45 +103,45 @@ const AllAppointment = ({
   ];
 
   useEffect(() => {
-    StoreAppointmentService.getAllAppointmentsWeekly(currentWeek).then(
-      (res: any) => {
-        if (res.data.success) {
-          const structuredData = res.data.data.map((item: any) => {
-            const date = dayjs(item.appointmentTime).tz('Asia/Karachi');
-            const year = date.year();
-            const month = date.month();
-            const day = date.date();
-            const hour = date.hour();
-            const minute = date.minute();
-            const newDate1 = new Date(year, month, day, hour, minute);
-            const newDate2 = new Date(year, month, day, hour, minute);
-            newDate2.setMinutes(
-              newDate2.getMinutes() + Number(item.serviceTime)
-            );
-            const dateF1 = dayjs(newDate1).tz('Asia/Karachi');
-            const dateF2 = dayjs(newDate2).tz('Asia/Karachi');
-            const formattedDateWithHour1 = dateF1.format(
-              'ddd MMM DD YYYY h:mm:ss [GMT]ZZ (zz)'
-            );
-            const formattedDateWithHour2 = dateF2.format(
-              'ddd MMM DD YYYY h:mm:ss [GMT]ZZ (zz)'
-            );
-            return {
-              title: item.name,
-              priorityId: item.storeEmployee,
-              startDate: formattedDateWithHour1,
-              endDate: formattedDateWithHour2,
-              id: item.id,
-            };
-          });
-          setData(structuredData);
-          console.log('ALL APPO', structuredData);
-        }
+    StoreAppointmentService.getAllAppointments(currentWeek).then((res: any) => {
+      if (res.data.success) {
+        const structuredData = res.data.data.map((item: any) => {
+          const date = dayjs(item.appointmentTime).tz('Asia/Karachi');
+          const year = date.year();
+          const month = date.month();
+          const day = date.date();
+          const hour = date.hour();
+          const minute = date.minute();
+          const newDate1 = new Date(year, month, day, hour, minute);
+          const newDate2 = new Date(year, month, day, hour, minute);
+          newDate2.setMinutes(newDate2.getMinutes() + Number(item.serviceTime));
+          const dateF1 = dayjs(newDate1).tz('Asia/Karachi');
+          const dateF2 = dayjs(newDate2).tz('Asia/Karachi');
+          const formattedDateWithHour1 = dateF1.format(
+            'ddd MMM DD YYYY h:mm:ss [GMT]ZZ (zz)'
+          );
+          const formattedDateWithHour2 = dateF2.format(
+            'ddd MMM DD YYYY h:mm:ss [GMT]ZZ (zz)'
+          );
+          return {
+            title: item.name,
+            priorityId: item.storeEmployee,
+            startDate: formattedDateWithHour1,
+            endDate: formattedDateWithHour2,
+            id: item.id,
+          };
+        });
+        // const startEndTime = res.data.data.map((el:any)=>{
+        //   const date = dayjs(el.appointmentTime).tz('Asia/Karachi');
+        //   const hour = date.hour();
+        // })
+        setData(structuredData);
+        console.log('ALL APPO', structuredData);
       }
-    );
+    });
   }, []);
 
-  console.log('selectedPriorityData', selectedPriorityData);
+  // console.log('selectedPriorityData', selectedPriorityData);
   // [{ startDate: new Date() }]
   const resources: any = [
     {
@@ -176,7 +166,7 @@ const AllAppointment = ({
     setSelectedPriorityData(tempPriority);
   };
 
-  console.log('🚀 ~ AllAppointment ~ selectedUser:', priorityData);
+  // console.log('🚀 ~ AllAppointment ~ selectedUser:', priorityData);
 
   const CustomAppointmentContent = ({ appointmentData, ...restProps }: any) => {
     console.log(
@@ -228,7 +218,7 @@ const AllAppointment = ({
   return (
     <Paper>
       <div className="h-16 p-[15px]">
-        <SwiperComponent selectedUser={selectedUser} data={users} />
+        <SwiperComponent selectedUser={selectedUser} data={priorityData} />
       </div>
       <hr />
       <Scheduler data={data} height={580}>
@@ -238,10 +228,17 @@ const AllAppointment = ({
           grouping={grouping}
           groupOrientation={groupOrientation}
         />
+        {/* <WeekView
+          name="Vertical Orientation"
+          startDayHour={0}
+          endDayHour={16}
+          displayName="Week"  
+          // excludedDays={[0, 6]}
+        /> */}
         <WeekView
           name="Vertical Orientation"
           startDayHour={9}
-          endDayHour={13}
+          endDayHour={16}
           // excludedDays={[0, 6]}
           displayName="Week"
         />
