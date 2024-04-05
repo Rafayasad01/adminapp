@@ -50,19 +50,19 @@ const links = [
     icon: <GridViewOutlinedIcon fontSize="inherit" />,
   },
   {
-    name: 'Barber Services',
+    name: 'Shop Services',
     path: 'service',
     permission: 'Category List',
     icon: <GridViewOutlinedIcon fontSize="inherit" />,
   },
   {
-    name: 'Shop Barbers',
+    name: 'Shop Employees',
     path: 'shop-barbers',
     permission: 'Category List',
     icon: <ProviderIcon />,
   },
   {
-    name: 'Appointments',
+    name: 'Booking',
     path: 'appointments',
     permission: 'Category List',
     icon: <VisitIcon />,
