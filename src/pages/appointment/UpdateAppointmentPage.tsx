@@ -47,10 +47,9 @@ const darkTheme = createTheme({
   },
 });
 
-export default function AddAppointmentPage() {
+export default function UpdateAppointmentPage() {
   const navigate = useNavigate();
   const [isLoader, setIsLoader] = useState(false);
-  const [isPageLoader, setIsPageLoader] = useState(false);
   const [isNotify, setIsNotify] = useState(false);
   const [notifyMessage, setNotifyMessage] = useState({});
   const [activeBarber, setActiveBarber] = useState<any>();
@@ -135,7 +134,7 @@ export default function AddAppointmentPage() {
         } w-[100%] cursor-pointer rounded-2xl border-[1px] border-[#949EAE] px-3 py-4`}
       >
         <div className="flex items-center justify-between">
-          <span className="font-semibold text-[#003E80]">Barber</span>
+          <span className="font-semibold text-[#003E80]">Beautician</span>
           <div className="flex items-center">
             <img
               className="h-[14px] w-[14px]"
@@ -194,19 +193,12 @@ export default function AddAppointmentPage() {
   }, []);
 
   const getBarbers = async (id: any) => {
-    setIsPageLoader(true);
-    await StoreAppointmentService.getBarbersList(id)
-      .then((res) => {
-        if (res.data.success) {
-          setIsPageLoader(false);
-          setBarberList(res.data.data);
-          setActiveBarberData(null);
-          setActiveBarber(null);
-        } else {
-          setIsPageLoader(false);
-        }
-      })
-      .catch((err) => setIsPageLoader(false));
+    await StoreAppointmentService.getBarbersList(id).then((res) => {
+      setBarberList(res.data.data);
+      setActiveBarberData(null);
+      setActiveBarber(null);
+      // console.log("res items", res.data.data);
+    });
   };
 
   const getCatItems = async (id: any) => {
@@ -355,7 +347,7 @@ export default function AddAppointmentPage() {
         setIsOpen={setIsNotify}
         displayMessage={notifyMessage}
       />
-      <TopBar isNestedRoute title="Fill Appointment Form" />
+      <TopBar isNestedRoute title="Fill Update Appointment Form" />
       <div className="container m-auto mt-5">
         <div className="w-full rounded-lg bg-white shadow-lg">
           <div className="p-3">
@@ -375,6 +367,7 @@ export default function AddAppointmentPage() {
                           variant="standard"
                         >
                           <CustomInputBox
+                            disable
                             maxLetterLimit={50}
                             pattern={PATTERN.CHAR_SPACE_DASH}
                             inputTitle="Full Name"
@@ -394,6 +387,7 @@ export default function AddAppointmentPage() {
                           variant="standard"
                         >
                           <CustomDropDown
+                            disabled
                             validateRequired
                             id="gender"
                             control={control}
@@ -416,6 +410,7 @@ export default function AddAppointmentPage() {
                           variant="standard"
                         >
                           <CustomInputBox
+                            disable
                             pattern={PATTERN.ONLY_NUM}
                             maxLetterLimit={15}
                             inputTitle="Phone"
@@ -435,6 +430,7 @@ export default function AddAppointmentPage() {
                           variant="standard"
                         >
                           <CustomInputBox
+                            disable
                             pattern={PATTERN.CHAR_NUM_DOT_AT}
                             inputTitle="Email"
                             placeholder="Enter email address"
@@ -455,6 +451,7 @@ export default function AddAppointmentPage() {
                           variant="standard"
                         >
                           <CustomDropDown
+                            disabled
                             validateRequired
                             id="categoryId"
                             control={control}
@@ -475,6 +472,7 @@ export default function AddAppointmentPage() {
                           variant="standard"
                         >
                           <CustomDropDown
+                            disabled
                             validateRequired
                             id="storeServiceCategoryItem"
                             control={control}
@@ -485,7 +483,6 @@ export default function AddAppointmentPage() {
                             customHeight="h-[40px] rounded-xl"
                             customClassInputTitle="font-semibold"
                             inputTitle="Barber Services"
-                            defaultValue="Select Service"
                           />
                         </FormControl>
                       </div>
@@ -501,6 +498,7 @@ export default function AddAppointmentPage() {
                           Any Message{' '}
                         </label>
                         <TextField
+                          disabled
                           className="FormTextarea"
                           id="note"
                           multiline
@@ -536,37 +534,34 @@ export default function AddAppointmentPage() {
                         Select Barber
                       </span>
                       <hr className="my-4 border-[#949EAE]" />
-                      {isPageLoader ? (
-                        <Loader />
-                      ) : barberList?.length > 0 ? (
-                        <div
-                          className={
-                            barberList?.length === 0 ? 'h-[0px]' : 'h-[215px]'
-                          }
+                      <div
+                        className={
+                          barberList?.length === 0 ? 'h-[0px]' : 'h-[215px]'
+                        }
+                      >
+                        <Swiper
+                          slidesPerView={6}
+                          spaceBetween={30}
+                          pagination={pagination}
+                          modules={[Pagination]}
+                          className="mySwiper custom-swiper custom-swiper-slider"
                         >
-                          <Swiper
-                            slidesPerView={6}
-                            spaceBetween={30}
-                            pagination={pagination}
-                            modules={[Pagination]}
-                            className="mySwiper custom-swiper custom-swiper-slider"
-                          >
-                            {barberList?.map((item: any, index: number) => {
-                              return (
-                                <SwiperSlide key={index}>
-                                  {BarberCard(item, index)}
-                                </SwiperSlide>
-                              );
-                            })}
-                          </Swiper>
-                        </div>
-                      ) : (
-                        <span>
-                          There are currently no barbers available to provide
-                          this service.
-                        </span>
-                      )}
+                          {barberList?.map((item: any, index: number) => {
+                            return (
+                              <SwiperSlide key={index}>
+                                {BarberCard(item, index)}
+                              </SwiperSlide>
+                            );
+                          })}
+                        </Swiper>
+                      </div>
                     </div>
+                    {barberList?.length === 0 && (
+                      <span>
+                        There are currently no barbers available to provide this
+                        service.
+                      </span>
+                    )}
                     {activeBarberData !== null && (
                       <div className="mt-5">
                         <span className="text-base font-bold text-[#1A1A1A]">

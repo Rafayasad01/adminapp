@@ -90,9 +90,9 @@ const SwiperComponent = ({ data, selectedUser }: Props) => {
                 </div>
                 <div
                   onClick={() => handleUser(item.text)}
-                  className="cursor-pointer"
+                  className="cursor-pointer truncate"
                 >
-                  <span className="mx-3 text-base font-semibold">
+                  <span className="mx-2 text-base font-semibold">
                     {item.text}
                   </span>
                 </div>

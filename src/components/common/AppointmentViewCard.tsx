@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import EditNoteOutlinedIcon from '@mui/icons-material/BorderColor';
 import CloseIcon from '@mui/icons-material/Close';
 import Avatar from '@mui/material/Avatar';
 import StarIcon from '@mui/icons-material/Star';
@@ -9,6 +10,7 @@ import dayjs from 'dayjs';
 import assets from '../../assets';
 import StoreAppointmentService from '../../services/adminapp/adminStoreAppointment';
 import Loader from './Loader2';
+import { useNavigate } from 'react-router-dom';
 
 type Props = {
   appointmentData?: any;
@@ -24,6 +26,7 @@ const AppointmentViewCard = ({
   setIsTooltipOpen,
   ...restProps
 }: Props) => {
+  const navigate = useNavigate();
   const [data, setData] = useState<any>(null);
   const [isLoader, setIsLoader] = useState<boolean>(true);
 
@@ -83,6 +86,9 @@ const AppointmentViewCard = ({
           <div>
             <IconButton
               className="icon-btn mr-3.5 p-0"
+              onClick={() =>
+                navigate(`../update-appointment/${appointmentData.id}`)
+              }
               // onClick={() =>
               //     item.isActive ? editHandler(item.id) : null
               // }
@@ -96,6 +102,15 @@ const AppointmentViewCard = ({
               // }
             >
               <DeleteIcon />
+            </IconButton>
+            <IconButton
+              name="Reschedule"
+              className="icon-btn mr-3.5 p-0"
+              onClick={() =>
+                navigate(`../reschedule-appointment/${appointmentData.id}`)
+              }
+            >
+              <EditNoteOutlinedIcon />
             </IconButton>
           </div>
           <div>
@@ -166,7 +181,7 @@ const AppointmentViewCard = ({
           <div>
             <span className="mx-2 text-xs text-[#6A6A6A]">
               {data?.startDateFormat} - {data?.endDateFormat} (
-              {data.serviceTime})
+              {data?.serviceTime} min)
             </span>
           </div>
         </div>

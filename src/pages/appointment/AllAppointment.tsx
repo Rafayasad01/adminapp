@@ -124,6 +124,7 @@ const AllAppointment = ({
             'ddd MMM DD YYYY h:mm:ss [GMT]ZZ (zz)'
           );
           return {
+            // paid: true,
             title: item.name,
             priorityId: item.storeEmployee,
             startDate: formattedDateWithHour1,
@@ -215,6 +216,21 @@ const AllAppointment = ({
     }
   };
 
+  // const AppointmentContent = ({ style, ...restProps }: any) => {
+  //   if (!restProps.data) {
+  //     return null; // or handle the case where data is undefined
+  //   }
+  //   console.log("restProps", restProps);
+  //   return (
+  //     <Appointments.AppointmentContent {...restProps}>
+  //       <div className='flex items-center flex-wrap justify-between w-full'>
+  //         <div className=''>{restProps?.data?.title}</div>
+  //         {/* <div className='px-2 py-1 border-[1px] rounded-full'>unpaid</div> */}
+  //       </div>
+  //     </Appointments.AppointmentContent>
+  //   );
+  // };
+
   return (
     <Paper>
       <div className="h-16 p-[15px]">
@@ -243,10 +259,10 @@ const AllAppointment = ({
           displayName="Week"
         />
         <MonthView />
-
-        <Appointments />
+        <Appointments
+        // appointmentContentComponent={AppointmentContent}
+        />
         <Resources data={resources} mainResourceName="priorityId" />
-
         <IntegratedGrouping />
         <IntegratedEditing />
         <AppointmentTooltip
