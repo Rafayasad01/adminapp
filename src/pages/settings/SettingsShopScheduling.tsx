@@ -51,11 +51,11 @@ function SettingsShopScheduling() {
                 value="SYSTEM_CONFIGURATION"
                 onClick={() => navigate('../config')}
               />
-              {/* <Tab
+              <Tab
                 label="Shop Scheduling"
                 value="SHOP_SCHEDULING"
                 onClick={() => navigate('../shop')}
-              /> */}
+              />
             </Tabs>
           </div>
           <div className="Content w-full py-5 px-4">

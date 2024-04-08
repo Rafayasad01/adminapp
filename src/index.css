@@ -1047,7 +1047,7 @@ label + .css-1aa5qj0-MuiInputBase-root-MuiInput-root {
 }
 
 .css-1t1j96h-MuiPaper-root-MuiDialog-paper {
-  width: 648px !important;
+  width: 648px;
   max-width: none;
 }
 
@@ -1849,4 +1849,8 @@ main .container:nth-child(3){
 .swiper-pagination-horizontal.swiper-pagination-bullets
   .swiper-pagination-bullet {
   margin: 0 var(--swiper-pagination-bullet-horizontal-gap, 3px) !important;
+}
+
+#OffDayForm .rdrMonths.rdrMonthsHorizontal {
+  @apply justify-center;
 }
