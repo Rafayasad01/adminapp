@@ -552,13 +552,15 @@ function AppointmentVisitPage() {
             </div>
           </div>
           <div className="mt-5">
-            <AllAppointment
-              appointmentType={appointmentType?.text}
-              priorityData={priorityData}
-              selectedPriorityData={selectedPriorityData}
-              setSelectedPriorityData={setSelectedPriorityData}
-              setAppointmentType={setAppointmentType}
-            />
+            {!!priorityData.length && (
+              <AllAppointment
+                appointmentType={appointmentType?.text}
+                priorityData={priorityData}
+                selectedPriorityData={selectedPriorityData}
+                setSelectedPriorityData={setSelectedPriorityData}
+                setAppointmentType={setAppointmentType}
+              />
+            )}
           </div>
           {/* <div className='mt-5'>
             <IndividualAppointment />

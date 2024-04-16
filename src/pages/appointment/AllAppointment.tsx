@@ -88,7 +88,7 @@ const AllAppointment = ({
   setSelectedPriorityData,
   selectedPriorityData,
 }: Props) => {
-  const [data, setData] = useState(appointments);
+  const [data, setData] = useState<any>(appointments);
   const [appointmentData, setAppointmentData] = useState();
   const [isTooltipOpen, setIsTooltipOpen] = useState(false);
   const [isLoader, setIsLoader] = useState(false);
@@ -108,9 +108,11 @@ const AllAppointment = ({
   ];
 
   useEffect(() => {
+    setIsLoader(true);
     StoreAppointmentService.getAllAppointments(currentWeek)
       .then((res: any) => {
         if (res.data.success) {
+          setIsLoader(false);
           const structuredData = res.data.data.map((item: any) => {
             const date = dayjs(item.appointmentTime).tz('Asia/Karachi');
             const year = date.year();
@@ -216,16 +218,16 @@ const AllAppointment = ({
   //   );
   // };
 
-  const onCommitChanges = useCallback(
+  const onCommitChanges: any = useCallback(
     ({ added, changed, deleted }: any) => {
       if (added) {
-        const startingAddedId =
+        const startingAddedId: any =
           data?.length > 0 ? data[data.length - 1].id + 1 : 0;
         setData([...data, { id: startingAddedId, ...added }]);
       }
       if (changed) {
         setData(
-          data?.map((appointment) =>
+          data?.map((appointment: any) =>
             changed[appointment.id]
               ? { ...appointment, ...changed[appointment.id] }
               : appointment
@@ -233,7 +235,7 @@ const AllAppointment = ({
         );
       }
       if (deleted !== undefined) {
-        setData(data.filter((appointment) => appointment.id !== deleted));
+        setData(data.filter((appointment: any) => appointment.id !== deleted));
       }
     },
     [setData, data]
