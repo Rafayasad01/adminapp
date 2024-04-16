@@ -88,7 +88,7 @@ const AllAppointment = ({
   setSelectedPriorityData,
   selectedPriorityData,
 }: Props) => {
-  const [data, setData] = useState<any>(appointments);
+  const [data, setData] = useState<any>([]);
   const [appointmentData, setAppointmentData] = useState();
   const [isTooltipOpen, setIsTooltipOpen] = useState(false);
   const [isLoader, setIsLoader] = useState(false);
@@ -410,11 +410,13 @@ const AllAppointment = ({
   ) : (
     <Paper>
       <div className="h-16 p-[15px]">
-        <SwiperComponent
-          isActiveUser={isActiveUser}
-          selectedUser={selectedUser}
-          data={priorityData}
-        />
+        {priorityData.length ? (
+          <SwiperComponent
+            isActiveUser={isActiveUser}
+            selectedUser={selectedUser}
+            data={priorityData}
+          />
+        ) : null}
       </div>
       <hr />
       <Scheduler data={data} height={580}>

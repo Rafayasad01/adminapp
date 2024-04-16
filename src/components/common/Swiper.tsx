@@ -79,34 +79,38 @@ const SwiperComponent = ({ data, selectedUser, isActiveUser }: Props) => {
   return (
     <div className="swiper">
       <div className="swiper-wrapper">
-        {data?.map((item: any, index: number) => {
-          return (
-            <div key={index} className="swiper-slide flex items-center">
-              {item.text === isActiveUser && (
-                <div className="mr-3">
-                  <FiberManualRecordIcon />
-                </div>
-              )}
-              <div className="flex items-center">
-                <div>
-                  <img
-                    className="w-[35px]"
-                    src={item.imageUrl ?? assets.images.avatarUser}
-                    alt="avatar-img"
-                  />
-                </div>
-                <div
-                  onClick={() => handleUser(item.text)}
-                  className="cursor-pointer truncate"
-                >
-                  <span className="mx-2 text-base font-semibold">
-                    {item.text}
-                  </span>
+        {data.length > 0 ? (
+          data?.map((item: any, index: number) => {
+            return (
+              <div key={index} className="swiper-slide flex items-center">
+                {item.text === isActiveUser && (
+                  <div className="mr-3">
+                    <FiberManualRecordIcon />
+                  </div>
+                )}
+                <div className="flex items-center">
+                  <div>
+                    <img
+                      className="w-[35px]"
+                      src={item.imageUrl}
+                      // alt="avatar-img"
+                    />
+                  </div>
+                  <div
+                    onClick={() => handleUser(item.text)}
+                    className="cursor-pointer truncate"
+                  >
+                    <span className="mx-2 text-base font-semibold">
+                      {item.text}
+                    </span>
+                  </div>
                 </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })
+        ) : (
+          <></>
+        )}
       </div>
       <div className="swiper-button-next" />
       <div className="swiper-button-prev" />
