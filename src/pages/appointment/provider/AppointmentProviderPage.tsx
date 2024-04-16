@@ -298,7 +298,7 @@ function AppointmentProviderPage() {
                   amount: el.amount,
                   amountType: el.amountType,
                   // storeEmployee: el.storeEmployee,
-                  minutes: el.minutes,
+                  serviceTime: el.serviceTime,
                   storeServiceCategoryItem: el.storeServiceCategoryItem,
                 })
               );
@@ -516,7 +516,7 @@ function AppointmentProviderPage() {
 
   const onSubmitDialogBox = async (data: any) => {
     // console.log('🚀 ~ onSubmitDialogBox ~ data: 1', data);
-    // setIsLoader(true);
+    setIsLoader(true);
     delete data.servicesName;
     delete data.servicesAmount;
     delete data.price;

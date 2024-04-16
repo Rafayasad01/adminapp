@@ -6,15 +6,16 @@ import createTheme from '@mui/material/styles/createTheme';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import Avatar from '@mui/material/Avatar';
 import dayjs from 'dayjs';
 import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
 import { useEffect, useState } from 'react';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { Pagination } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
+import { Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import assets from '../../assets';
 import '../../assets/css/PopupStyle.css';
@@ -32,7 +33,6 @@ import Loader from '../../components/common/Loader2';
 import TimePicker from '../../components/common/TimePicker';
 import StoreAppointmentService from '../../services/adminapp/adminStoreAppointment';
 import StoreLovService from '../../services/adminapp/adminStoreService';
-import Avatar from '@mui/material/Avatar';
 
 // Extend dayjs with necessary plugins
 dayjs.extend(utc);
@@ -55,6 +55,7 @@ export default function AddAppointmentPage() {
   const [notifyMessage, setNotifyMessage] = useState({});
   const [activeBarber, setActiveBarber] = useState<any>();
   const [activeBarberData, setActiveBarberData] = useState<any>();
+  const [bookingList, setBookingList] = useState<any>();
   const [catLovlist, setCatLovList] = useState<any>();
   const [catItemsLovlist, setCatItemsLovList] = useState<any>([]);
   const [usedCatItemsLovlist, setusedCatItemsLovList] = useState<any>([]);
@@ -79,6 +80,12 @@ export default function AddAppointmentPage() {
     keyName: 'key',
   });
 
+  const getCatItemName = (id: any) => {
+    let tempAr: any[] = [];
+    tempAr = usedCatItemsLovlist;
+    return tempAr?.find((el: any) => el.id === id)?.name;
+  };
+
   const pagination = {
     clickable: true,
     renderBullet(index: number, className: any) {
@@ -101,8 +108,10 @@ export default function AddAppointmentPage() {
       if (index === activeBarber) {
         setActiveBarber(null);
         setActiveBarberData(null);
+        setBookingList(null);
         setAppointmentBookedTime([]);
       } else {
+        setBookingList(item.storeEmployeeSchedule);
         setActiveBarberData(item);
         setActiveBarber(index);
         getBookedTimeSlots(
@@ -135,7 +144,9 @@ export default function AddAppointmentPage() {
         } w-[100%] cursor-pointer rounded-2xl border-[1px] border-[#949EAE] px-3 py-4`}
       >
         <div className="flex items-center justify-between">
-          <span className="font-semibold text-[#003E80]">Barber</span>
+          <span className="font-semibold text-[#003E80]">
+            {getCatItemName(item.storeServiceCategoryItem)}
+          </span>
           <div className="flex items-center">
             <img
               className="h-[14px] w-[14px]"
@@ -191,6 +202,7 @@ export default function AddAppointmentPage() {
 
   useEffect(() => {
     catLovService();
+    // setAppointmentTime(dayjs().format("HH:mm"))
   }, []);
 
   const getBarbers = async (id: any) => {
@@ -201,6 +213,7 @@ export default function AddAppointmentPage() {
           setIsPageLoader(false);
           setBarberList(res.data.data);
           setActiveBarberData(null);
+          setBookingList(null);
           setActiveBarber(null);
         } else {
           setIsPageLoader(false);
@@ -269,14 +282,101 @@ export default function AddAppointmentPage() {
       getValues('appointmentDate') &&
       appointmentTime
     ) {
-      append(obj);
+      const check: boolean =
+        fields?.find(
+          (el: any) =>
+            el.storeServiceCategoryItem === watch('storeServiceCategoryItem')
+        ) !== undefined;
+      if (!check) {
+        const isTrue = false;
+        const currentDay = dayjs(getValues('appointmentDate')).format('dddd');
+        const scheduleData = activeBarberData?.storeEmployeeSchedule.filter(
+          (item: any) => item.workDay === currentDay
+        );
+        console.log('FIELDS', scheduleData);
+        if (scheduleData.length <= 0) return append(obj);
+        const startTime = dayjs(scheduleData[0].startTime).format('HH:mm');
+        const endTime = dayjs(scheduleData[0].endTime).format('HH:mm');
+        let prevTime = dayjs(scheduleData[0].startTime).format('HH:mm');
+        const time: any = dayjs(appointmentTime).format('HH:mm');
+        const addTime = dayjs(appointmentTime).add(
+          activeBarberData?.serviceTime,
+          'minute'
+        );
+        const convertAppointmentAddTime = dayjs(addTime).format('HH:mm');
+        appointmentBookedTime.forEach((el: any, index: number) => {
+          console.log('El', el);
+          const add = dayjs(el.appointmentTime).add(el.serviceTime, 'minute');
+          const elStartTime = dayjs(el.appointmentTime).format('HH:mm');
+          const convertAddTime: any = dayjs(add).format('HH:mm');
+          if (elStartTime > startTime && elStartTime < endTime) {
+            if (time > convertAddTime) {
+              console.log('if');
+              prevTime = convertAddTime;
+            } else {
+              // console.log("2");
+              // console.log("🚀 ~ appointmentBookedTime.forEach ~ time:", time, prevTime, convertAppointmentAddTime, elStartTime)
+              console.log('else');
+              if (time >= prevTime && convertAppointmentAddTime > elStartTime) {
+                // console.log("3");
+                console.log('if meet error');
+                setIsNotify(true);
+                setNotifyMessage({
+                  text: `Service time is ${activeBarberData?.serviceTime} minutes, Barber is not avaiable at ${time}`,
+                  type: 'error',
+                });
+              }
+              throw new Error('Break');
+            }
+          } else {
+            // console.log("4");
+            // console.log("if success error 2");/
+            setNotifyMessage({
+              text: 'Barber is not avaiable at this time',
+              type: 'error',
+            });
+          }
+          const newData = {
+            appointmentNumber: index + 1,
+            appointmentTime: time,
+            code: 'WISE_PINK_GREW_WIRE_1713176225894',
+            email: activeBarberData?.email,
+            gender: 'Male',
+            id: '6ea8f150-fa7d-4c1e-b217-5abf97010e48',
+            name: 'rafay',
+            note: 'asdsadsadsadsad',
+            paymentStatus: 'Unpaid',
+            phone: '342423',
+            serviceTime: '45',
+            status: 'New',
+            storeEmployee: 'f254c910-4e18-47af-9ac4-162d53b7bed1',
+            storeServiceCategory: '7afe3149-e72e-42c8-b98a-8184bbe5a4f8',
+            storeServiceCategoryItem: '14a3a48c-0a83-402a-a351-9dea5ca0246d',
+            tenant: '30f155f2-ded0-4fc2-897c-87dae511faf8',
+            totalAmount: '3000.00',
+            updatedBy: '3c5b9acd-0deb-4b18-9a91-11bbac1a0367',
+            updatedDate: '2024-04-15T05:17:04.187Z',
+          };
+          setAppointmentBookedTime((prev: any) => [...prev, newData]);
+        });
+        // console.log("🚀 ~ addAppointmentServices ~ isTrue:", isTrue);
+      } else {
+        // console.log("5");
+        setIsNotify(true);
+        setNotifyMessage({
+          text: 'This service you already selected, Please select another service',
+          type: 'error',
+        });
+      }
     } else {
+      // console.log("6");
       setIsNotify(true);
       setNotifyMessage({
         text: 'Please select your preferred barber, category , desired services, and appointment date & time for scheduling.',
         type: 'error',
       });
     }
+    return append(obj);
   };
 
   const onSubmit = (data: any) => {
@@ -290,6 +390,7 @@ export default function AddAppointmentPage() {
       return rest;
     });
     data.appointments = updatedAppointmentArray;
+    console.log('dataa', data, bookingList);
     StoreAppointmentService.appointmentCreate(data)
       .then((res: any) => {
         if (res.data.success) {
@@ -321,14 +422,8 @@ export default function AddAppointmentPage() {
       });
   };
 
-  const getCatItemName = (id: any) => {
-    let tempAr: any[] = [];
-    tempAr = usedCatItemsLovlist;
-    return tempAr?.find((el: any) => el.id === id)?.name;
-  };
-
   const handleDateChange = (date: any, field: any) => {
-    console.log('HIT', date, activeBarberData);
+    // console.log('HIT', date, activeBarberData);
     if (activeBarberData) {
       field.onChange(date);
       getBookedTimeSlots(

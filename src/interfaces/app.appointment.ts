@@ -59,3 +59,10 @@ export interface AddAppointmentForm {
   storeEmployee: any;
   storeServiceCategoryItem: any;
 }
+export interface UpdateAppointmentForm {
+  name: string;
+  email: string;
+  phone: string;
+  note: string;
+  gender: string;
+}

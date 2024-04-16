@@ -293,8 +293,8 @@ function AppointmentVisitPage() {
       EmloyeeService.StoreEmployeeList(search, page, 2000)
         .then((item: any) => {
           setIsLoader(false);
-          console.log(item);
-          let temp = item.data.data.list.map((el: any) => ({
+          console.log('item', item);
+          const temp = item.data.data.list.map((el: any) => ({
             text: el.name,
             id: el.id,
             imageUrl: el.avatar,
@@ -323,7 +323,7 @@ function AppointmentVisitPage() {
       //   },
       // ]);
     }
-  }, [appointmentType]);
+  }, []);
 
   useEffect(() => {
     if (listingRolePermission(dataRole, 'Appointment List')) {

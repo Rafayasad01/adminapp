@@ -173,7 +173,7 @@ function EmployeeServiceEditPopup({
               <div className="col-span-4">
                 <FormControl className="FormControl" variant="standard">
                   <CustomInputBox
-                    value={formData?.minutes}
+                    value={formData?.serviceTime}
                     pattern={PATTERN.ONLY_NUM}
                     maxLetterLimit={4}
                     inputTitle="Service Time (Minutes)"

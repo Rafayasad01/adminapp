@@ -11,19 +11,20 @@ import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
 import { useEffect, useState } from 'react';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
-import { Pagination } from 'swiper/modules';
+import { useNavigate, useParams } from 'react-router-dom';
 import 'swiper/css';
 import 'swiper/css/pagination';
+import { Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import assets from '../../assets';
-import '../../assets/css/PopupStyle.css';
+import Avatar from '@mui/material/Avatar';
 import Notify from '../../components/common/Notify';
 import TopBar from '../../components/common/TopBar';
 import { AddAppointmentForm } from '../../interfaces/app.appointment';
 import { GENDER, MAX_LENGTH_EXCEEDED, PATTERN } from '../../utils/constants';
 
 // import required modules
+import assets from '../../assets';
+import '../../assets/css/PopupStyle.css';
 import CustomButton from '../../components/common/CustomButton';
 import CustomDropDown from '../../components/common/CustomDropDown';
 import CustomInputBox from '../../components/common/CustomInputBox';
@@ -32,7 +33,6 @@ import Loader from '../../components/common/Loader2';
 import TimePicker from '../../components/common/TimePicker';
 import StoreAppointmentService from '../../services/adminapp/adminStoreAppointment';
 import StoreLovService from '../../services/adminapp/adminStoreService';
-import Avatar from '@mui/material/Avatar';
 
 // Extend dayjs with necessary plugins
 dayjs.extend(utc);
@@ -61,6 +61,7 @@ export default function RescheduleAppointmentPage() {
   const [appointmentTime, setAppointmentTime] = useState<dayjs.Dayjs | any>(
     null
   );
+  const [appointmentData, setAppointmentData] = useState<any>();
   const [appointmentBookedTime, setAppointmentBookedTime] = useState<any>([]);
   const {
     register,
@@ -71,6 +72,9 @@ export default function RescheduleAppointmentPage() {
     formState: { errors },
     control,
   } = useForm<AddAppointmentForm>();
+
+  const params = useParams();
+  const id: any = params.id;
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -85,14 +89,20 @@ export default function RescheduleAppointmentPage() {
     },
   };
 
-  const getBookedTimeSlots = async (id: any, date: any) => {
-    await StoreAppointmentService.getBarberBookedTimeSlots(id, date).then(
+  const getBookedTimeSlots = async (bookedid: any, date: any) => {
+    await StoreAppointmentService.getBarberBookedTimeSlots(bookedid, date).then(
       (res) => {
         if (res.data.success) {
           setAppointmentBookedTime(res.data.data);
         }
       }
     );
+  };
+
+  const getCatItemName = (catitemid: any) => {
+    let tempAr: any[] = [];
+    tempAr = usedCatItemsLovlist;
+    return tempAr?.find((el: any) => el.id === catitemid)?.name;
   };
 
   const BarberCard = (item: any, index: number) => {
@@ -108,15 +118,6 @@ export default function RescheduleAppointmentPage() {
           item.storeEmployee.id,
           dayjs(getValues('appointmentDate'))?.format('YYYY-MM-DD')
         );
-        // console.log("date",dayjs(getValues("appointmentDate"))?.format('YYYY-MM-DD'));
-        // await StoreAppointmentService.getBarberBookedTimeSlots(
-        //   item.storeEmployee.id,
-        //   dayjs(getValues('appointmentDate'))?.format('YYYY-MM-DD')
-        // ).then((res) => {
-        //   if (res.data.success) {
-        //     setAppointmentBookedTime(res.data.data);
-        //   }
-        // });
       }
     };
 
@@ -134,7 +135,9 @@ export default function RescheduleAppointmentPage() {
         } w-[100%] cursor-pointer rounded-2xl border-[1px] border-[#949EAE] px-3 py-4`}
       >
         <div className="flex items-center justify-between">
-          <span className="font-semibold text-[#003E80]">Beautician</span>
+          <span className="font-semibold text-[#003E80]">
+            {getCatItemName(item.storeServiceCategoryItem)}
+          </span>
           <div className="flex items-center">
             <img
               className="h-[14px] w-[14px]"
@@ -188,12 +191,46 @@ export default function RescheduleAppointmentPage() {
       });
   };
 
+  const getAppointment = async () => {
+    setIsLoader(true);
+    await StoreAppointmentService.getAppointment(id)
+      .then((res: any) => {
+        if (res.data.success) {
+          setValue('name', res.data.data.name);
+          setValue('email', res.data.data.email);
+          setValue('phone', res.data.data.phone);
+          setValue('note', res.data.data.note);
+          setValue('gender', res.data.data.gender);
+          setAppointmentData(res.data.data);
+          setBarberList(res.data.data);
+          console.log('getAppointment', res.data.data);
+          setIsLoader(false);
+        } else {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: res.data.message,
+            type: 'error',
+          });
+        }
+      })
+      .catch((err: Error) => {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
+        });
+      });
+  };
+
   useEffect(() => {
     catLovService();
+    getAppointment();
   }, []);
 
-  const getBarbers = async (id: any) => {
-    await StoreAppointmentService.getBarbersList(id).then((res) => {
+  const getBarbers = async (barberid: any) => {
+    await StoreAppointmentService.getBarbersList(barberid).then((res) => {
       setBarberList(res.data.data);
       setActiveBarberData(null);
       setActiveBarber(null);
@@ -201,8 +238,8 @@ export default function RescheduleAppointmentPage() {
     });
   };
 
-  const getCatItems = async (id: any) => {
-    await StoreLovService.StoreCatItemsLov(id).then((res) => {
+  const getCatItems = async (catid: any) => {
+    await StoreLovService.StoreCatItemsLov(catid).then((res) => {
       if (res.data.success) {
         setCatItemsLovList(res.data.data);
         const uniqueData = res.data.data.filter(
@@ -282,7 +319,7 @@ export default function RescheduleAppointmentPage() {
       return rest;
     });
     data.appointments = updatedAppointmentArray;
-    StoreAppointmentService.appointmentCreate(data)
+    StoreAppointmentService.appointmentReschedule(id, data)
       .then((res: any) => {
         if (res.data.success) {
           setIsLoader(false);
@@ -311,12 +348,6 @@ export default function RescheduleAppointmentPage() {
           type: 'error',
         });
       });
-  };
-
-  const getCatItemName = (id: any) => {
-    let tempAr: any[] = [];
-    tempAr = usedCatItemsLovlist;
-    return tempAr?.find((el: any) => el.id === id)?.name;
   };
 
   const handleDateChange = (date: any, field: any) => {
@@ -451,7 +482,6 @@ export default function RescheduleAppointmentPage() {
                           variant="standard"
                         >
                           <CustomDropDown
-                            disabled
                             validateRequired
                             id="categoryId"
                             control={control}
@@ -472,7 +502,6 @@ export default function RescheduleAppointmentPage() {
                           variant="standard"
                         >
                           <CustomDropDown
-                            disabled
                             validateRequired
                             id="storeServiceCategoryItem"
                             control={control}

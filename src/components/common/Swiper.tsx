@@ -1,14 +1,16 @@
 import React, { useEffect } from 'react';
 import Swiper from 'swiper';
+import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import 'swiper/swiper-bundle.css';
 import assets from '../../assets';
 
 type Props = {
   data: any;
   selectedUser?: any;
+  isActiveUser?: string;
 };
 
-const SwiperComponent = ({ data, selectedUser }: Props) => {
+const SwiperComponent = ({ data, selectedUser, isActiveUser }: Props) => {
   function getDirection() {
     const windowWidth = window.innerWidth;
     return windowWidth <= 760 ? 'vertical' : 'horizontal';
@@ -79,7 +81,12 @@ const SwiperComponent = ({ data, selectedUser }: Props) => {
       <div className="swiper-wrapper">
         {data?.map((item: any, index: number) => {
           return (
-            <div key={index} className="swiper-slide">
+            <div key={index} className="swiper-slide flex items-center">
+              {item.text === isActiveUser && (
+                <div className="mr-3">
+                  <FiberManualRecordIcon />
+                </div>
+              )}
               <div className="flex items-center">
                 <div>
                   <img

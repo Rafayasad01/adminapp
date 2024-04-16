@@ -57,7 +57,7 @@ import ServiceItemPage from '../pages/services/ServiceItemPage';
 import EmployeeServices from '../pages/appointment/employeeServices/EmployeeServices';
 import AddAppointmentPage from '../pages/appointment/AddAppointmentPage';
 import RescheduleAppointmentPage from '../pages/appointment/RescheduleAppointmentPage';
-import UpdateAppointmentPage from '../pages/appointment/UpdateAppointmentPage';
+// import UpdateAppointmentPage from '../pages/appointment/UpdateAppointmentPage';
 
 export const routeObjects: RouteObject[] = [
   {
@@ -301,10 +301,10 @@ export const routeObjects: RouteObject[] = [
                 path: 'add-appointment',
                 element: <AddAppointmentPage />,
               },
-              {
-                path: 'update-appointment/:id',
-                element: <UpdateAppointmentPage />,
-              },
+              // {
+              //   path: 'update-appointment/:id',
+              //   element: <UpdateAppointmentPage />,
+              // },
               {
                 path: 'reschedule-appointment/:id',
                 element: <RescheduleAppointmentPage />,

@@ -21,12 +21,26 @@ const appointmentCreate = (data: any) => {
   return network.post(`${STORE_PREFIX}/${APPOINTMENT_PREFIX}/create`, data);
 };
 
-const appointmentUpdate = (data: any) => {
-  return network.post(`${STORE_PREFIX}/${APPOINTMENT_PREFIX}/update`, data);
+const appointmentUpdate = (storeAppId: any, data: any) => {
+  return network.post(
+    `${STORE_PREFIX}/${APPOINTMENT_PREFIX}/update/${storeAppId}`,
+    data
+  );
+};
+
+const appointmentReschedule = (storeAppId: any, data: any) => {
+  return network.post(
+    `${STORE_PREFIX}/${APPOINTMENT_PREFIX}/re-schedule/${storeAppId}`,
+    data
+  );
 };
 
 const getAllAppointments = (date: any) => {
   return network.get(`${STORE_PREFIX}/${APPOINTMENT_PREFIX}/monthly/${date}`);
+};
+
+const getAppointment = (storeAppId: any) => {
+  return network.get(`${STORE_PREFIX}/${APPOINTMENT_PREFIX}/get/${storeAppId}`);
 };
 
 const getAppointmentById = (storeAppId: any) => {
@@ -39,5 +53,7 @@ export default {
   appointmentCreate,
   appointmentUpdate,
   getAllAppointments,
+  getAppointment,
   getAppointmentById,
+  appointmentReschedule,
 };

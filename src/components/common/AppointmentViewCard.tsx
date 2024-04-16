@@ -7,16 +7,18 @@ import CloseIcon from '@mui/icons-material/Close';
 import Avatar from '@mui/material/Avatar';
 import StarIcon from '@mui/icons-material/Star';
 import dayjs from 'dayjs';
+import { useNavigate } from 'react-router-dom';
 import assets from '../../assets';
 import StoreAppointmentService from '../../services/adminapp/adminStoreAppointment';
 import Loader from './Loader2';
-import { useNavigate } from 'react-router-dom';
 
 type Props = {
   appointmentData?: any;
   setAppointmentTooltipData?: any;
   setIsTooltipOpen?: any;
   isTooltipOpen?: boolean;
+  setOpenFormDialog?: any;
+  getUpdatePopupData?: any;
 };
 
 const AppointmentViewCard = ({
@@ -24,6 +26,8 @@ const AppointmentViewCard = ({
   setAppointmentTooltipData,
   isTooltipOpen,
   setIsTooltipOpen,
+  setOpenFormDialog,
+  getUpdatePopupData,
   ...restProps
 }: Props) => {
   const navigate = useNavigate();
@@ -80,15 +84,17 @@ const AppointmentViewCard = ({
   return isLoader ? (
     <Loader />
   ) : (
-    <div className="">
+    <div className="custom-appo">
       <div className="bg-[#B8DFF2] p-5 pb-16">
         <div className="flex justify-between">
           <div>
             <IconButton
               className="icon-btn mr-3.5 p-0"
-              onClick={() =>
-                navigate(`../update-appointment/${appointmentData.id}`)
-              }
+              onClick={() => {
+                setOpenFormDialog(true);
+                setIsTooltipOpen(false);
+                getUpdatePopupData(data);
+              }}
               // onClick={() =>
               //     item.isActive ? editHandler(item.id) : null
               // }

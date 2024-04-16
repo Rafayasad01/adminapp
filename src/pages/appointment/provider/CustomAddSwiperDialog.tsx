@@ -135,7 +135,7 @@ function CustomSwiperDialog({
   const handleServices = () => {
     const obj = {
       storeServiceCategoryItem: watch('servicesId'),
-      minutes: watch('mints'),
+      serviceTime: watch('mints'),
       amountType: watch('servicesAmount'),
       amount: watch('price'),
     };
@@ -578,7 +578,7 @@ function CustomSwiperDialog({
                       <div>{item.storeServiceCategoryItem}</div>
                       <div className="flex w-[25%] items-center justify-between gap-2">
                         <div className="flex items-center">
-                          <span className="text-sm">{item.minutes}</span>
+                          <span className="text-sm">{item.serviceTime}</span>
                           <span> mints</span>
                         </div>
                         <div>RS{item.amount}.00</div>

@@ -1751,6 +1751,11 @@ main .container:nth-child(3){
 
 .css-1fklddj-MuiModal-root-MuiPopover-root .Layout-popover {
   width: 363px !important;
+  /* position: 'absolute' !important; */
+  /* top: 16px !important; */
+  /* left: 16px !important; */
+  /* transform: 'translate(-50%, -50%)' !important; */
+  /* transform-origin: -16px -16px !important; */
 }
 
 .Content .FormField {

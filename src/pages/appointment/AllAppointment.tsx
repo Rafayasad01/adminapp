@@ -1,45 +1,45 @@
-import React, { useState, useCallback, useEffect } from 'react';
-import Paper from '@mui/material/Paper';
-import PersonOutlinedIcon from '@mui/icons-material/PersonOutlined';
 import {
-  ViewState,
   EditingState,
   GroupingState,
-  IntegratedGrouping,
   IntegratedEditing,
+  IntegratedGrouping,
+  ViewState,
 } from '@devexpress/dx-react-scheduler';
-import { Avatar, ListItemAvatar, ListItemText, ListItem } from '@mui/material';
+import { styled, alpha } from '@mui/material/styles';
 import {
-  Scheduler,
-  Resources,
-  WeekView,
-  Appointments,
   AppointmentTooltip,
-  AppointmentForm,
-  GroupingPanel,
-  Toolbar,
-  ViewSwitcher,
-  MonthView,
-  DragDropProvider,
+  Appointments,
   // AppointmentContent,
   DateNavigator,
+  GroupingPanel,
+  MonthView,
+  Resources,
+  Scheduler,
+  Toolbar,
+  ViewSwitcher,
+  WeekView,
 } from '@devexpress/dx-react-scheduler-material-ui';
-import weekOfYear from 'dayjs/plugin/weekOfYear';
-import timezone from 'dayjs/plugin/timezone';
-import { blue, orange } from '@mui/material/colors';
-import assets from '../../assets';
-import SwiperComponent from '../../components/common/Swiper';
-import AppointmentViewCard from '../../components/common/AppointmentViewCard';
-import StoreAppointmentService from '../../services/adminapp/adminStoreAppointment';
+import PersonOutlinedIcon from '@mui/icons-material/PersonOutlined';
+import Paper from '@mui/material/Paper';
 import dayjs from 'dayjs';
+import timezone from 'dayjs/plugin/timezone';
+import weekOfYear from 'dayjs/plugin/weekOfYear';
+import React, { useCallback, useEffect, useState } from 'react';
+import { formatDate } from 'devextreme/localization';
+import assets from '../../assets';
+import AppointmentViewCard from '../../components/common/AppointmentViewCard';
+import Loader from '../../components/common/Loader';
+import SwiperComponent from '../../components/common/Swiper';
+import StoreAppointmentService from '../../services/adminapp/adminStoreAppointment';
+import UpdateAppointmentPopup from './UpdateAppointmentPopup';
 
 dayjs.extend(weekOfYear);
 dayjs.extend(timezone);
 
-const dateString = '2024-04-02T09:10:00.000Z';
-const dateStrings = '2024-04-02T09:15:00.000Z';
-const date = dayjs(dateString);
-const dates = dayjs(dateStrings);
+// const dateString = '2024-04-02T09:10:00.000Z';
+// const dateStrings = '2024-04-02T09:15:00.000Z';
+// const date = dayjs(dateString);
+// const dates = dayjs(dateStrings);
 
 const newDate = new Date(2018, 4, 28, 9, 30);
 console.log('newDatesdasdsasadsa', newDate);
@@ -78,7 +78,7 @@ type Props = {
   setAppointmentType?: any;
   selectedPriorityData?: any;
   setSelectedPriorityData?: any;
-  appointmentType?: string;
+  appointmentType?: any;
 };
 
 const AllAppointment = ({
@@ -89,11 +89,16 @@ const AllAppointment = ({
   selectedPriorityData,
 }: Props) => {
   const [data, setData] = useState(appointments);
+  const [appointmentData, setAppointmentData] = useState();
   const [isTooltipOpen, setIsTooltipOpen] = useState(false);
+  const [isLoader, setIsLoader] = useState(false);
   const [appointmentTooltipData, setAppointmentTooltipData] =
     useState<any>(null);
   const [isActiveUser, setIsActiveUser] = useState('all');
   const currentWeek = dayjs().format('YYYY-MM-DD');
+  const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
+  const [isNotify, setIsNotify] = React.useState(true);
+  const [notifyMessage, setNotifyMessage] = React.useState({});
 
   const groupOrientation = (viewName: any) => viewName.split(' ')[0];
   const grouping = [
@@ -123,6 +128,7 @@ const AllAppointment = ({
           const formattedDateWithHour2 = dateF2.format(
             'ddd MMM DD YYYY h:mm:ss [GMT]ZZ (zz)'
           );
+          const title = `${item.appointmentNumber}. ${item.name}`;
           return {
             // paid: true,
             title: item.name,
@@ -137,7 +143,7 @@ const AllAppointment = ({
         //   const hour = date.hour();
         // })
         setData(structuredData);
-        console.log('ALL APPO', structuredData);
+        setIsLoader(false);
       }
     });
   }, []);
@@ -155,6 +161,12 @@ const AllAppointment = ({
     },
   ];
 
+  // useEffect(() => {
+  //   if (appointmentType === "Individual Appointment") {
+  //     setIsActiveUser('');
+  //   }
+  // }, [appointmentType])
+
   const selectedUser = (name: string) => {
     setIsActiveUser(name);
     setAppointmentType({
@@ -169,21 +181,21 @@ const AllAppointment = ({
 
   // console.log('🚀 ~ AllAppointment ~ selectedUser:', priorityData);
 
-  const CustomAppointmentContent = ({ appointmentData, ...restProps }: any) => {
-    console.log(
-      '🚀 ~ CustomAppointmentContent ~ appointmentData:',
-      appointmentData,
-      restProps
-    );
-    // Customize the appearance of the appointment based on the appointmentData
-    return (
-      <div style={{ padding: '5px' }}>
-        <div>
-          <span>{appointmentData?.title}</span>
-        </div>
-      </div>
-    );
-  };
+  // const CustomAppointmentContent = ({ appointmentData, ...restProps }: any) => {
+  //   console.log(
+  //     '🚀 ~ CustomAppointmentContent ~ appointmentData:',
+  //     appointmentData,
+  //     restProps
+  //   );
+  //   // Customize the appearance of the appointment based on the appointmentData
+  //   return (
+  //     <div style={{ padding: '5px' }}>
+  //       <div>
+  //         <span>{appointmentData?.title}</span>
+  //       </div>
+  //     </div>
+  //   );
+  // };
 
   const onCommitChanges = useCallback(
     ({ added, changed, deleted }: any) => {
@@ -216,25 +228,172 @@ const AllAppointment = ({
     }
   };
 
-  // const AppointmentContent = ({ style, ...restProps }: any) => {
-  //   if (!restProps.data) {
-  //     return null; // or handle the case where data is undefined
+  const getUpdatePopupData = async (updateData: any) => {
+    setAppointmentData(updateData);
+    //   .then((res: any) => {
+    //     if (res.data.success) {
+    //       setAppointmentData(res.data.data);
+    //     } else {
+    //       setIsNotify(true);
+    //       setNotifyMessage({
+    //         text: res.data.message,
+    //         type: 'error',
+    //       });
+    //     }
+    //   })
+    //   .catch((err: Error) => {
+    //     setIsNotify(true);
+    //     setNotifyMessage({
+    //       text: err.message,
+    //       type: 'error',
+    //     });
+    //   });
+  };
+
+  const updateAppointmentHandler = async (updateAppointmentData: any) => {
+    setIsLoader(true);
+    const appId = updateAppointmentData.id;
+    delete updateAppointmentData.id;
+    await StoreAppointmentService.appointmentUpdate(
+      appId,
+      updateAppointmentData
+    )
+      .then((res) => {
+        if (res.data.success) {
+          setIsLoader(false);
+          setData((newArr: any) => {
+            return newArr.map((item: any) => {
+              console.log(item);
+              if (item.id === res.data.data.id) {
+                item.title = res.data.data.name;
+              }
+              return { ...item };
+            });
+          });
+          setIsNotify(true);
+          setNotifyMessage({
+            text: res.data.message,
+            type: 'success',
+          });
+        } else {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: res.data.message,
+            type: 'error',
+          });
+        }
+      })
+      .catch((err) => {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
+        });
+      });
+  };
+
+  const AppointmentContent = ({ style, ...restProps }: any) => {
+    if (!restProps.data) {
+      return null; // or handle the case where data is undefined
+    }
+    const startDate = restProps.data?.startDate;
+    const endDate = restProps.data?.endDate;
+    const sdformat = dayjs(startDate);
+    const edformat = dayjs(endDate);
+    return (
+      <Appointments.AppointmentContent className="custom-appo" {...restProps}>
+        q
+        <div className="w-full">
+          <div className="flex w-full flex-wrap items-center justify-between">
+            <div className="w-[50%] truncate">{restProps?.data?.title}</div>
+            <div className="rounded-full">unpaid</div>
+          </div>
+          <div className="">{`${sdformat.format('HH:mm A')} - ${edformat.format(
+            'HH:mm A'
+          )}`}</div>
+        </div>
+      </Appointments.AppointmentContent>
+    );
+  };
+
+  const PREFIX = 'Demo';
+  // #FOLD_BLOCK
+  const classes = {
+    flexibleSpace: `${PREFIX}-flexibleSpace`,
+    textField: `${PREFIX}-textField`,
+    locationSelector: `${PREFIX}-locationSelector`,
+    button: `${PREFIX}-button`,
+    selectedButton: `${PREFIX}-selectedButton`,
+    longButtonText: `${PREFIX}-longButtonText`,
+    shortButtonText: `${PREFIX}-shortButtonText`,
+    title: `${PREFIX}-title`,
+    textContainer: `${PREFIX}-textContainer`,
+    time: `${PREFIX}-time`,
+    text: `${PREFIX}-text`,
+    container: `${PREFIX}-container`,
+    weekendCell: `${PREFIX}-weekendCell`,
+    weekEnd: `${PREFIX}-weekEnd`,
+  };
+
+  const StyledWeekViewTimeTableCell = styled(WeekView.TimeTableCell)(
+    ({ theme: { palette } }) => ({
+      [`&.${classes.weekendCell}`]: {
+        backgroundColor: alpha(palette.action.disabledBackground, 0.04),
+        '&:hover': {
+          backgroundColor: alpha(palette.action.disabledBackground, 0.04),
+        },
+        '&:focus': {
+          backgroundColor: alpha(palette.action.disabledBackground, 0.04),
+        },
+      },
+    })
+  );
+  // #FOLD_BLOCK
+  const StyledWeekViewDayScaleCell = styled(WeekView.DayScaleCell)(
+    ({ theme: { palette } }) => ({
+      [`&.${classes.weekEnd}`]: {
+        backgroundColor: alpha(palette.action.disabledBackground, 0.06),
+      },
+    })
+  );
+
+  // const isRestTime = (date: any) =>
+  //   date.getDay() === 0 ||
+  //   date.getDay() === 6 ||
+  //   date.getHours() < 9 ||
+  //   date.getHours() >= 18;
+
+  // const TimeTableCell = ({ ...restProps }) => {
+  //   const { startDate } = restProps;
+  //   if (isRestTime(startDate)) {
+  //     return (
+  //       <StyledWeekViewTimeTableCell
+  //         {...restProps}
+  //         className={classes.weekendCell}
+  //       />
+  //     );
   //   }
-  //   console.log("restProps", restProps);
-  //   return (
-  //     <Appointments.AppointmentContent {...restProps}>
-  //       <div className='flex items-center flex-wrap justify-between w-full'>
-  //         <div className=''>{restProps?.data?.title}</div>
-  //         {/* <div className='px-2 py-1 border-[1px] rounded-full'>unpaid</div> */}
-  //       </div>
-  //     </Appointments.AppointmentContent>
-  //   );
+  //   return <StyledWeekViewTimeTableCell {...restProps} />;
   // };
 
-  return (
+  // const DayScaleCell = (({ ...restProps }) => {
+  //   return <MonthView.TimeTableCell
+  //     // startDate={dayjs(dateString)}
+  //   />
+  // });
+
+  return isLoader ? (
+    <Loader />
+  ) : (
     <Paper>
       <div className="h-16 p-[15px]">
-        <SwiperComponent selectedUser={selectedUser} data={priorityData} />
+        <SwiperComponent
+          isActiveUser={isActiveUser}
+          selectedUser={selectedUser}
+          data={priorityData}
+        />
       </div>
       <hr />
       <Scheduler data={data} height={580}>
@@ -253,13 +412,17 @@ const AllAppointment = ({
         /> */}
         <WeekView
           name="Vertical Orientation"
-          startDayHour={9}
-          endDayHour={16}
+          startDayHour={10}
+          endDayHour={22}
           // excludedDays={[0, 6]}
           displayName="Week"
         />
-        <MonthView />
+        <MonthView
+        // timeTableCellComponent={DayScaleCell}
+        // dayScaleCellComponent={DayScaleCell}
+        />
         <Appointments
+
         // appointmentContentComponent={AppointmentContent}
         />
         <Resources data={resources} mainResourceName="priorityId" />
@@ -268,14 +431,16 @@ const AllAppointment = ({
         <AppointmentTooltip
           headerComponent={(props) => <AppointmentTooltip.Header {...props} />}
           contentComponent={(props) => (
-            <div>
-              <AppointmentViewCard
-                {...(isTooltipOpen ? props : null)}
-                setAppointmentTooltipData={setAppointmentTooltipData}
-                setIsTooltipOpen={setIsTooltipOpen}
-                isTooltipOpen={isTooltipOpen}
-              />
-            </div>
+            // <div>
+            <AppointmentViewCard
+              {...(isTooltipOpen ? props : null)}
+              setAppointmentTooltipData={setAppointmentTooltipData}
+              setIsTooltipOpen={setIsTooltipOpen}
+              isTooltipOpen={isTooltipOpen}
+              setOpenFormDialog={setOpenEditFormDialog}
+              getUpdatePopupData={getUpdatePopupData}
+            />
+            // </div>
           )}
           onVisibilityChange={handleVisibilityChange}
           visible={isTooltipOpen}
@@ -301,6 +466,16 @@ const AllAppointment = ({
         {/* <DragDropProvider /> */}
         {/* <DateNavigator /> */}
       </Scheduler>
+      {openEditFormDialog && (
+        <UpdateAppointmentPopup
+          setIsNotify={setIsNotify}
+          setNotifyMessage={setNotifyMessage}
+          openFormDialog={openEditFormDialog}
+          setOpenFormDialog={setOpenEditFormDialog}
+          formData={appointmentData}
+          callback={updateAppointmentHandler}
+        />
+      )}
     </Paper>
   );
 };

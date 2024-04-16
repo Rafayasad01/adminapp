@@ -298,7 +298,7 @@ function EmployeeServices() {
             if (list[i].id === updateItem.data.data.id) {
               list[i].storeServiceCategoryItem =
                 updateItem.data.data.storeServiceCategoryItem;
-              list[i].minutes = updateItem.data.data.minutes;
+              list[i].serviceTime = updateItem.data.data.serviceTime;
               list[i].amountType = updateItem.data.data.amountType;
               list[i].amount = updateItem.data.data.amount;
             }
@@ -476,7 +476,7 @@ function EmployeeServices() {
                   <th className="w-[30%]">Description</th>
                   <th>Amount Type</th>
                   <th>Amount</th>
-                  <th>Minutes</th>
+                  <th>Service Time</th>
                   <th>Created Date</th>
                   <th>Status</th>
                   <th>&nbsp;</th>
@@ -517,7 +517,7 @@ function EmployeeServices() {
                         </td>
                         <td>{item.amountType ? item.amountType : '--'}</td>
                         <td>{item.amount ? item.amount : '--'}</td>
-                        <td>{item.minutes ? item.minutes : '--'}</td>
+                        <td>{item.serviceTime ? item.serviceTime : '--'}</td>
                         <td>
                           {dayjs(
                             item.storeServiceCategoryItem.createdDate
