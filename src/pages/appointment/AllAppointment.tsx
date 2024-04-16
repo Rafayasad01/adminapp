@@ -95,11 +95,12 @@ const AllAppointment = ({
   const [appointmentTooltipData, setAppointmentTooltipData] =
     useState<any>(null);
   const [isActiveUser, setIsActiveUser] = useState('all');
-  const currentWeek = dayjs().format('YYYY-MM-DD');
+  const currentWeek = dayjs().week() - 1;
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
   const [isNotify, setIsNotify] = React.useState(true);
   const [notifyMessage, setNotifyMessage] = React.useState({});
 
+  console.log('🚀 ~ currentWeek:', currentWeek);
   const groupOrientation = (viewName: any) => viewName.split(' ')[0];
   const grouping = [
     {
@@ -160,6 +161,8 @@ const AllAppointment = ({
           //   const date = dayjs(el.appointmentTime).tz('Asia/Karachi');
           //   const hour = date.hour();
           // })
+          console.log('structuredData', structuredData);
+
           setData(structuredData);
           setIsLoader(false);
         }
@@ -167,7 +170,7 @@ const AllAppointment = ({
       .catch((err: any) => {
         setIsLoader(false);
       });
-  }, []);
+  }, [currentWeek]);
 
   // console.log('selectedPriorityData', selectedPriorityData);
   // [{ startDate: new Date() }]
@@ -445,7 +448,6 @@ const AllAppointment = ({
         // dayScaleCellComponent={DayScaleCell}
         />
         <Appointments
-
         // appointmentContentComponent={AppointmentContent}
         />
         <Resources data={resources} mainResourceName="priorityId" />

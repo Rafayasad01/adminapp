@@ -36,7 +36,7 @@ const appointmentReschedule = (storeAppId: any, data: any) => {
 };
 
 const getAllAppointments = (date: any) => {
-  return network.get(`${STORE_PREFIX}/${APPOINTMENT_PREFIX}/monthly/${date}`);
+  return network.get(`${STORE_PREFIX}/${APPOINTMENT_PREFIX}/weekly/${date}`);
 };
 
 const getAppointment = (storeAppId: any) => {
