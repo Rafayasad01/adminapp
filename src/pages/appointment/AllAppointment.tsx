@@ -145,12 +145,12 @@ const AllAppointment = ({
               // paid: true,
               title: item.name,
               priorityId: item.storeEmployee,
-              startDate:
-                formattedDateWithHour1 ??
-                dayjs().format('ddd MMM DD YYYY h:mm:ss [GMT]ZZ (zz)'),
-              endDate:
-                formattedDateWithHour2 ??
-                dayjs().format('ddd MMM DD YYYY h:mm:ss [GMT]ZZ (zz)'),
+              startDate: formattedDateWithHour1
+                ? formattedDateWithHour1
+                : dayjs().format('ddd MMM DD YYYY h:mm:ss [GMT]ZZ (zz)'),
+              endDate: formattedDateWithHour2
+                ? formattedDateWithHour2
+                : dayjs().format('ddd MMM DD YYYY h:mm:ss [GMT]ZZ (zz)'),
               id: item.id,
             };
           });
@@ -220,12 +220,12 @@ const AllAppointment = ({
     ({ added, changed, deleted }: any) => {
       if (added) {
         const startingAddedId =
-          data.length > 0 ? data[data.length - 1].id + 1 : 0;
+          data?.length > 0 ? data[data.length - 1].id + 1 : 0;
         setData([...data, { id: startingAddedId, ...added }]);
       }
       if (changed) {
         setData(
-          data.map((appointment) =>
+          data?.map((appointment) =>
             changed[appointment.id]
               ? { ...appointment, ...changed[appointment.id] }
               : appointment
@@ -317,8 +317,8 @@ const AllAppointment = ({
     if (!restProps.data) {
       return null; // or handle the case where data is undefined
     }
-    const startDate = restProps.data?.startDate;
-    const endDate = restProps.data?.endDate;
+    const startDate = restProps?.data?.startDate;
+    const endDate = restProps?.data?.endDate;
     const sdformat = dayjs(startDate);
     const edformat = dayjs(endDate);
     return (

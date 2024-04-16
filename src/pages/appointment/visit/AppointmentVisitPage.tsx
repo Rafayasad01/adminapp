@@ -73,18 +73,7 @@ function AppointmentVisitPage() {
   const [notifyMessage, setNotifyMessage] = React.useState({});
   const [isPrintEnabled, setPrintEnabled] = useState<any>([]);
   const [selectedPriorityData, setSelectedPriorityData] = useState<any>([]);
-  const [priorityData, setPriorityData] = useState<any>([
-    {
-      text: 'John',
-      id: 1,
-      imageUrl: assets.images.avatarUser,
-    },
-    {
-      text: 'Thomas',
-      id: 2,
-      imageUrl: assets.images.avatarUser,
-    },
-  ]);
+  const [priorityData, setPriorityData] = useState<any>([]);
 
   // dropdown
   const [appointmentType, setAppointmentType] = useState({
