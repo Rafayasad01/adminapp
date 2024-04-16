@@ -325,37 +325,37 @@ function AppointmentVisitPage() {
     }
   }, []);
 
-  useEffect(() => {
-    if (listingRolePermission(dataRole, 'Appointment List')) {
-      Service.VisitList(authState.user.tenant, page, rowsPerPage)
-        .then((item: any) => {
-          if (item.data.success) {
-            // console.log('item.data.data.list::::::', item.data.data.list);
-            setIsLoader(false);
-            setList(item.data.data.list);
-            setTotal(item.data.data.total);
-            setPrintEnabled(item.data.data.list.map(() => false));
-          } else {
-            setIsLoader(false);
-            setIsNotify(true);
-            setNotifyMessage({
-              text: item.data.message,
-              type: 'error',
-            });
-          }
-        })
-        .catch((err) => {
-          setIsLoader(false);
-          setIsNotify(true);
-          setNotifyMessage({
-            text: err.message,
-            type: 'error',
-          });
-        });
-    } else {
-      setIsLoader(false);
-    }
-  }, [emptyVariable]);
+  // useEffect(() => {
+  //   if (listingRolePermission(dataRole, 'Appointment List')) {
+  //     Service.VisitList(authState.user.tenant, page, rowsPerPage)
+  //       .then((item: any) => {
+  //         if (item.data.success) {
+  //           // console.log('item.data.data.list::::::', item.data.data.list);
+  //           setIsLoader(false);
+  //           setList(item.data.data.list);
+  //           setTotal(item.data.data.total);
+  //           setPrintEnabled(item.data.data.list.map(() => false));
+  //         } else {
+  //           setIsLoader(false);
+  //           setIsNotify(true);
+  //           setNotifyMessage({
+  //             text: item.data.message,
+  //             type: 'error',
+  //           });
+  //         }
+  //       })
+  //       .catch((err) => {
+  //         setIsLoader(false);
+  //         setIsNotify(true);
+  //         setNotifyMessage({
+  //           text: err.message,
+  //           type: 'error',
+  //         });
+  //       });
+  //   } else {
+  //     setIsLoader(false);
+  //   }
+  // }, [emptyVariable]);
 
   const createFormHandler = (data: any, type: string) => {
     // console.log('dataaaaCREATE', data, type);

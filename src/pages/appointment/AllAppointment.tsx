@@ -108,44 +108,63 @@ const AllAppointment = ({
   ];
 
   useEffect(() => {
-    StoreAppointmentService.getAllAppointments(currentWeek).then((res: any) => {
-      if (res.data.success) {
-        const structuredData = res.data.data.map((item: any) => {
-          const date = dayjs(item.appointmentTime).tz('Asia/Karachi');
-          const year = date.year();
-          const month = date.month();
-          const day = date.date();
-          const hour = date.hour();
-          const minute = date.minute();
-          const newDate1 = new Date(year, month, day, hour, minute);
-          const newDate2 = new Date(year, month, day, hour, minute);
-          newDate2.setMinutes(newDate2.getMinutes() + Number(item.serviceTime));
-          const dateF1 = dayjs(newDate1).tz('Asia/Karachi');
-          const dateF2 = dayjs(newDate2).tz('Asia/Karachi');
-          const formattedDateWithHour1 = dateF1.format(
-            'ddd MMM DD YYYY h:mm:ss [GMT]ZZ (zz)'
-          );
-          const formattedDateWithHour2 = dateF2.format(
-            'ddd MMM DD YYYY h:mm:ss [GMT]ZZ (zz)'
-          );
-          const title = `${item.appointmentNumber}. ${item.name}`;
-          return {
-            // paid: true,
-            title: item.name,
-            priorityId: item.storeEmployee,
-            startDate: formattedDateWithHour1,
-            endDate: formattedDateWithHour2,
-            id: item.id,
-          };
-        });
-        // const startEndTime = res.data.data.map((el:any)=>{
-        //   const date = dayjs(el.appointmentTime).tz('Asia/Karachi');
-        //   const hour = date.hour();
-        // })
-        setData(structuredData);
+    StoreAppointmentService.getAllAppointments(currentWeek)
+      .then((res: any) => {
+        if (res.data.success) {
+          const structuredData = res.data.data.map((item: any) => {
+            const date = dayjs(item.appointmentTime).tz('Asia/Karachi');
+            const year = date.year();
+            const month = date.month();
+            const day = date.date();
+            const hour = date.hour();
+            const minute = date.minute();
+            const newDate1 = new Date(year, month, day, hour, minute);
+            const newDate2 = new Date(year, month, day, hour, minute);
+            newDate2.setMinutes(
+              newDate2.getMinutes() + Number(item.serviceTime)
+            );
+            const dateF1 = dayjs(newDate1).tz('Asia/Karachi');
+            const dateF2 = dayjs(newDate2).tz('Asia/Karachi');
+            const formattedDateWithHour1 = dateF1.format(
+              'ddd MMM DD YYYY h:mm:ss [GMT]ZZ (zz)'
+            );
+            const formattedDateWithHour2 = dateF2.format(
+              'ddd MMM DD YYYY h:mm:ss [GMT]ZZ (zz)'
+            );
+            const title = `${item.appointmentNumber}. ${item.name}`;
+            console.log(
+              'date',
+              dayjs().format('ddd MMM DD YYYY h:mm:ss [GMT]ZZ (zz)')
+            );
+            console.log(
+              'date',
+              dayjs().format('ddd MMM DD YYYY h:mm:ss [GMT]ZZ (zz)')
+            );
+
+            return {
+              // paid: true,
+              title: item.name,
+              priorityId: item.storeEmployee,
+              startDate:
+                formattedDateWithHour1 ??
+                dayjs().format('ddd MMM DD YYYY h:mm:ss [GMT]ZZ (zz)'),
+              endDate:
+                formattedDateWithHour2 ??
+                dayjs().format('ddd MMM DD YYYY h:mm:ss [GMT]ZZ (zz)'),
+              id: item.id,
+            };
+          });
+          // const startEndTime = res.data.data.map((el:any)=>{
+          //   const date = dayjs(el.appointmentTime).tz('Asia/Karachi');
+          //   const hour = date.hour();
+          // })
+          setData(structuredData);
+          setIsLoader(false);
+        }
+      })
+      .catch((err: any) => {
         setIsLoader(false);
-      }
-    });
+      });
   }, []);
 
   // console.log('selectedPriorityData', selectedPriorityData);
