@@ -408,6 +408,40 @@ const AllAppointment = ({
   //   />
   // });
 
+  const [currentDate, setCurrentDate] = useState(dayjs().toDate());
+  const [currentView, setCurrentView] = useState('Week');
+
+  const [ranges, setRange] = useState();
+
+  const getRange = (date: any, view: any) => {
+    console.log('VIEW', view);
+    if (view === 'Month') {
+      return { startDate: date, endDate: date };
+    }
+    if (view === 'Week') {
+      let firstDay = date.getDate() - date.getDay();
+      let lastDay = firstDay + 6;
+      return {
+        startDate: new Date(date.setDate(firstDay)),
+        endDate: new Date(date.setDate(lastDay)),
+      };
+    }
+  };
+
+  const currentViewChange = (newView: any) => {
+    let range: any = getRange(currentDate, newView);
+    setCurrentView(newView);
+    setRange(range);
+  };
+
+  const currentDateChange = (newDate: any) => {
+    let range: any = getRange(newDate, currentView);
+    setCurrentDate(newDate);
+    setRange(range);
+  };
+
+  console.log('RANGE', ranges);
+
   return isLoader ? (
     <Loader />
   ) : (
@@ -423,7 +457,12 @@ const AllAppointment = ({
       </div>
       <hr />
       <Scheduler data={data} height={580}>
-        <ViewState defaultCurrentDate={dayjs().toDate()} />
+        <ViewState
+          defaultCurrentDate={dayjs().toDate()}
+          currentDate={currentDate}
+          onCurrentDateChange={currentDateChange}
+          onCurrentViewNameChange={currentViewChange}
+        />
         <EditingState onCommitChanges={onCommitChanges} />
         <GroupingState
           grouping={grouping}
@@ -473,8 +512,8 @@ const AllAppointment = ({
         <GroupingPanel />
         <Toolbar />
         <ViewSwitcher />
-        <DateNavigator />
         {/* <AppointmentForm /> */}
+        <DateNavigator />
         {/* <div>
                     {priorityData?.map((resource: any) => (
                         <ListItem key={resource.id}>
