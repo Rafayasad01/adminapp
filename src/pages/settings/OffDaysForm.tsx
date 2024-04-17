@@ -1,13 +1,16 @@
-import { Button } from '@mui/material';
+import { Button, CircularProgress, Divider } from '@mui/material';
 import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
-import React, { useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import dayjs from 'dayjs';
 // eslint-disable-next-line import/no-cycle
 import SettingsOffDaysDateRangePicker from './SettingsOffDaysDateRangePicker';
 import { DateRange } from '../../interfaces/shop-schedule.interface';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
-import { setOffDays } from '../../redux/features/shopScheduleStateSlice';
+import {
+  fetchSchedule,
+  setOffDays,
+} from '../../redux/features/shopScheduleStateSlice';
 
 function OffDaysForm() {
   const [dateRange, setDateRange] = useState<DateRange[]>([
@@ -17,7 +20,14 @@ function OffDaysForm() {
   ]);
   const [event, setEvent] = useState<string | null>();
   const dispatch = useAppDispatch();
+  const authState = useAppSelector((state) => state?.authState);
   const offDays = useAppSelector((state) => state?.scheduleState?.offDays);
+  const scheduleLoading = useAppSelector(
+    (state) => state?.scheduleState?.loading
+  );
+  const ScheduledMonthDate = useAppSelector(
+    (state) => state?.scheduleState?.date
+  );
 
   const handleEventInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEvent(e.target.value);
@@ -60,6 +70,14 @@ function OffDaysForm() {
     setOffDaysState(days);
   };
 
+  useEffect(() => {
+    dispatch(
+      fetchSchedule({
+        tenant: authState.user?.tenant,
+        date: dayjs(ScheduledMonthDate).format('YYYY-MM-DD'),
+      })
+    );
+  }, [ScheduledMonthDate]);
   return (
     <div className="grid grid-cols-12 gap-8" id="OffDayForm">
       <div className="sm:order-2 md:order-2 md:col-span-12 lg:order-first lg:col-span-6">
@@ -88,36 +106,52 @@ function OffDaysForm() {
             Add
           </Button>
         </div>
-        <table className="mt-3">
-          <thead>
-            <tr>
-              <th>Event</th>
-              <th>Start</th>
-              <th>End</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {offDays.map((e, i) => {
-              return (
-                <tr key={i}>
-                  <th>{e.key}</th>
-                  <td>{dayjs(e.startDate).format('DD/MM/YYYY')}</td>
-                  <td>{dayjs(e.endDate).format('DD/MM/YYYY')}</td>
-                  <td>
-                    <Button
-                      color="warning"
-                      variant="text"
-                      onClick={() => handleDeleteEvent(i)}
-                    >
-                      Delete
-                    </Button>
-                  </td>
+        <Divider className=" mt-3" />
+        {scheduleLoading ? (
+          <div className="mt-3 flex h-48 flex-wrap items-center justify-center">
+            <CircularProgress />
+          </div>
+        ) : (
+          <div>
+            <h1 className="mt-4 h-1 text-center text-lg">
+              Events of{' '}
+              <span className="font-bold">
+                {dayjs(ScheduledMonthDate).isValid() &&
+                  dayjs(ScheduledMonthDate).format('MMMM')}
+              </span>
+            </h1>
+            <table className="mt-3">
+              <thead>
+                <tr>
+                  <th>Event</th>
+                  <th>Start</th>
+                  <th>End</th>
+                  <th>Action</th>
                 </tr>
-              );
-            })}
-          </tbody>
-        </table>
+              </thead>
+              <tbody>
+                {offDays.map((e, i) => {
+                  return (
+                    <tr key={i}>
+                      <th>{e.key}</th>
+                      <td>{dayjs(e.startDate).format('DD/MM/YYYY')}</td>
+                      <td>{dayjs(e.endDate).format('DD/MM/YYYY')}</td>
+                      <td>
+                        <Button
+                          color="warning"
+                          variant="text"
+                          onClick={() => handleDeleteEvent(i)}
+                        >
+                          Delete
+                        </Button>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
       <div className="md:col-span-12 lg:col-span-6">
         <SettingsOffDaysDateRangePicker
@@ -129,4 +163,4 @@ function OffDaysForm() {
   );
 }
 
-export default OffDaysForm;
+export default memo(OffDaysForm);

@@ -1,7 +1,7 @@
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import dayjs from 'dayjs';
-import { useEffect, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import '../../assets/css/PopupStyle.css';
 import { Button, FormControl } from '@mui/material';
@@ -269,13 +269,13 @@ function WorkDaysForm({
                   <td> {d.openTime?.format('h:mm A') || '--'} </td>
                   <td> {d.closeTime?.format('h:mm A') || '--'} </td>
                   <td>
-                    {d.breakTime?.isValid()
+                    {d.breakTime && d.breakTime?.isValid()
                       ? d.breakTime?.format('h:mm A')
                       : '--'}
                   </td>
                   <td>
                     {' '}
-                    {d.breakTime?.isValid()
+                    {d.breakOffTime && d.breakOffTime?.isValid()
                       ? d.breakOffTime?.format('h:mm A')
                       : '--'}
                   </td>
@@ -298,4 +298,4 @@ function WorkDaysForm({
   );
 }
 
-export default WorkDaysForm;
+export default memo(WorkDaysForm);

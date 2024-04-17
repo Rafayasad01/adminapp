@@ -1,16 +1,19 @@
 import { endOfWeek, startOfWeek } from 'date-fns';
 import dayjs from 'dayjs';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { DateRangePicker } from 'react-date-range';
 
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
+import { useAppDispatch } from '../../redux/redux-hooks';
+import { setScheduleMonthDateForWeek } from '../../redux/features/shopScheduleStateSlice';
 
 type Props = {
   calendarStyle: string;
 };
 
 function SettingsDateRangePicker({ calendarStyle }: Props) {
+  const dispatch = useAppDispatch();
   const [dateRange, setDateRange] = useState([
     {
       startDate: startOfWeek(new Date()), // start of the current week (Monday)
@@ -30,6 +33,9 @@ function SettingsDateRangePicker({ calendarStyle }: Props) {
         date = ranges.selection.endDate;
         startDate = dayjs(date).startOf('week').toDate();
         endDate = dayjs(date).endOf('week').toDate();
+        dispatch(
+          setScheduleMonthDateForWeek(dayjs(endDate).format('YYYY-MM-DD'))
+        );
         return [
           {
             startDate,
@@ -38,6 +44,10 @@ function SettingsDateRangePicker({ calendarStyle }: Props) {
           },
         ];
       }
+      dispatch(
+        setScheduleMonthDateForWeek(dayjs(endDate).format('YYYY-MM-DD'))
+      );
+
       return [
         {
           startDate,

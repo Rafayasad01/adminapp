@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Dialog from '@mui/material/Dialog';
 import Button from '@mui/material/Button';
 
@@ -9,24 +9,34 @@ import Tab from '@mui/material/Tab';
 
 import '../../assets/css/PopupStyle.css';
 import { CircularProgress } from '@mui/material';
+import dayjs from 'dayjs';
 import WorkDaysForm from './WorkDaysForm';
 import OffDaysForm from './OffDaysForm';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
+import {
+  fetchSchedule,
+  setScheduleThunk,
+} from '../../redux/features/shopScheduleStateSlice';
+import { convertDayJSToString } from '../../utils/helper';
 
 type Props = {
   scheduleAddPopup: boolean;
   setScheduleAddPopup: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-function SettingsCreateSchedulePopup({
+const SettingsCreateSchedulePopup = ({
   scheduleAddPopup,
   setScheduleAddPopup,
-}: Props) {
+}: Props) => {
   const handleFormClose = () => setScheduleAddPopup(false);
   const dispatch = useAppDispatch();
-  const workDays = useAppSelector((state) => state.scheduleState.workDays);
-  const offDays = useAppSelector((state) => state?.scheduleState?.offDays);
-  const [loading, setLoading] = React.useState(false);
+  const {
+    workDays,
+    offDays,
+    date: ScheduledMonthDate,
+    postLoading: ScheduledLoading,
+  } = useAppSelector((state) => state?.scheduleState);
+  const authState = useAppSelector((state) => state?.authState);
   const [tabPanel, setTabPanel] = React.useState(0);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -34,12 +44,35 @@ function SettingsCreateSchedulePopup({
   };
 
   const submitSchedule = () => {
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-    }, 1000);
-    console.log('Data Submission:', { workDays, eventDays: offDays });
+    let od = offDays.map((x) => ({ ...x, event: x.key }));
+    od = convertDayJSToString(od, ['startDate', 'endDate'], 'YYYY-MM-DD');
+    const wd = convertDayJSToString(workDays, [
+      'openTime',
+      'breakTime',
+      'closeTime',
+      'breakOffTime',
+    ]);
+
+    dispatch(
+      setScheduleThunk({
+        tenant: authState.user?.tenant,
+        body: {
+          workDays: wd,
+          eventDays: od,
+          date: dayjs(ScheduledMonthDate).format('YYYY-MM-DD'),
+        },
+      })
+    );
   };
+
+  useEffect(() => {
+    dispatch(
+      fetchSchedule({
+        tenant: authState.user?.tenant,
+        date: dayjs(ScheduledMonthDate).format('YYYY-MM-DD'),
+      })
+    );
+  }, []);
 
   return (
     <Dialog
@@ -111,17 +144,17 @@ function SettingsCreateSchedulePopup({
               padding: '0.375rem 1.5rem !important',
             }}
           >
-            Cancel
+            Close
           </Button>
           <Button
             className="btn-black-fill"
-            disabled={loading}
+            disabled={ScheduledLoading}
             sx={{
               padding: '0.375rem 2rem !important',
             }}
             onClick={submitSchedule}
           >
-            {loading && (
+            {ScheduledLoading && (
               <CircularProgress color="inherit" size={20} className="mr-3" />
             )}
             Submit Schedule
@@ -130,6 +163,6 @@ function SettingsCreateSchedulePopup({
       </div>
     </Dialog>
   );
-}
+};
 
 export default SettingsCreateSchedulePopup;

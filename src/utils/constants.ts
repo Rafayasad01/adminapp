@@ -70,6 +70,7 @@ export const DOMAIN_PROTOCOL = 'https://';
 export const NOT_AUTHORIZED_MESSAGE = 'You dont have permission for this.';
 export const TOKEN_STORE_KEY = 'APP_AUTH_TOKEN';
 export const SYSTEM_CONFIG_PREFIX = 'theme';
+export const SHOP_SCHEDULING_PREFIX = 'shop-schedule';
 
 let TEXT_STORE_KEY = '';
 export const setText = (text: string) => {
