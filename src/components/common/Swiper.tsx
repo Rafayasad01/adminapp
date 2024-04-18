@@ -1,8 +1,7 @@
-import React, { useEffect } from 'react';
-import Swiper from 'swiper';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
+import { useEffect } from 'react';
+import Swiper from 'swiper';
 import 'swiper/swiper-bundle.css';
-import assets from '../../assets';
 
 type Props = {
   data: any;
@@ -79,38 +78,36 @@ const SwiperComponent = ({ data, selectedUser, isActiveUser }: Props) => {
   return (
     <div className="swiper">
       <div className="swiper-wrapper">
-        {data.length > 0 ? (
-          data?.map((item: any, index: number) => {
-            return (
-              <div key={index} className="swiper-slide flex items-center">
-                {item.text === isActiveUser && (
-                  <div className="mr-3">
-                    <FiberManualRecordIcon />
-                  </div>
-                )}
-                <div className="flex items-center">
-                  <div>
-                    <img
-                      className="w-[35px]"
-                      src={item.imageUrl}
-                      // alt="avatar-img"
-                    />
-                  </div>
-                  <div
-                    onClick={() => handleUser(item.text)}
-                    className="cursor-pointer truncate"
-                  >
-                    <span className="mx-2 text-base font-semibold">
-                      {item.text}
-                    </span>
+        {data.length > 0
+          ? data?.map((item: any, index: number) => {
+              return (
+                <div key={index} className="swiper-slide flex items-center">
+                  {item.text === isActiveUser && (
+                    <div className="mr-3">
+                      <FiberManualRecordIcon />
+                    </div>
+                  )}
+                  <div className="flex items-center">
+                    <div>
+                      <img
+                        className="w-[35px]"
+                        src={item.imageUrl}
+                        alt="avatar-img"
+                      />
+                    </div>
+                    <div
+                      onClick={() => handleUser(item.text)}
+                      className="cursor-pointer truncate"
+                    >
+                      <span className="mx-2 text-base font-semibold">
+                        {item.text}
+                      </span>
+                    </div>
                   </div>
                 </div>
-              </div>
-            );
-          })
-        ) : (
-          <></>
-        )}
+              );
+            })
+          : null}
       </div>
       <div className="swiper-button-next" />
       <div className="swiper-button-prev" />

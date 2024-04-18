@@ -99,7 +99,7 @@ const AllAppointment = ({
 
   console.log('All Page');
 
-  //console.log('🚀 ~ currentWeek:', currentWeek);
+  // console.log('🚀 ~ currentWeek:', currentWeek);
   const groupOrientation = (viewName: any) => viewName.split(' ')[0];
   const grouping = [
     {
@@ -151,12 +151,12 @@ const AllAppointment = ({
               // paid: true,
               title: item.name,
               priorityId: item.storeEmployee,
-              startDate: formattedDateWithHour1
-                ? formattedDateWithHour1
-                : dayjs().format('ddd MMM DD YYYY h:mm:ss [GMT]ZZ (zz)'),
-              endDate: formattedDateWithHour2
-                ? formattedDateWithHour2
-                : dayjs().format('ddd MMM DD YYYY h:mm:ss [GMT]ZZ (zz)'),
+              startDate:
+                formattedDateWithHour1 ||
+                dayjs().format('ddd MMM DD YYYY h:mm:ss [GMT]ZZ (zz)'),
+              endDate:
+                formattedDateWithHour2 ||
+                dayjs().format('ddd MMM DD YYYY h:mm:ss [GMT]ZZ (zz)'),
               id: item.id,
             };
           });

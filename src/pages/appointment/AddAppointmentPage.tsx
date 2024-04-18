@@ -1,3 +1,5 @@
+/* eslint-disable no-restricted-syntax */
+
 import CloseIcon from '@mui/icons-material/Close';
 import Avatar from '@mui/material/Avatar';
 import FormControl from '@mui/material/FormControl';
@@ -266,7 +268,7 @@ export default function AddAppointmentPage() {
   }, [watch('storeServiceCategoryItem')]);
 
   const addAppointmentServices = () => {
-    let tmpId = 0;
+    const tmpId = 0;
     const obj = {
       id: 0,
       barber: activeBarberData?.storeEmployee?.name,
@@ -306,7 +308,8 @@ export default function AddAppointmentPage() {
         );
         const convertAppointmentAddTime = dayjs(addTime).format('HH:mm');
         // appointmentBookedTime.forEach((el: any, index: number) => {
-        for (const index in appointmentBookedTime) {
+        for (const key of Object.keys(appointmentBookedTime)) {
+          const index = key;
           const el = appointmentBookedTime[index];
           // console.log('El', el);
           // console.log('activeBarberData', activeBarberData);
@@ -322,23 +325,21 @@ export default function AddAppointmentPage() {
               if (time > convertAddTime) {
                 // console.log('if');
                 prevTime = convertAddTime;
-              } else {
+              } else if (
+                time < prevTime &&
+                convertAppointmentAddTime >= elStartTime
+              ) {
                 // console.log("2");
                 // console.log("🚀 ~ appointmentBookedTime.forEach ~ time:", time, prevTime, convertAppointmentAddTime, elStartTime)
                 // console.log('else');
-                if (
-                  time < prevTime &&
-                  convertAppointmentAddTime >= elStartTime
-                ) {
-                  // console.log("3");
-                  // console.log('if meet error');
-                  setIsNotify(true);
-                  setNotifyMessage({
-                    text: `Service time is ${activeBarberData?.serviceTime} minutes, Barber is not avaiable at ${time}`,
-                    type: 'error',
-                  });
-                  break;
-                }
+                // console.log("3");
+                // console.log('if meet error');
+                setIsNotify(true);
+                setNotifyMessage({
+                  text: `Service time is ${activeBarberData?.serviceTime} minutes, Barber is not avaiable at ${time}`,
+                  type: 'error',
+                });
+                break;
               }
             } else {
               // console.log("4");
@@ -353,7 +354,7 @@ export default function AddAppointmentPage() {
         const newTmpId = tmpId + 1;
         const newData = {
           id: newTmpId,
-          appointmentTime: appointmentTime,
+          appointmentTime,
           email: getValues('email'),
           gender: getValues('gender'),
           name: getValues('name'),
@@ -368,7 +369,6 @@ export default function AddAppointmentPage() {
         setAppointmentBookedTime((prev: any) => [...prev, newData]);
         obj.id = newTmpId;
         append(obj);
-        return;
 
         // console.log("🚀 ~ addAppointmentServices ~ isTrue:", isTrue);
       } else {
@@ -387,8 +387,7 @@ export default function AddAppointmentPage() {
         type: 'error',
       });
     }
-
-    return;
+    return null;
   };
 
   const onSubmit = (data: any) => {
