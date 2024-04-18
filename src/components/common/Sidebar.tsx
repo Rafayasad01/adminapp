@@ -6,10 +6,10 @@ import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined
 // import FormatListBulletedOutlinedIcon from '@mui/icons-material/FormatListBulletedOutlined';
 // import PlaceOutlinedIcon from '@mui/icons-material/PlaceOutlined';
 // import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
-import QuestionAnswerOutlinedIcon from '@mui/icons-material/QuestionAnswerOutlined';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
+import QuestionAnswerOutlinedIcon from '@mui/icons-material/QuestionAnswerOutlined';
 // import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import CorporateFareIcon from '@mui/icons-material/CorporateFare';
 import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
@@ -38,7 +38,6 @@ import CategoryIcon from '../icons/CategoryIcon';
 import OrderIcon from '../icons/OrderIcon';
 // import TenantIcon from '../icons/TenantIcon';
 import VoucherIcon from '../icons/VoucherIcon';
-import AppointmentIcon from '../icons/appointmentIcon';
 import ProviderIcon from '../icons/providerIcon';
 import VisitIcon from '../icons/visitIcon';
 
@@ -50,13 +49,13 @@ const links = [
     icon: <GridViewOutlinedIcon fontSize="inherit" />,
   },
   {
-    name: 'Barber Services',
+    name: 'Services',
     path: 'service',
     permission: 'Category List',
     icon: <GridViewOutlinedIcon fontSize="inherit" />,
   },
   {
-    name: 'Shop Barbers',
+    name: 'Barbers',
     path: 'shop-barbers',
     permission: 'Category List',
     icon: <ProviderIcon />,

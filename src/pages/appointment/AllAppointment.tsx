@@ -5,7 +5,6 @@ import {
   IntegratedGrouping,
   ViewState,
 } from '@devexpress/dx-react-scheduler';
-import { styled, alpha } from '@mui/material/styles';
 import {
   AppointmentTooltip,
   Appointments,
@@ -25,8 +24,6 @@ import dayjs from 'dayjs';
 import timezone from 'dayjs/plugin/timezone';
 import weekOfYear from 'dayjs/plugin/weekOfYear';
 import React, { useCallback, useEffect, useState } from 'react';
-import { formatDate } from 'devextreme/localization';
-import assets from '../../assets';
 import AppointmentViewCard from '../../components/common/AppointmentViewCard';
 import Loader from '../../components/common/Loader';
 import SwiperComponent from '../../components/common/Swiper';
@@ -42,36 +39,36 @@ dayjs.extend(timezone);
 // const dates = dayjs(dateStrings);
 
 const newDate = new Date(2018, 4, 28, 9, 30);
-console.log('newDatesdasdsasadsa', newDate);
+// console.log('newDatesdasdsasadsa', newDate);
 
-const appointments = [
-  {
-    title: 'Website Re-Design Plan',
-    priorityId: 1,
-    startDate: new Date(2018, 4, 28, 9, 30),
-    endDate: new Date(2018, 4, 28, 11, 30),
-    id: 0,
-  },
-  {
-    title: 'Website Re-Design Plan',
-    priorityId: 1,
-    startDate: new Date(2018, 4, 28, 11, 35),
-    endDate: new Date(2018, 4, 28, 12, 0),
-    id: 0,
-  },
-];
+// const appointments = [
+//   {
+//     title: 'Website Re-Design Plan',
+//     priorityId: 1,
+//     startDate: new Date(2018, 4, 28, 9, 30),
+//     endDate: new Date(2018, 4, 28, 11, 30),
+//     id: 0,
+//   },
+//   {
+//     title: 'Website Re-Design Plan',
+//     priorityId: 1,
+//     startDate: new Date(2018, 4, 28, 11, 35),
+//     endDate: new Date(2018, 4, 28, 12, 0),
+//     id: 0,
+//   },
+// ];
 
-const users = [
-  { id: 1, name: 'John', profileUrl: assets.images.avatarUser },
-  { id: 2, name: 'Jane Smith', profileUrl: assets.images.avatarUser },
-  { id: 3, name: 'John Martin', profileUrl: assets.images.avatarUser },
-  { id: 4, name: 'Michael H. Tilley', profileUrl: assets.images.avatarUser },
-  { id: 5, name: 'Thomas', profileUrl: assets.images.avatarUser },
-  { id: 6, name: 'Michael', profileUrl: assets.images.avatarUser },
-  { id: 7, name: 'John Johnson', profileUrl: assets.images.avatarUser },
-  { id: 8, name: 'Smith Johnson', profileUrl: assets.images.avatarUser },
-  { id: 9, name: 'Alice Doe', profileUrl: assets.images.avatarUser },
-];
+// const users = [
+//   { id: 1, name: 'John', profileUrl: assets.images.avatarUser },
+//   { id: 2, name: 'Jane Smith', profileUrl: assets.images.avatarUser },
+//   { id: 3, name: 'John Martin', profileUrl: assets.images.avatarUser },
+//   { id: 4, name: 'Michael H. Tilley', profileUrl: assets.images.avatarUser },
+//   { id: 5, name: 'Thomas', profileUrl: assets.images.avatarUser },
+//   { id: 6, name: 'Michael', profileUrl: assets.images.avatarUser },
+//   { id: 7, name: 'John Johnson', profileUrl: assets.images.avatarUser },
+//   { id: 8, name: 'Smith Johnson', profileUrl: assets.images.avatarUser },
+//   { id: 9, name: 'Alice Doe', profileUrl: assets.images.avatarUser },
+// ];
 
 type Props = {
   priorityData?: any;
@@ -95,18 +92,24 @@ const AllAppointment = ({
   const [appointmentTooltipData, setAppointmentTooltipData] =
     useState<any>(null);
   const [isActiveUser, setIsActiveUser] = useState('all');
-  const currentWeek = dayjs().week() - 1;
+  const currentWeek = dayjs().week();
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
   const [isNotify, setIsNotify] = React.useState(true);
   const [notifyMessage, setNotifyMessage] = React.useState({});
 
-  console.log('🚀 ~ currentWeek:', currentWeek);
+  console.log('All Page');
+
+  //console.log('🚀 ~ currentWeek:', currentWeek);
   const groupOrientation = (viewName: any) => viewName.split(' ')[0];
   const grouping = [
     {
       resourceName: 'priorityId',
     },
   ];
+
+  useEffect(() => {
+    setIsActiveUser(selectedPriorityData[0].text);
+  }, [selectedPriorityData]);
 
   useEffect(() => {
     setIsLoader(true);
@@ -318,29 +321,29 @@ const AllAppointment = ({
       });
   };
 
-  const AppointmentContent = ({ style, ...restProps }: any) => {
-    if (!restProps.data) {
-      return null; // or handle the case where data is undefined
-    }
-    const startDate = restProps?.data?.startDate;
-    const endDate = restProps?.data?.endDate;
-    const sdformat = dayjs(startDate);
-    const edformat = dayjs(endDate);
-    return (
-      <Appointments.AppointmentContent className="custom-appo" {...restProps}>
-        q
-        <div className="w-full">
-          <div className="flex w-full flex-wrap items-center justify-between">
-            <div className="w-[50%] truncate">{restProps?.data?.title}</div>
-            <div className="rounded-full">unpaid</div>
-          </div>
-          <div className="">{`${sdformat.format('HH:mm A')} - ${edformat.format(
-            'HH:mm A'
-          )}`}</div>
-        </div>
-      </Appointments.AppointmentContent>
-    );
-  };
+  // const AppointmentContent = ({ style, ...restProps }: any) => {
+  //   if (!restProps.data) {
+  //     return null; // or handle the case where data is undefined
+  //   }
+  //   const startDate = restProps?.data?.startDate;
+  //   const endDate = restProps?.data?.endDate;
+  //   const sdformat = dayjs(startDate);
+  //   const edformat = dayjs(endDate);
+  //   return (
+  //     <Appointments.AppointmentContent className="custom-appo" {...restProps}>
+  //       q
+  //       <div className="w-full">
+  //         <div className="flex w-full flex-wrap items-center justify-between">
+  //           <div className="w-[50%] truncate">{restProps?.data?.title}</div>
+  //           <div className="rounded-full">unpaid</div>
+  //         </div>
+  //         <div className="">{`${sdformat.format('HH:mm A')} - ${edformat.format(
+  //           'HH:mm A'
+  //         )}`}</div>
+  //       </div>
+  //     </Appointments.AppointmentContent>
+  //   );
+  // };
 
   const PREFIX = 'Demo';
   // #FOLD_BLOCK
@@ -361,27 +364,27 @@ const AllAppointment = ({
     weekEnd: `${PREFIX}-weekEnd`,
   };
 
-  const StyledWeekViewTimeTableCell = styled(WeekView.TimeTableCell)(
-    ({ theme: { palette } }) => ({
-      [`&.${classes.weekendCell}`]: {
-        backgroundColor: alpha(palette.action.disabledBackground, 0.04),
-        '&:hover': {
-          backgroundColor: alpha(palette.action.disabledBackground, 0.04),
-        },
-        '&:focus': {
-          backgroundColor: alpha(palette.action.disabledBackground, 0.04),
-        },
-      },
-    })
-  );
+  // const StyledWeekViewTimeTableCell = styled(WeekView.TimeTableCell)(
+  //   ({ theme: { palette } }) => ({
+  //     [`&.${classes.weekendCell}`]: {
+  //       backgroundColor: alpha(palette.action.disabledBackground, 0.04),
+  //       '&:hover': {
+  //         backgroundColor: alpha(palette.action.disabledBackground, 0.04),
+  //       },
+  //       '&:focus': {
+  //         backgroundColor: alpha(palette.action.disabledBackground, 0.04),
+  //       },
+  //     },
+  //   })
+  // );
   // #FOLD_BLOCK
-  const StyledWeekViewDayScaleCell = styled(WeekView.DayScaleCell)(
-    ({ theme: { palette } }) => ({
-      [`&.${classes.weekEnd}`]: {
-        backgroundColor: alpha(palette.action.disabledBackground, 0.06),
-      },
-    })
-  );
+  // const StyledWeekViewDayScaleCell = styled(WeekView.DayScaleCell)(
+  //   ({ theme: { palette } }) => ({
+  //     [`&.${classes.weekEnd}`]: {
+  //       backgroundColor: alpha(palette.action.disabledBackground, 0.06),
+  //     },
+  //   })
+  // );
 
   // const isRestTime = (date: any) =>
   //   date.getDay() === 0 ||
@@ -438,8 +441,8 @@ const AllAppointment = ({
         /> */}
         <WeekView
           name="Vertical Orientation"
-          startDayHour={10}
-          endDayHour={22}
+          startDayHour={0}
+          endDayHour={24}
           // excludedDays={[0, 6]}
           displayName="Week"
         />

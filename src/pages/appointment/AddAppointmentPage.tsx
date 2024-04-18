@@ -1,4 +1,5 @@
 import CloseIcon from '@mui/icons-material/Close';
+import Avatar from '@mui/material/Avatar';
 import FormControl from '@mui/material/FormControl';
 import TextField from '@mui/material/TextField';
 import ThemeProvider from '@mui/material/styles/ThemeProvider';
@@ -6,7 +7,6 @@ import createTheme from '@mui/material/styles/createTheme';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import Avatar from '@mui/material/Avatar';
 import dayjs from 'dayjs';
 import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
@@ -266,7 +266,9 @@ export default function AddAppointmentPage() {
   }, [watch('storeServiceCategoryItem')]);
 
   const addAppointmentServices = () => {
+    let tmpId = 0;
     const obj = {
+      id: 0,
       barber: activeBarberData?.storeEmployee?.name,
       amount: activeBarberData?.amount,
       storeServiceCategory: watch('categoryId'),
@@ -288,12 +290,11 @@ export default function AddAppointmentPage() {
             el.storeServiceCategoryItem === watch('storeServiceCategoryItem')
         ) !== undefined;
       if (!check) {
-        const isTrue = false;
         const currentDay = dayjs(getValues('appointmentDate')).format('dddd');
         const scheduleData = activeBarberData?.storeEmployeeSchedule.filter(
           (item: any) => item.workDay === currentDay
         );
-        console.log('FIELDS', scheduleData);
+        // console.log('FIELDS', scheduleData);
         if (scheduleData.length <= 0) return append(obj);
         const startTime = dayjs(scheduleData[0].startTime).format('HH:mm');
         const endTime = dayjs(scheduleData[0].endTime).format('HH:mm');
@@ -304,61 +305,71 @@ export default function AddAppointmentPage() {
           'minute'
         );
         const convertAppointmentAddTime = dayjs(addTime).format('HH:mm');
-        appointmentBookedTime.forEach((el: any, index: number) => {
-          console.log('El', el);
-          const add = dayjs(el.appointmentTime).add(el.serviceTime, 'minute');
-          const elStartTime = dayjs(el.appointmentTime).format('HH:mm');
-          const convertAddTime: any = dayjs(add).format('HH:mm');
-          if (elStartTime > startTime && elStartTime < endTime) {
-            if (time > convertAddTime) {
-              console.log('if');
-              prevTime = convertAddTime;
-            } else {
-              // console.log("2");
-              // console.log("🚀 ~ appointmentBookedTime.forEach ~ time:", time, prevTime, convertAppointmentAddTime, elStartTime)
-              console.log('else');
-              if (time >= prevTime && convertAppointmentAddTime > elStartTime) {
-                // console.log("3");
-                console.log('if meet error');
-                setIsNotify(true);
-                setNotifyMessage({
-                  text: `Service time is ${activeBarberData?.serviceTime} minutes, Barber is not avaiable at ${time}`,
-                  type: 'error',
-                });
+        // appointmentBookedTime.forEach((el: any, index: number) => {
+        for (const index in appointmentBookedTime) {
+          const el = appointmentBookedTime[index];
+          // console.log('El', el);
+          // console.log('activeBarberData', activeBarberData);
+          if (
+            el.storeEmployee === activeBarberData?.storeEmployee?.id &&
+            dayjs(el.appointmentTime).format('HH:mm') !== time
+          ) {
+            // console.log('El', el);
+            const add = dayjs(el.appointmentTime).add(el.serviceTime, 'minute');
+            const elStartTime = dayjs(el.appointmentTime).format('HH:mm');
+            const convertAddTime: any = dayjs(add).format('HH:mm');
+            if (elStartTime > startTime && elStartTime < endTime) {
+              if (time > convertAddTime) {
+                // console.log('if');
+                prevTime = convertAddTime;
+              } else {
+                // console.log("2");
+                // console.log("🚀 ~ appointmentBookedTime.forEach ~ time:", time, prevTime, convertAppointmentAddTime, elStartTime)
+                // console.log('else');
+                if (
+                  time < prevTime &&
+                  convertAppointmentAddTime >= elStartTime
+                ) {
+                  // console.log("3");
+                  // console.log('if meet error');
+                  setIsNotify(true);
+                  setNotifyMessage({
+                    text: `Service time is ${activeBarberData?.serviceTime} minutes, Barber is not avaiable at ${time}`,
+                    type: 'error',
+                  });
+                  break;
+                }
               }
-              throw new Error('Break');
+            } else {
+              // console.log("4");
+              // console.log("if success error 2");/
+              setNotifyMessage({
+                text: 'Barber is not avaiable at this time',
+                type: 'error',
+              });
             }
-          } else {
-            // console.log("4");
-            // console.log("if success error 2");/
-            setNotifyMessage({
-              text: 'Barber is not avaiable at this time',
-              type: 'error',
-            });
           }
-          const newData = {
-            appointmentNumber: index + 1,
-            appointmentTime: time,
-            code: 'WISE_PINK_GREW_WIRE_1713176225894',
-            email: activeBarberData?.email,
-            gender: 'Male',
-            id: '6ea8f150-fa7d-4c1e-b217-5abf97010e48',
-            name: 'rafay',
-            note: 'asdsadsadsadsad',
-            paymentStatus: 'Unpaid',
-            phone: '342423',
-            serviceTime: '45',
-            status: 'New',
-            storeEmployee: 'f254c910-4e18-47af-9ac4-162d53b7bed1',
-            storeServiceCategory: '7afe3149-e72e-42c8-b98a-8184bbe5a4f8',
-            storeServiceCategoryItem: '14a3a48c-0a83-402a-a351-9dea5ca0246d',
-            tenant: '30f155f2-ded0-4fc2-897c-87dae511faf8',
-            totalAmount: '3000.00',
-            updatedBy: '3c5b9acd-0deb-4b18-9a91-11bbac1a0367',
-            updatedDate: '2024-04-15T05:17:04.187Z',
-          };
-          setAppointmentBookedTime((prev: any) => [...prev, newData]);
-        });
+        }
+        const newTmpId = tmpId + 1;
+        const newData = {
+          id: newTmpId,
+          appointmentTime: appointmentTime,
+          email: getValues('email'),
+          gender: getValues('gender'),
+          name: getValues('name'),
+          note: getValues('note'),
+          phone: getValues('phone'),
+          serviceTime: activeBarberData?.serviceTime,
+          status: 'New',
+          storeEmployee: activeBarberData?.storeEmployee?.id,
+          storeServiceCategory: getValues('categoryId'),
+          storeServiceCategoryItem: activeBarberData?.storeServiceCategoryItem,
+        };
+        setAppointmentBookedTime((prev: any) => [...prev, newData]);
+        obj.id = newTmpId;
+        append(obj);
+        return;
+
         // console.log("🚀 ~ addAppointmentServices ~ isTrue:", isTrue);
       } else {
         // console.log("5");
@@ -376,7 +387,8 @@ export default function AddAppointmentPage() {
         type: 'error',
       });
     }
-    return append(obj);
+
+    return;
   };
 
   const onSubmit = (data: any) => {
@@ -390,7 +402,7 @@ export default function AddAppointmentPage() {
       return rest;
     });
     data.appointments = updatedAppointmentArray;
-    console.log('dataa', data, bookingList);
+    // console.log('dataa', data, bookingList);
     StoreAppointmentService.appointmentCreate(data)
       .then((res: any) => {
         if (res.data.success) {
@@ -440,6 +452,12 @@ export default function AddAppointmentPage() {
   };
 
   // console.log("barberList", barberList);
+
+  const removeBookinkList = (item: any) => {
+    setAppointmentBookedTime((arr: any) =>
+      arr.filter((filterItem: any) => filterItem.id !== item.id)
+    );
+  };
 
   return isLoader ? (
     <Loader />
@@ -817,7 +835,10 @@ export default function AddAppointmentPage() {
                       <div className="my-4 grid grid-cols-12" key={index}>
                         <div className="col-span-1">
                           <div
-                            onClick={() => remove(index)}
+                            onClick={() => {
+                              remove(index);
+                              removeBookinkList(items);
+                            }}
                             className="flex w-[40%] cursor-pointer items-center justify-center rounded-2xl bg-background p-2"
                           >
                             <CloseIcon />

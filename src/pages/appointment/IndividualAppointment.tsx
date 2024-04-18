@@ -1,17 +1,16 @@
-import React, { useState } from 'react';
-import Paper from '@mui/material/Paper';
-import { ViewState, EditingState } from '@devexpress/dx-react-scheduler';
+import { EditingState, ViewState } from '@devexpress/dx-react-scheduler';
 import {
-  Scheduler,
-  WeekView,
-  MonthView,
   Appointments,
-  ViewSwitcher,
-  Toolbar,
-  DragDropProvider,
-  EditRecurrenceMenu,
   DateNavigator,
+  EditRecurrenceMenu,
+  MonthView,
+  Scheduler,
+  Toolbar,
+  ViewSwitcher,
+  WeekView,
 } from '@devexpress/dx-react-scheduler-material-ui';
+import Paper from '@mui/material/Paper';
+import { useState } from 'react';
 
 const appointments = [
   {
@@ -40,7 +39,8 @@ const appointments = [
 ];
 
 const IndividualAppointment = () => {
-  const [data, setData] = useState(appointments);
+  console.log('Indivi');
+  const [data, setData] = useState<any>([]);
 
   const commitChanges = ({ added, changed, deleted }: any) => {
     let updatedData = [...data];
@@ -67,8 +67,8 @@ const IndividualAppointment = () => {
   };
   return (
     <Paper>
-      <Scheduler data={data}>
-        {/* <div>hello</div> */}
+      <Scheduler data={data.length ? data : [{}]}>
+        <div>hello</div>
         <ViewState defaultCurrentDate="2018-06-25" />
         <EditingState onCommitChanges={commitChanges} />
         <WeekView startDayHour={9} endDayHour={15} />
