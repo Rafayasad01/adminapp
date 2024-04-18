@@ -21,7 +21,7 @@ import {
   APPOINTMENT_TYPE,
   NOT_AUTHORIZED_MESSAGE,
 } from '../../../utils/constants';
-import { listingRolePermission } from '../../../utils/helper';
+import promiseHandler, { listingRolePermission } from '../../../utils/helper';
 import AllAppointment from '../AllAppointment';
 import AppointmentVisitCreatePopup from './AppointmentVisitCreatePopup';
 import AppointmentVisitReschedulePopup from './AppointmentVisitReschedulePopup';
@@ -193,6 +193,50 @@ function AppointmentVisitPage() {
 
   useEffect(() => {
     if (appointmentType?.text === 'All Appointments') {
+      const getStoreEmployeeList = async () => {
+        const storeEmployeeListPromise = EmloyeeService.StoreEmployeeList(
+          search,
+          page,
+          2000
+        );
+        const [
+          storeEmployeeListResult,
+          storeEmployeeListError,
+          storeEmployeeListOk,
+        ] = await promiseHandler(storeEmployeeListPromise);
+        if (!storeEmployeeListOk) {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: storeEmployeeListError.message,
+            type: 'error',
+          });
+          return;
+        }
+        if (!storeEmployeeListResult.data.success) {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: storeEmployeeListResult.data.message,
+            type: 'error',
+          });
+          return;
+        }
+        setIsLoader(false);
+        // console.log('item', item);
+        const temp = storeEmployeeListResult.data.data.list.map((el) => ({
+          text: el.name,
+          id: el.id,
+          imageUrl: el.avatar,
+        }));
+        // console.log('🚀 ~ temp ~ temp:', temp);
+        setPriorityData(temp);
+      };
+      getStoreEmployeeList();
+    }
+
+    /*  if (appointmentType?.text === 'All Appointments') {
+
       EmloyeeService.StoreEmployeeList(search, page, 2000)
         .then((item: any) => {
           setIsLoader(false);
@@ -213,7 +257,7 @@ function AppointmentVisitPage() {
             type: 'error',
           });
         });
-    }
+    } */
   }, []);
 
   const createFormHandler = (data: any, type: string) => {

@@ -1,3 +1,4 @@
+import { AxiosResponse } from 'axios';
 import {
   EMPLOYEE_PREFIX,
   SERVICE_PREFIX,
@@ -5,7 +6,40 @@ import {
 } from '../../utils/constants';
 import network from '../../utils/network';
 
-const StoreEmployeeList = (search: string, page: number, size: number) => {
+export interface GetStoreEmployeeListResponse {
+  success: boolean;
+  code: number;
+  message: string;
+  data: GetStoreEmployeeListData;
+}
+
+export interface GetStoreEmployeeListData {
+  list: GetStoreEmployeeList[];
+  total: number;
+}
+
+export interface GetStoreEmployeeList {
+  id: string;
+  name: string;
+  address: string;
+  phone: string;
+  cnic: string;
+  tenant: string;
+  isActive: boolean;
+  isDeleted: boolean;
+  createdBy: string;
+  updatedBy: string;
+  createdDate: string;
+  updatedDate: string;
+  email: string;
+  avatar?: string;
+}
+
+const StoreEmployeeList = (
+  search: string,
+  page: number,
+  size: number
+): Promise<AxiosResponse<GetStoreEmployeeListResponse, any>> => {
   return network.getWithQueryParam(`${STORE_PREFIX}/${EMPLOYEE_PREFIX}/list`, {
     search,
     page: page.toString(),

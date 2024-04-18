@@ -30,8 +30,8 @@ export default async function promiseHandler<T, U = Error>(
   promise: Promise<T>
 ) {
   return promise
-    .then<readonly [T, null]>((result) => [result, null] as const)
-    .catch<readonly [null, U]>((error) => [null, error] as const);
+    .then<readonly [T, null, true]>((result) => [result, null, true] as const)
+    .catch<readonly [null, U, false]>((error) => [null, error, false] as const);
 }
 
 export const convertKeysToDayJS = (

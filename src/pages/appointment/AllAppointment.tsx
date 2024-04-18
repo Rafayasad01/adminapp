@@ -428,28 +428,29 @@ const AllAppointment = ({
       return { startDate: date, endDate: date };
     }
     if (view === 'Week') {
-      let firstDay = date.getDate() - date.getDay();
-      let lastDay = firstDay + 6;
+      const firstDay = date.getDate() - date.getDay();
+      const lastDay = firstDay + 6;
       return {
         startDate: new Date(date.setDate(firstDay)),
         endDate: new Date(date.setDate(lastDay)),
       };
     }
+    return null;
   };
 
   const currentViewChange = (newView: any) => {
-    let range: any = getRange(currentDate, newView);
+    const range: any = getRange(currentDate, newView);
     setCurrentView(newView);
     setRange(range);
   };
 
-  const currentDateChange = (newDate: any) => {
-    let range: any = getRange(newDate, currentView);
-    setCurrentDate(newDate);
+  const currentDateChange = (newCurrentDate: any) => {
+    const range: any = getRange(newCurrentDate, currentView);
+    setCurrentDate(newCurrentDate);
     setRange(range);
   };
 
-  console.log('RANGE', ranges);
+  // console.log('RANGE', ranges);
 
   return isLoader ? (
     <Loader />

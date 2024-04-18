@@ -1,3 +1,4 @@
+/* eslint-disable import/no-cycle */
 import axios from 'axios';
 import { setLogo, setRemoveItemState } from '../redux/features/appStateSlice';
 import { logout } from '../redux/features/authStateSlice';

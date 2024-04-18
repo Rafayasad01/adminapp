@@ -151,64 +151,74 @@ function SettingsShopScheduling() {
               <div className="grid grid-cols-12 gap-y-0 gap-x-4">
                 <div className="col-span-8">
                   <div className="class">
-                    <table className="schedule-table table-border table-auto border-separate border-spacing-y-[1.4rem]">
-                      <thead>
-                        <tr>
-                          <th className="w-16">&nbsp;</th>
-                          <th>Date</th>
-                          <th>Shop Time</th>
-                          <th>Break Time</th>
-                          <th>Days Off</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {currentWeekDates.map((x) => {
-                          const day = workDays.find((d) =>
-                            d.day.includes(x.day)
-                          );
-                          const event = checkHoliday(x.date, offDays);
-                          const holiday = !day || event;
-                          return (
-                            <tr
-                              className={`${holiday ? 'days-off' : ''}`}
-                              key={x.date}
-                            >
-                              <td>{x.day?.substring(0, 3)}</td>
-                              <td>{dayjs(x.date).format('LL')}</td>
-                              <td className="py-3">
-                                {holiday
-                                  ? `${event || ''}`
-                                  : `${day.openTime?.format('h:mm A')} - `}
+                    {workDays.length === 0 ? (
+                      <div className="flex h-72 w-full items-center justify-center">
+                        <h1 className="text-3xl">
+                          Please set work days to show week schedule.
+                        </h1>
+                      </div>
+                    ) : (
+                      <table className="schedule-table table-border table-auto border-separate border-spacing-y-[1.4rem]">
+                        <thead>
+                          <tr>
+                            <th className="w-16">&nbsp;</th>
+                            <th>Date</th>
+                            <th>Shop Time</th>
+                            <th>Break Time</th>
+                            <th>Days Off</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {currentWeekDates.map((x) => {
+                            const day = workDays.find((d) =>
+                              d.day.includes(x.day)
+                            );
+                            const event = checkHoliday(x.date, offDays);
+                            const holiday = !day || event;
+                            return (
+                              <tr
+                                className={`${holiday ? 'days-off' : ''}`}
+                                key={x.date}
+                              >
+                                <td>{x.day?.substring(0, 3)}</td>
+                                <td>{dayjs(x.date).format('LL')}</td>
+                                <td className="py-3">
+                                  {holiday
+                                    ? `${event || ''}`
+                                    : `${day.openTime?.format('h:mm A')} - `}
 
-                                {holiday ? '' : day.closeTime?.format('h:mm A')}
-                              </td>
-                              <td>
-                                {' '}
-                                {holiday
-                                  ? ''
-                                  : `${
-                                      isDayjs(day.breakTime) &&
-                                      day.breakTime.isValid()
-                                        ? `${day.breakTime?.format(
-                                            'h:mm A'
-                                          )} - `
-                                        : ''
-                                    }`}
-                                {holiday
-                                  ? ''
-                                  : isDayjs(day.breakTime) &&
-                                    day.breakOffTime?.isValid() &&
-                                    day.breakOffTime?.format('h:mm A')}
-                              </td>
-                              <td className="py-3">
-                                {' '}
-                                {holiday ? ' Day Off' : ''}
-                              </td>
-                            </tr>
-                          );
-                        })}
-                      </tbody>
-                    </table>
+                                  {holiday
+                                    ? ''
+                                    : day.closeTime?.format('h:mm A')}
+                                </td>
+                                <td>
+                                  {' '}
+                                  {holiday
+                                    ? ''
+                                    : `${
+                                        isDayjs(day.breakTime) &&
+                                        day.breakTime.isValid()
+                                          ? `${day.breakTime?.format(
+                                              'h:mm A'
+                                            )} - `
+                                          : ''
+                                      }`}
+                                  {holiday
+                                    ? ''
+                                    : isDayjs(day.breakTime) &&
+                                      day.breakOffTime?.isValid() &&
+                                      day.breakOffTime?.format('h:mm A')}
+                                </td>
+                                <td className="py-3">
+                                  {' '}
+                                  {holiday ? ' Day Off' : ''}
+                                </td>
+                              </tr>
+                            );
+                          })}
+                        </tbody>
+                      </table>
+                    )}
                   </div>
                 </div>
                 <div className="col-span-4">

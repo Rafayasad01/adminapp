@@ -368,6 +368,7 @@ export default function AddAppointmentPage() {
               });
             }
           }
+          return null;
         });
         console.log('hello me');
         const newTmpId = tmpId + 1;
@@ -406,7 +407,7 @@ export default function AddAppointmentPage() {
         type: 'error',
       });
     }
-    // return false;
+    return null;
   };
 
   // console.log('AVTIVE BARBER', activeBarberData);
