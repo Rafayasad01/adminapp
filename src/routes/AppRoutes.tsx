@@ -59,6 +59,7 @@ import AddAppointmentPage from '../pages/appointment/AddAppointmentPage';
 import RescheduleAppointmentPage from '../pages/appointment/RescheduleAppointmentPage';
 import AddNewOrder from '../pages/orders/AddNewOrder';
 import OrderBasket from '../pages/orders/OrderBasket';
+import OrderItemDetailPage from '../pages/orders/OrderItemDetailPage';
 // import UpdateAppointmentPage from '../pages/appointment/UpdateAppointmentPage';
 
 export const routeObjects: RouteObject[] = [
@@ -145,6 +146,10 @@ export const routeObjects: RouteObject[] = [
               {
                 path: 'create',
                 element: <AddNewOrder />,
+              },
+              {
+                path: 'item/:id',
+                element: <OrderItemDetailPage />,
               },
               {
                 path: 'basket',
