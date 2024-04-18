@@ -132,18 +132,18 @@ const links = [
       },
     ],
   },
-  {
-    name: 'Products',
-    path: 'product',
-    permission: 'Category List',
-    icon: <CategoryIcon />,
-  },
-  {
-    name: 'Orders',
-    path: 'orders',
-    permission: 'Order List',
-    icon: <OrderIcon />,
-  },
+  // {
+  //   name: 'Products',
+  //   path: 'product',
+  //   permission: 'Category List',
+  //   icon: <CategoryIcon />,
+  // },
+  // {
+  //   name: 'Orders',
+  //   path: 'orders',
+  //   permission: 'Order List',
+  //   icon: <OrderIcon />,
+  // },
   // {
   //   name: 'App user',
   //   path: 'app-user',
@@ -168,12 +168,12 @@ const links = [
     permission: 'Banners List',
     icon: <ViewCarouselOutlinedIcon className="w-[17px]" />,
   },
-  {
-    name: 'Rating',
-    path: 'ratings',
-    permission: 'Banners List',
-    icon: <ViewCarouselOutlinedIcon className="w-[17px]" />,
-  },
+  // {
+  //   name: 'Rating',
+  //   path: 'ratings',
+  //   permission: 'Banners List',
+  //   icon: <ViewCarouselOutlinedIcon className="w-[17px]" />,
+  // },
   {
     name: 'FAQs',
     path: 'faq',
@@ -186,12 +186,12 @@ const links = [
     permission: 'Notification List',
     icon: <NotificationsOutlinedIcon fontSize="inherit" />,
   },
-  {
-    name: 'Vouchers',
-    path: 'vouchers',
-    permission: 'Voucher List',
-    icon: <VoucherIcon />,
-  },
+  // {
+  //   name: 'Vouchers',
+  //   path: 'vouchers',
+  //   permission: 'Voucher List',
+  //   icon: <VoucherIcon />,
+  // },
   {
     name: 'Settings',
     path: 'settings',
