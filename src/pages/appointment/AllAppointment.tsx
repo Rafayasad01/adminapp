@@ -108,7 +108,7 @@ const AllAppointment = ({
   ];
 
   useEffect(() => {
-    setIsActiveUser(selectedPriorityData[0].text);
+    setIsActiveUser(selectedPriorityData[0]?.text);
   }, [selectedPriorityData]);
 
   useEffect(() => {
@@ -193,6 +193,12 @@ const AllAppointment = ({
   //     setIsActiveUser('');
   //   }
   // }, [appointmentType])
+
+  useEffect(() => {
+    if (appointmentType === 'All Appointments') {
+      setIsActiveUser('all');
+    }
+  }, [appointmentType]);
 
   const selectedUser = (name: string) => {
     setIsActiveUser(name);

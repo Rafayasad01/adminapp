@@ -186,6 +186,7 @@ export default function AddAppointmentPage() {
         if (res.data.success) {
           setCatLovList(res.data.data);
         } else {
+          navigate(-1);
           setIsNotify(true);
           setNotifyMessage({
             text: res.data.message,
@@ -286,49 +287,64 @@ export default function AddAppointmentPage() {
       getValues('appointmentDate') &&
       appointmentTime
     ) {
+      // console.log("start");
+
       const check: boolean =
         fields?.find(
           (el: any) =>
             el.storeServiceCategoryItem === watch('storeServiceCategoryItem')
         ) !== undefined;
       if (!check) {
+        console.log('start 1');
+
         const currentDay = dayjs(getValues('appointmentDate')).format('dddd');
         const scheduleData = activeBarberData?.storeEmployeeSchedule.filter(
           (item: any) => item.workDay === currentDay
         );
-        // console.log('FIELDS', scheduleData);
-        if (scheduleData.length <= 0) return append(obj);
-        const startTime = dayjs(scheduleData[0].startTime).format('HH:mm');
-        const endTime = dayjs(scheduleData[0].endTime).format('HH:mm');
-        let prevTime = dayjs(scheduleData[0].startTime).format('HH:mm');
+        // console.log("active barber", activeBarberData);
+        console.log(
+          'appointmentBookedTime',
+          appointmentBookedTime,
+          scheduleData
+        );
+        // if (appointmentBookedTime?.length <= 0) {
+        //   append(obj);
+        // };
+        const startTime = dayjs(scheduleData[0]?.startTime).format('HH:mm');
+        const endTime = dayjs(scheduleData[0]?.endTime).format('HH:mm');
+        let prevTime = dayjs(scheduleData[0]?.startTime).format('HH:mm');
         const time: any = dayjs(appointmentTime).format('HH:mm');
         const addTime = dayjs(appointmentTime).add(
           activeBarberData?.serviceTime,
           'minute'
         );
         const convertAppointmentAddTime = dayjs(addTime).format('HH:mm');
-        // appointmentBookedTime.forEach((el: any, index: number) => {
-        for (const key of Object.keys(appointmentBookedTime)) {
-          const index = key;
-          const el = appointmentBookedTime[index];
-          // console.log('El', el);
+        console.log('start end');
+        appointmentBookedTime.forEach((el: any, index: number) => {
+          // for (const key of Object.keys(appointmentBookedTime)) {
+          //   const index = key;
+          //   const el = appointmentBookedTime[index];
+          console.log('El', el);
           // console.log('activeBarberData', activeBarberData);
           if (
-            el.storeEmployee === activeBarberData?.storeEmployee?.id &&
+            el.storeEmployee.id === activeBarberData?.storeEmployee?.id &&
             dayjs(el.appointmentTime).format('HH:mm') !== time
           ) {
-            // console.log('El', el);
+            console.log('El', el);
             const add = dayjs(el.appointmentTime).add(el.serviceTime, 'minute');
             const elStartTime = dayjs(el.appointmentTime).format('HH:mm');
             const convertAddTime: any = dayjs(add).format('HH:mm');
             if (elStartTime > startTime && elStartTime < endTime) {
+              console.log('if mee 1');
               if (time > convertAddTime) {
+                console.log('if mee 2');
                 // console.log('if');
                 prevTime = convertAddTime;
               } else if (
                 time < prevTime &&
                 convertAppointmentAddTime >= elStartTime
               ) {
+                console.log('if mee 3');
                 // console.log("2");
                 // console.log("🚀 ~ appointmentBookedTime.forEach ~ time:", time, prevTime, convertAppointmentAddTime, elStartTime)
                 // console.log('else');
@@ -339,9 +355,11 @@ export default function AddAppointmentPage() {
                   text: `Service time is ${activeBarberData?.serviceTime} minutes, Barber is not avaiable at ${time}`,
                   type: 'error',
                 });
-                break;
+                return false;
+                // break;
               }
             } else {
+              console.log('if mee 4');
               // console.log("4");
               // console.log("if success error 2");/
               setNotifyMessage({
@@ -350,26 +368,27 @@ export default function AddAppointmentPage() {
               });
             }
           }
-        }
+        });
+        console.log('hello me');
         const newTmpId = tmpId + 1;
         const newData = {
           id: newTmpId,
           appointmentTime,
-          email: getValues('email'),
-          gender: getValues('gender'),
-          name: getValues('name'),
-          note: getValues('note'),
-          phone: getValues('phone'),
+          email: activeBarberData?.storeEmployee?.email ?? 'abc@gmail.com',
+          gender: 'male',
+          name: activeBarberData?.storeEmployee?.name ?? 'urapp',
+          note: 'demo',
+          phone: activeBarberData?.storeEmployee?.phone,
           serviceTime: activeBarberData?.serviceTime,
           status: 'New',
           storeEmployee: activeBarberData?.storeEmployee?.id,
-          storeServiceCategory: getValues('categoryId'),
+          storeServiceCategory: '12345',
           storeServiceCategoryItem: activeBarberData?.storeServiceCategoryItem,
         };
-        setAppointmentBookedTime((prev: any) => [...prev, newData]);
+        console.log('NEWDATA', newData);
         obj.id = newTmpId;
+        setAppointmentBookedTime((prev: any) => [...prev, newData]);
         append(obj);
-
         // console.log("🚀 ~ addAppointmentServices ~ isTrue:", isTrue);
       } else {
         // console.log("5");
@@ -387,10 +406,10 @@ export default function AddAppointmentPage() {
         type: 'error',
       });
     }
-    return null;
+    // return false;
   };
 
-  console.log('AVTIVE BARBER', activeBarber);
+  // console.log('AVTIVE BARBER', activeBarberData);
 
   const onSubmit = (data: any) => {
     setIsLoader(true);

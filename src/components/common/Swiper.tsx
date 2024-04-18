@@ -2,6 +2,7 @@ import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import { useEffect } from 'react';
 import Swiper from 'swiper';
 import 'swiper/swiper-bundle.css';
+import assets from '../../assets';
 
 type Props = {
   data: any;
@@ -91,7 +92,7 @@ const SwiperComponent = ({ data, selectedUser, isActiveUser }: Props) => {
                     <div>
                       <img
                         className="w-[35px]"
-                        src={item.imageUrl}
+                        src={item.imageUrl ?? assets.tempImages.avatarCustomer}
                         alt="avatar-img"
                       />
                     </div>
