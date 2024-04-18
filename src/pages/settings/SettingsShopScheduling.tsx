@@ -6,16 +6,16 @@ import { memo, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import dayjs, { isDayjs } from 'dayjs';
-import SettingsCreateSchedulePopup from './SettingsCreateSchedulePopup';
-import SettingsDateRangePicker from './SettingsDateRangePicker';
-import SettingsEditSchedulePopup from './SettingsEditSchedulePopup';
-import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
+import Notify from '../../components/common/Notify';
 import { DateRange } from '../../interfaces/shop-schedule.interface';
 import {
   fetchSchedule,
   setNotifyScheduleError,
 } from '../../redux/features/shopScheduleStateSlice';
-import Notify from '../../components/common/Notify';
+import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
+import SettingsCreateSchedulePopup from './SettingsCreateSchedulePopup';
+import SettingsDateRangePicker from './SettingsDateRangePicker';
+import SettingsEditSchedulePopup from './SettingsEditSchedulePopup';
 
 interface Holiday {
   id: string;
@@ -67,13 +67,13 @@ function SettingsShopScheduling() {
 
   const checkHoliday = (
     date: string,
-    holidays: Holiday[] | DateRange[]
+    holidays: Array<DateRange | Holiday>
   ): string | false => {
     const currentDate = dayjs(date);
 
-    const holiday = holidays.find((h) => {
-      const startDate = dayjs(h.startDate);
-      const endDate = dayjs(h.endDate);
+    const holiday = holidays.find((item: any) => {
+      const startDate = dayjs(item.startDate);
+      const endDate = dayjs(item.endDate);
 
       return (
         currentDate.isBetween(startDate, endDate, null, '[]') ||
