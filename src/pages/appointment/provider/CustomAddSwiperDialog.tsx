@@ -31,7 +31,7 @@ import {
   MAX_LENGTH_EXCEEDED,
   PATTERN,
 } from '../../../utils/constants';
-import WorkDaysForm from '../../settings/WorkDaysForm';
+import CustomWorkDaysForm from '../../../components/common/CustomWorkDaysForm';
 
 type Props = {
   control?: any;
@@ -404,11 +404,15 @@ function CustomSwiperDialog({
                   </span>
                 </div>
               )}
+
               {addScheduleFormat && (
                 <div>
                   {!noweekdays && (
                     <div>
-                      <WorkDaysForm onlyweeksformat setWeekDays={setWeekDays} />
+                      <CustomWorkDaysForm
+                        onlyweeksformat
+                        setWeekDays={setWeekDays}
+                      />
                     </div>
                   )}
                   <div className={singleField ? 'FormField' : 'FormFields'}>
