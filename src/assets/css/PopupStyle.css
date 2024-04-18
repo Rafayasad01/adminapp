@@ -23,7 +23,7 @@
 }
 
 .Dialog .Content {
-  @apply flex h-full w-full flex-col justify-evenly rounded-lg bg-[#fff] px-4 py-5 shadow-lg !important;
+  @apply flex h-full w-full flex-col justify-evenly overflow-y-auto rounded-lg bg-[#fff] px-4 py-5 shadow-lg !important;
 }
 
 .Dialog .Content.NoPadding {
@@ -537,7 +537,7 @@
 }
 
 .CustomToggleBtn.Mui-selected {
-  background: #1d1d1d !important;
+  background: #1d4675 !important;
   color: #ffffff !important;
   border: 1px solid #1d1d1d !important;
 }

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Dialog from '@mui/material/Dialog';
 import Button from '@mui/material/Button';
 
@@ -8,33 +8,78 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 
 import '../../assets/css/PopupStyle.css';
-import SettingsDateRangePicker from './SettingsDateRangePicker';
+import { CircularProgress } from '@mui/material';
+import dayjs from 'dayjs';
 import WorkDaysForm from './WorkDaysForm';
 import OffDaysForm from './OffDaysForm';
+import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
+import {
+  fetchSchedule,
+  setScheduleThunk,
+} from '../../redux/features/shopScheduleStateSlice';
+import { convertDayJSToString } from '../../utils/helper';
 
 type Props = {
   scheduleAddPopup: boolean;
   setScheduleAddPopup: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-function SettingsCreateSchedulePopup({
+const SettingsCreateSchedulePopup = ({
   scheduleAddPopup,
   setScheduleAddPopup,
-}: Props) {
+}: Props) => {
   const handleFormClose = () => setScheduleAddPopup(false);
-
+  const dispatch = useAppDispatch();
+  const {
+    workDays,
+    offDays,
+    date: ScheduledMonthDate,
+    postLoading: ScheduledLoading,
+  } = useAppSelector((state) => state?.scheduleState);
+  const authState = useAppSelector((state) => state?.authState);
   const [tabPanel, setTabPanel] = React.useState(0);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setTabPanel(newValue);
   };
 
+  const submitSchedule = () => {
+    let od = offDays.map((x) => ({ ...x, event: x.key }));
+    od = convertDayJSToString(od, ['startDate', 'endDate'], 'YYYY-MM-DD');
+    const wd = convertDayJSToString(workDays, [
+      'openTime',
+      'breakTime',
+      'closeTime',
+      'breakOffTime',
+    ]);
+
+    dispatch(
+      setScheduleThunk({
+        tenant: authState.user?.tenant,
+        body: {
+          workDays: wd,
+          eventDays: od,
+          date: dayjs(ScheduledMonthDate).format('YYYY-MM-DD'),
+        },
+      })
+    );
+  };
+
+  useEffect(() => {
+    dispatch(
+      fetchSchedule({
+        tenant: authState.user?.tenant,
+        date: dayjs(ScheduledMonthDate).format('YYYY-MM-DD'),
+      })
+    );
+  }, []);
+
   return (
     <Dialog
       open={scheduleAddPopup}
       onClose={handleFormClose}
       PaperProps={{
-        className: 'Dialog Width-55',
+        className: `Dialog ${tabPanel ? 'Width-55' : '!w-[500px]'}`,
         style: {
           maxWidth: '100%',
           maxHeight: 'auto',
@@ -43,11 +88,11 @@ function SettingsCreateSchedulePopup({
     >
       <div className="Content">
         <div className="FormHeader">
-          <span className="Title">New Schedule</span>
+          <span className="Title">Set Shop Timings</span>
         </div>
         <div className="FormBody">
-          <div className="Row gap-x3">
-            <div className="Column-7" style={{ padding: '1rem 0' }}>
+          <div className="Row gap-7">
+            <div className="col-span-12" style={{ padding: '1rem 0' }}>
               <div className="custom-schedule-tab">
                 <Tabs
                   value={tabPanel}
@@ -78,18 +123,15 @@ function SettingsCreateSchedulePopup({
                       )
                     }
                     iconPosition="bottom"
-                    label="Off Days"
+                    label="Event Days"
                     value={1}
                     disableRipple
                   />
                 </Tabs>
               </div>
-              <div className="flex">
+              <div className="">
                 {tabPanel === 0 ? <WorkDaysForm /> : <OffDaysForm />}
               </div>
-            </div>
-            <div className="Column-5" style={{ padding: '0.2rem 0' }}>
-              <SettingsDateRangePicker calendarStyle="settingPopup" />
             </div>
           </div>
         </div>
@@ -102,21 +144,25 @@ function SettingsCreateSchedulePopup({
               padding: '0.375rem 1.5rem !important',
             }}
           >
-            Cancel
+            Close
           </Button>
           <Button
             className="btn-black-fill"
-            onClick={handleFormClose}
+            disabled={ScheduledLoading}
             sx={{
               padding: '0.375rem 2rem !important',
             }}
+            onClick={submitSchedule}
           >
-            Add
+            {ScheduledLoading && (
+              <CircularProgress color="inherit" size={20} className="mr-3" />
+            )}
+            Submit Schedule
           </Button>
         </div>
       </div>
     </Dialog>
   );
-}
+};
 
 export default SettingsCreateSchedulePopup;
