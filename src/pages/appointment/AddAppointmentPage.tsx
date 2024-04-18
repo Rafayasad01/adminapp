@@ -390,6 +390,8 @@ export default function AddAppointmentPage() {
     return null;
   };
 
+  console.log('AVTIVE BARBER', activeBarber);
+
   const onSubmit = (data: any) => {
     setIsLoader(true);
     delete data.storeServiceCategoryItem;
