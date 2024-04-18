@@ -57,6 +57,8 @@ import ServiceItemPage from '../pages/services/ServiceItemPage';
 import EmployeeServices from '../pages/appointment/employeeServices/EmployeeServices';
 import AddAppointmentPage from '../pages/appointment/AddAppointmentPage';
 import RescheduleAppointmentPage from '../pages/appointment/RescheduleAppointmentPage';
+import AddNewOrder from '../pages/orders/AddNewOrder';
+import OrderBasket from '../pages/orders/OrderBasket';
 // import UpdateAppointmentPage from '../pages/appointment/UpdateAppointmentPage';
 
 export const routeObjects: RouteObject[] = [
@@ -142,7 +144,12 @@ export const routeObjects: RouteObject[] = [
               },
               {
                 path: 'create',
-                element: <OrdersCreatePage />,
+                element: <AddNewOrder />,
+              },
+              {
+                path: 'basket',
+                element: <OrderBasket />,
+                // element: CAN("canView", "Order List") ? <OrdersPage /> : <p>not authorized</p>,
               },
               {
                 path: 'detail/:orderId',
