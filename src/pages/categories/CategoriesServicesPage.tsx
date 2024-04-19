@@ -42,7 +42,7 @@ function CategoriesServicesPage() {
   const [actionMenuAnchorEl, setActionMenuAnchorEl] =
     useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
-  const actionMenuOptions = ["Item faq's", 'Edit', 'Delete'];
+  const actionMenuOptions = ["Product faq's", 'Edit', 'Delete'];
   const [emptyVariable] = useState(null);
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
@@ -207,7 +207,7 @@ function CategoriesServicesPage() {
           }
         }
       });
-    } else if (option === "Item faq's") {
+    } else if (option === "Product faq's") {
       CheckRolePermission(
         'Category Service List',
         dataRole,
@@ -365,13 +365,13 @@ function CategoriesServicesPage() {
         setIsOpen={setIsNotify}
         displayMessage={notifyMessage}
       />
-      <TopBar isNestedRoute title="Items" />
+      <TopBar isNestedRoute title="Products" />
       <div className="container m-auto mt-5">
         <div className="w-full rounded-lg bg-white shadow-lg">
           <div className="grid grid-cols-12 px-4 py-5">
             <div className="col-span-7">
               <span className="font-open-sans text-xl font-semibold text-[#252733]">
-                All Items
+                All Products
               </span>
             </div>
             <div className="col-span-5">

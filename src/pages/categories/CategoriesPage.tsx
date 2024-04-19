@@ -44,7 +44,7 @@ function CategoriesPage() {
   const [actionMenuAnchorEl, setActionMenuAnchorEl] =
     useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
-  const actionMenuOptions = ['Items', 'Edit', 'Delete'];
+  const actionMenuOptions = ['Products', 'Edit', 'Delete'];
   const [emptyVariable] = useState(null);
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
@@ -204,7 +204,7 @@ function CategoriesPage() {
           type: 'warning',
         });
       }
-    } else if (option === 'Items') {
+    } else if (option === 'Products') {
       // navigate(`../item/${actionMenuItemid}`);
       CheckRolePermission(
         'Category Service Get',
@@ -365,13 +365,13 @@ function CategoriesPage() {
         setIsOpen={setIsNotify}
         displayMessage={notifyMessage}
       />
-      <TopBar title="Categories" />
+      <TopBar title="Products" />
       <div className="cs-dialog container mx-auto mt-5 w-full">
         <div className="w-full rounded-lg bg-white shadow-lg">
           <div className="grid grid-cols-12 px-4 py-5">
             <div className="col-span-7">
               <span className="font-open-sans text-xl font-semibold text-[#252733]">
-                All Categories
+                All Product Categories
               </span>
             </div>
             <div className="col-span-5">

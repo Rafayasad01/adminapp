@@ -32,6 +32,7 @@ import {
   PATTERN,
 } from '../../../utils/constants';
 import CustomWorkDaysForm from '../../../components/common/CustomWorkDaysForm';
+import CustomDateTimePicker from '../../../components/common/CustomDateTimePicker';
 
 type Props = {
   control?: any;
@@ -281,6 +282,18 @@ function CustomSwiperDialog({
                               )}
                             </FormControl>
                           </div>
+                        ) : items.type === 'datepickeronly' ? (
+                          <div className="">
+                            <CustomDateTimePicker
+                              register={register}
+                              defaultValue={dayjs()}
+                              id={items.id}
+                              error={errors.dob}
+                              inputTitle={items.fieldName}
+                              setValue={items.setValue}
+                              value={watch('dob') ? watch('dob') : dayjs()}
+                            />
+                          </div>
                         ) : items.type === 'uploadImg' ? (
                           <div className="FormField">
                             <label className="FormLabel">Upload Image</label>
@@ -488,7 +501,7 @@ function CustomSwiperDialog({
                     error={errors}
                     register={register}
                     setValue={setValue}
-                    options={{ roles: catLov }}
+                    options={{ roles: catLov ?? [] }}
                     defaultValue="Select Category"
                     customClassInputTitle="font-bold"
                     inputTitle="Select Category"
@@ -502,7 +515,7 @@ function CustomSwiperDialog({
                     error={errors}
                     register={register}
                     setValue={setValue}
-                    options={{ roles: catItemsLov }}
+                    options={{ roles: catItemsLov ?? [] }}
                     defaultValue="Select Services"
                     customClassInputTitle="font-bold"
                     inputTitle="Select Services"

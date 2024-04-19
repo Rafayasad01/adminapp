@@ -119,7 +119,7 @@ function CategoriesEditPopup({
       <div className="Content">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="FormHeader">
-            <span className="Title">Edit Category</span>
+            <span className="Title">Edit Product Category</span>
           </div>
           {formData && (
             <>

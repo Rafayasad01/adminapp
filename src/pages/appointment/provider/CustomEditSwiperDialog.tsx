@@ -32,6 +32,7 @@ import {
   PATTERN,
 } from '../../../utils/constants';
 import WorkDaysForm from '../../settings/WorkDaysForm';
+import CustomDateTimePicker from '../../../components/common/CustomDateTimePicker';
 
 type Props = {
   setDelIds?: any;
@@ -267,7 +268,7 @@ function CustomEditSwiperDialog({
                               variant="standard"
                             >
                               <label className="FormLabel">
-                                Message{' '}
+                                Note{' '}
                                 <span className="SubLabel">
                                   Write 01-250 Characters
                                 </span>
@@ -280,6 +281,7 @@ function CustomEditSwiperDialog({
                                 defaultValue=""
                                 placeholder="Write Description"
                                 {...items.register(items.id, {
+                                  value: items.value ? items.value : '',
                                   pattern: {
                                     value: items.pattern,
                                     message: INVALID_CHAR,
@@ -302,6 +304,18 @@ function CustomEditSwiperDialog({
                                 <ErrorSpanBox error={items.error.message} />
                               )}
                             </FormControl>
+                          </div>
+                        ) : items.type === 'datepickeronly' ? (
+                          <div className="">
+                            <CustomDateTimePicker
+                              register={register}
+                              defaultValue={dayjs()}
+                              id={items.id}
+                              error={errors.dob}
+                              inputTitle={items.fieldName}
+                              setValue={items.setValue}
+                              value={watch('dob') ? watch('dob') : dayjs()}
+                            />
                           </div>
                         ) : items.type === 'uploadImg' ? (
                           <div className="FormField">

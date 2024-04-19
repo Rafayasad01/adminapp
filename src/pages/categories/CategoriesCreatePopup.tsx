@@ -93,7 +93,7 @@ function CategoriesCreatePopup({
       <div className="Content">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="FormHeader">
-            <span className="Title">Add Category</span>
+            <span className="Title">Add Product Category</span>
           </div>
           <div className="FormBody">
             <div className="FormField">

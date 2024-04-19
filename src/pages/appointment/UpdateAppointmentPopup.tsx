@@ -76,7 +76,7 @@ function UpdateAppointmentPopup({
       <div className="Content">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="FormHeader">
-            <span className="Title">Update Appointment</span>
+            <span className="Title">Edit Appointment</span>
           </div>
           {formData ? (
             <>

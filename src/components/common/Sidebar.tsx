@@ -5,7 +5,9 @@ import { Fragment, useEffect, useState } from 'react';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 // import FormatListBulletedOutlinedIcon from '@mui/icons-material/FormatListBulletedOutlined';
 // import PlaceOutlinedIcon from '@mui/icons-material/PlaceOutlined';
+import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
 // import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
+import SplitscreenOutlinedIcon from '@mui/icons-material/SplitscreenOutlined';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
@@ -48,24 +50,24 @@ const links = [
     permission: 'Dashboard List',
     icon: <GridViewOutlinedIcon fontSize="inherit" />,
   },
-  {
-    name: 'Services',
-    path: 'service',
-    permission: 'Category List',
-    icon: <GridViewOutlinedIcon fontSize="inherit" />,
-  },
-  {
-    name: 'Barbers',
-    path: 'shop-barbers',
-    permission: 'Category List',
-    icon: <ProviderIcon />,
-  },
-  {
-    name: 'Appointments',
-    path: 'appointments',
-    permission: 'Category List',
-    icon: <VisitIcon />,
-  },
+  // {
+  //   name: 'Services',
+  //   path: 'service',
+  //   permission: 'Category List',
+  //   icon: <GridViewOutlinedIcon fontSize="inherit" />,
+  // },
+  // {
+  //   name: 'Barbers',
+  //   path: 'shop-barbers',
+  //   permission: 'Category List',
+  //   icon: <ProviderIcon />,
+  // },
+  // {
+  //   name: 'Appointments',
+  //   path: 'appointments',
+  //   permission: 'Category List',
+  //   icon: <VisitIcon />,
+  // },
   // {
   //   name: 'Carts',
   //   path: 'carts',
@@ -112,6 +114,53 @@ const links = [
   //     },
   //   ],
   // },
+
+  {
+    name: 'Store Appointment',
+    path: 'store-appointment',
+    permission: 'Appointment Parent',
+    icon: <SplitscreenOutlinedIcon fontSize="inherit" />,
+    childLinks: [
+      {
+        name: 'Services',
+        path: 'store-appointment/service',
+        permission: 'Category List',
+        icon: <GridViewOutlinedIcon fontSize="inherit" />,
+      },
+      {
+        name: 'Employees',
+        path: 'store-appointment/shop-barbers',
+        permission: 'Category List',
+        icon: <ProviderIcon />,
+      },
+      {
+        name: 'Appointments',
+        path: 'store-appointment/appointments',
+        permission: 'Category List',
+        icon: <VisitIcon />,
+      },
+    ],
+  },
+  {
+    name: 'Store Product',
+    path: 'store-product',
+    permission: 'Appointment Parent',
+    icon: <Inventory2OutlinedIcon fontSize="inherit" />,
+    childLinks: [
+      {
+        name: 'Products',
+        path: 'store-product/product',
+        permission: 'Category List',
+        icon: <CategoryIcon />,
+      },
+      {
+        name: 'Orders',
+        path: 'store-product/orders',
+        permission: 'Order List',
+        icon: <OrderIcon />,
+      },
+    ],
+  },
   {
     name: 'User',
     path: 'user',
@@ -132,6 +181,7 @@ const links = [
       },
     ],
   },
+
   // {
   //   name: 'Products',
   //   path: 'product',

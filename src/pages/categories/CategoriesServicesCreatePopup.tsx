@@ -93,12 +93,12 @@ function CategoriesServicesCreatePopup({
       <div className="Content">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="FormHeader">
-            <span className="Title">Add Services</span>
+            <span className="Title">Add Product</span>
           </div>
           <div className="FormBody">
             <div className="FormField">
               <FormControl className="FormControl" variant="standard">
-                <label className="FormLabel">Service Name</label>
+                <label className="FormLabel">Name</label>
                 <Input
                   className="FormInput"
                   id="name"

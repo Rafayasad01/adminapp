@@ -127,7 +127,7 @@ function ServiceItemEditPopup({
       <div className="Content">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="FormHeader">
-            <span className="Title">Edit Services</span>
+            <span className="Title">Edit Service</span>
           </div>
           <div className="FormBody">
             <div className="FormField">

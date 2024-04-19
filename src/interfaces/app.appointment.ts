@@ -3,6 +3,9 @@ export interface AppointmentProvider {
   address: string;
   phone: string;
   cnic: string;
+  password: string;
+  dob: any;
+  note: string;
   startDateTime: string;
   endDateTime: string;
   isActive: boolean;

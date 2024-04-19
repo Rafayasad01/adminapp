@@ -325,55 +325,140 @@ export const routeObjects: RouteObject[] = [
             ],
           },
           // nested appointment
-          // {
-          //   path: 'appointment',
-          //   children: [
-          //     {
-          //       index: true,
-          //       element: <Navigate to="provider/list" replace />,
-          //     },
-          //     {
-          //       path: 'visit',
-          //       children: [
-          //         { index: true, element: <Navigate to="list" replace /> },
-          //         {
-          //           path: 'list',
-          //           element: <AppointmentVisitPage />,
-          //         },
-          //         {
-          //           path: 'detail/:id',
-          //           element: <AppointmentVisitDetailPage />,
-          //         },
-          //       ],
-          //     },
-          //     {
-          //       path: 'provider',
-          //       children: [
-          //         { index: true, element: <Navigate to="list" replace /> },
-          //         {
-          //           path: 'list',
-          //           element: <AppointmentProviderPage />,
-          //         },
-          //         {
-          //           path: 'schedule/:id',
-          //           element: <AppointmentProviderSchedulePage />,
-          //         },
-          //         {
-          //           path: 'add-schedule/:id',
-          //           element: <AppointmentProviderAddSchedulePage />,
-          //         },
-          //         {
-          //           path: 'services/:providerId',
-          //           element: <AppointmentProviderServicesList />,
-          //         },
-          //         {
-          //           path: 'today-appointment/:providerId',
-          //           element: <AppointmentProviderByIdPage />,
-          //         },
-          //       ],
-          //     },
-          //   ],
-          // },
+          {
+            path: 'store-appointment',
+            children: [
+              {
+                index: true,
+                element: <Navigate to="service" replace />,
+              },
+              {
+                path: 'service',
+                children: [
+                  {
+                    index: true,
+                    element: <ServicesCatPage />,
+                  },
+                  {
+                    path: 'services/:CatId',
+                    element: <ServiceItemPage />,
+                  },
+                ],
+              },
+              {
+                path: 'shop-barbers',
+                children: [
+                  { index: true, element: <Navigate to="list" replace /> },
+                  {
+                    path: 'list',
+                    element: <AppointmentProviderPage />,
+                  },
+                  {
+                    path: 'schedule/:id',
+                    element: <AppointmentProviderSchedulePage />,
+                  },
+                  {
+                    path: 'add-schedule/:id',
+                    element: <AppointmentProviderAddSchedulePage />,
+                  },
+                  {
+                    path: 'services/:providerId',
+                    element: <AppointmentProviderServicesList />,
+                  },
+                  {
+                    path: 'today-appointment/:providerId',
+                    element: <AppointmentProviderByIdPage />,
+                  },
+                  {
+                    path: 'services/list/:empId',
+                    element: <EmployeeServices />,
+                  },
+                ],
+              },
+              {
+                path: 'appointments',
+                children: [
+                  { index: true, element: <Navigate to="list" replace /> },
+                  {
+                    path: 'list',
+                    element: <AppointmentVisitPage />,
+                  },
+                  {
+                    path: 'detail/:id',
+                    element: <AppointmentVisitDetailPage />,
+                  },
+                  {
+                    path: 'add-appointment',
+                    element: <AddAppointmentPage />,
+                  },
+                  // {
+                  //   path: 'update-appointment/:id',
+                  //   element: <UpdateAppointmentPage />,
+                  // },
+                  {
+                    path: 'reschedule-appointment/:id',
+                    element: <RescheduleAppointmentPage />,
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            path: 'store-product',
+            children: [
+              {
+                index: true,
+                element: <Navigate to="product" replace />,
+              },
+              {
+                path: 'product',
+                children: [
+                  {
+                    index: true,
+                    element: <CategoriesPage />,
+                  },
+                  {
+                    path: 'item/:productId',
+                    element: <CategoriesServicesPage />,
+                  },
+                  {
+                    path: 'item/faq/:categoryServiceId',
+                    element: <CategoriesServicesFaqPage />,
+                  },
+                ],
+              },
+              {
+                path: 'orders',
+                children: [
+                  {
+                    index: true,
+                    element: <OrdersPage />,
+                    // element: CAN("canView", "Order List") ? <OrdersPage /> : <p>not authorized</p>,
+                  },
+                  {
+                    path: 'create',
+                    element: <OrdersCreatePage />,
+                  },
+                  {
+                    path: 'detail/:orderId',
+                    element: <OrderDetailsPage />,
+                  },
+                  {
+                    path: 'edit/:orderId',
+                    element: <OrdersEditPage />,
+                  },
+                  {
+                    path: 'assign/:orderId',
+                    element: <OrdersAssignPage />,
+                  },
+                  {
+                    path: 'view-driver',
+                    element: <DriverHistory />,
+                  },
+                ],
+              },
+            ],
+          },
           {
             path: 'salon',
             children: [

@@ -120,12 +120,12 @@ function CategoriesServicesEditPopup({
       <div className="Content">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="FormHeader">
-            <span className="Title">Edit Services</span>
+            <span className="Title">Edit Product</span>
           </div>
           <div className="FormBody">
             <div className="FormField">
               <FormControl className="FormControl" variant="standard">
-                <label className="FormLabel">Service Name</label>
+                <label className="FormLabel">Name</label>
                 <Input
                   className="FormInput"
                   id="name"

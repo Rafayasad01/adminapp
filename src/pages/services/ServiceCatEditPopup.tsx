@@ -131,7 +131,7 @@ function ServiceCatEditPopup({
       <div className="Content">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="FormHeader">
-            <span className="Title">Edit Category</span>
+            <span className="Title">Edit Service Category</span>
           </div>
           {formData && (
             <>

@@ -99,7 +99,7 @@ function ServiceCreatePopup({
       <div className="Content">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="FormHeader">
-            <span className="Title">Add Category</span>
+            <span className="Title">Add Service Category</span>
           </div>
           <div className="FormBody mt-2">
             <div className="FormField">

@@ -15,6 +15,7 @@ import TextField from '@mui/material/TextField';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
+import dayjs from 'dayjs';
 import assets from '../../assets';
 import '../../assets/css/PopupStyle.css';
 import ErrorSpanBox from '../../components/common/ErrorSpanBox';
@@ -25,6 +26,7 @@ import PlusIcon from '../../components/icons/PlusIcon';
 import { Setting } from '../../interfaces/app.interface';
 import { setEmployeeLimit, setLogo } from '../../redux/features/appStateSlice';
 // import { setTheme } from '../../redux/features/authStateSlice';
+import TimePicker from '../../components/common/TimePicker';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 import Service from '../../services/adminapp/admin';
 import {
@@ -76,6 +78,8 @@ function SettingsApp() {
   );
   const navigate = useNavigate();
   const [openSocialMediaPopup, setOpenSocialMediaPopup] = useState(false);
+  const [startTime, setStartTime] = useState<any>();
+  const [endTime, setEndTime] = useState<any>();
   const [file, setFile] = useState<any>(null);
   const [selectedImg, setSelectedImg] = useState<any>(null);
   const [detail, setDetail] = useState<any>();
@@ -89,13 +93,17 @@ function SettingsApp() {
     handleSubmit,
     watch,
     setValue,
+    getValues,
     formState: { errors },
   } = useForm<Setting>();
 
   const setData = (item: any) => {
-    // console.log('itesmssss', item);
+    console.log('itesmssss', item);
 
     // setValue('name', item.tenantConfig.name);
+    // setLocation()
+    setValue('latitude', item.tenantConfig.latitude);
+    setValue('longitude', item.tenantConfig.longitude);
     setValue('desc', item.tenantConfig.desc);
     setValue('email', item.tenantConfig.email);
     setValue('deliveryUrgentFees', item.tenantConfig.deliveryUrgentFees);
@@ -173,8 +181,12 @@ function SettingsApp() {
   };
 
   const onSubmit = (data: any) => {
-    // console.log('SETTTING DATA', data);
-    setIsLoader(true);
+    console.log('SETTTING DATA', data);
+    // console.log(
+    //   'SETTTING DATA',
+    //   dayjs().format('YYYY-MM-DD') + ' ' + dayjs(startTime).format('HH:mm')
+    // );
+    // setIsLoader(true);
     if (listingRolePermission(dataRole, 'Setting Update')) {
       // setIsLoader(true);
       const formData = new FormData();
@@ -184,7 +196,7 @@ function SettingsApp() {
         'gstPercentage',
         data.gstPercentage ? data.gstPercentage : ''
       );
-      formData.append('email', data.email ? data.email : '');
+      // formData.append('email', data.email ? data.email : '');
       formData.append(
         'minOrderAmount',
         data.minOrderAmount ? data.minOrderAmount : 0
@@ -199,12 +211,34 @@ function SettingsApp() {
         data.deliveryUrgentFees ? data.deliveryUrgentFees : 0
       );
       formData.append('address', data.address ? data.address : '');
-      formData.append('facebook', detail ? detail.facebook : '');
-      formData.append('instagram', detail ? detail.instagram : '');
-      formData.append('linkedin', detail ? detail.linkedin : '');
-      formData.append('twitter', detail ? detail.twitter : '');
-      formData.append('youtube', detail ? detail.youtube : '');
-      formData.append('whatsapp', detail ? detail.whatsapp : '');
+      formData.append('latitude', data.lat ? data.lat : 0);
+      formData.append('longitude', data.long ? data.long : 0);
+      formData.append(
+        'officeTimeIn',
+        startTime
+          ? `${dayjs().format('YYYY-MM-DD')} ${dayjs(startTime).format(
+              'HH:mm:ss'
+            )}`
+          : ''
+      );
+      formData.append(
+        'officeTimeOut',
+        endTime
+          ? `${dayjs().format('YYYY-MM-DD')} ${dayjs(startTime).format(
+              'HH:mm:ss'
+            )}`
+          : ''
+      );
+      formData.append(
+        'attendanceDistance',
+        data.attendanceDistance ? data.attendanceDistance : 0
+      );
+      // formData.append('facebook', detail ? detail.facebook : '');
+      // formData.append('instagram', detail ? detail.instagram : '');
+      // formData.append('linkedin', detail ? detail.linkedin : '');
+      // formData.append('twitter', detail ? detail.twitter : '');
+      // formData.append('youtube', detail ? detail.youtube : '');
+      // formData.append('whatsapp', detail ? detail.whatsapp : '');
       formData.append('updatedBy', authState.user.id);
       // formData.append('color1', color1);
       // formData.append('color2', color2);
@@ -222,50 +256,50 @@ function SettingsApp() {
       if (file !== null) formData.append('logo', file);
       // if (themeFile !== null) formData.append('banner', themeFile);
 
-      Service.updateService(authState.user.tenant, formData)
-        .then((item: any) => {
-          const { success, message, data: itemData } = item.data;
-          if (success) {
-            // console.log('messageDATA', itemData);
-            // dispatch(setTheme(itemData));
-            setAddress(itemData?.address);
-            // dispatch(setTheme(itemData));
-            if (itemData?.tenantConfig?.logo) {
-              dispatch(setLogo(itemData.tenantConfig.logo));
-            }
-            if (itemData?.userLimit) {
-              dispatch(setEmployeeLimit(itemData.userLimit));
-            }
-            setIsLoader(false);
-            setIsNotify(true);
-            setNotifyMessage({
-              text: message,
-              type: 'success',
-            });
-            setData(itemData);
-            setDetail(itemData);
-          } else {
-            // console.log('message2', message);
+      // Service.updateService(authState.user.tenant, formData)
+      //   .then((item: any) => {
+      //     const { success, message, data: itemData } = item.data;
+      //     if (success) {
+      //       // console.log('messageDATA', itemData);
+      //       // dispatch(setTheme(itemData));
+      //       setAddress(itemData?.address);
+      //       // dispatch(setTheme(itemData));
+      //       if (itemData?.tenantConfig?.logo) {
+      //         dispatch(setLogo(itemData.tenantConfig.logo));
+      //       }
+      //       if (itemData?.userLimit) {
+      //         dispatch(setEmployeeLimit(itemData.userLimit));
+      //       }
+      //       setIsLoader(false);
+      //       setIsNotify(true);
+      //       setNotifyMessage({
+      //         text: message,
+      //         type: 'success',
+      //       });
+      //       setData(itemData);
+      //       setDetail(itemData);
+      //     } else {
+      //       // console.log('message2', message);
 
-            setValue('userLimit', Number(detail?.userLimit));
-            setIsLoader(false);
-            setIsNotify(true);
-            setNotifyMessage({
-              text: message,
-              type: 'error',
-            });
-          }
-        })
-        .catch((err) => {
-          // console.log('message', err.message);
-          setValue('userLimit', Number(detail?.userLimit));
-          setIsLoader(false);
-          setIsNotify(true);
-          setNotifyMessage({
-            text: err.message,
-            type: 'error',
-          });
-        });
+      //       setValue('userLimit', Number(detail?.userLimit));
+      //       setIsLoader(false);
+      //       setIsNotify(true);
+      //       setNotifyMessage({
+      //         text: message,
+      //         type: 'error',
+      //       });
+      //     }
+      //   })
+      //   .catch((err) => {
+      //     // console.log('message', err.message);
+      //     setValue('userLimit', Number(detail?.userLimit));
+      //     setIsLoader(false);
+      //     setIsNotify(true);
+      //     setNotifyMessage({
+      //       text: err.message,
+      //       type: 'error',
+      //     });
+      //   });
     }
   };
 
@@ -278,7 +312,7 @@ function SettingsApp() {
             setIsLoader(false);
             setData(item.data.data);
             setDetail(item.data.data);
-            setAddress(item.data.data.address);
+            setAddress(item.data.data.tenantConfig.shopAddress);
           } else {
             setIsLoader(false);
             setIsNotify(true);
@@ -384,7 +418,7 @@ function SettingsApp() {
                     disableUnderline
                     {...register('address', {
                       pattern: PATTERN.ADDRESS_ONLY,
-                      validate: (value) => value.length <= 250,
+                      // validate: (value) => value.length <= 250,
                       value: detail ? detail.address : '',
                     })}
                   />
@@ -580,9 +614,105 @@ function SettingsApp() {
                   )}
                 </FormControl>
               </div>
+              <div className="FormFields">
+                <FormControl className="FormControl" variant="standard">
+                  <label className="FormLabel">Latitude</label>
+                  <Input
+                    disabled
+                    id="latitude"
+                    placeholder="Enter Latitude"
+                    type="number"
+                    className="FormInput"
+                    defaultValue={0}
+                    {...register('latitude', {
+                      validate: (value: any) =>
+                        VALIDATE_NON_NEGATIVE_NUM(value),
+                      maxLength: {
+                        value: 10,
+                        message: MAX_LENGTH_EXCEEDED,
+                      },
+                    })}
+                    disableUnderline
+                  />
+                  {errors?.latitude && (
+                    <ErrorSpanBox error={errors?.latitude?.message} />
+                  )}
+                </FormControl>
+                <FormControl className="FormControl" variant="standard">
+                  <label className="FormLabel">Longitude</label>
+                  <Input
+                    disabled
+                    id="longitude"
+                    placeholder="Enter Delivery Urgent Fees"
+                    type="number"
+                    className="FormInput"
+                    defaultValue={0}
+                    {...register('longitude', {
+                      validate: (value: any) =>
+                        VALIDATE_NON_NEGATIVE_NUM(value),
+                      maxLength: {
+                        value: 10,
+                        message: MAX_LENGTH_EXCEEDED,
+                      },
+                    })}
+                    disableUnderline
+                  />
+                  {errors?.longitude && (
+                    <ErrorSpanBox error={errors?.longitude?.message} />
+                  )}
+                </FormControl>
+              </div>
+              <div className="mt-3 flex items-center justify-between gap-4">
+                <div className="w-full">
+                  <FormControl className="FormControl" variant="standard">
+                    <label className="FormLabel">
+                      Attendance Distance (in meters)
+                    </label>
+                    <Input
+                      id="attendanceDistance"
+                      placeholder="Enter Shop Distance in meters"
+                      type="number"
+                      className="FormInput"
+                      defaultValue={0}
+                      {...register('attendanceDistance', {
+                        validate: (value: any) =>
+                          VALIDATE_NON_NEGATIVE_NUM(value),
+                        maxLength: {
+                          value: 10,
+                          message: MAX_LENGTH_EXCEEDED,
+                        },
+                      })}
+                      disableUnderline
+                    />
+                    {errors?.attendanceDistance && (
+                      <ErrorSpanBox
+                        error={errors?.attendanceDistance?.message}
+                      />
+                    )}
+                  </FormControl>
+                </div>
+                <div className="w-full">
+                  <TimePicker
+                    timePickerLabel="Shop Time In"
+                    timePickerValue={startTime}
+                    setTimePickerValue={setStartTime}
+                    id="startTime"
+                    // setError={setError}
+                  />
+                </div>
+                <div className="w-full">
+                  <TimePicker
+                    timePickerLabel="Shop Time Out"
+                    timePickerValue={endTime}
+                    setTimePickerValue={setEndTime}
+                    id="startTime"
+                    // setError={setError}
+                  />
+                </div>
+              </div>
               <div className="FormField mb-4">
                 <FormControl className="FormControl" variant="standard">
-                  <label className="FormLabel">Domain</label>
+                  <label className="FormLabel mt-2">Domain</label>
                   <Input
                     className="FormInput"
                     id="domainAdminapp"
@@ -813,7 +943,12 @@ function SettingsApp() {
         </div>
         <div className="col-span-6 min-h-[500px] rounded-lg bg-white shadow-lg">
           {address ? (
-            <MapAddress address={address} zoom={10} />
+            <MapAddress
+              getValues={getValues}
+              setValue={setValue}
+              address={address}
+              zoom={10}
+            />
           ) : (
             <div className="no-map-location">
               <div className="content">

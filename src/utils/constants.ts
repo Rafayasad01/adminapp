@@ -1,8 +1,8 @@
 import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined';
 import PersonOutlinedIcon from '@mui/icons-material/PersonOutlined';
 
-const HOST = 'https://dev.urapptech.com';
-// const HOST = 'http://192.168.8.68:3200';
+// const HOST = 'https://dev.urapptech.com';
+const HOST = 'http://192.168.8.68:3200';
 // const HOST = 'http://192.168.8.97:3200';
 
 export const BASE_URL = `${HOST}/api/v1/admin/`;
@@ -131,7 +131,7 @@ export const PATTERN = {
   CHAR_NUM_DOT_AT: /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/, // used for email fields
   CHAR_SPACE_DASH: /^[A-Za-z\s-]+$/, // used for textfield fields
   CHAR_NUM_SPACE_DASH: /^[A-Za-z0-9\s-]+$/, // used for textfield fields
-  ADDRESS_ONLY: /^[A-Za-z0-9\s@.,#-]+$/, // used for textfield address
+  ADDRESS_ONLY: /^[A-Za-z0-9\s@.,#()-]+$/, // used for textfield address
   CHAR_NUM_DASH: /^[A-Za-z0-9-]+$/, // used for only num,chars,dash like; postal code
   NUM_PLUS_MINUS: /^[+-\d\s]+$/,
   ACTION_WITHOUT_SPACE: /^[a-zA-Z0-9/-]+$/,

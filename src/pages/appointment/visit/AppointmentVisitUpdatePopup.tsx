@@ -150,7 +150,7 @@ function AppointmentVisitUpdatePopup({
             onSubmit={handleSubmit(onSubmit)}
           >
             <div className="FormHeader">
-              <span className="Title">Update Appointment</span>
+              <span className="Title">Edit Appointment</span>
             </div>
             <div className="FormBody">
               <div className="FormFields">

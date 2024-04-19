@@ -95,7 +95,7 @@ function ServiceItemCreatePopup({
       <div className="Content">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="FormHeader">
-            <span className="Title">Add Services</span>
+            <span className="Title">Add Service</span>
           </div>
           <div className="FormBody">
             <div className="FormField">

@@ -73,6 +73,9 @@ function AppointmentProviderPage() {
   // delete Id's
   const [delIds, setDelIds] = useState<any>([]);
 
+  const [showPassword, setShowPassword] = useState(true);
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+
   const {
     register,
     control,
@@ -116,9 +119,9 @@ function AppointmentProviderPage() {
 
   const inputFieldsData = [
     {
-      fieldName: 'Provider Name',
+      fieldName: 'Staff Name',
       id: 'name',
-      placeholder: 'Enter provider name',
+      placeholder: 'Enter Staff name',
       register,
       error: errors.name,
       type: 'text',
@@ -126,24 +129,27 @@ function AppointmentProviderPage() {
       maxLetterLimit: 150,
     },
     {
-      fieldName: 'Address',
-      id: 'address',
-      placeholder: 'Enter address',
-      register,
-      error: errors.address,
-      type: 'text',
-      notRequired: true,
-      pattern: PATTERN.ADDRESS_ONLY,
-      maxLetterLimit: 250,
-    },
-    {
       fieldName: 'Email',
       id: 'email',
       placeholder: 'Enter email address',
+      disable: openEditFormDialog && true,
       register,
       error: errors.email,
       type: 'text',
       pattern: PATTERN.CHAR_NUM_DOT_AT,
+      maxLetterLimit: 100,
+    },
+    {
+      fieldName: 'Password',
+      id: 'password',
+      placeholder: 'Enter password',
+      register,
+      error: errors.password,
+      notRequired: true,
+      type: 'password',
+      onclick: handleClickShowPassword,
+      showPassVisibility: showPassword,
+      pattern: PATTERN.PASSWORD,
       maxLetterLimit: 100,
     },
     {
@@ -168,6 +174,15 @@ function AppointmentProviderPage() {
       pattern: PATTERN.ONLY_NUM,
     },
     {
+      fieldName: 'DOB',
+      id: 'dob',
+      placeholder: 'Select DOB',
+      register,
+      disable: openEditFormDialog && true,
+      error: errors.dob,
+      type: 'datepickeronly',
+    },
+    {
       fieldName: 'Upload',
       id: 'uploadImg',
       placeholder: 'Upload Profile Picture',
@@ -178,6 +193,36 @@ function AppointmentProviderPage() {
       Onclick: handleFileOnClick,
       image,
       setImage,
+    },
+    {
+      fieldName: 'Address',
+      id: 'address',
+      placeholder: 'Enter address',
+      register,
+      error: errors.address,
+      type: 'text',
+      notRequired: true,
+      pattern: PATTERN.ADDRESS_ONLY,
+      maxLetterLimit: 250,
+    },
+    // {
+    //   fieldName: 'DOB',
+    //   id: 'dob',
+    //   placeholder: 'Select DOB',
+    //   register,
+    //   error: errors.dob,
+    //   type: 'text',
+    // },
+    {
+      fieldName: 'Note',
+      id: 'note',
+      placeholder: 'Enter your description',
+      register,
+      error: errors.note,
+      type: 'textarea',
+      notRequired: true,
+      pattern: PATTERN.CHAR_SPACE_DASH,
+      maxLetterLimit: 150,
     },
   ];
 
@@ -214,6 +259,7 @@ function AppointmentProviderPage() {
         if (res.data.success) {
           setCatLovList(res.data.data);
         } else {
+          setCatLovList([]);
           setIsNotify(true);
           setNotifyMessage({
             text: res.data.message,
@@ -222,6 +268,7 @@ function AppointmentProviderPage() {
         }
       })
       .catch((err) => {
+        setCatLovList([]);
         setIsNotify(true);
         setNotifyMessage({
           text: err.message,
@@ -244,10 +291,22 @@ function AppointmentProviderPage() {
   };
 
   const getCatItems = async (id: any) => {
-    await StoreLovService.StoreCatItemsLov(id).then((res) => {
-      setCatItemsLovList(res.data.data);
-      // console.log("res items", res.data.data);
-    });
+    await StoreLovService.StoreCatItemsLov(id)
+      .then((res) => {
+        if (res.data.success) {
+          setCatItemsLovList(res.data.data);
+        } else {
+          setCatItemsLovList([]);
+        }
+        // console.log("res items", res.data.data);
+      })
+      .catch((err: any) => {
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'warning',
+        });
+      });
   };
 
   useEffect(() => {
@@ -312,6 +371,8 @@ function AppointmentProviderPage() {
               setValue('phone', item.data.data.phone);
               setValue('email', item.data.data.email);
               setValue('cnic', item.data.data.cnic);
+              setValue('note', item.data.data.note);
+              setValue('dob', item.data.data.dob);
               setOpenEditFormDialog(true);
             } else {
               setIsLoader(false);
@@ -460,6 +521,7 @@ function AppointmentProviderPage() {
   // console.log("delte idss", delIds);
 
   const onSubmitUpdateDialogBox = async (data: any) => {
+    console.log('data', data);
     setIsLoader(true);
     delete data.servicesName;
     delete data.servicesAmount;
@@ -478,6 +540,8 @@ function AppointmentProviderPage() {
     formData.append('email', data.email);
     formData.append('phone', data.phone);
     formData.append('cnic', data.cnic);
+    if (data.password) formData.append('password', data.password);
+    formData.append('dob', dayjs(data.dob).format('YYYY-MM-DD'));
     formData.append('services', JSON.stringify(data.services));
     formData.append('deletedIds', JSON.stringify(delIds));
     if (image) formData.append('avatar', image);
@@ -496,6 +560,11 @@ function AppointmentProviderPage() {
               list[i].cnic = res.data.data.cnic;
             }
           }
+          setIsNotify(true);
+          setNotifyMessage({
+            text: res.data.message,
+            type: 'success',
+          });
         } else {
           setIsLoader(false);
           setIsNotify(true);
@@ -515,7 +584,7 @@ function AppointmentProviderPage() {
   };
 
   const onSubmitDialogBox = async (data: any) => {
-    // console.log('🚀 ~ onSubmitDialogBox ~ data: 1', data);
+    console.log('🚀 ~ onSubmitDialogBox ~ data: 1', data);
     setIsLoader(true);
     delete data.servicesName;
     delete data.servicesAmount;
@@ -536,6 +605,9 @@ function AppointmentProviderPage() {
     formData.append('email', data.email);
     formData.append('phone', data.phone);
     formData.append('cnic', data.cnic);
+    formData.append('password', data.password);
+    formData.append('dob', dayjs().format('YYYY-MM-DD'));
+    formData.append('note', data.note);
     if (image) formData.append('avatar', image);
     formData.append('services', JSON.stringify(data.services));
     formData.append('workDays', JSON.stringify(weekDays));
@@ -551,6 +623,11 @@ function AppointmentProviderPage() {
             setIsLoader(false);
             setOpenFormDialog(false);
             setList([res.data.data, ...list]);
+            setIsNotify(true);
+            setNotifyMessage({
+              text: res.data.message,
+              type: 'success',
+            });
           } else {
             setIsLoader(false);
             setIsNotify(true);
@@ -673,13 +750,13 @@ function AppointmentProviderPage() {
         setIsOpen={setIsNotify}
         displayMessage={notifyMessage}
       />
-      <TopBar title="Barber" />
+      <TopBar title="Staff" />
       <div className="container m-auto mt-5">
         <div className="w-full rounded-lg bg-white shadow-lg">
           <div className="grid grid-cols-12 px-4 py-5">
             <div className="col-span-7">
               <span className="font-open-sans text-xl font-semibold text-[#252733]">
-                All Barbers
+                All Staffs
               </span>
             </div>
             <div className="col-span-5">
@@ -792,8 +869,8 @@ function AppointmentProviderPage() {
           handleNextSlide={handleNextSlide}
           handlePrevSlide={handlePrevSlide}
           ServicesFields={fields}
-          DialogSliderOne="Add Barber"
-          DialogSliderTwo="Add Barber Services"
+          DialogSliderOne="Add Staff"
+          DialogSliderTwo="Add Staff Services"
           DialogSubHeader="Select Schedule"
           inputFieldsData={inputFieldsData}
           inputScheduleData={inputScheduleData}
@@ -841,8 +918,8 @@ function AppointmentProviderPage() {
           handleNextSlide={handleNextSlide}
           handlePrevSlide={handlePrevSlide}
           ServicesFields={fields}
-          DialogSliderOne="Edit Barber"
-          DialogSliderTwo="Edit Barber Services"
+          DialogSliderOne="Edit Staff"
+          DialogSliderTwo="Edit Staff Services"
           inputFieldsData={inputFieldsData}
           inputScheduleData={inputScheduleData}
           handleSubmit={handleSubmit}

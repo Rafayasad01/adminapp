@@ -94,7 +94,7 @@ function EmployeeServiceEditPopup({
       <div className="Content">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="FormHeader">
-            <span className="Title">Add Service</span>
+            <span className="Title">Edit Staff Service</span>
           </div>
           <div className="FormBody mt-2">
             <div className="FormFields">

@@ -330,13 +330,13 @@ function CategoriesServicesFaqPage() {
         setIsOpen={setIsNotify}
         displayMessage={notifyMessage}
       />
-      <TopBar isNestedRoute title="Category Item Faq's" />
-      <div className="container mt-5">
+      <TopBar isNestedRoute title="Products" />
+      <div className="container m-auto">
         <div className="w-full rounded-lg bg-white shadow-lg">
           <div className="grid grid-cols-12 px-4 py-5">
             <div className="col-span-7">
               <span className="font-open-sans text-xl font-semibold text-[#252733]">
-                All Category Item Faq&apos;s
+                All Product Faq&apos;s
               </span>
             </div>
             <div className="col-span-5">

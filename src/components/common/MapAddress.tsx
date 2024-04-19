@@ -3,6 +3,8 @@ import { useEffect, useRef, useState } from 'react';
 import assets from '../../assets';
 
 type Props = {
+  getValues?: any;
+  setValue?: any;
   address: string;
   zoom: number;
 };
@@ -12,7 +14,7 @@ const loader = new Loader({
   version: 'weekly',
 });
 
-function MapAddress({ address, zoom }: Props) {
+function MapAddress({ address, zoom, setValue, getValues }: Props) {
   const mapRef = useRef<HTMLDivElement>(null);
   const [map, setMap] = useState<google.maps.Map>();
   // const [marker, setMarker] = useState<google.maps.Marker>();
@@ -60,6 +62,12 @@ function MapAddress({ address, zoom }: Props) {
             });
             // setMarker(newMarker);
             map.setCenter(location);
+            console.log('gettt', getValues('latitude'));
+
+            if (getValues('latitude') === 0 || getValues('longitude') === 0) {
+              setValue('latitude', location.lat());
+              setValue('longitude', location.lng());
+            }
           } else {
             setIsError(true);
             // console.error('Invalid geocoder response for address:', address);
