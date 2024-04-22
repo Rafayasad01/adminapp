@@ -178,6 +178,7 @@ function AppointmentProviderPage() {
       id: 'dob',
       placeholder: 'Select DOB',
       register,
+      setValue,
       disable: openEditFormDialog && true,
       error: errors.dob,
       type: 'datepickeronly',

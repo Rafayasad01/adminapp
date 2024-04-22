@@ -1,7 +1,11 @@
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
+import AirplayIcon from '@mui/icons-material/Airplay';
 import EditIcon from '@mui/icons-material/Edit';
 import SearchIcon from '@mui/icons-material/Search';
 import WysiwygOutlinedIcon from '@mui/icons-material/WysiwygOutlined';
+import Badge from '@mui/material/Badge';
+import ApartmentIcon from '@mui/icons-material/Apartment';
+import PeopleOutlineIcon from '@mui/icons-material/PeopleOutline';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import FormControl from '@mui/material/FormControl';
@@ -9,26 +13,25 @@ import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
 import Switch from '@mui/material/Switch';
-import AirplayIcon from '@mui/icons-material/Airplay';
 import TablePagination from '@mui/material/TablePagination';
 import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import CustomButton from '../../components/common/CustomButton';
 import CustomText from '../../components/common/CustomText';
 import Loader from '../../components/common/Loader';
 import Notify from '../../components/common/Notify';
 import TopBar from '../../components/common/TopBar';
 import { AppUserEmployees } from '../../interfaces/app-user.interface';
+import { setItemState } from '../../redux/features/appStateSlice';
+import { login } from '../../redux/features/authStateSlice';
 import { useAppSelector } from '../../redux/redux-hooks';
 import Service from '../../services/adminapp/adminBranch';
 import { listingRolePermission } from '../../utils/helper';
 import BranchCreatePopup from './BranchCreatePopup';
 import BranchUpdatePopup from './BranchUpdatePopup';
-import CustomButton from '../../components/common/CustomButton';
-import { login } from '../../redux/features/authStateSlice';
-import { setItemState } from '../../redux/features/appStateSlice';
 
 function BranchPage() {
   const navigate = useNavigate();
@@ -129,7 +132,7 @@ function BranchPage() {
   };
 
   useEffect(() => {
-    setIsLoader(true);
+    // setIsLoader(true);
     if (listingRolePermission(dataRole, 'Employee List')) {
       Service.getListService(
         authState?.shopTenantDetails.tenant,
@@ -372,31 +375,77 @@ function BranchPage() {
             </div>
             <div className="col-span-10">
               <div className="flex flex-row items-center justify-end gap-3">
-                <div className="flex-col items-center justify-center px-2">
-                  <p className="text-sm font-semibold ">Total Employees</p>
-                  <div className="mt-2 flex justify-center">
-                    <span className="badge badge-danger btn-black-outline w-full text-sm">
+                <div className="flex-col px-2">
+                  <div>
+                    <p className="text-sm font-semibold ">Total Employees</p>
+                  </div>
+                  <div className="mt-4 flex w-full items-center justify-center">
+                    <Badge
+                      color="success"
+                      max={999}
+                      showZero
+                      badgeContent={Number(maxTotalEmployees) ?? 0}
+                    >
+                      <PeopleOutlineIcon />
+                    </Badge>
+                    {/* <span className=" w-full text-sm">
                       {maxTotalEmployees ?? '0'}
-                    </span>
+                    </span> */}
                   </div>
                 </div>
                 <div className="flex-col items-center justify-center">
                   <p className="text-sm font-semibold">
                     Employees Distribution
                   </p>
-                  <div className="mt-2 flex justify-center">
-                    <span className="badge badge-primary btn-black-outline w-full text-sm">
+                  <div className="mt-4 flex items-start justify-center">
+                    <Badge
+                      showZero
+                      max={999}
+                      color="error"
+                      badgeContent={
+                        Number(authState?.user?.maxEmployeeLimit) ?? 0
+                      }
+                    >
+                      <PeopleOutlineIcon />
+                    </Badge>{' '}
+                    <span className="mx-4"> - </span>
+                    <Badge
+                      showZero
+                      max={999}
+                      color="success"
+                      badgeContent={Number(maxTotalEmployeeLimit) ?? 0}
+                    >
+                      <PeopleOutlineIcon />
+                    </Badge>
+                    {/* <span className="w-full text-sm">
                       {authState.user.maxEmployeeLimit} -{' '}
                       {maxTotalEmployeeLimit || 0}
-                    </span>
+                    </span> */}
                   </div>
                 </div>
-                <div className="flex-col items-center justify-center px-2">
+                <div className=" flex-col items-center justify-center px-2">
                   <p className="text-sm font-semibold">Branches Distribution</p>
-                  <div className="mt-2 flex justify-center">
-                    <span className="badge badge-success btn-black-outline w-full text-sm">
+                  <div className="mt-4 flex items-center justify-center">
+                    <Badge
+                      showZero
+                      max={999}
+                      color="success"
+                      badgeContent={Number(authState?.user?.branchLimit) ?? 0}
+                    >
+                      <ApartmentIcon />
+                    </Badge>
+                    <span className="mx-4"> - </span>
+                    <Badge
+                      showZero
+                      max={999}
+                      color="success"
+                      badgeContent={Number(total) ?? 0}
+                    >
+                      <ApartmentIcon />
+                    </Badge>
+                    {/* <span className="badge badge-success btn-black-outline w-full text-sm">
                       {authState.user.branchLimit} - {total}
-                    </span>
+                    </span> */}
                   </div>
                 </div>
                 <FormControl

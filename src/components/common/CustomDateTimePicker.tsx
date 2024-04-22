@@ -17,6 +17,7 @@ type Props = {
   value?: any;
   defaultValue?: any;
   minDate?: any;
+  maxDate?: any;
 };
 
 function CustomDateTimePicker({
@@ -26,13 +27,12 @@ function CustomDateTimePicker({
   id,
   inputTitle,
   minDate,
+  maxDate,
 }: Props) {
   const handleChange = (date: any) => {
-    // console.log('daaa', date);
+    console.log('daaa', date);
     setValue(id, date);
   };
-
-  // console.log('sAASA', isTrue, value);
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -47,7 +47,8 @@ function CustomDateTimePicker({
           className="border-secondary"
           value={dayjs(value)}
           onChange={handleChange}
-          minDate={minDate}
+          // minDate={dayjs(minDates)}
+          maxDate={maxDate}
         />
       </DemoItem>
       {isTrue && value === undefined && (

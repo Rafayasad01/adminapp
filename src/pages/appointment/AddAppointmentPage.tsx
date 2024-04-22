@@ -120,15 +120,6 @@ export default function AddAppointmentPage() {
           item.storeEmployee.id,
           dayjs(getValues('appointmentDate'))?.format('YYYY-MM-DD')
         );
-        // console.log("date",dayjs(getValues("appointmentDate"))?.format('YYYY-MM-DD'));
-        // await StoreAppointmentService.getBarberBookedTimeSlots(
-        //   item.storeEmployee.id,
-        //   dayjs(getValues('appointmentDate'))?.format('YYYY-MM-DD')
-        // ).then((res) => {
-        //   if (res.data.success) {
-        //     setAppointmentBookedTime(res.data.data);
-        //   }
-        // });
       }
     };
 
@@ -205,7 +196,6 @@ export default function AddAppointmentPage() {
 
   useEffect(() => {
     catLovService();
-    // setAppointmentTime(dayjs().format("HH:mm"))
   }, []);
 
   const getBarbers = async (id: any) => {

@@ -1772,7 +1772,7 @@ main .container:nth-child(3){
 }
 
 .swiper-slide {
-  width: 15% !important;
+  /* width: 15% !important; */
 }
 
 .custom-swiper-slider .swiper-slide {
@@ -1801,11 +1801,16 @@ main .container:nth-child(3){
 
 .swiper-button-next,
 .swiper-button-prev {
-  width: 20px;
+  width: 45px !important;
   /* Adjust the width */
-  height: 20px;
+
+  /* height: 20px !important; */
   /* margin-top: .1px; */
   /* Adjust the height */
+}
+
+:root {
+  --swiper-navigation-size: 13px !important;
 }
 
 .swiper-button-next::after,
@@ -1813,7 +1818,7 @@ main .container:nth-child(3){
   @apply text-primary;
   font-size: 12px;
   font-weight: bold;
-  margin-top: 25px;
+  margin-top: 2px;
   /* Adjust the arrow icon size */
 }
 

@@ -29,46 +29,10 @@ import Loader from '../../components/common/Loader';
 import SwiperComponent from '../../components/common/Swiper';
 import StoreAppointmentService from '../../services/adminapp/adminStoreAppointment';
 import UpdateAppointmentPopup from './UpdateAppointmentPopup';
+import { useAppSelector } from '../../redux/redux-hooks';
 
 dayjs.extend(weekOfYear);
 dayjs.extend(timezone);
-
-// const dateString = '2024-04-02T09:10:00.000Z';
-// const dateStrings = '2024-04-02T09:15:00.000Z';
-// const date = dayjs(dateString);
-// const dates = dayjs(dateStrings);
-
-const newDate = new Date(2018, 4, 28, 9, 30);
-// console.log('newDatesdasdsasadsa', newDate);
-
-// const appointments = [
-//   {
-//     title: 'Website Re-Design Plan',
-//     priorityId: 1,
-//     startDate: new Date(2018, 4, 28, 9, 30),
-//     endDate: new Date(2018, 4, 28, 11, 30),
-//     id: 0,
-//   },
-//   {
-//     title: 'Website Re-Design Plan',
-//     priorityId: 1,
-//     startDate: new Date(2018, 4, 28, 11, 35),
-//     endDate: new Date(2018, 4, 28, 12, 0),
-//     id: 0,
-//   },
-// ];
-
-// const users = [
-//   { id: 1, name: 'John', profileUrl: assets.images.avatarUser },
-//   { id: 2, name: 'Jane Smith', profileUrl: assets.images.avatarUser },
-//   { id: 3, name: 'John Martin', profileUrl: assets.images.avatarUser },
-//   { id: 4, name: 'Michael H. Tilley', profileUrl: assets.images.avatarUser },
-//   { id: 5, name: 'Thomas', profileUrl: assets.images.avatarUser },
-//   { id: 6, name: 'Michael', profileUrl: assets.images.avatarUser },
-//   { id: 7, name: 'John Johnson', profileUrl: assets.images.avatarUser },
-//   { id: 8, name: 'Smith Johnson', profileUrl: assets.images.avatarUser },
-//   { id: 9, name: 'Alice Doe', profileUrl: assets.images.avatarUser },
-// ];
 
 type Props = {
   priorityData?: any;
@@ -87,6 +51,11 @@ const AllAppointment = ({
 }: Props) => {
   const [data, setData] = useState<any>([]);
   const [appointmentData, setAppointmentData] = useState();
+  const officeTimings = useAppSelector(
+    (state) => state.persisitReducer.appState.UserItems
+  );
+  const shopStartTime = dayjs(officeTimings?.officeTimeIn).hour();
+  const shopEndTime = dayjs(officeTimings?.officeTimeOut).hour();
   const [isTooltipOpen, setIsTooltipOpen] = useState(false);
   const [isLoader, setIsLoader] = useState(false);
   const [appointmentTooltipData, setAppointmentTooltipData] =
@@ -107,6 +76,7 @@ const AllAppointment = ({
       resourceName: 'priorityId',
     },
   ];
+  console.log('🚀 ~ officeTimings:', officeTimings);
 
   useEffect(() => {
     setIsActiveUser(selectedPriorityData[0]?.text);
@@ -114,7 +84,7 @@ const AllAppointment = ({
 
   const getAllAppoinments = async (appoDate: any, view: any) => {
     setIsLoader(true);
-    StoreAppointmentService.getAllAppointments(appoDate, view)
+    await StoreAppointmentService.getAllAppointments(appoDate, view)
       .then((res: any) => {
         if (res.data.success) {
           setIsLoader(false);
@@ -190,13 +160,6 @@ const AllAppointment = ({
           : selectedPriorityData,
     },
   ];
-
-  // useEffect(() => {
-  //   if (appointmentType === "Individual Appointment") {
-  //     setIsActiveUser('');
-  //   }
-  // }, [appointmentType])
-
   useEffect(() => {
     if (appointmentType === 'All Appointments') {
       setIsActiveUser('all');
@@ -299,7 +262,6 @@ const AllAppointment = ({
           setIsLoader(false);
           setData((newArr: any) => {
             return newArr.map((item: any) => {
-              console.log(item);
               if (item.id === res.data.data.id) {
                 item.title = res.data.data.name;
               }
@@ -354,29 +316,10 @@ const AllAppointment = ({
   //   );
   // };
 
-  const PREFIX = 'Demo';
-  // #FOLD_BLOCK
-  const classes = {
-    flexibleSpace: `${PREFIX}-flexibleSpace`,
-    textField: `${PREFIX}-textField`,
-    locationSelector: `${PREFIX}-locationSelector`,
-    button: `${PREFIX}-button`,
-    selectedButton: `${PREFIX}-selectedButton`,
-    longButtonText: `${PREFIX}-longButtonText`,
-    shortButtonText: `${PREFIX}-shortButtonText`,
-    title: `${PREFIX}-title`,
-    textContainer: `${PREFIX}-textContainer`,
-    time: `${PREFIX}-time`,
-    text: `${PREFIX}-text`,
-    container: `${PREFIX}-container`,
-    weekendCell: `${PREFIX}-weekendCell`,
-    weekEnd: `${PREFIX}-weekEnd`,
-  };
-
   const getRange = (date: any, view: any) => {
-    // console.log('VIEW', view);
     if (view === 'Month') {
       // const monthNumber = dayjs(date).month() + 1;
+      // console.log('🚀 ~ getRange ~ Month Date:', view, date);
       const monthDate = dayjs(date).format('YYYY-MM-DD');
       getAllAppoinments(monthDate, 'month');
       return { startDate: date, endDate: date };
@@ -386,6 +329,7 @@ const AllAppointment = ({
       const lastDay = firstDay + 6;
       const startDate = dayjs(new Date(date.setDate(firstDay)));
       const weekNumber = startDate.week();
+      // console.log('🚀 ~ getRange ~ Week Number:', weekNumber);
       getAllAppoinments(weekNumber, 'week');
       return {
         startDate: new Date(date.setDate(firstDay)),
@@ -396,6 +340,9 @@ const AllAppointment = ({
   };
 
   const currentViewChange = (newView: any) => {
+    if (newView === 'Vertical Orientation') {
+      newView = 'Week';
+    }
     const range: any = getRange(currentDate, newView);
     setCurrentView(newView);
     setRange(range);
@@ -412,7 +359,7 @@ const AllAppointment = ({
   ) : (
     <Paper>
       <div className="h-16 p-[15px]">
-        {priorityData.length ? (
+        {priorityData?.length ? (
           <SwiperComponent
             isActiveUser={isActiveUser}
             selectedUser={selectedUser}
@@ -442,8 +389,8 @@ const AllAppointment = ({
         /> */}
         <WeekView
           name="Vertical Orientation"
-          startDayHour={0}
-          endDayHour={24}
+          startDayHour={shopStartTime ?? 0}
+          endDayHour={shopEndTime ?? 12}
           // excludedDays={[0, 6]}
           displayName="Week"
         />
@@ -479,19 +426,6 @@ const AllAppointment = ({
         <ViewSwitcher />
         {/* <AppointmentForm /> */}
         <DateNavigator />
-        {/* <div>
-                    {priorityData?.map((resource: any) => (
-                        <ListItem key={resource.id}>
-                            <ListItemAvatar>
-                                <Avatar
-                                    alt={resource.text}
-                                    src={resource.imageUrl}
-                                />
-                            </ListItemAvatar>
-                            <ListItemText primary={resource.text} />
-                        </ListItem>
-                    ))}
-                </div> */}
         {/* <DragDropProvider /> */}
         {/* <DateNavigator /> */}
       </Scheduler>

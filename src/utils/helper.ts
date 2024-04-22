@@ -22,16 +22,18 @@ export const listingRolePermission = (permissions: any, name: string) => {
   return false;
 };
 
-export const formatName = (firstname: string, lastname: string) => {
-  return `${firstname} ${lastname}`;
+export const formatName = (firstName: string, lastName: string) => {
+  return `${firstName} ${lastName}`;
 };
 
-export default async function promiseHandler<T, U = Error>(
-  promise: Promise<T>
+export default async function promiseHandler<T>(
+  promise: Promise<T>,
+  onfinally?: (() => void) | null | undefined
 ) {
   return promise
-    .then<readonly [T, null, true]>((result) => [result, null, true] as const)
-    .catch<readonly [null, U, false]>((error) => [null, error, false] as const);
+    .then((result) => [result, null, true] as const)
+    .catch((error) => [null, error, false] as const)
+    .finally(onfinally);
 }
 
 export const convertKeysToDayJS = (

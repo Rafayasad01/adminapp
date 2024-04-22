@@ -24,7 +24,11 @@ import MapAddress from '../../components/common/MapAddress';
 import Notify from '../../components/common/Notify';
 import PlusIcon from '../../components/icons/PlusIcon';
 import { Setting } from '../../interfaces/app.interface';
-import { setEmployeeLimit, setLogo } from '../../redux/features/appStateSlice';
+import {
+  setEmployeeLimit,
+  setItemState,
+  setLogo,
+} from '../../redux/features/appStateSlice';
 // import { setTheme } from '../../redux/features/authStateSlice';
 import TimePicker from '../../components/common/TimePicker';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
@@ -97,6 +101,9 @@ function SettingsApp() {
     formState: { errors },
   } = useForm<Setting>();
 
+  console.log('starttime', startTime);
+  console.log('endtime', endTime);
+
   const setData = (item: any) => {
     console.log('itesmssss', item);
 
@@ -107,6 +114,8 @@ function SettingsApp() {
     setValue('desc', item.tenantConfig.desc);
     setValue('email', item.tenantConfig.email);
     setValue('deliveryUrgentFees', item.tenantConfig.deliveryUrgentFees);
+    setStartTime(item.tenantConfig.officeTimeIn);
+    setEndTime(item.tenantConfig.officeTimeOut);
     setValue(
       'minimumDeliveryTime',
       Number(item.tenantConfig.minimumDeliveryTime)
@@ -182,11 +191,7 @@ function SettingsApp() {
 
   const onSubmit = (data: any) => {
     console.log('SETTTING DATA', data);
-    // console.log(
-    //   'SETTTING DATA',
-    //   dayjs().format('YYYY-MM-DD') + ' ' + dayjs(startTime).format('HH:mm')
-    // );
-    // setIsLoader(true);
+    setIsLoader(true);
     if (listingRolePermission(dataRole, 'Setting Update')) {
       // setIsLoader(true);
       const formData = new FormData();
@@ -224,7 +229,7 @@ function SettingsApp() {
       formData.append(
         'officeTimeOut',
         endTime
-          ? `${dayjs().format('YYYY-MM-DD')} ${dayjs(startTime).format(
+          ? `${dayjs().format('YYYY-MM-DD')} ${dayjs(endTime).format(
               'HH:mm:ss'
             )}`
           : ''
@@ -256,50 +261,59 @@ function SettingsApp() {
       if (file !== null) formData.append('logo', file);
       // if (themeFile !== null) formData.append('banner', themeFile);
 
-      // Service.updateService(authState.user.tenant, formData)
-      //   .then((item: any) => {
-      //     const { success, message, data: itemData } = item.data;
-      //     if (success) {
-      //       // console.log('messageDATA', itemData);
-      //       // dispatch(setTheme(itemData));
-      //       setAddress(itemData?.address);
-      //       // dispatch(setTheme(itemData));
-      //       if (itemData?.tenantConfig?.logo) {
-      //         dispatch(setLogo(itemData.tenantConfig.logo));
-      //       }
-      //       if (itemData?.userLimit) {
-      //         dispatch(setEmployeeLimit(itemData.userLimit));
-      //       }
-      //       setIsLoader(false);
-      //       setIsNotify(true);
-      //       setNotifyMessage({
-      //         text: message,
-      //         type: 'success',
-      //       });
-      //       setData(itemData);
-      //       setDetail(itemData);
-      //     } else {
-      //       // console.log('message2', message);
-
-      //       setValue('userLimit', Number(detail?.userLimit));
-      //       setIsLoader(false);
-      //       setIsNotify(true);
-      //       setNotifyMessage({
-      //         text: message,
-      //         type: 'error',
-      //       });
-      //     }
-      //   })
-      //   .catch((err) => {
-      //     // console.log('message', err.message);
-      //     setValue('userLimit', Number(detail?.userLimit));
-      //     setIsLoader(false);
-      //     setIsNotify(true);
-      //     setNotifyMessage({
-      //       text: err.message,
-      //       type: 'error',
-      //     });
-      //   });
+      Service.updateService(authState.user.tenant, formData)
+        .then((item: any) => {
+          const { success, message, data: itemData } = item.data;
+          if (success) {
+            // console.log('messageDATA', itemData);
+            // dispatch(setTheme(itemData));
+            setAddress(itemData?.address);
+            // dispatch(setTheme(itemData));
+            if (
+              itemData?.tenantConfig?.officeTimeIn ||
+              itemData?.tenantConfig?.officeTimeOut
+            ) {
+              dispatch(
+                setItemState({
+                  officeTimeIn: itemData?.tenantConfig?.officeTimeIn,
+                  officeTimeOut: itemData?.tenantConfig?.officeTimeOut,
+                })
+              );
+            }
+            if (itemData?.tenantConfig?.logo) {
+              dispatch(setLogo(itemData.tenantConfig.logo));
+            }
+            if (itemData?.userLimit) {
+              dispatch(setEmployeeLimit(itemData.userLimit));
+            }
+            setIsLoader(false);
+            setIsNotify(true);
+            setNotifyMessage({
+              text: message,
+              type: 'success',
+            });
+            setData(itemData);
+            setDetail(itemData);
+          } else {
+            setValue('userLimit', Number(detail?.userLimit));
+            setIsLoader(false);
+            setIsNotify(true);
+            setNotifyMessage({
+              text: message,
+              type: 'error',
+            });
+          }
+        })
+        .catch((err) => {
+          // console.log('message', err.message);
+          setValue('userLimit', Number(detail?.userLimit));
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: err.message,
+            type: 'error',
+          });
+        });
     }
   };
 
@@ -705,7 +719,7 @@ function SettingsApp() {
                     timePickerLabel="Shop Time Out"
                     timePickerValue={endTime}
                     setTimePickerValue={setEndTime}
-                    id="startTime"
+                    id="endTime"
                     // setError={setError}
                   />
                 </div>
