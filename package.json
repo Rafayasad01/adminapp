@@ -15,10 +15,7 @@
   },
   "lint-staged": {
     "**/*.{js,jsx,ts,tsx,css,scss,html,json}": "prettier --write",
-    "**/*.{js,jsx,ts,tsx}": [
-      "eslint --fix",
-      "npm run check"
-    ]
+    "**/*.{js,jsx,ts,tsx}": "eslint --fix"
   },
   "dependencies": {
     "@casl/ability": "^6.5.0",
