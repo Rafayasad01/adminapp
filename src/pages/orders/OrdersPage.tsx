@@ -2,39 +2,31 @@
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import SearchIcon from '@mui/icons-material/Search';
 import WysiwygOutlinedIcon from '@mui/icons-material/WysiwygOutlined';
+import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import FormControl from '@mui/material/FormControl';
 import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-// import Pagination from '@mui/material/Pagination';
-// import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
 import TablePagination from '@mui/material/TablePagination';
 import dayjs from 'dayjs';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import ActionMenu from '../../components/common/ActionMenu';
 import Loader from '../../components/common/Loader';
 import Notify from '../../components/common/Notify';
 import TopBar from '../../components/common/TopBar';
 import { useAppSelector } from '../../redux/redux-hooks';
 import order from '../../services/adminapp/adminOrders';
-import {
-  ORDER_STATUSES,
-  ORDER_STATUS_IN_CANCELLED,
-  ORDER_STATUS_IN_DELIVERED,
-  ORDER_STATUS_IN_DELIVERY,
-  ORDER_STATUS_NEW,
-  ORDER_STATUS_PICKED_UP,
-  ORDER_STATUS_PROCESSING,
-} from '../../utils/constants';
+import { ORDER_STATUSES } from '../../utils/constants';
 import { CheckRolePermission, listingRolePermission } from '../../utils/helper';
+// import Pagination from '@mui/material/Pagination';
+// import Stack from '@mui/material/Stack';
 
 function OrdersPage() {
   const authState: any = useAppSelector((state) => state?.authState);
   const dataRole = useAppSelector(
-    (state: any) => state?.persisitReducer?.roleState?.role?.permissions
+    (state: any) => state?.persistedReducer?.roleState?.role?.permissions
   );
   const navigate = useNavigate();
   const [search, setSearch] = useState('');
@@ -92,9 +84,9 @@ function OrdersPage() {
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    const newRowperPage = parseInt(event.target.value, 10);
+    const newRowPerPage = parseInt(event.target.value, 10);
     const newPage = 0;
-    setRowsPerPage(newRowperPage);
+    setRowsPerPage(newRowPerPage);
     setPage(newPage);
     if (search === '' || search === null || search === undefined) {
       order
@@ -191,7 +183,7 @@ function OrdersPage() {
     }
   }, [emptyVariable]);
 
-  const manuHandler = (option: string) => {
+  const menuHandler = (option: string) => {
     let doOption = '';
     if (option === 'Edit') {
       doOption = 'edit';
@@ -208,22 +200,13 @@ function OrdersPage() {
     );
   };
 
-  const getStatusTag = (status: string) => {
-    let tag = '';
-    if (status === ORDER_STATUS_NEW) {
-      tag = 'blue';
-    } else if (status === ORDER_STATUS_PICKED_UP) {
-      tag = 'purple';
-    } else if (status === ORDER_STATUS_PROCESSING) {
-      tag = 'green';
-    } else if (status === ORDER_STATUS_IN_DELIVERY) {
-      tag = 'orange';
-    } else if (status === ORDER_STATUS_IN_DELIVERED) {
-      tag = 'yellow';
-    } else if (status === ORDER_STATUS_IN_CANCELLED) {
-      tag = 'red';
-    }
-    return tag;
+  const getStatusBackground = (status: string) => {
+    const newStatuses = [...ORDER_STATUSES].map(([key, value]) => ({
+      key,
+      value,
+    }));
+    const newStatus = newStatuses.find((s) => s.key === status);
+    return newStatus?.value.background;
   };
 
   const setOrderStatus = (status: string) => {
@@ -231,8 +214,8 @@ function OrdersPage() {
       key,
       value,
     }));
-    const newStatus = newStatuses.filter((s) => s.key === status);
-    return newStatus[0].value.title;
+    const newStatus = newStatuses.find((s) => s.key === status);
+    return newStatus?.value.title;
   };
   return isLoader ? (
     <Loader />
@@ -244,7 +227,7 @@ function OrdersPage() {
           anchorEl={actionMenuAnchorEl}
           setAnchorEl={setActionMenuAnchorEl}
           options={actionMenuOptions}
-          callback={manuHandler}
+          callback={menuHandler}
         />
       )}
       <Notify
@@ -307,13 +290,12 @@ function OrdersPage() {
             <table className="table-border table-auto">
               <thead>
                 <tr className="border-opacity">
-                  <th className="w-[22%] ">Customers</th>
+                  <th className="w-[22%]">Customers</th>
                   <th>Pickup Time</th>
                   <th>Drop-off Time</th>
                   <th>Amount</th>
                   <th>Status</th>
                   <th>Order ID</th>
-                  <th>&nbsp;</th>
                 </tr>
               </thead>
               <tbody>
@@ -370,7 +352,7 @@ function OrdersPage() {
                         </td>
                         <td>
                           <span
-                            className={`badge badge-${getStatusTag(
+                            className={`badge ${getStatusBackground(
                               Item.status
                             )}`}
                           >

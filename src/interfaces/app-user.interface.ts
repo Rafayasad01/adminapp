@@ -1,4 +1,4 @@
-export interface AppUserDriverExt {
+export type AppUserDriverExt = {
   first_name: string;
   last_name: string;
   email: string;
@@ -9,9 +9,9 @@ export interface AppUserDriverExt {
   end_time: any;
   address: string;
   avatar: string;
-}
+};
 
-export interface AppUser {
+export type AppUser = {
   firstName: string;
   lastName: string;
   password: string;
@@ -22,30 +22,30 @@ export interface AppUser {
   appuserRole: string;
   avatar: string;
   licenseNumber: string;
-}
+};
 
-export interface AppUserAddress {
+export type AppUserAddress = {
   name: string;
   address: string;
   latitude: number;
   longitude: number;
   type: string;
-}
+};
 
-export interface AppUserEmployees {
+export type AppUserEmployees = {
   user_id: string;
   first_name: string;
   last_name: string;
   email: string;
   password: string;
-}
+};
 
-export interface AppSchedule {
+export type AppSchedule = {
   weekName: any;
   startDateTime: string;
   endDateTime: string;
-}
-export interface EditProfile {
+};
+export type EditProfile = {
   firstName: string;
   lastName: string;
   avatar: any;
@@ -55,10 +55,10 @@ export interface EditProfile {
   city: string;
   zipCode: string;
   phone: string;
-}
+};
 
-export interface Password {
+export type Password = {
   currentPassword: string;
   newPassword: string;
   reNewPassword: string;
-}
+};

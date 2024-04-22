@@ -5,24 +5,17 @@ import assets from '../../assets';
 import {
   DOMAIN_PREFIX,
   DOMAIN_PROTOCOL,
-  FACEBOOK,
-  INSTAGRAM,
-  LINKEDIN,
-  TWITTER,
-  WHATSAPP,
-  YOUTUBE,
+  SOCIAL_MEDIA,
 } from '../../utils/constants';
-
-type Props = {
-  setOpenFormDialog: any;
-  openFormDialog: any;
-  detail: any;
-};
 
 type AssetsImages = keyof typeof assets.images;
 
-function Item(props: { value: any; name: AssetsImages }) {
-  const { value, name } = props;
+type ItemProps = {
+  value: any;
+  name: AssetsImages;
+};
+
+function Item({ value, name }: ItemProps) {
   return (
     <Link href={value} underline="none" target="_blank">
       <img src={assets.images[name]} alt="" />
@@ -30,11 +23,17 @@ function Item(props: { value: any; name: AssetsImages }) {
   );
 }
 
+type BranchSettingPopupProps = {
+  setOpenFormDialog: any;
+  openFormDialog: any;
+  detail: any;
+};
+
 function BranchSettingPopup({
   openFormDialog,
   setOpenFormDialog,
   detail,
-}: Props) {
+}: BranchSettingPopupProps) {
   const handleFormClose = () => {
     setOpenFormDialog(false);
   };
@@ -58,7 +57,7 @@ function BranchSettingPopup({
           </span>
           <div className="grid w-full grid-cols-12 gap-3">
             <div className="col-span-4">
-              <div className="flex flex-col py-[2rem] px-5">
+              <div className="flex flex-col px-5 py-[2rem]">
                 <div className="flex w-full flex-col">
                   <span className="font-open-sans text-base font-semibold not-italic text-secondary">
                     Logo
@@ -160,7 +159,7 @@ function BranchSettingPopup({
               </div>
             </div>
             <div className="col-span-4">
-              <div className="flex flex-col py-[2rem] px-5">
+              <div className="flex flex-col px-5 py-[2rem]">
                 <div className="flex w-full flex-col">
                   <span className="font-open-sans text-base font-semibold not-italic text-secondary">
                     Minimum Order Amount
@@ -210,42 +209,42 @@ function BranchSettingPopup({
                         <Item
                           key={detail.facebook}
                           value={detail.facebook}
-                          name={FACEBOOK as AssetsImages}
+                          name={SOCIAL_MEDIA.FACEBOOK as AssetsImages}
                         />
                       )}
                       {detail.instagram !== 'null' && (
                         <Item
                           key={detail.instagram}
                           value={detail.instagram}
-                          name={INSTAGRAM as AssetsImages}
+                          name={SOCIAL_MEDIA.INSTAGRAM as AssetsImages}
                         />
                       )}
                       {detail.linkedin !== 'null' && (
                         <Item
                           key={detail.linkedin}
                           value={detail.linkedin}
-                          name={LINKEDIN as AssetsImages}
+                          name={SOCIAL_MEDIA.LINKEDIN as AssetsImages}
                         />
                       )}
                       {detail.twitter !== 'null' && (
                         <Item
                           key={detail.twitter}
                           value={detail.twitter}
-                          name={TWITTER as AssetsImages}
+                          name={SOCIAL_MEDIA.TWITTER as AssetsImages}
                         />
                       )}
                       {detail.youtube !== 'null' && (
                         <Item
                           key={detail.youtube}
                           value={detail.youtube}
-                          name={YOUTUBE as AssetsImages}
+                          name={SOCIAL_MEDIA.YOUTUBE as AssetsImages}
                         />
                       )}
                       {detail.whatsapp !== 'null' && (
                         <Item
                           key={detail.whatsapp}
                           value={detail.whatsapp}
-                          name={WHATSAPP as AssetsImages}
+                          name={SOCIAL_MEDIA.WHATSAPP as AssetsImages}
                         />
                       )}
                     </div>

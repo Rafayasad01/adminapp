@@ -1,131 +1,126 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
+import AddIcon from '@mui/icons-material/Add';
+import ArrowCircleLeftOutlinedIcon from '@mui/icons-material/ArrowCircleLeftOutlined';
+import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
+import EastIcon from '@mui/icons-material/East';
 import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
+import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import FormControl from '@mui/material/FormControl';
-import AddIcon from '@mui/icons-material/Add';
-import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
-import EastIcon from '@mui/icons-material/East';
-import ArrowCircleLeftOutlinedIcon from '@mui/icons-material/ArrowCircleLeftOutlined';
 import IconButton from '@mui/material/IconButton';
 import TextField from '@mui/material/TextField';
-import React, { Fragment, useEffect, useRef, useState } from 'react';
-import '../../../assets/css/PopupStyle.css';
-import Button from '@mui/material/Button';
-import { Swiper, SwiperSlide } from 'swiper/react';
 import dayjs from 'dayjs';
-
-import { TimePicker } from '@mui/x-date-pickers/TimePicker';
-import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { renderTimeViewClock } from '@mui/x-date-pickers/timeViewRenderers';
-import CustomTimePicker from '../../../components/common/TimePicker';
-import ErrorSpanBox from '../../../components/common/ErrorSpanBox';
-import CustomInputBox from '../../../components/common/CustomInputBox';
-import CustomDropDown from '../../../components/common/CustomDropDown';
+import React, { Fragment } from 'react';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import '../../../assets/css/PopupStyle.css';
 import CustomButton from '../../../components/common/CustomButton';
+import CustomDateTimePicker from '../../../components/common/CustomDateTimePicker';
+import CustomDropDown from '../../../components/common/CustomDropDown';
+import CustomInputBox from '../../../components/common/CustomInputBox';
+import CustomWorkDaysForm from '../../../components/common/CustomWorkDaysForm';
+import ErrorSpanBox from '../../../components/common/ErrorSpanBox';
+import CustomTimePicker from '../../../components/common/TimePicker';
 import {
-  BARBER_SERVICES,
   BARBER_SERVICES_AMOUNT,
   INVALID_CHAR,
   MAX_LENGTH_EXCEEDED,
   PATTERN,
 } from '../../../utils/constants';
-import CustomWorkDaysForm from '../../../components/common/CustomWorkDaysForm';
-import CustomDateTimePicker from '../../../components/common/CustomDateTimePicker';
 
-type Props = {
-  control?: any;
-  setValue?: any;
-  getValues?: any;
-  watch?: any;
+type CustomSwiperDialogProps = {
+  addScheduleFormat?: boolean;
   append?: any;
-  remove?: any;
-  register?: any;
-  errors?: any;
-  setError?: any;
-  swiperRef?: any;
-  handleNextSlide?: any;
-  handlePrevSlide?: any;
-  openFormDialog: boolean;
-  setNotifyMessage?: any;
-  setIsNotify?: any;
-  setOpenFormDialog: React.Dispatch<React.SetStateAction<boolean>>;
+  catItemsLov?: any;
+  catLov?: any;
+  control?: any;
   DialogSliderOne?: string;
   DialogSliderTwo?: string;
   DialogSubHeader?: string;
+  endTime?: any;
+  errors?: any;
+  getValues?: any;
+  handleNextSlide?: any;
+  handlePrevSlide?: any;
+  handleSubmit: any;
   inputFieldsData?: any;
   inputScheduleData?: any;
-  handleSubmit: any;
-  ServicesFields?: any;
-  onSubmit: (data: any) => void;
-  type?: any;
-  reset?: any;
-  setAvater?: any;
-  specailCase?: boolean;
-  singleField?: boolean;
-  setWeekDays?: any;
-  weekDays?: any;
-  startTime?: any;
-  endTime?: any;
-  addScheduleFormat?: boolean;
   noweekdays?: boolean;
-  startServiceTime?: any;
+  onSubmit: (data: any) => void;
+  openFormDialog: boolean;
+  register?: any;
+  remove?: any;
+  reset?: any;
+  ServicesFields?: any;
+  setAvater?: any;
+  setError?: any;
+  setIsNotify?: any;
+  setNotifyMessage?: any;
+  setOpenFormDialog: React.Dispatch<React.SetStateAction<boolean>>;
   setStartServiceTime?: any;
-  catLov?: any;
-  catItemsLov?: any;
+  setValue?: any;
+  setWeekDays?: any;
+  singleField?: boolean;
+  specailCase?: boolean;
+  startServiceTime?: any;
+  startTime?: any;
+  swiperRef?: any;
+  type?: any;
+  watch?: any;
+  weekDays?: any;
 };
 
 function CustomSwiperDialog({
-  control,
-  setValue,
-  register,
-  errors,
-  setError,
-  getValues,
-  watch,
+  setStartServiceTime,
+  startServiceTime,
+  addScheduleFormat,
   append,
-  remove,
-  swiperRef,
-  handleNextSlide,
-  handlePrevSlide,
-  openFormDialog,
-  setOpenFormDialog,
-  setIsNotify,
-  setNotifyMessage,
+  catItemsLov,
+  catLov,
+  control,
   DialogSliderOne,
   DialogSliderTwo,
   DialogSubHeader,
+  endTime,
+  errors,
+  getValues,
+  handleNextSlide,
+  handlePrevSlide,
+  handleSubmit,
   inputFieldsData,
   inputScheduleData,
-  handleSubmit,
-  onSubmit,
-  ServicesFields,
-  type,
-  specailCase,
-  setAvater,
-  reset,
-  singleField,
-  setWeekDays,
-  weekDays,
-  startTime,
-  endTime,
-  addScheduleFormat,
   noweekdays,
-  startServiceTime,
-  setStartServiceTime,
-  catLov,
-  catItemsLov,
-}: Props) {
+  onSubmit,
+  openFormDialog,
+  register,
+  remove,
+  reset,
+  ServicesFields,
+  setAvater,
+  setError,
+  setIsNotify,
+  setNotifyMessage,
+  setOpenFormDialog,
+  setValue,
+  setWeekDays,
+  singleField,
+  specailCase,
+  startTime,
+  swiperRef,
+  type,
+  watch,
+  weekDays,
+}: CustomSwiperDialogProps) {
   const handleFormClose = () => {
     if (type === 'edit' && specailCase) {
       reset({
-        role: 'none',
+        // role: 'none',
         userLimits: '',
       });
       setOpenFormDialog(false);
     } else if (type === 'edit' && !specailCase) {
-      setAvater && setAvater(null);
+      if (setAvater) setAvater(null);
       reset();
       setOpenFormDialog(false);
     } else {
@@ -160,12 +155,12 @@ function CustomSwiperDialog({
     }
   };
 
-  const customRenderTimeViewClock = (props: any) => {
+  /* const customRenderTimeViewClock = (props: any) => {
     return renderTimeViewClock({
       ...props,
       getClockNumber: (value: any) => (value < 10 ? `0${value}` : value),
     });
-  };
+  }; */
 
   return (
     <Dialog
@@ -572,7 +567,7 @@ function CustomSwiperDialog({
                 </div>
               </div>
               <div className="ImageBox">
-                <label htmlFor="" className="ImageLabel mt-4 mb-3 w-full">
+                <label htmlFor="" className="ImageLabel mb-3 mt-4 w-full">
                   <Button
                     onClick={handleServices}
                     className="w-full"

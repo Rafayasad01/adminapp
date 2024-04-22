@@ -34,7 +34,7 @@ function ProfilePage() {
   const dispatch = useDispatch();
   const authState: any = useAppSelector((state: any) => state?.authState);
   const dataRole = useAppSelector(
-    (state: any) => state?.persisitReducer?.roleState?.role?.permissions
+    (state: any) => state?.persistedReducer?.roleState?.role?.permissions
   );
   const [changePassword, setChangePassword] = useState(false);
   const [openFormDialog, setOpenFormDialog] = useState(false);
@@ -87,7 +87,7 @@ function ProfilePage() {
       formData.append('state', dataEl.state);
       formData.append('zipCode', dataEl.zipCode);
       formData.append('city', dataEl.city);
-      dataEl.avatar && formData.append('avatar', dataEl.avatar);
+      if (dataEl.avatar) formData.append('avatar', dataEl.avatar);
       Service.updateProfile(formData)
         .then((item: any) => {
           if (item.data.success) {

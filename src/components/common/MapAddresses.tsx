@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 
 import assets from '../../assets';
 
-type Props = {
+type MapAddressesProps = {
   addresses: string[];
   zoom: number;
 };
@@ -13,7 +13,7 @@ const loader = new Loader({
   version: 'weekly',
 });
 
-function MapAddresses({ addresses, zoom }: Props) {
+function MapAddresses({ addresses, zoom }: MapAddressesProps) {
   const mapRef = useRef<HTMLDivElement>(null);
   const [map, setMap] = useState<google.maps.Map>();
   // const [markers, setMarkers] = useState<google.maps.Marker[]>([]);

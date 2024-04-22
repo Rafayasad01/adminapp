@@ -1,8 +1,8 @@
-import React from 'react';
 import Dialog from '@mui/material/Dialog';
+import React from 'react';
 import '../../assets/css/PopupStyle.css';
 
-type Props = {
+type NotificationDetailPopupProps = {
   openDetailDialog: boolean;
   setOpenDetailDialog: React.Dispatch<React.SetStateAction<boolean>>;
   detail: any;
@@ -12,7 +12,7 @@ function NotificationDetailPopup({
   openDetailDialog,
   setOpenDetailDialog,
   detail,
-}: Props) {
+}: NotificationDetailPopupProps) {
   const handleFormClose = () => {
     setOpenDetailDialog(false);
   };

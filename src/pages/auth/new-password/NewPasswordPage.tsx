@@ -179,7 +179,7 @@ function NewPasswordPage() {
           <div className="w-[30%] self-start px-[30px]">
             <div className="max-h-[29px] w-full max-w-[150px] px-[25px] py-[40px]">
               <img
-                src={assets.images.urApplogo}
+                src={assets.images.urAppLogo}
                 alt="urlaundry"
                 className="h-auto w-full object-contain"
               />
@@ -258,7 +258,7 @@ function NewPasswordPage() {
       {showAlert && (
         <AlertBox
           msg={alertMsg}
-          setSeverty={alertSeverity}
+          setSeverity={alertSeverity}
           alertOpen={showAlert}
           setAlertOpen={setShowAlert}
         />

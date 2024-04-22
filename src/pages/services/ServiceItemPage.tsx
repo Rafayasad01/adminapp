@@ -11,7 +11,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import Switch from '@mui/material/Switch';
 import TablePagination from '@mui/material/TablePagination';
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import ActionMenu from '../../components/common/ActionMenu';
 import CustomText from '../../components/common/CustomText';
 import Loader from '../../components/common/Loader';
@@ -28,11 +28,9 @@ import ServiceItemEditPopup from './ServiceItemEditPopup';
 
 function ServiceItemPage() {
   const params = useParams();
-  const authState: any = useAppSelector((state) => state?.authState);
   const dataRole = useAppSelector(
-    (state: any) => state?.persisitReducer?.roleState?.role?.permissions
+    (state) => state?.persistedReducer?.roleState?.role?.permissions
   );
-  const navigate = useNavigate();
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(0);
   const [total, setTotal] = useState(0);
@@ -50,10 +48,10 @@ function ServiceItemPage() {
   const [isLoader, setIsLoader] = React.useState(true);
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
-  const [cancelDialogOpen, setCancelDialogOpen] = useState<boolean>(false);
-  const [dialogText] = useState<any>(
+  const [, setCancelDialogOpen] = useState<boolean>(false);
+  /* const [dialogText] = useState<any>(
     'Are you sure you want to delete this service ?'
-  );
+  ); */
   const [isModalImage, setIsModalImage] = useState(false);
   const [modalImage, setModalImage] = useState('');
 
@@ -467,7 +465,7 @@ function ServiceItemPage() {
             </table>
           </div>
           {list?.length < 1 ? (
-            <CustomText noroundedborders text="No Records Found" />
+            <CustomText noRoundedBorders text="No Records Found" />
           ) : null}
           <div className="mt-3 flex w-[100%] justify-center py-3">
             <TablePagination

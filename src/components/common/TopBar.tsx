@@ -22,15 +22,15 @@ import { useAppSelector } from '../../redux/redux-hooks';
 import BackArrowIcon from '../icons/BackArrowIcon';
 import ShopIcon from '../icons/ShopIcon';
 
-type Props = {
+type TopBarProps = {
   title?: string;
   isNestedRoute?: boolean;
 };
 
-function TopBar({ title, isNestedRoute = false }: Props) {
+function TopBar({ title, isNestedRoute = false }: TopBarProps) {
   const userData = useAppSelector((state: any) => state?.authState?.user);
   const ProfileAvatar = useAppSelector(
-    (state: any) => state?.persisitReducer?.appState?.profileAvatar
+    (state: any) => state?.persistedReducer?.appState?.profileAvatar
   );
   // console.log("PRAV", ProfileAvatar);
 
@@ -66,7 +66,7 @@ function TopBar({ title, isNestedRoute = false }: Props) {
   return (
     <AppBar
       position="relative"
-      className="w-full bg-transparent px-0 pt-4 pb-0 text-gray-50 shadow-none"
+      className="w-full bg-transparent px-0 pb-0 pt-4 text-gray-50 shadow-none"
     >
       <Toolbar className="toolbar-style container relative mx-auto flex">
         {isNestedRoute ? (

@@ -1,40 +1,38 @@
-import React, { useEffect, useState } from 'react';
-import IconButton from '@mui/material/IconButton';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
 import EditNoteOutlinedIcon from '@mui/icons-material/BorderColor';
 import CloseIcon from '@mui/icons-material/Close';
-import Avatar from '@mui/material/Avatar';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 import StarIcon from '@mui/icons-material/Star';
+import Avatar from '@mui/material/Avatar';
+import IconButton from '@mui/material/IconButton';
 import dayjs from 'dayjs';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import assets from '../../assets';
 import StoreAppointmentService from '../../services/adminapp/adminStoreAppointment';
 import Loader from './Loader2';
 
-type Props = {
+type AppointmentViewCardProps = {
   appointmentData?: any;
   setAppointmentTooltipData?: any;
   setIsTooltipOpen?: any;
-  isTooltipOpen?: boolean;
   setOpenFormDialog?: any;
   getUpdatePopupData?: any;
+  // isTooltipOpen?: boolean;
 };
 
 const AppointmentViewCard = ({
   appointmentData,
+  getUpdatePopupData,
+  // isTooltipOpen,
   setAppointmentTooltipData,
-  isTooltipOpen,
   setIsTooltipOpen,
   setOpenFormDialog,
-  getUpdatePopupData,
-  ...restProps
-}: Props) => {
+}: // ...restProps
+AppointmentViewCardProps) => {
   const navigate = useNavigate();
   const [data, setData] = useState<any>(null);
   const [isLoader, setIsLoader] = useState<boolean>(true);
-
-  // console.log('🚀 ~ AppointmentViewCard ~ appointmentData:', appointmentData);
 
   const handleClose = () => {
     setIsTooltipOpen(false);

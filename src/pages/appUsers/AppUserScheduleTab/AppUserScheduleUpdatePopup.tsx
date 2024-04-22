@@ -9,14 +9,14 @@ import '../../../assets/css/PopupStyle.css';
 import TimePicker from '../../../components/common/TimePicker';
 import { AppointmentProviderScheduleTime } from '../../../interfaces/app.appointment';
 
-type Props = {
-  roles?: any;
+type AppUserScheduleUpdatePopupProps = {
+  // roles?: any;
   openFormDialog: boolean;
   setOpenFormDialog: React.Dispatch<React.SetStateAction<boolean>>;
   callback: (...args: any[]) => any;
   setIsNotify: any;
   setNotifyMessage: any;
-  type?: boolean;
+  // type?: boolean;
   formData?: any;
 };
 
@@ -27,7 +27,7 @@ function AppUserScheduleUpdatePopup({
   setIsNotify,
   setNotifyMessage,
   formData,
-}: Props) {
+}: AppUserScheduleUpdatePopupProps) {
   const { handleSubmit } = useForm<AppointmentProviderScheduleTime>();
   const [startTime, setStartTime] = useState<dayjs.Dayjs | any>(null);
   const [endTime, setEndTime] = useState<dayjs.Dayjs | any>(null);

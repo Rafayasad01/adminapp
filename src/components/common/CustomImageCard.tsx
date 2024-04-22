@@ -1,12 +1,12 @@
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import IconButton from '@mui/material/IconButton';
 
-type Props = {
+type CustomImageCardProps = {
   link: string;
   header: string;
 };
 
-function CustomImageCard({ link, header }: Props) {
+function CustomImageCard({ link, header }: CustomImageCardProps) {
   const handleText = (text: string) => {
     return navigator.clipboard.writeText(text);
   };

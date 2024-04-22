@@ -14,12 +14,12 @@ const darkTheme = createTheme({
   },
 });
 
-type Props = {
+type DatePickerButtonProps = {
   icon: JSX.Element;
   id: string;
   onChange: (value: dayjs.Dayjs | null) => void;
 };
-function DatePickerButton({ onChange, id, icon }: Props) {
+function DatePickerButton({ onChange, id, icon }: DatePickerButtonProps) {
   const [datePicker, setDatePicker] = useState<HTMLButtonElement | null>(null);
   const buttonElement = useRef(null);
   const handleClick = () => {

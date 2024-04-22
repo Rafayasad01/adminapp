@@ -1,53 +1,40 @@
-import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
-import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import FormControl from '@mui/material/FormControl';
-import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-
-import TextField from '@mui/material/TextField';
-import StoreLovService from '../../../services/adminapp/adminStoreService';
 import '../../../assets/css/PopupStyle.css';
-import ErrorSpanBox from '../../../components/common/ErrorSpanBox';
-import { BarberItemServices } from '../../../interfaces/services.interface';
-import {
-  BARBER_SERVICES_AMOUNT,
-  INVALID_CHAR,
-  MAX_LENGTH_EXCEEDED,
-  PATTERN,
-  imageAllowedTypes,
-} from '../../../utils/constants';
 import CustomDropDown from '../../../components/common/CustomDropDown';
 import CustomInputBox from '../../../components/common/CustomInputBox';
+import { BarberItemServices } from '../../../interfaces/services.interface';
+import StoreLovService from '../../../services/adminapp/adminStoreService';
+import { BARBER_SERVICES_AMOUNT, PATTERN } from '../../../utils/constants';
 
-type Props = {
-  openFormDialog: boolean;
-  setOpenFormDialog: React.Dispatch<React.SetStateAction<boolean>>;
+type EmployeeServiceCreatePopupProps = {
   callback: (...args: any[]) => any;
+  catlov?: any;
+  openFormDialog: boolean;
   setIsNotify: any;
   setNotifyMessage: any;
-  catlov?: any;
+  setOpenFormDialog: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 function EmployeeServiceCreatePopup({
-  openFormDialog,
-  setOpenFormDialog,
   callback,
+  catlov,
+  openFormDialog,
   setIsNotify,
   setNotifyMessage,
-  catlov,
-}: Props) {
+  setOpenFormDialog,
+}: EmployeeServiceCreatePopupProps) {
   const {
     control,
     register,
     handleSubmit,
     getValues,
     setValue,
-    setError,
-    clearErrors,
     watch,
     formState: { errors },
   } = useForm<BarberItemServices>();

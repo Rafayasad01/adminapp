@@ -14,7 +14,7 @@ import { listingRolePermission } from '../../../utils/helper';
 
 function AppUserPromotionDetailPage() {
   const dataRole = useAppSelector(
-    (state: any) => state?.persisitReducer?.roleState?.role?.permissions
+    (state: any) => state?.persistedReducer?.roleState?.role?.permissions
   );
   // const navigate = useNavigate();
   const [detail, setDetail] = useState<any>(null);
@@ -258,7 +258,7 @@ function AppUserPromotionDetailPage() {
                         <th className="w-[50%]">Description</th>
                         <th>Quantity</th>
                         <th>Unit Price</th>
-                        <th>&nbsp;</th>
+                        <th aria-label="empty table header">&nbsp;</th>
                       </tr>
                     </thead>
                     <tbody>

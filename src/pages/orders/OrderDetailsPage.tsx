@@ -1,106 +1,89 @@
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import AssignmentTurnedInOutlinedIcon from '@mui/icons-material/AssignmentTurnedInOutlined';
-import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutlineOutlined';
-import CircleOutlinedIcon from '@mui/icons-material/CircleOutlined';
 import DateRangeIcon from '@mui/icons-material/DateRange';
 import DomainVerificationOutlinedIcon from '@mui/icons-material/DomainVerificationOutlined';
 import FilterNoneOutlinedIcon from '@mui/icons-material/FilterNoneOutlined';
-import LocalShippingOutlinedIcon from '@mui/icons-material/LocalShippingOutlined';
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
+import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
-import dayjs from 'dayjs';
-import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-
-import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
-import TopBar from '../../components/common/TopBar';
-import orderService from '../../services/adminapp/adminOrders';
-
+import dayjs from 'dayjs';
+import { useEffect, useMemo, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import assets from '../../assets';
 import Loader from '../../components/common/Loader';
 import Notify from '../../components/common/Notify';
-import ShopIcon from '../../components/icons/ShopIcon';
+import TopBar from '../../components/common/TopBar';
 import { useAppSelector } from '../../redux/redux-hooks';
-import {
-  NOT_AUTHORIZED_MESSAGE,
-  ORDER_STATUS_IN_CANCELLED,
-  ORDER_STATUS_IN_DELIVERED,
-  ORDER_STATUS_IN_DELIVERY,
-  ORDER_STATUSES,
-} from '../../utils/constants';
+import orderService from '../../services/adminapp/adminOrders';
 import CustomOrderPrintLayoutCash from '../../utils/CustomPrintLayout/CustomOrderPrintLayoutCash';
 import CustomOrderPrintLayoutInvoice from '../../utils/CustomPrintLayout/CustomOrderPrintLayoutInvoice';
-import { listingRolePermission } from '../../utils/helper';
 import PermissionPopup from '../../utils/PermissionPopup';
+import cn from '../../utils/class-names';
+import {
+  NOT_AUTHORIZED_MESSAGE,
+  ORDER_FULFILLMENT_METHOD,
+  ORDER_STATUS,
+  ORDER_STATUSES,
+} from '../../utils/constants';
+import { listingRolePermission } from '../../utils/helper';
+import OrderDetailsTrackingPage from './OrderDetailsTracking';
 
 function OrderDetailsPage() {
   const navigate = useNavigate();
   const dataRole = useAppSelector(
-    (state: any) => state?.persisitReducer?.roleState?.role?.permissions
+    (state: any) => state?.persistedReducer?.roleState?.role?.permissions
   );
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
   const [cancelDialogOpen, setCancelDialogOpen] = useState<boolean>(false);
   // const [orderAssign, setOrderAssign] = useState<boolean>(false);
   const [dialogText, setDialogText] = useState<any>('');
   const [viewData, setViewData] = useState<any>({});
-  const [totalQuantity, setTotalQuantity] = useState(0);
-  const [orderStatuses, setOrderStatuses] = useState<any>([]);
-  const [isCancelled, setIsCancelled] = useState<boolean>(false);
-  const [cancelled, setCancelled] = useState<boolean>(false);
+  const [isCancelled] = useState<boolean>(false);
+  const [cancelled] = useState<boolean>(false);
   const [isPrintEnabled, setPrintEnabled] = useState<any>([false]);
-  const [nextBtn, setNextBtn] = useState<any>(null);
-  const [currentStatus, setCurrentStatus] = useState<any>(null);
   const [isLoader, setIsLoader] = useState(true);
   const [isNotify, setIsNotify] = useState(false);
   const [notifyMessage, setNotifyMessage] = useState({});
   const params = useParams();
   const id: any = params.orderId;
-  const [emptyVariable] = useState(null);
+
+  const currentStatus = {
+    key: viewData.status,
+    value: ORDER_STATUSES.get(viewData.status),
+  };
+
+  const showSelectDriverButton = useMemo(() => {
+    if (viewData.status === ORDER_STATUS.NEW) {
+      return true;
+    }
+    if (viewData.status === ORDER_STATUS.PROCESSING_ITEM) {
+      if (viewData.fulfillmentMethod === ORDER_FULFILLMENT_METHOD.SELF) {
+        return false;
+      }
+      return true;
+    }
+    if (viewData.status === ORDER_STATUS.DRIVER_DELIVERED_ITEM_TO_CUSTOMER) {
+      return true;
+    }
+    if (viewData.status === ORDER_STATUS.DRIVER_RETURNED_ITEM_TO_CUSTOMER) {
+      return true;
+    }
+    if (
+      viewData.status === ORDER_STATUS.DRIVER_DECLINED_TO_PICKUP_ITEM_FROM_SHOP
+    ) {
+      return true;
+    }
+    if (viewData.status === ORDER_STATUS.DRIVER_RETURNED_ITEM_TO_SHOP) {
+      return true;
+    }
+
+    return false;
+  }, [viewData.status, viewData.fulfillmentMethod]);
 
   const setData = (itemData: any) => {
     setViewData(itemData);
-    let quantity = 0;
-    itemData.appOrderStatuses.forEach((item: any, index: number) => {
-      if (item.status !== ORDER_STATUS_IN_CANCELLED) {
-        quantity = (index + 1) * 20;
-      }
-    });
-    setTotalQuantity(quantity);
-    let laststatus = {};
-    const newStatuses = [...ORDER_STATUSES].map(([key, value]) => ({
-      key,
-      value,
-    }));
-    const newResult = newStatuses.map((statusItem, index) => {
-      const result = itemData.appOrderStatuses.find((matchItem: any) =>
-        matchItem.status.includes(statusItem.key)
-      );
-      if (result) {
-        laststatus = statusItem;
-        if (
-          result.status === ORDER_STATUS_IN_DELIVERY ||
-          result.status === ORDER_STATUS_IN_DELIVERED
-        ) {
-          setIsCancelled(true);
-          if (result.status === ORDER_STATUS_IN_DELIVERED) {
-            setCancelled(true);
-          }
-        }
-        if (result.status === ORDER_STATUS_IN_CANCELLED) {
-          setCancelled(true);
-        }
-        if (typeof newStatuses[index + 1] !== 'undefined') {
-          setNextBtn(newStatuses[index + 1]);
-        }
-        return { ...statusItem, isStatus: true };
-      }
-      return { ...statusItem, isStatus: false };
-    });
-    setCurrentStatus(laststatus);
-    setOrderStatuses(newResult);
-    // console.log('orderStatuses', newResult);
   };
 
   useEffect(() => {
@@ -123,7 +106,7 @@ function OrderDetailsPage() {
           });
         });
     }
-  }, [emptyVariable]);
+  }, []);
 
   const getIcon = (string: string) => {
     let icon;
@@ -143,11 +126,9 @@ function OrderDetailsPage() {
     return icon;
   };
 
-  const createOrderStatusesService = (data: any, key: string) => {
+  const createOrderStatusesService = (data: any) => {
     setIsLoader(true);
-    if (key === ORDER_STATUS_IN_CANCELLED && (cancelled || isCancelled)) {
-      return;
-    }
+
     orderService
       .createStatusesService(data)
       .then((item) => {
@@ -158,8 +139,9 @@ function OrderDetailsPage() {
             text: item.data.message,
             type: 'success',
           });
-          const tempData = viewData;
+          const tempData = structuredClone(viewData);
           tempData.appOrderStatuses.push(item.data.data);
+          tempData.status = item.data.data.status;
           setViewData(tempData);
           setData(tempData);
         }
@@ -174,21 +156,94 @@ function OrderDetailsPage() {
       });
   };
 
+  const getNextStatusButton = useMemo(() => {
+    if (viewData.status === ORDER_STATUS.DRIVER_ASSIGNED_FOR_ITEM_PICKUP) {
+      return {
+        key: ORDER_STATUS.DRIVER_ACCEPTED_TO_PICK_UP_ITEM_FROM_CUSTOMER,
+        value: ORDER_STATUSES.get(
+          ORDER_STATUS.DRIVER_ACCEPTED_TO_PICK_UP_ITEM_FROM_CUSTOMER
+        ),
+      };
+    }
+    if (
+      viewData.status ===
+      ORDER_STATUS.DRIVER_ACCEPTED_TO_PICK_UP_ITEM_FROM_CUSTOMER
+    ) {
+      return {
+        key: ORDER_STATUS.DRIVER_PICKED_UP_ITEM_FROM_CUSTOMER,
+        value: ORDER_STATUSES.get(
+          ORDER_STATUS.DRIVER_PICKED_UP_ITEM_FROM_CUSTOMER
+        ),
+      };
+    }
+    if (viewData.status === ORDER_STATUS.DRIVER_PICKED_UP_ITEM_FROM_CUSTOMER) {
+      return {
+        key: ORDER_STATUS.DRIVER_DELIVERED_ITEM_TO_SHOP,
+        value: ORDER_STATUSES.get(ORDER_STATUS.DRIVER_DELIVERED_ITEM_TO_SHOP),
+      };
+    }
+    if (viewData.status === ORDER_STATUS.DRIVER_DELIVERED_ITEM_TO_SHOP) {
+      return {
+        key: ORDER_STATUS.PROCESSING_ITEM,
+        value: ORDER_STATUSES.get(ORDER_STATUS.PROCESSING_ITEM),
+      };
+    }
+    if (
+      viewData.status === ORDER_STATUS.PROCESSING_ITEM &&
+      viewData.fulfillmentMethod === ORDER_FULFILLMENT_METHOD.SELF
+    ) {
+      return {
+        key: ORDER_STATUS.CUSTOMER_PICK_UP,
+        value: ORDER_STATUSES.get(ORDER_STATUS.CUSTOMER_PICK_UP),
+      };
+    }
+    if (viewData.status === ORDER_STATUS.DRIVER_ASSIGNED_FOR_ITEM_DELIVERY) {
+      return {
+        key: ORDER_STATUS.DRIVER_ACCEPTED_TO_PICK_UP_ITEM_FROM_SHOP,
+        value: ORDER_STATUSES.get(
+          ORDER_STATUS.DRIVER_ACCEPTED_TO_PICK_UP_ITEM_FROM_SHOP
+        ),
+      };
+    }
+    if (
+      viewData.status === ORDER_STATUS.DRIVER_ACCEPTED_TO_PICK_UP_ITEM_FROM_SHOP
+    ) {
+      return {
+        key: ORDER_STATUS.DRIVER_PICKED_UP_ITEM_FROM_SHOP,
+        value: ORDER_STATUSES.get(ORDER_STATUS.DRIVER_PICKED_UP_ITEM_FROM_SHOP),
+      };
+    }
+    if (viewData.status === ORDER_STATUS.DRIVER_PICKED_UP_ITEM_FROM_SHOP) {
+      return {
+        key: ORDER_STATUS.DRIVER_DELIVERED_ITEM_TO_CUSTOMER,
+        value: ORDER_STATUSES.get(
+          ORDER_STATUS.DRIVER_DELIVERED_ITEM_TO_CUSTOMER
+        ),
+      };
+    }
+    if (
+      viewData.status === ORDER_STATUS.DRIVER_DELIVERED_ITEM_TO_CUSTOMER ||
+      viewData.status === ORDER_STATUS.CUSTOMER_PICK_UP
+    ) {
+      return {
+        key: ORDER_STATUS.COMPLETED,
+        value: ORDER_STATUSES.get(ORDER_STATUS.COMPLETED),
+      };
+    }
+    return null;
+  }, [viewData.status, viewData.fulfillmentMethod]);
+
   const statusUpdateHandler = () => {
+    if (viewData.status === ORDER_STATUS.COMPLETED) {
+      return;
+    }
     if (listingRolePermission(dataRole, 'Order Statuses Create')) {
-      let newIndex = 0;
-      orderStatuses.forEach((item: any, index: number) => {
-        if (typeof viewData.appOrderStatuses[index] !== 'undefined') {
-          newIndex = index;
-        }
-      });
       const data = {
         app_order: id,
-        status: orderStatuses[newIndex + 1].key,
+        status: getNextStatusButton?.value?.status,
       };
-      // console.log('DATA', data);
 
-      createOrderStatusesService(data, orderStatuses[newIndex].key);
+      createOrderStatusesService(data);
     } else {
       setIsNotify(true);
       setNotifyMessage({
@@ -202,9 +257,9 @@ function OrderDetailsPage() {
     if (listingRolePermission(dataRole, 'Order Statuses Create')) {
       const data = {
         app_order: id,
-        status: ORDER_STATUS_IN_CANCELLED,
+        status: ORDER_STATUS.CANCELLED,
       };
-      createOrderStatusesService(data, ORDER_STATUS_IN_CANCELLED);
+      createOrderStatusesService(data);
     } else {
       setIsNotify(true);
       setNotifyMessage({
@@ -215,13 +270,16 @@ function OrderDetailsPage() {
   };
 
   const handleDriverStatus = () => {
-    if (viewData.paymentType === 'Shop') {
-      return (
-        <div className="flex items-center font-open-sans text-sm font-normal text-neutral-500">
-          <ShopIcon color="black" />
-          <p className="mx-3">Order has been delivered by shop</p>
-        </div>
-      );
+    // if (viewData.paymentType === 'Shop') {
+    //   return (
+    //     <div className="flex items-center font-open-sans text-sm font-normal text-neutral-500">
+    //       <ShopIcon color="black" />
+    //       <p className="mx-3">Order has been delivered by shop</p>
+    //     </div>
+    //   );
+    // }
+    if (!showSelectDriverButton) {
+      return null;
     }
     return (
       <IconButton
@@ -272,23 +330,21 @@ function OrderDetailsPage() {
       <TopBar isNestedRoute title="Order Details" />
       <div className="order--details container py-3">
         <div className="grid w-full grid-cols-2 gap-3">
-          <div className="mb-auto min-h-[600px] rounded-lg bg-[#fff] shadow-lg">
+          <div className="mb-auto min-h-[40rem] rounded-lg bg-[#fff] shadow-lg">
             <div className="p-4">
               <div className="flex items-center">
                 <div
-                  className={`relative mr-2 inline-flex ${
-                    currentStatus &&
-                    currentStatus.key === ORDER_STATUS_IN_CANCELLED
-                      ? 'text-red-500'
-                      : 'text-green-500'
-                  }`}
+                  className={cn(
+                    `relative mr-2 inline-flex`,
+                    currentStatus?.value?.color
+                  )}
                 >
                   <CircularProgress
                     thickness={1.5}
                     className="z-10"
                     size="4rem"
                     variant="determinate"
-                    value={totalQuantity}
+                    value={currentStatus?.value?.progress ?? 0}
                     color="inherit"
                   />
                   <CircularProgress
@@ -299,8 +355,9 @@ function OrderDetailsPage() {
                     value={100}
                     color="inherit"
                   />
-                  <div className="absolute top-0 left-0 bottom-0 right-0 flex items-center justify-center">
-                    {currentStatus && getIcon(currentStatus.value.iconText)}
+                  <div className="absolute bottom-0 left-0 right-0 top-0 flex items-center justify-center">
+                    {currentStatus &&
+                      getIcon(currentStatus?.value?.iconText ?? '')}
                   </div>
                 </div>
                 <div className="flex flex-col gap-1">
@@ -318,14 +375,12 @@ function OrderDetailsPage() {
                     )}
                   </div>
                   <div
-                    className={`font-open-sans text-sm font-semibold  ${
-                      currentStatus &&
-                      currentStatus.key === ORDER_STATUS_IN_CANCELLED
-                        ? 'text-red-500'
-                        : 'text-green-500'
-                    } `}
+                    className={cn(
+                      `font-open-sans text-sm font-semibold`,
+                      currentStatus?.value?.color
+                    )}
                   >
-                    {currentStatus && `${currentStatus.value.title} `}
+                    {currentStatus && `${currentStatus?.value?.title} `}
                   </div>
                 </div>
                 <div className="flex-grow" />
@@ -335,7 +390,7 @@ function OrderDetailsPage() {
                     setDialogText('Are you sure you want to cancel this Order');
                     setCancelDialogOpen(true);
                   }}
-                  className={`bg-ord-del rounded-xl py-2 px-12 font-open-sans text-sm font-semibold ${
+                  className={`bg-ord-del rounded-xl px-12 py-2 font-open-sans text-sm font-semibold ${
                     cancelled || isCancelled
                       ? 'bg-neutral-400 text-neutral-900'
                       : 'bg-neutral-900 text-gray-50'
@@ -364,7 +419,7 @@ function OrderDetailsPage() {
                     />
                     {/* <button><PrintOutlinedIcon /> Order Slip</button> */}
                   </div>
-                  <div className="my-2 mx-1">
+                  <div className="mx-1 my-2">
                     <CustomOrderPrintLayoutInvoice
                       isPrintEnabled={isPrintEnabled}
                       setPrintEnabled={setPrintEnabled}
@@ -432,7 +487,7 @@ function OrderDetailsPage() {
               </div>
               <hr className="my-3 h-[1px] w-full bg-neutral-200" />
               <div className="flex w-full flex-shrink-0 items-center gap-x-3">
-                {viewData.driver ? (
+                {viewData.driver && !showSelectDriverButton ? (
                   <>
                     <IconButton
                       aria-label="delete"
@@ -493,7 +548,7 @@ function OrderDetailsPage() {
                   handleDriverStatus()
                 )}
               </div>
-              <hr className="my-3 h-[1px] w-full bg-neutral-200" />
+              <hr className="my-3 h-0.5 w-full bg-neutral-200" />
               <div className="max-h-48 flex-none overflow-y-scroll scroll-smooth px-4">
                 {viewData.orderItems &&
                   viewData.orderItems.map((item: any, index: number) => {
@@ -551,7 +606,7 @@ function OrderDetailsPage() {
                 </div>
               </div>
             </div>
-            <div className="bg-ord-del flex items-center justify-between rounded-b-lg bg-neutral-300 py-2 px-4">
+            <div className="bg-ord-del flex items-center justify-between rounded-b-lg bg-neutral-300 px-4 py-2">
               <div className="font-open-sans text-sm font-semibold text-neutral-900 ">
                 Grand Total
               </div>
@@ -560,111 +615,12 @@ function OrderDetailsPage() {
               </div>
             </div>
           </div>
-          <div className="mb-auto min-h-[610px] rounded-lg bg-[#fff] shadow-lg">
-            <div className="bg-ord-del rounded-t-xl bg-neutral-300 py-2 px-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center">
-                  <div className="bg-grey-icon mr-2 flex aspect-square w-9 items-center justify-center rounded-full bg-neutral-400 text-gray-50">
-                    <LocalShippingOutlinedIcon className="grey-icon text-xl" />
-                  </div>
-                  <div className="text-grey font-open-sans text-base font-semibold text-neutral-900">
-                    Your order is {viewData.status}
-                  </div>
-                </div>
-                <div className="items-center justify-center">
-                  {nextBtn && (
-                    <Button
-                      type="button"
-                      onClick={() => {
-                        setDialogText(
-                          'Are you sure you want to update status this Order'
-                        );
-                        setDialogOpen(true);
-                      }}
-                      className={`btn-grey rounded py-2 px-12 font-open-sans text-sm font-semibold ${
-                        cancelled ||
-                        (isCancelled &&
-                          nextBtn.key === ORDER_STATUS_IN_CANCELLED)
-                          ? 'bg-neutral-400 text-neutral-900'
-                          : 'bg-neutral-900 text-gray-50'
-                      } `}
-                      color="inherit"
-                      disabled={
-                        !!(
-                          cancelled ||
-                          (isCancelled &&
-                            nextBtn.key === ORDER_STATUS_IN_CANCELLED)
-                        )
-                      }
-                    >
-                      <span>{nextBtn.value.title}</span>
-                    </Button>
-                  )}
-                </div>
-              </div>
-            </div>
-            <div className="flex flex-col gap-4 px-4 py-4">
-              {orderStatuses &&
-                orderStatuses.map((item: any, index: number) => {
-                  // console.log(item)
-                  if (item.key === ORDER_STATUS_IN_CANCELLED && isCancelled) {
-                    return null;
-                  }
-                  return (
-                    <div
-                      key={index}
-                      className={`flex items-center ${
-                        item.isStatus ? '' : 'opacity-25'
-                      } `}
-                    >
-                      {item.isStatus ? (
-                        <CheckCircleOutlineOutlinedIcon />
-                      ) : (
-                        <CircleOutlinedIcon className="text-neutral-500" />
-                      )}
-
-                      <div
-                        className={`relative mx-2 flex ${
-                          item.isStatus ? item.value.color : 'text-neutral-500'
-                        } `}
-                      >
-                        <CircularProgress
-                          thickness={1.5}
-                          className="z-10"
-                          size="3rem"
-                          variant="determinate"
-                          value={100}
-                          color="inherit"
-                        />
-                        <div className="absolute top-0 left-0 bottom-0 right-0 flex items-center justify-center">
-                          {getIcon(item.value.iconText)}
-                        </div>
-                      </div>
-                      <div>
-                        <div
-                          className={`font-open-sans text-base font-semibold ${
-                            item.isStatus
-                              ? item.value.color
-                              : 'text-neutral-500'
-                          } `}
-                        >
-                          {item.value.title}
-                        </div>
-                        <div className="font-open-sans text-sm font-normal text-neutral-500">
-                          {item.value.text}
-                        </div>
-                      </div>
-                      <div className="flex-grow" />
-                      <div className="font-open-sans text-sm font-normal text-neutral-500">
-                        {dayjs(viewData?.updatedDate).format(
-                          'MMM DD, YY | HH:mm:ss A'
-                        )}
-                      </div>
-                    </div>
-                  );
-                })}
-            </div>
-          </div>
+          <OrderDetailsTrackingPage
+            orderData={viewData}
+            buttonText={getNextStatusButton?.value?.title}
+            setDialogOpen={setDialogOpen}
+            setDialogText={setDialogText}
+          />
         </div>
       </div>
     </>

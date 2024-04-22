@@ -7,12 +7,11 @@ import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
 import dayjs from 'dayjs';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useForm, useFieldArray } from 'react-hook-form';
+import React, { useEffect, useRef, useState } from 'react';
+import { useFieldArray, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import ActionMenu from '../../../components/common/ActionMenu';
 import CustomButton from '../../../components/common/CustomButton';
-import CustomDialog from '../../../components/common/CustomDialog';
 import CustomText from '../../../components/common/CustomText';
 import Loader from '../../../components/common/Loader';
 import Notify from '../../../components/common/Notify';
@@ -37,7 +36,7 @@ function AppointmentProviderPage() {
   const navigate = useNavigate();
   const authState: any = useAppSelector((state: any) => state?.authState);
   const dataRole: any = useAppSelector(
-    (state: any) => state?.persisitReducer?.roleState?.role?.permissions
+    (state: any) => state?.persistedReducer?.roleState?.role?.permissions
   );
   const [startTime, setStartTime] = useState<dayjs.Dayjs | any>(null);
   const [endTime, setEndTime] = useState<dayjs.Dayjs | any>(null);
@@ -81,7 +80,6 @@ function AppointmentProviderPage() {
     control,
     handleSubmit,
     watch,
-    reset,
     setValue,
     getValues,
     setError,
@@ -584,7 +582,7 @@ function AppointmentProviderPage() {
   };
 
   const onSubmitDialogBox = async (data: any) => {
-    console.log('🚀 ~ onSubmitDialogBox ~ data: 1', data);
+    console.log(`onSubmitDialogBox -> data:`, data);
     setIsLoader(true);
     delete data.servicesName;
     delete data.servicesAmount;
@@ -592,6 +590,7 @@ function AppointmentProviderPage() {
     delete data.categoryId;
     delete data.servicesId;
     delete data.mints;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const obj = {
       ...data,
       weekDays,
@@ -812,7 +811,7 @@ function AppointmentProviderPage() {
             />
           </div>
           {list?.length < 1 ? (
-            <CustomText noroundedborders text="No Records Found" />
+            <CustomText noRoundedBorders text="No Records Found" />
           ) : null}
           <div className="mt-3 flex w-[100%] justify-end py-3">
             {list?.length > rowsPerPage && (

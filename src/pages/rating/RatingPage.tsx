@@ -24,7 +24,7 @@ function RatingPage() {
   const navigate = useNavigate();
   const authState: any = useAppSelector((state: any) => state?.authState);
   const dataRole = useAppSelector(
-    (state: any) => state?.persisitReducer?.roleState?.role?.permissions
+    (state: any) => state?.persistedReducer?.roleState?.role?.permissions
   );
   const [search, setSearch] = useState<any>('');
   const [emptyVariable] = useState(null);
@@ -190,7 +190,7 @@ function RatingPage() {
                   <th>Item</th>
                   <th>Total Star</th>
                   <th>Reviews</th>
-                  <th>&nbsp;</th>
+                  <th aria-label="empty table header">&nbsp;</th>
                 </tr>
               </thead>
               <tbody>
@@ -234,7 +234,7 @@ function RatingPage() {
                         </td>
                         <td>{item.star}</td>
                         <td>{item.reviews}</td>
-                        <td>
+                        <td aria-label="go to reviews">
                           <div className="flex flex-row-reverse">
                             <IconButton
                               className="icon-btn"
@@ -251,7 +251,7 @@ function RatingPage() {
             </table>
           </div>
           {list?.length < 1 ? (
-            <CustomText noroundedborders text="No Records Found" />
+            <CustomText noRoundedBorders text="No Records Found" />
           ) : null}
           <div className="mt-3 flex w-[100%] justify-center py-3">
             <TablePagination

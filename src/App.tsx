@@ -1,17 +1,18 @@
 import 'devextreme/dist/css/dx.light.css';
 /* eslint-disable no-console */
-import { useNavigate, useRoutes } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { routeObjects } from './routes/AppRoutes';
-import { useAppDispatch } from './redux/redux-hooks';
-import system from './services/adminapp/SystemConfig';
-import { setSystemConfig, setTheme } from './redux/features/authStateSlice';
+import { useErrorBoundary } from 'react-error-boundary';
+import { useRoutes } from 'react-router-dom';
 import Loader from './components/common/Loader';
+import { setSystemConfig, setTheme } from './redux/features/authStateSlice';
+import { useAppDispatch } from './redux/redux-hooks';
+import { routeObjects } from './routes/AppRoutes';
+import system from './services/adminapp/SystemConfig';
 
 function App() {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
-  const [isPageLoader, setIsPageLoader] = useState(false);
+  const { showBoundary } = useErrorBoundary();
+  const [isPageLoader, setIsPageLoader] = useState(true);
   if (process.env.NODE_ENV === 'production') {
     console.log = () => {};
     console.error = () => {};
@@ -61,7 +62,8 @@ function App() {
         } else {
           setIsPageLoader(false);
           console.log('4041');
-          navigate('./admin/auth/404', { replace: true });
+          showBoundary(new Error('fetching system config failed'));
+          // navigate('./admin/auth/404', { replace: true });
           // showNotification(res.data.message, 'error');
           // console.log('404 page');
         }
@@ -69,7 +71,8 @@ function App() {
       .catch(() => {
         console.log('4042');
         setIsPageLoader(false);
-        navigate('./admin/auth/404', { replace: true });
+        // navigate('./admin/auth/404', { replace: true });
+        showBoundary(new Error('fetching system config failed'));
         // showNotification(err.message, 'error');
       });
   }, []);

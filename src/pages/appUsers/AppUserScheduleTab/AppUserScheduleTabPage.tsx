@@ -15,7 +15,7 @@ import { listingRolePermission } from '../../../utils/helper';
 import AppUserScheduleCreatePopup from './AppUserScheduleCreatePopup';
 import AppUserScheduleUpdatePopup from './AppUserScheduleUpdatePopup';
 
-type Props = {
+type AppUserScheduleTabPageProps = {
   appUserId?: any;
   scheduleList?: any;
   filteredWeekdays?: any;
@@ -25,11 +25,11 @@ function AppUserScheduleTabPage({
   scheduleList,
   appUserId,
   filteredWeekdays,
-}: Props) {
+}: AppUserScheduleTabPageProps) {
   const authState: any = useAppSelector((state) => state?.authState);
   const [list, setList] = useState<any>([]);
   const dataRole = useAppSelector(
-    (state: any) => state?.persisitReducer?.roleState?.role?.permissions
+    (state: any) => state?.persistedReducer?.roleState?.role?.permissions
   );
   const [isLoader, setIsLoader] = React.useState(false);
   const [isNotify, setIsNotify] = React.useState(false);
@@ -250,7 +250,7 @@ function AppUserScheduleTabPage({
                       <th>Start Time</th>
                       <th>End Time</th>
                       <th>status</th>
-                      <th>&nbsp;</th>
+                      <th aria-label="empty table header">&nbsp;</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -319,7 +319,7 @@ function AppUserScheduleTabPage({
                         </div> */}
             </>
           ) : (
-            <CustomText noroundedborders text="No Address Records" />
+            <CustomText noRoundedBorders text="No Address Records" />
           )}
         </div>
       </div>

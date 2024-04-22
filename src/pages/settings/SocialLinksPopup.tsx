@@ -12,7 +12,7 @@ import { setItemState } from '../../redux/features/appStateSlice';
 import { useAppSelector } from '../../redux/redux-hooks';
 import Service from '../../services/adminapp/admin';
 
-type Props = {
+type SocialLinksPopupProps = {
   openDialog: boolean;
   setOpenDialog: React.Dispatch<React.SetStateAction<boolean>>;
   detail: any;
@@ -26,7 +26,7 @@ function SocialLinksPopup({
   detail,
   setDetail,
   setIsLoader,
-}: Props) {
+}: SocialLinksPopupProps) {
   const { register, handleSubmit } = useForm<SocialMedia>();
   const dispatch = useDispatch();
   const authState: any = useAppSelector((state) => state?.authState);

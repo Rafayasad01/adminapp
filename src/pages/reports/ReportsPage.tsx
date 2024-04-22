@@ -69,7 +69,7 @@ function ReportsPage() {
               className="divider horizontal"
               style={{ margin: '0.625rem 0' }}
             />
-            <div className="mt-3 mb-5 flex w-full px-3">
+            <div className="mb-5 mt-3 flex w-full px-3">
               <ReportsRevenueChart />
             </div>
           </div>

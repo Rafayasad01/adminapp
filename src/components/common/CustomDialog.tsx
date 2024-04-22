@@ -15,7 +15,7 @@ import CustomInputBox from './CustomInputBox';
 import ErrorSpanBox from './ErrorSpanBox';
 import TimePicker from './TimePicker';
 
-type Props = {
+type CustomDialogProps = {
   openFormDialog: boolean;
   setOpenFormDialog: React.Dispatch<React.SetStateAction<boolean>>;
   DialogHeader?: string;
@@ -26,15 +26,15 @@ type Props = {
   onSubmit: (data: any) => void;
   type?: any;
   reset?: any;
-  setAvater?: any;
-  specailCase?: boolean;
+  setAvatar?: any;
+  specialCase?: boolean;
   singleField?: boolean;
   setWeekDays?: any;
   weekDays?: any;
   startTime?: any;
   endTime?: any;
   addScheduleFormat?: boolean;
-  noweekdays?: boolean;
+  noWeekDays?: boolean;
 };
 
 function CustomDialog({
@@ -47,8 +47,8 @@ function CustomDialog({
   handleSubmit,
   onSubmit,
   type,
-  specailCase,
-  setAvater,
+  specialCase,
+  setAvatar,
   reset,
   singleField,
   setWeekDays,
@@ -56,17 +56,17 @@ function CustomDialog({
   startTime,
   endTime,
   addScheduleFormat,
-  noweekdays,
-}: Props) {
+  noWeekDays,
+}: CustomDialogProps) {
   const handleFormClose = () => {
-    if (type === 'edit' && specailCase) {
+    if (type === 'edit' && specialCase) {
       reset({
         role: 'none',
         userLimits: '',
       });
       setOpenFormDialog(false);
-    } else if (type === 'edit' && !specailCase) {
-      setAvater && setAvater(null);
+    } else if (type === 'edit' && !specialCase) {
+      if (setAvatar) setAvatar(null);
       reset();
       setOpenFormDialog(false);
     } else {
@@ -312,9 +312,9 @@ function CustomDialog({
             )}
             {addScheduleFormat && (
               <div>
-                {!noweekdays && (
+                {!noWeekDays && (
                   <div>
-                    <WorkDaysForm onlyweeksformat setWeekDays={setWeekDays} />
+                    <WorkDaysForm onlyWeeksFormat setWeekDays={setWeekDays} />
                   </div>
                 )}
                 <div className={singleField ? 'FormField' : 'FormFields'}>

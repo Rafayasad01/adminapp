@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined';
 import Button from '@mui/material/Button';
-// import dayjs from 'dayjs';
 import dayjs from 'dayjs';
 import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
@@ -36,20 +37,18 @@ function AppointmentVisitPage() {
   const navigate = useNavigate();
   const authState: any = useAppSelector((state: any) => state?.authState);
   const dataRole = useAppSelector(
-    (state: any) => state?.persisitReducer?.roleState?.role?.permissions
+    (state: any) => state?.persistedReducer?.roleState?.role?.permissions
   );
   const [search, setSearch] = useState<any>('');
   const [emptyVariable] = useState(null);
   const [page, setPage] = useState(0);
   const [list, setList] = useState<any>([]);
   const [editDetails, setEditDetails] = useState<any>();
-
-  const [actionMenuItemid, setActionMenuItemid] = React.useState<any>();
+  const [actionMenuItemId, setActionMenuItemId] = useState<any>();
   const [actionMenuAnchorEl, setActionMenuAnchorEl] =
     useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
   const actionMenuOptions = ['Detail', 'Reschedule', 'Edit', 'Cancel'];
-
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
   const [openRescheduleFormDialog, setOpenRescheduleFormDialog] =
@@ -82,10 +81,10 @@ function AppointmentVisitPage() {
   };
 
   const manuHandler = (option: string) => {
-    if (actionMenuItemid?.status === 'Cancelled') {
+    if (actionMenuItemId?.status === 'Cancelled') {
       if (option === 'Detail') {
         if (listingRolePermission(dataRole, 'Appointment Detail')) {
-          navigate(`../detail/${actionMenuItemid?.id}`);
+          navigate(`../detail/${actionMenuItemId?.id}`);
         } else {
           setIsNotify(true);
           setNotifyMessage({
@@ -97,7 +96,7 @@ function AppointmentVisitPage() {
     } else if (option === 'Edit') {
       if (listingRolePermission(dataRole, 'Appointment Edit')) {
         setIsLoader(true);
-        Service.VisitEdit(actionMenuItemid?.id)
+        Service.VisitEdit(actionMenuItemId?.id)
           .then((item: any) => {
             if (item.data.success) {
               setIsLoader(false);
@@ -133,7 +132,7 @@ function AppointmentVisitPage() {
     } else if (option === 'Cancel') {
       if (listingRolePermission(dataRole, 'Appointment Cancel')) {
         setIsLoader(true);
-        Service.VisitCancel(actionMenuItemid?.id)
+        Service.VisitCancel(actionMenuItemId?.id)
           .then((item: any) => {
             if (item.data.success) {
               setIsLoader(false);
@@ -180,7 +179,7 @@ function AppointmentVisitPage() {
       }
     } else if (option === 'Detail') {
       if (listingRolePermission(dataRole, 'Appointment Detail')) {
-        navigate(`../detail/${actionMenuItemid?.id}`);
+        navigate(`../detail/${actionMenuItemId?.id}`);
       } else {
         setIsNotify(true);
         setNotifyMessage({
@@ -298,7 +297,7 @@ function AppointmentVisitPage() {
           });
         });
     } else {
-      data.appointmentId = actionMenuItemid?.id;
+      data.appointmentId = actionMenuItemId?.id;
       // console.log('daTA', data);
       Service.VisitReschedule(data)
         .then((item: any) => {
@@ -351,7 +350,7 @@ function AppointmentVisitPage() {
             type: 'success',
           });
           for (let i = 0; i < list.length; i += 1) {
-            if (list[i].id === actionMenuItemid?.id) {
+            if (list[i].id === actionMenuItemId?.id) {
               list[i].name = item.data.data.name;
               list[i].note = item.data.data.note;
               list[i].phone = item.data.data.phone;

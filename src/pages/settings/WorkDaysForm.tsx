@@ -1,26 +1,28 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable import/no-cycle */
+
+import { Button, FormControl } from '@mui/material';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import dayjs from 'dayjs';
 import { memo, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import '../../assets/css/PopupStyle.css';
-import { Button, FormControl } from '@mui/material';
 import ErrorSpanBox from '../../components/common/ErrorSpanBox';
 import TimePicker from '../../components/common/TimePicker';
 import { WorkDay } from '../../interfaces/shop-schedule.interface';
-import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 import { setWordDays } from '../../redux/features/shopScheduleStateSlice';
+import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 
-type Props = {
-  onlyweeksformat?: boolean;
+type WorkDaysFormProps = {
+  onlyWeeksFormat?: boolean;
   setWeekDays?: any;
 };
 
 function WorkDaysForm({
-  onlyweeksformat,
+  onlyWeeksFormat,
   setWeekDays = (e?: any) => {},
-}: Props) {
+}: WorkDaysFormProps) {
   const [shopOpenTime, setShopOpenTime] = useState<dayjs.Dayjs | null>(null);
   const [shopCloseTime, setShopCloseTime] = useState<dayjs.Dayjs | null>(null);
   const [breakTime, setBreakTime] = useState<dayjs.Dayjs | null>(null);
@@ -120,7 +122,7 @@ function WorkDaysForm({
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <div className={`${!onlyweeksformat && 'height-230'}`}>
+      <div className={`${!onlyWeeksFormat && 'height-230'}`}>
         <div className=" !mt-3 grid grid-cols-7 justify-center">
           {weekDays.map((d, index) => (
             <Button
@@ -138,7 +140,7 @@ function WorkDaysForm({
           ))}
         </div>
         <form onSubmit={handleSubmit(onSubmit)}>
-          {!onlyweeksformat && (
+          {!onlyWeeksFormat && (
             <>
               <div className="FormFields">
                 <FormControl>

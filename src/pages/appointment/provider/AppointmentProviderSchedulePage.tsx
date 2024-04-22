@@ -26,7 +26,7 @@ function AppointmentProviderSchedulePage() {
   const navigate = useNavigate();
   const authState: any = useAppSelector((state: any) => state?.authState);
   const dataRole = useAppSelector(
-    (state: any) => state?.persisitReducer?.roleState?.role?.permissions
+    (state: any) => state?.persistedReducer?.roleState?.role?.permissions
   );
   const [startTime, setStartTime] = useState<dayjs.Dayjs | any>(null);
   const [endTime, setEndTime] = useState<dayjs.Dayjs | any>(null);
@@ -596,7 +596,7 @@ function AppointmentProviderSchedulePage() {
                   <th>Start Time</th>
                   <th>End Time</th>
                   <th>Status</th>
-                  <th>&nbsp;</th>
+                  <th aria-label="empty table header">&nbsp;</th>
                 </tr>
               </thead>
               <tbody>
@@ -638,7 +638,7 @@ function AppointmentProviderSchedulePage() {
                           <td>
                             <div className="flex flex-row-reverse">
                               <IconButton
-                                className="icon-btn mr-3.5 ml-4 p-0"
+                                className="icon-btn ml-4 mr-3.5 p-0"
                                 onClick={() =>
                                   item.isActive ? editHandler(item.id) : null
                                 }
@@ -662,7 +662,7 @@ function AppointmentProviderSchedulePage() {
             </table>
           </div>
           {list.appointmentProviderSchedule?.length < 1 ? (
-            <CustomText noroundedborders text="No Records Found" />
+            <CustomText noRoundedBorders text="No Records Found" />
           ) : null}
         </div>
       </div>

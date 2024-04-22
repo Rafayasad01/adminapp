@@ -40,7 +40,6 @@ function ServiceCreatePopup({
     register,
     handleSubmit,
     setValue,
-    setError,
     clearErrors,
     watch,
     formState: { errors },

@@ -2,7 +2,7 @@
 import { Loader } from '@googlemaps/js-api-loader';
 import { useEffect, useRef, useState } from 'react';
 
-type Props = {
+type CircleMapProps = {
   center: google.maps.LatLngLiteral;
   zoom: number;
   radius: number;
@@ -13,7 +13,7 @@ const loader = new Loader({
   version: 'weekly',
 });
 
-function CircleMap({ center, zoom, radius }: Props) {
+function CircleMap({ center, zoom, radius }: CircleMapProps) {
   const [map, setMap] = useState<any>(null); // reference to the Google Map object
   const [circle, setCircle] = useState<any>(null); // reference to the Circle marker object
 

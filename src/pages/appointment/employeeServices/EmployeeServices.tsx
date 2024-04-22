@@ -1,15 +1,8 @@
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import SearchIcon from '@mui/icons-material/Search';
 import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import Divider from '@mui/material/Divider';
-import FormControl from '@mui/material/FormControl';
 import IconButton from '@mui/material/IconButton';
-import Input from '@mui/material/Input';
-import InputAdornment from '@mui/material/InputAdornment';
 import Switch from '@mui/material/Switch';
-import TablePagination from '@mui/material/TablePagination';
 import dayjs from 'dayjs';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -20,8 +13,9 @@ import Loader from '../../../components/common/Loader';
 import Notify from '../../../components/common/Notify';
 import TopBar from '../../../components/common/TopBar';
 import { useAppSelector } from '../../../redux/redux-hooks';
-import StoreLovService from '../../../services/adminapp/adminStoreService';
 import employee from '../../../services/adminapp/adminStoreEmployee';
+import StoreLovService from '../../../services/adminapp/adminStoreService';
+import PermissionPopup from '../../../utils/PermissionPopup';
 import { NOT_AUTHORIZED_MESSAGE } from '../../../utils/constants';
 import {
   CheckRolePermission,
@@ -29,7 +23,6 @@ import {
 } from '../../../utils/helper';
 import EmployeeServiceCreatePopup from './EmployeeServiceCreatePopup';
 import EmployeeServiceEditPopup from './EmployeeServiceEditPopup';
-import PermissionPopup from '../../../utils/PermissionPopup';
 // import ServiceCatCreatePopup from './ServiceCatCreatePopup';
 // import ServiceCatEditPopup from './ServiceCatEditPopup';
 // import CategoriesCreatePopup from './CategoriesCreatePopup';
@@ -37,17 +30,17 @@ import PermissionPopup from '../../../utils/PermissionPopup';
 
 function EmployeeServices() {
   const { empId } = useParams();
-  const authState: any = useAppSelector((state) => state?.authState);
+  // const authState = useAppSelector((state) => state?.authState);
   const dataRole = useAppSelector(
-    (state) => state?.persisitReducer?.roleState?.role?.permissions
+    (state) => state?.persistedReducer?.roleState?.role?.permissions
   );
   const navigate = useNavigate();
-  const [search, setSearch] = useState('');
-  const [page, setPage] = useState(0);
-  const [total, setTotal] = useState(0);
+  // const [search, setSearch] = useState('');
+  // const [page, setPage] = useState(0);
+  // const [total, setTotal] = useState(0);
   const [list, setList] = useState<any>([]);
   const [editFormData, setEditFormData] = useState<any>(null);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  // const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [actionMenuItemid, setActionMenuItemid] = React.useState('');
   const [isLoader, setIsLoader] = React.useState(true);
   const [actionMenuAnchorEl, setActionMenuAnchorEl] =
@@ -63,8 +56,8 @@ function EmployeeServices() {
   const [dialogText] = useState<any>(
     'Are you sure you want to delete this Category ?'
   );
-  const [isModalImage, setIsModalImage] = useState(false);
-  const [modalImage, setModalImage] = useState('');
+  const [, /* isModalImage */ setIsModalImage] = useState(false);
+  const [, /* modalImage */ setModalImage] = useState('');
   const [catLovlist, setCatLovList] = useState<any>([]);
 
   const catLovService = useCallback(async () => {
@@ -122,7 +115,7 @@ function EmployeeServices() {
     }
   }, [emptyVariable]);
 
-  const handleClickSearch = (event: any) => {
+  /* const handleClickSearch = (event: any) => {
     if (event.key === 'Enter') {
       const searchTxt = event.target.value as string;
       const newPage = 0;
@@ -135,9 +128,9 @@ function EmployeeServices() {
         }
       );
     }
-  };
+  }; */
 
-  const handleChangePage = (
+  /* const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number
   ) => {
@@ -150,8 +143,8 @@ function EmployeeServices() {
       setList(item.data.data.list);
       setTotal(item.data.data.total);
     });
-  };
-
+  }; */
+  /* 
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -167,7 +160,7 @@ function EmployeeServices() {
       setList(item.data.data.list);
       setTotal(item.data.data.total);
     });
-  };
+  }; */
 
   // const deleteHandler = (id: string) => {
   //     setIsLoader(true);
@@ -402,10 +395,10 @@ function EmployeeServices() {
     setIsModalImage(true);
   };
 
-  const closeModal = () => {
+  /* const closeModal = () => {
     setModalImage('');
     setIsModalImage(false);
-  };
+  }; */
 
   return isLoader ? (
     <Loader />
@@ -573,7 +566,7 @@ function EmployeeServices() {
             </table>
           </div>
           {list?.length < 1 ? (
-            <CustomText noroundedborders text="No Records Found" />
+            <CustomText noRoundedBorders text="No Records Found" />
           ) : null}
           {/* <div className="mt-3 flex w-[100%] justify-center py-3">
                         <TablePagination

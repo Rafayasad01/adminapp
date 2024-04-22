@@ -15,7 +15,7 @@ import {
   PATTERN,
 } from '../../utils/constants';
 
-type Props = {
+type CategoriesServicesFaqCreatePopupProps = {
   openFormDialog: boolean;
   setOpenFormDialog: React.Dispatch<React.SetStateAction<boolean>>;
   callback: (...args: any[]) => any;
@@ -25,7 +25,7 @@ function CategoriesServicesFaqCreatePopup({
   openFormDialog,
   setOpenFormDialog,
   callback,
-}: Props) {
+}: CategoriesServicesFaqCreatePopupProps) {
   const {
     register,
     handleSubmit,

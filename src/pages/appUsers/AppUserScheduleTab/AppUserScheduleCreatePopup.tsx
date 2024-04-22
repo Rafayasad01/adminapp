@@ -13,12 +13,12 @@ import '../../../index.css';
 import { AppSchedule } from '../../../interfaces/app-user.interface';
 import { useAppSelector } from '../../../redux/redux-hooks';
 
-type Props = {
+type AppUserScheduleCreatePageProps = {
   openFormDialog: boolean;
   setOpenFormDialog: React.Dispatch<React.SetStateAction<boolean>>;
   callback: (...args: any[]) => any;
-  setIsNotify: any;
-  setNotifyMessage: any;
+  // setIsNotify: any;
+  // setNotifyMessage: any;
   filteredWeekdays?: any;
   appUserId?: string;
 };
@@ -29,7 +29,7 @@ function AppUserScheduleCreatePage({
   callback,
   filteredWeekdays,
   appUserId,
-}: Props) {
+}: AppUserScheduleCreatePageProps) {
   const authState: any = useAppSelector((state) => state?.authState);
   const [isLoader, setIsLoader] = useState<boolean>(false);
   const [count, setCount] = useState(0);

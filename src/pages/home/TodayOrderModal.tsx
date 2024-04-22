@@ -1,14 +1,14 @@
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
-import Modal from '@mui/material/Modal';
 import IconButton from '@mui/material/IconButton';
+import Modal from '@mui/material/Modal';
 
-type Props = {
+type TodayOrderModalProps = {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  data: any;
+  // data: any;
 };
 
-function TodayOrderModal({ open, setOpen }: Props) {
+function TodayOrderModal({ open, setOpen }: TodayOrderModalProps) {
   const handleClose = () => setOpen(false);
   return (
     <Modal

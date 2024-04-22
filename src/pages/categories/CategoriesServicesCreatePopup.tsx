@@ -20,7 +20,7 @@ import {
   imageAllowedTypes,
 } from '../../utils/constants';
 
-type Props = {
+type CategoriesServicesCreatePopupProps = {
   openFormDialog: boolean;
   setOpenFormDialog: React.Dispatch<React.SetStateAction<boolean>>;
   callback: (...args: any[]) => any;
@@ -34,7 +34,7 @@ function CategoriesServicesCreatePopup({
   callback,
   setIsNotify,
   setNotifyMessage,
-}: Props) {
+}: CategoriesServicesCreatePopupProps) {
   const [image, setImage] = useState<any>(null);
 
   const {

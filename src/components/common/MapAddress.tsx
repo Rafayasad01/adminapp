@@ -2,7 +2,7 @@ import { Loader } from '@googlemaps/js-api-loader';
 import { useEffect, useRef, useState } from 'react';
 import assets from '../../assets';
 
-type Props = {
+type MapAddressProps = {
   getValues?: any;
   setValue?: any;
   address: string;
@@ -14,7 +14,7 @@ const loader = new Loader({
   version: 'weekly',
 });
 
-function MapAddress({ address, zoom, setValue, getValues }: Props) {
+function MapAddress({ address, zoom, setValue, getValues }: MapAddressProps) {
   const mapRef = useRef<HTMLDivElement>(null);
   const [map, setMap] = useState<google.maps.Map>();
   // const [marker, setMarker] = useState<google.maps.Marker>();

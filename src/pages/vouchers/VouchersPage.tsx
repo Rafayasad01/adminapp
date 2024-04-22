@@ -29,7 +29,7 @@ const options = ['Edit', 'Delete'];
 function VouchersPage() {
   const authState: any = useAppSelector((state) => state?.authState);
   const dataRole = useAppSelector(
-    (state: any) => state?.persisitReducer?.roleState?.role?.permissions
+    (state: any) => state?.persistedReducer?.roleState?.role?.permissions
   );
   const [list, setList] = useState<any>([]);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -378,7 +378,7 @@ function VouchersPage() {
                   <th>Limitation</th>
                   <th>User Redeem</th>
                   <th>Status</th>
-                  <th>&nbsp;</th>
+                  <th aria-label="empty table header">&nbsp;</th>
                 </tr>
               </thead>
               <tbody>

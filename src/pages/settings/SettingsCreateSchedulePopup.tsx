@@ -1,25 +1,22 @@
-import React, { useEffect, useState } from 'react';
-import Dialog from '@mui/material/Dialog';
-import Button from '@mui/material/Button';
-
 import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined';
-
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-
-import '../../assets/css/PopupStyle.css';
 import { CircularProgress } from '@mui/material';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import Tab from '@mui/material/Tab';
+import Tabs from '@mui/material/Tabs';
 import dayjs from 'dayjs';
-import WorkDaysForm from './WorkDaysForm';
-import OffDaysForm from './OffDaysForm';
-import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
+import React, { useEffect } from 'react';
+import '../../assets/css/PopupStyle.css';
 import {
   fetchSchedule,
   setScheduleThunk,
 } from '../../redux/features/shopScheduleStateSlice';
+import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 import { convertDayJSToString } from '../../utils/helper';
+import OffDaysForm from './OffDaysForm';
+import WorkDaysForm from './WorkDaysForm';
 
-type Props = {
+type SettingsCreateSchedulePopupProps = {
   scheduleAddPopup: boolean;
   setScheduleAddPopup: React.Dispatch<React.SetStateAction<boolean>>;
 };
@@ -27,7 +24,7 @@ type Props = {
 const SettingsCreateSchedulePopup = ({
   scheduleAddPopup,
   setScheduleAddPopup,
-}: Props) => {
+}: SettingsCreateSchedulePopupProps) => {
   const handleFormClose = () => setScheduleAddPopup(false);
   const dispatch = useAppDispatch();
   const {

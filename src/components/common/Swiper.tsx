@@ -4,13 +4,17 @@ import Swiper from 'swiper';
 import 'swiper/swiper-bundle.css';
 import assets from '../../assets';
 
-type Props = {
+type SwiperComponentProps = {
   data: any;
-  selectedUser?: any;
   isActiveUser?: string;
+  selectedUser?: any;
 };
 
-const SwiperComponent = ({ data, selectedUser, isActiveUser }: Props) => {
+const SwiperComponent = ({
+  data,
+  isActiveUser,
+  selectedUser,
+}: SwiperComponentProps) => {
   function getDirection() {
     const windowWidth = window.innerWidth;
     return windowWidth <= 760 ? 'vertical' : 'horizontal';

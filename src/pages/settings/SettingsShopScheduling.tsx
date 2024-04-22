@@ -2,10 +2,9 @@ import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import Button from '@mui/material/Button';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
+import dayjs, { isDayjs } from 'dayjs';
 import { memo, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
-import dayjs, { isDayjs } from 'dayjs';
 import Notify from '../../components/common/Notify';
 import { DateRange } from '../../interfaces/shop-schedule.interface';
 import {
@@ -137,7 +136,7 @@ function SettingsShopScheduling() {
               />
             </Tabs>
           </div>
-          <div className="Content w-full py-5 px-4">
+          <div className="Content w-full px-4 py-5">
             <div className="flex flex-col gap-0">
               <div className="flex justify-end">
                 <Button
@@ -148,7 +147,7 @@ function SettingsShopScheduling() {
                   <AddOutlinedIcon /> Set Schedule
                 </Button>
               </div>
-              <div className="grid grid-cols-12 gap-y-0 gap-x-4">
+              <div className="grid grid-cols-12 gap-x-4 gap-y-0">
                 <div className="col-span-8">
                   <div className="class">
                     {workDays.length === 0 ? (

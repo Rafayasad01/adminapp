@@ -38,7 +38,7 @@ dayjs.extend(timezone);
 // const date = dayjs(dateString);
 // const dates = dayjs(dateStrings);
 
-const newDate = new Date(2018, 4, 28, 9, 30);
+// const newDate = new Date(2018, 4, 28, 9, 30);
 // console.log('newDatesdasdsasadsa', newDate);
 
 // const appointments = [
@@ -70,36 +70,32 @@ const newDate = new Date(2018, 4, 28, 9, 30);
 //   { id: 9, name: 'Alice Doe', profileUrl: assets.images.avatarUser },
 // ];
 
-type Props = {
-  priorityData?: any;
-  setAppointmentType?: any;
-  selectedPriorityData?: any;
-  setSelectedPriorityData?: any;
+type AllAppointmentProps = {
   appointmentType?: any;
+  priorityData?: any;
+  selectedPriorityData?: any;
+  setAppointmentType?: any;
+  setSelectedPriorityData?: any;
 };
 
 const AllAppointment = ({
   appointmentType,
   priorityData,
+  selectedPriorityData,
   setAppointmentType,
   setSelectedPriorityData,
-  selectedPriorityData,
-}: Props) => {
+}: AllAppointmentProps) => {
   const [data, setData] = useState<any>([]);
   const [appointmentData, setAppointmentData] = useState();
   const [isTooltipOpen, setIsTooltipOpen] = useState(false);
   const [isLoader, setIsLoader] = useState(false);
-  const [appointmentTooltipData, setAppointmentTooltipData] =
+  const [, /* appointmentTooltipData */ setAppointmentTooltipData] =
     useState<any>(null);
   const [isActiveUser, setIsActiveUser] = useState('all');
   const currentWeek = dayjs().week();
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
-  const [isNotify, setIsNotify] = React.useState(true);
-  const [notifyMessage, setNotifyMessage] = React.useState({});
-
-  console.log('All Page');
-
-  // console.log('🚀 ~ currentWeek:', currentWeek);
+  const [, /* isNotify */ setIsNotify] = React.useState(true);
+  const [, /* notifyMessage */ setNotifyMessage] = React.useState({});
   const groupOrientation = (viewName: any) => viewName.split(' ')[0];
   const grouping = [
     {
@@ -137,7 +133,7 @@ const AllAppointment = ({
             const formattedDateWithHour2 = dateF2.format(
               'ddd MMM DD YYYY h:mm:ss [GMT]ZZ (zz)'
             );
-            const title = `${item.appointmentNumber}. ${item.name}`;
+            // const title = `${item.appointmentNumber}. ${item.name}`;
             console.log(
               'date',
               dayjs().format('ddd MMM DD YYYY h:mm:ss [GMT]ZZ (zz)')
@@ -170,7 +166,8 @@ const AllAppointment = ({
           setIsLoader(false);
         }
       })
-      .catch((err: any) => {
+      .catch((error: any) => {
+        console.error(`useEffect -> error:`, error);
         setIsLoader(false);
       });
   }, [currentWeek]);
@@ -353,6 +350,7 @@ const AllAppointment = ({
 
   const PREFIX = 'Demo';
   // #FOLD_BLOCK
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const classes = {
     flexibleSpace: `${PREFIX}-flexibleSpace`,
     textField: `${PREFIX}-textField`,
@@ -420,7 +418,7 @@ const AllAppointment = ({
   const [currentDate, setCurrentDate] = useState(dayjs().toDate());
   const [currentView, setCurrentView] = useState('Week');
 
-  const [ranges, setRange] = useState();
+  const [, /* ranges */ setRange] = useState();
 
   const getRange = (date: any, view: any) => {
     console.log('VIEW', view);

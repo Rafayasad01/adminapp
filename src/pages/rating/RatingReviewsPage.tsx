@@ -28,7 +28,7 @@ dayjs.extend(relativeTime);
 function RatingReviewsPage() {
   const { itemId } = useParams();
   const dataRole = useAppSelector(
-    (state: any) => state?.persisitReducer?.roleState?.role?.permissions
+    (state: any) => state?.persistedReducer?.roleState?.role?.permissions
   );
   const [emptyVariable] = useState(null);
   const [search] = useState<any>('');
@@ -322,7 +322,7 @@ function RatingReviewsPage() {
               )}
             </div>
             {list?.length < 1 ? (
-              <CustomText noroundedborders text="No Records Found" />
+              <CustomText noRoundedBorders text="No Records Found" />
             ) : null}
             <div className="mt-3 flex w-[100%] justify-end py-3">
               {list?.length > rowsPerPage && (

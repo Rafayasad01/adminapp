@@ -1,8 +1,8 @@
-type Props = {
+type ShopIconProps = {
   color?: string;
 };
 
-function ShopIcon({ color }: Props) {
+function ShopIcon({ color }: ShopIconProps) {
   return (
     <div className="text-base">
       <svg

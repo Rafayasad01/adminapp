@@ -175,7 +175,7 @@ function ComplainsPage() {
                   <th>Date</th>
                   <th>Complain</th>
                   <th>Status</th>
-                  <th>&nbsp;</th>
+                  <th aria-label="empty table header">&nbsp;</th>
                 </tr>
               </thead>
               <tbody>
@@ -192,7 +192,7 @@ function ComplainsPage() {
                       checked={isCheckedAll}
                     />
                   </td>
-                  <td>
+                  <td aria-label="user avatar">
                     <div className="avatar flex flex-row items-center">
                       <img src={assets.images.avatarUser} alt="" />
                     </div>
@@ -239,7 +239,7 @@ function ComplainsPage() {
                       checked={isCheckedAll}
                     />
                   </td>
-                  <td>
+                  <td aria-label="user avatar">
                     <div className="avatar flex flex-row items-center">
                       <img src={assets.images.avatarUser} alt="" />
                     </div>

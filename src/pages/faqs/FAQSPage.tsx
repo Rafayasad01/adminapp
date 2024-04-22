@@ -1,23 +1,23 @@
-import React, { useState } from 'react';
-import IconButton from '@mui/material/IconButton';
-import Divider from '@mui/material/Divider';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Input from '@mui/material/Input';
-import InputAdornment from '@mui/material/InputAdornment';
+import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
+import CheckBoxOutlineBlankOutlinedIcon from '@mui/icons-material/CheckBoxOutlineBlankOutlined';
+import CheckBoxOutlinedIcon from '@mui/icons-material/CheckBoxOutlined';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import SearchIcon from '@mui/icons-material/Search';
 import Button from '@mui/material/Button';
+import Checkbox from '@mui/material/Checkbox';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import SearchIcon from '@mui/icons-material/Search';
-import Checkbox from '@mui/material/Checkbox';
-import CheckBoxOutlineBlankOutlinedIcon from '@mui/icons-material/CheckBoxOutlineBlankOutlined';
-import CheckBoxOutlinedIcon from '@mui/icons-material/CheckBoxOutlined';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
+import Divider from '@mui/material/Divider';
+import FormControl from '@mui/material/FormControl';
+import IconButton from '@mui/material/IconButton';
+import Input from '@mui/material/Input';
+import InputAdornment from '@mui/material/InputAdornment';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import React, { useState } from 'react';
 import TopBar from '../../components/common/TopBar';
 import FAQSCreatePopup from './FAQSCreatePopup';
 import FAQSEditPopup from './FAQSEditPopup';
@@ -146,7 +146,7 @@ function FAQSPage() {
                   <th className="w-[20rem]">Questions</th>
                   <th>Last Updated Date</th>
                   <th className="w-[24rem]">Description</th>
-                  <th>&nbsp;</th>
+                  <th aria-label="empty table header">&nbsp;</th>
                 </tr>
               </thead>
               <tbody>

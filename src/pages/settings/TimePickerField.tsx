@@ -20,7 +20,7 @@ const darkTheme = createTheme({
   },
 });
 
-type Props = {
+type TimePickerFieldProps = {
   timePickerLabel: string;
   timePickerValue: dayjs.Dayjs | null;
   setTimePickerValue: React.Dispatch<React.SetStateAction<dayjs.Dayjs | null>>;
@@ -31,7 +31,7 @@ function TimePickerField({
   timePickerValue,
   setTimePickerValue,
   id,
-}: Props) {
+}: TimePickerFieldProps) {
   const [timePicker, setTimePicker] = useState<HTMLButtonElement | null>(null);
   const buttonElement = useRef(null);
   const handleClick = () => {

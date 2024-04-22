@@ -31,7 +31,7 @@ import ServiceCatEditPopup from './ServiceCatEditPopup';
 function ServicesPage() {
   const authState: any = useAppSelector((state) => state?.authState);
   const dataRole = useAppSelector(
-    (state) => state?.persisitReducer?.roleState?.role?.permissions
+    (state) => state?.persistedReducer?.roleState?.role?.permissions
   );
   const navigate = useNavigate();
   const [search, setSearch] = useState('');
@@ -51,10 +51,10 @@ function ServicesPage() {
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
-  const [cancelDialogOpen, setCancelDialogOpen] = useState<boolean>(false);
-  const [dialogText] = useState<any>(
+  const [, setCancelDialogOpen] = useState<boolean>(false);
+  /* const [dialogText] = useState<any>(
     'Are you sure you want to delete this Category ?'
-  );
+  ); */
   const [isModalImage, setIsModalImage] = useState(false);
   const [modalImage, setModalImage] = useState('');
 
@@ -479,7 +479,7 @@ function ServicesPage() {
             </table>
           </div>
           {list?.length < 1 ? (
-            <CustomText noroundedborders text="No Records Found" />
+            <CustomText noRoundedBorders text="No Records Found" />
           ) : null}
           <div className="mt-3 flex w-[100%] justify-center py-3">
             <TablePagination

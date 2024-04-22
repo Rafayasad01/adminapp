@@ -32,17 +32,12 @@ import Service from '../../services/adminapp/admin';
 import {
   DOMAIN_PREFIX,
   DOMAIN_PROTOCOL,
-  FACEBOOK,
-  INSTAGRAM,
   INVALID_CHAR,
-  LINKEDIN,
   MAX_LENGTH_EXCEEDED,
   PATTERN,
   PH_MINI_LENGTH,
-  TWITTER,
+  SOCIAL_MEDIA,
   VALIDATE_NON_NEGATIVE_NUM,
-  WHATSAPP,
-  YOUTUBE,
 } from '../../utils/constants';
 import { listingRolePermission } from '../../utils/helper';
 import DragDropFile from './DragDropFile';
@@ -74,7 +69,7 @@ function SettingsApp() {
   const dispatch = useAppDispatch();
   const authState: any = useAppSelector((state) => state?.authState);
   const dataRole = useAppSelector(
-    (state: any) => state?.persisitReducer?.roleState?.role?.permissions
+    (state: any) => state?.persistedReducer?.roleState?.role?.permissions
   );
   const navigate = useNavigate();
   const [openSocialMediaPopup, setOpenSocialMediaPopup] = useState(false);
@@ -817,7 +812,7 @@ function SettingsApp() {
                       detail?.tenantConfig?.facebook !== 'undefined' && (
                         <Item
                           value={detail?.tenantConfig?.facebook}
-                          name={FACEBOOK as AssetsImages}
+                          name={SOCIAL_MEDIA.FACEBOOK as AssetsImages}
                         />
                       )}
                     {detail &&
@@ -826,7 +821,7 @@ function SettingsApp() {
                       detail?.tenantConfig?.instagram !== 'undefined' && (
                         <Item
                           value={detail?.tenantConfig?.instagram}
-                          name={INSTAGRAM as AssetsImages}
+                          name={SOCIAL_MEDIA.INSTAGRAM as AssetsImages}
                         />
                       )}
                     {detail &&
@@ -835,7 +830,7 @@ function SettingsApp() {
                       detail?.tenantConfig?.linkedin !== 'undefined' && (
                         <Item
                           value={detail?.tenantConfig?.linkedin}
-                          name={LINKEDIN as AssetsImages}
+                          name={SOCIAL_MEDIA.LINKEDIN as AssetsImages}
                         />
                       )}
                     {detail &&
@@ -844,7 +839,7 @@ function SettingsApp() {
                       detail?.tenantConfig?.twitter !== 'undefined' && (
                         <Item
                           value={detail?.tenantConfig?.twitter}
-                          name={TWITTER as AssetsImages}
+                          name={SOCIAL_MEDIA.TWITTER as AssetsImages}
                         />
                       )}
                     {detail &&
@@ -853,7 +848,7 @@ function SettingsApp() {
                       detail.tenantConfig?.youtube !== 'undefined' && (
                         <Item
                           value={detail.tenantConfig?.youtube}
-                          name={YOUTUBE as AssetsImages}
+                          name={SOCIAL_MEDIA.YOUTUBE as AssetsImages}
                         />
                       )}
                     {detail &&
@@ -862,7 +857,7 @@ function SettingsApp() {
                       detail.tenantConfig?.whatsapp !== 'undefined' && (
                         <Item
                           value={detail.tenantConfig?.whatsapp}
-                          name={WHATSAPP as AssetsImages}
+                          name={SOCIAL_MEDIA.WHATSAPP as AssetsImages}
                         />
                       )}
                     <IconButton

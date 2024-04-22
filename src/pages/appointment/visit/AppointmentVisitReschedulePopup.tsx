@@ -27,7 +27,7 @@ import {
   PH_MINI_LENGTH,
 } from '../../../utils/constants';
 
-type Props = {
+type AppointmentVisitReschedulePopupProps = {
   roles?: any;
   openFormDialog: boolean;
   setOpenFormDialog: React.Dispatch<React.SetStateAction<boolean>>;
@@ -44,7 +44,7 @@ function AppointmentVisitReschedulePopup({
   callback,
   setIsNotify,
   setNotifyMessage,
-}: Props) {
+}: AppointmentVisitReschedulePopupProps) {
   const {
     register,
     handleSubmit,

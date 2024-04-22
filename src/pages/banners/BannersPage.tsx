@@ -23,7 +23,7 @@ import BannersCreatePopup from './BannersCreatePopup';
 function BannersPage() {
   const authState: any = useAppSelector((state: any) => state?.authState);
   const dataRole = useAppSelector(
-    (state: any) => state?.persisitReducer?.roleState?.role?.permissions
+    (state: any) => state?.persistedReducer?.roleState?.role?.permissions
   );
   const [emptyVariable] = useState(null);
   const [list, setList] = useState<any>([]);

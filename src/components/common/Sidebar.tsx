@@ -1,23 +1,16 @@
 /* eslint-disable prettier/prettier */
-import GridViewOutlinedIcon from '@mui/icons-material/GridViewOutlined';
-import { Fragment, useEffect, useState } from 'react';
-// import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
-import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
-// import FormatListBulletedOutlinedIcon from '@mui/icons-material/FormatListBulletedOutlined';
-// import PlaceOutlinedIcon from '@mui/icons-material/PlaceOutlined';
-import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
-// import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
-import SplitscreenOutlinedIcon from '@mui/icons-material/SplitscreenOutlined';
-import FacebookIcon from '@mui/icons-material/Facebook';
-import InstagramIcon from '@mui/icons-material/Instagram';
-import LinkedInIcon from '@mui/icons-material/LinkedIn';
-import QuestionAnswerOutlinedIcon from '@mui/icons-material/QuestionAnswerOutlined';
-// import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import CorporateFareIcon from '@mui/icons-material/CorporateFare';
+import FacebookIcon from '@mui/icons-material/Facebook';
+import GridViewOutlinedIcon from '@mui/icons-material/GridViewOutlined';
+import InstagramIcon from '@mui/icons-material/Instagram';
+import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
+import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
 import PeopleOutlineOutlinedIcon from '@mui/icons-material/PeopleOutlineOutlined';
+import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
+import QuestionAnswerOutlinedIcon from '@mui/icons-material/QuestionAnswerOutlined';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
-// import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
+import SplitscreenOutlinedIcon from '@mui/icons-material/SplitscreenOutlined';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import ViewCarouselOutlinedIcon from '@mui/icons-material/ViewCarouselOutlined';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
@@ -27,19 +20,16 @@ import IconButton from '@mui/material/IconButton';
 import List from '@mui/material/List';
 import Stack from '@mui/material/Stack';
 import Toolbar from '@mui/material/Toolbar';
+import { Fragment, useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
-// import HeadphonesOutlinedIcon from '@mui/icons-material/HeadphonesOutlined'
-// import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined';
 import assets from '../../assets';
 import { useAppSelector } from '../../redux/redux-hooks';
 import CAN, { defineRules } from '../../services/permissions/permissions';
-import { MODULE_EMPLOYEEES } from '../../utils/constants';
+import { MODULE_EMPLOYEES } from '../../utils/constants';
 import ArrowDown from '../icons/ArrowDown';
 import ArrowUp from '../icons/ArrowUp';
 import CategoryIcon from '../icons/CategoryIcon';
 import OrderIcon from '../icons/OrderIcon';
-// import TenantIcon from '../icons/TenantIcon';
-import VoucherIcon from '../icons/VoucherIcon';
 import ProviderIcon from '../icons/providerIcon';
 import VisitIcon from '../icons/visitIcon';
 
@@ -253,10 +243,10 @@ const links = [
 function Sidebar() {
   const userData = useAppSelector((state: any) => state?.authState?.user);
   const appItems = useAppSelector(
-    (state: any) => state?.persisitReducer?.appState?.UserItems
+    (state: any) => state?.persistedReducer?.appState?.UserItems
   );
   const logo = useAppSelector(
-    (state: any) => state?.persisitReducer?.appState?.logo
+    (state: any) => state?.persistedReducer?.appState?.logo
   );
 
   // console.log('appItems', appItems);
@@ -366,17 +356,17 @@ function Sidebar() {
   }
 
   useEffect(() => {
-    defineRules(dataRole?.persisitReducer?.roleState?.role?.permissions);
-    if (dataRole?.persisitReducer?.roleState?.role?.permissions) {
+    defineRules(dataRole?.persistedReducer?.roleState?.role?.permissions);
+    if (dataRole?.persistedReducer?.roleState?.role?.permissions) {
       const tempList = links.filter((el) => {
-        if (el.name === MODULE_EMPLOYEEES) {
+        if (el.name === MODULE_EMPLOYEES) {
           if (appItems.employeeLimit <= 0) {
             return null;
           }
         }
         return CAN('canView', el.permission as string);
       });
-      // console.log("templost", tempList);
+      // console.log("tempList", tempList);
       tempList.unshift({
         name: 'Dashboard',
         path: 'home',
@@ -410,7 +400,7 @@ function Sidebar() {
             {userData?.isSuperAdmin ? (
               <img
                 className="mt-9 h-[29px] max-w-[150px]"
-                src={assets.images.urApplogoWhite}
+                src={assets.images.urAppLogoWhite}
                 alt=""
               />
             ) : logo ? (
@@ -423,7 +413,7 @@ function Sidebar() {
               <div className="flex w-full items-center justify-start rounded-2xl p-3 text-white">
                 <img
                   className="mt-2 max-w-[150px]"
-                  src={assets.images.urApplogoWhite}
+                  src={assets.images.urAppLogoWhite}
                   alt="logo"
                 />
               </div>

@@ -1,21 +1,24 @@
-import React from 'react';
+import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
+import LocalSeeOutlinedIcon from '@mui/icons-material/LocalSeeOutlined';
 import Dialog from '@mui/material/Dialog';
 import FormControl from '@mui/material/FormControl';
 import IconButton from '@mui/material/IconButton';
 import TextField from '@mui/material/TextField';
-import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
-import LocalSeeOutlinedIcon from '@mui/icons-material/LocalSeeOutlined';
-import ChatIcon from '../../components/icons/ChatIcon';
-import BackArrowIcon from '../../components/icons/BackArrowIcon';
+import React from 'react';
 import '../../assets/css/PopupStyle.css';
 import assets from '../../assets/index';
+import BackArrowIcon from '../../components/icons/BackArrowIcon';
+import ChatIcon from '../../components/icons/ChatIcon';
 import SendIcon from '../../components/icons/SendIcon';
 
-type Props = {
+type ComplainsChatPopupProps = {
   openChatPopup: boolean;
   setOpenChatPopup: React.Dispatch<React.SetStateAction<boolean>>;
 };
-function ComplainsChatPopup({ openChatPopup, setOpenChatPopup }: Props) {
+function ComplainsChatPopup({
+  openChatPopup,
+  setOpenChatPopup,
+}: ComplainsChatPopupProps) {
   const handleClose = () => setOpenChatPopup(false);
   return (
     <Dialog

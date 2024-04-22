@@ -21,7 +21,7 @@ const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const store = configureStore({
   reducer: {
-    persisitReducer: persistedReducer,
+    persistedReducer,
     // roleState: persistReducer<any, any>(
     //   persistConfig,
     //   rolePermissionStateReducer

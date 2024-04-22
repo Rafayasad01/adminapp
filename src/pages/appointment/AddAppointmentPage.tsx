@@ -21,20 +21,18 @@ import { Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import assets from '../../assets';
 import '../../assets/css/PopupStyle.css';
-import Notify from '../../components/common/Notify';
-import TopBar from '../../components/common/TopBar';
-import { AddAppointmentForm } from '../../interfaces/app.appointment';
-import { GENDER, MAX_LENGTH_EXCEEDED, PATTERN } from '../../utils/constants';
-
-// import required modules
 import CustomButton from '../../components/common/CustomButton';
 import CustomDropDown from '../../components/common/CustomDropDown';
 import CustomInputBox from '../../components/common/CustomInputBox';
 import ErrorSpanBox from '../../components/common/ErrorSpanBox';
 import Loader from '../../components/common/Loader2';
+import Notify from '../../components/common/Notify';
 import TimePicker from '../../components/common/TimePicker';
+import TopBar from '../../components/common/TopBar';
+import { AddAppointmentForm } from '../../interfaces/app.appointment';
 import StoreAppointmentService from '../../services/adminapp/adminStoreAppointment';
 import StoreLovService from '../../services/adminapp/adminStoreService';
+import { GENDER, MAX_LENGTH_EXCEEDED, PATTERN } from '../../utils/constants';
 
 // Extend dayjs with necessary plugins
 dayjs.extend(utc);
@@ -57,7 +55,7 @@ export default function AddAppointmentPage() {
   const [notifyMessage, setNotifyMessage] = useState({});
   const [activeBarber, setActiveBarber] = useState<any>();
   const [activeBarberData, setActiveBarberData] = useState<any>();
-  const [bookingList, setBookingList] = useState<any>();
+  const [, /* bookingList */ setBookingList] = useState<any>();
   const [catLovlist, setCatLovList] = useState<any>();
   const [catItemsLovlist, setCatItemsLovList] = useState<any>([]);
   const [usedCatItemsLovlist, setusedCatItemsLovList] = useState<any>([]);
@@ -222,7 +220,10 @@ export default function AddAppointmentPage() {
           setIsPageLoader(false);
         }
       })
-      .catch((err) => setIsPageLoader(false));
+      .catch((error) => {
+        console.error(`getBarbers -> error:`, error);
+        setIsPageLoader(false);
+      });
   };
 
   const getCatItems = async (id: any) => {
@@ -320,7 +321,7 @@ export default function AddAppointmentPage() {
         );
         const convertAppointmentAddTime = dayjs(addTime).format('HH:mm');
         console.log('start end');
-        appointmentBookedTime.forEach((el: any, index: number) => {
+        appointmentBookedTime.forEach((el: any) => {
           // for (const key of Object.keys(appointmentBookedTime)) {
           //   const index = key;
           //   const el = appointmentBookedTime[index];
@@ -419,6 +420,7 @@ export default function AddAppointmentPage() {
     delete data.categoryId;
     delete data.appointmentDate;
     const updatedAppointmentArray = data.appointments.map((item: any) => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { amount, barber, ...rest } = item;
       return rest;
     });
@@ -704,8 +706,8 @@ export default function AddAppointmentPage() {
                     {activeBarberData !== null && (
                       <div className="mt-5">
                         <span className="text-base font-bold text-[#1A1A1A]">
-                          Avaiable {activeBarberData?.storeEmployee?.name}{' '}
-                          Appoitment slots
+                          Available {activeBarberData?.storeEmployee?.name}
+                          Appointment slots
                         </span>
                         <hr className="my-4 border-[#949EAE]" />
                         <div className="gaps-4 grid grid-cols-12">

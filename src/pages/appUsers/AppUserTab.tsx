@@ -13,18 +13,18 @@ import Service from '../../services/adminapp/adminAppUser';
 import { NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
 import { CheckRolePermission, listingRolePermission } from '../../utils/helper';
 
-type Props = {
+type AppUserTabProps = {
   list: any;
   setList: any;
-  isLoader: boolean;
+  // isLoader: boolean;
   setIsLoader: any;
   actionMenuItemid: any;
   setActionMenuItemid: any;
   setEditFormData: any;
   setOpenEditFormDialog: any;
-  notifyMessage: any;
+  // notifyMessage: any;
   setNotifyMessage: any;
-  isNotify: boolean;
+  // isNotify: boolean;
   setIsNotify: any;
   total: any;
   rowsPerPage: any;
@@ -52,11 +52,11 @@ function AppUserTab({
   setActionMenuItemid,
   setEditFormData,
   setOpenEditFormDialog,
-}: Props) {
+}: AppUserTabProps) {
   const navigate = useNavigate();
   const authState: any = useAppSelector((state) => state?.authState);
   const dataRole = useAppSelector(
-    (state: any) => state?.persisitReducer?.roleState?.role?.permissions
+    (state: any) => state?.persistedReducer?.roleState?.role?.permissions
   );
   const [actionMenuAnchorEl, setActionMenuAnchorEl] =
     useState<null | HTMLElement>(null);
@@ -253,7 +253,7 @@ function AppUserTab({
               <th>Loyalty Coins</th>
               <th>User Type</th>
               <th>Status</th>
-              <th>&nbsp;</th>
+              <th aria-label="empty table header">&nbsp;</th>
             </tr>
           </thead>
           <tbody>
@@ -342,7 +342,7 @@ function AppUserTab({
         </table>
       </div>
       {list?.length < 1 ? (
-        <CustomText noroundedborders text="No Records Found" />
+        <CustomText noRoundedBorders text="No Records Found" />
       ) : null}
       <div className="mt-5 flex items-center justify-center">
         <TablePagination

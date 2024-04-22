@@ -1,18 +1,19 @@
 import { endOfWeek, startOfWeek } from 'date-fns';
 import dayjs from 'dayjs';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { DateRangePicker } from 'react-date-range';
-
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
-import { useAppDispatch } from '../../redux/redux-hooks';
 import { setScheduleMonthDateForWeek } from '../../redux/features/shopScheduleStateSlice';
+import { useAppDispatch } from '../../redux/redux-hooks';
 
-type Props = {
+type SettingsDateRangePickerProps = {
   calendarStyle: string;
 };
 
-function SettingsDateRangePicker({ calendarStyle }: Props) {
+function SettingsDateRangePicker({
+  calendarStyle,
+}: SettingsDateRangePickerProps) {
   const dispatch = useAppDispatch();
   const [dateRange, setDateRange] = useState([
     {

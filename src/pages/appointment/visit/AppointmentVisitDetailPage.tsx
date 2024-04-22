@@ -19,7 +19,7 @@ dayjs.tz.setDefault('UTC');
 function AppointmentVisitDetailPage() {
   const { id } = useParams();
   const dataRole = useAppSelector(
-    (state: any) => state?.persisitReducer?.roleState?.role?.permissions
+    (state: any) => state?.persistedReducer?.roleState?.role?.permissions
   );
   const [emptyVariable] = useState(null);
   // const [total, setTotal] = useState(0);
@@ -248,7 +248,7 @@ function AppointmentVisitDetailPage() {
                     );
                   })
                 ) : list?.appointmentService?.length < 1 ? (
-                  <CustomText noroundedborders text="No Records Found" />
+                  <CustomText noRoundedBorders text="No Records Found" />
                 ) : null}
               </tbody>
             </table>

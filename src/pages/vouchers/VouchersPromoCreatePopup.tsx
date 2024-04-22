@@ -29,7 +29,7 @@ import {
   VALIDATE_NON_NEGATIVE_NUM_AND_CHECK_LENGTH,
 } from '../../utils/constants';
 
-type Props = {
+type VouchersPromoCreatePopupProps = {
   vouchersPromoDialog: boolean;
   setVouchersPromoDialog: React.Dispatch<React.SetStateAction<boolean>>;
   callback: Function;
@@ -69,7 +69,7 @@ function VouchersPromoCreatePopup({
   vouchersPromoDialog,
   setVouchersPromoDialog,
   callback,
-}: Props) {
+}: VouchersPromoCreatePopupProps) {
   const {
     register,
     handleSubmit,

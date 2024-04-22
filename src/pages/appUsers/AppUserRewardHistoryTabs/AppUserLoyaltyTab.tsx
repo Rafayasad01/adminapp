@@ -7,7 +7,7 @@ import CustomText from '../../../components/common/CustomText';
 import { useAppSelector } from '../../../redux/redux-hooks';
 import Service from '../../../services/adminapp/adminAppUser';
 
-type Props = {
+type AppUserLoyaltyTabProps = {
   list: any;
   total: number;
   page: number;
@@ -17,7 +17,7 @@ type Props = {
   setRowsPerPage: any;
   setList: any;
   search: string;
-  setSearch: any;
+  // setSearch: any;
 };
 
 function AppUserLoyaltyTab({
@@ -30,7 +30,7 @@ function AppUserLoyaltyTab({
   setTotal,
   setRowsPerPage,
   search,
-}: Props) {
+}: AppUserLoyaltyTabProps) {
   const navigate = useNavigate();
   const authState: any = useAppSelector((state) => state?.authState);
 
@@ -105,7 +105,7 @@ function AppUserLoyaltyTab({
               <th>Coins</th>
               <th>Grand Total</th>
               <th>Created Date</th>
-              <th>&nbsp;</th>
+              <th aria-label="empty table header">&nbsp;</th>
             </tr>
           </thead>
           <tbody>
@@ -146,7 +146,7 @@ function AppUserLoyaltyTab({
         </table>
       </div>
       {list?.length < 1 ? (
-        <CustomText noroundedborders text="No Records Found" />
+        <CustomText noRoundedBorders text="No Records Found" />
       ) : null}
       <div className="mt-5 flex items-center justify-center">
         <TablePagination

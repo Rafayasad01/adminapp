@@ -13,7 +13,7 @@ import {
   PATTERN,
 } from '../../../utils/constants';
 
-type Props = {
+type AppUserAddressUpdatePopupProps = {
   openFormDialog: boolean;
   setOpenFormDialog: React.Dispatch<React.SetStateAction<boolean>>;
   formData: any;
@@ -31,7 +31,7 @@ function AppUserAddressUpdatePopup({
   setEditFormData,
   callback,
   appUserAddressTypeLov,
-}: Props) {
+}: AppUserAddressUpdatePopupProps) {
   const {
     register,
     handleSubmit,
