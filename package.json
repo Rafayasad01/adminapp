@@ -14,7 +14,11 @@
     "prepare": "husky install"
   },
   "lint-staged": {
-    "**/*.{js,jsx,ts,tsx,css,scss,html,json}": "prettier --write"
+    "**/*.{js,jsx,ts,tsx,css,scss,html,json}": "prettier --write",
+    "**/*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "npm run tsc"
+    ]
   },
   "dependencies": {
     "@casl/ability": "^6.5.0",
