@@ -148,7 +148,7 @@ export const routeObjects: RouteObject[] = [
                 element: <AddNewOrder />,
               },
               {
-                path: 'item/:id',
+                path: 'item/:itemId',
                 element: <OrderItemDetailPage />,
               },
               {

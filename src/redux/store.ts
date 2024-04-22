@@ -6,6 +6,9 @@ import appStateReducer from './features/appStateSlice';
 import authStateReducer from './features/authStateSlice';
 import rolePermissionStateReducer from './features/permissionsStateSlice';
 import shopScheduleStateSliceReducer from './features/shopScheduleStateSlice';
+import CategorySliceReducer from './features/CategorySlice';
+import ItemSliceReducer from './features/ItemSlice';
+import CartSliceReducer from './features/CartSlice';
 
 const persistConfig = {
   key: 'root',
@@ -29,6 +32,9 @@ export const store = configureStore({
     // appState: persistReducer<any, any>(persistConfig, appStateReducer),
     authState: authStateReducer,
     scheduleState: shopScheduleStateSliceReducer,
+    categoryState: CategorySliceReducer,
+    itemState: ItemSliceReducer,
+    cartState: CartSliceReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

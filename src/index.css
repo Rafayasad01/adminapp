@@ -2132,7 +2132,7 @@ main .container:nth-child(3){
   text-align: center;
   line-height: 20px;
 }
-.all-categories .category-wrap a.active {
+.all-categories .category-wrap button.active {
   position: relative;
 }
 .cart-page .page-heading {

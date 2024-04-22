@@ -9,7 +9,8 @@ import Typography from '@mui/material/Typography';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { Button } from '@mui/material';
 import TopBar from '../../components/common/TopBar';
 // import CustomersCreatePopup from './CustomersCreatePopup';
 // import CustomersEditPopup from './CustomersEditPopup';
@@ -18,10 +19,13 @@ import CustomText from '../../components/common/CustomText';
 import Loader from '../../components/common/Loader';
 import Loader2 from '../../components/common/Loader2';
 import Notify from '../../components/common/Notify';
-import { useAppSelector } from '../../redux/redux-hooks';
+import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 import Service from '../../services/adminapp/rating';
 import { listingRolePermission } from '../../utils/helper';
 import RatingAccordions from '../rating/RatingAccordin';
+import { AppCategoryItems } from '../../interfaces/category.interface';
+import { addToCart, setCart } from '../../redux/features/CartSlice';
+import { showNotifyMessage } from '../../redux/features/CategorySlice';
 
 dayjs.extend(relativeTime);
 
@@ -42,13 +46,16 @@ function OrderItemDetailPage() {
   const [isLoader, setIsLoader] = React.useState(true);
   const [isLoaderPagination, setIsLoaderPagination] = React.useState(false);
   const [isNotify, setIsNotify] = React.useState(false);
+  const { items: cartItems } = useAppSelector((x) => x.cartState);
+  const dispatch = useAppDispatch();
   const [notifyMessage, setNotifyMessage] = React.useState({});
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setIsLoader(true);
-        if (listingRolePermission(dataRole, 'Employee List')) {
+        if (listingRolePermission(dataRole, 'Order List')) {
           const [catListResponse, catStarRatingResponse, catDetailResponse] =
             await Promise.all([
               Service.getCatListService(itemId, search, page, rowsPerPage),
@@ -187,6 +194,26 @@ function OrderItemDetailPage() {
     );
   };
 
+  const updateCart = (item: AppCategoryItems | any, quantity = 1) => {
+    const allItemsOfCart = [...cartItems];
+    const ItemIndex = allItemsOfCart.findIndex((x) => x.id === item.id);
+    allItemsOfCart[ItemIndex] = { ...item, quantity };
+    dispatch(setCart(allItemsOfCart));
+  };
+
+  const addInToCartHandler = (id: string | undefined, quantity = 1) => {
+    const c = cartItems.find((x: any) => x.id === id);
+    if (c) {
+      updateCart(ratingDetail, quantity);
+    } else {
+      dispatch(addToCart({ ...ratingDetail, quantity }));
+    }
+    dispatch(
+      showNotifyMessage({ text: 'Item added successfully', type: 'success' })
+    );
+    navigate(-1);
+  };
+
   return isLoader ? (
     <Loader />
   ) : (
@@ -217,6 +244,16 @@ function OrderItemDetailPage() {
                 <div>
                   <span className="mt-3">{ratingDetail?.desc}</span>
                 </div>
+              </div>
+              <div className="mx-4 my-2 flex justify-end">
+                <Button
+                  className="btn-black-fill rounded-lg"
+                  onClick={() => {
+                    addInToCartHandler(itemId, 1);
+                  }}
+                >
+                  Add to Basket
+                </Button>
               </div>
             </div>
             <div className="rounded-xl bg-white p-3 shadow-md xl:col-span-5 2xl:col-span-4">

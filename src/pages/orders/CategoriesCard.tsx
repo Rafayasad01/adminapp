@@ -1,3 +1,5 @@
+import { AppCategories } from '../../interfaces/category.interface';
+
 function getCategoryClasses(isActive: boolean) {
   const classes = 'item';
 
@@ -24,7 +26,7 @@ function CategoriesCard({ categories, onClick }: ICategoryProps) {
   return (
     <div className="categories-list">
       {categories.length &&
-        categories.map((category: any, index: number) => (
+        categories.map((category: AppCategories, index: number) => (
           <button
             type="button"
             onClick={() => onClick(category.id)}
