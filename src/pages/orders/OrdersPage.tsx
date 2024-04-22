@@ -19,7 +19,10 @@ import TopBar from '../../components/common/TopBar';
 import { useAppSelector } from '../../redux/redux-hooks';
 import order from '../../services/adminapp/adminOrders';
 import { ORDER_STATUSES } from '../../utils/constants';
-import { CheckRolePermission, listingRolePermission } from '../../utils/helper';
+import promiseHandler, {
+  CheckRolePermission,
+  listingRolePermission,
+} from '../../utils/helper';
 // import Pagination from '@mui/material/Pagination';
 // import Stack from '@mui/material/Stack';
 
@@ -43,45 +46,70 @@ function OrdersPage() {
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
   const actionMenuOptions = ['Detail'];
   const [emptyVariable] = useState(null);
-  const handleChangePage = (
+  const handleChangePage = async (
     event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number
   ) => {
     setPage(newPage);
     // offset? ,limit rowsperpage hoga ofset page * rowsperPage
     if (search === '' || search === null || search === undefined) {
-      order
-        .getListService(authState.user.tenant, newPage, rowsPerPage)
-        .then((item) => {
-          setList(
-            item.data.data.list.map((newItem: any) => ({
-              ...newItem,
-              isSelected: false,
-              orderStatus: newItem.status,
-            }))
-          );
-          setTotal(item.data.data.total);
-        });
+      const getOrderListPromise = order.getListService(
+        authState.user.tenant,
+        newPage,
+        rowsPerPage
+      );
+      const [getOrderListResult, getOrderListError, getOrderListOk] =
+        await promiseHandler(getOrderListPromise);
+      if (!getOrderListOk) {
+        console.error('getOrderListError :>> ', getOrderListError);
+        return;
+      }
+      if (!getOrderListResult.data.success) {
+        console.error(
+          'getOrderListResult.data.message :>> ',
+          getOrderListResult.data.message
+        );
+        return;
+      }
+      setList(
+        getOrderListResult.data.data.list.map((newItem: any) => ({
+          ...newItem,
+          isSelected: false,
+          orderStatus: newItem.status,
+        }))
+      );
+      setTotal(getOrderListResult.data.data.total);
     } else {
-      order
-        .searchService(authState.user.tenant, search, newPage, rowsPerPage)
-        .then((item) => {
-          setList(
-            item.data.data.list.map((newItem: any) => ({
-              ...newItem,
-              isSelected: false,
-              orderStatus: newItem.status,
-            }))
-          );
-          setTotal(item.data.data.total);
-        });
+      const orderSearchPromise = order.searchService(
+        authState.user.tenant,
+        search,
+        newPage,
+        rowsPerPage
+      );
+      const [orderSearchResult, orderSearchError, orderSearchOk] =
+        await promiseHandler(orderSearchPromise);
+      if (!orderSearchOk) {
+        console.error('orderSearchError :>> ', orderSearchError);
+        return;
+      }
+      if (!orderSearchResult.data.success) {
+        console.error(
+          'orderSearchResult.data.message :>> ',
+          orderSearchResult.data.message
+        );
+        return;
+      }
+      setList(
+        orderSearchResult.data.data.list.map((newItem: any) => ({
+          ...newItem,
+          isSelected: false,
+          orderStatus: newItem.status,
+        }))
+      );
+      setTotal(orderSearchResult.data.data.total);
     }
-    // order.searchService(search, newPage, rowsPerPage).then(item => {
-    //   setList(item.data.data.list.map((item: any) => ({ ...item, isSelected: false, orderStatus: item.status })));
-    //   setTotal(item.data.data.total);
-    // });
   };
-  const handleChangeRowsPerPage = (
+  const handleChangeRowsPerPage = async (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const newRowPerPage = parseInt(event.target.value, 10);
@@ -89,18 +117,32 @@ function OrdersPage() {
     setRowsPerPage(newRowPerPage);
     setPage(newPage);
     if (search === '' || search === null || search === undefined) {
-      order
-        .getListService(authState.user.tenant, newPage, rowsPerPage)
-        .then((item) => {
-          setList(
-            item.data.data.list.map((newItem: any) => ({
-              ...newItem,
-              isSelected: false,
-              orderStatus: newItem.status,
-            }))
-          );
-          setTotal(item.data.data.total);
-        });
+      const getOrderListPromise = order.getListService(
+        authState.user.tenant,
+        newPage,
+        rowsPerPage
+      );
+      const [getOrderListResult, getOrderListError, getOrderListOk] =
+        await promiseHandler(getOrderListPromise);
+      if (!getOrderListOk) {
+        console.error('getOrderListError :>> ', getOrderListError);
+        return;
+      }
+      if (!getOrderListResult.data.success) {
+        console.error(
+          'getOrderListResult.data.message :>> ',
+          getOrderListResult.data.message
+        );
+        return;
+      }
+      setList(
+        getOrderListResult.data.data.list.map((newItem: any) => ({
+          ...newItem,
+          isSelected: false,
+          orderStatus: newItem.status,
+        }))
+      );
+      setTotal(getOrderListResult.data.data.total);
     } else {
       order
         .searchService(authState.user.tenant, search, newPage, rowsPerPage)
@@ -157,29 +199,44 @@ function OrdersPage() {
   // };
 
   useEffect(() => {
-    if (listingRolePermission(dataRole, 'Order List')) {
-      order
-        .getListService(authState.user.tenant, page, rowsPerPage)
-        .then((item) => {
-          setIsLoader(false);
-          // console.log(item.data.data);
-          setList(
-            item.data.data.list.map((newItem: any) => ({
-              ...newItem,
-              isSelected: false,
-              orderStatus: newItem.status,
-            }))
-          );
-          setTotal(item.data.data.total);
-        })
-        .catch((err) => {
-          setIsLoader(false);
-          setIsNotify(true);
-          setNotifyMessage({
-            text: err.message,
-            type: 'error',
-          });
+    async function getOrderList() {
+      const getOrderListPromise = order.getListService(
+        authState.user.tenant,
+        page,
+        rowsPerPage
+      );
+      const [getOrderListResult, getOrderListError, getOrderListOk] =
+        await promiseHandler(getOrderListPromise);
+      if (!getOrderListOk) {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: getOrderListError.message,
+          type: 'error',
         });
+        return;
+      }
+      if (!getOrderListResult.data.success) {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: getOrderListResult.data.message,
+          type: 'error',
+        });
+        return;
+      }
+      setIsLoader(false);
+      setList(
+        getOrderListResult.data.data.list.map((newItem: any) => ({
+          ...newItem,
+          isSelected: false,
+          orderStatus: newItem.status,
+        }))
+      );
+      setTotal(getOrderListResult.data.data.total);
+    }
+    if (listingRolePermission(dataRole, 'Order List')) {
+      getOrderList();
     }
   }, [emptyVariable]);
 
