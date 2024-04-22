@@ -1,8 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable prettier/prettier */
-import { useEffect, useState } from 'react';
 
 import IconButton from '@mui/material/IconButton';
+import { useEffect, useState } from 'react';
+import assets from '../../assets';
+import Loader from '../../components/common/Loader';
+import Notify from '../../components/common/Notify';
+import TopBar from '../../components/common/TopBar';
+import { useAppSelector } from '../../redux/redux-hooks';
+import Service from '../../services/adminapp/adminDashboard';
 import DeliveredModal from './DeliveredModal';
 import DeliveryModal from './DeliveryModal';
 import OverdueModal from './OverdueModal';
@@ -10,13 +16,6 @@ import PickupModal from './PickupModal';
 import TodayOrderModal from './TodayOrderModal';
 import TopCustomerModal from './TopCustomerModal';
 import TopDriverModal from './TopDriverModal';
-
-import assets from '../../assets';
-import Loader from '../../components/common/Loader';
-import Notify from '../../components/common/Notify';
-import TopBar from '../../components/common/TopBar';
-import { useAppSelector } from '../../redux/redux-hooks';
-import Service from '../../services/adminapp/adminDashboard';
 
 function HomePage() {
   const authState: any = useAppSelector((state) => state?.authState);
@@ -31,7 +30,7 @@ function HomePage() {
   const [openTodayOrderDialog, setOpenTodayOrderDialog] = useState(false);
   const [openTopCustomerDialog, setOpenTopCustomerDialog] = useState(false);
   const [openTopDriverDialog, setOpenTopDriverDialog] = useState(false);
-  const data = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  // const data = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
   const [emptyVariable] = useState(null);
 
   useEffect(() => {
@@ -71,37 +70,37 @@ function HomePage() {
       <PickupModal
         open={openPickupDialog}
         setOpen={setOpenPickupDialog}
-        data={data}
+        // data={data}
       />
       <DeliveryModal
         open={openDeliveryDialog}
         setOpen={setOpenDeliveryDialog}
-        data={data}
+        // data={data}
       />
       <OverdueModal
         open={openOverDueDialog}
         setOpen={setOpenOverDueDialog}
-        data={data}
+        // data={data}
       />
       <DeliveredModal
         open={openDeliveredDialog}
         setOpen={setOpenDeliveredDialog}
-        data={data}
+        // data={data}
       />
       <TodayOrderModal
         open={openTodayOrderDialog}
         setOpen={setOpenTodayOrderDialog}
-        data={data}
+        // data={data}
       />
       <TopCustomerModal
         open={openTopCustomerDialog}
         setOpen={setOpenTopCustomerDialog}
-        data={data}
+        // data={data}
       />
       <TopDriverModal
         open={openTopDriverDialog}
         setOpen={setOpenTopDriverDialog}
-        data={data}
+        // data={data}
       />
       <TopBar title="Dashboard" />
       {/* <div className="coming-soon">

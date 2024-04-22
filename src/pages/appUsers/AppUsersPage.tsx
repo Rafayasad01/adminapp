@@ -343,7 +343,7 @@ function AppUsersPage() {
           </Tabs>
           {selectedTab === 'APP USER' && (
             <AppUserTab
-              isLoader={isLoader}
+              // isLoader={isLoader}
               setIsLoader={setIsLoader}
               list={list}
               setList={setList}
@@ -358,15 +358,15 @@ function AppUsersPage() {
               setActionMenuItemid={setActionMenuItemid}
               setEditFormData={setEditFormData}
               setOpenEditFormDialog={setOpenEditFormDialog}
-              isNotify={isNotify}
+              // isNotify={isNotify}
               setIsNotify={setIsNotify}
-              notifyMessage={notifyMessage}
+              // notifyMessage={notifyMessage}
               setNotifyMessage={setNotifyMessage}
             />
           )}
           {selectedTab === 'OTHER' && (
             <AppUserOtherTab
-              isLoader={isLoader}
+              // isLoader={isLoader}
               setIsLoader={setIsLoader}
               list={list}
               setList={setList}
@@ -381,9 +381,9 @@ function AppUsersPage() {
               setActionMenuItemid={setActionMenuItemid}
               setEditFormData={setEditFormData}
               setOpenEditFormDialog={setOpenEditFormDialog}
-              isNotify={isNotify}
+              // isNotify={isNotify}
               setIsNotify={setIsNotify}
-              notifyMessage={notifyMessage}
+              // notifyMessage={notifyMessage}
               setNotifyMessage={setNotifyMessage}
             />
           )}

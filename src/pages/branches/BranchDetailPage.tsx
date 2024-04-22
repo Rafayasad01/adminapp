@@ -232,7 +232,7 @@ function BranchDetailPage() {
             categories={categories}
             subCategories={subCategories}
             setSubCategories={setSubCategories}
-            setCategories={setCategories}
+            // setCategories={setCategories}
           />
         )}
 

@@ -324,8 +324,8 @@ function AppUserScheduleTabPage({
         </div>
       </div>
       <AppUserScheduleCreatePopup
-        setIsNotify={setIsNotify}
-        setNotifyMessage={setNotifyMessage}
+        // setIsNotify={setIsNotify}
+        // setNotifyMessage={setNotifyMessage}
         openFormDialog={openFormDialog}
         setOpenFormDialog={setOpenFormDialog}
         callback={createFormHandler}

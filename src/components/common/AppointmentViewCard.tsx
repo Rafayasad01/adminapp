@@ -18,13 +18,13 @@ type AppointmentViewCardProps = {
   setIsTooltipOpen?: any;
   setOpenFormDialog?: any;
   getUpdatePopupData?: any;
-  // isTooltipOpen?: boolean;
+  isTooltipOpen?: boolean;
 };
 
 const AppointmentViewCard = ({
   appointmentData,
   getUpdatePopupData,
-  // isTooltipOpen,
+  isTooltipOpen,
   setAppointmentTooltipData,
   setIsTooltipOpen,
   setOpenFormDialog,

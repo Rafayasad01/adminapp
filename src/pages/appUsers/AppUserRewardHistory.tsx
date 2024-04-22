@@ -127,7 +127,7 @@ function AppUserRewardHistory() {
                 page={page}
                 rowsPerPage={rowsPerPage}
                 search={search}
-                setSearch={setSearch}
+                // setSearch={setSearch}
                 setList={setList}
                 setPage={setPage}
                 setTotal={setTotal}
