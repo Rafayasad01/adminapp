@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "vite --port 3005 --host",
     "build": "tsc && vite build",
-    "check": "tsc",
+    "check": "tsc --noEmit",
     "preview": "vite preview",
     "prettier": "prettier src/. -w",
     "lint": "eslint src/. --fix",
@@ -17,7 +17,7 @@
     "**/*.{js,jsx,ts,tsx,css,scss,html,json}": "prettier --write",
     "**/*.{js,jsx,ts,tsx}": [
       "eslint --fix",
-      "npm run tsc"
+      "npm run check"
     ]
   },
   "dependencies": {

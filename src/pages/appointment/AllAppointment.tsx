@@ -96,6 +96,11 @@ const AllAppointment = ({
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
   const [, /* isNotify */ setIsNotify] = React.useState(true);
   const [, /* notifyMessage */ setNotifyMessage] = React.useState({});
+  const [currentDate, setCurrentDate] = useState(dayjs().toDate());
+  const [currentView, setCurrentView] = useState('Week');
+  const [, /* ranges */ setRange] = useState();
+
+  // console.log('🚀 ~ currentWeek:', currentWeek);
   const groupOrientation = (viewName: any) => viewName.split(' ')[0];
   const grouping = [
     {
@@ -107,9 +112,9 @@ const AllAppointment = ({
     setIsActiveUser(selectedPriorityData[0]?.text);
   }, [selectedPriorityData]);
 
-  useEffect(() => {
+  const getAllAppoinments = async (appoDate: any, view: any) => {
     setIsLoader(true);
-    StoreAppointmentService.getAllAppointments(currentWeek)
+    StoreAppointmentService.getAllAppointments(appoDate, view)
       .then((res: any) => {
         if (res.data.success) {
           setIsLoader(false);
@@ -133,15 +138,6 @@ const AllAppointment = ({
             const formattedDateWithHour2 = dateF2.format(
               'ddd MMM DD YYYY h:mm:ss [GMT]ZZ (zz)'
             );
-            // const title = `${item.appointmentNumber}. ${item.name}`;
-            console.log(
-              'date',
-              dayjs().format('ddd MMM DD YYYY h:mm:ss [GMT]ZZ (zz)')
-            );
-            console.log(
-              'date',
-              dayjs().format('ddd MMM DD YYYY h:mm:ss [GMT]ZZ (zz)')
-            );
 
             return {
               // paid: true,
@@ -156,20 +152,31 @@ const AllAppointment = ({
               id: item.id,
             };
           });
-          // const startEndTime = res.data.data.map((el:any)=>{
-          //   const date = dayjs(el.appointmentTime).tz('Asia/Karachi');
-          //   const hour = date.hour();
-          // })
-          console.log('structuredData', structuredData);
-
+          // console.log('structuredData', structuredData);
           setData(structuredData);
           setIsLoader(false);
+        } else {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: res.data.message,
+            type: 'error',
+          });
         }
       })
       .catch((error: any) => {
         console.error(`useEffect -> error:`, error);
         setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: error.message,
+          type: 'error',
+        });
       });
+  };
+
+  useEffect(() => {
+    getAllAppoinments(currentWeek, 'week');
   }, [currentWeek]);
 
   // console.log('selectedPriorityData', selectedPriorityData);
@@ -368,66 +375,20 @@ const AllAppointment = ({
     weekEnd: `${PREFIX}-weekEnd`,
   };
 
-  // const StyledWeekViewTimeTableCell = styled(WeekView.TimeTableCell)(
-  //   ({ theme: { palette } }) => ({
-  //     [`&.${classes.weekendCell}`]: {
-  //       backgroundColor: alpha(palette.action.disabledBackground, 0.04),
-  //       '&:hover': {
-  //         backgroundColor: alpha(palette.action.disabledBackground, 0.04),
-  //       },
-  //       '&:focus': {
-  //         backgroundColor: alpha(palette.action.disabledBackground, 0.04),
-  //       },
-  //     },
-  //   })
-  // );
-  // #FOLD_BLOCK
-  // const StyledWeekViewDayScaleCell = styled(WeekView.DayScaleCell)(
-  //   ({ theme: { palette } }) => ({
-  //     [`&.${classes.weekEnd}`]: {
-  //       backgroundColor: alpha(palette.action.disabledBackground, 0.06),
-  //     },
-  //   })
-  // );
-
-  // const isRestTime = (date: any) =>
-  //   date.getDay() === 0 ||
-  //   date.getDay() === 6 ||
-  //   date.getHours() < 9 ||
-  //   date.getHours() >= 18;
-
-  // const TimeTableCell = ({ ...restProps }) => {
-  //   const { startDate } = restProps;
-  //   if (isRestTime(startDate)) {
-  //     return (
-  //       <StyledWeekViewTimeTableCell
-  //         {...restProps}
-  //         className={classes.weekendCell}
-  //       />
-  //     );
-  //   }
-  //   return <StyledWeekViewTimeTableCell {...restProps} />;
-  // };
-
-  // const DayScaleCell = (({ ...restProps }) => {
-  //   return <MonthView.TimeTableCell
-  //     // startDate={dayjs(dateString)}
-  //   />
-  // });
-
-  const [currentDate, setCurrentDate] = useState(dayjs().toDate());
-  const [currentView, setCurrentView] = useState('Week');
-
-  const [, /* ranges */ setRange] = useState();
-
   const getRange = (date: any, view: any) => {
-    console.log('VIEW', view);
+    // console.log('VIEW', view);
     if (view === 'Month') {
+      // const monthNumber = dayjs(date).month() + 1;
+      const monthDate = dayjs(date).format('YYYY-MM-DD');
+      getAllAppoinments(monthDate, 'month');
       return { startDate: date, endDate: date };
     }
     if (view === 'Week') {
       const firstDay = date.getDate() - date.getDay();
       const lastDay = firstDay + 6;
+      const startDate = dayjs(new Date(date.setDate(firstDay)));
+      const weekNumber = startDate.week();
+      getAllAppoinments(weekNumber, 'week');
       return {
         startDate: new Date(date.setDate(firstDay)),
         endDate: new Date(date.setDate(lastDay)),
@@ -447,8 +408,6 @@ const AllAppointment = ({
     setCurrentDate(newCurrentDate);
     setRange(range);
   };
-
-  // console.log('RANGE', ranges);
 
   return isLoader ? (
     <Loader />
