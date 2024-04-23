@@ -695,7 +695,7 @@ export default function AddAppointmentPage() {
                       <div className="mt-5">
                         <span className="text-base font-bold text-[#1A1A1A]">
                           Avaiable {activeBarberData?.storeEmployee?.name}{' '}
-                          Appoitment slots
+                          Appointment slots
                         </span>
                         <hr className="my-4 border-[#949EAE]" />
                         <div className="gaps-4 grid grid-cols-12">
@@ -713,13 +713,13 @@ export default function AddAppointmentPage() {
                                       <span className="text-sm">
                                         {dayjs(item.startTime).isValid()
                                           ? dayjs(item.startTime)?.format(
-                                              'HH:mm A'
+                                              'h:mm A'
                                             )
                                           : '--'}{' '}
                                         -{' '}
                                         {dayjs(item.endTime).isValid()
                                           ? dayjs(item.endTime)?.format(
-                                              'HH:mm A'
+                                              'h:mm A'
                                             )
                                           : '--'}
                                       </span>
@@ -812,7 +812,7 @@ export default function AddAppointmentPage() {
                               servicetime,
                               'minute'
                             );
-                            const formattedEndTime = endTime.format('HH:mm A');
+                            const formattedEndTime = endTime.format('h:mm A');
                             return (
                               <div key={index} className="col-span-2 p-3">
                                 <div className="flex-col rounded-xl bg-background">
@@ -820,7 +820,7 @@ export default function AddAppointmentPage() {
                                     <span className="text-sm">
                                       {dayjs(item.appointmentTime).isValid()
                                         ? dayjs(item.appointmentTime)?.format(
-                                            'HH:mm A'
+                                            'h:mm A'
                                           )
                                         : '--'}{' '}
                                       - {formattedEndTime}
@@ -885,13 +885,13 @@ export default function AddAppointmentPage() {
               <div className="mt-3 flex w-full items-center justify-end">
                 <CustomButton
                   buttonType="button"
-                  title="Add"
+                  title={fields.length > 0 ? 'Add More Service' : 'Add'}
                   className="btn-black-fill"
                   // type={'submit'}
                   onclick={addAppointmentServices}
                   sx={{
                     padding: '0.375rem 2rem !important',
-                    width: '10%',
+                    width: '12%',
                     marginRight: '15px',
                     height: '35px',
                   }}

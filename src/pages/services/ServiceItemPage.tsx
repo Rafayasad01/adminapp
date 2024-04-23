@@ -145,7 +145,7 @@ function ServiceItemPage() {
   //         updatedBy: authState.user.id,
   //     };
   //     categoryItem
-  //         .deleteCategoryService(id, data)
+  //         .StoreCatItemDelete(id, data)
   //         .then((updateItem) => {
   //             if (updateItem.data.success) {
   //                 setIsLoader(false);

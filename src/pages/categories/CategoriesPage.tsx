@@ -152,9 +152,9 @@ function CategoriesPage() {
   const deleteHandler = (id: string) => {
     setIsLoader(true);
     const data = {
-      is_active: false,
-      is_deleted: true,
-      updated_by: authState.user.id,
+      isActive: false,
+      isDeleted: true,
+      updatedBy: authState.user.id,
     };
     category
       .deleteCategory(id, data)

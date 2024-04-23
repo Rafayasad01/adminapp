@@ -190,6 +190,8 @@ function CustomSwiperDialog({
     >
       <form onSubmit={handleSubmit(onSubmit)} className="overflow-auto">
         <Swiper
+          simulateTouch={false} // Allow touch simulation for non-touch devices
+          allowTouchMove={false}
           className="Content custom-swiper"
           spaceBetween={50}
           slidesPerView={1}
@@ -562,7 +564,7 @@ function CustomSwiperDialog({
                       pattern={PATTERN.ONLY_NUM}
                       maxLetterLimit={15}
                       inputTitle="Price"
-                      placeholder="Enter Service Amount"
+                      placeholder="Enter Service Commission Price"
                       id="price"
                       requiredType
                       register={register}

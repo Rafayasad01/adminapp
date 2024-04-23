@@ -132,41 +132,41 @@ function ServicesPage() {
   };
 
   // const deleteHandler = (id: string) => {
-  //     setIsLoader(true);
-  //     const data = {
-  //         is_active: false,
-  //         is_deleted: true,
-  //         updated_by: authState.user.id,
-  //     };
-  //     category
-  //         .deleteCategory(id, data)
-  //         .then((updateItem) => {
-  //             if (updateItem.data.success) {
-  //                 setIsLoader(false);
-  //                 setIsNotify(true);
-  //                 setNotifyMessage({
-  //                     text: updateItem.data.message,
-  //                     type: 'success',
-  //                 });
-  //                 setList((newArr: any) => {
-  //                     return newArr.filter((item: any) => item.id !== id);
-  //                 });
-  //                 let newtotal = total;
-  //                 setTotal((newtotal -= 1));
-  //             }
-  //         })
-  //         .catch((err) => {
-  //             setIsLoader(false);
-  //             setIsNotify(true);
-  //             setNotifyMessage({
-  //                 text: err.message,
-  //                 type: 'error',
-  //             });
+  //   setIsLoader(true);
+  //   const data = {
+  //     is_active: false,
+  //     is_deleted: true,
+  //     updated_by: authState.user.id,
+  //   };
+  //   category
+  //     .StoreCatDelete(id, data)
+  //     .then((updateItem) => {
+  //       if (updateItem.data.success) {
+  //         setIsLoader(false);
+  //         setIsNotify(true);
+  //         setNotifyMessage({
+  //           text: updateItem.data.message,
+  //           type: 'success',
   //         });
+  //         setList((newArr: any) => {
+  //           return newArr.filter((item: any) => item.id !== id);
+  //         });
+  //         let newtotal = total;
+  //         setTotal((newtotal -= 1));
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       setIsLoader(false);
+  //       setIsNotify(true);
+  //       setNotifyMessage({
+  //         text: err.message,
+  //         type: 'error',
+  //       });
+  //     });
   // };
 
   // const statusCancelHandler = () => {
-  //     deleteHandler(actionMenuItemid);
+  //   deleteHandler(actionMenuItemid);
   // };
 
   const manuHandler = (option: string) => {

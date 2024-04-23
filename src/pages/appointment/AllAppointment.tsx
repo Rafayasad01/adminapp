@@ -57,6 +57,8 @@ const AllAppointment = ({
   console.log('officeTimingssssssssssss', officeTimings);
   const shopStartTime = dayjs(officeTimings?.tenantConfig?.officeTimeIn).hour();
   const shopEndTime = dayjs(officeTimings?.tenantConfig?.officeTimeOut).hour();
+  console.log('shopStartTime', shopStartTime);
+  console.log('shopEndTime', shopEndTime);
   const [isTooltipOpen, setIsTooltipOpen] = useState(false);
   const [isLoader, setIsLoader] = useState(false);
   const [appointmentTooltipData, setAppointmentTooltipData] =
@@ -83,7 +85,7 @@ const AllAppointment = ({
   }, [selectedPriorityData]);
 
   const getAllAppoinments = async (appoDate: any, view: any) => {
-    setIsLoader(true);
+    if (view === 'week') setIsLoader(true);
     await StoreAppointmentService.getAllAppointments(appoDate, view)
       .then((res: any) => {
         if (res.data.success) {
@@ -147,7 +149,7 @@ const AllAppointment = ({
 
   useEffect(() => {
     getAllAppoinments(currentWeek, 'week');
-  }, [currentWeek]);
+  }, []);
 
   // console.log('selectedPriorityData', selectedPriorityData);
   // [{ startDate: new Date() }]
@@ -161,6 +163,7 @@ const AllAppointment = ({
           : selectedPriorityData,
     },
   ];
+
   useEffect(() => {
     if (appointmentType === 'All Appointments') {
       setIsActiveUser('all');
@@ -318,12 +321,13 @@ const AllAppointment = ({
   // };
 
   const getRange = (date: any, view: any) => {
+    console.log('view', view, date);
     if (view === 'Month') {
       // const monthNumber = dayjs(date).month() + 1;
       // console.log('🚀 ~ getRange ~ Month Date:', view, date);
       const monthDate = dayjs(date).format('YYYY-MM-DD');
       getAllAppoinments(monthDate, 'month');
-      return { startDate: date, endDate: date };
+      // return { startDate: date, endDate: date };
     }
     if (view === 'Week') {
       const firstDay = date.getDate() - date.getDay();
@@ -355,6 +359,49 @@ const AllAppointment = ({
     setRange(range);
   };
 
+  const handleMonthComp = (data: any) => {
+    console.log('month data', data);
+  };
+
+  const CustomTimeTableLayout = ({ ...restProps }: any) => {
+    console.log('REST', restProps);
+    // Your custom implementation for the time table layout
+    const { cellsData } = restProps;
+
+    // Get the current month
+    const currentMonth = dayjs().month();
+
+    // Filter the cells that belong to the current month
+    const currentMonthCells = cellsData?.filter(
+      ({ startDate }: any) => dayjs(startDate).month() === currentMonth
+    );
+    return (
+      <div>
+        {/* Render the cells for the current month */}
+        {currentMonthCells?.map((cell: any, index: number) => (
+          <div key={index}>
+            {/* Render each cell */}
+            {/* You can customize the cell rendering here */}
+            {cell.startDate.toLocaleString()} - {cell.endDate.toLocaleString()}
+          </div>
+        ))}
+      </div>
+    );
+  };
+
+  const CustomTimeTableCell = ({ setAppointmentData, ...restProps }: any) => {
+    // Your custom implementation for the time table cell
+    return <div>{/* Your custom time table cell */}</div>;
+  };
+
+  // Custom day scale cell component
+  const CustomDayScaleCell = ({ setAppointmentData, ...restProps }: any) => {
+    // Your custom implementation for the day scale cell
+    return <div>{/* Your custom day scale cell */}</div>;
+  };
+
+  console.log('appo data', data, priorityData);
+
   return isLoader ? (
     <Loader />
   ) : (
@@ -371,6 +418,7 @@ const AllAppointment = ({
       <hr />
       <Scheduler data={data} height={580}>
         <ViewState
+          defaultCurrentViewName="Month"
           defaultCurrentDate={dayjs().toDate()}
           currentDate={currentDate}
           onCurrentDateChange={currentDateChange}
@@ -398,8 +446,10 @@ const AllAppointment = ({
           displayName="Week"
         />
         <MonthView
-        // timeTableCellComponent={DayScaleCell}
-        // dayScaleCellComponent={DayScaleCell}
+        // timeTableLayoutComponent={CustomTimeTableLayout}
+        // timeTableRowComponent={CustomTimeTableLayout}
+        // timeTableCellComponent={CustomTimeTableCell}
+        // dayScaleCellComponent={CustomDayScaleCell}
         />
         <Appointments
         // appointmentContentComponent={AppointmentContent}
