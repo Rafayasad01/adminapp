@@ -28,6 +28,7 @@ import {
   setEmployeeLimit,
   setItemState,
   setLogo,
+  setTenantConfig,
 } from '../../redux/features/appStateSlice';
 // import { setTheme } from '../../redux/features/authStateSlice';
 import TimePicker from '../../components/common/TimePicker';
@@ -273,12 +274,13 @@ function SettingsApp() {
               itemData?.tenantConfig?.officeTimeIn ||
               itemData?.tenantConfig?.officeTimeOut
             ) {
-              dispatch(
-                setItemState({
-                  officeTimeIn: itemData?.tenantConfig?.officeTimeIn,
-                  officeTimeOut: itemData?.tenantConfig?.officeTimeOut,
-                })
-              );
+              // dispatch(
+              //   setItemState({
+              //     officeTimeIn: itemData?.tenantConfig?.officeTimeIn,
+              //     officeTimeOut: itemData?.tenantConfig?.officeTimeOut,
+              //   })
+              // );
+              dispatch(setTenantConfig(itemData?.tenantConfig));
             }
             if (itemData?.tenantConfig?.logo) {
               dispatch(setLogo(itemData.tenantConfig.logo));

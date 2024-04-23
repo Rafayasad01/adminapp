@@ -54,7 +54,7 @@ const AllAppointment = ({
   const officeTimings = useAppSelector(
     (state) => state?.persisitReducer?.appState?.UserItems
   );
-  console.log('officeTimings', officeTimings);
+  console.log('officeTimingssssssssssss', officeTimings);
   const shopStartTime = dayjs(officeTimings?.tenantConfig?.officeTimeIn).hour();
   const shopEndTime = dayjs(officeTimings?.tenantConfig?.officeTimeOut).hour();
   const [isTooltipOpen, setIsTooltipOpen] = useState(false);
@@ -89,7 +89,8 @@ const AllAppointment = ({
         if (res.data.success) {
           setIsLoader(false);
           const structuredData = res.data.data.map((item: any) => {
-            const date = dayjs(item.appointmentTime).tz('Asia/Karachi');
+            const date = dayjs(item.appointmentTime).utc();
+            console.log('date', date);
             const year = date.year();
             const month = date.month();
             const day = date.date();
@@ -122,7 +123,7 @@ const AllAppointment = ({
               id: item.id,
             };
           });
-          // console.log('structuredData', structuredData);
+          console.log('structuredData', structuredData);
           setData(structuredData);
           setIsLoader(false);
         } else {
