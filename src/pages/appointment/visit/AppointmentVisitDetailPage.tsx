@@ -21,7 +21,6 @@ function AppointmentVisitDetailPage() {
   const dataRole = useAppSelector(
     (state: any) => state?.persistedReducer?.roleState?.role?.permissions
   );
-  const [emptyVariable] = useState(null);
   // const [total, setTotal] = useState(0);
   const [list, setList] = useState<any>([]);
   const [isLoader, setIsLoader] = React.useState(true);
@@ -56,7 +55,7 @@ function AppointmentVisitDetailPage() {
     } else {
       setIsLoader(false);
     }
-  }, [emptyVariable]);
+  }, [null]);
 
   const [isPrintEnabled, setPrintEnabled] = useState<any>([false]);
 

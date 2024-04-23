@@ -27,7 +27,6 @@ function RatingPage() {
     (state: any) => state?.persistedReducer?.roleState?.role?.permissions
   );
   const [search, setSearch] = useState<any>('');
-  const [emptyVariable] = useState(null);
   const [page, setPage] = useState(0);
   const [total, setTotal] = useState(0);
   const [list, setList] = useState<any>([]);
@@ -128,7 +127,7 @@ function RatingPage() {
     } else {
       setIsLoader(false);
     }
-  }, [emptyVariable]);
+  }, [null]);
 
   return isLoader ? (
     <Loader />

@@ -31,7 +31,6 @@ function HomePage() {
   const [openTopCustomerDialog, setOpenTopCustomerDialog] = useState(false);
   const [openTopDriverDialog, setOpenTopDriverDialog] = useState(false);
   // const data = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-  const [emptyVariable] = useState(null);
 
   useEffect(() => {
     Service.getDashboardCount(authState.user.tenant)
@@ -56,7 +55,7 @@ function HomePage() {
           type: 'error',
         });
       });
-  }, [emptyVariable]);
+  }, [null]);
 
   return isLoader ? (
     <Loader />

@@ -38,7 +38,6 @@ function OrdersAssignPage() {
   const [isLoader, setIsLoader] = useState(true);
   const [isNotify, setIsNotify] = useState(false);
   const [notifyMessage, setNotifyMessage] = useState({});
-  const [emptyVariable] = useState(null);
   const params = useParams();
   const { orderId } = params;
 
@@ -185,7 +184,7 @@ function OrdersAssignPage() {
           });
         });
     }
-  }, [emptyVariable]);
+  }, [null]);
 
   const newStatus = useMemo(() => {
     if (!data) {

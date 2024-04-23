@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
 import AddIcon from '@mui/icons-material/Add';
 import ArrowCircleLeftOutlinedIcon from '@mui/icons-material/ArrowCircleLeftOutlined';
 import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
@@ -73,24 +71,24 @@ type CustomEditSwiperDialogProps = {
 };
 
 function CustomEditSwiperDialog({
-  addScheduleFormat,
+  addScheduleFormat: _addScheduleFormat,
   append,
   catItemsLov,
   catLov,
   control,
   DialogSliderOne,
   DialogSliderTwo,
-  DialogSubHeader,
+  DialogSubHeader: _DialogSubHeader,
   editFormData,
-  endTime,
+  endTime: _endTime,
   errors,
-  getValues,
+  getValues: _getValues,
   handleNextSlide,
   handlePrevSlide,
   handleSubmit,
   inputFieldsData,
-  inputScheduleData,
-  noweekdays,
+  inputScheduleData: _inputScheduleData,
+  noweekdays: _noweekdays,
   onSubmit,
   openFormDialog,
   register,
@@ -99,21 +97,21 @@ function CustomEditSwiperDialog({
   ServicesFields,
   setAvater,
   setDelIds,
-  setError,
+  setError: _setError,
   setIsNotify,
   setNotifyMessage,
   setOpenFormDialog,
-  setStartServiceTime,
+  setStartServiceTime: _setStartServiceTime,
   setValue,
-  setWeekDays,
+  setWeekDays: _setWeekDays,
   singleField,
   specailCase,
-  startServiceTime,
-  startTime,
+  startServiceTime: _startServiceTime,
+  startTime: _startTime,
   swiperRef,
   type,
   watch,
-  weekDays,
+  weekDays: _weekDays,
 }: CustomEditSwiperDialogProps) {
   const [imageName, setImageName] = useState<any>(null);
 

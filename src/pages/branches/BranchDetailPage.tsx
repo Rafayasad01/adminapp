@@ -27,7 +27,6 @@ function BranchDetailPage() {
   const [openSettingDialog, setOpenSettingDialog] = useState(false);
   const [isNotify, setIsNotify] = useState(false);
   const [notifyMessage, setNotifyMessage] = useState({});
-  const [emptyVariable] = useState(null);
 
   const getSettingById = () => {
     setIsLoader(true);
@@ -101,7 +100,7 @@ function BranchDetailPage() {
           type: 'error',
         });
       });
-  }, [emptyVariable]);
+  }, [null]);
 
   return isLoader ? (
     <Loader />

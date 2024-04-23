@@ -1,4 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+
 import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined';
 import EditIcon from '@mui/icons-material/Edit';
 import RadioButtonUncheckedOutlinedIcon from '@mui/icons-material/RadioButtonUncheckedOutlined';
@@ -12,10 +13,10 @@ import Link from '@mui/material/Link';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import TextField from '@mui/material/TextField';
+import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import dayjs from 'dayjs';
 import assets from '../../assets';
 import '../../assets/css/PopupStyle.css';
 import ErrorSpanBox from '../../components/common/ErrorSpanBox';
@@ -24,10 +25,9 @@ import MapAddress from '../../components/common/MapAddress';
 import Notify from '../../components/common/Notify';
 import PlusIcon from '../../components/icons/PlusIcon';
 import { Setting } from '../../interfaces/app.interface';
-import { setEmployeeLimit, setLogo } from '../../redux/features/appStateSlice';
 // import { setTheme } from '../../redux/features/authStateSlice';
 import TimePicker from '../../components/common/TimePicker';
-import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
+import { useAppSelector } from '../../redux/redux-hooks';
 import Service from '../../services/adminapp/admin';
 import {
   DOMAIN_PREFIX,
@@ -66,7 +66,6 @@ function HelpingIcon(elements: any) {
 }
 
 function SettingsApp() {
-  const dispatch = useAppDispatch();
   const authState: any = useAppSelector((state) => state?.authState);
   const dataRole = useAppSelector(
     (state: any) => state?.persistedReducer?.roleState?.role?.permissions
@@ -82,7 +81,6 @@ function SettingsApp() {
   const [isLoader, setIsLoader] = useState(true);
   const [isNotify, setIsNotify] = useState(false);
   const [notifyMessage, setNotifyMessage] = useState({});
-  const [emptyVariable] = useState(null);
   const {
     register,
     handleSubmit,
@@ -333,7 +331,7 @@ function SettingsApp() {
     //     }
     //   });
     // }
-  }, [emptyVariable]);
+  }, [null]);
 
   // console.log(
   //   'ENABLE',

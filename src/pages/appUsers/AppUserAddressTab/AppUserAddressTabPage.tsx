@@ -25,7 +25,6 @@ function AppUserAddressTabPage({
   appUserId,
   setAddress,
 }: AppUserAddressTabPageProps) {
-  const [emptyVariable] = useState<any>('');
   const authState: any = useAppSelector((state) => state?.authState);
   const [list, setList] = useState<any>();
   const dataRole = useAppSelector(
@@ -57,7 +56,7 @@ function AppUserAddressTabPage({
       setIsLoader(false);
       setList(addressList);
     }
-  }, [emptyVariable]);
+  }, ['']);
 
   const createFormHandler = (data: any) => {
     setIsLoader(true);

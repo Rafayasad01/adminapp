@@ -40,7 +40,6 @@ function AppUsersPage() {
   //   useState<null | HTMLElement>(null);
   // const actionMenuOpen = Boolean(actionMenuAnchorEl);
   // const actionMenuOptions = ['Detail', 'History', 'Edit', 'Delete'];
-  const [emptyVariable] = useState(null);
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
   const [isLoader, setIsLoader] = React.useState(true);
@@ -163,7 +162,7 @@ function AppUsersPage() {
     } else {
       setIsLoader(false);
     }
-  }, [emptyVariable, selectedTab]);
+  }, [null, selectedTab]);
 
   const createFormHandler = (data: any) => {
     // setIsLoader(true);

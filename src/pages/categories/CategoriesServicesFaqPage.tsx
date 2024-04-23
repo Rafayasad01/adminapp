@@ -42,7 +42,6 @@ function CategoriesServicesFaqPage() {
     useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
   const actionMenuOptions = ['Edit', 'Delete'];
-  const [emptyVariable] = useState(null);
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
   const [isLoader, setIsLoader] = React.useState(true);
@@ -148,7 +147,7 @@ function CategoriesServicesFaqPage() {
           // console.log('error::::::::', error);
         });
     }
-  }, [emptyVariable]);
+  }, [null]);
 
   const deleteHandler = (id: string) => {
     setIsLoader(true);

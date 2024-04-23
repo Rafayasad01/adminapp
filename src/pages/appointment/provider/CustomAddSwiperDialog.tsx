@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
 import AddIcon from '@mui/icons-material/Add';
 import ArrowCircleLeftOutlinedIcon from '@mui/icons-material/ArrowCircleLeftOutlined';
 import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
@@ -72,8 +70,8 @@ type CustomSwiperDialogProps = {
 };
 
 function CustomSwiperDialog({
-  setStartServiceTime,
-  startServiceTime,
+  setStartServiceTime: _setStartServiceTime,
+  startServiceTime: _startServiceTime,
   addScheduleFormat,
   append,
   catItemsLov,
@@ -84,7 +82,7 @@ function CustomSwiperDialog({
   DialogSubHeader,
   endTime,
   errors,
-  getValues,
+  getValues: _getValues,
   handleNextSlide,
   handlePrevSlide,
   handleSubmit,
@@ -98,7 +96,7 @@ function CustomSwiperDialog({
   reset,
   ServicesFields,
   setAvater,
-  setError,
+  setError: _setError,
   setIsNotify,
   setNotifyMessage,
   setOpenFormDialog,

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable import/no-cycle */
 
 import { Button, FormControl } from '@mui/material';
@@ -21,12 +20,12 @@ type WorkDaysFormProps = {
 
 function WorkDaysForm({
   onlyWeeksFormat,
-  setWeekDays = (e?: any) => {},
+  setWeekDays: _setWeekDays = () => null,
 }: WorkDaysFormProps) {
-  const [shopOpenTime, setShopOpenTime] = useState<dayjs.Dayjs | null>(null);
-  const [shopCloseTime, setShopCloseTime] = useState<dayjs.Dayjs | null>(null);
-  const [breakTime, setBreakTime] = useState<dayjs.Dayjs | null>(null);
-  const [breakOffTime, setBreakOffTime] = useState<dayjs.Dayjs | null>(null);
+  const [_shopOpenTime, setShopOpenTime] = useState<dayjs.Dayjs | null>(null);
+  const [_shopCloseTime, setShopCloseTime] = useState<dayjs.Dayjs | null>(null);
+  const [_breakTime, setBreakTime] = useState<dayjs.Dayjs | null>(null);
+  const [_breakOffTime, setBreakOffTime] = useState<dayjs.Dayjs | null>(null);
   const [currentDay, setCurrentDay] = useState<string>('Sunday');
   const dispatch = useAppDispatch();
   const workDays = useAppSelector((state) => state.scheduleState.workDays);
@@ -124,18 +123,18 @@ function WorkDaysForm({
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <div className={`${!onlyWeeksFormat && 'height-230'}`}>
         <div className=" !mt-3 grid grid-cols-7 justify-center">
-          {weekDays.map((d, index) => (
+          {weekDays.map((day) => (
             <Button
               className={`CustomToggleBtn ${
-                currentDay === d && 'btn-black-fill'
+                currentDay === day && 'btn-black-fill'
               } w-9`}
-              value={d}
-              key={d}
-              aria-label={d}
-              onClick={() => handleDayChange(d)}
+              value={day}
+              key={day}
+              aria-label={day}
+              onClick={() => handleDayChange(day)}
               disableRipple
             >
-              {d.substring(0, 3)}
+              {day.substring(0, 3)}
             </Button>
           ))}
         </div>

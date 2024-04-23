@@ -42,7 +42,6 @@ function ServiceItemPage() {
     useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
   const actionMenuOptions = ['Edit', 'Delete'];
-  const [emptyVariable] = useState(null);
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
   const [isLoader, setIsLoader] = React.useState(true);
@@ -133,7 +132,7 @@ function ServiceItemPage() {
           });
         });
     }
-  }, [emptyVariable]);
+  }, [null]);
 
   // const deleteHandler = (id: string) => {
   //     setIsLoader(true);

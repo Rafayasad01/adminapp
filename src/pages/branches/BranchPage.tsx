@@ -42,7 +42,6 @@ function BranchPage() {
   const [search, setSearch] = useState<any>('');
   const [maxTotalEmployeeLimit, setTotalMaxEmployeeLimit] = useState<any>();
   const [maxTotalEmployees, setTotalMaxEmployees] = useState();
-  // const [emptyVariable] = useState(null);
   const [page, setPage] = useState(0);
   const [total, setTotal] = useState(0);
   const [list, setList] = useState<any>([]);

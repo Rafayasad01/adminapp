@@ -1,8 +1,8 @@
 import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined';
 import PersonOutlinedIcon from '@mui/icons-material/PersonOutlined';
 
-// const HOST = 'https://dev.urapptech.com';
-const HOST = 'http://192.168.8.68:3200';
+const HOST = 'https://dev.urapptech.com';
+// const HOST = 'http://192.168.8.68:3200';
 // const HOST = 'http://192.168.8.68:3200';
 // const HOST = 'http://192.168.8.97:3200';
 // const HOST = 'http://localhost:3200';
@@ -69,6 +69,7 @@ export const NOT_AUTHORIZED_MESSAGE = 'You dont have permission for this.';
 export const TOKEN_STORE_KEY = 'APP_AUTH_TOKEN';
 export const SYSTEM_CONFIG_PREFIX = 'theme';
 export const SHOP_SCHEDULING_PREFIX = 'shop-schedule';
+export const CURRENCY_PREFIX = '$';
 
 let TEXT_STORE_KEY = '';
 export const setText = (text: string) => {

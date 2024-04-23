@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined';
 import Button from '@mui/material/Button';
@@ -35,16 +33,15 @@ dayjs.tz.setDefault('UTC');
 function AppointmentVisitPage() {
   console.log('Appointment Visit Page');
   const navigate = useNavigate();
-  const authState: any = useAppSelector((state: any) => state?.authState);
+  const _authState = useAppSelector((state) => state.authState);
   const dataRole = useAppSelector(
     (state: any) => state?.persistedReducer?.roleState?.role?.permissions
   );
-  const [search, setSearch] = useState<any>('');
-  const [emptyVariable] = useState(null);
-  const [page, setPage] = useState(0);
+  const [search, _setSearch] = useState<any>('');
+  const [page, _setPage] = useState(0);
   const [list, setList] = useState<any>([]);
   const [editDetails, setEditDetails] = useState<any>();
-  const [actionMenuItemId, setActionMenuItemId] = useState<any>();
+  const [actionMenuItemId, _setActionMenuItemId] = useState<any>();
   const [actionMenuAnchorEl, setActionMenuAnchorEl] =
     useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);

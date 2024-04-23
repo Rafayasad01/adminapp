@@ -41,7 +41,6 @@ function NotificationPage() {
   const [alertPopup, setAlertPopup] = useState<boolean>(false);
   const [alertSeverty, setAlertSeverty] = useState<string>('');
   const [alertMsg, setAlertMsg] = useState<string>('');
-  const [emptyVariable] = useState(null);
   const [isLoader, setIsLoader] = useState(true);
   const [isNotify, setIsNotify] = useState(false);
   const [notifyMessage, setNotifyMessage] = useState({});
@@ -146,7 +145,7 @@ function NotificationPage() {
           // console.log('error::::::::', error);
         });
     }
-  }, [emptyVariable]);
+  }, [null]);
 
   const createFormHandler = (data: any) => {
     const formData = new FormData();

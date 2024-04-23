@@ -42,7 +42,6 @@ function AppointmentProviderPage() {
   const [endTime, setEndTime] = useState<dayjs.Dayjs | any>(null);
   const [weekDays, setWeekDays] = useState<any>([]);
   const [search, setSearch] = useState<any>('');
-  const [emptyVariable] = useState(null);
   const [page, setPage] = useState(0);
   const [total, setTotal] = useState(0);
   const [list, setList] = useState<any>([]);
@@ -495,7 +494,7 @@ function AppointmentProviderPage() {
         type: 'warning',
       });
     }
-  }, [emptyVariable]);
+  }, [null]);
 
   const swiperRef = useRef<any>(null);
 
@@ -590,8 +589,7 @@ function AppointmentProviderPage() {
     delete data.categoryId;
     delete data.servicesId;
     delete data.mints;
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const obj = {
+    const _object = {
       ...data,
       weekDays,
       startTime,

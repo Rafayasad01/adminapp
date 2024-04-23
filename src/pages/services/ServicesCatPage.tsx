@@ -46,7 +46,6 @@ function ServicesPage() {
     useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
   const actionMenuOptions = ['Services', 'Edit', 'Delete'];
-  const [emptyVariable] = useState(null);
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
   const [isNotify, setIsNotify] = React.useState(false);
@@ -88,7 +87,7 @@ function ServicesPage() {
           });
         });
     }
-  }, [emptyVariable]);
+  }, [null]);
 
   const handleClickSearch = (event: any) => {
     if (event.key === 'Enter') {

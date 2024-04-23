@@ -40,8 +40,11 @@ import HomePage from '../pages/home/HomePage';
 import LocationsPage from '../pages/locations/LocationsPage';
 import NotAuthorized from '../pages/notAuthorized/notAuthorized';
 import NotificationPage from '../pages/notification/NotificationPage';
+import AddNewOrder from '../pages/orders/AddNewOrder';
 import DriverHistory from '../pages/orders/DriverHistory';
+import OrderBasket from '../pages/orders/OrderBasket';
 import OrderDetailsPage from '../pages/orders/OrderDetailsPage';
+import OrderItemDetailPage from '../pages/orders/OrderItemDetailPage';
 import OrdersAssignPage from '../pages/orders/OrdersAssignPage';
 import OrdersCreatePage from '../pages/orders/OrdersCreatePage';
 import OrdersEditPage from '../pages/orders/OrdersEditPage';
@@ -142,7 +145,16 @@ export const routeObjects: RouteObject[] = [
               },
               {
                 path: 'create',
-                element: <OrdersCreatePage />,
+                element: <AddNewOrder />,
+              },
+              {
+                path: 'item/:itemId',
+                element: <OrderItemDetailPage />,
+              },
+              {
+                path: 'basket',
+                element: <OrderBasket />,
+                // element: CAN("canView", "Order List") ? <OrdersPage /> : <p>not authorized</p>,
               },
               {
                 path: 'detail/:orderId',

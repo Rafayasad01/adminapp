@@ -45,7 +45,6 @@ function OrdersPage() {
     useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
   const actionMenuOptions = ['Detail'];
-  const [emptyVariable] = useState(null);
   const handleChangePage = async (
     event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number
@@ -238,7 +237,7 @@ function OrdersPage() {
     if (listingRolePermission(dataRole, 'Order List')) {
       getOrderList();
     }
-  }, [emptyVariable]);
+  }, [null]);
 
   const menuHandler = (option: string) => {
     let doOption = '';

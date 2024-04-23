@@ -24,12 +24,11 @@ type AppointmentViewCardProps = {
 const AppointmentViewCard = ({
   appointmentData,
   getUpdatePopupData,
-  isTooltipOpen,
+  isTooltipOpen: _isTooltipOpen,
   setAppointmentTooltipData,
   setIsTooltipOpen,
   setOpenFormDialog,
-}: // ...restProps
-AppointmentViewCardProps) => {
+}: AppointmentViewCardProps) => {
   const navigate = useNavigate();
   const [data, setData] = useState<any>(null);
   const [isLoader, setIsLoader] = useState<boolean>(true);

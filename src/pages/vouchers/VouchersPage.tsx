@@ -46,7 +46,6 @@ function VouchersPage() {
   const [isLoader, setIsLoader] = React.useState(true);
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
-  const [emptyVariable] = useState(null);
 
   const open = Boolean(anchorEl);
 
@@ -179,7 +178,7 @@ function VouchersPage() {
           });
         });
     }
-  }, [emptyVariable]);
+  }, [null]);
 
   const createFormHandler = (data: any) => {
     setIsLoader(true);

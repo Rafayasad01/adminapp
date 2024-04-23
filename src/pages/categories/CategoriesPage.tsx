@@ -45,7 +45,6 @@ function CategoriesPage() {
     useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
   const actionMenuOptions = ['Products', 'Edit', 'Delete'];
-  const [emptyVariable] = useState(null);
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
   const [isNotify, setIsNotify] = React.useState(false);
@@ -88,7 +87,7 @@ function CategoriesPage() {
           // console.log('error::::::::', error);
         });
     }
-  }, [emptyVariable]);
+  }, [null]);
 
   const handleClickSearch = (event: any) => {
     const searchTxt = event.target.value as string;

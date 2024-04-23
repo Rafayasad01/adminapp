@@ -58,13 +58,24 @@ module.exports = {
         caughtErrorsIgnorePattern: '^_',
       },
     ],
+    '@typescript-eslint/naming-convention': [
+      'error',
+      {
+        selector: 'variable',
+        format: ['camelCase', 'PascalCase', 'UPPER_CASE'],
+        filter: {
+          regex: '^_',
+          match: false,
+        },
+      },
+    ],
+    'no-underscore-dangle': 'off',
     'prettier/prettier': [
       'error',
       {
         endOfLine: 'auto',
       },
     ],
-    // '@typescript-eslint/no-unused-vars': 'off',
     // 'no-console': 'off',
   },
 };

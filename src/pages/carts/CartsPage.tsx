@@ -28,7 +28,6 @@ function CartsPage() {
   );
 
   const navigate = useNavigate();
-  const [emptyVariable] = useState(null);
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(0);
   const [total, setTotal] = useState(0);
@@ -115,7 +114,7 @@ function CartsPage() {
       .catch(() => {
         setIsLoader(false);
       });
-  }, [emptyVariable]);
+  }, [null]);
 
   const manuHandler = (option: string) => {
     let doOption = '';

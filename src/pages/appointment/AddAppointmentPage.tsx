@@ -420,8 +420,7 @@ export default function AddAppointmentPage() {
     delete data.categoryId;
     delete data.appointmentDate;
     const updatedAppointmentArray = data.appointments.map((item: any) => {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { amount, barber, ...rest } = item;
+      const { _amount, _barber, ...rest } = item;
       return rest;
     });
     data.appointments = updatedAppointmentArray;

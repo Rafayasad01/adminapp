@@ -1,4 +1,5 @@
 import CloseIcon from '@mui/icons-material/Close';
+import Avatar from '@mui/material/Avatar';
 import FormControl from '@mui/material/FormControl';
 import TextField from '@mui/material/TextField';
 import ThemeProvider from '@mui/material/styles/ThemeProvider';
@@ -16,7 +17,6 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import { Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import Avatar from '@mui/material/Avatar';
 import Notify from '../../components/common/Notify';
 import TopBar from '../../components/common/TopBar';
 import { AddAppointmentForm } from '../../interfaces/app.appointment';
@@ -61,7 +61,7 @@ export default function RescheduleAppointmentPage() {
   const [appointmentTime, setAppointmentTime] = useState<dayjs.Dayjs | any>(
     null
   );
-  const [appointmentData, setAppointmentData] = useState<any>();
+  const [_appointmentData, setAppointmentData] = useState<any>();
   const [appointmentBookedTime, setAppointmentBookedTime] = useState<any>([]);
   const {
     register,
@@ -315,7 +315,7 @@ export default function RescheduleAppointmentPage() {
     delete data.categoryId;
     delete data.appointmentDate;
     const updatedAppointmentArray = data.appointments.map((item: any) => {
-      const { amount, barber, ...rest } = item;
+      const { _amount, _barber, ...rest } = item;
       return rest;
     });
     data.appointments = updatedAppointmentArray;

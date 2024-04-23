@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import FormControl from '@mui/material/FormControl';
@@ -25,8 +24,8 @@ function EmployeeServiceCreatePopup({
   callback,
   catlov,
   openFormDialog,
-  setIsNotify,
-  setNotifyMessage,
+  setIsNotify: _setIsNotify,
+  setNotifyMessage: _setNotifyMessage,
   setOpenFormDialog,
 }: EmployeeServiceCreatePopupProps) {
   const {

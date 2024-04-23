@@ -35,7 +35,6 @@ function AppUserRewardHistory() {
     useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
   const actionMenuOptions = ['Edit', 'Delete'];
-  const [emptyVariable] = useState(null);
 
   const [isLoader, setIsLoader] = React.useState(true);
   const [isNotify, setIsNotify] = React.useState(false);
@@ -86,7 +85,7 @@ function AppUserRewardHistory() {
     } else {
       setIsLoader(false);
     }
-  }, [emptyVariable, selectedTab]);
+  }, [null, selectedTab]);
 
   return isLoader ? (
     <Loader />

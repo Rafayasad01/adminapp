@@ -15,7 +15,6 @@ import { CART_STATUS } from '../../utils/constants';
 
 function CartDetailsPage() {
   const [viewData, setViewData] = useState<any>({});
-  const [emptyVariable] = useState(null);
   const [isLoader, setIsLoader] = useState(true);
   const [isNotify, setIsNotify] = useState(false);
   const [notifyMessage, setNotifyMessage] = useState({});
@@ -39,7 +38,7 @@ function CartDetailsPage() {
           type: 'error',
         });
       });
-  }, [emptyVariable]);
+  }, [null]);
 
   return isLoader ? (
     <Loader />

@@ -31,7 +31,6 @@ function AppointmentProviderSchedulePage() {
   const [startTime, setStartTime] = useState<dayjs.Dayjs | any>(null);
   const [endTime, setEndTime] = useState<dayjs.Dayjs | any>(null);
   const [weekDays, setWeekDays] = useState<any>([]);
-  const [emptyVariable] = useState(null);
   const [list, setList] = useState<any>([]);
   const [editFormDetails, setEditFormDetails] = useState<any>();
   const [actionMenuItemid, setActionMenuItemid] = React.useState('');
@@ -281,7 +280,7 @@ function AppointmentProviderSchedulePage() {
         type: 'warning',
       });
     }
-  }, [emptyVariable]);
+  }, [null]);
 
   const createFormHandler = () => {
     // setIsLoader(true);

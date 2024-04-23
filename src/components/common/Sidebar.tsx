@@ -255,7 +255,6 @@ function Sidebar() {
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
   const authState: any = useAppSelector((state: any) => state?.authState);
   const dataRole = useAppSelector((state: any) => state);
-  const [emptyVariable] = useState(null);
 
   // const dispatch = useAppDispatch();
   // const logOut = () => {
@@ -375,7 +374,7 @@ function Sidebar() {
       });
       setList(tempList);
     }
-  }, [emptyVariable, appItems?.employeeLimit]);
+  }, [null, appItems?.employeeLimit]);
 
   return (
     <Drawer

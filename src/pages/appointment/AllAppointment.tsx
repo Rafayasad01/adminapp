@@ -357,8 +357,7 @@ const AllAppointment = ({
 
   const PREFIX = 'Demo';
   // #FOLD_BLOCK
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const classes = {
+  const _classes = {
     flexibleSpace: `${PREFIX}-flexibleSpace`,
     textField: `${PREFIX}-textField`,
     locationSelector: `${PREFIX}-locationSelector`,

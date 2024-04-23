@@ -1,7 +1,7 @@
+/* eslint-disable import/no-cycle */
+
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { AxiosError } from 'axios';
 import { DateRange, WorkDay } from '../../interfaces/shop-schedule.interface';
-// eslint-disable-next-line import/no-cycle
 import adminShopSchedule from '../../services/adminapp/adminShopSchedule';
 import { convertKeysToDayJS } from '../../utils/helper';
 
@@ -44,7 +44,7 @@ export const fetchSchedule = createAsyncThunk(
         return { ...response.data, forWeek: true };
       }
       return response.data;
-    } catch (error: any | AxiosError) {
+    } catch (error: any) {
       return rejectWithValue(error.response.data);
     }
   }
@@ -91,7 +91,7 @@ export const shopScheduleStateSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchSchedule.pending, (state, action) => {
+      .addCase(fetchSchedule.pending, (state, _action) => {
         state.loading = true;
       })
       .addCase(fetchSchedule.fulfilled, (state, action) => {
@@ -130,7 +130,7 @@ export const shopScheduleStateSlice = createSlice({
           state.notify = true;
         }
       })
-      .addCase(setScheduleThunk.pending, (state, action) => {
+      .addCase(setScheduleThunk.pending, (state) => {
         state.postLoading = true;
       })
       .addCase(setScheduleThunk.fulfilled, (state, action) => {

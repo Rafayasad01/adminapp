@@ -72,6 +72,8 @@ function CategoriesServicesFaqEditPopup({
               <FormControl className="FormControl" variant="standard">
                 <label className="FormLabel">Answer</label>
                 <TextareaAutosize
+                  onPointerEnterCapture={undefined}
+                  onPointerLeaveCapture={undefined}
                   className="FormTextarea"
                   id="outlined-multiline-static"
                   minRows={5}

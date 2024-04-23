@@ -25,7 +25,6 @@ function BannersPage() {
   const dataRole = useAppSelector(
     (state: any) => state?.persistedReducer?.roleState?.role?.permissions
   );
-  const [emptyVariable] = useState(null);
   const [list, setList] = useState<any>([]);
   const [editFormData, setEditFormData] = useState<any>();
   const [openFormDialog, setOpenFormDialog] = useState(false);
@@ -106,7 +105,7 @@ function BannersPage() {
     } else {
       setIsLoader(false);
     }
-  }, [emptyVariable]);
+  }, [null]);
 
   const createFormHandler = (bannerData: any) => {
     if (listingRolePermission(dataRole, 'Banners Create')) {

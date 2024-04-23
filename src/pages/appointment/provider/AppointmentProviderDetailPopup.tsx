@@ -26,7 +26,6 @@ function AppointmentProviderDetailPopup({
   // const dataRole = useAppSelector(
   //   (state: any) => state?.persistedReducer?.roleState?.role?.permissions
   // );
-  // const [emptyVariable] = useState(null);
   // const [total, setTotal] = useState(0);
   // const [list, setList] = useState<any>([]);
   const [isLoader] = React.useState(false);
@@ -65,7 +64,7 @@ function AppointmentProviderDetailPopup({
   //     } else {
   //         setIsLoader(false);
   //     }
-  // }, [emptyVariable]);
+  // }, [null]);
 
   // const [isPrintEnabled, setPrintEnabled] = useState<any>([false]);
 

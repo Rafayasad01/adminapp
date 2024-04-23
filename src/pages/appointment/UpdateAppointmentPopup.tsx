@@ -1,28 +1,19 @@
-import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
-import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import FormControl from '@mui/material/FormControl';
-import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
 import TextField from '@mui/material/TextField';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useForm } from 'react-hook-form';
 import '../../assets/css/PopupStyle.css';
-import ErrorSpanBox from '../../components/common/ErrorSpanBox';
-import { UpdateAppointmentForm } from '../../interfaces/app.appointment';
-import {
-  GENDER,
-  INVALID_CHAR,
-  MAX_LENGTH_EXCEEDED,
-  PATTERN,
-  imageAllowedTypes,
-} from '../../utils/constants';
 import CustomDropDown from '../../components/common/CustomDropDown';
 import CustomInputBox from '../../components/common/CustomInputBox';
+import ErrorSpanBox from '../../components/common/ErrorSpanBox';
 import Loader from '../../components/common/Loader2';
+import { UpdateAppointmentForm } from '../../interfaces/app.appointment';
+import { GENDER, MAX_LENGTH_EXCEEDED, PATTERN } from '../../utils/constants';
 
-type Props = {
+type UpdateAppointmentPopupProps = {
   openFormDialog: boolean;
   setOpenFormDialog: React.Dispatch<React.SetStateAction<boolean>>;
   formData?: any;
@@ -36,19 +27,15 @@ function UpdateAppointmentPopup({
   setOpenFormDialog,
   formData,
   callback,
-  setIsNotify,
-  setNotifyMessage,
-}: Props) {
-  const [loader, setIsLoader] = useState<any>(null);
-
+  setIsNotify: _setIsNotify,
+  setNotifyMessage: _setNotifyMessage,
+}: UpdateAppointmentPopupProps) {
   const {
     register,
     handleSubmit,
     control,
     setValue,
-    getValues,
     reset,
-    watch,
     formState: { errors },
   } = useForm<UpdateAppointmentForm>();
 
