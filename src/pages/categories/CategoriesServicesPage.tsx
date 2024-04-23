@@ -18,7 +18,7 @@ import Loader from '../../components/common/Loader';
 import Notify from '../../components/common/Notify';
 import TopBar from '../../components/common/TopBar';
 import { useAppSelector } from '../../redux/redux-hooks';
-import category from '../../services/adminapp/adminCategory';
+import categoryService from '../../services/adminapp/adminCategory';
 import PermissionPopup from '../../utils/PermissionPopup';
 import { NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
 import { CheckRolePermission, listingRolePermission } from '../../utils/helper';
@@ -62,7 +62,7 @@ function CategoriesServicesPage() {
     const newPage = 0;
     setSearch(searchTxt);
     setPage(newPage);
-    category
+    categoryService
       .searchCategoryService(productId, searchTxt, newPage, rowsPerPage)
       .then((item) => {
         setList(item.data.data.list);
@@ -77,14 +77,14 @@ function CategoriesServicesPage() {
     setPage(newPage);
     // offset? ,limit rowsperpage hoga ofset page * rowsperPage
     if (search === '' || search === null || search === undefined) {
-      category
+      categoryService
         .getCategoryServiceList(productId, newPage, rowsPerPage)
         .then((item) => {
           setList(item.data.data.list);
           setTotal(item.data.data.total);
         });
     } else {
-      category
+      categoryService
         .searchCategoryService(productId, search, newPage, rowsPerPage)
         .then((item) => {
           setList(item.data.data.list);
@@ -113,14 +113,14 @@ function CategoriesServicesPage() {
     setRowsPerPage(newRowperPage);
     setPage(newPage);
     if (search === '' || search === null || search === undefined) {
-      category
+      categoryService
         .getCategoryServiceList(productId, newPage, rowsPerPage)
         .then((item) => {
           setList(item.data.data.list);
           setTotal(item.data.data.total);
         });
     } else {
-      category
+      categoryService
         .searchCategoryService(productId, search, newPage, rowsPerPage)
         .then((item) => {
           setList(item.data.data.list);
@@ -131,7 +131,7 @@ function CategoriesServicesPage() {
 
   useEffect(() => {
     if (listingRolePermission(dataRole, 'Category Service List')) {
-      category
+      categoryService
         .getCategoryServiceList(productId, page, rowsPerPage)
         .then((item: any) => {
           if (listingRolePermission(dataRole, 'Category Service Get')) {
@@ -159,7 +159,7 @@ function CategoriesServicesPage() {
       isDeleted: true,
       updatedBy: authState.user.id,
     };
-    category
+    categoryService
       .deleteCategoryService(id, data)
       .then((updateItem) => {
         if (updateItem.data.success) {
@@ -192,7 +192,7 @@ function CategoriesServicesPage() {
 
   const manuHandler = (option: string) => {
     if (option === 'Edit') {
-      category.getCategoryService(actionMenuItemid).then((item: any) => {
+      categoryService.getCategoryService(actionMenuItemid).then((item: any) => {
         if (item.data.success) {
           if (listingRolePermission(dataRole, 'Category Service Update')) {
             setEditFormData(item.data.data);
@@ -237,7 +237,7 @@ function CategoriesServicesPage() {
     formData.append('price', data.price);
     formData.append('desc', data.desc);
     formData.append('createdBy', authState.user.id);
-    category
+    categoryService
       .categoryServiceCreate(productId, formData)
       .then((item) => {
         if (item.data.success) {
@@ -275,7 +275,7 @@ function CategoriesServicesPage() {
     formData.append('desc', data.desc);
     formData.append('updatedBy', authState.user.id);
     if (data.icon) formData.append('icon', data.icon);
-    category
+    categoryService
       .updateCategoryService(actionMenuItemid, formData)
       .then((updateItem: any) => {
         if (updateItem.data.success) {
@@ -323,19 +323,21 @@ function CategoriesServicesPage() {
         isActive: event.target.checked,
         updatedBy: authState.user.id,
       };
-      category.updateCategoryServiceStatus(id, data).then((updateItem) => {
-        if (updateItem.data.success) {
-          // setIsLoader(false);
-          setList((newArr: any) => {
-            return newArr.map((item: any) => {
-              if (item.id === id) {
-                item.isActive = updateItem.data.data.isActive;
-              }
-              return { ...item };
+      categoryService
+        .updateCategoryServiceStatus(id, data)
+        .then((updateItem) => {
+          if (updateItem.data.success) {
+            // setIsLoader(false);
+            setList((newArr: any) => {
+              return newArr.map((item: any) => {
+                if (item.id === id) {
+                  item.isActive = updateItem.data.data.isActive;
+                }
+                return { ...item };
+              });
             });
-          });
-        }
-      });
+          }
+        });
     } else {
       setIsNotify(true);
       setNotifyMessage({

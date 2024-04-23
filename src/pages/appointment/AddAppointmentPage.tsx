@@ -30,8 +30,8 @@ import Notify from '../../components/common/Notify';
 import TimePicker from '../../components/common/TimePicker';
 import TopBar from '../../components/common/TopBar';
 import { AddAppointmentForm } from '../../interfaces/app.appointment';
-import StoreAppointmentService from '../../services/adminapp/adminStoreAppointment';
-import StoreLovService from '../../services/adminapp/adminStoreService';
+import storeAppointmentService from '../../services/adminapp/adminStoreAppointment';
+import storeLovService from '../../services/adminapp/adminStoreService';
 import { GENDER, MAX_LENGTH_EXCEEDED, PATTERN } from '../../utils/constants';
 
 // Extend dayjs with necessary plugins
@@ -94,13 +94,13 @@ export default function AddAppointmentPage() {
   };
 
   const getBookedTimeSlots = async (id: any, date: any) => {
-    await StoreAppointmentService.getBarberBookedTimeSlots(id, date).then(
-      (res) => {
+    await storeAppointmentService
+      .getBarberBookedTimeSlots(id, date)
+      .then((res) => {
         if (res.data.success) {
           setAppointmentBookedTime(res.data.data);
         }
-      }
-    );
+      });
   };
 
   const BarberCard = (item: any, index: number) => {
@@ -179,7 +179,8 @@ export default function AddAppointmentPage() {
   };
 
   const catLovService = () => {
-    StoreLovService.StoreCatLov()
+    storeLovService
+      .StoreCatLov()
       .then((res: any) => {
         if (res.data.success) {
           setCatLovList(res.data.data);
@@ -208,7 +209,8 @@ export default function AddAppointmentPage() {
 
   const getBarbers = async (id: any) => {
     setIsPageLoader(true);
-    await StoreAppointmentService.getBarbersList(id)
+    await storeAppointmentService
+      .getBarbersList(id)
       .then((res) => {
         if (res.data.success) {
           setIsPageLoader(false);
@@ -227,7 +229,7 @@ export default function AddAppointmentPage() {
   };
 
   const getCatItems = async (id: any) => {
-    await StoreLovService.StoreCatItemsLov(id).then((res) => {
+    await storeLovService.StoreCatItemsLov(id).then((res) => {
       if (res.data.success) {
         setCatItemsLovList(res.data.data);
         const uniqueData = res.data.data.filter(
@@ -425,7 +427,8 @@ export default function AddAppointmentPage() {
     });
     data.appointments = updatedAppointmentArray;
     // console.log('dataa', data, bookingList);
-    StoreAppointmentService.appointmentCreate(data)
+    storeAppointmentService
+      .appointmentCreate(data)
       .then((res: any) => {
         if (res.data.success) {
           setIsLoader(false);

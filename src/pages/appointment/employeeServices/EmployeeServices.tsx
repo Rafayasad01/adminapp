@@ -13,8 +13,8 @@ import Loader from '../../../components/common/Loader';
 import Notify from '../../../components/common/Notify';
 import TopBar from '../../../components/common/TopBar';
 import { useAppSelector } from '../../../redux/redux-hooks';
-import employee from '../../../services/adminapp/adminStoreEmployee';
-import StoreLovService from '../../../services/adminapp/adminStoreService';
+import employeeService from '../../../services/adminapp/adminStoreEmployee';
+import storeLovService from '../../../services/adminapp/adminStoreService';
 import PermissionPopup from '../../../utils/PermissionPopup';
 import { NOT_AUTHORIZED_MESSAGE } from '../../../utils/constants';
 import {
@@ -60,7 +60,8 @@ function EmployeeServices() {
   const [catLovlist, setCatLovList] = useState<any>([]);
 
   const catLovService = useCallback(async () => {
-    await StoreLovService.StoreCatLov()
+    await storeLovService
+      .StoreCatLov()
       .then((res) => {
         if (res.data.success) {
           setCatLovList(res.data.data);
@@ -96,7 +97,7 @@ function EmployeeServices() {
 
   useEffect(() => {
     if (listingRolePermission(dataRole, 'Category List')) {
-      employee
+      employeeService
         .StoreEmployeeServiceList(empId)
         .then((item: any) => {
           setIsLoader(false);
@@ -242,7 +243,7 @@ function EmployeeServices() {
 
   const createFormHandler = (data: any) => {
     setIsLoader(true);
-    employee
+    employeeService
       .StoreEmployeeServiceCreate(empId, data)
       .then((item: any) => {
         if (item.data.success) {
@@ -275,7 +276,7 @@ function EmployeeServices() {
 
   const updateFormHandler = (data: any) => {
     setIsLoader(true);
-    employee
+    employeeService
       .StoreEmployeeServiceUpdate(actionMenuItemid, data)
       .then((updateItem: any) => {
         if (updateItem.data.success) {
@@ -319,18 +320,20 @@ function EmployeeServices() {
       const data = {
         isActive: event.target.checked,
       };
-      employee.StoreEmployeeServiceUpdateStatus(id, data).then((updateItem) => {
-        if (updateItem.data.success) {
-          setList((newArr: any) => {
-            return newArr.map((item: any) => {
-              if (item.id === id) {
-                item.isActive = updateItem.data.data.isActive;
-              }
-              return { ...item };
+      employeeService
+        .StoreEmployeeServiceUpdateStatus(id, data)
+        .then((updateItem) => {
+          if (updateItem.data.success) {
+            setList((newArr: any) => {
+              return newArr.map((item: any) => {
+                if (item.id === id) {
+                  item.isActive = updateItem.data.data.isActive;
+                }
+                return { ...item };
+              });
             });
-          });
-        }
-      });
+          }
+        });
     } else {
       setIsNotify(true);
       setNotifyMessage({
@@ -346,7 +349,7 @@ function EmployeeServices() {
       const data = {
         isDeleted: !!isDel,
       };
-      employee
+      employeeService
         .StoreEmployeeServiceDelete(actionMenuItemid, data)
         .then((updateItem) => {
           if (updateItem.data.success) {

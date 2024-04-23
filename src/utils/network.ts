@@ -1,7 +1,7 @@
 /* eslint-disable import/no-cycle */
 import axios from 'axios';
-import { setLogo, setRemoveItemState } from '../redux/features/appStateSlice';
-import { logout } from '../redux/features/authStateSlice';
+import { setLogo, setRemoveItemState } from '../redux/features/appSlice';
+import { logout } from '../redux/features/authSlice';
 import { setRolePermissions } from '../redux/features/permissionsStateSlice';
 import { store } from '../redux/store';
 import { BASE_SYSTEM_URL, BASE_URL } from './constants';

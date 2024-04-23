@@ -11,7 +11,7 @@ import Notify from '../../components/common/Notify';
 import TopBar from '../../components/common/TopBar';
 import StarBadgeGreen from '../../components/icons/StarBadgeGreen';
 import StarBadgeRed from '../../components/icons/StarBadgeRed';
-import Service from '../../services/adminapp/adminBranch';
+import branchService from '../../services/adminapp/adminBranch';
 import { formatName } from '../../utils/helper';
 import BranchCategoryPopup from './BranchCategoryPopup';
 import BranchSettingPopup from './BranchSettingPopup';
@@ -30,7 +30,8 @@ function BranchDetailPage() {
 
   const getSettingById = () => {
     setIsLoader(true);
-    Service.getSettingService(branchId)
+    branchService
+      .getSettingService(branchId)
       .then((item: any) => {
         if (item.data.success) {
           setSettingDetail(item.data.data.tenantConfig);
@@ -53,7 +54,8 @@ function BranchDetailPage() {
 
   const getCategoryById = () => {
     setIsLoader(true);
-    Service.getCategoryService(branchId)
+    branchService
+      .getCategoryService(branchId)
       .then((item: any) => {
         if (item.data.success) {
           setCategories(item.data.data);
@@ -81,7 +83,8 @@ function BranchDetailPage() {
   };
 
   useEffect(() => {
-    Service.getDetailService(branchId)
+    branchService
+      .getDetailService(branchId)
       .then((item) => {
         if (item.data.success) {
           setIsLoader(false);

@@ -22,10 +22,10 @@ import Loader from '../../components/common/Loader';
 import Notify from '../../components/common/Notify';
 import TopBar from '../../components/common/TopBar';
 import { AppUserEmployees } from '../../interfaces/app-user.interface';
-import { setItemState } from '../../redux/features/appStateSlice';
-import { login } from '../../redux/features/authStateSlice';
+import { setItemState } from '../../redux/features/appSlice';
+import { login } from '../../redux/features/authSlice';
 import { useAppSelector } from '../../redux/redux-hooks';
-import Service from '../../services/adminapp/adminBranch';
+import branchService from '../../services/adminapp/adminBranch';
 import { listingRolePermission } from '../../utils/helper';
 import BranchCreatePopup from './BranchCreatePopup';
 import BranchUpdatePopup from './BranchUpdatePopup';
@@ -62,15 +62,17 @@ function BranchPage() {
       const newPage = 0;
       setSearch(searchTxt);
       setPage(newPage);
-      Service.getListServiceSearch(
-        authState.user.tenant,
-        searchTxt,
-        newPage,
-        rowsPerPage
-      ).then((item) => {
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      });
+      branchService
+        .getListServiceSearch(
+          authState.user.tenant,
+          searchTxt,
+          newPage,
+          rowsPerPage
+        )
+        .then((item) => {
+          setList(item.data.data.list);
+          setTotal(item.data.data.total);
+        });
     }
   };
 
@@ -81,22 +83,24 @@ function BranchPage() {
     setPage(newPage);
     // offset? ,limit rowsperpage hoga ofset page * rowsperPage
     if (search === '' || search === null || search === undefined) {
-      Service.getListService(authState.user.tenant, newPage, rowsPerPage).then(
-        (item) => {
+      branchService
+        .getListService(authState.user.tenant, newPage, rowsPerPage)
+        .then((item) => {
           setList(item.data.data.list);
           setTotal(item.data.data.total);
-        }
-      );
+        });
     } else {
-      Service.getListServiceSearch(
-        authState.user.tenant,
-        search,
-        newPage,
-        rowsPerPage
-      ).then((item) => {
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      });
+      branchService
+        .getListServiceSearch(
+          authState.user.tenant,
+          search,
+          newPage,
+          rowsPerPage
+        )
+        .then((item) => {
+          setList(item.data.data.list);
+          setTotal(item.data.data.total);
+        });
     }
   };
 
@@ -108,33 +112,32 @@ function BranchPage() {
     setRowsPerPage(newRowperPage);
     setPage(newPage);
     if (search === '' || search === null || search === undefined) {
-      Service.getListService(authState.user.tenant, newPage, rowsPerPage).then(
-        (item) => {
+      branchService
+        .getListService(authState.user.tenant, newPage, rowsPerPage)
+        .then((item) => {
           setList(item.data.data.list);
           setTotal(item.data.data.total);
-        }
-      );
+        });
     } else {
-      Service.getListServiceSearch(
-        authState.user.tenant,
-        search,
-        newPage,
-        rowsPerPage
-      ).then((item) => {
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      });
+      branchService
+        .getListServiceSearch(
+          authState.user.tenant,
+          search,
+          newPage,
+          rowsPerPage
+        )
+        .then((item) => {
+          setList(item.data.data.list);
+          setTotal(item.data.data.total);
+        });
     }
   };
 
   useEffect(() => {
     setIsLoader(true);
     if (listingRolePermission(dataRole, 'Employee List')) {
-      Service.getListService(
-        authState?.shopTenantDetails.tenant,
-        page,
-        rowsPerPage
-      )
+      branchService
+        .getListService(authState?.shopTenantDetails.tenant, page, rowsPerPage)
         .then((item: any) => {
           if (item.data.success) {
             setIsLoader(false);
@@ -168,7 +171,8 @@ function BranchPage() {
 
   const createFormHandler = (data: any) => {
     setIsLoader(true);
-    Service.insertBranch(data, authState?.user?.tenant)
+    branchService
+      .insertBranch(data, authState?.user?.tenant)
       .then((item: any) => {
         if (item.data.success) {
           setIsLoader(false);
@@ -204,7 +208,8 @@ function BranchPage() {
 
   const editHandler = (id: string) => {
     setIsLoader(true);
-    Service.editBranch(id)
+    branchService
+      .editBranch(id)
       .then((item: any) => {
         if (item.data.success) {
           setStateLimitVal(item.data.data.userLimit);
@@ -228,7 +233,8 @@ function BranchPage() {
     delete data.email;
     data.userId = authState?.user?.id;
     const temp = Number(maxTotalEmployeeLimit) - storeLimitVal;
-    Service.updateBranch(data, id)
+    branchService
+      .updateBranch(data, id)
       .then((item: any) => {
         if (item.data.success) {
           setIsLoader(false);
@@ -278,7 +284,8 @@ function BranchPage() {
       // trialMode: event.target.checked,
       updatedBy: authState.user.id,
     };
-    Service.updateBranchStatus(data, id)
+    branchService
+      .updateBranchStatus(data, id)
       .then((updateItem) => {
         if (updateItem.data.success) {
           setIsLoader(false);

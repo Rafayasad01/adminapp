@@ -19,7 +19,7 @@ import Loader from '../../components/common/Loader';
 import Loader2 from '../../components/common/Loader2';
 import Notify from '../../components/common/Notify';
 import { useAppSelector } from '../../redux/redux-hooks';
-import Service from '../../services/adminapp/rating';
+import ratingService from '../../services/adminapp/rating';
 import { listingRolePermission } from '../../utils/helper';
 import RatingAccordions from './RatingAccordin';
 
@@ -50,9 +50,14 @@ function RatingReviewsPage() {
         if (listingRolePermission(dataRole, 'Employee List')) {
           const [catListResponse, catStarRatingResponse, catDetailResponse] =
             await Promise.all([
-              Service.getCatListService(itemId, search, page, rowsPerPage),
-              Service.getCatStarRating(itemId),
-              Service.getCatStarDetail(itemId),
+              ratingService.getCatListService(
+                itemId,
+                search,
+                page,
+                rowsPerPage
+              ),
+              ratingService.getCatStarRating(itemId),
+              ratingService.getCatStarDetail(itemId),
             ]);
           // Handling list response
           if (catListResponse.data.success) {
@@ -121,7 +126,8 @@ function RatingReviewsPage() {
     setIsLoaderPagination(true);
     const newPage = page + 1;
     setPage(newPage);
-    Service.getCatListService(itemId, search, newPage, rowsPerPage)
+    ratingService
+      .getCatListService(itemId, search, newPage, rowsPerPage)
       .then((item) => {
         setIsLoaderPagination(false);
         setCurrentList(item.data.data.list);
@@ -142,7 +148,8 @@ function RatingReviewsPage() {
     setIsLoaderPagination(true);
     const newPage = page - 1;
     setPage(newPage);
-    Service.getCatListService(itemId, search, newPage, rowsPerPage)
+    ratingService
+      .getCatListService(itemId, search, newPage, rowsPerPage)
       .then((item) => {
         setIsLoaderPagination(false);
         setList((prev: any) =>

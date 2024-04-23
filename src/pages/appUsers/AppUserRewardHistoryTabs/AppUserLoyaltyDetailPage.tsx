@@ -8,7 +8,7 @@ import Loader from '../../../components/common/Loader';
 import Notify from '../../../components/common/Notify';
 import TopBar from '../../../components/common/TopBar';
 import { useAppSelector } from '../../../redux/redux-hooks';
-import Service from '../../../services/adminapp/adminAppUser';
+import appUserService from '../../../services/adminapp/adminAppUser';
 import PermissionPopup from '../../../utils/PermissionPopup';
 import { listingRolePermission } from '../../../utils/helper';
 
@@ -44,7 +44,8 @@ function AppUserLoyaltyDetailPage() {
 
   useEffect(() => {
     if (listingRolePermission(dataRole, 'Driver Address Detail')) {
-      Service.appUserLoyaltyHistoryDetails(loyaltyId)
+      appUserService
+        .appUserLoyaltyHistoryDetails(loyaltyId)
         .then((item: any) => {
           if (item.data.success) {
             setIsLoader(false);

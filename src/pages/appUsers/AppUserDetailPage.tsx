@@ -10,7 +10,7 @@ import MapAddress from '../../components/common/MapAddress';
 import Notify from '../../components/common/Notify';
 import TopBar from '../../components/common/TopBar';
 import { useAppSelector } from '../../redux/redux-hooks';
-import Service from '../../services/adminapp/adminAppUser';
+import appUserService from '../../services/adminapp/adminAppUser';
 import PermissionPopup from '../../utils/PermissionPopup';
 import { weekDays } from '../../utils/constants';
 import { listingRolePermission } from '../../utils/helper';
@@ -49,7 +49,8 @@ function AppUserDetailPage() {
 
   useEffect(() => {
     if (listingRolePermission(dataRole, 'Driver Address Detail')) {
-      Service.appUserDetails(appuserId)
+      appUserService
+        .appUserDetails(appuserId)
         .then((item: any) => {
           if (item.data.success) {
             setIsLoader(false);

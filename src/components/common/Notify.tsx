@@ -1,8 +1,8 @@
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
-import * as React from 'react';
+import { forwardRef, type SyntheticEvent } from 'react';
 
-const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
+const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
   ref
 ) {
@@ -16,10 +16,7 @@ type NotifyProps = {
 };
 
 function Notify({ isOpen, setIsOpen, displayMessage }: NotifyProps) {
-  const handleClose = (
-    event?: React.SyntheticEvent | Event,
-    reason?: string
-  ) => {
+  const handleClose = (event?: SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {
       return;
     }

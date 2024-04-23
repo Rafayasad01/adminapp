@@ -15,7 +15,7 @@ import Notify from '../../../components/common/Notify';
 import TopBar from '../../../components/common/TopBar';
 import { AppointmentProviderSchedule } from '../../../interfaces/app.appointment';
 import { useAppSelector } from '../../../redux/redux-hooks';
-import Service from '../../../services/adminapp/adminAppointment';
+import adminAppointmentService from '../../../services/adminapp/adminAppointment';
 import PermissionPopup from '../../../utils/PermissionPopup';
 import { NOT_AUTHORIZED_MESSAGE } from '../../../utils/constants';
 import { listingRolePermission } from '../../../utils/helper';
@@ -210,7 +210,8 @@ function AppointmentProviderSchedulePage() {
           id: actionMenuItemid,
           updatedBy: authState.user.id,
         };
-        Service.ProviderScheduleDelete(data)
+        adminAppointmentService
+          .ProviderScheduleDelete(data)
           .then((item: any) => {
             if (item.data.success) {
               setIsLoader(false);
@@ -250,7 +251,8 @@ function AppointmentProviderSchedulePage() {
 
   useEffect(() => {
     if (listingRolePermission(dataRole, 'Appointment Provider Schedule List')) {
-      Service.ProviderScheduleList(id)
+      adminAppointmentService
+        .ProviderScheduleList(id)
         .then((item: any) => {
           if (item.data.success) {
             setIsLoader(false);
@@ -291,7 +293,8 @@ function AppointmentProviderSchedulePage() {
       createdBy: authState.user.id,
     };
     // console.log("final data", userData)
-    Service.ProviderScheduleCreate(id, userData)
+    adminAppointmentService
+      .ProviderScheduleCreate(id, userData)
       .then((item) => {
         if (item.data.success) {
           reset();
@@ -337,7 +340,8 @@ function AppointmentProviderSchedulePage() {
     const details = {
       ...data,
     };
-    Service.ProviderScheduleUpdate(actionMenuItemid, details)
+    adminAppointmentService
+      .ProviderScheduleUpdate(actionMenuItemid, details)
       .then((item) => {
         if (item.data.success) {
           // console.log('itemmmm', item.data.data);
@@ -413,8 +417,9 @@ function AppointmentProviderSchedulePage() {
       const data = {
         isActive: event.target.checked,
       };
-      Service.ProviderScheduleUpdateStatus(switchId, data).then(
-        (updateItem) => {
+      adminAppointmentService
+        .ProviderScheduleUpdateStatus(switchId, data)
+        .then((updateItem) => {
           if (updateItem.data.success) {
             setIsLoader(false);
             setList((prevList: any) => {
@@ -441,8 +446,7 @@ function AppointmentProviderSchedulePage() {
               type: 'warning',
             });
           }
-        }
-      );
+        });
     }
   };
 

@@ -27,7 +27,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import AppointmentViewCard from '../../components/common/AppointmentViewCard';
 import Loader from '../../components/common/Loader';
 import SwiperComponent from '../../components/common/Swiper';
-import StoreAppointmentService from '../../services/adminapp/adminStoreAppointment';
+import storeAppointmentService from '../../services/adminapp/adminStoreAppointment';
 import UpdateAppointmentPopup from './UpdateAppointmentPopup';
 
 dayjs.extend(weekOfYear);
@@ -114,7 +114,8 @@ const AllAppointment = ({
 
   const getAllAppoinments = async (appoDate: any, view: any) => {
     setIsLoader(true);
-    StoreAppointmentService.getAllAppointments(appoDate, view)
+    storeAppointmentService
+      .getAllAppointments(appoDate, view)
       .then((res: any) => {
         if (res.data.success) {
           setIsLoader(false);
@@ -291,10 +292,8 @@ const AllAppointment = ({
     setIsLoader(true);
     const appId = updateAppointmentData.id;
     delete updateAppointmentData.id;
-    await StoreAppointmentService.appointmentUpdate(
-      appId,
-      updateAppointmentData
-    )
+    await storeAppointmentService
+      .appointmentUpdate(appId, updateAppointmentData)
       .then((res) => {
         if (res.data.success) {
           setIsLoader(false);

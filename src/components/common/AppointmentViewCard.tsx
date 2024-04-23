@@ -9,7 +9,7 @@ import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import assets from '../../assets';
-import StoreAppointmentService from '../../services/adminapp/adminStoreAppointment';
+import storeAppointmentService from '../../services/adminapp/adminStoreAppointment';
 import Loader from './Loader2';
 
 type AppointmentViewCardProps = {
@@ -41,8 +41,9 @@ const AppointmentViewCard = ({
 
   useEffect(() => {
     if (appointmentData) {
-      StoreAppointmentService.getAppointmentById(appointmentData.id).then(
-        (res) => {
+      storeAppointmentService
+        .getAppointmentById(appointmentData.id)
+        .then((res) => {
           const date = dayjs(res.data.data.appointmentTime).tz('Asia/Karachi');
           const year = date.year();
           const month = date.month();
@@ -73,8 +74,7 @@ const AppointmentViewCard = ({
             startDateFormat,
             endDateFormat,
           });
-        }
-      );
+        });
     }
   }, [appointmentData]);
 

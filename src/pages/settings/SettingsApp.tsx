@@ -28,7 +28,7 @@ import { Setting } from '../../interfaces/app.interface';
 // import { setTheme } from '../../redux/features/authStateSlice';
 import TimePicker from '../../components/common/TimePicker';
 import { useAppSelector } from '../../redux/redux-hooks';
-import Service from '../../services/adminapp/admin';
+import adminService from '../../services/adminapp/admin';
 import {
   DOMAIN_PREFIX,
   DOMAIN_PROTOCOL,
@@ -298,7 +298,8 @@ function SettingsApp() {
 
   useEffect(() => {
     if (listingRolePermission(dataRole, 'Setting View')) {
-      Service.getService(authState.user.tenant)
+      adminService
+        .getService(authState.user.tenant)
         .then((item: any) => {
           // console.log('item Select:::::', item)
           if (item.data.success) {

@@ -20,7 +20,7 @@ import Loader from '../../components/common/Loader';
 import Notify from '../../components/common/Notify';
 import TopBar from '../../components/common/TopBar';
 import { useAppSelector } from '../../redux/redux-hooks';
-import category from '../../services/adminapp/adminCategory';
+import categoryService from '../../services/adminapp/adminCategory';
 import PermissionPopup from '../../utils/PermissionPopup';
 import { NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
 import { CheckRolePermission, listingRolePermission } from '../../utils/helper';
@@ -70,7 +70,7 @@ function CategoriesPage() {
 
   useEffect(() => {
     if (listingRolePermission(dataRole, 'Category List')) {
-      category
+      categoryService
         .getListService(authState.user.tenant, page, rowsPerPage)
         .then((item: any) => {
           setIsLoader(false);
@@ -94,7 +94,7 @@ function CategoriesPage() {
     const newPage = 0;
     setSearch(searchTxt);
     setPage(newPage);
-    category
+    categoryService
       .searchService(authState.user.tenant, searchTxt, newPage, rowsPerPage)
       .then((item) => {
         setList(item.data.data.list);
@@ -109,14 +109,14 @@ function CategoriesPage() {
     setPage(newPage);
     // offset? ,limit rowsperpage hoga ofset page * rowsperPage
     if (search === '' || search === null || search === undefined) {
-      category
+      categoryService
         .getListService(authState.user.tenant, newPage, rowsPerPage)
         .then((item) => {
           setList(item.data.data.list);
           setTotal(item.data.data.total);
         });
     } else {
-      category
+      categoryService
         .searchService(authState.user.tenant, search, newPage, rowsPerPage)
         .then((item) => {
           setList(item.data.data.list);
@@ -132,14 +132,14 @@ function CategoriesPage() {
     setRowsPerPage(newRowperPage);
     setPage(newPage);
     if (search === '' || search === null || search === undefined) {
-      category
+      categoryService
         .getListService(authState.user.tenant, newPage, rowsPerPage)
         .then((item) => {
           setList(item.data.data.list);
           setTotal(item.data.data.total);
         });
     } else {
-      category
+      categoryService
         .searchService(authState.user.tenant, search, newPage, rowsPerPage)
         .then((item) => {
           setList(item.data.data.list);
@@ -155,7 +155,7 @@ function CategoriesPage() {
       is_deleted: true,
       updated_by: authState.user.id,
     };
-    category
+    categoryService
       .deleteCategory(id, data)
       .then((updateItem) => {
         if (updateItem.data.success) {
@@ -189,7 +189,7 @@ function CategoriesPage() {
   const manuHandler = (option: string) => {
     if (option === 'Edit') {
       if (listingRolePermission(dataRole, 'Category Update')) {
-        category.getCategory(actionMenuItemid).then((item: any) => {
+        categoryService.getCategory(actionMenuItemid).then((item: any) => {
           if (item.data.success) {
             // console.log('tem.data.data:::::::', item.data.data);
             setEditFormData(item.data.data);
@@ -234,7 +234,7 @@ function CategoriesPage() {
     formData.append('created_by', authState.user.id);
     formData.append('updated_by', authState.user.id);
     if (data.name && data.desc && data.icon) {
-      category
+      categoryService
         .create(formData)
         .then((item) => {
           if (item.data.success) {
@@ -280,7 +280,7 @@ function CategoriesPage() {
     formData.append('desc', data.desc);
     formData.append('updated_by', authState.user.id);
     if (data.icon) formData.append('icon', data.icon);
-    category
+    categoryService
       .updateCategory(actionMenuItemid, formData)
       .then((updateItem: any) => {
         if (updateItem.data.success) {
@@ -324,7 +324,7 @@ function CategoriesPage() {
         is_active: event.target.checked,
         updated_by: authState.user.id,
       };
-      category.updateStatus(id, data).then((updateItem) => {
+      categoryService.updateStatus(id, data).then((updateItem) => {
         if (updateItem.data.success) {
           setList((newArr: any) => {
             return newArr.map((item: any) => {

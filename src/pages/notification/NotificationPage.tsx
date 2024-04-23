@@ -15,7 +15,7 @@ import Loader from '../../components/common/Loader';
 import Notify from '../../components/common/Notify';
 import TopBar from '../../components/common/TopBar';
 import { useAppSelector } from '../../redux/redux-hooks';
-import Service from '../../services/adminapp/adminNotification';
+import notificationService from '../../services/adminapp/adminNotification';
 import AlertBox from '../../utils/Alert';
 import {
   NOTIFICATION_STATUS,
@@ -63,15 +63,12 @@ function NotificationPage() {
       const newPage = 0;
       setSearch(searchTxt);
       setPage(newPage);
-      Service.searchService(
-        authState.user.tenant,
-        searchTxt,
-        newPage,
-        rowsPerPage
-      ).then((item) => {
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      });
+      notificationService
+        .searchService(authState.user.tenant, searchTxt, newPage, rowsPerPage)
+        .then((item) => {
+          setList(item.data.data.list);
+          setTotal(item.data.data.total);
+        });
     }
   };
 
@@ -82,22 +79,19 @@ function NotificationPage() {
     setPage(newPage);
     // offset? ,limit rowsperpage hoga ofset page * rowsperPage
     if (search === '' || search === null || search === undefined) {
-      Service.getListService(authState.user.tenant, newPage, rowsPerPage).then(
-        (item) => {
+      notificationService
+        .getListService(authState.user.tenant, newPage, rowsPerPage)
+        .then((item) => {
           setList(item.data.data.list);
           setTotal(item.data.data.total);
-        }
-      );
+        });
     } else {
-      Service.searchService(
-        authState.user.tenant,
-        search,
-        newPage,
-        rowsPerPage
-      ).then((item) => {
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      });
+      notificationService
+        .searchService(authState.user.tenant, search, newPage, rowsPerPage)
+        .then((item) => {
+          setList(item.data.data.list);
+          setTotal(item.data.data.total);
+        });
     }
   };
   const handleChangeRowsPerPage = (
@@ -108,28 +102,26 @@ function NotificationPage() {
     setRowsPerPage(newRowperPage);
     setPage(newPage);
     if (search === '' || search === null || search === undefined) {
-      Service.getListService(authState.user.tenant, newPage, rowsPerPage).then(
-        (item) => {
+      notificationService
+        .getListService(authState.user.tenant, newPage, rowsPerPage)
+        .then((item) => {
           setList(item.data.data.list);
           setTotal(item.data.data.total);
-        }
-      );
+        });
     } else {
-      Service.searchService(
-        authState.user.tenant,
-        search,
-        newPage,
-        rowsPerPage
-      ).then((item) => {
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      });
+      notificationService
+        .searchService(authState.user.tenant, search, newPage, rowsPerPage)
+        .then((item) => {
+          setList(item.data.data.list);
+          setTotal(item.data.data.total);
+        });
     }
   };
 
   useEffect(() => {
     if (listingRolePermission(dataRole, 'Notification List')) {
-      Service.getListService(authState.user.tenant, page, rowsPerPage)
+      notificationService
+        .getListService(authState.user.tenant, page, rowsPerPage)
         .then((item: any) => {
           setIsLoader(false);
           setList(item.data.data.list);
@@ -153,7 +145,8 @@ function NotificationPage() {
     formData.append('message', data.message);
     formData.append('tenant', authState.user.tenant);
     formData.append('userId', authState.user.id);
-    Service.sentService(formData)
+    notificationService
+      .sentService(formData)
       .then((item) => {
         if (item.data.success) {
           // list.push(item.data.data);
@@ -186,7 +179,7 @@ function NotificationPage() {
 
   const detailButtonHandler = (getItem: any, index: number) => {
     if (listingRolePermission(dataRole, 'Notification Batch Detail')) {
-      Service.batchDetailService(list[index].id).then((item) => {
+      notificationService.batchDetailService(list[index].id).then((item) => {
         if (item.data.success) {
           setBatchDetail({ ...getItem, ...item.data.data });
           setDetailPopup(true);

@@ -9,7 +9,7 @@ import TablePagination from '@mui/material/TablePagination';
 import dayjs from 'dayjs';
 import { useNavigate } from 'react-router-dom';
 import CustomText from '../../../components/common/CustomText';
-import Service from '../../../services/adminapp/adminAppUser';
+import appUserService from '../../../services/adminapp/adminAppUser';
 
 type AppUserPromotionTabProps = {
   list: any;
@@ -48,22 +48,19 @@ function AppUserPromotionTab({
     setPage(newPage);
     // offset? ,limit rowsperpage hoga ofset page * rowsperPage
     if (search === '' || search === null || search === undefined) {
-      Service.appUserVocuherHistoryList(userId, newPage, rowsPerPage).then(
-        (item) => {
+      appUserService
+        .appUserVocuherHistoryList(userId, newPage, rowsPerPage)
+        .then((item) => {
           setList(item.data.data.list);
           setTotal(item.data.data.total);
-        }
-      );
+        });
     } else {
-      Service.appUserSearchVocuherHistoryList(
-        userId,
-        search,
-        newPage,
-        rowsPerPage
-      ).then((item) => {
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      });
+      appUserService
+        .appUserSearchVocuherHistoryList(userId, search, newPage, rowsPerPage)
+        .then((item) => {
+          setList(item.data.data.list);
+          setTotal(item.data.data.total);
+        });
     }
   };
 
@@ -75,22 +72,19 @@ function AppUserPromotionTab({
     setRowsPerPage(newRowperPage);
     setPage(newPage);
     if (search === '' || search === null || search === undefined) {
-      Service.appUserVocuherHistoryList(userId, newPage, rowsPerPage).then(
-        (item) => {
+      appUserService
+        .appUserVocuherHistoryList(userId, newPage, rowsPerPage)
+        .then((item) => {
           setList(item.data.data.list);
           setTotal(item.data.data.total);
-        }
-      );
+        });
     } else {
-      Service.appUserSearchVocuherHistoryList(
-        userId,
-        search,
-        newPage,
-        rowsPerPage
-      ).then((item) => {
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      });
+      appUserService
+        .appUserSearchVocuherHistoryList(userId, search, newPage, rowsPerPage)
+        .then((item) => {
+          setList(item.data.data.list);
+          setTotal(item.data.data.total);
+        });
     }
   };
 
@@ -100,15 +94,17 @@ function AppUserPromotionTab({
       const newPage = 0;
       setSearch(searchTxt);
       setPage(newPage);
-      Service.appUserSearchVocuherHistoryList(
-        userId,
-        searchTxt,
-        newPage,
-        rowsPerPage
-      ).then((item) => {
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      });
+      appUserService
+        .appUserSearchVocuherHistoryList(
+          userId,
+          searchTxt,
+          newPage,
+          rowsPerPage
+        )
+        .then((item) => {
+          setList(item.data.data.list);
+          setTotal(item.data.data.total);
+        });
     }
   };
 

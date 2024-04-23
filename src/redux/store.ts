@@ -2,13 +2,13 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import { persistReducer, persistStore } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
-import appStateReducer from './features/appStateSlice';
-import authStateReducer from './features/authStateSlice';
+import appStateReducer from './features/appSlice';
+import authStateReducer from './features/authSlice';
+import cartSliceReducer from './features/cartSlice';
+import categorySliceReducer from './features/categorySlice';
+import itemSliceReducer from './features/itemSlice';
 import rolePermissionStateReducer from './features/permissionsStateSlice';
 import shopScheduleStateSliceReducer from './features/shopScheduleStateSlice';
-import CategorySliceReducer from './features/CategorySlice';
-import ItemSliceReducer from './features/ItemSlice';
-import CartSliceReducer from './features/CartSlice';
 
 const persistConfig = {
   key: 'root',
@@ -32,9 +32,9 @@ export const store = configureStore({
     // appState: persistReducer<any, any>(persistConfig, appStateReducer),
     authState: authStateReducer,
     scheduleState: shopScheduleStateSliceReducer,
-    categoryState: CategorySliceReducer,
-    itemState: ItemSliceReducer,
-    cartState: CartSliceReducer,
+    categoryState: categorySliceReducer,
+    itemState: itemSliceReducer,
+    cartState: cartSliceReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

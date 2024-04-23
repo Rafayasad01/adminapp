@@ -18,7 +18,7 @@ import Loader from '../../components/common/Loader';
 import Notify from '../../components/common/Notify';
 import TopBar from '../../components/common/TopBar';
 import { useAppSelector } from '../../redux/redux-hooks';
-import category from '../../services/adminapp/adminCategory';
+import categoryService from '../../services/adminapp/adminCategory';
 import PermissionPopup from '../../utils/PermissionPopup';
 import { NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
 import { listingRolePermission } from '../../utils/helper';
@@ -59,7 +59,7 @@ function CategoriesServicesFaqPage() {
     const newPage = 0;
     setSearch(searchTxt);
     setPage(newPage);
-    category
+    categoryService
       .searchCategoryServiceFaq(
         categoryServiceId,
         searchTxt,
@@ -79,14 +79,14 @@ function CategoriesServicesFaqPage() {
     setPage(newPage);
     // offset? ,limit rowsperpage hoga ofset page * rowsperPage
     if (search === '' || search === null || search === undefined) {
-      category
+      categoryService
         .getCategoryServiceFaqList(categoryServiceId, newPage, rowsPerPage)
         .then((item) => {
           setList(item.data.data.list);
           setTotal(item.data.data.total);
         });
     } else {
-      category
+      categoryService
         .searchCategoryServiceFaq(
           categoryServiceId,
           search,
@@ -107,14 +107,14 @@ function CategoriesServicesFaqPage() {
     setRowsPerPage(newRowperPage);
     setPage(newPage);
     if (search === '' || search === null || search === undefined) {
-      category
+      categoryService
         .getCategoryServiceFaqList(categoryServiceId, newPage, rowsPerPage)
         .then((item) => {
           setList(item.data.data.list);
           setTotal(item.data.data.total);
         });
     } else {
-      category
+      categoryService
         .searchCategoryServiceFaq(
           categoryServiceId,
           search,
@@ -130,7 +130,7 @@ function CategoriesServicesFaqPage() {
 
   useEffect(() => {
     if (listingRolePermission(dataRole, 'Category Service Faq List')) {
-      category
+      categoryService
         .getCategoryServiceFaqList(categoryServiceId, page, rowsPerPage)
         .then((item: any) => {
           setIsLoader(false);
@@ -156,7 +156,7 @@ function CategoriesServicesFaqPage() {
       is_deleted: true,
       updated_by: authState.user.id,
     };
-    category
+    categoryService
       .deleteCategoryServiceFaq(id, data)
       .then((updateItem) => {
         if (updateItem.data.success) {
@@ -197,12 +197,14 @@ function CategoriesServicesFaqPage() {
   const manuHandler = (option: string) => {
     if (option === 'Edit') {
       if (listingRolePermission(dataRole, 'Category Service Faq Update')) {
-        category.getCategoryServiceFaq(actionMenuItemid).then((item: any) => {
-          if (item.data.success) {
-            setEditFormData(item.data.data);
-            setOpenEditFormDialog(true);
-          }
-        });
+        categoryService
+          .getCategoryServiceFaq(actionMenuItemid)
+          .then((item: any) => {
+            if (item.data.success) {
+              setEditFormData(item.data.data);
+              setOpenEditFormDialog(true);
+            }
+          });
       } else {
         setIsNotify(true);
         setNotifyMessage({
@@ -227,7 +229,7 @@ function CategoriesServicesFaqPage() {
     setIsLoader(true);
     data.created_by = authState.user.id;
     data.updated_by = authState.user.id;
-    category
+    categoryService
       .categoryServiceCreateFaq(categoryServiceId, data)
       .then((item) => {
         if (item.data.success) {
@@ -253,7 +255,7 @@ function CategoriesServicesFaqPage() {
   const updateFormHandler = (data: any) => {
     setIsLoader(true);
     data.updated_by = authState.user.id;
-    category
+    categoryService
       .updateCategoryServiceFaq(actionMenuItemid, data)
       .then((updateItem: any) => {
         if (updateItem.data.success) {
@@ -287,18 +289,20 @@ function CategoriesServicesFaqPage() {
       is_active: event.target.checked,
       updated_by: authState.user.id,
     };
-    category.updateCategoryServiceFaqStatus(id, data).then((updateItem) => {
-      if (updateItem.data.success) {
-        setList((newArr: any) => {
-          return newArr.map((item: any) => {
-            if (item.id === id) {
-              item.isActive = updateItem.data.data.isActive;
-            }
-            return { ...item };
+    categoryService
+      .updateCategoryServiceFaqStatus(id, data)
+      .then((updateItem) => {
+        if (updateItem.data.success) {
+          setList((newArr: any) => {
+            return newArr.map((item: any) => {
+              if (item.id === id) {
+                item.isActive = updateItem.data.data.isActive;
+              }
+              return { ...item };
+            });
           });
-        });
-      }
-    });
+        }
+      });
     // } else {
     //   setIsNotify(true);
     //   setNotifyMessage({

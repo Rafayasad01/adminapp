@@ -13,7 +13,7 @@ import Loader from '../../components/common/Loader';
 import Notify from '../../components/common/Notify';
 import TopBar from '../../components/common/TopBar';
 import { useAppSelector } from '../../redux/redux-hooks';
-import Service from '../../services/adminapp/adminAppUser';
+import appUserService from '../../services/adminapp/adminAppUser';
 import PermissionPopup from '../../utils/PermissionPopup';
 import { NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
 import { listingRolePermission } from '../../utils/helper';
@@ -84,16 +84,18 @@ function AppUsersPage() {
       const newPage = 0;
       setSearch(searchTxt);
       setPage(newPage);
-      Service.appListSearch(
-        authState.user.tenant,
-        selectedTab === 'APP USER' ? 'App' : 'Other',
-        searchTxt,
-        newPage,
-        rowsPerPage
-      ).then((item) => {
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      });
+      appUserService
+        .appListSearch(
+          authState.user.tenant,
+          selectedTab === 'APP USER' ? 'App' : 'Other',
+          searchTxt,
+          newPage,
+          rowsPerPage
+        )
+        .then((item) => {
+          setList(item.data.data.list);
+          setTotal(item.data.data.total);
+        });
     }
   };
 
@@ -103,7 +105,8 @@ function AppUsersPage() {
       id,
       updated_by: authState.user.id,
     };
-    Service.appUserDelete(data)
+    appUserService
+      .appUserDelete(data)
       .then((item: any) => {
         if (item.data.success) {
           setIsLoader(false);
@@ -136,12 +139,13 @@ function AppUsersPage() {
   useEffect(() => {
     setIsLoader(true);
     if (listingRolePermission(dataRole, 'Customer List')) {
-      Service.appList(
-        authState.user.tenant,
-        selectedTab === 'APP USER' ? 'App' : 'Other',
-        page,
-        rowsPerPage
-      )
+      appUserService
+        .appList(
+          authState.user.tenant,
+          selectedTab === 'APP USER' ? 'App' : 'Other',
+          page,
+          rowsPerPage
+        )
         .then((item: any) => {
           if (item.data.success) {
             setIsLoader(false);
@@ -186,7 +190,8 @@ function AppUsersPage() {
     } else if (data.appuserRole === 'App' && selectedTab === 'APP USER') {
       dataRender = true;
     }
-    Service.appCreateUser(formData)
+    appUserService
+      .appCreateUser(formData)
       .then((item) => {
         if (item.data.success) {
           setIsLoader(false);
@@ -235,7 +240,8 @@ function AppUsersPage() {
     } else if (data.appuserRole === 'App' && selectedTab === 'APP USER') {
       dataRender = true;
     }
-    Service.appUpdateUser(formData)
+    appUserService
+      .appUpdateUser(formData)
       .then((item) => {
         if (item.data.success) {
           setIsLoader(false);

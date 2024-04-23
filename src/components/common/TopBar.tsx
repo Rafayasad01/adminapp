@@ -5,18 +5,11 @@ import AppBar from '@mui/material/AppBar';
 import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
 import Toolbar from '@mui/material/Toolbar';
-// import  { blac } from '@mui/material/colors';
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { NavLink, useNavigate } from 'react-router-dom';
-import {
-  setLogo,
-  setRemoveItemState,
-} from '../../redux/features/appStateSlice';
-import {
-  logout,
-  setShopAdminTenant,
-} from '../../redux/features/authStateSlice';
+import { setLogo, setRemoveItemState } from '../../redux/features/appSlice';
+import { logout, setShopAdminTenant } from '../../redux/features/authSlice';
 import { setRolePermissions } from '../../redux/features/permissionsStateSlice';
 import { useAppSelector } from '../../redux/redux-hooks';
 import BackArrowIcon from '../icons/BackArrowIcon';

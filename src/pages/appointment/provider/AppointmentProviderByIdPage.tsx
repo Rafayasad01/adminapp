@@ -18,7 +18,7 @@ import Loader from '../../../components/common/Loader';
 import Notify from '../../../components/common/Notify';
 import TopBar from '../../../components/common/TopBar';
 import { useAppSelector } from '../../../redux/redux-hooks';
-import Service from '../../../services/adminapp/adminAppointment';
+import adminAppointmentService from '../../../services/adminapp/adminAppointment';
 import { NOT_AUTHORIZED_MESSAGE } from '../../../utils/constants';
 import { listingRolePermission } from '../../../utils/helper';
 import AppointmentProviderDetailPopup from './AppointmentProviderDetailPopup';
@@ -63,15 +63,12 @@ function AppointmentProviderByIdPage() {
       const newPage = 0;
       setSearch(searchTxt);
       setPage(newPage);
-      Service.ProviderTodaysList(
-        providerId,
-        searchTxt,
-        newPage,
-        rowsPerPage
-      ).then((item) => {
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      });
+      adminAppointmentService
+        .ProviderTodaysList(providerId, searchTxt, newPage, rowsPerPage)
+        .then((item) => {
+          setList(item.data.data.list);
+          setTotal(item.data.data.total);
+        });
     }
   };
 
@@ -81,12 +78,12 @@ function AppointmentProviderByIdPage() {
   ) => {
     setPage(newPage);
     // offset? ,limit rowsperpage hoga ofset page * rowsperPage
-    Service.ProviderTodaysList(providerId, search, newPage, rowsPerPage).then(
-      (item) => {
+    adminAppointmentService
+      .ProviderTodaysList(providerId, search, newPage, rowsPerPage)
+      .then((item) => {
         setList(item.data.data.list);
         setTotal(item.data.data.total);
-      }
-    );
+      });
   };
 
   const handleChangeRowsPerPage = (
@@ -96,17 +93,18 @@ function AppointmentProviderByIdPage() {
     const newPage = 0;
     setRowsPerPage(newRowperPage);
     setPage(newPage);
-    Service.ProviderTodaysList(providerId, search, newPage, newRowperPage).then(
-      (item) => {
+    adminAppointmentService
+      .ProviderTodaysList(providerId, search, newPage, newRowperPage)
+      .then((item) => {
         setList(item.data.data.list);
         setTotal(item.data.data.total);
-      }
-    );
+      });
   };
 
   useEffect(() => {
     if (listingRolePermission(dataRole, 'Appointment List')) {
-      Service.ProviderTodaysList(providerId, search, page, rowsPerPage)
+      adminAppointmentService
+        .ProviderTodaysList(providerId, search, page, rowsPerPage)
         .then((item: any) => {
           if (item.data.success) {
             setIsLoader(false);
@@ -137,7 +135,8 @@ function AppointmentProviderByIdPage() {
   const handleDetailDialog = (id: string) => {
     setIsLoader(true);
     if (listingRolePermission(dataRole, 'Employee List')) {
-      Service.VisitDetailById(id)
+      adminAppointmentService
+        .VisitDetailById(id)
         .then((item: any) => {
           if (item.data.success) {
             setOpenFormDialog(true);

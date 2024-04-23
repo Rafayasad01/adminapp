@@ -14,8 +14,8 @@ import Notify from '../../../components/common/Notify';
 import TopBar from '../../../components/common/TopBar';
 import { AppointmentVisit } from '../../../interfaces/app.appointment';
 import { useAppSelector } from '../../../redux/redux-hooks';
-import Service from '../../../services/adminapp/adminAppointment';
-import EmloyeeService from '../../../services/adminapp/adminStoreEmployee';
+import appointmentService from '../../../services/adminapp/adminAppointment';
+import employeeService from '../../../services/adminapp/adminStoreEmployee';
 import {
   APPOINTMENT_TYPE,
   NOT_AUTHORIZED_MESSAGE,
@@ -93,7 +93,8 @@ function AppointmentVisitPage() {
     } else if (option === 'Edit') {
       if (listingRolePermission(dataRole, 'Appointment Edit')) {
         setIsLoader(true);
-        Service.VisitEdit(actionMenuItemId?.id)
+        appointmentService
+          .VisitEdit(actionMenuItemId?.id)
           .then((item: any) => {
             if (item.data.success) {
               setIsLoader(false);
@@ -129,7 +130,8 @@ function AppointmentVisitPage() {
     } else if (option === 'Cancel') {
       if (listingRolePermission(dataRole, 'Appointment Cancel')) {
         setIsLoader(true);
-        Service.VisitCancel(actionMenuItemId?.id)
+        appointmentService
+          .VisitCancel(actionMenuItemId?.id)
           .then((item: any) => {
             if (item.data.success) {
               setIsLoader(false);
@@ -190,7 +192,7 @@ function AppointmentVisitPage() {
   useEffect(() => {
     if (appointmentType?.text === 'All Appointments') {
       const getStoreEmployeeList = async () => {
-        const storeEmployeeListPromise = EmloyeeService.StoreEmployeeList(
+        const storeEmployeeListPromise = employeeService.StoreEmployeeList(
           search,
           page,
           2000
@@ -260,7 +262,8 @@ function AppointmentVisitPage() {
     // console.log('dataaaaCREATE', data, type);
     setIsLoader(true);
     if (type === 'create') {
-      Service.VisitCreate(data)
+      appointmentService
+        .VisitCreate(data)
         .then((item) => {
           if (item.data.success) {
             setOpenFormDialog(false);
@@ -296,7 +299,8 @@ function AppointmentVisitPage() {
     } else {
       data.appointmentId = actionMenuItemId?.id;
       // console.log('daTA', data);
-      Service.VisitReschedule(data)
+      appointmentService
+        .VisitReschedule(data)
         .then((item: any) => {
           if (item.data.success) {
             setOpenRescheduleFormDialog(false);
@@ -335,7 +339,8 @@ function AppointmentVisitPage() {
   const updateFormHandler = (data: any) => {
     // console.log('datata', data);
     setIsLoader(true);
-    Service.VisitUpdate(data)
+    appointmentService
+      .VisitUpdate(data)
       .then((item) => {
         if (item.data.success) {
           // console.log('UPDATED', item.data.data);

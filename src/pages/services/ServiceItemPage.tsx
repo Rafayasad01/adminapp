@@ -18,7 +18,7 @@ import Loader from '../../components/common/Loader';
 import Notify from '../../components/common/Notify';
 import TopBar from '../../components/common/TopBar';
 import { useAppSelector } from '../../redux/redux-hooks';
-import categoryItem from '../../services/adminapp/adminStoreService';
+import storeService from '../../services/adminapp/adminStoreService';
 import { NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
 import { listingRolePermission } from '../../utils/helper';
 import ServiceItemCreatePopup from './ServiceItemCreatePopup';
@@ -62,7 +62,7 @@ function ServiceItemPage() {
       const newPage = 0;
       setSearch(searchTxt);
       setPage(newPage);
-      categoryItem
+      storeService
         .StoreCatItemsList(CatId, searchTxt, newPage, rowsPerPage)
         .then((item) => {
           setList(item.data.data.list);
@@ -77,7 +77,7 @@ function ServiceItemPage() {
   ) => {
     setPage(newPage);
     // offset? ,limit rowsperpage hoga ofset page * rowsperPage
-    categoryItem
+    storeService
       .StoreCatItemsList(CatId, search, newPage, rowsPerPage)
       .then((item) => {
         setList(item.data.data.list);
@@ -104,7 +104,7 @@ function ServiceItemPage() {
     const newPage = 0;
     setRowsPerPage(newRowperPage);
     setPage(newPage);
-    categoryItem
+    storeService
       .StoreCatItemsList(CatId, search, newPage, rowsPerPage)
       .then((item) => {
         setList(item.data.data.list);
@@ -114,7 +114,7 @@ function ServiceItemPage() {
 
   useEffect(() => {
     if (listingRolePermission(dataRole, 'Category Service List')) {
-      categoryItem
+      storeService
         .StoreCatItemsList(CatId, search, page, rowsPerPage)
         .then((item: any) => {
           if (listingRolePermission(dataRole, 'Category Service Get')) {
@@ -209,7 +209,7 @@ function ServiceItemPage() {
     formData.append('description', data.description);
     formData.append('avatar', data.avatar);
     formData.append('storeServiceCategory', CatId);
-    categoryItem
+    storeService
       .StoreCatItemsCreate(formData)
       .then((item) => {
         if (item.data.success) {
@@ -246,7 +246,7 @@ function ServiceItemPage() {
     formData.append('price', data.price);
     formData.append('description', data.description);
     if (data.avatar) formData.append('avatar', data.avatar);
-    categoryItem
+    storeService
       .StoreCatItemsUpdate(actionMenuItemid, formData)
       .then((updateItem: any) => {
         if (updateItem.data.success) {
@@ -291,7 +291,7 @@ function ServiceItemPage() {
       const data = {
         isActive: event.target.checked,
       };
-      categoryItem.StoreCatItemsUpdateStatus(id, data).then((updateItem) => {
+      storeService.StoreCatItemsUpdateStatus(id, data).then((updateItem) => {
         if (updateItem.data.success) {
           // setIsLoader(false);
           setList((newArr: any) => {

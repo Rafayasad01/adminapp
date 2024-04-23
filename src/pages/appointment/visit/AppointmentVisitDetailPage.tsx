@@ -8,7 +8,7 @@ import Loader from '../../../components/common/Loader';
 import Notify from '../../../components/common/Notify';
 import TopBar from '../../../components/common/TopBar';
 import { useAppSelector } from '../../../redux/redux-hooks';
-import Service from '../../../services/adminapp/adminAppointment';
+import adminAppointmentService from '../../../services/adminapp/adminAppointment';
 import CustomPrintLayout from '../../../utils/CustomPrintLayout/CustomAppointmentPrintLayout';
 import { listingRolePermission } from '../../../utils/helper';
 
@@ -29,7 +29,8 @@ function AppointmentVisitDetailPage() {
 
   useEffect(() => {
     if (listingRolePermission(dataRole, 'Employee List')) {
-      Service.VisitDetailById(id)
+      adminAppointmentService
+        .VisitDetailById(id)
         .then((item: any) => {
           if (item.data.success) {
             setIsLoader(false);

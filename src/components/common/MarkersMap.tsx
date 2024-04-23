@@ -1,9 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Loader } from '@googlemaps/js-api-loader';
 import { useEffect, useRef } from 'react';
-import { Marker } from '../../interfaces/map.interface';
-
 import assets from '../../assets';
+import { Marker } from '../../interfaces/map.interface';
 
 type MarkersMapProps = {
   markers: Marker[];

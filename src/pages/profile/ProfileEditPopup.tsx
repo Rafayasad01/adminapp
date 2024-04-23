@@ -11,7 +11,7 @@ import '../../assets/css/PopupStyle.css';
 import CustomDropDown from '../../components/common/CustomDropDown';
 import ErrorSpanBox from '../../components/common/ErrorSpanBox';
 import { EditProfile } from '../../interfaces/app-user.interface';
-import Countries from '../../services/commonApis/commonApis';
+import countriesService from '../../services/commonApis/commonApis';
 import {
   INVALID_CHAR,
   MAX_LENGTH_EXCEEDED,
@@ -100,7 +100,7 @@ function ProfileEditPopup({
   };
 
   useEffect(() => {
-    Countries().then((res: any) => {
+    countriesService().then((res: any) => {
       setCountries(
         res.data.map((country: any) => ({
           id: country.name.common,

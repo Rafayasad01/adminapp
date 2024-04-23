@@ -17,7 +17,7 @@ import Loader from '../../components/common/Loader';
 import Notify from '../../components/common/Notify';
 import TopBar from '../../components/common/TopBar';
 import { useAppSelector } from '../../redux/redux-hooks';
-import order from '../../services/adminapp/adminOrders';
+import orderService from '../../services/adminapp/adminOrders';
 import { ORDER_STATUSES } from '../../utils/constants';
 import promiseHandler, {
   CheckRolePermission,
@@ -52,7 +52,7 @@ function OrdersPage() {
     setPage(newPage);
     // offset? ,limit rowsperpage hoga ofset page * rowsperPage
     if (search === '' || search === null || search === undefined) {
-      const getOrderListPromise = order.getListService(
+      const getOrderListPromise = orderService.getListService(
         authState.user.tenant,
         newPage,
         rowsPerPage
@@ -79,7 +79,7 @@ function OrdersPage() {
       );
       setTotal(getOrderListResult.data.data.total);
     } else {
-      const orderSearchPromise = order.searchService(
+      const orderSearchPromise = orderService.searchService(
         authState.user.tenant,
         search,
         newPage,
@@ -116,7 +116,7 @@ function OrdersPage() {
     setRowsPerPage(newRowPerPage);
     setPage(newPage);
     if (search === '' || search === null || search === undefined) {
-      const getOrderListPromise = order.getListService(
+      const getOrderListPromise = orderService.getListService(
         authState.user.tenant,
         newPage,
         rowsPerPage
@@ -143,7 +143,7 @@ function OrdersPage() {
       );
       setTotal(getOrderListResult.data.data.total);
     } else {
-      order
+      orderService
         .searchService(authState.user.tenant, search, newPage, rowsPerPage)
         .then((item) => {
           setList(
@@ -171,7 +171,7 @@ function OrdersPage() {
       const searchTxt = event.target.value as string;
       setSearch(searchTxt);
       setPage(0);
-      order
+      orderService
         .searchService(authState.user.tenant, searchTxt, page, rowsPerPage)
         .then((item) => {
           setList(
@@ -199,7 +199,7 @@ function OrdersPage() {
 
   useEffect(() => {
     async function getOrderList() {
-      const getOrderListPromise = order.getListService(
+      const getOrderListPromise = orderService.getListService(
         authState.user.tenant,
         page,
         rowsPerPage

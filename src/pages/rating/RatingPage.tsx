@@ -17,7 +17,7 @@ import CustomText from '../../components/common/CustomText';
 import Loader from '../../components/common/Loader';
 import Notify from '../../components/common/Notify';
 import { useAppSelector } from '../../redux/redux-hooks';
-import Service from '../../services/adminapp/rating';
+import ratingService from '../../services/adminapp/rating';
 import { listingRolePermission } from '../../utils/helper';
 
 function RatingPage() {
@@ -41,15 +41,12 @@ function RatingPage() {
       const newPage = 0;
       setSearch(searchTxt);
       setPage(newPage);
-      Service.getListService(
-        authState.user.tenant,
-        searchTxt,
-        newPage,
-        rowsPerPage
-      ).then((item) => {
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      });
+      ratingService
+        .getListService(authState.user.tenant, searchTxt, newPage, rowsPerPage)
+        .then((item) => {
+          setList(item.data.data.list);
+          setTotal(item.data.data.total);
+        });
     }
   };
 
@@ -59,7 +56,8 @@ function RatingPage() {
   ) => {
     setPage(newPage);
     // offset? ,limit rowsperpage hoga ofset page * rowsperPage
-    Service.getListService(authState.user.tenant, search, newPage, rowsPerPage)
+    ratingService
+      .getListService(authState.user.tenant, search, newPage, rowsPerPage)
       .then((item) => {
         setList(item.data.data.list);
         setTotal(item.data.data.total);
@@ -81,15 +79,12 @@ function RatingPage() {
     const newPage = 0;
     setRowsPerPage(newRowperPage);
     setPage(newPage);
-    Service.getListService(
-      authState.user.tenant,
-      search,
-      newPage,
-      newRowperPage
-    ).then((item) => {
-      setList(item.data.data.list);
-      setTotal(item.data.data.total);
-    });
+    ratingService
+      .getListService(authState.user.tenant, search, newPage, newRowperPage)
+      .then((item) => {
+        setList(item.data.data.list);
+        setTotal(item.data.data.total);
+      });
     // if (search === '' || search === null || search === undefined) {
 
     // }
@@ -108,7 +103,8 @@ function RatingPage() {
 
   useEffect(() => {
     if (listingRolePermission(dataRole, 'Employee List')) {
-      Service.getListService(authState.user.tenant, search, page, rowsPerPage)
+      ratingService
+        .getListService(authState.user.tenant, search, page, rowsPerPage)
         .then((item: any) => {
           if (item.data.success) {
             setIsLoader(false);

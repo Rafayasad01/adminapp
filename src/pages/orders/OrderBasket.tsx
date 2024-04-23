@@ -27,11 +27,11 @@ import {
   setCart,
   setNotifyState,
   showNotifyMessage,
-} from '../../redux/features/CartSlice';
+} from '../../redux/features/cartSlice';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
-import AppUserService from '../../services/adminapp/adminAppUser';
-import Service from '../../services/adminapp/adminOrders';
-import VoucherService from '../../services/adminapp/adminVouchers';
+import appUserService from '../../services/adminapp/adminAppUser';
+import ordersService from '../../services/adminapp/adminOrders';
+import voucherService from '../../services/adminapp/adminVouchers';
 import { CURRENCY_PREFIX } from '../../utils/constants';
 
 const OrderBasket = () => {
@@ -133,9 +133,9 @@ const OrderBasket = () => {
     };
     let service;
     if (isExistingUser === 'Exist User') {
-      service = AppUserService.appLogin;
+      service = appUserService.appLogin;
     } else {
-      service = AppUserService.appAnonymousLogin;
+      service = appUserService.appAnonymousLogin;
     }
     service(payload)
       .then((res) => {
@@ -147,10 +147,11 @@ const OrderBasket = () => {
             type: 'success',
           });
           if (isExistingUser === 'Exist User') {
-            VoucherService.orderVoucherPromotionList(
-              authState.user.tenant,
-              res.data.data.id
-            )
+            voucherService
+              .orderVoucherPromotionList(
+                authState.user.tenant,
+                res.data.data.id
+              )
               .then((resp) => {
                 if (resp.data.success) {
                   setPromoList(resp.data.data);
@@ -196,7 +197,8 @@ const OrderBasket = () => {
           tenant: loginDetails?.tenant,
           appUser: loginDetails?.id,
         };
-        Service.OrderGetCart(cartPayload)
+        ordersService
+          .OrderGetCart(cartPayload)
           .then((item: any) => {
             if (item.data.success) {
               const updatedCartPayload = {
@@ -214,36 +216,38 @@ const OrderBasket = () => {
                   quantity: items.quantity,
                 })),
               };
-              Service.OrderUpdateCart(updatedCartPayload).then(
-                (updateCartRes) => {
+              ordersService
+                .OrderUpdateCart(updatedCartPayload)
+                .then((updateCartRes) => {
                   if (updateCartRes.data.success) {
                     const newOrderPlace = {
                       cartId: item.data.data.cart.id,
                       tenant: item.data.data.cart.tenant,
                       appUser: item.data.data.cart.appUser,
                     };
-                    Service.OrderPlace(newOrderPlace).then((orderPlaceRes) => {
-                      if (orderPlaceRes.data.success) {
-                        setIsLoader(false);
-                        showNotification({
-                          text: orderPlaceRes.data.message,
-                          type: 'success',
-                        });
-                        dispatch(setCart([]));
-                        navigate(-1);
-                      } else {
-                        setIsLoader(false);
-                        showNotification({
-                          text: orderPlaceRes.data.message,
-                          type: 'error',
-                        });
-                      }
-                      // console.log('Cart REs', cartRes);
-                    });
+                    ordersService
+                      .OrderPlace(newOrderPlace)
+                      .then((orderPlaceRes) => {
+                        if (orderPlaceRes.data.success) {
+                          setIsLoader(false);
+                          showNotification({
+                            text: orderPlaceRes.data.message,
+                            type: 'success',
+                          });
+                          dispatch(setCart([]));
+                          navigate(-1);
+                        } else {
+                          setIsLoader(false);
+                          showNotification({
+                            text: orderPlaceRes.data.message,
+                            type: 'error',
+                          });
+                        }
+                        // console.log('Cart REs', cartRes);
+                      });
                   }
                   // console.log('Cart REs', cartRes);
-                }
-              );
+                });
             }
           })
           .catch((err: any) => {

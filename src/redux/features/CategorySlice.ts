@@ -2,7 +2,7 @@
 
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { AppCategories } from '../../interfaces/category.interface';
-import services from '../../services/adminapp/adminOrders';
+import ordersService from '../../services/adminapp/adminOrders';
 
 type InitialState = {
   categories: AppCategories[];
@@ -22,7 +22,7 @@ export const fetchCategories = createAsyncThunk(
   'order/fetchCategories',
   async (tenant: string | undefined, { rejectWithValue }) => {
     try {
-      const response = await services.OrderCatList(tenant);
+      const response = await ordersService.OrderCatList(tenant);
       return response.data;
     } catch (error: any) {
       return rejectWithValue(error);
@@ -30,8 +30,8 @@ export const fetchCategories = createAsyncThunk(
   }
 );
 
-export const CategorySlice = createSlice({
-  name: 'CategorySlice',
+export const categorySlice = createSlice({
+  name: 'categorySlice',
   initialState,
   reducers: {
     setCategories: (state, action: PayloadAction<AppCategories[]>) => {
@@ -67,6 +67,6 @@ export const CategorySlice = createSlice({
 });
 
 export const { setCategories, setNotifyState, showNotifyMessage } =
-  CategorySlice.actions;
+  categorySlice.actions;
 
-export default CategorySlice.reducer;
+export default categorySlice.reducer;

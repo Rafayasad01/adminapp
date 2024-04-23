@@ -8,10 +8,10 @@ import DialogContent from '@mui/material/DialogContent';
 import IconButton from '@mui/material/IconButton';
 import { useEffect, useState } from 'react';
 import { AppCategoryItems } from '../../interfaces/category.interface';
-import { addToCart, setCart } from '../../redux/features/CartSlice';
-import { showNotifyMessage } from '../../redux/features/CategorySlice';
+import { addToCart, setCart } from '../../redux/features/cartSlice';
+import { showNotifyMessage } from '../../redux/features/categorySlice';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
-import Service from '../../services/adminapp/rating';
+import ratingService from '../../services/adminapp/rating';
 import RatingAccordions from '../rating/RatingAccordin';
 
 type HomePagePopupProps = {
@@ -79,7 +79,7 @@ function HomePagePopup({
     try {
       setIsLoader(true);
       const [catDetailResponse] = await Promise.all([
-        Service.getCatStarDetail(data?.id),
+        ratingService.getCatStarDetail(data?.id),
       ]);
 
       // Handling detail response

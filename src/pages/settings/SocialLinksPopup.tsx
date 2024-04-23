@@ -8,9 +8,9 @@ import { useDispatch } from 'react-redux';
 import '../../assets/css/PopupStyle.css';
 import Notify from '../../components/common/Notify';
 import { SocialMedia } from '../../interfaces/app.interface';
-import { setItemState } from '../../redux/features/appStateSlice';
+import { setItemState } from '../../redux/features/appSlice';
 import { useAppSelector } from '../../redux/redux-hooks';
-import Service from '../../services/adminapp/admin';
+import adminService from '../../services/adminapp/admin';
 
 type SocialLinksPopupProps = {
   openDialog: boolean;
@@ -50,7 +50,8 @@ function SocialLinksPopup({
       whatsapp: data.whatsapp ? data.whatsapp : null,
       updatedBy: authState.user.id,
     };
-    Service.updateMediaService(authState.user.tenant, formData)
+    adminService
+      .updateMediaService(authState.user.tenant, formData)
       .then((item: any) => {
         if (item.data.success) {
           setIsLoader(false);

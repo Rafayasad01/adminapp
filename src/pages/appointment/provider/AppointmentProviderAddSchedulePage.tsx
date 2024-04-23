@@ -13,7 +13,7 @@ import Notify from '../../../components/common/Notify';
 import TopBar from '../../../components/common/TopBar';
 import '../../../index.css';
 import { AppointmentProviderSchedule } from '../../../interfaces/app.appointment';
-import Service from '../../../services/adminapp/adminAppointment';
+import adminAppointmentService from '../../../services/adminapp/adminAppointment';
 import { setText, weekDays } from '../../../utils/constants';
 
 function AppointmentProviderAddSchedulePage() {
@@ -161,7 +161,8 @@ function AppointmentProviderAddSchedulePage() {
       };
       parent.workDays.push(dataItem);
     });
-    Service.ProviderScheduleCreate(id, parent)
+    adminAppointmentService
+      .ProviderScheduleCreate(id, parent)
       .then((item: any) => {
         if (item.data.success) {
           // console.log('CREATED', item.data);

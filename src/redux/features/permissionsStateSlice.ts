@@ -14,8 +14,8 @@ const initialState: RoleState = {
   role: null,
 };
 
-export const RolePermissionsStateSlice = createSlice({
-  name: 'rolePermissionsState',
+export const rolePermissionsSlice = createSlice({
+  name: 'rolePermissionsSlice',
   initialState,
   reducers: {
     setRolePermissions: (state, action: PayloadAction<RolePermissions>) => {
@@ -25,6 +25,6 @@ export const RolePermissionsStateSlice = createSlice({
   },
 });
 
-export const { setRolePermissions } = RolePermissionsStateSlice.actions;
+export const { setRolePermissions } = rolePermissionsSlice.actions;
 
-export default RolePermissionsStateSlice.reducer;
+export default rolePermissionsSlice.reducer;

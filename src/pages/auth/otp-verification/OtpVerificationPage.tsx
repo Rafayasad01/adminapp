@@ -15,7 +15,7 @@ import { useNotification } from '../../../components/Contexts/NotificationContex
 import ErrorSpanBox from '../../../components/common/ErrorSpanBox';
 import Notify from '../../../components/common/Notify';
 import { useAppSelector } from '../../../redux/redux-hooks';
-import auth from '../../../services/adminapp/admin';
+import authService from '../../../services/adminapp/admin';
 import {
   INVALID_CHAR,
   MAX_LENGTH_EXCEEDED,
@@ -59,7 +59,7 @@ function OTPVerificationPage() {
       email: state?.email,
       otp: OTP,
     };
-    auth
+    authService
       .newPasswordService(newPassObj)
       .then((res) => {
         if (res.data.success) {

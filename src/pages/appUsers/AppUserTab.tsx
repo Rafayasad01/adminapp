@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import ActionMenu from '../../components/common/ActionMenu';
 import CustomText from '../../components/common/CustomText';
 import { useAppSelector } from '../../redux/redux-hooks';
-import Service from '../../services/adminapp/adminAppUser';
+import appUserService from '../../services/adminapp/adminAppUser';
 import { NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
 import { CheckRolePermission, listingRolePermission } from '../../utils/helper';
 
@@ -67,7 +67,7 @@ function AppUserTab({
     setIsLoader(true);
     if (option === 'Edit') {
       if (listingRolePermission(dataRole, 'Customer Update')) {
-        Service.appUserEdit(actionMenuItemid?.id).then((item: any) => {
+        appUserService.appUserEdit(actionMenuItemid?.id).then((item: any) => {
           if (item.data.success) {
             setIsLoader(false);
             setOpenEditFormDialog(true);
@@ -103,7 +103,8 @@ function AppUserTab({
           id: actionMenuItemid?.id,
           updatedBy: authState.user.id,
         };
-        Service.appUserDelete(data)
+        appUserService
+          .appUserDelete(data)
           .then((item: any) => {
             if (item.data.success) {
               setIsLoader(false);
@@ -162,7 +163,7 @@ function AppUserTab({
         isActive: event.target.checked,
         updatedBy: authState.user.id,
       };
-      Service.appUpdateStatus(data).then((updateItem) => {
+      appUserService.appUpdateStatus(data).then((updateItem) => {
         if (updateItem.data.success) {
           setIsLoader(false);
           setList((newArr: any) => {
@@ -192,23 +193,25 @@ function AppUserTab({
     setPage(newPage);
     // offset? ,limit rowsperpage hoga ofset page * rowsperPage
     if (search === '' || search === null || search === undefined) {
-      Service.appList(authState.user.tenant, 'App', newPage, rowsPerPage).then(
-        (item) => {
+      appUserService
+        .appList(authState.user.tenant, 'App', newPage, rowsPerPage)
+        .then((item) => {
           setList(item.data.data.list);
           setTotal(item.data.data.total);
-        }
-      );
+        });
     } else {
-      Service.appListSearch(
-        authState.user.tenant,
-        'App',
-        search,
-        newPage,
-        rowsPerPage
-      ).then((item) => {
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      });
+      appUserService
+        .appListSearch(
+          authState.user.tenant,
+          'App',
+          search,
+          newPage,
+          rowsPerPage
+        )
+        .then((item) => {
+          setList(item.data.data.list);
+          setTotal(item.data.data.total);
+        });
     }
   };
 
@@ -220,23 +223,25 @@ function AppUserTab({
     setRowsPerPage(newRowperPage);
     setPage(newPage);
     if (search === '' || search === null || search === undefined) {
-      Service.appList(authState.user.tenant, 'App', newPage, rowsPerPage).then(
-        (item) => {
+      appUserService
+        .appList(authState.user.tenant, 'App', newPage, rowsPerPage)
+        .then((item) => {
           setList(item.data.data.list);
           setTotal(item.data.data.total);
-        }
-      );
+        });
     } else {
-      Service.appListSearch(
-        authState.user.tenant,
-        'App',
-        search,
-        newPage,
-        rowsPerPage
-      ).then((item) => {
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      });
+      appUserService
+        .appListSearch(
+          authState.user.tenant,
+          'App',
+          search,
+          newPage,
+          rowsPerPage
+        )
+        .then((item) => {
+          setList(item.data.data.list);
+          setTotal(item.data.data.total);
+        });
     }
   };
 

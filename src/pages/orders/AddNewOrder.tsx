@@ -1,21 +1,21 @@
-import { useNavigate } from 'react-router-dom';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
+import { Button } from '@mui/material';
 import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
-import { memo, useEffect, useState } from 'react';
 import _ from 'lodash';
-import { Button } from '@mui/material';
-import OrderLoginPopup from './OrderLoginPopup';
-import CategoriesCard from './CategoriesCard';
+import { memo, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import Notify from '../../components/common/Notify';
 import TopBar from '../../components/common/TopBar';
-import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
+import { AppCategories } from '../../interfaces/category.interface';
 import {
   fetchCategories,
   setNotifyState,
-} from '../../redux/features/CategorySlice';
+} from '../../redux/features/categorySlice';
+import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
+import CategoriesCard from './CategoriesCard';
 import CategoryItemsList from './CategoryItemsList';
-import { AppCategories } from '../../interfaces/category.interface';
-import Notify from '../../components/common/Notify';
+import OrderLoginPopup from './OrderLoginPopup';
 
 const AddNewOrder = () => {
   const { categories, notify, notifyMessage } = useAppSelector(

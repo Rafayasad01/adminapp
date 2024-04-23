@@ -19,7 +19,7 @@ import Loader from '../../../components/common/Loader2';
 import TimePicker from '../../../components/common/TimePicker';
 import { AppointmentVisit } from '../../../interfaces/app.appointment';
 import { useAppSelector } from '../../../redux/redux-hooks';
-import Service from '../../../services/adminapp/adminAppointment';
+import adminAppointmentService from '../../../services/adminapp/adminAppointment';
 import {
   INVALID_CHAR,
   MAX_LENGTH_EXCEEDED,
@@ -93,13 +93,15 @@ function AppointmentVisitCreatePopup({
       watch('appointmentProvider') !== 'none' &&
       watch('appointmentProvider') !== undefined
     ) {
-      Service.VisitProviderById(watch('appointmentProvider'))
+      adminAppointmentService
+        .VisitProviderById(watch('appointmentProvider'))
         .then((item: any) => {
           if (item.data.success) {
             // console.log('visit', item.data.data);
             setSchedule(item.data.data);
             setIsLoader(false);
-            Service.VisitServiceLovByProviderId(item.data.data.id)
+            adminAppointmentService
+              .VisitServiceLovByProviderId(item.data.data.id)
               .then((items: any) => {
                 if (items.data.success) {
                   //   console.log('visit Services', items.data.data);
@@ -140,7 +142,8 @@ function AppointmentVisitCreatePopup({
           });
         });
     } else {
-      Service.VisitLov(authState.user.tenant)
+      adminAppointmentService
+        .VisitLov(authState.user.tenant)
         .then((item: any) => {
           if (item.data.success) {
             // console.log('visit', item.data.data);

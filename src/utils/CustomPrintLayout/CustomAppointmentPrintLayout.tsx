@@ -4,7 +4,7 @@ import { QRCodeSVG } from 'qrcode.react';
 import { forwardRef, useEffect, useRef, useState } from 'react';
 import { useReactToPrint } from 'react-to-print';
 import { useAppSelector } from '../../redux/redux-hooks';
-import Service from '../../services/adminapp/adminAppointment';
+import appointmentService from '../../services/adminapp/adminAppointment';
 import promiseHandler from '../helper';
 
 type CustomPrintLayoutsProps = {
@@ -24,7 +24,9 @@ const CustomPrintLayouts = forwardRef<any, any>(
     const authState: any = useAppSelector((state: any) => state?.authState);
     useEffect(() => {
       const fetchData = async () => {
-        const [res] = await promiseHandler(Service.VisitDetailById(dataId.id));
+        const [res] = await promiseHandler(
+          appointmentService.VisitDetailById(dataId.id)
+        );
         if (!res) {
           // console.log('err', err);
           return;

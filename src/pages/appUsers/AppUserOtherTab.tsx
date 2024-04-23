@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import ActionMenu from '../../components/common/ActionMenu';
 import CustomText from '../../components/common/CustomText';
 import { useAppSelector } from '../../redux/redux-hooks';
-import Service from '../../services/adminapp/adminAppUser';
+import appUserService from '../../services/adminapp/adminAppUser';
 import { NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
 import { CheckRolePermission, listingRolePermission } from '../../utils/helper';
 
@@ -67,7 +67,7 @@ function AppUserOtherTab({
     setIsLoader(true);
     if (option === 'Edit') {
       if (listingRolePermission(dataRole, 'Customer Update')) {
-        Service.appUserEdit(actionMenuItemid?.id).then((item: any) => {
+        appUserService.appUserEdit(actionMenuItemid?.id).then((item: any) => {
           if (item.data.success) {
             setIsLoader(false);
             setOpenEditFormDialog(true);
@@ -103,7 +103,8 @@ function AppUserOtherTab({
           id: actionMenuItemid?.id,
           updatedBy: authState.user.id,
         };
-        Service.appUserDelete(data)
+        appUserService
+          .appUserDelete(data)
           .then((item: any) => {
             if (item.data.success) {
               setIsLoader(false);
@@ -160,7 +161,7 @@ function AppUserOtherTab({
         isActive: event.target.checked,
         updatedBy: authState.user.id,
       };
-      Service.appUpdateStatus(data).then((updateItem) => {
+      appUserService.appUpdateStatus(data).then((updateItem) => {
         if (updateItem.data.success) {
           setIsLoader(false);
           setList((newArr: any) => {
@@ -190,26 +191,25 @@ function AppUserOtherTab({
     setPage(newPage);
     // offset? ,limit rowsperpage hoga ofset page * rowsperPage
     if (search === '' || search === null || search === undefined) {
-      Service.appList(
-        authState.user.tenant,
-        'Other',
-        newPage,
-        rowsPerPage
-      ).then((item) => {
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      });
+      appUserService
+        .appList(authState.user.tenant, 'Other', newPage, rowsPerPage)
+        .then((item) => {
+          setList(item.data.data.list);
+          setTotal(item.data.data.total);
+        });
     } else {
-      Service.appListSearch(
-        authState.user.tenant,
-        'Other',
-        search,
-        newPage,
-        rowsPerPage
-      ).then((item) => {
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      });
+      appUserService
+        .appListSearch(
+          authState.user.tenant,
+          'Other',
+          search,
+          newPage,
+          rowsPerPage
+        )
+        .then((item) => {
+          setList(item.data.data.list);
+          setTotal(item.data.data.total);
+        });
     }
   };
 
@@ -221,26 +221,25 @@ function AppUserOtherTab({
     setRowsPerPage(newRowPerPage);
     setPage(newPage);
     if (search === '' || search === null || search === undefined) {
-      Service.appList(
-        authState.user.tenant,
-        'Other',
-        newPage,
-        rowsPerPage
-      ).then((item) => {
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      });
+      appUserService
+        .appList(authState.user.tenant, 'Other', newPage, rowsPerPage)
+        .then((item) => {
+          setList(item.data.data.list);
+          setTotal(item.data.data.total);
+        });
     } else {
-      Service.appListSearch(
-        authState.user.tenant,
-        'Other',
-        search,
-        newPage,
-        rowsPerPage
-      ).then((item) => {
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      });
+      appUserService
+        .appListSearch(
+          authState.user.tenant,
+          'Other',
+          search,
+          newPage,
+          rowsPerPage
+        )
+        .then((item) => {
+          setList(item.data.data.list);
+          setTotal(item.data.data.total);
+        });
     }
   };
 

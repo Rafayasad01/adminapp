@@ -8,7 +8,7 @@ import CustomText from '../../../components/common/CustomText';
 import Loader from '../../../components/common/Loader';
 import Notify from '../../../components/common/Notify';
 import { useAppSelector } from '../../../redux/redux-hooks';
-import Service from '../../../services/adminapp/adminAppUser';
+import appUserService from '../../../services/adminapp/adminAppUser';
 import { NOT_AUTHORIZED_MESSAGE } from '../../../utils/constants';
 import { listingRolePermission } from '../../../utils/helper';
 import AppUserAddressCreatePopup from './AppUserAddressCreatePopup';
@@ -68,7 +68,8 @@ function AppUserAddressTabPage({
       tenant: authState.user.tenant,
       appUser: appUserId,
     };
-    Service.appUserAddressCreate(formData)
+    appUserService
+      .appUserAddressCreate(formData)
       .then((item) => {
         if (item.data.success) {
           setIsLoader(false);
@@ -114,7 +115,8 @@ function AppUserAddressTabPage({
       type: data.type,
       address: data.address,
     };
-    Service.appUserAddressUpdate(formData)
+    appUserService
+      .appUserAddressUpdate(formData)
       .then((item) => {
         if (item.data.success) {
           setIsLoader(false);
@@ -157,7 +159,7 @@ function AppUserAddressTabPage({
         id,
         isActive: event.target.checked,
       };
-      Service.appUserAddressUpdateStatus(data).then((updateItem) => {
+      appUserService.appUserAddressUpdateStatus(data).then((updateItem) => {
         if (updateItem.data.success) {
           setList((newArr: any) => {
             return newArr.map((item: any) => {
@@ -213,7 +215,8 @@ function AppUserAddressTabPage({
   const handleEdit = (id: string) => {
     if (listingRolePermission(dataRole, 'Banners Edit')) {
       setIsLoader(true);
-      Service.appUserAddressEdit(id)
+      appUserService
+        .appUserAddressEdit(id)
         .then((item: any) => {
           if (item.data.success) {
             setIsLoader(false);

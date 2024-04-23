@@ -15,8 +15,8 @@ const initialState: InitialState = {
   notifyMessage: {},
 };
 
-export const CartSlice = createSlice({
-  name: 'CartSlice',
+export const cartSlice = createSlice({
+  name: 'cartSlice',
   initialState,
   reducers: {
     setCart: (state, action: PayloadAction<AppCategoryItems[]>) => {
@@ -64,6 +64,6 @@ export const {
   quantityDecrement,
   setNotifyState,
   showNotifyMessage,
-} = CartSlice.actions;
+} = cartSlice.actions;
 
-export default CartSlice.reducer;
+export default cartSlice.reducer;

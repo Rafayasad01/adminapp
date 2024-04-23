@@ -1,21 +1,21 @@
 import Button from '@mui/material/Button';
+import CircularProgress from '@mui/material/CircularProgress';
 import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
-import CircularProgress from '@mui/material/CircularProgress';
 import assets from '../../../assets';
-import auth from '../../../services/adminapp/admin';
+import { useNotification } from '../../../components/Contexts/NotificationContext';
 import ErrorSpanBox from '../../../components/common/ErrorSpanBox';
+import Notify from '../../../components/common/Notify';
+import { useAppSelector } from '../../../redux/redux-hooks';
+import authService from '../../../services/adminapp/admin';
 import {
   INVALID_CHAR,
   MAX_LENGTH_EXCEEDED,
   PATTERN,
 } from '../../../utils/constants';
-import Notify from '../../../components/common/Notify';
-import { useNotification } from '../../../components/Contexts/NotificationContext';
-import { useAppSelector } from '../../../redux/redux-hooks';
 
 interface Email {
   email: string;
@@ -46,7 +46,7 @@ function ForgotPasswordPage() {
 
   const sendEmail = async (data: Email) => {
     setIsLoader(true);
-    auth
+    authService
       .getOtpService(data)
       .then((res) => {
         if (res.data.success) {

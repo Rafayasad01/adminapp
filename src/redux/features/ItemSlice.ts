@@ -2,7 +2,7 @@
 
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { AppCategoryItems } from '../../interfaces/category.interface';
-import services from '../../services/adminapp/adminOrders';
+import ordersService from '../../services/adminapp/adminOrders';
 
 type InitialState = {
   items: AppCategoryItems[];
@@ -22,7 +22,7 @@ export const fetchItemsByCategory = createAsyncThunk(
   'order/fetchItems',
   async (id: any, { rejectWithValue }) => {
     try {
-      const response = await services.OrderCatItemList(id);
+      const response = await ordersService.OrderCatItemList(id);
       return response.data;
     } catch (error: any) {
       return rejectWithValue(error);
@@ -30,8 +30,8 @@ export const fetchItemsByCategory = createAsyncThunk(
   }
 );
 
-export const ItemSlice = createSlice({
-  name: 'ItemSlice',
+export const itemSlice = createSlice({
+  name: 'itemSlice',
   initialState,
   reducers: {
     setItems: (state, action: PayloadAction<AppCategoryItems[]>) => {
@@ -62,6 +62,6 @@ export const ItemSlice = createSlice({
   },
 });
 
-export const { setItems, setNotifyState } = ItemSlice.actions;
+export const { setItems, setNotifyState } = itemSlice.actions;
 
-export default ItemSlice.reducer;
+export default itemSlice.reducer;

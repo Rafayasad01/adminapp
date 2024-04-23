@@ -7,7 +7,7 @@ import Loader from '../../components/common/Loader';
 import Notify from '../../components/common/Notify';
 import TopBar from '../../components/common/TopBar';
 import { useAppSelector } from '../../redux/redux-hooks';
-import Service from '../../services/adminapp/adminAppUser';
+import appUserService from '../../services/adminapp/adminAppUser';
 import PermissionPopup from '../../utils/PermissionPopup';
 import { listingRolePermission } from '../../utils/helper';
 import AppUserLoyaltyTab from './AppUserRewardHistoryTabs/AppUserLoyaltyTab';
@@ -78,9 +78,9 @@ function AppUserRewardHistory() {
     setIsLoader(true);
     if (listingRolePermission(dataRole, 'Driver Address Detail')) {
       if (selectedTab === 'PROMOTION HISTORY') {
-        apiExecution(Service.appUserVocuherHistoryList);
+        apiExecution(appUserService.appUserVocuherHistoryList);
       } else {
-        apiExecution(Service.appUserLoyaltyHistoryList);
+        apiExecution(appUserService.appUserLoyaltyHistoryList);
       }
     } else {
       setIsLoader(false);

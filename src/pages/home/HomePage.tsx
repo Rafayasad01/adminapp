@@ -8,7 +8,7 @@ import Loader from '../../components/common/Loader';
 import Notify from '../../components/common/Notify';
 import TopBar from '../../components/common/TopBar';
 import { useAppSelector } from '../../redux/redux-hooks';
-import Service from '../../services/adminapp/adminDashboard';
+import dashboardService from '../../services/adminapp/adminDashboard';
 import DeliveredModal from './DeliveredModal';
 import DeliveryModal from './DeliveryModal';
 import OverdueModal from './OverdueModal';
@@ -33,7 +33,8 @@ function HomePage() {
   // const data = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
   useEffect(() => {
-    Service.getDashboardCount(authState.user.tenant)
+    dashboardService
+      .getDashboardCount(authState.user.tenant)
       .then((res) => {
         if (res.data.success) {
           setIsLoader(false);

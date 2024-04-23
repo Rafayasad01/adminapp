@@ -8,7 +8,7 @@ import '../../../assets/css/PopupStyle.css';
 import CustomDropDown from '../../../components/common/CustomDropDown';
 import CustomInputBox from '../../../components/common/CustomInputBox';
 import { BarberItemServices } from '../../../interfaces/services.interface';
-import StoreLovService from '../../../services/adminapp/adminStoreService';
+import storeLovService from '../../../services/adminapp/adminStoreService';
 import { BARBER_SERVICES_AMOUNT, PATTERN } from '../../../utils/constants';
 
 type EmployeeServiceCreatePopupProps = {
@@ -41,7 +41,7 @@ function EmployeeServiceCreatePopup({
   const [catItemsLovlist, setCatItemsLovList] = useState<any>([]);
 
   const getCatItems = async (id: any) => {
-    await StoreLovService.StoreCatItemsLov(id).then((res) => {
+    await storeLovService.StoreCatItemsLov(id).then((res) => {
       setCatItemsLovList(res.data.data);
     });
   };

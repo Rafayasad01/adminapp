@@ -16,7 +16,7 @@ import CustomText from '../../components/common/CustomText';
 import Loader from '../../components/common/Loader';
 import TopBar from '../../components/common/TopBar';
 import { useAppSelector } from '../../redux/redux-hooks';
-import cart from '../../services/adminapp/adminCarts';
+import cartService from '../../services/adminapp/adminCarts';
 import { CART_STATUS } from '../../utils/constants';
 import { CheckRolePermission } from '../../utils/helper';
 
@@ -46,14 +46,14 @@ function CartsPage() {
     setPage(newPage);
     // offset? ,limit rowsperpage hoga ofset page * rowsperPage
     if (search === '' || search === null || search === undefined) {
-      cart
+      cartService
         .getListService(authState.user.tenant, newPage, rowsPerPage)
         .then((item) => {
           setList(item.data.data.list.map((newItem: any) => ({ ...newItem })));
           setTotal(item.data.data.total);
         });
     } else {
-      cart
+      cartService
         .searchService(authState.user.tenant, search, newPage, rowsPerPage)
         .then((item) => {
           setList(item.data.data.list.map((newItem: any) => ({ ...newItem })));
@@ -70,7 +70,7 @@ function CartsPage() {
     setRowsPerPage(newRowperPage);
     setPage(newPage);
     if (search === '' || search === null || search === undefined) {
-      cart
+      cartService
         .getListService(authState.user.tenant, newPage, newRowperPage)
         .then((item) => {
           // console.log(item.data.data)
@@ -78,7 +78,7 @@ function CartsPage() {
           setTotal(item.data.data.total);
         });
     } else {
-      cart
+      cartService
         .searchService(authState.user.tenant, search, newPage, newRowperPage)
         .then((item) => {
           setList(item.data.data.list.map((newItem: any) => ({ ...newItem })));
@@ -93,7 +93,7 @@ function CartsPage() {
       const newPage = 0;
       setSearch(searchTxt);
       setPage(newPage);
-      cart
+      cartService
         .searchService(authState.user.tenant, searchTxt, newPage, rowsPerPage)
         .then((item) => {
           setList(item.data.data.list.map((newItem: any) => ({ ...newItem })));
@@ -103,7 +103,7 @@ function CartsPage() {
   };
 
   useEffect(() => {
-    cart
+    cartService
       .getListService(authState.user.tenant, page, rowsPerPage)
       .then((item) => {
         // console.log(item.data.data)

@@ -12,9 +12,9 @@ import CustomButton from '../../components/common/CustomButton';
 import Loader from '../../components/common/Loader';
 import MapAddress from '../../components/common/MapAddress';
 import Notify from '../../components/common/Notify';
-import { setSystemConfig, setTheme } from '../../redux/features/authStateSlice';
+import { setSystemConfig, setTheme } from '../../redux/features/authSlice';
 import { useAppSelector } from '../../redux/redux-hooks';
-import system from '../../services/adminapp/SystemConfig';
+import systemConfigService from '../../services/adminapp/systemConfig';
 import PermissionPopup from '../../utils/PermissionPopup';
 import DragDropFile from './DragDropFile';
 
@@ -37,7 +37,7 @@ function SettingsConfig() {
   const [dialogItem, setDialogItem] = useState<any>({});
 
   useEffect(() => {
-    system
+    systemConfigService
       .getSystemConfigByTenant(authState.user.tenant)
       .then((res) => {
         if (res.data.success) {
@@ -70,7 +70,7 @@ function SettingsConfig() {
       updatedBy: authState?.user?.id,
     };
     // console.log('themeObj:::::::', themeObj);
-    system
+    systemConfigService
       .systemConfigColorChange(authState.user.tenant, themeObj)
       .then((res) => {
         if (res.data.success) {
@@ -103,7 +103,7 @@ function SettingsConfig() {
     setIsLoader(true);
     const formData = new FormData();
     if (themeFile !== null) formData.append('logoffImage', themeFile);
-    system
+    systemConfigService
       .systemConfigLayoutUpdate(authState.user.tenant, formData)
       .then((res) => {
         if (res.data.success) {

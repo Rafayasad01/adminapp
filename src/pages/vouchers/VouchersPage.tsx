@@ -17,7 +17,7 @@ import Loader from '../../components/common/Loader';
 import Notify from '../../components/common/Notify';
 import TopBar from '../../components/common/TopBar';
 import { useAppSelector } from '../../redux/redux-hooks';
-import Service from '../../services/adminapp/adminVouchers';
+import vouchersService from '../../services/adminapp/adminVouchers';
 import PermissionPopup from '../../utils/PermissionPopup';
 import { NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
 import { listingRolePermission } from '../../utils/helper';
@@ -52,16 +52,16 @@ function VouchersPage() {
   const handleDialogClose = (deleteVoucher: boolean) => {
     if (deleteVoucher) {
       if (deleteItemId) {
-        Service.deleteVoucher(authState.user.tenant, deleteItemId).then(
-          (response) => {
+        vouchersService
+          .deleteVoucher(authState.user.tenant, deleteItemId)
+          .then((response) => {
             if (response.data.success) {
               const newList = list.filter(
                 (item: any) => item.id !== deleteItemId
               );
               setList(newList);
             }
-          }
-        );
+          });
       }
     }
     setDeleteItemId('');
@@ -120,17 +120,14 @@ function VouchersPage() {
     newPage: number
   ) => {
     setPage(newPage);
-    Service.listVouchers(
-      authState.user.tenant,
-      newPage,
-      rowsPerPage,
-      search
-    ).then((response) => {
-      if (response.data.success) {
-        setList(response.data.data.result);
-        setTotal(response.data.data.totalResults);
-      }
-    });
+    vouchersService
+      .listVouchers(authState.user.tenant, newPage, rowsPerPage, search)
+      .then((response) => {
+        if (response.data.success) {
+          setList(response.data.data.result);
+          setTotal(response.data.data.totalResults);
+        }
+      });
   };
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -139,22 +136,20 @@ function VouchersPage() {
     const newPage = 0;
     setRowsPerPage(newRowPerPage);
     setPage(newPage);
-    Service.listVouchers(
-      authState.user.tenant,
-      newPage,
-      rowsPerPage,
-      search
-    ).then((response) => {
-      if (response.data.success) {
-        setList(response.data.data.result);
-        setTotal(response.data.data.totalResults);
-      }
-    });
+    vouchersService
+      .listVouchers(authState.user.tenant, newPage, rowsPerPage, search)
+      .then((response) => {
+        if (response.data.success) {
+          setList(response.data.data.result);
+          setTotal(response.data.data.totalResults);
+        }
+      });
   };
 
   useEffect(() => {
     if (listingRolePermission(dataRole, 'Voucher List')) {
-      Service.listVouchers(authState.user.tenant, page, rowsPerPage, search)
+      vouchersService
+        .listVouchers(authState.user.tenant, page, rowsPerPage, search)
         .then((response: any) => {
           if (response.data.success) {
             setIsLoader(false);
@@ -182,7 +177,8 @@ function VouchersPage() {
 
   const createFormHandler = (data: any) => {
     setIsLoader(true);
-    Service.createVoucher(authState.user.tenant, data)
+    vouchersService
+      .createVoucher(authState.user.tenant, data)
       .then((response) => {
         if (response.data.success) {
           setIsLoader(false);
@@ -213,7 +209,8 @@ function VouchersPage() {
 
   const updateFormHandler = (id: string, data: any) => {
     setIsLoader(true);
-    Service.updateVoucher(authState.user.tenant, id, data)
+    vouchersService
+      .updateVoucher(authState.user.tenant, id, data)
       .then((response: any) => {
         if (response.data.success) {
           setIsLoader(false);
@@ -254,7 +251,7 @@ function VouchersPage() {
         isActive: event.target.checked,
         updatedBy: authState.user.id,
       };
-      Service.updateStatus(data).then((updateItem) => {
+      vouchersService.updateStatus(data).then((updateItem) => {
         if (updateItem.data.success) {
           setIsLoader(false);
           setList((newArr: any) => {

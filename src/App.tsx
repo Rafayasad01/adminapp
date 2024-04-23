@@ -4,10 +4,10 @@ import { useEffect, useState } from 'react';
 import { useErrorBoundary } from 'react-error-boundary';
 import { useRoutes } from 'react-router-dom';
 import Loader from './components/common/Loader';
-import { setSystemConfig, setTheme } from './redux/features/authStateSlice';
+import { setSystemConfig, setTheme } from './redux/features/authSlice';
 import { useAppDispatch } from './redux/redux-hooks';
 import { routeObjects } from './routes/AppRoutes';
-import system from './services/adminapp/SystemConfig';
+import systemConfigService from './services/adminapp/systemConfig';
 
 function App() {
   const dispatch = useAppDispatch();
@@ -41,7 +41,7 @@ function App() {
   useEffect(() => {
     setIsPageLoader(true);
     const currentURL = getDomain();
-    system
+    systemConfigService
       .getSystemConfig(currentURL)
       .then((res: any) => {
         setIsPageLoader(false);

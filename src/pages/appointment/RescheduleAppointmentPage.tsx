@@ -31,8 +31,8 @@ import CustomInputBox from '../../components/common/CustomInputBox';
 import ErrorSpanBox from '../../components/common/ErrorSpanBox';
 import Loader from '../../components/common/Loader2';
 import TimePicker from '../../components/common/TimePicker';
-import StoreAppointmentService from '../../services/adminapp/adminStoreAppointment';
-import StoreLovService from '../../services/adminapp/adminStoreService';
+import storeAppointmentService from '../../services/adminapp/adminStoreAppointment';
+import storeLovService from '../../services/adminapp/adminStoreService';
 
 // Extend dayjs with necessary plugins
 dayjs.extend(utc);
@@ -90,13 +90,13 @@ export default function RescheduleAppointmentPage() {
   };
 
   const getBookedTimeSlots = async (bookedid: any, date: any) => {
-    await StoreAppointmentService.getBarberBookedTimeSlots(bookedid, date).then(
-      (res) => {
+    await storeAppointmentService
+      .getBarberBookedTimeSlots(bookedid, date)
+      .then((res) => {
         if (res.data.success) {
           setAppointmentBookedTime(res.data.data);
         }
-      }
-    );
+      });
   };
 
   const getCatItemName = (catitemid: any) => {
@@ -170,7 +170,8 @@ export default function RescheduleAppointmentPage() {
   };
 
   const catLovService = () => {
-    StoreLovService.StoreCatLov()
+    storeLovService
+      .StoreCatLov()
       .then((res: any) => {
         if (res.data.success) {
           setCatLovList(res.data.data);
@@ -193,7 +194,8 @@ export default function RescheduleAppointmentPage() {
 
   const getAppointment = async () => {
     setIsLoader(true);
-    await StoreAppointmentService.getAppointment(id)
+    await storeAppointmentService
+      .getAppointment(id)
       .then((res: any) => {
         if (res.data.success) {
           setValue('name', res.data.data.name);
@@ -230,7 +232,7 @@ export default function RescheduleAppointmentPage() {
   }, []);
 
   const getBarbers = async (barberid: any) => {
-    await StoreAppointmentService.getBarbersList(barberid).then((res) => {
+    await storeAppointmentService.getBarbersList(barberid).then((res) => {
       setBarberList(res.data.data);
       setActiveBarberData(null);
       setActiveBarber(null);
@@ -239,7 +241,7 @@ export default function RescheduleAppointmentPage() {
   };
 
   const getCatItems = async (catid: any) => {
-    await StoreLovService.StoreCatItemsLov(catid).then((res) => {
+    await storeLovService.StoreCatItemsLov(catid).then((res) => {
       if (res.data.success) {
         setCatItemsLovList(res.data.data);
         const uniqueData = res.data.data.filter(
@@ -319,7 +321,8 @@ export default function RescheduleAppointmentPage() {
       return rest;
     });
     data.appointments = updatedAppointmentArray;
-    StoreAppointmentService.appointmentReschedule(id, data)
+    storeAppointmentService
+      .appointmentReschedule(id, data)
       .then((res: any) => {
         if (res.data.success) {
           setIsLoader(false);

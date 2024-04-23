@@ -1,15 +1,15 @@
-import { memo, useEffect, useState } from 'react';
 import _ from 'lodash';
+import { memo, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Notify from '../../components/common/Notify';
 import { AppCategoryItems } from '../../interfaces/category.interface';
-import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 import {
   fetchItemsByCategory,
   setNotifyState,
-} from '../../redux/features/ItemSlice';
+} from '../../redux/features/itemSlice';
+import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 import { CURRENCY_PREFIX } from '../../utils/constants';
 import HomePagePopup from './HomePagePopup';
-import Notify from '../../components/common/Notify';
 
 interface CategoryItemsListProps {
   categoryId: string | any;

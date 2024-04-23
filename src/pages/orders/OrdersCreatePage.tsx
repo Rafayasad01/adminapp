@@ -31,9 +31,9 @@ import DeleteIcon from '../../components/icons/DeleteIcon';
 import PromoCodeIcon from '../../components/icons/PromoCode';
 import { Order } from '../../interfaces/order.interface';
 import { useAppSelector } from '../../redux/redux-hooks';
-import AppUserService from '../../services/adminapp/adminAppUser';
-import Service from '../../services/adminapp/adminOrders';
-import VoucherService from '../../services/adminapp/adminVouchers';
+import appUserService from '../../services/adminapp/adminAppUser';
+import ordersService from '../../services/adminapp/adminOrders';
+import voucherService from '../../services/adminapp/adminVouchers';
 import { ORDER_FULFILLMENT_METHOD } from '../../utils/constants';
 import promiseHandler from '../../utils/helper';
 import { ValuesOf } from '../../utils/ts-helpers';
@@ -128,7 +128,7 @@ function OrdersCreatePage() {
           : userIdentifier || 'false',
       tenant,
     };
-    const anonymousLoginPromise = AppUserService.appAnonymousLogin(payload);
+    const anonymousLoginPromise = appUserService.appAnonymousLogin(payload);
     const [anonymousLoginResult, anonymousLoginError, anonymousLoginOk] =
       await promiseHandler(anonymousLoginPromise);
     if (!anonymousLoginOk) {
@@ -164,7 +164,7 @@ function OrdersCreatePage() {
       appUser: anonymousLoginResultData.id,
     };
 
-    const orderGetCartPromise = Service.OrderGetCart(cartPayload);
+    const orderGetCartPromise = ordersService.OrderGetCart(cartPayload);
 
     const [orderGetCartResult, orderGetCartError, orderGetCartOk] =
       await promiseHandler(orderGetCartPromise);
@@ -201,7 +201,8 @@ function OrdersCreatePage() {
         quantity: item.quantity,
       })),
     };
-    const orderUpdateCartPromise = Service.OrderUpdateCart(updatedCartPayload);
+    const orderUpdateCartPromise =
+      ordersService.OrderUpdateCart(updatedCartPayload);
     const [orderUpdateCartResult, orderUpdateCartError, orderUpdateCartOk] =
       await promiseHandler(orderUpdateCartPromise);
 
@@ -229,7 +230,7 @@ function OrdersCreatePage() {
       fulfillmentMethod: ORDER_FULFILLMENT_METHOD.SELF,
     };
 
-    const orderPlacePromise = Service.OrderPlace(newOrderPlace);
+    const orderPlacePromise = ordersService.OrderPlace(newOrderPlace);
 
     const [orderPlaceResult, orderPlaceError, orderPlaceOk] =
       await promiseHandler(orderPlacePromise);
@@ -271,9 +272,9 @@ function OrdersCreatePage() {
     };
     let service;
     if (isExistingUser === 'TRUE') {
-      service = AppUserService.appLogin;
+      service = appUserService.appLogin;
     } else {
-      service = AppUserService.appAnonymousLogin;
+      service = appUserService.appAnonymousLogin;
     }
     service(payload)
       .then((res) => {
@@ -292,10 +293,11 @@ function OrdersCreatePage() {
             type: 'success',
           });
           if (isExistingUser === 'TRUE') {
-            VoucherService.orderVoucherPromotionList(
-              authState.user.tenant,
-              res.data.data.id
-            )
+            voucherService
+              .orderVoucherPromotionList(
+                authState.user.tenant,
+                res.data.data.id
+              )
               .then((resp) => {
                 if (resp.data.success) {
                   setPromoList(resp.data.data);
@@ -349,7 +351,8 @@ function OrdersCreatePage() {
           tenant: loginDetails?.tenant,
           appUser: loginDetails?.id,
         };
-        Service.OrderGetCart(cartPayload)
+        ordersService
+          .OrderGetCart(cartPayload)
           .then((item: any) => {
             if (item.data.success) {
               const updatedCartPayload = {
@@ -367,8 +370,9 @@ function OrdersCreatePage() {
                   quantity: items.quantity,
                 })),
               };
-              Service.OrderUpdateCart(updatedCartPayload).then(
-                (updateCartRes) => {
+              ordersService
+                .OrderUpdateCart(updatedCartPayload)
+                .then((updateCartRes) => {
                   if (updateCartRes.data.success) {
                     const newOrderPlace = {
                       cartId: item.data.data.cart.id,
@@ -376,29 +380,30 @@ function OrdersCreatePage() {
                       appUser: item.data.data.cart.appUser,
                       fulfillmentMethod,
                     };
-                    Service.OrderPlace(newOrderPlace).then((orderPlaceRes) => {
-                      if (orderPlaceRes.data.success) {
-                        setIsLoader(false);
-                        setIsNotify(true);
-                        setNotifyMessage({
-                          text: orderPlaceRes.data.message,
-                          type: 'success',
-                        });
-                        navigate(-1);
-                      } else {
-                        setIsLoader(false);
-                        setIsNotify(true);
-                        setNotifyMessage({
-                          text: orderPlaceRes.data.message,
-                          type: 'error',
-                        });
-                      }
-                      // console.log('Cart REs', cartRes);
-                    });
+                    ordersService
+                      .OrderPlace(newOrderPlace)
+                      .then((orderPlaceRes) => {
+                        if (orderPlaceRes.data.success) {
+                          setIsLoader(false);
+                          setIsNotify(true);
+                          setNotifyMessage({
+                            text: orderPlaceRes.data.message,
+                            type: 'success',
+                          });
+                          navigate(-1);
+                        } else {
+                          setIsLoader(false);
+                          setIsNotify(true);
+                          setNotifyMessage({
+                            text: orderPlaceRes.data.message,
+                            type: 'error',
+                          });
+                        }
+                        // console.log('Cart REs', cartRes);
+                      });
                   }
                   // console.log('Cart REs', cartRes);
-                }
-              );
+                });
             }
           })
           .catch((err: any) => {
@@ -499,7 +504,8 @@ function OrdersCreatePage() {
   useEffect(() => {
     // setIsLoader(true);
     if (watch('category') !== 'none' && watch('category') !== undefined) {
-      Service.OrderCatItemList(watch('category'))
+      ordersService
+        .OrderCatItemList(watch('category'))
         .then((item: any) => {
           if (item.data.success) {
             setCatItemList(item.data.data);
@@ -522,7 +528,8 @@ function OrdersCreatePage() {
           });
         });
     } else {
-      Service.OrderCatList(authState.user.tenant)
+      ordersService
+        .OrderCatList(authState.user.tenant)
         .then((item: any) => {
           if (item.data.success) {
             setCatList(item.data.data);

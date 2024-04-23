@@ -14,7 +14,7 @@ import Notify from '../../components/common/Notify';
 import TopBar from '../../components/common/TopBar';
 import { AppUserEmployees } from '../../interfaces/app-user.interface';
 import { useAppSelector } from '../../redux/redux-hooks';
-import Service from '../../services/adminapp/adminBanner';
+import bannerService from '../../services/adminapp/adminBanner';
 import { NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
 import { listingRolePermission } from '../../utils/helper';
 import BannerUpdatePopup from './BannerUpdatePopup';
@@ -85,7 +85,8 @@ function BannersPage() {
 
   useEffect(() => {
     if (listingRolePermission(dataRole, 'Banners List')) {
-      Service.getBanners(authState.user.tenant)
+      bannerService
+        .getBanners(authState.user.tenant)
         .then((item: any) => {
           if (item.data.success) {
             setIsLoader(false);
@@ -119,7 +120,8 @@ function BannersPage() {
       formData.append('banner', bannerData.bannerImg);
       formData.append('createdBy', authState.user.id);
       formData.append('tenant', authState.user.tenant);
-      Service.createBanner(formData)
+      bannerService
+        .createBanner(formData)
         .then((item) => {
           if (item.data.success) {
             setOpenFormDialog(false);
@@ -174,7 +176,8 @@ function BannersPage() {
       if (data.bannerImg !== null) formDetails.append('banner', data.bannerImg);
       // formDetails.append('bannerId', data.id);
       formDetails.append('updatedBy', authState.user.id);
-      Service.updateBanners(formDetails, editFormData?.id)
+      bannerService
+        .updateBanners(formDetails, editFormData?.id)
         .then((item) => {
           if (item.data.success) {
             // console.log('UPDATED', item.data.data);
@@ -230,7 +233,8 @@ function BannersPage() {
   const handleEdit = (id: string) => {
     if (listingRolePermission(dataRole, 'Banners Edit')) {
       setIsLoader(true);
-      Service.editBanners(id)
+      bannerService
+        .editBanners(id)
         .then((item: any) => {
           if (item.data.success) {
             setIsLoader(false);
@@ -269,7 +273,8 @@ function BannersPage() {
       const deleteObj = {
         updatedBy: authState.user.id,
       };
-      Service.deleteBanner(deleteObj, id)
+      bannerService
+        .deleteBanner(deleteObj, id)
         .then((item: any) => {
           if (item.data.success) {
             setIsLoader(false);
@@ -311,7 +316,7 @@ function BannersPage() {
         isActive: event.target.checked,
         updatedBy: authState.user.id,
       };
-      Service.BannerUpdateStatus(data, id).then((updateItem) => {
+      bannerService.BannerUpdateStatus(data, id).then((updateItem) => {
         if (updateItem.data.success) {
           setList((newArr: any) => {
             return newArr.map((item: any) => {

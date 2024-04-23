@@ -2,7 +2,7 @@
 
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { DateRange, WorkDay } from '../../interfaces/shop-schedule.interface';
-import adminShopSchedule from '../../services/adminapp/adminShopSchedule';
+import shopScheduleService from '../../services/adminapp/adminShopSchedule';
 import { convertKeysToDayJS } from '../../utils/helper';
 
 type InitialState = {
@@ -35,7 +35,7 @@ export const fetchSchedule = createAsyncThunk(
   ) => {
     const { tenant, date } = data;
     try {
-      const response = await adminShopSchedule.getShopScheduleService(
+      const response = await shopScheduleService.getShopScheduleService(
         tenant,
         date
       );
@@ -55,19 +55,19 @@ export const setScheduleThunk = createAsyncThunk(
   async (data: { tenant: string | any; body: object }, { rejectWithValue }) => {
     const { tenant, body } = data;
     try {
-      const response = await adminShopSchedule.setShopScheduleService(
+      const response = await shopScheduleService.setShopScheduleService(
         tenant,
         body
       );
       return response.data;
-    } catch (error: any | AxiosError) {
+    } catch (error: any) {
       return rejectWithValue(error.response.data);
     }
   }
 );
 
-export const shopScheduleStateSlice = createSlice({
-  name: 'shopScheduleStateSlice',
+export const shopScheduleSlice = createSlice({
+  name: 'shopScheduleSlice',
   initialState,
   reducers: {
     setWordDays: (state, action: PayloadAction<any>) => {
@@ -174,6 +174,6 @@ export const {
   setScheduleMonthDate,
   setScheduleMonthDateForWeek,
   setNotifyScheduleError,
-} = shopScheduleStateSlice.actions;
+} = shopScheduleSlice.actions;
 
-export default shopScheduleStateSlice.reducer;
+export default shopScheduleSlice.reducer;

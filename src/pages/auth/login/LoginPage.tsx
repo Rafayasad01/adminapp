@@ -14,14 +14,11 @@ import { useNotification } from '../../../components/Contexts/NotificationContex
 import ErrorSpanBox from '../../../components/common/ErrorSpanBox';
 import Notify from '../../../components/common/Notify';
 import { UserLogin } from '../../../interfaces/auth.interface';
-import { setItemState, setLogo } from '../../../redux/features/appStateSlice';
-import {
-  login,
-  setShopAdminTenant,
-} from '../../../redux/features/authStateSlice';
+import { setItemState, setLogo } from '../../../redux/features/appSlice';
+import { login, setShopAdminTenant } from '../../../redux/features/authSlice';
 import { setRolePermissions } from '../../../redux/features/permissionsStateSlice';
 import { useAppDispatch, useAppSelector } from '../../../redux/redux-hooks';
-import auth from '../../../services/adminapp/admin';
+import authService from '../../../services/adminapp/admin';
 import { setItem } from '../../../utils/storage';
 
 interface LoginFields {
@@ -58,7 +55,7 @@ function LoginPage() {
       username: data.email,
       password: data.password,
     };
-    await auth
+    await authService
       .loginService(userData)
       .then(async (user) => {
         if (user && user.data.success) {

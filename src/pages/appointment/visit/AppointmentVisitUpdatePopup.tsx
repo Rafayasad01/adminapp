@@ -12,7 +12,7 @@ import CustomMultipleSelectBox from '../../../components/common/CustomMultipleSe
 import ErrorSpanBox from '../../../components/common/ErrorSpanBox';
 import Loader from '../../../components/common/Loader2';
 import { AppointmentVisit } from '../../../interfaces/app.appointment';
-import Service from '../../../services/adminapp/adminAppointment';
+import appointmentService from '../../../services/adminapp/adminAppointment';
 import {
   INVALID_CHAR,
   MAX_LENGTH_EXCEEDED,
@@ -67,17 +67,19 @@ function AppointmentVisitUpdatePopup({
 
   useEffect(() => {
     if (formData?.appointmentProvider) {
-      Service.VisitProviderById(
-        watch('appointmentProvider')
-          ? watch('appointmentProvider')
-          : formData?.appointmentProvider
-      )
+      appointmentService
+        .VisitProviderById(
+          watch('appointmentProvider')
+            ? watch('appointmentProvider')
+            : formData?.appointmentProvider
+        )
         .then((item: any) => {
           if (item.data.success) {
             // console.log('visitTTTT', item.data.data);
             setSchedule(item.data.data);
             setIsLoader(false);
-            Service.VisitServiceLovByProviderId(item.data.data.id)
+            appointmentService
+              .VisitServiceLovByProviderId(item.data.data.id)
               .then((items: any) => {
                 if (items.data.success) {
                   // console.log('visit Services', items.data.data);
