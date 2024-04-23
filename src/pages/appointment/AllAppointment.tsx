@@ -52,10 +52,11 @@ const AllAppointment = ({
   const [data, setData] = useState<any>([]);
   const [appointmentData, setAppointmentData] = useState();
   const officeTimings = useAppSelector(
-    (state) => state.persisitReducer.appState.UserItems
+    (state) => state?.persisitReducer?.appState?.UserItems
   );
-  const shopStartTime = dayjs(officeTimings?.officeTimeIn).hour();
-  const shopEndTime = dayjs(officeTimings?.officeTimeOut).hour();
+  console.log('officeTimings', officeTimings);
+  const shopStartTime = dayjs(officeTimings?.tenantConfig?.officeTimeIn).hour();
+  const shopEndTime = dayjs(officeTimings?.tenantConfig?.officeTimeOut).hour();
   const [isTooltipOpen, setIsTooltipOpen] = useState(false);
   const [isLoader, setIsLoader] = useState(false);
   const [appointmentTooltipData, setAppointmentTooltipData] =
@@ -76,7 +77,6 @@ const AllAppointment = ({
       resourceName: 'priorityId',
     },
   ];
-  console.log('🚀 ~ officeTimings:', officeTimings);
 
   useEffect(() => {
     setIsActiveUser(selectedPriorityData[0]?.text);
@@ -389,6 +389,8 @@ const AllAppointment = ({
         /> */}
         <WeekView
           name="Vertical Orientation"
+          // startDayHour={0}
+          // endDayHour={12}
           startDayHour={shopStartTime ?? 0}
           endDayHour={shopEndTime ?? 12}
           // excludedDays={[0, 6]}
