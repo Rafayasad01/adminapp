@@ -133,6 +133,18 @@ function CustomSwiperDialog({
       amountType: watch('servicesAmount'),
       amount: watch('price'),
     };
+    const check: boolean =
+      ServicesFields?.find(
+        (el: any) => el.storeServiceCategoryItem === watch('servicesId')
+      ) !== undefined;
+    if (check) {
+      setIsNotify(true);
+      setNotifyMessage({
+        text: 'This service you already selected, Please select another service',
+        type: 'error',
+      });
+      return;
+    }
     if (
       watch('servicesId') &&
       watch('servicesAmount') &&
@@ -171,6 +183,8 @@ function CustomSwiperDialog({
     >
       <form onSubmit={handleSubmit(onSubmit)} className="overflow-auto">
         <Swiper
+          simulateTouch={false} // Allow touch simulation for non-touch devices
+          allowTouchMove={false}
           className="Content custom-swiper"
           spaceBetween={50}
           slidesPerView={1}
@@ -186,6 +200,9 @@ function CustomSwiperDialog({
             <div className="FormBody">
               <div className={singleField ? 'FormField' : 'FormFields'}>
                 {inputFieldsData?.map((items: any, index: number) => {
+                  const minDate = dayjs().subtract(12, 'year');
+                  const formattedMinDate = dayjs(minDate);
+                  const formattedMaxDate = dayjs(formattedMinDate);
                   return (
                     <Fragment key={index}>
                       {
@@ -279,12 +296,13 @@ function CustomSwiperDialog({
                           <div className="">
                             <CustomDateTimePicker
                               register={register}
-                              defaultValue={dayjs()}
+                              // minDate={formattedMinDate}
+                              maxDate={formattedMaxDate}
                               id={items.id}
                               error={errors.dob}
                               inputTitle={items.fieldName}
                               setValue={items.setValue}
-                              value={watch('dob') ? watch('dob') : dayjs()}
+                              value={watch('dob') ? watch('dob') : ''}
                             />
                           </div>
                         ) : items.type === 'uploadImg' ? (
@@ -539,7 +557,7 @@ function CustomSwiperDialog({
                       pattern={PATTERN.ONLY_NUM}
                       maxLetterLimit={15}
                       inputTitle="Price"
-                      placeholder="Enter Service Amount"
+                      placeholder="Enter Service Commission Price"
                       id="price"
                       requiredType
                       register={register}

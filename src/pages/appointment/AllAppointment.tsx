@@ -8,7 +8,6 @@ import {
 import {
   AppointmentTooltip,
   Appointments,
-  // AppointmentContent,
   DateNavigator,
   GroupingPanel,
   MonthView,
@@ -27,48 +26,12 @@ import React, { useCallback, useEffect, useState } from 'react';
 import AppointmentViewCard from '../../components/common/AppointmentViewCard';
 import Loader from '../../components/common/Loader';
 import SwiperComponent from '../../components/common/Swiper';
+import { useAppSelector } from '../../redux/redux-hooks';
 import storeAppointmentService from '../../services/adminapp/adminStoreAppointment';
 import UpdateAppointmentPopup from './UpdateAppointmentPopup';
 
 dayjs.extend(weekOfYear);
 dayjs.extend(timezone);
-
-// const dateString = '2024-04-02T09:10:00.000Z';
-// const dateStrings = '2024-04-02T09:15:00.000Z';
-// const date = dayjs(dateString);
-// const dates = dayjs(dateStrings);
-
-// const newDate = new Date(2018, 4, 28, 9, 30);
-// console.log('newDatesdasdsasadsa', newDate);
-
-// const appointments = [
-//   {
-//     title: 'Website Re-Design Plan',
-//     priorityId: 1,
-//     startDate: new Date(2018, 4, 28, 9, 30),
-//     endDate: new Date(2018, 4, 28, 11, 30),
-//     id: 0,
-//   },
-//   {
-//     title: 'Website Re-Design Plan',
-//     priorityId: 1,
-//     startDate: new Date(2018, 4, 28, 11, 35),
-//     endDate: new Date(2018, 4, 28, 12, 0),
-//     id: 0,
-//   },
-// ];
-
-// const users = [
-//   { id: 1, name: 'John', profileUrl: assets.images.avatarUser },
-//   { id: 2, name: 'Jane Smith', profileUrl: assets.images.avatarUser },
-//   { id: 3, name: 'John Martin', profileUrl: assets.images.avatarUser },
-//   { id: 4, name: 'Michael H. Tilley', profileUrl: assets.images.avatarUser },
-//   { id: 5, name: 'Thomas', profileUrl: assets.images.avatarUser },
-//   { id: 6, name: 'Michael', profileUrl: assets.images.avatarUser },
-//   { id: 7, name: 'John Johnson', profileUrl: assets.images.avatarUser },
-//   { id: 8, name: 'Smith Johnson', profileUrl: assets.images.avatarUser },
-//   { id: 9, name: 'Alice Doe', profileUrl: assets.images.avatarUser },
-// ];
 
 type AllAppointmentProps = {
   appointmentType?: any;
@@ -87,6 +50,14 @@ const AllAppointment = ({
 }: AllAppointmentProps) => {
   const [data, setData] = useState<any>([]);
   const [appointmentData, setAppointmentData] = useState();
+  const officeTimings = useAppSelector(
+    (state) => state?.persistedReducer.appState.UserItems
+  );
+  console.log(`officeTimings:`, officeTimings);
+  const shopStartTime = dayjs(officeTimings?.tenantConfig?.officeTimeIn).hour();
+  const shopEndTime = dayjs(officeTimings?.tenantConfig?.officeTimeOut).hour();
+  console.log('shopStartTime', shopStartTime);
+  console.log('shopEndTime', shopEndTime);
   const [isTooltipOpen, setIsTooltipOpen] = useState(false);
   const [isLoader, setIsLoader] = useState(false);
   const [, /* appointmentTooltipData */ setAppointmentTooltipData] =
@@ -112,15 +83,16 @@ const AllAppointment = ({
     setIsActiveUser(selectedPriorityData[0]?.text);
   }, [selectedPriorityData]);
 
-  const getAllAppoinments = async (appoDate: any, view: any) => {
-    setIsLoader(true);
-    storeAppointmentService
-      .getAllAppointments(appoDate, view)
+  const getAllAppointments = async (appointmentDate: any, view: any) => {
+    if (view === 'week') setIsLoader(true);
+    await storeAppointmentService
+      .getAllAppointments(appointmentDate, view)
       .then((res: any) => {
         if (res.data.success) {
           setIsLoader(false);
           const structuredData = res.data.data.map((item: any) => {
-            const date = dayjs(item.appointmentTime).tz('Asia/Karachi');
+            const date = dayjs(item.appointmentTime).utc();
+            console.log('date', date);
             const year = date.year();
             const month = date.month();
             const day = date.date();
@@ -153,7 +125,7 @@ const AllAppointment = ({
               id: item.id,
             };
           });
-          // console.log('structuredData', structuredData);
+          console.log('structuredData', structuredData);
           setData(structuredData);
           setIsLoader(false);
         } else {
@@ -177,8 +149,8 @@ const AllAppointment = ({
   };
 
   useEffect(() => {
-    getAllAppoinments(currentWeek, 'week');
-  }, [currentWeek]);
+    getAllAppointments(currentWeek, 'week');
+  }, []);
 
   // console.log('selectedPriorityData', selectedPriorityData);
   // [{ startDate: new Date() }]
@@ -192,12 +164,6 @@ const AllAppointment = ({
           : selectedPriorityData,
     },
   ];
-
-  // useEffect(() => {
-  //   if (appointmentType === "Individual Appointment") {
-  //     setIsActiveUser('');
-  //   }
-  // }, [appointmentType])
 
   useEffect(() => {
     if (appointmentType === 'All Appointments') {
@@ -299,7 +265,6 @@ const AllAppointment = ({
           setIsLoader(false);
           setData((newArr: any) => {
             return newArr.map((item: any) => {
-              console.log(item);
               if (item.id === res.data.data.id) {
                 item.title = res.data.data.name;
               }
@@ -354,39 +319,22 @@ const AllAppointment = ({
   //   );
   // };
 
-  const PREFIX = 'Demo';
-  // #FOLD_BLOCK
-  const _classes = {
-    flexibleSpace: `${PREFIX}-flexibleSpace`,
-    textField: `${PREFIX}-textField`,
-    locationSelector: `${PREFIX}-locationSelector`,
-    button: `${PREFIX}-button`,
-    selectedButton: `${PREFIX}-selectedButton`,
-    longButtonText: `${PREFIX}-longButtonText`,
-    shortButtonText: `${PREFIX}-shortButtonText`,
-    title: `${PREFIX}-title`,
-    textContainer: `${PREFIX}-textContainer`,
-    time: `${PREFIX}-time`,
-    text: `${PREFIX}-text`,
-    container: `${PREFIX}-container`,
-    weekendCell: `${PREFIX}-weekendCell`,
-    weekEnd: `${PREFIX}-weekEnd`,
-  };
-
   const getRange = (date: any, view: any) => {
-    // console.log('VIEW', view);
+    console.log('view', view, date);
     if (view === 'Month') {
       // const monthNumber = dayjs(date).month() + 1;
+      // console.log('🚀 ~ getRange ~ Month Date:', view, date);
       const monthDate = dayjs(date).format('YYYY-MM-DD');
-      getAllAppoinments(monthDate, 'month');
-      return { startDate: date, endDate: date };
+      getAllAppointments(monthDate, 'month');
+      // return { startDate: date, endDate: date };
     }
     if (view === 'Week') {
       const firstDay = date.getDate() - date.getDay();
       const lastDay = firstDay + 6;
       const startDate = dayjs(new Date(date.setDate(firstDay)));
       const weekNumber = startDate.week();
-      getAllAppoinments(weekNumber, 'week');
+      // console.log('🚀 ~ getRange ~ Week Number:', weekNumber);
+      getAllAppointments(weekNumber, 'week');
       return {
         startDate: new Date(date.setDate(firstDay)),
         endDate: new Date(date.setDate(lastDay)),
@@ -396,6 +344,9 @@ const AllAppointment = ({
   };
 
   const currentViewChange = (newView: any) => {
+    if (newView === 'Vertical Orientation') {
+      newView = 'Week';
+    }
     const range: any = getRange(currentDate, newView);
     setCurrentView(newView);
     setRange(range);
@@ -407,12 +358,58 @@ const AllAppointment = ({
     setRange(range);
   };
 
+  const _handleMonthComp = (monthData: any) => {
+    console.log('month data', monthData);
+  };
+
+  const _CustomTimeTableLayout = ({ ...restProps }: any) => {
+    console.log('REST', restProps);
+    // Your custom implementation for the time table layout
+    const { cellsData } = restProps;
+
+    // Get the current month
+    const currentMonth = dayjs().month();
+
+    // Filter the cells that belong to the current month
+    const currentMonthCells = cellsData?.filter(
+      ({ startDate }: any) => dayjs(startDate).month() === currentMonth
+    );
+    return (
+      <div>
+        {/* Render the cells for the current month */}
+        {currentMonthCells?.map((cell: any, index: number) => (
+          <div key={index}>
+            {/* Render each cell */}
+            {/* You can customize the cell rendering here */}
+            {cell.startDate.toLocaleString()} - {cell.endDate.toLocaleString()}
+          </div>
+        ))}
+      </div>
+    );
+  };
+
+  const _CustomTimeTableCell = ({
+    _setAppointmentData,
+    ..._restProps
+  }: any) => {
+    // Your custom implementation for the time table cell
+    return <div>{/* Your custom time table cell */}</div>;
+  };
+
+  // Custom day scale cell component
+  const _CustomDayScaleCell = ({ _setAppointmentData, ..._restProps }: any) => {
+    // Your custom implementation for the day scale cell
+    return <div>{/* Your custom day scale cell */}</div>;
+  };
+
+  console.log('appo data', data, priorityData);
+
   return isLoader ? (
     <Loader />
   ) : (
     <Paper>
       <div className="h-16 p-[15px]">
-        {priorityData.length ? (
+        {priorityData?.length ? (
           <SwiperComponent
             isActiveUser={isActiveUser}
             selectedUser={selectedUser}
@@ -423,6 +420,7 @@ const AllAppointment = ({
       <hr />
       <Scheduler data={data} height={580}>
         <ViewState
+          defaultCurrentViewName="Month"
           defaultCurrentDate={dayjs().toDate()}
           currentDate={currentDate}
           onCurrentDateChange={currentDateChange}
@@ -442,14 +440,18 @@ const AllAppointment = ({
         /> */}
         <WeekView
           name="Vertical Orientation"
-          startDayHour={0}
-          endDayHour={24}
+          // startDayHour={0}
+          // endDayHour={12}
+          startDayHour={shopStartTime ?? 0}
+          endDayHour={shopEndTime ?? 12}
           // excludedDays={[0, 6]}
           displayName="Week"
         />
         <MonthView
-        // timeTableCellComponent={DayScaleCell}
-        // dayScaleCellComponent={DayScaleCell}
+        // timeTableLayoutComponent={CustomTimeTableLayout}
+        // timeTableRowComponent={CustomTimeTableLayout}
+        // timeTableCellComponent={CustomTimeTableCell}
+        // dayScaleCellComponent={CustomDayScaleCell}
         />
         <Appointments
         // appointmentContentComponent={AppointmentContent}
@@ -479,19 +481,6 @@ const AllAppointment = ({
         <ViewSwitcher />
         {/* <AppointmentForm /> */}
         <DateNavigator />
-        {/* <div>
-                    {priorityData?.map((resource: any) => (
-                        <ListItem key={resource.id}>
-                            <ListItemAvatar>
-                                <Avatar
-                                    alt={resource.text}
-                                    src={resource.imageUrl}
-                                />
-                            </ListItemAvatar>
-                            <ListItemText primary={resource.text} />
-                        </ListItem>
-                    ))}
-                </div> */}
         {/* <DragDropProvider /> */}
         {/* <DateNavigator /> */}
       </Scheduler>

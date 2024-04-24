@@ -39,6 +39,13 @@ const StoreCatUpdateStatus = (catId: any, data: any) => {
   );
 };
 
+const StoreCatDelete = (catId: any, data: any) => {
+  return network.post(
+    `${STORE_PREFIX}/${SERVICE_PREFIX}/${CATEGORY_PREFIX}/delete/${catId}`,
+    data
+  );
+};
+
 // cat items
 
 const StoreCatItemsList = (
@@ -78,6 +85,13 @@ const StoreCatItemsUpdateStatus = (catItemId: any, data: any) => {
   );
 };
 
+const StoreCatItemDelete = (catItemId: any, data: any) => {
+  return network.post(
+    `${STORE_PREFIX}/${SERVICE_PREFIX}/${CATEGORY_PREFIX}/item/delete/${catItemId}`,
+    data
+  );
+};
+
 // lovs
 
 const StoreCatLov = () => {
@@ -103,4 +117,6 @@ export default {
   StoreCatItemsUpdateStatus,
   StoreCatLov,
   StoreCatItemsLov,
+  StoreCatDelete,
+  StoreCatItemDelete,
 };

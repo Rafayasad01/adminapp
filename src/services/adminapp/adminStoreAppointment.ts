@@ -36,7 +36,6 @@ const appointmentReschedule = (storeAppId: any, data: any) => {
 };
 
 const getAllAppointments = (date: any, view: string) => {
-  console.log('🚀 ~ getAllAppointments ~ view:', view);
   return network.get(
     `${STORE_PREFIX}/${APPOINTMENT_PREFIX}/${
       view === 'week' ? 'weekly' : 'monthly'

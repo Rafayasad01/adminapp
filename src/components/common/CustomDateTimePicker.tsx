@@ -6,31 +6,36 @@ import dayjs from 'dayjs';
 import ErrorSpanBox from './ErrorSpanBox';
 
 type CustomDateTimePickerProps = {
-  register?: any;
-  id?: any;
-  error?: any;
-  inputTitle?: string;
-  // label?: string;
-  // notRequired?: boolean;
-  setValue?: any;
-  isTrue?: boolean;
-  value?: any;
   defaultValue?: any;
+  error?: any;
+  id?: any;
+  inputTitle?: string;
+  isTrue?: boolean;
+  label?: string;
+  maxDate?: any;
   minDate?: any;
+  notRequired?: boolean;
+  register?: any;
+  setValue?: any;
+  value?: any;
 };
 
 function CustomDateTimePicker({
-  register: _register,
-  defaultValue,
-  value,
-  isTrue,
-  setValue,
+  defaultValue: _defaultValue,
+  error: _error,
   id,
   inputTitle,
-  minDate,
-  error: _error,
+  isTrue,
+  label: _label,
+  maxDate,
+  minDate: _minDate,
+  notRequired: _notRequired,
+  register: _register,
+  setValue,
+  value,
 }: CustomDateTimePickerProps) {
   const handleChange = (date: any) => {
+    console.log('daaa', date);
     setValue(id, date);
   };
 
@@ -47,8 +52,8 @@ function CustomDateTimePicker({
           className="border-secondary"
           value={dayjs(value)}
           onChange={handleChange}
-          minDate={minDate}
-          defaultValue={defaultValue}
+          // minDate={dayjs(minDates)}
+          maxDate={maxDate}
         />
       </DemoItem>
       {isTrue && value === undefined && (

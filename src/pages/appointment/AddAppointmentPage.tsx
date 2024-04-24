@@ -118,15 +118,6 @@ export default function AddAppointmentPage() {
           item.storeEmployee.id,
           dayjs(getValues('appointmentDate'))?.format('YYYY-MM-DD')
         );
-        // console.log("date",dayjs(getValues("appointmentDate"))?.format('YYYY-MM-DD'));
-        // await StoreAppointmentService.getBarberBookedTimeSlots(
-        //   item.storeEmployee.id,
-        //   dayjs(getValues('appointmentDate'))?.format('YYYY-MM-DD')
-        // ).then((res) => {
-        //   if (res.data.success) {
-        //     setAppointmentBookedTime(res.data.data);
-        //   }
-        // });
       }
     };
 
@@ -204,7 +195,6 @@ export default function AddAppointmentPage() {
 
   useEffect(() => {
     catLovService();
-    // setAppointmentTime(dayjs().format("HH:mm"))
   }, []);
 
   const getBarbers = async (id: any) => {
@@ -727,13 +717,13 @@ export default function AddAppointmentPage() {
                                       <span className="text-sm">
                                         {dayjs(item.startTime).isValid()
                                           ? dayjs(item.startTime)?.format(
-                                              'HH:mm A'
+                                              'h:mm A'
                                             )
                                           : '--'}{' '}
                                         -{' '}
                                         {dayjs(item.endTime).isValid()
                                           ? dayjs(item.endTime)?.format(
-                                              'HH:mm A'
+                                              'h:mm A'
                                             )
                                           : '--'}
                                       </span>
@@ -826,7 +816,7 @@ export default function AddAppointmentPage() {
                               servicetime,
                               'minute'
                             );
-                            const formattedEndTime = endTime.format('HH:mm A');
+                            const formattedEndTime = endTime.format('h:mm A');
                             return (
                               <div key={index} className="col-span-2 p-3">
                                 <div className="flex-col rounded-xl bg-background">
@@ -834,7 +824,7 @@ export default function AddAppointmentPage() {
                                     <span className="text-sm">
                                       {dayjs(item.appointmentTime).isValid()
                                         ? dayjs(item.appointmentTime)?.format(
-                                            'HH:mm A'
+                                            'h:mm A'
                                           )
                                         : '--'}{' '}
                                       - {formattedEndTime}
@@ -899,13 +889,13 @@ export default function AddAppointmentPage() {
               <div className="mt-3 flex w-full items-center justify-end">
                 <CustomButton
                   buttonType="button"
-                  title="Add"
+                  title={fields.length > 0 ? 'Add More Service' : 'Add'}
                   className="btn-black-fill"
                   // type={'submit'}
                   onclick={addAppointmentServices}
                   sx={{
                     padding: '0.375rem 2rem !important',
-                    width: '10%',
+                    width: '12%',
                     marginRight: '15px',
                     height: '35px',
                   }}

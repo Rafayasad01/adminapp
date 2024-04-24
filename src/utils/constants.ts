@@ -3,7 +3,6 @@ import PersonOutlinedIcon from '@mui/icons-material/PersonOutlined';
 
 const HOST = 'https://dev.urapptech.com';
 // const HOST = 'http://192.168.8.68:3200';
-// const HOST = 'http://192.168.8.68:3200';
 // const HOST = 'http://192.168.8.97:3200';
 // const HOST = 'http://localhost:3200';
 
