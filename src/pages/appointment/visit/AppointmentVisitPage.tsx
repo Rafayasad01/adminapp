@@ -31,7 +31,7 @@ dayjs.extend(timezone);
 dayjs.tz.setDefault('UTC');
 
 function AppointmentVisitPage() {
-  console.log('Appointment Visit Page');
+  // console.log('Appointment Visit Page');
   const navigate = useNavigate();
   const _authState = useAppSelector((state) => state.authState);
   const dataRole = useAppSelector(
@@ -66,7 +66,7 @@ function AppointmentVisitPage() {
 
   const handleFormClickOpen = () => {
     if (listingRolePermission(dataRole, 'Appointment Create')) {
-      navigate('../add-appointment');
+      navigate('./add-appointment');
       // setOpenFormDialog(true);
     } else {
       setIsNotify(true);

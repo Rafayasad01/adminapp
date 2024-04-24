@@ -47,10 +47,10 @@ function ServiceItemEditPopup({
     formState: { errors },
   } = useForm<BarberCategoryServices>();
 
-  console.log('🚀 ~ onSubmit ~ errors:', errors);
+  // console.log('🚀 ~ onSubmit ~ errors:', errors);
 
   const onSubmit = (data: BarberCategoryServices) => {
-    console.log('🚀 ~ onSubmit ~ data:', data, image);
+    // console.log('🚀 ~ onSubmit ~ data:', data, image);
     if (image !== null) {
       const res = {
         name: data.name,

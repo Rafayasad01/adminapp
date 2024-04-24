@@ -173,7 +173,7 @@ function ServicesPage() {
   const manuHandler = (option: string) => {
     if (option === 'Edit') {
       if (listingRolePermission(dataRole, 'Category Update')) {
-        console.log('actionMenuItemid', actionMenuItemid, list);
+        // console.log('actionMenuItemid', actionMenuItemid, list);
         const editFormDatas = list?.find(
           (el: any) => el.id === actionMenuItemid
         );
@@ -209,7 +209,7 @@ function ServicesPage() {
   };
 
   const createFormHandler = (data: any) => {
-    console.log('data==>', data);
+    // console.log('data==>', data);
     setIsLoader(true);
     const formData = new FormData();
     formData.append('name', data.name);

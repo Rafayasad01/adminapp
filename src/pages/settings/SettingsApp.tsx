@@ -96,7 +96,7 @@ function SettingsApp() {
   } = useForm<Setting>();
 
   const setData = (item: any) => {
-    console.log('itesmssss', item);
+    // console.log('itesmssss', item);
 
     // setValue('name', item.tenantConfig.name);
     // setLocation()
@@ -181,7 +181,7 @@ function SettingsApp() {
   };
 
   const onSubmit = (data: any) => {
-    console.log('SETTTING DATA', data);
+    // console.log('SETTTING DATA', data);
     setIsLoader(true);
     if (listingRolePermission(dataRole, 'Setting Update')) {
       // setIsLoader(true);

@@ -10,7 +10,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import assets from '../../assets';
 import storeAppointmentService from '../../services/adminapp/adminStoreAppointment';
-import Loader from './Loader2';
+import Loader from '../../components/common/Loader2';
 
 type AppointmentViewCardProps = {
   appointmentData?: any;
@@ -110,7 +110,7 @@ const AppointmentViewCard = ({
               name="Reschedule"
               className="icon-btn mr-3.5 p-0"
               onClick={() =>
-                navigate(`../reschedule-appointment/${appointmentData.id}`)
+                navigate(`./reschedule-appointment/${appointmentData.id}`)
               }
             >
               <EditNoteOutlinedIcon />

@@ -47,7 +47,7 @@ function ServiceCatEditPopup({
   } = useForm<BarberCategory>();
 
   const onSubmit = (data: any) => {
-    console.log('IMAGE', data);
+    // console.log('IMAGE', data);
     if (image !== null) {
       const res = {
         name: data.categoryName,
@@ -84,10 +84,10 @@ function ServiceCatEditPopup({
       if (imageAllowedTypes.includes(fileType)) {
         setImage(event.target.files[0]);
         setImageName(selectedFile.name);
-        console.log(
-          '🚀 ~ handleFileChange ~ event.target.files[0]:',
-          event.target.files[0].name
-        );
+        // console.log(
+        //   '🚀 ~ handleFileChange ~ event.target.files[0]:',
+        //   event.target.files[0].name
+        // );
         setValue('avatar', event.target.files[0]);
       } else {
         setIsNotify(true);
@@ -99,7 +99,7 @@ function ServiceCatEditPopup({
     }
   };
 
-  console.log('imageName', imageName);
+  // console.log('imageName', imageName);
 
   const handleFileOnClick = (event: any) => {
     event.target.value = null;

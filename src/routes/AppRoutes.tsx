@@ -268,7 +268,7 @@ export const routeObjects: RouteObject[] = [
             ],
           },
           {
-            path: 'shop-barbers',
+            path: 'employees',
             children: [
               { index: true, element: <Navigate to="list" replace /> },
               {
@@ -300,11 +300,15 @@ export const routeObjects: RouteObject[] = [
           {
             path: 'appointments',
             children: [
-              { index: true, element: <Navigate to="list" replace /> },
               {
-                path: 'list',
+                index: true,
                 element: <AppointmentVisitPage />,
               },
+              // { index: true, element: <Navigate to="list" replace /> },
+              // {
+              //   path: 'list',
+              //   element: <AppointmentVisitPage />,
+              // },
               {
                 path: 'detail/:id',
                 element: <AppointmentVisitDetailPage />,
@@ -358,7 +362,7 @@ export const routeObjects: RouteObject[] = [
                 ],
               },
               {
-                path: 'shop-barbers',
+                path: 'employees',
                 children: [
                   { index: true, element: <Navigate to="list" replace /> },
                   {
@@ -390,11 +394,15 @@ export const routeObjects: RouteObject[] = [
               {
                 path: 'appointments',
                 children: [
-                  { index: true, element: <Navigate to="list" replace /> },
                   {
-                    path: 'list',
+                    index: true,
                     element: <AppointmentVisitPage />,
                   },
+                  // { index: true, element: <Navigate to="list" replace /> },
+                  // {
+                  //   path: 'list',
+                  //   element: <AppointmentVisitPage />,
+                  // },
                   {
                     path: 'detail/:id',
                     element: <AppointmentVisitDetailPage />,

@@ -23,7 +23,7 @@ import dayjs from 'dayjs';
 import timezone from 'dayjs/plugin/timezone';
 import weekOfYear from 'dayjs/plugin/weekOfYear';
 import React, { useCallback, useEffect, useState } from 'react';
-import AppointmentViewCard from '../../components/common/AppointmentViewCard';
+import AppointmentViewCard from './AppointmentViewCard';
 import Loader from '../../components/common/Loader';
 import SwiperComponent from '../../components/common/Swiper';
 import { useAppSelector } from '../../redux/redux-hooks';

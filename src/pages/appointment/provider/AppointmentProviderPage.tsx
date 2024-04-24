@@ -78,6 +78,7 @@ function AppointmentProviderPage() {
     register,
     control,
     handleSubmit,
+    reset,
     watch,
     setValue,
     getValues,
@@ -176,7 +177,6 @@ function AppointmentProviderPage() {
       placeholder: 'Select DOB',
       register,
       setValue,
-      disable: openEditFormDialog && true,
       error: errors.dob,
       type: 'datepickeronly',
     },
@@ -211,6 +211,33 @@ function AppointmentProviderPage() {
     //   error: errors.dob,
     //   type: 'text',
     // },
+    {
+      fieldName: 'Payroll Type',
+      id: 'payrollType',
+      defaultValue: 'Select Payroll Type',
+      control,
+      register,
+      setValue,
+      error: errors.payrollType,
+      type: 'select',
+      options: {
+        role: watch('payrollType'),
+        roles: [
+          {
+            id: 'Both',
+            name: 'Both',
+          },
+          {
+            id: 'Salary',
+            name: 'Salary',
+          },
+          {
+            id: 'Commission',
+            name: 'Commission',
+          },
+        ],
+      },
+    },
     {
       fieldName: 'Note',
       id: 'note',
@@ -276,6 +303,7 @@ function AppointmentProviderPage() {
   };
 
   const handleFormClickOpen = async () => {
+    // reset();
     if (listingRolePermission(dataRole, 'Appointment Provider Create')) {
       setOpenFormDialog(true);
       catLovService();
@@ -370,7 +398,8 @@ function AppointmentProviderPage() {
               setValue('email', item.data.data.email);
               setValue('cnic', item.data.data.cnic);
               setValue('note', item.data.data.note);
-              setValue('dob', item.data.data.dob);
+              setValue('dob', dayjs(item.data.data.dob).format('YYYY-MM-DD'));
+              setValue('payrollType', item.data.data.payrollType ?? 'none');
               setOpenEditFormDialog(true);
             } else {
               setIsLoader(false);
@@ -519,7 +548,7 @@ function AppointmentProviderPage() {
   // console.log("delte idss", delIds);
 
   const onSubmitUpdateDialogBox = async (data: any) => {
-    console.log('data', data);
+    console.log('Update data', data);
     setIsLoader(true);
     delete data.servicesName;
     delete data.servicesAmount;
@@ -541,6 +570,7 @@ function AppointmentProviderPage() {
     if (data.password) formData.append('password', data.password);
     formData.append('dob', dayjs(data.dob).format('YYYY-MM-DD'));
     formData.append('services', JSON.stringify(data.services));
+    formData.append('payrollType', data.payrollType);
     formData.append('deletedIds', JSON.stringify(delIds));
     if (image) formData.append('avatar', image);
     StoreEmployeeService.StoreEmployeeUpdate(formData, actionMenuItemid)
@@ -608,6 +638,7 @@ function AppointmentProviderPage() {
     formData.append('note', data.note);
     if (image) formData.append('avatar', image);
     formData.append('services', JSON.stringify(data.services));
+    formData.append('payrollType', data.payrollType);
     formData.append('workDays', JSON.stringify(weekDays));
     formData.append(
       'startTime',
@@ -626,6 +657,7 @@ function AppointmentProviderPage() {
               text: res.data.message,
               type: 'success',
             });
+            reset();
           } else {
             setIsLoader(false);
             setIsNotify(true);
@@ -900,6 +932,8 @@ function AppointmentProviderPage() {
         //   setOpenFormDialog={setOpenEditFormDialog}
         // />
         <CustomEditSwiperDialog
+          type="edit"
+          reset={reset}
           editFormData={editFormData}
           control={control}
           errors={errors}

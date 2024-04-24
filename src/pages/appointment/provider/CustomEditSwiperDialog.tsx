@@ -192,6 +192,8 @@ function CustomEditSwiperDialog({
     >
       <form onSubmit={handleSubmit(onSubmit)}>
         <Swiper
+          simulateTouch={false} // Allow touch simulation for non-touch devices
+          allowTouchMove={false}
           className="Content custom-swiper"
           spaceBetween={50}
           slidesPerView={1}
@@ -222,6 +224,7 @@ function CustomEditSwiperDialog({
                               validateRequired={items.validateRequired}
                               id={items.id}
                               control={items.control}
+                              setValue={items.setValue}
                               error={items.error}
                               register={items.register}
                               options={items.options}
@@ -507,7 +510,6 @@ function CustomEditSwiperDialog({
                       error={errors}
                       register={register}
                       setValue={setValue}
-                      // options={{ roles: providerlov }}
                       customClassInputTitle="font-bold"
                       inputTitle="Amount Type"
                       options={{ roles: BARBER_SERVICES_AMOUNT }}

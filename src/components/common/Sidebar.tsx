@@ -48,7 +48,7 @@ const links = [
   // },
   // {
   //   name: 'Barbers',
-  //   path: 'shop-barbers',
+  //   path: 'employees',
   //   permission: 'Category List',
   //   icon: <ProviderIcon />,
   // },
@@ -119,7 +119,7 @@ const links = [
       },
       {
         name: 'Employees',
-        path: 'store-appointment/shop-barbers',
+        path: 'store-appointment/employees',
         permission: 'Category List',
         icon: <ProviderIcon />,
       },

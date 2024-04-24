@@ -41,14 +41,14 @@ function ServiceCreatePopup({
     handleSubmit,
     setValue,
     clearErrors,
-    watch,
+    // watch,
     formState: { errors },
   } = useForm<BarberCategory>();
 
-  console.log('Errors', errors, watch('avatar'));
+  // console.log('Errors', errors, watch('avatar'));
 
   const onSubmit = (data: any) => {
-    console.log('🚀 ~ onSubmit ~ data:', data);
+    // console.log('🚀 ~ onSubmit ~ data:', data);
     data.avatar = image;
     const res = {
       name: data.categoryName,
