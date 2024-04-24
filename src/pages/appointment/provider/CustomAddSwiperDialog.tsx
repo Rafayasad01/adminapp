@@ -545,7 +545,7 @@ function CustomSwiperDialog({
                       setValue={setValue}
                       // options={{ roles: providerlov }}
                       customClassInputTitle="font-bold"
-                      inputTitle="Amount Type"
+                      inputTitle="Commission Amount Type"
                       options={{ roles: BARBER_SERVICES_AMOUNT }}
                       defaultValue="Select Type"
                     />
@@ -556,7 +556,7 @@ function CustomSwiperDialog({
                     <CustomInputBox
                       pattern={PATTERN.ONLY_NUM}
                       maxLetterLimit={15}
-                      inputTitle="Price"
+                      inputTitle="Commission Price"
                       placeholder="Enter Service Commission Price"
                       id="price"
                       requiredType

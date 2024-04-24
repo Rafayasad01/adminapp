@@ -6,7 +6,7 @@ import { AppCategoryItems } from '../../interfaces/category.interface';
 import {
   fetchItemsByCategory,
   setNotifyState,
-} from '../../redux/features/itemSlice';
+} from '../../redux/features/ItemSlice';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 import { CURRENCY_PREFIX } from '../../utils/constants';
 import HomePagePopup from './HomePagePopup';

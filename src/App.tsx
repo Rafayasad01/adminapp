@@ -7,7 +7,7 @@ import Loader from './components/common/Loader';
 import { setSystemConfig, setTheme } from './redux/features/authSlice';
 import { useAppDispatch } from './redux/redux-hooks';
 import { routeObjects } from './routes/AppRoutes';
-import systemConfigService from './services/adminapp/systemConfig';
+import systemConfigService from './services/adminapp/SystemConfig';
 
 function App() {
   const dispatch = useAppDispatch();

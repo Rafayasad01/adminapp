@@ -207,8 +207,8 @@ function SettingsApp() {
         data.deliveryUrgentFees ? data.deliveryUrgentFees : 0
       );
       formData.append('address', data.address ? data.address : '');
-      formData.append('latitude', data.lat ? data.lat : 0);
-      formData.append('longitude', data.long ? data.long : 0);
+      formData.append('latitude', watch('latitude') ? watch('latitude') : 0);
+      formData.append('longitude', watch('longitude') ? watch('longitude') : 0);
       formData.append(
         'officeTimeIn',
         startTime

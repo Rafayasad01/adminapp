@@ -20,8 +20,8 @@ import Loader from '../../components/common/Loader';
 import Loader2 from '../../components/common/Loader2';
 import Notify from '../../components/common/Notify';
 import { AppCategoryItems } from '../../interfaces/category.interface';
-import { addToCart, setCart } from '../../redux/features/cartSlice';
-import { showNotifyMessage } from '../../redux/features/categorySlice';
+import { addToCart, setCart } from '../../redux/features/CartSlice';
+import { showNotifyMessage } from '../../redux/features/CategorySlice';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 import ratingService from '../../services/adminapp/rating';
 import { listingRolePermission } from '../../utils/helper';
@@ -32,7 +32,7 @@ dayjs.extend(relativeTime);
 function OrderItemDetailPage() {
   const { itemId } = useParams();
   const dataRole = useAppSelector(
-    (state: any) => state?.persisitReducer?.roleState?.role?.permissions
+    (state: any) => state?.persistedReducer?.roleState?.role?.permissions
   );
   const [search] = useState<any>('');
   const [page, setPage] = useState(0);

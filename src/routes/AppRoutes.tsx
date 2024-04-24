@@ -449,7 +449,7 @@ export const routeObjects: RouteObject[] = [
                   },
                   {
                     path: 'create',
-                    element: <OrdersCreatePage />,
+                    element: <AddNewOrder />,
                   },
                   {
                     path: 'detail/:orderId',
@@ -466,6 +466,15 @@ export const routeObjects: RouteObject[] = [
                   {
                     path: 'view-driver',
                     element: <DriverHistory />,
+                  },
+                  {
+                    path: 'item/:itemId',
+                    element: <OrderItemDetailPage />,
+                  },
+                  {
+                    path: 'basket',
+                    element: <OrderBasket />,
+                    // element: CAN("canView", "Order List") ? <OrdersPage /> : <p>not authorized</p>,
                   },
                 ],
               },

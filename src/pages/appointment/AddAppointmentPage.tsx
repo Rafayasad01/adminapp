@@ -176,7 +176,9 @@ export default function AddAppointmentPage() {
         if (res.data.success) {
           setCatLovList(res.data.data);
         } else {
-          navigate(-1);
+          setTimeout(() => {
+            navigate(-1);
+          }, 1000);
           setIsNotify(true);
           setNotifyMessage({
             text: res.data.message,
@@ -288,8 +290,6 @@ export default function AddAppointmentPage() {
             el.storeServiceCategoryItem === watch('storeServiceCategoryItem')
         ) !== undefined;
       if (!check) {
-        console.log('start 1');
-
         const currentDay = dayjs(getValues('appointmentDate')).format('dddd');
         const scheduleData = activeBarberData?.storeEmployeeSchedule.filter(
           (item: any) => item.workDay === currentDay

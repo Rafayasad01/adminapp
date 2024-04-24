@@ -53,11 +53,8 @@ const AllAppointment = ({
   const officeTimings = useAppSelector(
     (state) => state?.persistedReducer.appState.UserItems
   );
-  console.log(`officeTimings:`, officeTimings);
   const shopStartTime = dayjs(officeTimings?.tenantConfig?.officeTimeIn).hour();
   const shopEndTime = dayjs(officeTimings?.tenantConfig?.officeTimeOut).hour();
-  console.log('shopStartTime', shopStartTime);
-  console.log('shopEndTime', shopEndTime);
   const [isTooltipOpen, setIsTooltipOpen] = useState(false);
   const [isLoader, setIsLoader] = useState(false);
   const [, /* appointmentTooltipData */ setAppointmentTooltipData] =
@@ -68,7 +65,7 @@ const AllAppointment = ({
   const [, /* isNotify */ setIsNotify] = React.useState(true);
   const [, /* notifyMessage */ setNotifyMessage] = React.useState({});
   const [currentDate, setCurrentDate] = useState(dayjs().toDate());
-  const [currentView, setCurrentView] = useState('Week');
+  const [currentView, setCurrentView] = useState('Vertical Orientation');
   const [, /* ranges */ setRange] = useState();
 
   // console.log('🚀 ~ currentWeek:', currentWeek);
@@ -80,7 +77,7 @@ const AllAppointment = ({
   ];
 
   useEffect(() => {
-    setIsActiveUser(selectedPriorityData[0]?.text);
+    setIsActiveUser(selectedPriorityData[0]?.id);
   }, [selectedPriorityData]);
 
   const getAllAppointments = async (appointmentDate: any, view: any) => {
@@ -168,6 +165,7 @@ const AllAppointment = ({
   useEffect(() => {
     if (appointmentType === 'All Appointments') {
       setIsActiveUser('all');
+      setCurrentView('Vertical Orientation');
     }
   }, [appointmentType]);
 
@@ -177,7 +175,7 @@ const AllAppointment = ({
       text: 'Individual Appointment',
       icon: PersonOutlinedIcon,
     });
-    const res = priorityData?.find((el: any) => el.text === name);
+    const res = priorityData?.find((el: any) => el.id === name);
     const tempPriority =
       res === undefined ? [{ startDate: new Date() }] : [res];
     setSelectedPriorityData(tempPriority);
@@ -320,8 +318,12 @@ const AllAppointment = ({
   // };
 
   const getRange = (date: any, view: any) => {
-    console.log('view', view, date);
     if (view === 'Month') {
+      setAppointmentType({
+        text: 'Individual Appointment',
+        icon: PersonOutlinedIcon,
+      });
+      setSelectedPriorityData([priorityData[0] ?? {}]);
       // const monthNumber = dayjs(date).month() + 1;
       // console.log('🚀 ~ getRange ~ Month Date:', view, date);
       const monthDate = dayjs(date).format('YYYY-MM-DD');
@@ -358,52 +360,6 @@ const AllAppointment = ({
     setRange(range);
   };
 
-  const _handleMonthComp = (monthData: any) => {
-    console.log('month data', monthData);
-  };
-
-  const _CustomTimeTableLayout = ({ ...restProps }: any) => {
-    console.log('REST', restProps);
-    // Your custom implementation for the time table layout
-    const { cellsData } = restProps;
-
-    // Get the current month
-    const currentMonth = dayjs().month();
-
-    // Filter the cells that belong to the current month
-    const currentMonthCells = cellsData?.filter(
-      ({ startDate }: any) => dayjs(startDate).month() === currentMonth
-    );
-    return (
-      <div>
-        {/* Render the cells for the current month */}
-        {currentMonthCells?.map((cell: any, index: number) => (
-          <div key={index}>
-            {/* Render each cell */}
-            {/* You can customize the cell rendering here */}
-            {cell.startDate.toLocaleString()} - {cell.endDate.toLocaleString()}
-          </div>
-        ))}
-      </div>
-    );
-  };
-
-  const _CustomTimeTableCell = ({
-    _setAppointmentData,
-    ..._restProps
-  }: any) => {
-    // Your custom implementation for the time table cell
-    return <div>{/* Your custom time table cell */}</div>;
-  };
-
-  // Custom day scale cell component
-  const _CustomDayScaleCell = ({ _setAppointmentData, ..._restProps }: any) => {
-    // Your custom implementation for the day scale cell
-    return <div>{/* Your custom day scale cell */}</div>;
-  };
-
-  console.log('appo data', data, priorityData);
-
   return isLoader ? (
     <Loader />
   ) : (
@@ -420,10 +376,11 @@ const AllAppointment = ({
       <hr />
       <Scheduler data={data} height={580}>
         <ViewState
-          defaultCurrentViewName="Month"
+          defaultCurrentViewName={currentView}
           defaultCurrentDate={dayjs().toDate()}
           currentDate={currentDate}
           onCurrentDateChange={currentDateChange}
+          currentViewName={currentView}
           onCurrentViewNameChange={currentViewChange}
         />
         <EditingState onCommitChanges={onCommitChanges} />

@@ -1,5 +1,5 @@
 type ErrorSpanBoxProps = {
-  error?: string;
+  error?: string | any;
 };
 
 function ErrorSpanBox({ error }: ErrorSpanBoxProps) {

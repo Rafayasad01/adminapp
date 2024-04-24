@@ -14,7 +14,7 @@ import MapAddress from '../../components/common/MapAddress';
 import Notify from '../../components/common/Notify';
 import { setSystemConfig, setTheme } from '../../redux/features/authSlice';
 import { useAppSelector } from '../../redux/redux-hooks';
-import systemConfigService from '../../services/adminapp/systemConfig';
+import systemConfigService from '../../services/adminapp/SystemConfig';
 import PermissionPopup from '../../utils/PermissionPopup';
 import DragDropFile from './DragDropFile';
 

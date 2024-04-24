@@ -34,8 +34,8 @@ export interface Setting {
   enableLoyaltyProgram: boolean;
   loyaltyCoinConversionRate: string;
   requiredCoinsToRedeem: string;
-  latitude: number;
-  longitude: number;
+  latitude: any;
+  longitude: any;
   attendanceDistance: number;
 }
 

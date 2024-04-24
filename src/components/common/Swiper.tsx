@@ -87,7 +87,7 @@ const SwiperComponent = ({
           ? data?.map((item: any, index: number) => {
               return (
                 <div key={index} className="swiper-slide flex items-center">
-                  {item.text === isActiveUser && (
+                  {item.id === isActiveUser && (
                     <div className="mr-3">
                       <FiberManualRecordIcon />
                     </div>
@@ -101,7 +101,7 @@ const SwiperComponent = ({
                       />
                     </div>
                     <div
-                      onClick={() => handleUser(item.text)}
+                      onClick={() => handleUser(item.id)}
                       className="cursor-pointer truncate"
                     >
                       <span className="mx-2 text-base font-semibold">

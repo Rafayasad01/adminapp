@@ -11,7 +11,7 @@ import { AppCategories } from '../../interfaces/category.interface';
 import {
   fetchCategories,
   setNotifyState,
-} from '../../redux/features/categorySlice';
+} from '../../redux/features/CategorySlice';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 import CategoriesCard from './CategoriesCard';
 import CategoryItemsList from './CategoryItemsList';
