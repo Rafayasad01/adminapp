@@ -53,7 +53,11 @@ function PermissionPopup({
         )}
         <div className={popupStyle.Title}>Hey Wait!</div>
         <div className={popupStyle.Message}>{dialogText}</div>
-        <div className={popupStyle.DescMessage}>Note : {dialogDesc}</div>
+        {dialogDesc ? (
+          <div className={popupStyle.DescMessage}>Note : {dialogDesc}</div>
+        ) : (
+          ''
+        )}
         <div className={popupStyle.Actions}>
           <Button
             onClick={() => onEventHandler('yes')}

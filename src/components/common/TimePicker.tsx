@@ -24,7 +24,7 @@ const darkTheme = createTheme({
 
 type TimePickerProps = {
   disabled?: boolean;
-  errors?: any;
+  // errors?: any;
   id: string;
   isTrue?: boolean;
   // setError?: any;
@@ -35,7 +35,7 @@ type TimePickerProps = {
 };
 function TimePicker({
   disabled,
-  errors,
+  // errors,
   id,
   isTrue,
   setTimePickerValue,
@@ -54,7 +54,6 @@ function TimePicker({
     //     });
     // }
   };
-  console.error(errors);
   const handleClose = () => {
     setTimePicker(null);
   };

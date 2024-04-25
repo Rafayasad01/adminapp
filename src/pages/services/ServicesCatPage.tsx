@@ -25,6 +25,7 @@ import { NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
 import { CheckRolePermission, listingRolePermission } from '../../utils/helper';
 import ServiceCatCreatePopup from './ServiceCatCreatePopup';
 import ServiceCatEditPopup from './ServiceCatEditPopup';
+import PermissionPopup from '../../utils/PermissionPopup';
 // import CategoriesCreatePopup from './CategoriesCreatePopup';
 // import CategoriesEditPopup from './CategoriesEditPopup';
 
@@ -50,10 +51,10 @@ function ServicesPage() {
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
-  const [, setCancelDialogOpen] = useState<boolean>(false);
-  /* const [dialogText] = useState<any>(
+  const [cancelDialogOpen, setCancelDialogOpen] = useState<boolean>(false);
+  const [dialogText] = useState<any>(
     'Are you sure you want to delete this Category ?'
-  ); */
+  );
   const [isModalImage, setIsModalImage] = useState(false);
   const [modalImage, setModalImage] = useState('');
 
@@ -132,43 +133,41 @@ function ServicesPage() {
       });
   };
 
-  // const deleteHandler = (id: string) => {
-  //   setIsLoader(true);
-  //   const data = {
-  //     is_active: false,
-  //     is_deleted: true,
-  //     updated_by: authState.user.id,
-  //   };
-  //   category
-  //     .StoreCatDelete(id, data)
-  //     .then((updateItem) => {
-  //       if (updateItem.data.success) {
-  //         setIsLoader(false);
-  //         setIsNotify(true);
-  //         setNotifyMessage({
-  //           text: updateItem.data.message,
-  //           type: 'success',
-  //         });
-  //         setList((newArr: any) => {
-  //           return newArr.filter((item: any) => item.id !== id);
-  //         });
-  //         let newtotal = total;
-  //         setTotal((newtotal -= 1));
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       setIsLoader(false);
-  //       setIsNotify(true);
-  //       setNotifyMessage({
-  //         text: err.message,
-  //         type: 'error',
-  //       });
-  //     });
-  // };
+  const deleteHandler = (id: string) => {
+    setIsLoader(true);
+    const data = {
+      isDeleted: true,
+    };
+    storeService
+      .StoreCatDelete(id, data)
+      .then((updateItem) => {
+        if (updateItem.data.success) {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: updateItem.data.message,
+            type: 'success',
+          });
+          setList((newArr: any) => {
+            return newArr.filter((item: any) => item.id !== id);
+          });
+          let newtotal = total;
+          setTotal((newtotal -= 1));
+        }
+      })
+      .catch((err) => {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
+        });
+      });
+  };
 
-  // const statusCancelHandler = () => {
-  //   deleteHandler(actionMenuItemid);
-  // };
+  const statusCancelHandler = () => {
+    deleteHandler(actionMenuItemid);
+  };
 
   const manuHandler = (option: string) => {
     if (option === 'Edit') {
@@ -494,15 +493,15 @@ function ServicesPage() {
           </div>
         </div>
       </div>
-      {/* {cancelDialogOpen && (
-                <PermissionPopup
-                    type="shock"
-                    open={cancelDialogOpen}
-                    setOpen={setCancelDialogOpen}
-                    dialogText={dialogText}
-                    callback={statusCancelHandler}
-                />
-            )} */}
+      {cancelDialogOpen && (
+        <PermissionPopup
+          type="shock"
+          open={cancelDialogOpen}
+          setOpen={setCancelDialogOpen}
+          dialogText={dialogText}
+          callback={statusCancelHandler}
+        />
+      )}
       {actionMenuAnchorEl && (
         <ActionMenu
           open={actionMenuOpen}

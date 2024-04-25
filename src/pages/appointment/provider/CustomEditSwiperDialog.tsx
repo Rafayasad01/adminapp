@@ -369,7 +369,7 @@ function CustomEditSwiperDialog({
                             timePickerValue={items.time}
                             setTimePickerValue={items.setTime}
                             id={items.id}
-                            errors={items.error}
+                            // errors={items.error}
                             // setError={setError}
                           />
                         ) : null
