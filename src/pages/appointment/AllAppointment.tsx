@@ -120,9 +120,10 @@ const AllAppointment = ({
                 formattedDateWithHour2 ||
                 dayjs().format('ddd MMM DD YYYY h:mm:ss [GMT]ZZ (zz)'),
               id: item.id,
+              status: item.status,
             };
           });
-          console.log('structuredData', structuredData);
+          // console.log('structuredData', structuredData);
           setData(structuredData);
           setIsLoader(false);
         } else {
@@ -135,7 +136,7 @@ const AllAppointment = ({
         }
       })
       .catch((error: any) => {
-        console.error(`useEffect -> error:`, error);
+        // console.error(`useEffect -> error:`, error);
         setIsLoader(false);
         setIsNotify(true);
         setNotifyMessage({
@@ -360,6 +361,47 @@ const AllAppointment = ({
     setRange(range);
   };
 
+  const isStatusDone = async (id: string) => {
+    try {
+      setIsLoader(true);
+      const [paidStatusResponse] = await Promise.all([
+        storeAppointmentService.appointmentPaid(id),
+      ]);
+      if (paidStatusResponse.data.success) {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: paidStatusResponse.data.message,
+          type: 'success',
+        });
+        setData((newArr: any) => {
+          return newArr.map((item: any) => {
+            if (item.id === paidStatusResponse.data.data.storeAppointment) {
+              item.status = 'Completed';
+            }
+            return { ...item };
+          });
+        });
+      } else {
+        // throw new Error(paidStatusResponse.data.message);
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: paidStatusResponse.data.message,
+          type: 'error',
+        });
+      }
+      // setIsLoader(false);
+    } catch (error: Error | any) {
+      setIsLoader(false);
+      setIsNotify(true);
+      setNotifyMessage({
+        text: error.message,
+        type: 'error',
+      });
+    }
+  };
+
   return isLoader ? (
     <Loader />
   ) : (
@@ -427,6 +469,7 @@ const AllAppointment = ({
               isTooltipOpen={isTooltipOpen}
               setOpenFormDialog={setOpenEditFormDialog}
               getUpdatePopupData={getUpdatePopupData}
+              isStatusDone={isStatusDone}
             />
             // </div>
           )}

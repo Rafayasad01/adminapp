@@ -46,6 +46,14 @@ export const CART_STATUS = {
   COMPLETED: 'Completed',
 } as const;
 
+export const APPOINTMENT_STATUS = {
+  NEW: 'New',
+  COMPLETED: 'Completed',
+  DONE: 'Done',
+  PENDING: 'Pending',
+  MISSED: 'Missed',
+} as const;
+
 export const NOTIFICATION_STATUS = {
   NEW: 'New',
   SENDING: 'Sending',

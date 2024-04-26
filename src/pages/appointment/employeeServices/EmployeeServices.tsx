@@ -354,6 +354,11 @@ function EmployeeServices() {
         .then((updateItem) => {
           if (updateItem.data.success) {
             setIsLoader(false);
+            setIsNotify(true);
+            setNotifyMessage({
+              text: updateItem.data.message,
+              type: 'success',
+            });
             setList((newArr: any) => {
               const updatedArray = newArr.map((item: any) => {
                 if (item.id === updateItem.data.data.id) {

@@ -117,6 +117,15 @@ const post = <T = any>(endPoint: string, data: T) => {
   });
 };
 
+const patch = <T = any>(endPoint: string, data: T) => {
+  return networkInstance.patch(`${BASE_URL}${endPoint}`, data, {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: token(),
+    },
+  });
+};
+
 const get = (endPoint: string) => {
   return networkInstance.get(`${BASE_URL}${endPoint}`, {
     headers: {
@@ -180,6 +189,7 @@ const getWithQueryParam = (
 
 export default {
   post,
+  patch,
   get,
   postMultipart,
   getSystemConfig,

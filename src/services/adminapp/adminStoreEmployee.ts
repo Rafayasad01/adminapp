@@ -72,6 +72,13 @@ const StoreEmployeeUpdateStatus = (empId: any, data: any) => {
   );
 };
 
+const StoreEmployeeDelete = (empId: any, data: any) => {
+  return network.post(
+    `${STORE_PREFIX}/${EMPLOYEE_PREFIX}/delete/${empId}`,
+    data
+  );
+};
+
 // Store Employee Services
 
 const StoreEmployeeServiceList = (empId: any) => {
@@ -119,4 +126,5 @@ export default {
   StoreEmployeeServiceUpdate,
   StoreEmployeeServiceUpdateStatus,
   StoreEmployeeServiceDelete,
+  StoreEmployeeDelete,
 };

@@ -35,6 +35,13 @@ const appointmentReschedule = (storeAppId: any, data: any) => {
   );
 };
 
+const appointmentPaid = (storeAppId: any) => {
+  return network.patch(
+    `${STORE_PREFIX}/${APPOINTMENT_PREFIX}/service/paid/${storeAppId}`,
+    {}
+  );
+};
+
 const getAllAppointments = (date: any, view: string) => {
   return network.get(
     `${STORE_PREFIX}/${APPOINTMENT_PREFIX}/${
@@ -60,4 +67,5 @@ export default {
   getAppointment,
   getAppointmentById,
   appointmentReschedule,
+  appointmentPaid,
 };

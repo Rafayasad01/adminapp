@@ -59,6 +59,9 @@ function AppointmentProviderPage() {
   const [isNotify, setIsNotify] = useState(false);
   const [notifyMessage, setNotifyMessage] = useState({});
   const [cancelDialogOpen, setCancelDialogOpen] = useState<boolean>(false);
+  const [dialogText] = useState<any>(
+    'Are you sure you want to delete this Category ?'
+  );
   const [image, setImage] = useState<any>(null);
   const [startServiceTime, setStartServiceTime] = useState<dayjs.Dayjs | any>(
     null
@@ -363,8 +366,47 @@ function AppointmentProviderPage() {
     }
   };
 
+  const deleteHandler = (id: string) => {
+    setIsLoader(true);
+    const data = {
+      isDeleted: true,
+    };
+    // console.log(actionMenuItemid);
+    StoreEmployeeService.StoreEmployeeDelete(id, data)
+      .then((item: any) => {
+        if (item.data.success) {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'success',
+          });
+          setList((newArr: any) => {
+            return newArr.filter(
+              (newItem: any) => newItem.id !== item.data.data.id
+            );
+          });
+        } else {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'error',
+          });
+        }
+      })
+      .catch((err: Error) => {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
+        });
+      });
+  };
+
   const statusCancelHandler = () => {
-    // deleteHandler(actionMenuItemid);
+    deleteHandler(actionMenuItemid);
   };
 
   const manuHandler = (option: string) => {
@@ -421,42 +463,7 @@ function AppointmentProviderPage() {
       }
     } else if (option === 'Delete') {
       if (listingRolePermission(dataRole, 'Appointment Provider Delete')) {
-        setIsLoader(true);
-        const data = {
-          updatedBy: authState.user.id,
-        };
-        // console.log(actionMenuItemid);
-        Service.ProviderDelete(actionMenuItemid, data)
-          .then((item: any) => {
-            if (item.data.success) {
-              setIsLoader(false);
-              setIsNotify(true);
-              setNotifyMessage({
-                text: item.data.message,
-                type: 'success',
-              });
-              setList((newArr: any) => {
-                return newArr.filter(
-                  (newItem: any) => newItem.id !== item.data.data.id
-                );
-              });
-            } else {
-              setIsLoader(false);
-              setIsNotify(true);
-              setNotifyMessage({
-                text: item.data.message,
-                type: 'error',
-              });
-            }
-          })
-          .catch((err: Error) => {
-            setIsLoader(false);
-            setIsNotify(true);
-            setNotifyMessage({
-              text: err.message,
-              type: 'error',
-            });
-          });
+        setCancelDialogOpen(true);
       } else {
         setIsNotify(true);
         setNotifyMessage({
@@ -567,6 +574,7 @@ function AppointmentProviderPage() {
     formData.append('email', data.email);
     formData.append('phone', data.phone);
     formData.append('cnic', data.cnic);
+    formData.append('note', data.note);
     if (data.password) formData.append('password', data.password);
     formData.append('dob', dayjs(data.dob).format('YYYY-MM-DD'));
     formData.append('services', JSON.stringify(data.services));
@@ -869,7 +877,7 @@ function AppointmentProviderPage() {
           type="shock"
           open={cancelDialogOpen}
           setOpen={setCancelDialogOpen}
-          // dialogText={dialogText}
+          dialogText={dialogText}
           callback={statusCancelHandler}
         />
       )}
@@ -963,6 +971,15 @@ function AppointmentProviderPage() {
           catLov={catLovlist}
           catItemsLov={catItemsLovlist}
           setDelIds={setDelIds}
+        />
+      )}
+      {cancelDialogOpen && (
+        <PermissionPopup
+          type="shock"
+          open={cancelDialogOpen}
+          setOpen={setCancelDialogOpen}
+          dialogText={dialogText}
+          callback={statusCancelHandler}
         />
       )}
       {/* <CustomersCreatePopup

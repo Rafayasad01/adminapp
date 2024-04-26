@@ -1,4 +1,5 @@
 import EditNoteOutlinedIcon from '@mui/icons-material/BorderColor';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import CloseIcon from '@mui/icons-material/Close';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
@@ -11,6 +12,7 @@ import { useNavigate } from 'react-router-dom';
 import assets from '../../assets';
 import storeAppointmentService from '../../services/adminapp/adminStoreAppointment';
 import Loader from '../../components/common/Loader2';
+import { APPOINTMENT_STATUS } from '../../utils/constants';
 
 type AppointmentViewCardProps = {
   appointmentData?: any;
@@ -19,6 +21,7 @@ type AppointmentViewCardProps = {
   setOpenFormDialog?: any;
   getUpdatePopupData?: any;
   isTooltipOpen?: boolean;
+  isStatusDone?: any;
 };
 
 const AppointmentViewCard = ({
@@ -28,6 +31,7 @@ const AppointmentViewCard = ({
   setAppointmentTooltipData,
   setIsTooltipOpen,
   setOpenFormDialog,
+  isStatusDone,
 }: AppointmentViewCardProps) => {
   const navigate = useNavigate();
   const [data, setData] = useState<any>(null);
@@ -78,6 +82,8 @@ const AppointmentViewCard = ({
     }
   }, [appointmentData]);
 
+  console.log('appointmentData', appointmentData);
+
   return isLoader ? (
     <Loader />
   ) : (
@@ -115,6 +121,35 @@ const AppointmentViewCard = ({
             >
               <EditNoteOutlinedIcon />
             </IconButton>
+            {appointmentData?.status !== APPOINTMENT_STATUS.NEW ? (
+              <div className="mt-3">
+                <span className="rounded bg-slate-200 px-2 py-1 text-sm">
+                  {appointmentData?.status === APPOINTMENT_STATUS.COMPLETED
+                    ? 'Appointment has been Completed'
+                    : appointmentData?.status === APPOINTMENT_STATUS.MISSED
+                    ? 'Appointment has been Missed'
+                    : ''}
+                </span>
+              </div>
+            ) : (
+              <div
+                onClick={() => {
+                  setIsTooltipOpen(false);
+                  isStatusDone(appointmentData.id);
+                }}
+                className="mt-3 flex w-[70%] cursor-pointer items-center justify-center rounded border-[3px] bg-slate-200 shadow"
+              >
+                <IconButton
+                  size="small"
+                  name="Done"
+                  className="icon-btn mx-[4px] p-0"
+                  // onClick={() => isStatusDone(appointmentData.id)}
+                >
+                  <CheckCircleOutlineIcon fontSize="small" />
+                </IconButton>
+                <span className="text-sm">Done</span>
+              </div>
+            )}
           </div>
           <div>
             <IconButton className="icon-btn p-0" onClick={handleClose}>

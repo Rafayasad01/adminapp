@@ -256,7 +256,7 @@ function CustomSwiperDialog({
                               variant="standard"
                             >
                               <label className="FormLabel">
-                                Message{' '}
+                                {items.fieldName}{' '}
                                 <span className="SubLabel">
                                   Write 01-250 Characters
                                 </span>
