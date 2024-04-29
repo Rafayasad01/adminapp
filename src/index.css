@@ -89,7 +89,7 @@ select {
 }
 
 .css-78trlr-MuiButtonBase-root-MuiIconButton-root:hover {
-  @apply bg-transparent !important;
+  @apply bg-transparent;
 }
 
 .form-group {
@@ -2095,9 +2095,9 @@ main .container:nth-child(3){
   font-weight: 400;
   color: #1a1a1a;
 }
-.css-78trlr-MuiButtonBase-root-MuiIconButton-root:hover {
+/* .css-78trlr-MuiButtonBase-root-MuiIconButton-root:hover {
   background-color: #1a1a1a !important;
-}
+} */
 .modal-add-to-cart .MuiModal-backdrop {
   -webkit-backdrop-filter: blur(25px) !important;
   backdrop-filter: blur(25px) !important;

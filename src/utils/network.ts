@@ -117,12 +117,13 @@ const post = <T = any>(endPoint: string, data: T) => {
   });
 };
 
-const get = (endPoint: string) => {
+const get = (endPoint: string, body?: any) => {
   return networkInstance.get(`${BASE_URL}${endPoint}`, {
     headers: {
       'Content-Type': 'application/json',
       Authorization: token(),
     },
+    params: body,
   });
 };
 
