@@ -48,7 +48,7 @@ const AppointmentViewCard = ({
       storeAppointmentService
         .getAppointmentById(appointmentData.id)
         .then((res) => {
-          const date = dayjs(res.data.data.appointmentTime).utc();
+          const date = dayjs(res.data.data.appointmentTime);
           const newDate2 = date.add(25, 'minute');
           const formattedDateWithHour1 = dayjs(date).format(
             'ddd MMM DD YYYY h:mm:ss A'

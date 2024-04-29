@@ -81,7 +81,7 @@ const AllAppointment = ({
   }, [selectedPriorityData]);
 
   const getAllAppointments = async (appointmentDate: any, view: any) => {
-    console.log('🚀 ~ getAllAppointments ~ view:', view);
+    // console.log('🚀 ~ getAllAppointments ~ view:', view);
     if (view === 'week') setIsLoader(true);
     await storeAppointmentService
       .getAllAppointments(appointmentDate, view)
@@ -89,7 +89,7 @@ const AllAppointment = ({
         if (res.data.success) {
           setIsLoader(false);
           const structuredData = res.data.data.map((item: any) => {
-            const date = dayjs(item.appointmentTime).utc();
+            const date = dayjs(item.appointmentTime);
             const newDate2 = date.add(25, 'minute');
             const formattedDateWithHour1 = dayjs(date).format(
               'ddd MMM DD YYYY h:mm:ss A'
