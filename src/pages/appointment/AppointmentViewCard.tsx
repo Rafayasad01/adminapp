@@ -48,30 +48,19 @@ const AppointmentViewCard = ({
       storeAppointmentService
         .getAppointmentById(appointmentData.id)
         .then((res) => {
-          const date = dayjs(res.data.data.appointmentTime).tz('Asia/Karachi');
-          const year = date.year();
-          const month = date.month();
-          const day = date.date();
-          const hour = date.hour();
-          const minute = date.minute();
-          const newDate1 = new Date(year, month, day, hour, minute);
-          const newDate2 = new Date(year, month, day, hour, minute);
-          newDate2.setMinutes(
-            newDate2.getMinutes() + Number(res.data.data.serviceTime)
+          const date = dayjs(res.data.data.appointmentTime).utc();
+          const newDate2 = date.add(25, 'minute');
+          const formattedDateWithHour1 = dayjs(date).format(
+            'ddd MMM DD YYYY h:mm:ss A'
           );
-          const dateF1 = dayjs(newDate1).tz('Asia/Karachi');
-          const dateF2 = dayjs(newDate2).tz('Asia/Karachi');
-          const formattedDateWithHour1 = dateF1.format(
-            'ddd MMM DD YYYY h:mm:ss [GMT]ZZ (zz)'
-          );
-          const formattedDateWithHour2 = dateF2.format(
-            'ddd MMM DD YYYY h:mm:ss [GMT]ZZ (zz)'
+          const formattedDateWithHour2 = newDate2.format(
+            'ddd MMM DD YYYY h:mm:ss A'
           );
           const startDate = dayjs(formattedDateWithHour1);
           const endDate = dayjs(formattedDateWithHour2);
           const startDateFormat = startDate.format('HH:mm');
           const endDateFormat = endDate.format('HH:mm');
-          console.log('SALON', formattedDateWithHour1, formattedDateWithHour2);
+          // console.log('SALON', formattedDateWithHour1, formattedDateWithHour2);
           setIsLoader(false);
           setData({
             ...res.data.data,

@@ -90,36 +90,23 @@ const AllAppointment = ({
           setIsLoader(false);
           const structuredData = res.data.data.map((item: any) => {
             const date = dayjs(item.appointmentTime).utc();
-            console.log('date', date);
-            const year = date.year();
-            const month = date.month();
-            const day = date.date();
-            const hour = date.hour();
-            const minute = date.minute();
-            const newDate1 = new Date(year, month, day, hour, minute);
-            const newDate2 = new Date(year, month, day, hour, minute);
-            newDate2.setMinutes(
-              newDate2.getMinutes() + Number(item.serviceTime)
+            const newDate2 = date.add(25, 'minute');
+            const formattedDateWithHour1 = dayjs(date).format(
+              'ddd MMM DD YYYY h:mm:ss A'
             );
-            const dateF1 = dayjs(newDate1);
-            const dateF2 = dayjs(newDate2);
-            const formattedDateWithHour1 = dateF1.format(
-              'ddd MMM DD YYYY h:mm:ss [GMT]ZZ (zz)'
+            const formattedDateWithHour2 = newDate2.format(
+              'ddd MMM DD YYYY h:mm:ss A'
             );
-            const formattedDateWithHour2 = dateF2.format(
-              'ddd MMM DD YYYY h:mm:ss [GMT]ZZ (zz)'
-            );
-
             return {
               // paid: true,
               title: item.name,
               priorityId: item.storeEmployee,
               startDate:
                 formattedDateWithHour1 ||
-                dayjs().format('ddd MMM DD YYYY h:mm:ss [GMT]ZZ (zz)'),
+                dayjs().format('ddd MMM DD YYYY h:mm:ss A'),
               endDate:
                 formattedDateWithHour2 ||
-                dayjs().format('ddd MMM DD YYYY h:mm:ss [GMT]ZZ (zz)'),
+                dayjs().format('ddd MMM DD YYYY h:mm:ss A'),
               id: item.id,
               status: item.status,
             };
