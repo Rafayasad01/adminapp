@@ -845,7 +845,7 @@ export default function AddAppointmentPage() {
                             );
                             // const formattedEndTime = endTime.format('h:mm A');
                             const formattedEndTime = dayjs(endTime).isValid()
-                              ? dayjs(endTime)?.format('HH:mm')
+                              ? dayjs(endTime)?.format('h:mm A')
                               : '--';
                             return (
                               <div key={index} className="col-span-2 p-3">
@@ -854,7 +854,7 @@ export default function AddAppointmentPage() {
                                     <span className="text-sm">
                                       {dayjs(item.appointmentTime).isValid()
                                         ? dayjs(item.appointmentTime)?.format(
-                                            'HH:mm'
+                                            'h:mm A'
                                           )
                                         : '--'}{' '}
                                       - {formattedEndTime}

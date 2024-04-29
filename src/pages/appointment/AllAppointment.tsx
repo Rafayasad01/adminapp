@@ -81,6 +81,7 @@ const AllAppointment = ({
   }, [selectedPriorityData]);
 
   const getAllAppointments = async (appointmentDate: any, view: any) => {
+    console.log('🚀 ~ getAllAppointments ~ view:', view);
     if (view === 'week') setIsLoader(true);
     await storeAppointmentService
       .getAllAppointments(appointmentDate, view)
@@ -320,6 +321,7 @@ const AllAppointment = ({
 
   const getRange = (date: any, view: any) => {
     if (view === 'Month') {
+      console.log('PRIOOOOOOOOO', priorityData);
       setAppointmentType({
         text: 'Individual Appointment',
         icon: PersonOutlinedIcon,
@@ -332,6 +334,17 @@ const AllAppointment = ({
       // return { startDate: date, endDate: date };
     }
     if (view === 'Week') {
+      setAppointmentType({
+        text: 'All Appointments',
+        icon: PersonOutlinedIcon,
+      });
+      // setIsLoader(true);
+      // setSelectedPriorityData([]);
+      // setAppointmentType({
+      //   text: 'All Appointment',
+      //   icon: PersonOutlinedIcon,
+      // });
+      // setSelectedPriorityData([priorityData[0] ?? {}]);
       const firstDay = date.getDate() - date.getDay();
       const lastDay = firstDay + 6;
       const startDate = dayjs(new Date(date.setDate(firstDay)));
