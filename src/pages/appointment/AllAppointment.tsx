@@ -23,11 +23,11 @@ import dayjs from 'dayjs';
 import timezone from 'dayjs/plugin/timezone';
 import weekOfYear from 'dayjs/plugin/weekOfYear';
 import React, { useCallback, useEffect, useState } from 'react';
-import AppointmentViewCard from './AppointmentViewCard';
 import Loader from '../../components/common/Loader';
 import SwiperComponent from '../../components/common/Swiper';
 import { useAppSelector } from '../../redux/redux-hooks';
 import storeAppointmentService from '../../services/adminapp/adminStoreAppointment';
+import AppointmentViewCard from './AppointmentViewCard';
 import UpdateAppointmentPopup from './UpdateAppointmentPopup';
 
 dayjs.extend(weekOfYear);
@@ -332,6 +332,10 @@ const AllAppointment = ({
       // return { startDate: date, endDate: date };
     }
     if (view === 'Week') {
+      setAppointmentType({
+        text: 'All Appointments',
+        icon: PersonOutlinedIcon,
+      });
       const firstDay = date.getDate() - date.getDay();
       const lastDay = firstDay + 6;
       const startDate = dayjs(new Date(date.setDate(firstDay)));

@@ -66,6 +66,11 @@ export default function AddAppointmentPage() {
     null
   );
   const [appointmentBookedTime, setAppointmentBookedTime] = useState<any>([]);
+  const [tempAppointmentBookedTime, setTempAppointmentBookedTime] =
+    useState<any>([]);
+
+  const [tmpId, setTmpId] = useState<any>(0);
+
   const {
     register,
     handleSubmit,
@@ -105,7 +110,17 @@ export default function AddAppointmentPage() {
             ...resp,
             appointmentTime: dayjs(resp.appointmentTime).utc(),
           }));
-          setAppointmentBookedTime(tempBookedTime);
+          // setAppointmentBookedTime(tempBookedTime);
+          console.log('tempBookedTime:::::::', tempBookedTime);
+          if (tempBookedTime.length > 0) {
+            setTempAppointmentBookedTime((prevArr: any) => [
+              ...prevArr,
+              tempBookedTime,
+            ]);
+            setAppointmentBookedTime(tempBookedTime);
+          }
+
+          // console.log('tempArr:::::::::', tempArr);
         } else {
           setIsNotify(true);
           setNotifyMessage({
@@ -129,7 +144,16 @@ export default function AddAppointmentPage() {
         setActiveBarber(null);
         setActiveBarberData(null);
         setBookingList(null);
-        setAppointmentBookedTime([]);
+        let newFilter = [];
+        if (tempAppointmentBookedTime.length > 0) {
+          newFilter = tempAppointmentBookedTime.filter(
+            (itemFilter: any) =>
+              itemFilter.storeEmployee === item.storeEmployee.id
+          );
+        }
+        console.log('item.storeEmployee.id:::::::', item.storeEmployee.id);
+        console.log('newFilter:::::::', newFilter);
+        setAppointmentBookedTime(newFilter);
       } else {
         setBookingList(item.storeEmployeeSchedule);
         setActiveBarberData(item);
@@ -139,6 +163,12 @@ export default function AddAppointmentPage() {
             item.storeEmployee.id,
             dayjs(getValues('appointmentDate'))?.format('YYYY-MM-DD')
           );
+        }
+        if (tempAppointmentBookedTime.length > 0) {
+          const newTempData = tempAppointmentBookedTime.filter(
+            (tabt: any) => tabt.storeEmployee === item.storeEmployee.id
+          );
+          setAppointmentBookedTime(newTempData);
         }
       }
     };
@@ -288,12 +318,11 @@ export default function AddAppointmentPage() {
   }, [watch('storeServiceCategoryItem')]);
 
   const addAppointmentServices = () => {
-    const tmpId = 0;
-    console.log(
-      "getValues('appointmentDate')",
-      appointmentTime,
-      dayjs(appointmentTime).format('HH:mm:ss')
-    );
+    // console.log(
+    //   "getValues('appointmentDate')",
+    //   appointmentTime,
+    //   dayjs(appointmentTime).format('HH:mm:ss')
+    // );
     const obj = {
       id: 0,
       barber: activeBarberData?.storeEmployee?.name,
@@ -316,7 +345,7 @@ export default function AddAppointmentPage() {
           (el: any) =>
             el.storeServiceCategoryItem === watch('storeServiceCategoryItem')
         ) !== undefined;
-      console.log('check', check);
+      // console.log('check', check);
       if (!check) {
         const currentDay = dayjs(getValues('appointmentDate')).format('dddd');
         const scheduleData = activeBarberData?.storeEmployeeSchedule.filter(
@@ -362,25 +391,25 @@ export default function AddAppointmentPage() {
             // );
             // console.log('add', add);
             if (elStartTime > startTime && elStartTime < endTime) {
-              console.log('if mee 1');
-              console.log('me ho time', time);
-              console.log('me ho converted time', convertAddTime);
-              console.log('me ho prev time', prevTime);
-              console.log(
-                'me ho convertAppointmentAddTime time',
-                convertAppointmentAddTime
-              );
-              console.log('me ho elStartTime time', elStartTime);
+              // console.log('if mee 1');
+              // console.log('me ho time', time);
+              // console.log('me ho converted time', convertAddTime);
+              // console.log('me ho prev time', prevTime);
+              // console.log(
+              //   'me ho convertAppointmentAddTime time',
+              //   convertAppointmentAddTime
+              // );
+              // console.log('me ho elStartTime time', elStartTime);
 
               if (time > convertAddTime) {
-                console.log('if mee 2');
+                // console.log('if mee 2');
                 // console.log('if');
                 prevTime = convertAddTime;
               } else if (
                 time < prevTime &&
                 convertAppointmentAddTime >= elStartTime
               ) {
-                console.log('if mee 3');
+                // console.log('if mee 3');
                 // console.log("2");
                 // console.log('else');
                 // console.log("3");
@@ -395,7 +424,7 @@ export default function AddAppointmentPage() {
               }
               break;
             } else {
-              console.log('if mee 4');
+              // console.log('if mee 4');
               // console.log("4");
               // console.log("if success error 2");/
               setIsNotify(true);
@@ -410,7 +439,7 @@ export default function AddAppointmentPage() {
           // });
         }
         // console.log('hello me');
-        const newTmpId = tmpId + 1;
+        const newTmpId: any = setTmpId(tmpId + 1);
         const newData = {
           id: newTmpId,
           appointmentTime,
@@ -425,8 +454,11 @@ export default function AddAppointmentPage() {
           storeServiceCategory: '12345',
           storeServiceCategoryItem: activeBarberData?.storeServiceCategoryItem,
         };
-        // console.log('NEWDATA', newData);
+        console.log('newData::::::', newData);
+        console.log('appointmentBookedTime', appointmentBookedTime);
+        console.log('tempAppointmentBookedTime', tempAppointmentBookedTime);
         obj.id = newTmpId;
+        setTempAppointmentBookedTime((prev: any) => [...prev, newData]);
         setAppointmentBookedTime((prev: any) => [...prev, newData]);
         // setPrevBookedAppointment(newData);
         append(obj);
@@ -556,6 +588,10 @@ export default function AddAppointmentPage() {
   // console.log("barberList", barberList);
 
   const removeBookinkList = (item: any) => {
+    console.log('item::::::', item);
+    setTempAppointmentBookedTime((arr: any) =>
+      arr.filter((filterItem: any) => filterItem.id !== item.id)
+    );
     setAppointmentBookedTime((arr: any) =>
       arr.filter((filterItem: any) => filterItem.id !== item.id)
     );
