@@ -101,7 +101,11 @@ export default function AddAppointmentPage() {
       .then((res) => {
         if (res.data.success) {
           setEmpId(id);
-          setAppointmentBookedTime(res.data.data);
+          const tempBookedTime = res.data.data.map((resp: any) => ({
+            ...resp,
+            appointmentTime: dayjs(resp.appointmentTime).utc(),
+          }));
+          setAppointmentBookedTime(tempBookedTime);
         } else {
           setIsNotify(true);
           setNotifyMessage({
@@ -285,6 +289,11 @@ export default function AddAppointmentPage() {
 
   const addAppointmentServices = () => {
     const tmpId = 0;
+    console.log(
+      "getValues('appointmentDate')",
+      appointmentTime,
+      dayjs(appointmentTime).format('HH:mm:ss')
+    );
     const obj = {
       id: 0,
       barber: activeBarberData?.storeEmployee?.name,
@@ -332,11 +341,11 @@ export default function AddAppointmentPage() {
         );
         const convertAppointmentAddTime = dayjs(addTime).format('HH:mm');
         // console.log('start end');
-        appointmentBookedTime.forEach((el: any) => {
-          // for (const key of Object.keys(appointmentBookedTime)) {
-          //   const index = key;
-          //   const el = appointmentBookedTime[index];
-          console.log('El', el);
+        // appointmentBookedTime.forEach((el: any) => {
+        for (const key of Object.keys(appointmentBookedTime)) {
+          const index = key;
+          const el = appointmentBookedTime[index];
+          // console.log('El', el);
           // console.log('activeBarberData', activeBarberData);
           if (
             el.storeEmployee === activeBarberData?.storeEmployee?.id &&
@@ -346,14 +355,23 @@ export default function AddAppointmentPage() {
             const add = dayjs(el.appointmentTime).add(el.serviceTime, 'minute');
             const elStartTime = dayjs(el.appointmentTime).format('HH:mm');
             const convertAddTime: any = dayjs(add).format('HH:mm');
-            console.log(
-              '🚀 ~ appointmentBookedTime.forEach ~ elStartTime:',
-              elStartTime,
-              convertAddTime
-            );
-            console.log('add', add);
+            // console.log(
+            //   '🚀 ~ appointmentBookedTime.forEach ~ elStartTime:',
+            //   elStartTime,
+            //   convertAddTime
+            // );
+            // console.log('add', add);
             if (elStartTime > startTime && elStartTime < endTime) {
               console.log('if mee 1');
+              console.log('me ho time', time);
+              console.log('me ho converted time', convertAddTime);
+              console.log('me ho prev time', prevTime);
+              console.log(
+                'me ho convertAppointmentAddTime time',
+                convertAppointmentAddTime
+              );
+              console.log('me ho elStartTime time', elStartTime);
+
               if (time > convertAddTime) {
                 console.log('if mee 2');
                 // console.log('if');
@@ -372,21 +390,25 @@ export default function AddAppointmentPage() {
                   text: `Service time is ${activeBarberData?.serviceTime} minutes, Barber is not avaiable at ${time}`,
                   type: 'error',
                 });
-                return false;
-                // break;
+                // return;
+                break;
               }
+              break;
             } else {
-              // console.log('if mee 4');
+              console.log('if mee 4');
               // console.log("4");
               // console.log("if success error 2");/
+              setIsNotify(true);
               setNotifyMessage({
                 text: 'Barber is not avaiable at this time',
                 type: 'error',
               });
             }
           }
-          return null;
-        });
+          // break;
+          // return;
+          // });
+        }
         // console.log('hello me');
         const newTmpId = tmpId + 1;
         const newData = {
@@ -424,11 +446,51 @@ export default function AddAppointmentPage() {
         type: 'error',
       });
     }
-    return null;
+
+    // break;
   };
 
-  console.log('AVTIVE BARBER FIELDS', fields);
-  console.log('AVTIVE BARBER BOOKING', fields);
+  // const addAppo = () => {
+  //   const obj = {
+  //     id: 0,
+  //     barber: activeBarberData?.storeEmployee?.name,
+  //     amount: activeBarberData?.amount,
+  //     storeServiceCategory: watch('categoryId'),
+  //     storeServiceCategoryItem: watch('storeServiceCategoryItem'),
+  //     storeEmployee: activeBarberData?.storeEmployee?.id,
+  //     appointmentTime: `${dayjs(getValues('appointmentDate'))?.format(
+  //       'YYYY-MM-DD'
+  //     )} ${dayjs(appointmentTime)?.format('HH:mm:ss')}`,
+  //   };
+  //   if (
+  //     watch('storeServiceCategoryItem') &&
+  //     activeBarberData &&
+  //     getValues('appointmentDate') &&
+  //     appointmentTime
+  //   ) {
+  //     const currentDay = dayjs(getValues('appointmentDate')).format('dddd');
+  //     const scheduleData = activeBarberData?.storeEmployeeSchedule.filter(
+  //       (item: any) => item.workDay === currentDay
+  //     );
+  //     // yeh start time hn
+  //     const startTime = dayjs(scheduleData[0]?.startTime).format('HH:mm');
+  //     // yeh end time hn
+  //     const endTime = dayjs(scheduleData[0]?.endTime).format('HH:mm');
+  //     // yeh appointment time jo banda deraha hn
+  //     const time: any = dayjs(appointmentTime).format('HH:mm');
+  //     // yeh active barber ka service time
+  //     const addBarberServiceIntoAppointmentTime = dayjs(appointmentTime).add(
+  //       activeBarberData?.serviceTime,
+  //       'minute'
+  //     );
+  //     const convertAppointmentAddTime = dayjs(
+  //       addBarberServiceIntoAppointmentTime
+  //     ).format('HH:mm');
+  //   }
+  // };
+
+  // console.log('AVTIVE BARBER FIELDS', fields);
+  // console.log('AVTIVE BARBER BOOKING', fields);
 
   const onSubmit = (data: any) => {
     setIsLoader(true);

@@ -101,8 +101,8 @@ const AllAppointment = ({
             newDate2.setMinutes(
               newDate2.getMinutes() + Number(item.serviceTime)
             );
-            const dateF1 = dayjs(newDate1).tz('Asia/Karachi');
-            const dateF2 = dayjs(newDate2).tz('Asia/Karachi');
+            const dateF1 = dayjs(newDate1);
+            const dateF2 = dayjs(newDate2);
             const formattedDateWithHour1 = dateF1.format(
               'ddd MMM DD YYYY h:mm:ss [GMT]ZZ (zz)'
             );
@@ -260,7 +260,7 @@ const AllAppointment = ({
     delete updateAppointmentData.id;
     await storeAppointmentService
       .appointmentUpdate(appId, updateAppointmentData)
-      .then((res) => {
+      .then((res: any) => {
         if (res.data.success) {
           setIsLoader(false);
           setData((newArr: any) => {
@@ -285,7 +285,7 @@ const AllAppointment = ({
           });
         }
       })
-      .catch((err) => {
+      .catch((err: any) => {
         setIsLoader(false);
         setIsNotify(true);
         setNotifyMessage({
