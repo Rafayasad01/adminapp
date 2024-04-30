@@ -316,6 +316,22 @@ export default function AddAppointmentPage() {
     }
   }, [watch('storeServiceCategoryItem')]);
 
+  function checkDuplicateServices(
+    array: any,
+    targetEmployee: string,
+    targetCategoryItem: string
+  ) {
+    for (const obj of array) {
+      if (
+        obj.storeEmployee === targetEmployee &&
+        obj.storeServiceCategoryItem === targetCategoryItem
+      ) {
+        return true; // Found a matching object
+      }
+    }
+    return false; // No matching object found
+  }
+
   const addAppointmentServices = () => {
     const obj = {
       id: 0,
@@ -354,14 +370,12 @@ export default function AddAppointmentPage() {
         selectedAppointmentTime >= startTime &&
         selectedAppointmentTime <= endTime
       ) {
-        const check: boolean =
-          fields?.find(
-            (el: any) =>
-              el.storeServiceCategoryItem === watch('storeServiceCategoryItem')
-          ) !== undefined;
-        // console.log('check', check);
-        if (!check) {
-          // console.log('start end');
+        const isDuplicate = checkDuplicateServices(
+          fields,
+          activeBarberData?.storeEmployee?.id,
+          watch('storeServiceCategoryItem')
+        );
+        if (!isDuplicate) {
           appointmentBookedTime.forEach((el: any) => {
             // for (const key of Object.keys(appointmentBookedTime)) {
             //   const index = key;
