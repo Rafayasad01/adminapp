@@ -6,9 +6,11 @@ import appStateReducer from './features/appSlice';
 import authStateReducer from './features/authSlice';
 import cartSliceReducer from './features/CartSlice';
 import categorySliceReducer from './features/CategorySlice';
+import dashboardSliceReducer from './features/DashboardSlice';
 import itemSliceReducer from './features/ItemSlice';
 import rolePermissionStateReducer from './features/permissionsStateSlice';
 import shopScheduleStateSliceReducer from './features/shopScheduleStateSlice';
+import AppointmentSliceReducer from './features/AppointmentSlice';
 
 const persistConfig = {
   key: 'root',
@@ -35,6 +37,8 @@ export const store = configureStore({
     categoryState: categorySliceReducer,
     itemState: itemSliceReducer,
     cartState: cartSliceReducer,
+    dashboardState: dashboardSliceReducer,
+    appointmentState: AppointmentSliceReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

@@ -60,6 +60,7 @@ import SettingsApp from '../pages/settings/SettingsApp';
 import SettingsPage from '../pages/settings/SettingsPage';
 import SettingsShopScheduling from '../pages/settings/SettingsShopScheduling';
 import VouchersPage from '../pages/vouchers/VouchersPage';
+import StoreAppointmentsList from '../pages/appointment/StoreAppointmentsList';
 // import UpdateAppointmentPage from '../pages/appointment/UpdateAppointmentPage';
 
 export const routeObjects: RouteObject[] = [
@@ -397,6 +398,14 @@ export const routeObjects: RouteObject[] = [
                   {
                     index: true,
                     element: <AppointmentVisitPage />,
+                  },
+                  {
+                    path: 'today/list',
+                    element: <StoreAppointmentsList today />,
+                  },
+                  {
+                    path: 'list',
+                    element: <StoreAppointmentsList />,
                   },
                   // { index: true, element: <Navigate to="list" replace /> },
                   // {

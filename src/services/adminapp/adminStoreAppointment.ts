@@ -1,3 +1,4 @@
+/* eslint-disable import/no-cycle */
 import {
   APPOINTMENT_PREFIX,
   EMPLOYEE_PREFIX,
@@ -58,6 +59,13 @@ const getAppointmentById = (storeAppId: any) => {
   return network.get(`${STORE_PREFIX}/${APPOINTMENT_PREFIX}/get/${storeAppId}`);
 };
 
+const fetchAllAppointments = (tenant: any, body: any) => {
+  return network.get(
+    `${STORE_PREFIX}/${APPOINTMENT_PREFIX}/list/${tenant}`,
+    body
+  );
+};
+
 export default {
   getBarbersList,
   getBarberBookedTimeSlots,
@@ -67,5 +75,6 @@ export default {
   getAppointment,
   getAppointmentById,
   appointmentReschedule,
+  fetchAllAppointments,
   appointmentPaid,
 };

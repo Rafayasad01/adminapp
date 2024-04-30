@@ -89,7 +89,7 @@ select {
 }
 
 .css-78trlr-MuiButtonBase-root-MuiIconButton-root:hover {
-  @apply bg-transparent !important;
+  @apply bg-transparent;
 }
 
 .form-group {
