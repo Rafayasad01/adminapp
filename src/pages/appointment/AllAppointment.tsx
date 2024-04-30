@@ -53,8 +53,18 @@ const AllAppointment = ({
   const officeTimings = useAppSelector(
     (state) => state?.persistedReducer.appState.UserItems
   );
-  const shopStartTime = dayjs(officeTimings?.tenantConfig?.officeTimeIn).hour();
-  const shopEndTime = dayjs(officeTimings?.tenantConfig?.officeTimeOut).hour();
+
+  const shopStartTime = Number(
+    dayjs(
+      officeTimings?.tenantConfig?.officeTimeIn ?? dayjs(0).set('hours', 0)
+    ).hour()
+  );
+  const shopEndTime = Number(
+    dayjs(
+      officeTimings?.tenantConfig?.officeTimeOut ?? dayjs(0).set('hours', 12)
+    ).hour()
+  );
+
   const [isTooltipOpen, setIsTooltipOpen] = useState(false);
   const [isLoader, setIsLoader] = useState(false);
   const [, /* appointmentTooltipData */ setAppointmentTooltipData] =
@@ -308,7 +318,6 @@ const AllAppointment = ({
 
   const getRange = (date: any, view: any) => {
     if (view === 'Month') {
-      console.log('PRIOOOOOOOOO', priorityData);
       setAppointmentType({
         text: 'Individual Appointment',
         icon: PersonOutlinedIcon,
