@@ -103,8 +103,12 @@ const AllAppointment = ({
           setIsLoader(false);
           const structuredData = res.data.data.map((item: any) => {
             const date = dayjs(item.appointmentTime);
+            console.log(
+              '🚀 ~ structuredData ~ date:',
+              date.format('ddd MMM DD YYYY h:mm:ss A')
+            );
             const newDate2 = date.add(25, 'minute');
-            const formattedDateWithHour1 = dayjs(date).format(
+            const formattedDateWithHour1 = date.format(
               'ddd MMM DD YYYY h:mm:ss A'
             );
             const formattedDateWithHour2 = newDate2.format(
@@ -444,12 +448,10 @@ const AllAppointment = ({
         /> */}
         <WeekView
           name="Vertical Orientation"
-          // startDayHour={0}
-          // endDayHour={13}
-          startDayHour={shopStartTime}
-          endDayHour={
-            shopStartTime > shopEndTime ? shopEndTime + 24 : shopEndTime
-          }
+          // startDayHour={23}
+          // endDayHour={24}
+          startDayHour={shopStartTime < shopEndTime ? shopStartTime : 0}
+          endDayHour={shopStartTime > shopEndTime ? 24 : shopEndTime}
           // excludedDays={[0, 6]}
           displayName="Week"
         />
