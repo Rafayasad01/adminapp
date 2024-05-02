@@ -11,7 +11,7 @@ import { AppCategories } from '../../interfaces/category.interface';
 import {
   fetchCategories,
   setNotifyState,
-} from '../../redux/features/CategorySlice';
+} from '../../redux/features/categorySlice';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 import CategoriesCard from './CategoriesCard';
 import CategoryItemsList from './CategoryItemsList';
@@ -27,7 +27,9 @@ const AddNewOrder = () => {
   const [category, setCategory] = useState<AppCategories | null>(null);
   const [search, setSearch] = useState('');
   const [searchInputValue, setInputValue] = useState('');
-  const { items: cartItems } = useAppSelector((x) => x.cartState);
+  const { items: cartItems } = useAppSelector(
+    (x) => x.persistedReducer.cartState
+  );
 
   useEffect(() => {
     dispatch(fetchCategories(authState.user?.tenant));
@@ -77,11 +79,11 @@ const AddNewOrder = () => {
               className="active"
               onClick={() => navigate('../basket')}
               aria-current="page"
+              type="button"
             >
               <span className="MuiBadge-root css-1c32n2y-MuiBadge-root">
-                <button
+                <div
                   className="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium p-0 text-gray-50 "
-                  type="button"
                   aria-label="cart-button"
                 >
                   <svg
@@ -94,7 +96,7 @@ const AddNewOrder = () => {
                     <path d="M18 6h-2c0-2.21-1.79-4-4-4S8 3.79 8 6H6c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-6-2c1.1 0 2 .9 2 2h-4c0-1.1.9-2 2-2zm6 16H6V8h2v2c0 .55.45 1 1 1s1-.45 1-1V8h4v2c0 .55.45 1 1 1s1-.45 1-1V8h2v12z" />
                   </svg>
                   <span className="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root" />
-                </button>
+                </div>
                 <span className="MuiBadge-badge custom-badge MuiBadge-standard MuiBadge-anchorOriginTopRight MuiBadge-anchorOriginTopRightRectangular MuiBadge-overlapRectangular css-fvc8ir-MuiBadge-badge">
                   {cartItems.length}
                 </span>

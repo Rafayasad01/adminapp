@@ -1,3 +1,4 @@
+import SearchIcon from '@mui/icons-material/Search';
 import {
   Button,
   Divider,
@@ -6,14 +7,13 @@ import {
   TablePagination,
   TextField,
 } from '@mui/material';
-import { memo, useEffect, useState } from 'react';
 import dayjs from 'dayjs';
-import SearchIcon from '@mui/icons-material/Search';
-import TopBar from '../../components/common/TopBar';
-import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
-import { fetchAppointments } from '../../redux/features/AppointmentSlice';
+import { memo, useEffect, useState } from 'react';
 import CustomText from '../../components/common/CustomText';
 import Loader from '../../components/common/Loader';
+import TopBar from '../../components/common/TopBar';
+import { fetchAppointments } from '../../redux/features/appointmentSlice';
+import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 
 type QueryParams = {
   tenant: string | undefined;

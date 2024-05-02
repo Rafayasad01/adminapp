@@ -1,5 +1,7 @@
+import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
 import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined';
 import RadioButtonUncheckedOutlinedIcon from '@mui/icons-material/RadioButtonUncheckedOutlined';
+import RemoveCircleOutlineOutlinedIcon from '@mui/icons-material/RemoveCircleOutlineOutlined';
 import {
   Button,
   CircularProgress,
@@ -12,6 +14,7 @@ import {
   Radio,
   RadioGroup,
 } from '@mui/material';
+import IconButton from '@mui/material/IconButton';
 import dayjs from 'dayjs';
 import _ from 'lodash';
 import { useState } from 'react';
@@ -24,32 +27,46 @@ import TopBar from '../../components/common/TopBar';
 import PromoCodeIcon from '../../components/icons/PromoCode';
 import { Order } from '../../interfaces/order.interface';
 import {
+  quantityDecrement,
+  quantityIncrement,
   setCart,
   setNotifyState,
   showNotifyMessage,
-} from '../../redux/features/CartSlice';
+} from '../../redux/features/cartSlice';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 import appUserService from '../../services/adminapp/adminAppUser';
 import ordersService from '../../services/adminapp/adminOrders';
 import voucherService from '../../services/adminapp/adminVouchers';
-import { CURRENCY_PREFIX } from '../../utils/constants';
+import {
+  CURRENCY_PREFIX,
+  ORDER_FULFILLMENT_METHOD,
+} from '../../utils/constants';
+import promiseHandler from '../../utils/helper';
+import { ValuesOf } from '../../utils/ts-helpers';
 
 const OrderBasket = () => {
   const {
     items: cartItems,
     notify,
     notifyMessage,
-  } = useAppSelector((x) => x.cartState);
+  } = useAppSelector((x) => x.persistedReducer.cartState);
+  const tenant = useAppSelector(
+    (state) => state?.persistedReducer?.appState.UserItems.tenant
+  );
   const navigate = useNavigate();
   const [paymentMethod] = useState('CASH_ON_DELIVERY');
-  const [isExistingUser, setIsExistingUser] = useState<any>('Anonymous User');
+  const [isExistingUser, setIsExistingUser] = useState<'TRUE' | 'FALSE'>(
+    'FALSE'
+  );
+  const [fulfillmentMethod, setFulfillmentMethod] =
+    useState<ValuesOf<typeof ORDER_FULFILLMENT_METHOD>>('Self');
   const [isLoginLoader, setIsLoginLoader] = useState(false);
   const [loginDetails, setLoginDetails] = useState<any>(null);
   const [promoCode, setPromoCode] = useState<any>();
   const [promoList, setPromoList] = useState<any>(null);
   const [userIdentifier, setUserIdentifier] = useState<any>('');
   const [isLoader, setIsLoader] = useState(false);
-  const authState: any = useAppSelector((state: any) => state?.authState);
+  const authState = useAppSelector((state) => state?.authState);
 
   const {
     register,
@@ -59,8 +76,8 @@ const OrderBasket = () => {
   } = useForm<Order>();
 
   const dropOffDate: any = useAppSelector(
-    (state: any) =>
-      state?.persisitReducer?.appState?.UserItems?.tenantConfig
+    (state) =>
+      state?.persistedReducer?.appState?.UserItems?.tenantConfig
         ?.minimumDeliveryTime
   );
   const currentDate = dayjs();
@@ -71,7 +88,8 @@ const OrderBasket = () => {
     0
   );
   const gstAmount =
-    totalAmount * (authState.user.tenantConfig.gstPercentage / 100);
+    totalAmount *
+    (Number(authState.user?.tenantConfig?.gstPercentage ?? 0) / 100);
 
   const discountedValue: any =
     cartItems?.length <= 0
@@ -121,18 +139,162 @@ const OrderBasket = () => {
     );
   };
 
+  const handleAnonymousSubmit = async () => {
+    if (!cartItems.length) {
+      setLoginDetails(null);
+      setIsLoginLoader(false);
+      showNotification({
+        text: 'No Items In Cart',
+        type: 'error',
+      });
+      return;
+    }
+
+    setIsLoginLoader(true);
+    const anonIdentifier = authState?.user?.username?.split('@')[0];
+    const payload = {
+      identifier:
+        isExistingUser === 'FALSE'
+          ? `${anonIdentifier}@shop.com`
+          : userIdentifier || 'false',
+      tenant,
+    };
+    const anonymousLoginPromise = appUserService.appAnonymousLogin(payload);
+    const [anonymousLoginResult, anonymousLoginError, anonymousLoginOk] =
+      await promiseHandler(anonymousLoginPromise);
+    if (!anonymousLoginOk) {
+      setLoginDetails(null);
+      setIsLoginLoader(false);
+      showNotification({
+        text: anonymousLoginError.message,
+        type: 'error',
+      });
+
+      return;
+    }
+    if (!anonymousLoginResult.data.success) {
+      setLoginDetails(null);
+      setIsLoginLoader(false);
+      showNotification({
+        text: anonymousLoginResult.data.message,
+        type: 'error',
+      });
+      return;
+    }
+    setIsLoginLoader(false);
+    setLoginDetails(anonymousLoginResult.data.data);
+    showNotification({
+      text: anonymousLoginResult.data.message,
+      type: 'success',
+    });
+    const anonymousLoginResultData = anonymousLoginResult.data.data;
+    const cartPayload = {
+      tenant: anonymousLoginResultData.tenant,
+      appUser: anonymousLoginResultData.id,
+    };
+
+    const orderGetCartPromise = ordersService.OrderGetCart(cartPayload);
+
+    const [orderGetCartResult, orderGetCartError, orderGetCartOk] =
+      await promiseHandler(orderGetCartPromise);
+
+    if (!orderGetCartOk) {
+      showNotification({
+        text: orderGetCartError.message,
+        type: 'error',
+      });
+      return;
+    }
+    if (!orderGetCartResult.data.success) {
+      showNotification({
+        text: orderGetCartResult.data.message,
+        type: 'error',
+      });
+      return;
+    }
+
+    const updatedCartPayload = {
+      cartId: orderGetCartResult.data.data.cart.id,
+      appUser: orderGetCartResult.data.data.cart.appUser,
+      tenant: orderGetCartResult.data.data.cart.tenant,
+      appUserAddress: anonymousLoginResultData.appUserAddress.id,
+      pickupDateTime: new Date(),
+      dropDateTime: watch('deliveryDropOffDate')
+        ? watch('deliveryDropOffDate').format('YYYY-MM-DD HH:mm:ss')
+        : DeliveryDate.format('YYYY-MM-DD HH:mm:ss'),
+      voucherCode: checkVoucherMinAmount ? promoCode : '' || '',
+      products: cartItems?.map((item: any) => ({
+        id: item.id,
+        quantity: item.quantity,
+      })),
+    };
+    const orderUpdateCartPromise =
+      ordersService.OrderUpdateCart(updatedCartPayload);
+    const [orderUpdateCartResult, orderUpdateCartError, orderUpdateCartOk] =
+      await promiseHandler(orderUpdateCartPromise);
+
+    if (!orderUpdateCartOk) {
+      showNotification({
+        text: orderUpdateCartError.message,
+        type: 'error',
+      });
+      return;
+    }
+    if (!orderUpdateCartResult.data.success) {
+      showNotification({
+        text: orderUpdateCartResult.data.message,
+        type: 'error',
+      });
+      return;
+    }
+
+    const newOrderPlace = {
+      cartId: orderGetCartResult.data.data.cart.id,
+      tenant: orderGetCartResult.data.data.cart.tenant,
+      appUser: orderGetCartResult.data.data.cart.appUser,
+      fulfillmentMethod: ORDER_FULFILLMENT_METHOD.SELF,
+    };
+
+    const orderPlacePromise = ordersService.OrderPlace(newOrderPlace);
+
+    const [orderPlaceResult, orderPlaceError, orderPlaceOk] =
+      await promiseHandler(orderPlacePromise);
+
+    if (!orderPlaceOk) {
+      showNotification({
+        text: orderPlaceError.message,
+        type: 'error',
+      });
+      return;
+    }
+    if (!orderPlaceResult.data.success) {
+      showNotification({
+        text: orderPlaceResult.data.message,
+        type: 'error',
+      });
+      return;
+    }
+    setIsLoader(false);
+    showNotification({
+      text: orderPlaceResult.data.message,
+      type: 'success',
+    });
+    dispatch(setCart([]));
+    navigate(-1);
+  };
+
   const handleLogin = () => {
     setIsLoginLoader(true);
-    const anonIdentidier = authState?.user?.username?.split('@')[0];
+    const anonIdentifier = authState?.user?.username?.split('@')[0];
     const payload = {
-      tenant: authState?.user?.tenant,
       identifier:
-        isExistingUser !== 'Exist User'
-          ? `${anonIdentidier}@shop.com`
+        isExistingUser === 'FALSE'
+          ? `${anonIdentifier}@shop.com`
           : userIdentifier || 'false',
+      tenant,
     };
     let service;
-    if (isExistingUser === 'Exist User') {
+    if (isExistingUser === 'TRUE') {
       service = appUserService.appLogin;
     } else {
       service = appUserService.appAnonymousLogin;
@@ -140,16 +302,23 @@ const OrderBasket = () => {
     service(payload)
       .then((res) => {
         if (res.data.success) {
+          // console.log(res.data.data);
+          // if(res.data.data.userType === "Shop"){
+          //   setAddress(authState?.tenantConfig?.shopAddress);
+          // }else{
+          //   setAddress(res.data.data);
+          // }
           setIsLoginLoader(false);
           setLoginDetails(res.data.data);
           showNotification({
             text: res.data.message,
             type: 'success',
           });
-          if (isExistingUser === 'Exist User') {
+
+          if (isExistingUser === 'TRUE') {
             voucherService
               .orderVoucherPromotionList(
-                authState.user.tenant,
+                authState.user?.tenant ?? '',
                 res.data.data.id
               )
               .then((resp) => {
@@ -189,7 +358,13 @@ const OrderBasket = () => {
       });
   };
 
-  const onSubmit = () => {
+  const handlePaymentChange = () => {};
+
+  const onSubmit = async () => {
+    if (isExistingUser === 'FALSE') {
+      await handleAnonymousSubmit();
+      return;
+    }
     if (loginDetails !== null) {
       if (cartItems?.length > 0 && totalAmount > 0) {
         setIsLoader(true);
@@ -224,6 +399,7 @@ const OrderBasket = () => {
                       cartId: item.data.data.cart.id,
                       tenant: item.data.data.cart.tenant,
                       appUser: item.data.data.cart.appUser,
+                      fulfillmentMethod,
                     };
                     ordersService
                       .OrderPlace(newOrderPlace)
@@ -260,7 +436,7 @@ const OrderBasket = () => {
       } else if (cartItems?.length <= 0) {
         setIsLoader(false);
         showNotification({
-          text: 'Select atleast one category item',
+          text: 'Select at least one category item',
           type: 'info',
         });
       } else if (totalAmount <= 0) {
@@ -331,7 +507,25 @@ const OrderBasket = () => {
                           <td>
                             {CURRENCY_PREFIX} {item.price}
                           </td>
-                          <td>{item.quantity}</td>
+                          <td>
+                            <IconButton
+                              className="p-0 text-neutral-900"
+                              onClick={() =>
+                                dispatch(quantityDecrement(item.id))
+                              }
+                            >
+                              <RemoveCircleOutlineOutlinedIcon className="text-lg" />
+                            </IconButton>
+                            <span className="mx-2"> {item.quantity}</span>
+                            <IconButton
+                              className="p-0 text-neutral-900"
+                              onClick={() =>
+                                dispatch(quantityIncrement(item.id))
+                              }
+                            >
+                              <AddCircleOutlineOutlinedIcon className="text-lg" />
+                            </IconButton>
+                          </td>
                           <td>
                             {' '}
                             {CURRENCY_PREFIX}
@@ -369,155 +563,194 @@ const OrderBasket = () => {
               </div>
             </div>
           </div>
-          <div className="col-span-5">
-            <div className="cart-checkout-card">
-              <div className="w-full px-4">
-                <FormControl className="w-full">
-                  <FormLabel
-                    id="demo-row-radio-buttons-group-label"
-                    className="font-open-sans text-xl font-semibold text-secondary"
-                  >
-                    Delivery Date
-                  </FormLabel>
-                  <div className="mt-3 flex items-center">
-                    <div>
-                      <p className="text-sm">Delivery Pickup Date</p>
+          <div className="col-span-5 rounded-lg bg-white py-5 shadow-lg">
+            <div className="w-full px-4">
+              <FormControl className="w-full">
+                <FormLabel
+                  id="demo-row-radio-buttons-group-label"
+                  className="font-open-sans text-xl font-semibold text-secondary"
+                >
+                  Delivery Date
+                </FormLabel>
+                <div className="mt-3 flex items-center">
+                  <div>
+                    <p className="text-sm">Delivery Pickup Date</p>
+                    <span className="text-sm font-semibold">
+                      {dayjs().format('MMMM DD, YYYY')}
+                    </span>
+                    {/* <CustomDateTimePicker
+                      register={register}
+                      defaultValue={dayjs()}
+                      minDate={dayjs()}
+                      id="deliveryPickupDate"
+                      error={errors.deliveryPickupDate}
+                      inputTitle="Delivery Pickup Date"
+                      setValue={setValue}
+                      value={dayjs()}
+                    /> */}
+                  </div>
+                  <div className="mx-10">
+                    <CustomDateTimePicker
+                      register={register}
+                      defaultValue={dayjs()}
+                      minDate={dayjs()}
+                      id="deliveryDropOffDate"
+                      error={errors.deliveryDropOffDate}
+                      inputTitle="Delivery Drop off Date"
+                      setValue={setValue}
+                      value={
+                        watch('deliveryDropOffDate')
+                          ? watch('deliveryDropOffDate')
+                          : DeliveryDate.toDate()
+                      }
+                    />
+                  </div>
+                </div>
+                <div className="my-2">
+                  <span className="text-sm font-semibold">
+                    {dropOffDate
+                      ? `Standard delivery time is ${dropOffDate} days.`
+                      : ''}
+                  </span>
+                </div>
+                {watch('deliveryDropOffDate') &&
+                  watch('deliveryDropOffDate').format('MM/DD/YYYY') !==
+                    DeliveryDate.format('MM/DD/YYYY') && (
+                    <div className="">
                       <span className="text-sm font-semibold">
-                        {dayjs().format('MMMM DD, YYYY')}
+                        {`${
+                          watch('deliveryDropOffDate').format('MM/DD/YYYY') >
+                            DeliveryDate.format('MM/DD/YYYY') ||
+                          !DeliveryDate.isValid()
+                            ? 'New'
+                            : 'Urgent'
+                        } delivery time is ${watch(
+                          'deliveryDropOffDate'
+                        )?.format('MMMM DD, YYYY')}.`}
                       </span>
                     </div>
-                    <div className="mx-10">
-                      <CustomDateTimePicker
-                        register={register}
-                        defaultValue={dayjs()}
-                        minDate={dayjs()}
-                        id="deliveryDropOffDate"
-                        error={errors.deliveryDropOffDate}
-                        inputTitle="Delivery Dropoff Date"
-                        setValue={setValue}
-                        value={
-                          watch('deliveryDropOffDate')
-                            ? watch('deliveryDropOffDate')
-                            : DeliveryDate
-                        }
+                  )}
+              </FormControl>
+            </div>
+            <div className="w-full px-4">
+              {/* <FormControl className="w-full" variant="filled">
+                <label className="mb-1 ml-1 w-full font-open-sans text-xl font-semibold">
+                  Address
+                </label>
+                <div className="w-full rounded-xl border border-solid border-foreground py-1 pl-3">
+                  <Input
+                    className="input-with-icon after:border-b-secondary"
+                    id="search"
+                    type="text"
+                    placeholder="Type Address"
+                    onKeyDown={(
+                      event: React.KeyboardEvent<
+                        HTMLInputElement | HTMLTextAreaElement
+                      >
+                    ) => {
+                      handleClickSearch(event);
+                    }}
+                    endAdornment={
+                      <InputAdornment position="end">
+                        <IconButton aria-label="toggle password visibility">
+                          <PlaceOutlinedIcon className="text-[#6A6A6A]" />
+                        </IconButton>
+                      </InputAdornment>
+                    }
+                    disableUnderline
+                  />
+                </div>
+              </FormControl> */}
+              <Divider flexItem className="mt-5" />
+              <FormControl className="mt-4">
+                <FormLabel
+                  id="demo-row-radio-buttons-group-label"
+                  className="font-open-sans text-xl font-semibold text-secondary"
+                >
+                  Payment
+                </FormLabel>
+                <RadioGroup
+                  row
+                  aria-labelledby="demo-row-radio-buttons-group-label"
+                  name="row-radio-buttons-group"
+                  value={paymentMethod}
+                  onClick={handlePaymentChange}
+                >
+                  <FormControlLabel
+                    sx={{
+                      color: '#6A6A6A',
+                      fontFamily: 'Open Sans',
+                      fonWeight: 400,
+                      fonSize: '14px',
+                    }}
+                    value="CASH_ON_DELIVERY"
+                    control={
+                      <Radio
+                        className="text-sm text-[#1D1D1D]"
+                        icon={<RadioButtonUncheckedOutlinedIcon />}
+                        checkedIcon={<CheckCircleOutlinedIcon />}
                       />
-                    </div>
-                  </div>
-                  <div className="my-2">
-                    <span className="text-sm font-semibold">
-                      {dropOffDate
-                        ? `Standard delivery time is ${dropOffDate} days.`
-                        : ''}
-                    </span>
-                  </div>
-                  {watch('deliveryDropOffDate') &&
-                    watch('deliveryDropOffDate').format('MM/DD/YYYY') !==
-                      DeliveryDate.format('MM/DD/YYYY') && (
-                      <div className="">
-                        <span className="text-sm font-semibold">
-                          {`${
-                            watch('deliveryDropOffDate').format('MM/DD/YYYY') >
-                              DeliveryDate.format('MM/DD/YYYY') ||
-                            DeliveryDate === null
-                              ? 'New'
-                              : 'Urgent'
-                          } delivery time is ${watch(
-                            'deliveryDropOffDate'
-                          )?.format('MMMM DD, YYYY')}.`}
-                        </span>
-                      </div>
-                    )}
-                </FormControl>
-              </div>
-              <div className="w-full px-4">
-                <Divider flexItem className="mt-5" />
-                <FormControl className="mt-4">
-                  <FormLabel
-                    id="demo-row-radio-buttons-group-label"
-                    className="font-open-sans text-xl font-semibold text-secondary"
-                  >
-                    Payment
-                  </FormLabel>
-                  <RadioGroup
-                    row
-                    aria-labelledby="demo-row-radio-buttons-group-label"
-                    name="row-radio-buttons-group"
-                    value={paymentMethod}
-                    onClick={() => {}}
-                  >
-                    <FormControlLabel
-                      sx={{
-                        color: '#6A6A6A',
-                        fontFamily: 'Open Sans',
-                        fonWeight: 400,
-                        fonSize: '14px',
-                      }}
-                      value="CASH_ON_DELIVERY"
-                      control={
-                        <Radio
-                          className="text-sm text-[#1D1D1D]"
-                          icon={<RadioButtonUncheckedOutlinedIcon />}
-                          checkedIcon={<CheckCircleOutlinedIcon />}
-                        />
-                      }
-                      label="Cash"
-                    />
-                  </RadioGroup>
-                </FormControl>
-                <Divider flexItem className="my-5" />
-                <div className="flex items-center justify-between">
-                  <div>
-                    <FormControl className="">
-                      <FormLabel
-                        id="demo-row-radio-buttons-group-label"
-                        className="font-open-sans text-xl font-semibold text-secondary"
-                      >
-                        User
-                      </FormLabel>
-                      <RadioGroup
-                        row
-                        aria-labelledby="demo-row-radio-buttons-group-label"
-                        name="row-radio-buttons-group"
-                        value={isExistingUser || ''}
-                        onClick={handleUserChange}
-                      >
-                        <FormControlLabel
-                          sx={{
-                            color: '#6A6A6A',
-                            fontFamily: 'Open Sans',
-                            fonWeight: 400,
-                            fonSize: '14px',
-                          }}
-                          value="Anonymous User"
-                          control={
-                            <Radio
-                              className="text-sm text-[#1D1D1D]"
-                              icon={<RadioButtonUncheckedOutlinedIcon />}
-                              checkedIcon={<CheckCircleOutlinedIcon />}
-                            />
-                          }
-                          label="Anonymous User"
-                        />
-                        <FormControlLabel
-                          sx={{
-                            color: '#6A6A6A',
-                            fontFamily: 'Open Sans',
-                            fonWeight: 400,
-                            fonSize: '14px',
-                          }}
-                          value="Exist User"
-                          control={
-                            <Radio
-                              className="text-[#1D1D1D]"
-                              icon={<RadioButtonUncheckedOutlinedIcon />}
-                              checkedIcon={<CheckCircleOutlinedIcon />}
-                            />
-                          }
-                          label="Exist User"
-                        />
-                      </RadioGroup>
-                    </FormControl>
-                  </div>
+                    }
+                    label="Cash"
+                  />
+                </RadioGroup>
+              </FormControl>
+
+              <Divider flexItem className="my-5" />
+              <div className="flex items-center justify-between">
+                <div>
+                  <FormControl className="">
+                    <FormLabel
+                      id="demo-row-radio-buttons-group-label"
+                      className="font-open-sans text-xl font-semibold text-secondary"
+                    >
+                      User
+                    </FormLabel>
+                    <RadioGroup
+                      row
+                      aria-labelledby="demo-row-radio-buttons-group-label"
+                      name="row-radio-buttons-group"
+                      value={isExistingUser}
+                      onClick={handleUserChange}
+                    >
+                      <FormControlLabel
+                        sx={{
+                          color: '#6A6A6A',
+                          fontFamily: 'Open Sans',
+                          fonWeight: 400,
+                          fonSize: '14px',
+                        }}
+                        value="FALSE"
+                        control={
+                          <Radio
+                            className="text-sm text-[#1D1D1D]"
+                            icon={<RadioButtonUncheckedOutlinedIcon />}
+                            checkedIcon={<CheckCircleOutlinedIcon />}
+                          />
+                        }
+                        label="Anonymous User"
+                      />
+                      <FormControlLabel
+                        sx={{
+                          color: '#6A6A6A',
+                          fontFamily: 'Open Sans',
+                          fonWeight: 400,
+                          fonSize: '14px',
+                        }}
+                        value="TRUE"
+                        control={
+                          <Radio
+                            className="text-[#1D1D1D]"
+                            icon={<RadioButtonUncheckedOutlinedIcon />}
+                            checkedIcon={<CheckCircleOutlinedIcon />}
+                          />
+                        }
+                        label="Exist User"
+                      />
+                    </RadioGroup>
+                  </FormControl>
+                </div>
+                {isExistingUser === 'TRUE' && (
                   <div>
                     <CustomButton
                       disabled={isLoginLoader || cartItems?.length <= 0}
@@ -536,79 +769,150 @@ const OrderBasket = () => {
                       }}
                     />
                   </div>
-                </div>
+                )}
+              </div>
 
-                {/* {console.log("isExx", isExistingUser)} */}
-                {isExistingUser === 'Exist User' && (
+              {/* {console.log("isExx", isExistingUser)} */}
+              {isExistingUser === 'TRUE' && (
+                <>
                   <div className="w-full rounded-xl border border-solid border-foreground py-1 pl-3">
                     <Input
                       className="input-with-icon after:border-b-secondary"
                       id="search"
                       type="text"
                       placeholder="Identifier (Ex : email or phone)"
+                      // onKeyDown={(
+                      //   event: React.KeyboardEvent<
+                      //     HTMLInputElement | HTMLTextAreaElement
+                      //   >
+                      // ) => {
+                      //   handleUserInput(event);
+                      // }}
                       onChange={(event) =>
                         setUserIdentifier(event.target.value)
                       }
                       disableUnderline
                     />
                   </div>
-                )}
-                <Divider flexItem className="my-5" />
-                {promoList?.length > 0 && (
-                  <>
-                    <div className="flex items-center justify-between py-2">
-                      <div className="font-open-sans font-bold text-neutral-900">
-                        Add Promo Code
-                      </div>
-                      <div className="font-open-sans text-base font-bold text-neutral-900">
-                        <div className="rounded-md border-[1px] border-[#A3A3A3]">
-                          <FormControl
-                            className="FormControl"
-                            variant="standard"
-                          >
-                            <Input
-                              onChange={(val) => setPromoCode(val.target.value)}
-                              className="FormInput px-1 text-sm"
-                              id="PromoCode"
-                              name="PromoCode"
-                              placeholder="Enter Promo Code"
-                              disableUnderline
-                              startAdornment={
-                                <InputAdornment position="start">
-                                  <PromoCodeIcon />
-                                </InputAdornment>
-                              }
-                            />
-                          </FormControl>
-                        </div>
+
+                  <Divider flexItem className="my-5" />
+                </>
+              )}
+
+              {isExistingUser === 'TRUE' && (
+                <FormControl>
+                  <FormLabel
+                    id="demo-row-radio-buttons-group-label"
+                    className="font-open-sans text-xl font-semibold text-secondary"
+                  >
+                    Fulfillment Mode
+                  </FormLabel>
+                  <RadioGroup
+                    row
+                    aria-labelledby="demo-row-radio-buttons-group-label"
+                    name="row-radio-buttons-group"
+                    value={fulfillmentMethod}
+                    onClick={(event: any) =>
+                      setFulfillmentMethod(event.target.value)
+                    }
+                  >
+                    <FormControlLabel
+                      sx={{
+                        color: '#6A6A6A',
+                        fontFamily: 'Open Sans',
+                        fonWeight: 400,
+                        fonSize: '14px',
+                      }}
+                      value="Self"
+                      control={
+                        <Radio
+                          className="text-[#1D1D1D]"
+                          icon={<RadioButtonUncheckedOutlinedIcon />}
+                          checkedIcon={<CheckCircleOutlinedIcon />}
+                        />
+                      }
+                      label="Customer Pickup"
+                    />
+                    <FormControlLabel
+                      sx={{
+                        color: '#6A6A6A',
+                        fontFamily: 'Open Sans',
+                        fonWeight: 400,
+                        fonSize: '14px',
+                      }}
+                      value="Delivery"
+                      control={
+                        <Radio
+                          className="text-sm text-[#1D1D1D]"
+                          icon={<RadioButtonUncheckedOutlinedIcon />}
+                          checkedIcon={<CheckCircleOutlinedIcon />}
+                        />
+                      }
+                      label="Delivery"
+                    />
+                  </RadioGroup>
+                </FormControl>
+              )}
+
+              <Divider flexItem className="my-5" />
+
+              {promoList?.length > 0 && (
+                <>
+                  <div className="flex items-center justify-between py-2">
+                    <div className="font-open-sans font-bold text-neutral-900">
+                      Add Promo Code
+                    </div>
+                    <div className="font-open-sans text-base font-bold text-neutral-900">
+                      <div className="rounded-md border-[1px] border-[#A3A3A3]">
+                        <FormControl className="FormControl" variant="standard">
+                          <Input
+                            // {...register('name', {
+                            //   required: true,
+                            //   pattern: PATTERN.CHAR_NUM_DASH,
+                            //   validate: (value) => value.length <= 100,
+                            // })}
+                            onChange={(val) => setPromoCode(val.target.value)}
+                            className="FormInput px-1 text-sm"
+                            id="PromoCode"
+                            name="PromoCode"
+                            placeholder="Enter Promo Code"
+                            disableUnderline
+                            startAdornment={
+                              <InputAdornment position="start">
+                                <PromoCodeIcon />
+                              </InputAdornment>
+                            }
+                          />
+                        </FormControl>
                       </div>
                     </div>
-                    <Divider flexItem className="my-5" />
-                  </>
-                )}
-                <div className="my-4">
-                  <div className="font-open-sans text-lg font-semibold text-neutral-900">
+                  </div>
+                  <Divider flexItem className="my-5" />
+                </>
+              )}
+              <div className="my-4">
+                <div className="font-open-sans text-lg font-semibold text-neutral-900">
+                  Total Amount
+                </div>
+                <div className="flex items-center justify-between py-2">
+                  <div className="font-open-sans text-xs font-normal text-neutral-900">
                     Total Amount
                   </div>
-                  <div className="flex items-center justify-between py-2">
-                    <div className="font-open-sans text-xs font-normal text-neutral-900">
-                      Total Amount
-                    </div>
-                    <div className="font-open-sans text-sm font-bold text-neutral-900">
-                      ${totalAmount.toFixed(2)}
-                    </div>
+                  <div className="font-open-sans text-sm font-bold text-neutral-900">
+                    ${totalAmount.toFixed(2)}
                   </div>
-                  <div className="flex items-center justify-between py-2">
-                    <div className="font-open-sans text-xs font-normal text-neutral-900">
-                      Discount{' '}
-                      {discountedValue?.discountType === 'Percentage'
-                        ? `(${Number(discountedValue?.value).toFixed(0)}%)`
-                        : ''}
-                    </div>
-                    <div className="font-open-sans text-sm font-bold text-neutral-900">
-                      {promoCode
-                        ? checkVoucherMinAmount
-                          ? `$
+                </div>
+                <div className="flex items-center justify-between py-2">
+                  <div className="font-open-sans text-xs font-normal text-neutral-900">
+                    Discount{' '}
+                    {discountedValue?.discountType === 'Percentage'
+                      ? `(${Number(discountedValue?.value).toFixed(0)}%)`
+                      : ''}
+                  </div>
+                  <div className="font-open-sans text-sm font-bold text-neutral-900">
+                    {promoCode
+                      ? checkVoucherMinAmount
+                        ? `$
                       ${
                         discountedValue?.value > 0 && promoCode
                           ? discountedValue?.discountType === 'Amount'
@@ -616,11 +920,11 @@ const OrderBasket = () => {
                             : `${discountedPercentageValue}`
                           : '0.00'
                       }`
-                          : 'N/A'
-                        : '$0.00'}
-                    </div>
+                        : 'N/A'
+                      : '$0.00'}
                   </div>
-                  {/* <div className="flex items-center justify-between py-2">
+                </div>
+                {/* <div className="flex items-center justify-between py-2">
                   <div className="font-open-sans text-xs font-normal text-neutral-900">
                     Total Discounted Amount
                   </div>
@@ -628,45 +932,46 @@ const OrderBasket = () => {
                     ${discountedTotalAmount ? discountedTotalAmount.toFixed(2) : "0.00"}
                   </div>
                 </div> */}
-                  <div className="flex items-center justify-between py-2">
-                    <div className="font-open-sans text-xs font-normal text-neutral-900">
-                      GST ({authState.user.tenantConfig.gstPercentage}%)
-                    </div>
-                    <div className="font-open-sans text-sm font-bold text-neutral-900">
-                      ${gstAmount.toFixed(2)}
-                    </div>
-                  </div>
-                </div>
-                <hr className="h-[1px] rounded-lg bg-neutral-200" />
-                <div className="mb-2 flex items-center justify-between py-2">
-                  <div className="font-open-sans text-lg font-semibold text-neutral-900">
-                    Grand Total
+                <div className="flex items-center justify-between py-2">
+                  <div className="font-open-sans text-xs font-normal text-neutral-900">
+                    GST ({authState.user?.tenantConfig.gstPercentage}%)
                   </div>
                   <div className="font-open-sans text-sm font-bold text-neutral-900">
-                    ${grandTotal ? grandTotal.toFixed(2) : '0.00'}
+                    ${gstAmount.toFixed(2)}
                   </div>
                 </div>
-                <Button
-                  disabled={
-                    isLoader || loginDetails === null || cartItems?.length <= 0
-                  }
-                  type="button"
-                  onClick={onSubmit}
-                  color="inherit"
-                  className={`w-full rounded-lg 
+              </div>
+              <hr className="h-[1px] rounded-lg bg-neutral-200" />
+              <div className="mb-2 flex items-center justify-between py-2">
+                <div className="font-open-sans text-lg font-semibold text-neutral-900">
+                  Grand Total
+                </div>
+                <div className="font-open-sans text-sm font-bold text-neutral-900">
+                  ${grandTotal ? grandTotal.toFixed(2) : '0.00'}
+                </div>
+              </div>
+              <Button
+                disabled={
+                  (isExistingUser === 'TRUE' && isLoader) ||
+                  (isExistingUser === 'TRUE' && loginDetails === null) ||
+                  (isExistingUser === 'TRUE' && cartItems?.length <= 0)
+                }
+                type="button"
+                onClick={onSubmit}
+                color="inherit"
+                className={`w-full rounded-lg 
                 ${
                   loginDetails === null || cartItems?.length <= 0
                     ? 'bg-neutral-400'
                     : 'bg-neutral-900'
                 } btn-gray-fill font-open-sans text-base font-semibold text-gray-50`}
-                >
-                  {isLoader && loginDetails !== null ? (
-                    <CircularProgress size="25px" color="inherit" />
-                  ) : (
-                    <span>Submit</span>
-                  )}
-                </Button>
-              </div>
+              >
+                {isLoader && loginDetails !== null ? (
+                  <CircularProgress size="25px" color="inherit" />
+                ) : (
+                  <span>Submit</span>
+                )}
+              </Button>
             </div>
           </div>
         </div>
