@@ -1,8 +1,8 @@
 import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined';
 import PersonOutlinedIcon from '@mui/icons-material/PersonOutlined';
 
-const HOST = 'https://dev.urapptech.com';
-// const HOST = 'http://192.168.8.68:3200';
+// const HOST = 'https://dev.urapptech.com';
+const HOST = 'http://192.168.8.68:3200';
 // const HOST = 'http://192.168.8.97:3200';
 // const HOST = 'http://localhost:3200';
 
@@ -24,6 +24,7 @@ export const DRIVER_PREFIX = 'driver';
 export const CUSTOMER_PREFIX = 'customer';
 export const CATEGORY_PREFIX = 'category';
 export const SERVICE_PREFIX = 'service';
+export const ATTENDANCE_PREFIX = 'attendance';
 export const STORE_PREFIX = 'store';
 export const SETTING_PREFIX = 'setting';
 export const NOTIFICATION_PREFIX = 'notification';

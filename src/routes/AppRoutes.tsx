@@ -61,6 +61,7 @@ import SettingsPage from '../pages/settings/SettingsPage';
 import SettingsShopScheduling from '../pages/settings/SettingsShopScheduling';
 import VouchersPage from '../pages/vouchers/VouchersPage';
 import StoreAppointmentsList from '../pages/appointment/StoreAppointmentsList';
+import AppointmentEmployeesAttendancePage from '../pages/appointment/provider/attendance/AppointmentEmployeesAttendancePage';
 // import UpdateAppointmentPage from '../pages/appointment/UpdateAppointmentPage';
 
 export const routeObjects: RouteObject[] = [
@@ -389,6 +390,10 @@ export const routeObjects: RouteObject[] = [
                   {
                     path: 'services/list/:empId',
                     element: <EmployeeServices />,
+                  },
+                  {
+                    path: 'attendance/:empId',
+                    element: <AppointmentEmployeesAttendancePage />,
                   },
                 ],
               },

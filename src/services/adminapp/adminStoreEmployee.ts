@@ -115,6 +115,17 @@ const StoreEmployeeServiceDelete = (serviceId: any, data: any) => {
   );
 };
 
+// Attendance Service
+const StoreEmployeeAttendanceService = (empId: any, month: any) => {
+  return network.get(
+    `${STORE_PREFIX}/${EMPLOYEE_PREFIX}/attendance/${empId}/${month}`
+  );
+};
+
+const StoreEmployeeAttendanceLeaveService = (empId: any) => {
+  return network.get(`${STORE_PREFIX}/${EMPLOYEE_PREFIX}/leave/${empId}`);
+};
+
 export default {
   StoreEmployeeList,
   StoreEmployeeCreate,
@@ -127,4 +138,6 @@ export default {
   StoreEmployeeServiceUpdateStatus,
   StoreEmployeeServiceDelete,
   StoreEmployeeDelete,
+  StoreEmployeeAttendanceService,
+  StoreEmployeeAttendanceLeaveService,
 };
