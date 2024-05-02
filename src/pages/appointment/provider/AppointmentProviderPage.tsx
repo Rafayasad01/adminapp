@@ -639,7 +639,7 @@ function AppointmentProviderPage() {
 
   const onSubmitDialogBox = async (data: any) => {
     console.log(`onSubmitDialogBox -> data:`, data);
-    // setIsLoader(true);
+    setIsLoader(true);
     delete data.servicesName;
     delete data.servicesAmount;
     delete data.price;
@@ -672,35 +672,35 @@ function AppointmentProviderPage() {
     );
     formData.append('endTime', dayjs(endTime).format('YYYY-MM-DD HH:mm:ss'));
     if (weekDays && startTime && endTime && data.services.length > 0) {
-      // StoreEmployeeService.StoreEmployeeCreate(formData)
-      //   .then((res) => {
-      //     if (res.data.success) {
-      //       setIsLoader(false);
-      //       setOpenFormDialog(false);
-      //       setList([res.data.data, ...list]);
-      //       setIsNotify(true);
-      //       setNotifyMessage({
-      //         text: res.data.message,
-      //         type: 'success',
-      //       });
-      //       reset();
-      //     } else {
-      //       setIsLoader(false);
-      //       setIsNotify(true);
-      //       setNotifyMessage({
-      //         text: res.data.message,
-      //         type: 'error',
-      //       });
-      //     }
-      //   })
-      //   .catch((err) => {
-      //     setIsLoader(false);
-      //     setIsNotify(true);
-      //     setNotifyMessage({
-      //       text: err.message,
-      //       type: 'error',
-      //     });
-      //   });
+      StoreEmployeeService.StoreEmployeeCreate(formData)
+        .then((res) => {
+          if (res.data.success) {
+            setIsLoader(false);
+            setOpenFormDialog(false);
+            setList([res.data.data, ...list]);
+            setIsNotify(true);
+            setNotifyMessage({
+              text: res.data.message,
+              type: 'success',
+            });
+            reset();
+          } else {
+            setIsLoader(false);
+            setIsNotify(true);
+            setNotifyMessage({
+              text: res.data.message,
+              type: 'error',
+            });
+          }
+        })
+        .catch((err) => {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: err.message,
+            type: 'error',
+          });
+        });
     } else {
       setIsLoader(false);
       setIsNotify(true);
