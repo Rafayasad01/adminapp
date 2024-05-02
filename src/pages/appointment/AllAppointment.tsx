@@ -54,17 +54,19 @@ const AllAppointment = ({
     (state) => state?.persistedReducer.appState.UserItems
   );
 
-  const shopStartTime = dayjs(
-    officeTimings?.tenantConfig?.officeTimeIn
-  ).isValid()
-    ? dayjs(officeTimings?.tenantConfig?.officeTimeIn).hour()
-    : 9;
+  const tempShopStartTime = dayjs(officeTimings?.tenantConfig?.officeTimeIn);
 
-  const shopEndTime: any = dayjs(
-    officeTimings?.tenantConfig?.officeTimeOut
-  ).isValid()
-    ? dayjs(officeTimings?.tenantConfig?.officeTimeOut).hour()
-    : 22;
+  const shopStartTimeIsValid = tempShopStartTime.isValid();
+
+  const shopStartTime = shopStartTimeIsValid ? tempShopStartTime.hour() : 9;
+
+  const tempShopEndTime = dayjs(officeTimings?.tenantConfig?.officeTimeOut);
+
+  const shopEndTimeIsValid = tempShopEndTime.isValid();
+
+  let shopEndTime = shopEndTimeIsValid ? tempShopEndTime.hour() : 9;
+
+  shopEndTime = tempShopEndTime.minute() ? shopEndTime + 1 : shopEndTime;
 
   const [isTooltipOpen, setIsTooltipOpen] = useState(false);
   const [isLoader, setIsLoader] = useState(false);
@@ -444,10 +446,10 @@ const AllAppointment = ({
           name="Vertical Orientation"
           // startDayHour={0}
           // endDayHour={13}
-          startDayHour={
-            shopStartTime < shopEndTime ? shopStartTime : shopEndTime
+          startDayHour={shopStartTime}
+          endDayHour={
+            shopStartTime > shopEndTime ? shopEndTime + 24 : shopEndTime
           }
-          endDayHour={shopStartTime > shopEndTime ? shopStartTime : shopEndTime}
           // excludedDays={[0, 6]}
           displayName="Week"
         />
