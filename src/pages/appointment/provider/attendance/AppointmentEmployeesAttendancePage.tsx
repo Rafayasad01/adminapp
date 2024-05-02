@@ -127,12 +127,14 @@ export default function AppointmentEmployeesAttendancePage() {
           StoreEmployeeService.StoreEmployeeAttendanceService(empId, month),
         ]);
         if (AttendanceResponse.data.success) {
+          console.log('AttendanceResponse.data', AttendanceResponse.data.data);
+
           //   setIsLoader(false);
-          setIsNotify(true);
-          setNotifyMessage({
-            text: AttendanceResponse.data.message,
-            type: 'success',
-          });
+          // setIsNotify(true);
+          // setNotifyMessage({
+          //   text: AttendanceResponse.data.message,
+          //   type: 'success',
+          // });
           //   {
           //     id: 2,
           //     title: 'Time in',

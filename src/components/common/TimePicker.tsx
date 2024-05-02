@@ -124,6 +124,7 @@ function TimePicker({
             <StaticTimePicker
               displayStaticWrapperAs="desktop"
               defaultValue={dayjs('2023-01-01T00:00')}
+              value={dayjs(timePickerValue) || null}
               onAccept={handleChange}
             />
           </LocalizationProvider>
