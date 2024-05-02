@@ -367,7 +367,7 @@ export default function AddAppointmentPage() {
       const convertAppointmentAddTime = dayjs(addTime).format('HH:mm');
 
       if (
-        selectedAppointmentTime >= startTime &&
+        selectedAppointmentTime >= startTime ||
         selectedAppointmentTime <= endTime
       ) {
         const isDuplicate = checkDuplicateServices(
