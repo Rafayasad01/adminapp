@@ -1,23 +1,23 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable prettier/prettier */
 
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import TextSnippetIcon from '@mui/icons-material/TextSnippet';
 import IconButton from '@mui/material/IconButton';
 import { useEffect } from 'react';
-import TextSnippetIcon from '@mui/icons-material/TextSnippet';
-import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import { useNavigate } from 'react-router';
+import AdminDashboardRevenueLineChart from '../../components/common/Dashboard/AdminDashboardRevenueLineChart';
+import AdminDashboardTopServices from '../../components/common/Dashboard/AdminDashboardTopServices';
+import AdminTopCustomerList from '../../components/common/Dashboard/AdminTopCustomerList';
 import Loader from '../../components/common/Loader';
 import Notify from '../../components/common/Notify';
 import TopBar from '../../components/common/TopBar';
-import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
-import AppointmentsStatistics from './AppointmentsStatistics';
-import AdminDashboardRevenueLineChart from '../../components/common/Dashboard/AdminDashboardRevenueLineChart';
 import {
   fetchDashboardSummary,
   setNotifyState,
-} from '../../redux/features/DashboardSlice';
-import AdminTopCustomerList from '../../components/common/Dashboard/AdminTopCustomerList';
-import AdminDashboardTopServices from '../../components/common/Dashboard/AdminDashboardTopServices';
+} from '../../redux/features/dashboardSlice';
+import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
+import AppointmentsStatistics from './AppointmentsStatistics';
 
 function HomePage() {
   const authState = useAppSelector((state) => state?.authState);

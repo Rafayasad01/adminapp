@@ -20,8 +20,8 @@ import Loader from '../../components/common/Loader';
 import Loader2 from '../../components/common/Loader2';
 import Notify from '../../components/common/Notify';
 import { AppCategoryItems } from '../../interfaces/category.interface';
-import { addToCart, setCart } from '../../redux/features/CartSlice';
-import { showNotifyMessage } from '../../redux/features/CategorySlice';
+import { addToCart, setCart } from '../../redux/features/cartSlice';
+import { showNotifyMessage } from '../../redux/features/categorySlice';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 import ratingService from '../../services/adminapp/rating';
 import { listingRolePermission } from '../../utils/helper';
@@ -45,7 +45,9 @@ function OrderItemDetailPage() {
   const [isLoader, setIsLoader] = React.useState(true);
   const [isLoaderPagination, setIsLoaderPagination] = React.useState(false);
   const [isNotify, setIsNotify] = React.useState(false);
-  const { items: cartItems } = useAppSelector((x) => x.cartState);
+  const { items: cartItems } = useAppSelector(
+    (x) => x.persistedReducer.cartState
+  );
   const dispatch = useAppDispatch();
   const [notifyMessage, setNotifyMessage] = React.useState({});
   const navigate = useNavigate();

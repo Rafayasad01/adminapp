@@ -8,8 +8,8 @@ import DialogContent from '@mui/material/DialogContent';
 import IconButton from '@mui/material/IconButton';
 import { useEffect, useState } from 'react';
 import { AppCategoryItems } from '../../interfaces/category.interface';
-import { addToCart, setCart } from '../../redux/features/CartSlice';
-import { showNotifyMessage } from '../../redux/features/CategorySlice';
+import { addToCart, setCart } from '../../redux/features/cartSlice';
+import { showNotifyMessage } from '../../redux/features/categorySlice';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 import ratingService from '../../services/adminapp/rating';
 import RatingAccordions from '../rating/RatingAccordin';
@@ -35,7 +35,9 @@ function HomePagePopup({
   const [ratingDetail, setRatingDetail] = useState<any>();
   const dispatch = useAppDispatch();
   const [_isLoader, setIsLoader] = useState(true);
-  const { items: cartItems } = useAppSelector((x) => x.cartState);
+  const { items: cartItems } = useAppSelector(
+    (x) => x.persistedReducer.cartState
+  );
   const [_expanded, setExpanded] = useState<string | false>(false);
   const _handleChange =
     (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {

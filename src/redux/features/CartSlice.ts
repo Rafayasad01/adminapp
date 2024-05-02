@@ -25,7 +25,7 @@ export const cartSlice = createSlice({
     addToCart: (state, action: PayloadAction<AppCategoryItems | any>) => {
       state.items = [...state.items, action.payload];
     },
-    quantityIncrement: (state, action?: PayloadAction<string>) => {
+    quantityIncrement: (state, action: PayloadAction<string>) => {
       state.items = state.items.map((item) => {
         if (item.id === action?.payload) {
           return {
@@ -36,12 +36,12 @@ export const cartSlice = createSlice({
         return item;
       });
     },
-    quantityDecrement: (state, action?: PayloadAction<string>) => {
+    quantityDecrement: (state, action: PayloadAction<string>) => {
       state.items = state.items.map((item) => {
         if (item.id === action?.payload) {
           return {
             ...item,
-            quantity: item.quantity - 1,
+            quantity: Math.max(item.quantity - 1, 1),
           };
         }
         return item;
