@@ -127,8 +127,19 @@ export default function AppointmentEmployeesAttendancePage() {
           StoreEmployeeService.StoreEmployeeAttendanceService(empId, month),
         ]);
         if (AttendanceResponse.data.success) {
-          console.log('AttendanceResponse.data', AttendanceResponse.data.data);
-
+          // const structuredAttendanceArr = AttendanceResponse.data.data?.map((el:any) => ({
+          //   title: el.,
+          // }));
+          // console.log('AttendanceResponse.data', AttendanceResponse.data.data);
+          // const temp = [
+          //   ...AttendanceResponse.data.data.attendance,
+          //   ...AttendanceResponse.data.data.leave,
+          // ];
+          // const structuredArr = temp?.map((el) => ({
+          //   title: el.,
+          // }));
+          // console.log('🚀 ~ empAttendance ~ temp:', temp);
+          // console.log('🚀 ~ structuredArr ~ structuredArr:', structuredArr);
           //   setIsLoader(false);
           // setIsNotify(true);
           // setNotifyMessage({
