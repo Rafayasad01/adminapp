@@ -192,7 +192,7 @@ const AllAppointment = ({
     ({ added, changed, deleted }: any) => {
       if (added) {
         const startingAddedId: any =
-          data?.length > 0 ? data[data.length - 1].id + 1 : 0;
+          data?.length > 0 ? data[data?.length - 1].id + 1 : 0;
         setData([...data, { id: startingAddedId, ...added }]);
       }
       if (changed) {

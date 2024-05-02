@@ -51,7 +51,13 @@ function AppointmentProviderPage() {
   const [actionMenuAnchorEl, setActionMenuAnchorEl] =
     useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
-  const actionMenuOptions = ['Services', 'Schedule', 'Edit', 'Delete'];
+  const actionMenuOptions = [
+    'Attendance',
+    'Services',
+    'Schedule',
+    'Edit',
+    'Delete',
+  ];
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
   const [isLoader, setIsLoader] = useState(true);
@@ -476,6 +482,18 @@ function AppointmentProviderPage() {
         listingRolePermission(dataRole, 'Appointment Provider Schedule View')
       ) {
         navigate(`../schedule/${actionMenuItemid}`);
+      } else {
+        setIsNotify(true);
+        setNotifyMessage({
+          text: NOT_AUTHORIZED_MESSAGE,
+          type: 'warning',
+        });
+      }
+    } else if (option === 'Attendance') {
+      if (
+        listingRolePermission(dataRole, 'Appointment Provider Service View')
+      ) {
+        navigate(`../attendance/${actionMenuItemid}`);
       } else {
         setIsNotify(true);
         setNotifyMessage({

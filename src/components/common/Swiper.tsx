@@ -83,7 +83,7 @@ const SwiperComponent = ({
   return (
     <div className="swiper">
       <div className="swiper-wrapper">
-        {data.length > 0
+        {data?.length > 0
           ? data?.map((item: any, index: number) => {
               return (
                 <div key={index} className="swiper-slide flex items-center">

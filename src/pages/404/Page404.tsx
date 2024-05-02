@@ -1,7 +1,7 @@
 import assets from '../../assets';
 import CustomButton from '../../components/common/CustomButton';
 
-function Page404() {
+function Page404({ error }: { error?: any }) {
   return (
     <div className="flex h-screen w-screen items-center justify-center bg-[#F0F0F0]">
       <div className="container mx-auto flex items-center justify-between px-10">
@@ -17,7 +17,7 @@ function Page404() {
             Looks like you’re lost
           </div>
           <div className="mb-[30px] text-[18px] font-normal leading-[normal] text-secondary opacity-[0.3]">
-            The page you are looking for not available!
+            {error?.message}
           </div>
           <CustomButton
             onclick={() => window.location.reload()}
