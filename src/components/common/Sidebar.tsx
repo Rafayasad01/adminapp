@@ -129,6 +129,12 @@ const links = [
         permission: 'Category List',
         icon: <VisitIcon />,
       },
+      {
+        name: 'Leave management',
+        path: 'store-appointment/leaves-management',
+        permission: 'Category List',
+        icon: <VisitIcon />,
+      },
     ],
   },
   {

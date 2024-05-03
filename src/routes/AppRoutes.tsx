@@ -62,6 +62,8 @@ import SettingsShopScheduling from '../pages/settings/SettingsShopScheduling';
 import VouchersPage from '../pages/vouchers/VouchersPage';
 import StoreAppointmentsList from '../pages/appointment/StoreAppointmentsList';
 import AppointmentEmployeesAttendancePage from '../pages/appointment/provider/attendance/AppointmentEmployeesAttendancePage';
+import LeaveManagement from '../pages/appointment/leaveManagement/LeaveManagement';
+
 // import UpdateAppointmentPage from '../pages/appointment/UpdateAppointmentPage';
 
 export const routeObjects: RouteObject[] = [
@@ -432,6 +434,15 @@ export const routeObjects: RouteObject[] = [
                   {
                     path: 'reschedule-appointment/:id',
                     element: <RescheduleAppointmentPage />,
+                  },
+                ],
+              },
+              {
+                path: 'leaves-management',
+                children: [
+                  {
+                    index: true,
+                    element: <LeaveManagement />,
                   },
                 ],
               },

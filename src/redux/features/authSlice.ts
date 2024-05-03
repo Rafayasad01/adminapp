@@ -24,11 +24,21 @@ type ShopTenantDetails = {
   branchLimit: string;
 };
 
+interface SystemConfig {
+  createdDate: string;
+  domain: string;
+  id: string;
+  logoffImage: string;
+  tenant: string;
+  shopName: string;
+  shopLogo: string;
+}
+
 type AuthState = {
   user: User | null;
   theme: null;
   shopTenantDetails: ShopTenantDetails | null;
-  systemConfig: null;
+  systemConfig: SystemConfig | null;
 };
 
 function getUser() {
