@@ -51,8 +51,8 @@ export const fetchDashboardSummary = createAsyncThunk(
   }
 );
 
-export const DashboardSlice = createSlice({
-  name: 'DashboardSlice',
+export const dashboardSlice = createSlice({
+  name: 'dashboardSlice',
   initialState,
   reducers: {
     setTodayAppointments: (state, action: PayloadAction<number>) => {
@@ -107,6 +107,6 @@ export const {
   setTotalAppointments,
   setNotifyState,
   showNotifyMessage,
-} = DashboardSlice.actions;
+} = dashboardSlice.actions;
 
-export default DashboardSlice.reducer;
+export default dashboardSlice.reducer;

@@ -1,3 +1,4 @@
+import { BACKOFFICE_PREFIX } from '../../utils/constants';
 import network from '../../utils/network';
 
 const APP_PREFIX = 'app/user';
@@ -138,6 +139,10 @@ const appUserLoyaltyHistoryDetails = (loyaltyHistoryId: any) => {
   );
 };
 
+const appAnonymousDetail = () => {
+  return network.get(`${BACKOFFICE_PREFIX}/anonymous/detail`);
+};
+
 export default {
   appLogin,
   appAnonymousLogin,
@@ -162,4 +167,5 @@ export default {
   appUserLoyaltyHistoryList,
   appUserVocuherHistoryDetails,
   appUserLoyaltyHistoryDetails,
+  appAnonymousDetail,
 };
