@@ -151,7 +151,30 @@ const OrderBasket = () => {
     }
 
     setIsLoginLoader(true);
-    const anonIdentifier = authState?.user?.username?.split('@')[0];
+    const anonymousDetailPromise = appUserService.appAnonymousDetail();
+    const [anonymousDetailResult, anonymousDetailError, anonymousDetailOk] =
+      await promiseHandler(anonymousDetailPromise);
+    if (!anonymousDetailOk) {
+      setLoginDetails(null);
+      setIsLoginLoader(false);
+      showNotification({
+        text: anonymousDetailError.message,
+        type: 'error',
+      });
+
+      return;
+    }
+    if (!anonymousDetailResult.data.success) {
+      setLoginDetails(null);
+      setIsLoginLoader(false);
+      showNotification({
+        text: anonymousDetailResult.data.message,
+        type: 'error',
+      });
+      return;
+    }
+    const anonIdentifier =
+      anonymousDetailResult?.data?.data?.username.split('@')[0];
     const payload = {
       identifier:
         isExistingUser === 'FALSE'
@@ -159,6 +182,9 @@ const OrderBasket = () => {
           : userIdentifier || 'false',
       tenant,
     };
+
+    // console.log('payload::::', payload);
+    // return;
     const anonymousLoginPromise = appUserService.appAnonymousLogin(payload);
     const [anonymousLoginResult, anonymousLoginError, anonymousLoginOk] =
       await promiseHandler(anonymousLoginPromise);
