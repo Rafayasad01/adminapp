@@ -1,4 +1,11 @@
 import {
+  Divider,
+  FormControl,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+} from '@mui/material';
+import {
   BarControllerChartOptions,
   Chart as ChartJS,
   CoreChartOptions,
@@ -9,15 +16,8 @@ import {
   ScaleChartOptions,
 } from 'chart.js';
 import { _DeepPartialObject } from 'chart.js/dist/types/utils';
-import { Bar } from 'react-chartjs-2';
 import { memo, useEffect, useState } from 'react';
-import {
-  Divider,
-  FormControl,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
-} from '@mui/material';
+import { Bar } from 'react-chartjs-2';
 import { useAppSelector } from '../../redux/redux-hooks';
 
 ChartJS.register(...registerables);
@@ -141,6 +141,7 @@ const AppointmentsStatistics = () => {
         </span>
         <FormControl variant="standard">
           <Select
+            className="apot-status"
             disableUnderline
             labelId="demo-simple-select-label"
             id="demo-simple-select"

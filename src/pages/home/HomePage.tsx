@@ -1,23 +1,23 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable prettier/prettier */
 
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import TextSnippetIcon from '@mui/icons-material/TextSnippet';
 import IconButton from '@mui/material/IconButton';
 import { useEffect } from 'react';
-import TextSnippetIcon from '@mui/icons-material/TextSnippet';
-import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import { useNavigate } from 'react-router';
+import AdminDashboardRevenueLineChart from '../../components/common/Dashboard/AdminDashboardRevenueLineChart';
+import AdminDashboardTopServices from '../../components/common/Dashboard/AdminDashboardTopServices';
+import AdminTopCustomerList from '../../components/common/Dashboard/AdminTopCustomerList';
 import Loader from '../../components/common/Loader';
 import Notify from '../../components/common/Notify';
 import TopBar from '../../components/common/TopBar';
-import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
-import AppointmentsStatistics from './AppointmentsStatistics';
-import AdminDashboardRevenueLineChart from '../../components/common/Dashboard/AdminDashboardRevenueLineChart';
 import {
   fetchDashboardSummary,
   setNotifyState,
 } from '../../redux/features/DashboardSlice';
-import AdminTopCustomerList from '../../components/common/Dashboard/AdminTopCustomerList';
-import AdminDashboardTopServices from '../../components/common/Dashboard/AdminDashboardTopServices';
+import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
+import AppointmentsStatistics from './AppointmentsStatistics';
 
 function HomePage() {
   const authState = useAppSelector((state) => state?.authState);
@@ -52,7 +52,7 @@ function HomePage() {
       <TopBar title="Dashboard" />
       <div className="container m-auto mt-3">
         <div className="mt-2 grid flex-1 grid-cols-4 gap-3">
-          <button
+          <div
             onClick={() =>
               navigate(
                 '/admin/dashboard/store-appointment/appointments/today/list'
@@ -74,8 +74,8 @@ function HomePage() {
                 </IconButton>
               </div>
             </div>
-          </button>
-          <button
+          </div>
+          <div
             onClick={() =>
               navigate('/admin/dashboard/store-appointment/appointments/list')
             }
@@ -95,7 +95,7 @@ function HomePage() {
                 </IconButton>
               </div>
             </div>
-          </button>
+          </div>
         </div>
         <div className="mt-3 grid grid-cols-2 gap-3 ">
           <div className="flex flex-col rounded-3xl bg-white px-3 py-5 shadow-lg">
