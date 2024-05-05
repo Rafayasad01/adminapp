@@ -122,8 +122,16 @@ const StoreEmployeeAttendanceService = (empId: any, month: any) => {
   );
 };
 
-const StoreEmployeeAttendanceLeaveService = (empId: any) => {
-  return network.get(`${STORE_PREFIX}/${EMPLOYEE_PREFIX}/leave/${empId}`);
+const StoreEmployeeAttendanceLeaveService = (
+  search: string,
+  page: number,
+  size: number
+) => {
+  return network.get(`${STORE_PREFIX}/${EMPLOYEE_PREFIX}/leave/management`, {
+    search,
+    page: page.toString(),
+    size: size.toString(),
+  });
 };
 
 export default {

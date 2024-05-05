@@ -39,8 +39,8 @@ const YearMonthDatePicker = ({
           className="border-secondary"
           views={['year', 'month']}
           //   label="Year and Month"
-          minDate={new Date('2012-03-01')}
-          maxDate={new Date()}
+          // minDate={new Date('2012-03-01')}
+          // maxDate={new Date()}
           value={value ?? new Date()}
           onChange={(date) => setValue(date)}
         />
