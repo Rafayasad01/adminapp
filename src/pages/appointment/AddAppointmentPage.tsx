@@ -409,7 +409,7 @@ export default function AddAppointmentPage() {
       appointmentTime
     ) {
       const currentDay = dayjs(getValues('appointmentDate')).format('dddd');
-      const scheduleData = activeBarberData?.storeEmployeeSchedule.find(
+      const scheduleData = activeBarberData?.storeEmployeeSchedule.filter(
         (item: any) => item.workDay === currentDay
       );
       const time = dayjs(appointmentTime);
@@ -423,9 +423,15 @@ export default function AddAppointmentPage() {
         .set('year', time.year());
       let prevTime = startTime;
       const addTime = dayjs(time).add(activeBarberData?.serviceTime, 'minutes');
+      console.log('🚀 ~ addAppointmentServices ~ scheduleData:', scheduleData);
 
       if (scheduleData.length > 0) {
         if (!checkIsBetweenTime(time, startTime, endTime)) {
+          setIsNotify(true);
+          setNotifyMessage({
+            text: 'Barber is not available at this time',
+            type: 'error',
+          });
           return false;
         }
 
@@ -451,6 +457,11 @@ export default function AddAppointmentPage() {
                   dayjs(tempEl.appointmentTime)
                 )
               ) {
+                setIsNotify(true);
+                setNotifyMessage({
+                  text: `Barber is not available at this time`,
+                  type: 'error',
+                });
                 return false;
               }
             }
@@ -479,6 +490,11 @@ export default function AddAppointmentPage() {
               !checkIsBetweenTime(addTime, prevTime, dayjs(el.appointmentTime))
             ) {
               // break;
+              setIsNotify(true);
+              setNotifyMessage({
+                text: `Barber is not available at this time`,
+                type: 'error',
+              });
               return false;
               // throw new Error('Error');
             }
@@ -608,7 +624,7 @@ export default function AddAppointmentPage() {
     return null;
   };
 
-  console.log('temmmmmmmmmmmmmmmmmmmmmm', tempAppointmentBookedTime);
+  // console.log('temmmmmmmmmmmmmmmmmmmmmm', tempAppointmentBookedTime);
 
   // const addAppo = () => {
   //   const obj = {
@@ -824,6 +840,7 @@ export default function AddAppointmentPage() {
                             customClass="border-[2px] border-[#949EAE] rounded-xl px-2 py-1 text-sm"
                             register={register}
                             error={errors.email}
+                            requiredType
                             inputType="text"
                           />
                         </FormControl>

@@ -23,7 +23,7 @@ function RatingAccordions({ data }: RatingAccordionsProps) {
       {data?.length > 0 ? (
         data?.map((item: any, index: number) => {
           return (
-            <>
+            <div key={index}>
               <Accordion
                 className="boxShadow bg-transparent"
                 expanded={expanded === `panel${index}`}
@@ -48,7 +48,7 @@ function RatingAccordions({ data }: RatingAccordionsProps) {
                 </AccordionDetails>
               </Accordion>
               <Divider />
-            </>
+            </div>
           );
         })
       ) : (

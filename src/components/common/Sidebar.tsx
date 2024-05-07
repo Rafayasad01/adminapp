@@ -33,6 +33,7 @@ import CategoryIcon from '../icons/CategoryIcon';
 import OrderIcon from '../icons/OrderIcon';
 import ProviderIcon from '../icons/providerIcon';
 import VisitIcon from '../icons/visitIcon';
+import VoucherIcon from '../icons/VoucherIcon';
 
 const links = [
   {
@@ -41,71 +42,6 @@ const links = [
     permission: 'Dashboard List',
     icon: <GridViewOutlinedIcon fontSize="inherit" />,
   },
-  // {
-  //   name: 'Services',
-  //   path: 'service',
-  //   permission: 'Category List',
-  //   icon: <GridViewOutlinedIcon fontSize="inherit" />,
-  // },
-  // {
-  //   name: 'Barbers',
-  //   path: 'employees',
-  //   permission: 'Category List',
-  //   icon: <ProviderIcon />,
-  // },
-  // {
-  //   name: 'Appointments',
-  //   path: 'appointments',
-  //   permission: 'Category List',
-  //   icon: <VisitIcon />,
-  // },
-  // {
-  //   name: 'Carts',
-  //   path: 'carts',
-  //   permission: 'Cart List',
-  //   icon: <ShoppingCartOutlinedIcon fontSize="inherit" />,
-  // },
-  // {
-  //   name: 'Appointment',
-  //   path: 'appointment',
-  //   permission: 'Appointment Parent',
-  //   icon: <AppointmentIcon />,
-  //   childLinks: [
-  //     {
-  //       name: 'Shop Barbers',
-  //       path: 'appointment/provider',
-  //       permission: 'Appointment Category List',
-  //       icon: <ProviderIcon />,
-  //     },
-  //     {
-  //       name: 'All Appointments',
-  //       path: 'appointment/visit',
-  //       permission: 'Appointment Visit List',
-  //       icon: <VisitIcon />,
-  //     },
-  //   ],
-  // },
-  // {
-  //   name: 'Salon',
-  //   path: 'salon',
-  //   permission: 'Appointment Parent',
-  //   icon: <AppointmentIcon />,
-  //   childLinks: [
-  //     {
-  //       name: 'Products',
-  //       path: 'salon/product/list',
-  //       permission: 'Appointment Visit List',
-  //       icon: <CategoryIcon />,
-  //     },
-  //     {
-  //       name: 'Order',
-  //       path: 'salon/orders',
-  //       permission: 'Appointment Category List',
-  //       icon: <OrderIcon />,
-  //     },
-  //   ],
-  // },
-
   {
     name: 'Store Appointment',
     path: 'store-appointment',
@@ -190,31 +126,6 @@ const links = [
       },
     ],
   },
-
-  // {
-  //   name: 'Products',
-  //   path: 'product',
-  //   permission: 'Category List',
-  //   icon: <CategoryIcon />,
-  // },
-  // {
-  //   name: 'Orders',
-  //   path: 'orders',
-  //   permission: 'Order List',
-  //   icon: <OrderIcon />,
-  // },
-  // {
-  //   name: 'App user',
-  //   path: 'app-user',
-  //   permission: 'Customer List',
-  //   icon: <PersonOutlineOutlinedIcon fontSize="inherit" />,
-  // },
-  // {
-  //   name: 'Admin Employees',
-  //   path: 'employees',
-  //   permission: 'Employee List',
-  //   icon: <PeopleOutlineOutlinedIcon className="w-[17px]" />,
-  // },
   {
     name: 'Branches',
     path: 'branches',
@@ -227,12 +138,6 @@ const links = [
     permission: 'Banners List',
     icon: <ViewCarouselOutlinedIcon className="w-[17px]" />,
   },
-  // {
-  //   name: 'Rating',
-  //   path: 'ratings',
-  //   permission: 'Banners List',
-  //   icon: <ViewCarouselOutlinedIcon className="w-[17px]" />,
-  // },
   {
     name: 'FAQs',
     path: 'faq',
@@ -245,12 +150,12 @@ const links = [
     permission: 'Notification List',
     icon: <NotificationsOutlinedIcon fontSize="inherit" />,
   },
-  // {
-  //   name: 'Vouchers',
-  //   path: 'vouchers',
-  //   permission: 'Voucher List',
-  //   icon: <VoucherIcon />,
-  // },
+  {
+    name: 'Vouchers',
+    path: 'vouchers',
+    permission: 'Voucher List',
+    icon: <VoucherIcon />,
+  },
   {
     name: 'Settings',
     path: 'settings',

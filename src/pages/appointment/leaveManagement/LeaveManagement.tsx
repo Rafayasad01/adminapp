@@ -5,6 +5,9 @@ import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import Divider from '@mui/material/Divider';
 import FormControl from '@mui/material/FormControl';
+import ImageOutlinedIcon from '@mui/icons-material/ImageOutlined';
+import PictureAsPdfOutlinedIcon from '@mui/icons-material/PictureAsPdfOutlined';
+import ArticleOutlinedIcon from '@mui/icons-material/ArticleOutlined';
 import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -213,10 +216,11 @@ function LeaveManagement() {
     }
   };
 
-  // const openModal = (avatar: string) => {
-  //   setModalImage(avatar);
-  //   setIsModalImage(true);
-  // };
+  const openModal = (avatar: string) => {
+    console.log('🚀 ~ openModal ~ avatar:', avatar);
+    setModalImage(avatar);
+    setIsModalImage(true);
+  };
 
   const closeModal = () => {
     setModalImage('');
@@ -285,6 +289,7 @@ function LeaveManagement() {
                   <th>From Date</th>
                   <th>To Date</th>
                   <th>Type</th>
+                  <th>Attachments</th>
                   <th>Status</th>
                   <th aria-label="empty table header">&nbsp;</th>
                 </tr>
@@ -343,6 +348,76 @@ function LeaveManagement() {
                             : '--'}
                         </td>
                         <td>{item.leaveType}</td>
+                        <td>
+                          {item.storeEmployeeLeaveAttachment?.length < 1 &&
+                            'No Attentments'}
+                          <div className="flex flex-wrap">
+                            {item.storeEmployeeLeaveAttachment?.map(
+                              (el: any, ind: any) => {
+                                return (
+                                  <div key={ind}>
+                                    <div>
+                                      <div
+                                        className="cursor-pointer"
+                                        onClick={() => openModal(el.attachment)}
+                                      >
+                                        {el.attachmentExtension === 'jpg' && (
+                                          <ImageOutlinedIcon />
+                                        )}
+                                      </div>
+                                      <div
+                                        className="cursor-pointer"
+                                        onClick={() => openModal(el.attachment)}
+                                      >
+                                        {el.attachmentExtension === 'png' && (
+                                          <ImageOutlinedIcon />
+                                        )}
+                                      </div>
+                                      <div
+                                        className="cursor-pointer"
+                                        onClick={() => openModal(el.attachment)}
+                                      >
+                                        {el.attachmentExtension === 'jpeg' && (
+                                          <ImageOutlinedIcon />
+                                        )}
+                                      </div>
+                                      <div
+                                        className="cursor-pointer"
+                                        onClick={() =>
+                                          window.open(el.attachment, '_blank')
+                                        }
+                                      >
+                                        {el.attachmentExtension === 'pdf' && (
+                                          <PictureAsPdfOutlinedIcon />
+                                        )}
+                                      </div>
+                                      <div
+                                        className="cursor-pointer"
+                                        onClick={() =>
+                                          window.open(el.attachment, '_blank')
+                                        }
+                                      >
+                                        {el.attachmentExtension === 'docx' && (
+                                          <ArticleOutlinedIcon />
+                                        )}
+                                      </div>
+                                      <div
+                                        className="cursor-pointer"
+                                        onClick={() =>
+                                          window.open(el.attachment, '_blank')
+                                        }
+                                      >
+                                        {el.attachmentExtension === 'xlsx' && (
+                                          <ArticleOutlinedIcon />
+                                        )}
+                                      </div>
+                                    </div>
+                                  </div>
+                                );
+                              }
+                            )}
+                          </div>
+                        </td>
                         <td>{item.status}</td>
                         <td>
                           <div className="flex flex-row-reverse">
@@ -428,12 +503,13 @@ function LeaveManagement() {
         <Dialog
           open={isModalImage}
           onClose={closeModal}
+          title="Image"
           PaperProps={{
             className: 'max-w-[25%] 2xl:min-h-[35%] xl:min-h-[45%]',
             style: {
               // maxWidth: '25%',
               // minHeight: '45%',
-              borderRadius: '5%',
+              borderRadius: '2%',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -442,7 +518,7 @@ function LeaveManagement() {
         >
           <div className="flex h-[100%] items-center justify-center">
             <img
-              className="max-w-[250px] xl:max-h-[100px] 2xl:max-h-[150px]"
+              className="max-w-[250px] rounded-2xl xl:max-h-[200px] 2xl:max-h-[300px]"
               src={modalImage}
               alt=""
             />
