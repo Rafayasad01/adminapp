@@ -189,7 +189,7 @@ export default function AddAppointmentPage() {
         // }
         // console.log('item.storeEmployee.id:::::::', item.storeEmployee.id);
         // console.log('newFilter:::::::', newFilter);
-        setAppointmentBookedTime(null);
+        setAppointmentBookedTime([]);
       } else {
         setBookingList(item.storeEmployeeSchedule);
         setActiveBarberData(item);
