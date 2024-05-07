@@ -43,6 +43,20 @@ const appointmentPaid = (storeAppId: any) => {
   );
 };
 
+const appointmentProcessing = (storeAppId: any) => {
+  return network.post(
+    `${STORE_PREFIX}/${APPOINTMENT_PREFIX}/service/processing/${storeAppId}`,
+    {}
+  );
+};
+
+const appointmentCancelled = (storeAppId: any) => {
+  return network.patch(
+    `${STORE_PREFIX}/${APPOINTMENT_PREFIX}/service/cancelled/${storeAppId}`,
+    {}
+  );
+};
+
 const getAllAppointments = (date: any, view: string) => {
   return network.get(
     `${STORE_PREFIX}/${APPOINTMENT_PREFIX}/${
@@ -77,4 +91,6 @@ export default {
   appointmentReschedule,
   fetchAllAppointments,
   appointmentPaid,
+  appointmentProcessing,
+  appointmentCancelled,
 };

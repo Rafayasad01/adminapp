@@ -93,6 +93,12 @@ export default function AddAppointmentPage() {
     keyName: 'key',
   });
 
+  console.log(
+    "getValues getValues('appointmentDate')",
+    getValues('appointmentDate')
+  );
+  console.log('getValues appointmentTime', appointmentTime);
+
   const getCatItemName = (id: any) => {
     let tempAr: any[] = [];
     tempAr = usedCatItemsLovlist;
@@ -128,7 +134,7 @@ export default function AddAppointmentPage() {
           } */
 
           setAppointmentBookedTime(bookedTime);
-          console.log('🚀 ~ .then ~ tempBookedTime:', bookedTime);
+          // console.log('🚀 ~ .then ~ tempBookedTime:', bookedTime);
 
           // console.log('tempArr:::::::::', tempArr);
         } else {
@@ -203,7 +209,9 @@ export default function AddAppointmentPage() {
       >
         <div className="flex items-center justify-between">
           <span className="font-semibold text-[#003E80]">
-            {getCatItemName(item.storeServiceCategoryItem)}
+            {getCatItemName(item.storeServiceCategoryItem)}{' '}
+            <p className="text-xs">{`(${item.serviceTime} mints)`}</p>
+            {/* {`(${item.serviceTime} mints)`} */}
           </span>
           <div className="flex items-center">
             <img
@@ -211,7 +219,7 @@ export default function AddAppointmentPage() {
               src={assets.images.Star}
               alt="avatar-img"
             />
-            <span className="ml-1 text-sm font-semibold">4.9</span>
+            <span className="ml-1 text-sm font-semibold">{item.rating}</span>
           </div>
         </div>
         <div className="my-6 text-center">
@@ -333,23 +341,26 @@ export default function AddAppointmentPage() {
   function checkDuplicateServices(
     array: any,
     targetEmployee: string,
-    targetCategoryItem: string,
-    targetDate: any
+    targetCategoryItem: string
+    // targetDate: any
   ) {
-    console.log(
-      '🚀 ~ AddAppointmentPage ~ targetDate:',
-      dayjs(targetDate).format('YYYYMMDD')
-    );
-    console.log('🚀 ~ AddAppointmentPage ~ targetDate:', array);
+    // console.log(
+    //   '🚀 ~ AddAppointmentPage ~ targetDate:',
+    //   dayjs(targetDate).format('YYYYMMDD')
+    // );
+    // console.log('🚀 ~ AddAppointmentPage ~ targetDate:', array);
 
     for (const obj of array) {
-      console.log('AddAppointmentPage ~ targetDate: sdsd', obj);
+      // console.log('AddAppointmentPage ~ targetDate: sdsd', obj);
+
+      if (obj.storeServiceCategoryItem === targetCategoryItem) {
+        return true;
+      }
 
       if (
         obj.storeEmployee === targetEmployee &&
         dayjs(obj.appointmentTime).format('YYYYMMDD') ===
-          dayjs(getValues('appointmentDate')).format('YYYYMMDD') &&
-        obj.storeServiceCategoryItem === targetCategoryItem
+          dayjs(getValues('appointmentDate')).format('YYYYMMDD')
       ) {
         return true; // Found a matching object
       }
@@ -410,8 +421,7 @@ export default function AddAppointmentPage() {
           const isDuplicate = checkDuplicateServices(
             fields,
             activeBarberData?.storeEmployee?.id,
-            watch('storeServiceCategoryItem'),
-            watch('appointmentDate')
+            watch('storeServiceCategoryItem')
           );
           if (!isDuplicate) {
             //
@@ -428,9 +438,9 @@ export default function AddAppointmentPage() {
                   dayjs(item.appointmentTime).format('YYYYMMDD')
                 ) {
                   if (elStartTime > startTime || elStartTime < endTime) {
-                    console.log('if mee 1');
+                    // console.log('if mee 1');
                     if (time > convertAddTime) {
-                      console.log('if mee 2');
+                      // console.log('if mee 2');
                       prevTime = convertAddTime;
                     } else if (
                       convertAppointmentAddTime >= elStartTime &&
@@ -439,16 +449,16 @@ export default function AddAppointmentPage() {
                     ) {
                       setIsNotify(true);
                       setNotifyMessage({
-                        text: `Service time is ${activeBarberData?.serviceTime} minutes, Barber is not avaiable at ${time}`,
+                        text: `Service time is ${activeBarberData?.serviceTime} minutes, Barber is not available at ${time}`,
                         type: 'error',
                       });
                       throw new Error('Error');
                     }
                   } else {
-                    console.log('if mee 4');
+                    // console.log('if mee 4');
                     setIsNotify(true);
                     setNotifyMessage({
-                      text: 'Barber is not avaiable at this time',
+                      text: 'Barber is not available at this time',
                       type: 'error',
                     });
                     throw new Error('Error');
@@ -457,19 +467,18 @@ export default function AddAppointmentPage() {
               });
             }
             // return;
-
             appointmentBookedTime.forEach((el: any) => {
               // for (const key of Object.keys(appointmentBookedTime)) {
               //   const index = key;
               //   const el = appointmentBookedTime[index];
               // console.log('El', el);
               // console.log('activeBarberData', activeBarberData);
-              console.log('hello its me 1');
+              // console.log('hello its me 1');
               if (
                 el.storeEmployee === activeBarberData?.storeEmployee?.id &&
                 dayjs(el.appointmentTime).format('HH:mm') !== time
               ) {
-                console.log('hello its me 2', el);
+                // console.log('hello its me 2', el);
                 const add = dayjs(el.appointmentTime).add(
                   el.serviceTime,
                   'minute'
@@ -481,13 +490,13 @@ export default function AddAppointmentPage() {
                 //   elStartTime,
                 //   convertAddTime
                 // );
-                console.log('elStartTime', elStartTime);
-                console.log('startTime', startTime);
-                console.log('endTime', endTime);
+                // console.log('elStartTime', elStartTime);
+                // console.log('startTime', startTime);
+                // console.log('endTime', endTime);
                 if (elStartTime > startTime || elStartTime < endTime) {
-                  console.log('if mee 1');
+                  // console.log('if mee 1');
                   if (time > convertAddTime) {
-                    console.log('if mee 2');
+                    // console.log('if mee 2');
                     // console.log('if');
                     prevTime = convertAddTime;
                   } else if (
@@ -496,16 +505,16 @@ export default function AddAppointmentPage() {
                   ) {
                     setIsNotify(true);
                     setNotifyMessage({
-                      text: `Service time is ${activeBarberData?.serviceTime} minutes, Barber is not avaiable at ${time}`,
+                      text: `Service time is ${activeBarberData?.serviceTime} minutes, Barber is not available at ${time}`,
                       type: 'error',
                     });
                     throw new Error('Error');
                   }
                 } else {
-                  console.log('if mee 4');
+                  // console.log('if mee 4');
                   setIsNotify(true);
                   setNotifyMessage({
-                    text: 'Barber is not avaiable at this time',
+                    text: 'Barber is not available at this time',
                     type: 'error',
                   });
                   throw new Error('Error');
@@ -515,9 +524,14 @@ export default function AddAppointmentPage() {
             });
             // }
             setTmpId((prevId: any) => prevId + 1);
+
+            const nAp = dayjs(getValues('appointmentDate'))
+              .set('hours', dayjs(appointmentTime).hour())
+              .set('minutes', dayjs(appointmentTime).minute());
+            console.log('nAp', nAp);
             const newData = {
               id: tmpId,
-              appointmentTime: getValues('appointmentDate'),
+              appointmentTime: nAp,
               email: activeBarberData?.storeEmployee?.email ?? 'abc@gmail.com',
               gender: 'male',
               name: activeBarberData?.storeEmployee?.name ?? 'urapp',
@@ -535,6 +549,11 @@ export default function AddAppointmentPage() {
             // setAppointmentBookedTime((prev: any) => [...prev, newData]);
             // setPrevBookedAppointment(newData);
             append(obj);
+            // console.log(
+            //   'getValues appointmentDate',
+            //   // getValues('appointmentDate'),
+            //   appointmentTime
+            // );
           } else {
             // console.log("5");
             setIsNotify(true);
@@ -546,14 +565,14 @@ export default function AddAppointmentPage() {
         } else {
           setIsNotify(true);
           setNotifyMessage({
-            text: `Barber is not avaiable at ${selectedAppointmentTime}`,
+            text: `Barber is not available at ${selectedAppointmentTime}`,
             type: 'error',
           });
         }
       } else {
         setIsNotify(true);
         setNotifyMessage({
-          text: `Barber is not avaiable at ${currentDay}`,
+          text: `Barber is not available at ${currentDay}`,
           type: 'error',
         });
       }
@@ -763,6 +782,7 @@ export default function AddAppointmentPage() {
                             customFontClass="font-semibold mb-1"
                             customClass="border-[2px] border-[#949EAE] rounded-xl px-2 py-1 text-sm"
                             register={register}
+                            requiredType
                             error={errors.phone}
                             inputType="text"
                           />
@@ -847,11 +867,6 @@ export default function AddAppointmentPage() {
                           defaultValue=""
                           placeholder="Write Note..."
                           {...register('note', {
-                            required: 'Note is required',
-                            minLength: {
-                              value: 1,
-                              message: 'Minimum One Characters',
-                            },
                             maxLength: {
                               value: 250,
                               message: MAX_LENGTH_EXCEEDED,
@@ -880,7 +895,7 @@ export default function AddAppointmentPage() {
                       ) : barberList?.length > 0 ? (
                         <div
                           className={
-                            barberList?.length === 0 ? 'h-[0px]' : 'h-[215px]'
+                            barberList?.length === 0 ? 'h-[0px]' : 'h-[240px]'
                           }
                         >
                           <Swiper
@@ -1028,7 +1043,7 @@ export default function AddAppointmentPage() {
                               item.storeEmployee !==
                               activeBarberData?.storeEmployee?.id
                             ) {
-                              console.log('me ho 1');
+                              // console.log('me ho 1');
 
                               return false;
                             }
@@ -1040,21 +1055,21 @@ export default function AddAppointmentPage() {
                                 'DD/MM/YYYY'
                               )
                             ) {
-                              console.log(
-                                `dayjs(item.appointmentTime).format(
-                                'DD/MM/YYYY'
-                              )`,
-                                dayjs(item.appointmentTime).format('DD/MM/YYYY')
-                              );
-                              console.log(
-                                `dayjs(getValues('appointmentDate')).format(
-                                  'DD/MM/YYYY'
-                                )`,
-                                dayjs(getValues('appointmentDate')).format(
-                                  'DD/MM/YYYY'
-                                )
-                              );
-                              console.log('me ho 2');
+                              // console.log(
+                              //   `dayjs(item.appointmentTime).format(
+                              //   'DD/MM/YYYY'
+                              // )`,
+                              //   dayjs(item.appointmentTime).format('DD/MM/YYYY')
+                              // );
+                              // console.log(
+                              //   `dayjs(getValues('appointmentDate')).format(
+                              //     'DD/MM/YYYY'
+                              //   )`,
+                              //   dayjs(getValues('appointmentDate')).format(
+                              //     'DD/MM/YYYY'
+                              //   )
+                              // );
+                              // console.log('me ho 2');
 
                               return false;
                             }
@@ -1150,13 +1165,13 @@ export default function AddAppointmentPage() {
               <div className="mt-3 flex w-full items-center justify-end">
                 <CustomButton
                   buttonType="button"
-                  title={fields.length > 0 ? 'Add More Service' : 'Add'}
-                  className="btn-black-fill"
+                  title={fields.length > 0 ? 'Add More Services' : 'Add'}
+                  className="btn-black-fill xl:w-[20%] 2xl:w-[12%]"
                   // type={'submit'}
                   onclick={addAppointmentServices}
                   sx={{
                     padding: '0.375rem 2rem !important',
-                    width: '12%',
+                    // width: '20%',
                     marginRight: '15px',
                     height: '35px',
                   }}

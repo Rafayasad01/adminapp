@@ -53,6 +53,7 @@ function AppointmentProviderPage() {
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
   const actionMenuOptions = [
     'Attendance',
+    'Rating',
     'Services',
     'Schedule',
     'Edit',
@@ -75,6 +76,7 @@ function AppointmentProviderPage() {
   // lovs
   const [catLovlist, setCatLovList] = useState<any>([]);
   const [catItemsLovlist, setCatItemsLovList] = useState<any>([]);
+  const [usedCatItemsLovlist, setusedCatItemsLovList] = useState<any>([]);
   // edit formdata
   const [editFormData, setEditFormData] = useState<any>();
   // delete Id's
@@ -255,7 +257,7 @@ function AppointmentProviderPage() {
       error: errors.note,
       type: 'textarea',
       notRequired: true,
-      pattern: PATTERN.CHAR_SPACE_DASH,
+      pattern: PATTERN.CHAR_NUM_SPACE_DASH,
       maxLetterLimit: 150,
     },
   ];
@@ -316,6 +318,7 @@ function AppointmentProviderPage() {
     if (listingRolePermission(dataRole, 'Appointment Provider Create')) {
       setOpenFormDialog(true);
       catLovService();
+      remove();
     } else {
       setIsNotify(true);
       setNotifyMessage({
@@ -330,6 +333,14 @@ function AppointmentProviderPage() {
       .then((res) => {
         if (res.data.success) {
           setCatItemsLovList(res.data.data);
+          const uniqueData = res.data.data.filter(
+            (item: any) =>
+              !usedCatItemsLovlist.some(
+                (existingItem: any) => existingItem.id === item.id
+              )
+          );
+          setusedCatItemsLovList([...usedCatItemsLovlist, ...uniqueData]);
+          // console.log('🚀 ~ .then ~ res.data.data:', res.data.data);
         } else {
           setCatItemsLovList([]);
         }
@@ -432,10 +443,17 @@ function AppointmentProviderPage() {
                   amountType: el.amountType,
                   // storeEmployee: el.storeEmployee,
                   serviceTime: el.serviceTime,
-                  storeServiceCategoryItem: el.storeServiceCategoryItem,
+                  storeServiceCategoryItem: el.storeServiceCategoryItem.id,
                 })
               );
               append(filteredServices);
+              // console.log('🚀 ~ .then CAT ~ res.data.data:', item.data.data);
+              const catItems = item.data.data.services.map((elItems: any) => ({
+                id: elItems.storeServiceCategoryItem.id,
+                name: elItems.storeServiceCategoryItem.name,
+              }));
+              console.log('🚀 ~ catItems ~ catItems:', catItems);
+              setusedCatItemsLovList([...usedCatItemsLovlist, ...catItems]);
               // console.log("filteredServices", filteredServices);
               // [filteredServices].forEach((service: any) => {
               //   append(service);
@@ -506,6 +524,18 @@ function AppointmentProviderPage() {
         listingRolePermission(dataRole, 'Appointment Provider Service View')
       ) {
         navigate(`../services/list/${actionMenuItemid}`);
+      } else {
+        setIsNotify(true);
+        setNotifyMessage({
+          text: NOT_AUTHORIZED_MESSAGE,
+          type: 'warning',
+        });
+      }
+    } else if (option === 'Rating') {
+      if (
+        listingRolePermission(dataRole, 'Appointment Provider Service View')
+      ) {
+        navigate(`../review/${actionMenuItemid}`);
       } else {
         setIsNotify(true);
         setNotifyMessage({
@@ -943,6 +973,7 @@ function AppointmentProviderPage() {
           startServiceTime={startServiceTime}
           catLov={catLovlist}
           catItemsLov={catItemsLovlist}
+          usedCatItemsLovlist={usedCatItemsLovlist}
         />
       )}
       {openEditFormDialog && (
@@ -988,6 +1019,8 @@ function AppointmentProviderPage() {
           startServiceTime={startServiceTime}
           catLov={catLovlist}
           catItemsLov={catItemsLovlist}
+          usedCatItemsLovlist={usedCatItemsLovlist}
+          setUsedCatItemsLovlist={setusedCatItemsLovList}
           setDelIds={setDelIds}
         />
       )}

@@ -134,6 +134,23 @@ const StoreEmployeeAttendanceLeaveService = (
   });
 };
 
+// Employee Rating
+const StoreEmployeeRatingDetailService = (empId: string | any) => {
+  return network.get(`${STORE_PREFIX}/${EMPLOYEE_PREFIX}/detail/${empId}`);
+};
+
+const StoreEmployeeRatingReviewService = (empId: string | any) => {
+  return network.get(
+    `${STORE_PREFIX}/${EMPLOYEE_PREFIX}/rating/reviews/${empId}`
+  );
+};
+
+const StoreEmployeeReviewStarListService = (empId: string | any) => {
+  return network.get(
+    `${STORE_PREFIX}/${EMPLOYEE_PREFIX}/rating/distinct/star/list/${empId}`
+  );
+};
+
 export default {
   StoreEmployeeList,
   StoreEmployeeCreate,
@@ -148,4 +165,7 @@ export default {
   StoreEmployeeDelete,
   StoreEmployeeAttendanceService,
   StoreEmployeeAttendanceLeaveService,
+  StoreEmployeeRatingDetailService,
+  StoreEmployeeRatingReviewService,
+  StoreEmployeeReviewStarListService,
 };

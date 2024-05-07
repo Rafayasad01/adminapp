@@ -63,6 +63,10 @@ import VouchersPage from '../pages/vouchers/VouchersPage';
 import StoreAppointmentsList from '../pages/appointment/StoreAppointmentsList';
 import AppointmentEmployeesAttendancePage from '../pages/appointment/provider/attendance/AppointmentEmployeesAttendancePage';
 import LeaveManagement from '../pages/appointment/leaveManagement/LeaveManagement';
+// import EmployeeRatingPage from '../pages/appointment/provider/rating/EmployeeRatingPage';
+import EmployeeRatingReviewsPage from '../pages/appointment/provider/rating/EmployeeRatingReviewsPage';
+import AppointmentRatingPage from '../pages/appointment/rating/AppointmentRatingPage';
+import AppointmentRatingReviewsPage from '../pages/appointment/rating/AppointmentRatingReviewsPage';
 
 // import UpdateAppointmentPage from '../pages/appointment/UpdateAppointmentPage';
 
@@ -397,6 +401,14 @@ export const routeObjects: RouteObject[] = [
                     path: 'attendance/:empId',
                     element: <AppointmentEmployeesAttendancePage />,
                   },
+                  // {
+                  //   path: 'rating/:empId',
+                  //   element: <EmployeeRatingPage />,
+                  // },
+                  {
+                    path: 'review/:empId',
+                    element: <EmployeeRatingReviewsPage />,
+                  },
                 ],
               },
               {
@@ -443,6 +455,19 @@ export const routeObjects: RouteObject[] = [
                   {
                     index: true,
                     element: <LeaveManagement />,
+                  },
+                ],
+              },
+              {
+                path: 'ratings',
+                children: [
+                  {
+                    index: true,
+                    element: <AppointmentRatingPage />,
+                  },
+                  {
+                    path: 'review/:appId',
+                    element: <AppointmentRatingReviewsPage />,
                   },
                 ],
               },
@@ -508,6 +533,19 @@ export const routeObjects: RouteObject[] = [
                     path: 'basket',
                     element: <OrderBasket />,
                     // element: CAN("canView", "Order List") ? <OrdersPage /> : <p>not authorized</p>,
+                  },
+                ],
+              },
+              {
+                path: 'ratings',
+                children: [
+                  {
+                    index: true,
+                    element: <RatingPage />,
+                  },
+                  {
+                    path: 'reviews/:itemId',
+                    element: <RatingReviewsPage />,
                   },
                 ],
               },

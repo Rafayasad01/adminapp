@@ -20,19 +20,6 @@ function App() {
   }
 
   const getDomain = () => {
-    // const regexPattern = /localhost/;
-    // let a = 'https://devwebapp.urapptech.com/admin/auth/login';
-    // console.log('a::::::', a);
-    // const newTxt = a.split('/')[2].split('.')[0];
-    // console.log('newTxt::::::', newTxt);
-    // let url = currentURL;
-    // if (regexPattern.test(currentURL)) {
-    //   url = currentURL.split('/')[2].split(':')[0];
-    // } else {
-    //   url = currentURL.split('/')[2].split('.')[0];
-    // }
-    // console.log('url', url);
-
     const domain = window.location.hostname;
     return domain.split('.')[0];
     // return 'asdasdsa';

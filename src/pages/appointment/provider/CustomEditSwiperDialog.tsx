@@ -30,6 +30,7 @@ type CustomEditSwiperDialogProps = {
   addScheduleFormat?: boolean;
   append?: any;
   catItemsLov?: any;
+  usedCatItemsLovlist?: any;
   catLov?: any;
   control?: any;
   DialogSliderOne?: string;
@@ -56,6 +57,7 @@ type CustomEditSwiperDialogProps = {
   setError?: any;
   setIsNotify?: any;
   setNotifyMessage?: any;
+  setUsedCatItemsLovlist?: any;
   setOpenFormDialog: React.Dispatch<React.SetStateAction<boolean>>;
   setStartServiceTime?: any;
   setValue?: any;
@@ -74,6 +76,7 @@ function CustomEditSwiperDialog({
   addScheduleFormat: _addScheduleFormat,
   append,
   catItemsLov,
+  usedCatItemsLovlist,
   catLov,
   control,
   DialogSliderOne,
@@ -87,6 +90,7 @@ function CustomEditSwiperDialog({
   handlePrevSlide,
   handleSubmit,
   inputFieldsData,
+  setUsedCatItemsLovlist,
   inputScheduleData: _inputScheduleData,
   noweekdays: _noweekdays,
   onSubmit,
@@ -128,6 +132,7 @@ function CustomEditSwiperDialog({
       setOpenFormDialog(false);
     } else {
       if (ServicesFields?.length > 0) {
+        setUsedCatItemsLovlist([]);
         remove();
       }
       setOpenFormDialog(false);
@@ -179,6 +184,12 @@ function CustomEditSwiperDialog({
     if (id !== undefined) {
       setDelIds((prevIds: string) => [...prevIds, id]);
     }
+  };
+
+  const getCatItemName = (id: any) => {
+    let tempAr: any[] = [];
+    tempAr = usedCatItemsLovlist;
+    return tempAr?.find((el: any) => el.id === id)?.name;
   };
 
   return (
@@ -571,7 +582,7 @@ function CustomEditSwiperDialog({
                       className="my-3 flex items-center justify-between rounded-md border-[1px] border-[#949EAE] p-1 px-3 text-sm text-[#1A1A1A]"
                       key={index}
                     >
-                      <div>{item.storeServiceCategoryItem}</div>
+                      <div>{getCatItemName(item.storeServiceCategoryItem)}</div>
                       <div className="flex w-[25%] items-center justify-between gap-2">
                         <div className="flex items-center">
                           <span className="text-sm">{item.serviceTime}</span>

@@ -10,23 +10,24 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import TopBar from '../../components/common/TopBar';
+import TopBar from '../../../../components/common/TopBar';
 // import CustomersCreatePopup from './CustomersCreatePopup';
 // import CustomersEditPopup from './CustomersEditPopup';
-import CustomButton from '../../components/common/CustomButton';
-import CustomText from '../../components/common/CustomText';
-import Loader from '../../components/common/Loader';
-import Loader2 from '../../components/common/Loader2';
-import Notify from '../../components/common/Notify';
-import { useAppSelector } from '../../redux/redux-hooks';
-import ratingService from '../../services/adminapp/rating';
-import { listingRolePermission } from '../../utils/helper';
-import RatingAccordions from './RatingAccordin';
+import CustomButton from '../../../../components/common/CustomButton';
+import CustomText from '../../../../components/common/CustomText';
+import Loader from '../../../../components/common/Loader';
+import Loader2 from '../../../../components/common/Loader2';
+import Notify from '../../../../components/common/Notify';
+import { useAppSelector } from '../../../../redux/redux-hooks';
+import ratingService from '../../../../services/adminapp/rating';
+import employeeRatingService from '../../../../services/adminapp/adminStoreEmployee';
+import { listingRolePermission } from '../../../../utils/helper';
+import RatingAccordions from './EmployeeRatingAccordin';
 
 dayjs.extend(relativeTime);
 
-function RatingReviewsPage() {
-  const { itemId } = useParams();
+function EmployeeRatingReviewsPage() {
+  const { empId } = useParams();
   const dataRole = useAppSelector(
     (state: any) => state?.persistedReducer?.roleState?.role?.permissions
   );
@@ -50,14 +51,9 @@ function RatingReviewsPage() {
         if (listingRolePermission(dataRole, 'Employee List')) {
           const [catListResponse, catStarRatingResponse, catDetailResponse] =
             await Promise.all([
-              ratingService.getCatListService(
-                itemId,
-                search,
-                page,
-                rowsPerPage
-              ),
-              ratingService.getCatStarRating(itemId),
-              ratingService.getCatStarDetail(itemId),
+              employeeRatingService.StoreEmployeeRatingReviewService(empId),
+              employeeRatingService.StoreEmployeeReviewStarListService(empId),
+              employeeRatingService.StoreEmployeeRatingDetailService(empId),
             ]);
           // Handling list response
           if (catListResponse.data.success) {
@@ -115,7 +111,7 @@ function RatingReviewsPage() {
         return 4;
       case num <= 3.5 && num > 2:
         return 3;
-      case num <= 2 && num >= 0:
+      case num <= 2 && num >= 1:
         return 2;
       case num === 0:
         return 0;
@@ -129,7 +125,7 @@ function RatingReviewsPage() {
     const newPage = page + 1;
     setPage(newPage);
     ratingService
-      .getCatListService(itemId, search, newPage, rowsPerPage)
+      .getCatListService(empId, search, newPage, rowsPerPage)
       .then((item) => {
         setIsLoaderPagination(false);
         setCurrentList(item.data.data.list);
@@ -151,7 +147,7 @@ function RatingReviewsPage() {
     const newPage = page - 1;
     setPage(newPage);
     ratingService
-      .getCatListService(itemId, search, newPage, rowsPerPage)
+      .getCatListService(empId, search, newPage, rowsPerPage)
       .then((item) => {
         setIsLoaderPagination(false);
         setList((prev: any) =>
@@ -210,11 +206,17 @@ function RatingReviewsPage() {
           <div className="grid grid-cols-12 gap-8 xl:gap-4">
             <div className="rounded-xl bg-white shadow-md xl:col-span-7 2xl:col-span-8">
               <div className="m-auto my-5 h-[266px] w-[637px]">
-                <img
-                  alt="rating-detail"
-                  className="h-full w-full object-contain"
-                  src={ratingDetail?.icon}
-                />
+                {ratingDetail?.avatar ? (
+                  <img
+                    alt="rating-detail"
+                    className="h-full w-full object-contain"
+                    src={ratingDetail?.avatar}
+                  />
+                ) : (
+                  <div className="flex h-full w-full items-center justify-center">
+                    <p>No Reviews found</p>
+                  </div>
+                )}
               </div>
               <div className="mx-4 my-2">
                 <div>
@@ -223,12 +225,12 @@ function RatingReviewsPage() {
                   </span>
                 </div>
                 <div>
-                  <span className="mt-3">{ratingDetail?.desc}</span>
+                  <span className="mt-3">{ratingDetail?.note}</span>
                 </div>
               </div>
             </div>
             <div className="rounded-xl bg-white p-3 shadow-md xl:col-span-5 2xl:col-span-4">
-              <RatingAccordions data={ratingDetail?.homeCatItemFaq} />
+              <RatingAccordions data={ratingDetail?.services} />
             </div>
           </div>
           <div className="mt-5 w-full rounded-xl bg-white p-5 shadow-md">
@@ -236,38 +238,48 @@ function RatingReviewsPage() {
               <div className="xl:col-span-3 2xl:col-span-2">
                 <div className="flex items-center">
                   <span className="text-4xl font-semibold">
-                    {Number(starRatings?.total) / 5}
+                    {starRatings?.totalStars
+                      ? Number(starRatings?.totalStars) / 5
+                      : ''}
                   </span>
                   <div className="mx-4 flex items-center rounded-full bg-black px-4 text-white">
-                    <div className="mb-1">
-                      <StarOutlinedIcon
-                        fontSize="small"
-                        style={{ color: 'white' }}
-                      />
-                    </div>
-                    <span className="mx-2 text-sm">
-                      {handleRatingText(Number(starRatings?.total / 5))}
-                    </span>
+                    {starRatings?.totalStars && (
+                      <>
+                        <div className="mb-1">
+                          <StarOutlinedIcon
+                            fontSize="small"
+                            style={{ color: 'white' }}
+                          />
+                        </div>
+                        <span className="mx-2 text-sm">
+                          {handleRatingText(
+                            Number(starRatings?.totalStars / 5)
+                          )}
+                        </span>
+                      </>
+                    )}
                   </div>
                 </div>
                 <div className="mt-2">
                   <Rating
                     name="half-rating-read"
-                    value={handleRatingValue(Number(starRatings?.total / 5))}
+                    value={handleRatingValue(
+                      Number(starRatings?.totalStars / 5)
+                    )}
                     precision={0.5}
                     readOnly
                   />
                   {/* <Rating name="read-only" value={} readOnly /> */}
                 </div>
                 <div className="text-[#6A6A6A]">
-                  {starRatings?.total} Ratings
+                  {starRatings?.totalStars} Ratings
                 </div>
                 <div className="text-[#6A6A6A]">{total} Reviews</div>
               </div>
               <div className="2xl:col-col-span-10 border-l-[1px] xl:col-span-9">
                 <div>
-                  {starRatings?.list
-                    .slice(1)
+                  {starRatings?.starList
+                    ?.slice(1)
                     ?.reverse()
                     ?.map((ratings: any, index: number) => {
                       return (
@@ -312,17 +324,19 @@ function RatingReviewsPage() {
                             readOnly
                           />
                           <span className="mx-3 text-sm font-normal text-[#6A6A6A]">
-                            {items.appUser?.firstName} {items.appUser?.lastName}
+                            {items.storeAppointment.name}
                           </span>
                         </div>
                         <div>
                           <span className="text-sm text-[#6A6A6A]">
-                            {dayjs(items.createdDate).fromNow()}
+                            {dayjs(
+                              items.storeAppointment.createdDate
+                            ).fromNow()}
                           </span>
                         </div>
                       </div>
                       <div className="my-1 w-[70%] text-sm font-normal">
-                        <span>{items.review}</span>
+                        <span>{items.review ? items.review : 'no review'}</span>
                       </div>
                     </div>
                   );
@@ -366,4 +380,4 @@ function RatingReviewsPage() {
   );
 }
 
-export default RatingReviewsPage;
+export default EmployeeRatingReviewsPage;

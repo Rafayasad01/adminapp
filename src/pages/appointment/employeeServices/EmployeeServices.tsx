@@ -476,7 +476,7 @@ function EmployeeServices() {
                   <th className="w-[30%]">Description</th>
                   <th>Amount Type</th>
                   <th>Amount</th>
-                  <th>Service Time</th>
+                  <th>Service Time (mints)</th>
                   <th>Created Date</th>
                   <th>Status</th>
                   <th>&nbsp;</th>

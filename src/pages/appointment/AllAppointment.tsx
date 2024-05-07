@@ -29,6 +29,7 @@ import { useAppSelector } from '../../redux/redux-hooks';
 import storeAppointmentService from '../../services/adminapp/adminStoreAppointment';
 import AppointmentViewCard from './AppointmentViewCard';
 import UpdateAppointmentPopup from './UpdateAppointmentPopup';
+import Notify from '../../components/common/Notify';
 
 dayjs.extend(weekOfYear);
 dayjs.extend(timezone);
@@ -75,8 +76,8 @@ const AllAppointment = ({
   const [isActiveUser, setIsActiveUser] = useState('all');
   const currentWeek = dayjs().week();
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
-  const [, /* isNotify */ setIsNotify] = React.useState(true);
-  const [, /* notifyMessage */ setNotifyMessage] = React.useState({});
+  const [isNotify, setIsNotify] = React.useState(true);
+  const [notifyMessage, setNotifyMessage] = React.useState({});
   const [currentDate, setCurrentDate] = useState(dayjs().toDate());
   const [currentView, setCurrentView] = useState('Vertical Orientation');
   const [, /* ranges */ setRange] = useState();
@@ -258,6 +259,47 @@ const AllAppointment = ({
     //   });
   };
 
+  const deleteAppointmentHandler = async (id: string) => {
+    try {
+      setIsLoader(true);
+      const [deleteStatusResponse] = await Promise.all([
+        storeAppointmentService.appointmentCancelled(id),
+      ]);
+      if (deleteStatusResponse.data.success) {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: deleteStatusResponse.data.message,
+          type: 'success',
+        });
+        setData((newArr: any) => {
+          return newArr.map((item: any) => {
+            if (item.id === deleteStatusResponse.data.data.id) {
+              item.status = deleteStatusResponse.data.data.status;
+            }
+            return { ...item };
+          });
+        });
+      } else {
+        // throw new Error(paidStatusResponse.data.message);
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: deleteStatusResponse.data.message,
+          type: 'error',
+        });
+      }
+      // setIsLoader(false);
+    } catch (error: Error | any) {
+      setIsLoader(false);
+      setIsNotify(true);
+      setNotifyMessage({
+        text: error.message,
+        type: 'error',
+      });
+    }
+  };
+
   const updateAppointmentHandler = async (updateAppointmentData: any) => {
     setIsLoader(true);
     const appId = updateAppointmentData.id;
@@ -370,23 +412,23 @@ const AllAppointment = ({
     setRange(range);
   };
 
-  const isStatusDone = async (id: string) => {
+  const isStatusProcessing = async (id: string) => {
     try {
       setIsLoader(true);
-      const [paidStatusResponse] = await Promise.all([
-        storeAppointmentService.appointmentPaid(id),
+      const [processingStatusResponse] = await Promise.all([
+        storeAppointmentService.appointmentProcessing(id),
       ]);
-      if (paidStatusResponse.data.success) {
+      if (processingStatusResponse.data.success) {
         setIsLoader(false);
         setIsNotify(true);
         setNotifyMessage({
-          text: paidStatusResponse.data.message,
+          text: processingStatusResponse.data.message,
           type: 'success',
         });
         setData((newArr: any) => {
           return newArr.map((item: any) => {
-            if (item.id === paidStatusResponse.data.data.storeAppointment) {
-              item.status = 'Completed';
+            if (item.id === processingStatusResponse.data.data.id) {
+              item.status = processingStatusResponse.data.data.status;
             }
             return { ...item };
           });
@@ -396,7 +438,48 @@ const AllAppointment = ({
         setIsLoader(false);
         setIsNotify(true);
         setNotifyMessage({
-          text: paidStatusResponse.data.message,
+          text: processingStatusResponse.data.message,
+          type: 'error',
+        });
+      }
+      // setIsLoader(false);
+    } catch (error: Error | any) {
+      setIsLoader(false);
+      setIsNotify(true);
+      setNotifyMessage({
+        text: error.message,
+        type: 'error',
+      });
+    }
+  };
+
+  const isStatusDone = async (id: string) => {
+    try {
+      setIsLoader(true);
+      const [statusResponse] = await Promise.all([
+        storeAppointmentService.appointmentPaid(id),
+      ]);
+      if (statusResponse.data.success) {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: statusResponse.data.message,
+          type: 'success',
+        });
+        setData((newArr: any) => {
+          return newArr.map((item: any) => {
+            if (item.id === statusResponse.data.data.id) {
+              item.status = statusResponse.data.data.status;
+            }
+            return { ...item };
+          });
+        });
+      } else {
+        // throw new Error(paidStatusResponse.data.message);
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: statusResponse.data.message,
           type: 'error',
         });
       }
@@ -415,6 +498,11 @@ const AllAppointment = ({
     <Loader />
   ) : (
     <Paper>
+      <Notify
+        isOpen={isNotify}
+        setIsOpen={setIsNotify}
+        displayMessage={notifyMessage}
+      />
       <div className="h-16 p-[15px]">
         {priorityData?.length ? (
           <SwiperComponent
@@ -479,6 +567,8 @@ const AllAppointment = ({
               setOpenFormDialog={setOpenEditFormDialog}
               getUpdatePopupData={getUpdatePopupData}
               isStatusDone={isStatusDone}
+              isStatusProcessing={isStatusProcessing}
+              deleteAppointmentHandler={deleteAppointmentHandler}
             />
             // </div>
           )}

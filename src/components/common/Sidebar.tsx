@@ -6,6 +6,7 @@ import InstagramIcon from '@mui/icons-material/Instagram';
 import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
+import ManageAccountsOutlinedIcon from '@mui/icons-material/ManageAccountsOutlined';
 import PeopleOutlineOutlinedIcon from '@mui/icons-material/PeopleOutlineOutlined';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import QuestionAnswerOutlinedIcon from '@mui/icons-material/QuestionAnswerOutlined';
@@ -133,8 +134,14 @@ const links = [
         name: 'Leave management',
         path: 'store-appointment/leaves-management',
         permission: 'Category List',
-        icon: <VisitIcon />,
+        icon: <ManageAccountsOutlinedIcon fontSize="inherit" />,
       },
+      // {
+      //   name: 'Ratings',
+      //   path: 'store-appointment/ratings',
+      //   permission: 'Category List',
+      //   icon: <VisitIcon />,
+      // },
     ],
   },
   {
@@ -154,6 +161,12 @@ const links = [
         path: 'store-product/orders',
         permission: 'Order List',
         icon: <OrderIcon />,
+      },
+      {
+        name: 'Rating',
+        path: 'store-product/ratings',
+        permission: 'Banners List',
+        icon: <ViewCarouselOutlinedIcon className="w-[17px]" />,
       },
     ],
   },

@@ -10,23 +10,23 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import TopBar from '../../components/common/TopBar';
+import TopBar from '../../../components/common/TopBar';
 // import CustomersCreatePopup from './CustomersCreatePopup';
 // import CustomersEditPopup from './CustomersEditPopup';
-import CustomButton from '../../components/common/CustomButton';
-import CustomText from '../../components/common/CustomText';
-import Loader from '../../components/common/Loader';
-import Loader2 from '../../components/common/Loader2';
-import Notify from '../../components/common/Notify';
-import { useAppSelector } from '../../redux/redux-hooks';
-import ratingService from '../../services/adminapp/rating';
-import { listingRolePermission } from '../../utils/helper';
-import RatingAccordions from './RatingAccordin';
+import CustomButton from '../../../components/common/CustomButton';
+import CustomText from '../../../components/common/CustomText';
+import Loader from '../../../components/common/Loader';
+import Loader2 from '../../../components/common/Loader2';
+import Notify from '../../../components/common/Notify';
+import { useAppSelector } from '../../../redux/redux-hooks';
+import ratingService from '../../../services/adminapp/rating';
+import { listingRolePermission } from '../../../utils/helper';
+import RatingAccordions from './AppointmentRatingAccordin';
 
 dayjs.extend(relativeTime);
 
-function RatingReviewsPage() {
-  const { itemId } = useParams();
+function AppointmentRatingReviewsPage() {
+  const { appId } = useParams();
   const dataRole = useAppSelector(
     (state: any) => state?.persistedReducer?.roleState?.role?.permissions
   );
@@ -50,14 +50,9 @@ function RatingReviewsPage() {
         if (listingRolePermission(dataRole, 'Employee List')) {
           const [catListResponse, catStarRatingResponse, catDetailResponse] =
             await Promise.all([
-              ratingService.getCatListService(
-                itemId,
-                search,
-                page,
-                rowsPerPage
-              ),
-              ratingService.getCatStarRating(itemId),
-              ratingService.getCatStarDetail(itemId),
+              ratingService.getCatListService(appId, search, page, rowsPerPage),
+              ratingService.getCatStarRating(appId),
+              ratingService.getCatStarDetail(appId),
             ]);
           // Handling list response
           if (catListResponse.data.success) {
@@ -129,7 +124,7 @@ function RatingReviewsPage() {
     const newPage = page + 1;
     setPage(newPage);
     ratingService
-      .getCatListService(itemId, search, newPage, rowsPerPage)
+      .getCatListService(appId, search, newPage, rowsPerPage)
       .then((item) => {
         setIsLoaderPagination(false);
         setCurrentList(item.data.data.list);
@@ -151,7 +146,7 @@ function RatingReviewsPage() {
     const newPage = page - 1;
     setPage(newPage);
     ratingService
-      .getCatListService(itemId, search, newPage, rowsPerPage)
+      .getCatListService(appId, search, newPage, rowsPerPage)
       .then((item) => {
         setIsLoaderPagination(false);
         setList((prev: any) =>
@@ -210,11 +205,17 @@ function RatingReviewsPage() {
           <div className="grid grid-cols-12 gap-8 xl:gap-4">
             <div className="rounded-xl bg-white shadow-md xl:col-span-7 2xl:col-span-8">
               <div className="m-auto my-5 h-[266px] w-[637px]">
-                <img
-                  alt="rating-detail"
-                  className="h-full w-full object-contain"
-                  src={ratingDetail?.icon}
-                />
+                {ratingDetail?.icon ? (
+                  <img
+                    alt="rating-detail"
+                    className="h-full w-full object-contain"
+                    src={ratingDetail?.icon}
+                  />
+                ) : (
+                  <div className="flex h-full w-full items-center justify-center">
+                    <p>No Reviews found</p>
+                  </div>
+                )}
               </div>
               <div className="mx-4 my-2">
                 <div>
@@ -236,15 +237,17 @@ function RatingReviewsPage() {
               <div className="xl:col-span-3 2xl:col-span-2">
                 <div className="flex items-center">
                   <span className="text-4xl font-semibold">
-                    {Number(starRatings?.total) / 5}
+                    {starRatings?.total ? Number(starRatings?.total) / 5 : ''}
                   </span>
                   <div className="mx-4 flex items-center rounded-full bg-black px-4 text-white">
-                    <div className="mb-1">
-                      <StarOutlinedIcon
-                        fontSize="small"
-                        style={{ color: 'white' }}
-                      />
-                    </div>
+                    {starRatings?.total && (
+                      <div className="mb-1">
+                        <StarOutlinedIcon
+                          fontSize="small"
+                          style={{ color: 'white' }}
+                        />
+                      </div>
+                    )}
                     <span className="mx-2 text-sm">
                       {handleRatingText(Number(starRatings?.total / 5))}
                     </span>
@@ -366,4 +369,4 @@ function RatingReviewsPage() {
   );
 }
 
-export default RatingReviewsPage;
+export default AppointmentRatingReviewsPage;

@@ -1,8 +1,8 @@
 import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined';
 import PersonOutlinedIcon from '@mui/icons-material/PersonOutlined';
 
-const HOST = 'https://dev.urapptech.com';
-// const HOST = 'http://192.168.8.68:3200';
+// const HOST = 'https://dev.urapptech.com';
+const HOST = 'http://192.168.8.68:3200';
 // const HOST = 'http://192.168.8.97:3200';
 // const HOST = 'http://localhost:3200';
 
@@ -49,7 +49,9 @@ export const CART_STATUS = {
 
 export const APPOINTMENT_STATUS = {
   NEW: 'New',
+  PROCESSING: 'Processing',
   COMPLETED: 'Completed',
+  CANCELLED: 'Cancelled',
   DONE: 'Done',
   PENDING: 'Pending',
   MISSED: 'Missed',

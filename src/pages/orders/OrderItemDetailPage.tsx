@@ -126,6 +126,8 @@ function OrderItemDetailPage() {
         return 3;
       case num <= 2 && num >= 0:
         return 2;
+      case num === 0:
+        return 0;
       default:
         return null;
     }

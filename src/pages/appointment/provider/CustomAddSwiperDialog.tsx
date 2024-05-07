@@ -31,6 +31,7 @@ type CustomSwiperDialogProps = {
   addScheduleFormat?: boolean;
   append?: any;
   catItemsLov?: any;
+  usedCatItemsLovlist?: any;
   catLov?: any;
   control?: any;
   DialogSliderOne?: string;
@@ -75,6 +76,7 @@ function CustomSwiperDialog({
   addScheduleFormat,
   append,
   catItemsLov,
+  usedCatItemsLovlist,
   catLov,
   control,
   DialogSliderOne,
@@ -165,6 +167,12 @@ function CustomSwiperDialog({
     }
   };
 
+  const getCatItemName = (id: any) => {
+    let tempAr: any[] = [];
+    tempAr = usedCatItemsLovlist;
+    return tempAr?.find((el: any) => el.id === id)?.name;
+  };
+
   /* const customRenderTimeViewClock = (props: any) => {
     return renderTimeViewClock({
       ...props,
@@ -200,7 +208,8 @@ function CustomSwiperDialog({
             <div className="FormBody">
               <div className={singleField ? 'FormField' : 'FormFields'}>
                 {inputFieldsData?.map((items: any, index: number) => {
-                  const minDate = dayjs().subtract(12, 'year');
+                  const lastDayOfMonth = dayjs().endOf('month');
+                  const minDate = lastDayOfMonth.subtract(12, 'year');
                   const formattedMinDate = dayjs(minDate);
                   const formattedMaxDate = dayjs(formattedMinDate);
                   return (
@@ -545,7 +554,7 @@ function CustomSwiperDialog({
                       setValue={setValue}
                       // options={{ roles: providerlov }}
                       customClassInputTitle="font-bold"
-                      inputTitle="Commission Amount Type"
+                      inputTitle="Commission Type"
                       options={{ roles: BARBER_SERVICES_AMOUNT }}
                       defaultValue="Select Type"
                     />
@@ -603,7 +612,7 @@ function CustomSwiperDialog({
                       className="my-3 flex items-center justify-between rounded-md border-[1px] border-[#949EAE] p-1 px-3 text-sm text-[#1A1A1A]"
                       key={index}
                     >
-                      <div>{item.storeServiceCategoryItem}</div>
+                      <div>{getCatItemName(item.storeServiceCategoryItem)}</div>
                       <div className="flex w-[25%] items-center justify-between gap-2">
                         <div className="flex items-center">
                           <span className="text-sm">{item.serviceTime}</span>
