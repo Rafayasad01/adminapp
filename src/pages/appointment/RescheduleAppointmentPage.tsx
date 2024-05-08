@@ -78,10 +78,10 @@ export default function RescheduleAppointmentPage() {
     Array<any>
   >([]);
   const [tmpId, setTmpId] = useState<any>(0);
-  const [selectedScheduleTime, setSelectedScheduleTime] = useState<any>({
-    startTime: undefined,
-    endTime: undefined,
-  });
+  // const [selectedScheduleTime, setSelectedScheduleTime] = useState<any>({
+  //   startTime: undefined,
+  //   endTime: undefined,
+  // });
 
   const {
     register,
@@ -449,16 +449,16 @@ export default function RescheduleAppointmentPage() {
     return false; // No matching object found
   }
 
-  useEffect(() => {
-    const currentDay = dayjs(getValues('appointmentDate')).format('dddd');
-    const scheduleData = activeBarberData?.storeEmployeeSchedule.find(
-      (item: any) => item.workDay === currentDay
-    );
-    setSelectedScheduleTime({
-      startTime: dayjs(scheduleData?.startTime),
-      endTime: dayjs(scheduleData?.endTime),
-    });
-  }, [activeBarberData]);
+  // useEffect(() => {
+  // const currentDay = dayjs(getValues('appointmentDate')).format('dddd');
+  // const scheduleData = activeBarberData?.storeEmployeeSchedule.find(
+  //   (item: any) => item.workDay === currentDay
+  // );
+  // setSelectedScheduleTime({
+  //   startTime: dayjs(scheduleData?.startTime),
+  //   endTime: dayjs(scheduleData?.endTime),
+  // });
+  // }, [activeBarberData]);
 
   const addAppointmentServices = () => {
     const obj = {
@@ -1130,8 +1130,8 @@ export default function RescheduleAppointmentPage() {
                                     // timePickerSubLabel={"(Office in time)"}
                                     timePickerValue={appointmentTime}
                                     setTimePickerValue={setAppointmentTime}
-                                    minTime={selectedScheduleTime.startTime}
-                                    maxTime={selectedScheduleTime.endTime}
+                                    // minTime={selectedScheduleTime.startTime}
+                                    // maxTime={selectedScheduleTime.endTime}
                                     id="startTime"
                                     // setError={setError}
                                   />
