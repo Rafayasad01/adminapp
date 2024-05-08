@@ -134,7 +134,7 @@ function HomePage() {
           <div className="col-span-8 rounded-3xl bg-white p-5 px-3 py-5 shadow-lg">
             <div className="flex justify-between">
               <span className="heading-color flex font-open-sans text-xl font-semibold text-primary">
-                Customer Data
+                Latest Appointments
               </span>
             </div>
             <AdminTopCustomerList />

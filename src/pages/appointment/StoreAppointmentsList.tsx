@@ -29,10 +29,12 @@ const StoreAppointmentsList = ({ today = false }) => {
   const [startDate, setStartDate] = useState<string | null>(
     today
       ? dayjs().format('YYYY-MM-DD')
-      : dayjs().startOf('month').format('YYYY-MM-DD')
+      : dayjs().subtract(6, 'month').format('YYYY-MM-DD')
   );
   const [endDate, setEndDate] = useState<string | null>(
-    dayjs().format('YYYY-MM-DD')
+    today
+      ? dayjs().format('YYYY-MM-DD')
+      : dayjs().add(6, 'month').format('YYYY-MM-DD')
   );
   const {
     appointments,
