@@ -187,16 +187,17 @@ function OrdersAssignPage() {
   }, [null]);
 
   const newStatus = useMemo(() => {
-    if (!data) {
+    return '';
+    /*  if (!data) {
       return '';
     }
-    if (data.status === ORDER_STATUS.NEW) {
+   /*  if (data.status === ORDER_STATUS.NEW) {
       return ORDER_STATUS.DRIVER_ASSIGNED_FOR_ITEM_PICKUP;
-    }
-    if (data.fulfillmentMethod === 'Self') {
+    } */
+    /* if (data.fulfillmentMethod === 'Self') {
       return ORDER_STATUS.CUSTOMER_PICK_UP;
-    }
-    return ORDER_STATUS.DRIVER_ASSIGNED_FOR_ITEM_DELIVERY;
+    } */
+    /* return ORDER_STATUS.DRIVER_ASSIGNED_FOR_ITEM_DELIVERY; */
   }, [data?.status, data?.fulfillmentMethod]);
 
   const assignHandler = (userId: string) => {

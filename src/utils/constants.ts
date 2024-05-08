@@ -90,24 +90,24 @@ export { TEXT_STORE_KEY };
 
 export const ORDER_STATUS = {
   NEW: 'New',
-  DRIVER_ASSIGNED_FOR_ITEM_PICKUP: 'Driver-Assigned-For-Item-Pickup',
-  DRIVER_ACCEPTED_TO_PICK_UP_ITEM_FROM_CUSTOMER:
-    'Driver-Accepted-To-Pick-Up-Item-From-Customer',
-  DRIVER_PICKED_UP_ITEM_FROM_CUSTOMER: 'Driver-Picked-Up-Item-From-Customer',
-  DRIVER_DELIVERED_ITEM_TO_SHOP: 'Driver-Delivered-Item-To-Shop',
-  DRIVER_DECLINED_TO_PICKUP_ITEM_FROM_CUSTOMER:
-    'Driver-Declined-To-Pickup-Item-From-Customer',
-  DRIVER_RETURNED_ITEM_TO_CUSTOMER: 'Driver-Returned-Item-To-Customer',
+  // DRIVER_ASSIGNED_FOR_ITEM_PICKUP: 'Driver-Assigned-For-Item-Pickup',
+  // DRIVER_ACCEPTED_TO_PICK_UP_ITEM_FROM_CUSTOMER:
+  //   'Driver-Accepted-To-Pick-Up-Item-From-Customer',
+  // DRIVER_PICKED_UP_ITEM_FROM_CUSTOMER: 'Driver-Picked-Up-Item-From-Customer',
+  // DRIVER_DELIVERED_ITEM_TO_SHOP: 'Driver-Delivered-Item-To-Shop',
+  // DRIVER_DECLINED_TO_PICKUP_ITEM_FROM_CUSTOMER:
+  //   'Driver-Declined-To-Pickup-Item-From-Customer',
+  // DRIVER_RETURNED_ITEM_TO_CUSTOMER: 'Driver-Returned-Item-To-Customer',
   PROCESSING_ITEM: 'Processing-Item',
-  DRIVER_ASSIGNED_FOR_ITEM_DELIVERY: 'Driver-Assigned-For-Item-Delivery',
-  DRIVER_ACCEPTED_TO_PICK_UP_ITEM_FROM_SHOP:
-    'Driver-Accepted-To-Pick-Up-Item-From-Shop',
-  DRIVER_PICKED_UP_ITEM_FROM_SHOP: 'Driver-Picked-Up-Item-From-Shop',
-  DRIVER_DELIVERED_ITEM_TO_CUSTOMER: 'Driver-Delivered-Item-To-Customer',
-  DRIVER_DECLINED_TO_PICKUP_ITEM_FROM_SHOP:
-    'Driver-Declined-To-Pickup-Item-From-Shop',
-  DRIVER_RETURNED_ITEM_TO_SHOP: 'Driver-Returned-Item-To-Shop',
-  CUSTOMER_PICK_UP: 'Customer-Pick-Up',
+  // DRIVER_ASSIGNED_FOR_ITEM_DELIVERY: 'Driver-Assigned-For-Item-Delivery',
+  // DRIVER_ACCEPTED_TO_PICK_UP_ITEM_FROM_SHOP:
+  //   'Driver-Accepted-To-Pick-Up-Item-From-Shop',
+  // DRIVER_PICKED_UP_ITEM_FROM_SHOP: 'Driver-Picked-Up-Item-From-Shop',
+  // DRIVER_DELIVERED_ITEM_TO_CUSTOMER: 'Driver-Delivered-Item-To-Customer',
+  // DRIVER_DECLINED_TO_PICKUP_ITEM_FROM_SHOP:
+  //   'Driver-Declined-To-Pickup-Item-From-Shop',
+  // DRIVER_RETURNED_ITEM_TO_SHOP: 'Driver-Returned-Item-To-Shop',
+  // CUSTOMER_PICK_UP: 'Customer-Pick-Up',
   COMPLETED: 'Completed',
   CANCELLED: 'Cancelled',
 } as const;
@@ -125,7 +125,7 @@ export const ORDER_STATUSES = new Map([
       progress: 10,
     },
   ],
-  [
+  /* [
     ORDER_STATUS.DRIVER_ASSIGNED_FOR_ITEM_PICKUP,
     {
       status: ORDER_STATUS.DRIVER_ASSIGNED_FOR_ITEM_PICKUP,
@@ -136,8 +136,8 @@ export const ORDER_STATUSES = new Map([
       iconText: 'CheckCircleOutlineOutlined',
       progress: 20,
     },
-  ],
-  [
+  ], */
+  /* [
     ORDER_STATUS.DRIVER_ACCEPTED_TO_PICK_UP_ITEM_FROM_CUSTOMER,
     {
       status: ORDER_STATUS.DRIVER_ACCEPTED_TO_PICK_UP_ITEM_FROM_CUSTOMER,
@@ -148,8 +148,8 @@ export const ORDER_STATUSES = new Map([
       iconText: 'CheckCircleOutlineOutlined',
       progress: 30,
     },
-  ],
-  [
+  ], */
+  /* [
     ORDER_STATUS.DRIVER_PICKED_UP_ITEM_FROM_CUSTOMER,
     {
       status: ORDER_STATUS.DRIVER_PICKED_UP_ITEM_FROM_CUSTOMER,
@@ -160,8 +160,8 @@ export const ORDER_STATUSES = new Map([
       iconText: 'CheckCircleOutlineOutlined',
       progress: 40,
     },
-  ],
-  [
+  ], */
+  /* [
     ORDER_STATUS.DRIVER_DECLINED_TO_PICKUP_ITEM_FROM_CUSTOMER,
     {
       status: ORDER_STATUS.DRIVER_DECLINED_TO_PICKUP_ITEM_FROM_CUSTOMER,
@@ -172,8 +172,8 @@ export const ORDER_STATUSES = new Map([
       iconText: 'CheckCircleOutlineOutlined',
       progress: 40,
     },
-  ],
-  [
+  ], */
+  /* [
     ORDER_STATUS.DRIVER_RETURNED_ITEM_TO_CUSTOMER,
     {
       status: ORDER_STATUS.DRIVER_RETURNED_ITEM_TO_CUSTOMER,
@@ -184,8 +184,8 @@ export const ORDER_STATUSES = new Map([
       iconText: 'CheckCircleOutlineOutlined',
       progress: 40,
     },
-  ],
-  [
+  ], */
+  /* [
     ORDER_STATUS.DRIVER_DELIVERED_ITEM_TO_SHOP,
     {
       status: ORDER_STATUS.DRIVER_DELIVERED_ITEM_TO_SHOP,
@@ -196,7 +196,7 @@ export const ORDER_STATUSES = new Map([
       iconText: 'CheckCircleOutlineOutlined',
       progress: 50,
     },
-  ],
+  ], */
   [
     ORDER_STATUS.PROCESSING_ITEM,
     {
@@ -209,7 +209,7 @@ export const ORDER_STATUSES = new Map([
       progress: 60,
     },
   ],
-  [
+  /* [
     ORDER_STATUS.DRIVER_ASSIGNED_FOR_ITEM_DELIVERY,
     {
       status: ORDER_STATUS.DRIVER_ASSIGNED_FOR_ITEM_DELIVERY,
@@ -220,8 +220,8 @@ export const ORDER_STATUSES = new Map([
       iconText: 'CheckCircleOutlineOutlined',
       progress: 70,
     },
-  ],
-  [
+  ], */
+  /*  [
     ORDER_STATUS.DRIVER_DECLINED_TO_PICKUP_ITEM_FROM_SHOP,
     {
       status: ORDER_STATUS.DRIVER_DECLINED_TO_PICKUP_ITEM_FROM_SHOP,
@@ -232,8 +232,8 @@ export const ORDER_STATUSES = new Map([
       iconText: 'CheckCircleOutlineOutlined',
       progress: 70,
     },
-  ],
-  [
+  ], */
+  /* [
     ORDER_STATUS.DRIVER_RETURNED_ITEM_TO_SHOP,
     {
       status: ORDER_STATUS.DRIVER_RETURNED_ITEM_TO_SHOP,
@@ -244,8 +244,8 @@ export const ORDER_STATUSES = new Map([
       iconText: 'CheckCircleOutlineOutlined',
       progress: 70,
     },
-  ],
-  [
+  ], */
+  /*  [
     ORDER_STATUS.DRIVER_ACCEPTED_TO_PICK_UP_ITEM_FROM_SHOP,
     {
       status: ORDER_STATUS.DRIVER_ACCEPTED_TO_PICK_UP_ITEM_FROM_SHOP,
@@ -256,8 +256,8 @@ export const ORDER_STATUSES = new Map([
       iconText: 'CheckCircleOutlineOutlined',
       progress: 80,
     },
-  ],
-  [
+  ], */
+  /*  [
     ORDER_STATUS.DRIVER_PICKED_UP_ITEM_FROM_SHOP,
     {
       status: ORDER_STATUS.DRIVER_PICKED_UP_ITEM_FROM_SHOP,
@@ -268,8 +268,8 @@ export const ORDER_STATUSES = new Map([
       iconText: 'CheckCircleOutlineOutlined',
       progress: 90,
     },
-  ],
-  [
+  ], */
+  /* [
     ORDER_STATUS.DRIVER_DELIVERED_ITEM_TO_CUSTOMER,
     {
       status: ORDER_STATUS.DRIVER_DELIVERED_ITEM_TO_CUSTOMER,
@@ -280,8 +280,8 @@ export const ORDER_STATUSES = new Map([
       iconText: 'CheckCircleOutlineOutlined',
       progress: 100,
     },
-  ],
-  [
+  ], */
+  /*  [
     ORDER_STATUS.CUSTOMER_PICK_UP,
     {
       status: ORDER_STATUS.CUSTOMER_PICK_UP,
@@ -292,7 +292,7 @@ export const ORDER_STATUSES = new Map([
       iconText: 'CheckCircleOutlineOutlined',
       progress: 90,
     },
-  ],
+  ], */
   [
     ORDER_STATUS.COMPLETED,
     {
