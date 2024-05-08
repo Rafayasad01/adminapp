@@ -70,8 +70,8 @@ function TimePicker({
     handleClose();
   };
 
-  console.log('minTime', minTime);
-  console.log('maxTime', maxTime);
+  // console.log('minTime', minTime);
+  // console.log('maxTime', maxTime);
 
   return (
     <>

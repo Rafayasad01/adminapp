@@ -151,6 +151,12 @@ const StoreEmployeeReviewStarListService = (empId: string | any) => {
   );
 };
 
+const StoreEmployeeScheduleService = (empId: string | any, date: any) => {
+  return network.get(
+    `${STORE_PREFIX}/${EMPLOYEE_PREFIX}/leave/management/${empId}/${date}`
+  );
+};
+
 export default {
   StoreEmployeeList,
   StoreEmployeeCreate,
@@ -168,4 +174,5 @@ export default {
   StoreEmployeeRatingDetailService,
   StoreEmployeeRatingReviewService,
   StoreEmployeeReviewStarListService,
+  StoreEmployeeScheduleService,
 };

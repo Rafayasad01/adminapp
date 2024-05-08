@@ -32,8 +32,12 @@ import TimePicker from '../../components/common/TimePicker';
 import TopBar from '../../components/common/TopBar';
 import { AddAppointmentForm } from '../../interfaces/app.appointment';
 import storeAppointmentService from '../../services/adminapp/adminStoreAppointment';
+import storeEmployeeService from '../../services/adminapp/adminStoreEmployee';
+// import storeSettingService from '../../services/adminapp/adminShopSchedule';
 import storeLovService from '../../services/adminapp/adminStoreService';
 import { GENDER, MAX_LENGTH_EXCEEDED, PATTERN } from '../../utils/constants';
+// import { useAppSelector } from '../../redux/redux-hooks';
+// import { useAppSelector } from '../../redux/redux-hooks';
 
 // Extend dayjs with necessary plugins
 dayjs.extend(isBetween);
@@ -49,6 +53,8 @@ const darkTheme = createTheme({
 
 export default function AddAppointmentPage() {
   const navigate = useNavigate();
+  // const authState: any = useAppSelector((state: any) => state?.authState);
+  // console.log('🚀 ~ AddAppointmentPage ~ shopSchedule:', shopScheduleWorkDays);
   const [isLoader, setIsLoader] = useState(false);
   const [isPageLoader, setIsPageLoader] = useState(false);
   const [isNotify, setIsNotify] = useState(false);
@@ -60,6 +66,7 @@ export default function AddAppointmentPage() {
   const [catItemsLovlist, setCatItemsLovList] = useState<any>([]);
   const [usedCatItemsLovlist, setusedCatItemsLovList] = useState<any>([]);
   const [barberList, setBarberList] = useState<any>([]);
+  const [disabledButton, setDisabledButton] = useState<any>([]);
   // const [prevBookedAppointment, setPrevBookedAppointment] = useState<any>([]);
   const [appointmentTime, setAppointmentTime] = useState<dayjs.Dayjs | any>(
     null
@@ -118,9 +125,41 @@ export default function AddAppointmentPage() {
     },
   };
 
-  useEffect(() => {}, []);
+  const shopEvents = async (id: any, date: any) => {
+    try {
+      const resp = await storeEmployeeService.StoreEmployeeScheduleService(
+        id,
+        date
+      );
+      return resp.data.data;
+    } catch (error) {
+      console.error('Error:', error);
+      // Handle error if necessary
+      return false; // or throw error if you want to propagate it
+    }
+  };
 
-  const getBookedTimeSlots = async (id: any, date: any) => {
+  // useEffect(() => {
+  //   shopEvents();
+  // }, [getValues('appointmentDate')]);
+
+  const getBookedTimeSlots: any = async (id: any, date: any) => {
+    const resll = await shopEvents(
+      id,
+      dayjs(getValues('appointmentDate')).format('YYYY-MM-DD')
+    );
+    if (resll) {
+      setDisabledButton(true);
+      setAppointmentBookedTime([]);
+      setIsNotify(true);
+      setNotifyMessage({
+        text: 'Event',
+        type: 'error',
+      });
+      return false;
+    }
+    setDisabledButton(false);
+    console.log('🚀 ~ getBookedTimeSlots ~ resll:', resll);
     await storeAppointmentService
       .getBarberBookedTimeSlots(id, date)
       .then((res) => {
@@ -170,6 +209,7 @@ export default function AddAppointmentPage() {
           type: 'error',
         });
       });
+    return null;
   };
 
   console.log('AppBookedTimeArr:::::::::', appointmentBookedTime);
@@ -426,6 +466,9 @@ export default function AddAppointmentPage() {
       console.log('🚀 ~ addAppointmentServices ~ scheduleData:', scheduleData);
 
       if (scheduleData.length > 0) {
+        // for (let j = 0; j < shopScheduleWorkDays.length; i += 1++) {
+        //   const elShop = appointmentBookedTime[j];
+        // }
         if (!checkIsBetweenTime(time, startTime, endTime)) {
           setIsNotify(true);
           setNotifyMessage({
@@ -1165,6 +1208,7 @@ export default function AddAppointmentPage() {
               <hr className="my-4 border-[#949EAE]" />
               <div className="mt-3 flex w-full items-center justify-end">
                 <CustomButton
+                  disabled={disabledButton}
                   buttonType="button"
                   title={fields.length > 0 ? 'Add More Services' : 'Add'}
                   className="btn-black-fill xl:w-[20%] 2xl:w-[12%]"
