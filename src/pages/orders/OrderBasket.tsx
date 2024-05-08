@@ -21,7 +21,6 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import CustomButton from '../../components/common/CustomButton';
-import CustomDateTimePicker from '../../components/common/CustomDateTimePicker';
 import Notify from '../../components/common/Notify';
 import TopBar from '../../components/common/TopBar';
 import PromoCodeIcon from '../../components/icons/PromoCode';
@@ -58,7 +57,7 @@ const OrderBasket = () => {
   const [isExistingUser, setIsExistingUser] = useState<'TRUE' | 'FALSE'>(
     'FALSE'
   );
-  const [fulfillmentMethod, setFulfillmentMethod] =
+  const [fulfillmentMethod /* , setFulfillmentMethod */] =
     useState<ValuesOf<typeof ORDER_FULFILLMENT_METHOD>>('Self');
   const [isLoginLoader, setIsLoginLoader] = useState(false);
   const [loginDetails, setLoginDetails] = useState<any>(null);
@@ -69,10 +68,10 @@ const OrderBasket = () => {
   const authState = useAppSelector((state) => state?.authState);
 
   const {
-    register,
+    /*  register, */
     watch,
-    setValue,
-    formState: { errors },
+    /*   setValue, */
+    /*  formState: { errors }, */
   } = useForm<Order>();
 
   const dropOffDate: any = useAppSelector(
@@ -591,7 +590,7 @@ const OrderBasket = () => {
           </div>
           <div className="col-span-5 rounded-lg bg-white py-5 shadow-lg">
             <div className="w-full px-4">
-              <FormControl className="w-full">
+              {/*   <FormControl className="w-full">
                 <FormLabel
                   id="demo-row-radio-buttons-group-label"
                   className="font-open-sans text-xl font-semibold text-secondary"
@@ -604,16 +603,6 @@ const OrderBasket = () => {
                     <span className="text-sm font-semibold">
                       {dayjs().format('MMMM DD, YYYY')}
                     </span>
-                    {/* <CustomDateTimePicker
-                      register={register}
-                      defaultValue={dayjs()}
-                      minDate={dayjs()}
-                      id="deliveryPickupDate"
-                      error={errors.deliveryPickupDate}
-                      inputTitle="Delivery Pickup Date"
-                      setValue={setValue}
-                      value={dayjs()}
-                    /> */}
                   </div>
                   <div className="mx-10">
                     <CustomDateTimePicker
@@ -656,7 +645,7 @@ const OrderBasket = () => {
                       </span>
                     </div>
                   )}
-              </FormControl>
+              </FormControl> */}
             </div>
             <div className="w-full px-4">
               {/* <FormControl className="w-full" variant="filled">
@@ -687,7 +676,7 @@ const OrderBasket = () => {
                   />
                 </div>
               </FormControl> */}
-              <Divider flexItem className="mt-5" />
+              {/* <Divider flexItem className="mt-5" /> */}
               <FormControl className="mt-4">
                 <FormLabel
                   id="demo-row-radio-buttons-group-label"
@@ -800,32 +789,27 @@ const OrderBasket = () => {
 
               {/* {console.log("isExx", isExistingUser)} */}
               {isExistingUser === 'TRUE' && (
-                <>
-                  <div className="w-full rounded-xl border border-solid border-foreground py-1 pl-3">
-                    <Input
-                      className="input-with-icon after:border-b-secondary"
-                      id="search"
-                      type="text"
-                      placeholder="Identifier (Ex : email or phone)"
-                      // onKeyDown={(
-                      //   event: React.KeyboardEvent<
-                      //     HTMLInputElement | HTMLTextAreaElement
-                      //   >
-                      // ) => {
-                      //   handleUserInput(event);
-                      // }}
-                      onChange={(event) =>
-                        setUserIdentifier(event.target.value)
-                      }
-                      disableUnderline
-                    />
-                  </div>
-
-                  <Divider flexItem className="my-5" />
-                </>
+                <div className="w-full rounded-xl border border-solid border-foreground py-1 pl-3">
+                  <Input
+                    className="input-with-icon after:border-b-secondary"
+                    id="search"
+                    type="text"
+                    placeholder="Identifier (Ex : email or phone)"
+                    // onKeyDown={(
+                    //   event: React.KeyboardEvent<
+                    //     HTMLInputElement | HTMLTextAreaElement
+                    //   >
+                    // ) => {
+                    //   handleUserInput(event);
+                    // }}
+                    onChange={(event) => setUserIdentifier(event.target.value)}
+                    disableUnderline
+                  />
+                </div>
               )}
 
-              {isExistingUser === 'TRUE' && (
+              <Divider flexItem className="my-5" />
+              {/* {isExistingUser === 'TRUE' && (
                 <FormControl>
                   <FormLabel
                     id="demo-row-radio-buttons-group-label"
@@ -880,7 +864,7 @@ const OrderBasket = () => {
                 </FormControl>
               )}
 
-              <Divider flexItem className="my-5" />
+              <Divider flexItem className="my-5" /> */}
 
               {promoList?.length > 0 && (
                 <>

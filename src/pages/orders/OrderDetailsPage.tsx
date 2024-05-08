@@ -23,7 +23,6 @@ import PermissionPopup from '../../utils/PermissionPopup';
 import cn from '../../utils/class-names';
 import {
   NOT_AUTHORIZED_MESSAGE,
-  ORDER_FULFILLMENT_METHOD,
   ORDER_STATUS,
   ORDER_STATUSES,
 } from '../../utils/constants';
@@ -40,8 +39,6 @@ function OrderDetailsPage() {
   // const [orderAssign, setOrderAssign] = useState<boolean>(false);
   const [dialogText, setDialogText] = useState<any>('');
   const [viewData, setViewData] = useState<any>({});
-  const [isCancelled] = useState<boolean>(false);
-  const [cancelled] = useState<boolean>(false);
   const [isPrintEnabled, setPrintEnabled] = useState<any>([false]);
   const [isLoader, setIsLoader] = useState(true);
   const [isNotify, setIsNotify] = useState(false);
@@ -55,7 +52,7 @@ function OrderDetailsPage() {
   };
 
   const showSelectDriverButton = useMemo(() => {
-    if (viewData.status === ORDER_STATUS.NEW) {
+    /* if (viewData.status === ORDER_STATUS.NEW) {
       return true;
     }
     if (viewData.status === ORDER_STATUS.PROCESSING_ITEM) {
@@ -77,7 +74,7 @@ function OrderDetailsPage() {
     }
     if (viewData.status === ORDER_STATUS.DRIVER_RETURNED_ITEM_TO_SHOP) {
       return true;
-    }
+    } */
 
     return false;
   }, [viewData.status, viewData.fulfillmentMethod]);
@@ -157,15 +154,15 @@ function OrderDetailsPage() {
   };
 
   const getNextStatusButton = useMemo(() => {
-    if (viewData.status === ORDER_STATUS.DRIVER_ASSIGNED_FOR_ITEM_PICKUP) {
+    /* if (viewData.status === ORDER_STATUS.DRIVER_ASSIGNED_FOR_ITEM_PICKUP) {
       return {
         key: ORDER_STATUS.DRIVER_ACCEPTED_TO_PICK_UP_ITEM_FROM_CUSTOMER,
         value: ORDER_STATUSES.get(
           ORDER_STATUS.DRIVER_ACCEPTED_TO_PICK_UP_ITEM_FROM_CUSTOMER
         ),
       };
-    }
-    if (
+    } */
+    /*  if (
       viewData.status ===
       ORDER_STATUS.DRIVER_ACCEPTED_TO_PICK_UP_ITEM_FROM_CUSTOMER
     ) {
@@ -175,20 +172,26 @@ function OrderDetailsPage() {
           ORDER_STATUS.DRIVER_PICKED_UP_ITEM_FROM_CUSTOMER
         ),
       };
-    }
-    if (viewData.status === ORDER_STATUS.DRIVER_PICKED_UP_ITEM_FROM_CUSTOMER) {
+    } */
+    /*  if (viewData.status === ORDER_STATUS.DRIVER_PICKED_UP_ITEM_FROM_CUSTOMER) {
       return {
         key: ORDER_STATUS.DRIVER_DELIVERED_ITEM_TO_SHOP,
         value: ORDER_STATUSES.get(ORDER_STATUS.DRIVER_DELIVERED_ITEM_TO_SHOP),
       };
-    }
-    if (viewData.status === ORDER_STATUS.DRIVER_DELIVERED_ITEM_TO_SHOP) {
+    } */
+    if (viewData.status === ORDER_STATUS.NEW) {
       return {
         key: ORDER_STATUS.PROCESSING_ITEM,
         value: ORDER_STATUSES.get(ORDER_STATUS.PROCESSING_ITEM),
       };
     }
-    if (
+    if (viewData.status === ORDER_STATUS.PROCESSING_ITEM) {
+      return {
+        key: ORDER_STATUS.COMPLETED,
+        value: ORDER_STATUSES.get(ORDER_STATUS.COMPLETED),
+      };
+    }
+    /* if (
       viewData.status === ORDER_STATUS.PROCESSING_ITEM &&
       viewData.fulfillmentMethod === ORDER_FULFILLMENT_METHOD.SELF
     ) {
@@ -196,32 +199,32 @@ function OrderDetailsPage() {
         key: ORDER_STATUS.CUSTOMER_PICK_UP,
         value: ORDER_STATUSES.get(ORDER_STATUS.CUSTOMER_PICK_UP),
       };
-    }
-    if (viewData.status === ORDER_STATUS.DRIVER_ASSIGNED_FOR_ITEM_DELIVERY) {
+    } */
+    /*  if (viewData.status === ORDER_STATUS.DRIVER_ASSIGNED_FOR_ITEM_DELIVERY) {
       return {
         key: ORDER_STATUS.DRIVER_ACCEPTED_TO_PICK_UP_ITEM_FROM_SHOP,
         value: ORDER_STATUSES.get(
           ORDER_STATUS.DRIVER_ACCEPTED_TO_PICK_UP_ITEM_FROM_SHOP
         ),
       };
-    }
-    if (
+    } */
+    /* if (
       viewData.status === ORDER_STATUS.DRIVER_ACCEPTED_TO_PICK_UP_ITEM_FROM_SHOP
     ) {
       return {
         key: ORDER_STATUS.DRIVER_PICKED_UP_ITEM_FROM_SHOP,
         value: ORDER_STATUSES.get(ORDER_STATUS.DRIVER_PICKED_UP_ITEM_FROM_SHOP),
       };
-    }
-    if (viewData.status === ORDER_STATUS.DRIVER_PICKED_UP_ITEM_FROM_SHOP) {
+    } */
+    /*  if (viewData.status === ORDER_STATUS.DRIVER_PICKED_UP_ITEM_FROM_SHOP) {
       return {
         key: ORDER_STATUS.DRIVER_DELIVERED_ITEM_TO_CUSTOMER,
         value: ORDER_STATUSES.get(
           ORDER_STATUS.DRIVER_DELIVERED_ITEM_TO_CUSTOMER
         ),
       };
-    }
-    if (
+    } */
+    /* if (
       viewData.status === ORDER_STATUS.DRIVER_DELIVERED_ITEM_TO_CUSTOMER ||
       viewData.status === ORDER_STATUS.CUSTOMER_PICK_UP
     ) {
@@ -229,7 +232,7 @@ function OrderDetailsPage() {
         key: ORDER_STATUS.COMPLETED,
         value: ORDER_STATUSES.get(ORDER_STATUS.COMPLETED),
       };
-    }
+    } */
     return null;
   }, [viewData.status, viewData.fulfillmentMethod]);
 
@@ -287,7 +290,7 @@ function OrderDetailsPage() {
         className="p-0"
         disableRipple
         onClick={() => navigate(`../assign/${id}`)}
-        disabled={!!(isCancelled || cancelled)}
+        disabled={false}
       >
         <Avatar
           alt="Truck Driver Icon"
@@ -300,6 +303,16 @@ function OrderDetailsPage() {
       </IconButton>
     );
   };
+
+  const isCancelledOrCompleted = useMemo(() => {
+    if (currentStatus.value?.status === ORDER_STATUS.COMPLETED) {
+      return true;
+    }
+    if (currentStatus.value?.status === ORDER_STATUS.CANCELLED) {
+      return true;
+    }
+    return false;
+  }, [currentStatus]);
 
   return isLoader ? (
     <Loader />
@@ -384,22 +397,26 @@ function OrderDetailsPage() {
                   </div>
                 </div>
                 <div className="flex-grow" />
-                <Button
-                  type="button"
-                  onClick={() => {
-                    setDialogText('Are you sure you want to cancel this Order');
-                    setCancelDialogOpen(true);
-                  }}
-                  className={`bg-ord-del rounded-xl px-12 py-2 font-open-sans text-sm font-semibold ${
-                    cancelled || isCancelled
-                      ? 'bg-neutral-400 text-neutral-900'
-                      : 'bg-neutral-900 text-gray-50'
-                  } `}
-                  color="inherit"
-                  disabled={!!(cancelled || isCancelled)}
-                >
-                  <span> Cancel Order</span>
-                </Button>
+                {!isCancelledOrCompleted && (
+                  <Button
+                    type="button"
+                    onClick={() => {
+                      setDialogText(
+                        'Are you sure you want to cancel this Order'
+                      );
+                      setCancelDialogOpen(true);
+                    }}
+                    className={`bg-ord-del rounded-xl px-12 py-2 font-open-sans text-sm font-semibold ${
+                      false
+                        ? 'bg-neutral-400 text-neutral-900'
+                        : 'bg-neutral-900 text-gray-50'
+                    } `}
+                    color="inherit"
+                    disabled={false}
+                  >
+                    <span> Cancel Order</span>
+                  </Button>
+                )}
               </div>
               <div className="flex items-center justify-end">
                 {/* <div>
@@ -485,7 +502,7 @@ function OrderDetailsPage() {
                     : 'No Address'}
                 </div>
               </div>
-              <hr className="my-3 h-[1px] w-full bg-neutral-200" />
+              {/* <hr className="my-3 h-[1px] w-full bg-neutral-200" /> */}
               <div className="flex w-full flex-shrink-0 items-center gap-x-3">
                 {viewData.driver && !showSelectDriverButton ? (
                   <>

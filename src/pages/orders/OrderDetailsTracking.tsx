@@ -10,11 +10,7 @@ import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 import dayjs from 'dayjs';
 import { useMemo } from 'react';
-import {
-  ORDER_FULFILLMENT_METHOD,
-  ORDER_STATUS,
-  ORDER_STATUSES,
-} from '../../utils/constants';
+import { ORDER_STATUS, ORDER_STATUSES } from '../../utils/constants';
 
 function OrderDetailsTrackingPage({
   orderData,
@@ -24,15 +20,12 @@ function OrderDetailsTrackingPage({
 }: any) {
   const showChangeStatusButton = useMemo(() => {
     if (orderData.status === ORDER_STATUS.NEW) {
-      return false;
+      return true;
     }
     if (orderData.status === ORDER_STATUS.PROCESSING_ITEM) {
-      if (orderData.fulfillmentMethod === ORDER_FULFILLMENT_METHOD.SELF) {
-        return true;
-      }
-      return false;
+      return true;
     }
-    if (
+    /*  if (
       orderData.status === ORDER_STATUS.DRIVER_DECLINED_TO_PICKUP_ITEM_FROM_SHOP
     ) {
       return false;
@@ -47,11 +40,11 @@ function OrderDetailsTrackingPage({
     }
     if (orderData.status === ORDER_STATUS.DRIVER_RETURNED_ITEM_TO_SHOP) {
       return false;
-    }
+    } */
     if (orderData.status === ORDER_STATUS.COMPLETED) {
       return false;
     }
-    return true;
+    return false;
   }, [orderData.status, orderData.fulfillmentMethod]);
 
   const getIcon = (string: string) => {
