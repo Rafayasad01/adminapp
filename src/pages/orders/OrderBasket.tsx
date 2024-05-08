@@ -43,6 +43,7 @@ import {
 } from '../../utils/constants';
 import promiseHandler from '../../utils/helper';
 import { ValuesOf } from '../../utils/ts-helpers';
+import PromotionListPopup from './PromotionListPopup';
 
 const OrderBasket = () => {
   const {
@@ -58,6 +59,7 @@ const OrderBasket = () => {
   const [isExistingUser, setIsExistingUser] = useState<'TRUE' | 'FALSE'>(
     'FALSE'
   );
+  const [isOpenPromoDialog, setIsOpenPromoDialog] = useState(false);
   const [fulfillmentMethod, setFulfillmentMethod] =
     useState<ValuesOf<typeof ORDER_FULFILLMENT_METHOD>>('Self');
   const [isLoginLoader, setIsLoginLoader] = useState(false);
@@ -880,42 +882,61 @@ const OrderBasket = () => {
                 </FormControl>
               )}
 
-              <Divider flexItem className="my-5" />
-
               {promoList?.length > 0 && (
                 <>
+                  <Divider flexItem className="my-5" />
                   <div className="flex items-center justify-between py-2">
                     <div className="font-open-sans font-bold text-neutral-900">
-                      Add Promo Code
+                      Check All Available Promo Codes
                     </div>
                     <div className="font-open-sans text-base font-bold text-neutral-900">
-                      <div className="rounded-md border-[1px] border-[#A3A3A3]">
-                        <FormControl className="FormControl" variant="standard">
-                          <Input
-                            // {...register('name', {
-                            //   required: true,
-                            //   pattern: PATTERN.CHAR_NUM_DASH,
-                            //   validate: (value) => value.length <= 100,
-                            // })}
-                            onChange={(val) => setPromoCode(val.target.value)}
-                            className="FormInput px-1 text-sm"
-                            id="PromoCode"
-                            name="PromoCode"
-                            placeholder="Enter Promo Code"
-                            disableUnderline
-                            startAdornment={
-                              <InputAdornment position="start">
-                                <PromoCodeIcon />
-                              </InputAdornment>
-                            }
-                          />
-                        </FormControl>
+                      <div
+                        onClick={() => setIsOpenPromoDialog(true)}
+                        className="flex w-full cursor-pointer rounded-md text-sm hover:text-blue-800 hover:underline"
+                      >
+                        <span>Promo code</span>
                       </div>
                     </div>
                   </div>
                   <Divider flexItem className="my-5" />
+                  <>
+                    <div className="flex items-center justify-between py-2">
+                      <div className="font-open-sans font-bold text-neutral-900">
+                        Add Promo Code
+                      </div>
+                      <div className="font-open-sans text-base font-bold text-neutral-900">
+                        <div className="flex w-full rounded-md border-[1px] border-[#A3A3A3] bg-slate-100">
+                          <FormControl
+                            className="FormControl"
+                            variant="standard"
+                          >
+                            <Input
+                              // {...register('name', {
+                              //   required: true,
+                              //   pattern: PATTERN.CHAR_NUM_DASH,
+                              //   validate: (value) => value.length <= 100,
+                              // })}
+                              onChange={(val) => setPromoCode(val.target.value)}
+                              className="FormInput px-1 text-sm"
+                              id="PromoCode"
+                              name="PromoCode"
+                              placeholder="Enter Promo Code"
+                              disableUnderline
+                              startAdornment={
+                                <InputAdornment position="start">
+                                  <PromoCodeIcon />
+                                </InputAdornment>
+                              }
+                            />
+                          </FormControl>
+                        </div>
+                      </div>
+                    </div>
+                    {/* <Divider flexItem className="my-5" /> */}
+                  </>
                 </>
               )}
+              <Divider flexItem className="my-5" />
               <div className="my-4">
                 <div className="font-open-sans text-lg font-semibold text-neutral-900">
                   Total Amount
@@ -1002,6 +1023,11 @@ const OrderBasket = () => {
           </div>
         </div>
       </div>
+      <PromotionListPopup
+        promoList={promoList}
+        openFormDialog={isOpenPromoDialog}
+        setOpenFormDialog={setIsOpenPromoDialog}
+      />
       <Notify
         isOpen={notify}
         setIsOpen={setNotifyDisplay}

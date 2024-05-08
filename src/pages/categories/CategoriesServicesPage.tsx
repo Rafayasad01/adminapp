@@ -229,7 +229,6 @@ function CategoriesServicesPage() {
 
   const createFormHandler = (data: any) => {
     setIsLoader(true);
-
     const formData = new FormData();
     formData.append('name', data.name);
     formData.append('loyaltyCoins', data.loyaltyCoins ? data.loyaltyCoins : 0);
