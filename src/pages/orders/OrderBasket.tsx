@@ -17,7 +17,7 @@ import {
 import IconButton from '@mui/material/IconButton';
 import dayjs from 'dayjs';
 import _ from 'lodash';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import CustomButton from '../../components/common/CustomButton';
@@ -124,7 +124,9 @@ const OrderBasket = () => {
   };
 
   const handleUserChange = (event: any) => {
-    setIsExistingUser(event.target.value);
+    if (promoList?.length < 1) {
+      setIsExistingUser(event.target.value);
+    }
   };
 
   const setNotifyDisplay = (value: boolean) => {
@@ -384,6 +386,14 @@ const OrderBasket = () => {
         });
       });
   };
+
+  useEffect(() => {
+    if (isExistingUser === 'FALSE') {
+      setPromoList([]);
+    }
+  }, [promoList]);
+
+  console.log('isExx', isExistingUser);
 
   const handlePaymentChange = () => {};
 
@@ -727,7 +737,7 @@ const OrderBasket = () => {
                       row
                       aria-labelledby="demo-row-radio-buttons-group-label"
                       name="row-radio-buttons-group"
-                      value={isExistingUser}
+                      value={isExistingUser ?? ''}
                       onClick={handleUserChange}
                     >
                       <FormControlLabel
@@ -737,6 +747,7 @@ const OrderBasket = () => {
                           fonWeight: 400,
                           fonSize: '14px',
                         }}
+                        disabled={promoList?.length > 0}
                         value="FALSE"
                         control={
                           <Radio
@@ -788,8 +799,6 @@ const OrderBasket = () => {
                   </div>
                 )}
               </div>
-
-              {/* {console.log("isExx", isExistingUser)} */}
               {isExistingUser === 'TRUE' && (
                 <div className="w-full rounded-xl border border-solid border-foreground py-1 pl-3">
                   <Input
@@ -810,7 +819,7 @@ const OrderBasket = () => {
                 </div>
               )}
 
-              <Divider flexItem className="my-5" />
+              {/* <Divider flexItem className="my-5" /> */}
               {/* {isExistingUser === 'TRUE' && (
                 <FormControl>
                   <FormLabel
@@ -868,7 +877,7 @@ const OrderBasket = () => {
 
               <Divider flexItem className="my-5" /> */}
 
-              {promoList?.length > 0 && (
+              {promoList?.length > 0 && isExistingUser === 'TRUE' && (
                 <>
                   <Divider flexItem className="my-5" />
                   <div className="flex items-center justify-between py-2">
