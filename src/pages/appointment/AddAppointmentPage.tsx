@@ -435,6 +435,8 @@ export default function AddAppointmentPage() {
     });
   }, [activeBarberData]);
 
+  console.log('scheduleData?.startTime', selectedScheduleTime);
+
   const addAppointmentServices = () => {
     const obj = {
       id: 0,
@@ -1104,8 +1106,8 @@ export default function AddAppointmentPage() {
                                     // timePickerSubLabel={"(Office in time)"}
                                     timePickerValue={appointmentTime}
                                     setTimePickerValue={setAppointmentTime}
-                                    minTime={selectedScheduleTime.startTime}
-                                    maxTime={selectedScheduleTime.endTime}
+                                    // minTime={selectedScheduleTime.startTime}
+                                    // maxTime={selectedScheduleTime.endTime}
                                     id="startTime"
                                     // setError={setError}
                                   />

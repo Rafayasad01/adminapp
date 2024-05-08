@@ -570,7 +570,7 @@ function CustomSwiperDialog({
                       id="price"
                       requiredType
                       register={register}
-                      // error={errors.price}
+                      error={errors.price}
                       inputType="text"
                     />
                   </FormControl>
@@ -585,7 +585,7 @@ function CustomSwiperDialog({
                       id="mints"
                       requiredType
                       register={register}
-                      // error={errors.price}
+                      error={errors.mints}
                       inputType="text"
                     />
                   </FormControl>
@@ -605,7 +605,7 @@ function CustomSwiperDialog({
                   </Button>
                 </label>
               </div>
-              <div className="overflow-auto px-1 xl:h-[180px] 2xl:h-[150px]">
+              <div className="overflow-auto px-1 xl:max-h-[180px] xl:min-h-[0px] 2xl:h-[150px]">
                 {ServicesFields?.map((item: any, index: number) => {
                   return (
                     <div
@@ -652,7 +652,7 @@ function CustomSwiperDialog({
                 className="btn-black-fill"
                 sx={{
                   padding: '0.375rem 2rem !important',
-                  width: '90%',
+                  width: '80%',
                   height: '35px',
                 }}
               />

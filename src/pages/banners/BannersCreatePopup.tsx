@@ -145,7 +145,7 @@ function BannersCreatePopup({
               )}
             </FormControl>
           </div>
-          <div className="my-3 grid grid-cols-10 gap-6">
+          <div className="my-2 grid grid-cols-10 gap-6">
             <div className="col-span-4 flex items-center">
               <DragDropFile
                 customWidth="w-[px]"
@@ -164,6 +164,9 @@ function BannersCreatePopup({
                 />
               </div>
             ) : null}
+          </div>
+          <div className="mx-1">
+            <span className="text-xs">Dimension: 1080px by 1080px</span>
           </div>
           {selectedImg === null && <ErrorSpanBox error="Image is required" />}
           <div className="FormField">

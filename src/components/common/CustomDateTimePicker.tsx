@@ -45,7 +45,8 @@ function CustomDateTimePicker({
         <DesktopDatePicker
           sx={{
             border: '1px solid',
-            padding: 'px',
+            padding: '0px',
+            margin: '0px',
             borderRadius: '5px',
             fontSize: '12px',
           }}

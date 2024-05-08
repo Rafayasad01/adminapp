@@ -67,7 +67,7 @@ function AppointmentProviderPage() {
   const [notifyMessage, setNotifyMessage] = useState({});
   const [cancelDialogOpen, setCancelDialogOpen] = useState<boolean>(false);
   const [dialogText] = useState<any>(
-    'Are you sure you want to delete this Category ?'
+    'Are you sure you want to delete this Staff ?'
   );
   const [image, setImage] = useState<any>(null);
   const [startServiceTime, setStartServiceTime] = useState<dayjs.Dayjs | any>(
@@ -84,6 +84,10 @@ function AppointmentProviderPage() {
 
   const [showPassword, setShowPassword] = useState(true);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+  const officeTimings = useAppSelector(
+    (state) => state?.persistedReducer.appState.UserItems
+  );
 
   const {
     register,
@@ -548,7 +552,7 @@ function AppointmentProviderPage() {
 
   useEffect(() => {
     if (listingRolePermission(dataRole, 'Appointment Provider List')) {
-      StoreEmployeeService.StoreEmployeeList(search, page, rowsPerPage)
+      StoreEmployeeService.StoreEmployeeAllList(search, page, rowsPerPage)
         .then((item: any) => {
           if (item.data.success) {
             setIsLoader(false);
@@ -669,20 +673,36 @@ function AppointmentProviderPage() {
 
   const onSubmitDialogBox = async (data: any) => {
     console.log(`onSubmitDialogBox -> data:`, data);
-    setIsLoader(true);
+    // setIsLoader(true);
     delete data.servicesName;
     delete data.servicesAmount;
     delete data.price;
     delete data.categoryId;
     delete data.servicesId;
     delete data.mints;
-    const _object = {
-      ...data,
-      weekDays,
-      startTime,
-      endTime,
-      avatar: image,
-    };
+    // const _object = {
+    //   ...data,
+    //   weekDays,
+    //   startTime,
+    //   endTime,
+    //   avatar: image,
+    // };
+    console.log('🚀 ~ onSubmitDialogBox ~ endTime:', endTime);
+    console.log('🚀 ~ onSubmitDialogBox ~ startTime:', startTime);
+    if (
+      dayjs(startTime).format('HH:mm') <
+        dayjs(officeTimings?.tenantConfig?.officeTimeIn).format('HH:mm') ||
+      dayjs(endTime).format('HH:mm') >
+        dayjs(officeTimings?.tenantConfig?.officeTimeOut).format('HH:mm')
+    ) {
+      setIsLoader(false);
+      setIsNotify(true);
+      setNotifyMessage({
+        text: 'You should check your shop time before creating staff',
+        type: 'error',
+      });
+      return null;
+    }
     const formData = new FormData();
     formData.append('name', data.name);
     formData.append('address', data.address);
@@ -744,6 +764,7 @@ function AppointmentProviderPage() {
         type: 'error',
       });
     }
+    return null;
     // handleNextSlide();
   };
 

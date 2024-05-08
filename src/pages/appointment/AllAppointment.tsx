@@ -378,7 +378,7 @@ const AllAppointment = ({
       getAllAppointments(monthDate, 'month');
       // return { startDate: date, endDate: date };
     }
-    if (view === 'Week') {
+    if (view === 'Week' || view === 'Vertical Orientation') {
       setAppointmentType({
         text: 'All Appointments',
         icon: PersonOutlinedIcon,

@@ -201,7 +201,7 @@ function CustomEditSwiperDialog({
         style: { maxWidth: '100%', maxHeight: 'auto' },
       }}
     >
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(onSubmit)} className="overflow-auto">
         <Swiper
           simulateTouch={false} // Allow touch simulation for non-touch devices
           allowTouchMove={false}

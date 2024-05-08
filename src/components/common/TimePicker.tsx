@@ -32,8 +32,8 @@ type TimePickerProps = {
   timePickerLabel?: string;
   timePickerSubLabel?: string;
   timePickerValue: dayjs.Dayjs | null;
-  minTime?: dayjs.Dayjs | undefined;
-  maxTime?: dayjs.Dayjs | undefined;
+  // minTime?: dayjs.Dayjs | undefined;
+  // maxTime?: dayjs.Dayjs | undefined;
 };
 function TimePicker({
   disabled,
@@ -44,9 +44,9 @@ function TimePicker({
   timePickerLabel,
   timePickerSubLabel,
   timePickerValue,
-  minTime,
-  maxTime,
-}: TimePickerProps) {
+}: // minTime,
+// maxTime,
+TimePickerProps) {
   const [timePicker, setTimePicker] = useState<HTMLButtonElement | null>(null);
   const buttonElement = useRef(null);
   const handleClick = () => {
@@ -133,8 +133,8 @@ function TimePicker({
               defaultValue={dayjs('2023-01-01T00:00')}
               value={dayjs(timePickerValue) || null}
               onAccept={handleChange}
-              minTime={minTime}
-              maxTime={maxTime}
+              // minTime={minTime}
+              // maxTime={maxTime}
             />
           </LocalizationProvider>
         </ThemeProvider>

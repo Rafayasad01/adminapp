@@ -5,7 +5,7 @@ import GridViewOutlinedIcon from '@mui/icons-material/GridViewOutlined';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
-import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
+// import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
 import ManageAccountsOutlinedIcon from '@mui/icons-material/ManageAccountsOutlined';
 import PeopleOutlineOutlinedIcon from '@mui/icons-material/PeopleOutlineOutlined';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
@@ -144,12 +144,12 @@ const links = [
     permission: 'Notification List',
     icon: <QuestionAnswerOutlinedIcon fontSize="inherit" />,
   },
-  {
-    name: 'Notifications',
-    path: 'notification',
-    permission: 'Notification List',
-    icon: <NotificationsOutlinedIcon fontSize="inherit" />,
-  },
+  // {
+  //   name: 'Notifications',
+  //   path: 'notification',
+  //   permission: 'Notification List',
+  //   icon: <NotificationsOutlinedIcon fontSize="inherit" />,
+  // },
   {
     name: 'Vouchers',
     path: 'vouchers',
@@ -365,24 +365,11 @@ function Sidebar() {
           {!authState.user.isSuperAdmin && (
             <div className="share-via">
               <h6 className="heading">Share</h6>
-              {(appItems?.tenantConfig?.facebook === 'undefined' ||
-                appItems?.tenantConfig?.facebook === null) &&
-                (appItems?.tenantConfig?.twitter === 'undefined' ||
-                  appItems?.tenantConfig?.twitter === null) &&
-                (appItems?.tenantConfig?.instagram === 'undefined' ||
-                  appItems?.tenantConfig?.instagram === null) &&
-                (appItems?.tenantConfig?.whatsapp === 'undefined' ||
-                  appItems?.tenantConfig?.whatsapp === null) &&
-                (appItems?.tenantConfig?.linkedin === 'undefined' ||
-                  appItems?.tenantConfig?.linkedin === null) &&
-                (appItems?.tenantConfig?.youtube === 'undefined' ||
-                  appItems?.tenantConfig?.youtube === null) && (
-                  <span className="text-sm">No Links yet</span>
-                )}
               {appItems?.tenantConfig && (
                 <div className="social-icons grid grid-cols-6">
                   {appItems?.tenantConfig?.facebook !== 'undefined' &&
-                    appItems?.tenantConfig?.facebook !== null && (
+                    appItems?.tenantConfig?.facebook !== null &&
+                    appItems?.tenantConfig?.facebook !== '' && (
                       <IconButton className="social-btn" onClick={() => null}>
                         <a
                           href={appItems?.tenantConfig?.facebook}
@@ -394,7 +381,8 @@ function Sidebar() {
                       </IconButton>
                     )}
                   {appItems?.tenantConfig?.twitter !== 'undefined' &&
-                    appItems?.tenantConfig?.twitter !== null && (
+                    appItems?.tenantConfig?.twitter !== null &&
+                    appItems?.tenantConfig?.twitter !== '' && (
                       <IconButton className="social-btn" onClick={() => null}>
                         <a
                           href={appItems?.tenantConfig?.twitter}
@@ -406,7 +394,8 @@ function Sidebar() {
                       </IconButton>
                     )}
                   {appItems?.tenantConfig?.instagram !== 'undefined' &&
-                    appItems?.tenantConfig?.instagram !== null && (
+                    appItems?.tenantConfig?.instagram !== null &&
+                    appItems?.tenantConfig?.instagram !== '' && (
                       <IconButton className="social-btn" onClick={() => null}>
                         <a
                           href={appItems?.tenantConfig?.instagram}
@@ -418,7 +407,8 @@ function Sidebar() {
                       </IconButton>
                     )}
                   {appItems?.tenantConfig?.whatsapp !== 'undefined' &&
-                    appItems?.tenantConfig?.whatsapp !== null && (
+                    appItems?.tenantConfig?.whatsapp !== null &&
+                    appItems?.tenantConfig?.whatsapp !== '' && (
                       <IconButton className="social-btn" onClick={() => null}>
                         <a
                           href={appItems?.tenantConfig?.whatsapp}
@@ -430,7 +420,8 @@ function Sidebar() {
                       </IconButton>
                     )}
                   {appItems?.tenantConfig?.linkedin !== 'undefined' &&
-                    appItems?.tenantConfig?.linkedin !== null && (
+                    appItems?.tenantConfig?.linkedin !== null &&
+                    appItems?.tenantConfig?.linkedin !== '' && (
                       <IconButton className="social-btn" onClick={() => null}>
                         <a
                           href={appItems?.tenantConfig?.linkedin}
@@ -442,7 +433,8 @@ function Sidebar() {
                       </IconButton>
                     )}
                   {appItems?.tenantConfig?.youtube !== 'undefined' &&
-                    appItems?.tenantConfig?.youtube !== null && (
+                    appItems?.tenantConfig?.youtube !== null &&
+                    appItems?.tenantConfig?.youtube !== '' && (
                       <IconButton className="social-btn" onClick={() => null}>
                         <a
                           href={appItems?.tenantConfig?.youtube}

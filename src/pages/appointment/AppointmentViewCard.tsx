@@ -88,7 +88,8 @@ const AppointmentViewCard = ({
             <IconButton
               disabled={
                 appointmentData?.status === APPOINTMENT_STATUS.CANCELLED ||
-                appointmentData?.status === APPOINTMENT_STATUS.COMPLETED
+                appointmentData?.status === APPOINTMENT_STATUS.COMPLETED ||
+                appointmentData?.status === APPOINTMENT_STATUS.RESCHEDULE
               }
               className="icon-btn mr-3.5 p-0"
               onClick={() => {
@@ -102,7 +103,8 @@ const AppointmentViewCard = ({
             <IconButton
               disabled={
                 appointmentData?.status === APPOINTMENT_STATUS.CANCELLED ||
-                appointmentData?.status === APPOINTMENT_STATUS.COMPLETED
+                appointmentData?.status === APPOINTMENT_STATUS.COMPLETED ||
+                appointmentData?.status === APPOINTMENT_STATUS.RESCHEDULE
               }
               className="icon-btn mr-3.5 p-0"
               onClick={() => {
@@ -115,7 +117,8 @@ const AppointmentViewCard = ({
             <IconButton
               disabled={
                 appointmentData?.status === APPOINTMENT_STATUS.CANCELLED ||
-                appointmentData?.status === APPOINTMENT_STATUS.COMPLETED
+                appointmentData?.status === APPOINTMENT_STATUS.COMPLETED ||
+                appointmentData?.status === APPOINTMENT_STATUS.RESCHEDULE
               }
               name="Reschedule"
               className="icon-btn mr-3.5 p-0"
@@ -126,7 +129,6 @@ const AppointmentViewCard = ({
               <EditNoteOutlinedIcon />
             </IconButton>
             {appointmentData?.status !== APPOINTMENT_STATUS.NEW &&
-            appointmentData?.status !== APPOINTMENT_STATUS.RESCHEDULE &&
             appointmentData?.status !== APPOINTMENT_STATUS.PROCESSING ? (
               <div className="mt-3">
                 <span className="rounded bg-slate-200 px-2 py-1 text-sm">
@@ -136,6 +138,8 @@ const AppointmentViewCard = ({
                     ? 'Appointment has been Missed'
                     : appointmentData?.status === APPOINTMENT_STATUS.CANCELLED
                     ? 'Appointment has been Cancelled'
+                    : appointmentData?.status === APPOINTMENT_STATUS.RESCHEDULE
+                    ? 'Appointment has been Rescheduled'
                     : ''}
                 </span>
               </div>
@@ -144,8 +148,6 @@ const AppointmentViewCard = ({
                 onClick={() => {
                   setIsTooltipOpen(false);
                   if (appointmentData?.status === 'New') {
-                    isStatusProcessing(appointmentData.id);
-                  } else if (appointmentData?.status === 'Reschedule') {
                     isStatusProcessing(appointmentData.id);
                   } else {
                     isStatusDone(appointmentData.id);
@@ -159,16 +161,14 @@ const AppointmentViewCard = ({
                   className="icon-btn mx-[4px] p-0"
                   // onClick={() => isStatusDone(appointmentData.id)}
                 >
-                  {appointmentData?.status === APPOINTMENT_STATUS.NEW ||
-                  appointmentData?.status === APPOINTMENT_STATUS.RESCHEDULE ? (
+                  {appointmentData?.status === APPOINTMENT_STATUS.NEW ? (
                     <UpdateOutlinedIcon fontSize="small" />
                   ) : (
                     <CheckCircleOutlineIcon fontSize="small" />
                   )}
                 </IconButton>
                 <span className="text-sm">
-                  {appointmentData?.status === APPOINTMENT_STATUS.NEW ||
-                  appointmentData?.status === APPOINTMENT_STATUS.RESCHEDULE
+                  {appointmentData?.status === APPOINTMENT_STATUS.NEW
                     ? 'Processing'
                     : 'Complete'}
                 </span>

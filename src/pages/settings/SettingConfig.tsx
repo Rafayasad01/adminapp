@@ -4,6 +4,7 @@ import Tabs from '@mui/material/Tabs';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
 import assets from '../../assets';
 import '../../assets/css/PopupStyle.css';
 import { useNotification } from '../../components/Contexts/NotificationContext';
@@ -17,6 +18,7 @@ import { useAppSelector } from '../../redux/redux-hooks';
 import systemConfigService from '../../services/adminapp/systemConfig';
 import PermissionPopup from '../../utils/PermissionPopup';
 import DragDropFile from './DragDropFile';
+import { Setting } from '../../interfaces/app.interface';
 
 function SettingsConfig() {
   const dispatch = useDispatch();
@@ -24,6 +26,7 @@ function SettingsConfig() {
   const { notification, hideNotification, showNotification } =
     useNotification();
   const authState: any = useAppSelector((state) => state?.authState);
+  console.log('🚀 ~ SettingsConfig ~ authState:', authState);
   const [data, setData] = useState<any>();
   const [allThemes, setAllThemes] = useState<any>([]);
   const [themeFile, setThemeFile] = useState<any>(null);
@@ -31,10 +34,11 @@ function SettingsConfig() {
   const [isNotify, setIsNotify] = useState(false);
   const [notifyMessage, setNotifyMessage] = useState({});
   // const { notification, hideNotification, showNotification } = useNotification();
-  const [address] = useState<any>(null);
+  // const [address] = useState<any>(null);
   const [isLoader, setIsLoader] = useState(true);
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
   const [dialogItem, setDialogItem] = useState<any>({});
+  const { setValue, getValues } = useForm<Setting>();
 
   useEffect(() => {
     systemConfigService
@@ -253,14 +257,12 @@ function SettingsConfig() {
                   ) : null}
                 </div>
                 <div className="mx-1">
-                  <span className="text-xs">
-                    Hint: Image should be 1080px by 1080px
-                  </span>
-                  <br />
+                  <span className="text-xs">Dimension: 1080px by 1080px</span>
+                  {/* <br /> */}
 
-                  <span className="text-xs">
+                  {/* <span className="text-xs">
                     Info: Small size Image may pixelate.
-                  </span>
+                  </span> */}
                 </div>
                 {themeSelectedImg && (
                   <div className="flex items-center justify-end">
@@ -277,8 +279,13 @@ function SettingsConfig() {
           </div>
         </div>
         <div className="col-span-6 min-h-[500px] rounded-lg bg-white shadow-lg">
-          {address ? (
-            <MapAddress address={address} zoom={10} />
+          {authState?.user?.tenantConfig?.shopAddress ? (
+            <MapAddress
+              getValues={getValues}
+              setValue={setValue}
+              address={authState?.user?.tenantConfig?.shopAddress ?? ''}
+              zoom={10}
+            />
           ) : (
             <div className="no-map-location">
               <div className="content">

@@ -390,7 +390,7 @@ function SettingsApp() {
                 <span className="">Upload Shop Logo</span>
               </div>
               <div className="grid grid-cols-12 items-center">
-                <div className="col-span-5 mb-4">
+                <div className="col-span-5 mb-1">
                   <DragDropFile
                     setIsNotify={setIsNotify}
                     setNotifyMessage={setNotifyMessage}
@@ -415,6 +415,9 @@ function SettingsApp() {
                     />
                   </div>
                 ) : null}
+              </div>
+              <div className="mx-1 mb-3">
+                <span className="text-xs">Dimension: 256px by 100px</span>
               </div>
               <div className="FormField mb-4">
                 <FormControl className="FormControl" variant="standard">

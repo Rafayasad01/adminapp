@@ -28,6 +28,10 @@ function AppointmentProviderSchedulePage() {
   const dataRole = useAppSelector(
     (state: any) => state?.persistedReducer?.roleState?.role?.permissions
   );
+  const officeTimings = useAppSelector(
+    (state) => state?.persistedReducer.appState.UserItems
+  );
+
   const [startTime, setStartTime] = useState<dayjs.Dayjs | any>(null);
   const [endTime, setEndTime] = useState<dayjs.Dayjs | any>(null);
   const [weekDays, setWeekDays] = useState<any>([]);
@@ -336,6 +340,20 @@ function AppointmentProviderSchedulePage() {
   };
 
   const updateFormHandler = (data: any) => {
+    if (
+      dayjs(data.startTime).format('HH:mm') <
+        dayjs(officeTimings?.tenantConfig?.officeTimeIn).format('HH:mm') ||
+      dayjs(data.endTime).format('HH:mm') >
+        dayjs(officeTimings?.tenantConfig?.officeTimeOut).format('HH:mm')
+    ) {
+      setIsLoader(false);
+      setIsNotify(true);
+      setNotifyMessage({
+        text: 'You should check your shop time before creating staff',
+        type: 'error',
+      });
+      return null;
+    }
     setIsLoader(true);
     const details = {
       ...data,
@@ -394,6 +412,7 @@ function AppointmentProviderSchedulePage() {
           type: 'error',
         });
       });
+    return null;
   };
 
   const onSubmitDialogBox = () => {

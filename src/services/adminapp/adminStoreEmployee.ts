@@ -47,6 +47,21 @@ const StoreEmployeeList = (
   });
 };
 
+const StoreEmployeeAllList = (
+  search: string,
+  page: number,
+  size: number
+): Promise<AxiosResponse<GetStoreEmployeeListResponse, any>> => {
+  return network.getWithQueryParam(
+    `${STORE_PREFIX}/${EMPLOYEE_PREFIX}/list/all`,
+    {
+      search,
+      page: page.toString(),
+      size: size.toString(),
+    }
+  );
+};
+
 const StoreEmployeeCreate = (data: any) => {
   return network.postMultipart(
     `${STORE_PREFIX}/${EMPLOYEE_PREFIX}/create`,
@@ -168,6 +183,7 @@ const StoreEmployeeLeaveStatusUpdateService = (empId: string, status: any) => {
 
 export default {
   StoreEmployeeList,
+  StoreEmployeeAllList,
   StoreEmployeeCreate,
   StoreEmployeeFind,
   StoreEmployeeUpdate,

@@ -80,6 +80,21 @@ const fetchAllAppointments = (tenant: any, body: any) => {
   );
 };
 
+const AppointmentStoreEmployeeList = (
+  search: string,
+  page: number,
+  size: number
+) => {
+  return network.getWithQueryParam(
+    `${STORE_PREFIX}/${EMPLOYEE_PREFIX}/appointment/list`,
+    {
+      search,
+      page: page.toString(),
+      size: size.toString(),
+    }
+  );
+};
+
 export default {
   getBarbersList,
   getBarberBookedTimeSlots,
@@ -93,4 +108,5 @@ export default {
   appointmentPaid,
   appointmentProcessing,
   appointmentCancelled,
+  AppointmentStoreEmployeeList,
 };
