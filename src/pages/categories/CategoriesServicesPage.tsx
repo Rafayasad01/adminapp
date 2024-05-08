@@ -232,7 +232,7 @@ function CategoriesServicesPage() {
 
     const formData = new FormData();
     formData.append('name', data.name);
-    formData.append('loyaltyCoins', data.loyaltyCoins);
+    formData.append('loyaltyCoins', data.loyaltyCoins ? data.loyaltyCoins : 0);
     formData.append('icon', data.icon);
     formData.append('price', data.price);
     formData.append('desc', data.desc);

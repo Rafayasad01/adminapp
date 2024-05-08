@@ -782,7 +782,7 @@ const OrderBasket = () => {
                       disabled={isLoginLoader || cartItems?.length <= 0}
                       onclick={handleLogin}
                       buttonType="button"
-                      title="Login"
+                      title="Verify"
                       className={`${
                         cartItems?.length <= 0
                           ? 'btn-gray-fill'

@@ -173,6 +173,7 @@ function CategoriesServicesEditPopup({
                   placeholder="Enter loyalty Coins"
                   type="number"
                   {...register('loyaltyCoins', {
+                    required: false,
                     value: formData?.loyaltyCoins,
                     pattern: {
                       value: PATTERN.POINT_NUM,
@@ -183,8 +184,9 @@ function CategoriesServicesEditPopup({
                       message: 'Length should not be excceed from 10 numbers.',
                     },
                     validate: (value: any) =>
-                      formData?.loyaltyCoins &&
-                      VALIDATE_NON_NEGATIVE_NUM(value),
+                      formData?.loyaltyCoins && value
+                        ? VALIDATE_NON_NEGATIVE_NUM(value)
+                        : true,
                   })}
                   disableUnderline
                 />

@@ -534,8 +534,8 @@ function SettingsApp() {
                   )}
                 </FormControl>
               </div>
-              <div className="FormFields">
-                <FormControl className="FormControl" variant="standard">
+              <div className="FormField">
+                {/* <FormControl className="FormControl" variant="standard">
                   <label className="FormLabel">Min order Amount</label>
                   <Input
                     className="FormInput"
@@ -553,28 +553,7 @@ function SettingsApp() {
                   {errors.minOrderAmount?.type === 'pattern' && (
                     <ErrorSpanBox error="Enter a valid amount" />
                   )}
-                </FormControl>
-                <FormControl className="FormControl" variant="standard">
-                  <label className="FormLabel">Rider Delivery Charges</label>
-                  <Input
-                    className="FormInput"
-                    id="name"
-                    placeholder="$1.00"
-                    disableUnderline
-                    {...register('deliveryFee', {
-                      value: detail ? detail.deliveryFee : '',
-                      pattern: {
-                        value: PATTERN.POINT_NUM,
-                        message: 'Enter a valid delivery fee',
-                      },
-                    })}
-                  />
-                  {errors.deliveryFee?.type === 'pattern' && (
-                    <ErrorSpanBox error="Enter a valid delivery fee" />
-                  )}
-                </FormControl>
-              </div>
-              <div className="FormFields">
+                </FormControl> */}
                 <FormControl className="FormControl" variant="standard">
                   <label className="FormLabel">Minimum Delivery Days</label>
                   <Input
@@ -599,7 +578,28 @@ function SettingsApp() {
                     />
                   )}
                 </FormControl>
-                <FormControl className="FormControl" variant="standard">
+                {/* <FormControl className="FormControl" variant="standard">
+                  <label className="FormLabel">Rider Delivery Charges</label>
+                  <Input
+                    className="FormInput"
+                    id="name"
+                    placeholder="$1.00"
+                    disableUnderline
+                    {...register('deliveryFee', {
+                      value: detail ? detail.deliveryFee : '',
+                      pattern: {
+                        value: PATTERN.POINT_NUM,
+                        message: 'Enter a valid delivery fee',
+                      },
+                    })}
+                  />
+                  {errors.deliveryFee?.type === 'pattern' && (
+                    <ErrorSpanBox error="Enter a valid delivery fee" />
+                  )}
+                </FormControl> */}
+              </div>
+              {/* <div className="FormFields"> */}
+              {/* <FormControl className="FormControl" variant="standard">
                   <label className="FormLabel">Delivery Urgent Day Fees</label>
                   <Input
                     id="deliveryUrgentFees"
@@ -620,8 +620,8 @@ function SettingsApp() {
                   {errors?.deliveryUrgentFees && (
                     <ErrorSpanBox error={errors?.deliveryUrgentFees?.message} />
                   )}
-                </FormControl>
-              </div>
+                </FormControl> */}
+              {/* </div> */}
               <div className="FormFields">
                 <FormControl className="FormControl" variant="standard">
                   <label className="FormLabel">Latitude</label>
@@ -674,7 +674,8 @@ function SettingsApp() {
                 <div className="w-full">
                   <FormControl className="FormControl" variant="standard">
                     <label className="FormLabel">
-                      Attendance Distance (in meters)
+                      Attendance Distance
+                      <span className="SubLabel">(in meters)</span>
                     </label>
                     <Input
                       id="attendanceDistance"

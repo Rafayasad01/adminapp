@@ -79,7 +79,7 @@ function CategoriesServicesCreatePopup({
     setImage(null);
   };
 
-  // console.log('errors', errors);
+  console.log('errors', errors);
 
   return (
     <Dialog
@@ -148,6 +148,7 @@ function CategoriesServicesCreatePopup({
                   id="loyaltyCoins"
                   placeholder="Enter loyalty Coins"
                   {...register('loyaltyCoins', {
+                    required: false,
                     pattern: {
                       value: PATTERN.POINT_NUM,
                       message: 'Enter a valid loyalty coins in numbers',
@@ -156,7 +157,8 @@ function CategoriesServicesCreatePopup({
                       value: 10,
                       message: 'Length should not be excceed from 10 numbers.',
                     },
-                    validate: (value: any) => VALIDATE_NON_NEGATIVE_NUM(value),
+                    validate: (value: any) =>
+                      value ? VALIDATE_NON_NEGATIVE_NUM(value) : true,
                   })}
                   disableUnderline
                 />

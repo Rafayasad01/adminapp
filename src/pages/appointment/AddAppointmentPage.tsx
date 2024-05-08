@@ -248,7 +248,7 @@ export default function AddAppointmentPage() {
     };
 
     // console.log('activeBarberData', activeBarberData);
-    console.log('tempAppointmentBookedTime', tempAppointmentBookedTime);
+    // console.log('tempAppointmentBookedTime', tempAppointmentBookedTime);
     return (
       <div
         onClick={onHandleBarber}
