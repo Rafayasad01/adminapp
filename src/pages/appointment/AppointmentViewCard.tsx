@@ -126,6 +126,7 @@ const AppointmentViewCard = ({
               <EditNoteOutlinedIcon />
             </IconButton>
             {appointmentData?.status !== APPOINTMENT_STATUS.NEW &&
+            appointmentData?.status !== APPOINTMENT_STATUS.RESCHEDULE &&
             appointmentData?.status !== APPOINTMENT_STATUS.PROCESSING ? (
               <div className="mt-3">
                 <span className="rounded bg-slate-200 px-2 py-1 text-sm">
@@ -144,6 +145,8 @@ const AppointmentViewCard = ({
                   setIsTooltipOpen(false);
                   if (appointmentData?.status === 'New') {
                     isStatusProcessing(appointmentData.id);
+                  } else if (appointmentData?.status === 'Reschedule') {
+                    isStatusProcessing(appointmentData.id);
                   } else {
                     isStatusDone(appointmentData.id);
                   }
@@ -156,14 +159,16 @@ const AppointmentViewCard = ({
                   className="icon-btn mx-[4px] p-0"
                   // onClick={() => isStatusDone(appointmentData.id)}
                 >
-                  {appointmentData?.status === APPOINTMENT_STATUS.NEW ? (
+                  {appointmentData?.status === APPOINTMENT_STATUS.NEW ||
+                  appointmentData?.status === APPOINTMENT_STATUS.RESCHEDULE ? (
                     <UpdateOutlinedIcon fontSize="small" />
                   ) : (
                     <CheckCircleOutlineIcon fontSize="small" />
                   )}
                 </IconButton>
                 <span className="text-sm">
-                  {appointmentData?.status === APPOINTMENT_STATUS.NEW
+                  {appointmentData?.status === APPOINTMENT_STATUS.NEW ||
+                  appointmentData?.status === APPOINTMENT_STATUS.RESCHEDULE
                     ? 'Processing'
                     : 'Complete'}
                 </span>
@@ -237,9 +242,8 @@ const AppointmentViewCard = ({
           </div>
           <div>
             <span className="mx-2 text-xs text-[#6A6A6A]">
-              {dayjs(data?.startDateFormat).format('h:mm A')} -{' '}
-              {dayjs(data?.endDateFormat).format('h:mm A')} ({data?.serviceTime}{' '}
-              min)
+              {dayjs(appointmentData?.startDate).format('h:mm A')} -{' '}
+              {dayjs(appointmentData?.endDate).format('h:mm A')}
             </span>
           </div>
         </div>

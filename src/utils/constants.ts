@@ -49,6 +49,7 @@ export const CART_STATUS = {
 
 export const APPOINTMENT_STATUS = {
   NEW: 'New',
+  RESCHEDULE: 'Reschedule',
   PROCESSING: 'Processing',
   COMPLETED: 'Completed',
   CANCELLED: 'Cancelled',

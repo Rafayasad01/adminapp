@@ -112,17 +112,17 @@ export default function AddAppointmentPage() {
     return dayjs(selectedTime).isBetween(beforeTime, afterTime, 'minute');
   };
 
-  const getCatItemName = (id: any) => {
-    let tempAr: any[] = [];
-    tempAr = usedCatItemsLovlist;
-    return tempAr?.find((el: any) => el.id === id)?.name;
-  };
-
   const pagination = {
     clickable: true,
     renderBullet(index: number, className: any) {
       return `<span class="${className}"></span>`;
     },
+  };
+
+  const getCatItemName = (id: any) => {
+    let tempAr: any[] = [];
+    tempAr = usedCatItemsLovlist;
+    return tempAr?.find((el: any) => el.id === id)?.name;
   };
 
   const shopEvents = async (id: any, date: any) => {
@@ -153,7 +153,7 @@ export default function AddAppointmentPage() {
       setAppointmentBookedTime([]);
       setIsNotify(true);
       setNotifyMessage({
-        text: 'Event',
+        text: 'Today must be an event or may be employee is on leave',
         type: 'error',
       });
       return false;
@@ -212,7 +212,7 @@ export default function AddAppointmentPage() {
     return null;
   };
 
-  console.log('AppBookedTimeArr:::::::::', appointmentBookedTime);
+  // console.log('AppBookedTimeArr:::::::::', appointmentBookedTime);
 
   const BarberCard = (item: any, index: number) => {
     const onHandleBarber = async () => {
@@ -393,6 +393,12 @@ export default function AddAppointmentPage() {
     targetCategoryItem: string
     // targetDate: any
   ) {
+    console.log(
+      '🚀 ~ AddAppointmentPage ~ targetCategoryItem:',
+      targetCategoryItem
+    );
+    console.log('🚀 ~ AddAppointmentPage ~ targetEmployee:', targetEmployee);
+    console.log('🚀 ~ AddAppointmentPage ~ array:', array);
     // console.log(
     //   '🚀 ~ AddAppointmentPage ~ targetDate:',
     //   dayjs(targetDate).format('YYYYMMDD')
@@ -402,12 +408,13 @@ export default function AddAppointmentPage() {
     for (const obj of array) {
       // console.log('AddAppointmentPage ~ targetDate: sdsd', obj);
 
-      if (obj.storeServiceCategoryItem === targetCategoryItem) {
-        return true;
-      }
+      // if (obj.storeServiceCategoryItem === targetCategoryItem) {
+      //   return true;
+      // }
 
       if (
         obj.storeEmployee === targetEmployee &&
+        obj.storeServiceCategoryItem === targetCategoryItem &&
         dayjs(obj.appointmentTime).format('YYYYMMDD') ===
           dayjs(getValues('appointmentDate')).format('YYYYMMDD')
       ) {
@@ -483,6 +490,7 @@ export default function AddAppointmentPage() {
           activeBarberData?.storeEmployee?.id,
           watch('storeServiceCategoryItem')
         );
+        console.log('🚀 ~ addAppointmentServices ~ isDuplicate:', isDuplicate);
         if (!isDuplicate) {
           if (tempAppointmentBookedTime.length > 0) {
             for (let i = 0; i < tempAppointmentBookedTime.length; i += 1) {
@@ -883,7 +891,6 @@ export default function AddAppointmentPage() {
                             customClass="border-[2px] border-[#949EAE] rounded-xl px-2 py-1 text-sm"
                             register={register}
                             error={errors.email}
-                            requiredType
                             inputType="text"
                           />
                         </FormControl>
