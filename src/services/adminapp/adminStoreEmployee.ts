@@ -157,6 +157,15 @@ const StoreEmployeeScheduleService = (empId: string | any, date: any) => {
   );
 };
 
+const StoreEmployeeLeaveStatusUpdateService = (empId: string, status: any) => {
+  return network.post(
+    `${STORE_PREFIX}/${EMPLOYEE_PREFIX}/leave/management/status/update/${empId}`,
+    {
+      status,
+    }
+  );
+};
+
 export default {
   StoreEmployeeList,
   StoreEmployeeCreate,
@@ -175,4 +184,5 @@ export default {
   StoreEmployeeRatingReviewService,
   StoreEmployeeReviewStarListService,
   StoreEmployeeScheduleService,
+  StoreEmployeeLeaveStatusUpdateService,
 };

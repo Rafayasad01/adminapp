@@ -1,3 +1,5 @@
+/* eslint-disable no-restricted-syntax */
+
 import CloseIcon from '@mui/icons-material/Close';
 import Avatar from '@mui/material/Avatar';
 import FormControl from '@mui/material/FormControl';
@@ -8,8 +10,9 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import dayjs from 'dayjs';
-import timezone from 'dayjs/plugin/timezone';
-import utc from 'dayjs/plugin/utc';
+import isBetween from 'dayjs/plugin/isBetween';
+// import timezone from 'dayjs/plugin/timezone';
+// import utc from 'dayjs/plugin/utc';
 import { useEffect, useState } from 'react';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -17,12 +20,6 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import { Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import Notify from '../../components/common/Notify';
-import TopBar from '../../components/common/TopBar';
-import { AddAppointmentForm } from '../../interfaces/app.appointment';
-import { GENDER, MAX_LENGTH_EXCEEDED, PATTERN } from '../../utils/constants';
-
-// import required modules
 import assets from '../../assets';
 import '../../assets/css/PopupStyle.css';
 import CustomButton from '../../components/common/CustomButton';
@@ -30,15 +27,21 @@ import CustomDropDown from '../../components/common/CustomDropDown';
 import CustomInputBox from '../../components/common/CustomInputBox';
 import ErrorSpanBox from '../../components/common/ErrorSpanBox';
 import Loader from '../../components/common/Loader2';
+import Notify from '../../components/common/Notify';
 import TimePicker from '../../components/common/TimePicker';
+import TopBar from '../../components/common/TopBar';
+import { AddAppointmentForm } from '../../interfaces/app.appointment';
 import storeAppointmentService from '../../services/adminapp/adminStoreAppointment';
 import storeEmployeeService from '../../services/adminapp/adminStoreEmployee';
+// import storeSettingService from '../../services/adminapp/adminShopSchedule';
 import storeLovService from '../../services/adminapp/adminStoreService';
+import { GENDER, MAX_LENGTH_EXCEEDED, PATTERN } from '../../utils/constants';
+// import { useAppSelector } from '../../redux/redux-hooks';
+// import { useAppSelector } from '../../redux/redux-hooks';
 
 // Extend dayjs with necessary plugins
-dayjs.extend(utc);
-dayjs.extend(timezone);
-dayjs.tz.setDefault('UTC');
+dayjs.extend(isBetween);
+// dayjs.extend(timezone);
 
 const darkTheme = createTheme({
   palette: {
@@ -50,6 +53,8 @@ const darkTheme = createTheme({
 
 export default function RescheduleAppointmentPage() {
   const navigate = useNavigate();
+  // const authState: any = useAppSelector((state: any) => state?.authState);
+  // console.log('🚀 ~ AddAppointmentPage ~ shopSchedule:', shopScheduleWorkDays);
   const [isLoader, setIsLoader] = useState(false);
   const [isPageLoader, setIsPageLoader] = useState(false);
   const [isNotify, setIsNotify] = useState(false);
@@ -116,6 +121,12 @@ export default function RescheduleAppointmentPage() {
     },
   };
 
+  const getCatItemName = (catid: any) => {
+    let tempAr: any[] = [];
+    tempAr = usedCatItemsLovlist;
+    return tempAr?.find((el: any) => el.id === catid)?.name;
+  };
+
   const shopEvents = async (shopEventId: any, date: any) => {
     try {
       const resp = await storeEmployeeService.StoreEmployeeScheduleService(
@@ -130,15 +141,9 @@ export default function RescheduleAppointmentPage() {
     }
   };
 
-  // const getBookedTimeSlots = async (bookedid: any, date: any) => {
-  //   await storeAppointmentService
-  //     .getBarberBookedTimeSlots(bookedid, date)
-  //     .then((res) => {
-  //       if (res.data.success) {
-  //         setAppointmentBookedTime(res.data.data);
-  //       }
-  //     });
-  // };
+  // useEffect(() => {
+  //   shopEvents();
+  // }, [getValues('appointmentDate')]);
 
   const getBookedTimeSlots: any = async (bookedTimeId: any, date: any) => {
     const resll = await shopEvents(
@@ -158,7 +163,7 @@ export default function RescheduleAppointmentPage() {
     setDisabledButton(false);
     console.log('🚀 ~ getBookedTimeSlots ~ resll:', resll);
     await storeAppointmentService
-      .getBarberBookedTimeSlots(id, date)
+      .getBarberBookedTimeSlots(bookedTimeId, date)
       .then((res) => {
         if (res.data.success) {
           // const tempBookedTime = res.data.data.map((resp: any) => ({
@@ -178,7 +183,7 @@ export default function RescheduleAppointmentPage() {
           if (tempAppointmentBookedTime.length > 0) {
             tempAppointmentBookedTime.filter((item: any) => {
               if (
-                item.storeEmployee === id &&
+                item.storeEmployee === bookedTimeId &&
                 checkIsSameDate(
                   getValues('appointmentDate'),
                   dayjs(item.appointmentTime)
@@ -208,28 +213,6 @@ export default function RescheduleAppointmentPage() {
       });
     return null;
   };
-
-  const getCatItemName = (catitemid: any) => {
-    let tempAr: any[] = [];
-    tempAr = usedCatItemsLovlist;
-    return tempAr?.find((el: any) => el.id === catitemid)?.name;
-  };
-
-  // const BarberCard = (item: any, index: number) => {
-  //   const onHandleBarber = async () => {
-  //     if (index === activeBarber) {
-  //       setActiveBarber(null);
-  //       setActiveBarberData(null);
-  //       setAppointmentBookedTime([]);
-  //     } else {
-  //       setActiveBarberData(item);
-  //       setActiveBarber(index);
-  //       getBookedTimeSlots(
-  //         item.storeEmployee.id,
-  //         dayjs(getValues('appointmentDate'))?.format('YYYY-MM-DD')
-  //       );
-  //     }
-  //   };
 
   const BarberCard = (item: any, index: number) => {
     const onHandleBarber = async () => {
@@ -687,7 +670,7 @@ export default function RescheduleAppointmentPage() {
           // console.log("5");
           setIsNotify(true);
           setNotifyMessage({
-            text: 'Barber is not available at this time or maybe service is same',
+            text: 'Barber is service you already selected, Please select another service',
             type: 'error',
           });
         }
@@ -715,6 +698,50 @@ export default function RescheduleAppointmentPage() {
     }
     return null;
   };
+
+  // console.log('temmmmmmmmmmmmmmmmmmmmmm', tempAppointmentBookedTime);
+
+  // const addAppo = () => {
+  //   const obj = {
+  //     id: 0,
+  //     barber: activeBarberData?.storeEmployee?.name,
+  //     amount: activeBarberData?.amount,
+  //     storeServiceCategory: watch('categoryId'),
+  //     storeServiceCategoryItem: watch('storeServiceCategoryItem'),
+  //     storeEmployee: activeBarberData?.storeEmployee?.id,
+  //     appointmentTime: `${dayjs(getValues('appointmentDate'))?.format(
+  //       'YYYY-MM-DD'
+  //     )} ${dayjs(appointmentTime)?.format('HH:mm:ss')}`,
+  //   };
+  //   if (
+  //     watch('storeServiceCategoryItem') &&
+  //     activeBarberData &&
+  //     getValues('appointmentDate') &&
+  //     appointmentTime
+  //   ) {
+  //     const currentDay = dayjs(getValues('appointmentDate')).format('dddd');
+  //     const scheduleData = activeBarberData?.storeEmployeeSchedule.filter(
+  //       (item: any) => item.workDay === currentDay
+  //     );
+  //     // yeh start time hn
+  //     const startTime = dayjs(scheduleData[0]?.startTime).format('HH:mm');
+  //     // yeh end time hn
+  //     const endTime = dayjs(scheduleData[0]?.endTime).format('HH:mm');
+  //     // yeh appointment time jo banda deraha hn
+  //     const time: any = dayjs(appointmentTime).format('HH:mm');
+  //     // yeh active barber ka service time
+  //     const addBarberServiceIntoAppointmentTime = dayjs(appointmentTime).add(
+  //       activeBarberData?.serviceTime,
+  //       'minute'
+  //     );
+  //     const convertAppointmentAddTime = dayjs(
+  //       addBarberServiceIntoAppointmentTime
+  //     ).format('HH:mm');
+  //   }
+  // };
+
+  // console.log('AVTIVE BARBER FIELDS', fields);
+  // console.log('AVTIVE BARBER BOOKING', fields);
 
   const onSubmit = (data: any) => {
     setIsLoader(true);
@@ -866,10 +893,10 @@ export default function RescheduleAppointmentPage() {
                             inputTitle="Phone"
                             placeholder="Enter phone number"
                             id="phone"
-                            requiredType
                             customFontClass="font-semibold mb-1"
                             customClass="border-[2px] border-[#949EAE] rounded-xl px-2 py-1 text-sm"
                             register={register}
+                            requiredType
                             error={errors.phone}
                             inputType="text"
                           />
@@ -932,6 +959,7 @@ export default function RescheduleAppointmentPage() {
                             customHeight="h-[40px] rounded-xl"
                             customClassInputTitle="font-semibold"
                             inputTitle="Barber Services"
+                            defaultValue="Select Service"
                           />
                         </FormControl>
                       </div>
@@ -1011,8 +1039,8 @@ export default function RescheduleAppointmentPage() {
                     {activeBarberData !== null && (
                       <div className="mt-5">
                         <span className="text-base font-bold text-[#1A1A1A]">
-                          Avaiable {activeBarberData?.storeEmployee?.name}{' '}
-                          Appoitment slots
+                          Available {activeBarberData?.storeEmployee?.name}{' '}
+                          Appointment slots
                         </span>
                         <hr className="my-4 border-[#949EAE]" />
                         <div className="gaps-4 grid grid-cols-12">
@@ -1030,13 +1058,13 @@ export default function RescheduleAppointmentPage() {
                                       <span className="text-sm">
                                         {dayjs(item.startTime).isValid()
                                           ? dayjs(item.startTime)?.format(
-                                              'HH:mm A'
+                                              'h:mm A'
                                             )
                                           : '--'}{' '}
                                         -{' '}
                                         {dayjs(item.endTime).isValid()
                                           ? dayjs(item.endTime)?.format(
-                                              'HH:mm A'
+                                              'h:mm A'
                                             )
                                           : '--'}
                                       </span>
@@ -1221,7 +1249,7 @@ export default function RescheduleAppointmentPage() {
                   onclick={addAppointmentServices}
                   sx={{
                     padding: '0.375rem 2rem !important',
-                    // width: '10%',
+                    // width: '20%',
                     marginRight: '15px',
                     height: '35px',
                   }}

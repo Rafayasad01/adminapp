@@ -183,30 +183,35 @@ function LeaveManagement() {
       });
   };
 
-  const handleLeave = (type: string) => {
-    console.log(type);
+  const handleLeave = (id: any, type: string) => {
+    console.log('TYPE', type);
     if (listingRolePermission(dataRole, 'Category List')) {
-      // employeeService
-      //   .StoreEmployeeAttendanceLeaveService(search, page, rowsPerPage)
-      //   .then((item: any) => {
-      //     if (item.data.success) {
-      //       setIsLoader(false);
-      //       setTotal(item.data.data.total);
-      //       setList(item.data.data.leaves);
-      //       // setTotal(item.data.data.total);
-      //     } else {
-      //       setIsLoader(false);
-      //     }
-      //   })
-      //   .catch((error) => {
-      //     setIsLoader(false);
-      //     setIsNotify(true);
-      //     setNotifyMessage({
-      //       text: error.message,
-      //       type: 'error',
-      //     });
-      //     // console.log('error::::::::', error);
-      //   });
+      employeeService
+        .StoreEmployeeLeaveStatusUpdateService(id, type)
+        .then((item: any) => {
+          if (item.data.success) {
+            setIsLoader(false);
+            setList((newArr: any) => {
+              return newArr.map((el: any) => {
+                if (el.id === id) {
+                  el.isActive = item.data.data.status;
+                }
+                return { ...item };
+              });
+            });
+          } else {
+            setIsLoader(false);
+          }
+        })
+        .catch((error) => {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: error.message,
+            type: 'error',
+          });
+          // console.log('error::::::::', error);
+        });
     } else {
       setIsNotify(true);
       setNotifyMessage({
@@ -423,18 +428,26 @@ function LeaveManagement() {
                           <div className="flex flex-row-reverse">
                             <div className="mx-3">
                               <Button
+                                disabled={
+                                  item.status === 'Approved' ||
+                                  item.status === 'Rejected'
+                                }
                                 variant="contained"
                                 className="btn-black-outline btn-icon"
-                                onClick={() => handleLeave('accept')}
+                                onClick={() => handleLeave(item.id, 'Rejected')}
                               >
-                                Disapprove
+                                Reject
                               </Button>
                             </div>
                             <div className="">
                               <Button
+                                disabled={
+                                  item.status === 'Approved' ||
+                                  item.status === 'Rejected'
+                                }
                                 variant="contained"
                                 className="btn-black-fill btn-icon"
-                                onClick={() => handleLeave('reject')}
+                                onClick={() => handleLeave(item.id, 'Approved')}
                               >
                                 Approve
                               </Button>
