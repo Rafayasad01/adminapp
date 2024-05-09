@@ -1,13 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-restricted-syntax */
 
+import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined';
 import CloseIcon from '@mui/icons-material/Close';
+import RadioButtonUncheckedOutlinedIcon from '@mui/icons-material/RadioButtonUncheckedOutlined';
 import Avatar from '@mui/material/Avatar';
 import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import RadioGroup from '@mui/material/RadioGroup';
-import Radio from '@mui/material/Radio';
 import FormLabel from '@mui/material/FormLabel';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
 import TextField from '@mui/material/TextField';
 import ThemeProvider from '@mui/material/styles/ThemeProvider';
 import createTheme from '@mui/material/styles/createTheme';
@@ -15,8 +17,6 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import dayjs from 'dayjs';
-import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined';
-import RadioButtonUncheckedOutlinedIcon from '@mui/icons-material/RadioButtonUncheckedOutlined';
 import isBetween from 'dayjs/plugin/isBetween';
 // import timezone from 'dayjs/plugin/timezone';
 // import utc from 'dayjs/plugin/utc';
@@ -43,7 +43,6 @@ import storeEmployeeService from '../../services/adminapp/adminStoreEmployee';
 // import storeSettingService from '../../services/adminapp/adminShopSchedule';
 import storeLovService from '../../services/adminapp/adminStoreService';
 import { GENDER, MAX_LENGTH_EXCEEDED, PATTERN } from '../../utils/constants';
-import { useAppSelector } from '../../redux/redux-hooks';
 // import { useAppSelector } from '../../redux/redux-hooks';
 // import { useAppSelector } from '../../redux/redux-hooks';
 
@@ -61,10 +60,6 @@ const darkTheme = createTheme({
 
 export default function AddAppointmentPage() {
   const navigate = useNavigate();
-  const officeTimings = useAppSelector(
-    (state: any) => state?.persistedReducer.appState.UserItems
-  );
-  const officeTimeOut = dayjs(officeTimings?.tenantConfig?.officeTimeOut);
   // const authState: any = useAppSelector((state: any) => state?.authState);
   // console.log('🚀 ~ AddAppointmentPage ~ shopSchedule:', shopScheduleWorkDays);
   const [isLoader, setIsLoader] = useState(false);
@@ -116,7 +111,7 @@ export default function AddAppointmentPage() {
   const handlePaymentChange = () => {
     setPaymentMethod(!paymentMethod);
   };
-  console.log('🚀 ~ handlePaymentChange ~ paymentMethod:', paymentMethod);
+  // console.log('🚀 ~ handlePaymentChange ~ paymentMethod:', paymentMethod);
 
   const checkIsSameDate = (date: any, appointmentDate: any) => {
     return dayjs(date).isSame(appointmentDate, 'day');
@@ -155,7 +150,7 @@ export default function AddAppointmentPage() {
       );
       return resp.data.data;
     } catch (error) {
-      console.error('Error:', error);
+      // console.error('Error:', error);
       // Handle error if necessary
       return false; // or throw error if you want to propagate it
     }
@@ -181,7 +176,7 @@ export default function AddAppointmentPage() {
       return false;
     }
     setDisabledButton(false);
-    console.log('🚀 ~ getBookedTimeSlots ~ resll:', resll);
+    // console.log('🚀 ~ getBookedTimeSlots ~ resll:', resll);
     await storeAppointmentService
       .getBarberBookedTimeSlots(id, date)
       .then((res) => {
@@ -361,7 +356,7 @@ export default function AddAppointmentPage() {
         }
       })
       .catch((error) => {
-        console.error(`getBarbers -> error:`, error);
+        // console.error(`getBarbers -> error:`, error);
         setIsPageLoader(false);
       });
   };
@@ -415,12 +410,12 @@ export default function AddAppointmentPage() {
     targetCategoryItem: string
     // targetDate: any
   ) {
-    console.log(
-      '🚀 ~ AddAppointmentPage ~ targetCategoryItem:',
-      targetCategoryItem
-    );
-    console.log('🚀 ~ AddAppointmentPage ~ targetEmployee:', targetEmployee);
-    console.log('🚀 ~ AddAppointmentPage ~ array:', array);
+    // console.log(
+    //   '🚀 ~ AddAppointmentPage ~ targetCategoryItem:',
+    //   targetCategoryItem
+    // );
+    // console.log('🚀 ~ AddAppointmentPage ~ targetEmployee:', targetEmployee);
+    // console.log('🚀 ~ AddAppointmentPage ~ array:', array);
     // console.log(
     //   '🚀 ~ AddAppointmentPage ~ targetDate:',
     //   dayjs(targetDate).format('YYYYMMDD')
@@ -561,11 +556,11 @@ export default function AddAppointmentPage() {
             // );
             if (
               time > dayjs(serviceTime) &&
-              checkIsAfterTime(officeTimeOut, serviceTime)
+              checkIsAfterTime(endTime, serviceTime)
             ) {
               prevTime = dayjs(serviceTime);
             } else if (
-              !checkIsAfterTime(officeTimeOut, serviceTime) &&
+              !checkIsAfterTime(endTime, serviceTime) &&
               !checkIsBetweenTime(addTime, prevTime, dayjs(el.appointmentTime))
             ) {
               // break;
