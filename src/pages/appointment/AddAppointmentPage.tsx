@@ -1,8 +1,13 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-restricted-syntax */
 
 import CloseIcon from '@mui/icons-material/Close';
 import Avatar from '@mui/material/Avatar';
 import FormControl from '@mui/material/FormControl';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import RadioGroup from '@mui/material/RadioGroup';
+import Radio from '@mui/material/Radio';
+import FormLabel from '@mui/material/FormLabel';
 import TextField from '@mui/material/TextField';
 import ThemeProvider from '@mui/material/styles/ThemeProvider';
 import createTheme from '@mui/material/styles/createTheme';
@@ -10,6 +15,8 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import dayjs from 'dayjs';
+import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined';
+import RadioButtonUncheckedOutlinedIcon from '@mui/icons-material/RadioButtonUncheckedOutlined';
 import isBetween from 'dayjs/plugin/isBetween';
 // import timezone from 'dayjs/plugin/timezone';
 // import utc from 'dayjs/plugin/utc';
@@ -36,6 +43,7 @@ import storeEmployeeService from '../../services/adminapp/adminStoreEmployee';
 // import storeSettingService from '../../services/adminapp/adminShopSchedule';
 import storeLovService from '../../services/adminapp/adminStoreService';
 import { GENDER, MAX_LENGTH_EXCEEDED, PATTERN } from '../../utils/constants';
+import { useAppSelector } from '../../redux/redux-hooks';
 // import { useAppSelector } from '../../redux/redux-hooks';
 // import { useAppSelector } from '../../redux/redux-hooks';
 
@@ -53,9 +61,14 @@ const darkTheme = createTheme({
 
 export default function AddAppointmentPage() {
   const navigate = useNavigate();
+  const officeTimings = useAppSelector(
+    (state: any) => state?.persistedReducer.appState.UserItems
+  );
+  const officeTimeOut = dayjs(officeTimings?.tenantConfig?.officeTimeOut);
   // const authState: any = useAppSelector((state: any) => state?.authState);
   // console.log('🚀 ~ AddAppointmentPage ~ shopSchedule:', shopScheduleWorkDays);
   const [isLoader, setIsLoader] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState(false);
   const [isPageLoader, setIsPageLoader] = useState(false);
   const [isNotify, setIsNotify] = useState(false);
   const [notifyMessage, setNotifyMessage] = useState({});
@@ -100,8 +113,17 @@ export default function AddAppointmentPage() {
     keyName: 'key',
   });
 
+  const handlePaymentChange = () => {
+    setPaymentMethod(!paymentMethod);
+  };
+  console.log('🚀 ~ handlePaymentChange ~ paymentMethod:', paymentMethod);
+
   const checkIsSameDate = (date: any, appointmentDate: any) => {
     return dayjs(date).isSame(appointmentDate, 'day');
+  };
+
+  const checkIsAfterTime = (date: any, appointmentDate: any) => {
+    return dayjs(date).isAfter(appointmentDate, 'minutes');
   };
 
   const checkIsBetweenTime = (
@@ -512,7 +534,7 @@ export default function AddAppointmentPage() {
               ) {
                 setIsNotify(true);
                 setNotifyMessage({
-                  text: `Barber is not available at this time`,
+                  text: `Barber is engaged with another client`,
                   type: 'error',
                 });
                 return false;
@@ -537,9 +559,13 @@ export default function AddAppointmentPage() {
             //   'checkIsBetweenTime(addTime, prevTime, dayjs(el.appointmentTime)):::::::',
             //   checkIsBetweenTime(addTime, prevTime, dayjs(el.appointmentTime))
             // );
-            if (time > dayjs(serviceTime)) {
+            if (
+              time > dayjs(serviceTime) &&
+              checkIsAfterTime(officeTimeOut, serviceTime)
+            ) {
               prevTime = dayjs(serviceTime);
             } else if (
+              !checkIsAfterTime(officeTimeOut, serviceTime) &&
               !checkIsBetweenTime(addTime, prevTime, dayjs(el.appointmentTime))
             ) {
               // break;
@@ -728,10 +754,18 @@ export default function AddAppointmentPage() {
     delete data.categoryId;
     delete data.appointmentDate;
     const updatedAppointmentArray = data.appointments.map((item: any) => {
-      const { _amount, _barber, ...rest } = item;
+      // console.log('🚀 ~ updatedAppointmentArray ~ item:', item);
+      const { amount, barber, id, ...rest } = item;
       return rest;
     });
+    console.log(
+      '🚀 ~ onSubmit ~ updatedAppointmentArray:',
+      updatedAppointmentArray
+    );
     data.appointments = updatedAppointmentArray;
+    data.status = paymentMethod ? 'Processing' : 'New';
+    // data.status = console.log('🚀 ~ onSubmit ~ data:', data);
+
     // console.log('dataa', data, bookingList);
     storeAppointmentService
       .appointmentCreate(data)
@@ -939,6 +973,40 @@ export default function AddAppointmentPage() {
                           />
                         </FormControl>
                       </div>
+                    </div>
+                    <div className="w-full">
+                      <FormControl className="mt-4">
+                        <FormLabel
+                          id="demo-row-radio-buttons-group-label"
+                          className="font-open-sans text-xl font-semibold text-secondary"
+                        >
+                          Processing Appointment
+                        </FormLabel>
+                        <RadioGroup
+                          row
+                          aria-labelledby="demo-row-radio-buttons-group-label"
+                          name="row-radio-buttons-group"
+                          onClick={handlePaymentChange}
+                        >
+                          <FormControlLabel
+                            sx={{
+                              color: '#6A6A6A',
+                              fontFamily: 'Open Sans',
+                              fonWeight: 400,
+                              fonSize: '14px',
+                            }}
+                            control={
+                              <Radio
+                                checked={paymentMethod}
+                                className="text-sm text-[#1D1D1D]"
+                                icon={<RadioButtonUncheckedOutlinedIcon />}
+                                checkedIcon={<CheckCircleOutlinedIcon />}
+                              />
+                            }
+                            label="Processing"
+                          />
+                        </RadioGroup>
+                      </FormControl>
                     </div>
                   </div>
                   <div className="col-span-4">
@@ -1151,7 +1219,7 @@ export default function AddAppointmentPage() {
                               <div key={index} className="col-span-2 p-3">
                                 <div className="flex-col rounded-xl bg-background">
                                   <div className="flex items-center justify-center p-3">
-                                    <span className="text-sm">
+                                    <span className="xl:text-xs 2xl:text-sm">
                                       {dayjs(item.appointmentTime).isValid()
                                         ? dayjs(item.appointmentTime)?.format(
                                             'h:mm A'
@@ -1183,32 +1251,50 @@ export default function AddAppointmentPage() {
                               remove(index);
                               removeBookinkList(items);
                             }}
-                            className="flex w-[40%] cursor-pointer items-center justify-center rounded-2xl bg-background p-2"
+                            className="2xl::w-[40%] flex cursor-pointer items-center justify-center rounded-2xl bg-background p-2 xl:w-[60%]"
                           >
                             <CloseIcon />
                           </div>
                         </div>
                         <div className="col-span-2">
-                          <p className="font-semibold">Barber</p>
-                          <span>{items.barber}</span>
+                          <p className="font-semibold xl:text-xs 2xl:text-sm">
+                            Barber
+                          </p>
+                          <span className="xl:text-xs 2xl:text-sm">
+                            {items.barber}
+                          </span>
                         </div>
                         <div className="col-span-2 mx-7">
-                          <p className="font-semibold">Service</p>
-                          <span>
+                          <p className="font-semibold xl:text-xs 2xl:text-sm">
+                            Service
+                          </p>
+                          <span className="xl:text-xs 2xl:text-sm">
                             {getCatItemName(items.storeServiceCategoryItem)}
                           </span>
                         </div>
                         <div className="col-span-2">
-                          <p className="font-semibold">Appointment Amount</p>
-                          <span>{items.amount}</span>
+                          <p className="font-semibold xl:text-xs 2xl:text-sm">
+                            Appointment Amount
+                          </p>
+                          <span className="xl:text-xs 2xl:text-sm">
+                            {items.amount}
+                          </span>
                         </div>
-                        <div className="col-span-2 mx-7">
-                          <p className="font-semibold">Appointment Date</p>
-                          <span>{items.appointmentTime.split(' ')[0]}</span>
+                        <div className="col-span-2 mx-5">
+                          <p className="font-semibold xl:text-xs 2xl:text-sm">
+                            Appointment Date
+                          </p>
+                          <span className="xl:text-xs 2xl:text-sm">
+                            {items.appointmentTime.split(' ')[0]}
+                          </span>
                         </div>
-                        <div className="col-span-2">
-                          <p className="font-semibold">Appointment Time</p>
-                          <span>{items.appointmentTime.split(' ')[1]}</span>
+                        <div className="col-span-2 mx-5">
+                          <p className="font-semibold xl:text-xs 2xl:text-sm">
+                            Appointment Time
+                          </p>
+                          <span className="xl:text-xs 2xl:text-sm">
+                            {items.appointmentTime.split(' ')[1]}
+                          </span>
                         </div>
                       </div>
                     );

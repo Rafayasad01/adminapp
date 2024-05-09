@@ -1,9 +1,9 @@
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined';
 import Button from '@mui/material/Button';
-import dayjs from 'dayjs';
-import timezone from 'dayjs/plugin/timezone';
-import utc from 'dayjs/plugin/utc';
+// import dayjs from 'dayjs';
+// import timezone from 'dayjs/plugin/timezone';
+// import utc from 'dayjs/plugin/utc';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
@@ -26,9 +26,9 @@ import AppointmentVisitCreatePopup from './AppointmentVisitCreatePopup';
 import AppointmentVisitReschedulePopup from './AppointmentVisitReschedulePopup';
 import AppointmentVisitUpdatePopup from './AppointmentVisitUpdatePopup';
 // Extend dayjs with necessary plugins
-dayjs.extend(utc);
-dayjs.extend(timezone);
-dayjs.tz.setDefault('UTC');
+// dayjs.extend(utc);
+// // dayjs.extend(timezone);
+// // dayjs.tz.setDefault('UTC');
 
 function AppointmentVisitPage() {
   // console.log('Appointment Visit Page');

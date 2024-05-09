@@ -1,15 +1,15 @@
 import Dialog from '@mui/material/Dialog';
 import Divider from '@mui/material/Divider';
 import dayjs from 'dayjs';
-import timezone from 'dayjs/plugin/timezone';
-import utc from 'dayjs/plugin/utc';
+// import timezone from 'dayjs/plugin/timezone';
+// import utc from 'dayjs/plugin/utc';
 import React from 'react';
 import CustomText from '../../../components/common/CustomText';
 import Loader from '../../../components/common/Loader';
 
-dayjs.extend(utc);
-dayjs.extend(timezone);
-dayjs.tz.setDefault('UTC');
+// dayjs.extend(utc);
+// dayjs.extend(timezone);
+// dayjs.tz.setDefault('UTC');
 
 type AppointmentProviderDetailPopupProps = {
   openFormDialog: boolean;

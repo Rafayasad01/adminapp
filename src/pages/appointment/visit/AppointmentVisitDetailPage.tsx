@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
-import timezone from 'dayjs/plugin/timezone';
-import utc from 'dayjs/plugin/utc';
+// import timezone from 'dayjs/plugin/timezone';
+// import utc from 'dayjs/plugin/utc';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import CustomText from '../../../components/common/CustomText';
@@ -12,9 +12,9 @@ import adminAppointmentService from '../../../services/adminapp/adminAppointment
 import CustomPrintLayout from '../../../utils/CustomPrintLayout/CustomAppointmentPrintLayout';
 import { listingRolePermission } from '../../../utils/helper';
 
-dayjs.extend(utc);
-dayjs.extend(timezone);
-dayjs.tz.setDefault('UTC');
+// dayjs.extend(utc);
+// dayjs.extend(timezone);
+// dayjs.tz.setDefault('UTC');
 
 function AppointmentVisitDetailPage() {
   const { id } = useParams();

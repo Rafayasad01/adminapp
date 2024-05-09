@@ -20,7 +20,7 @@ import {
 import PersonOutlinedIcon from '@mui/icons-material/PersonOutlined';
 import Paper from '@mui/material/Paper';
 import dayjs from 'dayjs';
-import timezone from 'dayjs/plugin/timezone';
+// import timezone from 'dayjs/plugin/timezone';
 import weekOfYear from 'dayjs/plugin/weekOfYear';
 import React, { useCallback, useEffect, useState } from 'react';
 import Loader from '../../components/common/Loader';
@@ -33,7 +33,7 @@ import AppointmentViewCard from './AppointmentViewCard';
 import UpdateAppointmentPopup from './UpdateAppointmentPopup';
 
 dayjs.extend(weekOfYear);
-dayjs.extend(timezone);
+// dayjs.extend(timezone);
 
 type AllAppointmentProps = {
   appointmentType?: any;
