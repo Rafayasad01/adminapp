@@ -605,7 +605,7 @@ function CustomSwiperDialog({
                   </Button>
                 </label>
               </div>
-              <div className="overflow-auto px-1 xl:max-h-[180px] xl:min-h-[0px] 2xl:h-[150px]">
+              <div className="overflow-x-hidden overflow-y-scroll px-1 xl:max-h-[180px] xl:min-h-[0px] 2xl:h-[150px]">
                 {ServicesFields?.map((item: any, index: number) => {
                   return (
                     <div
@@ -613,7 +613,7 @@ function CustomSwiperDialog({
                       key={index}
                     >
                       <div>{getCatItemName(item.storeServiceCategoryItem)}</div>
-                      <div className="flex w-[25%] items-center justify-between gap-2">
+                      <div className="flex  items-center justify-between gap-2">
                         <div className="flex items-center">
                           <span className="text-sm">{item.serviceTime}</span>
                           <span> mints</span>
