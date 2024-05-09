@@ -27,7 +27,7 @@ import {
   setCart,
   setNotifyState,
   showNotifyMessage,
-} from '../../redux/features/CartSlice';
+} from '../../redux/features/cartSlice';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 import appUserService from '../../services/adminapp/adminAppUser';
 import ordersService from '../../services/adminapp/adminOrders';

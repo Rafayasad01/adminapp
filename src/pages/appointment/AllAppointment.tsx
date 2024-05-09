@@ -25,7 +25,7 @@ import weekOfYear from 'dayjs/plugin/weekOfYear';
 import React, { useCallback, useEffect, useState } from 'react';
 import Loader from '../../components/common/Loader';
 import SwiperComponent from '../../components/common/Swiper';
-import { useAppSelector } from '../../redux/redux-hooks';
+// import { useAppSelector } from '../../redux/redux-hooks';
 import storeAppointmentService from '../../services/adminapp/adminStoreAppointment';
 import AppointmentViewCard from './AppointmentViewCard';
 import UpdateAppointmentPopup from './UpdateAppointmentPopup';
@@ -50,20 +50,20 @@ const AllAppointment = ({
 }: AllAppointmentProps) => {
   const [data, setData] = useState<any>([]);
   const [appointmentData, setAppointmentData] = useState();
-  const officeTimings = useAppSelector(
-    (state) => state?.persistedReducer.appState.UserItems
-  );
+  // const officeTimings = useAppSelector(
+  //   (state) => state?.persistedReducer.appState.UserItems
+  // );
 
-  const shopStartTime = Number(
-    dayjs(
-      officeTimings?.tenantConfig?.officeTimeIn ?? dayjs(0).set('hours', 0)
-    ).hour()
-  );
-  const shopEndTime = Number(
-    dayjs(
-      officeTimings?.tenantConfig?.officeTimeOut ?? dayjs(0).set('hours', 12)
-    ).hour()
-  );
+  // const shopStartTime = Number(
+  //   dayjs(
+  //     officeTimings?.tenantConfig?.officeTimeIn ?? dayjs(0).set('hours', 0)
+  //   ).hour()
+  // );
+  // const shopEndTime = Number(
+  //   dayjs(
+  //     officeTimings?.tenantConfig?.officeTimeOut ?? dayjs(0).set('hours', 12)
+  //   ).hour()
+  // );
 
   const [isTooltipOpen, setIsTooltipOpen] = useState(false);
   const [isLoader, setIsLoader] = useState(false);
@@ -443,8 +443,8 @@ const AllAppointment = ({
           name="Vertical Orientation"
           // startDayHour={0}
           // endDayHour={12}
-          startDayHour={shopStartTime ?? 0}
-          endDayHour={shopEndTime ?? 12}
+          startDayHour={0}
+          endDayHour={12}
           // excludedDays={[0, 6]}
           displayName="Week"
         />

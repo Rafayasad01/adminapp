@@ -12,7 +12,7 @@ import { memo, useEffect, useState } from 'react';
 import CustomText from '../../components/common/CustomText';
 import Loader from '../../components/common/Loader';
 import TopBar from '../../components/common/TopBar';
-import { fetchAppointments } from '../../redux/features/AppointmentSlice';
+import { fetchAppointments } from '../../redux/features/appointmentSlice';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 
 type QueryParams = {

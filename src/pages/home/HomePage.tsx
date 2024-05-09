@@ -12,10 +12,14 @@ import AdminTopCustomerList from '../../components/common/Dashboard/AdminTopCust
 import Loader from '../../components/common/Loader';
 import Notify from '../../components/common/Notify';
 import TopBar from '../../components/common/TopBar';
+// import {
+//   fetchDashboardSummary,
+//   setNotifyState,
+// } from ;
 import {
   fetchDashboardSummary,
   setNotifyState,
-} from '../../redux/features/DashboardSlice';
+} from '../../redux/features/dashboardSlice';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 import AppointmentsStatistics from './AppointmentsStatistics';
 

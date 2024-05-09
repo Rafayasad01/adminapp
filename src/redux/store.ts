@@ -1,16 +1,19 @@
+/* eslint-disable import/no-named-default */
 /* eslint-disable import/no-cycle */
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import { persistReducer, persistStore } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
-import appStateReducer from './features/appSlice';
-import authStateReducer from './features/authSlice';
-import cartSliceReducer from './features/CartSlice';
-import categorySliceReducer from './features/CategorySlice';
-import dashboardSliceReducer from './features/DashboardSlice';
 import itemSliceReducer from './features/ItemSlice';
+import AppointmentSliceReducer from './features/appointmentSlice';
+import authStateReducer from './features/authSlice';
+import cartSliceReducer from './features/cartSlice';
+import categorySliceReducer from './features/categorySlice';
+import {
+  default as appStateReducer,
+  default as dashboardSliceReducer,
+} from './features/dashboardSlice';
 import rolePermissionStateReducer from './features/permissionsStateSlice';
 import shopScheduleStateSliceReducer from './features/shopScheduleStateSlice';
-import AppointmentSliceReducer from './features/AppointmentSlice';
 
 const persistConfig = {
   key: 'root',
