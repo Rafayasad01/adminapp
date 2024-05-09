@@ -111,7 +111,7 @@ const StoreAppointmentsList = ({ today = false }) => {
           <div className="flex justify-end gap-3 md:col-span-12 lg:col-span-8 ">
             <TextField
               label="Start Date"
-              className={`${today ? 'hidden' : ''}`}
+              className={`${today ? 'hidden ' : 'en-date'}`}
               sx={{ padding: 0 }}
               type="date"
               value={startDate}
@@ -122,7 +122,7 @@ const StoreAppointmentsList = ({ today = false }) => {
             />
             <TextField
               label="End Date"
-              className={`${today ? 'hidden' : ''}`}
+              className={`${today ? 'hidden' : 'en-date'}`}
               sx={{ padding: 0 }}
               type="date"
               value={endDate}
@@ -132,6 +132,7 @@ const StoreAppointmentsList = ({ today = false }) => {
               }}
             />
             <TextField
+              className="en-search"
               label="Search"
               value={search}
               variant="outlined"
@@ -140,7 +141,7 @@ const StoreAppointmentsList = ({ today = false }) => {
             />
             <Select
               value={status}
-              className="w-[150px]"
+              className="h-[48px] w-[150px]"
               onChange={(e) => setStatus(e.target.value as string)}
             >
               <MenuItem value="All">All</MenuItem>
@@ -153,7 +154,7 @@ const StoreAppointmentsList = ({ today = false }) => {
               onClick={() => fetchAppointmentsData()}
             >
               <SearchIcon />
-              Search Appointments
+              {/* Search Appointments */}
             </Button>
           </div>
         </div>

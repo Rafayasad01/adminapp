@@ -396,8 +396,8 @@ function AppointmentVisitPage() {
         displayMessage={notifyMessage}
       />
       <TopBar title="Appointment" />
-      <div className="container m-auto mt-5">
-        <div className="w-full rounded-lg bg-white shadow-lg">
+      <div className="main--custom container m-auto mt-5">
+        <div className="sub--cs w-full rounded-lg bg-white shadow-lg ">
           <div className="grid grid-cols-12 px-4 py-5">
             <div className="flex xl:col-span-7 2xl:col-span-9">
               <div className="mr-6">

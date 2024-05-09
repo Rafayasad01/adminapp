@@ -93,9 +93,9 @@ const SwiperComponent = ({
                     </div>
                   )}
                   <div className="flex items-center">
-                    <div>
+                    <div className="h-[35px] w-[35px] ">
                       <img
-                        className="w-[35px]"
+                        className="h-full w-full max-w-full rounded-[20px] object-fill"
                         src={item.imageUrl ?? assets.tempImages.avatarCustomer}
                         alt="avatar-img"
                       />
@@ -114,8 +114,8 @@ const SwiperComponent = ({
             })
           : null}
       </div>
-      <div className="swiper-button-next" />
-      <div className="swiper-button-prev" />
+      <div className="swiper-button-next bg-[#fff] p-2" />
+      <div className="swiper-button-prev bg-[#fff] p-2" />
     </div>
   );
 };

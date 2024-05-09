@@ -52,7 +52,7 @@ function HomePage() {
       <TopBar title="Dashboard" />
       <div className="container m-auto mt-3">
         <div className="mt-2 grid flex-1 grid-cols-4 gap-3">
-          <button
+          <div
             onClick={() =>
               navigate(
                 '/admin/dashboard/store-appointment/appointments/today/list'
@@ -74,8 +74,8 @@ function HomePage() {
                 </IconButton>
               </div>
             </div>
-          </button>
-          <button
+          </div>
+          <div
             onClick={() =>
               navigate('/admin/dashboard/store-appointment/appointments/list')
             }
@@ -95,7 +95,7 @@ function HomePage() {
                 </IconButton>
               </div>
             </div>
-          </button>
+          </div>
         </div>
         <div className="mt-3 grid grid-cols-2 gap-3 ">
           <div className="flex flex-col rounded-3xl bg-white px-3 py-5 shadow-lg">

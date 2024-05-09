@@ -25,11 +25,12 @@ import weekOfYear from 'dayjs/plugin/weekOfYear';
 import React, { useCallback, useEffect, useState } from 'react';
 import Loader from '../../components/common/Loader';
 import SwiperComponent from '../../components/common/Swiper';
+// import { useAppSelector } from '../../redux/redux-hooks';
+import Notify from '../../components/common/Notify';
 import { useAppSelector } from '../../redux/redux-hooks';
 import storeAppointmentService from '../../services/adminapp/adminStoreAppointment';
 import AppointmentViewCard from './AppointmentViewCard';
 import UpdateAppointmentPopup from './UpdateAppointmentPopup';
-import Notify from '../../components/common/Notify';
 
 dayjs.extend(weekOfYear);
 dayjs.extend(timezone);

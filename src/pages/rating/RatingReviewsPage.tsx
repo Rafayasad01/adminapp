@@ -232,7 +232,7 @@ function RatingReviewsPage() {
             </div>
           </div>
           <div className="mt-5 w-full rounded-xl bg-white p-5 shadow-md">
-            <div className="my-5 grid grid-cols-12">
+            <div className="my-5 flex grid-cols-12">
               <div className="xl:col-span-3 2xl:col-span-2">
                 <div className="flex items-center">
                   <span className="text-4xl font-semibold">
@@ -272,7 +272,7 @@ function RatingReviewsPage() {
                     ?.map((ratings: any, index: number) => {
                       return (
                         <div
-                          className="mx-5 grid grid-cols-12 items-center"
+                          className="mx-5 flex grid-cols-12 items-center"
                           key={index}
                         >
                           <div className="xl:col-span-2 2xl:col-span-1">
@@ -284,7 +284,10 @@ function RatingReviewsPage() {
                             />
                           </div>
                           <div className="mx-10 xl:col-span-6 2xl:col-span-3">
-                            <LinearProgressWithLabel value={ratings?.total} />
+                            <LinearProgressWithLabel
+                              value={ratings?.total}
+                              className="w-[100px]"
+                            />
                           </div>
                         </div>
                       );
