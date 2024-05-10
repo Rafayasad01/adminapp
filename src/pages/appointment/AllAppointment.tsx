@@ -123,7 +123,7 @@ const AllAppointment = ({
             const date2 = parsedDate.add(item.serviceTime, 'minute');
             const formattedDate2 = date2.format('ddd MMM DD YYYY h:mm:ss A');
 
-            console.log('🚀 ADD DATE2:', date2);
+            console.log('🚀 ADD DATE2:', formattedDate2);
             // const d1 = formattedDateTime;
             // const d2 = formattedDate2;
 
