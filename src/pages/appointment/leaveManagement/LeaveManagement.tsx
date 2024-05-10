@@ -184,7 +184,7 @@ function LeaveManagement() {
   };
 
   const handleLeave = (id: any, type: string) => {
-    console.log('TYPE', type);
+    setIsLoader(true);
     if (listingRolePermission(dataRole, 'Category List')) {
       employeeService
         .StoreEmployeeLeaveStatusUpdateService(id, type)
@@ -194,13 +194,18 @@ function LeaveManagement() {
             setList((newArr: any) => {
               return newArr.map((el: any) => {
                 if (el.id === id) {
-                  el.isActive = item.data.data.status;
+                  el.status = item.data.data.status;
                 }
-                return { ...item };
+                return { ...el };
               });
             });
           } else {
             setIsLoader(false);
+            setIsNotify(true);
+            setNotifyMessage({
+              text: item.data.message,
+              type: 'error',
+            });
           }
         })
         .catch((error) => {
@@ -210,7 +215,6 @@ function LeaveManagement() {
             text: error.message,
             type: 'error',
           });
-          // console.log('error::::::::', error);
         });
     } else {
       setIsNotify(true);
@@ -222,7 +226,7 @@ function LeaveManagement() {
   };
 
   const openModal = (avatar: string) => {
-    console.log('🚀 ~ openModal ~ avatar:', avatar);
+    // console.log('🚀 ~ openModal ~ avatar:', avatar);
     setModalImage(avatar);
     setIsModalImage(true);
   };
@@ -301,13 +305,13 @@ function LeaveManagement() {
               </thead>
               <tbody>
                 {list &&
-                  list.map((item: any, index: number) => {
+                  list?.map((item: any, index: number) => {
                     return (
                       <tr key={index}>
                         <td>
                           <div className="avatar flex flex-row items-center">
-                            {item.storeEmployee.avatar ? (
-                              <img src={item.storeEmployee.avatar} alt="" />
+                            {item?.storeEmployee?.avatar ? (
+                              <img src={item?.storeEmployee?.avatar} alt="" />
                             ) : (
                               <Avatar
                                 className="avatar flex flex-row items-center"
@@ -320,13 +324,13 @@ function LeaveManagement() {
                                   marginRight: '10px',
                                 }}
                               >
-                                {item.storeEmployee.name?.charAt(0)}
+                                {item.storeEmployee?.name?.charAt(0)}
                               </Avatar>
                             )}
 
                             <div className="flex flex-col items-start justify-start">
                               <span className="text-sm font-semibold">
-                                {`${item.storeEmployee.name}`}
+                                {`${item?.storeEmployee?.name}`}
                               </span>
                               <span className="text-xs font-normal text-[#6A6A6A]">
                                 {dayjs(item.createdDate).isValid()
@@ -433,7 +437,12 @@ function LeaveManagement() {
                                   item.status === 'Rejected'
                                 }
                                 variant="contained"
-                                className="btn-black-outline btn-icon"
+                                className={`${
+                                  item.status === 'Approved' ||
+                                  item.status === 'Rejected'
+                                    ? 'btn-grey-outline'
+                                    : 'btn-black-outline'
+                                } btn-icon`}
                                 onClick={() => handleLeave(item.id, 'Rejected')}
                               >
                                 Reject
@@ -446,7 +455,12 @@ function LeaveManagement() {
                                   item.status === 'Rejected'
                                 }
                                 variant="contained"
-                                className="btn-black-fill btn-icon"
+                                className={`${
+                                  item.status === 'Approved' ||
+                                  item.status === 'Rejected'
+                                    ? 'btn-grey-fill'
+                                    : 'btn-black-fill'
+                                } btn-icon`}
                                 onClick={() => handleLeave(item.id, 'Approved')}
                               >
                                 Approve

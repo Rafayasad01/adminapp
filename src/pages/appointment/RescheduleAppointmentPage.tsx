@@ -1183,7 +1183,7 @@ export default function RescheduleAppointmentPage() {
                               <div key={index} className="col-span-2 p-3">
                                 <div className="flex-col rounded-xl bg-background">
                                   <div className="flex items-center justify-center p-3">
-                                    <span className="text-sm">
+                                    <span className="xl:text-xs 2xl:text-sm">
                                       {dayjs(item.appointmentTime).isValid()
                                         ? dayjs(item.appointmentTime)?.format(
                                             'h:mm A'
@@ -1221,26 +1221,44 @@ export default function RescheduleAppointmentPage() {
                           </div>
                         </div>
                         <div className="col-span-2">
-                          <p className="font-semibold">Barber</p>
-                          <span>{items.barber}</span>
+                          <p className="font-semibold xl:text-xs 2xl:text-sm">
+                            Barber
+                          </p>
+                          <span className="xl:text-xs 2xl:text-sm">
+                            {items.barber}
+                          </span>
                         </div>
                         <div className="col-span-2 mx-7">
-                          <p className="font-semibold">Service</p>
-                          <span>
+                          <p className="font-semibold xl:text-xs 2xl:text-sm">
+                            Service
+                          </p>
+                          <span className="xl:text-xs 2xl:text-sm">
                             {getCatItemName(items.storeServiceCategoryItem)}
                           </span>
                         </div>
                         <div className="col-span-2">
-                          <p className="font-semibold">Appointment Amount</p>
-                          <span>{items.amount}</span>
+                          <p className="font-semibold xl:text-xs 2xl:text-sm">
+                            Appointment Amount
+                          </p>
+                          <span className="xl:text-xs 2xl:text-sm">
+                            {items.amount}
+                          </span>
                         </div>
-                        <div className="col-span-2 mx-7">
-                          <p className="font-semibold">Appointment Date</p>
-                          <span>{items.appointmentTime.split(' ')[0]}</span>
+                        <div className="col-span-2 mx-5">
+                          <p className="font-semibold xl:text-xs 2xl:text-sm">
+                            Appointment Date
+                          </p>
+                          <span className="xl:text-xs 2xl:text-sm">
+                            {items.appointmentTime.split(' ')[0]}
+                          </span>
                         </div>
-                        <div className="col-span-2">
-                          <p className="font-semibold">Appointment Time</p>
-                          <span>{items.appointmentTime.split(' ')[1]}</span>
+                        <div className="col-span-2 mx-5">
+                          <p className="font-semibold xl:text-xs 2xl:text-sm">
+                            Appointment Time
+                          </p>
+                          <span className="xl:text-xs 2xl:text-sm">
+                            {items.appointmentTime.split(' ')[1]}
+                          </span>
                         </div>
                       </div>
                     );

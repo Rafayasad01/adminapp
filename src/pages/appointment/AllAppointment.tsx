@@ -105,28 +105,39 @@ const AllAppointment = ({
         if (res.data.success) {
           setIsLoader(false);
           const structuredData = res.data.data.map((item: any) => {
-            const date = moment(item.appointmentTime);
+            // const date = moment(item.appointmentTime);
+            const date = dayjs(item.appointmentTime).toISOString();
+            const formattedDateTime = dayjs(date).format(
+              'ddd MMM DD YYYY h:mm:ss A'
+            );
+
+            const parsedDate = dayjs(date);
+            const date2 = parsedDate.add(item.serviceTime, 'minute');
+            const formattedDate2 = date2.format('ddd MMM DD YYYY h:mm:ss A');
+
+            const d1 = formattedDateTime.split('.')[0];
+            const d2 = formattedDate2.split('.')[0];
             // console.log(
             //   '🚀 ~ structuredData ~ date:',
             //   date.format('ddd MMM DD YYYY h:mm:ss A')
             // );
-            const formattedDateWithHour1 = date.format(
-              'ddd MMM DD YYYY h:mm:ss A'
-            );
-            const newDate2 = date.add(item.serviceTime, 'minute');
-            const formattedDateWithHour2 = newDate2.format(
-              'ddd MMM DD YYYY h:mm:ss A'
-            );
+            // const d1split = date.split('.')[0];
+            console.log('🚀 ~ structuredData ~ date one:', d1);
+            console.log('🚀 ~ structuredData ~ date two:', d2);
+            // const formattedDateWithHour1 = d1split.format(
+            //   'ddd MMM DD YYYY h:mm:ss A'
+            // );
+
+            // const newDate2 = date.add(item.serviceTime, 'minute');
+            // const formattedDateWithHour2 = newDate2.format(
+            //   'ddd MMM DD YYYY h:mm:ss A'
+            // );
             return {
               // paid: true,
               title: item.name,
               priorityId: item.storeEmployee,
-              startDate:
-                formattedDateWithHour1 ||
-                moment().format('ddd MMM DD YYYY h:mm:ss A'),
-              endDate:
-                formattedDateWithHour2 ||
-                moment().format('ddd MMM DD YYYY h:mm:ss A'),
+              startDate: d1 || moment().format('ddd MMM DD YYYY h:mm:ss A'),
+              endDate: d2 || moment().format('ddd MMM DD YYYY h:mm:ss A'),
               id: item.id,
               status: item.status,
             };
@@ -495,8 +506,6 @@ const AllAppointment = ({
       });
     }
   };
-  console.log('🚀 ~ isNotify:', isNotify);
-  console.log('🚀 ~ notifyMessage:', notifyMessage);
 
   return isLoader ? (
     <Loader />

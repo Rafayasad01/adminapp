@@ -207,7 +207,7 @@ function CustomPrintLayout({
         return previous;
       }),
   });
-  // console.log('prev', isPrintEnabled[index]);
+
   const trigger = () => {
     setPrintEnabled((prev: any) => {
       const previous = [...prev];
@@ -215,11 +215,6 @@ function CustomPrintLayout({
       return previous;
     });
   };
-  // console.log('A2', index);
-
-  // if (isPrintEnabled[index]) {
-  //     return <CustomPrintLayouts ref={ref} dataItem={data} />
-  // }
 
   return (
     <>

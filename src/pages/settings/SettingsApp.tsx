@@ -46,6 +46,7 @@ import {
 import { listingRolePermission } from '../../utils/helper';
 import DragDropFile from './DragDropFile';
 import SocialLinksPopup from './SocialLinksPopup';
+import CustomQRPrintLayout from '../../utils/CustomPrintLayout/CustomQRPrintLayout';
 
 type AssetsImages = keyof typeof assets.images;
 
@@ -86,6 +87,7 @@ function SettingsApp() {
   const [isLoader, setIsLoader] = useState(true);
   const [isNotify, setIsNotify] = useState(false);
   const [notifyMessage, setNotifyMessage] = useState({});
+  const [isPrintEnabled, setPrintEnabled] = useState<any>([false]);
   const {
     register,
     handleSubmit,
@@ -385,9 +387,21 @@ function SettingsApp() {
             </Tabs>
           </div>
           <div className="Content w-full px-4 py-5">
+            <div className="mb-4">
+              <CustomQRPrintLayout
+                isPrintEnabled={isPrintEnabled}
+                setPrintEnabled={setPrintEnabled}
+              />
+              {/* <button><PrintOutlinedIcon /> Order Slip</button> */}
+            </div>
             <form onSubmit={handleSubmit(onSubmit)}>
-              <div className="mb-3 text-base">
-                <span className="">Upload Shop Logo</span>
+              <div className="flex justify-between">
+                <div className="mb-3 text-base">
+                  <span className="">Upload Shop Logo</span>
+                </div>
+                {/* <div className="mb-3 cursor-pointer text-sm hover:text-blue-900 hover:underline">
+                  <span className="">Download QR-code</span>
+                </div> */}
               </div>
               <div className="grid grid-cols-12 items-center">
                 <div className="col-span-5 mb-1">
