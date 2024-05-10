@@ -88,7 +88,8 @@ const AppointmentViewCard = ({
               disabled={
                 appointmentData?.status === APPOINTMENT_STATUS.CANCELLED ||
                 appointmentData?.status === APPOINTMENT_STATUS.COMPLETED ||
-                appointmentData?.status === APPOINTMENT_STATUS.RESCHEDULE
+                appointmentData?.status === APPOINTMENT_STATUS.RESCHEDULE ||
+                appointmentData?.status === APPOINTMENT_STATUS.PROCESSING
               }
               className="icon-btn mr-3.5 p-0"
               onClick={() => {
@@ -103,7 +104,8 @@ const AppointmentViewCard = ({
               disabled={
                 appointmentData?.status === APPOINTMENT_STATUS.CANCELLED ||
                 appointmentData?.status === APPOINTMENT_STATUS.COMPLETED ||
-                appointmentData?.status === APPOINTMENT_STATUS.RESCHEDULE
+                appointmentData?.status === APPOINTMENT_STATUS.RESCHEDULE ||
+                appointmentData?.status === APPOINTMENT_STATUS.PROCESSING
               }
               className="icon-btn mr-3.5 p-0"
               onClick={() => {
@@ -117,7 +119,8 @@ const AppointmentViewCard = ({
               disabled={
                 appointmentData?.status === APPOINTMENT_STATUS.CANCELLED ||
                 appointmentData?.status === APPOINTMENT_STATUS.COMPLETED ||
-                appointmentData?.status === APPOINTMENT_STATUS.RESCHEDULE
+                appointmentData?.status === APPOINTMENT_STATUS.RESCHEDULE ||
+                appointmentData?.status === APPOINTMENT_STATUS.PROCESSING
               }
               name="Reschedule"
               className="icon-btn mr-3.5 p-0"
