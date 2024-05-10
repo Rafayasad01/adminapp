@@ -106,24 +106,42 @@ const AllAppointment = ({
           setIsLoader(false);
           const structuredData = res.data.data.map((item: any) => {
             // const date = moment(item.appointmentTime);
-            const date = dayjs(item.appointmentTime).toISOString();
+            const date = dayjs(item.appointmentTime)
+              .toISOString()
+              .split('.')[0];
+
+            console.log('🚀 DATE:', date);
             const formattedDateTime = dayjs(date).format(
               'ddd MMM DD YYYY h:mm:ss A'
             );
+
+            // moment(date.toString().split('.')[0]).format(
+            //   'ddd MMM DD YYYY h:mm:ss A'
+            // );
 
             const parsedDate = dayjs(date);
             const date2 = parsedDate.add(item.serviceTime, 'minute');
             const formattedDate2 = date2.format('ddd MMM DD YYYY h:mm:ss A');
 
-            const d1 = formattedDateTime.split('.')[0];
-            const d2 = formattedDate2.split('.')[0];
+            console.log('🚀 ADD DATE2:', date2);
+            // const d1 = formattedDateTime;
+            // const d2 = formattedDate2;
+
+            // console.log(
+            //   '🚀 ~ structuredData ~ formattedDateTime:',
+            //   formattedDateTime
+            // );
+            // console.log(
+            //   '🚀 ~ structuredData ~ formattedDate2:',
+            //   formattedDate2
+            // );
             // console.log(
             //   '🚀 ~ structuredData ~ date:',
             //   date.format('ddd MMM DD YYYY h:mm:ss A')
             // );
             // const d1split = date.split('.')[0];
-            console.log('🚀 ~ structuredData ~ date one:', d1);
-            console.log('🚀 ~ structuredData ~ date two:', d2);
+            // console.log('🚀 ~ structuredData ~ date one:', d1);
+            // console.log('🚀 ~ structuredData ~ date two:', d2);
             // const formattedDateWithHour1 = d1split.format(
             //   'ddd MMM DD YYYY h:mm:ss A'
             // );
@@ -136,8 +154,11 @@ const AllAppointment = ({
               // paid: true,
               title: item.name,
               priorityId: item.storeEmployee,
-              startDate: d1 || moment().format('ddd MMM DD YYYY h:mm:ss A'),
-              endDate: d2 || moment().format('ddd MMM DD YYYY h:mm:ss A'),
+              startDate:
+                formattedDateTime ||
+                moment().format('ddd MMM DD YYYY h:mm:ss A'),
+              endDate:
+                formattedDate2 || moment().format('ddd MMM DD YYYY h:mm:ss A'),
               id: item.id,
               status: item.status,
             };
