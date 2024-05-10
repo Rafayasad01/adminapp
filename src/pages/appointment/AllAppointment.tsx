@@ -495,6 +495,8 @@ const AllAppointment = ({
       });
     }
   };
+  console.log('🚀 ~ isNotify:', isNotify);
+  console.log('🚀 ~ notifyMessage:', notifyMessage);
 
   return isLoader ? (
     <Loader />

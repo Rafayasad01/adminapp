@@ -141,6 +141,10 @@ export default function RescheduleAppointmentPage() {
     }
   };
 
+  const checkIsAfterTime = (date: any, appointmentDate: any) => {
+    return dayjs(date).isAfter(appointmentDate, 'minutes');
+  };
+
   // useEffect(() => {
   //   shopEvents();
   // }, [getValues('appointmentDate')]);
@@ -534,7 +538,7 @@ export default function RescheduleAppointmentPage() {
               ) {
                 setIsNotify(true);
                 setNotifyMessage({
-                  text: `Barber is not available at this time`,
+                  text: `Barber is engaged with another client`,
                   type: 'error',
                 });
                 return false;
@@ -559,9 +563,13 @@ export default function RescheduleAppointmentPage() {
             //   'checkIsBetweenTime(addTime, prevTime, dayjs(el.appointmentTime)):::::::',
             //   checkIsBetweenTime(addTime, prevTime, dayjs(el.appointmentTime))
             // );
-            if (time > dayjs(serviceTime)) {
+            if (
+              time > dayjs(serviceTime) &&
+              checkIsAfterTime(endTime, serviceTime)
+            ) {
               prevTime = dayjs(serviceTime);
             } else if (
+              !checkIsAfterTime(endTime, serviceTime) &&
               !checkIsBetweenTime(addTime, prevTime, dayjs(el.appointmentTime))
             ) {
               // break;
