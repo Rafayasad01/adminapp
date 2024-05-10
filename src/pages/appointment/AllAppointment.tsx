@@ -23,6 +23,7 @@ import dayjs from 'dayjs';
 // import timezone from 'dayjs/plugin/timezone';
 import weekOfYear from 'dayjs/plugin/weekOfYear';
 import React, { useCallback, useEffect, useState } from 'react';
+import moment from 'moment';
 import Loader from '../../components/common/Loader';
 import SwiperComponent from '../../components/common/Swiper';
 // import { useAppSelector } from '../../redux/redux-hooks';
@@ -104,15 +105,15 @@ const AllAppointment = ({
         if (res.data.success) {
           setIsLoader(false);
           const structuredData = res.data.data.map((item: any) => {
-            const date = dayjs(item.appointmentTime);
-            console.log(
-              '🚀 ~ structuredData ~ date:',
-              date.format('ddd MMM DD YYYY h:mm:ss A')
-            );
-            const newDate2 = date.add(25, 'minute');
+            const date = moment(item.appointmentTime);
+            // console.log(
+            //   '🚀 ~ structuredData ~ date:',
+            //   date.format('ddd MMM DD YYYY h:mm:ss A')
+            // );
             const formattedDateWithHour1 = date.format(
               'ddd MMM DD YYYY h:mm:ss A'
             );
+            const newDate2 = date.add(item.serviceTime, 'minute');
             const formattedDateWithHour2 = newDate2.format(
               'ddd MMM DD YYYY h:mm:ss A'
             );
@@ -122,10 +123,10 @@ const AllAppointment = ({
               priorityId: item.storeEmployee,
               startDate:
                 formattedDateWithHour1 ||
-                dayjs().format('ddd MMM DD YYYY h:mm:ss A'),
+                moment().format('ddd MMM DD YYYY h:mm:ss A'),
               endDate:
                 formattedDateWithHour2 ||
-                dayjs().format('ddd MMM DD YYYY h:mm:ss A'),
+                moment().format('ddd MMM DD YYYY h:mm:ss A'),
               id: item.id,
               status: item.status,
             };

@@ -10,6 +10,7 @@ import IconButton from '@mui/material/IconButton';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import moment from 'moment';
 import assets from '../../assets';
 import storeAppointmentService from '../../services/adminapp/adminStoreAppointment';
 import Loader from '../../components/common/Loader2';
@@ -242,8 +243,8 @@ const AppointmentViewCard = ({
           </div>
           <div>
             <span className="mx-2 text-xs text-[#6A6A6A]">
-              {dayjs(appointmentData?.startDate).format('h:mm A')} -{' '}
-              {dayjs(appointmentData?.endDate).format('h:mm A')}
+              {moment(appointmentData?.startDate).format('h:mm A')} -{' '}
+              {moment(appointmentData?.endDate).format('h:mm A')}
             </span>
           </div>
         </div>
