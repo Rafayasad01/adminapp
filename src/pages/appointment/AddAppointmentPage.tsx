@@ -195,6 +195,14 @@ export default function AddAppointmentPage() {
           //   setAppointmentBookedTime(tempBookedTime);
           // }
           const newArr = res.data.data;
+          // const newArr2 = res.data.data.map((el: any) => {
+          //   return {
+          //     ...el,
+          //     appointmentTime: dayjs(el.appointmentTime)
+          //       .toISOString()
+          //       .split('.')[0],
+          //   };
+          // });
           if (tempAppointmentBookedTime.length > 0) {
             tempAppointmentBookedTime.filter((item: any) => {
               if (
@@ -463,9 +471,10 @@ export default function AddAppointmentPage() {
       serviceTime: activeBarber?.serviceTime,
       storeServiceCategoryItem: watch('storeServiceCategoryItem'),
       storeEmployee: activeBarberData?.storeEmployee?.id,
-      appointmentTime: `${dayjs(getValues('appointmentDate'))?.format(
-        'YYYY-MM-DD'
-      )} ${dayjs(appointmentTime)?.format('HH:mm:ss')}`,
+      appointmentTime: dayjs(getValues('appointmentDate')).toISOString(),
+      // appointmentTime: `${dayjs(getValues('appointmentDate'))?.format(
+      //   'YYYY-MM-DD'
+      // )} ${dayjs(appointmentTime)?.format('HH:mm:ss')}`,
     };
 
     if (
@@ -647,7 +656,7 @@ export default function AddAppointmentPage() {
           setTmpId((prevId: any) => prevId + 1);
           const newData = {
             id: tmpId,
-            appointmentTime,
+            appointmentTime: dayjs(appointmentTime).toISOString(),
             email: activeBarberData?.storeEmployee?.email ?? 'abc@gmail.com',
             gender: 'male',
             name: activeBarberData?.storeEmployee?.name ?? 'urapp',

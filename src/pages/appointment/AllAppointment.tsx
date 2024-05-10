@@ -106,9 +106,7 @@ const AllAppointment = ({
           setIsLoader(false);
           const structuredData = res.data.data.map((item: any) => {
             // const date = moment(item.appointmentTime);
-            const date = dayjs(item.appointmentTime)
-              .toISOString()
-              .split('.')[0];
+            const date = dayjs(item.appointmentTime).toISOString();
 
             console.log('🚀 DATE:', date);
             const formattedDateTime = dayjs(date).format(
