@@ -324,13 +324,14 @@ function CustomEditSwiperDialog({
                             />
                           </div>
                         ) : items.type === 'uploadImg' ? (
-                          <div className="FormField">
+                          <div className="">
                             <label className="FormLabel">Upload Image</label>
                             <div className="ImageBox">
                               <CustomButton
                                 buttonType="upload"
                                 title={items.fieldName}
                                 register={items.register}
+                                className=""
                                 icon={
                                   <FileUploadOutlinedIcon
                                     sx={{ marginRight: '0.5rem' }}
@@ -348,7 +349,7 @@ function CustomEditSwiperDialog({
                                 }}
                               />
                               {items.image || imageName ? (
-                                <div className="ShowImageBox bg-background">
+                                <div className="ShowImageBox customImgBox bg-background">
                                   <label className="ShowImageLabel">
                                     {items?.image?.name
                                       ? items?.image?.name
@@ -389,7 +390,7 @@ function CustomEditSwiperDialog({
                         <>
                           <br />
                           <div
-                            style={{ minWidth: '204%', marginTop: '0.75rem' }}
+                            style={{ minWidth: '150%', marginTop: '0.75rem' }}
                           >
                             <div className="ImageBox">
                               <CustomButton
@@ -463,7 +464,7 @@ function CustomEditSwiperDialog({
                 className="btn-black-fill"
                 sx={{
                   padding: '0.375rem 2rem !important',
-                  width: '90%',
+                  width: '80%',
                   height: '35px',
                 }}
               />
@@ -575,15 +576,15 @@ function CustomEditSwiperDialog({
                   </Button>
                 </label>
               </div>
-              <div className="overflow-auto px-1 xl:h-[180px] 2xl:h-[150px]">
+              <div className="mx-[10px] overflow-x-hidden overflow-y-scroll px-[8px] xl:max-h-[180px] xl:min-h-[0px] 2xl:h-[150px]">
                 {ServicesFields?.map((item: any, index: number) => {
                   return (
                     <div
-                      className="my-3 flex items-center justify-between rounded-md border-[1px] border-[#949EAE] p-1 px-3 text-sm text-[#1A1A1A]"
+                      className="my-1 flex items-center justify-between rounded-md border-[1px] border-[#949EAE] p-1 text-sm text-[#1A1A1A]"
                       key={index}
                     >
                       <div>{getCatItemName(item.storeServiceCategoryItem)}</div>
-                      <div className="flex w-[25%] items-center justify-between gap-2">
+                      <div className="flex  items-center justify-between gap-2">
                         <div className="flex items-center">
                           <span className="text-sm">{item.serviceTime}</span>
                           <span> mints</span>
@@ -625,7 +626,7 @@ function CustomEditSwiperDialog({
                 className="btn-black-fill"
                 sx={{
                   padding: '0.375rem 2rem !important',
-                  width: '90%',
+                  width: '80%',
                   height: '35px',
                 }}
               />

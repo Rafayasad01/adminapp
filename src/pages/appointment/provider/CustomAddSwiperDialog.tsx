@@ -605,11 +605,11 @@ function CustomSwiperDialog({
                   </Button>
                 </label>
               </div>
-              <div className="overflow-x-hidden overflow-y-scroll px-1 xl:max-h-[180px] xl:min-h-[0px] 2xl:h-[150px]">
+              <div className="mx-[10px] overflow-x-hidden overflow-y-scroll px-[8px] xl:max-h-[180px] xl:min-h-[0px] 2xl:h-[150px]">
                 {ServicesFields?.map((item: any, index: number) => {
                   return (
                     <div
-                      className="my-3 flex items-center justify-between rounded-md border-[1px] border-[#949EAE] p-1 px-3 text-sm text-[#1A1A1A]"
+                      className="my-1 flex items-center justify-between rounded-md border-[1px] border-[#949EAE] p-1 text-sm text-[#1A1A1A]"
                       key={index}
                     >
                       <div>{getCatItemName(item.storeServiceCategoryItem)}</div>

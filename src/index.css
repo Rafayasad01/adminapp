@@ -2471,7 +2471,21 @@ main.min-h-screen.w-full.flex-grow.bg-gray-50.p-3.MuiBox-root.css-0 {
 }
 
 .custom-swiper .custom-swiper-slide {
-  height: 600px;
+  height: 450px;
   overflow-y: scroll;
   overflow-x: hidden;
+}
+
+.customImgBox .ShowImageLabel {
+  margin-right: 0 !important;
+}
+.ShowImageBox.bg-background {
+  width: unset !important;
+  padding-right: 10px;
+}
+.ShowImageBox.bg-background .ShowImageLabel {
+  margin-right: 0 !important;
+}
+.ShowImageBox.bg-background button {
+  padding: 0 4px 0 2px !important;
 }

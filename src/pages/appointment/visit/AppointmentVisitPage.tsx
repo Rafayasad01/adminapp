@@ -230,6 +230,7 @@ function AppointmentVisitPage() {
         // console.log('🚀 ~ temp ~ temp:', temp);
         setPriorityData(temp);
       };
+
       getStoreEmployeeList();
     }
 

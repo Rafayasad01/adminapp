@@ -55,10 +55,10 @@ const AppointmentViewCard = ({
         .getAppointmentById(appointmentData.id)
         .then((res) => {
           const date = dayjs(res.data.data.appointmentTime);
-          const newDate2 = date.add(25, 'minute');
           const formattedDateWithHour1 = dayjs(date).format(
             'ddd MMM DD YYYY h:mm:ss A'
           );
+          const newDate2 = date.add(res.data.data.serviceTime, 'minute');
           const formattedDateWithHour2 = newDate2.format(
             'ddd MMM DD YYYY h:mm:ss A'
           );
@@ -76,8 +76,6 @@ const AppointmentViewCard = ({
         });
     }
   }, [appointmentData]);
-
-  console.log('appointmentData', appointmentData);
 
   return isLoader ? (
     <Loader />
@@ -231,9 +229,7 @@ const AppointmentViewCard = ({
           </div>
           <div>
             <span className="mx-2 text-xs text-[#6A6A6A]">
-              {dayjs(data?.appointmentTime).isValid()
-                ? dayjs(data?.appointmentTime)?.format('MMMM DD, YYYY')
-                : '--'}
+              {moment(data?.appointmentTime)?.format('MMMM DD, YYYY') ?? '--'}
             </span>
           </div>
         </div>
