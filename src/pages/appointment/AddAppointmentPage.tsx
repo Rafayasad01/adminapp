@@ -18,6 +18,8 @@ import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import dayjs from 'dayjs';
 import isBetween from 'dayjs/plugin/isBetween';
+import utcPlugin from 'dayjs/plugin/utc';
+// import isBetween from 'dayjs/plugin/';
 // import timezone from 'dayjs/plugin/timezone';
 // import utc from 'dayjs/plugin/utc';
 import { useEffect, useState } from 'react';
@@ -48,6 +50,7 @@ import { GENDER, MAX_LENGTH_EXCEEDED, PATTERN } from '../../utils/constants';
 
 // Extend dayjs with necessary plugins
 dayjs.extend(isBetween);
+dayjs.extend(utcPlugin);
 // dayjs.extend(timezone);
 
 const darkTheme = createTheme({
@@ -757,7 +760,14 @@ export default function AddAppointmentPage() {
       '🚀 ~ onSubmit ~ updatedAppointmentArray:',
       updatedAppointmentArray
     );
-    data.appointments = updatedAppointmentArray;
+    // data.appointments = updatedAppointmentArray;
+    data.appointments = updatedAppointmentArray.map((e: any) => {
+      const formattedDateTime = dayjs(e.appointmentTime)
+        .utc()
+        .format('YYYY-MM-DD HH:mm:ss');
+      e.appointmentTime = formattedDateTime;
+      return e;
+    });
     data.status = paymentMethod ? 'Processing' : 'New';
     // data.status = console.log('🚀 ~ onSubmit ~ data:', data);
 

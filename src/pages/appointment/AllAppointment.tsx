@@ -106,24 +106,20 @@ const AllAppointment = ({
           setIsLoader(false);
           const structuredData = res.data.data.map((item: any) => {
             // const date = moment(item.appointmentTime);
-            const date = dayjs(item.appointmentTime)
-              .toISOString()
-              .split('.')[0];
-
+            const date = dayjs(item.appointmentTime);
             console.log('🚀 DATE:', date);
             const formattedDateTime = dayjs(date).format(
               'ddd MMM DD YYYY h:mm:ss A'
             );
-
             // moment(date.toString().split('.')[0]).format(
             //   'ddd MMM DD YYYY h:mm:ss A'
             // );
 
-            const parsedDate = dayjs(date);
-            const date2 = parsedDate.add(item.serviceTime, 'minute');
+            // const parsedDate = dayjs(date);
+            const date2 = date.add(item.serviceTime, 'minute');
             const formattedDate2 = date2.format('ddd MMM DD YYYY h:mm:ss A');
 
-            console.log('🚀 ADD DATE2:', formattedDate2);
+            // console.log('🚀 ADD DATE2:', formattedDate2);
             // const d1 = formattedDateTime;
             // const d2 = formattedDate2;
 
