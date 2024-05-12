@@ -147,6 +147,33 @@ function CustomEditSwiperDialog({
       amount: watch('price'),
     };
     if (
+      !PATTERN.ONLY_NUM.test(watch('price')) &&
+      !PATTERN.ONLY_NUM.test(watch('mints'))
+    ) {
+      setIsNotify(true);
+      setNotifyMessage({
+        text: 'Price and Service time should be in digits(number)',
+        type: 'error',
+      });
+      return;
+    }
+    if (!PATTERN.ONLY_NUM.test(watch('price'))) {
+      setIsNotify(true);
+      setNotifyMessage({
+        text: 'Price should be in digits(number)',
+        type: 'error',
+      });
+      return;
+    }
+    if (!PATTERN.ONLY_NUM.test(watch('mints'))) {
+      setIsNotify(true);
+      setNotifyMessage({
+        text: 'Service Time should be in digits(number)',
+        type: 'error',
+      });
+      return;
+    }
+    if (
       watch('servicesId') &&
       watch('servicesAmount') &&
       watch('price') &&
