@@ -1015,10 +1015,6 @@ export default function AddAppointmentPage() {
       const { amount, barber, id, ...rest } = item;
       return rest;
     });
-    console.log(
-      '🚀 ~ onSubmit ~ updatedAppointmentArray:',
-      updatedAppointmentArray
-    );
     // data.appointments = updatedAppointmentArray;
     data.appointments = updatedAppointmentArray.map((e: any) => {
       // const formattedDateTime = formatISO(dayjs(e.appointmentTime).toDate());
@@ -1027,16 +1023,8 @@ export default function AddAppointmentPage() {
         .format('YYYY-MM-DD HH:mm:ss');
       e.appointmentTime = formattedDateTime;
       return e;
-      // const formattedDateTime = dayjs(e.appointmentTime)
-      //   .utc()
-      //   .format('YYYY-MM-DD HH:mm:ss');
-      // e.appointmentTime = formattedDateTime;
-      // return e;
     });
     data.status = paymentMethod ? 'Processing' : 'New';
-    // data.status = console.log('🚀 ~ onSubmit ~ data:', data);
-
-    // console.log('dataa', data, bookingList);
     storeAppointmentService
       .appointmentCreate(data)
       .then((res: any) => {
