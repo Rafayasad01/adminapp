@@ -77,7 +77,7 @@ export default function AddAppointmentPage() {
   const [catItemsLovlist, setCatItemsLovList] = useState<any>([]);
   const [usedCatItemsLovlist, setusedCatItemsLovList] = useState<any>([]);
   const [barberList, setBarberList] = useState<any>([]);
-  const [disabledButton, setDisabledButton] = useState<any>([]);
+  const [disabledButton, setDisabledButton] = useState<any>(false);
   // const [prevBookedAppointment, setPrevBookedAppointment] = useState<any>([]);
   const [appointmentTime, setAppointmentTime] = useState<dayjs.Dayjs | any>(
     null
@@ -455,8 +455,6 @@ export default function AddAppointmentPage() {
     });
   }, [activeBarberData]);
 
-  console.log('scheduleData?.startTime', selectedScheduleTime);
-
   const addAppointmentServices = () => {
     const obj = {
       id: 0,
@@ -481,7 +479,10 @@ export default function AddAppointmentPage() {
       const scheduleData = activeBarberData?.storeEmployeeSchedule.filter(
         (item: any) => item.workDay === currentDay
       );
-      const time = dayjs(appointmentTime);
+      const time = dayjs(getValues('appointmentDate'))
+        .set('hours', dayjs(appointmentTime).hour())
+        .set('minute', dayjs(appointmentTime).minute());
+      // const time = dayjs(appointmentTime);
       const startTime = dayjs(scheduleData[0]?.startTime)
         .set('date', time.date())
         .set('month', time.month())
@@ -512,7 +513,7 @@ export default function AddAppointmentPage() {
           activeBarberData?.storeEmployee?.id,
           watch('storeServiceCategoryItem')
         );
-        console.log('🚀 ~ addAppointmentServices ~ isDuplicate:', isDuplicate);
+        // console.log('🚀 ~ addAppointmentServices ~ isDuplicate:', isDuplicate);
         if (!isDuplicate) {
           if (tempAppointmentBookedTime.length > 0) {
             for (let i = 0; i < tempAppointmentBookedTime.length; i += 1) {
@@ -650,7 +651,7 @@ export default function AddAppointmentPage() {
           setTmpId((prevId: any) => prevId + 1);
           const newData = {
             id: tmpId,
-            appointmentTime,
+            appointmentTime: time,
             email: activeBarberData?.storeEmployee?.email ?? 'abc@gmail.com',
             gender: 'male',
             name: activeBarberData?.storeEmployee?.name ?? 'urapp',
@@ -756,10 +757,10 @@ export default function AddAppointmentPage() {
       const { amount, barber, id, ...rest } = item;
       return rest;
     });
-    console.log(
-      '🚀 ~ onSubmit ~ updatedAppointmentArray:',
-      updatedAppointmentArray
-    );
+    // console.log(
+    //   '🚀 ~ onSubmit ~ updatedAppointmentArray:',
+    //   updatedAppointmentArray
+    // );
     // data.appointments = updatedAppointmentArray;
     data.appointments = updatedAppointmentArray.map((e: any) => {
       const formattedDateTime = dayjs(e.appointmentTime)
