@@ -17,6 +17,8 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import dayjs from 'dayjs';
+import { formatISO } from 'date-fns';
+
 import isBetween from 'dayjs/plugin/isBetween';
 import utcPlugin from 'dayjs/plugin/utc';
 // import isBetween from 'dayjs/plugin/';
@@ -1019,11 +1021,16 @@ export default function AddAppointmentPage() {
     );
     // data.appointments = updatedAppointmentArray;
     data.appointments = updatedAppointmentArray.map((e: any) => {
-      const formattedDateTime = dayjs(e.appointmentTime)
-        .utc()
-        .format('YYYY-MM-DD HH:mm:ss');
+      const formattedDateTime = formatISO(dayjs(e.appointmentTime).toDate());
+      // .utc()
+      // .format('YYYY-MM-DD HH:mm:ss');
       e.appointmentTime = formattedDateTime;
       return e;
+      // const formattedDateTime = dayjs(e.appointmentTime)
+      //   .utc()
+      //   .format('YYYY-MM-DD HH:mm:ss');
+      // e.appointmentTime = formattedDateTime;
+      // return e;
     });
     data.status = paymentMethod ? 'Processing' : 'New';
     // data.status = console.log('🚀 ~ onSubmit ~ data:', data);
