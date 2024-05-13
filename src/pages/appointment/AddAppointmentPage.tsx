@@ -1021,9 +1021,10 @@ export default function AddAppointmentPage() {
     );
     // data.appointments = updatedAppointmentArray;
     data.appointments = updatedAppointmentArray.map((e: any) => {
-      const formattedDateTime = formatISO(dayjs(e.appointmentTime).toDate());
-      // .utc()
-      // .format('YYYY-MM-DD HH:mm:ss');
+      // const formattedDateTime = formatISO(dayjs(e.appointmentTime).toDate());
+      const formattedDateTime = dayjs(e.appointmentTime)
+        .utc()
+        .format('YYYY-MM-DD HH:mm:ss');
       e.appointmentTime = formattedDateTime;
       return e;
       // const formattedDateTime = dayjs(e.appointmentTime)
