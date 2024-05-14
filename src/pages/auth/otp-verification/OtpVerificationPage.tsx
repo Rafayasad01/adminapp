@@ -1,7 +1,6 @@
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Button from '@mui/material/Button';
-import CircularProgress from '@mui/material/CircularProgress';
 import FormControl from '@mui/material/FormControl';
 import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
@@ -21,6 +20,7 @@ import {
   MAX_LENGTH_EXCEEDED,
   PATTERN,
 } from '../../../utils/constants';
+import FastSpinner from '../../../components/common/CustomSpinner';
 
 type Pass = {
   newPassword: string;
@@ -81,14 +81,14 @@ function OTPVerificationPage() {
 
   return (
     <>
-      <div className="flex h-full w-full items-center justify-center bg-[#F0F0F0]">
+      <div className="flex w-full items-center justify-center bg-background xl:h-fit 2xl:h-full">
         <div className="mx-auto  flex w-full  items-start justify-around max-[1560px]:items-center">
           <div className="w-[30%] self-start px-[30px]">
-            <div className="max-h-[29px] w-full max-w-[150px] px-[25px] py-[40px]">
+            <div className="flex max-h-[29px] w-full max-w-[600px] items-center justify-center px-[25px] py-[40px]">
               <img
                 src={systemConfig?.shopLogo ?? systemConfig?.shopName}
                 alt="urlaundry"
-                className="h-auto w-full object-contain"
+                className="mt-10 h-auto w-[100px] object-contain"
               />
             </div>
             <div className="pt-[100px]">
@@ -101,13 +101,13 @@ function OTPVerificationPage() {
                 />
               </div>
               <div className="mt-2 ">
-                <span className="block text-center text-[14px] font-normal leading-[normal] text-[#6A6A6A]">
+                <span className="block text-center text-[11px] font-normal leading-[normal] text-[#6A6A6A]">
                   An 4 digit code has been sent to
                 </span>
-                <span className="block text-center text-[14px] font-semibold leading-[normal] text-[#6A6A6A]">
+                <span className="block text-center text-[12px] font-semibold leading-[normal] text-[#6A6A6A]">
                   {state?.email}
                 </span>
-                <span className="mx-10 mt-2 block text-center text-[13px] font-normal leading-[normal] text-[#6A6A6A]">
+                <span className="mx-10 mt-2 block text-center text-[11px] font-normal leading-[normal] text-[#6A6A6A]">
                   Note : Please check your email for the OTP code and paste it
                   here; otherwise, it will expire within an hour.
                 </span>
@@ -142,13 +142,10 @@ function OTPVerificationPage() {
                   <form onSubmit={handleSubmit(submitHandler)}>
                     <div className="flex flex-col">
                       <FormControl className="FormControl" variant="standard">
-                        <div className="form-group mt-[42px] w-full">
-                          <label
-                            htmlFor="email"
-                            className="mb-1 text-[14px] font-normal leading-[normal] text-[#06152B]"
-                          >
+                        <div className="form-group mt-[20px] w-full">
+                          <p className="mb-1 text-[12px] font-normal leading-[normal] text-[#06152B]">
                             New Password
-                          </label>
+                          </p>
                           <Input
                             style={{ paddingRight: '0' }}
                             className="FormInput"
@@ -191,12 +188,9 @@ function OTPVerificationPage() {
                       </FormControl>
                       <FormControl className="FormControl" variant="standard">
                         <div className="form-group mt-[2px] w-full">
-                          <label
-                            htmlFor="email"
-                            className="mb-1 text-[14px] font-normal leading-[normal] text-[#06152B]"
-                          >
+                          <p className="mb-1 text-[12px] font-normal leading-[normal] text-[#06152B]">
                             Confirm New Password
-                          </label>
+                          </p>
                           <Input
                             style={{ paddingRight: '0' }}
                             className="FormInput"
@@ -249,19 +243,15 @@ function OTPVerificationPage() {
                         </div>
                       </FormControl>
                     </div>
-                    <div className="mt-[100px] w-full px-4 ">
+                    <div className="mt-[10px] w-full px-4 py-4">
                       <Button
-                        className="w-full rounded-[10px] bg-neutral-900 px-16 py-2 text-gray-50"
+                        className="btn-black-fill w-full rounded-[10px] bg-primary px-16 py-2 text-gray-50"
                         variant="contained"
                         color="inherit"
                         title="Submit"
                         type="submit"
                       >
-                        {isLoader ? (
-                          <CircularProgress color="inherit" size={23} />
-                        ) : (
-                          'Submit'
-                        )}
+                        {isLoader ? <FastSpinner /> : 'Submit'}
                       </Button>
                     </div>
                   </form>

@@ -1,5 +1,4 @@
 import Button from '@mui/material/Button';
-import CircularProgress from '@mui/material/CircularProgress';
 import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
 import { useState } from 'react';
@@ -16,6 +15,7 @@ import {
   MAX_LENGTH_EXCEEDED,
   PATTERN,
 } from '../../../utils/constants';
+import FastSpinner from '../../../components/common/CustomSpinner';
 
 interface Email {
   email: string;
@@ -69,14 +69,14 @@ function ForgotPasswordPage() {
 
   return (
     <>
-      <div className="flex h-full w-full items-center justify-center bg-[#F0F0F0]">
+      <div className="flex h-full w-full items-center justify-center bg-background">
         <div className="mx-auto  flex w-full  items-start justify-around max-[1560px]:items-center">
           <div className="w-[30%] self-start px-[30px]">
-            <div className="max-h-[29px] w-full max-w-[150px] px-[25px] py-[40px]">
+            <div className="flex max-h-[29px] w-full max-w-[600px] items-center justify-center px-[25px] py-[40px]">
               <img
                 src={systemConfig?.shopLogo ?? systemConfig?.shopName}
                 alt="urlaundry"
-                className="h-auto w-full object-contain"
+                className="mt-10 h-auto w-[100px] object-contain"
               />
             </div>
             <div className="pt-[100px]">
@@ -90,27 +90,27 @@ function ForgotPasswordPage() {
               </div>
               <form onSubmit={handleSubmit(sendEmail)}>
                 <div className="mt-2 ">
-                  <span className="block text-center text-[14px] font-normal leading-[normal] text-[#6A6A6A]">
+                  <span className="block text-center text-[11px] font-normal leading-[normal] text-[#6A6A6A]">
                     Enter registered email
                   </span>
-                  <span className="block text-center text-[14px] font-normal leading-[normal] text-[#6A6A6A]">
+                  <span className="block text-center text-[11px] font-normal leading-[normal] text-[#6A6A6A]">
                     to receive OTP verification code
                   </span>
-                  <div className="form-group mt-[42px] w-full">
-                    <label
-                      htmlFor="email"
-                      className="mb-1 text-[14px] font-normal leading-[normal] text-[#06152B]"
-                    >
+                  <div className="form-group mt-[30px] w-full">
+                    <p className="mb-1 text-[12px] font-normal leading-[normal] text-[#06152B]">
                       Email
-                    </label>
-                    <FormControl className="m-1 w-full" variant="standard">
+                    </p>
+                    <FormControl
+                      className="m-1 w-full text-[11px]"
+                      variant="standard"
+                    >
                       <Input
-                        className="border-1 border-solid border-[#949EAE]"
                         {...register('email', {
                           required: true,
                           pattern: PATTERN.CHAR_NUM_DOT_AT,
                           validate: (value) => value.length <= 100,
                         })}
+                        className="border-1 border-solid border-[#949EAE] text-[11px]"
                         type="text"
                         id="email"
                         placeholder="Enter your email"
@@ -127,20 +127,16 @@ function ForgotPasswordPage() {
                       )}
                     </FormControl>
                   </div>
-                  <div className="w-full px-4 xl:mt-[60px] 2xl:mt-[100px] ">
+                  <div className="w-full px-4 xl:mt-[40px] 2xl:mt-[100px] ">
                     <Button
                       disabled={isLoader}
-                      className="w-full bg-neutral-900 px-16 py-2 text-gray-50"
+                      className="btn-black-fill w-full bg-primary px-16 py-2 text-gray-50"
                       variant="contained"
                       color="inherit"
                       title="get code"
                       type="submit"
                     >
-                      {isLoader ? (
-                        <CircularProgress color="inherit" size={23} />
-                      ) : (
-                        'Get Code'
-                      )}
+                      {isLoader ? <FastSpinner /> : 'Get Code'}
                     </Button>
                   </div>
                 </div>
@@ -148,7 +144,7 @@ function ForgotPasswordPage() {
             </div>
           </div>
           <div className="w-[70%] px-3 py-2">
-            <div className="mx-auto  flex max-h-[834px] items-center justify-center overflow-hidden rounded-lg max-[1560px]:max-h-[96vh]">
+            <div className="mx-auto flex max-h-[834px] items-center justify-center overflow-hidden rounded-lg max-[1560px]:max-h-[96vh]">
               <img
                 src={systemConfig?.logoffImage || assets.images.bgLogin}
                 alt="urlaundry"

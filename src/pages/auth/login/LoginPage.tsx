@@ -1,12 +1,11 @@
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import Button from '@mui/material/Button';
-import CircularProgress from '@mui/material/CircularProgress';
 import FormControl from '@mui/material/FormControl';
 import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { NavLink, useNavigate } from 'react-router-dom';
 import assets from '../../../assets';
@@ -20,6 +19,7 @@ import { setRolePermissions } from '../../../redux/features/permissionsStateSlic
 import { useAppDispatch, useAppSelector } from '../../../redux/redux-hooks';
 import authService from '../../../services/adminapp/admin';
 import { setItem } from '../../../utils/storage';
+import FastSpinner from '../../../components/common/CustomSpinner';
 
 interface LoginFields {
   email: string;
@@ -36,6 +36,7 @@ function LoginPage() {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [isLoader, setIsLoader] = useState(false);
+  const [greeting, setGreeting] = useState('');
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const handleMouseDownPassword = (
     event: React.MouseEvent<HTMLButtonElement>
@@ -48,6 +49,16 @@ function LoginPage() {
     handleSubmit,
     formState: { errors },
   } = useForm<LoginFields>();
+
+  useEffect(() => {
+    const currentTime = new Date().getHours();
+
+    if (currentTime >= 0 && currentTime < 12) {
+      setGreeting('Hey, morning!');
+    } else {
+      setGreeting('Hey, evening!');
+    }
+  }, []);
 
   const loginHandler = async (data: LoginFields) => {
     setIsLoader(true);
@@ -99,32 +110,41 @@ function LoginPage() {
   };
 
   return (
-    <div className="flex  h-full w-full items-center justify-center bg-[#F0F0F0]">
+    <div className="flex  h-full w-full items-center justify-center bg-background">
       <div className="mx-auto  flex w-full  items-start justify-around max-[1560px]:items-center">
         <div className="w-[30%]  self-start px-[30px]">
-          <div className="max-h-[29px] w-full max-w-[150px] px-[25px] py-[40px]">
+          <div className="flex max-h-[29px] w-full max-w-[600px] items-center justify-center px-[25px] py-[40px]">
             <img
               src={systemConfig?.shopLogo ?? systemConfig?.shopName}
               alt="urlaundry"
-              className="h-auto w-full object-contain"
+              className="mt-10 h-auto w-[100px] object-contain"
             />
           </div>
-          <div className="pt-[150px]">
+          <div className="xl:pt-[50px] 2xl:pt-[150px]">
+            <div className="flex justify-center">
+              {greeting === 'Hey, morning!' ? (
+                <img src={assets.images.morningImage} alt="morning" />
+              ) : (
+                <img
+                  height={80}
+                  width={80}
+                  src={assets.images.noonImage}
+                  alt="evening"
+                />
+              )}
+            </div>
             <h1 className="mb-4 text-center text-[36px] font-bold capitalize leading-[normal] text-black">
-              log in
+              {greeting}
             </h1>
             <form onSubmit={handleSubmit(loginHandler)}>
               <div className="">
                 <div className="form-group w-full">
-                  <label
-                    htmlFor="email"
-                    className="mb-1 font-sans text-[14px] font-normal leading-[normal] text-[#06152B]"
-                  >
+                  <p className="mb-1 font-sans text-[12px] font-normal leading-[normal] text-[#06152B]">
                     Email
-                  </label>
+                  </p>
                   <FormControl className="m-1 w-full" variant="standard">
                     <Input
-                      className="border-1 border-solid border-secondary"
+                      className="border-1 border-solid border-secondary text-[11px]"
                       id="email"
                       type="email"
                       {...register('email', {
@@ -138,10 +158,10 @@ function LoginPage() {
                   </FormControl>
                 </div>
                 <div className="form-group w-full">
-                  <label htmlFor="password">Password</label>
+                  <p className="mb-1 text-[12px]">Password</p>
                   <FormControl className="m-1 w-full" variant="filled">
                     <Input
-                      className="input-with-icon after:border-b-secondary"
+                      className="input-with-icon text-[11px] after:border-b-secondary"
                       id="password"
                       type={showPassword ? 'text' : 'password'}
                       {...register('password', {
@@ -171,7 +191,7 @@ function LoginPage() {
                 </div>
                 <div className="form-group self-end">
                   <NavLink
-                    className="font-open-sans text-sm font-normal text-neutral-900"
+                    className="font-open-sans text-sm font-normal text-neutral-900 hover:underline"
                     to="../forgot-password"
                   >
                     Forget Password?
@@ -180,17 +200,13 @@ function LoginPage() {
                 <div className="mt-8 w-full px-4">
                   <Button
                     disabled={!!isLoader}
-                    className="w-full bg-neutral-900 px-16 py-2 text-gray-50"
+                    className="btn-black-fill w-full bg-primary px-16 py-2 text-gray-50"
                     variant="contained"
                     color="inherit"
                     title="Login"
                     type="submit"
                   >
-                    {!isLoader ? (
-                      `Login`
-                    ) : (
-                      <CircularProgress color="inherit" size={24} />
-                    )}
+                    {isLoader ? <FastSpinner /> : 'Login'}
                   </Button>
                 </div>
               </div>

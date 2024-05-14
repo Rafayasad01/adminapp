@@ -2496,3 +2496,8 @@ main.min-h-screen.w-full.flex-grow.bg-gray-50.p-3.MuiBox-root.css-0 {
 .ShowImageBox.bg-background button {
   padding: 0 4px 0 2px !important;
 }
+
+/* Spnnier Speed */
+.css-18lrjg1-MuiCircularProgress-root {
+  animation: animation-61bdi0 0.4s linear infinite !important;
+}

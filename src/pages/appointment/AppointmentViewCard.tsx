@@ -1,4 +1,4 @@
-import EditNoteOutlinedIcon from '@mui/icons-material/BorderColor';
+import HistoryIcon from '@mui/icons-material/History';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import CloseIcon from '@mui/icons-material/Close';
 import UpdateOutlinedIcon from '@mui/icons-material/UpdateOutlined';
@@ -128,7 +128,7 @@ const AppointmentViewCard = ({
                 navigate(`./reschedule-appointment/${appointmentData.id}`)
               }
             >
-              <EditNoteOutlinedIcon />
+              <HistoryIcon />
             </IconButton>
             {appointmentData?.status !== APPOINTMENT_STATUS.NEW &&
             appointmentData?.status !== APPOINTMENT_STATUS.PROCESSING ? (

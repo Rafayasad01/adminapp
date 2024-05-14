@@ -4,7 +4,7 @@ type ErrorSpanBoxProps = {
 
 function ErrorSpanBox({ error }: ErrorSpanBoxProps) {
   return (
-    <span role="alert" className="error-color">
+    <span role="alert" className="error-color text-[11px]">
       {error && `*${error}`}
     </span>
   );

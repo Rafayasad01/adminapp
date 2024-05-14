@@ -192,7 +192,7 @@ function NewPasswordPage() {
                   className="mx-auto h-[80px] w-[80px]"
                 />
               </div>
-              <span className="block text-center text-[14px] font-normal leading-[normal] text-[#6A6A6A]">
+              <span className="block text-center text-[14px] font-normal leading-[normal] text-yellow-500">
                 Enter New Password
               </span>
               <div className="">
