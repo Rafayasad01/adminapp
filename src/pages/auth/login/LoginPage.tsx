@@ -146,6 +146,7 @@ function LoginPage() {
                     <Input
                       className="border-1 border-solid border-secondary text-[11px]"
                       id="email"
+                      placeholder="ilyassalon@urapptech.com"
                       type="email"
                       {...register('email', {
                         required: 'Please enter your email.',
@@ -163,6 +164,7 @@ function LoginPage() {
                     <Input
                       className="input-with-icon text-[11px] after:border-b-secondary"
                       id="password"
+                      placeholder="********"
                       type={showPassword ? 'text' : 'password'}
                       {...register('password', {
                         required: 'Please enter your password.',
@@ -191,7 +193,7 @@ function LoginPage() {
                 </div>
                 <div className="form-group self-end">
                   <NavLink
-                    className="font-open-sans text-sm font-normal text-neutral-900 hover:underline"
+                    className="font-open-sans text-[11px] font-normal text-neutral-900 hover:underline"
                     to="../forgot-password"
                   >
                     Forget Password?
