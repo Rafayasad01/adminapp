@@ -15,13 +15,13 @@ import '../../../index.css';
 import { AppointmentProviderSchedule } from '../../../interfaces/app.appointment';
 import adminAppointmentService from '../../../services/adminapp/adminAppointment';
 import { setText, weekDays } from '../../../utils/constants';
-import { useAppSelector } from '../../../redux/redux-hooks';
+// import { useAppSelector } from '../../../redux/redux-hooks';
 
 function AppointmentProviderAddSchedulePage() {
   const { id } = useParams();
-  const officeTimings = useAppSelector(
-    (state) => state?.persistedReducer.appState.UserItems
-  );
+  // const officeTimings = useAppSelector(
+  //   (state) => state?.persistedReducer.appState.UserItems
+  // );
 
   // const authState = useAppSelector((state) => state?.authState);
   const navigate = useNavigate();
@@ -164,20 +164,20 @@ function AppointmentProviderAddSchedulePage() {
         startTime: data[`startdatetime${index}`].format('YYYY-MM-DD HH:mm:ss'),
         endTime: data[`enddatetime${index}`].format('YYYY-MM-DD HH:mm:ss'),
       };
-      if (
-        dayjs(dataItem.startTime).format('HH:mm') <
-          dayjs(officeTimings?.tenantConfig?.officeTimeIn).format('HH:mm') ||
-        dayjs(dataItem.endTime).format('HH:mm') >
-          dayjs(officeTimings?.tenantConfig?.officeTimeOut).format('HH:mm')
-      ) {
-        setIsLoader(false);
-        setIsNotify(true);
-        setNotifyMessage({
-          text: 'You should check your shop time before creating staff',
-          type: 'error',
-        });
-        return null;
-      }
+      // if (
+      //   dayjs(dataItem.startTime).format('HH:mm') <
+      //     dayjs(officeTimings?.tenantConfig?.officeTimeIn).format('HH:mm') ||
+      //   dayjs(dataItem.endTime).format('HH:mm') >
+      //     dayjs(officeTimings?.tenantConfig?.officeTimeOut).format('HH:mm')
+      // ) {
+      //   setIsLoader(false);
+      //   setIsNotify(true);
+      //   setNotifyMessage({
+      //     text: 'You should check your shop time before creating staff',
+      //     type: 'error',
+      //   });
+      //   return null;
+      // }
       parent.workDays.push(dataItem);
       return null;
     });

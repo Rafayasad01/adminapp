@@ -85,9 +85,9 @@ function AppointmentProviderPage() {
   const [showPassword, setShowPassword] = useState(true);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
-  const officeTimings = useAppSelector(
-    (state) => state?.persistedReducer.appState.UserItems
-  );
+  // const officeTimings = useAppSelector(
+  //   (state) => state?.persistedReducer.appState.UserItems
+  // );
 
   const {
     register,
@@ -672,7 +672,7 @@ function AppointmentProviderPage() {
   };
 
   const onSubmitDialogBox = async (data: any) => {
-    console.log(`onSubmitDialogBox -> data:`, data);
+    // console.log(`onSubmitDialogBox -> data:`, data);
     // setIsLoader(true);
     delete data.servicesName;
     delete data.servicesAmount;
@@ -689,20 +689,36 @@ function AppointmentProviderPage() {
     // };
     console.log('🚀 ~ onSubmitDialogBox ~ endTime:', endTime);
     console.log('🚀 ~ onSubmitDialogBox ~ startTime:', startTime);
-    if (
-      dayjs(startTime).format('HH:mm') <
-        dayjs(officeTimings?.tenantConfig?.officeTimeIn).format('HH:mm') ||
-      dayjs(endTime).format('HH:mm') >
-        dayjs(officeTimings?.tenantConfig?.officeTimeOut).format('HH:mm')
-    ) {
-      setIsLoader(false);
-      setIsNotify(true);
-      setNotifyMessage({
-        text: 'You should check your shop time before creating staff',
-        type: 'error',
-      });
-      return null;
-    }
+
+    // const TshopOpenTime = dayjs(officeTimings?.tenantConfig?.officeTimeIn);
+    // let TshopCloseTime = dayjs(officeTimings?.tenantConfig?.officeTimeOut);
+    // const startT = dayjs(startTime);
+    // let endT = dayjs(endTime);
+
+    // const hourStartT = TshopOpenTime.hour();
+    // const hourEndT = TshopCloseTime.hour();
+    // const hourST1 = TshopOpenTime.hour();
+    // const hourST2 = TshopCloseTime.hour();
+
+    // if (hour1 > hour2) {
+    //   TshopCloseTime = TshopCloseTime.add(1, 'day');
+    //   // return console.log('err');
+    // }
+
+    // if (
+    //   dayjs(startTime).format('HH:mm') <
+    //     dayjs(officeTimings?.tenantConfig?.officeTimeIn).format('HH:mm') ||
+    //   dayjs(endTime).format('HH:mm') >
+    //     dayjs(officeTimings?.tenantConfig?.officeTimeOut).format('HH:mm')
+    // ) {
+    //   setIsLoader(false);
+    //   setIsNotify(true);
+    //   setNotifyMessage({
+    //     text: 'You should check your shop time before creating staff',
+    //     type: 'error',
+    //   });
+    //   return null;
+    // }
     const formData = new FormData();
     formData.append('name', data.name);
     formData.append('address', data.address);

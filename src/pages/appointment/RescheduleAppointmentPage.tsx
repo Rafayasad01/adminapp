@@ -36,6 +36,7 @@ import storeEmployeeService from '../../services/adminapp/adminStoreEmployee';
 // import storeSettingService from '../../services/adminapp/adminShopSchedule';
 import storeLovService from '../../services/adminapp/adminStoreService';
 import { GENDER, MAX_LENGTH_EXCEEDED, PATTERN } from '../../utils/constants';
+import { useAppSelector } from '../../redux/redux-hooks';
 // import { useAppSelector } from '../../redux/redux-hooks';
 // import { useAppSelector } from '../../redux/redux-hooks';
 
@@ -92,6 +93,10 @@ export default function RescheduleAppointmentPage() {
     formState: { errors },
     control,
   } = useForm<AddAppointmentForm>();
+
+  const officeTimings = useAppSelector(
+    (state) => state?.persistedReducer.appState.UserItems
+  );
 
   const params = useParams();
   const id: any = params.id;
@@ -727,17 +732,27 @@ export default function RescheduleAppointmentPage() {
         .set('date', time.date())
         .set('month', time.month())
         .set('year', time.year());
-      const endTime = dayjs(scheduleData[0]?.endTime)
+      let endTime = dayjs(scheduleData[0]?.endTime)
         .set('date', time.date())
         .set('month', time.month())
         .set('year', time.year());
+      if (startTime.hour() > endTime.hour()) {
+        endTime = endTime.add(1, 'day');
+      }
+      const officeTimeIn = dayjs(officeTimings?.tenantConfig?.officeTimeIn)
+        .set('date', time.date())
+        .set('month', time.month())
+        .set('year', time.year());
+      let officeTimeOut = dayjs(officeTimings?.tenantConfig?.officeTimeOut)
+        .set('date', time.date())
+        .set('month', time.month())
+        .set('year', time.year());
+      if (officeTimeIn.hour() > officeTimeOut.hour()) {
+        officeTimeOut = officeTimeOut.add(1, 'day');
+      }
       let prevTime = startTime;
       const addTime = dayjs(time).add(activeBarberData?.serviceTime, 'minutes');
-      // console.log(':rocket: ~ addAppointmentServices ~ scheduleData:', scheduleData);
       if (scheduleData.length > 0) {
-        // for (let j = 0; j < shopScheduleWorkDays.length; i += 1++) {
-        //   const elShop = appointmentBookedTime[j];
-        // }
         if (!checkIsBetweenTime(time, startTime, endTime)) {
           setIsNotify(true);
           setNotifyMessage({

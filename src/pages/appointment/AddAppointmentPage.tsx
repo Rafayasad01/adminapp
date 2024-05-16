@@ -47,6 +47,7 @@ import storeEmployeeService from '../../services/adminapp/adminStoreEmployee';
 // import storeSettingService from '../../services/adminapp/adminShopSchedule';
 import storeLovService from '../../services/adminapp/adminStoreService';
 import { GENDER, MAX_LENGTH_EXCEEDED, PATTERN } from '../../utils/constants';
+import { useAppSelector } from '../../redux/redux-hooks';
 // import { useAppSelector } from '../../redux/redux-hooks';
 // import { useAppSelector } from '../../redux/redux-hooks';
 
@@ -106,6 +107,10 @@ export default function AddAppointmentPage() {
     formState: { errors },
     control,
   } = useForm<AddAppointmentForm>();
+
+  const officeTimings = useAppSelector(
+    (state) => state?.persistedReducer.appState.UserItems
+  );
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -447,27 +452,8 @@ export default function AddAppointmentPage() {
     array: any,
     targetEmployee: string,
     targetCategoryItem: string
-    // targetDate: any
   ) {
-    // console.log(
-    //   '🚀 ~ AddAppointmentPage ~ targetCategoryItem:',
-    //   targetCategoryItem
-    // );
-    // console.log('🚀 ~ AddAppointmentPage ~ targetEmployee:', targetEmployee);
-    // console.log('🚀 ~ AddAppointmentPage ~ array:', array);
-    // console.log(
-    //   '🚀 ~ AddAppointmentPage ~ targetDate:',
-    //   dayjs(targetDate).format('YYYYMMDD')
-    // );
-    // console.log('🚀 ~ AddAppointmentPage ~ targetDate:', array);
-
     for (const obj of array) {
-      // console.log('AddAppointmentPage ~ targetDate: sdsd', obj);
-
-      // if (obj.storeServiceCategoryItem === targetCategoryItem) {
-      //   return true;
-      // }
-
       if (
         obj.storeEmployee === targetEmployee &&
         obj.storeServiceCategoryItem === targetCategoryItem &&
@@ -812,18 +798,31 @@ export default function AddAppointmentPage() {
         .set('date', time.date())
         .set('month', time.month())
         .set('year', time.year());
-      const endTime = dayjs(scheduleData[0]?.endTime)
+      let endTime = dayjs(scheduleData[0]?.endTime)
         .set('date', time.date())
         .set('month', time.month())
         .set('year', time.year());
+      if (startTime.hour() > endTime.hour()) {
+        endTime = endTime.add(1, 'day');
+      }
+      const officeTimeIn = dayjs(officeTimings?.tenantConfig?.officeTimeIn)
+        .set('date', time.date())
+        .set('month', time.month())
+        .set('year', time.year());
+      let officeTimeOut = dayjs(officeTimings?.tenantConfig?.officeTimeOut)
+        .set('date', time.date())
+        .set('month', time.month())
+        .set('year', time.year());
+      if (officeTimeIn.hour() > officeTimeOut.hour()) {
+        officeTimeOut = officeTimeOut.add(1, 'day');
+      }
       let prevTime = startTime;
       const addTime = dayjs(time).add(activeBarberData?.serviceTime, 'minutes');
-      // console.log(':rocket: ~ addAppointmentServices ~ scheduleData:', scheduleData);
       if (scheduleData.length > 0) {
-        // for (let j = 0; j < shopScheduleWorkDays.length; i += 1++) {
-        //   const elShop = appointmentBookedTime[j];
-        // }
-        if (!checkIsBetweenTime(time, startTime, endTime)) {
+        if (
+          !checkIsBetweenTime(time, startTime, endTime) ||
+          !checkIsBetweenTime(time, officeTimeIn, officeTimeOut)
+        ) {
           setIsNotify(true);
           setNotifyMessage({
             text: 'Barber is not available at this time',
@@ -836,7 +835,6 @@ export default function AddAppointmentPage() {
           activeBarberData?.storeEmployee?.id,
           watch('storeServiceCategoryItem')
         );
-        // console.log(':rocket: ~ addAppointmentServices ~ isDuplicate:', isDuplicate);
         if (!isDuplicate) {
           if (tempAppointmentBookedTime.length > 0) {
             for (let i = 0; i < tempAppointmentBookedTime.length; i += 1) {
@@ -869,18 +867,6 @@ export default function AddAppointmentPage() {
               el.serviceTime,
               'minute'
             );
-            // console.log('time::::::', time);
-            // console.log('el.appointmentTime::::::', dayjs(el.appointmentTime));
-            // console.log('prevTime::::::', prevTime);
-            // console.log('addTime::::::', addTime);
-            // console.log(
-            //   'checkIsAfterTime(el.appointmentTime, time)::::::',
-            //   checkIsAfterTime(dayjs(el.appointmentTime), time)
-            // );
-            // console.log(
-            //   'checkIsBetweenTime(addTime, prevTime, dayjs(el.appointmentTime)):::::::',
-            //   checkIsBetweenTime(addTime, prevTime, dayjs(el.appointmentTime))
-            // );
             if (
               time > dayjs(serviceTime) &&
               checkIsAfterTime(endTime, serviceTime)
@@ -897,82 +883,9 @@ export default function AddAppointmentPage() {
                 type: 'error',
               });
               return false;
-              // throw new Error('Error');
             }
-            // for (const key of Object.keys(appointmentBookedTime)) {
-            //   const index = key;
-            //   const el = appointmentBookedTime[index];
-            // console.log('El', el);
-            // console.log('activeBarberData', activeBarberData);
-            // console.log('hello its me 1');
-            // if (
-            //   el.storeEmployee === activeBarberData?.storeEmployee?.id &&
-            //   dayjs(el.appointmentTime).format('HH:mm') !== time
-            // ) {
-            //   console.log('hello its me 2', el);
-            //   const add = dayjs(el.appointmentTime).add(
-            //     el.serviceTime,
-            //     'minute'
-            //   );
-            //   const elStartTime = dayjs(el.appointmentTime).format('HH:mm');
-            //   const convertAddTime: any = dayjs(add).format('HH:mm');
-            //   // console.log(
-            //   //   ':rocket: ~ appointmentBookedTime.forEach ~ elStartTime:',
-            //   //   elStartTime,
-            //   //   convertAddTime
-            //   // );
-            //   // console.log('add', add);
-            //   if (elStartTime > startTime && elStartTime < endTime) {
-            //     // console.log('if mee 1');
-            //     // console.log('me ho time', time);
-            //     // console.log('me ho converted time', convertAddTime);
-            //     // console.log('me ho prev time', prevTime);
-            //     // console.log(
-            //     //   'me ho convertAppointmentAddTime time',
-            //     //   convertAppointmentAddTime
-            //     // );
-            //     // console.log('me ho time', time);
-            //     // console.log('me ho converted time', convertAddTime);
-            //     // console.log('me ho elstartTime', elStartTime);
-            //     if (time > convertAddTime) {
-            //       console.log('if mee 2');
-            //       // console.log('if');
-            //       prevTime = convertAddTime;
-            //     } else if (
-            //       time <= prevTime ||
-            //       convertAppointmentAddTime >= elStartTime
-            //     ) {
-            //       // console.log('if mee 3');
-            //       // console.log("2");
-            //       // console.log('else');
-            //       // console.log("3");
-            //       // console.log('if meet error');
-            //       setIsNotify(true);
-            //       setNotifyMessage({
-            //         text: `Service time is ${activeBarberData?.serviceTime} minutes, Barber is not avaiable at ${time}`,
-            //         type: 'error',
-            //       });
-            //       throw new Error('Error');
-            //     }
-            // } else {
-            //   // console.log('if mee 4');
-            //   // console.log("4");
-            //   // console.log("if success error 2");/
-            //   setIsNotify(true);
-            //   setNotifyMessage({
-            //     text: 'Barber is not avaiable at this time',
-            //     type: 'error',
-            //   });
-            //   throw new Error('Error');
-            // }
-            // }
-            // return;
           }
-          // }
           setTmpId((prevId: any) => prevId + 1);
-          // const newTime = `${dayjs(getValues('appointmentDate'))?.format(
-          //   'YYYY-MM-DD'
-          // )} ${dayjs(appointmentTime)?.format('HH:mm:ss')}`;
           const newTime = dayjs(getValues('appointmentDate'))
             .set('hours', dayjs(appointmentTime).hour())
             .set('minute', dayjs(appointmentTime).minute());

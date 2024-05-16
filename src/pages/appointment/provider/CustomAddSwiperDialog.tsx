@@ -175,8 +175,13 @@ function CustomSwiperDialog({
       });
       return;
     }
+    console.log(
+      "🚀 ~ handleServices ~ watch('servicesId'):",
+      watch('servicesId')
+    );
     if (
       watch('servicesId') &&
+      watch('servicesId') !== 'none' &&
       watch('servicesAmount') &&
       watch('price') &&
       watch('mints')
@@ -593,7 +598,7 @@ function CustomSwiperDialog({
                     <CustomInputBox
                       pattern={PATTERN.ONLY_NUM}
                       maxLetterLimit={15}
-                      inputTitle="Commission Price"
+                      inputTitle="Commission"
                       placeholder="Enter Service Commission Price"
                       id="price"
                       requiredType
@@ -608,7 +613,8 @@ function CustomSwiperDialog({
                     <CustomInputBox
                       pattern={PATTERN.ONLY_NUM}
                       maxLetterLimit={4}
-                      inputTitle="Service Time (Minutes)"
+                      inputTitle="Service Time"
+                      subInputTitle="(Minutes)"
                       placeholder="Enter time (Minutes)"
                       id="mints"
                       requiredType
