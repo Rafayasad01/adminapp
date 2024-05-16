@@ -5,7 +5,7 @@ import GridViewOutlinedIcon from '@mui/icons-material/GridViewOutlined';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
-// import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
+import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
 import ManageAccountsOutlinedIcon from '@mui/icons-material/ManageAccountsOutlined';
 import PeopleOutlineOutlinedIcon from '@mui/icons-material/PeopleOutlineOutlined';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
@@ -144,12 +144,12 @@ const links = [
     permission: 'Notification List',
     icon: <QuestionAnswerOutlinedIcon fontSize="inherit" />,
   },
-  // {
-  //   name: 'Notifications',
-  //   path: 'notification',
-  //   permission: 'Notification List',
-  //   icon: <NotificationsOutlinedIcon fontSize="inherit" />,
-  // },
+  {
+    name: 'Notifications',
+    path: 'notification',
+    permission: 'Notification List',
+    icon: <NotificationsOutlinedIcon fontSize="inherit" />,
+  },
   {
     name: 'Vouchers',
     path: 'vouchers',

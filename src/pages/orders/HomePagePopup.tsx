@@ -112,8 +112,12 @@ function HomePagePopup({
       <DialogContent className="modal-content">
         <div className="main-grid">
           <div className="modal-wrap">
-            <div className="product-img">
-              <img src={data?.icon} alt="" />
+            <div className="product-img flex justify-center">
+              <img
+                className="max-h-[50%] max-w-[50%] object-contain"
+                src={data?.icon}
+                alt=""
+              />
             </div>
             <div className="p-4">
               <h4 className="product-name">{data?.name}</h4>

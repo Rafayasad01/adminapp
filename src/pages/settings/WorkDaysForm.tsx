@@ -4,14 +4,18 @@ import { Button, FormControl } from '@mui/material';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import dayjs from 'dayjs';
+// import moment from 'moment';
 import { memo, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import '../../assets/css/PopupStyle.css';
+import isBetween from 'dayjs/plugin/isBetween';
 import ErrorSpanBox from '../../components/common/ErrorSpanBox';
 import TimePicker from '../../components/common/TimePicker';
 import { WorkDay } from '../../interfaces/shop-schedule.interface';
 import { setWordDays } from '../../redux/features/shopScheduleStateSlice';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
+
+dayjs.extend(isBetween);
 
 type WorkDaysFormProps = {
   onlyWeeksFormat?: boolean;
@@ -104,6 +108,63 @@ function WorkDaysForm({
     }
   };
 
+  const handleBreakInTimeChange = (value: any) => {
+    const TshopOpenTime = dayjs(getValues('shopOpenTime'));
+    let TshopCloseTime = dayjs(getValues('shopCloseTime'));
+    const hour1 = TshopOpenTime.hour();
+    const hour2 = TshopCloseTime.hour();
+    if (hour1 > hour2) {
+      TshopCloseTime = TshopCloseTime.add(1, 'day');
+    }
+
+    // Check if tempVal is between date1 and date2
+    // console.log('VALUE::', value);
+    // console.log('TS VALUE::', TshopOpenTime, TshopCloseTime);
+    // console.log(
+    //   'isbetween',
+    //   value.isBetween(TshopOpenTime, TshopCloseTime, 'minutes')
+    // );
+
+    return (
+      value === null ||
+      !value.isValid() ||
+      value.isBetween(TshopOpenTime, TshopCloseTime, 'minutes')
+    );
+  };
+
+  const handleBreakOffTimeChange = (value: any) => {
+    // const TshopOpenTime = dayjs(getValues('shopOpenTime'));
+    // let TshopCloseTime = dayjs(getValues('shopCloseTime'));
+    const TshopOpenTime = dayjs(getValues('shopOpenTime'));
+    let TshopCloseTime = dayjs(getValues('shopCloseTime'));
+    const TbreakTime = dayjs(getValues('breakTime'));
+    console.log('🚀 ~ handleBreakInTimeChange ~ value:', value);
+    // const tempVal = moment(moment(value));
+    // const date1 = dayjs('Wed May 15 2024 10:00:00 GMT+0500');
+    // let date2 = dayjs('Wed May 15 2024 00:00:00 GMT+0500');
+    const hour1 = TshopOpenTime.hour();
+    const hour2 = TshopCloseTime.hour();
+    if (hour1 > hour2) {
+      TshopCloseTime = TshopCloseTime.add(1, 'day');
+    }
+
+    // Check if tempVal is between date1 and date2
+    console.log('VALUE::', value);
+    console.log('TS VALUE::', TshopOpenTime, TshopCloseTime);
+    console.log(
+      'isbetween',
+      value.isBetween(TshopOpenTime, TshopCloseTime, 'minutes') &&
+        value.isAfter(TbreakTime)
+    );
+
+    return (
+      value === null ||
+      !value.isValid() ||
+      (value.isBetween(TshopOpenTime, TshopCloseTime, 'minutes') &&
+        value.isAfter(TbreakTime))
+    );
+  };
+
   /**
    * Handles the deletion of a work day from the list of work days.
    * @param {number} i - The index of the work day to be deleted.
@@ -184,18 +245,7 @@ function WorkDaysForm({
                     }}
                     id="pickupTimePicker"
                     {...register('breakTime', {
-                      validate: (value) => {
-                        const TshopOpenTime = getValues('shopOpenTime');
-                        const TshopCloseTime = getValues('shopCloseTime');
-                        return (
-                          value === null ||
-                          !value.isValid() ||
-                          (TshopOpenTime &&
-                            value.isAfter(TshopOpenTime) &&
-                            TshopCloseTime &&
-                            value.isBefore(TshopCloseTime))
-                        );
-                      },
+                      validate: (value) => handleBreakInTimeChange(value),
                     })}
                   />
                   {errors.breakTime && (
@@ -212,20 +262,7 @@ function WorkDaysForm({
                     }}
                     id="dropoffTimePicker"
                     {...register('breakOffTime', {
-                      validate: (value) => {
-                        const TshopOpenTime = getValues('shopOpenTime');
-                        const TbreakTime = getValues('breakTime');
-                        const TshopCloseTime = getValues('shopCloseTime');
-                        return (
-                          value === null ||
-                          !value.isValid() ||
-                          (TshopOpenTime &&
-                            TbreakTime &&
-                            value.isAfter(TbreakTime) &&
-                            TshopCloseTime &&
-                            value.isBefore(TshopCloseTime))
-                        );
-                      },
+                      validate: (value) => handleBreakOffTimeChange(value),
                     })}
                   />
                   {errors.breakOffTime && (

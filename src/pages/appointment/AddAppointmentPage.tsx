@@ -113,6 +113,31 @@ export default function AddAppointmentPage() {
     keyName: 'key',
   });
 
+  const sortTimeOrder = () => {
+    const daysArr = [
+      'Sunday',
+      'Monday',
+      'Tuesday',
+      'Wednesday',
+      'Thursday',
+      'Friday',
+      'Saturday',
+    ];
+    // const temp = activeBarberData?.storeEmployeeSchedule;
+    const filteredData = daysArr.reduce((filtered: any, day: any) => {
+      const filteredDayData = activeBarberData?.storeEmployeeSchedule.filter(
+        (item: any) => item.workDay === day
+      );
+      return [...filtered, ...filteredDayData];
+    }, []);
+    console.log('🚀 ~ sortTimeOrder ~ filteredData:', filteredData);
+    return filteredData;
+  };
+
+  useEffect(() => {
+    if (activeBarberData) sortTimeOrder();
+  }, [activeBarberData]);
+
   const handlePaymentChange = () => {
     setPaymentMethod(!paymentMethod);
   };
@@ -1346,8 +1371,8 @@ export default function AddAppointmentPage() {
                         </span>
                         <hr className="my-4 border-[#949EAE]" />
                         <div className="gaps-4 grid grid-cols-12">
-                          {activeBarberData?.storeEmployeeSchedule?.map(
-                            (item: any, index: number) => {
+                          {activeBarberData &&
+                            sortTimeOrder()?.map((item: any, index: number) => {
                               return (
                                 <div key={index} className="col-span-2 p-3">
                                   <div className="h-[100px] flex-col">
@@ -1374,8 +1399,7 @@ export default function AddAppointmentPage() {
                                   </div>
                                 </div>
                               );
-                            }
-                          )}
+                            })}
                         </div>
                       </div>
                     )}
