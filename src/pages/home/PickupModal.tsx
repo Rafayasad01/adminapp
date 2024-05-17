@@ -1,16 +1,16 @@
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
-import Modal from '@mui/material/Modal';
 import IconButton from '@mui/material/IconButton';
+import Modal from '@mui/material/Modal';
 
 import assets from '../../assets';
 
-type Props = {
+type PickupModalProps = {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  data: any;
+  // data: any;
 };
 
-function PickupModal({ open, setOpen }: Props) {
+function PickupModal({ open, setOpen }: PickupModalProps) {
   const handleClose = () => setOpen(false);
   return (
     <Modal

@@ -7,7 +7,7 @@ import Loader from '../../components/common/Loader';
 import Notify from '../../components/common/Notify';
 import TopBar from '../../components/common/TopBar';
 import { useAppSelector } from '../../redux/redux-hooks';
-import Service from '../../services/adminapp/adminAppUser';
+import appUserService from '../../services/adminapp/adminAppUser';
 import PermissionPopup from '../../utils/PermissionPopup';
 import { listingRolePermission } from '../../utils/helper';
 import AppUserLoyaltyTab from './AppUserRewardHistoryTabs/AppUserLoyaltyTab';
@@ -15,7 +15,7 @@ import AppUserPromotionTab from './AppUserRewardHistoryTabs/AppUserPromotionTab'
 
 function AppUserRewardHistory() {
   const dataRole = useAppSelector(
-    (state: any) => state?.persisitReducer?.roleState?.role?.permissions
+    (state: any) => state?.persistedReducer?.roleState?.role?.permissions
   );
   // const navigate = useNavigate();
   const [list, setList] = useState<any>(null);
@@ -35,7 +35,6 @@ function AppUserRewardHistory() {
     useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
   const actionMenuOptions = ['Edit', 'Delete'];
-  const [emptyVariable] = useState(null);
 
   const [isLoader, setIsLoader] = React.useState(true);
   const [isNotify, setIsNotify] = React.useState(false);
@@ -79,14 +78,14 @@ function AppUserRewardHistory() {
     setIsLoader(true);
     if (listingRolePermission(dataRole, 'Driver Address Detail')) {
       if (selectedTab === 'PROMOTION HISTORY') {
-        apiExecution(Service.appUserVocuherHistoryList);
+        apiExecution(appUserService.appUserVocuherHistoryList);
       } else {
-        apiExecution(Service.appUserLoyaltyHistoryList);
+        apiExecution(appUserService.appUserLoyaltyHistoryList);
       }
     } else {
       setIsLoader(false);
     }
-  }, [emptyVariable, selectedTab]);
+  }, [null, selectedTab]);
 
   return isLoader ? (
     <Loader />
@@ -127,7 +126,7 @@ function AppUserRewardHistory() {
                 page={page}
                 rowsPerPage={rowsPerPage}
                 search={search}
-                setSearch={setSearch}
+                // setSearch={setSearch}
                 setList={setList}
                 setPage={setPage}
                 setTotal={setTotal}

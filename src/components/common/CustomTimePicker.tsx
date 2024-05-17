@@ -21,7 +21,7 @@ const darkTheme = createTheme({
   },
 });
 
-type Props = {
+type CustomTimePickerProps = {
   timePickerLabel: string;
   timePickerSubLabel?: string;
   timePickerValue: dayjs.Dayjs | any;
@@ -44,7 +44,7 @@ function CustomTimePicker({
   register,
   setValue,
   watch,
-}: Props) {
+}: CustomTimePickerProps) {
   const [timePicker, setTimePicker] = useState<HTMLButtonElement | null>(null);
   // const buttonElement = useRef(null);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {

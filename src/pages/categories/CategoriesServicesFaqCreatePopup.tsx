@@ -1,11 +1,10 @@
+import TextareaAutosize from '@mui/base/TextareaAutosize';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
 import React from 'react';
 import { useForm } from 'react-hook-form';
-
-import TextareaAutosize from '@mui/base/TextareaAutosize';
 import '../../assets/css/PopupStyle.css';
 import ErrorSpanBox from '../../components/common/ErrorSpanBox';
 import { CategoryServiceFaq } from '../../interfaces/category.interface';
@@ -15,7 +14,7 @@ import {
   PATTERN,
 } from '../../utils/constants';
 
-type Props = {
+type CategoriesServicesFaqCreatePopupProps = {
   openFormDialog: boolean;
   setOpenFormDialog: React.Dispatch<React.SetStateAction<boolean>>;
   callback: (...args: any[]) => any;
@@ -25,7 +24,7 @@ function CategoriesServicesFaqCreatePopup({
   openFormDialog,
   setOpenFormDialog,
   callback,
-}: Props) {
+}: CategoriesServicesFaqCreatePopupProps) {
   const {
     register,
     handleSubmit,
@@ -84,6 +83,8 @@ function CategoriesServicesFaqCreatePopup({
               <FormControl className="FormControl" variant="standard">
                 <label className="FormLabel">Answer</label>
                 <TextareaAutosize
+                  onPointerEnterCapture={undefined}
+                  onPointerLeaveCapture={undefined}
                   className="FormTextarea pt-3 outline-none"
                   id="outlined-multiline-static"
                   minRows={5}

@@ -8,7 +8,7 @@ import { useForm } from 'react-hook-form';
 import '../../assets/css/PopupStyle.css';
 import { CategoryServiceFaq } from '../../interfaces/category.interface';
 
-type Props = {
+type CategoriesServicesFaqEditPopupProps = {
   openFormDialog: boolean;
   setOpenFormDialog: React.Dispatch<React.SetStateAction<boolean>>;
   formData: any;
@@ -20,7 +20,7 @@ function CategoriesServicesFaqEditPopup({
   setOpenFormDialog,
   formData,
   callback,
-}: Props) {
+}: CategoriesServicesFaqEditPopupProps) {
   const {
     register,
     handleSubmit,
@@ -72,6 +72,8 @@ function CategoriesServicesFaqEditPopup({
               <FormControl className="FormControl" variant="standard">
                 <label className="FormLabel">Answer</label>
                 <TextareaAutosize
+                  onPointerEnterCapture={undefined}
+                  onPointerLeaveCapture={undefined}
                   className="FormTextarea"
                   id="outlined-multiline-static"
                   minRows={5}

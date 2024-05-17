@@ -1,3 +1,5 @@
+/* eslint-disable import/no-cycle */
+
 import { ORDER_PREFIX } from '../../utils/constants';
 import network from '../../utils/network';
 

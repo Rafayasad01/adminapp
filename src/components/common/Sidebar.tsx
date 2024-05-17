@@ -1,21 +1,17 @@
 /* eslint-disable prettier/prettier */
-import GridViewOutlinedIcon from '@mui/icons-material/GridViewOutlined';
-import { Fragment, useEffect, useState } from 'react';
-// import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
-import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
-// import FormatListBulletedOutlinedIcon from '@mui/icons-material/FormatListBulletedOutlined';
-// import PlaceOutlinedIcon from '@mui/icons-material/PlaceOutlined';
-// import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
-import QuestionAnswerOutlinedIcon from '@mui/icons-material/QuestionAnswerOutlined';
-import FacebookIcon from '@mui/icons-material/Facebook';
-import InstagramIcon from '@mui/icons-material/Instagram';
-import LinkedInIcon from '@mui/icons-material/LinkedIn';
-// import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import CorporateFareIcon from '@mui/icons-material/CorporateFare';
+import FacebookIcon from '@mui/icons-material/Facebook';
+import GridViewOutlinedIcon from '@mui/icons-material/GridViewOutlined';
+import InstagramIcon from '@mui/icons-material/Instagram';
+import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
+import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
+import ManageAccountsOutlinedIcon from '@mui/icons-material/ManageAccountsOutlined';
 import PeopleOutlineOutlinedIcon from '@mui/icons-material/PeopleOutlineOutlined';
+import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
+import QuestionAnswerOutlinedIcon from '@mui/icons-material/QuestionAnswerOutlined';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
-// import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
+import SplitscreenOutlinedIcon from '@mui/icons-material/SplitscreenOutlined';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import ViewCarouselOutlinedIcon from '@mui/icons-material/ViewCarouselOutlined';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
@@ -25,22 +21,19 @@ import IconButton from '@mui/material/IconButton';
 import List from '@mui/material/List';
 import Stack from '@mui/material/Stack';
 import Toolbar from '@mui/material/Toolbar';
+import { Fragment, useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
-// import HeadphonesOutlinedIcon from '@mui/icons-material/HeadphonesOutlined'
-// import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined';
 import assets from '../../assets';
 import { useAppSelector } from '../../redux/redux-hooks';
 import CAN, { defineRules } from '../../services/permissions/permissions';
-import { MODULE_EMPLOYEEES } from '../../utils/constants';
+import { MODULE_EMPLOYEES } from '../../utils/constants';
 import ArrowDown from '../icons/ArrowDown';
 import ArrowUp from '../icons/ArrowUp';
 import CategoryIcon from '../icons/CategoryIcon';
 import OrderIcon from '../icons/OrderIcon';
-// import TenantIcon from '../icons/TenantIcon';
-import VoucherIcon from '../icons/VoucherIcon';
-import AppointmentIcon from '../icons/appointmentIcon';
 import ProviderIcon from '../icons/providerIcon';
 import VisitIcon from '../icons/visitIcon';
+import VoucherIcon from '../icons/VoucherIcon';
 
 const links = [
   {
@@ -49,35 +42,89 @@ const links = [
     permission: 'Dashboard List',
     icon: <GridViewOutlinedIcon fontSize="inherit" />,
   },
-  // {
-  //   name: 'Carts',
-  //   path: 'carts',
-  //   permission: 'Cart List',
-  //   icon: <ShoppingCartOutlinedIcon fontSize="inherit" />,
-  // },
   {
-    name: 'Orders',
-    path: 'orders',
-    permission: 'Order List',
-    icon: <OrderIcon />,
+    name: 'Store Appointment',
+    path: 'store-appointment',
+    permission: 'Appointment Parent',
+    icon: <SplitscreenOutlinedIcon fontSize="inherit" />,
+    childLinks: [
+      {
+        name: 'Services',
+        path: 'store-appointment/service',
+        permission: 'Category List',
+        icon: <GridViewOutlinedIcon fontSize="inherit" />,
+      },
+      {
+        name: 'Employees',
+        path: 'store-appointment/employees',
+        permission: 'Category List',
+        icon: <ProviderIcon />,
+      },
+      {
+        name: 'Appointments',
+        path: 'store-appointment/appointments',
+        permission: 'Category List',
+        icon: <VisitIcon />,
+      },
+      {
+        name: 'Leave management',
+        path: 'store-appointment/leaves-management',
+        permission: 'Category List',
+        icon: <ManageAccountsOutlinedIcon fontSize="inherit" />,
+      },
+      // {
+      //   name: 'Ratings',
+      //   path: 'store-appointment/ratings',
+      //   permission: 'Category List',
+      //   icon: <VisitIcon />,
+      // },
+    ],
   },
   {
-    name: 'Categories',
-    path: 'categories',
-    permission: 'Category List',
-    icon: <CategoryIcon />,
+    name: 'Store Product',
+    path: 'store-product',
+    permission: 'Appointment Parent',
+    icon: <Inventory2OutlinedIcon fontSize="inherit" />,
+    childLinks: [
+      {
+        name: 'Products',
+        path: 'store-product/product',
+        permission: 'Category List',
+        icon: <CategoryIcon />,
+      },
+      {
+        name: 'Orders',
+        path: 'store-product/orders',
+        permission: 'Order List',
+        icon: <OrderIcon />,
+      },
+      {
+        name: 'Rating',
+        path: 'store-product/ratings',
+        permission: 'Banners List',
+        icon: <ViewCarouselOutlinedIcon className="w-[17px]" />,
+      },
+    ],
   },
   {
-    name: 'App user',
-    path: 'app-user',
-    permission: 'Customer List',
+    name: 'User',
+    path: 'user',
+    permission: 'Appointment Parent',
     icon: <PersonOutlineOutlinedIcon fontSize="inherit" />,
-  },
-  {
-    name: 'Employees',
-    path: 'employees',
-    permission: 'Employee List',
-    icon: <PeopleOutlineOutlinedIcon className="w-[17px]" />,
+    childLinks: [
+      {
+        name: 'App User',
+        path: 'user/app-user/list',
+        permission: 'Customer List',
+        icon: <PersonOutlineOutlinedIcon fontSize="inherit" />,
+      },
+      {
+        name: 'Admin Users',
+        path: 'user/employees',
+        permission: 'Employee List',
+        icon: <PeopleOutlineOutlinedIcon className="w-[17px]" />,
+      },
+    ],
   },
   {
     name: 'Branches',
@@ -90,32 +137,6 @@ const links = [
     path: 'banners',
     permission: 'Banners List',
     icon: <ViewCarouselOutlinedIcon className="w-[17px]" />,
-  },
-  {
-    name: 'Rating',
-    path: 'ratings',
-    permission: 'Banners List',
-    icon: <ViewCarouselOutlinedIcon className="w-[17px]" />,
-  },
-  {
-    name: 'Appointment',
-    path: 'appointment',
-    permission: 'Appointment Parent',
-    icon: <AppointmentIcon />,
-    childLinks: [
-      {
-        name: 'Store Employees',
-        path: 'appointment/provider',
-        permission: 'Appointment Category List',
-        icon: <ProviderIcon />,
-      },
-      {
-        name: 'All Appointments',
-        path: 'appointment/visit',
-        permission: 'Appointment Visit List',
-        icon: <VisitIcon />,
-      },
-    ],
   },
   {
     name: 'FAQs',
@@ -146,10 +167,10 @@ const links = [
 function Sidebar() {
   const userData = useAppSelector((state: any) => state?.authState?.user);
   const appItems = useAppSelector(
-    (state: any) => state?.persisitReducer?.appState?.UserItems
+    (state: any) => state?.persistedReducer?.appState?.UserItems
   );
   const logo = useAppSelector(
-    (state: any) => state?.persisitReducer?.appState?.logo
+    (state: any) => state?.persistedReducer?.appState?.logo
   );
 
   // console.log('appItems', appItems);
@@ -158,7 +179,6 @@ function Sidebar() {
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
   const authState: any = useAppSelector((state: any) => state?.authState);
   const dataRole = useAppSelector((state: any) => state);
-  const [emptyVariable] = useState(null);
 
   // const dispatch = useAppDispatch();
   // const logOut = () => {
@@ -259,17 +279,17 @@ function Sidebar() {
   }
 
   useEffect(() => {
-    defineRules(dataRole?.persisitReducer?.roleState?.role?.permissions);
-    if (dataRole?.persisitReducer?.roleState?.role?.permissions) {
+    defineRules(dataRole?.persistedReducer?.roleState?.role?.permissions);
+    if (dataRole?.persistedReducer?.roleState?.role?.permissions) {
       const tempList = links.filter((el) => {
-        if (el.name === MODULE_EMPLOYEEES) {
+        if (el.name === MODULE_EMPLOYEES) {
           if (appItems.employeeLimit <= 0) {
             return null;
           }
         }
         return CAN('canView', el.permission as string);
       });
-      // console.log("templost", tempList);
+      // console.log("tempList", tempList);
       tempList.unshift({
         name: 'Dashboard',
         path: 'home',
@@ -278,7 +298,7 @@ function Sidebar() {
       });
       setList(tempList);
     }
-  }, [emptyVariable, appItems?.employeeLimit]);
+  }, [null, appItems?.employeeLimit]);
 
   return (
     <Drawer
@@ -303,7 +323,7 @@ function Sidebar() {
             {userData?.isSuperAdmin ? (
               <img
                 className="mt-9 h-[29px] max-w-[150px]"
-                src={assets.images.urApplogoWhite}
+                src={assets.images.urAppLogoWhite}
                 alt=""
               />
             ) : logo ? (
@@ -316,7 +336,7 @@ function Sidebar() {
               <div className="flex w-full items-center justify-start rounded-2xl p-3 text-white">
                 <img
                   className="mt-2 max-w-[150px]"
-                  src={assets.images.urApplogoWhite}
+                  src={assets.images.urAppLogoWhite}
                   alt="logo"
                 />
               </div>
@@ -345,24 +365,11 @@ function Sidebar() {
           {!authState.user.isSuperAdmin && (
             <div className="share-via">
               <h6 className="heading">Share</h6>
-              {(appItems?.tenantConfig?.facebook === 'undefined' ||
-                appItems?.tenantConfig?.facebook === null) &&
-                (appItems?.tenantConfig?.twitter === 'undefined' ||
-                  appItems?.tenantConfig?.twitter === null) &&
-                (appItems?.tenantConfig?.instagram === 'undefined' ||
-                  appItems?.tenantConfig?.instagram === null) &&
-                (appItems?.tenantConfig?.whatsapp === 'undefined' ||
-                  appItems?.tenantConfig?.whatsapp === null) &&
-                (appItems?.tenantConfig?.linkedin === 'undefined' ||
-                  appItems?.tenantConfig?.linkedin === null) &&
-                (appItems?.tenantConfig?.youtube === 'undefined' ||
-                  appItems?.tenantConfig?.youtube === null) && (
-                  <span className="text-sm">No Links yet</span>
-                )}
               {appItems?.tenantConfig && (
                 <div className="social-icons grid grid-cols-6">
                   {appItems?.tenantConfig?.facebook !== 'undefined' &&
-                    appItems?.tenantConfig?.facebook !== null && (
+                    appItems?.tenantConfig?.facebook !== null &&
+                    appItems?.tenantConfig?.facebook !== '' && (
                       <IconButton className="social-btn" onClick={() => null}>
                         <a
                           href={appItems?.tenantConfig?.facebook}
@@ -374,7 +381,8 @@ function Sidebar() {
                       </IconButton>
                     )}
                   {appItems?.tenantConfig?.twitter !== 'undefined' &&
-                    appItems?.tenantConfig?.twitter !== null && (
+                    appItems?.tenantConfig?.twitter !== null &&
+                    appItems?.tenantConfig?.twitter !== '' && (
                       <IconButton className="social-btn" onClick={() => null}>
                         <a
                           href={appItems?.tenantConfig?.twitter}
@@ -386,7 +394,8 @@ function Sidebar() {
                       </IconButton>
                     )}
                   {appItems?.tenantConfig?.instagram !== 'undefined' &&
-                    appItems?.tenantConfig?.instagram !== null && (
+                    appItems?.tenantConfig?.instagram !== null &&
+                    appItems?.tenantConfig?.instagram !== '' && (
                       <IconButton className="social-btn" onClick={() => null}>
                         <a
                           href={appItems?.tenantConfig?.instagram}
@@ -398,7 +407,8 @@ function Sidebar() {
                       </IconButton>
                     )}
                   {appItems?.tenantConfig?.whatsapp !== 'undefined' &&
-                    appItems?.tenantConfig?.whatsapp !== null && (
+                    appItems?.tenantConfig?.whatsapp !== null &&
+                    appItems?.tenantConfig?.whatsapp !== '' && (
                       <IconButton className="social-btn" onClick={() => null}>
                         <a
                           href={appItems?.tenantConfig?.whatsapp}
@@ -410,7 +420,8 @@ function Sidebar() {
                       </IconButton>
                     )}
                   {appItems?.tenantConfig?.linkedin !== 'undefined' &&
-                    appItems?.tenantConfig?.linkedin !== null && (
+                    appItems?.tenantConfig?.linkedin !== null &&
+                    appItems?.tenantConfig?.linkedin !== '' && (
                       <IconButton className="social-btn" onClick={() => null}>
                         <a
                           href={appItems?.tenantConfig?.linkedin}
@@ -422,7 +433,8 @@ function Sidebar() {
                       </IconButton>
                     )}
                   {appItems?.tenantConfig?.youtube !== 'undefined' &&
-                    appItems?.tenantConfig?.youtube !== null && (
+                    appItems?.tenantConfig?.youtube !== null &&
+                    appItems?.tenantConfig?.youtube !== '' && (
                       <IconButton className="social-btn" onClick={() => null}>
                         <a
                           href={appItems?.tenantConfig?.youtube}

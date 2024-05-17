@@ -20,7 +20,7 @@ import {
   PH_MINI_LENGTH,
 } from '../../utils/constants';
 
-type Props = {
+type AppUserCreatePopupProps = {
   openFormDialog: boolean;
   setOpenFormDialog: React.Dispatch<React.SetStateAction<boolean>>;
   callback: (...args: any[]) => any;
@@ -35,7 +35,7 @@ function AppUserCreatePopup({
   setOpenFormDialog,
   callback,
   appUserRoleLov,
-}: Props) {
+}: AppUserCreatePopupProps) {
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const {

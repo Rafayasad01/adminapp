@@ -1,23 +1,26 @@
-import React, { useState } from 'react';
-import Dialog from '@mui/material/Dialog';
-import Button from '@mui/material/Button';
-import FormControl from '@mui/material/FormControl';
-import Input from '@mui/material/Input';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import FormControl from '@mui/material/FormControl';
 import IconButton from '@mui/material/IconButton';
-import TextField from '@mui/material/TextField';
-import Select from '@mui/material/Select';
+import Input from '@mui/material/Input';
 import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
+import TextField from '@mui/material/TextField';
+import React, { useState } from 'react';
 
 import '../../assets/css/PopupStyle.css';
 
-type Props = {
+type ComplainsCreatePopupProps = {
   openFormDialog: boolean;
   setOpenFormDialog: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-function ComplainsCreatePopup({ openFormDialog, setOpenFormDialog }: Props) {
+function ComplainsCreatePopup({
+  openFormDialog,
+  setOpenFormDialog,
+}: ComplainsCreatePopupProps) {
   // const [selectShop, setSelectShop] = useState('status');
   const [isImage, setIsImage] = useState('');
   const handleFormClose = () => setOpenFormDialog(false);

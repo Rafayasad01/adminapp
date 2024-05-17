@@ -2,39 +2,34 @@
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import SearchIcon from '@mui/icons-material/Search';
 import WysiwygOutlinedIcon from '@mui/icons-material/WysiwygOutlined';
+import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import FormControl from '@mui/material/FormControl';
 import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-// import Pagination from '@mui/material/Pagination';
-// import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
 import TablePagination from '@mui/material/TablePagination';
 import dayjs from 'dayjs';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import ActionMenu from '../../components/common/ActionMenu';
 import Loader from '../../components/common/Loader';
 import Notify from '../../components/common/Notify';
 import TopBar from '../../components/common/TopBar';
 import { useAppSelector } from '../../redux/redux-hooks';
-import order from '../../services/adminapp/adminOrders';
-import {
-  ORDER_STATUSES,
-  ORDER_STATUS_IN_CANCELLED,
-  ORDER_STATUS_IN_DELIVERED,
-  ORDER_STATUS_IN_DELIVERY,
-  ORDER_STATUS_NEW,
-  ORDER_STATUS_PICKED_UP,
-  ORDER_STATUS_PROCESSING,
-} from '../../utils/constants';
-import { CheckRolePermission, listingRolePermission } from '../../utils/helper';
+import orderService from '../../services/adminapp/adminOrders';
+import { ORDER_STATUSES } from '../../utils/constants';
+import promiseHandler, {
+  CheckRolePermission,
+  listingRolePermission,
+} from '../../utils/helper';
+// import Pagination from '@mui/material/Pagination';
+// import Stack from '@mui/material/Stack';
 
 function OrdersPage() {
   const authState: any = useAppSelector((state) => state?.authState);
   const dataRole = useAppSelector(
-    (state: any) => state?.persisitReducer?.roleState?.role?.permissions
+    (state: any) => state?.persistedReducer?.roleState?.role?.permissions
   );
   const navigate = useNavigate();
   const [search, setSearch] = useState('');
@@ -50,67 +45,105 @@ function OrdersPage() {
     useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
   const actionMenuOptions = ['Detail'];
-  const [emptyVariable] = useState(null);
-  const handleChangePage = (
+  const handleChangePage = async (
     event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number
   ) => {
     setPage(newPage);
     // offset? ,limit rowsperpage hoga ofset page * rowsperPage
     if (search === '' || search === null || search === undefined) {
-      order
-        .getListService(authState.user.tenant, newPage, rowsPerPage)
-        .then((item) => {
-          setList(
-            item.data.data.list.map((newItem: any) => ({
-              ...newItem,
-              isSelected: false,
-              orderStatus: newItem.status,
-            }))
-          );
-          setTotal(item.data.data.total);
-        });
+      const getOrderListPromise = orderService.getListService(
+        authState.user.tenant,
+        newPage,
+        rowsPerPage
+      );
+      const [getOrderListResult, getOrderListError, getOrderListOk] =
+        await promiseHandler(getOrderListPromise);
+      if (!getOrderListOk) {
+        console.error('getOrderListError :>> ', getOrderListError);
+        return;
+      }
+      if (!getOrderListResult.data.success) {
+        console.error(
+          'getOrderListResult.data.message :>> ',
+          getOrderListResult.data.message
+        );
+        return;
+      }
+      setList(
+        getOrderListResult.data.data.list.map((newItem: any) => ({
+          ...newItem,
+          isSelected: false,
+          orderStatus: newItem.status,
+        }))
+      );
+      setTotal(getOrderListResult.data.data.total);
     } else {
-      order
-        .searchService(authState.user.tenant, search, newPage, rowsPerPage)
-        .then((item) => {
-          setList(
-            item.data.data.list.map((newItem: any) => ({
-              ...newItem,
-              isSelected: false,
-              orderStatus: newItem.status,
-            }))
-          );
-          setTotal(item.data.data.total);
-        });
+      const orderSearchPromise = orderService.searchService(
+        authState.user.tenant,
+        search,
+        newPage,
+        rowsPerPage
+      );
+      const [orderSearchResult, orderSearchError, orderSearchOk] =
+        await promiseHandler(orderSearchPromise);
+      if (!orderSearchOk) {
+        console.error('orderSearchError :>> ', orderSearchError);
+        return;
+      }
+      if (!orderSearchResult.data.success) {
+        console.error(
+          'orderSearchResult.data.message :>> ',
+          orderSearchResult.data.message
+        );
+        return;
+      }
+      setList(
+        orderSearchResult.data.data.list.map((newItem: any) => ({
+          ...newItem,
+          isSelected: false,
+          orderStatus: newItem.status,
+        }))
+      );
+      setTotal(orderSearchResult.data.data.total);
     }
-    // order.searchService(search, newPage, rowsPerPage).then(item => {
-    //   setList(item.data.data.list.map((item: any) => ({ ...item, isSelected: false, orderStatus: item.status })));
-    //   setTotal(item.data.data.total);
-    // });
   };
-  const handleChangeRowsPerPage = (
+  const handleChangeRowsPerPage = async (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    const newRowperPage = parseInt(event.target.value, 10);
+    const newRowPerPage = parseInt(event.target.value, 10);
     const newPage = 0;
-    setRowsPerPage(newRowperPage);
+    setRowsPerPage(newRowPerPage);
     setPage(newPage);
     if (search === '' || search === null || search === undefined) {
-      order
-        .getListService(authState.user.tenant, newPage, rowsPerPage)
-        .then((item) => {
-          setList(
-            item.data.data.list.map((newItem: any) => ({
-              ...newItem,
-              isSelected: false,
-              orderStatus: newItem.status,
-            }))
-          );
-          setTotal(item.data.data.total);
-        });
+      const getOrderListPromise = orderService.getListService(
+        authState.user.tenant,
+        newPage,
+        rowsPerPage
+      );
+      const [getOrderListResult, getOrderListError, getOrderListOk] =
+        await promiseHandler(getOrderListPromise);
+      if (!getOrderListOk) {
+        console.error('getOrderListError :>> ', getOrderListError);
+        return;
+      }
+      if (!getOrderListResult.data.success) {
+        console.error(
+          'getOrderListResult.data.message :>> ',
+          getOrderListResult.data.message
+        );
+        return;
+      }
+      setList(
+        getOrderListResult.data.data.list.map((newItem: any) => ({
+          ...newItem,
+          isSelected: false,
+          orderStatus: newItem.status,
+        }))
+      );
+      setTotal(getOrderListResult.data.data.total);
     } else {
-      order
+      orderService
         .searchService(authState.user.tenant, search, newPage, rowsPerPage)
         .then((item) => {
           setList(
@@ -138,7 +171,7 @@ function OrdersPage() {
       const searchTxt = event.target.value as string;
       setSearch(searchTxt);
       setPage(0);
-      order
+      orderService
         .searchService(authState.user.tenant, searchTxt, page, rowsPerPage)
         .then((item) => {
           setList(
@@ -165,33 +198,48 @@ function OrdersPage() {
   // };
 
   useEffect(() => {
-    if (listingRolePermission(dataRole, 'Order List')) {
-      order
-        .getListService(authState.user.tenant, page, rowsPerPage)
-        .then((item) => {
-          setIsLoader(false);
-          // console.log(item.data.data);
-          setList(
-            item.data.data.list.map((newItem: any) => ({
-              ...newItem,
-              isSelected: false,
-              orderStatus: newItem.status,
-            }))
-          );
-          setTotal(item.data.data.total);
-        })
-        .catch((err) => {
-          setIsLoader(false);
-          setIsNotify(true);
-          setNotifyMessage({
-            text: err.message,
-            type: 'error',
-          });
+    async function getOrderList() {
+      const getOrderListPromise = orderService.getListService(
+        authState.user.tenant,
+        page,
+        rowsPerPage
+      );
+      const [getOrderListResult, getOrderListError, getOrderListOk] =
+        await promiseHandler(getOrderListPromise);
+      if (!getOrderListOk) {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: getOrderListError.message,
+          type: 'error',
         });
+        return;
+      }
+      if (!getOrderListResult.data.success) {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: getOrderListResult.data.message,
+          type: 'error',
+        });
+        return;
+      }
+      setIsLoader(false);
+      setList(
+        getOrderListResult.data.data.list.map((newItem: any) => ({
+          ...newItem,
+          isSelected: false,
+          orderStatus: newItem.status,
+        }))
+      );
+      setTotal(getOrderListResult.data.data.total);
     }
-  }, [emptyVariable]);
+    if (listingRolePermission(dataRole, 'Order List')) {
+      getOrderList();
+    }
+  }, [null]);
 
-  const manuHandler = (option: string) => {
+  const menuHandler = (option: string) => {
     let doOption = '';
     if (option === 'Edit') {
       doOption = 'edit';
@@ -208,22 +256,13 @@ function OrdersPage() {
     );
   };
 
-  const getStatusTag = (status: string) => {
-    let tag = '';
-    if (status === ORDER_STATUS_NEW) {
-      tag = 'blue';
-    } else if (status === ORDER_STATUS_PICKED_UP) {
-      tag = 'purple';
-    } else if (status === ORDER_STATUS_PROCESSING) {
-      tag = 'green';
-    } else if (status === ORDER_STATUS_IN_DELIVERY) {
-      tag = 'orange';
-    } else if (status === ORDER_STATUS_IN_DELIVERED) {
-      tag = 'yellow';
-    } else if (status === ORDER_STATUS_IN_CANCELLED) {
-      tag = 'red';
-    }
-    return tag;
+  const getStatusBackground = (status: string) => {
+    const newStatuses = [...ORDER_STATUSES].map(([key, value]) => ({
+      key,
+      value,
+    }));
+    const newStatus = newStatuses.find((s) => s.key === status);
+    return newStatus?.value.background;
   };
 
   const setOrderStatus = (status: string) => {
@@ -231,8 +270,8 @@ function OrdersPage() {
       key,
       value,
     }));
-    const newStatus = newStatuses.filter((s) => s.key === status);
-    return newStatus[0].value.title;
+    const newStatus = newStatuses.find((s) => s.key === status);
+    return newStatus?.value.title;
   };
   return isLoader ? (
     <Loader />
@@ -244,7 +283,7 @@ function OrdersPage() {
           anchorEl={actionMenuAnchorEl}
           setAnchorEl={setActionMenuAnchorEl}
           options={actionMenuOptions}
-          callback={manuHandler}
+          callback={menuHandler}
         />
       )}
       <Notify
@@ -307,13 +346,12 @@ function OrdersPage() {
             <table className="table-border table-auto">
               <thead>
                 <tr className="border-opacity">
-                  <th className="w-[22%] ">Customers</th>
+                  <th className="w-[22%]">Customers</th>
                   <th>Pickup Time</th>
                   <th>Drop-off Time</th>
                   <th>Amount</th>
                   <th>Status</th>
                   <th>Order ID</th>
-                  <th>&nbsp;</th>
                 </tr>
               </thead>
               <tbody>
@@ -370,7 +408,7 @@ function OrdersPage() {
                         </td>
                         <td>
                           <span
-                            className={`badge badge-${getStatusTag(
+                            className={`badge ${getStatusBackground(
                               Item.status
                             )}`}
                           >

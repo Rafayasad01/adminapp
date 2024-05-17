@@ -1,7 +1,7 @@
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 
-type Props = {
+type ActionMenuProps = {
   open: boolean;
   anchorEl: any;
   setAnchorEl: React.Dispatch<React.SetStateAction<null | HTMLElement>>;
@@ -9,7 +9,13 @@ type Props = {
   callback: (...args: any[]) => any;
 };
 const ITEM_HEIGHT = 48;
-function ActionMenu({ open, anchorEl, setAnchorEl, options, callback }: Props) {
+function ActionMenu({
+  open,
+  anchorEl,
+  setAnchorEl,
+  options,
+  callback,
+}: ActionMenuProps) {
   const handleClose = () => {
     setAnchorEl(null);
   };

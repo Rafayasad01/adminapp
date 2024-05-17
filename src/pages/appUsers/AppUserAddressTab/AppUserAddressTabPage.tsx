@@ -8,24 +8,27 @@ import CustomText from '../../../components/common/CustomText';
 import Loader from '../../../components/common/Loader';
 import Notify from '../../../components/common/Notify';
 import { useAppSelector } from '../../../redux/redux-hooks';
-import Service from '../../../services/adminapp/adminAppUser';
+import appUserService from '../../../services/adminapp/adminAppUser';
 import { NOT_AUTHORIZED_MESSAGE } from '../../../utils/constants';
 import { listingRolePermission } from '../../../utils/helper';
 import AppUserAddressCreatePopup from './AppUserAddressCreatePopup';
 import AppUserAddressUpdatePopup from './AppUserAddressUpdatePopup';
 
-type Props = {
+type AppUserAddressTabPageProps = {
   addressList?: any;
   appUserId?: any;
   setAddress?: any;
 };
 
-function AppUserAddressTabPage({ addressList, appUserId, setAddress }: Props) {
-  const [emptyVariable] = useState<any>('');
+function AppUserAddressTabPage({
+  addressList,
+  appUserId,
+  setAddress,
+}: AppUserAddressTabPageProps) {
   const authState: any = useAppSelector((state) => state?.authState);
   const [list, setList] = useState<any>();
   const dataRole = useAppSelector(
-    (state: any) => state?.persisitReducer?.roleState?.role?.permissions
+    (state: any) => state?.persistedReducer?.roleState?.role?.permissions
   );
   const [isLoader, setIsLoader] = React.useState(true);
   const [isNotify, setIsNotify] = React.useState(false);
@@ -53,7 +56,7 @@ function AppUserAddressTabPage({ addressList, appUserId, setAddress }: Props) {
       setIsLoader(false);
       setList(addressList);
     }
-  }, [emptyVariable]);
+  }, ['']);
 
   const createFormHandler = (data: any) => {
     setIsLoader(true);
@@ -65,7 +68,8 @@ function AppUserAddressTabPage({ addressList, appUserId, setAddress }: Props) {
       tenant: authState.user.tenant,
       appUser: appUserId,
     };
-    Service.appUserAddressCreate(formData)
+    appUserService
+      .appUserAddressCreate(formData)
       .then((item) => {
         if (item.data.success) {
           setIsLoader(false);
@@ -111,7 +115,8 @@ function AppUserAddressTabPage({ addressList, appUserId, setAddress }: Props) {
       type: data.type,
       address: data.address,
     };
-    Service.appUserAddressUpdate(formData)
+    appUserService
+      .appUserAddressUpdate(formData)
       .then((item) => {
         if (item.data.success) {
           setIsLoader(false);
@@ -154,7 +159,7 @@ function AppUserAddressTabPage({ addressList, appUserId, setAddress }: Props) {
         id,
         isActive: event.target.checked,
       };
-      Service.appUserAddressUpdateStatus(data).then((updateItem) => {
+      appUserService.appUserAddressUpdateStatus(data).then((updateItem) => {
         if (updateItem.data.success) {
           setList((newArr: any) => {
             return newArr.map((item: any) => {
@@ -210,7 +215,8 @@ function AppUserAddressTabPage({ addressList, appUserId, setAddress }: Props) {
   const handleEdit = (id: string) => {
     if (listingRolePermission(dataRole, 'Banners Edit')) {
       setIsLoader(true);
-      Service.appUserAddressEdit(id)
+      appUserService
+        .appUserAddressEdit(id)
         .then((item: any) => {
           if (item.data.success) {
             setIsLoader(false);
@@ -282,7 +288,7 @@ function AppUserAddressTabPage({ addressList, appUserId, setAddress }: Props) {
                     <th>longitude</th>
                     <th>type</th>
                     <th>status</th>
-                    <th>&nbsp;</th>
+                    <th aria-label="empty table header">&nbsp;</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -328,7 +334,7 @@ function AppUserAddressTabPage({ addressList, appUserId, setAddress }: Props) {
               </table>
             </div>
           ) : (
-            <CustomText noroundedborders text="No Address Records" />
+            <CustomText noRoundedBorders text="No Address Records" />
           )}
         </div>
       </div>

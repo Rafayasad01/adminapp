@@ -5,34 +5,39 @@ import { DemoItem } from '@mui/x-date-pickers/internals/demo';
 import dayjs from 'dayjs';
 import ErrorSpanBox from './ErrorSpanBox';
 
-type Props = {
-  register?: any;
-  id?: any;
-  error?: any;
-  inputTitle?: string;
-  label?: string;
-  notRequired?: boolean;
-  setValue?: any;
-  isTrue?: boolean;
-  value?: any;
+type CustomDateTimePickerProps = {
   defaultValue?: any;
+  error?: any;
+  id?: any;
+  inputTitle?: string;
+  isTrue?: boolean;
+  label?: string;
+  maxDate?: any;
   minDate?: any;
+  notRequired?: boolean;
+  register?: any;
+  setValue?: any;
+  value?: any;
 };
 
 function CustomDateTimePicker({
-  value,
-  isTrue,
-  setValue,
+  defaultValue: _defaultValue,
+  error: _error,
   id,
   inputTitle,
-  minDate,
-}: Props) {
+  isTrue,
+  label: _label,
+  maxDate,
+  minDate: _minDate,
+  notRequired: _notRequired,
+  register: _register,
+  setValue,
+  value,
+}: CustomDateTimePickerProps) {
   const handleChange = (date: any) => {
-    // console.log('daaa', date);
+    console.log('daaa', date);
     setValue(id, date);
   };
-
-  // console.log('sAASA', isTrue, value);
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -40,14 +45,16 @@ function CustomDateTimePicker({
         <DesktopDatePicker
           sx={{
             border: '1px solid',
-            padding: 'px',
+            padding: '0px',
+            margin: '0px',
             borderRadius: '5px',
             fontSize: '12px',
           }}
           className="border-secondary"
           value={dayjs(value)}
           onChange={handleChange}
-          minDate={minDate}
+          // minDate={dayjs(minDates)}
+          maxDate={maxDate}
         />
       </DemoItem>
       {isTrue && value === undefined && (

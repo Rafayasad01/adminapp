@@ -1,17 +1,17 @@
-import React from 'react';
+import SearchIcon from '@mui/icons-material/Search';
+import Divider from '@mui/material/Divider';
 import FormControl from '@mui/material/FormControl';
+import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
-import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
-import SearchIcon from '@mui/icons-material/Search';
+import React from 'react';
 
-type Props = {
+type CustomSearchBarProps = {
   onkeydown: any;
   placeholder: string;
 };
 
-function CustomSearchBar({ onkeydown, placeholder }: Props) {
+function CustomSearchBar({ onkeydown, placeholder }: CustomSearchBarProps) {
   return (
     <FormControl
       className="search-grey-outline placeholder-grey w-60"

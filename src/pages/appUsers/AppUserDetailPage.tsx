@@ -10,7 +10,7 @@ import MapAddress from '../../components/common/MapAddress';
 import Notify from '../../components/common/Notify';
 import TopBar from '../../components/common/TopBar';
 import { useAppSelector } from '../../redux/redux-hooks';
-import Service from '../../services/adminapp/adminAppUser';
+import appUserService from '../../services/adminapp/adminAppUser';
 import PermissionPopup from '../../utils/PermissionPopup';
 import { weekDays } from '../../utils/constants';
 import { listingRolePermission } from '../../utils/helper';
@@ -19,7 +19,7 @@ import AppUserScheduleTabPage from './AppUserScheduleTab/AppUserScheduleTabPage'
 
 function AppUserDetailPage() {
   const dataRole = useAppSelector(
-    (state: any) => state?.persisitReducer?.roleState?.role?.permissions
+    (state: any) => state?.persistedReducer?.roleState?.role?.permissions
   );
   // const navigate = useNavigate();
   const [detail, setDetail] = useState<any>(null);
@@ -35,7 +35,6 @@ function AppUserDetailPage() {
     useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
   const actionMenuOptions = ['Edit', 'Delete'];
-  const [emptyVariable] = useState(null);
 
   const [isLoader, setIsLoader] = React.useState(true);
   const [isNotify, setIsNotify] = React.useState(false);
@@ -50,7 +49,8 @@ function AppUserDetailPage() {
 
   useEffect(() => {
     if (listingRolePermission(dataRole, 'Driver Address Detail')) {
-      Service.appUserDetails(appuserId)
+      appUserService
+        .appUserDetails(appuserId)
         .then((item: any) => {
           if (item.data.success) {
             setIsLoader(false);
@@ -94,7 +94,7 @@ function AppUserDetailPage() {
           });
         });
     }
-  }, [emptyVariable]);
+  }, [null]);
 
   return isLoader ? (
     <Loader />

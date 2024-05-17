@@ -20,7 +20,7 @@ import Loader from '../../../components/common/Loader';
 import Notify from '../../../components/common/Notify';
 import TopBar from '../../../components/common/TopBar';
 import { useAppSelector } from '../../../redux/redux-hooks';
-import Service from '../../../services/adminapp/adminAppointment';
+import adminAppointmentService from '../../../services/adminapp/adminAppointment';
 import { NOT_AUTHORIZED_MESSAGE, PATTERN } from '../../../utils/constants';
 
 import { AppointmentService } from '../../../interfaces/app.appointment';
@@ -30,10 +30,9 @@ function AppointmentProviderServicesList() {
   const { providerId } = useParams();
   const authState: any = useAppSelector((state: any) => state?.authState);
   const dataRole = useAppSelector(
-    (state: any) => state?.persisitReducer?.roleState?.role?.permissions
+    (state: any) => state?.persistedReducer?.roleState?.role?.permissions
   );
   const [search, setSearch] = useState<any>('');
-  const [emptyVariable] = useState(null);
   const [page, setPage] = useState(0);
   const [total, setTotal] = useState(0);
   const [list, setList] = useState<any>([]);
@@ -96,7 +95,8 @@ function AppointmentProviderServicesList() {
     if (
       listingRolePermission(dataRole, 'Appointment Provider Service Create')
     ) {
-      Service.ServiceProviderLov(authState.user.tenant)
+      adminAppointmentService
+        .ServiceProviderLov(authState.user.tenant)
         .then((item: any) => {
           if (item.data.success) {
             // setProviderLov(item.data.data);
@@ -136,15 +136,12 @@ function AppointmentProviderServicesList() {
       const newPage = 0;
       setSearch(searchTxt);
       setPage(newPage);
-      Service.ServiceSearchList(
-        providerId,
-        searchTxt,
-        newPage,
-        rowsPerPage
-      ).then((item) => {
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      });
+      adminAppointmentService
+        .ServiceSearchList(providerId, searchTxt, newPage, rowsPerPage)
+        .then((item) => {
+          setList(item.data.data.list);
+          setTotal(item.data.data.total);
+        });
     }
   };
 
@@ -155,22 +152,19 @@ function AppointmentProviderServicesList() {
     setPage(newPage);
     // offset? ,limit rowsperpage hoga ofset page * rowsperPage
     if (search === '' || search === null || search === undefined) {
-      Service.ServiceList(authState.user.tenant, newPage, rowsPerPage).then(
-        (item) => {
+      adminAppointmentService
+        .ServiceList(authState.user.tenant, newPage, rowsPerPage)
+        .then((item) => {
           setList(item.data.data.list);
           setTotal(item.data.data.total);
-        }
-      );
+        });
     } else {
-      Service.ServiceSearchList(
-        authState.user.tenant,
-        search,
-        newPage,
-        rowsPerPage
-      ).then((item) => {
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      });
+      adminAppointmentService
+        .ServiceSearchList(authState.user.tenant, search, newPage, rowsPerPage)
+        .then((item) => {
+          setList(item.data.data.list);
+          setTotal(item.data.data.total);
+        });
     }
   };
 
@@ -182,22 +176,19 @@ function AppointmentProviderServicesList() {
     setRowsPerPage(newRowperPage);
     setPage(newPage);
     if (search === '' || search === null || search === undefined) {
-      Service.ServiceList(authState.user.tenant, newPage, rowsPerPage).then(
-        (item) => {
+      adminAppointmentService
+        .ServiceList(authState.user.tenant, newPage, rowsPerPage)
+        .then((item) => {
           setList(item.data.data.list);
           setTotal(item.data.data.total);
-        }
-      );
+        });
     } else {
-      Service.ServiceSearchList(
-        authState.user.tenant,
-        search,
-        newPage,
-        rowsPerPage
-      ).then((item) => {
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      });
+      adminAppointmentService
+        .ServiceSearchList(authState.user.tenant, search, newPage, rowsPerPage)
+        .then((item) => {
+          setList(item.data.data.list);
+          setTotal(item.data.data.total);
+        });
     }
   };
 
@@ -207,15 +198,17 @@ function AppointmentProviderServicesList() {
         listingRolePermission(dataRole, 'Appointment Provider Service Edit')
       ) {
         setIsLoader(true);
-        Service.ServiceEdit(actionMenuItemid).then((item: any) => {
-          if (item.data.success) {
-            setIsLoader(false);
-            setValue('serviceName', item.data.data.name);
-            setValue('serviceDesc', item.data.data.desc);
-            setValue('fees', item.data.data.fees);
-            setOpenEditFormDialog(true);
-          }
-        });
+        adminAppointmentService
+          .ServiceEdit(actionMenuItemid)
+          .then((item: any) => {
+            if (item.data.success) {
+              setIsLoader(false);
+              setValue('serviceName', item.data.data.name);
+              setValue('serviceDesc', item.data.data.desc);
+              setValue('fees', item.data.data.fees);
+              setOpenEditFormDialog(true);
+            }
+          });
       } else {
         setIsLoader(false);
         setIsNotify(true);
@@ -233,7 +226,8 @@ function AppointmentProviderServicesList() {
           updatedBy: authState.user.id,
         };
         // console.log(actionMenuItemid);
-        Service.ServiceDelete(actionMenuItemid, data)
+        adminAppointmentService
+          .ServiceDelete(actionMenuItemid, data)
           .then((item: any) => {
             if (item.data.success) {
               setIsLoader(false);
@@ -269,7 +263,8 @@ function AppointmentProviderServicesList() {
 
   useEffect(() => {
     if (listingRolePermission(dataRole, 'Appointment Provider Service List')) {
-      Service.ServiceList(providerId, page, rowsPerPage)
+      adminAppointmentService
+        .ServiceList(providerId, page, rowsPerPage)
         .then((item: any) => {
           if (item.data.success) {
             setIsLoader(false);
@@ -300,7 +295,7 @@ function AppointmentProviderServicesList() {
         type: 'warning',
       });
     }
-  }, [emptyVariable]);
+  }, [null]);
 
   const createFormHandler = (data: any) => {
     // console.log('==>', data);
@@ -313,7 +308,8 @@ function AppointmentProviderServicesList() {
       fees: data.fees,
       createdBy: authState.user.id,
     };
-    Service.ServiceCreate(userData)
+    adminAppointmentService
+      .ServiceCreate(userData)
       .then((item) => {
         if (item.data.success) {
           reset();
@@ -356,7 +352,8 @@ function AppointmentProviderServicesList() {
       updatedBy: authState.user.id,
     };
 
-    Service.ServiceUpdate(actionMenuItemid, userData)
+    adminAppointmentService
+      .ServiceUpdate(actionMenuItemid, userData)
       .then((item) => {
         if (item.data.success) {
           setIsLoader(false);
@@ -425,18 +422,20 @@ function AppointmentProviderServicesList() {
         isActive: event.target.checked,
         updatedBy: authState.user.id,
       };
-      Service.ServiceUpdateStatus(id, data).then((updateItem) => {
-        if (updateItem.data.success) {
-          setList((newArr: any) => {
-            return newArr.map((item: any) => {
-              if (item.id === updateItem.data.data.id) {
-                item.isActive = updateItem.data.data.isActive;
-              }
-              return { ...item };
+      adminAppointmentService
+        .ServiceUpdateStatus(id, data)
+        .then((updateItem) => {
+          if (updateItem.data.success) {
+            setList((newArr: any) => {
+              return newArr.map((item: any) => {
+                if (item.id === updateItem.data.data.id) {
+                  item.isActive = updateItem.data.data.isActive;
+                }
+                return { ...item };
+              });
             });
-          });
-        }
-      });
+          }
+        });
     } else {
       setIsNotify(true);
       setNotifyMessage({
@@ -514,7 +513,7 @@ function AppointmentProviderServicesList() {
                   <th>Service Description</th>
                   <th>Service Fees</th>
                   <th>Status</th>
-                  <th>&nbsp;</th>
+                  <th aria-label="empty table header">&nbsp;</th>
                 </tr>
               </thead>
               <tbody>
@@ -585,7 +584,7 @@ function AppointmentProviderServicesList() {
             </table>
           </div>
           {list?.length < 1 ? (
-            <CustomText noroundedborders text="No Records Found" />
+            <CustomText noRoundedBorders text="No Records Found" />
           ) : null}
           <div className="mt-3 flex w-[100%] justify-center py-3">
             <TablePagination
@@ -633,7 +632,7 @@ function AppointmentProviderServicesList() {
           singleField
           DialogHeader="Edit Service"
           type="edit"
-          specailCase={false}
+          specialCase={false}
           reset={reset}
           inputFieldsData={inputFieldsData}
           handleSubmit={handleSubmit}

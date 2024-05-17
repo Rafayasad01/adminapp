@@ -13,13 +13,17 @@ import Notify from '../../../components/common/Notify';
 import TopBar from '../../../components/common/TopBar';
 import '../../../index.css';
 import { AppointmentProviderSchedule } from '../../../interfaces/app.appointment';
-import { useAppSelector } from '../../../redux/redux-hooks';
-import Service from '../../../services/adminapp/adminAppointment';
+import adminAppointmentService from '../../../services/adminapp/adminAppointment';
 import { setText, weekDays } from '../../../utils/constants';
+// import { useAppSelector } from '../../../redux/redux-hooks';
 
 function AppointmentProviderAddSchedulePage() {
   const { id } = useParams();
-  const authState: any = useAppSelector((state) => state?.authState);
+  // const officeTimings = useAppSelector(
+  //   (state) => state?.persistedReducer.appState.UserItems
+  // );
+
+  // const authState = useAppSelector((state) => state?.authState);
   const navigate = useNavigate();
   const [isLoader, setIsLoader] = useState<boolean>(false);
   const [isNotify, setIsNotify] = useState(false);
@@ -148,8 +152,6 @@ function AppointmentProviderAddSchedulePage() {
   const onSubmit = (data: any) => {
     setIsLoader(true);
     const parent: any = {
-      createdBy: authState.user.id,
-      appointmentProvider: id,
       workDays: [],
     };
     const dataKeys = Object.keys(data).filter((key) => key.includes('name'));
@@ -162,9 +164,25 @@ function AppointmentProviderAddSchedulePage() {
         startTime: data[`startdatetime${index}`].format('YYYY-MM-DD HH:mm:ss'),
         endTime: data[`enddatetime${index}`].format('YYYY-MM-DD HH:mm:ss'),
       };
+      // if (
+      //   dayjs(dataItem.startTime).format('HH:mm') <
+      //     dayjs(officeTimings?.tenantConfig?.officeTimeIn).format('HH:mm') ||
+      //   dayjs(dataItem.endTime).format('HH:mm') >
+      //     dayjs(officeTimings?.tenantConfig?.officeTimeOut).format('HH:mm')
+      // ) {
+      //   setIsLoader(false);
+      //   setIsNotify(true);
+      //   setNotifyMessage({
+      //     text: 'You should check your shop time before creating staff',
+      //     type: 'error',
+      //   });
+      //   return null;
+      // }
       parent.workDays.push(dataItem);
+      return null;
     });
-    Service.ProviderScheduleCreate(parent)
+    adminAppointmentService
+      .ProviderScheduleCreate(id, parent)
       .then((item: any) => {
         if (item.data.success) {
           // console.log('CREATED', item.data);
@@ -188,6 +206,7 @@ function AppointmentProviderAddSchedulePage() {
           type: 'error',
         });
       });
+    return null;
   };
 
   return isLoader ? (

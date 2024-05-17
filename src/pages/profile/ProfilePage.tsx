@@ -12,9 +12,9 @@ import ProfileChangePasswordPopup from './ProfileChangePasswordPopup';
 import Loader from '../../components/common/Loader';
 import MapAddress from '../../components/common/MapAddress';
 import Notify from '../../components/common/Notify';
-import { setProfileAvatar } from '../../redux/features/appStateSlice';
+import { setProfileAvatar } from '../../redux/features/appSlice';
 import { useAppSelector } from '../../redux/redux-hooks';
-import Service from '../../services/adminapp/adminProfile';
+import profileService from '../../services/adminapp/adminProfile';
 import { listingRolePermission } from '../../utils/helper';
 import ProfileEditPopup from './ProfileEditPopup';
 
@@ -34,7 +34,7 @@ function ProfilePage() {
   const dispatch = useDispatch();
   const authState: any = useAppSelector((state: any) => state?.authState);
   const dataRole = useAppSelector(
-    (state: any) => state?.persisitReducer?.roleState?.role?.permissions
+    (state: any) => state?.persistedReducer?.roleState?.role?.permissions
   );
   const [changePassword, setChangePassword] = useState(false);
   const [openFormDialog, setOpenFormDialog] = useState(false);
@@ -46,7 +46,8 @@ function ProfilePage() {
   useEffect(() => {
     setIsLoader(true);
     if (listingRolePermission(dataRole, 'Banners List')) {
-      Service.getProfile(authState.user.id)
+      profileService
+        .getProfile(authState.user.id)
         .then((item: any) => {
           if (item.data.success) {
             setIsLoader(false);
@@ -87,8 +88,9 @@ function ProfilePage() {
       formData.append('state', dataEl.state);
       formData.append('zipCode', dataEl.zipCode);
       formData.append('city', dataEl.city);
-      dataEl.avatar && formData.append('avatar', dataEl.avatar);
-      Service.updateProfile(formData)
+      if (dataEl.avatar) formData.append('avatar', dataEl.avatar);
+      profileService
+        .updateProfile(formData)
         .then((item: any) => {
           if (item.data.success) {
             setDetail(item.data.data);
@@ -124,7 +126,8 @@ function ProfilePage() {
         currentParole: dataItems.currentPassword,
         newParole: dataItems.newPassword,
       };
-      Service.newPassword(NewPass)
+      profileService
+        .newPassword(NewPass)
         .then((item: any) => {
           if (item.data.success) {
             setIsLoader(false);

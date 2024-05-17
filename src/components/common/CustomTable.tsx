@@ -9,7 +9,7 @@ import CustomAvatar from './CustomAvatar';
 import CustomButton from './CustomButton';
 import CustomSearchBar from './CustomSearchBar';
 
-type Props = {
+type CustomTableProps = {
   tableHeader: string;
   tableDataTitle: Array<string>;
   list: any;
@@ -19,7 +19,7 @@ type Props = {
   actions: string;
   service: any;
   search: string;
-  setSearch: React.Dispatch<React.SetStateAction<string>>;
+  // setSearch: React.Dispatch<React.SetStateAction<string>>;
   handleFormClickOpen: any;
   handleClickSearch: any;
   actionMenuOpen: any;
@@ -60,10 +60,10 @@ function CustomTable({
   serviceName,
   setIsNotify,
   setNotifyMessage,
-}: Props) {
+}: CustomTableProps) {
   const authState: any = useAppSelector((state) => state?.authState);
   const dataRole = useAppSelector(
-    (state: any) => state?.persisitReducer?.roleState?.role?.permissions
+    (state: any) => state?.persistedReducer?.roleState?.role?.permissions
   );
 
   // handle switch state
@@ -188,7 +188,7 @@ function CustomTable({
                 {tableDataTitle?.map((title: string, index: number) => {
                   return <th key={index}>{title}</th>;
                 })}
-                {actions && <th>&nbsp;</th>}
+                {actions && <th aria-label="empty table header">&nbsp;</th>}
               </tr>
             </thead>
             <tbody>

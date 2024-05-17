@@ -20,9 +20,6 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import dayjs from 'dayjs';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import AppUserService from '../../services/adminapp/adminAppUser';
-import VoucherService from '../../services/adminapp/adminVouchers';
-
 import assets from '../../assets';
 import CustomButton from '../../components/common/CustomButton';
 import CustomDateTimePicker from '../../components/common/CustomDateTimePicker';
@@ -34,14 +31,22 @@ import DeleteIcon from '../../components/icons/DeleteIcon';
 import PromoCodeIcon from '../../components/icons/PromoCode';
 import { Order } from '../../interfaces/order.interface';
 import { useAppSelector } from '../../redux/redux-hooks';
-import Service from '../../services/adminapp/adminOrders';
+import appUserService from '../../services/adminapp/adminAppUser';
+import ordersService from '../../services/adminapp/adminOrders';
+import voucherService from '../../services/adminapp/adminVouchers';
+import { ORDER_FULFILLMENT_METHOD } from '../../utils/constants';
+import promiseHandler from '../../utils/helper';
+import { ValuesOf } from '../../utils/ts-helpers';
 import PromotionListPopup from './PromotionListPopup';
 
 function OrdersCreatePage() {
   const dropOffDate: any = useAppSelector(
     (state: any) =>
-      state?.persisitReducer?.appState?.UserItems?.tenantConfig
+      state?.persistedReducer?.appState?.UserItems?.tenantConfig
         ?.minimumDeliveryTime
+  );
+  const tenant: any = useAppSelector(
+    (state: any) => state?.persistedReducer?.appState.UserItems.tenant
   );
   const currentDate = dayjs();
   const DeliveryDate = currentDate.add(dropOffDate, 'day');
@@ -55,7 +60,12 @@ function OrdersCreatePage() {
   const [isOpenPromoDialog, setIsOpenPromoDialog] = useState(false);
 
   // const [cashCheck, setCashCheck] = useState(false);
-  const [isExistingUser, setIsExistingUser] = useState<any>('Anonymous User');
+  const [isExistingUser, setIsExistingUser] = useState<'TRUE' | 'FALSE'>(
+    'FALSE'
+  );
+  const [fulfillmentMethod, setFulfillmentMethod] =
+    useState<ValuesOf<typeof ORDER_FULFILLMENT_METHOD>>('Delivery');
+
   const [userIdentifier, setUserIdentifier] = useState<any>('');
 
   const {
@@ -108,20 +118,163 @@ function OrdersCreatePage() {
   const checkVoucherMinAmount =
     specificVoucher && Number(totalAmount) > Number(specificVoucher.minAmount);
 
-  const handleLogin = () => {
+  const handleAnonymousSubmit = async () => {
     setIsLoginLoader(true);
-    const anonIdentidier = authState?.user?.username?.split('@')[0];
+    const anonIdentifier = authState?.user?.username?.split('@')[0];
     const payload = {
       identifier:
-        isExistingUser !== 'Exist User'
-          ? `${anonIdentidier}@shop.com`
+        isExistingUser === 'FALSE'
+          ? `${anonIdentifier}@shop.com`
           : userIdentifier || 'false',
+      tenant,
+    };
+    const anonymousLoginPromise = appUserService.appAnonymousLogin(payload);
+    const [anonymousLoginResult, anonymousLoginError, anonymousLoginOk] =
+      await promiseHandler(anonymousLoginPromise);
+    if (!anonymousLoginOk) {
+      setLoginDetails(null);
+      setIsLoginLoader(false);
+      setIsNotify(true);
+      setNotifyMessage({
+        text: anonymousLoginError.message,
+        type: 'error',
+      });
+      return;
+    }
+    if (!anonymousLoginResult.data.success) {
+      setLoginDetails(null);
+      setIsLoginLoader(false);
+      setIsNotify(true);
+      setNotifyMessage({
+        text: anonymousLoginResult.data.message,
+        type: 'error',
+      });
+      return;
+    }
+    setIsLoginLoader(false);
+    setLoginDetails(anonymousLoginResult.data.data);
+    setIsNotify(true);
+    setNotifyMessage({
+      text: anonymousLoginResult.data.message,
+      type: 'success',
+    });
+    const anonymousLoginResultData = anonymousLoginResult.data.data;
+    const cartPayload = {
+      tenant: anonymousLoginResultData.tenant,
+      appUser: anonymousLoginResultData.id,
+    };
+
+    const orderGetCartPromise = ordersService.OrderGetCart(cartPayload);
+
+    const [orderGetCartResult, orderGetCartError, orderGetCartOk] =
+      await promiseHandler(orderGetCartPromise);
+
+    if (!orderGetCartOk) {
+      setIsNotify(true);
+      setNotifyMessage({
+        text: orderGetCartError.message,
+        type: 'error',
+      });
+      return;
+    }
+    if (!orderGetCartResult.data.success) {
+      setIsNotify(true);
+      setNotifyMessage({
+        text: orderGetCartResult.data.message,
+        type: 'error',
+      });
+      return;
+    }
+
+    const updatedCartPayload = {
+      cartId: orderGetCartResult.data.data.cart.id,
+      appUser: orderGetCartResult.data.data.cart.appUser,
+      tenant: orderGetCartResult.data.data.cart.tenant,
+      appUserAddress: anonymousLoginResultData.appUserAddress.id,
+      pickupDateTime: new Date(),
+      dropDateTime: watch('deliveryDropOffDate')
+        ? watch('deliveryDropOffDate').format('YYYY-MM-DD HH:mm:ss')
+        : DeliveryDate.format('YYYY-MM-DD HH:mm:ss'),
+      voucherCode: checkVoucherMinAmount ? promoCode : '' || '',
+      products: itemList?.map((item: any) => ({
+        id: item.id,
+        quantity: item.quantity,
+      })),
+    };
+    const orderUpdateCartPromise =
+      ordersService.OrderUpdateCart(updatedCartPayload);
+    const [orderUpdateCartResult, orderUpdateCartError, orderUpdateCartOk] =
+      await promiseHandler(orderUpdateCartPromise);
+
+    if (!orderUpdateCartOk) {
+      setIsNotify(true);
+      setNotifyMessage({
+        text: orderUpdateCartError.message,
+        type: 'error',
+      });
+      return;
+    }
+    if (!orderUpdateCartResult.data.success) {
+      setIsNotify(true);
+      setNotifyMessage({
+        text: orderUpdateCartResult.data.message,
+        type: 'error',
+      });
+      return;
+    }
+
+    const newOrderPlace = {
+      cartId: orderGetCartResult.data.data.cart.id,
+      tenant: orderGetCartResult.data.data.cart.tenant,
+      appUser: orderGetCartResult.data.data.cart.appUser,
+      fulfillmentMethod: ORDER_FULFILLMENT_METHOD.SELF,
+    };
+
+    const orderPlacePromise = ordersService.OrderPlace(newOrderPlace);
+
+    const [orderPlaceResult, orderPlaceError, orderPlaceOk] =
+      await promiseHandler(orderPlacePromise);
+
+    if (!orderPlaceOk) {
+      setIsNotify(true);
+      setNotifyMessage({
+        text: orderPlaceError.message,
+        type: 'error',
+      });
+      return;
+    }
+    if (!orderPlaceResult.data.success) {
+      setIsNotify(true);
+      setNotifyMessage({
+        text: orderPlaceResult.data.message,
+        type: 'error',
+      });
+      return;
+    }
+    setIsLoader(false);
+    setIsNotify(true);
+    setNotifyMessage({
+      text: orderPlaceResult.data.message,
+      type: 'success',
+    });
+    navigate(-1);
+  };
+
+  const handleLogin = () => {
+    setIsLoginLoader(true);
+    const anonIdentifier = authState?.user?.username?.split('@')[0];
+    const payload = {
+      identifier:
+        isExistingUser === 'FALSE'
+          ? `${anonIdentifier}@shop.com`
+          : userIdentifier || 'false',
+      tenant,
     };
     let service;
-    if (isExistingUser === 'Exist User') {
-      service = AppUserService.appLogin;
+    if (isExistingUser === 'TRUE') {
+      service = appUserService.appLogin;
     } else {
-      service = AppUserService.appAnonymousLogin;
+      service = appUserService.appAnonymousLogin;
     }
     service(payload)
       .then((res) => {
@@ -130,7 +283,7 @@ function OrdersCreatePage() {
           // if(res.data.data.userType === "Shop"){
           //   setAddress(authState?.tenantConfig?.shopAddress);
           // }else{
-          //   setAddress(res.data.daaa.);
+          //   setAddress(res.data.data);
           // }
           setIsLoginLoader(false);
           setLoginDetails(res.data.data);
@@ -139,11 +292,12 @@ function OrdersCreatePage() {
             text: res.data.message,
             type: 'success',
           });
-          if (isExistingUser === 'Exist User') {
-            VoucherService.orderVoucherPromotionList(
-              authState.user.tenant,
-              res.data.data.id
-            )
+          if (isExistingUser === 'TRUE') {
+            voucherService
+              .orderVoucherPromotionList(
+                authState.user.tenant,
+                res.data.data.id
+              )
               .then((resp) => {
                 if (resp.data.success) {
                   setPromoList(resp.data.data);
@@ -185,7 +339,11 @@ function OrdersCreatePage() {
       });
   };
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
+    if (isExistingUser === 'FALSE') {
+      await handleAnonymousSubmit();
+      return;
+    }
     if (loginDetails !== null) {
       if (itemList?.length > 0 && totalAmount > 0) {
         setIsLoader(true);
@@ -193,7 +351,8 @@ function OrdersCreatePage() {
           tenant: loginDetails?.tenant,
           appUser: loginDetails?.id,
         };
-        Service.OrderGetCart(cartPayload)
+        ordersService
+          .OrderGetCart(cartPayload)
           .then((item: any) => {
             if (item.data.success) {
               const updatedCartPayload = {
@@ -211,37 +370,40 @@ function OrdersCreatePage() {
                   quantity: items.quantity,
                 })),
               };
-              Service.OrderUpdateCart(updatedCartPayload).then(
-                (updateCartRes) => {
+              ordersService
+                .OrderUpdateCart(updatedCartPayload)
+                .then((updateCartRes) => {
                   if (updateCartRes.data.success) {
                     const newOrderPlace = {
                       cartId: item.data.data.cart.id,
                       tenant: item.data.data.cart.tenant,
                       appUser: item.data.data.cart.appUser,
+                      fulfillmentMethod,
                     };
-                    Service.OrderPlace(newOrderPlace).then((orderPlaceRes) => {
-                      if (orderPlaceRes.data.success) {
-                        setIsLoader(false);
-                        setIsNotify(true);
-                        setNotifyMessage({
-                          text: orderPlaceRes.data.message,
-                          type: 'success',
-                        });
-                        navigate(-1);
-                      } else {
-                        setIsLoader(false);
-                        setIsNotify(true);
-                        setNotifyMessage({
-                          text: orderPlaceRes.data.message,
-                          type: 'error',
-                        });
-                      }
-                      // console.log('Cart REs', cartRes);
-                    });
+                    ordersService
+                      .OrderPlace(newOrderPlace)
+                      .then((orderPlaceRes) => {
+                        if (orderPlaceRes.data.success) {
+                          setIsLoader(false);
+                          setIsNotify(true);
+                          setNotifyMessage({
+                            text: orderPlaceRes.data.message,
+                            type: 'success',
+                          });
+                          navigate(-1);
+                        } else {
+                          setIsLoader(false);
+                          setIsNotify(true);
+                          setNotifyMessage({
+                            text: orderPlaceRes.data.message,
+                            type: 'error',
+                          });
+                        }
+                        // console.log('Cart REs', cartRes);
+                      });
                   }
                   // console.log('Cart REs', cartRes);
-                }
-              );
+                });
             }
           })
           .catch((err: any) => {
@@ -256,7 +418,7 @@ function OrdersCreatePage() {
         setIsLoader(false);
         setIsNotify(true);
         setNotifyMessage({
-          text: 'Select atleast one category item',
+          text: 'Select at least one category item',
           type: 'info',
         });
       } else if (totalAmount <= 0) {
@@ -342,7 +504,8 @@ function OrdersCreatePage() {
   useEffect(() => {
     // setIsLoader(true);
     if (watch('category') !== 'none' && watch('category') !== undefined) {
-      Service.OrderCatItemList(watch('category'))
+      ordersService
+        .OrderCatItemList(watch('category'))
         .then((item: any) => {
           if (item.data.success) {
             setCatItemList(item.data.data);
@@ -365,7 +528,8 @@ function OrdersCreatePage() {
           });
         });
     } else {
-      Service.OrderCatList(authState.user.tenant)
+      ordersService
+        .OrderCatList(authState.user.tenant)
         .then((item: any) => {
           if (item.data.success) {
             setCatList(item.data.data);
@@ -391,7 +555,7 @@ function OrdersCreatePage() {
   }, [watch('category'), watch('categoriesItem')]);
 
   // const handleUserInput = (event: any) => {
-  //   // console.log('enven', event.target.value);
+  // // console.log('event', event.target.value);
   //   setUserIdentifier(event.target.value);
   // };
 
@@ -469,7 +633,7 @@ function OrdersCreatePage() {
       <TopBar isNestedRoute title="New Order" />
       <div className="container">
         <div className="grid grid-cols-12 gap-3 py-2">
-          <div className="col-span-7 rounded-lg bg-white py-5 px-4 shadow-lg">
+          <div className="col-span-7 rounded-lg bg-white px-4 py-5 shadow-lg">
             <div className="flex items-center justify-between">
               <div className="flex items-center">
                 <div className="mx-2">
@@ -539,7 +703,7 @@ function OrdersCreatePage() {
               <table className="avatar-table no-border-table table-auto">
                 <thead>
                   <tr>
-                    <th>&nbsp;</th>
+                    <th aria-label="empty heading">&nbsp;</th>
                     <th className="font-open-sans text-base font-semibold text-secondary">
                       Products
                     </th>
@@ -558,7 +722,7 @@ function OrdersCreatePage() {
                   {itemList?.map((item: any, index: number) => {
                     return (
                       <tr key={index}>
-                        <td>
+                        <td aria-label="remove item">
                           <IconButton
                             className="p-0 text-neutral-900"
                             onClick={() =>
@@ -584,7 +748,7 @@ function OrdersCreatePage() {
                           </span>
                         </td>
                         <td>${item?.price}</td>
-                        <td>
+                        <td aria-label="item increment and item decrement button and item quantity">
                           <span className="flex w-full flex-row items-center justify-start">
                             <IconButton
                               className="p-0 text-neutral-900"
@@ -657,7 +821,7 @@ function OrdersCreatePage() {
                       minDate={dayjs()}
                       id="deliveryDropOffDate"
                       error={errors.deliveryDropOffDate}
-                      inputTitle="Delivery Dropoff Date"
+                      inputTitle="Delivery Drop off Date"
                       setValue={setValue}
                       value={
                         watch('deliveryDropOffDate')
@@ -703,7 +867,7 @@ function OrdersCreatePage() {
                     className="input-with-icon after:border-b-secondary"
                     id="search"
                     type="text"
-                    placeholder="Type Addess"
+                    placeholder="Type Address"
                     onKeyDown={(
                       event: React.KeyboardEvent<
                         HTMLInputElement | HTMLTextAreaElement
@@ -756,6 +920,7 @@ function OrdersCreatePage() {
                   />
                 </RadioGroup>
               </FormControl>
+
               <Divider flexItem className="my-5" />
               <div className="flex items-center justify-between">
                 <div>
@@ -770,7 +935,7 @@ function OrdersCreatePage() {
                       row
                       aria-labelledby="demo-row-radio-buttons-group-label"
                       name="row-radio-buttons-group"
-                      value={isExistingUser || ''}
+                      value={isExistingUser}
                       onClick={handleUserChange}
                     >
                       <FormControlLabel
@@ -780,7 +945,7 @@ function OrdersCreatePage() {
                           fonWeight: 400,
                           fonSize: '14px',
                         }}
-                        value="Anonymous User"
+                        value="FALSE"
                         control={
                           <Radio
                             className="text-sm text-[#1D1D1D]"
@@ -797,7 +962,7 @@ function OrdersCreatePage() {
                           fonWeight: 400,
                           fonSize: '14px',
                         }}
-                        value="Exist User"
+                        value="TRUE"
                         control={
                           <Radio
                             className="text-[#1D1D1D]"
@@ -810,45 +975,112 @@ function OrdersCreatePage() {
                     </RadioGroup>
                   </FormControl>
                 </div>
-                <div>
-                  <CustomButton
-                    disabled={isLoginLoader || itemList?.length <= 0}
-                    onclick={handleLogin}
-                    buttonType="button"
-                    title="Login"
-                    className={`${
-                      itemList?.length <= 0 ? 'btn-gray-fill' : 'btn-black-fill'
-                    }`}
-                    sx={{
-                      padding: '0.375rem 2rem !important',
-                      width: '100%',
-                      height: '35px',
-                    }}
-                  />
-                </div>
+                {isExistingUser === 'TRUE' && (
+                  <div>
+                    <CustomButton
+                      disabled={isLoginLoader || itemList?.length <= 0}
+                      onclick={handleLogin}
+                      buttonType="button"
+                      title="Login"
+                      className={`${
+                        itemList?.length <= 0
+                          ? 'btn-gray-fill'
+                          : 'btn-black-fill'
+                      }`}
+                      sx={{
+                        padding: '0.375rem 2rem !important',
+                        width: '100%',
+                        height: '35px',
+                      }}
+                    />
+                  </div>
+                )}
               </div>
 
               {/* {console.log("isExx", isExistingUser)} */}
-              {isExistingUser === 'Exist User' && (
-                <div className="w-full rounded-xl border border-solid border-foreground py-1 pl-3">
-                  <Input
-                    className="input-with-icon after:border-b-secondary"
-                    id="search"
-                    type="text"
-                    placeholder="Identifier (Ex : email or phone)"
-                    // onKeyDown={(
-                    //   event: React.KeyboardEvent<
-                    //     HTMLInputElement | HTMLTextAreaElement
-                    //   >
-                    // ) => {
-                    //   handleUserInput(event);
-                    // }}
-                    onChange={(event) => setUserIdentifier(event.target.value)}
-                    disableUnderline
-                  />
-                </div>
+              {isExistingUser === 'TRUE' && (
+                <>
+                  <div className="w-full rounded-xl border border-solid border-foreground py-1 pl-3">
+                    <Input
+                      className="input-with-icon after:border-b-secondary"
+                      id="search"
+                      type="text"
+                      placeholder="Identifier (Ex : email or phone)"
+                      // onKeyDown={(
+                      //   event: React.KeyboardEvent<
+                      //     HTMLInputElement | HTMLTextAreaElement
+                      //   >
+                      // ) => {
+                      //   handleUserInput(event);
+                      // }}
+                      onChange={(event) =>
+                        setUserIdentifier(event.target.value)
+                      }
+                      disableUnderline
+                    />
+                  </div>
+
+                  <Divider flexItem className="my-5" />
+                </>
               )}
+
+              {isExistingUser === 'TRUE' && (
+                <FormControl>
+                  <FormLabel
+                    id="demo-row-radio-buttons-group-label"
+                    className="font-open-sans text-xl font-semibold text-secondary"
+                  >
+                    Fulfillment Mode
+                  </FormLabel>
+                  <RadioGroup
+                    row
+                    aria-labelledby="demo-row-radio-buttons-group-label"
+                    name="row-radio-buttons-group"
+                    value={fulfillmentMethod}
+                    onClick={(event: any) =>
+                      setFulfillmentMethod(event.target.value)
+                    }
+                  >
+                    <FormControlLabel
+                      sx={{
+                        color: '#6A6A6A',
+                        fontFamily: 'Open Sans',
+                        fonWeight: 400,
+                        fonSize: '14px',
+                      }}
+                      value="Self"
+                      control={
+                        <Radio
+                          className="text-[#1D1D1D]"
+                          icon={<RadioButtonUncheckedOutlinedIcon />}
+                          checkedIcon={<CheckCircleOutlinedIcon />}
+                        />
+                      }
+                      label="Customer Pickup"
+                    />
+                    <FormControlLabel
+                      sx={{
+                        color: '#6A6A6A',
+                        fontFamily: 'Open Sans',
+                        fonWeight: 400,
+                        fonSize: '14px',
+                      }}
+                      value="Delivery"
+                      control={
+                        <Radio
+                          className="text-sm text-[#1D1D1D]"
+                          icon={<RadioButtonUncheckedOutlinedIcon />}
+                          checkedIcon={<CheckCircleOutlinedIcon />}
+                        />
+                      }
+                      label="Delivery"
+                    />
+                  </RadioGroup>
+                </FormControl>
+              )}
+
               <Divider flexItem className="my-5" />
+
               {promoList?.length > 0 && (
                 <>
                   <div className="flex items-center justify-between py-2">
@@ -945,7 +1177,9 @@ function OrdersCreatePage() {
               </div>
               <Button
                 disabled={
-                  isLoader || loginDetails === null || itemList?.length <= 0
+                  (isExistingUser === 'TRUE' && isLoader) ||
+                  (isExistingUser === 'TRUE' && loginDetails === null) ||
+                  (isExistingUser === 'TRUE' && itemList?.length <= 0)
                 }
                 type="button"
                 onClick={onSubmit}

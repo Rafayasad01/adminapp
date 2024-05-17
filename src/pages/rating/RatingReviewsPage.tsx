@@ -19,7 +19,7 @@ import Loader from '../../components/common/Loader';
 import Loader2 from '../../components/common/Loader2';
 import Notify from '../../components/common/Notify';
 import { useAppSelector } from '../../redux/redux-hooks';
-import Service from '../../services/adminapp/rating';
+import ratingService from '../../services/adminapp/rating';
 import { listingRolePermission } from '../../utils/helper';
 import RatingAccordions from './RatingAccordin';
 
@@ -28,9 +28,8 @@ dayjs.extend(relativeTime);
 function RatingReviewsPage() {
   const { itemId } = useParams();
   const dataRole = useAppSelector(
-    (state: any) => state?.persisitReducer?.roleState?.role?.permissions
+    (state: any) => state?.persistedReducer?.roleState?.role?.permissions
   );
-  const [emptyVariable] = useState(null);
   const [search] = useState<any>('');
   const [page, setPage] = useState(0);
   const [rowsPerPage] = React.useState(10);
@@ -51,9 +50,14 @@ function RatingReviewsPage() {
         if (listingRolePermission(dataRole, 'Employee List')) {
           const [catListResponse, catStarRatingResponse, catDetailResponse] =
             await Promise.all([
-              Service.getCatListService(itemId, search, page, rowsPerPage),
-              Service.getCatStarRating(itemId),
-              Service.getCatStarDetail(itemId),
+              ratingService.getCatListService(
+                itemId,
+                search,
+                page,
+                rowsPerPage
+              ),
+              ratingService.getCatStarRating(itemId),
+              ratingService.getCatStarDetail(itemId),
             ]);
           // Handling list response
           if (catListResponse.data.success) {
@@ -86,7 +90,7 @@ function RatingReviewsPage() {
       }
     };
     fetchData();
-  }, [emptyVariable]);
+  }, [null]);
 
   const handleRatingText = (num: number) => {
     switch (true) {
@@ -113,6 +117,8 @@ function RatingReviewsPage() {
         return 3;
       case num <= 2 && num >= 0:
         return 2;
+      case num === 0:
+        return 0;
       default:
         return null;
     }
@@ -122,7 +128,8 @@ function RatingReviewsPage() {
     setIsLoaderPagination(true);
     const newPage = page + 1;
     setPage(newPage);
-    Service.getCatListService(itemId, search, newPage, rowsPerPage)
+    ratingService
+      .getCatListService(itemId, search, newPage, rowsPerPage)
       .then((item) => {
         setIsLoaderPagination(false);
         setCurrentList(item.data.data.list);
@@ -143,7 +150,8 @@ function RatingReviewsPage() {
     setIsLoaderPagination(true);
     const newPage = page - 1;
     setPage(newPage);
-    Service.getCatListService(itemId, search, newPage, rowsPerPage)
+    ratingService
+      .getCatListService(itemId, search, newPage, rowsPerPage)
       .then((item) => {
         setIsLoaderPagination(false);
         setList((prev: any) =>
@@ -224,7 +232,7 @@ function RatingReviewsPage() {
             </div>
           </div>
           <div className="mt-5 w-full rounded-xl bg-white p-5 shadow-md">
-            <div className="my-5 grid grid-cols-12">
+            <div className="my-5 flex grid-cols-12">
               <div className="xl:col-span-3 2xl:col-span-2">
                 <div className="flex items-center">
                   <span className="text-4xl font-semibold">
@@ -264,7 +272,7 @@ function RatingReviewsPage() {
                     ?.map((ratings: any, index: number) => {
                       return (
                         <div
-                          className="mx-5 grid grid-cols-12 items-center"
+                          className="mx-5 flex grid-cols-12 items-center"
                           key={index}
                         >
                           <div className="xl:col-span-2 2xl:col-span-1">
@@ -276,7 +284,10 @@ function RatingReviewsPage() {
                             />
                           </div>
                           <div className="mx-10 xl:col-span-6 2xl:col-span-3">
-                            <LinearProgressWithLabel value={ratings?.total} />
+                            <LinearProgressWithLabel
+                              value={ratings?.total}
+                              className="w-[100px]"
+                            />
                           </div>
                         </div>
                       );
@@ -322,7 +333,7 @@ function RatingReviewsPage() {
               )}
             </div>
             {list?.length < 1 ? (
-              <CustomText noroundedborders text="No Records Found" />
+              <CustomText noRoundedBorders text="No Records Found" />
             ) : null}
             <div className="mt-3 flex w-[100%] justify-end py-3">
               {list?.length > rowsPerPage && (

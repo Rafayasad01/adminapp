@@ -20,7 +20,7 @@ import Loader from '../../components/common/Loader';
 import Notify from '../../components/common/Notify';
 import TopBar from '../../components/common/TopBar';
 import { useAppSelector } from '../../redux/redux-hooks';
-import category from '../../services/adminapp/adminCategory';
+import categoryService from '../../services/adminapp/adminCategory';
 import PermissionPopup from '../../utils/PermissionPopup';
 import { NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
 import { CheckRolePermission, listingRolePermission } from '../../utils/helper';
@@ -30,7 +30,7 @@ import CategoriesEditPopup from './CategoriesEditPopup';
 function CategoriesPage() {
   const authState: any = useAppSelector((state) => state?.authState);
   const dataRole = useAppSelector(
-    (state) => state?.persisitReducer?.roleState?.role?.permissions
+    (state) => state?.persistedReducer?.roleState?.role?.permissions
   );
   const navigate = useNavigate();
   const [search, setSearch] = useState('');
@@ -44,8 +44,7 @@ function CategoriesPage() {
   const [actionMenuAnchorEl, setActionMenuAnchorEl] =
     useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
-  const actionMenuOptions = ['Items', 'Edit', 'Delete'];
-  const [emptyVariable] = useState(null);
+  const actionMenuOptions = ['Products', 'Edit', 'Delete'];
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
   const [isNotify, setIsNotify] = React.useState(false);
@@ -71,7 +70,7 @@ function CategoriesPage() {
 
   useEffect(() => {
     if (listingRolePermission(dataRole, 'Category List')) {
-      category
+      categoryService
         .getListService(authState.user.tenant, page, rowsPerPage)
         .then((item: any) => {
           setIsLoader(false);
@@ -88,14 +87,14 @@ function CategoriesPage() {
           // console.log('error::::::::', error);
         });
     }
-  }, [emptyVariable]);
+  }, [null]);
 
   const handleClickSearch = (event: any) => {
     const searchTxt = event.target.value as string;
     const newPage = 0;
     setSearch(searchTxt);
     setPage(newPage);
-    category
+    categoryService
       .searchService(authState.user.tenant, searchTxt, newPage, rowsPerPage)
       .then((item) => {
         setList(item.data.data.list);
@@ -110,14 +109,14 @@ function CategoriesPage() {
     setPage(newPage);
     // offset? ,limit rowsperpage hoga ofset page * rowsperPage
     if (search === '' || search === null || search === undefined) {
-      category
+      categoryService
         .getListService(authState.user.tenant, newPage, rowsPerPage)
         .then((item) => {
           setList(item.data.data.list);
           setTotal(item.data.data.total);
         });
     } else {
-      category
+      categoryService
         .searchService(authState.user.tenant, search, newPage, rowsPerPage)
         .then((item) => {
           setList(item.data.data.list);
@@ -133,14 +132,14 @@ function CategoriesPage() {
     setRowsPerPage(newRowperPage);
     setPage(newPage);
     if (search === '' || search === null || search === undefined) {
-      category
+      categoryService
         .getListService(authState.user.tenant, newPage, rowsPerPage)
         .then((item) => {
           setList(item.data.data.list);
           setTotal(item.data.data.total);
         });
     } else {
-      category
+      categoryService
         .searchService(authState.user.tenant, search, newPage, rowsPerPage)
         .then((item) => {
           setList(item.data.data.list);
@@ -152,11 +151,11 @@ function CategoriesPage() {
   const deleteHandler = (id: string) => {
     setIsLoader(true);
     const data = {
-      is_active: false,
-      is_deleted: true,
-      updated_by: authState.user.id,
+      isActive: false,
+      isDeleted: true,
+      updatedBy: authState.user.id,
     };
-    category
+    categoryService
       .deleteCategory(id, data)
       .then((updateItem) => {
         if (updateItem.data.success) {
@@ -190,7 +189,7 @@ function CategoriesPage() {
   const manuHandler = (option: string) => {
     if (option === 'Edit') {
       if (listingRolePermission(dataRole, 'Category Update')) {
-        category.getCategory(actionMenuItemid).then((item: any) => {
+        categoryService.getCategory(actionMenuItemid).then((item: any) => {
           if (item.data.success) {
             // console.log('tem.data.data:::::::', item.data.data);
             setEditFormData(item.data.data);
@@ -204,14 +203,14 @@ function CategoriesPage() {
           type: 'warning',
         });
       }
-    } else if (option === 'Items') {
+    } else if (option === 'Products') {
+      // navigate(`../item/${actionMenuItemid}`);
       CheckRolePermission(
         'Category Service Get',
         dataRole,
         navigate,
-        `service/${actionMenuItemid}`
+        `item/${actionMenuItemid}`
       );
-      // navigate(`service/${actionMenuItemid}`);
     } else if (option === 'Delete') {
       if (listingRolePermission(dataRole, 'Category Delete')) {
         setCancelDialogOpen(true);
@@ -235,7 +234,7 @@ function CategoriesPage() {
     formData.append('created_by', authState.user.id);
     formData.append('updated_by', authState.user.id);
     if (data.name && data.desc && data.icon) {
-      category
+      categoryService
         .create(formData)
         .then((item) => {
           if (item.data.success) {
@@ -281,7 +280,7 @@ function CategoriesPage() {
     formData.append('desc', data.desc);
     formData.append('updated_by', authState.user.id);
     if (data.icon) formData.append('icon', data.icon);
-    category
+    categoryService
       .updateCategory(actionMenuItemid, formData)
       .then((updateItem: any) => {
         if (updateItem.data.success) {
@@ -325,7 +324,7 @@ function CategoriesPage() {
         is_active: event.target.checked,
         updated_by: authState.user.id,
       };
-      category.updateStatus(id, data).then((updateItem) => {
+      categoryService.updateStatus(id, data).then((updateItem) => {
         if (updateItem.data.success) {
           setList((newArr: any) => {
             return newArr.map((item: any) => {
@@ -365,13 +364,13 @@ function CategoriesPage() {
         setIsOpen={setIsNotify}
         displayMessage={notifyMessage}
       />
-      <TopBar title="Categories" />
+      <TopBar title="Products" />
       <div className="cs-dialog container mx-auto mt-5 w-full">
         <div className="w-full rounded-lg bg-white shadow-lg">
           <div className="grid grid-cols-12 px-4 py-5">
             <div className="col-span-7">
               <span className="font-open-sans text-xl font-semibold text-[#252733]">
-                All Categories
+                All Product Categories
               </span>
             </div>
             <div className="col-span-5">
@@ -424,7 +423,7 @@ function CategoriesPage() {
                   <th>Category Name</th>
                   <th>Created Date</th>
                   <th>Status</th>
-                  <th>&nbsp;</th>
+                  <th aria-label="empty table header">&nbsp;</th>
                 </tr>
               </thead>
               <tbody>
@@ -508,7 +507,7 @@ function CategoriesPage() {
             </table>
           </div>
           {list?.length < 1 ? (
-            <CustomText noroundedborders text="No Records Found" />
+            <CustomText noRoundedBorders text="No Records Found" />
           ) : null}
           <div className="mt-3 flex w-[100%] justify-center py-3">
             <TablePagination

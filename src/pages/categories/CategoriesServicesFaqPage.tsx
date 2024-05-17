@@ -18,7 +18,7 @@ import Loader from '../../components/common/Loader';
 import Notify from '../../components/common/Notify';
 import TopBar from '../../components/common/TopBar';
 import { useAppSelector } from '../../redux/redux-hooks';
-import category from '../../services/adminapp/adminCategory';
+import categoryService from '../../services/adminapp/adminCategory';
 import PermissionPopup from '../../utils/PermissionPopup';
 import { NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
 import { listingRolePermission } from '../../utils/helper';
@@ -29,7 +29,7 @@ function CategoriesServicesFaqPage() {
   const params = useParams();
   const authState: any = useAppSelector((state) => state?.authState);
   const dataRole = useAppSelector(
-    (state) => state?.persisitReducer?.roleState?.role?.permissions
+    (state) => state?.persistedReducer?.roleState?.role?.permissions
   );
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(0);
@@ -42,7 +42,6 @@ function CategoriesServicesFaqPage() {
     useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
   const actionMenuOptions = ['Edit', 'Delete'];
-  const [emptyVariable] = useState(null);
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
   const [isLoader, setIsLoader] = React.useState(true);
@@ -60,7 +59,7 @@ function CategoriesServicesFaqPage() {
     const newPage = 0;
     setSearch(searchTxt);
     setPage(newPage);
-    category
+    categoryService
       .searchCategoryServiceFaq(
         categoryServiceId,
         searchTxt,
@@ -80,14 +79,14 @@ function CategoriesServicesFaqPage() {
     setPage(newPage);
     // offset? ,limit rowsperpage hoga ofset page * rowsperPage
     if (search === '' || search === null || search === undefined) {
-      category
+      categoryService
         .getCategoryServiceFaqList(categoryServiceId, newPage, rowsPerPage)
         .then((item) => {
           setList(item.data.data.list);
           setTotal(item.data.data.total);
         });
     } else {
-      category
+      categoryService
         .searchCategoryServiceFaq(
           categoryServiceId,
           search,
@@ -108,14 +107,14 @@ function CategoriesServicesFaqPage() {
     setRowsPerPage(newRowperPage);
     setPage(newPage);
     if (search === '' || search === null || search === undefined) {
-      category
+      categoryService
         .getCategoryServiceFaqList(categoryServiceId, newPage, rowsPerPage)
         .then((item) => {
           setList(item.data.data.list);
           setTotal(item.data.data.total);
         });
     } else {
-      category
+      categoryService
         .searchCategoryServiceFaq(
           categoryServiceId,
           search,
@@ -131,7 +130,7 @@ function CategoriesServicesFaqPage() {
 
   useEffect(() => {
     if (listingRolePermission(dataRole, 'Category Service Faq List')) {
-      category
+      categoryService
         .getCategoryServiceFaqList(categoryServiceId, page, rowsPerPage)
         .then((item: any) => {
           setIsLoader(false);
@@ -148,7 +147,7 @@ function CategoriesServicesFaqPage() {
           // console.log('error::::::::', error);
         });
     }
-  }, [emptyVariable]);
+  }, [null]);
 
   const deleteHandler = (id: string) => {
     setIsLoader(true);
@@ -157,7 +156,7 @@ function CategoriesServicesFaqPage() {
       is_deleted: true,
       updated_by: authState.user.id,
     };
-    category
+    categoryService
       .deleteCategoryServiceFaq(id, data)
       .then((updateItem) => {
         if (updateItem.data.success) {
@@ -198,12 +197,14 @@ function CategoriesServicesFaqPage() {
   const manuHandler = (option: string) => {
     if (option === 'Edit') {
       if (listingRolePermission(dataRole, 'Category Service Faq Update')) {
-        category.getCategoryServiceFaq(actionMenuItemid).then((item: any) => {
-          if (item.data.success) {
-            setEditFormData(item.data.data);
-            setOpenEditFormDialog(true);
-          }
-        });
+        categoryService
+          .getCategoryServiceFaq(actionMenuItemid)
+          .then((item: any) => {
+            if (item.data.success) {
+              setEditFormData(item.data.data);
+              setOpenEditFormDialog(true);
+            }
+          });
       } else {
         setIsNotify(true);
         setNotifyMessage({
@@ -228,7 +229,7 @@ function CategoriesServicesFaqPage() {
     setIsLoader(true);
     data.created_by = authState.user.id;
     data.updated_by = authState.user.id;
-    category
+    categoryService
       .categoryServiceCreateFaq(categoryServiceId, data)
       .then((item) => {
         if (item.data.success) {
@@ -254,7 +255,7 @@ function CategoriesServicesFaqPage() {
   const updateFormHandler = (data: any) => {
     setIsLoader(true);
     data.updated_by = authState.user.id;
-    category
+    categoryService
       .updateCategoryServiceFaq(actionMenuItemid, data)
       .then((updateItem: any) => {
         if (updateItem.data.success) {
@@ -288,18 +289,20 @@ function CategoriesServicesFaqPage() {
       is_active: event.target.checked,
       updated_by: authState.user.id,
     };
-    category.updateCategoryServiceFaqStatus(id, data).then((updateItem) => {
-      if (updateItem.data.success) {
-        setList((newArr: any) => {
-          return newArr.map((item: any) => {
-            if (item.id === id) {
-              item.isActive = updateItem.data.data.isActive;
-            }
-            return { ...item };
+    categoryService
+      .updateCategoryServiceFaqStatus(id, data)
+      .then((updateItem) => {
+        if (updateItem.data.success) {
+          setList((newArr: any) => {
+            return newArr.map((item: any) => {
+              if (item.id === id) {
+                item.isActive = updateItem.data.data.isActive;
+              }
+              return { ...item };
+            });
           });
-        });
-      }
-    });
+        }
+      });
     // } else {
     //   setIsNotify(true);
     //   setNotifyMessage({
@@ -330,13 +333,13 @@ function CategoriesServicesFaqPage() {
         setIsOpen={setIsNotify}
         displayMessage={notifyMessage}
       />
-      <TopBar isNestedRoute title="Category Item Faq's" />
-      <div className="container mt-5">
+      <TopBar isNestedRoute title="Products" />
+      <div className="container m-auto">
         <div className="w-full rounded-lg bg-white shadow-lg">
           <div className="grid grid-cols-12 px-4 py-5">
             <div className="col-span-7">
               <span className="font-open-sans text-xl font-semibold text-[#252733]">
-                All Category Item Faq&apos;s
+                All Product Faq&apos;s
               </span>
             </div>
             <div className="col-span-5">
@@ -389,7 +392,7 @@ function CategoriesServicesFaqPage() {
                   <th className="w-[28rem]">Answer</th>
                   <th>Dated</th>
                   <th>Status</th>
-                  <th>&nbsp;</th>
+                  <th aria-label="empty table header">&nbsp;</th>
                 </tr>
               </thead>
               <tbody>
@@ -459,7 +462,7 @@ function CategoriesServicesFaqPage() {
             </table>
           </div>
           {list?.length < 1 ? (
-            <CustomText noroundedborders text="No Records Found" />
+            <CustomText noRoundedBorders text="No Records Found" />
           ) : null}
           <div className="mt-3 flex w-[100%] justify-center py-3">
             <TablePagination

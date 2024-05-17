@@ -5,32 +5,25 @@ import AppBar from '@mui/material/AppBar';
 import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
 import Toolbar from '@mui/material/Toolbar';
-// import  { blac } from '@mui/material/colors';
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { NavLink, useNavigate } from 'react-router-dom';
-import {
-  setLogo,
-  setRemoveItemState,
-} from '../../redux/features/appStateSlice';
-import {
-  logout,
-  setShopAdminTenant,
-} from '../../redux/features/authStateSlice';
+import { setLogo, setRemoveItemState } from '../../redux/features/appSlice';
+import { logout, setShopAdminTenant } from '../../redux/features/authSlice';
 import { setRolePermissions } from '../../redux/features/permissionsStateSlice';
 import { useAppSelector } from '../../redux/redux-hooks';
 import BackArrowIcon from '../icons/BackArrowIcon';
 import ShopIcon from '../icons/ShopIcon';
 
-type Props = {
+type TopBarProps = {
   title?: string;
   isNestedRoute?: boolean;
 };
 
-function TopBar({ title, isNestedRoute = false }: Props) {
+function TopBar({ title, isNestedRoute = false }: TopBarProps) {
   const userData = useAppSelector((state: any) => state?.authState?.user);
   const ProfileAvatar = useAppSelector(
-    (state: any) => state?.persisitReducer?.appState?.profileAvatar
+    (state: any) => state?.persistedReducer?.appState?.profileAvatar
   );
   // console.log("PRAV", ProfileAvatar);
 
@@ -66,7 +59,7 @@ function TopBar({ title, isNestedRoute = false }: Props) {
   return (
     <AppBar
       position="relative"
-      className="w-full bg-transparent px-0 pt-4 pb-0 text-gray-50 shadow-none"
+      className="w-full bg-transparent px-0 pb-0 pt-4 text-gray-50 shadow-none"
     >
       <Toolbar className="toolbar-style container relative mx-auto flex">
         {isNestedRoute ? (

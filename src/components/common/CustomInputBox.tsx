@@ -7,50 +7,50 @@ import '../../assets/css/PopupStyle.css';
 import { INVALID_CHAR } from '../../utils/constants';
 import ErrorSpanBox from './ErrorSpanBox';
 
-type Props = {
-  register: any;
-  id: any;
-  inputTitle?: string;
-  error?: any;
-  subInputTitle?: string;
-  length?: string;
-  value?: any;
-  inputType?: string;
-  onclick?: (items?: any) => void;
-  showPassVisibility?: boolean;
-  typeImportant?: boolean;
+type CustomInputBoxProps = {
   customClass?: string;
-  fieldNameSize?: string;
   customFontClass?: string;
   disable?: boolean;
-  placeholder?: string;
-  requiredType?: boolean;
+  error?: any;
+  fieldNameSize?: string;
+  id: any;
+  inputTitle?: string;
+  inputType?: string;
+  length?: string;
   maxLetterLimit?: number;
+  onclick?: (items?: any) => void;
   pattern?: any;
+  placeholder?: string;
+  register: any;
+  requiredType?: boolean;
+  showPassVisibility?: boolean;
+  subInputTitle?: string;
+  typeImportant?: boolean;
+  value?: any;
 };
 
 function CustomInputBox({
-  pattern,
-  register,
-  id,
-  value,
-  inputTitle,
-  placeholder,
-  error,
-  subInputTitle,
-  length,
-  inputType,
-  onclick,
-  disable,
-  showPassVisibility,
-  typeImportant,
-  fieldNameSize,
-  customFontClass,
   customClass,
-  requiredType,
+  customFontClass,
+  disable,
+  error,
+  fieldNameSize,
+  id,
+  inputTitle,
+  inputType,
+  length,
   maxLetterLimit,
-}: Props) {
-  // console.log('errrrerr', error);
+  onclick,
+  pattern,
+  placeholder,
+  register,
+  requiredType,
+  showPassVisibility,
+  subInputTitle,
+  typeImportant,
+  value,
+}: CustomInputBoxProps) {
+  // console.log('error', error);
   return (
     <>
       <div className="flex">

@@ -17,7 +17,7 @@ import {
   PATTERN,
 } from '../../utils/constants';
 
-type Props = {
+type ProfileChangePasswordPopupProps = {
   changePassword: boolean;
   setChangePassword: React.Dispatch<React.SetStateAction<boolean>>;
   callback: any;
@@ -31,7 +31,7 @@ function ProfileChangePasswordPopup({
   callback,
   setIsNotify,
   setNotifyMessage,
-}: Props) {
+}: ProfileChangePasswordPopupProps) {
   const {
     register,
     handleSubmit,

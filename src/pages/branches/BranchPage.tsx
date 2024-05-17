@@ -1,7 +1,11 @@
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
+import AirplayIcon from '@mui/icons-material/Airplay';
+import ApartmentIcon from '@mui/icons-material/Apartment';
 import EditIcon from '@mui/icons-material/Edit';
+import PeopleOutlineIcon from '@mui/icons-material/PeopleOutline';
 import SearchIcon from '@mui/icons-material/Search';
 import WysiwygOutlinedIcon from '@mui/icons-material/WysiwygOutlined';
+import Badge from '@mui/material/Badge';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import FormControl from '@mui/material/FormControl';
@@ -9,26 +13,25 @@ import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
 import Switch from '@mui/material/Switch';
-import AirplayIcon from '@mui/icons-material/Airplay';
 import TablePagination from '@mui/material/TablePagination';
 import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import CustomButton from '../../components/common/CustomButton';
 import CustomText from '../../components/common/CustomText';
 import Loader from '../../components/common/Loader';
 import Notify from '../../components/common/Notify';
 import TopBar from '../../components/common/TopBar';
 import { AppUserEmployees } from '../../interfaces/app-user.interface';
+import { setItemState } from '../../redux/features/appSlice';
+import { login } from '../../redux/features/authSlice';
 import { useAppSelector } from '../../redux/redux-hooks';
-import Service from '../../services/adminapp/adminBranch';
+import branchService from '../../services/adminapp/adminBranch';
 import { listingRolePermission } from '../../utils/helper';
 import BranchCreatePopup from './BranchCreatePopup';
 import BranchUpdatePopup from './BranchUpdatePopup';
-import CustomButton from '../../components/common/CustomButton';
-import { login } from '../../redux/features/authStateSlice';
-import { setItemState } from '../../redux/features/appStateSlice';
 
 function BranchPage() {
   const navigate = useNavigate();
@@ -37,12 +40,11 @@ function BranchPage() {
   // console.log('🚀 ~ BranchPage ~ authState:', authState);
 
   const dataRole = useAppSelector(
-    (state: any) => state?.persisitReducer?.roleState?.role?.permissions
+    (state: any) => state?.persistedReducer?.roleState?.role?.permissions
   );
   const [search, setSearch] = useState<any>('');
   const [maxTotalEmployeeLimit, setTotalMaxEmployeeLimit] = useState<any>();
   const [maxTotalEmployees, setTotalMaxEmployees] = useState();
-  // const [emptyVariable] = useState(null);
   const [page, setPage] = useState(0);
   const [total, setTotal] = useState(0);
   const [list, setList] = useState<any>([]);
@@ -63,15 +65,17 @@ function BranchPage() {
       const newPage = 0;
       setSearch(searchTxt);
       setPage(newPage);
-      Service.getListServiceSearch(
-        authState.user.tenant,
-        searchTxt,
-        newPage,
-        rowsPerPage
-      ).then((item) => {
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      });
+      branchService
+        .getListServiceSearch(
+          authState.user.tenant,
+          searchTxt,
+          newPage,
+          rowsPerPage
+        )
+        .then((item) => {
+          setList(item.data.data.list);
+          setTotal(item.data.data.total);
+        });
     }
   };
 
@@ -82,60 +86,61 @@ function BranchPage() {
     setPage(newPage);
     // offset? ,limit rowsperpage hoga ofset page * rowsperPage
     if (search === '' || search === null || search === undefined) {
-      Service.getListService(authState.user.tenant, newPage, rowsPerPage).then(
-        (item) => {
+      branchService
+        .getListService(authState.user.tenant, newPage, rowsPerPage)
+        .then((item) => {
           setList(item.data.data.list);
           setTotal(item.data.data.total);
-        }
-      );
+        });
     } else {
-      Service.getListServiceSearch(
-        authState.user.tenant,
-        search,
-        newPage,
-        rowsPerPage
-      ).then((item) => {
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      });
+      branchService
+        .getListServiceSearch(
+          authState.user.tenant,
+          search,
+          newPage,
+          rowsPerPage
+        )
+        .then((item) => {
+          setList(item.data.data.list);
+          setTotal(item.data.data.total);
+        });
     }
   };
 
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    const newRowperPage = parseInt(event.target.value, 10);
+    const newRowPerPage = parseInt(event.target.value, 10);
     const newPage = 0;
-    setRowsPerPage(newRowperPage);
+    setRowsPerPage(newRowPerPage);
     setPage(newPage);
     if (search === '' || search === null || search === undefined) {
-      Service.getListService(authState.user.tenant, newPage, rowsPerPage).then(
-        (item) => {
+      branchService
+        .getListService(authState.user.tenant, newPage, rowsPerPage)
+        .then((item) => {
           setList(item.data.data.list);
           setTotal(item.data.data.total);
-        }
-      );
+        });
     } else {
-      Service.getListServiceSearch(
-        authState.user.tenant,
-        search,
-        newPage,
-        rowsPerPage
-      ).then((item) => {
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      });
+      branchService
+        .getListServiceSearch(
+          authState.user.tenant,
+          search,
+          newPage,
+          rowsPerPage
+        )
+        .then((item) => {
+          setList(item.data.data.list);
+          setTotal(item.data.data.total);
+        });
     }
   };
 
   useEffect(() => {
-    setIsLoader(true);
+    // setIsLoader(true);
     if (listingRolePermission(dataRole, 'Employee List')) {
-      Service.getListService(
-        authState?.shopTenantDetails.tenant,
-        page,
-        rowsPerPage
-      )
+      branchService
+        .getListService(authState?.shopTenantDetails.tenant, page, rowsPerPage)
         .then((item: any) => {
           if (item.data.success) {
             setIsLoader(false);
@@ -169,7 +174,8 @@ function BranchPage() {
 
   const createFormHandler = (data: any) => {
     setIsLoader(true);
-    Service.insertBranch(data, authState?.user?.tenant)
+    branchService
+      .insertBranch(data, authState?.user?.tenant)
       .then((item: any) => {
         if (item.data.success) {
           setIsLoader(false);
@@ -205,7 +211,8 @@ function BranchPage() {
 
   const editHandler = (id: string) => {
     setIsLoader(true);
-    Service.editBranch(id)
+    branchService
+      .editBranch(id)
       .then((item: any) => {
         if (item.data.success) {
           setStateLimitVal(item.data.data.userLimit);
@@ -229,7 +236,8 @@ function BranchPage() {
     delete data.email;
     data.userId = authState?.user?.id;
     const temp = Number(maxTotalEmployeeLimit) - storeLimitVal;
-    Service.updateBranch(data, id)
+    branchService
+      .updateBranch(data, id)
       .then((item: any) => {
         if (item.data.success) {
           setIsLoader(false);
@@ -279,7 +287,8 @@ function BranchPage() {
       // trialMode: event.target.checked,
       updatedBy: authState.user.id,
     };
-    Service.updateBranchStatus(data, id)
+    branchService
+      .updateBranchStatus(data, id)
       .then((updateItem) => {
         if (updateItem.data.success) {
           setIsLoader(false);
@@ -372,31 +381,77 @@ function BranchPage() {
             </div>
             <div className="col-span-10">
               <div className="flex flex-row items-center justify-end gap-3">
-                <div className="flex-col items-center justify-center px-2">
-                  <p className="text-sm font-semibold ">Total Employees</p>
-                  <div className="mt-2 flex justify-center">
-                    <span className="badge badge-danger btn-black-outline w-full text-sm">
+                <div className="flex-col px-2">
+                  <div>
+                    <p className="text-sm font-semibold ">Total Employees</p>
+                  </div>
+                  <div className="mt-4 flex w-full items-center justify-center">
+                    <Badge
+                      color="success"
+                      max={999}
+                      showZero
+                      badgeContent={Number(maxTotalEmployees) ?? 0}
+                    >
+                      <PeopleOutlineIcon />
+                    </Badge>
+                    {/* <span className=" w-full text-sm">
                       {maxTotalEmployees ?? '0'}
-                    </span>
+                    </span> */}
                   </div>
                 </div>
                 <div className="flex-col items-center justify-center">
                   <p className="text-sm font-semibold">
                     Employees Distribution
                   </p>
-                  <div className="mt-2 flex justify-center">
-                    <span className="badge badge-primary btn-black-outline w-full text-sm">
+                  <div className="mt-4 flex items-start justify-center">
+                    <Badge
+                      showZero
+                      max={999}
+                      color="error"
+                      badgeContent={
+                        Number(authState?.user?.maxEmployeeLimit) ?? 0
+                      }
+                    >
+                      <PeopleOutlineIcon />
+                    </Badge>{' '}
+                    <span className="mx-4"> - </span>
+                    <Badge
+                      showZero
+                      max={999}
+                      color="success"
+                      badgeContent={Number(maxTotalEmployeeLimit) ?? 0}
+                    >
+                      <PeopleOutlineIcon />
+                    </Badge>
+                    {/* <span className="w-full text-sm">
                       {authState.user.maxEmployeeLimit} -{' '}
                       {maxTotalEmployeeLimit || 0}
-                    </span>
+                    </span> */}
                   </div>
                 </div>
-                <div className="flex-col items-center justify-center px-2">
+                <div className=" flex-col items-center justify-center px-2">
                   <p className="text-sm font-semibold">Branches Distribution</p>
-                  <div className="mt-2 flex justify-center">
-                    <span className="badge badge-success btn-black-outline w-full text-sm">
+                  <div className="mt-4 flex items-center justify-center">
+                    <Badge
+                      showZero
+                      max={999}
+                      color="success"
+                      badgeContent={Number(authState?.user?.branchLimit) ?? 0}
+                    >
+                      <ApartmentIcon />
+                    </Badge>
+                    <span className="mx-4"> - </span>
+                    <Badge
+                      showZero
+                      max={999}
+                      color="success"
+                      badgeContent={Number(total) ?? 0}
+                    >
+                      <ApartmentIcon />
+                    </Badge>
+                    {/* <span className="badge badge-success btn-black-outline w-full text-sm">
                       {authState.user.branchLimit} - {total}
-                    </span>
+                    </span> */}
                   </div>
                 </div>
                 <FormControl
@@ -467,7 +522,7 @@ function BranchPage() {
                   <th>Trial Start Date</th>
                   <th>Status</th>
                   <th>Branch Control</th>
-                  <th>&nbsp;</th>
+                  <th aria-label="empty table header">&nbsp;</th>
                 </tr>
               </thead>
               <tbody>
@@ -599,7 +654,7 @@ function BranchPage() {
             </table>
           </div>
           {list?.length < 1 ? (
-            <CustomText noroundedborders text="No Records Found" />
+            <CustomText noRoundedBorders text="No Records Found" />
           ) : null}
           <div className="mt-3 flex w-[100%] justify-center py-3">
             <TablePagination

@@ -1,14 +1,31 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable import/prefer-default-export */
+
 import { Navigate, RouteObject } from 'react-router-dom';
 import AppLayout from '../components/layout/AppLayout';
 import AuthLayout from '../components/layout/AuthLayout';
 import LayoutOutlet from '../components/layout/LayoutOutlet';
+import Page404 from '../pages/404/Page404';
+import AppUserDetailPage from '../pages/appUsers/AppUserDetailPage';
+import AppUserRewardHistory from '../pages/appUsers/AppUserRewardHistory';
+import AppUserLoyaltyDetailPage from '../pages/appUsers/AppUserRewardHistoryTabs/AppUserLoyaltyDetailPage';
+import AppUserPromotionDetailPage from '../pages/appUsers/AppUserRewardHistoryTabs/AppUserPromotionDetailPage';
+import AppUsersPage from '../pages/appUsers/AppUsersPage';
+import AddAppointmentPage from '../pages/appointment/AddAppointmentPage';
+import RescheduleAppointmentPage from '../pages/appointment/RescheduleAppointmentPage';
+import EmployeeServices from '../pages/appointment/employeeServices/EmployeeServices';
+import AppointmentProviderAddSchedulePage from '../pages/appointment/provider/AppointmentProviderAddSchedulePage';
+import AppointmentProviderByIdPage from '../pages/appointment/provider/AppointmentProviderByIdPage';
+import AppointmentProviderPage from '../pages/appointment/provider/AppointmentProviderPage';
+import AppointmentProviderSchedulePage from '../pages/appointment/provider/AppointmentProviderSchedulePage';
+import AppointmentProviderServicesList from '../pages/appointment/provider/AppointmentProviderServicesList';
+import AppointmentVisitDetailPage from '../pages/appointment/visit/AppointmentVisitDetailPage';
 import AppointmentVisitPage from '../pages/appointment/visit/AppointmentVisitPage';
 import ForgotPasswordPage from '../pages/auth/forgot-password/ForgotPasswordPage';
 import LoginPage from '../pages/auth/login/LoginPage';
 import NewPasswordPage from '../pages/auth/new-password/NewPasswordPage';
 import OTPVerificationPage from '../pages/auth/otp-verification/OtpVerificationPage';
+import BannersPage from '../pages/banners/BannersPage';
 import BranchDetailPage from '../pages/branches/BranchDetailPage';
 import BranchPage from '../pages/branches/BranchPage';
 import CartDetailsPage from '../pages/carts/CartDetailsPage';
@@ -18,40 +35,40 @@ import CategoriesServicesFaqPage from '../pages/categories/CategoriesServicesFaq
 import CategoriesServicesPage from '../pages/categories/CategoriesServicesPage';
 import ComplainsPage from '../pages/complain/ComplainsPage';
 import EmployeePage from '../pages/employees/EmployeePage';
+import FaqPage from '../pages/faq/faqPage';
 import HomePage from '../pages/home/HomePage';
 import LocationsPage from '../pages/locations/LocationsPage';
 import NotAuthorized from '../pages/notAuthorized/notAuthorized';
 import NotificationPage from '../pages/notification/NotificationPage';
+import AddNewOrder from '../pages/orders/AddNewOrder';
+import DriverHistory from '../pages/orders/DriverHistory';
+import OrderBasket from '../pages/orders/OrderBasket';
 import OrderDetailsPage from '../pages/orders/OrderDetailsPage';
+import OrderItemDetailPage from '../pages/orders/OrderItemDetailPage';
 import OrdersAssignPage from '../pages/orders/OrdersAssignPage';
 import OrdersCreatePage from '../pages/orders/OrdersCreatePage';
 import OrdersEditPage from '../pages/orders/OrdersEditPage';
 import OrdersPage from '../pages/orders/OrdersPage';
 import ProfilePage from '../pages/profile/ProfilePage';
+import RatingPage from '../pages/rating/RatingPage';
+import RatingReviewsPage from '../pages/rating/RatingReviewsPage';
 import ReportsPage from '../pages/reports/ReportsPage';
+import ServiceItemPage from '../pages/services/ServiceItemPage';
+import ServicesCatPage from '../pages/services/ServicesCatPage';
+import SettingConfig from '../pages/settings/SettingConfig';
 import SettingsApp from '../pages/settings/SettingsApp';
 import SettingsPage from '../pages/settings/SettingsPage';
 import SettingsShopScheduling from '../pages/settings/SettingsShopScheduling';
-
-import AppUserDetailPage from '../pages/appUsers/AppUserDetailPage';
-import AppUserRewardHistory from '../pages/appUsers/AppUserRewardHistory';
-import AppUserLoyaltyDetailPage from '../pages/appUsers/AppUserRewardHistoryTabs/AppUserLoyaltyDetailPage';
-import AppUserPromotionDetailPage from '../pages/appUsers/AppUserRewardHistoryTabs/AppUserPromotionDetailPage';
-import AppUsersPage from '../pages/appUsers/AppUsersPage';
-import AppointmentProviderAddSchedulePage from '../pages/appointment/provider/AppointmentProviderAddSchedulePage';
-import AppointmentProviderPage from '../pages/appointment/provider/AppointmentProviderPage';
-import AppointmentProviderSchedulePage from '../pages/appointment/provider/AppointmentProviderSchedulePage';
-import AppointmentProviderServicesList from '../pages/appointment/provider/AppointmentProviderServicesList';
-import AppointmentVisitDetailPage from '../pages/appointment/visit/AppointmentVisitDetailPage';
-import BannersPage from '../pages/banners/BannersPage';
-import DriverHistory from '../pages/orders/DriverHistory';
-import SettingConfig from '../pages/settings/SettingConfig';
 import VouchersPage from '../pages/vouchers/VouchersPage';
-import RatingPage from '../pages/rating/RatingPage';
-import RatingReviewsPage from '../pages/rating/RatingReviewsPage';
-import Page404 from '../pages/404/Page404';
-import AppointmentProviderByIdPage from '../pages/appointment/provider/AppointmentProviderByIdPage';
-import FaqPage from '../pages/faq/faqPage';
+import StoreAppointmentsList from '../pages/appointment/StoreAppointmentsList';
+import AppointmentEmployeesAttendancePage from '../pages/appointment/provider/attendance/AppointmentEmployeesAttendancePage';
+import LeaveManagement from '../pages/appointment/leaveManagement/LeaveManagement';
+// import EmployeeRatingPage from '../pages/appointment/provider/rating/EmployeeRatingPage';
+import EmployeeRatingReviewsPage from '../pages/appointment/provider/rating/EmployeeRatingReviewsPage';
+import AppointmentRatingPage from '../pages/appointment/rating/AppointmentRatingPage';
+import AppointmentRatingReviewsPage from '../pages/appointment/rating/AppointmentRatingReviewsPage';
+
+// import UpdateAppointmentPage from '../pages/appointment/UpdateAppointmentPage';
 
 export const routeObjects: RouteObject[] = [
   {
@@ -136,7 +153,16 @@ export const routeObjects: RouteObject[] = [
               },
               {
                 path: 'create',
-                element: <OrdersCreatePage />,
+                element: <AddNewOrder />,
+              },
+              {
+                path: 'item/:itemId',
+                element: <OrderItemDetailPage />,
+              },
+              {
+                path: 'basket',
+                element: <OrderBasket />,
+                // element: CAN("canView", "Order List") ? <OrdersPage /> : <p>not authorized</p>,
               },
               {
                 path: 'detail/:orderId',
@@ -166,19 +192,18 @@ export const routeObjects: RouteObject[] = [
             ],
           },
           {
-            path: 'categories',
+            path: 'product',
             children: [
               {
                 index: true,
                 element: <CategoriesPage />,
-                // element: CAN("canView", "Category List") ? <CategoriesPage /> : <p>not authorized</p>,
               },
               {
-                path: 'service/:categoryId',
+                path: 'item/:productId',
                 element: <CategoriesServicesPage />,
               },
               {
-                path: 'service/faq/:categoryServiceId',
+                path: 'item/faq/:categoryServiceId',
                 element: <CategoriesServicesFaqPage />,
               },
             ],
@@ -251,6 +276,66 @@ export const routeObjects: RouteObject[] = [
             ],
           },
           {
+            path: 'employees',
+            children: [
+              { index: true, element: <Navigate to="list" replace /> },
+              {
+                path: 'list',
+                element: <AppointmentProviderPage />,
+              },
+              {
+                path: 'schedule/:id',
+                element: <AppointmentProviderSchedulePage />,
+              },
+              {
+                path: 'add-schedule/:id',
+                element: <AppointmentProviderAddSchedulePage />,
+              },
+              {
+                path: 'services/:providerId',
+                element: <AppointmentProviderServicesList />,
+              },
+              {
+                path: 'today-appointment/:providerId',
+                element: <AppointmentProviderByIdPage />,
+              },
+              {
+                path: 'services/list/:empId',
+                element: <EmployeeServices />,
+              },
+            ],
+          },
+          {
+            path: 'appointments',
+            children: [
+              {
+                index: true,
+                element: <AppointmentVisitPage />,
+              },
+              // { index: true, element: <Navigate to="list" replace /> },
+              // {
+              //   path: 'list',
+              //   element: <AppointmentVisitPage />,
+              // },
+              {
+                path: 'detail/:id',
+                element: <AppointmentVisitDetailPage />,
+              },
+              {
+                path: 'add-appointment',
+                element: <AddAppointmentPage />,
+              },
+              // {
+              //   path: 'update-appointment/:id',
+              //   element: <UpdateAppointmentPage />,
+              // },
+              {
+                path: 'reschedule-appointment/:id',
+                element: <RescheduleAppointmentPage />,
+              },
+            ],
+          },
+          {
             path: 'branches',
             children: [
               {
@@ -263,29 +348,29 @@ export const routeObjects: RouteObject[] = [
               },
             ],
           },
+          // nested appointment
           {
-            path: 'appointment',
+            path: 'store-appointment',
             children: [
               {
                 index: true,
-                element: <Navigate to="provider/list" replace />,
+                element: <Navigate to="service" replace />,
               },
               {
-                path: 'visit',
+                path: 'service',
                 children: [
-                  { index: true, element: <Navigate to="list" replace /> },
                   {
-                    path: 'list',
-                    element: <AppointmentVisitPage />,
+                    index: true,
+                    element: <ServicesCatPage />,
                   },
                   {
-                    path: 'detail/:id',
-                    element: <AppointmentVisitDetailPage />,
+                    path: 'services/:CatId',
+                    element: <ServiceItemPage />,
                   },
                 ],
               },
               {
-                path: 'provider',
+                path: 'employees',
                 children: [
                   { index: true, element: <Navigate to="list" replace /> },
                   {
@@ -307,6 +392,272 @@ export const routeObjects: RouteObject[] = [
                   {
                     path: 'today-appointment/:providerId',
                     element: <AppointmentProviderByIdPage />,
+                  },
+                  {
+                    path: 'services/list/:empId',
+                    element: <EmployeeServices />,
+                  },
+                  {
+                    path: 'attendance/:empId',
+                    element: <AppointmentEmployeesAttendancePage />,
+                  },
+                  // {
+                  //   path: 'rating/:empId',
+                  //   element: <EmployeeRatingPage />,
+                  // },
+                  {
+                    path: 'review/:empId',
+                    element: <EmployeeRatingReviewsPage />,
+                  },
+                ],
+              },
+              {
+                path: 'appointments',
+                children: [
+                  {
+                    index: true,
+                    element: <AppointmentVisitPage />,
+                  },
+                  {
+                    path: 'today/list',
+                    element: <StoreAppointmentsList today />,
+                  },
+                  {
+                    path: 'list',
+                    element: <StoreAppointmentsList />,
+                  },
+                  // { index: true, element: <Navigate to="list" replace /> },
+                  // {
+                  //   path: 'list',
+                  //   element: <AppointmentVisitPage />,
+                  // },
+                  {
+                    path: 'detail/:id',
+                    element: <AppointmentVisitDetailPage />,
+                  },
+                  {
+                    path: 'add-appointment',
+                    element: <AddAppointmentPage />,
+                  },
+                  // {
+                  //   path: 'update-appointment/:id',
+                  //   element: <UpdateAppointmentPage />,
+                  // },
+                  {
+                    path: 'reschedule-appointment/:id',
+                    element: <RescheduleAppointmentPage />,
+                  },
+                ],
+              },
+              {
+                path: 'leaves-management',
+                children: [
+                  {
+                    index: true,
+                    element: <LeaveManagement />,
+                  },
+                ],
+              },
+              {
+                path: 'ratings',
+                children: [
+                  {
+                    index: true,
+                    element: <AppointmentRatingPage />,
+                  },
+                  {
+                    path: 'review/:appId',
+                    element: <AppointmentRatingReviewsPage />,
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            path: 'store-product',
+            children: [
+              {
+                index: true,
+                element: <Navigate to="product" replace />,
+              },
+              {
+                path: 'product',
+                children: [
+                  {
+                    index: true,
+                    element: <CategoriesPage />,
+                  },
+                  {
+                    path: 'item/:productId',
+                    element: <CategoriesServicesPage />,
+                  },
+                  {
+                    path: 'item/faq/:categoryServiceId',
+                    element: <CategoriesServicesFaqPage />,
+                  },
+                ],
+              },
+              {
+                path: 'orders',
+                children: [
+                  {
+                    index: true,
+                    element: <OrdersPage />,
+                    // element: CAN("canView", "Order List") ? <OrdersPage /> : <p>not authorized</p>,
+                  },
+                  {
+                    path: 'create',
+                    element: <AddNewOrder />,
+                  },
+                  {
+                    path: 'detail/:orderId',
+                    element: <OrderDetailsPage />,
+                  },
+                  {
+                    path: 'edit/:orderId',
+                    element: <OrdersEditPage />,
+                  },
+                  {
+                    path: 'assign/:orderId',
+                    element: <OrdersAssignPage />,
+                  },
+                  {
+                    path: 'view-driver',
+                    element: <DriverHistory />,
+                  },
+                  {
+                    path: 'item/:itemId',
+                    element: <OrderItemDetailPage />,
+                  },
+                  {
+                    path: 'basket',
+                    element: <OrderBasket />,
+                    // element: CAN("canView", "Order List") ? <OrdersPage /> : <p>not authorized</p>,
+                  },
+                ],
+              },
+              {
+                path: 'ratings',
+                children: [
+                  {
+                    index: true,
+                    element: <RatingPage />,
+                  },
+                  {
+                    path: 'reviews/:itemId',
+                    element: <RatingReviewsPage />,
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            path: 'salon',
+            children: [
+              {
+                index: true,
+                element: <Navigate to="product/list" replace />,
+              },
+              {
+                path: 'product',
+                children: [
+                  {
+                    path: 'list',
+                    index: true,
+                    element: <CategoriesPage />,
+                    // element: CAN("canView", "Category List") ? <CategoriesPage /> : <p>not authorized</p>,
+                  },
+                  {
+                    path: 'item/:productId',
+                    element: <CategoriesServicesPage />,
+                  },
+                  {
+                    path: 'item/faq/:categoryServiceId',
+                    element: <CategoriesServicesFaqPage />,
+                  },
+                ],
+              },
+              {
+                path: 'orders',
+                children: [
+                  {
+                    index: true,
+                    element: <OrdersPage />,
+                  },
+                  {
+                    path: 'create',
+                    element: <OrdersCreatePage />,
+                  },
+                  {
+                    path: 'detail/:orderId',
+                    element: <OrderDetailsPage />,
+                  },
+                  {
+                    path: 'edit/:orderId',
+                    element: <OrdersEditPage />,
+                  },
+                  {
+                    path: 'assign/:orderId',
+                    element: <OrdersAssignPage />,
+                  },
+                  {
+                    path: 'view-driver',
+                    element: <DriverHistory />,
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            path: 'user',
+            children: [
+              {
+                index: true,
+                element: <Navigate to="app-user/list" replace />,
+              },
+              {
+                path: 'app-user',
+                children: [
+                  {
+                    path: 'list',
+                    index: true,
+                    element: <AppUsersPage />,
+                    // element: CAN("canView", "Customer List") ? <CustomersPage /> : <p>not authorized</p>,
+                  },
+                  {
+                    path: 'detail/:appuserId',
+                    element: <AppUserDetailPage />,
+                  },
+                  {
+                    path: 'reward',
+                    // element: <AppUserRewardHistory />,
+                    children: [
+                      {
+                        index: true,
+                        element: <Navigate to="history/:userId" replace />,
+                      },
+                      {
+                        path: 'history/:userId',
+                        element: <AppUserRewardHistory />,
+                      },
+                      {
+                        path: 'history/voucher/detail/:historyId',
+                        element: <AppUserPromotionDetailPage />,
+                      },
+                      {
+                        path: 'history/loyalty/detail/:loyaltyId',
+                        element: <AppUserLoyaltyDetailPage />,
+                      },
+                    ],
+                  },
+                ],
+              },
+              {
+                path: 'employees',
+                children: [
+                  {
+                    index: true,
+                    element: <EmployeePage />,
                   },
                 ],
               },
@@ -384,6 +735,19 @@ export const routeObjects: RouteObject[] = [
                 index: true,
                 element: <NotificationPage />,
                 // element: CAN("canView", "Notification List") ? <NotificationPage /> : <p>not authorized</p>,
+              },
+            ],
+          },
+          {
+            path: 'service',
+            children: [
+              {
+                index: true,
+                element: <ServicesCatPage />,
+              },
+              {
+                path: 'services/:CatId',
+                element: <ServiceItemPage />,
               },
             ],
           },

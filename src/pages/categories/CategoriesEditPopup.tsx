@@ -19,7 +19,7 @@ import {
   imageAllowedTypes,
 } from '../../utils/constants';
 
-type Props = {
+type CategoriesEditPopupProps = {
   openFormDialog: boolean;
   setOpenFormDialog: React.Dispatch<React.SetStateAction<boolean>>;
   formData: any;
@@ -35,7 +35,7 @@ function CategoriesEditPopup({
   callback,
   setIsNotify,
   setNotifyMessage,
-}: Props) {
+}: CategoriesEditPopupProps) {
   const [image, setImage] = useState<any>(null);
   const [imageName, setImageName] = useState<any>(null);
 
@@ -119,7 +119,7 @@ function CategoriesEditPopup({
       <div className="Content">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="FormHeader">
-            <span className="Title">Edit Category</span>
+            <span className="Title">Edit Product Category</span>
           </div>
           {formData && (
             <>

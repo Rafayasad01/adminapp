@@ -5,9 +5,9 @@ import dayjs from 'dayjs';
 import { useNavigate } from 'react-router-dom';
 import CustomText from '../../../components/common/CustomText';
 import { useAppSelector } from '../../../redux/redux-hooks';
-import Service from '../../../services/adminapp/adminAppUser';
+import appUserService from '../../../services/adminapp/adminAppUser';
 
-type Props = {
+type AppUserLoyaltyTabProps = {
   list: any;
   total: number;
   page: number;
@@ -17,7 +17,7 @@ type Props = {
   setRowsPerPage: any;
   setList: any;
   search: string;
-  setSearch: any;
+  // setSearch: any;
 };
 
 function AppUserLoyaltyTab({
@@ -30,7 +30,7 @@ function AppUserLoyaltyTab({
   setTotal,
   setRowsPerPage,
   search,
-}: Props) {
+}: AppUserLoyaltyTabProps) {
   const navigate = useNavigate();
   const authState: any = useAppSelector((state) => state?.authState);
 
@@ -41,26 +41,25 @@ function AppUserLoyaltyTab({
     setPage(newPage);
     // offset? ,limit rowsperpage hoga ofset page * rowsperPage
     if (search === '' || search === null || search === undefined) {
-      Service.appList(
-        authState.user.tenant,
-        'Other',
-        newPage,
-        rowsPerPage
-      ).then((item) => {
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      });
+      appUserService
+        .appList(authState.user.tenant, 'Other', newPage, rowsPerPage)
+        .then((item) => {
+          setList(item.data.data.list);
+          setTotal(item.data.data.total);
+        });
     } else {
-      Service.appListSearch(
-        authState.user.tenant,
-        'Other',
-        search,
-        newPage,
-        rowsPerPage
-      ).then((item) => {
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      });
+      appUserService
+        .appListSearch(
+          authState.user.tenant,
+          'Other',
+          search,
+          newPage,
+          rowsPerPage
+        )
+        .then((item) => {
+          setList(item.data.data.list);
+          setTotal(item.data.data.total);
+        });
     }
   };
 
@@ -72,26 +71,25 @@ function AppUserLoyaltyTab({
     setRowsPerPage(newRowperPage);
     setPage(newPage);
     if (search === '' || search === null || search === undefined) {
-      Service.appList(
-        authState.user.tenant,
-        'Other',
-        newPage,
-        rowsPerPage
-      ).then((item) => {
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      });
+      appUserService
+        .appList(authState.user.tenant, 'Other', newPage, rowsPerPage)
+        .then((item) => {
+          setList(item.data.data.list);
+          setTotal(item.data.data.total);
+        });
     } else {
-      Service.appListSearch(
-        authState.user.tenant,
-        'Other',
-        search,
-        newPage,
-        rowsPerPage
-      ).then((item) => {
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      });
+      appUserService
+        .appListSearch(
+          authState.user.tenant,
+          'Other',
+          search,
+          newPage,
+          rowsPerPage
+        )
+        .then((item) => {
+          setList(item.data.data.list);
+          setTotal(item.data.data.total);
+        });
     }
   };
 
@@ -105,7 +103,7 @@ function AppUserLoyaltyTab({
               <th>Coins</th>
               <th>Grand Total</th>
               <th>Created Date</th>
-              <th>&nbsp;</th>
+              <th aria-label="empty table header">&nbsp;</th>
             </tr>
           </thead>
           <tbody>
@@ -146,7 +144,7 @@ function AppUserLoyaltyTab({
         </table>
       </div>
       {list?.length < 1 ? (
-        <CustomText noroundedborders text="No Records Found" />
+        <CustomText noRoundedBorders text="No Records Found" />
       ) : null}
       <div className="mt-5 flex items-center justify-center">
         <TablePagination

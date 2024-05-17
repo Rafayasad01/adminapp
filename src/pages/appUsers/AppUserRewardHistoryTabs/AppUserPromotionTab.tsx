@@ -9,9 +9,9 @@ import TablePagination from '@mui/material/TablePagination';
 import dayjs from 'dayjs';
 import { useNavigate } from 'react-router-dom';
 import CustomText from '../../../components/common/CustomText';
-import Service from '../../../services/adminapp/adminAppUser';
+import appUserService from '../../../services/adminapp/adminAppUser';
 
-type Props = {
+type AppUserPromotionTabProps = {
   list: any;
   total: number;
   page: number;
@@ -37,7 +37,7 @@ function AppUserPromotionTab({
   setRowsPerPage,
   search,
   setSearch,
-}: Props) {
+}: AppUserPromotionTabProps) {
   const navigate = useNavigate();
   // const authState: any = useAppSelector((state) => state?.authState);
 
@@ -48,22 +48,19 @@ function AppUserPromotionTab({
     setPage(newPage);
     // offset? ,limit rowsperpage hoga ofset page * rowsperPage
     if (search === '' || search === null || search === undefined) {
-      Service.appUserVocuherHistoryList(userId, newPage, rowsPerPage).then(
-        (item) => {
+      appUserService
+        .appUserVocuherHistoryList(userId, newPage, rowsPerPage)
+        .then((item) => {
           setList(item.data.data.list);
           setTotal(item.data.data.total);
-        }
-      );
+        });
     } else {
-      Service.appUserSearchVocuherHistoryList(
-        userId,
-        search,
-        newPage,
-        rowsPerPage
-      ).then((item) => {
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      });
+      appUserService
+        .appUserSearchVocuherHistoryList(userId, search, newPage, rowsPerPage)
+        .then((item) => {
+          setList(item.data.data.list);
+          setTotal(item.data.data.total);
+        });
     }
   };
 
@@ -75,22 +72,19 @@ function AppUserPromotionTab({
     setRowsPerPage(newRowperPage);
     setPage(newPage);
     if (search === '' || search === null || search === undefined) {
-      Service.appUserVocuherHistoryList(userId, newPage, rowsPerPage).then(
-        (item) => {
+      appUserService
+        .appUserVocuherHistoryList(userId, newPage, rowsPerPage)
+        .then((item) => {
           setList(item.data.data.list);
           setTotal(item.data.data.total);
-        }
-      );
+        });
     } else {
-      Service.appUserSearchVocuherHistoryList(
-        userId,
-        search,
-        newPage,
-        rowsPerPage
-      ).then((item) => {
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      });
+      appUserService
+        .appUserSearchVocuherHistoryList(userId, search, newPage, rowsPerPage)
+        .then((item) => {
+          setList(item.data.data.list);
+          setTotal(item.data.data.total);
+        });
     }
   };
 
@@ -100,15 +94,17 @@ function AppUserPromotionTab({
       const newPage = 0;
       setSearch(searchTxt);
       setPage(newPage);
-      Service.appUserSearchVocuherHistoryList(
-        userId,
-        searchTxt,
-        newPage,
-        rowsPerPage
-      ).then((item) => {
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      });
+      appUserService
+        .appUserSearchVocuherHistoryList(
+          userId,
+          searchTxt,
+          newPage,
+          rowsPerPage
+        )
+        .then((item) => {
+          setList(item.data.data.list);
+          setTotal(item.data.data.total);
+        });
     }
   };
 
@@ -156,7 +152,7 @@ function AppUserPromotionTab({
               <th>Amount</th>
               <th className="w-[15%]">Order Number</th>
               <th>Avail Date</th>
-              <th>&nbsp;</th>
+              <th aria-label="empty table header">&nbsp;</th>
             </tr>
           </thead>
           <tbody>
@@ -212,7 +208,7 @@ function AppUserPromotionTab({
         </table>
       </div>
       {list?.length < 1 ? (
-        <CustomText noroundedborders text="No Records Found" />
+        <CustomText noRoundedBorders text="No Records Found" />
       ) : null}
       <div className="mt-5 flex items-center justify-center">
         <TablePagination

@@ -23,7 +23,7 @@ import Loader from '../../components/common/Loader';
 import Notify from '../../components/common/Notify';
 import { AppUserEmployees } from '../../interfaces/app-user.interface';
 import { useAppSelector } from '../../redux/redux-hooks';
-import Service from '../../services/adminapp/adminEmployee';
+import employeeService from '../../services/adminapp/adminEmployee';
 import PermissionPopup from '../../utils/PermissionPopup';
 import { NOT_AUTHORIZED_MESSAGE, PATTERN } from '../../utils/constants';
 import { listingRolePermission } from '../../utils/helper';
@@ -31,10 +31,9 @@ import { listingRolePermission } from '../../utils/helper';
 function EmployeePage() {
   const authState: any = useAppSelector((state: any) => state?.authState);
   const dataRole = useAppSelector(
-    (state: any) => state?.persisitReducer?.roleState?.role?.permissions
+    (state: any) => state?.persistedReducer?.roleState?.role?.permissions
   );
   const [search, setSearch] = useState<any>('');
-  const [emptyVariable] = useState(null);
   const [page, setPage] = useState(0);
   const [total, setTotal] = useState(0);
   const [list, setList] = useState<any>([]);
@@ -138,15 +137,17 @@ function EmployeePage() {
       const newPage = 0;
       setSearch(searchTxt);
       setPage(newPage);
-      Service.getListServiceSearch(
-        authState.user.tenant,
-        searchTxt,
-        newPage,
-        rowsPerPage
-      ).then((item) => {
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      });
+      employeeService
+        .getListServiceSearch(
+          authState.user.tenant,
+          searchTxt,
+          newPage,
+          rowsPerPage
+        )
+        .then((item) => {
+          setList(item.data.data.list);
+          setTotal(item.data.data.total);
+        });
     }
   };
 
@@ -157,22 +158,24 @@ function EmployeePage() {
     setPage(newPage);
     // offset? ,limit rowsperpage hoga ofset page * rowsperPage
     if (search === '' || search === null || search === undefined) {
-      Service.getListService(authState.user.tenant, newPage, rowsPerPage).then(
-        (item) => {
+      employeeService
+        .getListService(authState.user.tenant, newPage, rowsPerPage)
+        .then((item) => {
           setList(item.data.data.list);
           setTotal(item.data.data.total);
-        }
-      );
+        });
     } else {
-      Service.getListServiceSearch(
-        authState.user.tenant,
-        search,
-        newPage,
-        rowsPerPage
-      ).then((item) => {
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      });
+      employeeService
+        .getListServiceSearch(
+          authState.user.tenant,
+          search,
+          newPage,
+          rowsPerPage
+        )
+        .then((item) => {
+          setList(item.data.data.list);
+          setTotal(item.data.data.total);
+        });
     }
   };
 
@@ -184,22 +187,24 @@ function EmployeePage() {
     setRowsPerPage(newRowperPage);
     setPage(newPage);
     if (search === '' || search === null || search === undefined) {
-      Service.getListService(authState.user.tenant, newPage, rowsPerPage).then(
-        (item) => {
+      employeeService
+        .getListService(authState.user.tenant, newPage, rowsPerPage)
+        .then((item) => {
           setList(item.data.data.list);
           setTotal(item.data.data.total);
-        }
-      );
+        });
     } else {
-      Service.getListServiceSearch(
-        authState.user.tenant,
-        search,
-        newPage,
-        rowsPerPage
-      ).then((item) => {
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      });
+      employeeService
+        .getListServiceSearch(
+          authState.user.tenant,
+          search,
+          newPage,
+          rowsPerPage
+        )
+        .then((item) => {
+          setList(item.data.data.list);
+          setTotal(item.data.data.total);
+        });
     }
   };
 
@@ -244,7 +249,7 @@ function EmployeePage() {
     if (option === 'Edit') {
       if (listingRolePermission(dataRole, 'Employee Update')) {
         setIsLoader(true);
-        Service.getService(actionMenuItemid).then((item: any) => {
+        employeeService.getService(actionMenuItemid).then((item: any) => {
           if (item.data.success) {
             setIsLoader(false);
             setValue('user_id', item.data.data.id);
@@ -269,7 +274,8 @@ function EmployeePage() {
           updatedBy: authState.user.id,
         };
         // console.log(actionMenuItemid);
-        Service.deleteService(actionMenuItemid, data)
+        employeeService
+          .deleteService(actionMenuItemid, data)
           .then((item: any) => {
             if (item.data.success) {
               setIsLoader(false);
@@ -305,7 +311,8 @@ function EmployeePage() {
 
   useEffect(() => {
     if (listingRolePermission(dataRole, 'Employee List')) {
-      Service.getListService(authState.user.tenant, page, rowsPerPage)
+      employeeService
+        .getListService(authState.user.tenant, page, rowsPerPage)
         .then((item: any) => {
           if (item.data.success) {
             setIsLoader(false);
@@ -326,7 +333,7 @@ function EmployeePage() {
     } else {
       setIsLoader(false);
     }
-  }, [emptyVariable]);
+  }, [null]);
 
   const createFormHandler = (data: any) => {
     setIsLoader(true);
@@ -338,7 +345,8 @@ function EmployeePage() {
       createdBy: authState.user.id,
       tenant: authState.user.tenant,
     };
-    Service.create(userData)
+    employeeService
+      .create(userData)
       .then((item) => {
         if (item.data.success) {
           reset();
@@ -380,7 +388,8 @@ function EmployeePage() {
     };
     // console.log('User', userData);
 
-    Service.updateService(getValues('user_id'), userData)
+    employeeService
+      .updateService(getValues('user_id'), userData)
       .then((item) => {
         if (item.data.success) {
           // console.log('LISSST', list, item.data.data, getValues('user_id'));
@@ -447,7 +456,7 @@ function EmployeePage() {
         isActive: event.target.checked,
         updatedBy: authState.user.id,
       };
-      Service.updateStatus(id, data).then((updateItem) => {
+      employeeService.updateStatus(id, data).then((updateItem) => {
         if (updateItem.data.success) {
           setList((newArr: any) => {
             return newArr.map((item: any) => {
@@ -535,7 +544,7 @@ function EmployeePage() {
                   <th>Employee</th>
                   <th>Email</th>
                   <th>Status</th>
-                  <th>&nbsp;</th>
+                  <th aria-label="empty tale header">&nbsp;</th>
                 </tr>
               </thead>
               <tbody>
@@ -626,7 +635,7 @@ function EmployeePage() {
             </table>
           </div>
           {list?.length < 1 ? (
-            <CustomText noroundedborders text="No Records Found" />
+            <CustomText noRoundedBorders text="No Records Found" />
           ) : null}
           <div className="mt-3 flex w-[100%] justify-center py-3">
             <TablePagination
@@ -672,7 +681,7 @@ function EmployeePage() {
         <CustomDialog
           DialogHeader="Edit Employee"
           type="edit"
-          specailCase={false}
+          specialCase={false}
           reset={reset}
           inputFieldsData={inputFieldsData?.filter(
             (item) => item.id !== 'password'

@@ -20,7 +20,7 @@ import {
   imageAllowedTypes,
 } from '../../utils/constants';
 
-type Props = {
+type CategoriesServicesEditPopupProps = {
   openFormDialog: boolean;
   setOpenFormDialog: React.Dispatch<React.SetStateAction<boolean>>;
   formData: any;
@@ -36,7 +36,7 @@ function CategoriesServicesEditPopup({
   callback,
   setIsNotify,
   setNotifyMessage,
-}: Props) {
+}: CategoriesServicesEditPopupProps) {
   const [image, setImage] = useState<any>(null);
   const [imageName, setImageName] = useState<any>(null);
 
@@ -120,12 +120,12 @@ function CategoriesServicesEditPopup({
       <div className="Content">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="FormHeader">
-            <span className="Title">Edit Services</span>
+            <span className="Title">Edit Product</span>
           </div>
           <div className="FormBody">
             <div className="FormField">
               <FormControl className="FormControl" variant="standard">
-                <label className="FormLabel">Service Name</label>
+                <label className="FormLabel">Name</label>
                 <Input
                   className="FormInput"
                   id="name"
@@ -173,6 +173,7 @@ function CategoriesServicesEditPopup({
                   placeholder="Enter loyalty Coins"
                   type="number"
                   {...register('loyaltyCoins', {
+                    required: false,
                     value: formData?.loyaltyCoins,
                     pattern: {
                       value: PATTERN.POINT_NUM,
@@ -183,8 +184,9 @@ function CategoriesServicesEditPopup({
                       message: 'Length should not be excceed from 10 numbers.',
                     },
                     validate: (value: any) =>
-                      formData?.loyaltyCoins &&
-                      VALIDATE_NON_NEGATIVE_NUM(value),
+                      formData?.loyaltyCoins && value
+                        ? VALIDATE_NON_NEGATIVE_NUM(value)
+                        : true,
                   })}
                   disableUnderline
                 />

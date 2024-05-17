@@ -1,11 +1,11 @@
-import Dialog from '@mui/material/Dialog';
-import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
 import SentimentSatisfiedAltOutlinedIcon from '@mui/icons-material/SentimentSatisfiedAltOutlined';
+import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
 import ThumbUpAltOutlinedIcon from '@mui/icons-material/ThumbUpAltOutlined';
 import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
 import popupStyle from '../assets/css/PermissionPopup.module.css';
 
-type Props = {
+type PermissionPopupProps = {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   dialogText?: string;
@@ -21,7 +21,7 @@ function PermissionPopup({
   dialogDesc,
   callback,
   type,
-}: Props) {
+}: PermissionPopupProps) {
   const onCloseHandler = (event: object, reason: string) => {
     if (reason !== 'backdropClick') {
       setOpen(false);
@@ -29,7 +29,7 @@ function PermissionPopup({
   };
   const onEventHandler = (event: any) => {
     if (event === 'yes') {
-      callback();
+      callback('yes');
     }
     setOpen(false);
   };
@@ -53,7 +53,11 @@ function PermissionPopup({
         )}
         <div className={popupStyle.Title}>Hey Wait!</div>
         <div className={popupStyle.Message}>{dialogText}</div>
-        <div className={popupStyle.DescMessage}>Note : {dialogDesc}</div>
+        {dialogDesc ? (
+          <div className={popupStyle.DescMessage}>Note : {dialogDesc}</div>
+        ) : (
+          ''
+        )}
         <div className={popupStyle.Actions}>
           <Button
             onClick={() => onEventHandler('yes')}

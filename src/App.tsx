@@ -1,36 +1,25 @@
+import 'devextreme/dist/css/dx.light.css';
 /* eslint-disable no-console */
-import { useNavigate, useRoutes } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { routeObjects } from './routes/AppRoutes';
-import { useAppDispatch } from './redux/redux-hooks';
-import system from './services/adminapp/SystemConfig';
-import { setSystemConfig, setTheme } from './redux/features/authStateSlice';
+import { useErrorBoundary } from 'react-error-boundary';
+import { useRoutes } from 'react-router-dom';
 import Loader from './components/common/Loader';
+import { setSystemConfig, setTheme } from './redux/features/authSlice';
+import { useAppDispatch } from './redux/redux-hooks';
+import { routeObjects } from './routes/AppRoutes';
+import systemConfigService from './services/adminapp/systemConfig';
 
 function App() {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
-  const [isPageLoader, setIsPageLoader] = useState(false);
-  if (process.env.NODE_ENV === 'production') {
-    console.log = () => {};
-    console.error = () => {};
-    console.warn = () => {};
-  }
+  const { showBoundary } = useErrorBoundary();
+  const [isPageLoader, setIsPageLoader] = useState(true);
+  // if (process.env.NODE_ENV === 'production') {
+  //   console.log = () => {};
+  //   console.error = () => {};
+  //   console.warn = () => {};
+  // }
 
   const getDomain = () => {
-    // const regexPattern = /localhost/;
-    // let a = 'https://devwebapp.urapptech.com/admin/auth/login';
-    // console.log('a::::::', a);
-    // const newTxt = a.split('/')[2].split('.')[0];
-    // console.log('newTxt::::::', newTxt);
-    // let url = currentURL;
-    // if (regexPattern.test(currentURL)) {
-    //   url = currentURL.split('/')[2].split(':')[0];
-    // } else {
-    //   url = currentURL.split('/')[2].split('.')[0];
-    // }
-    // console.log('url', url);
-
     const domain = window.location.hostname;
     return domain.split('.')[0];
     // return 'asdasdsa';
@@ -39,7 +28,7 @@ function App() {
   useEffect(() => {
     setIsPageLoader(true);
     const currentURL = getDomain();
-    system
+    systemConfigService
       .getSystemConfig(currentURL)
       .then((res: any) => {
         setIsPageLoader(false);
@@ -60,7 +49,8 @@ function App() {
         } else {
           setIsPageLoader(false);
           console.log('4041');
-          navigate('./admin/auth/404', { replace: true });
+          showBoundary(new Error('fetching system config failed'));
+          // navigate('./admin/auth/404', { replace: true });
           // showNotification(res.data.message, 'error');
           // console.log('404 page');
         }
@@ -68,7 +58,8 @@ function App() {
       .catch(() => {
         console.log('4042');
         setIsPageLoader(false);
-        navigate('./admin/auth/404', { replace: true });
+        // navigate('./admin/auth/404', { replace: true });
+        showBoundary(new Error('fetching system config failed'));
         // showNotification(err.message, 'error');
       });
   }, []);

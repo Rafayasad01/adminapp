@@ -10,19 +10,19 @@ import '../../assets/css/PopupStyle.css';
 dayjs.extend(duration);
 dayjs.extend(isBetween);
 
-type Props = {
+type BranchPreviewPopupProps = {
   openFormDialog: boolean;
   setOpenFormDialog: React.Dispatch<React.SetStateAction<boolean>>;
   items: any;
-  setIsNotify: any;
-  setNotifyMessage: any;
+  // setIsNotify: any;
+  // setNotifyMessage: any;
 };
 
 function BranchPreviewPopup({
   openFormDialog,
   setOpenFormDialog,
   items,
-}: Props) {
+}: BranchPreviewPopupProps) {
   const handleFormClose = () => {
     setOpenFormDialog(false);
   };

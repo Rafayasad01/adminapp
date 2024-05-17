@@ -2,31 +2,31 @@ import Avatar from '@mui/material/Avatar';
 import StarBadgeGreen from '../icons/StarBadgeGreen';
 import StarBadgeRed from '../icons/StarBadgeRed';
 
-type Props = {
+type CustomAvatarWithNameProps = {
   avatarIcon: any;
   title?: string;
   subTitle?: string;
   details?: any;
   center?: boolean;
-  customWidth?: string;
-  customHeight?: string;
+  // customWidth?: string;
+  // customHeight?: string;
   badgeText?: any;
-  firstname?: string;
-  lastname?: string;
-  isactive?: boolean;
+  firstName?: string;
+  lastName?: string;
+  isActive?: boolean;
 };
 
 function CustomAvatarWithName({
-  isactive,
+  isActive,
   details,
-  firstname,
-  lastname,
+  firstName,
+  lastName,
   avatarIcon,
   title,
   subTitle,
   center,
   badgeText,
-}: Props) {
+}: CustomAvatarWithNameProps) {
   const { email, role } = details;
   return (
     <div className={`${center && 'text-center'}`}>
@@ -53,8 +53,8 @@ function CustomAvatarWithName({
               fontSize: '16px',
             }}
           >
-            {firstname?.charAt(0)}
-            {lastname?.charAt(0)}
+            {firstName?.charAt(0)}
+            {lastName?.charAt(0)}
           </Avatar>
         )}
       </div>
@@ -63,7 +63,7 @@ function CustomAvatarWithName({
           {title}
         </p>
         <div className="">
-          {isactive ? <StarBadgeGreen /> : <StarBadgeRed />}
+          {isActive ? <StarBadgeGreen /> : <StarBadgeRed />}
         </div>
       </div>
       {subTitle && (

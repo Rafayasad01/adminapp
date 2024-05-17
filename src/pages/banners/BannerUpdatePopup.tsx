@@ -20,7 +20,7 @@ import {
 } from '../../utils/constants';
 import DragDropFile from '../settings/DragDropFile';
 
-type Props = {
+type BannerUpdatePopupProps = {
   roles?: any;
   openFormDialog: boolean;
   setOpenFormDialog: React.Dispatch<React.SetStateAction<boolean>>;
@@ -36,7 +36,7 @@ function BannerUpdatePopup({
   setOpenFormDialog,
   callback,
   formData,
-}: Props) {
+}: BannerUpdatePopupProps) {
   const {
     register,
     handleSubmit,
@@ -183,12 +183,15 @@ function BannerUpdatePopup({
             ) : formData && formData.banner ? (
               <div className="col-span-6 flex items-center justify-center">
                 <img
-                  className="max-h-[200px] max-w-[200px] rounded-md"
+                  className="max-h-[140px] max-w-[140px] rounded-md"
                   src={formData.banner}
                   alt={formData.name}
                 />
               </div>
             ) : null}
+          </div>
+          <div className="mx-1 mb-3">
+            <span className="text-xs">Dimension: 1080px by 1080px</span>
           </div>
           <div className="FormField">
             <FormControl className="FormControl" variant="standard">

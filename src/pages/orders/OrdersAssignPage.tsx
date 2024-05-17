@@ -1,35 +1,29 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import SearchIcon from '@mui/icons-material/Search';
+import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import FormControl from '@mui/material/FormControl';
 import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
-import dayjs from 'dayjs';
-import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-
-import Avatar from '@mui/material/Avatar';
 import TablePagination from '@mui/material/TablePagination';
+import dayjs from 'dayjs';
+import React, { useEffect, useMemo, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import Loader from '../../components/common/Loader';
 import Notify from '../../components/common/Notify';
 import TopBar from '../../components/common/TopBar';
 import { useAppSelector } from '../../redux/redux-hooks';
-import Service from '../../services/adminapp/adminOrders';
+import orderService from '../../services/adminapp/adminOrders';
 import AlertBox from '../../utils/Alert';
-import {
-  APP_USER_STATUS_OFFLINE,
-  ORDER_DELIVERY_STATUS_NEW,
-  ORDER_DELIVERY_STATUS_NOT_ASSIGN,
-  ORDER_STATUS_IN_CANCELLED,
-} from '../../utils/constants';
+import { APP_USER_STATUS_OFFLINE, ORDER_STATUS } from '../../utils/constants';
 import { listingRolePermission } from '../../utils/helper';
 
 function OrdersAssignPage() {
   const authState: any = useAppSelector((state) => state?.authState);
   const dataRole = useAppSelector(
-    (state: any) => state?.persisitReducer?.roleState?.role?.permissions
+    (state: any) => state?.persistedReducer?.roleState?.role?.permissions
   );
   const navigate = useNavigate();
   const [search, setSearch] = useState('');
@@ -38,14 +32,42 @@ function OrdersAssignPage() {
   const [list, setList] = useState<any>([]);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [alertMsg, setAlertMsg] = useState<string>('');
-  const [alertSeverty, setAlertSeverty] = useState<string>('');
+  const [data, setData] = useState<any>(null);
+  const [alertSeverity, setAlertSeverity] = useState<string>('');
   const [alertOpen, setAlertOpen] = useState<boolean>(false);
   const [isLoader, setIsLoader] = useState(true);
   const [isNotify, setIsNotify] = useState(false);
   const [notifyMessage, setNotifyMessage] = useState({});
-  const [emptyVariable] = useState(null);
   const params = useParams();
   const { orderId } = params;
+
+  useEffect(() => {
+    function getOrderDetails() {
+      if (!orderId) {
+        return;
+      }
+      if (!listingRolePermission(dataRole, 'Order View')) {
+        return;
+      }
+      orderService
+        .viewService(orderId)
+        .then((item) => {
+          setIsLoader(false);
+          if (item) {
+            setData(item.data.data);
+          }
+        })
+        .catch((error) => {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: error.message,
+            type: 'error',
+          });
+        });
+    }
+    getOrderDetails();
+  }, []);
 
   const handleClickSearch = (event: any) => {
     if (event.key === 'Enter') {
@@ -54,24 +76,24 @@ function OrdersAssignPage() {
       setSearch(searchTxt);
       setPage(newPage);
       if (searchTxt === '' || searchTxt === null || searchTxt === undefined) {
-        Service.getListAssignService(
-          authState.user.tenant,
-          newPage,
-          rowsPerPage
-        ).then((item) => {
-          setList(item.data.data.list);
-          setTotal(item.data.data.total);
-        });
+        orderService
+          .getListAssignService(authState.user.tenant, newPage, rowsPerPage)
+          .then((item) => {
+            setList(item.data.data.list);
+            setTotal(item.data.data.total);
+          });
       } else {
-        Service.searchAssignService(
-          authState.user.tenant,
-          search,
-          newPage,
-          rowsPerPage
-        ).then((item) => {
-          setList(item.data.data.list);
-          setTotal(item.data.data.total);
-        });
+        orderService
+          .searchAssignService(
+            authState.user.tenant,
+            search,
+            newPage,
+            rowsPerPage
+          )
+          .then((item) => {
+            setList(item.data.data.list);
+            setTotal(item.data.data.total);
+          });
       }
     }
   };
@@ -83,61 +105,62 @@ function OrdersAssignPage() {
     setPage(newPage);
     // offset? ,limit rowsperpage hoga ofset page * rowsperPage
     if (search === '' || search === null || search === undefined) {
-      Service.getListAssignService(
-        authState.user.tenant,
-        newPage,
-        rowsPerPage
-      ).then((item) => {
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      });
+      orderService
+        .getListAssignService(authState.user.tenant, newPage, rowsPerPage)
+        .then((item) => {
+          setList(item.data.data.list);
+          setTotal(item.data.data.total);
+        });
     } else {
-      Service.searchAssignService(
-        authState.user.tenant,
-        search,
-        newPage,
-        rowsPerPage
-      ).then((item) => {
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      });
+      orderService
+        .searchAssignService(
+          authState.user.tenant,
+          search,
+          newPage,
+          rowsPerPage
+        )
+        .then((item) => {
+          setList(item.data.data.list);
+          setTotal(item.data.data.total);
+        });
     }
   };
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     setIsLoader(true);
-    const newRowperPage = parseInt(event.target.value, 10);
+    const newRowPerPage = parseInt(event.target.value, 10);
     const newPage = 0;
-    setRowsPerPage(newRowperPage);
+    setRowsPerPage(newRowPerPage);
     setPage(newPage);
     if (search === '' || search === null || search === undefined) {
-      Service.getListAssignService(
-        authState.user.tenant,
-        newPage,
-        rowsPerPage
-      ).then((item) => {
-        setIsLoader(false);
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      });
+      orderService
+        .getListAssignService(authState.user.tenant, newPage, rowsPerPage)
+        .then((item) => {
+          setIsLoader(false);
+          setList(item.data.data.list);
+          setTotal(item.data.data.total);
+        });
     } else {
-      Service.searchAssignService(
-        authState.user.tenant,
-        search,
-        newPage,
-        rowsPerPage
-      ).then((item) => {
-        setIsLoader(false);
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      });
+      orderService
+        .searchAssignService(
+          authState.user.tenant,
+          search,
+          newPage,
+          rowsPerPage
+        )
+        .then((item) => {
+          setIsLoader(false);
+          setList(item.data.data.list);
+          setTotal(item.data.data.total);
+        });
     }
   };
 
   useEffect(() => {
     if (listingRolePermission(dataRole, 'Order Assign List')) {
-      Service.getListAssignService(authState.user.tenant, page, rowsPerPage)
+      orderService
+        .getListAssignService(authState.user.tenant, page, rowsPerPage)
         .then((item: any) => {
           if (item.data.success) {
             setIsLoader(false);
@@ -161,22 +184,39 @@ function OrdersAssignPage() {
           });
         });
     }
-  }, [emptyVariable]);
+  }, [null]);
+
+  const newStatus = useMemo(() => {
+    return '';
+    /*  if (!data) {
+      return '';
+    }
+   /*  if (data.status === ORDER_STATUS.NEW) {
+      return ORDER_STATUS.DRIVER_ASSIGNED_FOR_ITEM_PICKUP;
+    } */
+    /* if (data.fulfillmentMethod === 'Self') {
+      return ORDER_STATUS.CUSTOMER_PICK_UP;
+    } */
+    /* return ORDER_STATUS.DRIVER_ASSIGNED_FOR_ITEM_DELIVERY; */
+  }, [data?.status, data?.fulfillmentMethod]);
 
   const assignHandler = (userId: string) => {
+    if (!data) {
+      return;
+    }
     if (listingRolePermission(dataRole, 'Order Assign Create')) {
-      const data = {
+      const payload = {
         app_user: userId,
         app_order: orderId,
         created_by: authState.user.id,
-        status: ORDER_DELIVERY_STATUS_NEW,
+        status: newStatus,
       };
-      Service.createAssignService(data).then((item: any) => {
+      orderService.createAssignService(payload).then((item: any) => {
         if (item.data.success) {
-          navigate(`../view/${orderId}`);
+          navigate(`../detail/${orderId}`);
         } else {
           setAlertMsg('Not Assign');
-          setAlertSeverty('error');
+          setAlertSeverity('error');
           setAlertOpen(true);
         }
       });
@@ -184,15 +224,19 @@ function OrdersAssignPage() {
   };
   const assignButton = (item: any) => {
     // console.log("ITEMS", item);
+    if (item.status === APP_USER_STATUS_OFFLINE) {
+      return true;
+    }
+    return false;
     let isTrue = false;
     if (
       item.isActive === false ||
       item.status === APP_USER_STATUS_OFFLINE ||
-      item.appOrderDelivery.status === ORDER_STATUS_IN_CANCELLED
+      item.appOrderDelivery.status === ORDER_STATUS.CANCELLED
     ) {
       isTrue = true;
     } else if (
-      item.appOrderDelivery.status === ORDER_DELIVERY_STATUS_NOT_ASSIGN ||
+      item.appOrderDelivery.status === ORDER_STATUS.NEW ||
       item.appOrderDelivery.status === null
     ) {
       isTrue = false;
@@ -209,11 +253,11 @@ function OrdersAssignPage() {
     if (
       item.isActive === false ||
       item.status === APP_USER_STATUS_OFFLINE ||
-      item.appOrderDelivery.status === ORDER_STATUS_IN_CANCELLED
+      item.appOrderDelivery.status === ORDER_STATUS.CANCELLED
     ) {
       colorText = 'btn-gray-fill btn-icon';
     } else if (
-      item.appOrderDelivery.status === ORDER_DELIVERY_STATUS_NOT_ASSIGN ||
+      item.appOrderDelivery.status === ORDER_STATUS.NEW ||
       item.appOrderDelivery.status === null
     ) {
       colorText = 'btn-black-fill btn-icon';
@@ -288,7 +332,7 @@ function OrdersAssignPage() {
                   <th>Working Hours</th>
                   <th>License Number</th>
                   <th>Delivery Status</th>
-                  <th>&nbsp;</th>
+                  <th aria-label="empty table header">&nbsp;</th>
                 </tr>
               </thead>
               <tbody>
@@ -368,7 +412,7 @@ function OrdersAssignPage() {
                             </span>
                           ) : (
                             <span className="badge badge-danger">
-                              {ORDER_DELIVERY_STATUS_NOT_ASSIGN}
+                              {ORDER_STATUS.NEW}
                             </span>
                           )}
                         </td>
@@ -404,7 +448,7 @@ function OrdersAssignPage() {
       {alertOpen && (
         <AlertBox
           msg={alertMsg}
-          setSeverty={alertSeverty}
+          setSeverity={alertSeverity}
           alertOpen={alertOpen}
           setAlertOpen={setAlertOpen}
         />

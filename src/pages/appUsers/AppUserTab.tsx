@@ -9,22 +9,22 @@ import { useNavigate } from 'react-router-dom';
 import ActionMenu from '../../components/common/ActionMenu';
 import CustomText from '../../components/common/CustomText';
 import { useAppSelector } from '../../redux/redux-hooks';
-import Service from '../../services/adminapp/adminAppUser';
+import appUserService from '../../services/adminapp/adminAppUser';
 import { NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
 import { CheckRolePermission, listingRolePermission } from '../../utils/helper';
 
-type Props = {
+type AppUserTabProps = {
   list: any;
   setList: any;
-  isLoader: boolean;
+  // isLoader: boolean;
   setIsLoader: any;
   actionMenuItemid: any;
   setActionMenuItemid: any;
   setEditFormData: any;
   setOpenEditFormDialog: any;
-  notifyMessage: any;
+  // notifyMessage: any;
   setNotifyMessage: any;
-  isNotify: boolean;
+  // isNotify: boolean;
   setIsNotify: any;
   total: any;
   rowsPerPage: any;
@@ -52,11 +52,11 @@ function AppUserTab({
   setActionMenuItemid,
   setEditFormData,
   setOpenEditFormDialog,
-}: Props) {
+}: AppUserTabProps) {
   const navigate = useNavigate();
   const authState: any = useAppSelector((state) => state?.authState);
   const dataRole = useAppSelector(
-    (state: any) => state?.persisitReducer?.roleState?.role?.permissions
+    (state: any) => state?.persistedReducer?.roleState?.role?.permissions
   );
   const [actionMenuAnchorEl, setActionMenuAnchorEl] =
     useState<null | HTMLElement>(null);
@@ -67,7 +67,7 @@ function AppUserTab({
     setIsLoader(true);
     if (option === 'Edit') {
       if (listingRolePermission(dataRole, 'Customer Update')) {
-        Service.appUserEdit(actionMenuItemid?.id).then((item: any) => {
+        appUserService.appUserEdit(actionMenuItemid?.id).then((item: any) => {
           if (item.data.success) {
             setIsLoader(false);
             setOpenEditFormDialog(true);
@@ -103,7 +103,8 @@ function AppUserTab({
           id: actionMenuItemid?.id,
           updatedBy: authState.user.id,
         };
-        Service.appUserDelete(data)
+        appUserService
+          .appUserDelete(data)
           .then((item: any) => {
             if (item.data.success) {
               setIsLoader(false);
@@ -146,11 +147,11 @@ function AppUserTab({
         'Customer Detail',
         dataRole,
         navigate,
-        `detail/${actionMenuItemid?.id}`
+        `../detail/${actionMenuItemid?.id}`
       );
-      navigate(`detail/${actionMenuItemid?.id}`);
+      // navigate(`detail/${actionMenuItemid?.id}`);
     } else if (option === 'Reward History') {
-      navigate(`./reward/history/${actionMenuItemid?.id}`);
+      navigate(`../reward/history/${actionMenuItemid?.id}`);
     }
   };
 
@@ -162,7 +163,7 @@ function AppUserTab({
         isActive: event.target.checked,
         updatedBy: authState.user.id,
       };
-      Service.appUpdateStatus(data).then((updateItem) => {
+      appUserService.appUpdateStatus(data).then((updateItem) => {
         if (updateItem.data.success) {
           setIsLoader(false);
           setList((newArr: any) => {
@@ -192,23 +193,25 @@ function AppUserTab({
     setPage(newPage);
     // offset? ,limit rowsperpage hoga ofset page * rowsperPage
     if (search === '' || search === null || search === undefined) {
-      Service.appList(authState.user.tenant, 'App', newPage, rowsPerPage).then(
-        (item) => {
+      appUserService
+        .appList(authState.user.tenant, 'App', newPage, rowsPerPage)
+        .then((item) => {
           setList(item.data.data.list);
           setTotal(item.data.data.total);
-        }
-      );
+        });
     } else {
-      Service.appListSearch(
-        authState.user.tenant,
-        'App',
-        search,
-        newPage,
-        rowsPerPage
-      ).then((item) => {
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      });
+      appUserService
+        .appListSearch(
+          authState.user.tenant,
+          'App',
+          search,
+          newPage,
+          rowsPerPage
+        )
+        .then((item) => {
+          setList(item.data.data.list);
+          setTotal(item.data.data.total);
+        });
     }
   };
 
@@ -220,23 +223,25 @@ function AppUserTab({
     setRowsPerPage(newRowperPage);
     setPage(newPage);
     if (search === '' || search === null || search === undefined) {
-      Service.appList(authState.user.tenant, 'App', newPage, rowsPerPage).then(
-        (item) => {
+      appUserService
+        .appList(authState.user.tenant, 'App', newPage, rowsPerPage)
+        .then((item) => {
           setList(item.data.data.list);
           setTotal(item.data.data.total);
-        }
-      );
+        });
     } else {
-      Service.appListSearch(
-        authState.user.tenant,
-        'App',
-        search,
-        newPage,
-        rowsPerPage
-      ).then((item) => {
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      });
+      appUserService
+        .appListSearch(
+          authState.user.tenant,
+          'App',
+          search,
+          newPage,
+          rowsPerPage
+        )
+        .then((item) => {
+          setList(item.data.data.list);
+          setTotal(item.data.data.total);
+        });
     }
   };
 
@@ -253,7 +258,7 @@ function AppUserTab({
               <th>Loyalty Coins</th>
               <th>User Type</th>
               <th>Status</th>
-              <th>&nbsp;</th>
+              <th aria-label="empty table header">&nbsp;</th>
             </tr>
           </thead>
           <tbody>
@@ -342,7 +347,7 @@ function AppUserTab({
         </table>
       </div>
       {list?.length < 1 ? (
-        <CustomText noroundedborders text="No Records Found" />
+        <CustomText noRoundedBorders text="No Records Found" />
       ) : null}
       <div className="mt-5 flex items-center justify-center">
         <TablePagination

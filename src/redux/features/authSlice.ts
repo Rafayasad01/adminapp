@@ -24,11 +24,21 @@ type ShopTenantDetails = {
   branchLimit: string;
 };
 
+interface SystemConfig {
+  createdDate: string;
+  domain: string;
+  id: string;
+  logoffImage: string;
+  tenant: string;
+  shopName: string;
+  shopLogo: string;
+}
+
 type AuthState = {
   user: User | null;
   theme: null;
   shopTenantDetails: ShopTenantDetails | null;
-  systemConfig: null;
+  systemConfig: SystemConfig | null;
 };
 
 function getUser() {
@@ -51,8 +61,8 @@ const initialState: AuthState = {
   systemConfig: getItem<any>('SYSTEM_CONFIG'),
 };
 
-export const authStateSlice = createSlice({
-  name: 'authState',
+export const authSlice = createSlice({
+  name: 'authSlice',
   initialState,
   reducers: {
     login: (state, action: PayloadAction<User>) => {
@@ -80,6 +90,6 @@ export const authStateSlice = createSlice({
 });
 
 export const { login, logout, setTheme, setSystemConfig, setShopAdminTenant } =
-  authStateSlice.actions;
+  authSlice.actions;
 
-export default authStateSlice.reducer;
+export default authSlice.reducer;

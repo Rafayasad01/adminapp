@@ -24,8 +24,8 @@ const initialState: AppState = {
   profileAvatar: null,
 };
 
-export const appStateSlice = createSlice({
-  name: 'appState',
+export const appSlice = createSlice({
+  name: 'appSlice',
   initialState,
   reducers: {
     // setAppState: (state, action: PayloadAction<string>) => {
@@ -68,6 +68,6 @@ export const {
   setEmployeeLimit,
   setTenantConfig,
   setProfileAvatar,
-} = appStateSlice.actions;
+} = appSlice.actions;
 
-export default appStateSlice.reducer;
+export default appSlice.reducer;

@@ -7,7 +7,7 @@ function ColorRow({ colors = [] }) {
         <div
           key={index}
           style={{ backgroundColor: color }}
-          className="relative mr-2 mb-2 h-[30px] w-[30px] cursor-pointer rounded-full border border-gray-300 shadow-md"
+          className="relative mb-2 mr-2 h-[30px] w-[30px] cursor-pointer rounded-full border border-gray-300 shadow-md"
           title={color} // Use the title attribute for the tooltip
         />
       ))}

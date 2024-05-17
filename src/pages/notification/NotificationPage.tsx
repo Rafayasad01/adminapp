@@ -15,14 +15,10 @@ import Loader from '../../components/common/Loader';
 import Notify from '../../components/common/Notify';
 import TopBar from '../../components/common/TopBar';
 import { useAppSelector } from '../../redux/redux-hooks';
-import Service from '../../services/adminapp/adminNotification';
+import notificationService from '../../services/adminapp/adminNotification';
 import AlertBox from '../../utils/Alert';
 import {
-  NOTIFICATION_STATUS_CANCELLED,
-  NOTIFICATION_STATUS_COMPLETED,
-  NOTIFICATION_STATUS_FAILED,
-  NOTIFICATION_STATUS_NEW,
-  NOTIFICATION_STATUS_SENDING,
+  NOTIFICATION_STATUS,
   NOT_AUTHORIZED_MESSAGE,
 } from '../../utils/constants';
 import { listingRolePermission } from '../../utils/helper';
@@ -32,7 +28,7 @@ import NotificationDetailPopup from './NotificationDetailPopup';
 function NotificationPage() {
   const authState: any = useAppSelector((state) => state?.authState);
   const dataRole = useAppSelector(
-    (state: any) => state?.persisitReducer?.roleState?.role?.permissions
+    (state: any) => state?.persistedReducer?.roleState?.role?.permissions
   );
   const [search, setSearch] = useState<string>('');
   const [page, setPage] = useState<number>(0);
@@ -45,7 +41,6 @@ function NotificationPage() {
   const [alertPopup, setAlertPopup] = useState<boolean>(false);
   const [alertSeverty, setAlertSeverty] = useState<string>('');
   const [alertMsg, setAlertMsg] = useState<string>('');
-  const [emptyVariable] = useState(null);
   const [isLoader, setIsLoader] = useState(true);
   const [isNotify, setIsNotify] = useState(false);
   const [notifyMessage, setNotifyMessage] = useState({});
@@ -68,15 +63,12 @@ function NotificationPage() {
       const newPage = 0;
       setSearch(searchTxt);
       setPage(newPage);
-      Service.searchService(
-        authState.user.tenant,
-        searchTxt,
-        newPage,
-        rowsPerPage
-      ).then((item) => {
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      });
+      notificationService
+        .searchService(authState.user.tenant, searchTxt, newPage, rowsPerPage)
+        .then((item) => {
+          setList(item.data.data.list);
+          setTotal(item.data.data.total);
+        });
     }
   };
 
@@ -87,22 +79,19 @@ function NotificationPage() {
     setPage(newPage);
     // offset? ,limit rowsperpage hoga ofset page * rowsperPage
     if (search === '' || search === null || search === undefined) {
-      Service.getListService(authState.user.tenant, newPage, rowsPerPage).then(
-        (item) => {
+      notificationService
+        .getListService(authState.user.tenant, newPage, rowsPerPage)
+        .then((item) => {
           setList(item.data.data.list);
           setTotal(item.data.data.total);
-        }
-      );
+        });
     } else {
-      Service.searchService(
-        authState.user.tenant,
-        search,
-        newPage,
-        rowsPerPage
-      ).then((item) => {
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      });
+      notificationService
+        .searchService(authState.user.tenant, search, newPage, rowsPerPage)
+        .then((item) => {
+          setList(item.data.data.list);
+          setTotal(item.data.data.total);
+        });
     }
   };
   const handleChangeRowsPerPage = (
@@ -113,28 +102,26 @@ function NotificationPage() {
     setRowsPerPage(newRowperPage);
     setPage(newPage);
     if (search === '' || search === null || search === undefined) {
-      Service.getListService(authState.user.tenant, newPage, rowsPerPage).then(
-        (item) => {
+      notificationService
+        .getListService(authState.user.tenant, newPage, rowsPerPage)
+        .then((item) => {
           setList(item.data.data.list);
           setTotal(item.data.data.total);
-        }
-      );
+        });
     } else {
-      Service.searchService(
-        authState.user.tenant,
-        search,
-        newPage,
-        rowsPerPage
-      ).then((item) => {
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      });
+      notificationService
+        .searchService(authState.user.tenant, search, newPage, rowsPerPage)
+        .then((item) => {
+          setList(item.data.data.list);
+          setTotal(item.data.data.total);
+        });
     }
   };
 
   useEffect(() => {
     if (listingRolePermission(dataRole, 'Notification List')) {
-      Service.getListService(authState.user.tenant, page, rowsPerPage)
+      notificationService
+        .getListService(authState.user.tenant, page, rowsPerPage)
         .then((item: any) => {
           setIsLoader(false);
           setList(item.data.data.list);
@@ -150,7 +137,7 @@ function NotificationPage() {
           // console.log('error::::::::', error);
         });
     }
-  }, [emptyVariable]);
+  }, [null]);
 
   const createFormHandler = (data: any) => {
     const formData = new FormData();
@@ -158,7 +145,8 @@ function NotificationPage() {
     formData.append('message', data.message);
     formData.append('tenant', authState.user.tenant);
     formData.append('userId', authState.user.id);
-    Service.sentService(formData)
+    notificationService
+      .sentService(formData)
       .then((item) => {
         if (item.data.success) {
           // list.push(item.data.data);
@@ -174,15 +162,15 @@ function NotificationPage() {
 
   const getStatusTag = (status: string) => {
     let tag = '';
-    if (status === NOTIFICATION_STATUS_NEW) {
+    if (status === NOTIFICATION_STATUS.NEW) {
       tag = 'blue';
-    } else if (status === NOTIFICATION_STATUS_SENDING) {
+    } else if (status === NOTIFICATION_STATUS.SENDING) {
       tag = 'purple';
-    } else if (status === NOTIFICATION_STATUS_COMPLETED) {
+    } else if (status === NOTIFICATION_STATUS.COMPLETED) {
       tag = 'green';
     } else if (
-      status === NOTIFICATION_STATUS_FAILED ||
-      status === NOTIFICATION_STATUS_CANCELLED
+      status === NOTIFICATION_STATUS.FAILED ||
+      status === NOTIFICATION_STATUS.CANCELLED
     ) {
       tag = 'red';
     }
@@ -191,7 +179,7 @@ function NotificationPage() {
 
   const detailButtonHandler = (getItem: any, index: number) => {
     if (listingRolePermission(dataRole, 'Notification Batch Detail')) {
-      Service.batchDetailService(list[index].id).then((item) => {
+      notificationService.batchDetailService(list[index].id).then((item) => {
         if (item.data.success) {
           setBatchDetail({ ...getItem, ...item.data.data });
           setDetailPopup(true);
@@ -220,7 +208,7 @@ function NotificationPage() {
         displayMessage={notifyMessage}
       />
       <TopBar title="Notification" />
-      <div className="container mt-5">
+      <div className="container m-auto mt-5">
         <div className="w-full rounded-lg bg-white shadow-lg">
           <div className="grid grid-cols-12 px-4 py-5">
             <div className="col-span-7">
@@ -278,7 +266,7 @@ function NotificationPage() {
                   <th className="w-[30rem]">Message</th>
                   <th>Dated</th>
                   <th>status</th>
-                  <th>&nbsp;</th>
+                  <th aria-label="empty table header">&nbsp;</th>
                 </tr>
               </thead>
               <tbody>
@@ -309,7 +297,7 @@ function NotificationPage() {
                             {item.status}
                           </span>
                         </td>
-                        <td>
+                        <td aria-label="show detail button">
                           <IconButton
                             className="icon-btn mr-3.5 p-0"
                             onClick={() => detailButtonHandler(item, index)}
@@ -353,7 +341,7 @@ function NotificationPage() {
       {alertPopup && (
         <AlertBox
           msg={alertMsg}
-          setSeverty={alertSeverty}
+          setSeverity={alertSeverty}
           alertOpen={alertPopup}
           setAlertOpen={setAlertPopup}
         />

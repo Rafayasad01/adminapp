@@ -9,8 +9,8 @@ import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
 import TablePagination from '@mui/material/TablePagination';
 import dayjs from 'dayjs';
-import timezone from 'dayjs/plugin/timezone';
-import utc from 'dayjs/plugin/utc';
+// import timezone from 'dayjs/plugin/timezone';
+// import utc from 'dayjs/plugin/utc';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import CustomText from '../../../components/common/CustomText';
@@ -18,19 +18,19 @@ import Loader from '../../../components/common/Loader';
 import Notify from '../../../components/common/Notify';
 import TopBar from '../../../components/common/TopBar';
 import { useAppSelector } from '../../../redux/redux-hooks';
-import Service from '../../../services/adminapp/adminAppointment';
+import adminAppointmentService from '../../../services/adminapp/adminAppointment';
 import { NOT_AUTHORIZED_MESSAGE } from '../../../utils/constants';
 import { listingRolePermission } from '../../../utils/helper';
 import AppointmentProviderDetailPopup from './AppointmentProviderDetailPopup';
 // Extend dayjs with necessary plugins
-dayjs.extend(utc);
-dayjs.extend(timezone);
-dayjs.tz.setDefault('UTC');
+// dayjs.extend(utc);
+// dayjs.extend(timezone);
+// dayjs.tz.setDefault('UTC');
 
 function AppointmentProviderByIdPage() {
   const { providerId } = useParams();
   const dataRole = useAppSelector(
-    (state: any) => state?.persisitReducer?.roleState?.role?.permissions
+    (state: any) => state?.persistedReducer?.roleState?.role?.permissions
   );
   const [search, setSearch] = useState<any>('');
   const [page, setPage] = useState(0);
@@ -63,15 +63,12 @@ function AppointmentProviderByIdPage() {
       const newPage = 0;
       setSearch(searchTxt);
       setPage(newPage);
-      Service.ProviderTodaysList(
-        providerId,
-        searchTxt,
-        newPage,
-        rowsPerPage
-      ).then((item) => {
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      });
+      adminAppointmentService
+        .ProviderTodaysList(providerId, searchTxt, newPage, rowsPerPage)
+        .then((item) => {
+          setList(item.data.data.list);
+          setTotal(item.data.data.total);
+        });
     }
   };
 
@@ -81,12 +78,12 @@ function AppointmentProviderByIdPage() {
   ) => {
     setPage(newPage);
     // offset? ,limit rowsperpage hoga ofset page * rowsperPage
-    Service.ProviderTodaysList(providerId, search, newPage, rowsPerPage).then(
-      (item) => {
+    adminAppointmentService
+      .ProviderTodaysList(providerId, search, newPage, rowsPerPage)
+      .then((item) => {
         setList(item.data.data.list);
         setTotal(item.data.data.total);
-      }
-    );
+      });
   };
 
   const handleChangeRowsPerPage = (
@@ -96,17 +93,18 @@ function AppointmentProviderByIdPage() {
     const newPage = 0;
     setRowsPerPage(newRowperPage);
     setPage(newPage);
-    Service.ProviderTodaysList(providerId, search, newPage, newRowperPage).then(
-      (item) => {
+    adminAppointmentService
+      .ProviderTodaysList(providerId, search, newPage, newRowperPage)
+      .then((item) => {
         setList(item.data.data.list);
         setTotal(item.data.data.total);
-      }
-    );
+      });
   };
 
   useEffect(() => {
     if (listingRolePermission(dataRole, 'Appointment List')) {
-      Service.ProviderTodaysList(providerId, search, page, rowsPerPage)
+      adminAppointmentService
+        .ProviderTodaysList(providerId, search, page, rowsPerPage)
         .then((item: any) => {
           if (item.data.success) {
             setIsLoader(false);
@@ -137,7 +135,8 @@ function AppointmentProviderByIdPage() {
   const handleDetailDialog = (id: string) => {
     setIsLoader(true);
     if (listingRolePermission(dataRole, 'Employee List')) {
-      Service.VisitDetailById(id)
+      adminAppointmentService
+        .VisitDetailById(id)
         .then((item: any) => {
           if (item.data.success) {
             setOpenFormDialog(true);
@@ -245,7 +244,7 @@ function AppointmentProviderByIdPage() {
                   <th>Appoint Time</th>
                   <th>Payment</th>
                   <th>Status</th>
-                  <th>&nbsp;</th>
+                  <th aria-label="empty table header">&nbsp;</th>
                 </tr>
               </thead>
               <tbody>
@@ -320,7 +319,7 @@ function AppointmentProviderByIdPage() {
             </table>
           </div>
           {list?.length < 1 ? (
-            <CustomText noroundedborders text="No Records Found" />
+            <CustomText noRoundedBorders text="No Records Found" />
           ) : null}
           <div className="mt-3 flex w-[100%] justify-center py-3">
             <TablePagination

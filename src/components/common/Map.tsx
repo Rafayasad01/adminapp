@@ -1,6 +1,5 @@
 import { Loader } from '@googlemaps/js-api-loader';
 import { useEffect, useRef, useState } from 'react';
-
 import assets from '../../assets';
 import {
   OFFICE_MAP_LABEL,
@@ -8,7 +7,7 @@ import {
   OFFICE_MAP_LNG,
 } from '../../utils/constants';
 
-type Props = {
+type MapProps = {
   center: google.maps.LatLngLiteral;
   zoom: number;
 };
@@ -18,7 +17,7 @@ const loader = new Loader({
   version: 'weekly',
 });
 
-function Map({ center, zoom }: Props) {
+function Map({ center, zoom }: MapProps) {
   const mapRef = useRef<HTMLDivElement>(null);
   const [map, setMap] = useState<google.maps.Map>();
   const markerRef = useRef<google.maps.Marker>();

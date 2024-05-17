@@ -22,24 +22,31 @@ const darkTheme = createTheme({
   },
 });
 
-type Props = {
-  timePickerLabel: string;
+type TimePickerProps = {
+  disabled?: boolean;
+  // errors?: any;
+  id: string;
+  isTrue?: boolean;
+  // setError?: any;
+  setTimePickerValue: React.Dispatch<React.SetStateAction<dayjs.Dayjs | null>>;
+  timePickerLabel?: string;
   timePickerSubLabel?: string;
   timePickerValue: dayjs.Dayjs | null;
-  setTimePickerValue: React.Dispatch<React.SetStateAction<dayjs.Dayjs | null>>;
-  id: string;
-  errors?: any;
-  setError?: any;
-  isTrue?: boolean;
+  // minTime?: dayjs.Dayjs | undefined;
+  // maxTime?: dayjs.Dayjs | undefined;
 };
 function TimePicker({
+  disabled,
+  // errors,
+  id,
+  isTrue,
+  setTimePickerValue,
   timePickerLabel,
   timePickerSubLabel,
   timePickerValue,
-  setTimePickerValue,
-  id,
-  isTrue,
-}: Props) {
+}: // minTime,
+// maxTime,
+TimePickerProps) {
   const [timePicker, setTimePicker] = useState<HTMLButtonElement | null>(null);
   const buttonElement = useRef(null);
   const handleClick = () => {
@@ -63,11 +70,14 @@ function TimePicker({
     handleClose();
   };
 
+  // console.log('minTime', minTime);
+  // console.log('maxTime', maxTime);
+
   return (
     <>
       <FormControl className="FormControl" variant="standard">
         <label className="FormLabel">
-          {timePickerLabel}{' '}
+          {timePickerLabel ?? ''}{' '}
           {timePickerSubLabel ? (
             <span className="SubLabel">{timePickerSubLabel}</span>
           ) : (
@@ -75,10 +85,11 @@ function TimePicker({
           )}
         </label>
         <Input
+          disabled={disabled}
           ref={buttonElement}
           className="FormInput"
           type="text"
-          placeholder="HH:MM A"
+          placeholder="Select time"
           value={
             (timePickerValue &&
               dayjs(timePickerValue).isValid() &&
@@ -89,6 +100,7 @@ function TimePicker({
           endAdornment={
             <InputAdornment position="end">
               <IconButton
+                disabled={disabled}
                 aria-label="toggle password visibility"
                 onClick={handleClick}
                 style={{ padding: 0 }}
@@ -119,7 +131,10 @@ function TimePicker({
             <StaticTimePicker
               displayStaticWrapperAs="desktop"
               defaultValue={dayjs('2023-01-01T00:00')}
+              value={dayjs(timePickerValue) || null}
               onAccept={handleChange}
+              // minTime={minTime}
+              // maxTime={maxTime}
             />
           </LocalizationProvider>
         </ThemeProvider>

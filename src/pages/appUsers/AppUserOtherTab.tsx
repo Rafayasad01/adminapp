@@ -9,22 +9,22 @@ import { useNavigate } from 'react-router-dom';
 import ActionMenu from '../../components/common/ActionMenu';
 import CustomText from '../../components/common/CustomText';
 import { useAppSelector } from '../../redux/redux-hooks';
-import Service from '../../services/adminapp/adminAppUser';
+import appUserService from '../../services/adminapp/adminAppUser';
 import { NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
 import { CheckRolePermission, listingRolePermission } from '../../utils/helper';
 
-type Props = {
+type AppUserOtherTabProps = {
   list: any;
   setList: any;
-  isLoader: boolean;
+  // isLoader: boolean;
   setIsLoader: any;
   actionMenuItemid: any;
   setActionMenuItemid: any;
   setEditFormData: any;
   setOpenEditFormDialog: any;
-  notifyMessage: any;
+  // notifyMessage: any;
   setNotifyMessage: any;
-  isNotify: boolean;
+  // isNotify: boolean;
   setIsNotify: any;
   total: any;
   rowsPerPage: any;
@@ -52,22 +52,22 @@ function AppUserOtherTab({
   setActionMenuItemid,
   setEditFormData,
   setOpenEditFormDialog,
-}: Props) {
+}: AppUserOtherTabProps) {
   const navigate = useNavigate();
   const authState: any = useAppSelector((state) => state?.authState);
   const dataRole = useAppSelector(
-    (state: any) => state?.persisitReducer?.roleState?.role?.permissions
+    (state: any) => state?.persistedReducer?.roleState?.role?.permissions
   );
   const [actionMenuAnchorEl, setActionMenuAnchorEl] =
     useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
   const actionMenuOptions = ['Detail', 'Edit', 'Delete'];
 
-  const manuHandler = (option: string) => {
+  const menuHandler = (option: string) => {
     setIsLoader(true);
     if (option === 'Edit') {
       if (listingRolePermission(dataRole, 'Customer Update')) {
-        Service.appUserEdit(actionMenuItemid?.id).then((item: any) => {
+        appUserService.appUserEdit(actionMenuItemid?.id).then((item: any) => {
           if (item.data.success) {
             setIsLoader(false);
             setOpenEditFormDialog(true);
@@ -103,7 +103,8 @@ function AppUserOtherTab({
           id: actionMenuItemid?.id,
           updatedBy: authState.user.id,
         };
-        Service.appUserDelete(data)
+        appUserService
+          .appUserDelete(data)
           .then((item: any) => {
             if (item.data.success) {
               setIsLoader(false);
@@ -160,7 +161,7 @@ function AppUserOtherTab({
         isActive: event.target.checked,
         updatedBy: authState.user.id,
       };
-      Service.appUpdateStatus(data).then((updateItem) => {
+      appUserService.appUpdateStatus(data).then((updateItem) => {
         if (updateItem.data.success) {
           setIsLoader(false);
           setList((newArr: any) => {
@@ -190,57 +191,55 @@ function AppUserOtherTab({
     setPage(newPage);
     // offset? ,limit rowsperpage hoga ofset page * rowsperPage
     if (search === '' || search === null || search === undefined) {
-      Service.appList(
-        authState.user.tenant,
-        'Other',
-        newPage,
-        rowsPerPage
-      ).then((item) => {
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      });
+      appUserService
+        .appList(authState.user.tenant, 'Other', newPage, rowsPerPage)
+        .then((item) => {
+          setList(item.data.data.list);
+          setTotal(item.data.data.total);
+        });
     } else {
-      Service.appListSearch(
-        authState.user.tenant,
-        'Other',
-        search,
-        newPage,
-        rowsPerPage
-      ).then((item) => {
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      });
+      appUserService
+        .appListSearch(
+          authState.user.tenant,
+          'Other',
+          search,
+          newPage,
+          rowsPerPage
+        )
+        .then((item) => {
+          setList(item.data.data.list);
+          setTotal(item.data.data.total);
+        });
     }
   };
 
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    const newRowperPage = parseInt(event.target.value, 10);
+    const newRowPerPage = parseInt(event.target.value, 10);
     const newPage = 0;
-    setRowsPerPage(newRowperPage);
+    setRowsPerPage(newRowPerPage);
     setPage(newPage);
     if (search === '' || search === null || search === undefined) {
-      Service.appList(
-        authState.user.tenant,
-        'Other',
-        newPage,
-        rowsPerPage
-      ).then((item) => {
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      });
+      appUserService
+        .appList(authState.user.tenant, 'Other', newPage, rowsPerPage)
+        .then((item) => {
+          setList(item.data.data.list);
+          setTotal(item.data.data.total);
+        });
     } else {
-      Service.appListSearch(
-        authState.user.tenant,
-        'Other',
-        search,
-        newPage,
-        rowsPerPage
-      ).then((item) => {
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      });
+      appUserService
+        .appListSearch(
+          authState.user.tenant,
+          'Other',
+          search,
+          newPage,
+          rowsPerPage
+        )
+        .then((item) => {
+          setList(item.data.data.list);
+          setTotal(item.data.data.total);
+        });
     }
   };
 
@@ -256,7 +255,7 @@ function AppUserOtherTab({
               <th>Postal Code</th>
               <th>User Type</th>
               <th>Status</th>
-              <th>&nbsp;</th>
+              <th aria-label="empty table header">&nbsp;</th>
             </tr>
           </thead>
           <tbody>
@@ -344,7 +343,7 @@ function AppUserOtherTab({
         </table>
       </div>
       {list?.length < 1 ? (
-        <CustomText noroundedborders text="No Records Found" />
+        <CustomText noRoundedBorders text="No Records Found" />
       ) : null}
       <div className="mt-5 flex items-center justify-center">
         <TablePagination
@@ -362,7 +361,7 @@ function AppUserOtherTab({
           anchorEl={actionMenuAnchorEl}
           setAnchorEl={setActionMenuAnchorEl}
           options={actionMenuOptions}
-          callback={manuHandler}
+          callback={menuHandler}
         />
       )}
     </>

@@ -15,7 +15,7 @@ import {
   PATTERN,
 } from '../../utils/constants';
 
-type Props = {
+type NotificationCreatePopupProps = {
   openFormDialog: boolean;
   setOpenFormDialog: React.Dispatch<React.SetStateAction<boolean>>;
   callback: (...args: any[]) => any;
@@ -25,7 +25,7 @@ function NotificationCreatePopup({
   openFormDialog,
   setOpenFormDialog,
   callback,
-}: Props) {
+}: NotificationCreatePopupProps) {
   const {
     register,
     handleSubmit,

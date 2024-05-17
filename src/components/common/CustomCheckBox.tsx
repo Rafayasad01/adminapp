@@ -4,13 +4,13 @@ import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { Controller } from 'react-hook-form';
 
-type Props = {
+type CustomCheckBoxProps = {
   item: any;
   control: any;
-  index?: number;
+  // index?: number;
 };
 
-function CustomCheckBox({ item, control }: Props) {
+function CustomCheckBox({ item, control }: CustomCheckBoxProps) {
   return (
     <Controller
       name={`${item.id}`}

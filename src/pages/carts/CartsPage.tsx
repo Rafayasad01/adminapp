@@ -16,23 +16,18 @@ import CustomText from '../../components/common/CustomText';
 import Loader from '../../components/common/Loader';
 import TopBar from '../../components/common/TopBar';
 import { useAppSelector } from '../../redux/redux-hooks';
-import cart from '../../services/adminapp/adminCarts';
-import {
-  CART_STATUS_COMPELETED,
-  CART_STATUS_NEW,
-  CART_STATUS_PROCESSING,
-} from '../../utils/constants';
+import cartService from '../../services/adminapp/adminCarts';
+import { CART_STATUS } from '../../utils/constants';
 import { CheckRolePermission } from '../../utils/helper';
 
 const actionMenuOptions = ['View'];
 function CartsPage() {
   const authState: any = useAppSelector((state) => state?.authState);
   const dataRole = useAppSelector(
-    (state) => state?.persisitReducer?.roleState?.role?.permissions
+    (state) => state?.persistedReducer?.roleState?.role?.permissions
   );
 
   const navigate = useNavigate();
-  const [emptyVariable] = useState(null);
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(0);
   const [total, setTotal] = useState(0);
@@ -51,14 +46,14 @@ function CartsPage() {
     setPage(newPage);
     // offset? ,limit rowsperpage hoga ofset page * rowsperPage
     if (search === '' || search === null || search === undefined) {
-      cart
+      cartService
         .getListService(authState.user.tenant, newPage, rowsPerPage)
         .then((item) => {
           setList(item.data.data.list.map((newItem: any) => ({ ...newItem })));
           setTotal(item.data.data.total);
         });
     } else {
-      cart
+      cartService
         .searchService(authState.user.tenant, search, newPage, rowsPerPage)
         .then((item) => {
           setList(item.data.data.list.map((newItem: any) => ({ ...newItem })));
@@ -75,7 +70,7 @@ function CartsPage() {
     setRowsPerPage(newRowperPage);
     setPage(newPage);
     if (search === '' || search === null || search === undefined) {
-      cart
+      cartService
         .getListService(authState.user.tenant, newPage, newRowperPage)
         .then((item) => {
           // console.log(item.data.data)
@@ -83,7 +78,7 @@ function CartsPage() {
           setTotal(item.data.data.total);
         });
     } else {
-      cart
+      cartService
         .searchService(authState.user.tenant, search, newPage, newRowperPage)
         .then((item) => {
           setList(item.data.data.list.map((newItem: any) => ({ ...newItem })));
@@ -98,7 +93,7 @@ function CartsPage() {
       const newPage = 0;
       setSearch(searchTxt);
       setPage(newPage);
-      cart
+      cartService
         .searchService(authState.user.tenant, searchTxt, newPage, rowsPerPage)
         .then((item) => {
           setList(item.data.data.list.map((newItem: any) => ({ ...newItem })));
@@ -108,7 +103,7 @@ function CartsPage() {
   };
 
   useEffect(() => {
-    cart
+    cartService
       .getListService(authState.user.tenant, page, rowsPerPage)
       .then((item) => {
         // console.log(item.data.data)
@@ -119,7 +114,7 @@ function CartsPage() {
       .catch(() => {
         setIsLoader(false);
       });
-  }, [emptyVariable]);
+  }, [null]);
 
   const manuHandler = (option: string) => {
     let doOption = '';
@@ -141,11 +136,11 @@ function CartsPage() {
   const getStatusTag = (status: string) => {
     // console.log('STATAT', status);
     let tag = '';
-    if (status === CART_STATUS_NEW) {
+    if (status === CART_STATUS.NEW) {
       tag = 'blue';
-    } else if (status === CART_STATUS_PROCESSING) {
+    } else if (status === CART_STATUS.PROCESSING) {
       tag = 'green';
-    } else if (status === CART_STATUS_COMPELETED) {
+    } else if (status === CART_STATUS.COMPLETED) {
       tag = 'green';
     }
     return tag;
@@ -251,7 +246,7 @@ function CartsPage() {
                   <th>Drop-off Time</th>
                   <th>Amount</th>
                   <th>Status</th>
-                  <th>&nbsp;</th>
+                  <th aria-label="empty table header">&nbsp;</th>
                 </tr>
               </thead>
               <tbody>
@@ -364,7 +359,7 @@ function CartsPage() {
             </table>
           </div>
           {list?.length < 1 ? (
-            <CustomText text="No Driver History Records" noroundedborders />
+            <CustomText text="No Driver History Records" noRoundedBorders />
           ) : null}
           <div className="mt-3 flex w-[100%] justify-center py-3">
             <TablePagination

@@ -1,20 +1,21 @@
-import React, { Fragment } from 'react';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
 
-type Props = {
+type CustomButtonProps = {
   onclick?: (item?: any) => void;
   onchange?: (item?: any) => void;
   register?: any;
   className?: string;
   title?: string;
   icon?: any;
+  iconRight?: any;
   buttonType: string;
   type?: any;
   isMenuOpen?: boolean;
   sx?: any;
   disabled?: boolean;
+  required?: any;
 };
 
 function CustomButton({
@@ -25,11 +26,13 @@ function CustomButton({
   type,
   className,
   icon,
+  iconRight,
   title,
   isMenuOpen,
   sx,
   disabled,
-}: Props) {
+  required,
+}: CustomButtonProps) {
   if (buttonType === 'button') {
     return (
       <Button
@@ -42,7 +45,7 @@ function CustomButton({
       >
         {/* {disabled ? <Loader /> : */}
         <>
-          {icon && icon} {title}
+          {icon && icon} {title} &nbsp; {iconRight && iconRight}
         </>
         {/* } */}
       </Button>
@@ -72,7 +75,9 @@ function CustomButton({
           style={{ display: 'none' }}
           id="raised-button-file"
           type="file"
-          {...register('avatar')}
+          {...register('avatar', {
+            required: required && 'avatar is required',
+          })}
           onChange={onchange}
           onClick={onclick}
         />

@@ -18,7 +18,7 @@ import Loader from '../../components/common/Loader';
 import Notify from '../../components/common/Notify';
 import TopBar from '../../components/common/TopBar';
 import { useAppSelector } from '../../redux/redux-hooks';
-import category from '../../services/adminapp/adminCategory';
+import categoryService from '../../services/adminapp/adminCategory';
 import PermissionPopup from '../../utils/PermissionPopup';
 import { NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
 import { CheckRolePermission, listingRolePermission } from '../../utils/helper';
@@ -29,7 +29,7 @@ function CategoriesServicesPage() {
   const params = useParams();
   const authState: any = useAppSelector((state) => state?.authState);
   const dataRole = useAppSelector(
-    (state: any) => state?.persisitReducer?.roleState?.role?.permissions
+    (state: any) => state?.persistedReducer?.roleState?.role?.permissions
   );
   const navigate = useNavigate();
   const [search, setSearch] = useState('');
@@ -42,8 +42,7 @@ function CategoriesServicesPage() {
   const [actionMenuAnchorEl, setActionMenuAnchorEl] =
     useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
-  const actionMenuOptions = ["Item faq's", 'Edit', 'Delete'];
-  const [emptyVariable] = useState(null);
+  const actionMenuOptions = ["Product faq's", 'Edit', 'Delete'];
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
   const [isLoader, setIsLoader] = React.useState(true);
@@ -56,15 +55,15 @@ function CategoriesServicesPage() {
   const [isModalImage, setIsModalImage] = useState(false);
   const [modalImage, setModalImage] = useState('');
 
-  const categoryId = params.categoryId ?? '';
+  const productId = params.productId ?? '';
 
   const handleClickSearch = (event: any) => {
     const searchTxt = event.target.value as string;
     const newPage = 0;
     setSearch(searchTxt);
     setPage(newPage);
-    category
-      .searchCategoryService(categoryId, searchTxt, newPage, rowsPerPage)
+    categoryService
+      .searchCategoryService(productId, searchTxt, newPage, rowsPerPage)
       .then((item) => {
         setList(item.data.data.list);
         setTotal(item.data.data.total);
@@ -78,15 +77,15 @@ function CategoriesServicesPage() {
     setPage(newPage);
     // offset? ,limit rowsperpage hoga ofset page * rowsperPage
     if (search === '' || search === null || search === undefined) {
-      category
-        .getCategoryServiceList(categoryId, newPage, rowsPerPage)
+      categoryService
+        .getCategoryServiceList(productId, newPage, rowsPerPage)
         .then((item) => {
           setList(item.data.data.list);
           setTotal(item.data.data.total);
         });
     } else {
-      category
-        .searchCategoryService(categoryId, search, newPage, rowsPerPage)
+      categoryService
+        .searchCategoryService(productId, search, newPage, rowsPerPage)
         .then((item) => {
           setList(item.data.data.list);
           setTotal(item.data.data.total);
@@ -114,15 +113,15 @@ function CategoriesServicesPage() {
     setRowsPerPage(newRowperPage);
     setPage(newPage);
     if (search === '' || search === null || search === undefined) {
-      category
-        .getCategoryServiceList(categoryId, newPage, rowsPerPage)
+      categoryService
+        .getCategoryServiceList(productId, newPage, rowsPerPage)
         .then((item) => {
           setList(item.data.data.list);
           setTotal(item.data.data.total);
         });
     } else {
-      category
-        .searchCategoryService(categoryId, search, newPage, rowsPerPage)
+      categoryService
+        .searchCategoryService(productId, search, newPage, rowsPerPage)
         .then((item) => {
           setList(item.data.data.list);
           setTotal(item.data.data.total);
@@ -132,8 +131,8 @@ function CategoriesServicesPage() {
 
   useEffect(() => {
     if (listingRolePermission(dataRole, 'Category Service List')) {
-      category
-        .getCategoryServiceList(categoryId, page, rowsPerPage)
+      categoryService
+        .getCategoryServiceList(productId, page, rowsPerPage)
         .then((item: any) => {
           if (listingRolePermission(dataRole, 'Category Service Get')) {
             setIsLoader(false);
@@ -151,7 +150,7 @@ function CategoriesServicesPage() {
           // console.log('error::::::::', error);
         });
     }
-  }, [emptyVariable]);
+  }, [null]);
 
   const deleteHandler = (id: string) => {
     setIsLoader(true);
@@ -160,7 +159,7 @@ function CategoriesServicesPage() {
       isDeleted: true,
       updatedBy: authState.user.id,
     };
-    category
+    categoryService
       .deleteCategoryService(id, data)
       .then((updateItem) => {
         if (updateItem.data.success) {
@@ -193,7 +192,7 @@ function CategoriesServicesPage() {
 
   const manuHandler = (option: string) => {
     if (option === 'Edit') {
-      category.getCategoryService(actionMenuItemid).then((item: any) => {
+      categoryService.getCategoryService(actionMenuItemid).then((item: any) => {
         if (item.data.success) {
           if (listingRolePermission(dataRole, 'Category Service Update')) {
             setEditFormData(item.data.data);
@@ -207,12 +206,12 @@ function CategoriesServicesPage() {
           }
         }
       });
-    } else if (option === "Item faq's") {
+    } else if (option === "Product faq's") {
       CheckRolePermission(
         'Category Service List',
         dataRole,
         navigate,
-        `../service/faq/${actionMenuItemid}`
+        `../item/faq/${actionMenuItemid}`
       );
       // navigate(`../service/faq/${actionMenuItemid}`);
     } else if (option === 'Delete') {
@@ -230,16 +229,15 @@ function CategoriesServicesPage() {
 
   const createFormHandler = (data: any) => {
     setIsLoader(true);
-
     const formData = new FormData();
     formData.append('name', data.name);
-    formData.append('loyaltyCoins', data.loyaltyCoins);
+    formData.append('loyaltyCoins', data.loyaltyCoins ? data.loyaltyCoins : 0);
     formData.append('icon', data.icon);
     formData.append('price', data.price);
     formData.append('desc', data.desc);
     formData.append('createdBy', authState.user.id);
-    category
-      .categoryServiceCreate(categoryId, formData)
+    categoryService
+      .categoryServiceCreate(productId, formData)
       .then((item) => {
         if (item.data.success) {
           setIsLoader(false);
@@ -276,7 +274,7 @@ function CategoriesServicesPage() {
     formData.append('desc', data.desc);
     formData.append('updatedBy', authState.user.id);
     if (data.icon) formData.append('icon', data.icon);
-    category
+    categoryService
       .updateCategoryService(actionMenuItemid, formData)
       .then((updateItem: any) => {
         if (updateItem.data.success) {
@@ -324,19 +322,21 @@ function CategoriesServicesPage() {
         isActive: event.target.checked,
         updatedBy: authState.user.id,
       };
-      category.updateCategoryServiceStatus(id, data).then((updateItem) => {
-        if (updateItem.data.success) {
-          // setIsLoader(false);
-          setList((newArr: any) => {
-            return newArr.map((item: any) => {
-              if (item.id === id) {
-                item.isActive = updateItem.data.data.isActive;
-              }
-              return { ...item };
+      categoryService
+        .updateCategoryServiceStatus(id, data)
+        .then((updateItem) => {
+          if (updateItem.data.success) {
+            // setIsLoader(false);
+            setList((newArr: any) => {
+              return newArr.map((item: any) => {
+                if (item.id === id) {
+                  item.isActive = updateItem.data.data.isActive;
+                }
+                return { ...item };
+              });
             });
-          });
-        }
-      });
+          }
+        });
     } else {
       setIsNotify(true);
       setNotifyMessage({
@@ -365,13 +365,13 @@ function CategoriesServicesPage() {
         setIsOpen={setIsNotify}
         displayMessage={notifyMessage}
       />
-      <TopBar isNestedRoute title="Items" />
+      <TopBar isNestedRoute title="Products" />
       <div className="container m-auto mt-5">
         <div className="w-full rounded-lg bg-white shadow-lg">
           <div className="grid grid-cols-12 px-4 py-5">
             <div className="col-span-7">
               <span className="font-open-sans text-xl font-semibold text-[#252733]">
-                All Items
+                All Products Services
               </span>
             </div>
             <div className="col-span-5">
@@ -426,7 +426,7 @@ function CategoriesServicesPage() {
                   <th>Coins</th>
                   <th>Price</th>
                   <th>Status</th>
-                  <th>&nbsp;</th>
+                  <th aria-label="empty table header">&nbsp;</th>
                 </tr>
               </thead>
               <tbody>
@@ -499,7 +499,7 @@ function CategoriesServicesPage() {
             </table>
           </div>
           {list?.length < 1 ? (
-            <CustomText noroundedborders text="No Records Found" />
+            <CustomText noRoundedBorders text="No Records Found" />
           ) : null}
           <div className="mt-3 flex w-[100%] justify-center py-3">
             <TablePagination

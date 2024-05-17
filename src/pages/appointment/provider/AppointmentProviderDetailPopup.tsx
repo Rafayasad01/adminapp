@@ -1,17 +1,17 @@
 import Dialog from '@mui/material/Dialog';
 import Divider from '@mui/material/Divider';
 import dayjs from 'dayjs';
-import timezone from 'dayjs/plugin/timezone';
-import utc from 'dayjs/plugin/utc';
+// import timezone from 'dayjs/plugin/timezone';
+// import utc from 'dayjs/plugin/utc';
 import React from 'react';
 import CustomText from '../../../components/common/CustomText';
 import Loader from '../../../components/common/Loader';
 
-dayjs.extend(utc);
-dayjs.extend(timezone);
-dayjs.tz.setDefault('UTC');
+// dayjs.extend(utc);
+// dayjs.extend(timezone);
+// dayjs.tz.setDefault('UTC');
 
-type Props = {
+type AppointmentProviderDetailPopupProps = {
   openFormDialog: boolean;
   setOpenFormDialog: React.Dispatch<React.SetStateAction<boolean>>;
   list: any;
@@ -21,12 +21,11 @@ function AppointmentProviderDetailPopup({
   openFormDialog,
   setOpenFormDialog,
   list,
-}: Props) {
+}: AppointmentProviderDetailPopupProps) {
   // const { id } = useParams();
   // const dataRole = useAppSelector(
-  //   (state: any) => state?.persisitReducer?.roleState?.role?.permissions
+  //   (state: any) => state?.persistedReducer?.roleState?.role?.permissions
   // );
-  // const [emptyVariable] = useState(null);
   // const [total, setTotal] = useState(0);
   // const [list, setList] = useState<any>([]);
   const [isLoader] = React.useState(false);
@@ -65,7 +64,7 @@ function AppointmentProviderDetailPopup({
   //     } else {
   //         setIsLoader(false);
   //     }
-  // }, [emptyVariable]);
+  // }, [null]);
 
   // const [isPrintEnabled, setPrintEnabled] = useState<any>([false]);
 
@@ -271,7 +270,7 @@ function AppointmentProviderDetailPopup({
                       }
                     )
                   ) : list?.appointmentService?.length < 1 ? (
-                    <CustomText noroundedborders text="No Records Found" />
+                    <CustomText noRoundedBorders text="No Records Found" />
                   ) : null}
                 </tbody>
               </table>

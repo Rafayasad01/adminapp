@@ -29,7 +29,7 @@ import {
   VALIDATE_NON_NEGATIVE_NUM_AND_CHECK_LENGTH,
 } from '../../utils/constants';
 
-type Props = {
+type VouchersPromoCreatePopupProps = {
   vouchersPromoDialog: boolean;
   setVouchersPromoDialog: React.Dispatch<React.SetStateAction<boolean>>;
   callback: Function;
@@ -69,7 +69,7 @@ function VouchersPromoCreatePopup({
   vouchersPromoDialog,
   setVouchersPromoDialog,
   callback,
-}: Props) {
+}: VouchersPromoCreatePopupProps) {
   const {
     register,
     handleSubmit,
@@ -124,7 +124,7 @@ function VouchersPromoCreatePopup({
           style: { maxWidth: '100%', maxHeight: 'auto' },
         }}
       >
-        <div className="Content">
+        <div className="Content !flex-row overflow-y-scroll">
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="FormHeader">
               <span className="Title">Add Voucher</span>

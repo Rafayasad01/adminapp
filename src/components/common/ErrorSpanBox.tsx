@@ -1,10 +1,10 @@
-type Props = {
-  error?: string;
+type ErrorSpanBoxProps = {
+  error?: string | any;
 };
 
-function ErrorSpanBox({ error }: Props) {
+function ErrorSpanBox({ error }: ErrorSpanBoxProps) {
   return (
-    <span role="alert" className="error-color">
+    <span role="alert" className="error-color text-[11px]">
       {error && `*${error}`}
     </span>
   );

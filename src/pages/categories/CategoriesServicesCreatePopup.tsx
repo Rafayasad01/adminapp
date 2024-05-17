@@ -20,7 +20,7 @@ import {
   imageAllowedTypes,
 } from '../../utils/constants';
 
-type Props = {
+type CategoriesServicesCreatePopupProps = {
   openFormDialog: boolean;
   setOpenFormDialog: React.Dispatch<React.SetStateAction<boolean>>;
   callback: (...args: any[]) => any;
@@ -34,7 +34,7 @@ function CategoriesServicesCreatePopup({
   callback,
   setIsNotify,
   setNotifyMessage,
-}: Props) {
+}: CategoriesServicesCreatePopupProps) {
   const [image, setImage] = useState<any>(null);
 
   const {
@@ -79,7 +79,7 @@ function CategoriesServicesCreatePopup({
     setImage(null);
   };
 
-  // console.log('errors', errors);
+  console.log('errors', errors);
 
   return (
     <Dialog
@@ -93,12 +93,12 @@ function CategoriesServicesCreatePopup({
       <div className="Content">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="FormHeader">
-            <span className="Title">Add Services</span>
+            <span className="Title">Add Product</span>
           </div>
           <div className="FormBody">
             <div className="FormField">
               <FormControl className="FormControl" variant="standard">
-                <label className="FormLabel">Service Name</label>
+                <label className="FormLabel">Name</label>
                 <Input
                   className="FormInput"
                   id="name"
@@ -148,6 +148,7 @@ function CategoriesServicesCreatePopup({
                   id="loyaltyCoins"
                   placeholder="Enter loyalty Coins"
                   {...register('loyaltyCoins', {
+                    required: false,
                     pattern: {
                       value: PATTERN.POINT_NUM,
                       message: 'Enter a valid loyalty coins in numbers',
@@ -156,7 +157,8 @@ function CategoriesServicesCreatePopup({
                       value: 10,
                       message: 'Length should not be excceed from 10 numbers.',
                     },
-                    validate: (value: any) => VALIDATE_NON_NEGATIVE_NUM(value),
+                    validate: (value: any) =>
+                      value ? VALIDATE_NON_NEGATIVE_NUM(value) : true,
                   })}
                   disableUnderline
                 />

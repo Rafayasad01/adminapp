@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
-import timezone from 'dayjs/plugin/timezone';
-import utc from 'dayjs/plugin/utc';
+// import timezone from 'dayjs/plugin/timezone';
+// import utc from 'dayjs/plugin/utc';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import CustomText from '../../../components/common/CustomText';
@@ -8,20 +8,19 @@ import Loader from '../../../components/common/Loader';
 import Notify from '../../../components/common/Notify';
 import TopBar from '../../../components/common/TopBar';
 import { useAppSelector } from '../../../redux/redux-hooks';
-import Service from '../../../services/adminapp/adminAppointment';
+import adminAppointmentService from '../../../services/adminapp/adminAppointment';
 import CustomPrintLayout from '../../../utils/CustomPrintLayout/CustomAppointmentPrintLayout';
 import { listingRolePermission } from '../../../utils/helper';
 
-dayjs.extend(utc);
-dayjs.extend(timezone);
-dayjs.tz.setDefault('UTC');
+// dayjs.extend(utc);
+// dayjs.extend(timezone);
+// dayjs.tz.setDefault('UTC');
 
 function AppointmentVisitDetailPage() {
   const { id } = useParams();
   const dataRole = useAppSelector(
-    (state: any) => state?.persisitReducer?.roleState?.role?.permissions
+    (state: any) => state?.persistedReducer?.roleState?.role?.permissions
   );
-  const [emptyVariable] = useState(null);
   // const [total, setTotal] = useState(0);
   const [list, setList] = useState<any>([]);
   const [isLoader, setIsLoader] = React.useState(true);
@@ -30,7 +29,8 @@ function AppointmentVisitDetailPage() {
 
   useEffect(() => {
     if (listingRolePermission(dataRole, 'Employee List')) {
-      Service.VisitDetailById(id)
+      adminAppointmentService
+        .VisitDetailById(id)
         .then((item: any) => {
           if (item.data.success) {
             setIsLoader(false);
@@ -56,7 +56,7 @@ function AppointmentVisitDetailPage() {
     } else {
       setIsLoader(false);
     }
-  }, [emptyVariable]);
+  }, [null]);
 
   const [isPrintEnabled, setPrintEnabled] = useState<any>([false]);
 
@@ -248,7 +248,7 @@ function AppointmentVisitDetailPage() {
                     );
                   })
                 ) : list?.appointmentService?.length < 1 ? (
-                  <CustomText noroundedborders text="No Records Found" />
+                  <CustomText noRoundedBorders text="No Records Found" />
                 ) : null}
               </tbody>
             </table>

@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
-import Dialog from '@mui/material/Dialog';
 import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
 import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
 import Slider from '@mui/material/Slider';
+import React, { useState } from 'react';
 
 import '../../assets/css/PopupStyle.css';
 import CircleMap from '../../components/common/CircleMap';
 
-type Props = {
+type LocationsEditPopupProps = {
   locationEditDialog: boolean;
   setLocationEditDialog: React.Dispatch<React.SetStateAction<boolean>>;
 };
@@ -16,7 +16,7 @@ type Props = {
 function LocationsEditPopup({
   locationEditDialog,
   setLocationEditDialog,
-}: Props) {
+}: LocationsEditPopupProps) {
   const [sliderCount, setSliderCount] = useState<number>(50);
   const handleSliderChange = (event: Event, newValue: number | number[]) => {
     if (typeof newValue === 'number') {

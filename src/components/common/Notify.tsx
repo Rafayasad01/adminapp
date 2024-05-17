@@ -1,25 +1,22 @@
-import * as React from 'react';
-import Snackbar from '@mui/material/Snackbar';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
+import Snackbar from '@mui/material/Snackbar';
+import { forwardRef, type SyntheticEvent } from 'react';
 
-const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
+const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
   ref
 ) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
-type Props = {
+type NotifyProps = {
   isOpen?: boolean;
   setIsOpen: (value: boolean) => void;
   displayMessage: any;
 };
 
-function Notify({ isOpen, setIsOpen, displayMessage }: Props) {
-  const handleClose = (
-    event?: React.SyntheticEvent | Event,
-    reason?: string
-  ) => {
+function Notify({ isOpen, setIsOpen, displayMessage }: NotifyProps) {
+  const handleClose = (event?: SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {
       return;
     }

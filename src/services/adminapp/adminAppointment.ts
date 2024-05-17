@@ -1,4 +1,8 @@
-import { APPOINTMENT_PREFIX } from '../../utils/constants';
+import {
+  APPOINTMENT_PREFIX,
+  EMPLOYEE_PREFIX,
+  STORE_PREFIX,
+} from '../../utils/constants';
 import network from '../../utils/network';
 
 const PROVIDER_PREFIX = 'provider';
@@ -56,15 +60,16 @@ const ProviderDelete = (providerId: any, data: any) => {
 };
 
 // provider schedule
-const ProviderScheduleList = (providerID: any) => {
+
+const ProviderScheduleList = (empID: any) => {
   return network.get(
-    `${APPOINTMENT_PREFIX}/${PROVIDER_PREFIX}/${SCHEDULE_PREFIX}/list/${providerID}`
+    `${STORE_PREFIX}/${EMPLOYEE_PREFIX}/${SCHEDULE_PREFIX}/list/${empID}`
   );
 };
 
-const ProviderScheduleCreate = (data: any) => {
+const ProviderScheduleCreate = (empID: any, data: any) => {
   return network.post(
-    `${APPOINTMENT_PREFIX}/${PROVIDER_PREFIX}/${SCHEDULE_PREFIX}/create`,
+    `${STORE_PREFIX}/${EMPLOYEE_PREFIX}/${SCHEDULE_PREFIX}/create/${empID}`,
     data
   );
 };
@@ -75,16 +80,16 @@ const ProviderScheduleEdit = (providerId: any) => {
   );
 };
 
-const ProviderScheduleUpdate = (data: any) => {
+const ProviderScheduleUpdate = (seheduleId: any, data: any) => {
   return network.post(
-    `${APPOINTMENT_PREFIX}/${PROVIDER_PREFIX}/${SCHEDULE_PREFIX}/update`,
+    `${STORE_PREFIX}/${EMPLOYEE_PREFIX}/${SCHEDULE_PREFIX}/update/${seheduleId}`,
     data
   );
 };
 
-const ProviderScheduleUpdateStatus = (data: any) => {
+const ProviderScheduleUpdateStatus = (seheduleId: any, data: any) => {
   return network.post(
-    `${APPOINTMENT_PREFIX}/${PROVIDER_PREFIX}/${SCHEDULE_PREFIX}/update/status`,
+    `${STORE_PREFIX}/${EMPLOYEE_PREFIX}/${SCHEDULE_PREFIX}/update/status/${seheduleId}`,
     data
   );
 };

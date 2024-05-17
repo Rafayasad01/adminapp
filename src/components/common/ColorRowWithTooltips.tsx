@@ -1,12 +1,12 @@
 import _ from 'lodash';
 import { memo } from 'react';
 
-type Props = {
+type ColorRowWithTooltipsProps = {
   type?: string;
   colors: any;
 };
 
-function ColorRowWithTooltips({ colors, type }: Props) {
+function ColorRowWithTooltips({ colors, type }: ColorRowWithTooltipsProps) {
   return (
     <div className="flex max-w-[240px] flex-wrap items-center">
       {type === 'array'
@@ -24,7 +24,7 @@ function ColorRowWithTooltips({ colors, type }: Props) {
             <div
               key={index}
               style={{ backgroundColor: _.toString(color) }}
-              className="relative mr-2 mb-2 h-[30px] w-[30px] cursor-pointer rounded-full border border-gray-300 shadow-md"
+              className="relative mb-2 mr-2 h-[30px] w-[30px] cursor-pointer rounded-full border border-gray-300 shadow-md"
               title={key} // Use the title attribute for the tooltip
             />
           ))}

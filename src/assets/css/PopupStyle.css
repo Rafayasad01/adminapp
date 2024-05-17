@@ -23,7 +23,7 @@
 }
 
 .Dialog .Content {
-  @apply flex h-full w-full flex-col justify-evenly rounded-lg bg-[#fff] px-4 py-5 shadow-lg !important;
+  @apply flex h-full w-full flex-col justify-evenly overflow-y-auto rounded-lg bg-[#fff] px-4 py-5 shadow-lg !important;
 }
 
 .Dialog .Content.NoPadding {
@@ -269,15 +269,15 @@
 }
 
 .ChatDetails {
-  @apply mt-4 border border-solid border-foreground py-3 px-3 shadow-md !important;
+  @apply mt-4 border border-solid border-foreground px-3 py-3 shadow-md !important;
 }
 
 .ChatLeftBox .ChatDetails {
-  @apply rounded-tl-lg rounded-tr-lg rounded-br-lg !important;
+  @apply rounded-br-lg rounded-tl-lg rounded-tr-lg !important;
 }
 
 .ChatRightBox .ChatDetails {
-  @apply rounded-tl-lg rounded-tr-lg rounded-bl-lg bg-[#1D1D1D] !important;
+  @apply rounded-bl-lg rounded-tl-lg rounded-tr-lg bg-[#1D1D1D] !important;
 }
 
 .ChatContent .ChatTxt {
@@ -393,7 +393,7 @@
 }
 
 .FormControl .DatePicker input {
-  @apply py-[4px] px-0 font-open-sans text-sm font-normal text-secondary opacity-[0.7] !important;
+  @apply px-0 py-[4px] font-open-sans text-sm font-normal text-secondary opacity-[0.7] !important;
 }
 
 .FormControl .DatePicker button {
@@ -537,7 +537,7 @@
 }
 
 .CustomToggleBtn.Mui-selected {
-  background: #1d1d1d !important;
+  background: #1d4675 !important;
   color: #ffffff !important;
   border: 1px solid #1d1d1d !important;
 }

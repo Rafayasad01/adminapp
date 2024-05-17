@@ -15,7 +15,7 @@ const darkTheme = createTheme({
   },
 });
 
-type Props = {
+type ColorPickerProps = {
   colorPickerLabel: string;
   colorPickerValue: any;
   setColorPickerValue: React.Dispatch<React.SetStateAction<any>>;
@@ -27,7 +27,7 @@ function ColorPicker({
   colorPickerValue,
   setColorPickerValue,
   id,
-}: Props) {
+}: ColorPickerProps) {
   const [colorPicker, setColorPicker] = useState<HTMLButtonElement | null>(
     null
   );

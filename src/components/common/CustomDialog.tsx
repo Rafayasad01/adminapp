@@ -1,5 +1,6 @@
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
+import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import FormControl from '@mui/material/FormControl';
 import IconButton from '@mui/material/IconButton';
@@ -14,7 +15,7 @@ import CustomInputBox from './CustomInputBox';
 import ErrorSpanBox from './ErrorSpanBox';
 import TimePicker from './TimePicker';
 
-type Props = {
+type CustomDialogProps = {
   openFormDialog: boolean;
   setOpenFormDialog: React.Dispatch<React.SetStateAction<boolean>>;
   DialogHeader?: string;
@@ -25,15 +26,15 @@ type Props = {
   onSubmit: (data: any) => void;
   type?: any;
   reset?: any;
-  setAvater?: any;
-  specailCase?: boolean;
+  setAvatar?: any;
+  specialCase?: boolean;
   singleField?: boolean;
   setWeekDays?: any;
   weekDays?: any;
   startTime?: any;
   endTime?: any;
   addScheduleFormat?: boolean;
-  noweekdays?: boolean;
+  noWeekDays?: boolean;
 };
 
 function CustomDialog({
@@ -46,8 +47,8 @@ function CustomDialog({
   handleSubmit,
   onSubmit,
   type,
-  specailCase,
-  setAvater,
+  specialCase,
+  setAvatar,
   reset,
   singleField,
   setWeekDays,
@@ -55,17 +56,17 @@ function CustomDialog({
   startTime,
   endTime,
   addScheduleFormat,
-  noweekdays,
-}: Props) {
+  noWeekDays,
+}: CustomDialogProps) {
   const handleFormClose = () => {
-    if (type === 'edit' && specailCase) {
+    if (type === 'edit' && specialCase) {
       reset({
         role: 'none',
         userLimits: '',
       });
       setOpenFormDialog(false);
-    } else if (type === 'edit' && !specailCase) {
-      setAvater && setAvater(null);
+    } else if (type === 'edit' && !specialCase) {
+      if (setAvatar) setAvatar(null);
       reset();
       setOpenFormDialog(false);
     } else {
@@ -179,6 +180,63 @@ function CustomDialog({
                             )}
                           </FormControl>
                         </div>
+                      ) : items.type === 'uploadImg' ? (
+                        <div className="FormField">
+                          <label className="FormLabel">Upload Image</label>
+                          <div className="ImageBox">
+                            <input
+                              accept="image/*"
+                              style={{ display: 'none' }}
+                              {...items.register(items.id)}
+                              id={items.id}
+                              type="file"
+                              onChange={(
+                                event: React.InputHTMLAttributes<HTMLInputElement>
+                              ) => {
+                                items.onChange(event);
+                              }}
+                              onClick={(
+                                event: React.InputHTMLAttributes<HTMLInputElement>
+                              ) => {
+                                items.OnClick(event);
+                              }}
+                            />
+                            <label
+                              htmlFor="raised-button-file"
+                              className="ImageLabel"
+                            >
+                              <Button component="span" className="ImageBtn">
+                                <FileUploadOutlinedIcon
+                                  sx={{ marginRight: '0.5rem' }}
+                                />
+                                Upload image
+                              </Button>
+                            </label>
+
+                            {items.image ? (
+                              <div className="ShowImageBox">
+                                <label className="ShowImageLabel">
+                                  {items.image.name}
+                                </label>
+                                <IconButton
+                                  className="btn-dot"
+                                  onClick={() => items.setImage(null)}
+                                >
+                                  <CloseOutlinedIcon
+                                    sx={{
+                                      color: '#1D1D1D',
+                                      fontSize: '1rem',
+                                      lineHeight: '1.5rem',
+                                    }}
+                                  />
+                                </IconButton>
+                              </div>
+                            ) : (
+                              ''
+                            )}
+                          </div>
+                          {/* {image === null && <ErrorSpanBox error={errors.icon?.message} />} */}
+                        </div>
                       ) : items.type === 'datepicker' ? (
                         <TimePicker
                           timePickerLabel={items.fieldName}
@@ -186,7 +244,7 @@ function CustomDialog({
                           timePickerValue={items.time}
                           setTimePickerValue={items.setTime}
                           id={items.id}
-                          errors={items.error}
+                          // errors={items.error}
                           // setError={setError}
                         />
                       ) : null
@@ -254,9 +312,9 @@ function CustomDialog({
             )}
             {addScheduleFormat && (
               <div>
-                {!noweekdays && (
+                {!noWeekDays && (
                   <div>
-                    <WorkDaysForm onlyweeksformat setWeekDays={setWeekDays} />
+                    <WorkDaysForm onlyWeeksFormat setWeekDays={setWeekDays} />
                   </div>
                 )}
                 <div className={singleField ? 'FormField' : 'FormFields'}>
@@ -269,7 +327,7 @@ function CustomDialog({
                           timePickerValue={items.time}
                           setTimePickerValue={items.setTime}
                           id={items.id}
-                          errors={items.error}
+                          // errors={items.error}
                           // setError={setError}
                         />
                       </Fragment>

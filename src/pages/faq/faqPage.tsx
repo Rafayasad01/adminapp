@@ -11,14 +11,14 @@ import Switch from '@mui/material/Switch';
 import TablePagination from '@mui/material/TablePagination';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import TopBar from '../../components/common/TopBar';
 import CustomDialog from '../../components/common/CustomDialog';
 import CustomText from '../../components/common/CustomText';
 import Loader from '../../components/common/Loader';
 import Notify from '../../components/common/Notify';
+import TopBar from '../../components/common/TopBar';
 import { AppFaq } from '../../interfaces/app-faq.interface';
 import { useAppSelector } from '../../redux/redux-hooks';
-import Service from '../../services/adminapp/adminAppFaqs';
+import appFaqsService from '../../services/adminapp/adminAppFaqs';
 import PermissionPopup from '../../utils/PermissionPopup';
 import { NOT_AUTHORIZED_MESSAGE, PATTERN } from '../../utils/constants';
 import { listingRolePermission } from '../../utils/helper';
@@ -26,10 +26,9 @@ import { listingRolePermission } from '../../utils/helper';
 function FaqPage() {
   const authState: any = useAppSelector((state: any) => state?.authState);
   const dataRole = useAppSelector(
-    (state: any) => state?.persisitReducer?.roleState?.role?.permissions
+    (state: any) => state?.persistedReducer?.roleState?.role?.permissions
   );
   const [search, setSearch] = useState<any>('');
-  const [emptyVariable] = useState(null);
   const [page, setPage] = useState(0);
   const [total, setTotal] = useState(0);
   const [list, setList] = useState<any>([]);
@@ -94,15 +93,12 @@ function FaqPage() {
       const newPage = 0;
       setSearch(searchTxt);
       setPage(newPage);
-      Service.FaqList(
-        authState.user.tenant,
-        searchTxt,
-        newPage,
-        rowsPerPage
-      ).then((item) => {
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      });
+      appFaqsService
+        .FaqList(authState.user.tenant, searchTxt, newPage, rowsPerPage)
+        .then((item) => {
+          setList(item.data.data.list);
+          setTotal(item.data.data.total);
+        });
     }
   };
 
@@ -112,12 +108,12 @@ function FaqPage() {
   ) => {
     setPage(newPage);
     // offset? ,limit rowsperpage hoga ofset page * rowsperPage
-    Service.FaqList(authState.user.tenant, search, newPage, rowsPerPage).then(
-      (item) => {
+    appFaqsService
+      .FaqList(authState.user.tenant, search, newPage, rowsPerPage)
+      .then((item) => {
         setList(item.data.data.list);
         setTotal(item.data.data.total);
-      }
-    );
+      });
   };
 
   const handleChangeRowsPerPage = (
@@ -127,12 +123,12 @@ function FaqPage() {
     const newPage = 0;
     setRowsPerPage(newRowperPage);
     setPage(newPage);
-    Service.FaqList(authState.user.tenant, search, newPage, rowsPerPage).then(
-      (item) => {
+    appFaqsService
+      .FaqList(authState.user.tenant, search, newPage, rowsPerPage)
+      .then((item) => {
         setList(item.data.data.list);
         setTotal(item.data.data.total);
-      }
-    );
+      });
   };
 
   // const deleteHandler = (id: string) => {
@@ -175,7 +171,7 @@ function FaqPage() {
   const handleEdit = (id: string) => {
     if (listingRolePermission(dataRole, 'Employee Update')) {
       setIsLoader(true);
-      Service.FaqFindById(id).then((item: any) => {
+      appFaqsService.FaqFindById(id).then((item: any) => {
         if (item.data.success) {
           setIsLoader(false);
           setValue('id', item.data.data.id);
@@ -189,7 +185,8 @@ function FaqPage() {
 
   useEffect(() => {
     if (listingRolePermission(dataRole, 'Employee List')) {
-      Service.FaqList(authState.user.tenant, search, page, rowsPerPage)
+      appFaqsService
+        .FaqList(authState.user.tenant, search, page, rowsPerPage)
         .then((item: any) => {
           if (item.data.success) {
             setIsLoader(false);
@@ -208,7 +205,7 @@ function FaqPage() {
     } else {
       setIsLoader(false);
     }
-  }, [emptyVariable]);
+  }, [null]);
 
   const createFormHandler = (data: any) => {
     setIsLoader(true);
@@ -219,7 +216,8 @@ function FaqPage() {
       createdBy: authState.user.id,
       updatedBy: authState.user.id,
     };
-    Service.FaqCreate(faqData)
+    appFaqsService
+      .FaqCreate(faqData)
       .then((item) => {
         if (item.data.success) {
           reset();
@@ -261,7 +259,8 @@ function FaqPage() {
       createdBy: authState.user.id,
       updatedBy: authState.user.id,
     };
-    Service.FaqUpdate(getValues('id'), faqData)
+    appFaqsService
+      .FaqUpdate(getValues('id'), faqData)
       .then((item) => {
         if (item.data.success) {
           setIsLoader(false);
@@ -308,7 +307,7 @@ function FaqPage() {
         isActive: event.target.checked,
         updatedBy: authState.user.id,
       };
-      Service.FaqUpdateStatus(id, data).then((updateItem) => {
+      appFaqsService.FaqUpdateStatus(id, data).then((updateItem) => {
         if (updateItem.data.success) {
           setList((newArr: any) => {
             return newArr.map((item: any) => {
@@ -396,7 +395,7 @@ function FaqPage() {
                   <th className="w-[30%]">Question</th>
                   <th className="w-[40%]">Answer</th>
                   <th>Status</th>
-                  <th>&nbsp;</th>
+                  <th aria-label="empty table header">&nbsp;</th>
                 </tr>
               </thead>
               <tbody>
@@ -421,7 +420,7 @@ function FaqPage() {
                             <span className="badge badge-danger">INACTIVE</span>
                           )}
                         </td>
-                        <td>
+                        <td aria-label="action">
                           <div className="flex flex-row-reverse items-center">
                             <div
                               className="mx-3 cursor-pointer"
@@ -445,7 +444,7 @@ function FaqPage() {
             </table>
           </div>
           {list?.length < 1 ? (
-            <CustomText noroundedborders text="No Records Found" />
+            <CustomText noRoundedBorders text="No Records Found" />
           ) : null}
           <div className="mt-3 flex w-[100%] justify-center py-3">
             <TablePagination
@@ -484,7 +483,7 @@ function FaqPage() {
           singleField
           DialogHeader="Edit Faq"
           type="edit"
-          specailCase={false}
+          specialCase={false}
           reset={reset}
           inputFieldsData={inputFieldsData}
           handleSubmit={handleSubmit}

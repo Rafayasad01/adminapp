@@ -17,17 +17,16 @@ import CustomText from '../../components/common/CustomText';
 import Loader from '../../components/common/Loader';
 import Notify from '../../components/common/Notify';
 import { useAppSelector } from '../../redux/redux-hooks';
-import Service from '../../services/adminapp/rating';
+import ratingService from '../../services/adminapp/rating';
 import { listingRolePermission } from '../../utils/helper';
 
 function RatingPage() {
   const navigate = useNavigate();
   const authState: any = useAppSelector((state: any) => state?.authState);
   const dataRole = useAppSelector(
-    (state: any) => state?.persisitReducer?.roleState?.role?.permissions
+    (state: any) => state?.persistedReducer?.roleState?.role?.permissions
   );
   const [search, setSearch] = useState<any>('');
-  const [emptyVariable] = useState(null);
   const [page, setPage] = useState(0);
   const [total, setTotal] = useState(0);
   const [list, setList] = useState<any>([]);
@@ -42,15 +41,12 @@ function RatingPage() {
       const newPage = 0;
       setSearch(searchTxt);
       setPage(newPage);
-      Service.getListService(
-        authState.user.tenant,
-        searchTxt,
-        newPage,
-        rowsPerPage
-      ).then((item) => {
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      });
+      ratingService
+        .getListService(authState.user.tenant, searchTxt, newPage, rowsPerPage)
+        .then((item) => {
+          setList(item.data.data.list);
+          setTotal(item.data.data.total);
+        });
     }
   };
 
@@ -60,7 +56,8 @@ function RatingPage() {
   ) => {
     setPage(newPage);
     // offset? ,limit rowsperpage hoga ofset page * rowsperPage
-    Service.getListService(authState.user.tenant, search, newPage, rowsPerPage)
+    ratingService
+      .getListService(authState.user.tenant, search, newPage, rowsPerPage)
       .then((item) => {
         setList(item.data.data.list);
         setTotal(item.data.data.total);
@@ -82,15 +79,12 @@ function RatingPage() {
     const newPage = 0;
     setRowsPerPage(newRowperPage);
     setPage(newPage);
-    Service.getListService(
-      authState.user.tenant,
-      search,
-      newPage,
-      newRowperPage
-    ).then((item) => {
-      setList(item.data.data.list);
-      setTotal(item.data.data.total);
-    });
+    ratingService
+      .getListService(authState.user.tenant, search, newPage, newRowperPage)
+      .then((item) => {
+        setList(item.data.data.list);
+        setTotal(item.data.data.total);
+      });
     // if (search === '' || search === null || search === undefined) {
 
     // }
@@ -109,7 +103,8 @@ function RatingPage() {
 
   useEffect(() => {
     if (listingRolePermission(dataRole, 'Employee List')) {
-      Service.getListService(authState.user.tenant, search, page, rowsPerPage)
+      ratingService
+        .getListService(authState.user.tenant, search, page, rowsPerPage)
         .then((item: any) => {
           if (item.data.success) {
             setIsLoader(false);
@@ -128,7 +123,7 @@ function RatingPage() {
     } else {
       setIsLoader(false);
     }
-  }, [emptyVariable]);
+  }, [null]);
 
   return isLoader ? (
     <Loader />
@@ -190,7 +185,7 @@ function RatingPage() {
                   <th>Item</th>
                   <th>Total Star</th>
                   <th>Reviews</th>
-                  <th>&nbsp;</th>
+                  <th aria-label="empty table header">&nbsp;</th>
                 </tr>
               </thead>
               <tbody>
@@ -234,7 +229,7 @@ function RatingPage() {
                         </td>
                         <td>{item.star}</td>
                         <td>{item.reviews}</td>
-                        <td>
+                        <td aria-label="go to reviews">
                           <div className="flex flex-row-reverse">
                             <IconButton
                               className="icon-btn"
@@ -251,7 +246,7 @@ function RatingPage() {
             </table>
           </div>
           {list?.length < 1 ? (
-            <CustomText noroundedborders text="No Records Found" />
+            <CustomText noRoundedBorders text="No Records Found" />
           ) : null}
           <div className="mt-3 flex w-[100%] justify-center py-3">
             <TablePagination

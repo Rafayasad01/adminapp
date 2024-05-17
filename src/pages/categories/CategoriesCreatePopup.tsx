@@ -19,7 +19,7 @@ import {
   imageAllowedTypes,
 } from '../../utils/constants';
 
-type Props = {
+type CategoriesCreatePopupProps = {
   openFormDialog: boolean;
   setOpenFormDialog: React.Dispatch<React.SetStateAction<boolean>>;
   callback: (...args: any[]) => any;
@@ -33,7 +33,7 @@ function CategoriesCreatePopup({
   callback,
   setIsNotify,
   setNotifyMessage,
-}: Props) {
+}: CategoriesCreatePopupProps) {
   const [image, setImage] = useState<any>(null);
 
   const {
@@ -41,6 +41,7 @@ function CategoriesCreatePopup({
     handleSubmit,
     formState: { errors },
   } = useForm<Category>();
+
   const onSubmit = (data: Category) => {
     if (data.desc && image && data.name) {
       data.icon = image;
@@ -92,7 +93,7 @@ function CategoriesCreatePopup({
       <div className="Content">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="FormHeader">
-            <span className="Title">Add Category</span>
+            <span className="Title">Add Product Category</span>
           </div>
           <div className="FormBody">
             <div className="FormField">
