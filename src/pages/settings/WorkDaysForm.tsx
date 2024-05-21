@@ -5,10 +5,10 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import dayjs from 'dayjs';
 // import moment from 'moment';
+import isBetween from 'dayjs/plugin/isBetween';
 import { memo, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import '../../assets/css/PopupStyle.css';
-import isBetween from 'dayjs/plugin/isBetween';
 import ErrorSpanBox from '../../components/common/ErrorSpanBox';
 import TimePicker from '../../components/common/TimePicker';
 import { WorkDay } from '../../interfaces/shop-schedule.interface';
@@ -28,19 +28,19 @@ function WorkDaysForm({
 }: WorkDaysFormProps) {
   const [_shopOpenTime, setShopOpenTime] = useState<dayjs.Dayjs | null>(null);
   const [_shopCloseTime, setShopCloseTime] = useState<dayjs.Dayjs | null>(null);
-  const [
-    _breakTime,
-    //  setBreakTime
-  ] = useState<dayjs.Dayjs | null>(null);
-  const [
-    _breakOffTime,
-    //  setBreakOffTime
-  ] = useState<dayjs.Dayjs | null>(null);
+  // const [
+  //   _breakTime,
+  //   //  setBreakTime
+  // ] = useState<dayjs.Dayjs | null>(null);
+  // const [
+  //   _breakOffTime,
+  //   //  setBreakOffTime
+  // ] = useState<dayjs.Dayjs | null>(null);
   const [currentDay, setCurrentDay] = useState<string>('Sunday');
   const dispatch = useAppDispatch();
   const workDays = useAppSelector((state) => state.scheduleState.workDays);
   const {
-    register,
+    // register,
     handleSubmit,
     getValues,
     setValue,
@@ -220,7 +220,7 @@ function WorkDaysForm({
                       setShopOpenTime(e);
                     }}
                     id="shopInTimePicker"
-                    {...register('shopOpenTime', { required: true })}
+                    // {...register('shopOpenTime', { required: true })}
                   />
                   {errors.shopOpenTime && (
                     <ErrorSpanBox error="This field is required" />
@@ -235,7 +235,7 @@ function WorkDaysForm({
                       setShopCloseTime(e);
                     }}
                     id="shopOutTimePicker"
-                    {...register('shopCloseTime', { required: true })}
+                    // {...register('shopCloseTime', { required: true })}
                   />
                   {errors.shopCloseTime && (
                     <ErrorSpanBox error="This field is required" />

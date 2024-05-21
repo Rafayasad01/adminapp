@@ -14,8 +14,8 @@ const AdminTopCustomerList = () => {
         </tr>
       </thead>
       <tbody>
-        {customers.map((x) => (
-          <tr key={x.email}>
+        {customers.map((x, index) => (
+          <tr key={index}>
             <td className="font-bold capitalize text-primary">{x.name}</td>
             <td>{dayjs(x.dateIn).format('MMM D, YYYY')}</td>
             <td>{x.service}</td>
