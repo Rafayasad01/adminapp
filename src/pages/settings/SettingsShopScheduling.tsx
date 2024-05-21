@@ -2,7 +2,7 @@ import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import Button from '@mui/material/Button';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
-import dayjs, { isDayjs } from 'dayjs';
+import dayjs from 'dayjs';
 import { memo, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Notify from '../../components/common/Notify';
@@ -163,7 +163,7 @@ function SettingsShopScheduling() {
                             <th className="w-16">&nbsp;</th>
                             <th>Date</th>
                             <th>Shop Time</th>
-                            <th>Break Time</th>
+                            {/* <th>Break Time</th> */}
                             <th>Days Off</th>
                           </tr>
                         </thead>
@@ -190,7 +190,7 @@ function SettingsShopScheduling() {
                                     ? ''
                                     : day.closeTime?.format('h:mm A')}
                                 </td>
-                                <td>
+                                {/* <td>
                                   {' '}
                                   {holiday
                                     ? ''
@@ -207,7 +207,7 @@ function SettingsShopScheduling() {
                                     : isDayjs(day.breakTime) &&
                                       day.breakOffTime?.isValid() &&
                                       day.breakOffTime?.format('h:mm A')}
-                                </td>
+                                </td> */}
                                 <td className="py-3">
                                   {' '}
                                   {holiday ? ' Day Off' : ''}

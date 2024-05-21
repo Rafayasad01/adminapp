@@ -5,10 +5,10 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import dayjs from 'dayjs';
 // import moment from 'moment';
+import isBetween from 'dayjs/plugin/isBetween';
 import { memo, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import '../../assets/css/PopupStyle.css';
-import isBetween from 'dayjs/plugin/isBetween';
 import ErrorSpanBox from '../../components/common/ErrorSpanBox';
 import TimePicker from '../../components/common/TimePicker';
 import { WorkDay } from '../../interfaces/shop-schedule.interface';
@@ -28,13 +28,19 @@ function WorkDaysForm({
 }: WorkDaysFormProps) {
   const [_shopOpenTime, setShopOpenTime] = useState<dayjs.Dayjs | null>(null);
   const [_shopCloseTime, setShopCloseTime] = useState<dayjs.Dayjs | null>(null);
-  const [_breakTime, setBreakTime] = useState<dayjs.Dayjs | null>(null);
-  const [_breakOffTime, setBreakOffTime] = useState<dayjs.Dayjs | null>(null);
+  // const [
+  //   _breakTime,
+  //   //  setBreakTime
+  // ] = useState<dayjs.Dayjs | null>(null);
+  // const [
+  //   _breakOffTime,
+  //   //  setBreakOffTime
+  // ] = useState<dayjs.Dayjs | null>(null);
   const [currentDay, setCurrentDay] = useState<string>('Sunday');
   const dispatch = useAppDispatch();
   const workDays = useAppSelector((state) => state.scheduleState.workDays);
   const {
-    register,
+    // register,
     handleSubmit,
     getValues,
     setValue,
@@ -95,8 +101,10 @@ function WorkDaysForm({
       day: currentDay,
       openTime: data.shopOpenTime,
       closeTime: data.shopCloseTime,
-      breakTime: data.breakTime,
-      breakOffTime: data.breakOffTime,
+      breakTime: data.shopOpenTime,
+      breakOffTime: data.shopCloseTime,
+      // breakTime: data.breakTime,
+      // breakOffTime: data.breakOffTime,
     };
 
     if (index === -1) {
@@ -108,62 +116,62 @@ function WorkDaysForm({
     }
   };
 
-  const handleBreakInTimeChange = (value: any) => {
-    const TshopOpenTime = dayjs(getValues('shopOpenTime'));
-    let TshopCloseTime = dayjs(getValues('shopCloseTime'));
-    const hour1 = TshopOpenTime.hour();
-    const hour2 = TshopCloseTime.hour();
-    if (hour1 > hour2) {
-      TshopCloseTime = TshopCloseTime.add(1, 'day');
-    }
+  // const handleBreakInTimeChange = (value: any) => {
+  //   const TshopOpenTime = dayjs(getValues('shopOpenTime'));
+  //   let TshopCloseTime = dayjs(getValues('shopCloseTime'));
+  //   const hour1 = TshopOpenTime.hour();
+  //   const hour2 = TshopCloseTime.hour();
+  //   if (hour1 > hour2) {
+  //     TshopCloseTime = TshopCloseTime.add(1, 'day');
+  //   }
 
-    // Check if tempVal is between date1 and date2
-    // console.log('VALUE::', value);
-    // console.log('TS VALUE::', TshopOpenTime, TshopCloseTime);
-    // console.log(
-    //   'isbetween',
-    //   value.isBetween(TshopOpenTime, TshopCloseTime, 'minutes')
-    // );
+  //   // Check if tempVal is between date1 and date2
+  //   // console.log('VALUE::', value);
+  //   // console.log('TS VALUE::', TshopOpenTime, TshopCloseTime);
+  //   // console.log(
+  //   //   'isbetween',
+  //   //   value.isBetween(TshopOpenTime, TshopCloseTime, 'minutes')
+  //   // );
 
-    return (
-      value === null ||
-      !value.isValid() ||
-      value.isBetween(TshopOpenTime, TshopCloseTime, 'minutes')
-    );
-  };
+  //   return (
+  //     value === null ||
+  //     !value.isValid() ||
+  //     value.isBetween(TshopOpenTime, TshopCloseTime, 'minutes')
+  //   );
+  // };
 
-  const handleBreakOffTimeChange = (value: any) => {
-    // const TshopOpenTime = dayjs(getValues('shopOpenTime'));
-    // let TshopCloseTime = dayjs(getValues('shopCloseTime'));
-    const TshopOpenTime = dayjs(getValues('shopOpenTime'));
-    let TshopCloseTime = dayjs(getValues('shopCloseTime'));
-    const TbreakTime = dayjs(getValues('breakTime'));
-    console.log('🚀 ~ handleBreakInTimeChange ~ value:', value);
-    // const tempVal = moment(moment(value));
-    // const date1 = dayjs('Wed May 15 2024 10:00:00 GMT+0500');
-    // let date2 = dayjs('Wed May 15 2024 00:00:00 GMT+0500');
-    const hour1 = TshopOpenTime.hour();
-    const hour2 = TshopCloseTime.hour();
-    if (hour1 > hour2) {
-      TshopCloseTime = TshopCloseTime.add(1, 'day');
-    }
+  // const handleBreakOffTimeChange = (value: any) => {
+  //   // const TshopOpenTime = dayjs(getValues('shopOpenTime'));
+  //   // let TshopCloseTime = dayjs(getValues('shopCloseTime'));
+  //   const TshopOpenTime = dayjs(getValues('shopOpenTime'));
+  //   let TshopCloseTime = dayjs(getValues('shopCloseTime'));
+  //   const TbreakTime = dayjs(getValues('breakTime'));
+  //   console.log('🚀 ~ handleBreakInTimeChange ~ value:', value);
+  //   // const tempVal = moment(moment(value));
+  //   // const date1 = dayjs('Wed May 15 2024 10:00:00 GMT+0500');
+  //   // let date2 = dayjs('Wed May 15 2024 00:00:00 GMT+0500');
+  //   const hour1 = TshopOpenTime.hour();
+  //   const hour2 = TshopCloseTime.hour();
+  //   if (hour1 > hour2) {
+  //     TshopCloseTime = TshopCloseTime.add(1, 'day');
+  //   }
 
-    // Check if tempVal is between date1 and date2
-    console.log('VALUE::', value);
-    console.log('TS VALUE::', TshopOpenTime, TshopCloseTime);
-    console.log(
-      'isbetween',
-      value.isBetween(TshopOpenTime, TshopCloseTime, 'minutes') &&
-        value.isAfter(TbreakTime)
-    );
+  //   // Check if tempVal is between date1 and date2
+  //   console.log('VALUE::', value);
+  //   console.log('TS VALUE::', TshopOpenTime, TshopCloseTime);
+  //   console.log(
+  //     'isbetween',
+  //     value.isBetween(TshopOpenTime, TshopCloseTime, 'minutes') &&
+  //       value.isAfter(TbreakTime)
+  //   );
 
-    return (
-      value === null ||
-      !value.isValid() ||
-      (value.isBetween(TshopOpenTime, TshopCloseTime, 'minutes') &&
-        value.isAfter(TbreakTime))
-    );
-  };
+  //   return (
+  //     value === null ||
+  //     !value.isValid() ||
+  //     (value.isBetween(TshopOpenTime, TshopCloseTime, 'minutes') &&
+  //       value.isAfter(TbreakTime))
+  //   );
+  // };
 
   /**
    * Handles the deletion of a work day from the list of work days.
@@ -212,7 +220,7 @@ function WorkDaysForm({
                       setShopOpenTime(e);
                     }}
                     id="shopInTimePicker"
-                    {...register('shopOpenTime', { required: true })}
+                    // {...register('shopOpenTime', { required: true })}
                   />
                   {errors.shopOpenTime && (
                     <ErrorSpanBox error="This field is required" />
@@ -227,14 +235,14 @@ function WorkDaysForm({
                       setShopCloseTime(e);
                     }}
                     id="shopOutTimePicker"
-                    {...register('shopCloseTime', { required: true })}
+                    // {...register('shopCloseTime', { required: true })}
                   />
                   {errors.shopCloseTime && (
                     <ErrorSpanBox error="This field is required" />
                   )}
                 </FormControl>
               </div>
-              <div className="FormFields">
+              {/* <div className="FormFields">
                 <FormControl>
                   <TimePicker
                     timePickerLabel="BreakIn Time"
@@ -272,7 +280,7 @@ function WorkDaysForm({
                     />
                   )}
                 </FormControl>
-              </div>
+              </div> */}
             </>
           )}
           <div className="mt-3">
@@ -295,8 +303,8 @@ function WorkDaysForm({
               <th>Day</th>
               <th>Open</th>
               <th>Close</th>
-              <th>Break</th>
-              <th>Break End</th>
+              {/* <th>Break</th> */}
+              {/* <th>Break End</th> */}
               <th>Action</th>
             </tr>
           </thead>
@@ -307,7 +315,7 @@ function WorkDaysForm({
                   <th>{d.day}</th>
                   <td> {d.openTime?.format('h:mm A') || '--'} </td>
                   <td> {d.closeTime?.format('h:mm A') || '--'} </td>
-                  <td>
+                  {/* <td>
                     {d.breakTime && d.breakTime?.isValid()
                       ? d.breakTime?.format('h:mm A')
                       : '--'}
@@ -317,7 +325,7 @@ function WorkDaysForm({
                     {d.breakOffTime && d.breakOffTime?.isValid()
                       ? d.breakOffTime?.format('h:mm A')
                       : '--'}
-                  </td>
+                  </td> */}
                   <td>
                     <Button
                       color="warning"

@@ -5,8 +5,8 @@ import GridViewOutlinedIcon from '@mui/icons-material/GridViewOutlined';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
-import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
 import ManageAccountsOutlinedIcon from '@mui/icons-material/ManageAccountsOutlined';
+import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
 import PeopleOutlineOutlinedIcon from '@mui/icons-material/PeopleOutlineOutlined';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import QuestionAnswerOutlinedIcon from '@mui/icons-material/QuestionAnswerOutlined';
@@ -31,9 +31,9 @@ import ArrowDown from '../icons/ArrowDown';
 import ArrowUp from '../icons/ArrowUp';
 import CategoryIcon from '../icons/CategoryIcon';
 import OrderIcon from '../icons/OrderIcon';
+import VoucherIcon from '../icons/VoucherIcon';
 import ProviderIcon from '../icons/providerIcon';
 import VisitIcon from '../icons/visitIcon';
-import VoucherIcon from '../icons/VoucherIcon';
 
 const links = [
   {
@@ -129,7 +129,8 @@ const links = [
   {
     name: 'Branches',
     path: 'branches',
-    permission: 'Branch List',
+    // permission: 'Branch List',
+    permission: 'Banners List',
     icon: <CorporateFareIcon className="w-[17px]" />,
   },
   {
@@ -178,7 +179,9 @@ function Sidebar() {
   const [list, setList] = useState<any>(null);
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
   const authState: any = useAppSelector((state: any) => state?.authState);
-  const dataRole = useAppSelector((state: any) => state);
+  const permissions = useAppSelector(
+    (state: any) => state?.persistedReducer?.roleState?.role?.permissions
+  );
 
   // const dispatch = useAppDispatch();
   // const logOut = () => {
@@ -279,8 +282,8 @@ function Sidebar() {
   }
 
   useEffect(() => {
-    defineRules(dataRole?.persistedReducer?.roleState?.role?.permissions);
-    if (dataRole?.persistedReducer?.roleState?.role?.permissions) {
+    defineRules(permissions);
+    if (permissions) {
       const tempList = links.filter((el) => {
         if (el.name === MODULE_EMPLOYEES) {
           if (appItems.employeeLimit <= 0) {

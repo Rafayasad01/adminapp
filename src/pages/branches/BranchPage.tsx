@@ -137,7 +137,7 @@ function BranchPage() {
   };
 
   useEffect(() => {
-    // setIsLoader(true);
+    setIsLoader(true);
     if (listingRolePermission(dataRole, 'Employee List')) {
       branchService
         .getListService(authState?.shopTenantDetails.tenant, page, rowsPerPage)
@@ -381,79 +381,91 @@ function BranchPage() {
             </div>
             <div className="col-span-10">
               <div className="flex flex-row items-center justify-end gap-3">
-                <div className="flex-col px-2">
-                  <div>
-                    <p className="text-sm font-semibold ">Total Employees</p>
-                  </div>
-                  <div className="mt-4 flex w-full items-center justify-center">
-                    <Badge
-                      color="success"
-                      max={999}
-                      showZero
-                      badgeContent={Number(maxTotalEmployees) ?? 0}
-                    >
-                      <PeopleOutlineIcon />
-                    </Badge>
-                    {/* <span className=" w-full text-sm">
+                {list?.length > 0 && (
+                  <>
+                    <div className="flex-col px-2">
+                      <div>
+                        <p className="text-sm font-semibold ">
+                          Total Employees
+                        </p>
+                      </div>
+                      <div className="mt-4 flex w-full items-center justify-center">
+                        <Badge
+                          color="success"
+                          max={999}
+                          showZero
+                          badgeContent={
+                            maxTotalEmployees ? Number(maxTotalEmployees) : 0
+                          }
+                        >
+                          <PeopleOutlineIcon />
+                        </Badge>
+                        {/* <span className=" w-full text-sm">
                       {maxTotalEmployees ?? '0'}
                     </span> */}
-                  </div>
-                </div>
-                <div className="flex-col items-center justify-center">
-                  <p className="text-sm font-semibold">
-                    Employees Distribution
-                  </p>
-                  <div className="mt-4 flex items-start justify-center">
-                    <Badge
-                      showZero
-                      max={999}
-                      color="error"
-                      badgeContent={
-                        Number(authState?.user?.maxEmployeeLimit) ?? 0
-                      }
-                    >
-                      <PeopleOutlineIcon />
-                    </Badge>{' '}
-                    <span className="mx-4"> - </span>
-                    <Badge
-                      showZero
-                      max={999}
-                      color="success"
-                      badgeContent={Number(maxTotalEmployeeLimit) ?? 0}
-                    >
-                      <PeopleOutlineIcon />
-                    </Badge>
-                    {/* <span className="w-full text-sm">
+                      </div>
+                    </div>
+                    <div className="flex-col items-center justify-center">
+                      <p className="text-sm font-semibold">
+                        Employees Distribution
+                      </p>
+                      <div className="mt-4 flex items-start justify-center">
+                        <Badge
+                          showZero
+                          max={999}
+                          color="error"
+                          badgeContent={
+                            Number(authState?.user?.maxEmployeeLimit) ?? 0
+                          }
+                        >
+                          <PeopleOutlineIcon />
+                        </Badge>{' '}
+                        <span className="mx-4"> - </span>
+                        <Badge
+                          showZero
+                          max={999}
+                          color="success"
+                          badgeContent={Number(maxTotalEmployeeLimit) ?? 0}
+                        >
+                          <PeopleOutlineIcon />
+                        </Badge>
+                        {/* <span className="w-full text-sm">
                       {authState.user.maxEmployeeLimit} -{' '}
                       {maxTotalEmployeeLimit || 0}
                     </span> */}
-                  </div>
-                </div>
-                <div className=" flex-col items-center justify-center px-2">
-                  <p className="text-sm font-semibold">Branches Distribution</p>
-                  <div className="mt-4 flex items-center justify-center">
-                    <Badge
-                      showZero
-                      max={999}
-                      color="success"
-                      badgeContent={Number(authState?.user?.branchLimit) ?? 0}
-                    >
-                      <ApartmentIcon />
-                    </Badge>
-                    <span className="mx-4"> - </span>
-                    <Badge
-                      showZero
-                      max={999}
-                      color="success"
-                      badgeContent={Number(total) ?? 0}
-                    >
-                      <ApartmentIcon />
-                    </Badge>
-                    {/* <span className="badge badge-success btn-black-outline w-full text-sm">
+                      </div>
+                    </div>
+                    <div className=" flex-col items-center justify-center px-2">
+                      <p className="text-sm font-semibold">
+                        Branches Distribution
+                      </p>
+                      <div className="mt-4 flex items-center justify-center">
+                        <Badge
+                          showZero
+                          max={999}
+                          color="success"
+                          badgeContent={
+                            Number(authState?.user?.branchLimit) ?? 0
+                          }
+                        >
+                          <ApartmentIcon />
+                        </Badge>
+                        <span className="mx-4"> - </span>
+                        <Badge
+                          showZero
+                          max={999}
+                          color="success"
+                          badgeContent={Number(total) ?? 0}
+                        >
+                          <ApartmentIcon />
+                        </Badge>
+                        {/* <span className="badge badge-success btn-black-outline w-full text-sm">
                       {authState.user.branchLimit} - {total}
                     </span> */}
-                  </div>
-                </div>
+                      </div>
+                    </div>
+                  </>
+                )}
                 <FormControl
                   className="search-grey-outline placeholder-grey w-48 2xl:w-60"
                   variant="filled"
@@ -527,7 +539,7 @@ function BranchPage() {
               </thead>
               <tbody>
                 {list &&
-                  list.map((item: any, index: number) => {
+                  list?.map((item: any, index: number) => {
                     return (
                       <tr key={index}>
                         <td>

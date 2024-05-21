@@ -2,8 +2,11 @@ import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
-import React from 'react';
+import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined';
+import RadioButtonUncheckedOutlinedIcon from '@mui/icons-material/RadioButtonUncheckedOutlined';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { FormControlLabel, FormLabel, Radio, RadioGroup } from '@mui/material';
 
 import TextField from '@mui/material/TextField';
 import '../../assets/css/PopupStyle.css';
@@ -26,6 +29,7 @@ function NotificationCreatePopup({
   setOpenFormDialog,
   callback,
 }: NotificationCreatePopupProps) {
+  const [notificationType, setNotificationType] = useState('Customers');
   const {
     register,
     handleSubmit,
@@ -33,11 +37,16 @@ function NotificationCreatePopup({
   } = useForm<Notification>();
   const onSubmit = (data: Notification) => {
     setOpenFormDialog(false);
+    data.notificationType = notificationType;
     callback(data);
   };
 
   const handleFormClose = () => {
     setOpenFormDialog(false);
+  };
+
+  const handleUserChange = (event: any) => {
+    setNotificationType(event.target.value);
   };
 
   return (
@@ -83,7 +92,7 @@ function NotificationCreatePopup({
             </div>
             <div className="FormField">
               <FormControl className="FormControl" variant="standard">
-                <label className="FormLabel">
+                <label className="FormLabel mt-3">
                   Message{' '}
                   <span className="SubLabel">Write 05-250 Characters</span>
                 </label>
@@ -110,6 +119,61 @@ function NotificationCreatePopup({
                   <ErrorSpanBox error={errors.message?.message} />
                 )}
               </FormControl>
+            </div>
+            <div className="mt-3 flex items-center justify-between">
+              <div>
+                <FormControl className="">
+                  <FormLabel
+                    id="demo-row-radio-buttons-group-label"
+                    className="font-open-sans text-sm text-secondary"
+                  >
+                    User Type
+                  </FormLabel>
+                  <RadioGroup
+                    row
+                    aria-labelledby="demo-row-radio-buttons-group-label"
+                    name="row-radio-buttons-group"
+                    value={notificationType ?? ''}
+                    onClick={handleUserChange}
+                  >
+                    <FormControlLabel
+                      sx={{
+                        color: '#6A6A6A',
+                        fontFamily: 'Open Sans',
+                        fonWeight: 400,
+                        fonSize: '14px',
+                      }}
+                      // disabled={FALSE}
+                      value="Customers"
+                      control={
+                        <Radio
+                          className="text-sm text-[#1D1D1D]"
+                          icon={<RadioButtonUncheckedOutlinedIcon />}
+                          checkedIcon={<CheckCircleOutlinedIcon />}
+                        />
+                      }
+                      label="Customers"
+                    />
+                    <FormControlLabel
+                      sx={{
+                        color: '#6A6A6A',
+                        fontFamily: 'Open Sans',
+                        fonWeight: 400,
+                        fonSize: '14px',
+                      }}
+                      value="StaffUsers"
+                      control={
+                        <Radio
+                          className="text-[#1D1D1D]"
+                          icon={<RadioButtonUncheckedOutlinedIcon />}
+                          checkedIcon={<CheckCircleOutlinedIcon />}
+                        />
+                      }
+                      label="Staff Users"
+                    />
+                  </RadioGroup>
+                </FormControl>
+              </div>
             </div>
           </div>
           <div className="FormFooter">

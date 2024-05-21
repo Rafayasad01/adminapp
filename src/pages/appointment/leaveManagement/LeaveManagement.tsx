@@ -6,6 +6,8 @@ import Dialog from '@mui/material/Dialog';
 import Divider from '@mui/material/Divider';
 import FormControl from '@mui/material/FormControl';
 import ImageOutlinedIcon from '@mui/icons-material/ImageOutlined';
+import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
+import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutlineOutlined';
 import PictureAsPdfOutlinedIcon from '@mui/icons-material/PictureAsPdfOutlined';
 import ArticleOutlinedIcon from '@mui/icons-material/ArticleOutlined';
 import IconButton from '@mui/material/IconButton';
@@ -445,7 +447,8 @@ function LeaveManagement() {
                                 } btn-icon`}
                                 onClick={() => handleLeave(item.id, 'Rejected')}
                               >
-                                Reject
+                                <CancelOutlinedIcon />
+                                {/* Reject */}
                               </Button>
                             </div>
                             <div className="">
@@ -463,7 +466,8 @@ function LeaveManagement() {
                                 } btn-icon`}
                                 onClick={() => handleLeave(item.id, 'Approved')}
                               >
-                                Approve
+                                <CheckCircleOutlineOutlinedIcon />
+                                {/* Approve */}
                               </Button>
                             </div>
                           </div>

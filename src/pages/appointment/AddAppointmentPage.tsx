@@ -886,9 +886,6 @@ export default function AddAppointmentPage() {
             }
           }
           setTmpId((prevId: any) => prevId + 1);
-          const newTime = dayjs(getValues('appointmentDate'))
-            .set('hours', dayjs(appointmentTime).hour())
-            .set('minute', dayjs(appointmentTime).minute());
           const newData = {
             id: tmpId,
             appointmentTime: time,
