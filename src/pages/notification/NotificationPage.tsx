@@ -140,20 +140,31 @@ function NotificationPage() {
   }, [null]);
 
   const createFormHandler = (data: any) => {
-    const formData = new FormData();
-    formData.append('title', data.title);
-    formData.append('message', data.message);
-    formData.append('tenant', authState.user.tenant);
-    formData.append('userId', authState.user.id);
+    // const formData = new FormData();
+    setIsLoader(true);
+    const obj = {
+      ...data,
+      tenant: authState.user.tenant,
+      userId: authState.user.id,
+    };
+    // console.log('🚀 ~ createFormHandler ~ obj:', obj);
+    // formData.append('title', data.title);
+    // formData.append('message', data.message);
+    // formData.append('tenant', authState.user.tenant);
+    // formData.append('userId', authState.user.id);
     notificationService
-      .sentService(formData)
+      .sentService(obj)
       .then((item) => {
         if (item.data.success) {
+          setIsLoader(false);
           // list.push(item.data.data);
           // setList(list);
+        } else {
+          setIsLoader(false);
         }
       })
       .catch((err) => {
+        setIsLoader(false);
         setAlertMsg(err.message);
         setAlertSeverty('error');
         setAlertPopup(true);

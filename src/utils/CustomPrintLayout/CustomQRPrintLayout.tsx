@@ -19,7 +19,7 @@ const CustomPrintLayouts = forwardRef<any, any>(
         <div ref={ref}>
           <div className="print-qr iv-padding">
             <div className="print-barccode flex w-full items-center justify-center text-center">
-              <QRCodeSVG level="M" size={500} value={qrCodeValue} />
+              <QRCodeSVG level="M" size={365} value={qrCodeValue} />
             </div>
           </div>
         </div>
