@@ -27,8 +27,8 @@ type NotificationCreatePopupProps = {
 function NotificationCreatePopup({
   openFormDialog,
   setOpenFormDialog,
-  callback,
-}: NotificationCreatePopupProps) {
+}: // callback,
+NotificationCreatePopupProps) {
   const [notificationType, setNotificationType] = useState('Customers');
   const {
     register,
@@ -38,7 +38,7 @@ function NotificationCreatePopup({
   const onSubmit = (data: Notification) => {
     setOpenFormDialog(false);
     data.notificationType = notificationType;
-    callback(data);
+    // callback(data);
   };
 
   const handleFormClose = () => {
@@ -71,7 +71,7 @@ function NotificationCreatePopup({
                   className="FormInput"
                   {...register('title', {
                     required: true,
-                    pattern: PATTERN.CHAR_SPACE_DASH,
+                    pattern: PATTERN.CHAR_SPEC_NUM_DASH,
                     validate: (value) => value.length <= 150,
                   })}
                   type="text"
