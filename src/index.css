@@ -149,7 +149,7 @@ table .avatar {
 }
 
 table .avatar img {
-  @apply mr-2.5 h-10 w-10 rounded-full object-cover;
+  @apply mr-2.5 h-10 w-10 rounded-full object-contain;
 }
 
 table.table-border > thead > tr > th {
@@ -1886,7 +1886,7 @@ main .container:nth-child(3){
 .all-categories .categories-list {
   display: flex;
   flex-wrap: wrap;
-  column-gap: 20px;
+  column-gap: 25px;
   row-gap: 25px;
 }
 
@@ -2500,4 +2500,24 @@ main.min-h-screen.w-full.flex-grow.bg-gray-50.p-3.MuiBox-root.css-0 {
 /* Spnnier Speed */
 .css-18lrjg1-MuiCircularProgress-root {
   animation: animation-61bdi0 0.4s linear infinite !important;
+}
+
+.css-1dyqkes.Appointment-appointment {
+  background-color: transparent !important;
+}
+.css-sizvqo-MuiTableCell-root {
+  border-bottom: 0 !important;
+}
+
+.css-t692qi.Appointment-appointment {
+  background-color: transparent !important;
+}
+
+.custom-class-app {
+  top: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  margin: auto;
+  height: fit-content;
 }

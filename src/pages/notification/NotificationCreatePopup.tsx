@@ -71,7 +71,7 @@ function NotificationCreatePopup({
                   className="FormInput"
                   {...register('title', {
                     required: true,
-                    pattern: PATTERN.CHAR_SPACE_DASH,
+                    pattern: PATTERN.CHAR_SPEC_NUM_DASH,
                     validate: (value) => value.length <= 150,
                   })}
                   type="text"

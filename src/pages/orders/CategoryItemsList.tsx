@@ -69,12 +69,12 @@ const CategoryItemsList: React.FC<CategoryItemsListProps> = ({
             />
           </button>
           <div className="flex flex-wrap items-center justify-between">
-            <h5 className="name">{item.name}</h5>
-            <h6 className="price">
+            <span className="name text-base">{item.name}</span>
+            <span className="price text-[13px]">
               {CURRENCY_PREFIX} {item.price}
-            </h6>
+            </span>
             <button
-              className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium btn-add css-sghohy-MuiButtonBase-root-MuiButton-root"
+              className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium btn-add css-sghohy-MuiButtonBase-root-MuiButton-root bg-primary"
               tabIndex={0}
               onClick={() => handleItemSelected(item)}
               type="button"
@@ -110,12 +110,12 @@ const CategoryItemsList: React.FC<CategoryItemsListProps> = ({
               />
             </button>
             <div className="flex flex-wrap items-center justify-between">
-              <h5 className="name">{item.name}</h5>
-              <h6 className="price">
+              <span className="name text-base">{item.name}</span>
+              <span className="price text-[13px]">
                 {CURRENCY_PREFIX} {item.price}
-              </h6>
+              </span>
               <button
-                className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium btn-add css-sghohy-MuiButtonBase-root-MuiButton-root"
+                className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium btn-add css-sghohy-MuiButtonBase-root-MuiButton-root bg-primary"
                 tabIndex={0}
                 onClick={() => handleItemSelected(item)}
                 type="button"

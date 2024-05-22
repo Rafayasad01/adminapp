@@ -528,7 +528,7 @@ function EmployeeServices() {
                             : '--'}
                         </td>
                         <td>
-                          {item.storeServiceCategoryItem.isActive ? (
+                          {item.isActive ? (
                             <span className="badge badge-success">Enabled</span>
                           ) : (
                             <span className="badge badge-danger">Disabled</span>

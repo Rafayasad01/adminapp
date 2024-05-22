@@ -1,7 +1,7 @@
 // import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 // import MoreVertIcon from '@mui/icons-material/MoreVert';
 import SearchIcon from '@mui/icons-material/Search';
-import Button from '@mui/material/Button';
+// import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import Divider from '@mui/material/Divider';
 import FormControl from '@mui/material/FormControl';
@@ -433,42 +433,42 @@ function LeaveManagement() {
                         <td>
                           <div className="flex flex-row-reverse">
                             <div className="mx-3">
-                              <Button
+                              <IconButton
                                 disabled={
                                   item.status === 'Approved' ||
                                   item.status === 'Rejected'
                                 }
-                                variant="contained"
                                 className={`${
-                                  item.status === 'Approved' ||
-                                  item.status === 'Rejected'
-                                    ? 'btn-grey-outline'
-                                    : 'btn-black-outline'
+                                  item.status === 'Approved'
+                                    ? 'text-gray'
+                                    : item.status === 'Rejected'
+                                    ? 'text-[red]'
+                                    : 'text-black'
                                 } btn-icon`}
                                 onClick={() => handleLeave(item.id, 'Rejected')}
                               >
                                 <CancelOutlinedIcon />
                                 {/* Reject */}
-                              </Button>
+                              </IconButton>
                             </div>
                             <div className="">
-                              <Button
+                              <IconButton
                                 disabled={
                                   item.status === 'Approved' ||
                                   item.status === 'Rejected'
                                 }
-                                variant="contained"
                                 className={`${
-                                  item.status === 'Approved' ||
                                   item.status === 'Rejected'
-                                    ? 'btn-grey-fill'
-                                    : 'btn-black-fill'
+                                    ? 'text-gray'
+                                    : item.status === 'Approved'
+                                    ? 'text-[green]'
+                                    : 'text-black'
                                 } btn-icon`}
                                 onClick={() => handleLeave(item.id, 'Approved')}
                               >
                                 <CheckCircleOutlineOutlinedIcon />
                                 {/* Approve */}
-                              </Button>
+                              </IconButton>
                             </div>
                           </div>
                         </td>

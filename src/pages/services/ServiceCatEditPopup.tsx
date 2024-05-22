@@ -190,7 +190,12 @@ function ServiceCatEditPopup({
                   </FormControl>
                 </div>
                 <div className="FormField">
-                  <label className="FormLabel">Upload Image</label>
+                  <label className="FormLabel">
+                    Upload Image
+                    <span className="SubLabel">
+                      Image should be 1080px x 1080px
+                    </span>
+                  </label>
                   <div className="ImageBox">
                     <input
                       accept="image/*"
