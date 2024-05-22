@@ -260,8 +260,8 @@ const AllAppointment = ({
     [setData, data]
   );
 
-  const handleVisibilityChange = (visible: any) => {
-    // console.log('visible', visible);
+  const handleVisibilityChange = (visible: boolean) => {
+    console.log('visible', visible);
     if (!visible) {
       setIsTooltipOpen(false);
     } else {
@@ -401,7 +401,7 @@ const AllAppointment = ({
     if (!restProps.data) {
       return null; // or handle the case where data is undefined
     }
-    console.log('🚀 ~ AppointmentContent ~ restProps:', restProps);
+    // console.log('🚀 ~ AppointmentContent ~ restProps:', restProps);
     const startDate = restProps?.data?.startDate;
     const endDate = restProps?.data?.endDate;
     const sdformat = dayjs(startDate);

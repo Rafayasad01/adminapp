@@ -27,8 +27,8 @@ type NotificationCreatePopupProps = {
 function NotificationCreatePopup({
   openFormDialog,
   setOpenFormDialog,
-}: // callback,
-NotificationCreatePopupProps) {
+  callback,
+}: NotificationCreatePopupProps) {
   const [notificationType, setNotificationType] = useState('Customers');
   const {
     register,
@@ -38,7 +38,7 @@ NotificationCreatePopupProps) {
   const onSubmit = (data: Notification) => {
     setOpenFormDialog(false);
     data.notificationType = notificationType;
-    // callback(data);
+    callback(data);
   };
 
   const handleFormClose = () => {

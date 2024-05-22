@@ -257,7 +257,7 @@ function OrderItemDetailPage() {
               </div>
               <div className="mx-4 my-2 flex justify-end">
                 <Button
-                  className="btn-black-fill rounded-lg"
+                  className="rounded-lg"
                   onClick={() => {
                     addInToCartHandler(itemId, 1);
                   }}

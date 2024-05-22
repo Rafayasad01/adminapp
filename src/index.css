@@ -149,7 +149,7 @@ table .avatar {
 }
 
 table .avatar img {
-  @apply mr-2.5 h-10 w-10 rounded-full object-cover;
+  @apply mr-2.5 h-10 w-10 rounded-full object-contain;
 }
 
 table.table-border > thead > tr > th {
@@ -1886,7 +1886,7 @@ main .container:nth-child(3){
 .all-categories .categories-list {
   display: flex;
   flex-wrap: wrap;
-  column-gap: 20px;
+  column-gap: 25px;
   row-gap: 25px;
 }
 
