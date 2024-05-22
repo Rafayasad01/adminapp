@@ -157,10 +157,20 @@ function NotificationPage() {
       .then((item) => {
         if (item.data.success) {
           setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: 'Sent your notification! Its processing now may succeed or fail. We will update you shortly.',
+            type: 'success',
+          });
           // list.push(item.data.data);
           // setList(list);
         } else {
           setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: 'Something went wrong',
+            type: 'error',
+          });
         }
       })
       .catch((err) => {

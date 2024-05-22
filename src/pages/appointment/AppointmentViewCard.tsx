@@ -50,6 +50,24 @@ const AppointmentViewCard = ({
   };
 
   useEffect(() => {
+    // Select the element
+    const element = document.querySelector('.MuiPaper-elevation8');
+
+    // Add the custom class
+    if (element) {
+      element.classList.add('custom-class-app');
+    }
+
+    // Clean-up function (optional)
+    return () => {
+      // Remove the class if needed
+      if (element) {
+        element.classList.remove('custom-class-app');
+      }
+    };
+  }, []); // Empty dependency array ensures this effect runs only once
+
+  useEffect(() => {
     if (appointmentData) {
       storeAppointmentService
         .getAppointmentById(appointmentData.id)
@@ -89,7 +107,8 @@ const AppointmentViewCard = ({
                 appointmentData?.status === APPOINTMENT_STATUS.CANCELLED ||
                 appointmentData?.status === APPOINTMENT_STATUS.COMPLETED ||
                 appointmentData?.status === APPOINTMENT_STATUS.RESCHEDULE ||
-                appointmentData?.status === APPOINTMENT_STATUS.PROCESSING
+                appointmentData?.status === APPOINTMENT_STATUS.PROCESSING ||
+                appointmentData?.status === APPOINTMENT_STATUS.MISSED
               }
               className="icon-btn mr-3.5 p-0"
               onClick={() => {
@@ -105,7 +124,8 @@ const AppointmentViewCard = ({
                 appointmentData?.status === APPOINTMENT_STATUS.CANCELLED ||
                 appointmentData?.status === APPOINTMENT_STATUS.COMPLETED ||
                 appointmentData?.status === APPOINTMENT_STATUS.RESCHEDULE ||
-                appointmentData?.status === APPOINTMENT_STATUS.PROCESSING
+                appointmentData?.status === APPOINTMENT_STATUS.PROCESSING ||
+                appointmentData?.status === APPOINTMENT_STATUS.MISSED
               }
               className="icon-btn mr-3.5 p-0"
               onClick={() => {
@@ -120,7 +140,8 @@ const AppointmentViewCard = ({
                 appointmentData?.status === APPOINTMENT_STATUS.CANCELLED ||
                 appointmentData?.status === APPOINTMENT_STATUS.COMPLETED ||
                 appointmentData?.status === APPOINTMENT_STATUS.RESCHEDULE ||
-                appointmentData?.status === APPOINTMENT_STATUS.PROCESSING
+                appointmentData?.status === APPOINTMENT_STATUS.PROCESSING ||
+                appointmentData?.status === APPOINTMENT_STATUS.MISSED
               }
               name="Reschedule"
               className="icon-btn mr-3.5 p-0"

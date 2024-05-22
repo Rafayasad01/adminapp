@@ -32,6 +32,7 @@ import { useAppSelector } from '../../redux/redux-hooks';
 import storeAppointmentService from '../../services/adminapp/adminStoreAppointment';
 import AppointmentViewCard from './AppointmentViewCard';
 import UpdateAppointmentPopup from './UpdateAppointmentPopup';
+import { APPOINTMENT_STATUS } from '../../utils/constants';
 
 dayjs.extend(weekOfYear);
 // dayjs.extend(timezone);
@@ -98,7 +99,7 @@ const AllAppointment = ({
 
   const getAllAppointments = async (appointmentDate: any, view: any) => {
     // console.log('🚀 ~ getAllAppointments ~ view:', view);
-    if (view === 'week') setIsLoader(true);
+    // if (view === 'week') setIsLoader(true);
     await storeAppointmentService
       .getAllAppointments(appointmentDate, view)
       .then((res: any) => {
@@ -259,7 +260,8 @@ const AllAppointment = ({
     [setData, data]
   );
 
-  const handleVisibilityChange = (visible: any) => {
+  const handleVisibilityChange = (visible: boolean) => {
+    console.log('visible', visible);
     if (!visible) {
       setIsTooltipOpen(false);
     } else {
@@ -370,30 +372,56 @@ const AllAppointment = ({
         });
       });
   };
+  const appColor = (status: any) => {
+    if (
+      status === APPOINTMENT_STATUS.NEW ||
+      status === APPOINTMENT_STATUS.PROCESSING
+    ) {
+      return 'bg-blue-700';
+    }
+    if (
+      status === APPOINTMENT_STATUS.COMPLETED ||
+      status === APPOINTMENT_STATUS.DONE
+    ) {
+      return 'bg-green-700';
+    }
+    if (status === APPOINTMENT_STATUS.RESCHEDULE) {
+      return 'bg-grey-700';
+    }
+    if (
+      status === APPOINTMENT_STATUS.CANCELLED ||
+      status === APPOINTMENT_STATUS.MISSED
+    ) {
+      return 'bg-red-700';
+    }
+    return null;
+  };
 
-  // const AppointmentContent = ({ style, ...restProps }: any) => {
-  //   if (!restProps.data) {
-  //     return null; // or handle the case where data is undefined
-  //   }
-  //   const startDate = restProps?.data?.startDate;
-  //   const endDate = restProps?.data?.endDate;
-  //   const sdformat = dayjs(startDate);
-  //   const edformat = dayjs(endDate);
-  //   return (
-  //     <Appointments.AppointmentContent className="custom-appo" {...restProps}>
-  //       q
-  //       <div className="w-full">
-  //         <div className="flex w-full flex-wrap items-center justify-between">
-  //           <div className="w-[50%] truncate">{restProps?.data?.title}</div>
-  //           <div className="rounded-full">unpaid</div>
-  //         </div>
-  //         <div className="">{`${sdformat.format('HH:mm A')} - ${edformat.format(
-  //           'HH:mm A'
-  //         )}`}</div>
-  //       </div>
-  //     </Appointments.AppointmentContent>
-  //   );
-  // };
+  const AppointmentContent = ({ ...restProps }: any) => {
+    if (!restProps.data) {
+      return null; // or handle the case where data is undefined
+    }
+    // console.log('🚀 ~ AppointmentContent ~ restProps:', restProps);
+    const startDate = restProps?.data?.startDate;
+    const endDate = restProps?.data?.endDate;
+    const sdformat = dayjs(startDate);
+    const edformat = dayjs(endDate);
+    return (
+      <Appointments.AppointmentContent
+        className={`custom-appo ${appColor(restProps.data.status)}`}
+        {...restProps}
+      >
+        <div className="w-full">
+          <div className="flex w-full flex-wrap items-center justify-between">
+            <div className="w-[50%] truncate">{restProps?.data?.title}</div>
+          </div>
+          <div className="">{`${sdformat.format('HH:mm A')} - ${edformat.format(
+            'HH:mm A'
+          )}`}</div>
+        </div>
+      </Appointments.AppointmentContent>
+    );
+  };
 
   const getRange = (date: any, view: any) => {
     if (view === 'Month') {
@@ -579,9 +607,7 @@ const AllAppointment = ({
         // timeTableCellComponent={CustomTimeTableCell}
         // dayScaleCellComponent={CustomDayScaleCell}
         />
-        <Appointments
-        // appointmentContentComponent={AppointmentContent}
-        />
+        <Appointments appointmentContentComponent={AppointmentContent} />
         <Resources data={resources} mainResourceName="priorityId" />
         <IntegratedGrouping />
         <IntegratedEditing />
