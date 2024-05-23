@@ -1,15 +1,15 @@
 /* eslint-disable prettier/prettier */
-import CorporateFareIcon from '@mui/icons-material/CorporateFare';
+// import CorporateFareIcon from '@mui/icons-material/CorporateFare';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import GridViewOutlinedIcon from '@mui/icons-material/GridViewOutlined';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
-import ManageAccountsOutlinedIcon from '@mui/icons-material/ManageAccountsOutlined';
+// import ManageAccountsOutlinedIcon from '@mui/icons-material/ManageAccountsOutlined';
 import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
 import PeopleOutlineOutlinedIcon from '@mui/icons-material/PeopleOutlineOutlined';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
-import QuestionAnswerOutlinedIcon from '@mui/icons-material/QuestionAnswerOutlined';
+// import QuestionAnswerOutlinedIcon from '@mui/icons-material/QuestionAnswerOutlined';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import SplitscreenOutlinedIcon from '@mui/icons-material/SplitscreenOutlined';
 import TwitterIcon from '@mui/icons-material/Twitter';
@@ -29,7 +29,7 @@ import CAN, { defineRules } from '../../services/permissions/permissions';
 import { MODULE_EMPLOYEES } from '../../utils/constants';
 import ArrowDown from '../icons/ArrowDown';
 import ArrowUp from '../icons/ArrowUp';
-import CategoryIcon from '../icons/CategoryIcon';
+// import CategoryIcon from '../icons/CategoryIcon';
 import OrderIcon from '../icons/OrderIcon';
 import VoucherIcon from '../icons/VoucherIcon';
 import ProviderIcon from '../icons/providerIcon';
@@ -66,12 +66,12 @@ const links = [
         permission: 'Category List',
         icon: <VisitIcon />,
       },
-      {
-        name: 'Leave management',
-        path: 'store-appointment/leaves-management',
-        permission: 'Category List',
-        icon: <ManageAccountsOutlinedIcon fontSize="inherit" />,
-      },
+      // {
+      //   name: 'Leave management',
+      //   path: 'store-appointment/leaves-management',
+      //   permission: 'Category List',
+      //   icon: <ManageAccountsOutlinedIcon fontSize="inherit" />,
+      // },
       // {
       //   name: 'Ratings',
       //   path: 'store-appointment/ratings',
@@ -86,12 +86,12 @@ const links = [
     permission: 'Appointment Parent',
     icon: <Inventory2OutlinedIcon fontSize="inherit" />,
     childLinks: [
-      {
-        name: 'Products',
-        path: 'store-product/product',
-        permission: 'Category List',
-        icon: <CategoryIcon />,
-      },
+      // {
+      //   name: 'Products',
+      //   path: 'store-product/product',
+      //   permission: 'Category List',
+      //   icon: <CategoryIcon />,
+      // },
       {
         name: 'Orders',
         path: 'store-product/orders',
@@ -112,12 +112,12 @@ const links = [
     permission: 'Appointment Parent',
     icon: <PersonOutlineOutlinedIcon fontSize="inherit" />,
     childLinks: [
-      {
-        name: 'App User',
-        path: 'user/app-user/list',
-        permission: 'Customer List',
-        icon: <PersonOutlineOutlinedIcon fontSize="inherit" />,
-      },
+      // {
+      //   name: 'App User',
+      //   path: 'user/app-user/list',
+      //   permission: 'Customer List',
+      //   icon: <PersonOutlineOutlinedIcon fontSize="inherit" />,
+      // },
       {
         name: 'Admin Users',
         path: 'user/employees',
@@ -126,25 +126,25 @@ const links = [
       },
     ],
   },
-  {
-    name: 'Branches',
-    path: 'branches',
-    // permission: 'Branch List',
-    permission: 'Banners List',
-    icon: <CorporateFareIcon className="w-[17px]" />,
-  },
+  // {
+  //   name: 'Branches',
+  //   path: 'branches',
+  //   // permission: 'Branch List',
+  //   permission: 'Banners List',
+  //   icon: <CorporateFareIcon className="w-[17px]" />,
+  // },
   {
     name: 'Banners',
     path: 'banners',
     permission: 'Banners List',
     icon: <ViewCarouselOutlinedIcon className="w-[17px]" />,
   },
-  {
-    name: 'FAQs',
-    path: 'faq',
-    permission: 'Notification List',
-    icon: <QuestionAnswerOutlinedIcon fontSize="inherit" />,
-  },
+  // {
+  //   name: 'FAQs',
+  //   path: 'faq',
+  //   permission: 'Notification List',
+  //   icon: <QuestionAnswerOutlinedIcon fontSize="inherit" />,
+  // },
   {
     name: 'Notifications',
     path: 'notification',

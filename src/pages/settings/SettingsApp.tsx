@@ -34,12 +34,12 @@ import {
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 import adminService from '../../services/adminapp/admin';
 import {
-  DOMAIN_PREFIX,
-  DOMAIN_PROTOCOL,
+  // DOMAIN_PREFIX,
+  // DOMAIN_PROTOCOL,
   INVALID_CHAR,
   MAX_LENGTH_EXCEEDED,
   PATTERN,
-  PH_MINI_LENGTH,
+  // PH_MINI_LENGTH,
   SOCIAL_MEDIA,
   VALIDATE_NON_NEGATIVE_NUM,
 } from '../../utils/constants';
@@ -505,7 +505,7 @@ function SettingsApp() {
                     <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
                   )}
                 </FormControl> */}
-                {authState?.user?.userType === 'ShopUser' && (
+                {/* {authState?.user?.userType === 'ShopUser' && (
                   <FormControl className="FormControl" variant="standard">
                     <label className="FormLabel">Employee Limit</label>
                     <Input
@@ -525,8 +525,8 @@ function SettingsApp() {
                       <ErrorSpanBox error={errors?.userLimit?.message} />
                     )}
                   </FormControl>
-                )}
-                <FormControl className="FormControl" variant="standard">
+                )} */}
+                {/* <FormControl className="FormControl" variant="standard">
                   <label className="FormLabel">Tax</label>
                   <Input
                     className="FormInput"
@@ -549,7 +549,7 @@ function SettingsApp() {
                   {errors.gstPercentage?.type === 'maxLength' && (
                     <ErrorSpanBox error={PH_MINI_LENGTH} />
                   )}
-                </FormControl>
+                </FormControl> */}
               </div>
               <div className="FormField">
                 {/* <FormControl className="FormControl" variant="standard">
@@ -571,7 +571,7 @@ function SettingsApp() {
                     <ErrorSpanBox error="Enter a valid amount" />
                   )}
                 </FormControl> */}
-                <FormControl className="FormControl" variant="standard">
+                {/* <FormControl className="FormControl" variant="standard">
                   <label className="FormLabel">Minimum Delivery Days</label>
                   <Input
                     id="minimumDeliveryTime"
@@ -594,7 +594,7 @@ function SettingsApp() {
                       error={errors?.minimumDeliveryTime?.message}
                     />
                   )}
-                </FormControl>
+                </FormControl> */}
                 {/* <FormControl className="FormControl" variant="standard">
                   <label className="FormLabel">Rider Delivery Charges</label>
                   <Input
@@ -639,7 +639,7 @@ function SettingsApp() {
                   )}
                 </FormControl> */}
               {/* </div> */}
-              <div className="FormFields">
+              {/* <div className="FormFields">
                 <FormControl className="FormControl" variant="standard">
                   <label className="FormLabel">Latitude</label>
                   <Input
@@ -686,9 +686,9 @@ function SettingsApp() {
                     <ErrorSpanBox error={errors?.longitude?.message} />
                   )}
                 </FormControl>
-              </div>
-              <div className="mt-3 flex items-center justify-between gap-4">
-                <div className="w-full">
+              </div> */}
+              <div className="flex items-center justify-between gap-4">
+                {/* <div className="w-full">
                   <FormControl className="FormControl" variant="standard">
                     <label className="FormLabel">
                       Attendance Distance
@@ -716,7 +716,7 @@ function SettingsApp() {
                       />
                     )}
                   </FormControl>
-                </div>
+                </div> */}
                 <div className="w-full">
                   <TimePicker
                     timePickerLabel="Shop Time In"
@@ -736,7 +736,7 @@ function SettingsApp() {
                   />
                 </div>
               </div>
-              <div className="FormField mb-4">
+              {/* <div className="FormField mb-4">
                 <FormControl className="FormControl" variant="standard">
                   <label className="FormLabel mt-2">Domain</label>
                   <Input
@@ -753,7 +753,7 @@ function SettingsApp() {
                     disabled
                   />
                 </FormControl>
-              </div>
+              </div> */}
               <div className="FormField">
                 <FormControlLabel
                   control={

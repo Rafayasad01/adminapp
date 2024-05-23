@@ -50,6 +50,10 @@ function MapAddress({ address, zoom, setValue, getValues }: MapAddressProps) {
       geocoder.geocode({ address }, (results, status: any) => {
         if (status === 'OK' && status !== 'ZERO_RESULTS') {
           setIsError(false);
+          if (!results) {
+            setIsError(true);
+            return;
+          }
           const { location } = results[0].geometry;
           if (location && location.lat() && location.lng()) {
             new google.maps.Marker({

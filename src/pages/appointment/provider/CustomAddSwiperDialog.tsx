@@ -21,7 +21,6 @@ import CustomWorkDaysForm from '../../../components/common/CustomWorkDaysForm';
 import ErrorSpanBox from '../../../components/common/ErrorSpanBox';
 import CustomTimePicker from '../../../components/common/TimePicker';
 import {
-  BARBER_SERVICES_AMOUNT,
   INVALID_CHAR,
   MAX_LENGTH_EXCEEDED,
   PATTERN,
@@ -549,8 +548,8 @@ function CustomSwiperDialog({
                 <span className="Title">{DialogSliderTwo}</span>
               </div>
             </div>
-            <div className="FormBody">
-              <div className="FormFields">
+            <div className="FormBody mt-3">
+              <div className="flex items-center justify-center">
                 <FormControl className="FormControl" variant="standard">
                   <CustomDropDown
                     // validateRequired
@@ -579,9 +578,23 @@ function CustomSwiperDialog({
                     inputTitle="Select Services"
                   />
                 </FormControl>
+                <FormControl className="FormControl" variant="standard">
+                  <CustomInputBox
+                    pattern={PATTERN.ONLY_NUM}
+                    maxLetterLimit={4}
+                    inputTitle="Service Time"
+                    subInputTitle="(Minutes)"
+                    placeholder="Enter time (Minutes)"
+                    id="mints"
+                    requiredType
+                    register={register}
+                    error={errors.mints}
+                    inputType="text"
+                  />
+                </FormControl>
               </div>
               <div className="mt-3 grid grid-cols-12 gap-4">
-                <div className="col-span-4">
+                {/* <div className="col-span-4">
                   <FormControl className="FormControl" variant="standard">
                     <CustomDropDown
                       // validateRequired
@@ -597,8 +610,8 @@ function CustomSwiperDialog({
                       defaultValue="Select Type"
                     />
                   </FormControl>
-                </div>
-                <div className="col-span-4">
+                </div> */}
+                {/* <div className="col-span-4">
                   <FormControl className="FormControl" variant="standard">
                     <CustomInputBox
                       pattern={PATTERN.ONLY_NUM}
@@ -612,23 +625,8 @@ function CustomSwiperDialog({
                       inputType="text"
                     />
                   </FormControl>
-                </div>
-                <div className="col-span-4">
-                  <FormControl className="FormControl" variant="standard">
-                    <CustomInputBox
-                      pattern={PATTERN.ONLY_NUM}
-                      maxLetterLimit={4}
-                      inputTitle="Service Time"
-                      subInputTitle="(Minutes)"
-                      placeholder="Enter time (Minutes)"
-                      id="mints"
-                      requiredType
-                      register={register}
-                      error={errors.mints}
-                      inputType="text"
-                    />
-                  </FormControl>
-                </div>
+                </div> */}
+                {/* <div className="col-span-4"></div> */}
               </div>
               <div className="ImageBox">
                 <label htmlFor="" className="ImageLabel mb-3 mt-4 w-full">

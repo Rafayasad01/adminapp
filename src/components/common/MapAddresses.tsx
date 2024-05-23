@@ -47,6 +47,9 @@ function MapAddresses({ addresses, zoom }: MapAddressesProps) {
       addresses.forEach((address) => {
         geocoder.geocode({ address }, (results, status: any) => {
           if (status === 'OK' && status !== 'ZERO_RESULTS') {
+            if (!results) {
+              return;
+            }
             const { location } = results[0].geometry;
             if (location && location.lat() && location.lng()) {
               const marker = new google.maps.Marker({
