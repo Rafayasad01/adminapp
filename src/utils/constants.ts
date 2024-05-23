@@ -81,6 +81,7 @@ export const TOKEN_STORE_KEY = 'APP_AUTH_TOKEN';
 export const SYSTEM_CONFIG_PREFIX = 'theme';
 export const SHOP_SCHEDULING_PREFIX = 'shop-schedule';
 export const CURRENCY_PREFIX = '$';
+export const PKR_CURRENCY_PREFIX = 'PKR';
 
 let TEXT_STORE_KEY = '';
 export const setText = (text: string) => {

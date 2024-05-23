@@ -233,7 +233,7 @@ function CartDetailsPage() {
                     Total Amount
                   </div>
                   <div className="text-right font-open-sans text-sm font-semibold text-neutral-900">
-                    ${viewData.totalAmount}
+                    PKR {viewData.totalAmount}
                   </div>
                 </div>
                 {/* <div className="flex items-center justify-between">
@@ -249,7 +249,7 @@ function CartDetailsPage() {
                     HST {viewData.gstPercentage}%
                   </div>
                   <div className="text-right font-open-sans text-sm font-semibold text-neutral-900">
-                    ${viewData.gstAmount}
+                    PKR {viewData.gstAmount}
                   </div>
                 </div>
               </div>

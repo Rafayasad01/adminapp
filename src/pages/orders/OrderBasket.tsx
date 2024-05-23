@@ -37,8 +37,9 @@ import appUserService from '../../services/adminapp/adminAppUser';
 import ordersService from '../../services/adminapp/adminOrders';
 import voucherService from '../../services/adminapp/adminVouchers';
 import {
-  CURRENCY_PREFIX,
+  // CURRENCY_PREFIX,
   ORDER_FULFILLMENT_METHOD,
+  PKR_CURRENCY_PREFIX,
 } from '../../utils/constants';
 import promiseHandler from '../../utils/helper';
 import { ValuesOf } from '../../utils/ts-helpers';
@@ -542,7 +543,7 @@ const OrderBasket = () => {
                             </div>
                           </td>
                           <td>
-                            {CURRENCY_PREFIX} {item.price}
+                            {PKR_CURRENCY_PREFIX} {item.price}
                           </td>
                           <td>
                             <IconButton
@@ -564,8 +565,7 @@ const OrderBasket = () => {
                             </IconButton>
                           </td>
                           <td>
-                            {' '}
-                            {CURRENCY_PREFIX}
+                            {PKR_CURRENCY_PREFIX}{' '}
                             {_.toNumber(
                               _.toNumber(item.price) * item.quantity
                             ).toFixed(2)}
@@ -941,7 +941,7 @@ const OrderBasket = () => {
                     Total Amount
                   </div>
                   <div className="font-open-sans text-sm font-bold text-neutral-900">
-                    ${totalAmount.toFixed(2)}
+                    {PKR_CURRENCY_PREFIX} {totalAmount.toFixed(2)}
                   </div>
                 </div>
                 <div className="flex items-center justify-between py-2">
@@ -954,7 +954,7 @@ const OrderBasket = () => {
                   <div className="font-open-sans text-sm font-bold text-neutral-900">
                     {promoCode
                       ? checkVoucherMinAmount
-                        ? `$
+                        ? `${PKR_CURRENCY_PREFIX}
                       ${
                         discountedValue?.value > 0 && promoCode
                           ? discountedValue?.discountType === 'Amount'
@@ -963,7 +963,7 @@ const OrderBasket = () => {
                           : '0.00'
                       }`
                         : 'N/A'
-                      : '$0.00'}
+                      : `${PKR_CURRENCY_PREFIX} 0.00`}
                   </div>
                 </div>
                 {/* <div className="flex items-center justify-between py-2">
@@ -979,7 +979,7 @@ const OrderBasket = () => {
                     GST ({authState.user?.tenantConfig.gstPercentage}%)
                   </div>
                   <div className="font-open-sans text-sm font-bold text-neutral-900">
-                    ${gstAmount.toFixed(2)}
+                    {PKR_CURRENCY_PREFIX} {gstAmount.toFixed(2)}
                   </div>
                 </div>
               </div>
@@ -989,7 +989,8 @@ const OrderBasket = () => {
                   Grand Total
                 </div>
                 <div className="font-open-sans text-sm font-bold text-neutral-900">
-                  ${grandTotal ? grandTotal.toFixed(2) : '0.00'}
+                  {PKR_CURRENCY_PREFIX}{' '}
+                  {grandTotal ? grandTotal.toFixed(2) : '0.00'}
                 </div>
               </div>
               <Button

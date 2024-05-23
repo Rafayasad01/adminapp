@@ -49,6 +49,10 @@ function MapAddress({ address, zoom, setValue, getValues }: MapAddressProps) {
       const geocoder = new google.maps.Geocoder();
       geocoder.geocode({ address }, (results, status: any) => {
         if (status === 'OK' && status !== 'ZERO_RESULTS') {
+          if (!results) {
+            setIsError(false);
+            return;
+          }
           setIsError(false);
           const { location } = results[0].geometry;
           if (location && location.lat() && location.lng()) {
