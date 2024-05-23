@@ -13,6 +13,7 @@ import { showNotifyMessage } from '../../redux/features/categorySlice';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 import ratingService from '../../services/adminapp/rating';
 import RatingAccordions from '../rating/RatingAccordin';
+import { PKR_CURRENCY_PREFIX } from '../../utils/constants';
 
 type HomePagePopupProps = {
   open: boolean;
@@ -125,7 +126,7 @@ function HomePagePopup({
               <div className="flex-container flex items-center justify-between">
                 <div className="price">
                   <h3 className="number">
-                    $ <span>{data?.price}</span>
+                    {PKR_CURRENCY_PREFIX} <span>{data?.price}</span>
                   </h3>
                   <p className="text">&nbsp;/ item</p>
                 </div>

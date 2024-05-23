@@ -404,7 +404,7 @@ function OrdersPage() {
                           </div>
                         </td>
                         <td className="text-sm font-semibold text-secondary">
-                          ${Item.grandTotal}
+                          PKR {Item.grandTotal}
                         </td>
                         <td>
                           <span

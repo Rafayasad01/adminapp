@@ -605,7 +605,7 @@ function OrderDetailsPage() {
                     Total Amount
                   </div>
                   <div className="text-right font-open-sans text-sm font-semibold text-neutral-900">
-                    ${viewData.totalAmount}
+                    PKR {viewData.totalAmount}
                   </div>
                 </div>
                 {/* <div className="flex items-center justify-between">
@@ -621,7 +621,7 @@ function OrderDetailsPage() {
                     HST {viewData.gstPercentage}%
                   </div>
                   <div className="text-right font-open-sans text-sm font-semibold text-neutral-900">
-                    ${viewData.gstAmount}
+                    PKR {viewData.gstAmount}
                   </div>
                 </div>
               </div>
@@ -631,7 +631,7 @@ function OrderDetailsPage() {
                 Grand Total
               </div>
               <div className="text-right font-open-sans text-sm font-semibold text-neutral-900">
-                ${viewData.grandTotal}
+                PKR {viewData.grandTotal}
               </div>
             </div>
           </div>

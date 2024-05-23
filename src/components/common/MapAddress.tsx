@@ -53,6 +53,10 @@ function MapAddress({ address, zoom, setValue, getValues }: MapAddressProps) {
           return null;
         }
         if (status === 'OK' && status !== 'ZERO_RESULTS') {
+          if (!results) {
+            setIsError(false);
+            return;
+          }
           setIsError(false);
           const { location } = results[0].geometry;
           if (location && location.lat() && location.lng()) {

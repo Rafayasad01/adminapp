@@ -8,7 +8,10 @@ import {
   setNotifyState,
 } from '../../redux/features/itemSlice';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
-import { CURRENCY_PREFIX } from '../../utils/constants';
+import {
+  //  CURRENCY_PREFIX,
+  PKR_CURRENCY_PREFIX,
+} from '../../utils/constants';
 import HomePagePopup from './HomePagePopup';
 
 interface CategoryItemsListProps {
@@ -71,7 +74,7 @@ const CategoryItemsList: React.FC<CategoryItemsListProps> = ({
           <div className="flex flex-wrap items-center justify-between">
             <span className="name text-base">{item.name}</span>
             <span className="price text-[13px]">
-              {CURRENCY_PREFIX} {item.price}
+              {PKR_CURRENCY_PREFIX} {item.price}
             </span>
             <button
               className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium btn-add css-sghohy-MuiButtonBase-root-MuiButton-root bg-primary"
@@ -112,7 +115,7 @@ const CategoryItemsList: React.FC<CategoryItemsListProps> = ({
             <div className="flex flex-wrap items-center justify-between">
               <span className="name text-base">{item.name}</span>
               <span className="price text-[13px]">
-                {CURRENCY_PREFIX} {item.price}
+                {PKR_CURRENCY_PREFIX} {item.price}
               </span>
               <button
                 className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium btn-add css-sghohy-MuiButtonBase-root-MuiButton-root bg-primary"

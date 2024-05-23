@@ -170,19 +170,19 @@ const CustomPrintLayouts = forwardRef<any, any>(
                       <div className="mb-2 flex justify-between text-sm font-medium">
                         <span>Sub Total Amount :</span>
                         <span className="font-bold">
-                          ${props?.data?.totalAmount}
+                          PKR {props?.data?.totalAmount}
                         </span>
                       </div>
                       <div className="mb-2 flex justify-between text-sm font-medium">
                         <span>HST {props?.data?.gstPercentage}% :</span>
                         <span className="font-bold">
-                          ${props?.data?.gstAmount}
+                          PKR {props?.data?.gstAmount}
                         </span>
                       </div>
                       <div className="mt-2 flex justify-between text-lg font-medium">
                         <span>Grand Total Amount :</span>
                         <span className="font-bold">
-                          ${props?.data?.grandTotal}
+                          PKR {props?.data?.grandTotal}
                         </span>
                       </div>
                     </div>

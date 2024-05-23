@@ -138,7 +138,7 @@ const CustomPrintLayouts = forwardRef<any, any>(
                 <span>Total</span>
               </div>
               <div className="col-2">
-                <span>${detailItems?.totalAmount}</span>
+                <span>PKR {detailItems?.totalAmount}</span>
               </div>
             </div>
             <div className="print-row">
@@ -146,7 +146,7 @@ const CustomPrintLayouts = forwardRef<any, any>(
                 <span>HST {detailItems?.gstPercentage}%</span>
               </div>
               <div className="col-2">
-                <span>${detailItems?.gstAmount}</span>
+                <span>PKR {detailItems?.gstAmount}</span>
               </div>
             </div>
             <div className="print-line straight" />
@@ -155,7 +155,7 @@ const CustomPrintLayouts = forwardRef<any, any>(
                 <span>Grand Total</span>
               </div>
               <div className="col-2">
-                <span>${detailItems?.grandTotal}</span>
+                <span>PKR {detailItems?.grandTotal}</span>
               </div>
             </div>
             <div className="print-line" />

@@ -50,6 +50,9 @@ function MapAddresses({ addresses, zoom }: MapAddressesProps) {
             return null;
           }
           if (status === 'OK' && status !== 'ZERO_RESULTS') {
+            if (!results) {
+              return;
+            }
             const { location } = results[0].geometry;
             if (location && location.lat() && location.lng()) {
               const marker = new google.maps.Marker({
