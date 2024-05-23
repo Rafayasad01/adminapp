@@ -48,6 +48,10 @@ function MapAddress({ address, zoom, setValue, getValues }: MapAddressProps) {
     if (map && address) {
       const geocoder = new google.maps.Geocoder();
       geocoder.geocode({ address }, (results, status: any) => {
+        if (!results) {
+          setIsError(true);
+          return null;
+        }
         if (status === 'OK' && status !== 'ZERO_RESULTS') {
           setIsError(false);
           const { location } = results[0].geometry;
@@ -62,7 +66,7 @@ function MapAddress({ address, zoom, setValue, getValues }: MapAddressProps) {
             });
             // setMarker(newMarker);
             map.setCenter(location);
-            console.log('gettt', getValues('latitude'));
+            // console.log('gettt', getValues('latitude'));
 
             if (getValues('latitude') === 0 || getValues('longitude') === 0) {
               setValue('latitude', location.lat());
@@ -76,6 +80,7 @@ function MapAddress({ address, zoom, setValue, getValues }: MapAddressProps) {
           setIsError(true);
           // console.error('Geocode was not successful for the following reason:', status);
         }
+        return null;
       });
     }
   }, [map, address]);

@@ -46,6 +46,9 @@ function MapAddresses({ addresses, zoom }: MapAddressesProps) {
       const newMarkers: google.maps.Marker[] = [];
       addresses.forEach((address) => {
         geocoder.geocode({ address }, (results, status: any) => {
+          if (!results) {
+            return null;
+          }
           if (status === 'OK' && status !== 'ZERO_RESULTS') {
             const { location } = results[0].geometry;
             if (location && location.lat() && location.lng()) {
@@ -65,6 +68,7 @@ function MapAddresses({ addresses, zoom }: MapAddressesProps) {
           } else {
             // console.error('Geocode was not successful for the following reason:', status);
           }
+          return null;
         });
       });
 
