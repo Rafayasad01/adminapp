@@ -59,6 +59,7 @@ import urAppLogo from './images/ur-laundry-logo.png';
 import logo from './images/ur-laundry-logo.svg';
 import avatarUser3 from './images/user3.svg';
 import userPermissionIcon from './images/userPermission.svg';
+import usersIcon from './images/users.svg';
 import wash from './images/wash.svg';
 import morningImage from './images/morning.svg';
 import noonImage from './images/noon.png';
@@ -116,6 +117,7 @@ const assets = {
     Star,
     morningImage,
     noonImage,
+    usersIcon,
   },
   tempImages: {
     wash,

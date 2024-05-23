@@ -25,6 +25,7 @@ import AllAppointment from '../AllAppointment';
 import AppointmentVisitCreatePopup from './AppointmentVisitCreatePopup';
 import AppointmentVisitReschedulePopup from './AppointmentVisitReschedulePopup';
 import AppointmentVisitUpdatePopup from './AppointmentVisitUpdatePopup';
+import assets from '../../../assets';
 // Extend dayjs with necessary plugins
 // dayjs.extend(utc);
 // // dayjs.extend(timezone);
@@ -54,7 +55,13 @@ function AppointmentVisitPage() {
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
   const [selectedPriorityData, setSelectedPriorityData] = useState<any>([]);
-  const [priorityData, setPriorityData] = useState<any>([]);
+  const [priorityData, setPriorityData] = useState<any>([
+    {
+      text: 'Any Professional',
+      id: 'AnyProfessional',
+      imageUrl: assets.images.usersIcon,
+    },
+  ]);
 
   // dropdown
   const [appointmentType, setAppointmentType] = useState({
@@ -228,7 +235,7 @@ function AppointmentVisitPage() {
           imageUrl: el.avatar,
         }));
         // console.log('🚀 ~ temp ~ temp:', temp);
-        setPriorityData(temp);
+        setPriorityData((prev: any) => [...prev, ...temp]);
       };
 
       getStoreEmployeeList();

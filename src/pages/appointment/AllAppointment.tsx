@@ -147,10 +147,14 @@ const AllAppointment = ({
             // const formattedDateWithHour2 = newDate2.format(
             //   'ddd MMM DD YYYY h:mm:ss A'
             // );
+            let priorityId = item.storeEmployee;
+            if (item.appointmentType === 'AnyProfessional') {
+              priorityId = 'AnyProfessional';
+            }
             return {
               // paid: true,
               title: item.name,
-              priorityId: item.storeEmployee,
+              priorityId,
               startDate:
                 formattedDateTime ||
                 moment().format('ddd MMM DD YYYY h:mm:ss A'),
@@ -158,6 +162,7 @@ const AllAppointment = ({
                 formattedDate2 || moment().format('ddd MMM DD YYYY h:mm:ss A'),
               id: item.id,
               status: item.status,
+              code: item.code,
             };
           });
           // console.log('structuredData', structuredData);
@@ -261,7 +266,6 @@ const AllAppointment = ({
   );
 
   const handleVisibilityChange = (visible: boolean) => {
-    console.log('visible', visible);
     if (!visible) {
       setIsTooltipOpen(false);
     } else {

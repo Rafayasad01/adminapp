@@ -60,7 +60,7 @@ const appointmentCancelled = (storeAppId: any) => {
 const getAllAppointments = (date: any, view: string) => {
   return network.get(
     `${STORE_PREFIX}/${APPOINTMENT_PREFIX}/${
-      view === 'week' ? 'weekly' : 'monthly'
+      view === 'week' ? 'distinct/weekly' : 'distinct/monthly'
     }/${date}`
   );
 };
@@ -69,8 +69,10 @@ const getAppointment = (storeAppId: any) => {
   return network.get(`${STORE_PREFIX}/${APPOINTMENT_PREFIX}/get/${storeAppId}`);
 };
 
-const getAppointmentById = (storeAppId: any) => {
-  return network.get(`${STORE_PREFIX}/${APPOINTMENT_PREFIX}/get/${storeAppId}`);
+const getAppointmentById = (code: any) => {
+  return network.get(
+    `${STORE_PREFIX}/${APPOINTMENT_PREFIX}/get/byCode/${code}`
+  );
 };
 
 const fetchAllAppointments = (tenant: any, body: any) => {

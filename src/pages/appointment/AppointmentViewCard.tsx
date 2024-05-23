@@ -4,17 +4,18 @@ import CloseIcon from '@mui/icons-material/Close';
 import UpdateOutlinedIcon from '@mui/icons-material/UpdateOutlined';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import StarIcon from '@mui/icons-material/Star';
-import Avatar from '@mui/material/Avatar';
+// import StarIcon from '@mui/icons-material/Star';
+// import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
-import dayjs from 'dayjs';
+// import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import moment from 'moment';
-import assets from '../../assets';
+// import moment from 'moment';
+// import assets from '../../assets';
 import storeAppointmentService from '../../services/adminapp/adminStoreAppointment';
 import Loader from '../../components/common/Loader2';
 import { APPOINTMENT_STATUS } from '../../utils/constants';
+import ViewCardAccordin from './ViewCardAccordin';
 
 type AppointmentViewCardProps = {
   appointmentData?: any;
@@ -67,39 +68,33 @@ const AppointmentViewCard = ({
     };
   }, []); // Empty dependency array ensures this effect runs only once
 
+  const calculateGrandTotal = () => {
+    const dataList = data;
+    return (
+      dataList?.length > 0 &&
+      dataList?.reduce((acc: any, tempData: any) => {
+        return acc + parseFloat(tempData.grandTotalAmount);
+      }, 0)
+    );
+  };
+
   useEffect(() => {
     if (appointmentData) {
       storeAppointmentService
-        .getAppointmentById(appointmentData.id)
+        .getAppointmentById(appointmentData.code)
         .then((res) => {
-          const date = dayjs(res.data.data.appointmentTime);
-          const formattedDateWithHour1 = dayjs(date).format(
-            'ddd MMM DD YYYY h:mm:ss A'
-          );
-          const newDate2 = date.add(res.data.data.serviceTime, 'minute');
-          const formattedDateWithHour2 = newDate2.format(
-            'ddd MMM DD YYYY h:mm:ss A'
-          );
-          const startDate = dayjs(formattedDateWithHour1);
-          const endDate = dayjs(formattedDateWithHour2);
-          const startDateFormat = startDate.format('HH:mm');
-          const endDateFormat = endDate.format('HH:mm');
-          // console.log('SALON', formattedDateWithHour1, formattedDateWithHour2);
           setIsLoader(false);
-          setData({
-            ...res.data.data,
-            startDateFormat,
-            endDateFormat,
-          });
+          setData(res.data.data);
         });
     }
   }, [appointmentData]);
+  // console.log('🚀 ~ appointmentData:', data, appointmentData);
 
   return isLoader ? (
     <Loader />
   ) : (
     <div className="custom-appo">
-      <div className="bg-[#B8DFF2] p-5 pb-16">
+      <div className="bg-primary p-5 pb-4">
         <div className="flex justify-between">
           <div>
             <IconButton
@@ -110,7 +105,7 @@ const AppointmentViewCard = ({
                 appointmentData?.status === APPOINTMENT_STATUS.PROCESSING ||
                 appointmentData?.status === APPOINTMENT_STATUS.MISSED
               }
-              className="icon-btn mr-3.5 p-0"
+              className="icon-btn mr-3.5 p-0 text-foreground"
               onClick={() => {
                 setOpenFormDialog(true);
                 setIsTooltipOpen(false);
@@ -127,7 +122,7 @@ const AppointmentViewCard = ({
                 appointmentData?.status === APPOINTMENT_STATUS.PROCESSING ||
                 appointmentData?.status === APPOINTMENT_STATUS.MISSED
               }
-              className="icon-btn mr-3.5 p-0"
+              className="icon-btn mr-3.5 p-0 text-foreground"
               onClick={() => {
                 setIsTooltipOpen(false);
                 deleteAppointmentHandler(appointmentData.id);
@@ -144,7 +139,7 @@ const AppointmentViewCard = ({
                 appointmentData?.status === APPOINTMENT_STATUS.MISSED
               }
               name="Reschedule"
-              className="icon-btn mr-3.5 p-0"
+              className="icon-btn mr-3.5 p-0 text-foreground"
               onClick={() =>
                 navigate(`./reschedule-appointment/${appointmentData.id}`)
               }
@@ -197,38 +192,47 @@ const AppointmentViewCard = ({
                 </span>
               </div>
             )}
+            <div className="mt-4 text-foreground">
+              <span className="text-xs">
+                Total Amount PKR {calculateGrandTotal()}
+              </span>
+            </div>
           </div>
           <div>
-            <IconButton className="icon-btn p-0" onClick={handleClose}>
+            <IconButton
+              className="icon-btn p-0 text-foreground"
+              onClick={handleClose}
+            >
               <CloseIcon style={{ fontSize: '28px' }} />
             </IconButton>
           </div>
         </div>
       </div>
-      <div className="relative h-14">
+      {/* <div className="relative h-14">
         <hr className="border-1 border-[#1D4675]" />
-        <div className="absolute left-1/2 top-[-50px] -translate-x-1/2 transform">
+        {/* <div className="absolute left-1/2 top-[-50px] -translate-x-1/2 transform">
           <Avatar
             alt="barber-pic"
             src={data?.storeEmployee?.avatar}
             sx={{ width: 100, height: 100 }}
           />
-        </div>
-      </div>
-      <div className="flex flex-col items-center justify-center">
-        <div>
+        </div> */}
+      {/* </div> */}
+      {/* <div className="flex flex-col items-center justify-center"> */}
+      {/* <div>
           <span className="text-xl font-semibold">
             {data?.storeEmployee?.name}
           </span>
-        </div>
-        <div>
+        </div> */}
+      {/* <div>
           <div className="mt-1 flex items-center justify-center rounded-full bg-[#1D1D1D] px-4 py-1 text-white">
             <StarIcon className="text-lg text-inherit" />
             <span className="mx-1 text-base">4.5</span>
           </div>
-        </div>
-      </div>
-      <div className="m-3 mt-5 rounded-xl border-[1px] border-[#949EAE] p-3">
+        </div>s */}
+      {/* </div> */}
+      <ViewCardAccordin data={data} />
+      {/* <div className="m-3 mt-5 rounded-xl border-[1px] border-[#949EAE] p-3">
         <div className="my-2 flex items-center">
           <div>
             <img src={assets.images.appProfile} alt="app-head" />
@@ -268,7 +272,7 @@ const AppointmentViewCard = ({
             </span>
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };
