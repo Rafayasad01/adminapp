@@ -437,14 +437,15 @@ function AppointmentProviderPage() {
         StoreEmployeeService.StoreEmployeeFind(actionMenuItemid).then(
           (item: any) => {
             if (item.data.success) {
+              remove();
               catLovService();
               setIsLoader(false);
               setEditFormData(item.data.data);
               const filteredServices = item.data.data.services.map(
                 (el: any) => ({
                   id: el.id,
-                  amount: el.amount,
-                  amountType: el.amountType,
+                  // amount: el.amount,
+                  // amountType: el.amountType,
                   // storeEmployee: el.storeEmployee,
                   serviceTime: el.serviceTime,
                   storeServiceCategoryItem: el.storeServiceCategoryItem.id,

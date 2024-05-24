@@ -341,7 +341,7 @@ export default function AddAppointmentPage() {
                 alt="avatar-img"
               />
             ) : (
-              <Avatar className="my-2 h-[55px] w-[55px]">
+              <Avatar className="my-2 h-[55px] w-[55px] truncate">
                 {getAvatarName(item.storeEmployee.name)}
               </Avatar>
             )}
@@ -1251,7 +1251,8 @@ export default function AddAppointmentPage() {
                           }
                         >
                           <Swiper
-                            slidesPerView={6}
+                            slidesPerView={4}
+                            // slidesPerView={6}
                             spaceBetween={30}
                             pagination={pagination}
                             modules={[Pagination]}

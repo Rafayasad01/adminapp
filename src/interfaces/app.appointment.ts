@@ -15,8 +15,8 @@ export interface AppointmentProvider {
   services: any;
   categoryId: any;
   servicesId: any;
-  servicesAmount: any;
-  price: any;
+  // servicesAmount: any;
+  // price: any;
   mints: any;
   payrollType: any;
 }

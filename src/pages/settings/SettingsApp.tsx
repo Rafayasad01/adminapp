@@ -98,12 +98,8 @@ function SettingsApp() {
   } = useForm<Setting>();
 
   const setData = (item: any) => {
-    // console.log('itesmssss', item);
-
-    // setValue('name', item.tenantConfig.name);
-    // setLocation()
-    setValue('latitude', item.tenantConfig.latitude);
-    setValue('longitude', item.tenantConfig.longitude);
+    setValue('latitude', watch('latitude') ?? 0);
+    setValue('longitude', watch('longitude') ?? 0);
     setValue('desc', item.tenantConfig.desc);
     setValue('email', item.tenantConfig.email);
     setValue('deliveryUrgentFees', item.tenantConfig.deliveryUrgentFees);

@@ -20,7 +20,7 @@ import CustomInputBox from '../../../components/common/CustomInputBox';
 import ErrorSpanBox from '../../../components/common/ErrorSpanBox';
 import CustomTimePicker from '../../../components/common/TimePicker';
 import {
-  BARBER_SERVICES_AMOUNT,
+  // BARBER_SERVICES_AMOUNT,
   INVALID_CHAR,
   MAX_LENGTH_EXCEEDED,
   PATTERN,
@@ -143,28 +143,28 @@ function CustomEditSwiperDialog({
     const obj = {
       storeServiceCategoryItem: watch('servicesId'),
       serviceTime: watch('mints'),
-      amountType: watch('servicesAmount'),
-      amount: watch('price'),
+      // amountType: watch('servicesAmount'),
+      // amount: watch('price'),
     };
-    if (
-      !PATTERN.ONLY_NUM.test(watch('price')) &&
-      !PATTERN.ONLY_NUM.test(watch('mints'))
-    ) {
-      setIsNotify(true);
-      setNotifyMessage({
-        text: 'Price and Service time should be in digits(number)',
-        type: 'error',
-      });
-      return;
-    }
-    if (!PATTERN.ONLY_NUM.test(watch('price'))) {
-      setIsNotify(true);
-      setNotifyMessage({
-        text: 'Price should be in digits(number)',
-        type: 'error',
-      });
-      return;
-    }
+    // if (
+    //   !PATTERN.ONLY_NUM.test(watch('price')) &&
+    //   !PATTERN.ONLY_NUM.test(watch('mints'))
+    // ) {
+    //   setIsNotify(true);
+    //   setNotifyMessage({
+    //     text: 'Price and Service time should be in digits(number)',
+    //     type: 'error',
+    //   });
+    //   return;
+    // }
+    // if (!PATTERN.ONLY_NUM.test(watch('price'))) {
+    //   setIsNotify(true);
+    //   setNotifyMessage({
+    //     text: 'Price should be in digits(number)',
+    //     type: 'error',
+    //   });
+    //   return;
+    // }
     if (!PATTERN.ONLY_NUM.test(watch('mints'))) {
       setIsNotify(true);
       setNotifyMessage({
@@ -175,8 +175,8 @@ function CustomEditSwiperDialog({
     }
     if (
       watch('servicesId') &&
-      watch('servicesAmount') &&
-      watch('price') &&
+      // watch('servicesAmount') &&
+      // watch('price') &&
       watch('mints')
     ) {
       append(obj);
@@ -514,7 +514,7 @@ function CustomEditSwiperDialog({
               </div>
             </div>
             <div className="FormBody">
-              <div className="FormFields">
+              <div className="flex">
                 <FormControl className="FormControl" variant="standard">
                   <CustomDropDown
                     // validateRequired
@@ -543,9 +543,24 @@ function CustomEditSwiperDialog({
                     inputTitle="Select Services"
                   />
                 </FormControl>
+                <FormControl className="FormControl" variant="standard">
+                  <FormControl className="FormControl" variant="standard">
+                    <CustomInputBox
+                      pattern={PATTERN.ONLY_NUM}
+                      maxLetterLimit={4}
+                      inputTitle="Enter time (Minutes)"
+                      placeholder="Enter time (Minutes)"
+                      id="mints"
+                      requiredType
+                      register={register}
+                      // error={errors.price}
+                      inputType="text"
+                    />
+                  </FormControl>
+                </FormControl>
               </div>
               <div className="mt-3 grid grid-cols-12 gap-4">
-                <div className="col-span-4">
+                {/* <div className="col-span-4">
                   <FormControl className="FormControl" variant="standard">
                     <CustomDropDown
                       // validateRequired
@@ -575,24 +590,7 @@ function CustomEditSwiperDialog({
                       inputType="text"
                     />
                   </FormControl>
-                </div>
-                <div className="col-span-4">
-                  <FormControl className="FormControl" variant="standard">
-                    <FormControl className="FormControl" variant="standard">
-                      <CustomInputBox
-                        pattern={PATTERN.ONLY_NUM}
-                        maxLetterLimit={4}
-                        inputTitle="Service Time (Minutes)"
-                        placeholder="Enter time (Minutes)"
-                        id="mints"
-                        requiredType
-                        register={register}
-                        // error={errors.price}
-                        inputType="text"
-                      />
-                    </FormControl>
-                  </FormControl>
-                </div>
+                </div> */}
               </div>
               <div className="ImageBox">
                 <label htmlFor="" className="ImageLabel mb-3 mt-4 w-full">
@@ -610,6 +608,8 @@ function CustomEditSwiperDialog({
               </div>
               <div className="mx-[10px] overflow-x-hidden overflow-y-scroll px-[8px] xl:max-h-[180px] xl:min-h-[0px] 2xl:h-[150px]">
                 {ServicesFields?.map((item: any, index: number) => {
+                  console.log('🚀 ~ {ServicesFields?.map ~ item:', item);
+
                   return (
                     <div
                       className="my-1 flex items-center justify-between rounded-md border-[1px] border-[#949EAE] p-1 text-sm text-[#1A1A1A]"
@@ -621,10 +621,10 @@ function CustomEditSwiperDialog({
                           <span className="text-sm">{item.serviceTime}</span>
                           <span> mints</span>
                         </div>
-                        <div>
+                        {/* <div>
                           {`${item.amount === 'Percentage' ? '%' : 'RS'}`}
                           {item.amount}.00
-                        </div>
+                        </div> */}
                         <div>
                           <ClearOutlinedIcon
                             className="cursor-pointer"
