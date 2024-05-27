@@ -361,7 +361,7 @@ function LeaveManagement() {
                         <td>{item.leaveType}</td>
                         <td>
                           {item.storeEmployeeLeaveAttachment?.length < 1 &&
-                            'No Attentments'}
+                            'No Attachments'}
                           <div className="flex flex-wrap">
                             {item.storeEmployeeLeaveAttachment?.map(
                               (el: any, ind: any) => {
