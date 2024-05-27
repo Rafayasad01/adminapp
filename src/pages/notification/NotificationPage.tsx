@@ -286,6 +286,7 @@ function NotificationPage() {
                   <th className="w-[16rem]">Title</th>
                   <th className="w-[30rem]">Message</th>
                   <th>Dated</th>
+                  <th>Type</th>
                   <th>status</th>
                   <th aria-label="empty table header">&nbsp;</th>
                 </tr>
@@ -308,6 +309,11 @@ function NotificationPage() {
                               )}
                             </span>
                           </div>
+                        </td>
+                        <td>
+                          {item.notificationType
+                            .replace(/([A-Z])/g, ' $1')
+                            .trim()}
                         </td>
                         <td>
                           <span

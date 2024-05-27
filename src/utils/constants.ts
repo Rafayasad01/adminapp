@@ -1,13 +1,11 @@
 import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined';
 import PersonOutlinedIcon from '@mui/icons-material/PersonOutlined';
 
-// const HOST = 'https://dev.urapptech.com';
-const HOST = 'http://192.168.8.68:3200';
-// const HOST = 'http://192.168.8.97:3200';
-// const HOST = 'http://localhost:3200';
-
-export const BASE_URL = `${HOST}/api/v1/admin/`;
-export const BASE_SYSTEM_URL = `${HOST}/api/v1/system/config/`;
+const HOST = 'https://dev.urapptech.com';
+export const BASE_URL =
+  import.meta.env.VITE_BASE_URL || `${HOST}/api/v1/admin/`;
+export const BASE_SYSTEM_URL =
+  import.meta.env.VITE_SYSTEM_BASE_URL || `${HOST}/api/v1/system/config/`;
 export const MODULE_EMPLOYEES = 'Employees';
 export const RATING = 'rating';
 export const FAQ = 'faq';
@@ -81,6 +79,7 @@ export const TOKEN_STORE_KEY = 'APP_AUTH_TOKEN';
 export const SYSTEM_CONFIG_PREFIX = 'theme';
 export const SHOP_SCHEDULING_PREFIX = 'shop-schedule';
 export const CURRENCY_PREFIX = '$';
+export const PKR_CURRENCY_PREFIX = 'PKR';
 
 let TEXT_STORE_KEY = '';
 export const setText = (text: string) => {
