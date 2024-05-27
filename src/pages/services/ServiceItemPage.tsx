@@ -206,6 +206,7 @@ function ServiceItemPage() {
     formData.append('name', data.name);
     formData.append('price', data.price);
     formData.append('description', data.description);
+    formData.append('serviceTime', data.serviceTime);
     formData.append('avatar', data.avatar);
     formData.append('storeServiceCategory', CatId);
     storeService
@@ -243,6 +244,7 @@ function ServiceItemPage() {
     const formData = new FormData();
     formData.append('name', data.name);
     formData.append('price', data.price);
+    formData.append('serviceTime', data.serviceTime);
     formData.append('description', data.description);
     if (data.avatar) formData.append('avatar', data.avatar);
     storeService
@@ -260,6 +262,7 @@ function ServiceItemPage() {
               list[i].name = updateItem.data.data.name;
               list[i].description = updateItem.data.data.description;
               list[i].price = updateItem.data.data.price;
+              list[i].serviceTime = updateItem.data.data.serviceTime;
               if (updateItem.data.data.avatar) {
                 list[i].avatar = updateItem.data.data.avatar;
               }

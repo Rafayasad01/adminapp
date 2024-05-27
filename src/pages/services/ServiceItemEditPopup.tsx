@@ -19,6 +19,7 @@ import {
   VALIDATE_NON_NEGATIVE_NUM,
   imageAllowedTypes,
 } from '../../utils/constants';
+import CustomInputBox from '../../components/common/CustomInputBox';
 
 type Props = {
   openFormDialog: boolean;
@@ -56,6 +57,7 @@ function ServiceItemEditPopup({
         name: data.name,
         description: data.description,
         price: data.price,
+        serviceTime: data.serviceTime,
         avatar: image,
       };
       setOpenFormDialog(false);
@@ -65,6 +67,7 @@ function ServiceItemEditPopup({
         name: data.name,
         description: data.description,
         price: data.price,
+        serviceTime: data.serviceTime,
       };
       setOpenFormDialog(false);
       callback(res);
@@ -156,7 +159,7 @@ function ServiceItemEditPopup({
                 )}
               </FormControl>
             </div>
-            <div className="FormField">
+            <div className="FormFields">
               <FormControl className="FormControl" variant="standard">
                 <label className="FormLabel">Price</label>
                 <Input
@@ -176,6 +179,21 @@ function ServiceItemEditPopup({
                   disableUnderline
                 />
                 {errors.price && <ErrorSpanBox error={errors.price?.message} />}
+              </FormControl>
+              <FormControl className="FormControl" variant="standard">
+                <CustomInputBox
+                  pattern={PATTERN.ONLY_NUM}
+                  value={formData?.serviceTime}
+                  maxLetterLimit={4}
+                  inputTitle="Service Time"
+                  subInputTitle="(Minutes)"
+                  placeholder="Enter time (Minutes)"
+                  id="serviceTime"
+                  requiredType
+                  register={register}
+                  error={errors.serviceTime}
+                  inputType="text"
+                />
               </FormControl>
               {/* <FormControl className="FormControl" variant="standard">
                 <label className="FormLabel">Loyality Coins</label>

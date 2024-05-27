@@ -23,7 +23,7 @@ import CustomTimePicker from '../../../components/common/TimePicker';
 import {
   INVALID_CHAR,
   MAX_LENGTH_EXCEEDED,
-  PATTERN,
+  // PATTERN,
 } from '../../../utils/constants';
 
 type CustomSwiperDialogProps = {
@@ -130,18 +130,18 @@ function CustomSwiperDialog({
   const handleServices = () => {
     const obj = {
       storeServiceCategoryItem: watch('servicesId'),
-      serviceTime: watch('mints'),
+      // serviceTime: watch('mints'),
       // amountType: watch('servicesAmount'),
       // amount: watch('price'),
     };
-    if (!PATTERN.ONLY_NUM.test(watch('mints'))) {
-      setIsNotify(true);
-      setNotifyMessage({
-        text: 'Service Time should be in digits(number)',
-        type: 'error',
-      });
-      return;
-    }
+    // if (!PATTERN.ONLY_NUM.test(watch('mints'))) {
+    //   setIsNotify(true);
+    //   setNotifyMessage({
+    //     text: 'Service Time should be in digits(number)',
+    //     type: 'error',
+    //   });
+    //   return;
+    // }
 
     const check: boolean =
       ServicesFields?.find(
@@ -155,16 +155,16 @@ function CustomSwiperDialog({
       });
       return;
     }
-    console.log(
-      "🚀 ~ handleServices ~ watch('servicesId'):",
-      watch('servicesId')
-    );
+    // console.log(
+    //   "🚀 ~ handleServices ~ watch('servicesId'):",
+    //   watch('servicesId')
+    // );
     if (
       watch('servicesId') &&
-      watch('servicesId') !== 'none' &&
+      watch('servicesId') !== 'none'
+      // watch('mints')
       // watch('servicesAmount') &&
       // watch('price') &&
-      watch('mints')
     ) {
       append(obj);
       // setValue("servicesId", 'none')
@@ -174,7 +174,7 @@ function CustomSwiperDialog({
     } else {
       setIsNotify(true);
       setNotifyMessage({
-        text: 'All Services Fields are Required',
+        text: 'Both Fields are Required',
         type: 'error',
       });
     }
@@ -530,7 +530,7 @@ function CustomSwiperDialog({
               </div>
             </div>
             <div className="FormBody mt-3">
-              <div className="flex items-center justify-center">
+              <div className="FormFields">
                 <FormControl className="FormControl" variant="standard">
                   <CustomDropDown
                     // validateRequired
@@ -559,7 +559,7 @@ function CustomSwiperDialog({
                     inputTitle="Select Services"
                   />
                 </FormControl>
-                <FormControl className="FormControl" variant="standard">
+                {/* <FormControl className="FormControl" variant="standard">
                   <CustomInputBox
                     pattern={PATTERN.ONLY_NUM}
                     maxLetterLimit={4}
@@ -572,7 +572,7 @@ function CustomSwiperDialog({
                     error={errors.mints}
                     inputType="text"
                   />
-                </FormControl>
+                </FormControl> */}
               </div>
               <div className="mt-3 grid grid-cols-12 gap-4">
                 {/* <div className="col-span-4">
@@ -632,10 +632,10 @@ function CustomSwiperDialog({
                     >
                       <div>{getCatItemName(item.storeServiceCategoryItem)}</div>
                       <div className="flex  items-center justify-between gap-2">
-                        <div className="flex items-center">
+                        {/* <div className="flex items-center">
                           <span className="text-sm">{item.serviceTime}</span>
                           <span> mints</span>
-                        </div>
+                        </div> */}
                         {/* <div>RS{item.amount}.00</div> */}
                         <div>
                           <ClearOutlinedIcon

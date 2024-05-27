@@ -434,8 +434,8 @@ function AppointmentProviderPage() {
     if (option === 'Edit') {
       if (listingRolePermission(dataRole, 'Appointment Provider Edit')) {
         setIsLoader(true);
-        StoreEmployeeService.StoreEmployeeFind(actionMenuItemid).then(
-          (item: any) => {
+        StoreEmployeeService.StoreEmployeeFind(actionMenuItemid)
+          .then((item: any) => {
             if (item.data.success) {
               remove();
               catLovService();
@@ -457,7 +457,7 @@ function AppointmentProviderPage() {
                 id: elItems.storeServiceCategoryItem.id,
                 name: elItems.storeServiceCategoryItem.name,
               }));
-              console.log('🚀 ~ catItems ~ catItems:', catItems);
+              // console.log('🚀 ~ catItems ~ catItems:', catItems);
               setusedCatItemsLovList([...usedCatItemsLovlist, ...catItems]);
               // console.log("filteredServices", filteredServices);
               // [filteredServices].forEach((service: any) => {
@@ -480,8 +480,15 @@ function AppointmentProviderPage() {
                 type: 'error',
               });
             }
-          }
-        );
+          })
+          .catch((err: Error) => {
+            setIsLoader(false);
+            setIsNotify(true);
+            setNotifyMessage({
+              text: err.message,
+              type: 'error',
+            });
+          });
       } else {
         setIsLoader(false);
         setIsNotify(true);

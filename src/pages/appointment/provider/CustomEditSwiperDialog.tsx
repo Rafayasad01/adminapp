@@ -23,7 +23,7 @@ import {
   // BARBER_SERVICES_AMOUNT,
   INVALID_CHAR,
   MAX_LENGTH_EXCEEDED,
-  PATTERN,
+  // PATTERN,
 } from '../../../utils/constants';
 
 type CustomEditSwiperDialogProps = {
@@ -142,10 +142,22 @@ function CustomEditSwiperDialog({
   const handleServices = () => {
     const obj = {
       storeServiceCategoryItem: watch('servicesId'),
-      serviceTime: watch('mints'),
+      // serviceTime: watch('mints'),
       // amountType: watch('servicesAmount'),
       // amount: watch('price'),
     };
+    const check: boolean =
+      ServicesFields?.find(
+        (el: any) => el.storeServiceCategoryItem === watch('servicesId')
+      ) !== undefined;
+    if (check) {
+      setIsNotify(true);
+      setNotifyMessage({
+        text: 'This service you already selected, Please select another service',
+        type: 'error',
+      });
+      return;
+    }
     // if (
     //   !PATTERN.ONLY_NUM.test(watch('price')) &&
     //   !PATTERN.ONLY_NUM.test(watch('mints'))
@@ -165,25 +177,26 @@ function CustomEditSwiperDialog({
     //   });
     //   return;
     // }
-    if (!PATTERN.ONLY_NUM.test(watch('mints'))) {
-      setIsNotify(true);
-      setNotifyMessage({
-        text: 'Service Time should be in digits(number)',
-        type: 'error',
-      });
-      return;
-    }
+    // if (!PATTERN.ONLY_NUM.test(watch('mints'))) {
+    //   setIsNotify(true);
+    //   setNotifyMessage({
+    //     text: 'Service Time should be in digits(number)',
+    //     type: 'error',
+    //   });
+    //   return;
+    // }
     if (
       watch('servicesId') &&
+      watch('servicesId') !== 'none'
       // watch('servicesAmount') &&
       // watch('price') &&
-      watch('mints')
+      // watch('mints')
     ) {
       append(obj);
     } else {
       setIsNotify(true);
       setNotifyMessage({
-        text: 'All Services Fields are Required',
+        text: 'Both Fields are Required',
         type: 'error',
       });
     }
@@ -514,7 +527,7 @@ function CustomEditSwiperDialog({
               </div>
             </div>
             <div className="FormBody">
-              <div className="flex">
+              <div className="FormFields">
                 <FormControl className="FormControl" variant="standard">
                   <CustomDropDown
                     // validateRequired
@@ -543,7 +556,7 @@ function CustomEditSwiperDialog({
                     inputTitle="Select Services"
                   />
                 </FormControl>
-                <FormControl className="FormControl" variant="standard">
+                {/* <FormControl className="FormControl" variant="standard">
                   <FormControl className="FormControl" variant="standard">
                     <CustomInputBox
                       pattern={PATTERN.ONLY_NUM}
@@ -557,7 +570,7 @@ function CustomEditSwiperDialog({
                       inputType="text"
                     />
                   </FormControl>
-                </FormControl>
+                </FormControl> */}
               </div>
               <div className="mt-3 grid grid-cols-12 gap-4">
                 {/* <div className="col-span-4">
@@ -617,10 +630,10 @@ function CustomEditSwiperDialog({
                     >
                       <div>{getCatItemName(item.storeServiceCategoryItem)}</div>
                       <div className="flex  items-center justify-between gap-2">
-                        <div className="flex items-center">
+                        {/* <div className="flex items-center">
                           <span className="text-sm">{item.serviceTime}</span>
                           <span> mints</span>
-                        </div>
+                        </div> */}
                         {/* <div>
                           {`${item.amount === 'Percentage' ? '%' : 'RS'}`}
                           {item.amount}.00

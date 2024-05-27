@@ -19,6 +19,7 @@ import {
   VALIDATE_NON_NEGATIVE_NUM,
   imageAllowedTypes,
 } from '../../utils/constants';
+import CustomInputBox from '../../components/common/CustomInputBox';
 
 type Props = {
   openFormDialog: boolean;
@@ -47,7 +48,7 @@ function ServiceItemCreatePopup({
     if (image) {
       data.avatar = image;
       setOpenFormDialog(false);
-      console.log('🚀 ~ onSubmit ~ data:', data);
+      // console.log('🚀 ~ onSubmit ~ data:', data);
       callback(data);
     } else {
       setIsNotify(true);
@@ -123,7 +124,7 @@ function ServiceItemCreatePopup({
                 )}
               </FormControl>
             </div>
-            <div className="FormField">
+            <div className="FormFields">
               <FormControl className="FormControl" variant="standard">
                 <label className="FormLabel">Price</label>
                 <Input
@@ -142,6 +143,20 @@ function ServiceItemCreatePopup({
                   disableUnderline
                 />
                 {errors.price && <ErrorSpanBox error={errors.price?.message} />}
+              </FormControl>
+              <FormControl className="FormControl" variant="standard">
+                <CustomInputBox
+                  pattern={PATTERN.ONLY_NUM}
+                  maxLetterLimit={4}
+                  inputTitle="Service Time"
+                  subInputTitle="(Minutes)"
+                  placeholder="Enter time (Minutes)"
+                  id="serviceTime"
+                  requiredType
+                  register={register}
+                  error={errors.serviceTime}
+                  inputType="text"
+                />
               </FormControl>
               {/* <FormControl className="FormControl" variant="standard">
                 <label className="FormLabel">Loyality Coins</label>

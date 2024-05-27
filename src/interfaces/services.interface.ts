@@ -12,6 +12,7 @@ export interface BarberCategory {
 
 export interface BarberCategoryServices {
   name: string;
+  serviceTime: any;
   description: string;
   price: string;
   avatar: any;
