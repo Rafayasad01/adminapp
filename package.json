@@ -6,6 +6,9 @@
   "homepage": ".",
   "scripts": {
     "dev": "vite --port 3005 --host",
+    "dev:development": "vite --mode development --port 3005 --host",
+    "dev:development-local": "vite --mode development-local --port 3005 --host",
+    "dev:production": "vite --mode producton --port 3005 --host",
     "build": "tsc && vite build",
     "build:staging": "tsc && vite build --mode staging",
     "build:production": "tsc && vite build --mode production",

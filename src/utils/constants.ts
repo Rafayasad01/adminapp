@@ -2,7 +2,6 @@ import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined';
 import PersonOutlinedIcon from '@mui/icons-material/PersonOutlined';
 
 const HOST = 'https://dev.urapptech.com';
-
 export const BASE_URL =
   import.meta.env.VITE_SERVICE_BASE_URL || `${HOST}/api/v1/admin/`;
 export const BASE_SYSTEM_URL =
