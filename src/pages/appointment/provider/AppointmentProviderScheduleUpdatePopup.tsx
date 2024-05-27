@@ -3,11 +3,14 @@ import Dialog from '@mui/material/Dialog';
 import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
 import dayjs from 'dayjs';
+import utcPlugin from 'dayjs/plugin/utc';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import '../../../assets/css/PopupStyle.css';
 import TimePicker from '../../../components/common/TimePicker';
 import { AppointmentProviderScheduleTime } from '../../../interfaces/app.appointment';
+
+dayjs.extend(utcPlugin);
 
 type AppointmentProviderScheduleUpdatePopupProps = {
   // roles?: any;
@@ -36,10 +39,10 @@ function AppointmentProviderScheduleUpdatePopup({
     const time = {
       startTime:
         dayjs(startTime).isValid() &&
-        dayjs(startTime).format('YYYY-MM-DD HH:mm:ss'),
+        dayjs(startTime).utc().format('YYYY-MM-DD HH:mm:ss'),
       endTime:
         dayjs(endTime).isValid() &&
-        dayjs(endTime).format('YYYY-MM-DD HH:mm:ss'),
+        dayjs(endTime).utc().format('YYYY-MM-DD HH:mm:ss'),
       workDay: formData?.workDay,
     };
     if (startTime && endTime) {

@@ -1,6 +1,7 @@
 import AddIcon from '@mui/icons-material/Add';
 import FormControl from '@mui/material/FormControl';
 import dayjs from 'dayjs';
+import utcPlugin from 'dayjs/plugin/utc';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -16,6 +17,8 @@ import { AppointmentProviderSchedule } from '../../../interfaces/app.appointment
 import adminAppointmentService from '../../../services/adminapp/adminAppointment';
 import { setText, weekDays } from '../../../utils/constants';
 // import { useAppSelector } from '../../../redux/redux-hooks';
+
+dayjs.extend(utcPlugin);
 
 function AppointmentProviderAddSchedulePage() {
   const { id } = useParams();
@@ -161,8 +164,12 @@ function AppointmentProviderAddSchedulePage() {
       const index = nameKey.match(indexPattern)[0];
       const dataItem = {
         day: data[`name${index}`],
-        startTime: data[`startdatetime${index}`].format('YYYY-MM-DD HH:mm:ss'),
-        endTime: data[`enddatetime${index}`].format('YYYY-MM-DD HH:mm:ss'),
+        startTime: dayjs(data[`startdatetime${index}`])
+          .utc()
+          .format('YYYY-MM-DD HH:mm:ss'),
+        endTime: dayjs(data[`enddatetime${index}`])
+          .utc()
+          .format('YYYY-MM-DD HH:mm:ss'),
       };
       // if (
       //   dayjs(dataItem.startTime).format('HH:mm') <
