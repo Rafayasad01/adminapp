@@ -3,6 +3,7 @@ import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import CloseIcon from '@mui/icons-material/Close';
 import UpdateOutlinedIcon from '@mui/icons-material/UpdateOutlined';
 import DeleteIcon from '@mui/icons-material/Delete';
+import WalletIcon from '@mui/icons-material/Wallet';
 import EditIcon from '@mui/icons-material/Edit';
 // import StarIcon from '@mui/icons-material/Star';
 // import Avatar from '@mui/material/Avatar';
@@ -13,9 +14,13 @@ import { useNavigate } from 'react-router-dom';
 // import moment from 'moment';
 // import assets from '../../assets';
 import storeAppointmentService from '../../services/adminapp/adminStoreAppointment';
+import walletService from '../../services/adminapp/adminWallet';
 import Loader from '../../components/common/Loader2';
 import { APPOINTMENT_STATUS } from '../../utils/constants';
 import ViewCardAccordin from './ViewCardAccordin';
+import CustomButton from '../../components/common/CustomButton';
+import ViewWalletPopupCard from './ViewWalletPopupCard';
+import '../../assets/css/PopupStyle.css';
 
 type AppointmentViewCardProps = {
   appointmentData?: any;
@@ -43,6 +48,18 @@ const AppointmentViewCard = ({
   const navigate = useNavigate();
   const [data, setData] = useState<any>(null);
   const [isLoader, setIsLoader] = useState<boolean>(true);
+  const [isWalletLoader, setIsWalletLoader] = useState<boolean>(false);
+
+  // popover navigation of wallet button
+  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
+  const handleClickPop = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClosePop = () => {
+    setAnchorEl(null);
+  };
+  const open = Boolean(anchorEl);
+  const id = open ? 'simple-popover' : undefined;
 
   const handleClose = () => {
     setIsTooltipOpen(false);
@@ -78,6 +95,45 @@ const AppointmentViewCard = ({
     );
   };
 
+  const onWalletSubmit = (payload: any) => {
+    console.log('🚀 ~ onWalletSubmit ~ data:', payload);
+    setIsWalletLoader(true);
+    const dataObj = {
+      ...payload,
+      referenceId: appointmentData.id,
+      appUser: appointmentData.appUser,
+      referenceType: 'Appointment',
+      type: 'Credit',
+    };
+    walletService
+      .WalletCreate(dataObj)
+      .then((item) => {
+        if (item.data.success) {
+          setIsWalletLoader(false);
+          handleClosePop();
+          // setTotal(item.data.data.totalPages);
+          // setList(item.data.data.leaves);
+        } else {
+          setIsWalletLoader(false);
+          console.log('err else');
+          // setIsNotify(true);
+          // setNotifyMessage({
+          //   text: item.data.message,
+          //   type: 'error',
+          // });
+        }
+      })
+      .catch((error) => {
+        setIsWalletLoader(false);
+        console.log('🚀 ~ onWalletSubmit ~ error:', error);
+        // setIsNotify(true);
+        // setNotifyMessage({
+        //   text: error.message,
+        //   type: 'error',
+        // });
+      });
+  };
+
   useEffect(() => {
     if (appointmentData) {
       storeAppointmentService
@@ -88,7 +144,11 @@ const AppointmentViewCard = ({
         });
     }
   }, [appointmentData]);
-  // console.log('🚀 ~ appointmentData:', data, appointmentData);
+
+  console.log('🚀 ~ appointmentData:', appointmentData);
+  // const handleWallet = () =>{
+
+  // }
 
   return isLoader ? (
     <Loader />
@@ -96,7 +156,12 @@ const AppointmentViewCard = ({
     <div className="custom-appo">
       <div className="bg-primary p-5 pb-4">
         <div className="flex justify-between">
-          <div>
+          <div
+            className={`${
+              appointmentData?.status === APPOINTMENT_STATUS.COMPLETED &&
+              'w-full'
+            }`}
+          >
             <IconButton
               disabled={
                 appointmentData?.status === APPOINTMENT_STATUS.CANCELLED ||
@@ -192,10 +257,27 @@ const AppointmentViewCard = ({
                 </span>
               </div>
             )}
-            <div className="mt-4 text-foreground">
-              <span className="text-xs">
-                Total Amount PKR {calculateGrandTotal()}
-              </span>
+            <div className="mt-4 flex w-[110%] items-center justify-between text-foreground">
+              <div>
+                <span className="text-xs">
+                  Total Amount PKR {calculateGrandTotal()}
+                </span>
+              </div>
+              {appointmentData?.status === APPOINTMENT_STATUS.COMPLETED && (
+                <div>
+                  <CustomButton
+                    // sx={{
+                    //   width: '20px',
+                    // }}
+                    buttonType="button"
+                    title="Wallet"
+                    icon={<WalletIcon />}
+                    className="btn-black-fill btn-icon"
+                    onclick={handleClickPop}
+                    // onclick={handleFormClickOpen}
+                  />
+                </div>
+              )}
             </div>
           </div>
           <div>
@@ -273,6 +355,27 @@ const AppointmentViewCard = ({
           </div>
         </div>
       </div> */}
+      <ViewWalletPopupCard
+        id={id}
+        open={open}
+        anchorEl={anchorEl}
+        onclose={handleClosePop}
+        isWalletLoader={isWalletLoader}
+        callback={onWalletSubmit}
+      />
+      {/* <Popover
+        id={id}
+        open={open}
+        anchorEl={anchorEl}
+        onClose={handleClosePop}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+      >
+        <span>The content of the Popover.</span>
+        {/* <Typography sx={{ p: 2 }}>The content of the Popover.</Typography> */}
+      {/* </Popover> */}
     </div>
   );
 };

@@ -185,11 +185,11 @@ function ServiceItemEditPopup({
                   pattern={PATTERN.ONLY_NUM}
                   value={formData?.serviceTime}
                   maxLetterLimit={4}
+                  minValueLimit={15}
                   inputTitle="Service Time"
                   subInputTitle="(Minutes)"
                   placeholder="Enter time (Minutes)"
                   id="serviceTime"
-                  requiredType
                   register={register}
                   error={errors.serviceTime}
                   inputType="text"

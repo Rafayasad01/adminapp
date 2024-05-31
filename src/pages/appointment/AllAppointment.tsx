@@ -163,6 +163,7 @@ const AllAppointment = ({
               id: item.id,
               status: item.status,
               code: item.code,
+              appUser: item.appUser,
             };
           });
           // console.log('structuredData', structuredData);

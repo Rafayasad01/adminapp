@@ -70,3 +70,8 @@ export interface UpdateAppointmentForm {
   note: string;
   gender: string;
 }
+export interface AppointmentWalletPayment {
+  balance: string;
+  note: string;
+  person: string;
+}

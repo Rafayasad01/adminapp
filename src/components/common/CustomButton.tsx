@@ -1,5 +1,6 @@
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Button from '@mui/material/Button';
+// import CircularProgress from '@mui/material/CircularProgress';
 import IconButton from '@mui/material/IconButton';
 
 type CustomButtonProps = {
@@ -7,7 +8,7 @@ type CustomButtonProps = {
   onchange?: (item?: any) => void;
   register?: any;
   className?: string;
-  title?: string;
+  title?: string | any;
   icon?: any;
   iconRight?: any;
   buttonType: string;
@@ -45,6 +46,7 @@ function CustomButton({
       >
         {/* {disabled ? <Loader /> : */}
         <>
+          {/* <CircularProgress size={18} /> */}
           {icon && icon} {title} &nbsp; {iconRight && iconRight}
         </>
         {/* } */}

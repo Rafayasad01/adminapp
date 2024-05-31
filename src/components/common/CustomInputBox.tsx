@@ -18,11 +18,13 @@ type CustomInputBoxProps = {
   inputType?: string;
   length?: string;
   maxLetterLimit?: number;
+  minValueLimit?: number;
   onclick?: (items?: any) => void;
   pattern?: any;
   placeholder?: string;
   register: any;
   requiredType?: boolean;
+  sx?: any;
   showPassVisibility?: boolean;
   subInputTitle?: string;
   typeImportant?: boolean;
@@ -38,8 +40,10 @@ function CustomInputBox({
   id,
   inputTitle,
   inputType,
+  sx,
   length,
   maxLetterLimit,
+  minValueLimit,
   onclick,
   pattern,
   placeholder,
@@ -68,7 +72,7 @@ function CustomInputBox({
       </div>
       <Input
         disabled={disable || false}
-        sx={{ width: length }}
+        sx={sx ?? { width: length }}
         className={`FormInput ${customClass}`}
         placeholder={placeholder}
         id={id}
@@ -81,6 +85,10 @@ function CustomInputBox({
           pattern: {
             value: pattern,
             message: INVALID_CHAR,
+          },
+          min: {
+            value: minValueLimit, // Set minimum value
+            message: `${inputTitle} should be at least ${minValueLimit}.`,
           },
           maxLength: {
             value: maxLetterLimit,

@@ -2522,3 +2522,7 @@ main.min-h-screen.w-full.flex-grow.bg-gray-50.p-3.MuiBox-root.css-0 {
   margin: auto;
   height: fit-content;
 }
+
+.css-3bmhjh-MuiPaper-root-MuiPopover-paper {
+  width: 35% !important;
+}

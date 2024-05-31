@@ -66,6 +66,12 @@ const links = [
         permission: 'Category List',
         icon: <VisitIcon />,
       },
+      {
+        name: 'Wallet',
+        path: 'store-appointment/wallet',
+        permission: 'Category List',
+        icon: <VisitIcon />,
+      },
       // {
       //   name: 'Leave management',
       //   path: 'store-appointment/leaves-management',
