@@ -7,7 +7,7 @@ type CustomButtonProps = {
   onchange?: (item?: any) => void;
   register?: any;
   className?: string;
-  title?: string;
+  title?: string | any;
   icon?: any;
   iconRight?: any;
   buttonType: string;

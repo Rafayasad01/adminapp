@@ -11,6 +11,7 @@ type CustomInputBoxProps = {
   customClass?: string;
   customFontClass?: string;
   disable?: boolean;
+  sx?: any;
   error?: any;
   fieldNameSize?: string;
   id: any;
@@ -39,6 +40,7 @@ function CustomInputBox({
   inputTitle,
   inputType,
   length,
+  sx,
   maxLetterLimit,
   onclick,
   pattern,
@@ -68,7 +70,7 @@ function CustomInputBox({
       </div>
       <Input
         disabled={disable || false}
-        sx={{ width: length }}
+        sx={sx ?? { width: length }}
         className={`FormInput ${customClass}`}
         placeholder={placeholder}
         id={id}
