@@ -1,39 +1,31 @@
-// import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
-// import MoreVertIcon from '@mui/icons-material/MoreVert';
 import SearchIcon from '@mui/icons-material/Search';
-// import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import Divider from '@mui/material/Divider';
 import FormControl from '@mui/material/FormControl';
-// import ImageOutlinedIcon from '@mui/icons-material/ImageOutlined';
-// import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
-// import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutlineOutlined';
-// import PictureAsPdfOutlinedIcon from '@mui/icons-material/PictureAsPdfOutlined';
-// import ArticleOutlinedIcon from '@mui/icons-material/ArticleOutlined';
+// import WysiwygOutlinedIcon from '@mui/icons-material/WysiwygOutlined';
+import WalletIcon from '@mui/icons-material/Wallet';
 import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
-// import Switch from '@mui/material/Switch';
 import TablePagination from '@mui/material/TablePagination';
 import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
-// import { useNavigate } from 'react-router-dom';
-// import Avatar from '@mui/material/Avatar';
-// import assets from '../../../assets';
-// import ActionMenu from '../../../components/common/ActionMenu';
 import CustomText from '../../../components/common/CustomText';
 import Loader from '../../../components/common/Loader';
 import Notify from '../../../components/common/Notify';
 import TopBar from '../../../components/common/TopBar';
 import { useAppSelector } from '../../../redux/redux-hooks';
 import walletService from '../../../services/adminapp/adminWallet';
-// import PermissionPopup from '../../../utils/PermissionPopup';
-import { NOT_AUTHORIZED_MESSAGE } from '../../../utils/constants';
+import {
+  CURRENCY_PREFIX,
+  NOT_AUTHORIZED_MESSAGE,
+} from '../../../utils/constants';
 import {
   // CheckRolePermission,
   listingRolePermission,
 } from '../../../utils/helper';
-import CustomButton from '../../../components/common/CustomButton';
+import WalletUpdatePopup from './WalletUpdatePopup';
+import WalletDetailPopup from './WalletDetailPopup';
 // import CategoriesCreatePopup from './CategoriesCreatePopup';
 // import CategoriesEditPopup from './CategoriesEditPopup';
 
@@ -47,7 +39,7 @@ function WalletPage() {
   const [page, setPage] = useState(0);
   const [total, setTotal] = useState(0);
   const [list, setList] = useState<any>([]);
-  // const [editFormData, setEditFormData] = useState<any>(null);
+  const [editFormData, setEditFormData] = useState<any>(null);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   // const [actionMenuItemid, setActionMenuItemid] = React.useState('');
   const [isLoader, setIsLoader] = React.useState(true);
@@ -56,7 +48,8 @@ function WalletPage() {
   // const actionMenuOpen = Boolean(actionMenuAnchorEl);
   // const actionMenuOptions = ['Products', 'Edit', 'Delete'];
   // const [openFormDialog, setOpenFormDialog] = useState(false);
-  // const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
+  const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
+  const [openDetailDialog, setOpenDetailDialog] = useState(false);
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
   // const [cancelDialogOpen, setCancelDialogOpen] = useState<boolean>(false);
@@ -120,9 +113,9 @@ function WalletPage() {
       const newPage = 0;
       setSearch(searchTxt);
       setPage(newPage);
-      walletService.WalletList(searchTxt, page, rowsPerPage).then((item) => {
-        setTotal(item.data.data.totalPages);
-        setList(item.data.data.leaves);
+      walletService.WalletList(searchTxt, newPage, rowsPerPage).then((item) => {
+        setTotal(item.data.data.total);
+        setList(item.data.data.list);
       });
     }
   };
@@ -136,8 +129,8 @@ function WalletPage() {
       .WalletList(search, newPage, rowsPerPage)
       .then((item) => {
         if (item.data.success) {
-          setTotal(item.data.data.totalPages);
-          setList(item.data.data.leaves);
+          setTotal(item.data.data.total);
+          setList(item.data.data.list);
         } else {
           setIsNotify(true);
           setNotifyMessage({
@@ -165,8 +158,8 @@ function WalletPage() {
       .WalletList(search, newPage, newRowperPage)
       .then((item) => {
         if (item.data.success) {
-          setTotal(item.data.data.totalPages);
-          setList(item.data.data.leaves);
+          setTotal(item.data.data.total);
+          setList(item.data.data.list);
         } else {
           setIsNotify(true);
           setNotifyMessage({
@@ -184,6 +177,51 @@ function WalletPage() {
       });
   };
 
+  const editHandler = (id: string, type: string) => {
+    if (type === 'update') {
+      setOpenEditFormDialog(true);
+    } else {
+      setOpenDetailDialog(true);
+    }
+    const filtered = list.filter((item: any) => item.id === id);
+    setEditFormData(filtered);
+  };
+
+  const updateFormHandler = (data: string) => {
+    setIsLoader(true);
+    walletService
+      .WalletUpdate(editFormData[0]?.id, data)
+      .then((updateItem) => {
+        if (updateItem.data.success) {
+          setList((newArr: any) => {
+            return newArr.map((item: any) => {
+              if (item.id === updateItem.data.data.id) {
+                item.balance = updateItem.data.data.balance;
+                item.status = updateItem.data.data.status;
+              }
+              return { ...item };
+            });
+          });
+          setIsLoader(false);
+          setOpenEditFormDialog(false);
+        } else {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: updateItem.data.message,
+            type: 'error',
+          });
+        }
+      })
+      .catch((error) => {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: error.message,
+          type: 'error',
+        });
+      });
+  };
   // const handleLeave = (id: any, type: string) => {
   //   setIsLoader(true);
   //   if (listingRolePermission(dataRole, 'Category List')) {
@@ -227,7 +265,6 @@ function WalletPage() {
   // };
 
   // const openModal = (avatar: string) => {
-  //   // console.log('🚀 ~ openModal ~ avatar:', avatar);
   //   setModalImage(avatar);
   //   setIsModalImage(true);
   // };
@@ -295,28 +332,43 @@ function WalletPage() {
             <table className="table-border table-auto">
               <thead>
                 <tr>
-                  <th>Balance</th>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Service</th>
+                  <th>Credit</th>
                   <th>Type</th>
-                  <th>Created Date</th>
-                  <th>Status</th>
+                  {/* <th>Status</th> */}
                   <th aria-label="empty table header">&nbsp;</th>
                 </tr>
               </thead>
               <tbody>
                 {list &&
-                  list?.map((item: any, index: number) => {
+                  list.map((item: any, index: number) => {
                     return (
                       <tr key={index}>
-                        <td className="font-semibold">{item.balance}</td>
-                        <td>{item.referenceType}</td>
                         <td>
-                          {dayjs(item.createdDate).isValid()
-                            ? dayjs(item.createdDate)?.format(
-                                'ddd, MMM DD, YYYY hh:mm:ssA'
-                              )
-                            : '--'}
+                          <div className="avatar flex flex-row items-center">
+                            <div className="flex flex-col items-start justify-start">
+                              <span className="text-sm font-semibold">
+                                {`${item.storeAppointment?.name}`}
+                              </span>
+                              <span className="text-xs font-normal text-[#6A6A6A]">
+                                {dayjs(item.createdDate).isValid()
+                                  ? dayjs(item.createdDate)?.format(
+                                      'MMMM DD, YYYY'
+                                    )
+                                  : '--'}
+                              </span>
+                            </div>
+                          </div>
                         </td>
+                        <td>{item.storeAppointment?.email}</td>
+                        <td>{item.storeServiceCategoryItem?.name}</td>
                         <td>
+                          {Math.floor(item?.balance)} {CURRENCY_PREFIX}
+                        </td>
+                        <td>{item?.referenceType}</td>
+                        {/* <td>
                           <span
                             className={`badge ${
                               item.status === 'Balance'
@@ -324,11 +376,33 @@ function WalletPage() {
                                 : 'badge-success'
                             }`}
                           >
-                            {item.status}
+                            {item?.status}
                           </span>
-                        </td>
+                        </td> */}
                         <td>
                           <div className="flex flex-row-reverse">
+                            {/* <IconButton
+                              className="icon-btn mr-3.5 p-0"
+                              onClick={() => editHandler(item?.id, 'detail')}
+                            >
+                              <WysiwygOutlinedIcon />
+                            </IconButton> */}
+                            <IconButton
+                              disabled={!!(item.status === 'Completed')}
+                              className="icon-btn mr-3.5 p-0"
+                              onClick={() => editHandler(item?.id, 'update')}
+                            >
+                              <WalletIcon />
+                            </IconButton>
+                            {/* <Switch
+                              checked={item.isActive}
+                              onChange={(
+                                event: React.ChangeEvent<HTMLInputElement>
+                              ) => handleSwitchChange(event, item.id)}
+                              inputProps={{ 'aria-label': 'controlled' }}
+                            /> */}
+                          </div>
+                          {/* <div className="flex flex-row-reverse">
                             <div className="mx-3">
                               <CustomButton
                                 // disabled={isWalletLoader}
@@ -341,44 +415,8 @@ function WalletPage() {
                                   height: '35px',
                                 }}
                               />
-                              {/* <IconButton
-                                // disabled={
-                                //   item.status === 'Approved' ||
-                                //   item.status === 'Rejected'
-                                // }
-                                // className={`${
-                                //   item.status === 'Approved'
-                                //     ? 'text-gray'
-                                //     : item.status === 'Rejected'
-                                //     ? 'text-[red]'
-                                //     : 'text-black'
-                                // } btn-icon`}
-                                onClick={() => handleLeave(item.id, 'Rejected')}
-                              >
-                                <CancelOutlinedIcon />
-                                {/* Reject */}
-                              {/* </IconButton> */}
                             </div>
-                            {/* <div className="">
-                              <IconButton
-                                disabled={
-                                  item.status === 'Approved' ||
-                                  item.status === 'Rejected'
-                                }
-                                className={`${
-                                  item.status === 'Rejected'
-                                    ? 'text-gray'
-                                    : item.status === 'Approved'
-                                    ? 'text-[green]'
-                                    : 'text-black'
-                                } btn-icon`}
-                                onClick={() => handleLeave(item.id, 'Approved')}
-                              >
-                                <CheckCircleOutlineOutlinedIcon />
-                                {/* Approve */}
-                            {/* </IconButton> */}
-                            {/* </div> */}
-                          </div>
+                          </div> */}
                         </td>
                       </tr>
                     );
@@ -428,16 +466,26 @@ function WalletPage() {
           callback={createFormHandler}
         />
       )}
+    */}
       {openEditFormDialog && (
-        <CategoriesEditPopup
-          setIsNotify={setIsNotify}
-          setNotifyMessage={setNotifyMessage}
+        <WalletUpdatePopup
+          // setIsNotify={setIsNotify}
+          // setNotifyMessage={setNotifyMessage}
           openFormDialog={openEditFormDialog}
           setOpenFormDialog={setOpenEditFormDialog}
-          formData={editFormData}
+          formData={editFormData[0]}
           callback={updateFormHandler}
         />
-      )} */}
+      )}
+      {openDetailDialog && (
+        <WalletDetailPopup
+          // setIsNotify={setIsNotify}
+          // setNotifyMessage={setNotifyMessage}
+          openFormDialog={openDetailDialog}
+          setOpenFormDialog={setOpenDetailDialog}
+          formData={editFormData[0]}
+        />
+      )}
       {modalImage && (
         <Dialog
           open={isModalImage}

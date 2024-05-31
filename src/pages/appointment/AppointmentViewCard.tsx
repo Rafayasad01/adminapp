@@ -148,7 +148,7 @@ const AppointmentViewCard = ({
           });
         });
     }
-  }, [appointmentData]);
+  }, [appointmentData, isWalletLoader]);
 
   return isLoader ? (
     <Loader />
@@ -260,21 +260,22 @@ const AppointmentViewCard = ({
           </div>
         </div>
         <div className="mt-3">
-          {appointmentData?.status === APPOINTMENT_STATUS.COMPLETED && (
-            <div>
-              <CustomButton
-                // sx={{
-                //   width: '20px',
-                // }}
-                buttonType="button"
-                title="Wallet"
-                icon={<WalletIcon />}
-                className="btn-black-outline btn-icon"
-                onclick={handleClickPop}
-                // onclick={handleFormClickOpen}
-              />
-            </div>
-          )}
+          {appointmentData?.status === APPOINTMENT_STATUS.COMPLETED &&
+            data?.wallets === null && (
+              <div>
+                <CustomButton
+                  // sx={{
+                  //   width: '20px',
+                  // }}
+                  buttonType="button"
+                  title="Wallet"
+                  icon={<WalletIcon />}
+                  className="btn-black-outline btn-icon"
+                  onclick={handleClickPop}
+                  // onclick={handleFormClickOpen}
+                />
+              </div>
+            )}
         </div>
       </div>
       <div className="relative h-14">
@@ -296,7 +297,7 @@ const AppointmentViewCard = ({
         <div>
           <div className="mt-1 flex items-center justify-center rounded-full bg-[#1D1D1D] px-4 py-1 text-white">
             <StarIcon className="text-lg text-inherit" />
-            <span className="mx-1 text-base">4.5</span>
+            <span className="mx-1 text-base">{data?.rating}</span>
           </div>
         </div>
       </div>

@@ -16,10 +16,15 @@ const WalletList = (
 };
 
 const WalletCreate = (data: any) => {
-  return network.postMultipart(`${WALLET_PREFIX}/create`, data);
+  return network.post(`${WALLET_PREFIX}/create`, data);
+};
+
+const WalletUpdate = (id: any, data: any) => {
+  return network.post(`${WALLET_PREFIX}/update/${id}`, data);
 };
 
 export default {
   WalletList,
   WalletCreate,
+  WalletUpdate,
 };

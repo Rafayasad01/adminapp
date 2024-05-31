@@ -76,3 +76,7 @@ export interface AppointmentWalletPayment {
   note: string;
   person: string;
 }
+
+export interface AppointmentWalletPaymentUpdate {
+  balance: string;
+}

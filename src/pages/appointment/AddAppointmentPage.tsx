@@ -256,6 +256,7 @@ export default function AddAppointmentPage() {
   const navigate = useNavigate();
   const authState: any = useAppSelector((state: any) => state?.authState);
   // console.log('🚀 ~ AddAppointmentPage ~ shopSchedule:', shopScheduleWorkDays);
+  const [activeLoginOption, setActiveLoginOption] = useState<any>(null);
   const [loginDetails, setLoginDetails] = useState<any>(null);
   const [userEmailIdentifier, setUserEmailIdentifier] = useState('');
   const [openFormDialog, setOpenFormDialog] = useState(false);
@@ -667,6 +668,15 @@ export default function AddAppointmentPage() {
       endTime: dayjs(scheduleData?.endTime),
     });
   }, [activeBarberData]);
+
+  useEffect(() => {
+    if (loginDetails && activeLoginOption === 'TRUE') {
+      const name = `${loginDetails.firstName} ${loginDetails.lastName}`;
+      setValue('name', name);
+      setValue('email', loginDetails?.email);
+      setValue('phone', loginDetails?.phone);
+    }
+  }, [loginDetails]);
 
   // const addAppointmentServices = () => {
   //   const obj = {
@@ -1215,7 +1225,8 @@ export default function AddAppointmentPage() {
   };
 
   const callbackValue = (value: string) => {
-    console.log('🚀 ~ callbackValue ~ value:', value);
+    // console.log('🚀 ~ callbackValue ~ value:', value);
+    setActiveLoginOption(value);
   };
 
   return isLoader ? (
@@ -1321,6 +1332,9 @@ export default function AddAppointmentPage() {
                           variant="standard"
                         >
                           <CustomInputBox
+                            disable={
+                              !!(loginDetails && activeLoginOption === 'TRUE')
+                            }
                             pattern={PATTERN.CHAR_NUM_DOT_AT}
                             inputTitle="Email"
                             placeholder="Enter email address"
