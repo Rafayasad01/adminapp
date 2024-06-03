@@ -51,7 +51,7 @@ function MapAddresses({ addresses, zoom }: MapAddressesProps) {
           }
           if (status === 'OK' && status !== 'ZERO_RESULTS') {
             if (!results) {
-              return;
+              return null;
             }
             const { location } = results[0].geometry;
             if (location && location.lat() && location.lng()) {
