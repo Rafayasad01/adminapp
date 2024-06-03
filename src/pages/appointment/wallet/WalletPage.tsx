@@ -204,6 +204,11 @@ function WalletPage() {
           });
           setIsLoader(false);
           setOpenEditFormDialog(false);
+          // setIsNotify(true);
+          // setNotifyMessage({
+          //   text: updateItem.data.message,
+          //   type: 'sccuess',
+          // });
         } else {
           setIsLoader(false);
           setIsNotify(true);
@@ -334,7 +339,7 @@ function WalletPage() {
                 <tr>
                   <th>Name</th>
                   <th>Email</th>
-                  <th>Service</th>
+                  {/* <th>Service</th> */}
                   <th>Credit</th>
                   <th>Type</th>
                   {/* <th>Status</th> */}
@@ -350,7 +355,7 @@ function WalletPage() {
                           <div className="avatar flex flex-row items-center">
                             <div className="flex flex-col items-start justify-start">
                               <span className="text-sm font-semibold">
-                                {`${item.storeAppointment?.name}`}
+                                {`${item.appUser?.firstName} ${item.appUser?.lastName}`}
                               </span>
                               <span className="text-xs font-normal text-[#6A6A6A]">
                                 {dayjs(item.createdDate).isValid()
@@ -362,8 +367,8 @@ function WalletPage() {
                             </div>
                           </div>
                         </td>
-                        <td>{item.storeAppointment?.email}</td>
-                        <td>{item.storeServiceCategoryItem?.name}</td>
+                        <td>{item.appUser?.email}</td>
+                        {/* <td>{item.storeServiceCategoryItem?.name}</td> */}
                         <td>
                           {Math.floor(item?.balance)} {CURRENCY_PREFIX}
                         </td>

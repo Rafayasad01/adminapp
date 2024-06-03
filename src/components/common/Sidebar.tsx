@@ -136,8 +136,8 @@ const links = [
   {
     name: 'Branches',
     path: 'branches',
-    // permission: 'Branch List',
-    permission: 'Banners List',
+    permission: 'Branch List',
+    // permission: 'Banners List',
     icon: <CorporateFareIcon className="w-[17px]" />,
   },
   {
