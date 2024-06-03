@@ -102,9 +102,9 @@ function ProfileEditPopup({
   useEffect(() => {
     countriesService().then((res: any) => {
       setCountries(
-        res.data.map((country: any) => ({
-          id: country.name.common,
-          name: country.name.common,
+        res.data.data.map((el: any) => ({
+          id: el.country,
+          name: el.country,
         }))
       );
     });
