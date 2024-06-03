@@ -2,7 +2,6 @@ import SearchIcon from '@mui/icons-material/Search';
 import Dialog from '@mui/material/Dialog';
 import Divider from '@mui/material/Divider';
 import FormControl from '@mui/material/FormControl';
-// import WysiwygOutlinedIcon from '@mui/icons-material/WysiwygOutlined';
 import WalletIcon from '@mui/icons-material/Wallet';
 import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
@@ -25,12 +24,8 @@ import {
   listingRolePermission,
 } from '../../../utils/helper';
 import WalletUpdatePopup from './WalletUpdatePopup';
-import WalletDetailPopup from './WalletDetailPopup';
-// import CategoriesCreatePopup from './CategoriesCreatePopup';
-// import CategoriesEditPopup from './CategoriesEditPopup';
 
 function WalletPage() {
-  // const authState: any = useAppSelector((state) => state?.authState);
   const dataRole = useAppSelector(
     (state) => state?.persistedReducer?.roleState?.role?.permissions
   );
@@ -41,15 +36,13 @@ function WalletPage() {
   const [list, setList] = useState<any>([]);
   const [editFormData, setEditFormData] = useState<any>(null);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  // const [actionMenuItemid, setActionMenuItemid] = React.useState('');
   const [isLoader, setIsLoader] = React.useState(true);
-  // const [actionMenuAnchorEl, setActionMenuAnchorEl] =
-  //   useState<null | HTMLElement>(null);
-  // const actionMenuOpen = Boolean(actionMenuAnchorEl);
-  // const actionMenuOptions = ['Products', 'Edit', 'Delete'];
-  // const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
-  const [openDetailDialog, setOpenDetailDialog] = useState(false);
+  const [
+    ,
+    // openDetailDialog
+    setOpenDetailDialog,
+  ] = useState(false);
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
   // const [cancelDialogOpen, setCancelDialogOpen] = useState<boolean>(false);
@@ -58,18 +51,6 @@ function WalletPage() {
   // );
   const [isModalImage, setIsModalImage] = useState(false);
   const [modalImage, setModalImage] = useState('');
-
-  // const handleFormClickOpen = () => {
-  //   if (listingRolePermission(dataRole, 'Category Create')) {
-  //     setOpenFormDialog(true);
-  //   } else {
-  //     setIsNotify(true);
-  //     setNotifyMessage({
-  //       text: NOT_AUTHORIZED_MESSAGE,
-  //       type: 'warning',
-  //     });
-  //   }
-  // };
 
   useEffect(() => {
     if (listingRolePermission(dataRole, 'Category List')) {
@@ -204,11 +185,11 @@ function WalletPage() {
           });
           setIsLoader(false);
           setOpenEditFormDialog(false);
-          // setIsNotify(true);
-          // setNotifyMessage({
-          //   text: updateItem.data.message,
-          //   type: 'sccuess',
-          // });
+          setIsNotify(true);
+          setNotifyMessage({
+            text: updateItem.data.message,
+            type: 'sccuess',
+          });
         } else {
           setIsLoader(false);
           setIsNotify(true);
@@ -227,52 +208,6 @@ function WalletPage() {
         });
       });
   };
-  // const handleLeave = (id: any, type: string) => {
-  //   setIsLoader(true);
-  //   if (listingRolePermission(dataRole, 'Category List')) {
-  //     employeeService
-  //       .StoreEmployeeLeaveStatusUpdateService(id, type)
-  //       .then((item: any) => {
-  //         if (item.data.success) {
-  //           setIsLoader(false);
-  //           setList((newArr: any) => {
-  //             return newArr.map((el: any) => {
-  //               if (el.id === id) {
-  //                 el.status = item.data.data.status;
-  //               }
-  //               return { ...el };
-  //             });
-  //           });
-  //         } else {
-  //           setIsLoader(false);
-  //           setIsNotify(true);
-  //           setNotifyMessage({
-  //             text: item.data.message,
-  //             type: 'error',
-  //           });
-  //         }
-  //       })
-  //       .catch((error) => {
-  //         setIsLoader(false);
-  //         setIsNotify(true);
-  //         setNotifyMessage({
-  //           text: error.message,
-  //           type: 'error',
-  //         });
-  //       });
-  //   } else {
-  //     setIsNotify(true);
-  //     setNotifyMessage({
-  //       text: NOT_AUTHORIZED_MESSAGE,
-  //       type: 'warning',
-  //     });
-  //   }
-  // };
-
-  // const openModal = (avatar: string) => {
-  //   setModalImage(avatar);
-  //   setIsModalImage(true);
-  // };
 
   const closeModal = () => {
     setModalImage('');
@@ -373,25 +308,8 @@ function WalletPage() {
                           {Math.floor(item?.balance)} {CURRENCY_PREFIX}
                         </td>
                         <td>{item?.referenceType}</td>
-                        {/* <td>
-                          <span
-                            className={`badge ${
-                              item.status === 'Balance'
-                                ? 'badge-primary'
-                                : 'badge-success'
-                            }`}
-                          >
-                            {item?.status}
-                          </span>
-                        </td> */}
                         <td>
                           <div className="flex flex-row-reverse">
-                            {/* <IconButton
-                              className="icon-btn mr-3.5 p-0"
-                              onClick={() => editHandler(item?.id, 'detail')}
-                            >
-                              <WysiwygOutlinedIcon />
-                            </IconButton> */}
                             <IconButton
                               disabled={!!(item.status === 'Completed')}
                               className="icon-btn mr-3.5 p-0"
@@ -399,29 +317,7 @@ function WalletPage() {
                             >
                               <WalletIcon />
                             </IconButton>
-                            {/* <Switch
-                              checked={item.isActive}
-                              onChange={(
-                                event: React.ChangeEvent<HTMLInputElement>
-                              ) => handleSwitchChange(event, item.id)}
-                              inputProps={{ 'aria-label': 'controlled' }}
-                            /> */}
                           </div>
-                          {/* <div className="flex flex-row-reverse">
-                            <div className="mx-3">
-                              <CustomButton
-                                // disabled={isWalletLoader}
-                                buttonType="button"
-                                title="Update"
-                                className="btn-black-outline"
-                                // type="submit"
-                                sx={{
-                                  width: '100%',
-                                  height: '35px',
-                                }}
-                              />
-                            </div>
-                          </div> */}
                         </td>
                       </tr>
                     );
@@ -444,34 +340,6 @@ function WalletPage() {
           </div>
         </div>
       </div>
-      {/* {cancelDialogOpen && (
-        <PermissionPopup
-          type="shock"
-          open={cancelDialogOpen}
-          setOpen={setCancelDialogOpen}
-          dialogText={dialogText}
-          callback={statusCancelHandler}
-        />
-      )}
-      {actionMenuAnchorEl && (
-        <ActionMenu
-          open={actionMenuOpen}
-          anchorEl={actionMenuAnchorEl}
-          setAnchorEl={setActionMenuAnchorEl}
-          options={actionMenuOptions}
-          callback={manuHandler}
-        />
-      )} */}
-      {/* {openFormDialog && (
-        <CategoriesCreatePopup
-          setIsNotify={setIsNotify}
-          setNotifyMessage={setNotifyMessage}
-          openFormDialog={openFormDialog}
-          setOpenFormDialog={setOpenFormDialog}
-          callback={createFormHandler}
-        />
-      )}
-    */}
       {openEditFormDialog && (
         <WalletUpdatePopup
           // setIsNotify={setIsNotify}
@@ -482,7 +350,7 @@ function WalletPage() {
           callback={updateFormHandler}
         />
       )}
-      {openDetailDialog && (
+      {/* {openDetailDialog && (
         <WalletDetailPopup
           // setIsNotify={setIsNotify}
           // setNotifyMessage={setNotifyMessage}
@@ -490,7 +358,7 @@ function WalletPage() {
           setOpenFormDialog={setOpenDetailDialog}
           formData={editFormData[0]}
         />
-      )}
+      )} */}
       {modalImage && (
         <Dialog
           open={isModalImage}
@@ -499,8 +367,6 @@ function WalletPage() {
           PaperProps={{
             className: 'max-w-[25%] 2xl:min-h-[35%] xl:min-h-[45%]',
             style: {
-              // maxWidth: '25%',
-              // minHeight: '45%',
               borderRadius: '2%',
               display: 'flex',
               alignItems: 'center',
