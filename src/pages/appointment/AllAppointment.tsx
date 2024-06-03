@@ -160,7 +160,7 @@ const AllAppointment = ({
               status: item.status,
             };
           });
-          // console.log('structuredData', structuredData);
+          console.log('structuredData', structuredData);
           setData(structuredData);
           setIsLoader(false);
         } else {
@@ -386,7 +386,7 @@ const AllAppointment = ({
       return 'bg-green-700';
     }
     if (status === APPOINTMENT_STATUS.RESCHEDULE) {
-      return 'bg-grey-700';
+      return 'bg-red-700';
     }
     if (
       status === APPOINTMENT_STATUS.CANCELLED ||

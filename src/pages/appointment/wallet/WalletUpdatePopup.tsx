@@ -63,6 +63,7 @@ WalletUpdatePopupProps) {
                     <CustomInputBox
                       pattern={PATTERN.ONLY_NUM}
                       maxLetterLimit={15}
+                      min={1}
                       inputTitle="Amount"
                       placeholder="2500 (PKR)"
                       id="balance"

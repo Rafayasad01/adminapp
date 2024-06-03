@@ -19,6 +19,7 @@ type CustomInputBoxProps = {
   inputType?: string;
   length?: string;
   maxLetterLimit?: number;
+  min?: number;
   onclick?: (items?: any) => void;
   pattern?: any;
   placeholder?: string;
@@ -42,6 +43,7 @@ function CustomInputBox({
   length,
   sx,
   maxLetterLimit,
+  min,
   onclick,
   pattern,
   placeholder,
@@ -83,6 +85,10 @@ function CustomInputBox({
           pattern: {
             value: pattern,
             message: INVALID_CHAR,
+          },
+          min: {
+            value: min,
+            message: `${inputTitle} should be greater than 0.`,
           },
           maxLength: {
             value: maxLetterLimit,

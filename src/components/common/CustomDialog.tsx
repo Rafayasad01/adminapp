@@ -360,7 +360,7 @@ function CustomDialog({
               className="btn-black-fill"
               sx={{
                 padding: '0.375rem 2rem !important',
-                width: '90%',
+                width: '80%',
                 height: '35px',
               }}
             />
