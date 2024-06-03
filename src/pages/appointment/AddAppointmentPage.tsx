@@ -5,9 +5,13 @@ import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined';
 import CloseIcon from '@mui/icons-material/Close';
 import RadioButtonUncheckedOutlinedIcon from '@mui/icons-material/RadioButtonUncheckedOutlined';
 import Avatar from '@mui/material/Avatar';
+import Dialog from '@mui/material/Dialog';
 import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import { CircularProgress, Divider, InputAdornment } from '@mui/material';
+import Button from '@mui/material/Button';
 import FormLabel from '@mui/material/FormLabel';
+import Input from '@mui/material/Input';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import TextField from '@mui/material/TextField';
@@ -31,6 +35,7 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import { Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import appUserService from '../../services/adminapp/adminAppUser';
 import assets from '../../assets';
 import '../../assets/css/PopupStyle.css';
 import CustomButton from '../../components/common/CustomButton';
@@ -64,10 +69,197 @@ const darkTheme = createTheme({
   },
 });
 
+type UserPopupProps = {
+  openFormDialog: any;
+  handleFormClose: any;
+  callbackValue: any;
+  userEmailIdentifier: any;
+  setUserEmailIdentifier: any;
+  authState: any;
+  setLoginDetails: any;
+  setIsNotify: any;
+  setNotifyMessage: any;
+};
+
+const UserPopup = ({
+  openFormDialog,
+  handleFormClose,
+  callbackValue,
+  setUserEmailIdentifier,
+  authState,
+  userEmailIdentifier,
+  setLoginDetails,
+  setIsNotify,
+  setNotifyMessage,
+}: UserPopupProps) => {
+  const [isLoginLoader, setIsLoginLoader] = useState<boolean>(false);
+  const [isExistingUser, setIsExistingUser] = useState<'TRUE' | 'FALSE'>(
+    'FALSE'
+  );
+  const handleUserChange = (event: any) => {
+    setIsExistingUser(event.target.value);
+    callbackValue(event.target.value);
+  };
+
+  const handleLogin = () => {
+    setIsLoginLoader(true);
+    const anonIdentifier = authState?.user?.username?.split('@')[0];
+    const payload = {
+      identifier:
+        isExistingUser === 'FALSE'
+          ? `${anonIdentifier}@shop.com`
+          : userEmailIdentifier || 'false',
+      tenant: authState?.user?.tenant,
+    };
+    let service;
+    if (isExistingUser === 'TRUE') {
+      service = appUserService.appLogin;
+    } else {
+      service = appUserService.appAnonymousLogin;
+    }
+    service(payload)
+      .then((res) => {
+        if (res.data.success) {
+          setIsLoginLoader(false);
+          setLoginDetails(res.data.data);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: res.data.message,
+            type: 'success',
+          });
+          handleFormClose(false);
+        } else {
+          setIsLoginLoader(false);
+          setLoginDetails(null);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: res.data.message,
+            type: 'error',
+          });
+        }
+      })
+      .catch((err) => {
+        setIsLoginLoader(false);
+        setLoginDetails(null);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
+        });
+      });
+  };
+
+  return (
+    <Dialog
+      open={openFormDialog}
+      onClose={() => handleFormClose(false)}
+      PaperProps={{
+        className: 'Dialog',
+        style: { maxWidth: '100%', maxHeight: 'auto' },
+      }}
+    >
+      <div className="Content">
+        <form>
+          <div className="FormHeader">
+            <span className="Title">Select User</span>
+          </div>
+          <div>
+            <FormControl className="">
+              <RadioGroup
+                row
+                aria-labelledby="demo-row-radio-buttons-group-label"
+                name="row-radio-buttons-group"
+                value={isExistingUser ?? ''}
+                onClick={handleUserChange}
+              >
+                <FormControlLabel
+                  sx={{
+                    color: '#6A6A6A',
+                    fontFamily: 'Open Sans',
+                    fonWeight: 400,
+                    fonSize: '14px',
+                  }}
+                  // disabled={}
+                  value="FALSE"
+                  control={
+                    <Radio
+                      className="text-sm text-[#1D1D1D]"
+                      icon={<RadioButtonUncheckedOutlinedIcon />}
+                      checkedIcon={<CheckCircleOutlinedIcon />}
+                    />
+                  }
+                  label="Anonymous"
+                />
+                <FormControlLabel
+                  sx={{
+                    color: '#6A6A6A',
+                    fontFamily: 'Open Sans',
+                    fonWeight: 400,
+                    fonSize: '14px',
+                  }}
+                  value="TRUE"
+                  control={
+                    <Radio
+                      className="text-[#1D1D1D]"
+                      icon={<RadioButtonUncheckedOutlinedIcon />}
+                      checkedIcon={<CheckCircleOutlinedIcon />}
+                    />
+                  }
+                  label="Customer"
+                />
+              </RadioGroup>
+            </FormControl>
+          </div>
+        </form>
+        {isExistingUser === 'TRUE' && (
+          // <>
+          <div className="w-full rounded-xl border border-solid border-foreground py-1 pl-3">
+            <Input
+              className="input-with-icon after:border-b-secondary"
+              id="search"
+              type="text"
+              placeholder="Identifier (Ex : email or phone)"
+              // onKeyDown={(
+              //   event: React.KeyboardEvent<
+              //     HTMLInputElement | HTMLTextAreaElement
+              //   >
+              // ) => {
+              //   handleUserInput(event);
+              // }}
+              onChange={(event) => setUserEmailIdentifier(event.target.value)}
+              disableUnderline
+            />
+          </div>
+          // </>
+        )}
+        <div>
+          <CustomButton
+            disabled={isLoginLoader}
+            onclick={handleLogin}
+            buttonType="button"
+            title={isLoginLoader ? <CircularProgress size={14} /> : 'Verify'}
+            // title={"Verify"}
+            className={`${'btn-black-outline mt-3'}`}
+            sx={{
+              padding: '0.375rem 2rem !important',
+              width: '100%',
+              height: '35px',
+            }}
+          />
+        </div>
+      </div>
+    </Dialog>
+  );
+};
+
 export default function AddAppointmentPage() {
   const navigate = useNavigate();
-  // const authState: any = useAppSelector((state: any) => state?.authState);
+  const authState: any = useAppSelector((state: any) => state?.authState);
   // console.log('🚀 ~ AddAppointmentPage ~ shopSchedule:', shopScheduleWorkDays);
+  const [activeLoginOption, setActiveLoginOption] = useState<any>(null);
+  const [loginDetails, setLoginDetails] = useState<any>(null);
+  const [userEmailIdentifier, setUserEmailIdentifier] = useState('');
+  const [openFormDialog, setOpenFormDialog] = useState(false);
   const [isLoader, setIsLoader] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState(false);
   const [isPageLoader, setIsPageLoader] = useState(false);
@@ -476,6 +668,15 @@ export default function AddAppointmentPage() {
       endTime: dayjs(scheduleData?.endTime),
     });
   }, [activeBarberData]);
+
+  useEffect(() => {
+    if (loginDetails && activeLoginOption === 'TRUE') {
+      const name = `${loginDetails.firstName} ${loginDetails.lastName}`;
+      setValue('name', name);
+      setValue('email', loginDetails?.email);
+      setValue('phone', loginDetails?.phone);
+    }
+  }, [loginDetails]);
 
   // const addAppointmentServices = () => {
   //   const obj = {
@@ -960,6 +1161,7 @@ export default function AddAppointmentPage() {
       return e;
     });
     data.status = paymentMethod ? 'Processing' : 'New';
+    data.appUser = loginDetails?.id;
     storeAppointmentService
       .appointmentCreate(data)
       .then((res: any) => {
@@ -1022,10 +1224,28 @@ export default function AddAppointmentPage() {
     );
   };
 
+  const callbackValue = (value: string) => {
+    // console.log('🚀 ~ callbackValue ~ value:', value);
+    setActiveLoginOption(value);
+  };
+
   return isLoader ? (
     <Loader />
   ) : (
     <div>
+      {openFormDialog && (
+        <UserPopup
+          authState={authState}
+          openFormDialog={openFormDialog}
+          handleFormClose={setOpenFormDialog}
+          setUserEmailIdentifier={setUserEmailIdentifier}
+          userEmailIdentifier={userEmailIdentifier}
+          callbackValue={callbackValue}
+          setLoginDetails={setLoginDetails}
+          setIsNotify={setIsNotify}
+          setNotifyMessage={setNotifyMessage}
+        />
+      )}
       <Notify
         isOpen={isNotify}
         setIsOpen={setIsNotify}
@@ -1112,6 +1332,9 @@ export default function AddAppointmentPage() {
                           variant="standard"
                         >
                           <CustomInputBox
+                            disable={
+                              !!(loginDetails && activeLoginOption === 'TRUE')
+                            }
                             pattern={PATTERN.CHAR_NUM_DOT_AT}
                             inputTitle="Email"
                             placeholder="Enter email address"
@@ -1508,19 +1731,35 @@ export default function AddAppointmentPage() {
                     height: '35px',
                   }}
                 />
-                <CustomButton
-                  disabled={fields?.length < 1 && true}
-                  buttonType="button"
-                  title="Submit"
-                  className="btn-black-outline"
-                  type="submit"
-                  // onclick={handleFormClose}
-                  sx={{
-                    padding: '0.375rem 2rem !important',
-                    width: '15%',
-                    height: '35px',
-                  }}
-                />
+                {loginDetails ? (
+                  <CustomButton
+                    disabled={fields?.length < 1 && true}
+                    buttonType="button"
+                    title="Submit"
+                    className="btn-black-outline"
+                    type="submit"
+                    // onclick={() => setOpenFormDialog(true)}
+                    sx={{
+                      padding: '0.375rem 2rem !important',
+                      width: '15%',
+                      height: '35px',
+                    }}
+                  />
+                ) : (
+                  <CustomButton
+                    // disabled={fields?.length < 1 && true}
+                    buttonType="button"
+                    title="Verify User"
+                    className="btn-black-outline"
+                    // type="submit"
+                    onclick={() => setOpenFormDialog(true)}
+                    sx={{
+                      padding: '0.375rem 2rem !important',
+                      width: '15%',
+                      height: '35px',
+                    }}
+                  />
+                )}
               </div>
             </form>
           </div>
