@@ -139,39 +139,109 @@ function OrderDetailsTrackingPage({
       if (
         status === ORDER_STATUS.DRIVER_DECLINED_TO_PICKUP_ITEM_FROM_CUSTOMER
       ) {
-        let declinedCustomer = true;
-        if (currentStatus === ORDER_STATUS.COMPLETED) {
-          declinedCustomer = false;
-        }
-        if (currentStatus === ORDER_STATUS.DRIVER_DELIVERED_ITEM_TO_SHOP) {
-          declinedCustomer = false;
+        let declinedCustomer = false;
+        if (
+          currentStatus ===
+          ORDER_STATUS.DRIVER_DECLINED_TO_PICKUP_ITEM_FROM_CUSTOMER
+        ) {
+          declinedCustomer = true;
         }
         return declinedCustomer;
       }
 
       if (status === ORDER_STATUS.DRIVER_RETURNED_ITEM_TO_CUSTOMER) {
-        let returnedCustomer = true;
-        if (currentStatus === ORDER_STATUS.COMPLETED) {
-          returnedCustomer = false;
-        }
-        if (currentStatus === ORDER_STATUS.DRIVER_DELIVERED_ITEM_TO_SHOP) {
-          returnedCustomer = false;
+        let returnedCustomer = false;
+        if (currentStatus === ORDER_STATUS.DRIVER_RETURNED_ITEM_TO_CUSTOMER) {
+          returnedCustomer = true;
         }
         return returnedCustomer;
       }
 
-      if (
-        currentStatus ===
-        ORDER_STATUS.DRIVER_ACCEPTED_TO_PICK_UP_ITEM_FROM_CUSTOMER
-      ) {
-        if (
-          status === ORDER_STATUS.DRIVER_ACCEPTED_TO_PICK_UP_ITEM_FROM_CUSTOMER
-        ) {
-          return true;
-        }
-
-        return false;
+      if (status === ORDER_STATUS.DRIVER_DELIVERED_ITEM_TO_SHOP) {
+        return true;
       }
+
+      if (status === ORDER_STATUS.PROCESSING_ITEM) {
+        return true;
+      }
+
+      if (status === ORDER_STATUS.DRIVER_ASSIGNED_FOR_ITEM_DELIVERY) {
+        let pickedUp = true;
+        if (
+          currentStatus ===
+          ORDER_STATUS.DRIVER_DECLINED_TO_PICKUP_ITEM_FROM_SHOP
+        ) {
+          pickedUp = false;
+        }
+        if (currentStatus === ORDER_STATUS.DRIVER_RETURNED_ITEM_TO_SHOP) {
+          pickedUp = false;
+        }
+        return pickedUp;
+      }
+
+      if (status === ORDER_STATUS.DRIVER_ACCEPTED_TO_PICK_UP_ITEM_FROM_SHOP) {
+        let showAccepted = true;
+        if (
+          currentStatus ===
+          ORDER_STATUS.DRIVER_DECLINED_TO_PICKUP_ITEM_FROM_SHOP
+        ) {
+          showAccepted = false;
+        }
+        if (currentStatus === ORDER_STATUS.DRIVER_RETURNED_ITEM_TO_SHOP) {
+          showAccepted = false;
+        }
+        return showAccepted;
+      }
+
+      if (status === ORDER_STATUS.DRIVER_DECLINED_TO_PICKUP_ITEM_FROM_SHOP) {
+        let declinedShop = false;
+        if (
+          currentStatus ===
+          ORDER_STATUS.DRIVER_DECLINED_TO_PICKUP_ITEM_FROM_SHOP
+        ) {
+          declinedShop = true;
+        }
+        return declinedShop;
+      }
+
+      if (status === ORDER_STATUS.DRIVER_RETURNED_ITEM_TO_SHOP) {
+        let returnedShop = false;
+        if (currentStatus === ORDER_STATUS.DRIVER_RETURNED_ITEM_TO_SHOP) {
+          returnedShop = true;
+        }
+        return returnedShop;
+      }
+
+      if (status === ORDER_STATUS.DRIVER_PICKED_UP_ITEM_FROM_SHOP) {
+        let pickedUp = true;
+        if (
+          currentStatus ===
+          ORDER_STATUS.DRIVER_DECLINED_TO_PICKUP_ITEM_FROM_SHOP
+        ) {
+          pickedUp = false;
+        }
+        if (currentStatus === ORDER_STATUS.DRIVER_RETURNED_ITEM_TO_SHOP) {
+          pickedUp = false;
+        }
+        return pickedUp;
+      }
+
+      if (status === ORDER_STATUS.DRIVER_DELIVERED_ITEM_TO_CUSTOMER) {
+        return true;
+      }
+
+      if (status === ORDER_STATUS.CUSTOMER_PICK_UP) {
+        return true;
+      }
+
+      if (status === ORDER_STATUS.COMPLETED) {
+        return true;
+      }
+
+      if (status === ORDER_STATUS.CANCELLED) {
+        return true;
+      }
+
       return false;
     },
     [orderData.status, orderData.appOrderStatuses]
