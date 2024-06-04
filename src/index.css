@@ -1783,8 +1783,12 @@ main .container:nth-child(3){
 }
 
 .custom-swiper-slider .swiper-slide {
-  width: 15% !important;
+  width: 22% !important;
 }
+
+/* .custom-swiper-slider .swiper-slide {
+  width: 15% !important;
+} */
 
 .swiper-wrapper {
   padding-left: 150px;

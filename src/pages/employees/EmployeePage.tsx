@@ -191,7 +191,7 @@ function EmployeePage() {
     setPage(newPage);
     if (search === '' || search === null || search === undefined) {
       employeeService
-        .getListService(authState.user.tenant, newPage, rowsPerPage)
+        .getListService(authState.user.tenant, newPage, newRowperPage)
         .then((item) => {
           setList(item.data.data.list);
           setTotal(item.data.data.total);
@@ -202,7 +202,7 @@ function EmployeePage() {
           authState.user.tenant,
           search,
           newPage,
-          rowsPerPage
+          newRowperPage
         )
         .then((item) => {
           setList(item.data.data.list);

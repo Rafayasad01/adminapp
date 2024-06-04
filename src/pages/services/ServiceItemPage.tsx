@@ -106,7 +106,7 @@ function ServiceItemPage() {
     setRowsPerPage(newRowperPage);
     setPage(newPage);
     storeService
-      .StoreCatItemsList(CatId, search, newPage, rowsPerPage)
+      .StoreCatItemsList(CatId, search, newPage, newRowperPage)
       .then((item) => {
         setList(item.data.data.list);
         setTotal(item.data.data.total);

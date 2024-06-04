@@ -126,7 +126,7 @@ function ServicesPage() {
     setRowsPerPage(newRowperPage);
     setPage(newPage);
     storeService
-      .StoreCatList(authState.user.tenant, newPage, rowsPerPage)
+      .StoreCatList(authState.user.tenant, newPage, newRowperPage)
       .then((item) => {
         setList(item.data.data.list);
         setTotal(item.data.data.total);

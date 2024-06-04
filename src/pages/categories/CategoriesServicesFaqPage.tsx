@@ -108,7 +108,7 @@ function CategoriesServicesFaqPage() {
     setPage(newPage);
     if (search === '' || search === null || search === undefined) {
       categoryService
-        .getCategoryServiceFaqList(categoryServiceId, newPage, rowsPerPage)
+        .getCategoryServiceFaqList(categoryServiceId, newPage, newRowperPage)
         .then((item) => {
           setList(item.data.data.list);
           setTotal(item.data.data.total);
@@ -119,7 +119,7 @@ function CategoriesServicesFaqPage() {
           categoryServiceId,
           search,
           newPage,
-          rowsPerPage
+          newRowperPage
         )
         .then((item) => {
           setList(item.data.data.list);

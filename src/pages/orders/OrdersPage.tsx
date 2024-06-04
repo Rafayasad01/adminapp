@@ -119,7 +119,7 @@ function OrdersPage() {
       const getOrderListPromise = orderService.getListService(
         authState.user.tenant,
         newPage,
-        rowsPerPage
+        newRowPerPage
       );
       const [getOrderListResult, getOrderListError, getOrderListOk] =
         await promiseHandler(getOrderListPromise);

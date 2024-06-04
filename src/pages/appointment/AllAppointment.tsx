@@ -106,45 +106,11 @@ const AllAppointment = ({
           const structuredData = res.data.data.map((item: any) => {
             // const date = moment(item.appointmentTime);
             const date = dayjs(item.appointmentTime);
-            console.log('🚀 DATE:', date);
             const formattedDateTime = dayjs(date).format(
               'ddd MMM DD YYYY h:mm:ss A'
             );
-            // moment(date.toString().split('.')[0]).format(
-            //   'ddd MMM DD YYYY h:mm:ss A'
-            // );
-
-            // const parsedDate = dayjs(date);
             const date2 = date.add(item.serviceTime, 'minute');
             const formattedDate2 = date2.format('ddd MMM DD YYYY h:mm:ss A');
-
-            // console.log('🚀 ADD DATE2:', formattedDate2);
-            // const d1 = formattedDateTime;
-            // const d2 = formattedDate2;
-
-            // console.log(
-            //   '🚀 ~ structuredData ~ formattedDateTime:',
-            //   formattedDateTime
-            // );
-            // console.log(
-            //   '🚀 ~ structuredData ~ formattedDate2:',
-            //   formattedDate2
-            // );
-            // console.log(
-            //   '🚀 ~ structuredData ~ date:',
-            //   date.format('ddd MMM DD YYYY h:mm:ss A')
-            // );
-            // const d1split = date.split('.')[0];
-            // console.log('🚀 ~ structuredData ~ date one:', d1);
-            // console.log('🚀 ~ structuredData ~ date two:', d2);
-            // const formattedDateWithHour1 = d1split.format(
-            //   'ddd MMM DD YYYY h:mm:ss A'
-            // );
-
-            // const newDate2 = date.add(item.serviceTime, 'minute');
-            // const formattedDateWithHour2 = newDate2.format(
-            //   'ddd MMM DD YYYY h:mm:ss A'
-            // );
             return {
               // paid: true,
               title: item.name,
@@ -158,7 +124,6 @@ const AllAppointment = ({
               status: item.status,
             };
           });
-          console.log('structuredData', structuredData);
           setData(structuredData);
           setIsLoader(false);
         } else {
@@ -551,15 +516,10 @@ const AllAppointment = ({
         <IntegratedEditing />
         <AppointmentTooltip
           showCloseButton
-          // visible={isTooltipOpen}
-          // onVisibilityChange={handleVisibilityChange}
           contentComponent={(props) => (
             <div>
-              {/* {isTooltipOpen && ( */}
               <AppointmentViewCard
-                // {...(isTooltipOpen ? props : null)}
                 {...props}
-                // setAppointmentTooltipData={setAppointmentTooltipData}
                 setIsTooltipOpen={setIsTooltipOpen}
                 isTooltipOpen={isTooltipOpen}
                 setOpenFormDialog={setOpenEditFormDialog}
@@ -571,41 +531,11 @@ const AllAppointment = ({
               {/* )} */}
             </div>
           )}
-          // showOpenButton={isTooltipOpen}
-          // headerComponent={(props) => <AppointmentTooltip.Header {...props} />}
         />
-        {/* <AppointmentTooltip
-          // showOpenButton={isTooltipOpen}
-          // headerComponent={(props) => <AppointmentTooltip.Header  {...props} />}
-          contentComponent={
-            (props) =>
-              // <div>
-              isTooltipOpen && (
-                <AppointmentViewCard
-                  // {...(isTooltipOpen ? props : null)}
-                  {...props}
-                  setAppointmentTooltipData={setAppointmentTooltipData}
-                  setIsTooltipOpen={setIsTooltipOpen}
-                  isTooltipOpen={isTooltipOpen}
-                  setOpenFormDialog={setOpenEditFormDialog}
-                  getUpdatePopupData={getUpdatePopupData}
-                  isStatusDone={isStatusDone}
-                  isStatusProcessing={isStatusProcessing}
-                  deleteAppointmentHandler={deleteAppointmentHandler}
-                />
-              )
-            // </div>
-          }
-          onVisibilityChange={handleVisibilityChange}
-          visible={isTooltipOpen}
-        /> */}
         <GroupingPanel />
         <Toolbar />
         <ViewSwitcher />
-        {/* <AppointmentForm /> */}
         <DateNavigator />
-        {/* <DragDropProvider /> */}
-        {/* <DateNavigator /> */}
       </Scheduler>
       {openEditFormDialog && (
         <UpdateAppointmentPopup
