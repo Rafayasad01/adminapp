@@ -79,7 +79,7 @@ const AllAppointment = ({
   const [isActiveUser, setIsActiveUser] = useState('all');
   const currentWeek = dayjs().week();
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
-  const [isNotify, setIsNotify] = React.useState(true);
+  const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
   const [currentDate, setCurrentDate] = useState(dayjs().toDate());
   const [currentView, setCurrentView] = useState('Vertical Orientation');
@@ -415,8 +415,8 @@ const AllAppointment = ({
           <div className="flex w-full flex-wrap items-center justify-between">
             <div className="w-[50%] truncate">{restProps?.data?.title}</div>
           </div>
-          <div className="">{`${sdformat.format('HH:mm A')} - ${edformat.format(
-            'HH:mm A'
+          <div className="">{`${sdformat.format('hh:mm A')} - ${edformat.format(
+            'hh:mm A'
           )}`}</div>
         </div>
       </Appointments.AppointmentContent>
@@ -551,6 +551,7 @@ const AllAppointment = ({
       });
     }
   };
+  // console.log('🚀 ~ isNotify:', isNotify);
 
   return isLoader ? (
     <Loader />

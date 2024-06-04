@@ -1,13 +1,9 @@
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined';
 import Button from '@mui/material/Button';
-// import dayjs from 'dayjs';
-// import timezone from 'dayjs/plugin/timezone';
-// import utc from 'dayjs/plugin/utc';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import ActionMenu from '../../../components/common/ActionMenu';
 import CustomBgDropdown from '../../../components/common/CustomBgDropdown';
 import Loader from '../../../components/common/Loader';
 import Notify from '../../../components/common/Notify';
@@ -22,16 +18,9 @@ import {
 } from '../../../utils/constants';
 import promiseHandler, { listingRolePermission } from '../../../utils/helper';
 import AllAppointment from '../AllAppointment';
-import AppointmentVisitCreatePopup from './AppointmentVisitCreatePopup';
-import AppointmentVisitReschedulePopup from './AppointmentVisitReschedulePopup';
 import AppointmentVisitUpdatePopup from './AppointmentVisitUpdatePopup';
-// Extend dayjs with necessary plugins
-// dayjs.extend(utc);
-// // dayjs.extend(timezone);
-// // dayjs.tz.setDefault('UTC');
 
 function AppointmentVisitPage() {
-  // console.log('Appointment Visit Page');
   const navigate = useNavigate();
   const _authState = useAppSelector((state) => state.authState);
   const dataRole = useAppSelector(
@@ -39,17 +28,13 @@ function AppointmentVisitPage() {
   );
   const [search, _setSearch] = useState<any>('');
   const [page, _setPage] = useState(0);
-  const [list, setList] = useState<any>([]);
-  const [editDetails, setEditDetails] = useState<any>();
+  const [
+    list,
+    // setList
+  ] = useState<any>([]);
+  const [editDetails] = useState<any>();
   const [actionMenuItemId, _setActionMenuItemId] = useState<any>();
-  const [actionMenuAnchorEl, setActionMenuAnchorEl] =
-    useState<null | HTMLElement>(null);
-  const actionMenuOpen = Boolean(actionMenuAnchorEl);
-  const actionMenuOptions = ['Detail', 'Reschedule', 'Edit', 'Cancel'];
-  const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
-  const [openRescheduleFormDialog, setOpenRescheduleFormDialog] =
-    useState(false);
   const [isLoader, setIsLoader] = React.useState(true);
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
@@ -74,118 +59,6 @@ function AppointmentVisitPage() {
         text: NOT_AUTHORIZED_MESSAGE,
         type: 'warning',
       });
-    }
-  };
-
-  const manuHandler = (option: string) => {
-    if (actionMenuItemId?.status === 'Cancelled') {
-      if (option === 'Detail') {
-        if (listingRolePermission(dataRole, 'Appointment Detail')) {
-          navigate(`../detail/${actionMenuItemId?.id}`);
-        } else {
-          setIsNotify(true);
-          setNotifyMessage({
-            text: NOT_AUTHORIZED_MESSAGE,
-            type: 'warning',
-          });
-        }
-      }
-    } else if (option === 'Edit') {
-      if (listingRolePermission(dataRole, 'Appointment Edit')) {
-        setIsLoader(true);
-        appointmentService
-          .VisitEdit(actionMenuItemId?.id)
-          .then((item: any) => {
-            if (item.data.success) {
-              setIsLoader(false);
-              setOpenEditFormDialog(true);
-              setEditDetails(item.data.data);
-            } else {
-              setIsLoader(false);
-              setOpenEditFormDialog(false);
-              setIsNotify(true);
-              setNotifyMessage({
-                text: item.data.message,
-                type: 'error',
-              });
-            }
-          })
-          .catch((err) => {
-            setIsLoader(false);
-            setOpenEditFormDialog(false);
-            setIsNotify(true);
-            setNotifyMessage({
-              text: err.message,
-              type: 'error',
-            });
-          });
-      } else {
-        setIsLoader(false);
-        setIsNotify(true);
-        setNotifyMessage({
-          text: NOT_AUTHORIZED_MESSAGE,
-          type: 'warning',
-        });
-      }
-    } else if (option === 'Cancel') {
-      if (listingRolePermission(dataRole, 'Appointment Cancel')) {
-        setIsLoader(true);
-        appointmentService
-          .VisitCancel(actionMenuItemId?.id)
-          .then((item: any) => {
-            if (item.data.success) {
-              setIsLoader(false);
-              setIsNotify(true);
-              setNotifyMessage({
-                text: item.data.message,
-                type: 'success',
-              });
-              // console.log('statat', item.data.data);
-              setList((newArr: any) => {
-                return newArr.map((items: any) => {
-                  if (items.id === item.data.data.appointmentId) {
-                    items.status = item.data.data.status;
-                  }
-                  return { ...items };
-                });
-              });
-            }
-          })
-          .catch((err: Error) => {
-            setIsLoader(false);
-            setIsNotify(true);
-            setNotifyMessage({
-              text: err.message,
-              type: 'error',
-            });
-          });
-      } else {
-        setIsNotify(true);
-        setNotifyMessage({
-          text: NOT_AUTHORIZED_MESSAGE,
-          type: 'warning',
-        });
-      }
-    } else if (option === 'Reschedule') {
-      if (listingRolePermission(dataRole, 'Appointment Reschedule')) {
-        setOpenRescheduleFormDialog(true);
-      } else {
-        setIsNotify(true);
-        setNotifyMessage({
-          text: NOT_AUTHORIZED_MESSAGE,
-          type: 'warning',
-        });
-      }
-    } else if (option === 'Detail') {
-      if (listingRolePermission(dataRole, 'Appointment Detail')) {
-        navigate(`../detail/${actionMenuItemId?.id}`);
-      } else {
-        setIsNotify(true);
-        setNotifyMessage({
-          text: NOT_AUTHORIZED_MESSAGE,
-          type: 'warning',
-        });
-      }
     }
   };
 
@@ -233,109 +106,7 @@ function AppointmentVisitPage() {
 
       getStoreEmployeeList();
     }
-
-    /*  if (appointmentType?.text === 'All Appointments') {
-
-      EmloyeeService.StoreEmployeeList(search, page, 2000)
-        .then((item: any) => {
-          setIsLoader(false);
-          // console.log('item', item);
-          const temp = item.data.data.list.map((el: any) => ({
-            text: el.name,
-            id: el.id,
-            imageUrl: el.avatar,
-          }));
-          setPriorityData(temp);
-          // setList(item.data.data);
-        })
-        .catch((error: Error) => {
-          setIsLoader(false);
-          setIsNotify(true);
-          setNotifyMessage({
-            text: error.message,
-            type: 'error',
-          });
-        });
-    } */
   }, []);
-
-  const createFormHandler = (data: any, type: string) => {
-    // console.log('dataaaaCREATE', data, type);
-    setIsLoader(true);
-    if (type === 'create') {
-      appointmentService
-        .VisitCreate(data)
-        .then((item) => {
-          if (item.data.success) {
-            setOpenFormDialog(false);
-            reset();
-            setIsLoader(false);
-            setIsNotify(true);
-            setNotifyMessage({
-              text: item.data.message,
-              type: 'success',
-            });
-            setList([item.data.data, ...list]);
-          } else {
-            reset();
-            setOpenFormDialog(false);
-            setIsLoader(false);
-            setIsNotify(true);
-            setNotifyMessage({
-              text: item.data.message,
-              type: 'error',
-            });
-          }
-        })
-        .catch((err) => {
-          setOpenFormDialog(false);
-          reset();
-          setIsLoader(false);
-          setIsNotify(true);
-          setNotifyMessage({
-            text: err.message,
-            type: 'error',
-          });
-        });
-    } else {
-      data.appointmentId = actionMenuItemId?.id;
-      // console.log('daTA', data);
-      appointmentService
-        .VisitReschedule(data)
-        .then((item: any) => {
-          if (item.data.success) {
-            setOpenRescheduleFormDialog(false);
-            reset();
-            setIsLoader(false);
-            setIsNotify(true);
-            setNotifyMessage({
-              text: item.data.message,
-              type: 'success',
-            });
-            setList([item.data.data, ...list]);
-          } else {
-            reset();
-            setOpenRescheduleFormDialog(false);
-            setIsLoader(false);
-            setIsNotify(true);
-            setNotifyMessage({
-              text: item.data.message,
-              type: 'error',
-            });
-          }
-        })
-        .catch((err: Error) => {
-          setOpenRescheduleFormDialog(false);
-          reset();
-          setIsLoader(false);
-          setIsNotify(true);
-          setNotifyMessage({
-            text: err.message,
-            type: 'error',
-          });
-        });
-    }
-  };
 
   const updateFormHandler = (data: any) => {
     // console.log('datata', data);
@@ -446,33 +217,6 @@ function AppointmentVisitPage() {
           </div>
         </div>
       </div>
-      {actionMenuAnchorEl && (
-        <ActionMenu
-          open={actionMenuOpen}
-          anchorEl={actionMenuAnchorEl}
-          setAnchorEl={setActionMenuAnchorEl}
-          options={actionMenuOptions}
-          callback={manuHandler}
-        />
-      )}
-      {openFormDialog && (
-        <AppointmentVisitCreatePopup
-          setIsNotify={setIsNotify}
-          setNotifyMessage={setNotifyMessage}
-          openFormDialog={openFormDialog}
-          setOpenFormDialog={setOpenFormDialog}
-          callback={createFormHandler}
-        />
-      )}
-      {openRescheduleFormDialog && (
-        <AppointmentVisitReschedulePopup
-          setIsNotify={setIsNotify}
-          setNotifyMessage={setNotifyMessage}
-          openFormDialog={openRescheduleFormDialog}
-          setOpenFormDialog={setOpenRescheduleFormDialog}
-          callback={createFormHandler}
-        />
-      )}
       {openEditFormDialog && (
         <AppointmentVisitUpdatePopup
           setIsNotify={setIsNotify}
