@@ -5,9 +5,13 @@ import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined';
 import CloseIcon from '@mui/icons-material/Close';
 import RadioButtonUncheckedOutlinedIcon from '@mui/icons-material/RadioButtonUncheckedOutlined';
 import Avatar from '@mui/material/Avatar';
+import Dialog from '@mui/material/Dialog';
 import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import { CircularProgress, Divider, InputAdornment } from '@mui/material';
+import Button from '@mui/material/Button';
 import FormLabel from '@mui/material/FormLabel';
+import Input from '@mui/material/Input';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import TextField from '@mui/material/TextField';
@@ -31,6 +35,7 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import { Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import appUserService from '../../services/adminapp/adminAppUser';
 import assets from '../../assets';
 import '../../assets/css/PopupStyle.css';
 import CustomButton from '../../components/common/CustomButton';
@@ -64,10 +69,197 @@ const darkTheme = createTheme({
   },
 });
 
+type UserPopupProps = {
+  openFormDialog: any;
+  handleFormClose: any;
+  callbackValue: any;
+  userEmailIdentifier: any;
+  setUserEmailIdentifier: any;
+  authState: any;
+  setLoginDetails: any;
+  setIsNotify: any;
+  setNotifyMessage: any;
+};
+
+const UserPopup = ({
+  openFormDialog,
+  handleFormClose,
+  callbackValue,
+  setUserEmailIdentifier,
+  authState,
+  userEmailIdentifier,
+  setLoginDetails,
+  setIsNotify,
+  setNotifyMessage,
+}: UserPopupProps) => {
+  const [isLoginLoader, setIsLoginLoader] = useState<boolean>(false);
+  const [isExistingUser, setIsExistingUser] = useState<'TRUE' | 'FALSE'>(
+    'FALSE'
+  );
+  const handleUserChange = (event: any) => {
+    setIsExistingUser(event.target.value);
+    callbackValue(event.target.value);
+  };
+
+  const handleLogin = () => {
+    setIsLoginLoader(true);
+    const anonIdentifier = authState?.user?.username?.split('@')[0];
+    const payload = {
+      identifier:
+        isExistingUser === 'FALSE'
+          ? `${anonIdentifier}@shop.com`
+          : userEmailIdentifier || 'false',
+      tenant: authState?.user?.tenant,
+    };
+    let service;
+    if (isExistingUser === 'TRUE') {
+      service = appUserService.appLogin;
+    } else {
+      service = appUserService.appAnonymousLogin;
+    }
+    service(payload)
+      .then((res) => {
+        if (res.data.success) {
+          setIsLoginLoader(false);
+          setLoginDetails(res.data.data);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: res.data.message,
+            type: 'success',
+          });
+          handleFormClose(false);
+        } else {
+          setIsLoginLoader(false);
+          setLoginDetails(null);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: res.data.message,
+            type: 'error',
+          });
+        }
+      })
+      .catch((err) => {
+        setIsLoginLoader(false);
+        setLoginDetails(null);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
+        });
+      });
+  };
+
+  return (
+    <Dialog
+      open={openFormDialog}
+      onClose={() => handleFormClose(false)}
+      PaperProps={{
+        className: 'Dialog',
+        style: { maxWidth: '100%', maxHeight: 'auto' },
+      }}
+    >
+      <div className="Content">
+        <form>
+          <div className="FormHeader">
+            <span className="Title">Select User</span>
+          </div>
+          <div>
+            <FormControl className="">
+              <RadioGroup
+                row
+                aria-labelledby="demo-row-radio-buttons-group-label"
+                name="row-radio-buttons-group"
+                value={isExistingUser ?? ''}
+                onClick={handleUserChange}
+              >
+                <FormControlLabel
+                  sx={{
+                    color: '#6A6A6A',
+                    fontFamily: 'Open Sans',
+                    fonWeight: 400,
+                    fonSize: '14px',
+                  }}
+                  // disabled={}
+                  value="FALSE"
+                  control={
+                    <Radio
+                      className="text-sm text-[#1D1D1D]"
+                      icon={<RadioButtonUncheckedOutlinedIcon />}
+                      checkedIcon={<CheckCircleOutlinedIcon />}
+                    />
+                  }
+                  label="Anonymous"
+                />
+                <FormControlLabel
+                  sx={{
+                    color: '#6A6A6A',
+                    fontFamily: 'Open Sans',
+                    fonWeight: 400,
+                    fonSize: '14px',
+                  }}
+                  value="TRUE"
+                  control={
+                    <Radio
+                      className="text-[#1D1D1D]"
+                      icon={<RadioButtonUncheckedOutlinedIcon />}
+                      checkedIcon={<CheckCircleOutlinedIcon />}
+                    />
+                  }
+                  label="Customer"
+                />
+              </RadioGroup>
+            </FormControl>
+          </div>
+        </form>
+        {isExistingUser === 'TRUE' && (
+          // <>
+          <div className="w-full rounded-xl border border-solid border-foreground py-1 pl-3">
+            <Input
+              className="input-with-icon after:border-b-secondary"
+              id="search"
+              type="text"
+              placeholder="Identifier (Ex : email or phone)"
+              // onKeyDown={(
+              //   event: React.KeyboardEvent<
+              //     HTMLInputElement | HTMLTextAreaElement
+              //   >
+              // ) => {
+              //   handleUserInput(event);
+              // }}
+              onChange={(event) => setUserEmailIdentifier(event.target.value)}
+              disableUnderline
+            />
+          </div>
+          // </>
+        )}
+        <div>
+          <CustomButton
+            disabled={isLoginLoader}
+            onclick={handleLogin}
+            buttonType="button"
+            title={isLoginLoader ? <CircularProgress size={14} /> : 'Verify'}
+            // title={"Verify"}
+            className={`${'btn-black-outline mt-3'}`}
+            sx={{
+              padding: '0.375rem 2rem !important',
+              width: '100%',
+              height: '35px',
+            }}
+          />
+        </div>
+      </div>
+    </Dialog>
+  );
+};
+
 export default function AddAppointmentPage() {
   const navigate = useNavigate();
-  // const authState: any = useAppSelector((state: any) => state?.authState);
+  const authState: any = useAppSelector((state: any) => state?.authState);
   // console.log('🚀 ~ AddAppointmentPage ~ shopSchedule:', shopScheduleWorkDays);
+  const [activeLoginOption, setActiveLoginOption] = useState<any>(null);
+  const [loginDetails, setLoginDetails] = useState<any>(null);
+  const [userEmailIdentifier, setUserEmailIdentifier] = useState('');
+  const [openFormDialog, setOpenFormDialog] = useState(false);
   const [isLoader, setIsLoader] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState(false);
   const [isPageLoader, setIsPageLoader] = useState(false);
@@ -477,296 +669,14 @@ export default function AddAppointmentPage() {
     });
   }, [activeBarberData]);
 
-  // const addAppointmentServices = () => {
-  //   const obj = {
-  //     id: 0,
-  //     barber: activeBarberData?.storeEmployee?.name,
-  //     amount: activeBarberData?.amount,
-  //     storeServiceCategory: watch('categoryId'),
-  //     serviceTime: activeBarber?.serviceTime,
-  //     storeServiceCategoryItem: watch('storeServiceCategoryItem'),
-  //     storeEmployee: activeBarberData?.storeEmployee?.id,
-  //     appointmentTime: `${dayjs(getValues('appointmentDate'))?.format(
-  //       'YYYY-MM-DD'
-  //     )} ${dayjs(appointmentTime)?.format('HH:mm:ss')}`,
-  //   };
-
-  //   if (
-  //     watch('storeServiceCategoryItem') &&
-  //     activeBarberData &&
-  //     getValues('appointmentDate') &&
-  //     appointmentTime
-  //   ) {
-  //     const currentDay = dayjs(getValues('appointmentDate')).format('dddd');
-  //     const scheduleData = activeBarberData?.storeEmployeeSchedule.filter(
-  //       (item: any) => item.workDay === currentDay
-  //     );
-  //     const time = dayjs(getValues('appointmentDate'))
-  //       .set('hours', dayjs(appointmentTime).hour())
-  //       .set('minute', dayjs(appointmentTime).minute());
-  //     // const time = dayjs(appointmentTime);
-  //     const startTime = dayjs(scheduleData[0]?.startTime)
-  //       .set('date', time.date())
-  //       .set('month', time.month())
-  //       .set('year', time.year());
-  //     const endTime = dayjs(scheduleData[0]?.endTime)
-  //       .set('date', time.date())
-  //       .set('month', time.month())
-  //       .set('year', time.year());
-  //     let prevTime = startTime;
-  //     const addTime = dayjs(time).add(activeBarberData?.serviceTime, 'minutes');
-  //     console.log('🚀 ~ addAppointmentServices ~ scheduleData:', scheduleData);
-
-  //     if (scheduleData.length > 0) {
-  //       // for (let j = 0; j < shopScheduleWorkDays.length; i += 1++) {
-  //       //   const elShop = appointmentBookedTime[j];
-  //       // }
-  //       if (!checkIsBetweenTime(time, startTime, endTime)) {
-  //         setIsNotify(true);
-  //         setNotifyMessage({
-  //           text: 'Barber is not available at this time',
-  //           type: 'error',
-  //         });
-  //         return false;
-  //       }
-
-  //       const isDuplicate = checkDuplicateServices(
-  //         fields,
-  //         activeBarberData?.storeEmployee?.id,
-  //         watch('storeServiceCategoryItem')
-  //       );
-  //       // console.log('🚀 ~ addAppointmentServices ~ isDuplicate:', isDuplicate);
-  //       if (!isDuplicate) {
-  //         if (tempAppointmentBookedTime.length > 0) {
-  //           for (let i = 0; i < tempAppointmentBookedTime.length; i += 1) {
-  //             const tempEl = tempAppointmentBookedTime[i];
-  //             const tempServiceTime = dayjs(tempEl.appointmentTime).add(
-  //               tempEl.serviceTime,
-  //               'minute'
-  //             );
-  //             if (time > dayjs(tempServiceTime)) {
-  //               prevTime = dayjs(tempServiceTime);
-  //             } else if (
-  //               !checkIsBetweenTime(
-  //                 addTime,
-  //                 prevTime,
-  //                 dayjs(tempEl.appointmentTime)
-  //               )
-  //             ) {
-  //               setIsNotify(true);
-  //               setNotifyMessage({
-  //                 text: `Barber is engaged with another client`,
-  //                 type: 'error',
-  //               });
-  //               return false;
-  //             }
-  //           }
-  //         }
-  //         for (let i = 0; i < appointmentBookedTime.length; i += 1) {
-  //           const el = appointmentBookedTime[i];
-  //           const serviceTime = dayjs(el.appointmentTime).add(
-  //             el.serviceTime,
-  //             'minute'
-  //           );
-  //           // console.log('time::::::', time);
-  //           // console.log('el.appointmentTime::::::', dayjs(el.appointmentTime));
-  //           // console.log('prevTime::::::', prevTime);
-  //           // console.log('addTime::::::', addTime);
-  //           // console.log(
-  //           //   'checkIsAfterTime(el.appointmentTime, time)::::::',
-  //           //   checkIsAfterTime(dayjs(el.appointmentTime), time)
-  //           // );
-  //           // console.log(
-  //           //   'checkIsBetweenTime(addTime, prevTime, dayjs(el.appointmentTime)):::::::',
-  //           //   checkIsBetweenTime(addTime, prevTime, dayjs(el.appointmentTime))
-  //           // );
-  //           if (
-  //             time > dayjs(serviceTime) &&
-  //             checkIsAfterTime(endTime, serviceTime)
-  //           ) {
-  //             prevTime = dayjs(serviceTime);
-  //           } else if (
-  //             !checkIsAfterTime(endTime, serviceTime) &&
-  //             !checkIsBetweenTime(addTime, prevTime, dayjs(el.appointmentTime))
-  //           ) {
-  //             // break;
-  //             setIsNotify(true);
-  //             setNotifyMessage({
-  //               text: `Barber is not available at this time`,
-  //               type: 'error',
-  //             });
-  //             return false;
-  //             // throw new Error('Error');
-  //           }
-
-  //           // for (const key of Object.keys(appointmentBookedTime)) {
-  //           //   const index = key;
-  //           //   const el = appointmentBookedTime[index];
-  //           // console.log('El', el);
-  //           // console.log('activeBarberData', activeBarberData);
-  //           // console.log('hello its me 1');
-  //           // if (
-  //           //   el.storeEmployee === activeBarberData?.storeEmployee?.id &&
-  //           //   dayjs(el.appointmentTime).format('HH:mm') !== time
-  //           // ) {
-  //           //   console.log('hello its me 2', el);
-  //           //   const add = dayjs(el.appointmentTime).add(
-  //           //     el.serviceTime,
-  //           //     'minute'
-  //           //   );
-  //           //   const elStartTime = dayjs(el.appointmentTime).format('HH:mm');
-  //           //   const convertAddTime: any = dayjs(add).format('HH:mm');
-  //           //   // console.log(
-  //           //   //   '🚀 ~ appointmentBookedTime.forEach ~ elStartTime:',
-  //           //   //   elStartTime,
-  //           //   //   convertAddTime
-  //           //   // );
-  //           //   // console.log('add', add);
-  //           //   if (elStartTime > startTime && elStartTime < endTime) {
-  //           //     // console.log('if mee 1');
-  //           //     // console.log('me ho time', time);
-  //           //     // console.log('me ho converted time', convertAddTime);
-  //           //     // console.log('me ho prev time', prevTime);
-  //           //     // console.log(
-  //           //     //   'me ho convertAppointmentAddTime time',
-  //           //     //   convertAppointmentAddTime
-  //           //     // );
-  //           //     // console.log('me ho time', time);
-  //           //     // console.log('me ho converted time', convertAddTime);
-  //           //     // console.log('me ho elstartTime', elStartTime);
-
-  //           //     if (time > convertAddTime) {
-  //           //       console.log('if mee 2');
-  //           //       // console.log('if');
-  //           //       prevTime = convertAddTime;
-  //           //     } else if (
-  //           //       time <= prevTime ||
-  //           //       convertAppointmentAddTime >= elStartTime
-  //           //     ) {
-  //           //       // console.log('if mee 3');
-  //           //       // console.log("2");
-  //           //       // console.log('else');
-  //           //       // console.log("3");
-  //           //       // console.log('if meet error');
-  //           //       setIsNotify(true);
-  //           //       setNotifyMessage({
-  //           //         text: `Service time is ${activeBarberData?.serviceTime} minutes, Barber is not avaiable at ${time}`,
-  //           //         type: 'error',
-  //           //       });
-  //           //       throw new Error('Error');
-  //           //     }
-  //           // } else {
-  //           //   // console.log('if mee 4');
-  //           //   // console.log("4");
-  //           //   // console.log("if success error 2");/
-  //           //   setIsNotify(true);
-  //           //   setNotifyMessage({
-  //           //     text: 'Barber is not avaiable at this time',
-  //           //     type: 'error',
-  //           //   });
-  //           //   throw new Error('Error');
-  //           // }
-  //           // }
-  //           // return;
-  //         }
-  //         // }
-  //         setTmpId((prevId: any) => prevId + 1);
-  //         const newData = {
-  //           id: tmpId,
-  //           appointmentTime: time,
-  //           email: activeBarberData?.storeEmployee?.email ?? 'abc@gmail.com',
-  //           gender: 'male',
-  //           name: activeBarberData?.storeEmployee?.name ?? 'urapp',
-  //           note: 'demo',
-  //           phone: activeBarberData?.storeEmployee?.phone,
-  //           serviceTime: activeBarberData?.serviceTime,
-  //           status: 'New',
-  //           storeEmployee: activeBarberData?.storeEmployee?.id,
-  //           storeServiceCategory: '12345',
-  //           storeServiceCategoryItem:
-  //             activeBarberData?.storeServiceCategoryItem,
-  //         };
-  //         obj.id = tmpId;
-  //         setTempAppointmentBookedTime((prev: any) => [...prev, newData]);
-  //         setAppointmentBookedTime((prev: any) => [...prev, newData]);
-  //         // setPrevBookedAppointment(newData);
-  //         append(obj);
-  //       } else {
-  //         // console.log("5");
-  //         setIsNotify(true);
-  //         setNotifyMessage({
-  //           text: 'This service you already selected, Please select another service',
-  //           type: 'error',
-  //         });
-  //       }
-  //       // } else {
-  //       //   setIsNotify(true);
-  //       //   setNotifyMessage({
-  //       //     text: `Barber is not avaiable at ${selectedAppointmentTime}`,
-  //       //     type: 'error',
-  //       //   });
-  //       // }
-  //     } else {
-  //       setIsNotify(true);
-  //       setNotifyMessage({
-  //         text: `Barber is not available at ${currentDay}`,
-  //         type: 'error',
-  //       });
-  //     }
-  //   } else {
-  //     // console.log("6");
-  //     setIsNotify(true);
-  //     setNotifyMessage({
-  //       text: 'Please select your preferred barber, category , desired services, and appointment date & time for scheduling.',
-  //       type: 'error',
-  //     });
-  //   }
-  //   return null;
-  // };
-
-  // console.log('temmmmmmmmmmmmmmmmmmmmmm', tempAppointmentBookedTime);
-
-  // const addAppo = () => {
-  //   const obj = {
-  //     id: 0,
-  //     barber: activeBarberData?.storeEmployee?.name,
-  //     amount: activeBarberData?.amount,
-  //     storeServiceCategory: watch('categoryId'),
-  //     storeServiceCategoryItem: watch('storeServiceCategoryItem'),
-  //     storeEmployee: activeBarberData?.storeEmployee?.id,
-  //     appointmentTime: `${dayjs(getValues('appointmentDate'))?.format(
-  //       'YYYY-MM-DD'
-  //     )} ${dayjs(appointmentTime)?.format('HH:mm:ss')}`,
-  //   };
-  //   if (
-  //     watch('storeServiceCategoryItem') &&
-  //     activeBarberData &&
-  //     getValues('appointmentDate') &&
-  //     appointmentTime
-  //   ) {
-  //     const currentDay = dayjs(getValues('appointmentDate')).format('dddd');
-  //     const scheduleData = activeBarberData?.storeEmployeeSchedule.filter(
-  //       (item: any) => item.workDay === currentDay
-  //     );
-  //     // yeh start time hn
-  //     const startTime = dayjs(scheduleData[0]?.startTime).format('HH:mm');
-  //     // yeh end time hn
-  //     const endTime = dayjs(scheduleData[0]?.endTime).format('HH:mm');
-  //     // yeh appointment time jo banda deraha hn
-  //     const time: any = dayjs(appointmentTime).format('HH:mm');
-  //     // yeh active barber ka service time
-  //     const addBarberServiceIntoAppointmentTime = dayjs(appointmentTime).add(
-  //       activeBarberData?.serviceTime,
-  //       'minute'
-  //     );
-  //     const convertAppointmentAddTime = dayjs(
-  //       addBarberServiceIntoAppointmentTime
-  //     ).format('HH:mm');
-  //   }
-  // };
-
-  // console.log('AVTIVE BARBER FIELDS', fields);
-  // console.log('AVTIVE BARBER BOOKING', fields);
+  useEffect(() => {
+    if (loginDetails && activeLoginOption === 'TRUE') {
+      const name = `${loginDetails.firstName} ${loginDetails.lastName}`;
+      setValue('name', name);
+      setValue('email', loginDetails?.email);
+      setValue('phone', loginDetails?.phone);
+    }
+  }, [loginDetails]);
 
   const addAppointmentServices = () => {
     const obj = {
@@ -960,6 +870,7 @@ export default function AddAppointmentPage() {
       return e;
     });
     data.status = paymentMethod ? 'Processing' : 'New';
+    data.appUser = loginDetails?.id;
     storeAppointmentService
       .appointmentCreate(data)
       .then((res: any) => {
@@ -1022,10 +933,28 @@ export default function AddAppointmentPage() {
     );
   };
 
+  const callbackValue = (value: string) => {
+    // console.log('🚀 ~ callbackValue ~ value:', value);
+    setActiveLoginOption(value);
+  };
+
   return isLoader ? (
     <Loader />
   ) : (
     <div>
+      {openFormDialog && (
+        <UserPopup
+          authState={authState}
+          openFormDialog={openFormDialog}
+          handleFormClose={setOpenFormDialog}
+          setUserEmailIdentifier={setUserEmailIdentifier}
+          userEmailIdentifier={userEmailIdentifier}
+          callbackValue={callbackValue}
+          setLoginDetails={setLoginDetails}
+          setIsNotify={setIsNotify}
+          setNotifyMessage={setNotifyMessage}
+        />
+      )}
       <Notify
         isOpen={isNotify}
         setIsOpen={setIsNotify}
@@ -1112,6 +1041,9 @@ export default function AddAppointmentPage() {
                           variant="standard"
                         >
                           <CustomInputBox
+                            disable={
+                              !!(loginDetails && activeLoginOption === 'TRUE')
+                            }
                             pattern={PATTERN.CHAR_NUM_DOT_AT}
                             inputTitle="Email"
                             placeholder="Enter email address"
@@ -1508,19 +1440,35 @@ export default function AddAppointmentPage() {
                     height: '35px',
                   }}
                 />
-                <CustomButton
-                  disabled={fields?.length < 1 && true}
-                  buttonType="button"
-                  title="Submit"
-                  className="btn-black-outline"
-                  type="submit"
-                  // onclick={handleFormClose}
-                  sx={{
-                    padding: '0.375rem 2rem !important',
-                    width: '15%',
-                    height: '35px',
-                  }}
-                />
+                {loginDetails ? (
+                  <CustomButton
+                    disabled={fields?.length < 1 && true}
+                    buttonType="button"
+                    title="Submit"
+                    className="btn-black-outline"
+                    type="submit"
+                    // onclick={() => setOpenFormDialog(true)}
+                    sx={{
+                      padding: '0.375rem 2rem !important',
+                      width: '15%',
+                      height: '35px',
+                    }}
+                  />
+                ) : (
+                  <CustomButton
+                    // disabled={fields?.length < 1 && true}
+                    buttonType="button"
+                    title="Verify User"
+                    className="btn-black-outline"
+                    // type="submit"
+                    onclick={() => setOpenFormDialog(true)}
+                    sx={{
+                      padding: '0.375rem 2rem !important',
+                      width: '15%',
+                      height: '35px',
+                    }}
+                  />
+                )}
               </div>
             </form>
           </div>

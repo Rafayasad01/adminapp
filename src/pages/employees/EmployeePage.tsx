@@ -30,6 +30,9 @@ import { listingRolePermission } from '../../utils/helper';
 
 function EmployeePage() {
   const authState: any = useAppSelector((state: any) => state?.authState);
+  const employeeLimit: any = useAppSelector(
+    (state: any) => state?.persistedReducer?.appState?.UserItems?.employeeLimit
+  );
   const dataRole = useAppSelector(
     (state: any) => state?.persistedReducer?.roleState?.role?.permissions
   );
@@ -113,7 +116,7 @@ function EmployeePage() {
 
   const handleFormClickOpen = () => {
     if (listingRolePermission(dataRole, 'Employee Create')) {
-      if (total < authState.user.employeeLimit) {
+      if (total < employeeLimit) {
         setOpenFormDialog(true);
       } else {
         setIsNotify(true);

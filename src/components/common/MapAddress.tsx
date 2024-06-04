@@ -55,7 +55,7 @@ function MapAddress({ address, zoom, setValue, getValues }: MapAddressProps) {
         if (status === 'OK' && status !== 'ZERO_RESULTS') {
           if (!results) {
             setIsError(false);
-            return;
+            return null;
           }
           setIsError(false);
           const { location } = results[0].geometry;

@@ -67,6 +67,7 @@ import LeaveManagement from '../pages/appointment/leaveManagement/LeaveManagemen
 import EmployeeRatingReviewsPage from '../pages/appointment/provider/rating/EmployeeRatingReviewsPage';
 import AppointmentRatingPage from '../pages/appointment/rating/AppointmentRatingPage';
 import AppointmentRatingReviewsPage from '../pages/appointment/rating/AppointmentRatingReviewsPage';
+import WalletPage from '../pages/appointment/wallet/WalletPage';
 
 // import UpdateAppointmentPage from '../pages/appointment/UpdateAppointmentPage';
 
@@ -446,6 +447,15 @@ export const routeObjects: RouteObject[] = [
                   {
                     path: 'reschedule-appointment/:id',
                     element: <RescheduleAppointmentPage />,
+                  },
+                ],
+              },
+              {
+                path: 'wallet',
+                children: [
+                  {
+                    index: true,
+                    element: <WalletPage />,
                   },
                 ],
               },

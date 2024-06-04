@@ -134,7 +134,6 @@ function BannersPage() {
             });
             setList([...list, item.data.data]);
           } else {
-            reset();
             setOpenFormDialog(true);
             setIsLoader(false);
             setIsNotify(true);
@@ -145,7 +144,6 @@ function BannersPage() {
           }
         })
         .catch((err) => {
-          reset();
           setOpenFormDialog(true);
           setIsLoader(false);
           setIsNotify(true);
@@ -200,7 +198,6 @@ function BannersPage() {
             }
             reset();
           } else {
-            reset();
             setOpenEditFormDialog(false);
             setIsLoader(false);
             setIsNotify(true);
@@ -211,7 +208,6 @@ function BannersPage() {
           }
         })
         .catch((err) => {
-          reset();
           setOpenEditFormDialog(false);
           setIsLoader(false);
           setIsNotify(true);
