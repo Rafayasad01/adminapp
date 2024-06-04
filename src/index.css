@@ -2521,3 +2521,13 @@ main.min-h-screen.w-full.flex-grow.bg-gray-50.p-3.MuiBox-root.css-0 {
   margin: auto;
   height: fit-content;
 }
+
+.css-8ludsl.Header-flexContainer {
+  position: absolute !important;
+  right: 6px !important;
+  top: 5px !important;
+}
+
+.css-8ludsl .Header-line {
+  background: transparent !important;
+}
