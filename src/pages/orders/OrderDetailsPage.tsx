@@ -1,23 +1,21 @@
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import AssignmentTurnedInOutlinedIcon from '@mui/icons-material/AssignmentTurnedInOutlined';
-// import DateRangeIcon from '@mui/icons-material/DateRange';
+import DateRangeIcon from '@mui/icons-material/DateRange';
 import DomainVerificationOutlinedIcon from '@mui/icons-material/DomainVerificationOutlined';
 import FilterNoneOutlinedIcon from '@mui/icons-material/FilterNoneOutlined';
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
-// import Avatar from '@mui/material/Avatar';
+import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
-// import IconButton from '@mui/material/IconButton';
+import IconButton from '@mui/material/IconButton';
 import dayjs from 'dayjs';
 import { useEffect, useMemo, useState } from 'react';
-import {
-  //  useNavigate,
-  useParams,
-} from 'react-router-dom';
-// import assets from '../../assets';
+import { useNavigate, useParams } from 'react-router-dom';
+import assets from '../../assets';
 import Loader from '../../components/common/Loader';
 import Notify from '../../components/common/Notify';
 import TopBar from '../../components/common/TopBar';
+import ShopIcon from '../../components/icons/ShopIcon';
 import { useAppSelector } from '../../redux/redux-hooks';
 import orderService from '../../services/adminapp/adminOrders';
 import CustomOrderPrintLayoutCash from '../../utils/CustomPrintLayout/CustomOrderPrintLayoutCash';
@@ -26,6 +24,7 @@ import PermissionPopup from '../../utils/PermissionPopup';
 import cn from '../../utils/class-names';
 import {
   NOT_AUTHORIZED_MESSAGE,
+  ORDER_FULFILLMENT_METHOD,
   ORDER_STATUS,
   ORDER_STATUSES,
 } from '../../utils/constants';
@@ -33,7 +32,7 @@ import { listingRolePermission } from '../../utils/helper';
 import OrderDetailsTrackingPage from './OrderDetailsTracking';
 
 function OrderDetailsPage() {
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const dataRole = useAppSelector(
     (state: any) => state?.persistedReducer?.roleState?.role?.permissions
   );
@@ -54,33 +53,40 @@ function OrderDetailsPage() {
     value: ORDER_STATUSES.get(viewData.status),
   };
 
-  // const showSelectDriverButton = useMemo(() => {
-  //   /* if (viewData.status === ORDER_STATUS.NEW) {
-  //     return true;
-  //   }
-  //   if (viewData.status === ORDER_STATUS.PROCESSING_ITEM) {
-  //     if (viewData.fulfillmentMethod === ORDER_FULFILLMENT_METHOD.SELF) {
-  //       return false;
-  //     }
-  //     return true;
-  //   }
-  //   if (viewData.status === ORDER_STATUS.DRIVER_DELIVERED_ITEM_TO_CUSTOMER) {
-  //     return true;
-  //   }
-  //   if (viewData.status === ORDER_STATUS.DRIVER_RETURNED_ITEM_TO_CUSTOMER) {
-  //     return true;
-  //   }
-  //   if (
-  //     viewData.status === ORDER_STATUS.DRIVER_DECLINED_TO_PICKUP_ITEM_FROM_SHOP
-  //   ) {
-  //     return true;
-  //   }
-  //   if (viewData.status === ORDER_STATUS.DRIVER_RETURNED_ITEM_TO_SHOP) {
-  //     return true;
-  //   } */
+  const showSelectDriverButton = useMemo(() => {
+    console.log('viewData.status :>> ', viewData.status);
+    if (viewData.status === ORDER_STATUS.NEW) {
+      return true;
+    }
+    if (
+      viewData.status ===
+      ORDER_STATUS.DRIVER_DECLINED_TO_PICKUP_ITEM_FROM_CUSTOMER
+    ) {
+      return true;
+    }
+    if (viewData.status === ORDER_STATUS.PROCESSING_ITEM) {
+      if (viewData.fulfillmentMethod === ORDER_FULFILLMENT_METHOD.SELF) {
+        return false;
+      }
+      return true;
+    }
+    if (viewData.status === ORDER_STATUS.DRIVER_DELIVERED_ITEM_TO_CUSTOMER) {
+      return false;
+    }
+    if (viewData.status === ORDER_STATUS.DRIVER_RETURNED_ITEM_TO_CUSTOMER) {
+      return true;
+    }
+    if (
+      viewData.status === ORDER_STATUS.DRIVER_DECLINED_TO_PICKUP_ITEM_FROM_SHOP
+    ) {
+      return true;
+    }
+    if (viewData.status === ORDER_STATUS.DRIVER_RETURNED_ITEM_TO_SHOP) {
+      return true;
+    }
 
-  //   return false;
-  // }, [viewData.status, viewData.fulfillmentMethod]);
+    return false;
+  }, [viewData.status, viewData.fulfillmentMethod]);
 
   const setData = (itemData: any) => {
     setViewData(itemData);
@@ -157,15 +163,15 @@ function OrderDetailsPage() {
   };
 
   const getNextStatusButton = useMemo(() => {
-    /* if (viewData.status === ORDER_STATUS.DRIVER_ASSIGNED_FOR_ITEM_PICKUP) {
+    if (viewData.status === ORDER_STATUS.DRIVER_ASSIGNED_FOR_ITEM_PICKUP) {
       return {
         key: ORDER_STATUS.DRIVER_ACCEPTED_TO_PICK_UP_ITEM_FROM_CUSTOMER,
         value: ORDER_STATUSES.get(
           ORDER_STATUS.DRIVER_ACCEPTED_TO_PICK_UP_ITEM_FROM_CUSTOMER
         ),
       };
-    } */
-    /*  if (
+    }
+    if (
       viewData.status ===
       ORDER_STATUS.DRIVER_ACCEPTED_TO_PICK_UP_ITEM_FROM_CUSTOMER
     ) {
@@ -175,26 +181,20 @@ function OrderDetailsPage() {
           ORDER_STATUS.DRIVER_PICKED_UP_ITEM_FROM_CUSTOMER
         ),
       };
-    } */
-    /*  if (viewData.status === ORDER_STATUS.DRIVER_PICKED_UP_ITEM_FROM_CUSTOMER) {
+    }
+    if (viewData.status === ORDER_STATUS.DRIVER_PICKED_UP_ITEM_FROM_CUSTOMER) {
       return {
         key: ORDER_STATUS.DRIVER_DELIVERED_ITEM_TO_SHOP,
         value: ORDER_STATUSES.get(ORDER_STATUS.DRIVER_DELIVERED_ITEM_TO_SHOP),
       };
-    } */
-    if (viewData.status === ORDER_STATUS.NEW) {
+    }
+    if (viewData.status === ORDER_STATUS.DRIVER_DELIVERED_ITEM_TO_SHOP) {
       return {
         key: ORDER_STATUS.PROCESSING_ITEM,
         value: ORDER_STATUSES.get(ORDER_STATUS.PROCESSING_ITEM),
       };
     }
-    if (viewData.status === ORDER_STATUS.PROCESSING_ITEM) {
-      return {
-        key: ORDER_STATUS.COMPLETED,
-        value: ORDER_STATUSES.get(ORDER_STATUS.COMPLETED),
-      };
-    }
-    /* if (
+    if (
       viewData.status === ORDER_STATUS.PROCESSING_ITEM &&
       viewData.fulfillmentMethod === ORDER_FULFILLMENT_METHOD.SELF
     ) {
@@ -202,40 +202,37 @@ function OrderDetailsPage() {
         key: ORDER_STATUS.CUSTOMER_PICK_UP,
         value: ORDER_STATUSES.get(ORDER_STATUS.CUSTOMER_PICK_UP),
       };
-    } */
-    /*  if (viewData.status === ORDER_STATUS.DRIVER_ASSIGNED_FOR_ITEM_DELIVERY) {
+    }
+    if (viewData.status === ORDER_STATUS.DRIVER_ASSIGNED_FOR_ITEM_DELIVERY) {
       return {
         key: ORDER_STATUS.DRIVER_ACCEPTED_TO_PICK_UP_ITEM_FROM_SHOP,
         value: ORDER_STATUSES.get(
           ORDER_STATUS.DRIVER_ACCEPTED_TO_PICK_UP_ITEM_FROM_SHOP
         ),
       };
-    } */
-    /* if (
+    }
+    if (
       viewData.status === ORDER_STATUS.DRIVER_ACCEPTED_TO_PICK_UP_ITEM_FROM_SHOP
     ) {
       return {
         key: ORDER_STATUS.DRIVER_PICKED_UP_ITEM_FROM_SHOP,
         value: ORDER_STATUSES.get(ORDER_STATUS.DRIVER_PICKED_UP_ITEM_FROM_SHOP),
       };
-    } */
-    /*  if (viewData.status === ORDER_STATUS.DRIVER_PICKED_UP_ITEM_FROM_SHOP) {
+    }
+    if (viewData.status === ORDER_STATUS.DRIVER_PICKED_UP_ITEM_FROM_SHOP) {
       return {
         key: ORDER_STATUS.DRIVER_DELIVERED_ITEM_TO_CUSTOMER,
         value: ORDER_STATUSES.get(
           ORDER_STATUS.DRIVER_DELIVERED_ITEM_TO_CUSTOMER
         ),
       };
-    } */
-    /* if (
-      viewData.status === ORDER_STATUS.DRIVER_DELIVERED_ITEM_TO_CUSTOMER ||
-      viewData.status === ORDER_STATUS.CUSTOMER_PICK_UP
-    ) {
+    }
+    if (viewData.status === ORDER_STATUS.CUSTOMER_PICK_UP) {
       return {
         key: ORDER_STATUS.COMPLETED,
         value: ORDER_STATUSES.get(ORDER_STATUS.COMPLETED),
       };
-    } */
+    }
     return null;
   }, [viewData.status, viewData.fulfillmentMethod]);
 
@@ -275,39 +272,45 @@ function OrderDetailsPage() {
     }
   };
 
-  // const handleDriverStatus = () => {
-  //   // if (viewData.paymentType === 'Shop') {
-  //   //   return (
-  //   //     <div className="flex items-center font-open-sans text-sm font-normal text-neutral-500">
-  //   //       <ShopIcon color="black" />
-  //   //       <p className="mx-3">Order has been delivered by shop</p>
-  //   //     </div>
-  //   //   );
-  //   // }
-  //   if (!showSelectDriverButton) {
-  //     return null;
-  //   }
-  //   return (
-  //     <IconButton
-  //       aria-label="delete"
-  //       className="p-0"
-  //       disableRipple
-  //       onClick={() => navigate(`../assign/${id}`)}
-  //       disabled={false}
-  //     >
-  //       <Avatar
-  //         alt="Truck Driver Icon"
-  //         src={assets.images.truckDriverIcon}
-  //         sx={{ width: 24, height: 24, marginRight: '5px' }}
-  //       />
-  //       <div className="font-open-sans text-sm font-normal text-neutral-500">
-  //         Choose a driver
-  //       </div>
-  //     </IconButton>
-  //   );
-  // };
+  const handleDriverStatus = () => {
+    if (viewData.paymentType === 'Shop') {
+      return (
+        <div className="flex items-center font-open-sans text-sm font-normal text-neutral-500">
+          <ShopIcon color="black" />
+          <p className="mx-3">Order has been delivered by shop</p>
+        </div>
+      );
+    }
+    if (!showSelectDriverButton) {
+      return null;
+    }
+    return (
+      <IconButton
+        aria-label="delete"
+        className="p-0"
+        disableRipple
+        onClick={() => navigate(`../assign/${id}`)}
+        disabled={false}
+      >
+        <Avatar
+          alt="Truck Driver Icon"
+          src={assets.images.truckDriverIcon}
+          sx={{ width: 24, height: 24, marginRight: '5px' }}
+        />
+        <div className="font-open-sans text-sm font-normal text-neutral-500">
+          Choose a driver
+        </div>
+      </IconButton>
+    );
+  };
 
   const isCancelledOrCompleted = useMemo(() => {
+    if (
+      currentStatus.value?.status ===
+      ORDER_STATUS.DRIVER_DELIVERED_ITEM_TO_CUSTOMER
+    ) {
+      return true;
+    }
     if (currentStatus.value?.status === ORDER_STATUS.COMPLETED) {
       return true;
     }
@@ -450,7 +453,7 @@ function OrderDetailsPage() {
                 </div>
               </div>
               <hr className="my-4 h-[1px] w-full bg-neutral-200" />
-              {/* <div className="grid grid-cols-2">
+              <div className="grid grid-cols-2">
                 <div className="flex flex-col">
                   <div className="font-open-sans text-sm font-semibold text-neutral-900">
                     Pick Up Time
@@ -495,8 +498,8 @@ function OrderDetailsPage() {
                     </div>
                   </div>
                 </div>
-              </div> */}
-              {/* <hr className="my-3 h-[1px] w-full bg-neutral-200" /> */}
+              </div>
+              <hr className="my-3 h-[1px] w-full bg-neutral-200" />
               <div className="flex items-center">
                 <LocationOnOutlinedIcon className="mr-2 text-xl text-neutral-900" />
                 <div className="font-open-sans text-sm font-normal text-neutral-500">
@@ -505,8 +508,8 @@ function OrderDetailsPage() {
                     : 'No Address'}
                 </div>
               </div>
-              {/* <hr className="my-3 h-[1px] w-full bg-neutral-200" /> */}
-              {/* <div className="flex w-full flex-shrink-0 items-center gap-x-3">
+              <hr className="my-3 h-[1px] w-full bg-neutral-200" />
+              <div className="flex w-full flex-shrink-0 items-center gap-x-3">
                 {viewData.driver && !showSelectDriverButton ? (
                   <>
                     <IconButton
@@ -567,7 +570,7 @@ function OrderDetailsPage() {
                 ) : (
                   handleDriverStatus()
                 )}
-              </div> */}
+              </div>
               <hr className="my-3 h-0.5 w-full bg-neutral-200" />
               <div className="max-h-48 flex-none overflow-y-scroll scroll-smooth px-4">
                 {viewData.orderItems &&

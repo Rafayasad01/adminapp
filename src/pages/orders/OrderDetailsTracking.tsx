@@ -9,8 +9,12 @@ import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 import dayjs from 'dayjs';
-import { useMemo } from 'react';
-import { ORDER_STATUS, ORDER_STATUSES } from '../../utils/constants';
+import { useCallback, useMemo } from 'react';
+import {
+  ORDER_FULFILLMENT_METHOD,
+  ORDER_STATUS,
+  ORDER_STATUSES,
+} from '../../utils/constants';
 
 function OrderDetailsTrackingPage({
   orderData,
@@ -19,13 +23,22 @@ function OrderDetailsTrackingPage({
   setDialogText,
 }: any) {
   const showChangeStatusButton = useMemo(() => {
-    if (orderData.status === ORDER_STATUS.NEW) {
+    if (orderData.status === ORDER_STATUS.DRIVER_DELIVERED_ITEM_TO_SHOP) {
       return true;
     }
-    if (orderData.status === ORDER_STATUS.PROCESSING_ITEM) {
+    if (orderData.status === ORDER_STATUS.DRIVER_DELIVERED_ITEM_TO_CUSTOMER) {
       return true;
     }
-    /*  if (
+    if (
+      orderData.status === ORDER_STATUS.PROCESSING_ITEM &&
+      orderData.fulfillmentMethod === ORDER_FULFILLMENT_METHOD.SELF
+    ) {
+      return true;
+    }
+    if (orderData.status === ORDER_STATUS.CUSTOMER_PICK_UP) {
+      return true;
+    }
+    if (
       orderData.status === ORDER_STATUS.DRIVER_DECLINED_TO_PICKUP_ITEM_FROM_SHOP
     ) {
       return false;
@@ -40,7 +53,7 @@ function OrderDetailsTrackingPage({
     }
     if (orderData.status === ORDER_STATUS.DRIVER_RETURNED_ITEM_TO_SHOP) {
       return false;
-    } */
+    }
     if (orderData.status === ORDER_STATUS.COMPLETED) {
       return false;
     }
@@ -64,6 +77,105 @@ function OrderDetailsTrackingPage({
     }
     return icon;
   };
+
+  const isStatusActive = useCallback(
+    (status: string) => {
+      const appOrderStatus = orderData.appOrderStatuses.find(
+        (item: any) => item.status === status
+      );
+      if (!appOrderStatus) {
+        return false;
+      }
+      const currentStatus = orderData.status;
+
+      if (status === ORDER_STATUS.NEW) {
+        return true;
+      }
+
+      if (status === ORDER_STATUS.DRIVER_ASSIGNED_FOR_ITEM_PICKUP) {
+        let pickedUp = true;
+        if (
+          currentStatus ===
+          ORDER_STATUS.DRIVER_DECLINED_TO_PICKUP_ITEM_FROM_CUSTOMER
+        ) {
+          pickedUp = false;
+        }
+        if (currentStatus === ORDER_STATUS.DRIVER_RETURNED_ITEM_TO_CUSTOMER) {
+          pickedUp = false;
+        }
+        return pickedUp;
+      }
+
+      if (
+        status === ORDER_STATUS.DRIVER_ACCEPTED_TO_PICK_UP_ITEM_FROM_CUSTOMER
+      ) {
+        let showAccepted = true;
+        if (
+          currentStatus ===
+          ORDER_STATUS.DRIVER_DECLINED_TO_PICKUP_ITEM_FROM_CUSTOMER
+        ) {
+          showAccepted = false;
+        }
+        if (currentStatus === ORDER_STATUS.DRIVER_RETURNED_ITEM_TO_CUSTOMER) {
+          showAccepted = false;
+        }
+        return showAccepted;
+      }
+
+      if (status === ORDER_STATUS.DRIVER_PICKED_UP_ITEM_FROM_CUSTOMER) {
+        let showPickedUp = true;
+        if (
+          currentStatus ===
+          ORDER_STATUS.DRIVER_DECLINED_TO_PICKUP_ITEM_FROM_CUSTOMER
+        ) {
+          showPickedUp = false;
+        }
+        if (currentStatus === ORDER_STATUS.DRIVER_RETURNED_ITEM_TO_CUSTOMER) {
+          showPickedUp = false;
+        }
+        return showPickedUp;
+      }
+
+      if (
+        status === ORDER_STATUS.DRIVER_DECLINED_TO_PICKUP_ITEM_FROM_CUSTOMER
+      ) {
+        let declinedCustomer = true;
+        if (currentStatus === ORDER_STATUS.COMPLETED) {
+          declinedCustomer = false;
+        }
+        if (currentStatus === ORDER_STATUS.DRIVER_DELIVERED_ITEM_TO_SHOP) {
+          declinedCustomer = false;
+        }
+        return declinedCustomer;
+      }
+
+      if (status === ORDER_STATUS.DRIVER_RETURNED_ITEM_TO_CUSTOMER) {
+        let returnedCustomer = true;
+        if (currentStatus === ORDER_STATUS.COMPLETED) {
+          returnedCustomer = false;
+        }
+        if (currentStatus === ORDER_STATUS.DRIVER_DELIVERED_ITEM_TO_SHOP) {
+          returnedCustomer = false;
+        }
+        return returnedCustomer;
+      }
+
+      if (
+        currentStatus ===
+        ORDER_STATUS.DRIVER_ACCEPTED_TO_PICK_UP_ITEM_FROM_CUSTOMER
+      ) {
+        if (
+          status === ORDER_STATUS.DRIVER_ACCEPTED_TO_PICK_UP_ITEM_FROM_CUSTOMER
+        ) {
+          return true;
+        }
+
+        return false;
+      }
+      return false;
+    },
+    [orderData.status, orderData.appOrderStatuses]
+  );
 
   return (
     <div className="mb-auto min-h-[40rem] rounded-lg bg-[#fff] shadow-lg">
@@ -101,7 +213,7 @@ function OrderDetailsTrackingPage({
           const appOrderStatus = orderData.appOrderStatuses.find(
             (item: any) => item.status === value.status
           );
-          const isActive = Boolean(appOrderStatus);
+          const isActive = isStatusActive(value.status);
           return (
             <div
               key={index}

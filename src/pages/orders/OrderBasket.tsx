@@ -59,7 +59,7 @@ const OrderBasket = () => {
     'FALSE'
   );
   const [isOpenPromoDialog, setIsOpenPromoDialog] = useState(false);
-  const [fulfillmentMethod /* , setFulfillmentMethod */] =
+  const [fulfillmentMethod, setFulfillmentMethod] =
     useState<ValuesOf<typeof ORDER_FULFILLMENT_METHOD>>('Self');
   const [isLoginLoader, setIsLoginLoader] = useState(false);
   const [loginDetails, setLoginDetails] = useState<any>(null);
@@ -819,8 +819,8 @@ const OrderBasket = () => {
                 </div>
               )}
 
-              {/* <Divider flexItem className="my-5" /> */}
-              {/* {isExistingUser === 'TRUE' && (
+              <Divider flexItem className="my-5" />
+              {isExistingUser === 'TRUE' && (
                 <FormControl>
                   <FormLabel
                     id="demo-row-radio-buttons-group-label"
@@ -874,8 +874,6 @@ const OrderBasket = () => {
                   </RadioGroup>
                 </FormControl>
               )}
-
-              <Divider flexItem className="my-5" /> */}
 
               {promoList?.length > 0 && isExistingUser === 'TRUE' && (
                 <>

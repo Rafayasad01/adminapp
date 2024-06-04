@@ -187,17 +187,24 @@ function OrdersAssignPage() {
   }, [null]);
 
   const newStatus = useMemo(() => {
-    return '';
-    /*  if (!data) {
+    if (!data) {
       return '';
     }
-   /*  if (data.status === ORDER_STATUS.NEW) {
+    if (data.status === ORDER_STATUS.NEW) {
       return ORDER_STATUS.DRIVER_ASSIGNED_FOR_ITEM_PICKUP;
-    } */
-    /* if (data.fulfillmentMethod === 'Self') {
+    }
+    if (
+      data.status === ORDER_STATUS.DRIVER_DECLINED_TO_PICKUP_ITEM_FROM_CUSTOMER
+    ) {
+      return ORDER_STATUS.DRIVER_ASSIGNED_FOR_ITEM_PICKUP;
+    }
+    if (data.status === ORDER_STATUS.DRIVER_RETURNED_ITEM_TO_CUSTOMER) {
+      return ORDER_STATUS.DRIVER_ASSIGNED_FOR_ITEM_PICKUP;
+    }
+    if (data.fulfillmentMethod === 'Self') {
       return ORDER_STATUS.CUSTOMER_PICK_UP;
-    } */
-    /* return ORDER_STATUS.DRIVER_ASSIGNED_FOR_ITEM_DELIVERY; */
+    }
+    return ORDER_STATUS.DRIVER_ASSIGNED_FOR_ITEM_DELIVERY;
   }, [data?.status, data?.fulfillmentMethod]);
 
   const assignHandler = (userId: string) => {
@@ -223,29 +230,37 @@ function OrdersAssignPage() {
     }
   };
   const assignButton = (item: any) => {
-    // console.log("ITEMS", item);
-    if (item.status === APP_USER_STATUS_OFFLINE) {
+    console.log('item :>> ', item);
+    if (item.isActive === false || item.status === APP_USER_STATUS_OFFLINE) {
+      return true;
+    }
+    if (item.appOrderDelivery.appOrder === orderId) {
+      if (item.appOrderDelivery.status === ORDER_STATUS.NEW) return false;
+      if (
+        item.appOrderDelivery.status ===
+        ORDER_STATUS.DRIVER_DECLINED_TO_PICKUP_ITEM_FROM_CUSTOMER
+      )
+        return false;
+      if (
+        item.appOrderDelivery.status ===
+        ORDER_STATUS.DRIVER_RETURNED_ITEM_TO_CUSTOMER
+      )
+        return false;
+      if (item.appOrderDelivery.status === ORDER_STATUS.PROCESSING_ITEM)
+        return false;
+      if (
+        item.appOrderDelivery.status ===
+        ORDER_STATUS.DRIVER_DECLINED_TO_PICKUP_ITEM_FROM_SHOP
+      )
+        return false;
+      if (
+        item.appOrderDelivery.status ===
+        ORDER_STATUS.DRIVER_RETURNED_ITEM_TO_SHOP
+      )
+        return false;
       return true;
     }
     return false;
-    let isTrue = false;
-    if (
-      item.isActive === false ||
-      item.status === APP_USER_STATUS_OFFLINE ||
-      item.appOrderDelivery.status === ORDER_STATUS.CANCELLED
-    ) {
-      isTrue = true;
-    } else if (
-      item.appOrderDelivery.status === ORDER_STATUS.NEW ||
-      item.appOrderDelivery.status === null
-    ) {
-      isTrue = false;
-    } else if (item.appOrderDelivery.appOrder === orderId) {
-      isTrue = true;
-    } else {
-      isTrue = false;
-    }
-    return isTrue;
   };
 
   const assignBtnColor = (item: any) => {
