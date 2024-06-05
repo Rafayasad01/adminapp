@@ -352,6 +352,7 @@ function OrdersPage() {
                   <th>Amount</th>
                   <th className="w-60">Status</th>
                   <th>Order ID</th>
+                  <th aria-label="empty table header">&nbsp;</th>
                 </tr>
               </thead>
               <tbody>
