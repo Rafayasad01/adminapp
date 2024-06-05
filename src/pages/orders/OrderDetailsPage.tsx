@@ -227,6 +227,12 @@ function OrderDetailsPage() {
         ),
       };
     }
+    if (viewData.status === ORDER_STATUS.DRIVER_DELIVERED_ITEM_TO_CUSTOMER) {
+      return {
+        key: ORDER_STATUS.COMPLETED,
+        value: ORDER_STATUSES.get(ORDER_STATUS.COMPLETED),
+      };
+    }
     if (viewData.status === ORDER_STATUS.CUSTOMER_PICK_UP) {
       return {
         key: ORDER_STATUS.COMPLETED,
