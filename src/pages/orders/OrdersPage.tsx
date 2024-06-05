@@ -350,7 +350,7 @@ function OrdersPage() {
                   <th>Pickup Time</th>
                   <th>Drop-off Time</th>
                   <th>Amount</th>
-                  <th className="w-36">Status</th>
+                  <th className="w-60">Status</th>
                   <th>Order ID</th>
                 </tr>
               </thead>

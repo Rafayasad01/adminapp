@@ -5,14 +5,11 @@ import GridViewOutlinedIcon from '@mui/icons-material/GridViewOutlined';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
-import ManageAccountsOutlinedIcon from '@mui/icons-material/ManageAccountsOutlined';
 import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
 import PeopleOutlineOutlinedIcon from '@mui/icons-material/PeopleOutlineOutlined';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import QuestionAnswerOutlinedIcon from '@mui/icons-material/QuestionAnswerOutlined';
-import WalletIcon from '@mui/icons-material/Wallet';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
-import SplitscreenOutlinedIcon from '@mui/icons-material/SplitscreenOutlined';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import ViewCarouselOutlinedIcon from '@mui/icons-material/ViewCarouselOutlined';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
@@ -33,8 +30,6 @@ import ArrowUp from '../icons/ArrowUp';
 import CategoryIcon from '../icons/CategoryIcon';
 import OrderIcon from '../icons/OrderIcon';
 import VoucherIcon from '../icons/VoucherIcon';
-import ProviderIcon from '../icons/providerIcon';
-import VisitIcon from '../icons/visitIcon';
 
 const links = [
   {
@@ -43,50 +38,50 @@ const links = [
     permission: 'Dashboard List',
     icon: <GridViewOutlinedIcon fontSize="inherit" />,
   },
-  {
-    name: 'Store Appointment',
-    path: 'store-appointment',
-    permission: 'Appointment Parent',
-    icon: <SplitscreenOutlinedIcon fontSize="inherit" />,
-    childLinks: [
-      {
-        name: 'Services',
-        path: 'store-appointment/service',
-        permission: 'Category List',
-        icon: <GridViewOutlinedIcon fontSize="inherit" />,
-      },
-      {
-        name: 'Employees',
-        path: 'store-appointment/employees',
-        permission: 'Category List',
-        icon: <ProviderIcon />,
-      },
-      {
-        name: 'Appointments',
-        path: 'store-appointment/appointments',
-        permission: 'Category List',
-        icon: <VisitIcon />,
-      },
-      {
-        name: 'Wallet',
-        path: 'store-appointment/wallet',
-        permission: 'Category List',
-        icon: <WalletIcon fontSize="inherit" />,
-      },
-      {
-        name: 'Leave management',
-        path: 'store-appointment/leaves-management',
-        permission: 'Category List',
-        icon: <ManageAccountsOutlinedIcon fontSize="inherit" />,
-      },
-      // {
-      //   name: 'Ratings',
-      //   path: 'store-appointment/ratings',
-      //   permission: 'Category List',
-      //   icon: <VisitIcon />,
-      // },
-    ],
-  },
+  // {
+  //   name: 'Store Appointment',
+  //   path: 'store-appointment',
+  //   permission: 'Appointment Parent',
+  //   icon: <SplitscreenOutlinedIcon fontSize="inherit" />,
+  //   childLinks: [
+  //     {
+  //       name: 'Services',
+  //       path: 'store-appointment/service',
+  //       permission: 'Category List',
+  //       icon: <GridViewOutlinedIcon fontSize="inherit" />,
+  //     },
+  //     {
+  //       name: 'Employees',
+  //       path: 'store-appointment/employees',
+  //       permission: 'Category List',
+  //       icon: <ProviderIcon />,
+  //     },
+  //     {
+  //       name: 'Appointments',
+  //       path: 'store-appointment/appointments',
+  //       permission: 'Category List',
+  //       icon: <VisitIcon />,
+  //     },
+  //     {
+  //       name: 'Wallet',
+  //       path: 'store-appointment/wallet',
+  //       permission: 'Category List',
+  //       icon: <WalletIcon fontSize="inherit" />,
+  //     },
+  //     {
+  //       name: 'Leave management',
+  //       path: 'store-appointment/leaves-management',
+  //       permission: 'Category List',
+  //       icon: <ManageAccountsOutlinedIcon fontSize="inherit" />,
+  //     },
+  //     // {
+  //     //   name: 'Ratings',
+  //     //   path: 'store-appointment/ratings',
+  //     //   permission: 'Category List',
+  //     //   icon: <VisitIcon />,
+  //     // },
+  //   ],
+  // },
   {
     name: 'Store Product',
     path: 'store-product',
