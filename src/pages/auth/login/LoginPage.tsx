@@ -10,6 +10,7 @@ import { useForm } from 'react-hook-form';
 import { NavLink, useNavigate } from 'react-router-dom';
 import assets from '../../../assets';
 import { useNotification } from '../../../components/Contexts/NotificationContext';
+import FastSpinner from '../../../components/common/CustomSpinner';
 import ErrorSpanBox from '../../../components/common/ErrorSpanBox';
 import Notify from '../../../components/common/Notify';
 import { UserLogin } from '../../../interfaces/auth.interface';
@@ -19,7 +20,6 @@ import { setRolePermissions } from '../../../redux/features/permissionsStateSlic
 import { useAppDispatch, useAppSelector } from '../../../redux/redux-hooks';
 import authService from '../../../services/adminapp/admin';
 import { setItem } from '../../../utils/storage';
-import FastSpinner from '../../../components/common/CustomSpinner';
 
 interface LoginFields {
   email: string;
@@ -146,7 +146,7 @@ function LoginPage() {
                     <Input
                       className="border-1 border-solid border-secondary text-[11px]"
                       id="email"
-                      placeholder="ilyassalon@urapptech.com"
+                      placeholder="example@mail.com"
                       type="email"
                       {...register('email', {
                         required: 'Please enter your email.',
