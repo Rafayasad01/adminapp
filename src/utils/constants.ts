@@ -92,20 +92,20 @@ export const ORDER_STATUS = {
   DRIVER_ASSIGNED_FOR_ITEM_PICKUP: 'Driver-Assigned-For-Item-Pickup',
   DRIVER_ACCEPTED_TO_PICK_UP_ITEM_FROM_CUSTOMER:
     'Driver-Accepted-To-Pick-Up-Item-From-Customer',
-  DRIVER_PICKED_UP_ITEM_FROM_CUSTOMER: 'Driver-Picked-Up-Item-From-Customer',
-  DRIVER_DELIVERED_ITEM_TO_SHOP: 'Driver-Delivered-Item-To-Shop',
   DRIVER_DECLINED_TO_PICKUP_ITEM_FROM_CUSTOMER:
     'Driver-Declined-To-Pickup-Item-From-Customer',
+  DRIVER_PICKED_UP_ITEM_FROM_CUSTOMER: 'Driver-Picked-Up-Item-From-Customer',
   DRIVER_RETURNED_ITEM_TO_CUSTOMER: 'Driver-Returned-Item-To-Customer',
+  DRIVER_DELIVERED_ITEM_TO_SHOP: 'Driver-Delivered-Item-To-Shop',
   PROCESSING_ITEM: 'Processing-Item',
   DRIVER_ASSIGNED_FOR_ITEM_DELIVERY: 'Driver-Assigned-For-Item-Delivery',
   DRIVER_ACCEPTED_TO_PICK_UP_ITEM_FROM_SHOP:
     'Driver-Accepted-To-Pick-Up-Item-From-Shop',
-  DRIVER_PICKED_UP_ITEM_FROM_SHOP: 'Driver-Picked-Up-Item-From-Shop',
-  DRIVER_DELIVERED_ITEM_TO_CUSTOMER: 'Driver-Delivered-Item-To-Customer',
   DRIVER_DECLINED_TO_PICKUP_ITEM_FROM_SHOP:
     'Driver-Declined-To-Pickup-Item-From-Shop',
+  DRIVER_PICKED_UP_ITEM_FROM_SHOP: 'Driver-Picked-Up-Item-From-Shop',
   DRIVER_RETURNED_ITEM_TO_SHOP: 'Driver-Returned-Item-To-Shop',
+  DRIVER_DELIVERED_ITEM_TO_CUSTOMER: 'Driver-Delivered-Item-To-Customer',
   CUSTOMER_PICK_UP: 'Customer-Pick-Up',
   COMPLETED: 'Completed',
   CANCELLED: 'Cancelled',
@@ -149,18 +149,6 @@ export const ORDER_STATUSES = new Map([
     },
   ],
   [
-    ORDER_STATUS.DRIVER_PICKED_UP_ITEM_FROM_CUSTOMER,
-    {
-      status: ORDER_STATUS.DRIVER_PICKED_UP_ITEM_FROM_CUSTOMER,
-      title: 'Driver Pickup Items',
-      color: 'text-blue-500',
-      background: 'bg-blue-500',
-      text: 'driver has customers items',
-      iconText: 'CheckCircleOutlineOutlined',
-      progress: 40,
-    },
-  ],
-  [
     ORDER_STATUS.DRIVER_DECLINED_TO_PICKUP_ITEM_FROM_CUSTOMER,
     {
       status: ORDER_STATUS.DRIVER_DECLINED_TO_PICKUP_ITEM_FROM_CUSTOMER,
@@ -168,6 +156,18 @@ export const ORDER_STATUSES = new Map([
       color: 'text-indigo-500',
       background: 'bg-indigo-500',
       text: 'driver has returned items to customer',
+      iconText: 'CheckCircleOutlineOutlined',
+      progress: 40,
+    },
+  ],
+  [
+    ORDER_STATUS.DRIVER_PICKED_UP_ITEM_FROM_CUSTOMER,
+    {
+      status: ORDER_STATUS.DRIVER_PICKED_UP_ITEM_FROM_CUSTOMER,
+      title: 'Driver Pickup Items',
+      color: 'text-blue-500',
+      background: 'bg-blue-500',
+      text: 'driver has customers items',
       iconText: 'CheckCircleOutlineOutlined',
       progress: 40,
     },
@@ -221,30 +221,6 @@ export const ORDER_STATUSES = new Map([
     },
   ],
   [
-    ORDER_STATUS.DRIVER_DECLINED_TO_PICKUP_ITEM_FROM_SHOP,
-    {
-      status: ORDER_STATUS.DRIVER_DECLINED_TO_PICKUP_ITEM_FROM_SHOP,
-      title: 'Driver Declined Items',
-      color: 'text-indigo-500',
-      background: 'bg-indigo-500',
-      text: 'driver has returned items to customer',
-      iconText: 'CheckCircleOutlineOutlined',
-      progress: 70,
-    },
-  ],
-  [
-    ORDER_STATUS.DRIVER_RETURNED_ITEM_TO_SHOP,
-    {
-      status: ORDER_STATUS.DRIVER_RETURNED_ITEM_TO_SHOP,
-      title: 'Driver Returned Items',
-      color: 'text-indigo-500',
-      background: 'bg-indigo-500',
-      text: 'driver has returned items to customer',
-      iconText: 'CheckCircleOutlineOutlined',
-      progress: 70,
-    },
-  ],
-  [
     ORDER_STATUS.DRIVER_ACCEPTED_TO_PICK_UP_ITEM_FROM_SHOP,
     {
       status: ORDER_STATUS.DRIVER_ACCEPTED_TO_PICK_UP_ITEM_FROM_SHOP,
@@ -257,6 +233,18 @@ export const ORDER_STATUSES = new Map([
     },
   ],
   [
+    ORDER_STATUS.DRIVER_DECLINED_TO_PICKUP_ITEM_FROM_SHOP,
+    {
+      status: ORDER_STATUS.DRIVER_DECLINED_TO_PICKUP_ITEM_FROM_SHOP,
+      title: 'Driver Declined Items',
+      color: 'text-indigo-500',
+      background: 'bg-indigo-500',
+      text: 'driver has returned items to customer',
+      iconText: 'CheckCircleOutlineOutlined',
+      progress: 70,
+    },
+  ],
+  [
     ORDER_STATUS.DRIVER_PICKED_UP_ITEM_FROM_SHOP,
     {
       status: ORDER_STATUS.DRIVER_PICKED_UP_ITEM_FROM_SHOP,
@@ -266,6 +254,18 @@ export const ORDER_STATUSES = new Map([
       text: 'driver has customers items',
       iconText: 'CheckCircleOutlineOutlined',
       progress: 90,
+    },
+  ],
+  [
+    ORDER_STATUS.DRIVER_RETURNED_ITEM_TO_SHOP,
+    {
+      status: ORDER_STATUS.DRIVER_RETURNED_ITEM_TO_SHOP,
+      title: 'Driver Returned Items',
+      color: 'text-indigo-500',
+      background: 'bg-indigo-500',
+      text: 'driver has returned items to customer',
+      iconText: 'CheckCircleOutlineOutlined',
+      progress: 70,
     },
   ],
   [

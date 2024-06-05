@@ -86,6 +86,7 @@ function OrderDetailsTrackingPage({
       if (!appOrderStatus) {
         return false;
       }
+
       const currentStatus = orderData.status;
 
       if (status === ORDER_STATUS.NEW) {
@@ -110,6 +111,9 @@ function OrderDetailsTrackingPage({
         status === ORDER_STATUS.DRIVER_ACCEPTED_TO_PICK_UP_ITEM_FROM_CUSTOMER
       ) {
         let showAccepted = true;
+        if (currentStatus === ORDER_STATUS.DRIVER_ASSIGNED_FOR_ITEM_PICKUP) {
+          showAccepted = false;
+        }
         if (
           currentStatus ===
           ORDER_STATUS.DRIVER_DECLINED_TO_PICKUP_ITEM_FROM_CUSTOMER
@@ -124,6 +128,15 @@ function OrderDetailsTrackingPage({
 
       if (status === ORDER_STATUS.DRIVER_PICKED_UP_ITEM_FROM_CUSTOMER) {
         let showPickedUp = true;
+        if (currentStatus === ORDER_STATUS.DRIVER_ASSIGNED_FOR_ITEM_PICKUP) {
+          showPickedUp = false;
+        }
+        if (
+          currentStatus ===
+          ORDER_STATUS.DRIVER_ACCEPTED_TO_PICK_UP_ITEM_FROM_CUSTOMER
+        ) {
+          showPickedUp = false;
+        }
         if (
           currentStatus ===
           ORDER_STATUS.DRIVER_DECLINED_TO_PICKUP_ITEM_FROM_CUSTOMER
@@ -133,6 +146,7 @@ function OrderDetailsTrackingPage({
         if (currentStatus === ORDER_STATUS.DRIVER_RETURNED_ITEM_TO_CUSTOMER) {
           showPickedUp = false;
         }
+
         return showPickedUp;
       }
 
@@ -181,6 +195,9 @@ function OrderDetailsTrackingPage({
 
       if (status === ORDER_STATUS.DRIVER_ACCEPTED_TO_PICK_UP_ITEM_FROM_SHOP) {
         let showAccepted = true;
+        if (currentStatus === ORDER_STATUS.DRIVER_ASSIGNED_FOR_ITEM_DELIVERY) {
+          showAccepted = false;
+        }
         if (
           currentStatus ===
           ORDER_STATUS.DRIVER_DECLINED_TO_PICKUP_ITEM_FROM_SHOP
@@ -214,6 +231,15 @@ function OrderDetailsTrackingPage({
 
       if (status === ORDER_STATUS.DRIVER_PICKED_UP_ITEM_FROM_SHOP) {
         let pickedUp = true;
+        if (currentStatus === ORDER_STATUS.DRIVER_ASSIGNED_FOR_ITEM_DELIVERY) {
+          pickedUp = false;
+        }
+        if (
+          currentStatus ===
+          ORDER_STATUS.DRIVER_ACCEPTED_TO_PICK_UP_ITEM_FROM_SHOP
+        ) {
+          pickedUp = false;
+        }
         if (
           currentStatus ===
           ORDER_STATUS.DRIVER_DECLINED_TO_PICKUP_ITEM_FROM_SHOP
