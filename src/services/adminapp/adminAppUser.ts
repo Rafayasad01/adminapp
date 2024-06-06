@@ -143,7 +143,7 @@ const appAnonymousDetail = () => {
   return network.get(`${BACKOFFICE_PREFIX}/anonymous/detail`);
 };
 
-const driverHistory = (search: string, page: number, size: number) => {
+const driverList = (search: string, page: number, size: number) => {
   return network.getWithQueryParam(`${APP_PREFIX}/driver/list`, {
     search,
     page: page.toString(),
@@ -151,8 +151,37 @@ const driverHistory = (search: string, page: number, size: number) => {
   });
 };
 
-const driverDetailHistory = (appUser: string) => {
-  return network.get(`${APP_PREFIX}/driver/detail/${appUser}`);
+const driverDetail = (
+  appUser: string,
+  page: number,
+  size: number,
+  to: string,
+  from: string
+) => {
+  return network.getWithQueryParam(`${APP_PREFIX}/driver/detail/${appUser}`, {
+    page: page.toString(),
+    size: size.toString(),
+    to,
+    from,
+  });
+};
+
+const driverWalletDetail = (
+  wallets: string,
+  page: number,
+  size: number,
+  to: string,
+  from: string
+) => {
+  return network.getWithQueryParam(
+    `${APP_PREFIX}/driver/wallet/detail/${wallets}`,
+    {
+      page: page.toString(),
+      size: size.toString(),
+      to,
+      from,
+    }
+  );
 };
 
 export default {
@@ -180,6 +209,7 @@ export default {
   appUserVocuherHistoryDetails,
   appUserLoyaltyHistoryDetails,
   appAnonymousDetail,
-  driverHistory,
-  driverDetailHistory,
+  driverList,
+  driverDetail,
+  driverWalletDetail,
 };

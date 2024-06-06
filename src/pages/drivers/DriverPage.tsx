@@ -10,21 +10,14 @@ import TablePagination from '@mui/material/TablePagination';
 import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import TopBar from '../../components/common/TopBar';
-// import CustomersCreatePopup from './CustomersCreatePopup';
-// import CustomersEditPopup from './CustomersEditPopup';
 import CustomText from '../../components/common/CustomText';
 import Loader from '../../components/common/Loader';
 import Notify from '../../components/common/Notify';
-// import { useAppSelector } from '../../redux/redux-hooks';
+import TopBar from '../../components/common/TopBar';
 
 import Service from '../../services/adminapp/adminAppUser';
 
 function DriverPage() {
-  // const authState: any = useAppSelector((state: any) => state?.authState);
-  // const dataRole = useAppSelector(
-  //   (state: any) => state?.persistedReducer?.roleState?.role?.permissions
-  // );
   const navigate = useNavigate();
   const [search, setSearch] = useState<any>('');
   const [page, setPage] = useState(0);
@@ -41,17 +34,14 @@ function DriverPage() {
       const newPage = 0;
       setSearch(searchTxt);
       setPage(newPage);
-      // employeeService
-      //   .getListServiceSearch(
-      //     authState.user.tenant,
-      //     searchTxt,
-      //     newPage,
-      //     rowsPerPage
-      //   )
-      //   .then((item) => {
-      //     setList(item.data.data.list);
-      //     setTotal(item.data.data.total);
-      //   });
+      Service.driverList(searchTxt, newPage, rowsPerPage).then((item) => {
+        if (item.data.success) {
+          setList(item.data.data.list);
+          setTotal(item.data.data.total);
+          setIsLoader(false);
+          setNotifyMessage('test');
+        }
+      });
     }
   };
 
@@ -60,27 +50,14 @@ function DriverPage() {
     newPage: number
   ) => {
     setPage(newPage);
-    // offset? ,limit rowsperpage hoga ofset page * rowsperPage
-    if (search === '' || search === null || search === undefined) {
-      // employeeService
-      //   .getListService(authState.user.tenant, newPage, rowsPerPage)
-      //   .then((item) => {
-      //     setList(item.data.data.list);
-      //     setTotal(item.data.data.total);
-      //   });
-    } else {
-      // employeeService
-      //   .getListServiceSearch(
-      //     authState.user.tenant,
-      //     search,
-      //     newPage,
-      //     rowsPerPage
-      //   )
-      //   .then((item) => {
-      //     setList(item.data.data.list);
-      //     setTotal(item.data.data.total);
-      //   });
-    }
+    Service.driverList(search, newPage, rowsPerPage).then((item) => {
+      if (item.data.success) {
+        setList(item.data.data.list);
+        setTotal(item.data.data.total);
+        setIsLoader(false);
+        setNotifyMessage('test');
+      }
+    });
   };
 
   const handleChangeRowsPerPage = (
@@ -90,31 +67,7 @@ function DriverPage() {
     const newPage = 0;
     setRowsPerPage(newRowperPage);
     setPage(newPage);
-    if (search === '' || search === null || search === undefined) {
-      // employeeService
-      //   .getListService(authState.user.tenant, newPage, rowsPerPage)
-      //   .then((item) => {
-      //     setList(item.data.data.list);
-      //     setTotal(item.data.data.total);
-      //   });
-    } else {
-      // employeeService
-      //   .getListServiceSearch(
-      //     authState.user.tenant,
-      //     search,
-      //     newPage,
-      //     rowsPerPage
-      //   )
-      //   .then((item) => {
-      //     setList(item.data.data.list);
-      //     setTotal(item.data.data.total);
-      //   });
-    }
-  };
-
-  useEffect(() => {
-    Service.driverHistory(search, page, rowsPerPage).then((item) => {
-      console.log('item:::::::', item);
+    Service.driverList(search, newPage, newRowperPage).then((item) => {
       if (item.data.success) {
         setList(item.data.data.list);
         setTotal(item.data.data.total);
@@ -122,29 +75,17 @@ function DriverPage() {
         setNotifyMessage('test');
       }
     });
-    // if (listingRolePermission(dataRole, 'Employee List')) {
-    //   employeeService
-    //     .getListService(authState.user.tenant, page, rowsPerPage)
-    //     .then((item: any) => {
-    //       if (item.data.success) {
-    //         setIsLoader(false);
-    //         setList(item.data.data.list);
-    //         setTotal(item.data.data.total);
-    //       } else {
-    //         setIsLoader(false);
-    //       }
-    //     })
-    //     .catch((err) => {
-    //       setIsLoader(false);
-    //       setIsNotify(true);
-    //       setNotifyMessage({
-    //         text: err.message,
-    //         type: 'error',
-    //       });
-    //     });
-    // } else {
-    //   setIsLoader(false);
-    // }
+  };
+
+  useEffect(() => {
+    Service.driverList(search, page, rowsPerPage).then((item) => {
+      if (item.data.success) {
+        setList(item.data.data.list);
+        setTotal(item.data.data.total);
+        setIsLoader(false);
+        setNotifyMessage('test');
+      }
+    });
   }, [null]);
 
   return isLoader ? (
