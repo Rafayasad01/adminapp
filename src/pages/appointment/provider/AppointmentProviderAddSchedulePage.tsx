@@ -162,10 +162,10 @@ function AppointmentProviderAddSchedulePage() {
       const dataItem = {
         day: data[`name${index}`],
         startTime: data[`startdatetime${index}`]
-          .utc()
+          // .utc()
           .format('YYYY-MM-DD HH:mm:ss'),
         endTime: data[`enddatetime${index}`]
-          .utc()
+          // .utc()
           .format('YYYY-MM-DD HH:mm:ss'),
       };
 
