@@ -434,8 +434,8 @@ function AppointmentProviderPage() {
     if (option === 'Edit') {
       if (listingRolePermission(dataRole, 'Appointment Provider Edit')) {
         setIsLoader(true);
-        StoreEmployeeService.StoreEmployeeFind(actionMenuItemid).then(
-          (item: any) => {
+        StoreEmployeeService.StoreEmployeeFind(actionMenuItemid)
+          .then((item: any) => {
             if (item.data.success) {
               catLovService();
               setIsLoader(false);
@@ -479,8 +479,15 @@ function AppointmentProviderPage() {
                 type: 'error',
               });
             }
-          }
-        );
+          })
+          .catch((err) => {
+            setIsLoader(false);
+            setIsNotify(true);
+            setNotifyMessage({
+              text: err.message,
+              type: 'error',
+            });
+          });
       } else {
         setIsLoader(false);
         setIsNotify(true);
@@ -663,6 +670,7 @@ function AppointmentProviderPage() {
         }
       })
       .catch((err) => {
+        setIsLoader(false);
         setIsNotify(true);
         setNotifyMessage({
           text: err.message,

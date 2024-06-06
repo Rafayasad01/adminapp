@@ -30,7 +30,7 @@ function AppUserAddressTabPage({
   const dataRole = useAppSelector(
     (state: any) => state?.persistedReducer?.roleState?.role?.permissions
   );
-  const [isLoader, setIsLoader] = React.useState(true);
+  const [isLoader, setIsLoader] = React.useState(false);
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
   const [openFormDialog, setOpenFormDialog] = useState(false);

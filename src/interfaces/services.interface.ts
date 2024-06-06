@@ -21,7 +21,7 @@ export interface BarberCategoryServices {
 export interface BarberItemServices {
   amount: string;
   amountType: string;
-  minutes: string;
+  serviceTime: string;
   categoryId?: string;
   storeServiceCategoryItem: string;
 }
