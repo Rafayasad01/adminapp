@@ -222,7 +222,7 @@ function AppUserOtherTab({
     setPage(newPage);
     if (search === '' || search === null || search === undefined) {
       appUserService
-        .appList(authState.user.tenant, 'Other', newPage, rowsPerPage)
+        .appList(authState.user.tenant, 'Other', newPage, newRowPerPage)
         .then((item) => {
           setList(item.data.data.list);
           setTotal(item.data.data.total);
@@ -234,7 +234,7 @@ function AppUserOtherTab({
           'Other',
           search,
           newPage,
-          rowsPerPage
+          newRowPerPage
         )
         .then((item) => {
           setList(item.data.data.list);

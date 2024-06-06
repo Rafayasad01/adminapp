@@ -219,13 +219,6 @@ const UserPopup = ({
               id="search"
               type="text"
               placeholder="Identifier (Ex : email or phone)"
-              // onKeyDown={(
-              //   event: React.KeyboardEvent<
-              //     HTMLInputElement | HTMLTextAreaElement
-              //   >
-              // ) => {
-              //   handleUserInput(event);
-              // }}
               onChange={(event) => setUserEmailIdentifier(event.target.value)}
               disableUnderline
             />
@@ -510,12 +503,11 @@ export default function AddAppointmentPage() {
         } w-[100%] cursor-pointer rounded-2xl border-[1px] border-[#949EAE] px-3 py-4`}
       >
         <div className="flex items-center justify-between">
-          <span className="font-semibold text-[#003E80]">
+          <span className="truncate font-semibold text-[#003E80]">
             {getCatItemName(item.storeServiceCategoryItem)}{' '}
             <p className="text-xs">{`(${item.serviceTime} mints)`}</p>
-            {/* {`(${item.serviceTime} mints)`} */}
           </span>
-          <div className="flex items-center">
+          <div className="flex items-center px-2">
             <img
               className="h-[14px] w-[14px]"
               src={assets.images.Star}
@@ -1183,7 +1175,7 @@ export default function AddAppointmentPage() {
                           }
                         >
                           <Swiper
-                            slidesPerView={6}
+                            slidesPerView={4}
                             spaceBetween={30}
                             pagination={pagination}
                             modules={[Pagination]}

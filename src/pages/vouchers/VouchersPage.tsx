@@ -137,7 +137,7 @@ function VouchersPage() {
     setRowsPerPage(newRowPerPage);
     setPage(newPage);
     vouchersService
-      .listVouchers(authState.user.tenant, newPage, rowsPerPage, search)
+      .listVouchers(authState.user.tenant, newPage, newRowPerPage, search)
       .then((response) => {
         if (response.data.success) {
           setList(response.data.data.result);

@@ -161,26 +161,19 @@ function AppointmentProviderAddSchedulePage() {
       const index = nameKey.match(indexPattern)[0];
       const dataItem = {
         day: data[`name${index}`],
-        startTime: data[`startdatetime${index}`].format('YYYY-MM-DD HH:mm:ss'),
-        endTime: data[`enddatetime${index}`].format('YYYY-MM-DD HH:mm:ss'),
+        startTime: data[`startdatetime${index}`]
+          // .utc()
+          .format('YYYY-MM-DD HH:mm:ss'),
+        endTime: data[`enddatetime${index}`]
+          // .utc()
+          .format('YYYY-MM-DD HH:mm:ss'),
       };
-      // if (
-      //   dayjs(dataItem.startTime).format('HH:mm') <
-      //     dayjs(officeTimings?.tenantConfig?.officeTimeIn).format('HH:mm') ||
-      //   dayjs(dataItem.endTime).format('HH:mm') >
-      //     dayjs(officeTimings?.tenantConfig?.officeTimeOut).format('HH:mm')
-      // ) {
-      //   setIsLoader(false);
-      //   setIsNotify(true);
-      //   setNotifyMessage({
-      //     text: 'You should check your shop time before creating staff',
-      //     type: 'error',
-      //   });
-      //   return null;
-      // }
+
       parent.workDays.push(dataItem);
       return null;
     });
+    // console.log('PARENTS', parent);
+
     adminAppointmentService
       .ProviderScheduleCreate(id, parent)
       .then((item: any) => {

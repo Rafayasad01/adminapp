@@ -73,14 +73,14 @@ function AppUserPromotionTab({
     setPage(newPage);
     if (search === '' || search === null || search === undefined) {
       appUserService
-        .appUserVocuherHistoryList(userId, newPage, rowsPerPage)
+        .appUserVocuherHistoryList(userId, newPage, newRowperPage)
         .then((item) => {
           setList(item.data.data.list);
           setTotal(item.data.data.total);
         });
     } else {
       appUserService
-        .appUserSearchVocuherHistoryList(userId, search, newPage, rowsPerPage)
+        .appUserSearchVocuherHistoryList(userId, search, newPage, newRowperPage)
         .then((item) => {
           setList(item.data.data.list);
           setTotal(item.data.data.total);

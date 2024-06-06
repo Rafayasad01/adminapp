@@ -135,14 +135,14 @@ function CustomTable({
     setPage(newPage);
     if (search === '' || search === null || search === undefined) {
       service
-        .getListService(authState.user.tenant, newPage, rowsPerPage)
+        .getListService(authState.user.tenant, newPage, newRowperPage)
         .then((item: any) => {
           setList(item.data.data.list);
           setTotal(item.data.data.total);
         });
     } else {
       service
-        .searchService(authState.user.tenant, search, newPage, rowsPerPage)
+        .searchService(authState.user.tenant, search, newPage, newRowperPage)
         .then((item: any) => {
           setList(item.data.data.list);
           setTotal(item.data.data.total);

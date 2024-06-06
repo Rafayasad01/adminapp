@@ -1,6 +1,6 @@
 import HistoryIcon from '@mui/icons-material/History';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
-import CloseIcon from '@mui/icons-material/Close';
+// import CloseIcon from '@mui/icons-material/Close';
 import UpdateOutlinedIcon from '@mui/icons-material/UpdateOutlined';
 import DeleteIcon from '@mui/icons-material/Delete';
 import WalletIcon from '@mui/icons-material/Wallet';
@@ -11,7 +11,7 @@ import IconButton from '@mui/material/IconButton';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import moment from 'moment';
+// import moment from 'moment';
 import assets from '../../assets';
 import storeAppointmentService from '../../services/adminapp/adminStoreAppointment';
 import walletService from '../../services/adminapp/adminWallet';
@@ -22,7 +22,7 @@ import ViewWalletPopupCard from './ViewWalletPopupCard';
 
 type AppointmentViewCardProps = {
   appointmentData?: any;
-  setAppointmentTooltipData?: any;
+  // setAppointmentTooltipData?: any;
   setIsTooltipOpen?: any;
   setOpenFormDialog?: any;
   getUpdatePopupData?: any;
@@ -36,7 +36,7 @@ const AppointmentViewCard = ({
   appointmentData,
   getUpdatePopupData,
   isTooltipOpen: _isTooltipOpen,
-  setAppointmentTooltipData,
+  // setAppointmentTooltipData,
   setIsTooltipOpen,
   setOpenFormDialog,
   isStatusDone,
@@ -59,11 +59,11 @@ const AppointmentViewCard = ({
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
 
-  const handleClose = () => {
-    setIsTooltipOpen(false);
-    setAppointmentTooltipData(null);
-    setData(null);
-  };
+  // const handleClose = () => {
+  //   setIsTooltipOpen(false);
+  //   setAppointmentTooltipData(null);
+  //   setData(null);
+  // };
 
   useEffect(() => {
     // Select the element
@@ -81,7 +81,7 @@ const AppointmentViewCard = ({
         element.classList.remove('custom-class-app');
       }
     };
-  }, []); // Empty dependency array ensures this effect runs only once
+  }, []);
 
   const onWalletSubmit = (payload: any) => {
     // console.log('🚀 ~ onWalletSubmit ~ data:', payload);
@@ -99,26 +99,13 @@ const AppointmentViewCard = ({
         if (item.data.success) {
           setIsWalletLoader(false);
           handleClosePop();
-          // setTotal(item.data.data.totalPages);
-          // setList(item.data.data.leaves);
         } else {
           setIsWalletLoader(false);
-          console.log('err else');
-          // setIsNotify(true);
-          // setNotifyMessage({
-          //   text: item.data.message,
-          //   type: 'error',
-          // });
         }
       })
       .catch((error) => {
         setIsWalletLoader(false);
         console.log('🚀 ~ onWalletSubmit ~ error:', error);
-        // setIsNotify(true);
-        // setNotifyMessage({
-        //   text: error.message,
-        //   type: 'error',
-        // });
       });
   };
 
@@ -253,11 +240,11 @@ const AppointmentViewCard = ({
               </div>
             )}
           </div>
-          <div>
+          {/* <div>
             <IconButton className="icon-btn p-0" onClick={handleClose}>
               <CloseIcon style={{ fontSize: '28px' }} />
             </IconButton>
-          </div>
+          </div> */}
         </div>
         <div className="mt-3">
           {appointmentData?.status === APPOINTMENT_STATUS.COMPLETED &&
@@ -284,7 +271,10 @@ const AppointmentViewCard = ({
           <Avatar
             alt="barber-pic"
             src={data?.storeEmployee?.avatar}
-            sx={{ width: 100, height: 100 }}
+            sx={{
+              width: 100,
+              height: 100,
+            }}
           />
         </div>
       </div>
@@ -327,7 +317,7 @@ const AppointmentViewCard = ({
           </div>
           <div>
             <span className="mx-2 text-xs text-[#6A6A6A]">
-              {moment(data?.appointmentTime)?.format('MMMM DD, YYYY') ?? '--'}
+              {dayjs(data?.appointmentTime)?.format('MMMM DD, YYYY') ?? '--'}
             </span>
           </div>
         </div>
@@ -337,8 +327,8 @@ const AppointmentViewCard = ({
           </div>
           <div>
             <span className="mx-2 text-xs text-[#6A6A6A]">
-              {moment(appointmentData?.startDate).format('h:mm A')} -{' '}
-              {moment(appointmentData?.endDate).format('h:mm A')}
+              {dayjs(appointmentData?.startDate).format('h:mm A')} -{' '}
+              {dayjs(appointmentData?.endDate).format('h:mm A')}
             </span>
           </div>
         </div>
@@ -356,91 +346,3 @@ const AppointmentViewCard = ({
 };
 
 export default AppointmentViewCard;
-
-// {appointmentData?.status === APPOINTMENT_STATUS.COMPLETED && (
-//   <div>
-//     <CustomButton
-//       // sx={{
-//       //   width: '20px',
-//       // }}
-//       buttonType="button"
-//       title="Wallet"
-//       icon={<WalletIcon />}
-//       className="btn-black-fill btn-icon"
-//       onclick={handleClickPop}
-//       // onclick={handleFormClickOpen}
-//     />
-//   </div>
-// )}
-
-// const [isWalletLoader, setIsWalletLoader] = useState<boolean>(false);
-
-// // popover navigation of wallet button
-// const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
-// const handleClickPop = (event: React.MouseEvent<HTMLButtonElement>) => {
-//   setAnchorEl(event.currentTarget);
-// };
-// const handleClosePop = () => {
-//   setAnchorEl(null);
-// };
-// const open = Boolean(anchorEl);
-// const id = open ? 'simple-popover' : undefined;
-
-// const handleClose = () => {
-//   setIsTooltipOpen(false);
-//   setAppointmentTooltipData(null);
-//   setData(null);
-// };
-
-// import WalletIcon from '@mui/icons-material/Wallet';
-
-// eslint-disable-next-line no-lone-blocks
-{
-  /* <ViewWalletPopupCard
-id={id}
-open={open}
-anchorEl={anchorEl}
-onclose={handleClosePop}
-isWalletLoader={isWalletLoader}
-callback={onWalletSubmit}
-/> */
-}
-
-// const onWalletSubmit = (payload: any) => {
-//   console.log('🚀 ~ onWalletSubmit ~ data:', payload);
-//   setIsWalletLoader(true);
-//   const dataObj = {
-//     ...payload,
-//     referenceId: appointmentData.id,
-//     appUser: appointmentData.appUser,
-//     referenceType: 'Appointment',
-//     type: 'Credit',
-//   };
-//   walletService
-//     .WalletCreate(dataObj)
-//     .then((item) => {
-//       if (item.data.success) {
-//         setIsWalletLoader(false);
-//         handleClosePop();
-//         // setTotal(item.data.data.totalPages);
-//         // setList(item.data.data.leaves);
-//       } else {
-//         setIsWalletLoader(false);
-//         console.log('err else');
-//         // setIsNotify(true);
-//         // setNotifyMessage({
-//         //   text: item.data.message,
-//         //   type: 'error',
-//         // });
-//       }
-//     })
-//     .catch((error) => {
-//       setIsWalletLoader(false);
-//       console.log('🚀 ~ onWalletSubmit ~ error:', error);
-//       // setIsNotify(true);
-//       // setNotifyMessage({
-//       //   text: error.message,
-//       //   type: 'error',
-//       // });
-//     });
-// };

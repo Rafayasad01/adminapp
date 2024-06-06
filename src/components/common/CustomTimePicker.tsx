@@ -90,7 +90,7 @@ function CustomTimePicker({
           type="text"
           placeholder="HH:MM"
           value={
-            (watch(id) && watch(id) !== null && watch(id)?.format('HH:mm A')) ||
+            (watch(id) && watch(id) !== null && watch(id)?.format('hh:mm A')) ||
             ''
           }
           onChange={() => null}

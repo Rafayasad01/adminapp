@@ -177,14 +177,19 @@ function AppointmentProviderServicesList() {
     setPage(newPage);
     if (search === '' || search === null || search === undefined) {
       adminAppointmentService
-        .ServiceList(authState.user.tenant, newPage, rowsPerPage)
+        .ServiceList(authState.user.tenant, newPage, newRowperPage)
         .then((item) => {
           setList(item.data.data.list);
           setTotal(item.data.data.total);
         });
     } else {
       adminAppointmentService
-        .ServiceSearchList(authState.user.tenant, search, newPage, rowsPerPage)
+        .ServiceSearchList(
+          authState.user.tenant,
+          search,
+          newPage,
+          newRowperPage
+        )
         .then((item) => {
           setList(item.data.data.list);
           setTotal(item.data.data.total);

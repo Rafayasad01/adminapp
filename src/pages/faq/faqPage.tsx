@@ -124,7 +124,7 @@ function FaqPage() {
     setRowsPerPage(newRowperPage);
     setPage(newPage);
     appFaqsService
-      .FaqList(authState.user.tenant, search, newPage, rowsPerPage)
+      .FaqList(authState.user.tenant, search, newPage, newRowperPage)
       .then((item) => {
         setList(item.data.data.list);
         setTotal(item.data.data.total);

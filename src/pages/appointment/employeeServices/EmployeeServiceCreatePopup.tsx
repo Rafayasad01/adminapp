@@ -57,7 +57,7 @@ function EmployeeServiceCreatePopup({
   }, [watch('categoryId')]);
 
   const onSubmit = (data: BarberItemServices) => {
-    console.log('🚀 ~ onSubmit ~ data:', data);
+    // console.log('🚀 ~ onSubmit ~ data:', data);
     delete data?.categoryId;
     callback(data);
   };
@@ -150,9 +150,9 @@ function EmployeeServiceCreatePopup({
                     maxLetterLimit={4}
                     inputTitle="Service Time (Minutes)"
                     placeholder="Enter time (Minutes)"
-                    id="minutes"
+                    id="serviceTime"
                     register={register}
-                    error={errors.minutes}
+                    error={errors.serviceTime}
                     inputType="text"
                   />
                 </FormControl>

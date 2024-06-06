@@ -114,14 +114,14 @@ function CategoriesServicesPage() {
     setPage(newPage);
     if (search === '' || search === null || search === undefined) {
       categoryService
-        .getCategoryServiceList(productId, newPage, rowsPerPage)
+        .getCategoryServiceList(productId, newPage, newRowperPage)
         .then((item) => {
           setList(item.data.data.list);
           setTotal(item.data.data.total);
         });
     } else {
       categoryService
-        .searchCategoryService(productId, search, newPage, rowsPerPage)
+        .searchCategoryService(productId, search, newPage, newRowperPage)
         .then((item) => {
           setList(item.data.data.list);
           setTotal(item.data.data.total);

@@ -116,7 +116,7 @@ function BranchPage() {
     setPage(newPage);
     if (search === '' || search === null || search === undefined) {
       branchService
-        .getListService(authState.user.tenant, newPage, rowsPerPage)
+        .getListService(authState.user.tenant, newPage, newRowPerPage)
         .then((item) => {
           setList(item.data.data.list);
           setTotal(item.data.data.total);
@@ -127,7 +127,7 @@ function BranchPage() {
           authState.user.tenant,
           search,
           newPage,
-          rowsPerPage
+          newRowPerPage
         )
         .then((item) => {
           setList(item.data.data.list);

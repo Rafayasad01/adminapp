@@ -1783,8 +1783,12 @@ main .container:nth-child(3){
 }
 
 .custom-swiper-slider .swiper-slide {
-  width: 15% !important;
+  width: 22% !important;
 }
+
+/* .custom-swiper-slider .swiper-slide {
+  width: 15% !important;
+} */
 
 .swiper-wrapper {
   padding-left: 150px;
@@ -2520,4 +2524,14 @@ main.min-h-screen.w-full.flex-grow.bg-gray-50.p-3.MuiBox-root.css-0 {
   left: 0 !important;
   margin: auto;
   height: fit-content;
+}
+
+.css-8ludsl.Header-flexContainer {
+  position: absolute !important;
+  right: 6px !important;
+  top: 5px !important;
+}
+
+.css-8ludsl .Header-line {
+  background: transparent !important;
 }

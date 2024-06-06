@@ -135,7 +135,7 @@ function OrdersAssignPage() {
     setPage(newPage);
     if (search === '' || search === null || search === undefined) {
       orderService
-        .getListAssignService(authState.user.tenant, newPage, rowsPerPage)
+        .getListAssignService(authState.user.tenant, newPage, newRowPerPage)
         .then((item) => {
           setIsLoader(false);
           setList(item.data.data.list);
@@ -147,7 +147,7 @@ function OrdersAssignPage() {
           authState.user.tenant,
           search,
           newPage,
-          rowsPerPage
+          newRowPerPage
         )
         .then((item) => {
           setIsLoader(false);

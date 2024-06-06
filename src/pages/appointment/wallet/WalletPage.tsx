@@ -229,7 +229,7 @@ function WalletPage() {
           <div className="grid grid-cols-12 px-4 py-5">
             <div className="col-span-7">
               <span className="font-open-sans text-xl font-semibold text-[#252733]">
-                All Remaining Wallets
+                All Wallets
               </span>
             </div>
             <div className="col-span-5">
@@ -275,7 +275,7 @@ function WalletPage() {
                   <th>Name</th>
                   <th>Email</th>
                   {/* <th>Service</th> */}
-                  <th>Credit</th>
+                  <th>Balance</th>
                   <th>Type</th>
                   {/* <th>Status</th> */}
                   <th aria-label="empty table header">&nbsp;</th>

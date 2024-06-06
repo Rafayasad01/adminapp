@@ -103,14 +103,14 @@ function NotificationPage() {
     setPage(newPage);
     if (search === '' || search === null || search === undefined) {
       notificationService
-        .getListService(authState.user.tenant, newPage, rowsPerPage)
+        .getListService(authState.user.tenant, newPage, newRowperPage)
         .then((item) => {
           setList(item.data.data.list);
           setTotal(item.data.data.total);
         });
     } else {
       notificationService
-        .searchService(authState.user.tenant, search, newPage, rowsPerPage)
+        .searchService(authState.user.tenant, search, newPage, newRowperPage)
         .then((item) => {
           setList(item.data.data.list);
           setTotal(item.data.data.total);

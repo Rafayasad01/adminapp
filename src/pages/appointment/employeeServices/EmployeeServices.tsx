@@ -115,97 +115,10 @@ function EmployeeServices() {
     }
   }, [null]);
 
-  /* const handleClickSearch = (event: any) => {
-    if (event.key === 'Enter') {
-      const searchTxt = event.target.value as string;
-      const newPage = 0;
-      setSearch(searchTxt);
-      setPage(newPage);
-      StoreLovService.StoreCatList(searchTxt, newPage, rowsPerPage).then(
-        (item) => {
-          setList(item.data.data.list);
-          setTotal(item.data.data.total);
-        }
-      );
-    }
-  }; */
-
-  /* const handleChangePage = (
-    event: React.MouseEvent<HTMLButtonElement> | null,
-    newPage: number
-  ) => {
-    setPage(newPage);
-    StoreLovService.StoreCatList(
-      authState.user.tenant,
-      newPage,
-      rowsPerPage
-    ).then((item: any) => {
-      setList(item.data.data.list);
-      setTotal(item.data.data.total);
-    });
-  }; */
-  /* 
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const newRowperPage = parseInt(event.target.value, 10);
-    const newPage = 0;
-    setRowsPerPage(newRowperPage);
-    setPage(newPage);
-    StoreLovService.StoreCatList(
-      authState.user.tenant,
-      newPage,
-      rowsPerPage
-    ).then((item) => {
-      setList(item.data.data.list);
-      setTotal(item.data.data.total);
-    });
-  }; */
-
-  // const deleteHandler = (id: string) => {
-  //     setIsLoader(true);
-  //     const data = {
-  //         is_active: false,
-  //         is_deleted: true,
-  //         updated_by: authState.user.id,
-  //     };
-  //     StoreLovService
-  //         .deleteCategory(id, data)
-  //         .then((updateItem) => {
-  //             if (updateItem.data.success) {
-  //                 setIsLoader(false);
-  //                 setIsNotify(true);
-  //                 setNotifyMessage({
-  //                     text: updateItem.data.message,
-  //                     type: 'success',
-  //                 });
-  //                 setList((newArr: any) => {
-  //                     return newArr.filter((item: any) => item.id !== id);
-  //                 });
-  //                 let newtotal = total;
-  //                 setTotal((newtotal -= 1));
-  //             }
-  //         })
-  //         .catch((err) => {
-  //             setIsLoader(false);
-  //             setIsNotify(true);
-  //             setNotifyMessage({
-  //                 text: err.message,
-  //                 type: 'error',
-  //             });
-  //         });
-  // };
-
-  // const statusCancelHandler = () => {
-  //     deleteHandler(actionMenuItemid);
-  // };
-
-  // console.log(list);
-
   const manuHandler = (option: string) => {
     if (option === 'Edit') {
       if (listingRolePermission(dataRole, 'Category Update')) {
-        console.log('actionMenuItemid', actionMenuItemid, list);
+        // console.log('actionMenuItemid', actionMenuItemid, list);
         const editFormDatas = list?.find(
           (el: any) => el.id === actionMenuItemid
         );
@@ -402,11 +315,6 @@ function EmployeeServices() {
     setIsModalImage(true);
   };
 
-  /* const closeModal = () => {
-    setModalImage('');
-    setIsModalImage(false);
-  }; */
-
   return isLoader ? (
     <Loader />
   ) : (
@@ -427,36 +335,6 @@ function EmployeeServices() {
             </div>
             <div className="col-span-5">
               <div className="flex flex-row justify-end gap-3">
-                {/* <FormControl
-                                    className="search-grey-outline placeholder-grey w-60"
-                                    variant="filled"
-                                >
-                                    <Input
-                                        className="input-with-icon after:border-b-secondary"
-                                        id="search"
-                                        type="text"
-                                        placeholder="Search"
-                                        onKeyDown={(
-                                            event: React.KeyboardEvent<
-                                                HTMLInputElement | HTMLTextAreaElement
-                                            >
-                                        ) => {
-                                            handleClickSearch(event);
-                                        }}
-                                        endAdornment={
-                                            <InputAdornment position="end">
-                                                <Divider
-                                                    sx={{ height: 28, m: 0.5 }}
-                                                    orientation="vertical"
-                                                />
-                                                <IconButton aria-label="toggle password visibility">
-                                                    <SearchIcon className="text-[#6A6A6A]" />
-                                                </IconButton>
-                                            </InputAdornment>
-                                        }
-                                        disableUnderline
-                                    />
-                                </FormControl> */}
                 <Button
                   variant="contained"
                   className="btn-black-fill btn-icon"
@@ -472,11 +350,11 @@ function EmployeeServices() {
             <table className="table-border table-auto">
               <thead>
                 <tr>
-                  <th>Name</th>
-                  <th className="w-[30%]">Description</th>
-                  <th>Amount Type</th>
-                  <th>Amount</th>
-                  <th>Service Time (mints)</th>
+                  <th className="w-[20%]">Name</th>
+                  <th className="w-[20%]">Description</th>
+                  <th className="w-[10%]">Amount Type</th>
+                  <th className="w-[10%]">Amount</th>
+                  <th className="w-[10%]">Service Time (mints)</th>
                   <th>Created Date</th>
                   <th>Status</th>
                   <th>&nbsp;</th>
@@ -516,7 +394,10 @@ function EmployeeServices() {
                             : '--'}
                         </td>
                         <td>{item.amountType ? item.amountType : '--'}</td>
-                        <td>{item.amount ? item.amount : '--'}</td>
+                        <td>
+                          {item.amount ? Math.floor(item.amount) : '--'}
+                          {import.meta.env.VITE_CURRENCY_SYMBOL}
+                        </td>
                         <td>{item.serviceTime ? item.serviceTime : '--'}</td>
                         <td>
                           {dayjs(
