@@ -614,7 +614,7 @@ function AppointmentProviderPage() {
   // console.log("delte idss", delIds);
 
   const onSubmitUpdateDialogBox = async (data: any) => {
-    console.log('Update data', data);
+    // console.log('Update data', data);
     setIsLoader(true);
     delete data.servicesName;
     delete data.servicesAmount;
@@ -622,11 +622,7 @@ function AppointmentProviderPage() {
     delete data.categoryId;
     delete data.servicesId;
     delete data.mints;
-    // const obj = {
-    //   ...data,
-    //   avatar: image,
-    // };
-    // console.log('🚀 ~ onSubmitUpdateDialogBox ~ data:2', obj);
+
     const formData = new FormData();
     formData.append('name', data.name);
     formData.append('address', data.address);
@@ -640,93 +636,70 @@ function AppointmentProviderPage() {
     formData.append('payrollType', data.payrollType);
     formData.append('deletedIds', JSON.stringify(delIds));
     if (image) formData.append('avatar', image);
-    StoreEmployeeService.StoreEmployeeUpdate(formData, actionMenuItemid)
-      .then((res) => {
-        if (res.data.success) {
-          setIsLoader(false);
-          setOpenEditFormDialog(false);
-          console.log('res', res.data.data);
-          for (let i = 0; i < list.length; i += 1) {
-            if (list[i].id === res.data.data.id) {
-              list[i].name = res.data.data.name;
-              list[i].address = res.data.data.address;
-              list[i].email = res.data.data.email;
-              list[i].phone = res.data.data.phone;
-              list[i].cnic = res.data.data.cnic;
+    if (data.services.length > 0) {
+      StoreEmployeeService.StoreEmployeeUpdate(formData, actionMenuItemid)
+        .then((res) => {
+          if (res.data.success) {
+            setIsLoader(false);
+            setOpenEditFormDialog(false);
+            console.log('res', res.data.data);
+            for (let i = 0; i < list.length; i += 1) {
+              if (list[i].id === res.data.data.id) {
+                list[i].name = res.data.data.name;
+                list[i].address = res.data.data.address;
+                list[i].email = res.data.data.email;
+                list[i].phone = res.data.data.phone;
+                list[i].cnic = res.data.data.cnic;
+              }
             }
+            remove();
+            setIsNotify(true);
+            setNotifyMessage({
+              text: res.data.message,
+              type: 'success',
+            });
+          } else {
+            setIsLoader(false);
+            setIsNotify(true);
+            setNotifyMessage({
+              text: res.data.message,
+              type: 'error',
+            });
           }
-          setIsNotify(true);
-          setNotifyMessage({
-            text: res.data.message,
-            type: 'success',
-          });
-        } else {
+        })
+        .catch((err) => {
           setIsLoader(false);
           setIsNotify(true);
           setNotifyMessage({
-            text: res.data.message,
+            text: err.message,
             type: 'error',
           });
-        }
-      })
-      .catch((err) => {
-        setIsLoader(false);
-        setIsNotify(true);
-        setNotifyMessage({
-          text: err.message,
-          type: 'error',
         });
+    } else {
+      setIsLoader(false);
+      setIsNotify(true);
+      setNotifyMessage({
+        text: `All fields are required
+         ${
+           data?.services?.length < 1
+             ? '& you must need to add atleast one service.'
+             : ''
+         }`,
+        type: 'error',
       });
+    }
   };
 
   const onSubmitDialogBox = async (data: any) => {
     // console.log(`onSubmitDialogBox -> data:`, data);
-    // setIsLoader(true);
+    setIsLoader(true);
     delete data.servicesName;
     delete data.servicesAmount;
     delete data.price;
     delete data.categoryId;
     delete data.servicesId;
     delete data.mints;
-    // const _object = {
-    //   ...data,
-    //   weekDays,
-    //   startTime,
-    //   endTime,
-    //   avatar: image,
-    // };
-    console.log('🚀 ~ onSubmitDialogBox ~ endTime:', endTime);
-    console.log('🚀 ~ onSubmitDialogBox ~ startTime:', startTime);
 
-    // const TshopOpenTime = dayjs(officeTimings?.tenantConfig?.officeTimeIn);
-    // let TshopCloseTime = dayjs(officeTimings?.tenantConfig?.officeTimeOut);
-    // const startT = dayjs(startTime);
-    // let endT = dayjs(endTime);
-
-    // const hourStartT = TshopOpenTime.hour();
-    // const hourEndT = TshopCloseTime.hour();
-    // const hourST1 = TshopOpenTime.hour();
-    // const hourST2 = TshopCloseTime.hour();
-
-    // if (hour1 > hour2) {
-    //   TshopCloseTime = TshopCloseTime.add(1, 'day');
-    //   // return console.log('err');
-    // }
-
-    // if (
-    //   dayjs(startTime).format('HH:mm') <
-    //     dayjs(officeTimings?.tenantConfig?.officeTimeIn).format('HH:mm') ||
-    //   dayjs(endTime).format('HH:mm') >
-    //     dayjs(officeTimings?.tenantConfig?.officeTimeOut).format('HH:mm')
-    // ) {
-    //   setIsLoader(false);
-    //   setIsNotify(true);
-    //   setNotifyMessage({
-    //     text: 'You should check your shop time before creating staff',
-    //     type: 'error',
-    //   });
-    //   return null;
-    // }
     const formData = new FormData();
     formData.append('name', data.name);
     formData.append('address', data.address);
@@ -751,7 +724,7 @@ function AppointmentProviderPage() {
           if (res.data.success) {
             setIsLoader(false);
             setOpenFormDialog(false);
-            setList([res.data.data, ...list]);
+            setList((prev: any) => [res.data.data, ...prev]);
             setIsNotify(true);
             setNotifyMessage({
               text: res.data.message,
