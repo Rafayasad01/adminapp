@@ -230,7 +230,7 @@ function OrdersAssignPage() {
     }
   };
   const assignButton = (item: any) => {
-    console.log('item :>> ', item);
+    // console.log('item :>> ', item);
     if (item.isActive === false || item.status === APP_USER_STATUS_OFFLINE) {
       return true;
     }
@@ -264,12 +264,9 @@ function OrdersAssignPage() {
   };
 
   const assignBtnColor = (item: any) => {
+    // || item.appOrderDelivery.status === ORDER_STATUS.CANCELLED
     let colorText = '';
-    if (
-      item.isActive === false ||
-      item.status === APP_USER_STATUS_OFFLINE ||
-      item.appOrderDelivery.status === ORDER_STATUS.CANCELLED
-    ) {
+    if (item.isActive === false || item.status === APP_USER_STATUS_OFFLINE) {
       colorText = 'btn-gray-fill btn-icon';
     } else if (
       item.appOrderDelivery.status === ORDER_STATUS.NEW ||
@@ -343,10 +340,10 @@ function OrdersAssignPage() {
                 <tr>
                   <th>Drivers</th>
                   <th>Phone</th>
-                  <th>Availability</th>
                   <th>Working Hours</th>
                   <th>License Number</th>
-                  <th>Delivery Status</th>
+                  <th>Availability</th>
+                  {/* <th>Delivery Status</th> */}
                   <th aria-label="empty table header">&nbsp;</th>
                 </tr>
               </thead>
@@ -392,17 +389,6 @@ function OrdersAssignPage() {
                         </td>
                         <td>{item.phone}</td>
                         <td>
-                          <span
-                            className={`badge badge-${
-                              item.status === APP_USER_STATUS_OFFLINE
-                                ? 'danger'
-                                : 'success'
-                            } `}
-                          >
-                            {item.status}
-                          </span>
-                        </td>
-                        <td>
                           {item.appDriverWorkingSchedule ? (
                             <span>
                               {dayjs(
@@ -421,6 +407,17 @@ function OrdersAssignPage() {
                           {item.licenseNumber ? item.licenseNumber : '--'}
                         </td>
                         <td>
+                          <span
+                            className={`badge badge-${
+                              item.status === APP_USER_STATUS_OFFLINE
+                                ? 'danger'
+                                : 'success'
+                            } `}
+                          >
+                            {item.status}
+                          </span>
+                        </td>
+                        {/* <td>
                           {item.appOrderDelivery.status ? (
                             <span className="badge badge-success">
                               {item.appOrderDelivery.status}
@@ -430,7 +427,7 @@ function OrdersAssignPage() {
                               {ORDER_STATUS.NEW}
                             </span>
                           )}
-                        </td>
+                        </td> */}
                         {/* <td>{assignButton(item)}</td> */}
                         <td>
                           <Button

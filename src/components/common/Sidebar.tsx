@@ -28,6 +28,7 @@ import { MODULE_EMPLOYEES } from '../../utils/constants';
 import ArrowDown from '../icons/ArrowDown';
 import ArrowUp from '../icons/ArrowUp';
 import CategoryIcon from '../icons/CategoryIcon';
+import DriverIcon from '../icons/DriverIcon';
 import OrderIcon from '../icons/OrderIcon';
 import VoucherIcon from '../icons/VoucherIcon';
 
@@ -105,6 +106,12 @@ const links = [
         path: 'store-product/ratings',
         permission: 'Banners List',
         icon: <ViewCarouselOutlinedIcon className="w-[17px]" />,
+      },
+      {
+        name: 'Driver History',
+        path: 'store-product/drivers',
+        permission: 'Driver List',
+        icon: <DriverIcon />,
       },
     ],
   },

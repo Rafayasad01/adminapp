@@ -13,12 +13,15 @@ import AppUserPromotionDetailPage from '../pages/appUsers/AppUserRewardHistoryTa
 import AppUsersPage from '../pages/appUsers/AppUsersPage';
 import AddAppointmentPage from '../pages/appointment/AddAppointmentPage';
 import RescheduleAppointmentPage from '../pages/appointment/RescheduleAppointmentPage';
+import StoreAppointmentsList from '../pages/appointment/StoreAppointmentsList';
 import EmployeeServices from '../pages/appointment/employeeServices/EmployeeServices';
+import LeaveManagement from '../pages/appointment/leaveManagement/LeaveManagement';
 import AppointmentProviderAddSchedulePage from '../pages/appointment/provider/AppointmentProviderAddSchedulePage';
 import AppointmentProviderByIdPage from '../pages/appointment/provider/AppointmentProviderByIdPage';
 import AppointmentProviderPage from '../pages/appointment/provider/AppointmentProviderPage';
 import AppointmentProviderSchedulePage from '../pages/appointment/provider/AppointmentProviderSchedulePage';
 import AppointmentProviderServicesList from '../pages/appointment/provider/AppointmentProviderServicesList';
+import AppointmentEmployeesAttendancePage from '../pages/appointment/provider/attendance/AppointmentEmployeesAttendancePage';
 import AppointmentVisitDetailPage from '../pages/appointment/visit/AppointmentVisitDetailPage';
 import AppointmentVisitPage from '../pages/appointment/visit/AppointmentVisitPage';
 import ForgotPasswordPage from '../pages/auth/forgot-password/ForgotPasswordPage';
@@ -60,14 +63,13 @@ import SettingsApp from '../pages/settings/SettingsApp';
 import SettingsPage from '../pages/settings/SettingsPage';
 import SettingsShopScheduling from '../pages/settings/SettingsShopScheduling';
 import VouchersPage from '../pages/vouchers/VouchersPage';
-import StoreAppointmentsList from '../pages/appointment/StoreAppointmentsList';
-import AppointmentEmployeesAttendancePage from '../pages/appointment/provider/attendance/AppointmentEmployeesAttendancePage';
-import LeaveManagement from '../pages/appointment/leaveManagement/LeaveManagement';
 // import EmployeeRatingPage from '../pages/appointment/provider/rating/EmployeeRatingPage';
 import EmployeeRatingReviewsPage from '../pages/appointment/provider/rating/EmployeeRatingReviewsPage';
 import AppointmentRatingPage from '../pages/appointment/rating/AppointmentRatingPage';
 import AppointmentRatingReviewsPage from '../pages/appointment/rating/AppointmentRatingReviewsPage';
 import WalletPage from '../pages/appointment/wallet/WalletPage';
+import DriverDetailPage from '../pages/drivers/DriverDetailPage';
+import DriverPage from '../pages/drivers/DriverPage';
 
 // import UpdateAppointmentPage from '../pages/appointment/UpdateAppointmentPage';
 
@@ -556,6 +558,19 @@ export const routeObjects: RouteObject[] = [
                   {
                     path: 'reviews/:itemId',
                     element: <RatingReviewsPage />,
+                  },
+                ],
+              },
+              {
+                path: 'drivers',
+                children: [
+                  {
+                    index: true,
+                    element: <DriverPage />,
+                  },
+                  {
+                    path: 'detail/:appUser',
+                    element: <DriverDetailPage />,
                   },
                 ],
               },

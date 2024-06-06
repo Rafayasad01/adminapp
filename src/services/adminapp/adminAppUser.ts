@@ -143,6 +143,18 @@ const appAnonymousDetail = () => {
   return network.get(`${BACKOFFICE_PREFIX}/anonymous/detail`);
 };
 
+const driverHistory = (search: string, page: number, size: number) => {
+  return network.getWithQueryParam(`${APP_PREFIX}/driver/list`, {
+    search,
+    page: page.toString(),
+    size: size.toString(),
+  });
+};
+
+const driverDetailHistory = (appUser: string) => {
+  return network.get(`${APP_PREFIX}/driver/detail/${appUser}`);
+};
+
 export default {
   appLogin,
   appAnonymousLogin,
@@ -168,4 +180,6 @@ export default {
   appUserVocuherHistoryDetails,
   appUserLoyaltyHistoryDetails,
   appAnonymousDetail,
+  driverHistory,
+  driverDetailHistory,
 };
