@@ -65,6 +65,201 @@ function OrderDetailsTrackingPage({
     return icon;
   };
 
+  // const isStatusActive = useCallback(
+  //   (status: string) => {
+  //     const appOrderStatus = orderData.appOrderStatuses?.find(
+  //       (item: any) => item.status === status
+  //     );
+  //     if (!appOrderStatus) {
+  //       return false;
+  //     }
+
+  //     const currentStatus = orderData.status;
+
+  //     if (status === ORDER_STATUS.NEW) {
+  //       return true;
+  //     }
+
+  //     if (status === ORDER_STATUS.DRIVER_ASSIGNED_FOR_ITEM_PICKUP) {
+  //       let pickedUp = true;
+  //       if (
+  //         currentStatus ===
+  //         ORDER_STATUS.DRIVER_DECLINED_TO_PICKUP_ITEM_FROM_CUSTOMER
+  //       ) {
+  //         pickedUp = false;
+  //       }
+  //       if (currentStatus === ORDER_STATUS.DRIVER_RETURNED_ITEM_TO_CUSTOMER) {
+  //         pickedUp = false;
+  //       }
+  //       return pickedUp;
+  //     }
+
+  //     if (
+  //       status === ORDER_STATUS.DRIVER_ACCEPTED_TO_PICK_UP_ITEM_FROM_CUSTOMER
+  //     ) {
+  //       let showAccepted = true;
+  //       if (currentStatus === ORDER_STATUS.DRIVER_ASSIGNED_FOR_ITEM_PICKUP) {
+  //         showAccepted = false;
+  //       }
+  //       if (
+  //         currentStatus ===
+  //         ORDER_STATUS.DRIVER_DECLINED_TO_PICKUP_ITEM_FROM_CUSTOMER
+  //       ) {
+  //         showAccepted = false;
+  //       }
+  //       if (currentStatus === ORDER_STATUS.DRIVER_RETURNED_ITEM_TO_CUSTOMER) {
+  //         showAccepted = false;
+  //       }
+  //       return showAccepted;
+  //     }
+
+  //     if (status === ORDER_STATUS.DRIVER_PICKED_UP_ITEM_FROM_CUSTOMER) {
+  //       let showPickedUp = true;
+  //       if (currentStatus === ORDER_STATUS.DRIVER_ASSIGNED_FOR_ITEM_PICKUP) {
+  //         showPickedUp = false;
+  //       }
+  //       if (
+  //         currentStatus ===
+  //         ORDER_STATUS.DRIVER_ACCEPTED_TO_PICK_UP_ITEM_FROM_CUSTOMER
+  //       ) {
+  //         showPickedUp = false;
+  //       }
+  //       if (
+  //         currentStatus ===
+  //         ORDER_STATUS.DRIVER_DECLINED_TO_PICKUP_ITEM_FROM_CUSTOMER
+  //       ) {
+  //         showPickedUp = false;
+  //       }
+  //       if (currentStatus === ORDER_STATUS.DRIVER_RETURNED_ITEM_TO_CUSTOMER) {
+  //         showPickedUp = false;
+  //       }
+
+  //       return showPickedUp;
+  //     }
+
+  //     if (
+  //       status === ORDER_STATUS.DRIVER_DECLINED_TO_PICKUP_ITEM_FROM_CUSTOMER
+  //     ) {
+  //       let declinedCustomer = false;
+  //       if (
+  //         currentStatus ===
+  //         ORDER_STATUS.DRIVER_DECLINED_TO_PICKUP_ITEM_FROM_CUSTOMER
+  //       ) {
+  //         declinedCustomer = true;
+  //       }
+  //       return declinedCustomer;
+  //     }
+
+  //     if (status === ORDER_STATUS.DRIVER_RETURNED_ITEM_TO_CUSTOMER) {
+  //       let returnedCustomer = false;
+  //       if (currentStatus === ORDER_STATUS.DRIVER_RETURNED_ITEM_TO_CUSTOMER) {
+  //         returnedCustomer = true;
+  //       }
+  //       return returnedCustomer;
+  //     }
+
+  //     if (status === ORDER_STATUS.DRIVER_DELIVERED_ITEM_TO_SHOP) {
+  //       return true;
+  //     }
+
+  //     if (status === ORDER_STATUS.PROCESSING_ITEM) {
+  //       return true;
+  //     }
+
+  //     if (status === ORDER_STATUS.DRIVER_ASSIGNED_FOR_ITEM_DELIVERY) {
+  //       let pickedUp = true;
+  //       if (
+  //         currentStatus ===
+  //         ORDER_STATUS.DRIVER_DECLINED_TO_PICKUP_ITEM_FROM_SHOP
+  //       ) {
+  //         pickedUp = false;
+  //       }
+  //       if (currentStatus === ORDER_STATUS.DRIVER_RETURNED_ITEM_TO_SHOP) {
+  //         pickedUp = false;
+  //       }
+  //       return pickedUp;
+  //     }
+
+  //     if (status === ORDER_STATUS.DRIVER_ACCEPTED_TO_PICK_UP_ITEM_FROM_SHOP) {
+  //       let showAccepted = true;
+  //       if (currentStatus === ORDER_STATUS.DRIVER_ASSIGNED_FOR_ITEM_DELIVERY) {
+  //         showAccepted = false;
+  //       }
+  //       if (
+  //         currentStatus ===
+  //         ORDER_STATUS.DRIVER_DECLINED_TO_PICKUP_ITEM_FROM_SHOP
+  //       ) {
+  //         showAccepted = false;
+  //       }
+  //       if (currentStatus === ORDER_STATUS.DRIVER_RETURNED_ITEM_TO_SHOP) {
+  //         showAccepted = false;
+  //       }
+  //       return showAccepted;
+  //     }
+
+  //     if (status === ORDER_STATUS.DRIVER_DECLINED_TO_PICKUP_ITEM_FROM_SHOP) {
+  //       let declinedShop = false;
+  //       if (
+  //         currentStatus ===
+  //         ORDER_STATUS.DRIVER_DECLINED_TO_PICKUP_ITEM_FROM_SHOP
+  //       ) {
+  //         declinedShop = true;
+  //       }
+  //       return declinedShop;
+  //     }
+
+  //     if (status === ORDER_STATUS.DRIVER_RETURNED_ITEM_TO_SHOP) {
+  //       let returnedShop = false;
+  //       if (currentStatus === ORDER_STATUS.DRIVER_RETURNED_ITEM_TO_SHOP) {
+  //         returnedShop = true;
+  //       }
+  //       return returnedShop;
+  //     }
+
+  //     if (status === ORDER_STATUS.DRIVER_PICKED_UP_ITEM_FROM_SHOP) {
+  //       let pickedUp = true;
+  //       if (currentStatus === ORDER_STATUS.DRIVER_ASSIGNED_FOR_ITEM_DELIVERY) {
+  //         pickedUp = false;
+  //       }
+  //       if (
+  //         currentStatus ===
+  //         ORDER_STATUS.DRIVER_ACCEPTED_TO_PICK_UP_ITEM_FROM_SHOP
+  //       ) {
+  //         pickedUp = false;
+  //       }
+  //       if (
+  //         currentStatus ===
+  //         ORDER_STATUS.DRIVER_DECLINED_TO_PICKUP_ITEM_FROM_SHOP
+  //       ) {
+  //         pickedUp = false;
+  //       }
+  //       if (currentStatus === ORDER_STATUS.DRIVER_RETURNED_ITEM_TO_SHOP) {
+  //         pickedUp = false;
+  //       }
+  //       return pickedUp;
+  //     }
+
+  //     if (status === ORDER_STATUS.DRIVER_DELIVERED_ITEM_TO_CUSTOMER) {
+  //       return true;
+  //     }
+
+  //     if (status === ORDER_STATUS.CUSTOMER_PICK_UP) {
+  //       return true;
+  //     }
+
+  //     if (status === ORDER_STATUS.COMPLETED) {
+  //       return true;
+  //     }
+
+  //     if (status === ORDER_STATUS.CANCELLED) {
+  //       return true;
+  //     }
+
+  //     return false;
+  //   },
+  //   [orderData.status, orderData.appOrderStatuses]
+  // );
+
   return (
     <div className="mb-auto min-h-[40rem] rounded-lg bg-[#fff] shadow-lg">
       <div className="bg-ord-del rounded-t-xl bg-neutral-300 px-4 py-2">
@@ -98,7 +293,7 @@ function OrderDetailsTrackingPage({
       </div>
       <div className="flex flex-col gap-4 px-4 py-4">
         {[...ORDER_STATUSES].map(([_key, value], index: number) => {
-          const appOrderStatus = orderData.appOrderStatuses.find(
+          const appOrderStatus = orderData.appOrderStatuses?.find(
             (item: any) => item.status === value.status
           );
           const isActive = Boolean(appOrderStatus);

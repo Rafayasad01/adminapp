@@ -34,6 +34,7 @@ import OrderDetailsTrackingPage from './OrderDetailsTracking';
 
 function OrderDetailsPage() {
   // const navigate = useNavigate();
+  const authState: any = useAppSelector((state) => state?.authState);
   const dataRole = useAppSelector(
     (state: any) => state?.persistedReducer?.roleState?.role?.permissions
   );
@@ -54,8 +55,15 @@ function OrderDetailsPage() {
     value: ORDER_STATUSES.get(viewData.status),
   };
 
-  // const showSelectDriverButton = useMemo(() => {
-  //   /* if (viewData.status === ORDER_STATUS.NEW) {
+  // onst showSelectDriverButton = useMemo(() => {
+  //   console.log('viewData.status :>> ', viewData.status);
+  //   if (viewData.status === ORDER_STATUS.NEW) {
+  //     return true;
+  //   }
+  //   if (
+  //     viewData.status ===
+  //     ORDER_STATUS.DRIVER_DECLINED_TO_PICKUP_ITEM_FROM_CUSTOMER
+  //   ) {
   //     return true;
   //   }
   //   if (viewData.status === ORDER_STATUS.PROCESSING_ITEM) {
@@ -65,7 +73,7 @@ function OrderDetailsPage() {
   //     return true;
   //   }
   //   if (viewData.status === ORDER_STATUS.DRIVER_DELIVERED_ITEM_TO_CUSTOMER) {
-  //     return true;
+  //     return false;
   //   }
   //   if (viewData.status === ORDER_STATUS.DRIVER_RETURNED_ITEM_TO_CUSTOMER) {
   //     return true;
@@ -77,10 +85,10 @@ function OrderDetailsPage() {
   //   }
   //   if (viewData.status === ORDER_STATUS.DRIVER_RETURNED_ITEM_TO_SHOP) {
   //     return true;
-  //   } */
+  //   }
 
   //   return false;
-  // }, [viewData.status, viewData.fulfillmentMethod]);
+  // }, [viewData.status, viewData.fulfillmentMethod]);c
 
   const setData = (itemData: any) => {
     setViewData(itemData);
@@ -128,7 +136,7 @@ function OrderDetailsPage() {
 
   const createOrderStatusesService = (data: any) => {
     setIsLoader(true);
-
+    data.app_user = authState.user.anonAppUser;
     orderService
       .createStatusesService(data)
       .then((item) => {
@@ -276,14 +284,17 @@ function OrderDetailsPage() {
   };
 
   // const handleDriverStatus = () => {
-  //   // if (viewData.paymentType === 'Shop') {
-  //   //   return (
-  //   //     <div className="flex items-center font-open-sans text-sm font-normal text-neutral-500">
-  //   //       <ShopIcon color="black" />
-  //   //       <p className="mx-3">Order has been delivered by shop</p>
-  //   //     </div>
-  //   //   );
-  //   // }
+  //   if (
+  //     viewData.paymentType === 'Shop' &&
+  //     viewData.fulfillmentMethod === ORDER_FULFILLMENT_METHOD.SELF
+  //   ) {
+  //     return (
+  //       <div className="flex items-center font-open-sans text-sm font-normal text-neutral-500">
+  //         <ShopIcon color="black" />
+  //         <p className="mx-3">Order has been delivered by shop</p>
+  //       </div>
+  //     );
+  //   }
   //   if (!showSelectDriverButton) {
   //     return null;
   //   }
