@@ -13,6 +13,7 @@ import { useNotification } from '../../../components/Contexts/NotificationContex
 import ErrorSpanBox from '../../../components/common/ErrorSpanBox';
 import Notify from '../../../components/common/Notify';
 import { UserLogin } from '../../../interfaces/auth.interface';
+import appUserService from '../../../services/adminapp/adminAppUser';
 import { setItemState, setLogo } from '../../../redux/features/appSlice';
 import { login, setShopAdminTenant } from '../../../redux/features/authSlice';
 import { setRolePermissions } from '../../../redux/features/permissionsStateSlice';
@@ -60,6 +61,26 @@ function LoginPage() {
     }
   }, []);
 
+  const handleAnonAppUser = (user: any) => {
+    const anonIdentifier = user?.username?.split('@')[0];
+    const payload = {
+      identifier: `${anonIdentifier}@shop.com`,
+      tenant: user?.tenant,
+    };
+    appUserService
+      .appAnonymousLogin(payload)
+      .then((res) => {
+        if (res.data.success) {
+          dispatch(login({ ...user, anonAppUser: res.data.data.id }));
+        } else {
+          showNotification(res.data.message, 'error');
+        }
+      })
+      .catch((err) => {
+        showNotification(err.message, 'error');
+      });
+  };
+
   const loginHandler = async (data: LoginFields) => {
     setIsLoader(true);
     const userData: UserLogin = {
@@ -70,6 +91,7 @@ function LoginPage() {
       .loginService(userData)
       .then(async (user) => {
         if (user && user.data.success) {
+          await handleAnonAppUser(user.data.data);
           const newUserData = user.data.data;
           setIsLoader(false);
           setItem('AUTH_TOKEN', newUserData.accessToken);

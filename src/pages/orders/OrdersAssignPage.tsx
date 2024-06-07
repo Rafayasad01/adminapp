@@ -207,6 +207,7 @@ function OrdersAssignPage() {
     if (listingRolePermission(dataRole, 'Order Assign Create')) {
       const payload = {
         app_user: userId,
+        app_user_shop: authState.user.anonAppUser,
         app_order: orderId,
         created_by: authState.user.id,
         status: newStatus,

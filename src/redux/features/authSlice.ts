@@ -15,6 +15,7 @@ type User = {
   branchLimit: number;
   employeeLimit: number;
   userLimit: number;
+  anonAppUser: string;
 };
 
 type ShopTenantDetails = {
