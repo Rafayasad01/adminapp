@@ -36,6 +36,7 @@ function OrderDetailsPage() {
   const dataRole = useAppSelector(
     (state: any) => state?.persistedReducer?.roleState?.role?.permissions
   );
+  const authState: any = useAppSelector((state) => state?.authState);
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
   const [cancelDialogOpen, setCancelDialogOpen] = useState<boolean>(false);
   // const [orderAssign, setOrderAssign] = useState<boolean>(false);
@@ -133,8 +134,9 @@ function OrderDetailsPage() {
   };
 
   const createOrderStatusesService = (data: any) => {
+    console.log('🚀 ~ createOrderStatusesService ~ data:', data);
+    data.app_user = authState.user.anonAppUser;
     setIsLoader(true);
-
     orderService
       .createStatusesService(data)
       .then((item) => {
@@ -279,7 +281,10 @@ function OrderDetailsPage() {
   };
 
   const handleDriverStatus = () => {
-    if (viewData.paymentType === 'Shop') {
+    if (
+      viewData.paymentType === 'Shop' &&
+      viewData.fulfillmentMethod === ORDER_FULFILLMENT_METHOD.SELF
+    ) {
       return (
         <div className="flex items-center font-open-sans text-sm font-normal text-neutral-500">
           <ShopIcon color="black" />

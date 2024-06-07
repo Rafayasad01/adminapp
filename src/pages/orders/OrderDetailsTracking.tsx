@@ -80,7 +80,7 @@ function OrderDetailsTrackingPage({
 
   const isStatusActive = useCallback(
     (status: string) => {
-      const appOrderStatus = orderData.appOrderStatuses.find(
+      const appOrderStatus = orderData.appOrderStatuses?.find(
         (item: any) => item.status === status
       );
       if (!appOrderStatus) {
@@ -306,7 +306,7 @@ function OrderDetailsTrackingPage({
       </div>
       <div className="flex flex-col gap-4 px-4 py-4">
         {[...ORDER_STATUSES].map(([_key, value], index: number) => {
-          const appOrderStatus = orderData.appOrderStatuses.find(
+          const appOrderStatus = orderData.appOrderStatuses?.find(
             (item: any) => item.status === value.status
           );
           const isActive = isStatusActive(value.status);
