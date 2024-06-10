@@ -1,8 +1,10 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import 'devextreme/dist/css/dx.light.css';
 /* eslint-disable no-console */
 import { useEffect, useState } from 'react';
 import { useErrorBoundary } from 'react-error-boundary';
 import { useRoutes } from 'react-router-dom';
+// import ReactGA from 'react-ga';
 import Loader from './components/common/Loader';
 import { setSystemConfig, setTheme } from './redux/features/authSlice';
 import { useAppDispatch } from './redux/redux-hooks';
@@ -18,6 +20,9 @@ function App() {
   //   console.error = () => {};
   //   console.warn = () => {};
   // }
+
+  // const TRACKING_ID = 'G-6MG8TH508M'; // OUR_TRACKING_ID
+  // ReactGA.initialize(TRACKING_ID);
 
   const getDomain = () => {
     const domain = window.location.hostname;
