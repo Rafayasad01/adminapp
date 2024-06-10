@@ -320,7 +320,7 @@ export default function AddAppointmentPage() {
       );
       return [...filtered, ...filteredDayData];
     }, []);
-    console.log('🚀 ~ sortTimeOrder ~ filteredData:', filteredData);
+    // console.log('🚀 ~ sortTimeOrder ~ filteredData:', filteredData);
     return filteredData;
   };
 
@@ -370,15 +370,9 @@ export default function AddAppointmentPage() {
       );
       return resp.data.data;
     } catch (error) {
-      // console.error('Error:', error);
-      // Handle error if necessary
-      return false; // or throw error if you want to propagate it
+      return false;
     }
   };
-
-  // useEffect(() => {
-  //   shopEvents();
-  // }, [getValues('appointmentDate')]);
 
   const getBookedTimeSlots: any = async (id: any, date: any) => {
     const resll = await shopEvents(
@@ -676,7 +670,7 @@ export default function AddAppointmentPage() {
       barber: activeBarberData?.storeEmployee?.name,
       amount: activeBarberData?.amount,
       storeServiceCategory: watch('categoryId'),
-      serviceTime: activeBarber?.serviceTime,
+      serviceTime: activeBarberData?.serviceTime,
       storeServiceCategoryItem: watch('storeServiceCategoryItem'),
       storeEmployee: activeBarberData?.storeEmployee?.id,
       appointmentTime: `${dayjs(getValues('appointmentDate'))?.format(
@@ -1359,6 +1353,9 @@ export default function AddAppointmentPage() {
                 {fields?.length > 0 && <hr className="my-4 border-[#949EAE]" />}
                 {fields?.length > 0 &&
                   fields?.map((items: any, index: number) => {
+                    const date = dayjs(items.appointmentTime);
+                    const date2 = date.add(items.serviceTime, 'minute');
+                    const formattedDate2 = date2.format('hh:mm A');
                     return (
                       <div className="my-4 grid grid-cols-12" key={index}>
                         <div className="col-span-1">
@@ -1409,7 +1406,8 @@ export default function AddAppointmentPage() {
                             Appointment Time
                           </p>
                           <span className="xl:text-xs 2xl:text-sm">
-                            {dayjs(items.appointmentTime).format('hh:mm A')}
+                            {dayjs(items.appointmentTime).format('hh:mm A')} -{' '}
+                            {formattedDate2}
                           </span>
                         </div>
                       </div>
