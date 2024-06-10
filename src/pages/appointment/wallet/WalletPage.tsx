@@ -188,7 +188,7 @@ function WalletPage() {
           setIsNotify(true);
           setNotifyMessage({
             text: updateItem.data.message,
-            type: 'sccuess',
+            type: 'success',
           });
         } else {
           setIsLoader(false);
