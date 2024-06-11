@@ -398,7 +398,7 @@ function ServiceItemPage() {
                 {list &&
                   list.map((item: any, index: number) => {
                     return (
-                      <tr key={item.id}>
+                      <tr key={index}>
                         <td>
                           <div className="avatar flex flex-row items-center">
                             <button onClick={() => openModal(item.icon)}>
@@ -451,7 +451,7 @@ function ServiceItemPage() {
                               checked={!!item.isActive}
                               onChange={(
                                 event: React.ChangeEvent<HTMLInputElement>
-                              ) => handleSwitchChange(event, list[index].id)}
+                              ) => handleSwitchChange(event, item.id)}
                               inputProps={{ 'aria-label': 'controlled' }}
                             />
                           </div>
