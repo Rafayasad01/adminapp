@@ -126,7 +126,7 @@ function CategoriesCreatePopup({
               <FormControl className="FormControl" variant="standard">
                 <label className="FormLabel">
                   Message{' '}
-                  <span className="SubLabel">Write 01-250 Characters</span>
+                  <span className="SubLabel">Write 01-370 Characters</span>
                 </label>
                 <TextField
                   className="FormTextarea"
@@ -142,7 +142,7 @@ function CategoriesCreatePopup({
                       message: 'Minimum One Characters',
                     },
                     maxLength: {
-                      value: 250,
+                      value: 370,
                       message: MAX_LENGTH_EXCEEDED,
                     },
                   })}

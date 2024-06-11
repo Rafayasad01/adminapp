@@ -380,8 +380,8 @@ function AppointmentProviderSchedulePage() {
                   if (items.id === item.data.data.id) {
                     return {
                       ...items,
-                      startTime: item.data.data.startTime,
-                      endTime: item.data.data.endTime,
+                      startTime: dayjs(item.data.data.startTime).utc(),
+                      endTime: dayjs(item.data.data.endTime).utc(),
                     };
                   }
                   return items;
