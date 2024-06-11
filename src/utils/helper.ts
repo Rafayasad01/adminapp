@@ -68,3 +68,7 @@ export const convertDayJSToString = (
     return newObj;
   });
 };
+
+export const formatNumberWithCommas = (number: number | any) => {
+  return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+};

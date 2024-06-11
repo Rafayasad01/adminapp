@@ -4,3 +4,7 @@ export interface Order {
   deliveryPickupDate: any;
   deliveryDropOffDate: any;
 }
+
+export interface OrderBalance {
+  balance: string;
+}

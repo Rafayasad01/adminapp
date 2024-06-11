@@ -391,9 +391,7 @@ const OrderBasket = () => {
     if (isExistingUser === 'FALSE') {
       setPromoList([]);
     }
-  }, [promoList]);
-
-  console.log('isExx', isExistingUser);
+  }, []);
 
   const handlePaymentChange = () => {};
 

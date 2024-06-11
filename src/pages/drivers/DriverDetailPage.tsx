@@ -14,6 +14,8 @@ import Notify from '../../components/common/Notify';
 import TopBar from '../../components/common/TopBar';
 import Service from '../../services/adminapp/adminAppUser';
 import CustomText from '../../components/common/CustomText';
+import { formatNumberWithCommas } from '../../utils/helper';
+import { CURRENCY_PREFIX } from '../../utils/constants';
 
 function DriverDetailPage() {
   const [detail, setDetail] = useState<any>(null);
@@ -27,14 +29,6 @@ function DriverDetailPage() {
   const [notifyMessage, setNotifyMessage] = React.useState({});
   const [to, setTo] = useState<any>();
   const [from, setFrom] = useState<any>();
-  const [
-    // totalCredit,
-    setTotalCredit,
-  ] = useState<any>(0);
-  const [
-    // totalDebit
-    setTotalDebit,
-  ] = useState<any>(0);
 
   const { appUser } = useParams();
   const { control, handleSubmit, getValues } = useForm();
@@ -54,8 +48,6 @@ function DriverDetailPage() {
     ).then((item) => {
       setList(item.data.data.totalList);
       setTotal(Number(item.data.data.total));
-      setTotalCredit(Number(item.data.data.totalCredit));
-      setTotalDebit(Number(item.data.data.totalDebit));
     });
   };
 
@@ -75,8 +67,6 @@ function DriverDetailPage() {
     ).then((item) => {
       setList(item.data.data.totalList);
       setTotal(Number(item.data.data.total));
-      setTotalCredit(Number(item.data.data.totalCredit));
-      setTotalDebit(Number(item.data.data.totalDebit));
     });
   };
 
@@ -91,8 +81,6 @@ function DriverDetailPage() {
         setDetail(item.data.data);
         setList(item.data.data.walletTransactions.totalList);
         setTotal(Number(item.data.data.walletTransactions.total));
-        setTotalCredit(Number(item.data.data.walletTransactions.totalCredit));
-        setTotalDebit(Number(item.data.data.walletTransactions.totalDebit));
       }
     );
     // console.log('totalCredit::::::', totalCredit);
@@ -128,8 +116,6 @@ function DriverDetailPage() {
           setDetail(item.data.data);
           setList(item.data.data.walletTransactions.totalList);
           setTotal(Number(item.data.data.walletTransactions.total));
-          setTotalCredit(Number(item.data.data.walletTransactions.totalCredit));
-          setTotalDebit(Number(item.data.data.walletTransactions.totalDebit));
         } else {
           setIsLoader(false);
           setIsNotify(true);
@@ -207,16 +193,47 @@ function DriverDetailPage() {
                 </div>
                 <Divider className="mt-4" />
                 <div className="flex w-full flex-col">
-                  {detail?.wallets && (
-                    <div className="flex w-full flex-col">
-                      <span className="mt-2 font-open-sans text-base font-semibold text-secondary">
-                        Balance
-                      </span>
-                      <span className="font-open-sans text-sm font-normal text-[#6A6A6A]">
-                        {detail.wallets.balance}
-                      </span>
-                    </div>
-                  )}
+                  <div className="flex w-full items-center justify-between">
+                    {detail?.wallets && (
+                      <div className="flex w-full flex-col">
+                        <span className="mt-2 font-open-sans text-base font-semibold text-secondary">
+                          Balance
+                        </span>
+                        <span className="font-open-sans text-sm font-normal text-[#6A6A6A]">
+                          {formatNumberWithCommas(
+                            Math.floor(detail.wallets.balance)
+                          )}{' '}
+                          {CURRENCY_PREFIX}
+                        </span>
+                      </div>
+                    )}
+                    {detail?.walletTransactions && (
+                      <div className="flex w-full flex-col">
+                        <span className="mt-2 font-open-sans text-base font-semibold text-secondary">
+                          Credit
+                        </span>
+                        <span className="font-open-sans text-sm font-normal text-[#6A6A6A]">
+                          {formatNumberWithCommas(
+                            Math.floor(detail.walletTransactions.totalCredit)
+                          )}{' '}
+                          {CURRENCY_PREFIX}
+                        </span>
+                      </div>
+                    )}
+                    {detail?.walletTransactions && (
+                      <div className="flex w-full flex-col">
+                        <span className="mt-2 font-open-sans text-base font-semibold text-secondary">
+                          Debit
+                        </span>
+                        <span className="font-open-sans text-sm font-normal text-[#6A6A6A]">
+                          {formatNumberWithCommas(
+                            Math.floor(detail.walletTransactions.totalDebit)
+                          )}{' '}
+                          {CURRENCY_PREFIX}
+                        </span>
+                      </div>
+                    )}
+                  </div>
                   <div className="flex w-full flex-col">
                     <span className="mt-2 font-open-sans text-base font-semibold text-secondary">
                       Email

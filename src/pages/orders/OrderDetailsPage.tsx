@@ -11,6 +11,7 @@ import IconButton from '@mui/material/IconButton';
 import dayjs from 'dayjs';
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
 import assets from '../../assets';
 import Loader from '../../components/common/Loader';
 import Notify from '../../components/common/Notify';
@@ -30,6 +31,7 @@ import {
 } from '../../utils/constants';
 import { listingRolePermission } from '../../utils/helper';
 import OrderDetailsTrackingPage from './OrderDetailsTracking';
+import { OrderBalance } from '../../interfaces/order.interface';
 
 function OrderDetailsPage() {
   const navigate = useNavigate();
@@ -48,6 +50,14 @@ function OrderDetailsPage() {
   const [notifyMessage, setNotifyMessage] = useState({});
   const params = useParams();
   const id: any = params.orderId;
+
+  const {
+    register,
+    setError,
+    clearErrors,
+    watch,
+    formState: { errors },
+  } = useForm<OrderBalance>();
 
   const currentStatus = {
     key: viewData.status,
@@ -134,8 +144,19 @@ function OrderDetailsPage() {
   };
 
   const createOrderStatusesService = (data: any) => {
-    console.log('🚀 ~ createOrderStatusesService ~ data:', data);
+    console.log('🚀 ~ createOrderStatusesService ~ data:', data, viewData);
+    // setStatus({
+    //   paymentType: viewData.paymentType,
+    //   status: data.status,
+    // });
     data.app_user = authState.user.anonAppUser;
+    if (
+      viewData.paymentType === 'CashOnDelivery' &&
+      data.status === ORDER_STATUS.COMPLETED
+    ) {
+      data.balance = watch('balance');
+    }
+    console.log('updated data', data);
     setIsLoader(true);
     orderService
       .createStatusesService(data)
@@ -341,6 +362,12 @@ function OrderDetailsPage() {
           setOpen={setDialogOpen}
           dialogText={dialogText}
           callback={statusUpdateHandler}
+          register={register}
+          errors={errors}
+          watch={watch}
+          setError={setError}
+          clearErrors={clearErrors}
+          status={viewData}
         />
       )}
       {cancelDialogOpen && (

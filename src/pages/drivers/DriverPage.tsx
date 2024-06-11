@@ -16,6 +16,8 @@ import Notify from '../../components/common/Notify';
 import TopBar from '../../components/common/TopBar';
 
 import Service from '../../services/adminapp/adminAppUser';
+import { formatNumberWithCommas } from '../../utils/helper';
+import { CURRENCY_PREFIX } from '../../utils/constants';
 
 function DriverPage() {
   const navigate = useNavigate();
@@ -194,7 +196,11 @@ function DriverPage() {
                         </td>
                         <td>{item.email}</td>
                         <td>
-                          {item.wallets ? `PKR ${item.wallets.balance}` : 'N/A'}
+                          {item.wallets
+                            ? `${formatNumberWithCommas(
+                                Math.floor(item.wallets.balance)
+                              )} ${CURRENCY_PREFIX}`
+                            : 'N/A'}
                         </td>
                         <td>
                           {item.isActive ? (

@@ -106,6 +106,8 @@ function VouchersPromoCreatePopup({
     // reset();
   };
 
+  console.log('ERRORS', errors);
+
   useEffect(() => {
     if (watch('isUnlimitedRedeem')) {
       setValue('maxRedeem', 0);
@@ -282,7 +284,9 @@ function VouchersPromoCreatePopup({
                           ? 'Max Redeem is required in numbers'
                           : false,
                       validate: (value: any) =>
-                        VALIDATE_NON_NEGATIVE_NUM_AND_CHECK_LENGTH(value, 0),
+                        watch('isUnlimitedRedeem') === false
+                          ? VALIDATE_NON_NEGATIVE_NUM_AND_CHECK_LENGTH(value, 0)
+                          : true,
                     })}
                     disabled={watch('isUnlimitedRedeem')}
                     className="FormInput"
