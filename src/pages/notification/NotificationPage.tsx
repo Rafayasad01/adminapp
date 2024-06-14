@@ -325,12 +325,14 @@ function NotificationPage() {
                           </span>
                         </td>
                         <td aria-label="show detail button">
-                          <IconButton
-                            className="icon-btn mr-3.5 p-0"
-                            onClick={() => detailButtonHandler(item, index)}
-                          >
-                            <WysiwygOutlinedIcon />
-                          </IconButton>
+                          <div className="flex flex-row-reverse">
+                            <IconButton
+                              className="icon-btn mr-3.5 p-0"
+                              onClick={() => detailButtonHandler(item, index)}
+                            >
+                              <WysiwygOutlinedIcon />
+                            </IconButton>
+                          </div>
                         </td>
                       </tr>
                     );

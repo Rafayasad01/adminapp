@@ -352,6 +352,7 @@ function OrdersPage() {
                   <th>Amount</th>
                   <th className="w-36">Status</th>
                   <th>Order ID</th>
+                  <th aria-label="empty table header">&nbsp;</th>
                 </tr>
               </thead>
               <tbody>
@@ -416,7 +417,7 @@ function OrdersPage() {
                           </span>
                         </td>
                         <td>{Item.orderNumber}</td>
-                        <td>
+                        <td aria-label="go to reviews">
                           <div className="flex flex-row-reverse">
                             <IconButton
                               className="icon-btn"
