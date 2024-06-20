@@ -1,5 +1,7 @@
 import HistoryIcon from '@mui/icons-material/History';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import PhoneIphoneOutlinedIcon from '@mui/icons-material/PhoneIphoneOutlined';
 // import CloseIcon from '@mui/icons-material/Close';
 import UpdateOutlinedIcon from '@mui/icons-material/UpdateOutlined';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -109,6 +111,8 @@ const AppointmentViewCard = ({
       });
   };
 
+  console.log('appointmentData?.status', appointmentData?.status);
+
   useEffect(() => {
     if (appointmentData) {
       storeAppointmentService
@@ -194,7 +198,8 @@ const AppointmentViewCard = ({
               <HistoryIcon />
             </IconButton>
             {appointmentData?.status !== APPOINTMENT_STATUS.NEW &&
-            appointmentData?.status !== APPOINTMENT_STATUS.PROCESSING ? (
+            appointmentData?.status !== APPOINTMENT_STATUS.PROCESSING &&
+            appointmentData?.status !== APPOINTMENT_STATUS.DONE ? (
               <div className="mt-3">
                 <span className="rounded bg-slate-200 px-2 py-1 text-sm">
                   {appointmentData?.status === APPOINTMENT_STATUS.COMPLETED
@@ -214,28 +219,40 @@ const AppointmentViewCard = ({
                   setIsTooltipOpen(false);
                   if (appointmentData?.status === 'New') {
                     isStatusProcessing(appointmentData.id);
-                  } else {
+                  } else if (data?.status === APPOINTMENT_STATUS.DONE) {
                     isStatusDone(appointmentData.id);
                   }
                 }}
-                className="mt-3 flex w-[100%] cursor-pointer items-center justify-center rounded border-[3px] bg-slate-200 shadow"
+                className={`mt-3 flex w-[100%] ${
+                  appointmentData?.status === APPOINTMENT_STATUS.PROCESSING
+                    ? 'cursor-default'
+                    : 'cursor-pointer border-[3px] bg-slate-200 shadow'
+                } items-center justify-center rounded`}
               >
                 <IconButton
                   size="small"
                   name="Done"
+                  disabled={data?.status === APPOINTMENT_STATUS.PROCESSING}
                   className="icon-btn mx-[4px] p-0"
                   // onClick={() => isStatusDone(appointmentData.id)}
                 >
                   {appointmentData?.status === APPOINTMENT_STATUS.NEW ? (
                     <UpdateOutlinedIcon fontSize="small" />
+                  ) : appointmentData?.status ===
+                    APPOINTMENT_STATUS.PROCESSING ? (
+                    <InfoOutlinedIcon fontSize="small" />
                   ) : (
                     <CheckCircleOutlineIcon fontSize="small" />
                   )}
                 </IconButton>
                 <span className="text-sm">
-                  {appointmentData?.status === APPOINTMENT_STATUS.NEW
+                  {data?.status === APPOINTMENT_STATUS.NEW
                     ? 'Processing'
-                    : 'Complete'}
+                    : data?.status === APPOINTMENT_STATUS.PROCESSING
+                    ? 'This must be done by the staff.'
+                    : data?.status === APPOINTMENT_STATUS.DONE
+                    ? 'Complete'
+                    : ''}
                 </span>
               </div>
             )}
@@ -300,7 +317,17 @@ const AppointmentViewCard = ({
             <span className="mx-2 text-xs text-[#6A6A6A]">{data?.name}</span>
           </div>
         </div>
-
+        <div className="mt-2 flex items-center">
+          <div>
+            <PhoneIphoneOutlinedIcon
+              className="m-0 p-0 text-[0.9rem] text-[#6A6A6A]"
+              fontSize="small"
+            />
+          </div>
+          <div className="">
+            <span className="mx-2 text-xs text-[#6A6A6A]">{data?.phone}</span>
+          </div>
+        </div>
         <div className="mt-2 flex items-center">
           <div>
             <img src={assets.images.appHead} alt="app-head" />
