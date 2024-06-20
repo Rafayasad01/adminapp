@@ -146,12 +146,8 @@ function NotificationPage() {
       ...data,
       tenant: authState.user.tenant,
       userId: authState.user.id,
+      notificationType: 'Customers',
     };
-    // console.log('🚀 ~ createFormHandler ~ obj:', obj);
-    // formData.append('title', data.title);
-    // formData.append('message', data.message);
-    // formData.append('tenant', authState.user.tenant);
-    // formData.append('userId', authState.user.id);
     notificationService
       .sentService(obj)
       .then((item) => {
@@ -284,7 +280,7 @@ function NotificationPage() {
               <thead>
                 <tr>
                   <th className="w-[16rem]">Title</th>
-                  <th className="w-[30rem]">Message</th>
+                  <th className="w-[20rem]">Message</th>
                   <th>Dated</th>
                   <th>status</th>
                   <th aria-label="empty table header">&nbsp;</th>
@@ -318,7 +314,10 @@ function NotificationPage() {
                             {item.status}
                           </span>
                         </td>
-                        <td aria-label="show detail button">
+                        <td
+                          aria-label="show detail button"
+                          className="flex flex-row-reverse"
+                        >
                           <IconButton
                             className="icon-btn mr-3.5 p-0"
                             onClick={() => detailButtonHandler(item, index)}

@@ -1,12 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 
-import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined';
 import EditIcon from '@mui/icons-material/Edit';
-import RadioButtonUncheckedOutlinedIcon from '@mui/icons-material/RadioButtonUncheckedOutlined';
 import Button from '@mui/material/Button';
-import Checkbox from '@mui/material/Checkbox';
 import FormControl from '@mui/material/FormControl';
-import FormControlLabel from '@mui/material/FormControlLabel';
 import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
 import Link from '@mui/material/Link';
@@ -33,6 +29,7 @@ import {
 } from '../../redux/features/appSlice';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 import adminService from '../../services/adminapp/admin';
+import CustomQRPrintLayout from '../../utils/CustomPrintLayout/CustomQRPrintLayout';
 import {
   // DOMAIN_PREFIX,
   // DOMAIN_PROTOCOL,
@@ -41,12 +38,10 @@ import {
   PATTERN,
   // PH_MINI_LENGTH,
   SOCIAL_MEDIA,
-  VALIDATE_NON_NEGATIVE_NUM,
 } from '../../utils/constants';
 import { listingRolePermission } from '../../utils/helper';
 import DragDropFile from './DragDropFile';
 import SocialLinksPopup from './SocialLinksPopup';
-import CustomQRPrintLayout from '../../utils/CustomPrintLayout/CustomQRPrintLayout';
 
 type AssetsImages = keyof typeof assets.images;
 
@@ -451,7 +446,7 @@ function SettingsApp() {
                   )}
                 </FormControl>
               </div>
-              <div className="FormField">
+              <div className="FormField mb-4">
                 <FormControl className="FormControl" variant="standard">
                   <label className="FormLabel">
                     Description{' '}
@@ -479,247 +474,13 @@ function SettingsApp() {
                   {errors.desc && <ErrorSpanBox error={errors.desc?.message} />}
                 </FormControl>
               </div>
-              <div className="FormFields mb-4">
-                {/* <FormControl className="FormControl" variant="standard">
-                  <label className="FormLabel">Contact Email</label>
-                  <Input
-                    className="FormInput"
-                    id="email"
-                    type="text"
-                    placeholder="warning@urlaundry.com"
-                    disableUnderline
-                    {...register('email', {
-                      pattern: PATTERN.CHAR_NUM_DOT_AT,
-                      validate: (value) => value?.length <= 150,
-                      value: detail?.email ? detail.email : '',
-                    })}
-                  />
-                  {errors.email?.type === 'pattern' && (
-                    <ErrorSpanBox error={INVALID_CHAR} />
-                  )}
-                  {errors.email?.type === 'validate' && (
-                    <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
-                  )}
-                </FormControl> */}
-                {/* {authState?.user?.userType === 'ShopUser' && (
-                  <FormControl className="FormControl" variant="standard">
-                    <label className="FormLabel">Employee Limit</label>
-                    <Input
-                      className="FormInput"
-                      {...register('userLimit', {
-                        value: detail ? detail.userLimit : 0,
-                        validate: (value: any) =>
-                          VALIDATE_NON_NEGATIVE_NUM(value),
-                      })}
-                      defaultValue={0}
-                      type="number"
-                      id="userLimits"
-                      placeholder="Enter max user limits"
-                      disableUnderline
-                    />
-                    {errors?.userLimit && (
-                      <ErrorSpanBox error={errors?.userLimit?.message} />
-                    )}
-                  </FormControl>
-                )} */}
-                {/* <FormControl className="FormControl" variant="standard">
-                  <label className="FormLabel">Tax</label>
-                  <Input
-                    className="FormInput"
-                    id="gst_percentage"
-                    placeholder="1%"
-                    disableUnderline
-                    {...register('gstPercentage', {
-                      pattern: PATTERN.POINT_NUM,
-                      maxLength: {
-                        value: 15,
-                        message: MAX_LENGTH_EXCEEDED,
-                      },
-                      value: detail ? detail.gstPercentage : '',
-                    })}
-                    type="text"
-                  />
-                  {errors.gstPercentage?.type === 'pattern' && (
-                    <ErrorSpanBox error={INVALID_CHAR} />
-                  )}
-                  {errors.gstPercentage?.type === 'maxLength' && (
-                    <ErrorSpanBox error={PH_MINI_LENGTH} />
-                  )}
-                </FormControl> */}
-              </div>
-              <div className="FormField">
-                {/* <FormControl className="FormControl" variant="standard">
-                  <label className="FormLabel">Min order Amount</label>
-                  <Input
-                    className="FormInput"
-                    id="min_order_amount"
-                    placeholder="$1.00"
-                    disableUnderline
-                    {...register('minOrderAmount', {
-                      value: detail ? detail.minOrderAmount : '',
-                      pattern: {
-                        value: PATTERN.POINT_NUM,
-                        message: 'Enter a valid amount',
-                      },
-                    })}
-                  />
-                  {errors.minOrderAmount?.type === 'pattern' && (
-                    <ErrorSpanBox error="Enter a valid amount" />
-                  )}
-                </FormControl> */}
-                {/* <FormControl className="FormControl" variant="standard">
-                  <label className="FormLabel">Minimum Delivery Days</label>
-                  <Input
-                    id="minimumDeliveryTime"
-                    placeholder="Enter minimum delivery time"
-                    type="number"
-                    className="FormInput"
-                    defaultValue={0}
-                    {...register('minimumDeliveryTime', {
-                      validate: (value: any) =>
-                        VALIDATE_NON_NEGATIVE_NUM(value),
-                      maxLength: {
-                        value: 10,
-                        message: MAX_LENGTH_EXCEEDED,
-                      },
-                    })}
-                    disableUnderline
-                  />
-                  {errors?.minimumDeliveryTime && (
-                    <ErrorSpanBox
-                      error={errors?.minimumDeliveryTime?.message}
-                    />
-                  )}
-                </FormControl> */}
-                {/* <FormControl className="FormControl" variant="standard">
-                  <label className="FormLabel">Rider Delivery Charges</label>
-                  <Input
-                    className="FormInput"
-                    id="name"
-                    placeholder="$1.00"
-                    disableUnderline
-                    {...register('deliveryFee', {
-                      value: detail ? detail.deliveryFee : '',
-                      pattern: {
-                        value: PATTERN.POINT_NUM,
-                        message: 'Enter a valid delivery fee',
-                      },
-                    })}
-                  />
-                  {errors.deliveryFee?.type === 'pattern' && (
-                    <ErrorSpanBox error="Enter a valid delivery fee" />
-                  )}
-                </FormControl> */}
-              </div>
-              {/* <div className="FormFields"> */}
-              {/* <FormControl className="FormControl" variant="standard">
-                  <label className="FormLabel">Delivery Urgent Day Fees</label>
-                  <Input
-                    id="deliveryUrgentFees"
-                    placeholder="Enter Delivery Urgent Fees"
-                    type="number"
-                    className="FormInput"
-                    defaultValue={0}
-                    {...register('deliveryUrgentFees', {
-                      validate: (value: any) =>
-                        VALIDATE_NON_NEGATIVE_NUM(value),
-                      maxLength: {
-                        value: 10,
-                        message: MAX_LENGTH_EXCEEDED,
-                      },
-                    })}
-                    disableUnderline
-                  />
-                  {errors?.deliveryUrgentFees && (
-                    <ErrorSpanBox error={errors?.deliveryUrgentFees?.message} />
-                  )}
-                </FormControl> */}
-              {/* </div> */}
-              {/* <div className="FormFields">
-                <FormControl className="FormControl" variant="standard">
-                  <label className="FormLabel">Latitude</label>
-                  <Input
-                    disabled
-                    id="latitude"
-                    placeholder="Enter Latitude"
-                    type="number"
-                    className="FormInput"
-                    defaultValue={0}
-                    {...register('latitude', {
-                      validate: (value: any) =>
-                        VALIDATE_NON_NEGATIVE_NUM(value),
-                      maxLength: {
-                        value: 10,
-                        message: MAX_LENGTH_EXCEEDED,
-                      },
-                    })}
-                    disableUnderline
-                  />
-                  {errors?.latitude && (
-                    <ErrorSpanBox error={errors?.latitude?.message} />
-                  )}
-                </FormControl>
-                <FormControl className="FormControl" variant="standard">
-                  <label className="FormLabel">Longitude</label>
-                  <Input
-                    disabled
-                    id="longitude"
-                    placeholder="Enter Delivery Urgent Fees"
-                    type="number"
-                    className="FormInput"
-                    defaultValue={0}
-                    {...register('longitude', {
-                      validate: (value: any) =>
-                        VALIDATE_NON_NEGATIVE_NUM(value),
-                      maxLength: {
-                        value: 10,
-                        message: MAX_LENGTH_EXCEEDED,
-                      },
-                    })}
-                    disableUnderline
-                  />
-                  {errors?.longitude && (
-                    <ErrorSpanBox error={errors?.longitude?.message} />
-                  )}
-                </FormControl>
-              </div> */}
-              <div className="flex items-center justify-between gap-4">
-                {/* <div className="w-full">
-                  <FormControl className="FormControl" variant="standard">
-                    <label className="FormLabel">
-                      Attendance Distance
-                      <span className="SubLabel">(in meters)</span>
-                    </label>
-                    <Input
-                      id="attendanceDistance"
-                      placeholder="Enter Shop Distance in meters"
-                      type="number"
-                      className="FormInput"
-                      defaultValue={0}
-                      {...register('attendanceDistance', {
-                        validate: (value: any) =>
-                          VALIDATE_NON_NEGATIVE_NUM(value),
-                        maxLength: {
-                          value: 10,
-                          message: MAX_LENGTH_EXCEEDED,
-                        },
-                      })}
-                      disableUnderline
-                    />
-                    {errors?.attendanceDistance && (
-                      <ErrorSpanBox
-                        error={errors?.attendanceDistance?.message}
-                      />
-                    )}
-                  </FormControl>
-                </div> */}
+              <div className="mb-4 flex items-center justify-between gap-4">
                 <div className="w-full">
                   <TimePicker
                     timePickerLabel="Shop Time In"
                     timePickerValue={startTime}
                     setTimePickerValue={setStartTime}
                     id="startTime"
-                    // setError={setError}
                   />
                 </div>
                 <div className="w-full">
@@ -728,108 +489,10 @@ function SettingsApp() {
                     timePickerValue={endTime}
                     setTimePickerValue={setEndTime}
                     id="endTime"
-                    // setError={setError}
                   />
                 </div>
               </div>
-              {/* <div className="FormField mb-4">
-                <FormControl className="FormControl" variant="standard">
-                  <label className="FormLabel mt-2">Domain</label>
-                  <Input
-                    className="FormInput"
-                    id="domainAdminapp"
-                    placeholder="Domain"
-                    value={
-                      watch('domainAdminapp') &&
-                      `${DOMAIN_PROTOCOL}${watch(
-                        'domainAdminapp'
-                      )}${DOMAIN_PREFIX}`
-                    }
-                    disableUnderline
-                    disabled
-                  />
-                </FormControl>
-              </div> */}
-              <div className="FormField">
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      icon={
-                        <RadioButtonUncheckedOutlinedIcon
-                          style={{ color: '#1D1D1D' }}
-                        />
-                      }
-                      checkedIcon={
-                        <CheckCircleOutlinedIcon style={{ color: '#1D1D1D' }} />
-                      }
-                      {...register('enableLoyaltyProgram')}
-                      checked={watch('enableLoyaltyProgram')}
-                    />
-                  }
-                  label="Loyality Program"
-                />
-              </div>
-              {watch('enableLoyaltyProgram') === true && (
-                <div className="FormFields">
-                  <FormControl className="FormControl" variant="standard">
-                    <label className="FormLabel">
-                      Loyality Conversion Rate
-                    </label>
-                    <Input
-                      id="loyaltyCoinConversionRate"
-                      placeholder="Enter Conversion Rate"
-                      type="number"
-                      className="FormInput"
-                      defaultValue={0}
-                      {...register('loyaltyCoinConversionRate', {
-                        required:
-                          watch('enableLoyaltyProgram') === true &&
-                          'Loyality rate is required in numbers',
-                        validate: (value: any) =>
-                          VALIDATE_NON_NEGATIVE_NUM(value),
-                        maxLength: {
-                          value: 10,
-                          message: MAX_LENGTH_EXCEEDED,
-                        },
-                      })}
-                      disableUnderline
-                    />
-                    {errors?.loyaltyCoinConversionRate && (
-                      <ErrorSpanBox
-                        error={errors?.loyaltyCoinConversionRate?.message}
-                      />
-                    )}
-                  </FormControl>
-                  <FormControl className="FormControl" variant="standard">
-                    <label className="FormLabel">Minimum Loyality Coins</label>
-                    <Input
-                      id="requiredCoinsToRedeem"
-                      placeholder="Enter Minimum Loyality coins"
-                      type="number"
-                      className="FormInput"
-                      defaultValue={0}
-                      {...register('requiredCoinsToRedeem', {
-                        required:
-                          watch('enableLoyaltyProgram') === true &&
-                          'Loyality coins is required in numbers',
-                        validate: (value: any) =>
-                          VALIDATE_NON_NEGATIVE_NUM(value),
-                        maxLength: {
-                          value: 10,
-                          message: MAX_LENGTH_EXCEEDED,
-                        },
-                      })}
-                      disableUnderline
-                    />
-                    {errors?.requiredCoinsToRedeem && (
-                      <ErrorSpanBox
-                        error={errors?.requiredCoinsToRedeem?.message}
-                      />
-                    )}
-                  </FormControl>
-                </div>
-              )}
-              <div className="FormField mb-4">
+              <div className="FormField mb-4 mt-4">
                 <FormControl className="FormControl" variant="standard">
                   <label className="FormLabel">Social Links</label>
                   <div className="mt-2 flex flex-row items-center gap-3">

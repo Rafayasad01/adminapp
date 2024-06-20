@@ -1,6 +1,7 @@
 import BadgeOutlinedIcon from '@mui/icons-material/BadgeOutlined';
 import LocalPhoneOutlinedIcon from '@mui/icons-material/LocalPhoneOutlined';
 import MailOutlineOutlinedIcon from '@mui/icons-material/MailOutlineOutlined';
+import StarIcon from '@mui/icons-material/Star';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -37,9 +38,15 @@ const AppointmentProviderCards = ({
                 <div className="flex items-center justify-between">
                   <div className="avatar flex flex-row items-center">
                     <div className="flex flex-col items-start justify-start px-3">
-                      <span className="text-sm font-semibold">
-                        {`${item.name}`}
-                      </span>
+                      <div className="flex items-center">
+                        <span className="text-sm font-semibold">
+                          {`${item.name}`}{' '}
+                        </span>
+                        <div className="flex items-center px-1">
+                          <StarIcon className="text-base text-inherit text-yellow-500" />{' '}
+                          <span className="px-[2px] font-semibold">{`${item.rating}`}</span>
+                        </div>
+                      </div>
                       <span className="mt-1 text-xs font-normal text-[#6A6A6A]">
                         {dayjs(item.createdDate).isValid()
                           ? dayjs(item.createdDate)?.format('MMMM DD, YYYY')

@@ -32,6 +32,7 @@ function ViewCardAccordin({ data }: RatingAccordionsProps) {
           return (
             <>
               <Accordion
+                key={index}
                 className="boxShadow bg-transparent"
                 expanded={expanded === `panel${index}`}
                 onChange={handleChange(`panel${index}`)}

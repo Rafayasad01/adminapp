@@ -61,7 +61,7 @@ function AppointmentProviderPage() {
   ];
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
-  const [isLoader, setIsLoader] = useState(true);
+  const [isLoader, setIsLoader] = useState(false);
   const [, setIsLoaderPagination] = useState(false);
   const [isNotify, setIsNotify] = useState(false);
   const [notifyMessage, setNotifyMessage] = useState({});

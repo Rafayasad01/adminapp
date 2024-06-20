@@ -3,7 +3,7 @@
 import FacebookIcon from '@mui/icons-material/Facebook';
 import GridViewOutlinedIcon from '@mui/icons-material/GridViewOutlined';
 import InstagramIcon from '@mui/icons-material/Instagram';
-import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
+// import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 // import ManageAccountsOutlinedIcon from '@mui/icons-material/ManageAccountsOutlined';
 import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
@@ -30,7 +30,7 @@ import { MODULE_EMPLOYEES } from '../../utils/constants';
 import ArrowDown from '../icons/ArrowDown';
 import ArrowUp from '../icons/ArrowUp';
 // import CategoryIcon from '../icons/CategoryIcon';
-import OrderIcon from '../icons/OrderIcon';
+// import OrderIcon from '../icons/OrderIcon';
 import VoucherIcon from '../icons/VoucherIcon';
 import ProviderIcon from '../icons/providerIcon';
 import VisitIcon from '../icons/visitIcon';
@@ -80,32 +80,32 @@ const links = [
       // },
     ],
   },
-  {
-    name: 'Store Product',
-    path: 'store-product',
-    permission: 'Appointment Parent',
-    icon: <Inventory2OutlinedIcon fontSize="inherit" />,
-    childLinks: [
-      // {
-      //   name: 'Products',
-      //   path: 'store-product/product',
-      //   permission: 'Category List',
-      //   icon: <CategoryIcon />,
-      // },
-      {
-        name: 'Orders',
-        path: 'store-product/orders',
-        permission: 'Order List',
-        icon: <OrderIcon />,
-      },
-      {
-        name: 'Rating',
-        path: 'store-product/ratings',
-        permission: 'Banners List',
-        icon: <ViewCarouselOutlinedIcon className="w-[17px]" />,
-      },
-    ],
-  },
+  // {
+  //   name: 'Store Product',
+  //   path: 'store-product',
+  //   permission: 'Appointment Parent',
+  //   icon: <Inventory2OutlinedIcon fontSize="inherit" />,
+  //   childLinks: [
+  //     // {
+  //     //   name: 'Products',
+  //     //   path: 'store-product/product',
+  //     //   permission: 'Category List',
+  //     //   icon: <CategoryIcon />,
+  //     // },
+  //     {
+  //       name: 'Orders',
+  //       path: 'store-product/orders',
+  //       permission: 'Order List',
+  //       icon: <OrderIcon />,
+  //     },
+  //     {
+  //       name: 'Rating',
+  //       path: 'store-product/ratings',
+  //       permission: 'Banners List',
+  //       icon: <ViewCarouselOutlinedIcon className="w-[17px]" />,
+  //     },
+  //   ],
+  // },
   {
     name: 'User',
     path: 'user',
