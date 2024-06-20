@@ -21,6 +21,7 @@ import Loader from '../../components/common/Loader2';
 import { APPOINTMENT_STATUS } from '../../utils/constants';
 import CustomButton from '../../components/common/CustomButton';
 import ViewWalletPopupCard from './ViewWalletPopupCard';
+import CustomAppointmentLayoutCash from '../../utils/CustomPrintLayout/CustomAppointmentLayoutCash';
 
 type AppointmentViewCardProps = {
   appointmentData?: any;
@@ -47,9 +48,10 @@ const AppointmentViewCard = ({
 }: AppointmentViewCardProps) => {
   const navigate = useNavigate();
   const [data, setData] = useState<any>(null);
+  const [invoiceData, setInvoiceData] = useState<any>(null);
   const [isLoader, setIsLoader] = useState<boolean>(true);
   const [isWalletLoader, setIsWalletLoader] = useState<boolean>(false);
-
+  const [isPrintEnabled, setIsPrintEnabled] = useState<boolean>(false);
   // popover navigation of wallet button
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const handleClickPop = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -60,12 +62,6 @@ const AppointmentViewCard = ({
   };
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
-
-  // const handleClose = () => {
-  //   setIsTooltipOpen(false);
-  //   setAppointmentTooltipData(null);
-  //   setData(null);
-  // };
 
   useEffect(() => {
     // Select the element
@@ -111,7 +107,15 @@ const AppointmentViewCard = ({
       });
   };
 
-  console.log('appointmentData?.status', appointmentData?.status);
+  useEffect(() => {
+    // if (data?.status === APPOINTMENT_STATUS.COMPLETED) {
+    storeAppointmentService
+      .AppointmentInvoiceDetailById(appointmentData.id)
+      .then((res) => {
+        setInvoiceData(res.data.data);
+      });
+    // }
+  }, []);
 
   useEffect(() => {
     if (appointmentData) {
@@ -197,6 +201,13 @@ const AppointmentViewCard = ({
             >
               <HistoryIcon />
             </IconButton>
+            <IconButton name="Print Slip" className="icon-btn p-0">
+              <CustomAppointmentLayoutCash
+                isPrintEnabled={isPrintEnabled}
+                setPrintEnabled={setIsPrintEnabled}
+                data={invoiceData}
+              />
+            </IconButton>
             {appointmentData?.status !== APPOINTMENT_STATUS.NEW &&
             appointmentData?.status !== APPOINTMENT_STATUS.PROCESSING &&
             appointmentData?.status !== APPOINTMENT_STATUS.DONE ? (
@@ -224,7 +235,7 @@ const AppointmentViewCard = ({
                   }
                 }}
                 className={`mt-3 flex w-[100%] ${
-                  appointmentData?.status === APPOINTMENT_STATUS.PROCESSING
+                  data?.status === APPOINTMENT_STATUS.PROCESSING
                     ? 'cursor-default'
                     : 'cursor-pointer border-[3px] bg-slate-200 shadow'
                 } items-center justify-center rounded`}
@@ -236,10 +247,9 @@ const AppointmentViewCard = ({
                   className="icon-btn mx-[4px] p-0"
                   // onClick={() => isStatusDone(appointmentData.id)}
                 >
-                  {appointmentData?.status === APPOINTMENT_STATUS.NEW ? (
+                  {data?.status === APPOINTMENT_STATUS.NEW ? (
                     <UpdateOutlinedIcon fontSize="small" />
-                  ) : appointmentData?.status ===
-                    APPOINTMENT_STATUS.PROCESSING ? (
+                  ) : data?.status === APPOINTMENT_STATUS.PROCESSING ? (
                     <InfoOutlinedIcon fontSize="small" />
                   ) : (
                     <CheckCircleOutlineIcon fontSize="small" />

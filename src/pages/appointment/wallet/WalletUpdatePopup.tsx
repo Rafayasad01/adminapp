@@ -34,10 +34,11 @@ WalletUpdatePopupProps) {
   } = useForm<AppointmentWalletPaymentUpdate>();
 
   const onSubmit = (data: AppointmentWalletPaymentUpdate) => {
-    if (data.balance > Math.floor(formData?.balance).toString()) {
+    if (Number(data.balance) > Number(Math.floor(formData?.balance))) {
       setError('balance', {
         type: 'manual',
-        message: 'Balance must be less than and equal to acutal amount',
+        message:
+          'Balance must be less than or greater than and equal to acutal amount',
       });
       return;
     }

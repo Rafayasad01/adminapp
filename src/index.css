@@ -1154,7 +1154,7 @@ label + .css-1aa5qj0-MuiInputBase-root-MuiInput-root {
 }
 
 .print-area .rowss {
-  margin-bottom: 8px;
+  margin-bottom: 0px;
 }
 
 .print-area .print-row .col-1 span {
@@ -1164,7 +1164,7 @@ label + .css-1aa5qj0-MuiInputBase-root-MuiInput-root {
   font-weight: 500;
   line-height: 117.182%;
   display: block;
-  margin-bottom: 6px;
+  /* margin-bottom: 2px; */
 }
 
 .print-area .print-row .col-2 span {
@@ -1174,7 +1174,7 @@ label + .css-1aa5qj0-MuiInputBase-root-MuiInput-root {
   font-weight: 600;
   line-height: 117.182%;
   display: block;
-  margin-bottom: 6px;
+  /* margin-bottom: 2px; */
 }
 
 .print-area .print-banker {

@@ -95,6 +95,13 @@ const AppointmentStoreEmployeeList = (
   );
 };
 
+// invoice
+const AppointmentInvoiceDetailById = (storeAppId: string) => {
+  return network.get(
+    `${STORE_PREFIX}/${APPOINTMENT_PREFIX}/invoice/${storeAppId}`
+  );
+};
+
 export default {
   getBarbersList,
   getBarberBookedTimeSlots,
@@ -109,4 +116,5 @@ export default {
   appointmentProcessing,
   appointmentCancelled,
   AppointmentStoreEmployeeList,
+  AppointmentInvoiceDetailById,
 };
