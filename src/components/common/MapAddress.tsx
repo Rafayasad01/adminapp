@@ -25,6 +25,8 @@ function MapAddress({ address, zoom, setValue, getValues }: MapAddressProps) {
     lng: 0,
   };
 
+  // console.log("getValues('latitude')", getValues('latitude'));
+
   useEffect(() => {
     loader.load().then(async () => {
       const options: google.maps.MapOptions = {

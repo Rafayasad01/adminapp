@@ -115,7 +115,7 @@ function ProfileEditPopup({
       open={openFormDialog}
       onClose={handleFormClose}
       PaperProps={{
-        className: 'Dialog Width-30',
+        className: 'Dialog Width-40',
         style: { maxWidth: '100%', maxHeight: 'auto' },
       }}
     >
@@ -178,8 +178,8 @@ function ProfileEditPopup({
                     error={errors}
                     register={register}
                     options={{
-                      roles: countries,
-                      role: formData?.backofficeUserExt?.country,
+                      roles: countries ?? [],
+                      role: formData?.backofficeUserExt?.country ?? 'none',
                     }}
                     customClassInputTitle="font-bold"
                     inputTitle="Select Country"

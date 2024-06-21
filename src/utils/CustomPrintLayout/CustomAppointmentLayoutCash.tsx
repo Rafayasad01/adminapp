@@ -56,20 +56,24 @@ const CustomPrintLayouts = forwardRef<any, any>(
             <div className="print-line" />
             <div className="print-single-row print-date">
               <table>
-                <tr>
-                  <th>Service</th>
-                  <th>Time</th>
-                  <th>Price</th>
-                </tr>
-                {props?.data?.appointments?.map((el: any, index: number) => {
-                  return (
-                    <tr key={index}>
-                      <td>{el.storeServiceCategoryItem.name}</td>
-                      <td>{el.serviceTime}</td>
-                      <td>{el.amount}</td>
-                    </tr>
-                  );
-                })}
+                <thead>
+                  <tr>
+                    <th>Service</th>
+                    <th>Time</th>
+                    <th>Price</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {props?.data?.appointments?.map((el: any, index: number) => {
+                    return (
+                      <tr key={index}>
+                        <td>{el.storeServiceCategoryItem.name}</td>
+                        <td>{el.serviceTime}</td>
+                        <td>{el.amount}</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
               </table>
             </div>
 
@@ -146,10 +150,10 @@ function CustomAppointmentLayoutCash({
   return (
     <div className="flex items-center text-sm">
       {isPrintEnabled ? <CustomPrintLayouts ref={ref} data={data} /> : null}
-      <button onClick={trigger} className="printBtn">
+      <div onClick={trigger} className="printBtn">
         <PrintOutlinedIcon className="mx-1" />
         {/* <span className="mx-2"> Order Sl</span> */}
-      </button>
+      </div>
     </div>
   );
 }

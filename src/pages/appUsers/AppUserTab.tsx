@@ -33,6 +33,7 @@ type AppUserTabProps = {
   setPage: any;
   search: any;
   setRowsPerPage: any;
+  setCancelDialogOpen: any;
 };
 
 function AppUserTab({
@@ -52,6 +53,7 @@ function AppUserTab({
   setActionMenuItemid,
   setEditFormData,
   setOpenEditFormDialog,
+  setCancelDialogOpen,
 }: AppUserTabProps) {
   const navigate = useNavigate();
   const authState: any = useAppSelector((state) => state?.authState);
@@ -64,7 +66,7 @@ function AppUserTab({
   const actionMenuOptions = ['Detail', 'Reward History', 'Edit', 'Delete'];
 
   const manuHandler = (option: string) => {
-    setIsLoader(true);
+    // setIsLoader(true);
     if (option === 'Edit') {
       if (listingRolePermission(dataRole, 'Customer Update')) {
         appUserService.appUserEdit(actionMenuItemid?.id).then((item: any) => {
@@ -98,43 +100,7 @@ function AppUserTab({
       // navigate(`address/${actionMenuItemid?.id}`);
     } else if (option === 'Delete') {
       if (listingRolePermission(dataRole, 'Customer Delete')) {
-        setIsLoader(true);
-        const data = {
-          id: actionMenuItemid?.id,
-          updatedBy: authState.user.id,
-        };
-        appUserService
-          .appUserDelete(data)
-          .then((item: any) => {
-            if (item.data.success) {
-              setIsLoader(false);
-              setIsNotify(true);
-              setNotifyMessage({
-                text: item.data.message,
-                type: 'success',
-              });
-              setList((newArr: any) => {
-                return newArr.filter(
-                  (newItem: any) => newItem.id !== item.data.data.id
-                );
-              });
-            } else {
-              setIsLoader(false);
-              setIsNotify(true);
-              setNotifyMessage({
-                text: item.data.message,
-                type: 'error',
-              });
-            }
-          })
-          .catch((err: Error) => {
-            setIsLoader(false);
-            setIsNotify(true);
-            setNotifyMessage({
-              text: err.message,
-              type: 'error',
-            });
-          });
+        setCancelDialogOpen(true);
       } else {
         setIsNotify(true);
         setNotifyMessage({

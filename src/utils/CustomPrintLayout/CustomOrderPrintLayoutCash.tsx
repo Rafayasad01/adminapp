@@ -51,20 +51,24 @@ const CustomPrintLayouts = forwardRef<any, any>(
             <div className="print-line" />
             <div className="print-single-row print-date">
               <table>
-                <tr>
-                  <th>Items</th>
-                  <th>Qty</th>
-                  <th>Price</th>
-                </tr>
-                {props?.data?.orderItems?.map((el: any, index: number) => {
-                  return (
-                    <tr key={index}>
-                      <td>{el.name}</td>
-                      <td>{el.quantity}</td>
-                      <td>{el.unitPrice}</td>
-                    </tr>
-                  );
-                })}
+                <thead>
+                  <tr>
+                    <th>Items</th>
+                    <th>Qty</th>
+                    <th>Price</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {props?.data?.orderItems?.map((el: any, index: number) => {
+                    return (
+                      <tr key={index}>
+                        <td>{el.name}</td>
+                        <td>{el.quantity}</td>
+                        <td>{el.unitPrice}</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
               </table>
             </div>
 

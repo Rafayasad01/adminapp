@@ -6,6 +6,10 @@
   @apply w-[60%] !important;
 }
 
+.Dialog.Width-40 {
+  @apply w-[40%] !important;
+}
+
 .Dialog.Width-30 {
   @apply w-[30%] !important;
 }
@@ -269,15 +273,15 @@
 }
 
 .ChatDetails {
-  @apply mt-4 border border-solid border-foreground py-3 px-3 shadow-md !important;
+  @apply mt-4 border border-solid border-foreground px-3 py-3 shadow-md !important;
 }
 
 .ChatLeftBox .ChatDetails {
-  @apply rounded-tl-lg rounded-tr-lg rounded-br-lg !important;
+  @apply rounded-br-lg rounded-tl-lg rounded-tr-lg !important;
 }
 
 .ChatRightBox .ChatDetails {
-  @apply rounded-tl-lg rounded-tr-lg rounded-bl-lg bg-[#1D1D1D] !important;
+  @apply rounded-bl-lg rounded-tl-lg rounded-tr-lg bg-[#1D1D1D] !important;
 }
 
 .ChatContent .ChatTxt {
@@ -393,7 +397,7 @@
 }
 
 .FormControl .DatePicker input {
-  @apply py-[4px] px-0 font-open-sans text-sm font-normal text-secondary opacity-[0.7] !important;
+  @apply px-0 py-[4px] font-open-sans text-sm font-normal text-secondary opacity-[0.7] !important;
 }
 
 .FormControl .DatePicker button {

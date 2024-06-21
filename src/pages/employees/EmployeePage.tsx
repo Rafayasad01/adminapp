@@ -54,7 +54,7 @@ function EmployeePage() {
   const [notifyMessage, setNotifyMessage] = React.useState({});
   const [cancelDialogOpen, setCancelDialogOpen] = useState<boolean>(false);
   const [dialogText] = useState<any>(
-    'Are you sure you want to delete this customer ?'
+    'Are you sure you want to delete this employee ?'
   );
   const [showPassword, setShowPassword] = useState(true);
   const {
@@ -211,41 +211,40 @@ function EmployeePage() {
     }
   };
 
-  // const deleteHandler = (id: string) => {
-  //   setIsLoader(true);
-  //   // const data = {
-  //   //   updatedBy: authState.user.id,
-  //   // };
-  //   // console.log(actionMenuItemid);
-
-  //   // Service.deleteService(actionMenuItemid, data)
-  //   //   .then((item: any) => {
-  //   //     if (item.data.success) {
-  //   //       setIsLoader(false);
-  //   //       setIsNotify(true);
-  //   //       setNotifyMessage({
-  //   //         text: item.data.message,
-  //   //         type: 'success',
-  //   //       });
-  //   //       setList((newArr: any) => {
-  //   //         return newArr.filter(
-  //   //           (newItem: any) => newItem.id !== item.data.data.id
-  //   //         );
-  //   //       });
-  //   //     }
-  //   //   })
-  //   //   .catch((err) => {
-  //   //     setIsLoader(false);
-  //   //     setIsNotify(true);
-  //   //     setNotifyMessage({
-  //   //       text: err.message,
-  //   //       type: 'error',
-  //   //     });
-  //   //   });
-  // };
+  const deleteHandler = (id: string) => {
+    setIsLoader(true);
+    const data = {
+      updatedBy: authState.user.id,
+    };
+    employeeService
+      .deleteService(id, data)
+      .then((item: any) => {
+        if (item.data.success) {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'success',
+          });
+          setList((newArr: any) => {
+            return newArr.filter(
+              (newItem: any) => newItem.id !== item.data.data.id
+            );
+          });
+        }
+      })
+      .catch((err) => {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
+        });
+      });
+  };
 
   const statusCancelHandler = () => {
-    // deleteHandler(actionMenuItemid);
+    deleteHandler(actionMenuItemid);
   };
 
   const manuHandler = (option: string) => {
@@ -272,36 +271,7 @@ function EmployeePage() {
       }
     } else if (option === 'Delete') {
       if (listingRolePermission(dataRole, 'Employee delete')) {
-        setIsLoader(true);
-        const data = {
-          updatedBy: authState.user.id,
-        };
-        // console.log(actionMenuItemid);
-        employeeService
-          .deleteService(actionMenuItemid, data)
-          .then((item: any) => {
-            if (item.data.success) {
-              setIsLoader(false);
-              setIsNotify(true);
-              setNotifyMessage({
-                text: item.data.message,
-                type: 'success',
-              });
-              setList((newArr: any) => {
-                return newArr.filter(
-                  (newItem: any) => newItem.id !== item.data.data.id
-                );
-              });
-            }
-          })
-          .catch((err) => {
-            setIsLoader(false);
-            setIsNotify(true);
-            setNotifyMessage({
-              text: err.message,
-              type: 'error',
-            });
-          });
+        setCancelDialogOpen(true);
       } else {
         setIsNotify(true);
         setNotifyMessage({

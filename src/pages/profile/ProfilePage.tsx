@@ -4,6 +4,7 @@ import Divider from '@mui/material/Divider';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { useForm } from 'react-hook-form';
 import assets from '../../assets';
 import TopBar from '../../components/common/TopBar';
 import ProfileChangePasswordPopup from './ProfileChangePasswordPopup';
@@ -36,6 +37,7 @@ function ProfilePage() {
   const dataRole = useAppSelector(
     (state: any) => state?.persistedReducer?.roleState?.role?.permissions
   );
+  const { setValue, getValues } = useForm<any>();
   const [changePassword, setChangePassword] = useState(false);
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [detail, setDetail] = useState<any>();
@@ -277,7 +279,12 @@ function ProfilePage() {
             </div>
           </div>
           <div className="min-h-[640px] rounded-lg bg-white shadow-lg xl:col-span-7 2xl:col-span-8">
-            <MapAddress address={detail?.address} zoom={10} />
+            <MapAddress
+              getValues={getValues}
+              setValue={setValue}
+              address={detail?.address}
+              zoom={10}
+            />
           </div>
         </div>
       </div>

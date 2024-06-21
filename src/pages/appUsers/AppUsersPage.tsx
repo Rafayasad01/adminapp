@@ -106,7 +106,7 @@ function AppUsersPage() {
     setIsLoader(true);
     const data = {
       id,
-      updated_by: authState.user.id,
+      updatedBy: authState.user.id,
     };
     appUserService
       .appUserDelete(data)
@@ -123,9 +123,16 @@ function AppUsersPage() {
               (newItem: any) => newItem.id !== item.data.data.id
             );
           });
+        } else {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'error',
+          });
         }
       })
-      .catch((err) => {
+      .catch((err: Error) => {
         setIsLoader(false);
         setIsNotify(true);
         setNotifyMessage({
@@ -345,10 +352,6 @@ function AppUsersPage() {
               </div>
             </div>
           </div>
-          {/* <Tabs value={selectedTab} onChange={handleTabChange}>
-            <Tab label="app user" value="APP USER" />
-            {/* <Tab label="other" value="OTHER" /> */}
-          {/* </Tabs> */}
           {selectedTab === 'APP USER' && (
             <AppUserTab
               // isLoader={isLoader}
@@ -370,6 +373,7 @@ function AppUsersPage() {
               setIsNotify={setIsNotify}
               // notifyMessage={notifyMessage}
               setNotifyMessage={setNotifyMessage}
+              setCancelDialogOpen={setCancelDialogOpen}
             />
           )}
           {/* {selectedTab === 'OTHER' && (
