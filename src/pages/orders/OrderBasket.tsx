@@ -210,7 +210,7 @@ const OrderBasket = () => {
       });
       return;
     }
-    setIsLoginLoader(false);
+    // setIsLoginLoader(false);
     setLoginDetails(anonymousLoginResult.data.data);
     showNotification({
       text: anonymousLoginResult.data.message,
@@ -309,7 +309,8 @@ const OrderBasket = () => {
       type: 'success',
     });
     dispatch(setCart([]));
-    navigate(-1);
+    setIsLoginLoader(false);
+    navigate('../../orders');
   };
 
   const handleLogin = () => {
@@ -994,6 +995,7 @@ const OrderBasket = () => {
               </div>
               <Button
                 disabled={
+                  isLoginLoader ||
                   (isExistingUser === 'TRUE' && isLoader) ||
                   (isExistingUser === 'TRUE' && loginDetails === null) ||
                   (isExistingUser === 'TRUE' && cartItems?.length <= 0)
@@ -1011,7 +1013,12 @@ const OrderBasket = () => {
                 {isLoader && loginDetails !== null ? (
                   <CircularProgress size="25px" color="inherit" />
                 ) : (
-                  <span>Submit</span>
+                  <div className="flex items-center">
+                    {isLoginLoader && (
+                      <CircularProgress size="15px" color="inherit" />
+                    )}
+                    <span className="mx-2">Submit</span>
+                  </div>
                 )}
               </Button>
             </div>
