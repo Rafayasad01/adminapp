@@ -24,7 +24,7 @@ const colorArray = [
 
 function CategoriesCard({ categories, onClick }: ICategoryProps) {
   return (
-    <div className="categories-list">
+    <div className="categories-list h-[500px] min-h-[450px] overflow-auto">
       {categories.length &&
         categories.map((category: AppCategories, index: number) => (
           <button

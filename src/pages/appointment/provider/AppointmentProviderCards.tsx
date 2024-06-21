@@ -144,14 +144,6 @@ const AppointmentProviderCards = ({
                     </div>
                     <span className="text-sm font-medium">{item.email}</span>
                   </div>
-                  <div>
-                    <button
-                      className="text-[10px] font-bold hover:underline"
-                      onClick={() => handleViewMoreClick(index)}
-                    >
-                      {expandedBoxes[index] ? 'View less' : 'View more'}
-                    </button>
-                  </div>
                   <div
                     style={{
                       height: expandedBoxes[index] ? '70px' : '0px',
@@ -168,7 +160,7 @@ const AppointmentProviderCards = ({
                         {item.address}
                       </span>
                     </div>
-                    <div className="my-1 flex items-center justify-between">
+                    <div className="flex items-center justify-between">
                       <div className="mr-5">
                         <PaymentOutlinedIcon fontSize="small" />
                       </div>
@@ -176,6 +168,14 @@ const AppointmentProviderCards = ({
                         {item.payrollType}
                       </span>
                     </div>
+                  </div>
+                  <div className="mt-2 flex items-center justify-end">
+                    <button
+                      className="text-[10px] font-bold hover:underline"
+                      onClick={() => handleViewMoreClick(index)}
+                    >
+                      {expandedBoxes[index] ? 'View less' : 'View more'}
+                    </button>
                   </div>
                 </div>
               </CardContent>
