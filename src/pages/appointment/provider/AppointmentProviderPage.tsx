@@ -375,8 +375,8 @@ function AppointmentProviderPage() {
       const newPage = 0;
       setSearch(searchTxt);
       setPage(newPage);
-      Service.ProviderSearchList(
-        authState.user.tenant,
+      StoreEmployeeService.StoreEmployeeAllList(
+        // authState.user.tenant,
         searchTxt,
         newPage,
         rowsPerPage
@@ -559,6 +559,7 @@ function AppointmentProviderPage() {
   };
 
   useEffect(() => {
+    setIsLoader(true);
     if (listingRolePermission(dataRole, 'Appointment Provider List')) {
       StoreEmployeeService.StoreEmployeeAllList(search, page, rowsPerPage)
         .then((item: any) => {
@@ -591,7 +592,7 @@ function AppointmentProviderPage() {
         type: 'warning',
       });
     }
-  }, [null]);
+  }, []);
 
   const swiperRef = useRef<any>(null);
 
