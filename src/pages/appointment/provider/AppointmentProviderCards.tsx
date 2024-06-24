@@ -60,7 +60,7 @@ const AppointmentProviderCards = ({
                           }}
                           src={item.avatar}
                         />
-                        <span className="text-sm font-semibold">
+                        <span className="text-sm font-semibold capitalize">
                           {`${item.name}`}{' '}
                         </span>
                         <div className="flex items-center px-1">
@@ -157,7 +157,7 @@ const AppointmentProviderCards = ({
                         <HomeOutlinedIcon fontSize="small" />
                       </div>
                       <span className="text-sm font-medium">
-                        {item.address}
+                        {item.address ? item.address : '----'}
                       </span>
                     </div>
                     <div className="flex items-center justify-between">

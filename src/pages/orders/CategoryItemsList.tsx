@@ -68,7 +68,7 @@ const CategoryItemsList: React.FC<CategoryItemsListProps> = ({
               alt=""
             />
           </button>
-          <div className="flex flex-wrap items-center justify-between">
+          <div className="">
             <span className="name text-base">{item.name}</span>
             <span className="price text-[13px]">
               {CURRENCY_PREFIX} {item.price}
@@ -109,11 +109,11 @@ const CategoryItemsList: React.FC<CategoryItemsListProps> = ({
                 alt=""
               />
             </button>
-            <div className="flex flex-wrap items-center justify-between">
-              <span className="name text-base">{item.name}</span>
-              <span className="price text-[13px]">
+            <div className="">
+              <p className="name m-0 text-base">{item.name}</p>
+              <p className="price mb-3 text-[12px]">
                 {CURRENCY_PREFIX} {item.price}
-              </span>
+              </p>
               <button
                 className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium btn-add css-sghohy-MuiButtonBase-root-MuiButton-root bg-primary"
                 tabIndex={0}

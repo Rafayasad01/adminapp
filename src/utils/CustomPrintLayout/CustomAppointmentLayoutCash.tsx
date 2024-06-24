@@ -33,7 +33,7 @@ const CustomPrintLayouts = forwardRef<any, any>(
             </div>
             <div className="print-title">Your Appointment is Confirmed!</div>
 
-            {props.data.appointments?.map((item: any, index: number) => {
+            {props?.data?.appointments?.map((item: any, index: number) => {
               return (
                 <div key={index} className="print-row rowss">
                   <div className="col-1">
