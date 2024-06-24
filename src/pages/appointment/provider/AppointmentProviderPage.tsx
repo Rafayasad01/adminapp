@@ -375,8 +375,8 @@ function AppointmentProviderPage() {
       const newPage = 0;
       setSearch(searchTxt);
       setPage(newPage);
-      Service.ProviderSearchList(
-        authState.user.tenant,
+      StoreEmployeeService.StoreEmployeeAllList(
+        // authState.user.tenant,
         searchTxt,
         newPage,
         rowsPerPage

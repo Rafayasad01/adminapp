@@ -108,7 +108,7 @@ const UserPopup = ({
       identifier:
         isExistingUser === 'FALSE'
           ? `${anonIdentifier}@shop.com`
-          : userEmailIdentifier || 'false',
+          : userEmailIdentifier.trim().replace(/\s+/g, '') || 'false',
       tenant: authState?.user?.tenant,
     };
     let service;
