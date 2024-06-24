@@ -63,7 +63,7 @@ function LoginPage() {
   const loginHandler = async (data: LoginFields) => {
     setIsLoader(true);
     const userData: UserLogin = {
-      username: data.email,
+      username: data.email.trim().replace(/\s+/g, ''),
       password: data.password,
     };
     await authService
