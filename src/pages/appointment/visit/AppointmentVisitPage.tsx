@@ -1,6 +1,6 @@
-import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
+// import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined';
-import Button from '@mui/material/Button';
+// import Button from '@mui/material/Button';
 // import dayjs from 'dayjs';
 // import timezone from 'dayjs/plugin/timezone';
 // import utc from 'dayjs/plugin/utc';
@@ -71,18 +71,18 @@ function AppointmentVisitPage() {
 
   const { reset } = useForm<AppointmentVisit>();
 
-  const handleFormClickOpen = () => {
-    if (listingRolePermission(dataRole, 'Appointment Create')) {
-      navigate('./add-appointment');
-      // setOpenFormDialog(true);
-    } else {
-      setIsNotify(true);
-      setNotifyMessage({
-        text: NOT_AUTHORIZED_MESSAGE,
-        type: 'warning',
-      });
-    }
-  };
+  // const handleFormClickOpen = () => {
+  //   if (listingRolePermission(dataRole, 'Appointment Create')) {
+  //     navigate('./add-appointment');
+  //     // setOpenFormDialog(true);
+  //   } else {
+  //     setIsNotify(true);
+  //     setNotifyMessage({
+  //       text: NOT_AUTHORIZED_MESSAGE,
+  //       type: 'warning',
+  //     });
+  //   }
+  // };
 
   const manuHandler = (option: string) => {
     if (actionMenuItemId?.status === 'Cancelled') {
@@ -428,7 +428,7 @@ function AppointmentVisitPage() {
                 />
               </div>
             </div>
-            <div className="grid justify-end xl:col-span-5 2xl:col-span-3">
+            {/* <div className="grid justify-end xl:col-span-5 2xl:col-span-3">
               <div className="flex gap-3">
                 <div className="flex">
                   <Button
@@ -440,7 +440,7 @@ function AppointmentVisitPage() {
                   </Button>
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
           <div className="mt-5">
             <AllAppointment

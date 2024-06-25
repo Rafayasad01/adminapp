@@ -1,15 +1,15 @@
-import HistoryIcon from '@mui/icons-material/History';
+// import HistoryIcon from '@mui/icons-material/History';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import CloseIcon from '@mui/icons-material/Close';
 import UpdateOutlinedIcon from '@mui/icons-material/UpdateOutlined';
 import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
+// import EditIcon from '@mui/icons-material/Edit';
 // import StarIcon from '@mui/icons-material/Star';
 // import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
 // import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 // import moment from 'moment';
 // import assets from '../../assets';
 import storeAppointmentService from '../../services/adminapp/adminStoreAppointment';
@@ -21,8 +21,8 @@ type AppointmentViewCardProps = {
   appointmentData?: any;
   setAppointmentTooltipData?: any;
   setIsTooltipOpen?: any;
-  setOpenFormDialog?: any;
-  getUpdatePopupData?: any;
+  // setOpenFormDialog?: any;
+  // getUpdatePopupData?: any;
   isTooltipOpen?: boolean;
   isStatusDone?: any;
   isStatusProcessing?: any;
@@ -31,16 +31,16 @@ type AppointmentViewCardProps = {
 
 const AppointmentViewCard = ({
   appointmentData,
-  getUpdatePopupData,
+  // getUpdatePopupData,
   isTooltipOpen: _isTooltipOpen,
   setAppointmentTooltipData,
   setIsTooltipOpen,
-  setOpenFormDialog,
+  // setOpenFormDialog,
   isStatusDone,
   isStatusProcessing,
   deleteAppointmentHandler,
 }: AppointmentViewCardProps) => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const [data, setData] = useState<any>(null);
   const [isLoader, setIsLoader] = useState<boolean>(true);
 
@@ -97,7 +97,7 @@ const AppointmentViewCard = ({
       <div className="bg-primary p-5 pb-4">
         <div className="flex justify-between">
           <div>
-            <IconButton
+            {/* <IconButton
               disabled={
                 appointmentData?.status === APPOINTMENT_STATUS.CANCELLED ||
                 appointmentData?.status === APPOINTMENT_STATUS.COMPLETED ||
@@ -113,7 +113,7 @@ const AppointmentViewCard = ({
               }}
             >
               <EditIcon />
-            </IconButton>
+            </IconButton> */}
             <IconButton
               disabled={
                 appointmentData?.status === APPOINTMENT_STATUS.CANCELLED ||
@@ -130,7 +130,7 @@ const AppointmentViewCard = ({
             >
               <DeleteIcon />
             </IconButton>
-            <IconButton
+            {/* <IconButton
               disabled={
                 appointmentData?.status === APPOINTMENT_STATUS.CANCELLED ||
                 appointmentData?.status === APPOINTMENT_STATUS.COMPLETED ||
@@ -145,7 +145,7 @@ const AppointmentViewCard = ({
               }
             >
               <HistoryIcon />
-            </IconButton>
+            </IconButton> */}
             {appointmentData?.status !== APPOINTMENT_STATUS.NEW &&
             appointmentData?.status !== APPOINTMENT_STATUS.PROCESSING ? (
               <div className="mt-3">
@@ -208,71 +208,7 @@ const AppointmentViewCard = ({
           </div>
         </div>
       </div>
-      {/* <div className="relative h-14">
-        <hr className="border-1 border-[#1D4675]" />
-        {/* <div className="absolute left-1/2 top-[-50px] -translate-x-1/2 transform">
-          <Avatar
-            alt="barber-pic"
-            src={data?.storeEmployee?.avatar}
-            sx={{ width: 100, height: 100 }}
-          />
-        </div> */}
-      {/* </div> */}
-      {/* <div className="flex flex-col items-center justify-center"> */}
-      {/* <div>
-          <span className="text-xl font-semibold">
-            {data?.storeEmployee?.name}
-          </span>
-        </div> */}
-      {/* <div>
-          <div className="mt-1 flex items-center justify-center rounded-full bg-[#1D1D1D] px-4 py-1 text-white">
-            <StarIcon className="text-lg text-inherit" />
-            <span className="mx-1 text-base">4.5</span>
-          </div>
-        </div>s */}
-      {/* </div> */}
       <ViewCardAccordin data={data} />
-      {/* <div className="m-3 mt-5 rounded-xl border-[1px] border-[#949EAE] p-3">
-        <div className="my-2 flex items-center">
-          <div>
-            <img src={assets.images.appProfile} alt="app-head" />
-          </div>
-          <div className="flex items-center">
-            <span className="mx-2 text-xs text-[#6A6A6A]">{data?.name}</span>
-          </div>
-        </div>
-        <div className="mt-2 flex items-center">
-          <div>
-            <img src={assets.images.appHead} alt="app-head" />
-          </div>
-          <div>
-            <span className="mx-2 text-xs text-[#6A6A6A]">
-              {data?.storeServiceCategoryItem?.name}
-            </span>
-          </div>
-        </div>
-        <div className="my-2 flex items-center">
-          <div>
-            <img src={assets.images.appCalender} alt="app-head" />
-          </div>
-          <div>
-            <span className="mx-2 text-xs text-[#6A6A6A]">
-              {moment(data?.appointmentTime)?.format('MMMM DD, YYYY') ?? '--'}
-            </span>
-          </div>
-        </div>
-        <div className="flex items-center">
-          <div>
-            <img src={assets.images.appClock} alt="app-head" />
-          </div>
-          <div>
-            <span className="mx-2 text-xs text-[#6A6A6A]">
-              {moment(appointmentData?.startDate).format('h:mm A')} -{' '}
-              {moment(appointmentData?.endDate).format('h:mm A')}
-            </span>
-          </div>
-        </div>
-      </div> */}
     </div>
   );
 };

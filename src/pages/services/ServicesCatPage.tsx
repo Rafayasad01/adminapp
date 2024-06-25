@@ -30,7 +30,7 @@ import PermissionPopup from '../../utils/PermissionPopup';
 // import CategoriesEditPopup from './CategoriesEditPopup';
 
 function ServicesPage() {
-  const authState: any = useAppSelector((state) => state?.authState);
+  // const authState: any = useAppSelector((state) => state?.authState);
   const dataRole = useAppSelector(
     (state) => state?.persistedReducer?.roleState?.role?.permissions
   );
@@ -111,7 +111,7 @@ function ServicesPage() {
   ) => {
     setPage(newPage);
     storeService
-      .StoreCatList(authState.user.tenant, newPage, rowsPerPage)
+      .StoreCatList(search, newPage, rowsPerPage)
       .then((item: any) => {
         setList(item.data.data.list);
         setTotal(item.data.data.total);
@@ -125,12 +125,10 @@ function ServicesPage() {
     const newPage = 0;
     setRowsPerPage(newRowperPage);
     setPage(newPage);
-    storeService
-      .StoreCatList(authState.user.tenant, newPage, rowsPerPage)
-      .then((item) => {
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      });
+    storeService.StoreCatList(search, newPage, rowsPerPage).then((item) => {
+      setList(item.data.data.list);
+      setTotal(item.data.data.total);
+    });
   };
 
   const deleteHandler = (id: string) => {

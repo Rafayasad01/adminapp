@@ -30,7 +30,7 @@ function ViewCardAccordin({ data }: RatingAccordionsProps) {
           //   const date2 = date.add(item.serviceTime, 'minute');
           //   const formattedDate2 = date2.format('h:mm:ss A');
           return (
-            <>
+            <div key={index}>
               <Accordion
                 key={index}
                 className="boxShadow bg-transparent"
@@ -103,7 +103,7 @@ function ViewCardAccordin({ data }: RatingAccordionsProps) {
                 </AccordionDetails>
               </Accordion>
               <Divider />
-            </>
+            </div>
           );
         })
       ) : (

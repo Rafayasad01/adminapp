@@ -29,7 +29,7 @@ import {
 } from '../../redux/features/appSlice';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 import adminService from '../../services/adminapp/admin';
-import CustomQRPrintLayout from '../../utils/CustomPrintLayout/CustomQRPrintLayout';
+// import CustomQRPrintLayout from '../../utils/CustomPrintLayout/CustomQRPrintLayout';
 import {
   // DOMAIN_PREFIX,
   // DOMAIN_PROTOCOL,
@@ -82,7 +82,7 @@ function SettingsApp() {
   const [isLoader, setIsLoader] = useState(true);
   const [isNotify, setIsNotify] = useState(false);
   const [notifyMessage, setNotifyMessage] = useState({});
-  const [isPrintEnabled, setPrintEnabled] = useState<any>([false]);
+  // const [isPrintEnabled, setPrintEnabled] = useState<any>([false]);
   const {
     register,
     handleSubmit,
@@ -378,13 +378,13 @@ function SettingsApp() {
             </Tabs>
           </div>
           <div className="Content w-full px-4 py-5">
-            <div className="mb-4">
+            {/* <div className="mb-4">
               <CustomQRPrintLayout
                 isPrintEnabled={isPrintEnabled}
                 setPrintEnabled={setPrintEnabled}
               />
               {/* <button><PrintOutlinedIcon /> Order Slip</button> */}
-            </div>
+            {/* </div> */}
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="flex justify-between">
                 <div className="mb-3 text-base">

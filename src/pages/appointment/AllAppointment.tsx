@@ -53,7 +53,10 @@ const AllAppointment = ({
   setSelectedPriorityData,
 }: AllAppointmentProps) => {
   const [data, setData] = useState<any>([]);
-  const [appointmentData, setAppointmentData] = useState();
+  const [
+    appointmentData,
+    //  setAppointmentData
+  ] = useState();
   const officeTimings = useAppSelector(
     (state) => state?.persistedReducer.appState.UserItems
   );
@@ -273,27 +276,27 @@ const AllAppointment = ({
     }
   };
 
-  const getUpdatePopupData = async (updateData: any) => {
-    setAppointmentData(updateData);
-    //   .then((res: any) => {
-    //     if (res.data.success) {
-    //       setAppointmentData(res.data.data);
-    //     } else {
-    //       setIsNotify(true);
-    //       setNotifyMessage({
-    //         text: res.data.message,
-    //         type: 'error',
-    //       });
-    //     }
-    //   })
-    //   .catch((err: Error) => {
-    //     setIsNotify(true);
-    //     setNotifyMessage({
-    //       text: err.message,
-    //       type: 'error',
-    //     });
-    //   });
-  };
+  // const getUpdatePopupData = async (updateData: any) => {
+  //   setAppointmentData(updateData);
+  //   //   .then((res: any) => {
+  //   //     if (res.data.success) {
+  //   //       setAppointmentData(res.data.data);
+  //   //     } else {
+  //   //       setIsNotify(true);
+  //   //       setNotifyMessage({
+  //   //         text: res.data.message,
+  //   //         type: 'error',
+  //   //       });
+  //   //     }
+  //   //   })
+  //   //   .catch((err: Error) => {
+  //   //     setIsNotify(true);
+  //   //     setNotifyMessage({
+  //   //       text: err.message,
+  //   //       type: 'error',
+  //   //     });
+  //   //   });
+  // };
 
   const deleteAppointmentHandler = async (id: string) => {
     try {
@@ -377,11 +380,11 @@ const AllAppointment = ({
       });
   };
   const appColor = (status: any) => {
-    if (
-      status === APPOINTMENT_STATUS.NEW ||
-      status === APPOINTMENT_STATUS.PROCESSING
-    ) {
+    if (status === APPOINTMENT_STATUS.NEW) {
       return 'bg-blue-700';
+    }
+    if (status === APPOINTMENT_STATUS.PROCESSING) {
+      return 'bg-gray-600';
     }
     if (
       status === APPOINTMENT_STATUS.COMPLETED ||
@@ -390,7 +393,7 @@ const AllAppointment = ({
       return 'bg-green-700';
     }
     if (status === APPOINTMENT_STATUS.RESCHEDULE) {
-      return 'bg-grey-700';
+      return 'bg-yellow-700';
     }
     if (
       status === APPOINTMENT_STATUS.CANCELLED ||
@@ -624,8 +627,8 @@ const AllAppointment = ({
               setAppointmentTooltipData={setAppointmentTooltipData}
               setIsTooltipOpen={setIsTooltipOpen}
               isTooltipOpen={isTooltipOpen}
-              setOpenFormDialog={setOpenEditFormDialog}
-              getUpdatePopupData={getUpdatePopupData}
+              // setOpenFormDialog={setOpenEditFormDialog}
+              // getUpdatePopupData={getUpdatePopupData}
               isStatusDone={isStatusDone}
               isStatusProcessing={isStatusProcessing}
               deleteAppointmentHandler={deleteAppointmentHandler}
