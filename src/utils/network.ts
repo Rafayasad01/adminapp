@@ -126,7 +126,7 @@ const patch = <T = any>(endPoint: string, data: T) => {
   });
 };
 
-const get = (endPoint: string, body?: any) => {
+const get = <T = any>(endPoint: string, body?: T) => {
   return networkInstance.get(`${BASE_URL}${endPoint}`, {
     headers: {
       'Content-Type': 'application/json',

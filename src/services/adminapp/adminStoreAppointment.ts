@@ -38,7 +38,7 @@ const appointmentReschedule = (storeAppId: any, data: any) => {
 
 const appointmentPaid = (storeAppId: any) => {
   return network.patch(
-    `${STORE_PREFIX}/${APPOINTMENT_PREFIX}/service/paid/${storeAppId}`,
+    `${STORE_PREFIX}/${APPOINTMENT_PREFIX}/service/complete/${storeAppId}`,
     {}
   );
 };

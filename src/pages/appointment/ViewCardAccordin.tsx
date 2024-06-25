@@ -1,6 +1,7 @@
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
+import LocalPhoneOutlinedIcon from '@mui/icons-material/LocalPhoneOutlined';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
@@ -81,6 +82,20 @@ function ViewCardAccordin({ data }: RatingAccordionsProps) {
                     </div>
                   </div>
                   <div className="mt-1 flex items-center">
+                    <div>
+                      <LocalPhoneOutlinedIcon
+                        className="ml-[-2px]"
+                        fontSize="inherit"
+                      />
+                      {/* <img src={assets.images.appCalender} alt="app-head" /> */}
+                    </div>
+                    <div>
+                      <span className="mx-1 text-xs text-[#6A6A6A]">
+                        {item.phone ?? '--'}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="mt-[1px] flex items-center">
                     <div>
                       <img
                         className="ml-[-1px] h-[14px] w-[14px] rounded-full"

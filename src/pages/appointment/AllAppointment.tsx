@@ -22,7 +22,7 @@ import Paper from '@mui/material/Paper';
 import dayjs from 'dayjs';
 // import timezone from 'dayjs/plugin/timezone';
 import weekOfYear from 'dayjs/plugin/weekOfYear';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import moment from 'moment';
 import Loader from '../../components/common/Loader';
 import SwiperComponent from '../../components/common/Swiper';
@@ -80,7 +80,10 @@ const AllAppointment = ({
   const [, /* appointmentTooltipData */ setAppointmentTooltipData] =
     useState<any>(null);
   const [isActiveUser, setIsActiveUser] = useState('all');
-  const currentWeek = dayjs().week();
+  const currentWeekRef = useRef(dayjs().week());
+  const currentMonthRef: any = useRef();
+  const currentViewRef = useRef('Vertical Orientation');
+  const [currentWeek, setCurrentWeek] = useState<any>(dayjs().week());
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
@@ -111,7 +114,7 @@ const AllAppointment = ({
           const structuredData = res.data.data.map((item: any) => {
             // const date = moment(item.appointmentTime);
             const date = dayjs(item.appointmentTime);
-            console.log('🚀 DATE:', date);
+            // console.log('🚀 DATE:', date);
             const formattedDateTime = dayjs(date).format(
               'ddd MMM DD YYYY h:mm:ss A'
             );
@@ -207,6 +210,19 @@ const AllAppointment = ({
           : selectedPriorityData,
     },
   ];
+
+  useEffect(() => {
+    getAllAppointments(currentWeek, 'week');
+    const intervalId = setInterval(() => {
+      getAllAppointments(
+        currentViewRef.current === 'Month'
+          ? currentMonthRef.current
+          : currentWeekRef.current,
+        currentViewRef.current === 'Month' ? 'Month' : 'week'
+      );
+    }, 60000);
+    return () => clearInterval(intervalId);
+  }, []);
 
   useEffect(() => {
     if (appointmentType === 'All Appointments') {
@@ -381,10 +397,10 @@ const AllAppointment = ({
   };
   const appColor = (status: any) => {
     if (status === APPOINTMENT_STATUS.NEW) {
-      return 'bg-blue-700';
+      return 'bg-gray-600';
     }
     if (status === APPOINTMENT_STATUS.PROCESSING) {
-      return 'bg-gray-600';
+      return 'bg-blue-700';
     }
     if (
       status === APPOINTMENT_STATUS.COMPLETED ||
@@ -441,6 +457,7 @@ const AllAppointment = ({
       // console.log('🚀 ~ getRange ~ Month Date:', view, date);
       const monthDate = dayjs(date).format('YYYY-MM-DD');
       getAllAppointments(monthDate, 'month');
+      currentMonthRef.current = monthDate;
       // return { startDate: date, endDate: date };
     }
     if (view === 'Week' || view === 'Vertical Orientation') {
@@ -454,6 +471,8 @@ const AllAppointment = ({
       const weekNumber = startDate.week();
       // console.log('🚀 ~ getRange ~ Week Number:', weekNumber);
       getAllAppointments(weekNumber, 'week');
+      setCurrentWeek(weekNumber);
+      currentWeekRef.current = weekNumber;
       return {
         startDate: new Date(date.setDate(firstDay)),
         endDate: new Date(date.setDate(lastDay)),
@@ -469,6 +488,7 @@ const AllAppointment = ({
     const range: any = getRange(currentDate, newView);
     setCurrentView(newView);
     setRange(range);
+    currentViewRef.current = newView;
   };
 
   const currentDateChange = (newCurrentDate: any) => {
