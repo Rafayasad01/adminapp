@@ -52,8 +52,9 @@ function AppUserAddressTabPage({
   ];
 
   useEffect(() => {
+    setIsLoader(false);
+    console.log('🚀 ~ useEffect ~ addressList:', addressList);
     if (addressList?.length > 0) {
-      setIsLoader(false);
       setList(addressList);
     }
   }, ['']);

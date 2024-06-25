@@ -61,7 +61,7 @@ function AppUserTab({
   const [actionMenuAnchorEl, setActionMenuAnchorEl] =
     useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
-  const actionMenuOptions = ['Detail', 'Reward History', 'Edit', 'Delete'];
+  const actionMenuOptions = ['Detail', 'Edit', 'Delete'];
 
   const manuHandler = (option: string) => {
     setIsLoader(true);
@@ -150,9 +150,10 @@ function AppUserTab({
         `../detail/${actionMenuItemid?.id}`
       );
       // navigate(`detail/${actionMenuItemid?.id}`);
-    } else if (option === 'Reward History') {
-      navigate(`../reward/history/${actionMenuItemid?.id}`);
     }
+    // else if (option === 'Reward History') {
+    //   navigate(`../reward/history/${actionMenuItemid?.id}`);
+    // }
   };
 
   const handleSwitchChange = (event: any, id: string) => {

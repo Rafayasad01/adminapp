@@ -6,10 +6,10 @@ import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import '../../../assets/css/PopupStyle.css';
 import CustomDropDown from '../../../components/common/CustomDropDown';
-import CustomInputBox from '../../../components/common/CustomInputBox';
+// import CustomInputBox from '../../../components/common/CustomInputBox';
 import { BarberItemServices } from '../../../interfaces/services.interface';
 import storeLovService from '../../../services/adminapp/adminStoreService';
-import { BARBER_SERVICES_AMOUNT, PATTERN } from '../../../utils/constants';
+// import { BARBER_SERVICES_AMOUNT, PATTERN } from '../../../utils/constants';
 
 type EmployeeServiceCreatePopupProps = {
   callback: (...args: any[]) => any;
@@ -111,8 +111,8 @@ function EmployeeServiceCreatePopup({
                 />
               </FormControl>
             </div>
-            <div className="mt-3 grid grid-cols-12 gap-4">
-              <div className="col-span-4">
+            {/* <div className="mt-3 grid grid-cols-12 gap-4">
+              <div className="col-span-6">
                 <FormControl className="FormControl" variant="standard">
                   <CustomDropDown
                     validateRequired
@@ -129,7 +129,7 @@ function EmployeeServiceCreatePopup({
                   />
                 </FormControl>
               </div>
-              <div className="col-span-4">
+              <div className="col-span-6">
                 <FormControl className="FormControl" variant="standard">
                   <CustomInputBox
                     pattern={PATTERN.ONLY_NUM}
@@ -142,8 +142,8 @@ function EmployeeServiceCreatePopup({
                     inputType="text"
                   />
                 </FormControl>
-              </div>
-              <div className="col-span-4">
+              </div> */}
+            {/* <div className="col-span-4">
                 <FormControl className="FormControl" variant="standard">
                   <CustomInputBox
                     pattern={PATTERN.ONLY_NUM}
@@ -156,8 +156,8 @@ function EmployeeServiceCreatePopup({
                     inputType="text"
                   />
                 </FormControl>
-              </div>
-            </div>
+              </div> */}
+            {/* </div> */}
           </div>
           <div className="FormFooter">
             <Button

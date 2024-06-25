@@ -48,7 +48,7 @@ function AppUserUpdatePopup({
 
   const onSubmit = (data: AppUser) => {
     if (data.firstName && data.lastName) {
-      // data.avatar = avatar;
+      data.appuserRole = 'App';
       setOpenFormDialog(false);
       callback(data);
       setEditFormData(null);
@@ -67,7 +67,7 @@ function AppUserUpdatePopup({
       <div className="Content">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="FormHeader">
-            <span className="Title">Edit App User</span>
+            <span className="Title">Edit Customer</span>
           </div>
           {formData && (
             <>
@@ -169,9 +169,9 @@ function AppUserUpdatePopup({
                     )}
                   </FormControl>
                 </div>
-                <div className="FormFields">
+                <div className="FormField">
                   <FormControl className="FormControl" variant="standard">
-                    <label className="FormLabel">Email</label>
+                    <label className="FormLabel mt-2">Email</label>
                     <Input
                       disabled
                       className="FormInput"
@@ -184,7 +184,7 @@ function AppUserUpdatePopup({
                       })}
                     />
                   </FormControl>
-                  <FormControl className="FormControl" variant="standard">
+                  {/* <FormControl className="FormControl" variant="standard">
                     <label className="FormLabel">User Type</label>
                     <Input
                       disabled
@@ -197,7 +197,7 @@ function AppUserUpdatePopup({
                         value: formData?.userType,
                       })}
                     />
-                  </FormControl>
+                  </FormControl> */}
                 </div>
                 <div className="FormFields">
                   {formData?.userType === 'Driver' && (

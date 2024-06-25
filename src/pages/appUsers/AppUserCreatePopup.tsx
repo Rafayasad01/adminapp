@@ -10,7 +10,7 @@ import React, { useState } from 'react';
 
 import { useForm } from 'react-hook-form';
 import '../../assets/css/PopupStyle.css';
-import CustomDropDown from '../../components/common/CustomDropDown';
+// import CustomDropDown from '../../components/common/CustomDropDown';
 import ErrorSpanBox from '../../components/common/ErrorSpanBox';
 import { AppUser } from '../../interfaces/app-user.interface';
 import {
@@ -34,16 +34,16 @@ function AppUserCreatePopup({
   openFormDialog,
   setOpenFormDialog,
   callback,
-  appUserRoleLov,
-}: AppUserCreatePopupProps) {
+}: // appUserRoleLov,
+AppUserCreatePopupProps) {
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const {
     register,
     handleSubmit,
-    watch,
+    // watch,
     formState: { errors },
-    control,
+    // control,
   } = useForm<AppUser>();
 
   const handleFormClose = () => setOpenFormDialog(false);
@@ -51,6 +51,7 @@ function AppUserCreatePopup({
   const onSubmit = (data: AppUser) => {
     // console.log('SUB DATA', data);
     setOpenFormDialog(false);
+    data.appuserRole = 'App';
     callback(data);
   };
   // console.log('errrr', errors);
@@ -67,7 +68,7 @@ function AppUserCreatePopup({
       <div className="Content">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="FormHeader">
-            <span className="Title">Add App User</span>
+            <span className="Title">Add Customer</span>
           </div>
           <div className="FormBody">
             <div className="FormFields">
@@ -225,8 +226,8 @@ function AppUserCreatePopup({
                 )}
               </FormControl>
             </div>
-            <div className="FormFields">
-              <FormControl className="FormControl" variant="standard">
+            <div className="FormField">
+              {/* <FormControl className="FormControl" variant="standard">
                 <CustomDropDown
                   validateRequired
                   id="appuserRole"
@@ -238,9 +239,9 @@ function AppUserCreatePopup({
                   inputTitle="User Type"
                   defaultValue="Select type"
                 />
-              </FormControl>
+              </FormControl> */}
               <FormControl className="FormControl" variant="standard">
-                <label className="FormLabel">Address</label>
+                <label className="FormLabel mt-2">Address</label>
                 <Input
                   className="FormInput"
                   id="address"
@@ -263,7 +264,7 @@ function AppUserCreatePopup({
                 )}
               </FormControl>
             </div>
-            {watch('appuserRole') === 'Driver' && (
+            {/* {watch('appuserRole') === 'Driver' && (
               <div className="FormField">
                 <FormControl className="FormControl" variant="standard">
                   <label className="FormLabel">License Number</label>
@@ -289,7 +290,7 @@ function AppUserCreatePopup({
                   )}
                 </FormControl>
               </div>
-            )}
+            )} */}
             {/* <div className="FormField">
                             <label className="FormLabel">Upload Image</label>
                             <div className="ImageBox">

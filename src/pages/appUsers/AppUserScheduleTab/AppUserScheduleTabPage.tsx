@@ -39,8 +39,8 @@ function AppUserScheduleTabPage({
   const [editFormData, setEditFormData] = useState<any>();
 
   useEffect(() => {
+    setIsLoader(false);
     if (scheduleList?.length > 0) {
-      setIsLoader(false);
       setList(scheduleList);
     }
   }, []);

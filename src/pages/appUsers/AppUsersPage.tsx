@@ -172,7 +172,7 @@ function AppUsersPage() {
   }, [null, selectedTab]);
 
   const createFormHandler = (data: any) => {
-    // setIsLoader(true);
+    setIsLoader(true);
     const formData = {
       firstName: data.firstName,
       lastName: data.lastName,
@@ -204,7 +204,7 @@ function AppUsersPage() {
             type: 'success',
           });
           if (dataRender) {
-            setList([...list, item.data.data]);
+            setList([item.data.data, ...list]);
           }
         } else {
           setIsLoader(false);
@@ -294,13 +294,13 @@ function AppUsersPage() {
         setIsOpen={setIsNotify}
         displayMessage={notifyMessage}
       />
-      <TopBar title="App Users" />
+      <TopBar title="Customers" />
       <div className="container m-auto mt-5">
         <div className="w-full rounded-lg bg-white shadow-lg">
           <div className="grid grid-cols-12 px-4 py-5">
             <div className="col-span-7">
               <span className="font-open-sans text-xl font-semibold text-[#252733]">
-                All App Users
+                All Customers
               </span>
             </div>
             <div className="col-span-5">

@@ -472,8 +472,8 @@ function EmployeeServices() {
             <table className="table-border table-auto">
               <thead>
                 <tr>
-                  <th>Name</th>
-                  <th className="w-[30%]">Description</th>
+                  <th className="w-[20%]">Name</th>
+                  <th className="w-[20%]">Description</th>
                   <th>Amount Type</th>
                   <th>Amount</th>
                   <th>Service Time (mints)</th>

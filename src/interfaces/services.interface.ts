@@ -20,9 +20,9 @@ export interface BarberCategoryServices {
 
 // employee services item
 export interface BarberItemServices {
-  amount: string;
-  amountType: string;
-  minutes: string;
+  // amount: string;
+  // amountType: string;
+  // minutes: string;
   categoryId?: string;
   storeServiceCategoryItem: string;
 }

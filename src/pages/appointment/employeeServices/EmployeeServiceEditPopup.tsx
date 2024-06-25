@@ -6,10 +6,10 @@ import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import '../../../assets/css/PopupStyle.css';
 import CustomDropDown from '../../../components/common/CustomDropDown';
-import CustomInputBox from '../../../components/common/CustomInputBox';
+// import CustomInputBox from '../../../components/common/CustomInputBox';
 import { BarberItemServices } from '../../../interfaces/services.interface';
 import storeLovService from '../../../services/adminapp/adminStoreService';
-import { BARBER_SERVICES_AMOUNT, PATTERN } from '../../../utils/constants';
+// import { BARBER_SERVICES_AMOUNT, PATTERN } from '../../../utils/constants';
 
 type EmployeeServiceEditPopupProps = {
   callback: (...args: any[]) => any;
@@ -120,7 +120,7 @@ function EmployeeServiceEditPopup({
                 />
               </FormControl>
             </div>
-            <div className="mt-3 grid grid-cols-12 gap-4">
+            {/* <div className="mt-3 grid grid-cols-12 gap-4">
               <div className="col-span-4">
                 <FormControl className="FormControl" variant="standard">
                   <CustomDropDown
@@ -171,7 +171,7 @@ function EmployeeServiceEditPopup({
                   />
                 </FormControl>
               </div>
-            </div>
+            </div> */}
           </div>
           <div className="FormFooter">
             <Button

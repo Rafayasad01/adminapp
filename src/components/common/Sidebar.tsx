@@ -31,7 +31,7 @@ import ArrowDown from '../icons/ArrowDown';
 import ArrowUp from '../icons/ArrowUp';
 // import CategoryIcon from '../icons/CategoryIcon';
 // import OrderIcon from '../icons/OrderIcon';
-import VoucherIcon from '../icons/VoucherIcon';
+// import VoucherIcon from '../icons/VoucherIcon';
 import ProviderIcon from '../icons/providerIcon';
 import VisitIcon from '../icons/visitIcon';
 
@@ -112,12 +112,12 @@ const links = [
     permission: 'Appointment Parent',
     icon: <PersonOutlineOutlinedIcon fontSize="inherit" />,
     childLinks: [
-      // {
-      //   name: 'App User',
-      //   path: 'user/app-user/list',
-      //   permission: 'Customer List',
-      //   icon: <PersonOutlineOutlinedIcon fontSize="inherit" />,
-      // },
+      {
+        name: 'Customers',
+        path: 'user/app-user/list',
+        permission: 'Customer List',
+        icon: <PersonOutlineOutlinedIcon fontSize="inherit" />,
+      },
       {
         name: 'Admin Users',
         path: 'user/employees',
@@ -151,12 +151,12 @@ const links = [
     permission: 'Notification List',
     icon: <NotificationsOutlinedIcon fontSize="inherit" />,
   },
-  {
-    name: 'Vouchers',
-    path: 'vouchers',
-    permission: 'Voucher List',
-    icon: <VoucherIcon />,
-  },
+  // {
+  //   name: 'Vouchers',
+  //   path: 'vouchers',
+  //   permission: 'Voucher List',
+  //   icon: <VoucherIcon />,
+  // },
   {
     name: 'Settings',
     path: 'settings',
