@@ -232,7 +232,10 @@ function SettingsApp() {
       // formData.append('color1', color1);
       // formData.append('color2', color2);
       // formData.append('color3', color3);
-      formData.append('enableLoyaltyProgram', data.enableLoyaltyProgram);
+      formData.append(
+        'enableLoyaltyProgram',
+        data.enableLoyaltyProgram ?? false
+      );
       formData.append(
         'loyaltyCoinConversionRate',
         data.loyaltyCoinConversionRate
