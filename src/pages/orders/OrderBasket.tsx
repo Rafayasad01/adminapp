@@ -2,6 +2,7 @@ import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOu
 import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined';
 import RadioButtonUncheckedOutlinedIcon from '@mui/icons-material/RadioButtonUncheckedOutlined';
 import RemoveCircleOutlineOutlinedIcon from '@mui/icons-material/RemoveCircleOutlineOutlined';
+import IntegrationInstructionsOutlinedIcon from '@mui/icons-material/IntegrationInstructionsOutlined';
 import {
   Button,
   CircularProgress,
@@ -97,14 +98,16 @@ const OrderBasket = () => {
       ? '0.00'
       : promoList?.filter((val: any) => val.voucherCode === promoCode)[0];
 
-  const discountedPercentageValue: string | undefined = (
-    (discountedValue?.value ?? 0 / 100) * totalAmount
-  )?.toFixed(2);
+  // const discountedPercentageValue: string | undefined = (
+  //   (discountedValue?.value ?? 0 / 100) * totalAmount
+  // )?.toFixed(2);
 
-  const discountedValueByType: any =
-    discountedValue?.discountType === 'Amount'
-      ? Number(discountedValue?.value)
-      : discountedPercentageValue;
+  // const discountedValueByType: any =
+  //   discountedValue?.discountType === 'Amount'
+  //     ? Number(discountedValue?.value)
+  //     : discountedPercentageValue;
+
+  const discountedValueByType: any = Number(discountedValue?.value);
 
   const discountedTotalAmount: any = totalAmount - discountedValueByType;
 
@@ -735,6 +738,7 @@ const OrderBasket = () => {
                       User
                     </FormLabel>
                     <RadioGroup
+                      className="mb-1"
                       row
                       aria-labelledby="demo-row-radio-buttons-group-label"
                       name="row-radio-buttons-group"
@@ -779,26 +783,6 @@ const OrderBasket = () => {
                     </RadioGroup>
                   </FormControl>
                 </div>
-                {isExistingUser === 'TRUE' && (
-                  <div>
-                    <CustomButton
-                      disabled={isLoginLoader || cartItems?.length <= 0}
-                      onclick={handleLogin}
-                      buttonType="button"
-                      title="Verify"
-                      className={`${
-                        cartItems?.length <= 0
-                          ? 'btn-gray-fill'
-                          : 'btn-black-fill'
-                      }`}
-                      sx={{
-                        padding: '0.375rem 2rem !important',
-                        width: '100%',
-                        height: '35px',
-                      }}
-                    />
-                  </div>
-                )}
               </div>
               {isExistingUser === 'TRUE' && (
                 <div className="w-full rounded-xl border border-solid border-foreground py-1 pl-3">
@@ -819,7 +803,26 @@ const OrderBasket = () => {
                   />
                 </div>
               )}
-
+              {isExistingUser === 'TRUE' && (
+                <div className="mt-2">
+                  <CustomButton
+                    disabled={isLoginLoader || cartItems?.length <= 0}
+                    onclick={handleLogin}
+                    buttonType="button"
+                    title="Verify"
+                    className={`${
+                      cartItems?.length <= 0
+                        ? 'btn-gray-fill'
+                        : 'btn-black-fill'
+                    }`}
+                    sx={{
+                      padding: '0.375rem 2rem !important',
+                      width: '100%',
+                      height: '35px',
+                    }}
+                  />
+                </div>
+              )}
               {/* <Divider flexItem className="my-5" /> */}
               {/* {isExistingUser === 'TRUE' && (
                 <FormControl>
@@ -880,56 +883,49 @@ const OrderBasket = () => {
 
               {promoList?.length > 0 && isExistingUser === 'TRUE' && (
                 <>
-                  <Divider flexItem className="my-5" />
-                  <div className="flex items-center justify-between py-2">
-                    <div className="font-open-sans font-bold text-neutral-900">
+                  <Divider flexItem className="my-4" />
+                  <div className="flex items-center justify-between">
+                    <div className="font-open-sans text-xs text-neutral-900">
                       Check All Available Promo Codes
                     </div>
                     <div className="font-open-sans text-base font-bold text-neutral-900">
                       <div
                         onClick={() => setIsOpenPromoDialog(true)}
-                        className="flex w-full cursor-pointer rounded-md text-sm hover:text-blue-800 hover:underline"
+                        className="flex w-full cursor-pointer rounded-md text-xs hover:text-blue-800"
                       >
-                        <span>Promo code</span>
+                        <span>
+                          <IntegrationInstructionsOutlinedIcon />
+                        </span>
                       </div>
                     </div>
                   </div>
-                  <Divider flexItem className="my-5" />
-                  <>
-                    <div className="flex items-center justify-between py-2">
-                      <div className="font-open-sans font-bold text-neutral-900">
-                        Add Promo Code
-                      </div>
-                      <div className="font-open-sans text-base font-bold text-neutral-900">
-                        <div className="flex w-full rounded-md border-[1px] border-[#A3A3A3] bg-slate-100">
-                          <FormControl
-                            className="FormControl"
-                            variant="standard"
-                          >
-                            <Input
-                              // {...register('name', {
-                              //   required: true,
-                              //   pattern: PATTERN.CHAR_NUM_DASH,
-                              //   validate: (value) => value.length <= 100,
-                              // })}
-                              onChange={(val) => setPromoCode(val.target.value)}
-                              className="FormInput px-1 text-sm"
-                              id="PromoCode"
-                              name="PromoCode"
-                              placeholder="Enter Promo Code"
-                              disableUnderline
-                              startAdornment={
-                                <InputAdornment position="start">
-                                  <PromoCodeIcon />
-                                </InputAdornment>
-                              }
-                            />
-                          </FormControl>
-                        </div>
-                      </div>
+                  <div className="my-2 font-open-sans text-base font-bold text-neutral-900">
+                    <div className="flex w-full rounded-md border-[1px] border-[#A3A3A3] bg-slate-100">
+                      <FormControl className="FormControl" variant="standard">
+                        <Input
+                          // {...register('name', {
+                          //   required: true,
+                          //   pattern: PATTERN.CHAR_NUM_DASH,
+                          //   validate: (value) => value.length <= 100,
+                          // })}
+                          onChange={(val) => {
+                            setPromoCode(val.target.value);
+                          }}
+                          className="FormInput px-1 text-sm"
+                          id="PromoCode"
+                          name="PromoCode"
+                          placeholder="Enter Promo Code"
+                          disableUnderline
+                          startAdornment={
+                            <InputAdornment position="start">
+                              <PromoCodeIcon />
+                            </InputAdornment>
+                          }
+                        />
+                      </FormControl>
                     </div>
-                    {/* <Divider flexItem className="my-5" /> */}
-                  </>
+                  </div>
+                  {/* <Divider flexItem className="my-5" /> */}
                 </>
               )}
               <Divider flexItem className="my-5" />
@@ -942,29 +938,32 @@ const OrderBasket = () => {
                     Total Amount
                   </div>
                   <div className="font-open-sans text-sm font-bold text-neutral-900">
-                    ${totalAmount.toFixed(2)}
+                    {CURRENCY_PREFIX} {totalAmount.toFixed(2)}
                   </div>
                 </div>
                 <div className="flex items-center justify-between py-2">
                   <div className="font-open-sans text-xs font-normal text-neutral-900">
-                    Discount{' '}
-                    {discountedValue?.discountType === 'Percentage'
-                      ? `(${Number(discountedValue?.value).toFixed(0)}%)`
-                      : ''}
+                    Discount
                   </div>
                   <div className="font-open-sans text-sm font-bold text-neutral-900">
-                    {promoCode
-                      ? checkVoucherMinAmount
-                        ? `$
+                    {promoCode ? (
+                      checkVoucherMinAmount ? (
+                        `${CURRENCY_PREFIX}
                       ${
-                        discountedValue?.value > 0 && promoCode
-                          ? discountedValue?.discountType === 'Amount'
-                            ? Number(discountedValue?.value).toFixed(2)
-                            : `${discountedPercentageValue}`
+                        discountedValue?.value > 0 &&
+                        totalAmount > discountedValue?.value &&
+                        promoCode
+                          ? Number(discountedValue?.value).toFixed(2)
                           : '0.00'
                       }`
-                        : 'N/A'
-                      : '$0.00'}
+                      ) : (
+                        <span className="text-xs font-normal">
+                          This discount is not applicable
+                        </span>
+                      )
+                    ) : (
+                      `${CURRENCY_PREFIX} 0.00`
+                    )}
                   </div>
                 </div>
                 {/* <div className="flex items-center justify-between py-2">
@@ -980,7 +979,7 @@ const OrderBasket = () => {
                     GST ({authState.user?.tenantConfig.gstPercentage}%)
                   </div>
                   <div className="font-open-sans text-sm font-bold text-neutral-900">
-                    ${gstAmount.toFixed(2)}
+                    {CURRENCY_PREFIX} {gstAmount.toFixed(2)}
                   </div>
                 </div>
               </div>
@@ -990,12 +989,14 @@ const OrderBasket = () => {
                   Grand Total
                 </div>
                 <div className="font-open-sans text-sm font-bold text-neutral-900">
-                  ${grandTotal ? grandTotal.toFixed(2) : '0.00'}
+                  {CURRENCY_PREFIX}{' '}
+                  {grandTotal ? grandTotal.toFixed(2) : '0.00'}
                 </div>
               </div>
               <Button
                 disabled={
                   isLoginLoader ||
+                  grandTotal <= 0 ||
                   (isExistingUser === 'TRUE' && isLoader) ||
                   (isExistingUser === 'TRUE' && loginDetails === null) ||
                   (isExistingUser === 'TRUE' && cartItems?.length <= 0)

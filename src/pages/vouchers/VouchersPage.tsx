@@ -365,11 +365,9 @@ function VouchersPage() {
                   <th>Vouchers</th>
                   <th>Valid From</th>
                   <th>Valid Till</th>
-                  <th className="w-[10%]">
-                    Value <br /> PKR / %
-                  </th>
+                  <th className="w-[10%]">Discount</th>
                   <th>Min Amount</th>
-                  <th>Type</th>
+                  {/* <th>Type</th> */}
                   <th>Redeem</th>
                   <th>Limitation</th>
                   <th>User Redeem</th>
@@ -402,7 +400,7 @@ function VouchersPage() {
                             (item.discountType === 'Percentage' ? ' %' : '')}
                         </td>
                         <td>{Number(item.minAmount)} PKR</td>
-                        <td>{item.discountType}</td>
+                        {/* <td>{item.discountType}</td> */}
                         <td>
                           {item.isUnlimitedRedeem
                             ? '0'

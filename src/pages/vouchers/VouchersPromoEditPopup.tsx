@@ -4,8 +4,8 @@ import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
-import MenuItem from '@mui/material/MenuItem';
-import Select from '@mui/material/Select';
+// import MenuItem from '@mui/material/MenuItem';
+// import Select from '@mui/material/Select';
 import Switch from '@mui/material/Switch';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -90,8 +90,8 @@ function VouchersPromoEditPopup({
   const onSubmit = (data: UpdateVoucherFromData) => {
     handleFormClose();
     const updateVoucherPayload: UpdateVoucherPayload = {
-      type: data.type as 'Referral' | 'Promo',
-      discountType: data.discountType as 'Amount' | 'Percentage',
+      type: 'Promo',
+      discountType: 'Amount',
       voucherCode: data.voucherCode,
       value: +data.value,
       minAmount: +data.minAmount,
@@ -138,7 +138,7 @@ function VouchersPromoEditPopup({
               <span className="Title">Edit Voucher</span>
             </div>
             <div className="FormBody">
-              <div className="FormFields">
+              {/* <div className="FormFields">
                 <FormControl className="FormControl" variant="standard">
                   <label className="FormLabel">Coupon Type</label>
                   <Select
@@ -179,7 +179,7 @@ function VouchersPromoEditPopup({
                     <ErrorSpanBox error="Offer Type is required" />
                   )}
                 </FormControl>
-              </div>
+              </div> */}
               <div className="FormFields">
                 <FormControl className="FormControl" variant="standard">
                   <CustomDateTimePicker
