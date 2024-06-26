@@ -168,7 +168,7 @@ function SettingsShopScheduling() {
                           </tr>
                         </thead>
                         <tbody>
-                          {currentWeekDates.map((x) => {
+                          {currentWeekDates?.map((x) => {
                             const day = workDays.find((d) =>
                               d.day.includes(x.day)
                             );
@@ -180,7 +180,7 @@ function SettingsShopScheduling() {
                                 key={x.date}
                               >
                                 <td>{x.day?.substring(0, 3)}</td>
-                                <td>{dayjs(x.date).format('LL')}</td>
+                                <td>{dayjs(x.date)?.format('LL')}</td>
                                 <td className="py-3">
                                   {holiday
                                     ? `${event || ''}`
