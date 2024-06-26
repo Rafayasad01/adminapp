@@ -195,8 +195,8 @@ function SettingsShopScheduling() {
                                                 'h:mm A'
                                               )
                                             : ''
-                                        }`}
-
+                                        }`}{' '}
+                                    -{' '}
                                     {holiday
                                       ? ''
                                       : day && dayjs(day?.closeTime).isValid()
