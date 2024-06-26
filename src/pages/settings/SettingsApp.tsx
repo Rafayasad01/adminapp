@@ -650,8 +650,8 @@ function SettingsApp() {
                     className="FormInput"
                     defaultValue={0}
                     {...register('latitude', {
-                      validate: (value: any) =>
-                        VALIDATE_NON_NEGATIVE_NUM(value),
+                      // validate: (value: any) =>
+                      //   VALIDATE_NON_NEGATIVE_NUM(value),
                       maxLength: {
                         value: 10,
                         message: MAX_LENGTH_EXCEEDED,
@@ -673,8 +673,8 @@ function SettingsApp() {
                     className="FormInput"
                     defaultValue={0}
                     {...register('longitude', {
-                      validate: (value: any) =>
-                        VALIDATE_NON_NEGATIVE_NUM(value),
+                      // validate: (value: any) =>
+                      //   VALIDATE_NON_NEGATIVE_NUM(value),
                       maxLength: {
                         value: 10,
                         message: MAX_LENGTH_EXCEEDED,

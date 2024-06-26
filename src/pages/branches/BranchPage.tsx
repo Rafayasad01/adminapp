@@ -348,7 +348,8 @@ function BranchPage() {
     tenantId: string,
     name: string,
     maxEmployeeLimit: string,
-    maxBranchLimit: string
+    maxBranchLimit: string,
+    userType: string
   ) => {
     const userObj = {
       ...authState.user,
@@ -356,6 +357,7 @@ function BranchPage() {
       tenantName: name,
       maxEmployeeLimit,
       branchLimit: maxBranchLimit,
+      userType,
     };
     dispatch(login(userObj));
     dispatch(setItemState(userObj));
@@ -518,7 +520,8 @@ function BranchPage() {
                     authState.shopTenantDetails.tenant,
                     authState.shopTenantDetails.tenantName,
                     authState.shopTenantDetails.maxEmployeeLimit,
-                    authState.shopTenantDetails.branchLimit
+                    authState.shopTenantDetails.branchLimit,
+                    'ShopUser'
                   )
                 }
               />
@@ -540,6 +543,7 @@ function BranchPage() {
               <tbody>
                 {list &&
                   list?.map((item: any, index: number) => {
+                    console.log('item', item);
                     return (
                       <tr key={index}>
                         <td>
@@ -626,7 +630,8 @@ function BranchPage() {
                                 item.id,
                                 item.name,
                                 item.maxUserLimit,
-                                item.maxBranchLimit
+                                item.maxBranchLimit,
+                                item.tenantType
                               )
                             }
                           >
