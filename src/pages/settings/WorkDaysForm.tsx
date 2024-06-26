@@ -97,7 +97,7 @@ function WorkDaysForm({
    */
   const onSubmit = (data: any) => {
     const index = workDays.findIndex((x) => x.day === currentDay);
-    const newWorkDay: WorkDay = {
+    const newWorkDay: WorkDay | any = {
       day: currentDay,
       openTime: data.shopOpenTime,
       closeTime: data.shopCloseTime,

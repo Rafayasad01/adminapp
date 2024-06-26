@@ -40,7 +40,7 @@ function SettingsShopScheduling() {
     dateForWeek: ScheduledMonthDate,
     notify,
     notifyMessage,
-  } = useAppSelector((state) => state?.scheduleState);
+  } = useAppSelector((state: any) => state?.scheduleState);
   const authState = useAppSelector((state) => state?.authState);
 
   // Function to generate dates for the current week
@@ -65,14 +65,14 @@ function SettingsShopScheduling() {
   };
 
   const checkHoliday = (
-    date: string,
+    date: string | any,
     holidays: Array<DateRange | Holiday>
   ): string | false => {
-    const currentDate = dayjs(date);
+    const currentDate: any = dayjs(date);
 
     const holiday = holidays.find((item: any) => {
-      const startDate = dayjs(item.startDate);
-      const endDate = dayjs(item.endDate);
+      const startDate: any = dayjs(item.startDate);
+      const endDate: any = dayjs(item.endDate);
 
       return (
         currentDate.isBetween(startDate, endDate, null, '[]') ||
@@ -170,7 +170,7 @@ function SettingsShopScheduling() {
                         <tbody>
                           {currentWeekDates?.length > 0 &&
                             currentWeekDates?.map((x) => {
-                              const day = workDays?.find((d) =>
+                              const day = workDays?.find((d: any) =>
                                 d?.day?.includes(x.day)
                               );
                               const event = checkHoliday(x?.date, offDays);
@@ -181,15 +181,24 @@ function SettingsShopScheduling() {
                                   key={x?.date}
                                 >
                                   <td>{x?.day?.substring(0, 3)}</td>
-                                  <td>{dayjs(x.date)?.format('LL')}</td>
+                                  <td>
+                                    {dayjs(x.date).isValid() &&
+                                      dayjs(x.date)?.format('LL')}
+                                  </td>
                                   <td className="py-3">
                                     {holiday
                                       ? `${event || ''}`
-                                      : `${day?.openTime?.format('h:mm A')} - `}
+                                      : `${
+                                          day &&
+                                          dayjs(day?.openTime).isValid() &&
+                                          dayjs(day?.openTime).format('h:mm A')
+                                        } - `}
 
                                     {holiday
                                       ? ''
-                                      : day?.closeTime?.format('h:mm A')}
+                                      : day &&
+                                        dayjs(day?.closeTime).isValid() &&
+                                        dayjs(day?.closeTime).format('h:mm A')}
                                   </td>
                                   {/* <td>
                                   {' '}

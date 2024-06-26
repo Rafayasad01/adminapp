@@ -1,6 +1,7 @@
 import dayjs from 'dayjs';
 
 export interface WorkDay {
+  isValid(): unknown;
   day: string;
   openTime: dayjs.Dayjs | null | undefined;
   closeTime: dayjs.Dayjs | null | undefined;
