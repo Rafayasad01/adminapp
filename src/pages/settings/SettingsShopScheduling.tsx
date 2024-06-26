@@ -169,26 +169,26 @@ function SettingsShopScheduling() {
                         </thead>
                         <tbody>
                           {currentWeekDates?.map((x) => {
-                            const day = workDays.find((d) =>
-                              d.day.includes(x.day)
+                            const day = workDays?.find((d) =>
+                              d?.day?.includes(x.day)
                             );
-                            const event = checkHoliday(x.date, offDays);
+                            const event = checkHoliday(x?.date, offDays);
                             const holiday = !day || event;
                             return (
                               <tr
                                 className={`${holiday ? 'days-off' : ''}`}
-                                key={x.date}
+                                key={x?.date}
                               >
-                                <td>{x.day?.substring(0, 3)}</td>
+                                <td>{x?.day?.substring(0, 3)}</td>
                                 <td>{dayjs(x.date)?.format('LL')}</td>
                                 <td className="py-3">
                                   {holiday
                                     ? `${event || ''}`
-                                    : `${day.openTime?.format('h:mm A')} - `}
+                                    : `${day?.openTime?.format('h:mm A')} - `}
 
                                   {holiday
                                     ? ''
-                                    : day.closeTime?.format('h:mm A')}
+                                    : day?.closeTime?.format('h:mm A')}
                                 </td>
                                 {/* <td>
                                   {' '}
