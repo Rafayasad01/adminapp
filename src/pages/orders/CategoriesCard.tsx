@@ -38,11 +38,11 @@ function CategoriesCard({ categories, onClick }: ICategoryProps) {
         }}
         breakpoints={{
           // Large screens
-          1500: {
+          1800: {
             slidesPerView: 5,
           },
           // Laptop screens
-          700: {
+          1000: {
             slidesPerView: 4,
           },
         }}
