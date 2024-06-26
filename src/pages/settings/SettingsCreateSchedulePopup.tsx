@@ -41,7 +41,7 @@ const SettingsCreateSchedulePopup = ({
   };
 
   const submitSchedule = () => {
-    let od = offDays.map((x) => ({ ...x, event: x.key }));
+    let od = offDays?.map((x) => ({ ...x, event: x.key }));
     od = convertDayJSToString(od, ['startDate', 'endDate'], 'YYYY-MM-DD');
     const wd = convertDayJSToString(workDays, [
       'openTime',

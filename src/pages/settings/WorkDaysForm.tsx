@@ -192,7 +192,7 @@ function WorkDaysForm({
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <div className={`${!onlyWeeksFormat && 'height-230'}`}>
         <div className=" !mt-3 grid grid-cols-7 justify-center">
-          {weekDays.map((day) => (
+          {weekDays?.map((day) => (
             <Button
               className={`CustomToggleBtn ${
                 currentDay === day && 'btn-black-fill'
@@ -309,12 +309,21 @@ function WorkDaysForm({
             </tr>
           </thead>
           <tbody>
-            {workDays.map((d, index) => {
+            {workDays?.map((d, index) => {
               return (
                 <tr key={d.day}>
                   <th>{d.day}</th>
-                  <td> {d.openTime?.format('h:mm A') || '--'} </td>
-                  <td> {d.closeTime?.format('h:mm A') || '--'} </td>
+                  <td>
+                    {' '}
+                    {dayjs(d.openTime).isValid()
+                      ? dayjs(d.openTime).format('h:mm A')
+                      : ''}{' '}
+                  </td>
+                  <td>
+                    {dayjs(d.closeTime).isValid()
+                      ? dayjs(d.closeTime).format('h:mm A')
+                      : ''}{' '}
+                  </td>
                   {/* <td>
                     {d.breakTime && d.breakTime?.isValid()
                       ? d.breakTime?.format('h:mm A')
