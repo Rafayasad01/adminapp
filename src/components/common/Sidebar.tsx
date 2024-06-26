@@ -27,7 +27,7 @@ import { NavLink } from 'react-router-dom';
 import assets from '../../assets';
 import { useAppSelector } from '../../redux/redux-hooks';
 import CAN, { defineRules } from '../../services/permissions/permissions';
-import { MODULE_EMPLOYEES } from '../../utils/constants';
+import { MODULE_EMPLOYEES, MODULE_SETTINGS } from '../../utils/constants';
 import ArrowDown from '../icons/ArrowDown';
 import ArrowUp from '../icons/ArrowUp';
 import CategoryIcon from '../icons/CategoryIcon';
@@ -297,6 +297,11 @@ function Sidebar() {
             return null;
           }
         }
+        if (el.name === MODULE_SETTINGS) {
+          if (authState.user.userType !== 'ShopUser') {
+            return null;
+          }
+        }
         return CAN('canView', el.permission as string);
       });
       // console.log("tempList", tempList);
@@ -308,7 +313,7 @@ function Sidebar() {
       });
       setList(tempList);
     }
-  }, [null, appItems?.employeeLimit]);
+  }, [null, appItems?.employeeLimit, authState]);
 
   return (
     <Drawer

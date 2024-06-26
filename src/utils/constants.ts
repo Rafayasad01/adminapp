@@ -7,6 +7,7 @@ export const BASE_URL =
 export const BASE_SYSTEM_URL =
   import.meta.env.VITE_SYSTEM_BASE_URL || `${HOST}/api/v1/system/config/`;
 export const MODULE_EMPLOYEES = 'Employees';
+export const MODULE_SETTINGS = 'Settings';
 export const RATING = 'rating';
 export const FAQ = 'faq';
 export const EMPLOYEE_PREFIX = 'employee';
