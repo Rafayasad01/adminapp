@@ -23,7 +23,7 @@ import CustomDateTimePicker from '../../components/common/CustomDateTimePicker';
 import ErrorSpanBox from '../../components/common/ErrorSpanBox';
 import { useAppSelector } from '../../redux/redux-hooks';
 import {
-  PATTERN,
+  // PATTERN,
   VALIDATE_NON_NEGATIVE_NUM,
   VALIDATE_NON_NEGATIVE_NUM_AND_CHECK_LENGTH,
 } from '../../utils/constants';
@@ -202,7 +202,7 @@ function VouchersPromoEditPopup({
                   />
                 </FormControl>
               </div>
-              <div className="FormFields">
+              {/* <div className="FormFields">
                 <FormControl className="FormControl" variant="standard">
                   <label className="FormLabel">Coupon Code</label>
                   <Input
@@ -242,7 +242,7 @@ function VouchersPromoEditPopup({
                     <ErrorSpanBox error={errors?.value?.message} />
                   )}
                 </FormControl>
-              </div>
+              </div> */}
               <div className="FormFields">
                 <FormControl className="FormControl" variant="standard">
                   <label className="FormLabel">Min Amount</label>
@@ -293,7 +293,7 @@ function VouchersPromoEditPopup({
               </div>
               <div className="FormField">
                 <FormControl className="FormControl" variant="standard">
-                  <label className="FormLabel">Status</label>
+                  <label className="FormLabel mt-2">Status</label>
                   <Switch
                     {...register('isActive')}
                     id="isActive"

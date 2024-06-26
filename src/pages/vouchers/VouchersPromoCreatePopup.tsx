@@ -8,8 +8,8 @@ import Dialog from '@mui/material/Dialog';
 import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Input from '@mui/material/Input';
-import MenuItem from '@mui/material/MenuItem';
-import Select from '@mui/material/Select';
+// import MenuItem from '@mui/material/MenuItem';
+// import Select from '@mui/material/Select';
 import Switch from '@mui/material/Switch';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -89,8 +89,8 @@ function VouchersPromoCreatePopup({
   const onSubmit = (data: CreateVoucherFromData) => {
     handleFormClose();
     const createVoucherPayload: CreateVoucherPayload = {
-      type: data.type as 'Referral' | 'Promo',
-      discountType: data.discountType as 'Amount' | 'Percentage',
+      type: 'Promo',
+      discountType: 'Amount',
       voucherCode: data.voucherCode,
       value: +data.value,
       minAmount: +data.minAmount,
@@ -132,7 +132,7 @@ function VouchersPromoCreatePopup({
               <span className="Title">Add Voucher</span>
             </div>
             <div className="FormBody">
-              <div className="FormFields">
+              {/* <div className="FormFields">
                 <FormControl className="FormControl" variant="standard">
                   <label className="FormLabel">Coupon Type</label>
                   <Select
@@ -186,7 +186,7 @@ function VouchersPromoCreatePopup({
                     </span>
                   )}
                 </FormControl>
-              </div>
+              </div> */}
               <div className="FormFields">
                 <FormControl className="FormControl" variant="standard">
                   <CustomDateTimePicker
@@ -306,7 +306,7 @@ function VouchersPromoCreatePopup({
               </div>
               <div className="FormField">
                 <FormControl className="FormControl" variant="standard">
-                  <label className="FormLabel">Status</label>
+                  <label className="FormLabel mt-2">Status</label>
                   <Switch
                     {...register('isActive')}
                     checked={checked}

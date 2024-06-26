@@ -19,7 +19,7 @@ import TopBar from '../../components/common/TopBar';
 import { useAppSelector } from '../../redux/redux-hooks';
 import vouchersService from '../../services/adminapp/adminVouchers';
 import PermissionPopup from '../../utils/PermissionPopup';
-import { NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
+import { CURRENCY_PREFIX, NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
 import { listingRolePermission } from '../../utils/helper';
 import VouchersPromoCreatePopup from './VouchersPromoCreatePopup';
 import VouchersPromoEditPopup from './VouchersPromoEditPopup';
@@ -365,11 +365,9 @@ function VouchersPage() {
                   <th>Vouchers</th>
                   <th>Valid From</th>
                   <th>Valid Till</th>
-                  <th>
-                    Value <br /> $ / %
-                  </th>
+                  <th className="w-[10%]">Discount</th>
                   <th>Min Amount</th>
-                  <th>Type</th>
+                  {/* <th>Type</th> */}
                   <th>Redeem</th>
                   <th>Limitation</th>
                   <th>User Redeem</th>
@@ -397,12 +395,12 @@ function VouchersPage() {
                         <td>{dayjs(item.validFrom).format('MMMM DD, YYYY')}</td>
                         <td>{dayjs(item.validTill).format('MMMM DD, YYYY')}</td>
                         <td>
-                          {(item.discountType === 'Amount' ? '$' : '') +
-                            Number(item.value) +
-                            (item.discountType === 'Percentage' ? '%' : '')}
+                          {CURRENCY_PREFIX} {Number(item.value)}
                         </td>
-                        <td>${Number(item.minAmount)}</td>
-                        <td>{item.discountType}</td>
+                        <td>
+                          {CURRENCY_PREFIX} {Number(item.minAmount)}
+                        </td>
+                        {/* <td>{item.discountType}</td> */}
                         <td>
                           {item.isUnlimitedRedeem
                             ? '0'
