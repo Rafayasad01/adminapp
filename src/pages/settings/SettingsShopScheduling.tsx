@@ -150,7 +150,7 @@ function SettingsShopScheduling() {
               <div className="grid grid-cols-12 gap-x-4 gap-y-0">
                 <div className="col-span-8">
                   <div className="class">
-                    {workDays.length === 0 ? (
+                    {workDays?.length === 0 ? (
                       <div className="flex h-72 w-full items-center justify-center">
                         <h1 className="text-3xl">
                           Please set work days to show week schedule.
