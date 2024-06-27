@@ -3,6 +3,7 @@ import Dialog from '@mui/material/Dialog';
 import dayjs from 'dayjs';
 import React from 'react';
 import '../../assets/css/PopupStyle.css';
+import { CURRENCY_PREFIX } from '../../utils/constants';
 
 type PromotionListPopupProps = {
   openFormDialog: boolean;
@@ -45,10 +46,10 @@ function PromotionListPopup({
                 <thead>
                   <tr>
                     <th className="w-32">Voucher Code</th>
-                    <th>Value</th>
+                    <th>Discount</th>
                     <th className="w-1/6">Valid From</th>
                     <th className="w-1/6">Valid Till</th>
-                    <th>Amount Type</th>
+                    <th>Min Withdrawl</th>
                     <th>Redeem Count</th>
                     <th>Max User Redeem</th>
                     <th>Redeem Limitation</th>
@@ -65,9 +66,7 @@ function PromotionListPopup({
                           </td>
                           <td>
                             <div>
-                              {item.discountType === 'Amount'
-                                ? `$${Number(item.value).toFixed(0)}`
-                                : `${Number(item.value).toFixed(0)}%`}
+                              {CURRENCY_PREFIX} {Number(item.value).toFixed(0)}
                             </div>
                           </td>
                           <td>
@@ -81,7 +80,7 @@ function PromotionListPopup({
                             </div>
                           </td>
                           <td>
-                            <div>{item.discountType}</div>
+                            <div>{Number(item.minAmount).toFixed(0)}</div>
                           </td>
                           <td>
                             <div>

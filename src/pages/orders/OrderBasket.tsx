@@ -1,8 +1,8 @@
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
 import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined';
+import IntegrationInstructionsOutlinedIcon from '@mui/icons-material/IntegrationInstructionsOutlined';
 import RadioButtonUncheckedOutlinedIcon from '@mui/icons-material/RadioButtonUncheckedOutlined';
 import RemoveCircleOutlineOutlinedIcon from '@mui/icons-material/RemoveCircleOutlineOutlined';
-import IntegrationInstructionsOutlinedIcon from '@mui/icons-material/IntegrationInstructionsOutlined';
 import {
   Button,
   CircularProgress,
@@ -66,6 +66,7 @@ const OrderBasket = () => {
   const [loginDetails, setLoginDetails] = useState<any>(null);
   const [promoCode, setPromoCode] = useState<any>();
   const [promoList, setPromoList] = useState<any>(null);
+  const [minDiscount, setMinDiscount] = useState<number>(0);
   const [userIdentifier, setUserIdentifier] = useState<any>('');
   const [isLoader, setIsLoader] = useState(false);
   const authState = useAppSelector((state) => state?.authState);
@@ -496,6 +497,17 @@ const OrderBasket = () => {
     }
   };
 
+  const handlePromoCode = (code: string) => {
+    setPromoCode(code);
+    const filteredPromoCode = promoList?.find(
+      (el: any) => el.voucherCode === code
+    );
+
+    if (filteredPromoCode) {
+      setMinDiscount(Number(filteredPromoCode.minAmount));
+    }
+  };
+
   return (
     <>
       <TopBar isNestedRoute title="Order" />
@@ -908,9 +920,9 @@ const OrderBasket = () => {
                           //   pattern: PATTERN.CHAR_NUM_DASH,
                           //   validate: (value) => value.length <= 100,
                           // })}
-                          onChange={(val) => {
-                            setPromoCode(val.target.value);
-                          }}
+                          onChange={(val: any) =>
+                            handlePromoCode(val.target.value)
+                          }
                           className="FormInput px-1 text-sm"
                           id="PromoCode"
                           name="PromoCode"
@@ -951,6 +963,7 @@ const OrderBasket = () => {
                         `${CURRENCY_PREFIX}
                       ${
                         discountedValue?.value > 0 &&
+                        totalAmount > minDiscount &&
                         totalAmount > discountedValue?.value &&
                         promoCode
                           ? Number(discountedValue?.value).toFixed(2)

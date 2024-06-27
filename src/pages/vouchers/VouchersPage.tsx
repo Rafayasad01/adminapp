@@ -366,7 +366,7 @@ function VouchersPage() {
                   <th>Valid From</th>
                   <th>Valid Till</th>
                   <th className="w-[10%]">Discount</th>
-                  <th>Min Amount</th>
+                  <th>Min Withdrawl</th>
                   {/* <th>Type</th> */}
                   <th>Redeem</th>
                   <th>Limitation</th>
@@ -394,11 +394,7 @@ function VouchersPage() {
                         </td>
                         <td>{dayjs(item.validFrom).format('MMMM DD, YYYY')}</td>
                         <td>{dayjs(item.validTill).format('MMMM DD, YYYY')}</td>
-                        <td>
-                          {Number(item.value) +
-                            (item.discountType === 'Amount' ? ' PKR' : '') +
-                            (item.discountType === 'Percentage' ? ' %' : '')}
-                        </td>
+                        <td>{`${Number(item.value)} PKR`}</td>
                         <td>{Number(item.minAmount)} PKR</td>
                         {/* <td>{item.discountType}</td> */}
                         <td>
