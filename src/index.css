@@ -2521,3 +2521,69 @@ main.min-h-screen.w-full.flex-grow.bg-gray-50.p-3.MuiBox-root.css-0 {
   margin: auto;
   height: fit-content;
 }
+
+.css-8ludsl.Header-flexContainer {
+  position: absolute !important;
+  right: 6px !important;
+  top: 5px !important;
+}
+
+.css-8ludsl .Header-line {
+  background: transparent !important;
+}
+
+/* CategoriesCard.css */
+
+/* Ensure the swiper container is positioned relatively */
+.categories-swiper-container {
+  position: relative;
+  width: 100%;
+  padding-bottom: 60px; /* Extra space for arrows below */
+}
+
+/* Position and style the navigation arrows */
+.swiper-navigation-container {
+  display: flex;
+  justify-content: flex-start; /* Center align the buttons */
+  align-items: center;
+  position: absolute;
+  bottom: -10px; /* Position arrows below the cards */
+  /* right: 400px; */
+  width: 100%;
+  gap: 10px; /* Space between the buttons */
+}
+
+/* Swiper navigation arrows styling */
+.custom-swiper-button-next,
+.custom-swiper-button-prev {
+  background-color: rgba(255, 255, 255, 0.8); /* Light background for arrows */
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px; /* Adjust arrow size */
+  color: #000; /* Change arrow color */
+  cursor: pointer;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Optional shadow */
+}
+
+.custom-swiper-button-next:hover,
+.custom-swiper-button-prev:hover {
+  background-color: rgba(0, 0, 0, 0.1); /* Hover effect */
+}
+
+/* Optional: Adjust arrow position and size based on screen size */
+@media (max-width: 1024px) {
+  .custom-swiper-button-next,
+  .custom-swiper-button-prev {
+    width: 30px;
+    height: 30px;
+    font-size: 16px;
+  }
+
+  .swiper-navigation-container {
+    bottom: -20px;
+  }
+}

@@ -1,5 +1,4 @@
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
-import { Button } from '@mui/material';
 import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
 import _ from 'lodash';
@@ -26,7 +25,7 @@ const AddNewOrder = () => {
   const authState = useAppSelector((state) => state?.authState);
   const [category, setCategory] = useState<AppCategories | null>(null);
   const [search, setSearch] = useState('');
-  const [searchInputValue, setInputValue] = useState('');
+  // const [searchInputValue, setInputValue] = useState('');
   const { items: cartItems } = useAppSelector(
     (x) => x.persistedReducer.cartState
   );
@@ -118,7 +117,7 @@ const AddNewOrder = () => {
                 id="search"
                 type="text"
                 onChange={(e) => {
-                  setInputValue(e.target.value);
+                  setSearch(e.target.value);
                   if (e.target.value === '') {
                     setSearch('');
                   }
@@ -128,9 +127,9 @@ const AddNewOrder = () => {
                 }}
                 disableUnderline
                 endAdornment={
-                  <Button onClick={() => setSearch(searchInputValue)}>
-                    <SearchOutlinedIcon />
-                  </Button>
+                  // <Button onChange={() => setSearch(searchInputValue)}>
+                  <SearchOutlinedIcon />
+                  // </Button>
                 }
               />
             </FormControl>
