@@ -396,7 +396,7 @@ const OrderBasket = () => {
     if (isExistingUser === 'FALSE') {
       setPromoList([]);
     }
-  }, [promoList]);
+  }, []);
 
   console.log('isExx', isExistingUser);
 
@@ -498,6 +498,7 @@ const OrderBasket = () => {
   };
 
   const handlePromoCode = (code: string) => {
+    // console.log('promoList:::::::', promoList);
     setPromoCode(code);
     const filteredPromoCode = promoList?.find(
       (el: any) => el.voucherCode === code
