@@ -1,8 +1,8 @@
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
 import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined';
+import IntegrationInstructionsOutlinedIcon from '@mui/icons-material/IntegrationInstructionsOutlined';
 import RadioButtonUncheckedOutlinedIcon from '@mui/icons-material/RadioButtonUncheckedOutlined';
 import RemoveCircleOutlineOutlinedIcon from '@mui/icons-material/RemoveCircleOutlineOutlined';
-import IntegrationInstructionsOutlinedIcon from '@mui/icons-material/IntegrationInstructionsOutlined';
 import {
   Button,
   CircularProgress,
@@ -499,7 +499,10 @@ const OrderBasket = () => {
     const filteredPromoCode = promoList?.find(
       (el: any) => el.voucherCode === code
     );
-    setMinDiscount(filteredPromoCode.minAmount);
+
+    if (filteredPromoCode) {
+      setMinDiscount(Number(filteredPromoCode.minAmount));
+    }
   };
 
   return (
