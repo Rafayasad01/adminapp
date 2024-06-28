@@ -2600,3 +2600,7 @@ main.min-h-screen.w-full.flex-grow.bg-gray-50.p-3.MuiBox-root.css-0 {
 .css-11a8txn-MuiStack-root > :not(style) ~ :not(style) {
   border-color: rgb(26 26 26 / 30%) !important;
 }
+
+.css-yrkqu1 {
+  border-color: rgb(26 26 26 / 30%) !important;
+}
