@@ -50,7 +50,7 @@ function CustomDateTimePicker({
             borderRadius: '5px',
             fontSize: '12px',
           }}
-          className="border-secondary"
+          className=""
           value={dayjs(value)}
           onChange={handleChange}
           // minDate={dayjs(minDates)}
