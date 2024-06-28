@@ -386,8 +386,9 @@ export const VALIDATE_NON_NEGATIVE_NUM_AND_CHECK_LENGTH = (
   length: number
 ) => {
   const parsedValue = parseInt(value, 10);
+  console.log('🚀 ~ parsedValue:', parsedValue);
 
-  if (parsedValue >= 0 && parsedValue > length) {
+  if (parsedValue >= 0 && parsedValue >= length) {
     return true; // Validation passes
   }
   if (parsedValue < 0) {
