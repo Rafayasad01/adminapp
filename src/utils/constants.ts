@@ -477,3 +477,15 @@ export const GENDER = [
     name: 'Other',
   },
 ];
+
+export const routeConfig: any = {
+  '/admin/dashboard/home': 'Home',
+  'admin/dashboard/branches': 'Branches',
+  'admin/dashboard/banners': 'Banners',
+  '/auth/login': 'Login',
+  '/auth/forgot-password': 'Forgot Password',
+  '/auth/otp-verification': 'OTP Verification',
+  '/auth/new-password': 'New Password',
+  '/404': 'Page Not Found',
+  // Add other routes and their respective names here
+};

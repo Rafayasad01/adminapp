@@ -9,6 +9,7 @@ import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
 import TablePagination from '@mui/material/TablePagination';
+import ReactGA from 'react-ga4';
 import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -165,6 +166,14 @@ function OrdersPage() {
   // const addRouteHandler = () => {
   //   navigate('create');
   // };
+
+  const handleAddNew = () => {
+    navigate('./create');
+    ReactGA.event({
+      category: authState.user.name,
+      action: 'Clicked a button',
+    });
+  };
 
   const handleClickSearch = (event: any) => {
     if (event.key === 'Enter') {
@@ -335,7 +344,8 @@ function OrdersPage() {
                 <Button
                   variant="contained"
                   className="btn-black-fill btn-icon"
-                  onClick={() => navigate('./create')}
+                  onClick={handleAddNew}
+                  // onClick={() => navigate('./create')}
                 >
                   <AddOutlinedIcon /> Add New
                 </Button>
