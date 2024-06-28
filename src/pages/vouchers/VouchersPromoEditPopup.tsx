@@ -293,7 +293,7 @@ function VouchersPromoEditPopup({
               </div>
               <div className="FormField">
                 <FormControl className="FormControl" variant="standard">
-                  <label className="FormLabel">Status</label>
+                  <label className="FormLabel my-1 mt-2">Status</label>
                   <Switch
                     {...register('isActive')}
                     id="isActive"
