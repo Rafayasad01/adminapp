@@ -87,7 +87,7 @@ const AddNewOrder = () => {
                   aria-label="cart-button"
                 >
                   <svg
-                    className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+                    className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root custom-baskets-icon"
                     focusable="false"
                     aria-hidden="true"
                     viewBox="0 0 24 24"
