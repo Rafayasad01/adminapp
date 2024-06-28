@@ -2183,7 +2183,7 @@ main .container:nth-child(3){
   color: #fff;
   position: absolute;
   font-size: 10px;
-  top: 0;
+  top: -3px;
   left: 9px;
   background: #ff4848;
   border-radius: 50%;

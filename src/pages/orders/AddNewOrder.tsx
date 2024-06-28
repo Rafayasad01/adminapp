@@ -82,12 +82,9 @@ const AddNewOrder = () => {
               type="button"
             >
               <span className="MuiBadge-root css-1c32n2y-MuiBadge-root">
-                <div
-                  className="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium p-0 text-gray-50 "
-                  aria-label="cart-button"
-                >
+                <div className="p-0 text-gray-50 " aria-label="cart-button">
                   <svg
-                    className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root custom-baskets-icon"
+                    className="custom-baskets-icon"
                     focusable="false"
                     aria-hidden="true"
                     viewBox="0 0 24 24"
