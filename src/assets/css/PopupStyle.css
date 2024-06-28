@@ -327,19 +327,18 @@
   @apply flex flex-row items-center justify-items-center !important;
 }
 
-.FormControl .css-julti5-MuiSwitch-root {
+.FormControl .custom-switch {
   width: 50px !important;
   height: 26px !important;
   padding: 0 !important;
   background: transparent !important;
   border-radius: 26px !important;
 }
-
 .FormControl .MuiSwitch-switchBase {
   padding: 0 !important;
-  margin: 0 !important;
+  margin: 2px 0 0 !important;
   transition-duration: 300ms !important;
-  margin-top: 2px !important;
+  /* margin-top: 2px !important; */
 }
 
 .FormControl .MuiSwitch-switchBase.Mui-checked {

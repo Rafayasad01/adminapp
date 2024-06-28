@@ -301,6 +301,7 @@ function VouchersPromoEditPopup({
                     checked={checked}
                     onChange={handleSwitchChange}
                     inputProps={{ 'aria-label': 'controlled' }}
+                    className="custom-switch"
                   />
                 </FormControl>
               </div>
