@@ -332,7 +332,7 @@ function CustomSwiperDialog({
                             <label className="FormLabel">
                               Upload Image
                               <span className="SubLabel">
-                                Image should be 1080px x 1080px
+                                Image should be 1080px by 1080px
                               </span>
                             </label>
                             <div className="ImageBox">
