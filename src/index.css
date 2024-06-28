@@ -2522,3 +2522,12 @@ main.min-h-screen.w-full.flex-grow.bg-gray-50.p-3.MuiBox-root.css-0 {
   margin: auto;
   height: fit-content;
 }
+
+.css-1uvydh2 {
+  padding: 4px 10px !important;
+  font: -webkit-mini-control !important;
+}
+
+.css-11a8txn-MuiStack-root > :not(style) ~ :not(style) {
+  border-color: rgb(26 26 26 / 30%) !important;
+}
