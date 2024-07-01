@@ -105,7 +105,7 @@ const StoreAppointmentsList = ({ today = false }) => {
         <div className="grid grid-cols-12">
           <div className="flex items-center md:col-span-12 md:mb-8 lg:col-span-4 lg:mb-0">
             <span className="font-open-sans text-xl font-semibold text-[#252733]">
-              {today ? "Today's" : 'Total'} Appointments
+              {today ? "Today's" : 'Total'} Appointment
             </span>
           </div>
           <div className="flex justify-end gap-3 md:col-span-12 lg:col-span-8 ">
@@ -164,6 +164,7 @@ const StoreAppointmentsList = ({ today = false }) => {
             <table>
               <thead>
                 <tr>
+                  <th className="font-bold">Appointment No.</th>
                   <th className="font-bold">Name</th>
                   <th className="font-bold">Email</th>
                   <th className="font-bold">Service</th>
@@ -175,6 +176,7 @@ const StoreAppointmentsList = ({ today = false }) => {
               <tbody>
                 {appointments?.map((x) => (
                   <tr key={x.id}>
+                    <td>{x.appointmentNumber}</td>
                     <td className="font-bold capitalize text-primary">
                       {x.name}
                     </td>
