@@ -3,6 +3,7 @@ import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined';
 import IntegrationInstructionsOutlinedIcon from '@mui/icons-material/IntegrationInstructionsOutlined';
 import RadioButtonUncheckedOutlinedIcon from '@mui/icons-material/RadioButtonUncheckedOutlined';
 import RemoveCircleOutlineOutlinedIcon from '@mui/icons-material/RemoveCircleOutlineOutlined';
+import ReactGA from 'react-ga4';
 import {
   Button,
   CircularProgress,
@@ -396,6 +397,32 @@ const OrderBasket = () => {
     if (isExistingUser === 'FALSE') {
       setPromoList([]);
     }
+    ReactGA.event('purchase', {
+      transaction_id: '2',
+      affiliation: 'order_affiliation',
+      value: '2',
+      currency: 'PKR',
+      tax: '15%',
+      shipping: 'street 3',
+      items: [
+        {
+          item_id: '1',
+          item_name: 'band',
+          item_category: 'hairs',
+          item_variant: 'medium',
+          price: '200',
+          quantity: '1',
+        },
+        {
+          item_id: '2',
+          item_name: 'brush',
+          item_category: 'hairs',
+          item_variant: 'medium',
+          price: '150',
+          quantity: '3',
+        },
+      ],
+    });
   }, []);
 
   console.log('isExx', isExistingUser);
