@@ -169,7 +169,7 @@ function LoginPage() {
                     <Input
                       className="border-1 border-solid border-secondary text-[11px]"
                       id="email"
-                      placeholder="example@mail.com"
+                      placeholder="user@example.com"
                       type="email"
                       {...register('email', {
                         required: 'Please enter your email.',
