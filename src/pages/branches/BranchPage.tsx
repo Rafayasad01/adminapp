@@ -11,6 +11,7 @@ import Divider from '@mui/material/Divider';
 import FormControl from '@mui/material/FormControl';
 import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
+import ReactGA from 'react-ga4';
 import InputAdornment from '@mui/material/InputAdornment';
 import Switch from '@mui/material/Switch';
 import TablePagination from '@mui/material/TablePagination';
@@ -18,7 +19,7 @@ import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import CustomButton from '../../components/common/CustomButton';
 import CustomText from '../../components/common/CustomText';
 import Loader from '../../components/common/Loader';
@@ -34,6 +35,7 @@ import BranchCreatePopup from './BranchCreatePopup';
 import BranchUpdatePopup from './BranchUpdatePopup';
 
 function BranchPage() {
+  const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const authState: any = useAppSelector((state: any) => state?.authState);
@@ -139,6 +141,11 @@ function BranchPage() {
   useEffect(() => {
     setIsLoader(true);
     if (listingRolePermission(dataRole, 'Employee List')) {
+      ReactGA.send({
+        hitType: 'pageview',
+        page: location.pathname + location.search,
+        title: 'Branches',
+      });
       branchService
         .getListService(authState?.shopTenantDetails.tenant, page, rowsPerPage)
         .then((item: any) => {
@@ -333,6 +340,11 @@ function BranchPage() {
   };
 
   const handleAddNew = () => {
+    ReactGA.event({
+      category: 'All Branches',
+      action: 'Add New Branch',
+      label: 'Branch',
+    });
     if (totalBranches >= authState.user.branchLimit) {
       setIsNotify(true);
       setNotifyMessage({
