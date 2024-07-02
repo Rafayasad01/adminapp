@@ -3,6 +3,7 @@ import Dialog from '@mui/material/Dialog';
 import Divider from '@mui/material/Divider';
 import FormControl from '@mui/material/FormControl';
 import WalletIcon from '@mui/icons-material/Wallet';
+import WysiwygOutlinedIcon from '@mui/icons-material/WysiwygOutlined';
 import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -24,6 +25,7 @@ import {
   listingRolePermission,
 } from '../../../utils/helper';
 import WalletUpdatePopup from './WalletUpdatePopup';
+import WalletDetailPopup from './WalletDetailPopup';
 
 function WalletPage() {
   const dataRole = useAppSelector(
@@ -34,15 +36,13 @@ function WalletPage() {
   const [page, setPage] = useState(0);
   const [total, setTotal] = useState(0);
   const [list, setList] = useState<any>([]);
+  // const [walletTransactionlist, setWalletTransactionlist] = useState<any>([]);
+  // const [walletTransactionTotal, setWalletTransactionTotal] = useState(0);
   const [editFormData, setEditFormData] = useState<any>(null);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [isLoader, setIsLoader] = React.useState(true);
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
-  const [
-    ,
-    // openDetailDialog
-    setOpenDetailDialog,
-  ] = useState(false);
+  const [openDetailDialog, setOpenDetailDialog] = useState(false);
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
   // const [cancelDialogOpen, setCancelDialogOpen] = useState<boolean>(false);
@@ -156,6 +156,41 @@ function WalletPage() {
           type: 'error',
         });
       });
+  };
+
+  const handleDetailPopup = (id: string) => {
+    if (listingRolePermission(dataRole, 'Category List')) {
+      setIsLoader(true);
+      walletService
+        .WalletTransactionList(id, search, page, rowsPerPage)
+        .then((item: any) => {
+          if (item.data.success) {
+            setIsLoader(false);
+            // setWalletTransactionTotal(item.data.data.total);
+            // setWalletTransactionlist(item.data.data.list);
+          } else {
+            setIsLoader(false);
+            setNotifyMessage({
+              text: item.data.message,
+              type: 'error',
+            });
+          }
+        })
+        .catch((error) => {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: error.message,
+            type: 'error',
+          });
+        });
+    } else {
+      setIsNotify(true);
+      setNotifyMessage({
+        text: NOT_AUTHORIZED_MESSAGE,
+        type: 'warning',
+      });
+    }
   };
 
   const editHandler = (id: string, type: string) => {
@@ -283,7 +318,7 @@ function WalletPage() {
               </thead>
               <tbody>
                 {list &&
-                  list.map((item: any, index: number) => {
+                  list?.map((item: any, index: number) => {
                     return (
                       <tr key={index}>
                         <td>
@@ -310,6 +345,12 @@ function WalletPage() {
                         <td>{item?.referenceType}</td>
                         <td>
                           <div className="flex flex-row-reverse">
+                            <IconButton
+                              className="icon-btn mr-3.5 p-0"
+                              onClick={() => handleDetailPopup(item.id)}
+                            >
+                              <WysiwygOutlinedIcon />
+                            </IconButton>
                             <IconButton
                               disabled={!!(item.status === 'Completed')}
                               className="icon-btn mr-3.5 p-0"
@@ -348,6 +389,13 @@ function WalletPage() {
           setOpenFormDialog={setOpenEditFormDialog}
           formData={editFormData[0]}
           callback={updateFormHandler}
+        />
+      )}
+      {openDetailDialog && (
+        <WalletDetailPopup
+          openFormDialog={openEditFormDialog}
+          setOpenFormDialog={setOpenEditFormDialog}
+          // data={walletTransactionlist}
         />
       )}
       {/* {openDetailDialog && (
