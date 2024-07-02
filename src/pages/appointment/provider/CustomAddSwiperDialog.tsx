@@ -272,7 +272,7 @@ function CustomSwiperDialog({
                             />
                           </FormControl>
                         ) : items.type === 'textarea' ? (
-                          <div className="">
+                          <div className="w-[475px]">
                             <FormControl
                               className="FormControl py-2"
                               variant="standard"
@@ -332,7 +332,7 @@ function CustomSwiperDialog({
                             <label className="FormLabel">
                               Upload Image
                               <span className="SubLabel">
-                                Image should be 1080px by 1080px
+                                (1080px by 1080px)
                               </span>
                             </label>
                             <div className="ImageBox">

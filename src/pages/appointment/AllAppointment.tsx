@@ -194,9 +194,9 @@ const AllAppointment = ({
       });
   };
 
-  useEffect(() => {
-    getAllAppointments(currentWeek, 'week');
-  }, []);
+  // useEffect(() => {
+  //   getAllAppointments(currentWeek, 'week');
+  // }, []);
 
   // console.log('selectedPriorityData', selectedPriorityData);
   // [{ startDate: new Date() }]

@@ -256,8 +256,8 @@ function AppUserTab({
               <th>Email</th>
               <th>Phone</th>
               <th>Postal Code</th>
-              <th>Loyalty Coins</th>
-              <th>User Type</th>
+              {/* <th>Loyalty Coins</th> */}
+              {/* <th>User Type</th> */}
               <th>Status</th>
               <th aria-label="empty table header">&nbsp;</th>
             </tr>
@@ -303,10 +303,10 @@ function AppUserTab({
                     <td>{item.email}</td>
                     <td>{item.phone}</td>
                     <td>{item.postalCode ? item.postalCode : '--'}</td>
-                    <td>
+                    {/* <td>
                       <span className="font-bold">{item.loyaltyCoins}</span>
-                    </td>
-                    <td>{item.userType}</td>
+                    </td> */}
+                    {/* <td>{item.userType}</td> */}
                     <td>
                       {item.isActive ? (
                         <span className="badge badge-success">ACTIVE</span>

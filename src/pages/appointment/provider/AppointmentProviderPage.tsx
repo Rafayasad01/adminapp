@@ -226,33 +226,33 @@ function AppointmentProviderPage() {
     //   error: errors.dob,
     //   type: 'text',
     // },
-    {
-      fieldName: 'Payroll Type',
-      id: 'payrollType',
-      defaultValue: 'Select Payroll Type',
-      control,
-      register,
-      setValue,
-      error: errors.payrollType,
-      type: 'select',
-      options: {
-        role: watch('payrollType'),
-        roles: [
-          {
-            id: 'Both',
-            name: 'Both',
-          },
-          {
-            id: 'Salary',
-            name: 'Salary',
-          },
-          {
-            id: 'Commission',
-            name: 'Commission',
-          },
-        ],
-      },
-    },
+    // {
+    //   fieldName: 'Payroll Type',
+    //   id: 'payrollType',
+    //   defaultValue: 'Select Payroll Type',
+    //   control,
+    //   register,
+    //   setValue,
+    //   error: errors.payrollType,
+    //   type: 'select',
+    //   options: {
+    //     role: watch('payrollType'),
+    //     roles: [
+    //       {
+    //         id: 'Both',
+    //         name: 'Both',
+    //       },
+    //       {
+    //         id: 'Salary',
+    //         name: 'Salary',
+    //       },
+    //       {
+    //         id: 'Commission',
+    //         name: 'Commission',
+    //       },
+    //     ],
+    //   },
+    // },
     {
       fieldName: 'Note',
       id: 'note',
@@ -613,10 +613,8 @@ function AppointmentProviderPage() {
     if (length > 0) handlePrevSlide();
   }, [errors]);
 
-  // console.log("delte idss", delIds);
-
   const onSubmitUpdateDialogBox = async (data: any) => {
-    console.log('Update data', data);
+    // console.log('Update data', data);
     setIsLoader(true);
     delete data.servicesName;
     delete data.servicesAmount;
@@ -624,11 +622,7 @@ function AppointmentProviderPage() {
     delete data.categoryId;
     delete data.servicesId;
     delete data.mints;
-    // const obj = {
-    //   ...data,
-    //   avatar: image,
-    // };
-    // console.log('🚀 ~ onSubmitUpdateDialogBox ~ data:2', obj);
+
     const formData = new FormData();
     formData.append('name', data.name);
     formData.append('address', data.address);
@@ -639,7 +633,7 @@ function AppointmentProviderPage() {
     if (data.password) formData.append('password', data.password);
     formData.append('dob', dayjs(data.dob).format('YYYY-MM-DD'));
     formData.append('services', JSON.stringify(data.services));
-    formData.append('payrollType', data.payrollType);
+    formData.append('payrollType', 'Both');
     formData.append('deletedIds', JSON.stringify(delIds));
     if (image) formData.append('avatar', image);
     StoreEmployeeService.StoreEmployeeUpdate(formData, actionMenuItemid)
@@ -681,53 +675,13 @@ function AppointmentProviderPage() {
   };
 
   const onSubmitDialogBox = async (data: any) => {
-    // console.log(`onSubmitDialogBox -> data:`, data);
-    // setIsLoader(true);
     delete data.servicesName;
     delete data.servicesAmount;
     delete data.price;
     delete data.categoryId;
     delete data.servicesId;
     delete data.mints;
-    // const _object = {
-    //   ...data,
-    //   weekDays,
-    //   startTime,
-    //   endTime,
-    //   avatar: image,
-    // };
-    console.log('🚀 ~ onSubmitDialogBox ~ endTime:', endTime);
-    console.log('🚀 ~ onSubmitDialogBox ~ startTime:', startTime);
 
-    // const TshopOpenTime = dayjs(officeTimings?.tenantConfig?.officeTimeIn);
-    // let TshopCloseTime = dayjs(officeTimings?.tenantConfig?.officeTimeOut);
-    // const startT = dayjs(startTime);
-    // let endT = dayjs(endTime);
-
-    // const hourStartT = TshopOpenTime.hour();
-    // const hourEndT = TshopCloseTime.hour();
-    // const hourST1 = TshopOpenTime.hour();
-    // const hourST2 = TshopCloseTime.hour();
-
-    // if (hour1 > hour2) {
-    //   TshopCloseTime = TshopCloseTime.add(1, 'day');
-    //   // return console.log('err');
-    // }
-
-    // if (
-    //   dayjs(startTime).format('HH:mm') <
-    //     dayjs(officeTimings?.tenantConfig?.officeTimeIn).format('HH:mm') ||
-    //   dayjs(endTime).format('HH:mm') >
-    //     dayjs(officeTimings?.tenantConfig?.officeTimeOut).format('HH:mm')
-    // ) {
-    //   setIsLoader(false);
-    //   setIsNotify(true);
-    //   setNotifyMessage({
-    //     text: 'You should check your shop time before creating staff',
-    //     type: 'error',
-    //   });
-    //   return null;
-    // }
     const formData = new FormData();
     formData.append('name', data.name);
     formData.append('address', data.address);
@@ -739,7 +693,7 @@ function AppointmentProviderPage() {
     formData.append('note', data.note);
     if (image) formData.append('avatar', image);
     formData.append('services', JSON.stringify(data.services));
-    formData.append('payrollType', data.payrollType);
+    formData.append('payrollType', 'Both');
     formData.append('workDays', JSON.stringify(weekDays));
     formData.append(
       'startTime',
