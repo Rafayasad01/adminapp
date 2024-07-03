@@ -17,14 +17,17 @@ const WalletList = (
 
 const WalletTransactionList = (
   id: string,
-  search: string,
   page: number,
-  size: number
+  size: number,
+  toDate: string | any,
+  fromDate: string | any
 ): Promise<AxiosResponse<any, any>> => {
   return network.getWithQueryParam(`${WALLET_PREFIX}/transactions/${id}`, {
-    search,
+    search: '',
     page: page.toString(),
     size: size.toString(),
+    to: toDate.toString(),
+    from: fromDate.toString(),
   });
 };
 

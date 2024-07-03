@@ -346,16 +346,12 @@ function LeaveManagement() {
                         </td>
                         <td>
                           {dayjs(item.fromDate).isValid()
-                            ? dayjs(item.fromDate)?.format(
-                                'ddd, MMM DD, YYYY hh:mm:ssA'
-                              )
+                            ? dayjs(item.fromDate)?.format('ddd, MMM DD, YYYY')
                             : '--'}
                         </td>
                         <td>
                           {dayjs(item.toDate).isValid()
-                            ? dayjs(item.toDate)?.format(
-                                'ddd, MMM DD, YYYY hh:mm:ssA'
-                              )
+                            ? dayjs(item.toDate)?.format('ddd, MMM DD, YYYY')
                             : '--'}
                         </td>
                         <td>{item.leaveType}</td>

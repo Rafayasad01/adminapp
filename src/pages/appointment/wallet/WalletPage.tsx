@@ -36,8 +36,6 @@ function WalletPage() {
   const [page, setPage] = useState(0);
   const [total, setTotal] = useState(0);
   const [list, setList] = useState<any>([]);
-  // const [walletTransactionlist, setWalletTransactionlist] = useState<any>([]);
-  // const [walletTransactionTotal, setWalletTransactionTotal] = useState(0);
   const [editFormData, setEditFormData] = useState<any>(null);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [isLoader, setIsLoader] = React.useState(true);
@@ -51,6 +49,7 @@ function WalletPage() {
   // );
   const [isModalImage, setIsModalImage] = useState(false);
   const [modalImage, setModalImage] = useState('');
+  const [walletId, setWalletId] = useState('');
 
   useEffect(() => {
     if (listingRolePermission(dataRole, 'Category List')) {
@@ -86,7 +85,7 @@ function WalletPage() {
         type: 'warning',
       });
     }
-  }, [null]);
+  }, []);
 
   const handleClickSearch = (event: any) => {
     if (event.key === 'Enter') {
@@ -158,41 +157,6 @@ function WalletPage() {
       });
   };
 
-  const handleDetailPopup = (id: string) => {
-    if (listingRolePermission(dataRole, 'Category List')) {
-      setIsLoader(true);
-      walletService
-        .WalletTransactionList(id, search, page, rowsPerPage)
-        .then((item: any) => {
-          if (item.data.success) {
-            setIsLoader(false);
-            // setWalletTransactionTotal(item.data.data.total);
-            // setWalletTransactionlist(item.data.data.list);
-          } else {
-            setIsLoader(false);
-            setNotifyMessage({
-              text: item.data.message,
-              type: 'error',
-            });
-          }
-        })
-        .catch((error) => {
-          setIsLoader(false);
-          setIsNotify(true);
-          setNotifyMessage({
-            text: error.message,
-            type: 'error',
-          });
-        });
-    } else {
-      setIsNotify(true);
-      setNotifyMessage({
-        text: NOT_AUTHORIZED_MESSAGE,
-        type: 'warning',
-      });
-    }
-  };
-
   const editHandler = (id: string, type: string) => {
     if (type === 'update') {
       setOpenEditFormDialog(true);
@@ -242,6 +206,20 @@ function WalletPage() {
           type: 'error',
         });
       });
+  };
+
+  const handleDetailPopup = (id: string) => {
+    if (listingRolePermission(dataRole, 'Category List')) {
+      setWalletId(id);
+      setOpenDetailDialog(true);
+      console.log('🚀 ~ handleDetailPopup ~ id:', id);
+    } else {
+      setIsNotify(true);
+      setNotifyMessage({
+        text: NOT_AUTHORIZED_MESSAGE,
+        type: 'warning',
+      });
+    }
   };
 
   const closeModal = () => {
@@ -393,20 +371,11 @@ function WalletPage() {
       )}
       {openDetailDialog && (
         <WalletDetailPopup
-          openFormDialog={openEditFormDialog}
-          setOpenFormDialog={setOpenEditFormDialog}
-          // data={walletTransactionlist}
-        />
-      )}
-      {/* {openDetailDialog && (
-        <WalletDetailPopup
-          // setIsNotify={setIsNotify}
-          // setNotifyMessage={setNotifyMessage}
           openFormDialog={openDetailDialog}
           setOpenFormDialog={setOpenDetailDialog}
-          formData={editFormData[0]}
+          walletId={walletId}
         />
-      )} */}
+      )}
       {modalImage && (
         <Dialog
           open={isModalImage}
