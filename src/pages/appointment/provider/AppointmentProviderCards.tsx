@@ -1,7 +1,6 @@
 import BadgeOutlinedIcon from '@mui/icons-material/BadgeOutlined';
 import LocalPhoneOutlinedIcon from '@mui/icons-material/LocalPhoneOutlined';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
-import PaymentOutlinedIcon from '@mui/icons-material/PaymentOutlined';
 import MailOutlineOutlinedIcon from '@mui/icons-material/MailOutlineOutlined';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import StarIcon from '@mui/icons-material/Star';
@@ -146,7 +145,7 @@ const AppointmentProviderCards = ({
                   </div>
                   <div
                     style={{
-                      height: expandedBoxes[index] ? '70px' : '0px',
+                      height: expandedBoxes[index] ? '30px' : '0px',
                       overflow: 'hidden',
                       transition: 'height 0.3s ease',
                       padding: '0px',
@@ -160,14 +159,14 @@ const AppointmentProviderCards = ({
                         {item.address ? item.address : '----'}
                       </span>
                     </div>
-                    <div className="flex items-center justify-between">
+                    {/* <div className="flex items-center justify-between">
                       <div className="mr-5">
                         <PaymentOutlinedIcon fontSize="small" />
                       </div>
                       <span className="text-sm font-medium">
                         {item.payrollType}
                       </span>
-                    </div>
+                    </div> */}
                   </div>
                   <div className="mt-2 flex items-center justify-end">
                     <button

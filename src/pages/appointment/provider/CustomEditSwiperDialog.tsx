@@ -308,7 +308,7 @@ function CustomEditSwiperDialog({
                             />
                           </FormControl>
                         ) : items.type === 'textarea' ? (
-                          <div className="">
+                          <div className="w-[465px]">
                             <FormControl
                               className="FormControl py-2"
                               variant="standard"
