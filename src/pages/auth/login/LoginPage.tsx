@@ -4,6 +4,8 @@ import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
 import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import ReactGA from 'react-ga4';
 import InputAdornment from '@mui/material/InputAdornment';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -94,6 +96,11 @@ function LoginPage() {
           await handleAnonAppUser(user.data.data);
           const newUserData = user.data.data;
           setIsLoader(false);
+          ReactGA.set({
+            user_id: newUserData.tenant,
+            user_name: `${newUserData.firstName} ${newUserData.lastName}`,
+            user_registered: newUserData.tenant ? 'Yes' : 'No',
+          });
           setItem('AUTH_TOKEN', newUserData.accessToken);
           setItem('REFRESH_TOKEN', newUserData.refreshToken);
           dispatch(setRolePermissions(newUserData.role));

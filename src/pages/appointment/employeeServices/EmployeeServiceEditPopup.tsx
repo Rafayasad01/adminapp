@@ -132,7 +132,7 @@ function EmployeeServiceEditPopup({
                     setValue={setValue}
                     // options={{ roles: providerlov }}
                     customClassInputTitle="font-bold"
-                    inputTitle="Amount Type"
+                    inputTitle="Commission Type"
                     options={{
                       roles: BARBER_SERVICES_AMOUNT,
                       role: formData?.amountType,

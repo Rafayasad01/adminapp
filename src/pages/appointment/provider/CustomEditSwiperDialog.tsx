@@ -555,7 +555,7 @@ function CustomEditSwiperDialog({
                       register={register}
                       setValue={setValue}
                       customClassInputTitle="font-bold"
-                      inputTitle="Amount Type"
+                      inputTitle="Commission Type"
                       options={{ roles: BARBER_SERVICES_AMOUNT }}
                       defaultValue="Select Type"
                     />
@@ -566,7 +566,7 @@ function CustomEditSwiperDialog({
                     <CustomInputBox
                       pattern={PATTERN.ONLY_NUM}
                       maxLetterLimit={15}
-                      inputTitle="Price"
+                      inputTitle="Commission"
                       placeholder="Enter Service Amount"
                       id="price"
                       requiredType
@@ -582,7 +582,8 @@ function CustomEditSwiperDialog({
                       <CustomInputBox
                         pattern={PATTERN.ONLY_NUM}
                         maxLetterLimit={4}
-                        inputTitle="Service Time (Minutes)"
+                        inputTitle="Service Time"
+                        subInputTitle="(Minutes)"
                         placeholder="Enter time (Minutes)"
                         id="mints"
                         requiredType

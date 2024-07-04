@@ -11,7 +11,10 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import ReactGA from 'react-ga4';
 import TopBar from '../../components/common/TopBar';
+// eslint-disable-next-line import/no-extraneous-dependencies
 // import CustomersCreatePopup from './CustomersCreatePopup';
 // import CustomersEditPopup from './CustomersEditPopup';
 import CustomButton from '../../components/common/CustomButton';
@@ -87,6 +90,22 @@ function OrderItemDetailPage() {
           } else {
             throw new Error(catDetailResponse.data.message);
           }
+          // Analytics
+          console.log(
+            '🚀 ~ fetchData ~ catDetailResponse.data.data:',
+            catDetailResponse.data.data
+          );
+          ReactGA.event('view_item', {
+            items: [
+              {
+                item_id: catDetailResponse.data.data.id,
+                item_name: catDetailResponse.data.data.name,
+                item_category: catDetailResponse.data.data.homeCategory,
+                item_variant: catDetailResponse.data.data.desc,
+                price: catDetailResponse.data.data.price,
+              },
+            ],
+          });
         }
         setIsLoader(false);
       } catch (error: Error | any) {
@@ -221,6 +240,18 @@ function OrderItemDetailPage() {
     dispatch(
       showNotifyMessage({ text: 'Item added successfully', type: 'success' })
     );
+    // Analytics add to cart
+    // console.log('🚀 ~ addInToCartHandler ~ ratingDetail:', ratingDetail);
+    ReactGA.event('add_to_cart', {
+      items: {
+        item_id: ratingDetail?.id,
+        item_name: ratingDetail?.name,
+        item_category: ratingDetail?.homeCategory,
+        item_variant: ratingDetail?.desc,
+        price: ratingDetail?.price,
+        quantity: ratingDetail?.quantity,
+      },
+    });
     navigate(-1);
   };
 

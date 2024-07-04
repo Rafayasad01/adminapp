@@ -7,6 +7,8 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import IconButton from '@mui/material/IconButton';
 import { useEffect, useState } from 'react';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import ReactGA from 'react-ga4';
 import { AppCategoryItems } from '../../interfaces/category.interface';
 import { addToCart, setCart } from '../../redux/features/cartSlice';
 import { showNotifyMessage } from '../../redux/features/categorySlice';
@@ -76,6 +78,18 @@ function HomePagePopup({
     dispatch(
       showNotifyMessage({ text: 'Item added successfully', type: 'success' })
     );
+    // Analytics add to cart
+    console.log('🚀 ~ addInToCartHandler ~ data:', data);
+    ReactGA.event('add_to_cart', {
+      items: {
+        item_id: data?.id, // Product ID
+        item_name: data?.name, // Product name
+        item_category: data?.homeCategory, // Product category
+        item_variant: data?.desc, // Product variant
+        price: data?.price, // Product price
+        quantity: data?.quantity, // Quantity added to the cart
+      },
+    });
   };
 
   const fetchData = async () => {

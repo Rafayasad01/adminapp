@@ -3,6 +3,7 @@ import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined';
 import IntegrationInstructionsOutlinedIcon from '@mui/icons-material/IntegrationInstructionsOutlined';
 import RadioButtonUncheckedOutlinedIcon from '@mui/icons-material/RadioButtonUncheckedOutlined';
 import RemoveCircleOutlineOutlinedIcon from '@mui/icons-material/RemoveCircleOutlineOutlined';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import ReactGA from 'react-ga4';
 import {
   Button,
@@ -397,6 +398,11 @@ const OrderBasket = () => {
     if (isExistingUser === 'FALSE') {
       setPromoList([]);
     }
+    ReactGA.send({
+      hitType: 'Order-Purchase',
+      page: '/admin/dashboard/store-product/orders/basket',
+      title: 'Order Purchase Details',
+    });
     ReactGA.event('purchase', {
       transaction_id: '2',
       affiliation: 'order_affiliation',
@@ -422,6 +428,9 @@ const OrderBasket = () => {
           quantity: '3',
         },
       ],
+      user_id: authState.user?.tenant,
+      user_name: `${authState.user?.firstName} ${authState.user?.lastName}`,
+      user_registered: authState.user?.tenant ? 'Yes' : 'No',
     });
   }, []);
 
