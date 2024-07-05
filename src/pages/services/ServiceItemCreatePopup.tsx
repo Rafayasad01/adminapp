@@ -13,12 +13,15 @@ import '../../assets/css/PopupStyle.css';
 import ErrorSpanBox from '../../components/common/ErrorSpanBox';
 import { BarberCategoryServices } from '../../interfaces/services.interface';
 import {
+  // GENDER,
   INVALID_CHAR,
   MAX_LENGTH_EXCEEDED,
   PATTERN,
   VALIDATE_NON_NEGATIVE_NUM,
   imageAllowedTypes,
 } from '../../utils/constants';
+import CustomInputBox from '../../components/common/CustomInputBox';
+// import CustomDropDown from '../../components/common/CustomDropDown';
 
 type Props = {
   openFormDialog: boolean;
@@ -40,13 +43,14 @@ function ServiceItemCreatePopup({
   const {
     register,
     handleSubmit,
+    // control,
+    // setValue,
     formState: { errors },
   } = useForm<BarberCategoryServices>();
 
   const onSubmit = (data: BarberCategoryServices) => {
     if (image) {
       data.avatar = image;
-      setOpenFormDialog(false);
       console.log('🚀 ~ onSubmit ~ data:', data);
       callback(data);
     } else {
@@ -122,8 +126,22 @@ function ServiceItemCreatePopup({
                   <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
                 )}
               </FormControl>
+              {/* <FormControl className="FormControl" variant="standard">
+                <CustomDropDown
+                  validateRequired
+                  id="serviceType"
+                  control={control}
+                  error={errors}
+                  register={register}
+                  setValue={setValue}
+                  customClassInputTitle="font-bold"
+                  inputTitle="Service Type"
+                  options={{ roles: GENDER }}
+                  defaultValue="Select Type"
+                />
+              </FormControl> */}
             </div>
-            <div className="FormField">
+            <div className="FormFields">
               <FormControl className="FormControl" variant="standard">
                 <label className="FormLabel">Price</label>
                 <Input
@@ -142,6 +160,18 @@ function ServiceItemCreatePopup({
                   disableUnderline
                 />
                 {errors.price && <ErrorSpanBox error={errors.price?.message} />}
+              </FormControl>
+              <FormControl className="FormControl" variant="standard">
+                <CustomInputBox
+                  pattern={PATTERN.ONLY_NUM}
+                  maxLetterLimit={4}
+                  inputTitle="Service Time (Minutes)"
+                  placeholder="Enter time (Minutes)"
+                  id="serviceTime"
+                  register={register}
+                  error={errors.serviceTime}
+                  inputType="text"
+                />
               </FormControl>
               {/* <FormControl className="FormControl" variant="standard">
                 <label className="FormLabel">Loyality Coins</label>

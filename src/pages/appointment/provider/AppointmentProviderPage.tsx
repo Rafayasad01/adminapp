@@ -440,24 +440,24 @@ function AppointmentProviderPage() {
               catLovService();
               setIsLoader(false);
               setEditFormData(item.data.data);
-              const filteredServices = item.data.data.services.map(
-                (el: any) => ({
-                  id: el.id,
-                  amount: el.amount,
-                  amountType: el.amountType,
-                  // storeEmployee: el.storeEmployee,
-                  serviceTime: el.serviceTime,
-                  storeServiceCategoryItem: el.storeServiceCategoryItem.id,
-                })
-              );
-              append(filteredServices);
+              // const filteredServices = item.data.data.services.map(
+              //   (el: any) => ({
+              //     id: el.id,
+              //     amount: el.amount,
+              //     amountType: el.amountType,
+              //     // storeEmployee: el.storeEmployee,
+              //     serviceTime: el.serviceTime,
+              //     storeServiceCategoryItem: el.storeServiceCategoryItem.id,
+              //   })
+              // );
+              // append(filteredServices);
               // console.log('🚀 ~ .then CAT ~ res.data.data:', item.data.data);
-              const catItems = item.data.data.services.map((elItems: any) => ({
-                id: elItems.storeServiceCategoryItem.id,
-                name: elItems.storeServiceCategoryItem.name,
-              }));
-              console.log('🚀 ~ catItems ~ catItems:', catItems);
-              setusedCatItemsLovList([...usedCatItemsLovlist, ...catItems]);
+              // const catItems = item.data.data.services.map((elItems: any) => ({
+              //   id: elItems.storeServiceCategoryItem.id,
+              //   name: elItems.storeServiceCategoryItem.name,
+              // }));
+              // console.log('🚀 ~ catItems ~ catItems:', catItems);
+              // setusedCatItemsLovList([...usedCatItemsLovlist, ...catItems]);
               // console.log("filteredServices", filteredServices);
               // [filteredServices].forEach((service: any) => {
               //   append(service);
@@ -616,6 +616,7 @@ function AppointmentProviderPage() {
   const onSubmitUpdateDialogBox = async (data: any) => {
     // console.log('Update data', data);
     setIsLoader(true);
+    delete data.services;
     delete data.servicesName;
     delete data.servicesAmount;
     delete data.price;
@@ -632,17 +633,17 @@ function AppointmentProviderPage() {
     formData.append('note', data.note);
     if (data.password) formData.append('password', data.password);
     formData.append('dob', dayjs(data.dob).format('YYYY-MM-DD'));
-    formData.append('services', JSON.stringify(data.services));
+    // formData.append('services', JSON.stringify(data.services));
     formData.append('payrollType', data.payrollType);
     formData.append('deletedIds', JSON.stringify(delIds));
     if (image) formData.append('avatar', image);
-    if (data.services.length > 0) {
+    if (data) {
       StoreEmployeeService.StoreEmployeeUpdate(formData, actionMenuItemid)
         .then((res) => {
           if (res.data.success) {
             setIsLoader(false);
             setOpenEditFormDialog(false);
-            console.log('res', res.data.data);
+            // console.log('res', res.data.data);
             for (let i = 0; i < list.length; i += 1) {
               if (list[i].id === res.data.data.id) {
                 list[i].name = res.data.data.name;
@@ -679,20 +680,24 @@ function AppointmentProviderPage() {
       setIsLoader(false);
       setIsNotify(true);
       setNotifyMessage({
-        text: `All fields are required
-         ${
-           data?.services?.length < 1
-             ? '& you must need to add atleast one service.'
-             : ''
-         }`,
+        text: 'All fields are required',
         type: 'error',
       });
+      // setNotifyMessage({
+      //   text: `All fields are required
+      //    ${
+      //      data?.services?.length < 1
+      //        ? '& you must need to add atleast one service.'
+      //        : ''
+      //    }`,
+      //   type: 'error',
+      // });
     }
   };
 
   const onSubmitDialogBox = async (data: any) => {
-    // console.log(`onSubmitDialogBox -> data:`, data);
     setIsLoader(true);
+    delete data.servicess;
     delete data.servicesName;
     delete data.servicesAmount;
     delete data.price;
@@ -700,6 +705,7 @@ function AppointmentProviderPage() {
     delete data.servicesId;
     delete data.mints;
 
+    console.log(`onSubmitDialogBox -> data:`, data);
     const formData = new FormData();
     formData.append('name', data.name);
     formData.append('address', data.address);
@@ -710,7 +716,7 @@ function AppointmentProviderPage() {
     formData.append('dob', dayjs().format('YYYY-MM-DD'));
     formData.append('note', data.note);
     if (image) formData.append('avatar', image);
-    formData.append('services', JSON.stringify(data.services));
+    // formData.append('services', JSON.stringify(data.services));
     formData.append('payrollType', data.payrollType);
     formData.append('workDays', JSON.stringify(weekDays));
     formData.append(
@@ -718,7 +724,7 @@ function AppointmentProviderPage() {
       dayjs(startTime).format('YYYY-MM-DD HH:mm:ss')
     );
     formData.append('endTime', dayjs(endTime).format('YYYY-MM-DD HH:mm:ss'));
-    if (weekDays && startTime && endTime && data.services.length > 0) {
+    if (weekDays && startTime && endTime) {
       StoreEmployeeService.StoreEmployeeCreate(formData)
         .then((res) => {
           if (res.data.success) {
