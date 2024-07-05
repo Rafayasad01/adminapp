@@ -168,29 +168,39 @@ function SettingsShopScheduling() {
                           </tr>
                         </thead>
                         <tbody>
-                          {currentWeekDates.map((x) => {
-                            const day = workDays.find((d) =>
-                              d.day.includes(x.day)
-                            );
-                            const event = checkHoliday(x.date, offDays);
-                            const holiday = !day || event;
-                            return (
-                              <tr
-                                className={`${holiday ? 'days-off' : ''}`}
-                                key={x.date}
-                              >
-                                <td>{x.day?.substring(0, 3)}</td>
-                                <td>{dayjs(x.date).format('LL')}</td>
-                                <td className="py-3">
-                                  {holiday
-                                    ? `${event || ''}`
-                                    : `${day.openTime?.format('h:mm A')} - `}
+                          {currentWeekDates?.length > 0 &&
+                            currentWeekDates?.map((x) => {
+                              const day = workDays?.find((d) =>
+                                d?.day?.includes(x.day)
+                              );
+                              const event = checkHoliday(x.date, offDays);
+                              const holiday = !day || event;
+                              return (
+                                <tr
+                                  className={`${holiday ? 'days-off' : ''}`}
+                                  key={x?.date}
+                                >
+                                  <td>{x?.day?.substring(0, 3)}</td>
+                                  <td>
+                                    {dayjs(x.date).isValid() &&
+                                      dayjs(x.date).format('LL')}
+                                  </td>
+                                  <td className="py-3">
+                                    {holiday
+                                      ? `${event || ''}`
+                                      : `${
+                                          day && dayjs(day?.openTime).isValid()
+                                            ? day.openTime?.format('h:mm A')
+                                            : ''
+                                        } - `}
 
-                                  {holiday
-                                    ? ''
-                                    : day.closeTime?.format('h:mm A')}
-                                </td>
-                                {/* <td>
+                                    {holiday
+                                      ? ''
+                                      : day && dayjs(day?.closeTime).isValid()
+                                      ? day.closeTime?.format('h:mm A')
+                                      : ''}
+                                  </td>
+                                  {/* <td>
                                   {' '}
                                   {holiday
                                     ? ''
@@ -208,13 +218,13 @@ function SettingsShopScheduling() {
                                       day.breakOffTime?.isValid() &&
                                       day.breakOffTime?.format('h:mm A')}
                                 </td> */}
-                                <td className="py-3">
-                                  {' '}
-                                  {holiday ? ' Day Off' : ''}
-                                </td>
-                              </tr>
-                            );
-                          })}
+                                  <td className="py-3">
+                                    {' '}
+                                    {holiday ? ' Day Off' : ''}
+                                  </td>
+                                </tr>
+                              );
+                            })}
                         </tbody>
                       </table>
                     )}

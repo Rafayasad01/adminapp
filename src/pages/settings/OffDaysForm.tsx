@@ -116,8 +116,9 @@ function OffDaysForm() {
             <h1 className="mt-4 h-1 text-center text-lg">
               Events of{' '}
               <span className="font-bold">
-                {dayjs(ScheduledMonthDate).isValid() &&
-                  dayjs(ScheduledMonthDate).format('MMMM')}
+                {dayjs(ScheduledMonthDate).isValid()
+                  ? dayjs(ScheduledMonthDate).format('MMMM')
+                  : ''}
               </span>
             </h1>
             <table className="mt-3">
@@ -134,8 +135,16 @@ function OffDaysForm() {
                   return (
                     <tr key={i}>
                       <th>{e.key}</th>
-                      <td>{dayjs(e.startDate).format('DD/MM/YYYY')}</td>
-                      <td>{dayjs(e.endDate).format('DD/MM/YYYY')}</td>
+                      <td>
+                        {dayjs(e.startDate).isValid()
+                          ? dayjs(e.startDate).format('DD/MM/YYYY')
+                          : ''}
+                      </td>
+                      <td>
+                        {dayjs(e.endDate).isValid()
+                          ? dayjs(e.endDate).format('DD/MM/YYYY')
+                          : ''}
+                      </td>
                       <td>
                         <Button
                           color="warning"
