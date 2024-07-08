@@ -180,15 +180,27 @@ function SettingsShopScheduling() {
                                 key={x.date}
                               >
                                 <td>{x.day?.substring(0, 3)}</td>
-                                <td>{dayjs(x.date).format('LL')}</td>
+                                <td>
+                                  {' '}
+                                  {dayjs(x.date).isValid()
+                                    ? dayjs(x.date)?.format('LL')
+                                    : ''}
+                                </td>
                                 <td className="py-3">
                                   {holiday
                                     ? `${event || ''}`
-                                    : `${day.openTime?.format('h:mm A')} - `}
-
+                                    : `${
+                                        day && dayjs(day?.openTime).isValid()
+                                          ? dayjs(day?.openTime).format(
+                                              'h:mm A'
+                                            )
+                                          : ''
+                                      }`}{' '}
                                   {holiday
                                     ? ''
-                                    : day.closeTime?.format('h:mm A')}
+                                    : day && dayjs(day?.closeTime).isValid()
+                                    ? dayjs(day?.closeTime).format('h:mm A')
+                                    : ''}
                                 </td>
                                 {/* <td>
                                   {' '}
