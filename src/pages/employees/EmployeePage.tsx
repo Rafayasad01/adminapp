@@ -305,6 +305,11 @@ function EmployeePage() {
         });
     } else {
       setIsLoader(false);
+      setIsNotify(true);
+      setNotifyMessage({
+        text: NOT_AUTHORIZED_MESSAGE,
+        type: 'warning',
+      });
     }
   }, [null]);
 

@@ -10,7 +10,7 @@ import React, { useState } from 'react';
 
 import { useForm } from 'react-hook-form';
 import '../../assets/css/PopupStyle.css';
-import CustomDropDown from '../../components/common/CustomDropDown';
+// import CustomDropDown from '../../components/common/CustomDropDown';
 import ErrorSpanBox from '../../components/common/ErrorSpanBox';
 import { AppUser } from '../../interfaces/app-user.interface';
 import {
@@ -34,8 +34,8 @@ function AppUserCreatePopup({
   openFormDialog,
   setOpenFormDialog,
   callback,
-  appUserRoleLov,
-}: AppUserCreatePopupProps) {
+}: // appUserRoleLov,
+AppUserCreatePopupProps) {
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const {
@@ -43,7 +43,7 @@ function AppUserCreatePopup({
     handleSubmit,
     watch,
     formState: { errors },
-    control,
+    // control,
   } = useForm<AppUser>();
 
   const handleFormClose = () => setOpenFormDialog(false);
@@ -225,8 +225,8 @@ function AppUserCreatePopup({
                 )}
               </FormControl>
             </div>
-            <div className="FormFields">
-              <FormControl className="FormControl" variant="standard">
+            <div className="FormField">
+              {/* <FormControl className="FormControl" variant="standard">
                 <CustomDropDown
                   validateRequired
                   id="appuserRole"
@@ -238,9 +238,9 @@ function AppUserCreatePopup({
                   inputTitle="User Type"
                   defaultValue="Select type"
                 />
-              </FormControl>
+              </FormControl> */}
               <FormControl className="FormControl" variant="standard">
-                <label className="FormLabel">Address</label>
+                <label className="FormLabel mt-2">Address</label>
                 <Input
                   className="FormInput"
                   id="address"

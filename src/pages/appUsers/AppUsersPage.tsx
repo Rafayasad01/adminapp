@@ -179,7 +179,7 @@ function AppUsersPage() {
   }, [null, selectedTab]);
 
   const createFormHandler = (data: any) => {
-    // setIsLoader(true);
+    setIsLoader(true);
     const formData = {
       firstName: data.firstName,
       lastName: data.lastName,
@@ -187,19 +187,20 @@ function AppUsersPage() {
       email: data.email,
       phone: data.phone ? data.phone : null,
       address: data.address,
-      userType: data.appuserRole,
+      // userType: data.appuserRole,
+      userType: 'App',
       postalCode: data.postalCode ? data.postalCode : null,
       licenseNumber: data.licenseNumber ? data.licenseNumber : null,
       tenant: authState.user.tenant,
       createdBy: authState.user.id,
     };
 
-    let dataRender = false;
-    if (data.appuserRole === 'Driver' && selectedTab === 'OTHER') {
-      dataRender = true;
-    } else if (data.appuserRole === 'App' && selectedTab === 'APP USER') {
-      dataRender = true;
-    }
+    // let dataRender = false;
+    // if (data.appuserRole === 'Driver' && selectedTab === 'OTHER') {
+    //   dataRender = true;
+    // } else if (data.appuserRole === 'App' && selectedTab === 'APP USER') {
+    //   dataRender = true;
+    // }
     appUserService
       .appCreateUser(formData)
       .then((item) => {
@@ -210,9 +211,9 @@ function AppUsersPage() {
             text: item.data.message,
             type: 'success',
           });
-          if (dataRender) {
-            setList([...list, item.data.data]);
-          }
+          // if (dataRender) {
+          setList([item.data.data, ...list]);
+          // }
         } else {
           setIsLoader(false);
           setIsNotify(true);
@@ -239,7 +240,8 @@ function AppUsersPage() {
       firstName: data.firstName,
       lastName: data.lastName,
       phone: data.phone ? data.phone : null,
-      userType: data.appuserRole,
+      // userType: data.appuserRole,
+      userType: 'App',
       postalCode: data.postalCode ? data.postalCode : null,
       licenseNumber: data.licenseNumber ? data.licenseNumber : null,
       updatedBy: authState.user.id,
