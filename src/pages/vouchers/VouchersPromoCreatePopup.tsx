@@ -10,7 +10,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Input from '@mui/material/Input';
 // import MenuItem from '@mui/material/MenuItem';
 // import Select from '@mui/material/Select';
-import Switch from '@mui/material/Switch';
+// import Switch from '@mui/material/Switch';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import dayjs from 'dayjs';
@@ -80,11 +80,11 @@ function VouchersPromoCreatePopup({
 
   const authState: any = useAppSelector((state) => state?.authState);
   const handleFormClose = () => setVouchersPromoDialog(false);
-  const [checked, setChecked] = React.useState(true);
+  // const [checked, setChecked] = React.useState(true);
 
-  const handleSwitchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setChecked(event.target.checked);
-  };
+  // const handleSwitchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   setChecked(event.target.checked);
+  // };
 
   const onSubmit = (data: CreateVoucherFromData) => {
     handleFormClose();
@@ -95,7 +95,7 @@ function VouchersPromoCreatePopup({
       value: +data.value,
       minAmount: +data.minAmount,
       maxRedeem: data.isUnlimitedRedeem ? 0 : data.maxRedeem,
-      isActive: data.isActive,
+      isActive: true,
       backOfficeUser: authState.user.id,
       validFrom: dayjs(data.validFrom)?.format('YYYY-MM-DD HH:mm:ss'),
       validTill: dayjs(data.validTill)?.format('YYYY-MM-DD HH:mm:ss'),
@@ -300,7 +300,7 @@ function VouchersPromoCreatePopup({
                 </FormControl>
                 {/* } */}
               </div>
-              <div className="FormField">
+              {/* <div className="FormField">
                 <FormControl className="FormControl" variant="standard">
                   <label className="FormLabel my-1 mt-2">Status</label>
                   <Switch
@@ -313,7 +313,7 @@ function VouchersPromoCreatePopup({
                     className="custom-switch"
                   />
                 </FormControl>
-              </div>
+              </div> */}
               <div className="FormField">
                 <FormControlLabel
                   control={

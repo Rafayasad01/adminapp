@@ -6,7 +6,7 @@ import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
 // import MenuItem from '@mui/material/MenuItem';
 // import Select from '@mui/material/Select';
-import Switch from '@mui/material/Switch';
+// import Switch from '@mui/material/Switch';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
@@ -83,9 +83,9 @@ function VouchersPromoEditPopup({
   const handleFormClose = () => setVouchersPromoEditDialog(false);
   const [checked, setChecked] = useState(true);
 
-  const handleSwitchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setChecked(event.target.checked);
-  };
+  // const handleSwitchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   setChecked(event.target.checked);
+  // };
 
   const onSubmit = (data: UpdateVoucherFromData) => {
     handleFormClose();
@@ -96,7 +96,7 @@ function VouchersPromoEditPopup({
       value: +data.value,
       minAmount: +data.minAmount,
       maxRedeem: data.isUnlimitedRedeem ? 0 : data.maxRedeem,
-      isActive: data.isActive,
+      isActive: checked,
       backOfficeUser: authState.user.id,
       validFrom: dayjs(data.validFrom)?.format('YYYY-MM-DD HH:mm:ss'),
       validTill: dayjs(data.validTill)?.format('YYYY-MM-DD HH:mm:ss'),
@@ -111,6 +111,7 @@ function VouchersPromoEditPopup({
     if (watch('isUnlimitedRedeem')) {
       setValue('maxRedeem', 0);
     } else {
+      setValue('maxRedeem', item.maxRedeem);
       setValue('maxUserRedeem', '0');
     }
   }, [watch('isUnlimitedRedeem')]);
@@ -291,7 +292,7 @@ function VouchersPromoEditPopup({
                   )}
                 </FormControl>
               </div>
-              <div className="FormField">
+              {/* <div className="FormField">
                 <FormControl className="FormControl" variant="standard">
                   <label className="FormLabel my-1 mt-2">Status</label>
                   <Switch
@@ -304,7 +305,7 @@ function VouchersPromoEditPopup({
                     className="custom-switch"
                   />
                 </FormControl>
-              </div>
+              </div> */}
               <div className="FormField">
                 <FormControlLabel
                   control={

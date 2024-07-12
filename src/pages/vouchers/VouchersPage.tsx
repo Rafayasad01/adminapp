@@ -407,11 +407,11 @@ function VouchersPage() {
                           <span
                             className={`${
                               item.isUnlimitedRedeem
-                                ? 'badge badge-success'
-                                : 'badge badge-primary'
+                                ? 'badge badge-primary'
+                                : 'badge badge-success'
                             }`}
                           >
-                            {item.isUnlimitedRedeem ? 'unlimited' : 'limited'}
+                            {item.isUnlimitedRedeem ? 'limited' : 'unlimited'}
                           </span>
                         </td>
                         <td>

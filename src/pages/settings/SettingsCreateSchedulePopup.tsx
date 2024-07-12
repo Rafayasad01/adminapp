@@ -52,7 +52,7 @@ const SettingsCreateSchedulePopup = ({
 
     dispatch(
       setScheduleThunk({
-        tenant: authState.user?.tenant,
+        tenant: authState?.user?.tenant,
         body: {
           workDays: wd,
           eventDays: od,
@@ -65,7 +65,7 @@ const SettingsCreateSchedulePopup = ({
   useEffect(() => {
     dispatch(
       fetchSchedule({
-        tenant: authState.user?.tenant,
+        tenant: authState?.user?.tenant,
         date: dayjs(ScheduledMonthDate).format('YYYY-MM-DD'),
       })
     );
