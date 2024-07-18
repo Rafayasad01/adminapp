@@ -387,7 +387,9 @@ function VouchersPage() {
                                 {item.voucherCode}
                               </span>
                               <span className="text-xs font-normal text-[#6A6A6A]">
-                                {item.type}
+                                {dayjs(item.createdDate).format(
+                                  'MMMM DD, YYYY'
+                                )}
                               </span>
                             </div>
                           </div>
