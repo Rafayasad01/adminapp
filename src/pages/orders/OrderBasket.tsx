@@ -398,39 +398,11 @@ const OrderBasket = () => {
     if (isExistingUser === 'FALSE') {
       setPromoList([]);
     }
+    console.log('ITEMSSSSSSSSSS', cartItems);
     ReactGA.send({
       hitType: 'Order-Purchase',
       page: '/admin/dashboard/store-product/orders/basket',
       title: 'Order Purchase Details',
-    });
-    ReactGA.event('purchase', {
-      transaction_id: '2',
-      affiliation: 'order_affiliation',
-      value: '2',
-      currency: 'PKR',
-      tax: '15%',
-      shipping: 'street 3',
-      items: [
-        {
-          item_id: '1',
-          item_name: 'band',
-          item_category: 'hairs',
-          item_variant: 'medium',
-          price: '200',
-          quantity: '1',
-        },
-        {
-          item_id: '2',
-          item_name: 'brush',
-          item_category: 'hairs',
-          item_variant: 'medium',
-          price: '150',
-          quantity: '3',
-        },
-      ],
-      user_id: authState.user?.tenant,
-      user_name: `${authState.user?.firstName} ${authState.user?.lastName}`,
-      user_registered: authState.user?.tenant ? 'Yes' : 'No',
     });
   }, []);
 
@@ -483,6 +455,29 @@ const OrderBasket = () => {
                       .OrderPlace(newOrderPlace)
                       .then((orderPlaceRes) => {
                         if (orderPlaceRes.data.success) {
+                          // purchase google analytics
+                          ReactGA.event('purchase', {
+                            transaction_id: item.data.data.cart.id,
+                            affiliation: 'order_purchase_affiliation',
+                            value: grandTotal,
+                            currency: 'PKR',
+                            tax: authState?.user?.tenantConfig?.gstPercentage,
+                            shipping:
+                              authState?.user?.tenantConfig?.shopAddress,
+                            items: cartItems?.map((el: any) => ({
+                              item_id: el.id,
+                              item_name: el.name,
+                              item_category: el.homeCategory,
+                              item_variant: el.desc,
+                              price: el.price,
+                              quantity: el.quantity,
+                            })),
+                            user_id: authState.user?.tenant,
+                            user_name: `${authState.user?.firstName} ${authState.user?.lastName}`,
+                            user_registered: authState.user?.tenant
+                              ? 'Yes'
+                              : 'No',
+                          });
                           setIsLoader(false);
                           showNotification({
                             text: orderPlaceRes.data.message,

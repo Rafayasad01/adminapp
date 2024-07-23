@@ -284,7 +284,7 @@ function NotificationPage() {
               <thead>
                 <tr>
                   <th className="w-[16rem]">Title</th>
-                  <th className="w-[30rem]">Message</th>
+                  <th className="w-[20rem]">Message</th>
                   <th>Dated</th>
                   <th>Type</th>
                   <th>status</th>
