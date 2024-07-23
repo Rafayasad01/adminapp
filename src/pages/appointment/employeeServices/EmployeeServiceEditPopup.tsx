@@ -9,7 +9,11 @@ import CustomDropDown from '../../../components/common/CustomDropDown';
 import CustomInputBox from '../../../components/common/CustomInputBox';
 import { BarberItemServices } from '../../../interfaces/services.interface';
 import storeLovService from '../../../services/adminapp/adminStoreService';
-import { BARBER_SERVICES_AMOUNT, PATTERN } from '../../../utils/constants';
+import {
+  BARBER_SERVICES_AMOUNT,
+  // GENDER,
+  PATTERN,
+} from '../../../utils/constants';
 
 type EmployeeServiceEditPopupProps = {
   callback: (...args: any[]) => any;
@@ -54,7 +58,6 @@ function EmployeeServiceEditPopup({
       getValues('categoryId') !== 'none'
     ) {
       getCatItems(watch('categoryId'));
-      // console.log("hit");
     }
   }, [watch('categoryId')]);
 
@@ -83,45 +86,68 @@ function EmployeeServiceEditPopup({
             <span className="Title">Edit Staff Service</span>
           </div>
           <div className="FormBody mt-2">
-            <div className="FormFields">
-              <FormControl className="FormControl" variant="standard">
-                <CustomDropDown
-                  validateRequired
-                  id="categoryId"
-                  control={control}
-                  error={errors}
-                  register={register}
-                  setValue={setValue}
-                  options={{
-                    roles: catlov,
-                    role: formData?.storeServiceCategoryItem
-                      ?.storeServiceCategory,
-                  }}
-                  defaultValue="Select Category"
-                  customClassInputTitle="font-bold"
-                  inputTitle="Select Category"
-                />
-              </FormControl>
-              <FormControl className="FormControl" variant="standard">
-                <CustomDropDown
-                  validateRequired
-                  id="storeServiceCategoryItem"
-                  control={control}
-                  error={errors}
-                  register={register}
-                  setValue={setValue}
-                  options={{
-                    roles: catItemsLovlist,
-                    role: formData?.storeServiceCategoryItem?.id,
-                  }}
-                  defaultValue="Select Services"
-                  customClassInputTitle="font-bold"
-                  inputTitle="Select Services"
-                />
-              </FormControl>
+            <div className="grid grid-cols-12 gap-4">
+              <div className="col-span-6">
+                <FormControl className="FormControl" variant="standard">
+                  <CustomDropDown
+                    validateRequired
+                    id="categoryId"
+                    control={control}
+                    error={errors}
+                    register={register}
+                    setValue={setValue}
+                    options={{
+                      roles: catlov,
+                      role: formData?.storeServiceCategoryItem
+                        ?.storeServiceCategory,
+                    }}
+                    defaultValue="Select Category"
+                    customClassInputTitle="font-bold"
+                    inputTitle="Select Category"
+                  />
+                </FormControl>
+              </div>
+              {/* <div className="col-span-4">
+                <FormControl className="FormControl" variant="standard">
+                  <CustomDropDown
+                    validateRequired
+                    id="serviceType"
+                    control={control}
+                    error={errors}
+                    register={register}
+                    setValue={setValue}
+                    options={{
+                      roles: GENDER,
+                      role: formData?.serviceType,
+                    }}
+                    defaultValue="Select Type"
+                    customClassInputTitle="font-bold"
+                    inputTitle="Select Type"
+                  />
+                </FormControl>
+              </div> */}
+              <div className="col-span-6">
+                <FormControl className="FormControl" variant="standard">
+                  <CustomDropDown
+                    validateRequired
+                    id="storeServiceCategoryItem"
+                    control={control}
+                    error={errors}
+                    register={register}
+                    setValue={setValue}
+                    options={{
+                      roles: catItemsLovlist,
+                      role: formData?.storeServiceCategoryItem?.id,
+                    }}
+                    defaultValue="Select Services"
+                    customClassInputTitle="font-bold"
+                    inputTitle="Select Services"
+                  />
+                </FormControl>
+              </div>
             </div>
             <div className="mt-3 grid grid-cols-12 gap-4">
-              <div className="col-span-4">
+              <div className="col-span-6">
                 <FormControl className="FormControl" variant="standard">
                   <CustomDropDown
                     validateRequired
@@ -141,7 +167,7 @@ function EmployeeServiceEditPopup({
                   />
                 </FormControl>
               </div>
-              <div className="col-span-4">
+              <div className="col-span-6">
                 <FormControl className="FormControl" variant="standard">
                   <CustomInputBox
                     value={Math.floor(formData?.amount)}
@@ -156,7 +182,7 @@ function EmployeeServiceEditPopup({
                   />
                 </FormControl>
               </div>
-              <div className="col-span-4">
+              {/* <div className="col-span-4">
                 <FormControl className="FormControl" variant="standard">
                   <CustomInputBox
                     value={formData?.serviceTime}
@@ -170,7 +196,7 @@ function EmployeeServiceEditPopup({
                     inputType="text"
                   />
                 </FormControl>
-              </div>
+              </div> */}
             </div>
           </div>
           <div className="FormFooter">

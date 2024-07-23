@@ -14,14 +14,17 @@ export interface BarberCategoryServices {
   name: string;
   description: string;
   price: string;
+  serviceTime: string;
+  serviceType: string;
   avatar: any;
 }
 
 // employee services item
 export interface BarberItemServices {
+  // serviceTime: string;
   amount: string;
   amountType: string;
-  serviceTime: string;
   categoryId?: string;
-  storeServiceCategoryItem: string;
+  serviceType: string;
+  store: string;
 }

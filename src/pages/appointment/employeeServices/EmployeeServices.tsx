@@ -352,9 +352,9 @@ function EmployeeServices() {
                 <tr>
                   <th className="w-[20%]">Name</th>
                   <th className="w-[20%]">Description</th>
-                  <th className="w-[10%]">Amount Type</th>
+                  <th className="w-[12%]">Amount Type</th>
                   <th className="w-[10%]">Amount</th>
-                  <th className="w-[10%]">Service Time (mints)</th>
+                  {/* <th className="w-[10%]">Service Time (mints)</th> */}
                   <th>Created Date</th>
                   <th>Status</th>
                   <th>&nbsp;</th>
@@ -395,17 +395,17 @@ function EmployeeServices() {
                         </td>
                         <td>{item.amountType ? item.amountType : '--'}</td>
                         <td>
-                          {item.amount ? Math.floor(item.amount) : '--'}
+                          {item.amount ? Math.floor(item.amount) : '--'}{' '}
                           {import.meta.env.VITE_CURRENCY_SYMBOL}
                         </td>
-                        <td>{item.serviceTime ? item.serviceTime : '--'}</td>
+                        {/* <td>{item.serviceTime ? item.serviceTime : '--'}</td> */}
                         <td>
                           {dayjs(
                             item.storeServiceCategoryItem.createdDate
                           ).isValid()
                             ? dayjs(
                                 item.storeServiceCategoryItem.createdDate
-                              )?.format('ddd, MMM DD, YYYY hh:mm:ssA')
+                              )?.format('ddd, MMM DD, YYYY')
                             : '--'}
                         </td>
                         <td>

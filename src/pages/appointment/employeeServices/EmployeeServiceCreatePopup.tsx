@@ -9,7 +9,11 @@ import CustomDropDown from '../../../components/common/CustomDropDown';
 import CustomInputBox from '../../../components/common/CustomInputBox';
 import { BarberItemServices } from '../../../interfaces/services.interface';
 import storeLovService from '../../../services/adminapp/adminStoreService';
-import { BARBER_SERVICES_AMOUNT, PATTERN } from '../../../utils/constants';
+import {
+  BARBER_SERVICES_AMOUNT,
+  // GENDER,
+  PATTERN,
+} from '../../../utils/constants';
 
 type EmployeeServiceCreatePopupProps = {
   callback: (...args: any[]) => any;
@@ -52,7 +56,6 @@ function EmployeeServiceCreatePopup({
       getValues('categoryId') !== 'none'
     ) {
       getCatItems(watch('categoryId'));
-      // console.log("hit");
     }
   }, [watch('categoryId')]);
 
@@ -81,38 +84,58 @@ function EmployeeServiceCreatePopup({
             <span className="Title">Add Staff Service</span>
           </div>
           <div className="FormBody mt-2">
-            <div className="FormFields">
-              <FormControl className="FormControl" variant="standard">
-                <CustomDropDown
-                  validateRequired
-                  id="categoryId"
-                  control={control}
-                  error={errors}
-                  register={register}
-                  setValue={setValue}
-                  options={{ roles: catlov }}
-                  defaultValue="Select Category"
-                  customClassInputTitle="font-bold"
-                  inputTitle="Select Category"
-                />
-              </FormControl>
-              <FormControl className="FormControl" variant="standard">
-                <CustomDropDown
-                  validateRequired
-                  id="storeServiceCategoryItem"
-                  control={control}
-                  error={errors}
-                  register={register}
-                  setValue={setValue}
-                  options={{ roles: catItemsLovlist }}
-                  defaultValue="Select Services"
-                  customClassInputTitle="font-bold"
-                  inputTitle="Select Services"
-                />
-              </FormControl>
+            <div className="grid grid-cols-12 gap-4">
+              <div className="col-span-6">
+                <FormControl className="FormControl" variant="standard">
+                  <CustomDropDown
+                    validateRequired
+                    id="categoryId"
+                    control={control}
+                    error={errors}
+                    register={register}
+                    setValue={setValue}
+                    options={{ roles: catlov }}
+                    defaultValue="Select Category"
+                    customClassInputTitle="font-bold"
+                    inputTitle="Select Category"
+                  />
+                </FormControl>
+              </div>
+              {/* <div className="col-span-4">
+                <FormControl className="FormControl" variant="standard">
+                  <CustomDropDown
+                    validateRequired
+                    id="serviceType"
+                    control={control}
+                    error={errors}
+                    register={register}
+                    setValue={setValue}
+                    options={{ roles: GENDER }}
+                    defaultValue="Select Type"
+                    customClassInputTitle="font-bold"
+                    inputTitle="Select Type"
+                  />
+                </FormControl>
+              </div> */}
+              <div className="col-span-6">
+                <FormControl className="FormControl" variant="standard">
+                  <CustomDropDown
+                    validateRequired
+                    id="storeServiceCategoryItem"
+                    control={control}
+                    error={errors}
+                    register={register}
+                    setValue={setValue}
+                    options={{ roles: catItemsLovlist }}
+                    defaultValue="Select Services"
+                    customClassInputTitle="font-bold"
+                    inputTitle="Select Services"
+                  />
+                </FormControl>
+              </div>
             </div>
             <div className="mt-3 grid grid-cols-12 gap-4">
-              <div className="col-span-4">
+              <div className="col-span-6">
                 <FormControl className="FormControl" variant="standard">
                   <CustomDropDown
                     validateRequired
@@ -129,7 +152,7 @@ function EmployeeServiceCreatePopup({
                   />
                 </FormControl>
               </div>
-              <div className="col-span-4">
+              <div className="col-span-6">
                 <FormControl className="FormControl" variant="standard">
                   <CustomInputBox
                     pattern={PATTERN.ONLY_NUM}
@@ -143,7 +166,7 @@ function EmployeeServiceCreatePopup({
                   />
                 </FormControl>
               </div>
-              <div className="col-span-4">
+              {/* <div className="col-span-4">
                 <FormControl className="FormControl" variant="standard">
                   <CustomInputBox
                     pattern={PATTERN.ONLY_NUM}
@@ -156,7 +179,7 @@ function EmployeeServiceCreatePopup({
                     inputType="text"
                   />
                 </FormControl>
-              </div>
+              </div> */}
             </div>
           </div>
           <div className="FormFooter">

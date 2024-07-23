@@ -12,6 +12,7 @@ import Switch from '@mui/material/Switch';
 import TablePagination from '@mui/material/TablePagination';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import dayjs from 'dayjs';
 import ActionMenu from '../../components/common/ActionMenu';
 import CustomText from '../../components/common/CustomText';
 import Loader from '../../components/common/Loader';
@@ -205,6 +206,8 @@ function ServiceItemPage() {
     const formData = new FormData();
     formData.append('name', data.name);
     formData.append('price', data.price);
+    formData.append('serviceTime', data.serviceTime);
+    // formData.append('serviceType', data.serviceType);
     formData.append('description', data.description);
     formData.append('avatar', data.avatar);
     formData.append('storeServiceCategory', CatId);
@@ -212,6 +215,7 @@ function ServiceItemPage() {
       .StoreCatItemsCreate(formData)
       .then((item) => {
         if (item.data.success) {
+          setOpenFormDialog(false);
           setIsLoader(false);
           setIsNotify(true);
           setNotifyMessage({
@@ -243,6 +247,8 @@ function ServiceItemPage() {
     const formData = new FormData();
     formData.append('name', data.name);
     formData.append('price', data.price);
+    formData.append('serviceTime', data.serviceTime);
+    // formData.append('serviceType', data.serviceType);
     formData.append('description', data.description);
     if (data.avatar) formData.append('avatar', data.avatar);
     storeService
@@ -260,6 +266,8 @@ function ServiceItemPage() {
               list[i].name = updateItem.data.data.name;
               list[i].description = updateItem.data.data.description;
               list[i].price = updateItem.data.data.price;
+              list[i].serviceTime = updateItem.data.data.serviceTime;
+              // list[i].serviceType = updateItem.data.data.serviceType;
               if (updateItem.data.data.avatar) {
                 list[i].avatar = updateItem.data.data.avatar;
               }
@@ -321,6 +329,17 @@ function ServiceItemPage() {
     setModalImage('');
     setIsModalImage(false);
   };
+
+  function convertMinutesToHours(minutes: any) {
+    const duration = dayjs.duration(minutes, 'minutes');
+    const hours = Math.floor(duration.asHours()); // Extract the whole number of hours
+    const remainingMinutes = duration.minutes(); // Get the remaining minutes
+
+    const formattedHours = String(hours).padStart(2, '0');
+    const formattedMinutes = String(remainingMinutes).padStart(2, '0');
+
+    return `${formattedHours}:${formattedMinutes}`;
+  }
 
   return isLoader ? (
     <Loader />
@@ -387,8 +406,9 @@ function ServiceItemPage() {
               <thead>
                 <tr>
                   <th className="w-[20%]">Item Name</th>
-                  <th className="w-[50%]">Description</th>
-                  {/* <th>Min Quantity</th> */}
+                  <th className="w-[25%]">Description</th>
+                  <th>Service Time</th>
+                  <th>Service Type</th>
                   <th>Price</th>
                   <th>Status</th>
                   <th>&nbsp;</th>
@@ -416,7 +436,10 @@ function ServiceItemPage() {
                           </div>
                         </td>
                         <td>{item.description ? item.description : '--'}</td>
-                        {/* <td>{item.quantity}</td> */}
+                        <td>
+                          {convertMinutesToHours(item.serviceTime) ?? '--'}
+                        </td>
+                        <td>{item.serviceType ?? '--'}</td>
                         <td>{item.price}</td>
                         <td>
                           {item.isActive ? (

@@ -18,6 +18,7 @@ import {
   WeekView,
 } from '@devexpress/dx-react-scheduler-material-ui';
 import PersonOutlinedIcon from '@mui/icons-material/PersonOutlined';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import Paper from '@mui/material/Paper';
 import dayjs from 'dayjs';
 // import timezone from 'dayjs/plugin/timezone';
@@ -507,6 +508,9 @@ const AllAppointment = ({
       </div>
       <hr />
       <Scheduler data={data} height={580}>
+        <span className="absolute left-[8px] top-[80px]">
+          <CalendarMonthIcon className="text-primary" />
+        </span>
         <ViewState
           defaultCurrentViewName={currentView}
           defaultCurrentDate={dayjs().toDate()}

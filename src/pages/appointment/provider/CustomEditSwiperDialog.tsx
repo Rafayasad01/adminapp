@@ -1,10 +1,10 @@
-import AddIcon from '@mui/icons-material/Add';
-import ArrowCircleLeftOutlinedIcon from '@mui/icons-material/ArrowCircleLeftOutlined';
-import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
+// import AddIcon from '@mui/icons-material/Add';
+// import ArrowCircleLeftOutlinedIcon from '@mui/icons-material/ArrowCircleLeftOutlined';
+// import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
-import EastIcon from '@mui/icons-material/East';
+// import EastIcon from '@mui/icons-material/East';
 import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
-import Button from '@mui/material/Button';
+// import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import FormControl from '@mui/material/FormControl';
 import IconButton from '@mui/material/IconButton';
@@ -20,10 +20,10 @@ import CustomInputBox from '../../../components/common/CustomInputBox';
 import ErrorSpanBox from '../../../components/common/ErrorSpanBox';
 import CustomTimePicker from '../../../components/common/TimePicker';
 import {
-  BARBER_SERVICES_AMOUNT,
+  // BARBER_SERVICES_AMOUNT,
   INVALID_CHAR,
   MAX_LENGTH_EXCEEDED,
-  PATTERN,
+  // PATTERN,
 } from '../../../utils/constants';
 
 type CustomEditSwiperDialogProps = {
@@ -74,20 +74,20 @@ type CustomEditSwiperDialogProps = {
 
 function CustomEditSwiperDialog({
   addScheduleFormat: _addScheduleFormat,
-  append,
-  catItemsLov,
-  usedCatItemsLovlist,
-  catLov,
-  control,
+  // append,
+  // catItemsLov,
+  // usedCatItemsLovlist,
+  // catLov,
+  // control,
   DialogSliderOne,
-  DialogSliderTwo,
+  // DialogSliderTwo,
   DialogSubHeader: _DialogSubHeader,
   editFormData,
   endTime: _endTime,
   errors,
   getValues: _getValues,
-  handleNextSlide,
-  handlePrevSlide,
+  // handleNextSlide,
+  // handlePrevSlide,
   handleSubmit,
   inputFieldsData,
   setUsedCatItemsLovlist,
@@ -100,13 +100,13 @@ function CustomEditSwiperDialog({
   reset,
   ServicesFields,
   setAvater,
-  setDelIds,
+  // setDelIds,
   setError: _setError,
-  setIsNotify,
-  setNotifyMessage,
+  // setIsNotify,
+  // setNotifyMessage,
   setOpenFormDialog,
   setStartServiceTime: _setStartServiceTime,
-  setValue,
+  // setValue,
   setWeekDays: _setWeekDays,
   singleField,
   specailCase,
@@ -139,55 +139,55 @@ function CustomEditSwiperDialog({
     }
   };
 
-  const handleServices = () => {
-    const obj = {
-      storeServiceCategoryItem: watch('servicesId'),
-      serviceTime: watch('mints'),
-      amountType: watch('servicesAmount'),
-      amount: watch('price'),
-    };
-    if (
-      !PATTERN.ONLY_NUM.test(watch('price')) &&
-      !PATTERN.ONLY_NUM.test(watch('mints'))
-    ) {
-      setIsNotify(true);
-      setNotifyMessage({
-        text: 'Price and Service time should be in digits(number)',
-        type: 'error',
-      });
-      return;
-    }
-    if (!PATTERN.ONLY_NUM.test(watch('price'))) {
-      setIsNotify(true);
-      setNotifyMessage({
-        text: 'Price should be in digits(number)',
-        type: 'error',
-      });
-      return;
-    }
-    if (!PATTERN.ONLY_NUM.test(watch('mints'))) {
-      setIsNotify(true);
-      setNotifyMessage({
-        text: 'Service Time should be in digits(number)',
-        type: 'error',
-      });
-      return;
-    }
-    if (
-      watch('servicesId') &&
-      watch('servicesAmount') &&
-      watch('price') &&
-      watch('mints')
-    ) {
-      append(obj);
-    } else {
-      setIsNotify(true);
-      setNotifyMessage({
-        text: 'All Services Fields are Required',
-        type: 'error',
-      });
-    }
-  };
+  // const handleServices = () => {
+  //   const obj = {
+  //     storeServiceCategoryItem: watch('servicesId'),
+  //     serviceTime: watch('mints'),
+  //     amountType: watch('servicesAmount'),
+  //     amount: watch('price'),
+  //   };
+  //   if (
+  //     !PATTERN.ONLY_NUM.test(watch('price')) &&
+  //     !PATTERN.ONLY_NUM.test(watch('mints'))
+  //   ) {
+  //     setIsNotify(true);
+  //     setNotifyMessage({
+  //       text: 'Price and Service time should be in digits(number)',
+  //       type: 'error',
+  //     });
+  //     return;
+  //   }
+  //   if (!PATTERN.ONLY_NUM.test(watch('price'))) {
+  //     setIsNotify(true);
+  //     setNotifyMessage({
+  //       text: 'Price should be in digits(number)',
+  //       type: 'error',
+  //     });
+  //     return;
+  //   }
+  //   if (!PATTERN.ONLY_NUM.test(watch('mints'))) {
+  //     setIsNotify(true);
+  //     setNotifyMessage({
+  //       text: 'Service Time should be in digits(number)',
+  //       type: 'error',
+  //     });
+  //     return;
+  //   }
+  //   if (
+  //     watch('servicesId') &&
+  //     watch('servicesAmount') &&
+  //     watch('price') &&
+  //     watch('mints')
+  //   ) {
+  //     append(obj);
+  //   } else {
+  //     setIsNotify(true);
+  //     setNotifyMessage({
+  //       text: 'All Services Fields are Required',
+  //       type: 'error',
+  //     });
+  //   }
+  // };
 
   /* const customRenderTimeViewClock = (props: any) => {
     return renderTimeViewClock({
@@ -205,19 +205,19 @@ function CustomEditSwiperDialog({
     setImageName(editFormData?.avatar);
   }, [editFormData]);
 
-  const handleRemove = (index: any, id: string | undefined) => {
-    console.log('uid', id);
-    remove(index);
-    if (id !== undefined) {
-      setDelIds((prevIds: string) => [...prevIds, id]);
-    }
-  };
+  // const handleRemove = (index: any, id: string | undefined) => {
+  //   console.log('uid', id);
+  //   remove(index);
+  //   if (id !== undefined) {
+  //     setDelIds((prevIds: string) => [...prevIds, id]);
+  //   }
+  // };
 
-  const getCatItemName = (id: any) => {
-    let tempAr: any[] = [];
-    tempAr = usedCatItemsLovlist;
-    return tempAr?.find((el: any) => el.id === id)?.name;
-  };
+  // const getCatItemName = (id: any) => {
+  //   let tempAr: any[] = [];
+  //   tempAr = usedCatItemsLovlist;
+  //   return tempAr?.find((el: any) => el.id === id)?.name;
+  // };
 
   return (
     <Dialog
@@ -489,10 +489,10 @@ function CustomEditSwiperDialog({
               />
               <CustomButton
                 buttonType="button"
-                title="Next"
-                iconRight={<EastIcon className="text-base" />}
-                onclick={handleNextSlide}
-                // type={'submit'}
+                title="Submit"
+                // iconRight={<EastIcon className="text-base" />}
+                // onclick={handleNextSlide}
+                type="submit"
                 className="btn-black-fill"
                 sx={{
                   padding: '0.375rem 2rem !important',
@@ -502,7 +502,7 @@ function CustomEditSwiperDialog({
               />
             </div>
           </SwiperSlide>
-          <SwiperSlide className="custom-swiper-slide swiper-no-swiping">
+          {/* <SwiperSlide className="custom-swiper-slide swiper-no-swiping">
             <div className="FormHeader">
               <div className="flex items-center">
                 <ArrowCircleLeftOutlinedIcon
@@ -555,7 +555,7 @@ function CustomEditSwiperDialog({
                       register={register}
                       setValue={setValue}
                       customClassInputTitle="font-bold"
-                      inputTitle="Amount Type"
+                      inputTitle="Commission Type"
                       options={{ roles: BARBER_SERVICES_AMOUNT }}
                       defaultValue="Select Type"
                     />
@@ -566,8 +566,8 @@ function CustomEditSwiperDialog({
                     <CustomInputBox
                       pattern={PATTERN.ONLY_NUM}
                       maxLetterLimit={15}
-                      inputTitle="Price"
-                      placeholder="Enter Service Amount"
+                      inputTitle="Commission"
+                      placeholder="Enter Service Commission Price"
                       id="price"
                       requiredType
                       register={register}
@@ -582,7 +582,8 @@ function CustomEditSwiperDialog({
                       <CustomInputBox
                         pattern={PATTERN.ONLY_NUM}
                         maxLetterLimit={4}
-                        inputTitle="Service Time (Minutes)"
+                        inputTitle="Service Time"
+                        subInputTitle="(Minutes)"
                         placeholder="Enter time (Minutes)"
                         id="mints"
                         requiredType
@@ -663,7 +664,7 @@ function CustomEditSwiperDialog({
                 }}
               />
             </div>
-          </SwiperSlide>
+          </SwiperSlide> */}
         </Swiper>
       </form>
     </Dialog>
