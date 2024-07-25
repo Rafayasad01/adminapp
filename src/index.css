@@ -2434,17 +2434,17 @@ main.min-h-screen.w-full.flex-grow.bg-gray-50.p-3.MuiBox-root.css-0 {
 }
 
 .en-date .MuiInputBase-formControl {
-  height: 48px;
+  height: 40px;
   font-size: 16px;
 }
 
 .en-search .MuiInputBase-formControl {
-  height: 48px;
+  height: 40px;
   font-size: 16px;
 }
 
 .en-search label.MuiFormLabel-root {
-  line-height: 16px;
+  line-height: 10px;
   font-size: 14px;
 }
 
@@ -2630,6 +2630,12 @@ main.min-h-screen.w-full.flex-grow.bg-gray-50.p-3.MuiBox-root.css-0 {
   padding: 0% !important;
   padding-top: 1px !important ;
   border: 1px solid gray; /* Example blue border color */
+}
+
+.custom-border-2 {
+  padding: 0% !important;
+  padding-top: 1px !important ;
+  border: 1px solid lightgray; /* Example blue border color */
 }
 
 .css-71a9mb-MuiButtonBase-root-MuiIconButton-root.NavigationButton-button {

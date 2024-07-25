@@ -68,6 +68,10 @@ import EmployeeRatingReviewsPage from '../pages/appointment/provider/rating/Empl
 import AppointmentRatingPage from '../pages/appointment/rating/AppointmentRatingPage';
 import AppointmentRatingReviewsPage from '../pages/appointment/rating/AppointmentRatingReviewsPage';
 import WalletPage from '../pages/appointment/wallet/WalletPage';
+import DeductionPage from '../pages/appointment/provider/deduction/DeductionPage';
+import CommissionPage from '../pages/appointment/provider/commission/CommissionPage';
+import BonusPage from '../pages/appointment/provider/bonus/BonusPage';
+import OvertimePage from '../pages/appointment/provider/overtime/OvertimePage';
 
 // import UpdateAppointmentPage from '../pages/appointment/UpdateAppointmentPage';
 
@@ -304,6 +308,10 @@ export const routeObjects: RouteObject[] = [
                 path: 'services/list/:empId',
                 element: <EmployeeServices />,
               },
+              {
+                path: 'deduction/:empId',
+                element: <DeductionPage />,
+              },
             ],
           },
           {
@@ -402,13 +410,25 @@ export const routeObjects: RouteObject[] = [
                     path: 'attendance/:empId',
                     element: <AppointmentEmployeesAttendancePage />,
                   },
-                  // {
-                  //   path: 'rating/:empId',
-                  //   element: <EmployeeRatingPage />,
-                  // },
                   {
                     path: 'review/:empId',
                     element: <EmployeeRatingReviewsPage />,
+                  },
+                  {
+                    path: 'deduction/:empId',
+                    element: <DeductionPage />,
+                  },
+                  {
+                    path: 'commission/:empId',
+                    element: <CommissionPage />,
+                  },
+                  {
+                    path: 'bonus/:empId',
+                    element: <BonusPage />,
+                  },
+                  {
+                    path: 'overtime/:empId',
+                    element: <OvertimePage />,
                   },
                 ],
               },

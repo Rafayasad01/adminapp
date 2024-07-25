@@ -477,3 +477,30 @@ export const GENDER = [
     name: 'Other',
   },
 ];
+
+export const DEDUCTION_TYPE = [
+  {
+    id: 'lateArrival',
+    name: 'Late Arrival',
+  },
+  {
+    id: 'uniform',
+    name: 'Uniform',
+  },
+  {
+    id: 'absent',
+    name: 'Absent',
+  },
+  {
+    id: 'halfDay',
+    name: 'Half Day',
+  },
+  {
+    id: 'earlyGoing',
+    name: 'Early Going',
+  },
+  {
+    id: 'others',
+    name: 'Others',
+  },
+];

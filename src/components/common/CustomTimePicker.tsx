@@ -58,7 +58,7 @@ function CustomTimePicker({
     setTimePicker(null);
   };
 
-  console.log('WATCH', watch(id));
+  // console.log('WATCH', watch(id));
 
   const open = Boolean(timePicker);
   const idProp = open ? id : undefined;

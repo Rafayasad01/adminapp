@@ -27,6 +27,7 @@ type TimePickerProps = {
   // errors?: any;
   id: string;
   isTrue?: boolean;
+  // views?: any;
   // setError?: any;
   setTimePickerValue: React.Dispatch<React.SetStateAction<dayjs.Dayjs | null>>;
   timePickerLabel?: string;
@@ -40,6 +41,7 @@ function TimePicker({
   // errors,
   id,
   isTrue,
+  // views,
   setTimePickerValue,
   timePickerLabel,
   timePickerSubLabel,
@@ -133,6 +135,7 @@ TimePickerProps) {
               defaultValue={dayjs('2023-01-01T00:00')}
               value={dayjs(timePickerValue) || null}
               onAccept={handleChange}
+              // views={views ?? ['hours', 'minutes']}
               // minTime={minTime}
               // maxTime={maxTime}
             />

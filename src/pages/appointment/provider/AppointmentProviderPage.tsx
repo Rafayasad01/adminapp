@@ -56,6 +56,11 @@ function AppointmentProviderPage() {
     'Rating',
     'Services',
     'Schedule',
+    'Deductions',
+    'Commissions',
+    'Bonus',
+    'Overtime',
+    'Payroll',
     'Edit',
     'Delete',
   ];
@@ -547,6 +552,54 @@ function AppointmentProviderPage() {
         listingRolePermission(dataRole, 'Appointment Provider Service View')
       ) {
         navigate(`../review/${actionMenuItemid}`);
+      } else {
+        setIsNotify(true);
+        setNotifyMessage({
+          text: NOT_AUTHORIZED_MESSAGE,
+          type: 'warning',
+        });
+      }
+    } else if (option === 'Deductions') {
+      if (
+        listingRolePermission(dataRole, 'Appointment Provider Service View')
+      ) {
+        navigate(`../deduction/${actionMenuItemid}`);
+      } else {
+        setIsNotify(true);
+        setNotifyMessage({
+          text: NOT_AUTHORIZED_MESSAGE,
+          type: 'warning',
+        });
+      }
+    } else if (option === 'Commissions') {
+      if (
+        listingRolePermission(dataRole, 'Appointment Provider Service View')
+      ) {
+        navigate(`../commission/${actionMenuItemid}`);
+      } else {
+        setIsNotify(true);
+        setNotifyMessage({
+          text: NOT_AUTHORIZED_MESSAGE,
+          type: 'warning',
+        });
+      }
+    } else if (option === 'Bonus') {
+      if (
+        listingRolePermission(dataRole, 'Appointment Provider Service View')
+      ) {
+        navigate(`../bonus/${actionMenuItemid}`);
+      } else {
+        setIsNotify(true);
+        setNotifyMessage({
+          text: NOT_AUTHORIZED_MESSAGE,
+          type: 'warning',
+        });
+      }
+    } else if (option === 'Overtime') {
+      if (
+        listingRolePermission(dataRole, 'Appointment Provider Service View')
+      ) {
+        navigate(`../overtime/${actionMenuItemid}`);
       } else {
         setIsNotify(true);
         setNotifyMessage({
