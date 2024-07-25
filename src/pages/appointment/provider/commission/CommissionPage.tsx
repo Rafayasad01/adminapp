@@ -1,4 +1,4 @@
-import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
+// import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import SearchIcon from '@mui/icons-material/Search';
 import Button from '@mui/material/Button';
@@ -25,7 +25,7 @@ import {
   //   CheckRolePermission,
   listingRolePermission,
 } from '../../../../utils/helper';
-import CommissionAddPopup from './CommissionAddPopup';
+import CommissionAddPopup from '../../../orders/CommissionAddPopup';
 // import ServiceCatEditPopup from './ServiceCatEditPopup';
 import PermissionPopup from '../../../../utils/PermissionPopup';
 import CommissionEditPopup from './CommissionEditPopup';
@@ -79,17 +79,17 @@ function CommissionPage() {
   const [isModalImage, setIsModalImage] = useState(false);
   const [modalImage, setModalImage] = useState('');
 
-  const handleFormClickOpen = () => {
-    if (listingRolePermission(dataRole, 'Category Create')) {
-      setOpenFormDialog(true);
-    } else {
-      setIsNotify(true);
-      setNotifyMessage({
-        text: NOT_AUTHORIZED_MESSAGE,
-        type: 'warning',
-      });
-    }
-  };
+  // const handleFormClickOpen = () => {
+  //   if (listingRolePermission(dataRole, 'Category Create')) {
+  //     setOpenFormDialog(true);
+  //   } else {
+  //     setIsNotify(true);
+  //     setNotifyMessage({
+  //       text: NOT_AUTHORIZED_MESSAGE,
+  //       type: 'warning',
+  //     });
+  //   }
+  // };
 
   useEffect(() => {
     // if (listingRolePermission(dataRole, 'Category List')) {
@@ -391,7 +391,7 @@ function CommissionPage() {
                 All Ahmed Commission
               </span>
             </div>
-            <div className="col-span-5">
+            {/* <div className="col-span-5">
               <div className="flex flex-row justify-end gap-3">
                 <Button
                   variant="contained"
@@ -401,9 +401,9 @@ function CommissionPage() {
                   <AddOutlinedIcon /> Add New
                 </Button>
               </div>
-            </div>
+            </div> */}
           </div>
-          <div className="flex justify-between gap-3 px-4 md:col-span-12 lg:col-span-8">
+          <div className="flex justify-start gap-3 px-4 md:col-span-12 lg:col-span-8">
             <div className="flex justify-start gap-3 md:col-span-12 lg:col-span-8">
               <TextField
                 label="Start Date"
@@ -448,11 +448,11 @@ function CommissionPage() {
             </div>
             <div>
               <Button
-                variant="contained"
+                variant="outlined"
                 className="btn-black-fill btn-icon"
                 onClick={() => fetchAppointmentsData()}
               >
-                <SearchIcon /> Search
+                <SearchIcon />
               </Button>
             </div>
           </div>

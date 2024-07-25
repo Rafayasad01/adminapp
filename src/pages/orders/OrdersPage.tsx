@@ -1,11 +1,12 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import SearchIcon from '@mui/icons-material/Search';
-import WysiwygOutlinedIcon from '@mui/icons-material/WysiwygOutlined';
+// import WysiwygOutlinedIcon from '@mui/icons-material/WysiwygOutlined';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import FormControl from '@mui/material/FormControl';
 import IconButton from '@mui/material/IconButton';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
 import TablePagination from '@mui/material/TablePagination';
@@ -20,9 +21,10 @@ import { useAppSelector } from '../../redux/redux-hooks';
 import orderService from '../../services/adminapp/adminOrders';
 import { ORDER_STATUSES } from '../../utils/constants';
 import promiseHandler, {
-  CheckRolePermission,
+  // CheckRolePermission,
   listingRolePermission,
 } from '../../utils/helper';
+import CommissionAddPopup from './CommissionAddPopup';
 // import Pagination from '@mui/material/Pagination';
 // import Stack from '@mui/material/Stack';
 
@@ -37,14 +39,16 @@ function OrdersPage() {
   const [total, setTotal] = useState(0);
   const [list, setList] = useState<any>([]);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const [actionMenuItemid] = React.useState('');
+  // const [actionMenuItemid] = React.useState('');
   const [isLoader, setIsLoader] = useState(true);
+  const [openFormDialog, setOpenFormDialog] = React.useState(false);
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
+  const [actionMenuItemid, setActionMenuItemid] = useState<null>(null);
   const [actionMenuAnchorEl, setActionMenuAnchorEl] =
     useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
-  const actionMenuOptions = ['Detail'];
+  const actionMenuOptions = ['Detail', 'Add Commission'];
   const handleChangePage = async (
     event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number
@@ -186,6 +190,44 @@ function OrdersPage() {
     }
   };
 
+  const createFormHandler = (data: any) => {
+    // console.log('data==>', data);
+    setIsLoader(true);
+    const formData = new FormData();
+    formData.append('name', data.name);
+    formData.append('description', data.description);
+    formData.append('avatar', data.avatar);
+    // storeService
+    //   .StoreCatCreate(formData)
+    //   .then((item: any) => {
+    //     if (item.data.success) {
+    //       setOpenFormDialog(false);
+    //       setIsLoader(false);
+    //       setIsNotify(true);
+    //       setNotifyMessage({
+    //         text: item.data.message,
+    //         type: 'success',
+    //       });
+    //       setList([item.data.data, ...list]);
+    //     } else {
+    //       setIsLoader(false);
+    //       setIsNotify(true);
+    //       setNotifyMessage({
+    //         text: item.data.message,
+    //         type: 'error',
+    //       });
+    //     }
+    //   })
+    //   .catch((err: Error) => {
+    //     setIsLoader(false);
+    //     setIsNotify(true);
+    //     setNotifyMessage({
+    //       text: err.message,
+    //       type: 'error',
+    //     });
+    //   });
+  };
+
   // const handleStatusChange = (event: SelectChangeEvent) => {
   //   setStatus(event.target.value as string);
   // };
@@ -240,20 +282,18 @@ function OrdersPage() {
   }, [null]);
 
   const menuHandler = (option: string) => {
-    let doOption = '';
-    if (option === 'Edit') {
-      doOption = 'edit';
-    } else if (option === 'Detail') {
-      doOption = 'detail';
-    } else {
-      doOption = 'download';
+    // console.log('🚀 ~ menuHandler ~ option:', option);
+    if (option === 'Detail') {
+      navigate(`./detail/${actionMenuItemid}`);
+    } else if (option === 'Add Commission') {
+      setOpenFormDialog(true);
     }
-    CheckRolePermission(
-      'Order View',
-      dataRole,
-      navigate,
-      `${doOption}/${actionMenuItemid}`
-    );
+    // CheckRolePermission(
+    //   'Order View',
+    //   dataRole,
+    //   navigate,
+    //   `${option}/${actionMenuItemid}`
+    // );
   };
 
   const getStatusBackground = (status: string) => {
@@ -286,6 +326,16 @@ function OrdersPage() {
           callback={menuHandler}
         />
       )}
+      {openFormDialog && (
+        <CommissionAddPopup
+          setIsNotify={setIsNotify}
+          setNotifyMessage={setNotifyMessage}
+          openFormDialog={openFormDialog}
+          setOpenFormDialog={setOpenFormDialog}
+          callback={createFormHandler}
+        />
+      )}
+
       <Notify
         isOpen={isNotify}
         setIsOpen={setIsNotify}
@@ -418,15 +468,21 @@ function OrdersPage() {
                         </td>
                         <td>{Item.orderNumber}</td>
                         <td aria-label="go to reviews">
-                          <div className="flex flex-row-reverse">
+                          {/* <div className="flex flex-row-reverse">
                             <IconButton
                               className="icon-btn"
                               onClick={() => navigate(`./detail/${Item.id}`)}
                             >
                               <WysiwygOutlinedIcon />
                             </IconButton>
-                          </div>
-                          {/* <IconButton
+                            <IconButton
+                              className="icon-btn"
+                              onClick={() => navigate(`./detail/${Item.id}`)}
+                            >
+                              <LocalAtmIcon />
+                            </IconButton>
+                          </div> */}
+                          <IconButton
                             className="btn-dot"
                             aria-label="more"
                             id="long-button"
@@ -436,12 +492,12 @@ function OrdersPage() {
                             aria-expanded={actionMenuOpen ? 'true' : undefined}
                             aria-haspopup="true"
                             onClick={(event: React.MouseEvent<HTMLElement>) => {
-                              setActionMenuItemid(list[index].id);
+                              setActionMenuItemid(Item.id);
                               setActionMenuAnchorEl(event.currentTarget);
                             }}
                           >
                             <MoreVertIcon />
-                          </IconButton> */}
+                          </IconButton>
                         </td>
                       </tr>
                     );

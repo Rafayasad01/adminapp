@@ -403,7 +403,7 @@ function DeductionPage() {
               </div>
             </div>
           </div>
-          <div className="flex justify-between gap-3 px-4 md:col-span-12 lg:col-span-8">
+          <div className="flex justify-start gap-3 px-4 md:col-span-12 lg:col-span-8">
             <div className="flex justify-start gap-3 md:col-span-12 lg:col-span-8">
               <TextField
                 label="Start Date"
@@ -452,7 +452,7 @@ function DeductionPage() {
                 className="btn-black-fill btn-icon"
                 onClick={() => fetchAppointmentsData()}
               >
-                <SearchIcon /> Search
+                <SearchIcon />
               </Button>
             </div>
           </div>

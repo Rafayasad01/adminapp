@@ -35,7 +35,7 @@ function ActionMenu({
       PaperProps={{
         style: {
           maxHeight: ITEM_HEIGHT * 4.5,
-          width: '11ch',
+          width: '12ch',
         },
       }}
     >
