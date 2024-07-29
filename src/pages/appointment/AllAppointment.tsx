@@ -32,7 +32,7 @@ import Notify from '../../components/common/Notify';
 import { useAppSelector } from '../../redux/redux-hooks';
 import storeAppointmentService from '../../services/adminapp/adminStoreAppointment';
 import AppointmentViewCard from './AppointmentViewCard';
-import UpdateAppointmentPopup from './UpdateAppointmentPopup';
+// import UpdateAppointmentPopup from './UpdateAppointmentPopup';
 import { APPOINTMENT_STATUS } from '../../utils/constants';
 
 dayjs.extend(weekOfYear);
@@ -54,7 +54,7 @@ const AllAppointment = ({
   setSelectedPriorityData,
 }: AllAppointmentProps) => {
   const [data, setData] = useState<any>([]);
-  const [appointmentData, setAppointmentData] = useState();
+  // const [appointmentData, setAppointmentData] = useState();
   const officeTimings = useAppSelector(
     (state) => state?.persistedReducer.appState.UserItems
   );
@@ -80,7 +80,7 @@ const AllAppointment = ({
   const currentMonthRef: any = useRef();
   const currentViewRef = useRef('Vertical Orientation');
   const [currentWeek, setCurrentWeek] = useState<any>(dayjs().week());
-  const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
+  // const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
   const [currentDate, setCurrentDate] = useState(dayjs().toDate());
@@ -108,6 +108,7 @@ const AllAppointment = ({
         if (res.data.success) {
           setIsLoader(false);
           const structuredData = res.data.data.map((item: any) => {
+            console.log('🚀 ~ structuredData ~ item:', item);
             // const date = moment(item.appointmentTime);
             const date = dayjs(item.appointmentTime);
             const formattedDateTime = dayjs(date).format(
@@ -159,7 +160,7 @@ const AllAppointment = ({
           : currentWeekRef.current,
         currentViewRef.current === 'Month' ? 'Month' : 'week'
       );
-    }, 60000);
+    }, 300000);
     return () => clearInterval(intervalId);
   }, []);
 
@@ -216,17 +217,21 @@ const AllAppointment = ({
     [setData, data]
   );
 
-  const getUpdatePopupData = async (updateData: any) => {
-    setAppointmentData(updateData);
-  };
+  // const getUpdatePopupData = async (updateData: any) => {
+  //   // setAppointmentData(updateData);
+  // };
 
-  const deleteAppointmentHandler = async (id: string) => {
+  const deleteAppointmentHandler = async (code: string) => {
+    // console.log('🚀 ~ deleteAppointmentHandler ~ code:', code);
+    setIsLoader(true);
     try {
-      setIsLoader(true);
-      const [deleteStatusResponse] = await Promise.all([
-        storeAppointmentService.appointmentCancelled(id),
-      ]);
+      const deleteStatusResponse =
+        await storeAppointmentService.appointmentAllCancelled(code);
       if (deleteStatusResponse.data.success) {
+        console.log(
+          '🚀 ~ deleteAppointmentHandler ~ deleteStatusResponse:',
+          deleteStatusResponse
+        );
         setIsLoader(false);
         setIsNotify(true);
         setNotifyMessage({
@@ -234,11 +239,14 @@ const AllAppointment = ({
           type: 'success',
         });
         setData((newArr: any) => {
-          return newArr.map((item: any) => {
-            if (item.id === deleteStatusResponse.data.data.id) {
-              item.status = deleteStatusResponse.data.data.status;
+          return newArr.map((el: any) => {
+            const findData = deleteStatusResponse.data.data.find(
+              (it: any) => it.id === el.id
+            );
+            if (findData && findData.id === el.id) {
+              el.status = APPOINTMENT_STATUS.CANCELLED;
             }
-            return { ...item };
+            return el;
           });
         });
       } else {
@@ -261,46 +269,47 @@ const AllAppointment = ({
     }
   };
 
-  const updateAppointmentHandler = async (updateAppointmentData: any) => {
-    setIsLoader(true);
-    const appId = updateAppointmentData.id;
-    delete updateAppointmentData.id;
-    await storeAppointmentService
-      .appointmentUpdate(appId, updateAppointmentData)
-      .then((res: any) => {
-        if (res.data.success) {
-          setIsLoader(false);
-          setData((newArr: any) => {
-            return newArr.map((item: any) => {
-              if (item.id === res.data.data.id) {
-                item.title = res.data.data.name;
-              }
-              return { ...item };
-            });
-          });
-          setIsNotify(true);
-          setNotifyMessage({
-            text: res.data.message,
-            type: 'success',
-          });
-        } else {
-          setIsLoader(false);
-          setIsNotify(true);
-          setNotifyMessage({
-            text: res.data.message,
-            type: 'error',
-          });
-        }
-      })
-      .catch((err: any) => {
-        setIsLoader(false);
-        setIsNotify(true);
-        setNotifyMessage({
-          text: err.message,
-          type: 'error',
-        });
-      });
-  };
+  // const updateAppointmentHandler = async (updateAppointmentData: any) => {
+  //   setIsLoader(true);
+  //   const appId = updateAppointmentData.id;
+  //   delete updateAppointmentData.id;
+  //   await storeAppointmentService
+  //     .appointmentUpdate(appId, updateAppointmentData)
+  //     .then((res: any) => {
+  //       if (res.data.success) {
+  //         setIsLoader(false);
+  //         setData((newArr: any) => {
+  //           return newArr.map((item: any) => {
+  //             if (item.id === res.data.data.id) {
+  //               item.title = res.data.data.name;
+  //             }
+  //             return { ...item };
+  //           });
+  //         });
+  //         setIsNotify(true);
+  //         setNotifyMessage({
+  //           text: res.data.message,
+  //           type: 'success',
+  //         });
+  //       } else {
+  //         setIsLoader(false);
+  //         setIsNotify(true);
+  //         setNotifyMessage({
+  //           text: res.data.message,
+  //           type: 'error',
+  //         });
+  //       }
+  //     })
+  //     .catch((err: any) => {
+  //       setIsLoader(false);
+  //       setIsNotify(true);
+  //       setNotifyMessage({
+  //         text: err.message,
+  //         type: 'error',
+  //       });
+  //     });
+  // };
+
   const appColor = (status: any) => {
     if (status === APPOINTMENT_STATUS.NEW) {
       return 'bg-blue-700';
@@ -543,8 +552,8 @@ const AllAppointment = ({
                 {...props}
                 setIsTooltipOpen={setIsTooltipOpen}
                 isTooltipOpen={isTooltipOpen}
-                setOpenFormDialog={setOpenEditFormDialog}
-                getUpdatePopupData={getUpdatePopupData}
+                // setOpenFormDialog={setOpenEditFormDialog}
+                // getUpdatePopupData={getUpdatePopupData}
                 isStatusDone={isStatusDone}
                 isStatusProcessing={isStatusProcessing}
                 deleteAppointmentHandler={deleteAppointmentHandler}
@@ -558,7 +567,7 @@ const AllAppointment = ({
         <ViewSwitcher />
         <DateNavigator />
       </Scheduler>
-      {openEditFormDialog && (
+      {/* {openEditFormDialog && (
         <UpdateAppointmentPopup
           setIsNotify={setIsNotify}
           setNotifyMessage={setNotifyMessage}
@@ -567,7 +576,7 @@ const AllAppointment = ({
           formData={appointmentData}
           callback={updateAppointmentHandler}
         />
-      )}
+      )} */}
     </Paper>
   );
 };

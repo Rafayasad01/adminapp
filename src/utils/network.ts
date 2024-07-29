@@ -117,8 +117,8 @@ const post = <T = any>(endPoint: string, data: T) => {
   });
 };
 
-const patch = <T = any>(endPoint: string, data: T) => {
-  return networkInstance.patch(`${BASE_URL}${endPoint}`, data, {
+const patch = <T = any, R = any>(endPoint: string, data: T) => {
+  return networkInstance.patch<R>(`${BASE_URL}${endPoint}`, data, {
     headers: {
       'Content-Type': 'application/json',
       Authorization: token(),

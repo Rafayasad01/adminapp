@@ -56,6 +56,49 @@ const appointmentCancelled = (storeAppId: any) => {
     {}
   );
 };
+interface AppointmentAllCancelledResponse {
+  success: boolean;
+  code: number;
+  message: string;
+  data: AppointmentAllCancelledData[];
+}
+
+interface AppointmentAllCancelledData {
+  id: string;
+  name: string;
+  phone: string;
+  email: string;
+  gender: string;
+  note: string;
+  tenant: string;
+  appointmentNumber: string;
+  status: string;
+  gstPercentage: number;
+  gstAmount: string;
+  discountAmount: string;
+  totalAmount: string;
+  grandTotalAmount: string;
+  createdBy: string;
+  updatedBy: string;
+  createdDate: string;
+  updatedDate: string;
+  storeEmployee: string;
+  storeServiceCategoryItem: string;
+  appointmentTime: string;
+  serviceTime: string;
+  storeServiceCategory: string;
+  paymentStatus: string;
+  code: string;
+  appUser: string;
+  appointmentType: string;
+  guestType: string;
+}
+const appointmentAllCancelled = (code: any) => {
+  return network.patch<any, AppointmentAllCancelledResponse>(
+    `${STORE_PREFIX}/${APPOINTMENT_PREFIX}/service/cancelled/all/${code}`,
+    {}
+  );
+};
 
 const getAllAppointments = (date: any, view: string) => {
   return network.get(
@@ -95,6 +138,14 @@ const AppointmentStoreEmployeeList = (
   );
 };
 
+// reschedule individual
+const appointmentRescheduleById = (storeAppId: any, data: any) => {
+  return network.post(
+    `${STORE_PREFIX}/${APPOINTMENT_PREFIX}/re-schedule/individual/${storeAppId}`,
+    data
+  );
+};
+
 // invoice
 const AppointmentInvoiceDetailById = (storeAppId: string) => {
   return network.get(
@@ -115,6 +166,8 @@ export default {
   appointmentPaid,
   appointmentProcessing,
   appointmentCancelled,
+  appointmentAllCancelled,
   AppointmentStoreEmployeeList,
+  appointmentRescheduleById,
   AppointmentInvoiceDetailById,
 };
