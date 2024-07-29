@@ -22,7 +22,7 @@ export interface BarberCategoryServices {
 // employee services item
 export interface BarberItemServices {
   // serviceTime: string;
-  amount: string;
+  amount: string | any;
   amountType: string;
   categoryId?: string;
   serviceType: string;

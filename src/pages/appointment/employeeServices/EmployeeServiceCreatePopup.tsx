@@ -21,6 +21,7 @@ type EmployeeServiceCreatePopupProps = {
   openFormDialog: boolean;
   setIsNotify: any;
   setNotifyMessage: any;
+  empDetail: any;
   setOpenFormDialog: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
@@ -31,6 +32,7 @@ function EmployeeServiceCreatePopup({
   setIsNotify: _setIsNotify,
   setNotifyMessage: _setNotifyMessage,
   setOpenFormDialog,
+  empDetail,
 }: EmployeeServiceCreatePopupProps) {
   const {
     control,
@@ -61,6 +63,10 @@ function EmployeeServiceCreatePopup({
 
   const onSubmit = (data: BarberItemServices) => {
     // console.log('🚀 ~ onSubmit ~ data:', data);
+    if (empDetail.payrollType === 'Salary') {
+      data.amount = 0;
+      data.amountType = 'None';
+    }
     delete data?.categoryId;
     callback(data);
   };
@@ -68,6 +74,8 @@ function EmployeeServiceCreatePopup({
   const handleFormClose = () => {
     setOpenFormDialog(false);
   };
+
+  console.log('empDetail', empDetail);
 
   return (
     <Dialog
@@ -134,39 +142,40 @@ function EmployeeServiceCreatePopup({
                 </FormControl>
               </div>
             </div>
-            <div className="mt-3 grid grid-cols-12 gap-4">
-              <div className="col-span-6">
-                <FormControl className="FormControl" variant="standard">
-                  <CustomDropDown
-                    validateRequired
-                    id="amountType"
-                    control={control}
-                    error={errors}
-                    register={register}
-                    setValue={setValue}
-                    // options={{ roles: providerlov }}
-                    customClassInputTitle="font-bold"
-                    inputTitle="Amount Type"
-                    options={{ roles: BARBER_SERVICES_AMOUNT }}
-                    defaultValue="Select Type"
-                  />
-                </FormControl>
-              </div>
-              <div className="col-span-6">
-                <FormControl className="FormControl" variant="standard">
-                  <CustomInputBox
-                    pattern={PATTERN.ONLY_NUM}
-                    maxLetterLimit={15}
-                    inputTitle="Price"
-                    placeholder="Enter Service Amount"
-                    id="amount"
-                    register={register}
-                    error={errors.amount}
-                    inputType="text"
-                  />
-                </FormControl>
-              </div>
-              {/* <div className="col-span-4">
+            {empDetail && empDetail.payrollType !== 'Salary' && (
+              <div className="mt-3 grid grid-cols-12 gap-4">
+                <div className="col-span-6">
+                  <FormControl className="FormControl" variant="standard">
+                    <CustomDropDown
+                      validateRequired
+                      id="amountType"
+                      control={control}
+                      error={errors}
+                      register={register}
+                      setValue={setValue}
+                      // options={{ roles: providerlov }}
+                      customClassInputTitle="font-bold"
+                      inputTitle="Amount Type"
+                      options={{ roles: BARBER_SERVICES_AMOUNT }}
+                      defaultValue="Select Type"
+                    />
+                  </FormControl>
+                </div>
+                <div className="col-span-6">
+                  <FormControl className="FormControl" variant="standard">
+                    <CustomInputBox
+                      pattern={PATTERN.ONLY_NUM}
+                      maxLetterLimit={15}
+                      inputTitle="Commission"
+                      placeholder="Enter Amount / Percentage"
+                      id="amount"
+                      register={register}
+                      error={errors.amount}
+                      inputType="text"
+                    />
+                  </FormControl>
+                </div>
+                {/* <div className="col-span-4">
                 <FormControl className="FormControl" variant="standard">
                   <CustomInputBox
                     pattern={PATTERN.ONLY_NUM}
@@ -180,7 +189,8 @@ function EmployeeServiceCreatePopup({
                   />
                 </FormControl>
               </div> */}
-            </div>
+              </div>
+            )}
           </div>
           <div className="FormFooter">
             <Button

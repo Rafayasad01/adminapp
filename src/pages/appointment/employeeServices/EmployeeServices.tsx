@@ -58,6 +58,7 @@ function EmployeeServices() {
   const [, /* isModalImage */ setIsModalImage] = useState(false);
   const [, /* modalImage */ setModalImage] = useState('');
   const [catLovlist, setCatLovList] = useState<any>([]);
+  const [empDetail, setEmpDetail] = useState<any>();
 
   const catLovService = useCallback(async () => {
     await storeLovService
@@ -82,10 +83,34 @@ function EmployeeServices() {
       });
   }, []);
 
+  const getEmployee = useCallback(async () => {
+    await employeeService
+      .StoreEmployeeFind(empId)
+      .then((res) => {
+        if (res.data.success) {
+          setEmpDetail(res.data.data);
+        } else {
+          setIsNotify(true);
+          setNotifyMessage({
+            text: res.data.message,
+            type: 'error',
+          });
+        }
+      })
+      .catch((err) => {
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
+        });
+      });
+  }, []);
+
   const handleFormClickOpen = () => {
     if (listingRolePermission(dataRole, 'Category Create')) {
       setOpenFormDialog(true);
       catLovService();
+      getEmployee();
     } else {
       setIsNotify(true);
       setNotifyMessage({
@@ -122,6 +147,7 @@ function EmployeeServices() {
         const editFormDatas = list?.find(
           (el: any) => el.id === actionMenuItemid
         );
+        getEmployee();
         catLovService();
         setActionMenuItemid(editFormDatas.id);
         setEditFormData(editFormDatas);
@@ -353,7 +379,7 @@ function EmployeeServices() {
                   <th className="w-[20%]">Name</th>
                   <th className="w-[20%]">Description</th>
                   <th className="w-[12%]">Amount Type</th>
-                  <th className="w-[10%]">Amount</th>
+                  <th className="w-[10%]">Amount / Percentage</th>
                   {/* <th className="w-[10%]">Service Time (mints)</th> */}
                   <th>Created Date</th>
                   <th>Status</th>
@@ -396,7 +422,11 @@ function EmployeeServices() {
                         <td>{item.amountType ? item.amountType : '--'}</td>
                         <td>
                           {item.amount ? Math.floor(item.amount) : '--'}{' '}
-                          {import.meta.env.VITE_CURRENCY_SYMBOL}
+                          {item.amountType === 'Percentage'
+                            ? '%'
+                            : item.amountType === 'None'
+                            ? ''
+                            : import.meta.env.VITE_CURRENCY_SYMBOL}
                         </td>
                         {/* <td>{item.serviceTime ? item.serviceTime : '--'}</td> */}
                         <td>
@@ -488,6 +518,7 @@ function EmployeeServices() {
       )}
       {openFormDialog && (
         <EmployeeServiceCreatePopup
+          empDetail={empDetail}
           setIsNotify={setIsNotify}
           setNotifyMessage={setNotifyMessage}
           openFormDialog={openFormDialog}
@@ -498,6 +529,7 @@ function EmployeeServices() {
       )}
       {openEditFormDialog && (
         <EmployeeServiceEditPopup
+          empDetail={empDetail}
           setIsNotify={setIsNotify}
           setNotifyMessage={setNotifyMessage}
           openFormDialog={openEditFormDialog}

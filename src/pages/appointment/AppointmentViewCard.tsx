@@ -1,6 +1,6 @@
 import HistoryIcon from '@mui/icons-material/History';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
-import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+// import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import PhoneIphoneOutlinedIcon from '@mui/icons-material/PhoneIphoneOutlined';
 // import CloseIcon from '@mui/icons-material/Close';
 import UpdateOutlinedIcon from '@mui/icons-material/UpdateOutlined';
@@ -230,37 +230,32 @@ const AppointmentViewCard = ({
                   setIsTooltipOpen(false);
                   if (appointmentData?.status === 'New') {
                     isStatusProcessing(appointmentData.id);
-                  } else if (data?.status === APPOINTMENT_STATUS.DONE) {
+                  } else if (data?.status === APPOINTMENT_STATUS.PROCESSING) {
                     isStatusDone(appointmentData.id);
                   }
                 }}
-                className={`mt-3 flex w-[100%] ${
-                  data?.status === APPOINTMENT_STATUS.PROCESSING
-                    ? 'cursor-default'
-                    : 'cursor-pointer border-[3px] bg-slate-200 shadow'
-                } items-center justify-center rounded`}
+                className="mt-3 flex w-[100%] cursor-pointer items-center justify-center rounded border-[3px] bg-slate-200 shadow"
               >
                 <IconButton
                   size="small"
                   name="Done"
                   disabled={data?.status === APPOINTMENT_STATUS.PROCESSING}
                   className="icon-btn mx-[4px] p-0"
-                  // onClick={() => isStatusDone(appointmentData.id)}
+                  onClick={() => isStatusDone(appointmentData.id)}
                 >
                   {data?.status === APPOINTMENT_STATUS.NEW ? (
                     <UpdateOutlinedIcon fontSize="small" />
-                  ) : data?.status === APPOINTMENT_STATUS.PROCESSING ? (
-                    <InfoOutlinedIcon fontSize="small" />
                   ) : (
-                    <CheckCircleOutlineIcon fontSize="small" />
+                    data?.status === APPOINTMENT_STATUS.PROCESSING && (
+                      // <InfoOutlinedIcon fontSize="small" />
+                      <CheckCircleOutlineIcon fontSize="small" />
+                    )
                   )}
                 </IconButton>
                 <span className="text-sm">
                   {data?.status === APPOINTMENT_STATUS.NEW
                     ? 'Processing'
                     : data?.status === APPOINTMENT_STATUS.PROCESSING
-                    ? 'This must be done by the staff.'
-                    : data?.status === APPOINTMENT_STATUS.DONE
                     ? 'Complete'
                     : ''}
                 </span>
