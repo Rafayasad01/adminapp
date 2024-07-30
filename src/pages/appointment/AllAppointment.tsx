@@ -23,7 +23,7 @@ import Paper from '@mui/material/Paper';
 import dayjs from 'dayjs';
 // import timezone from 'dayjs/plugin/timezone';
 import weekOfYear from 'dayjs/plugin/weekOfYear';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { memo, useCallback, useEffect, useRef, useState } from 'react';
 // import moment from 'moment';
 import Loader from '../../components/common/Loader';
 import SwiperComponent from '../../components/common/Swiper';
@@ -37,6 +37,8 @@ import { APPOINTMENT_STATUS } from '../../utils/constants';
 
 dayjs.extend(weekOfYear);
 // dayjs.extend(timezone);
+
+const MemoizedAppointmentTooltip = memo(AppointmentTooltip);
 
 type AllAppointmentProps = {
   appointmentType?: any;
@@ -101,7 +103,7 @@ const AllAppointment = ({
 
   const getAllAppointments = async (appointmentDate: any, view: any) => {
     // console.log('🚀 ~ getAllAppointments ~ view:', view);
-    // if (view === 'week') setIsLoader(true);
+    if (currentViewRef.current === 'week') setIsLoader(true);
     await storeAppointmentService
       .getAllAppointments(appointmentDate, view)
       .then((res: any) => {
@@ -160,7 +162,7 @@ const AllAppointment = ({
           : currentWeekRef.current,
         currentViewRef.current === 'Month' ? 'Month' : 'week'
       );
-    }, 300000);
+    }, 600000);
     return () => clearInterval(intervalId);
   }, []);
 
@@ -339,7 +341,7 @@ const AllAppointment = ({
     if (!restProps.data) {
       return null; // or handle the case where data is undefined
     }
-    // console.log('🚀 ~ AppointmentContent ~ restProps:', restProps);
+    // console.log('🚀 ~ AppointmentContent ~ restProps:', restProps.data);
     const startDate = restProps?.data?.startDate;
     const endDate = restProps?.data?.endDate;
     const sdformat = dayjs(startDate);
@@ -396,8 +398,6 @@ const AllAppointment = ({
     return null;
   };
 
-  console.log('CURR WEEK', currentWeek);
-
   const currentViewChange = (newView: any) => {
     if (newView === 'Vertical Orientation') {
       newView = 'Week';
@@ -410,57 +410,59 @@ const AllAppointment = ({
   };
 
   const currentDateChange = (newCurrentDate: any) => {
+    console.log('hi');
+    setIsLoader(true);
     const range: any = getRange(newCurrentDate, currentView);
     setCurrentDate(newCurrentDate);
     setRange(range);
   };
 
-  const isStatusProcessing = async (id: string) => {
-    try {
-      setIsLoader(true);
-      const [processingStatusResponse] = await Promise.all([
-        storeAppointmentService.appointmentProcessing(id),
-      ]);
-      if (processingStatusResponse.data.success) {
-        setIsLoader(false);
-        setIsNotify(true);
-        setNotifyMessage({
-          text: processingStatusResponse.data.message,
-          type: 'success',
-        });
-        setData((newArr: any) => {
-          return newArr.map((item: any) => {
-            if (item.id === processingStatusResponse.data.data.id) {
-              item.status = processingStatusResponse.data.data.status;
-            }
-            return { ...item };
-          });
-        });
-      } else {
-        // throw new Error(paidStatusResponse.data.message);
-        setIsLoader(false);
-        setIsNotify(true);
-        setNotifyMessage({
-          text: processingStatusResponse.data.message,
-          type: 'error',
-        });
-      }
-      // setIsLoader(false);
-    } catch (error: Error | any) {
-      setIsLoader(false);
-      setIsNotify(true);
-      setNotifyMessage({
-        text: error.message,
-        type: 'error',
-      });
-    }
-  };
+  // const isStatusProcessing = async (id: string) => {
+  //   try {
+  //     setIsLoader(true);
+  //     const [processingStatusResponse] = await Promise.all([
+  //       storeAppointmentService.appointmentProcessing(id),
+  //     ]);
+  //     if (processingStatusResponse.data.success) {
+  //       setIsLoader(false);
+  //       setIsNotify(true);
+  //       setNotifyMessage({
+  //         text: processingStatusResponse.data.message,
+  //         type: 'success',
+  //       });
+  //       setData((newArr: any) => {
+  //         return newArr.map((item: any) => {
+  //           if (item.id === processingStatusResponse.data.data.id) {
+  //             item.status = processingStatusResponse.data.data.status;
+  //           }
+  //           return { ...item };
+  //         });
+  //       });
+  //     } else {
+  //       // throw new Error(paidStatusResponse.data.message);
+  //       setIsLoader(false);
+  //       setIsNotify(true);
+  //       setNotifyMessage({
+  //         text: processingStatusResponse.data.message,
+  //         type: 'error',
+  //       });
+  //     }
+  //     // setIsLoader(false);
+  //   } catch (error: Error | any) {
+  //     setIsLoader(false);
+  //     setIsNotify(true);
+  //     setNotifyMessage({
+  //       text: error.message,
+  //       type: 'error',
+  //     });
+  //   }
+  // };
 
-  const isStatusDone = async (id: string) => {
+  const isStatusDone = async (code: string) => {
+    setIsLoader(true);
     try {
-      setIsLoader(true);
       const [statusResponse] = await Promise.all([
-        storeAppointmentService.appointmentPaid(id),
+        storeAppointmentService.appointmentPaidAll(code),
       ]);
       if (statusResponse.data.success) {
         setIsLoader(false);
@@ -470,15 +472,25 @@ const AllAppointment = ({
           type: 'success',
         });
         setData((newArr: any) => {
-          return newArr.map((item: any) => {
-            if (item.id === statusResponse.data.data.id) {
-              item.status = statusResponse.data.data.status;
+          return newArr.map((el: any) => {
+            const findData = statusResponse.data.data.find(
+              (it: any) => it.id === el.id
+            );
+            if (findData && findData.id === el.id) {
+              el.status = APPOINTMENT_STATUS.DONE;
             }
-            return { ...item };
+            return el;
           });
         });
+        // setData((newArr: any) => {
+        //   return newArr.map((item: any) => {
+        //     if (item.id === statusResponse.data.data.id) {
+        //       item.status = statusResponse.data.data.status;
+        //     }
+        //     return { ...item };
+        //   });
+        // });
       } else {
-        // throw new Error(paidStatusResponse.data.message);
         setIsLoader(false);
         setIsNotify(true);
         setNotifyMessage({
@@ -495,6 +507,11 @@ const AllAppointment = ({
         type: 'error',
       });
     }
+  };
+
+  const CustomNavigationButton = (props: any) => {
+    console.log(props);
+    return <DateNavigator.NavigationButton className="hidden" {...props} />;
   };
 
   return isLoader ? (
@@ -517,7 +534,7 @@ const AllAppointment = ({
       </div>
       <hr />
       <Scheduler data={data} height={580}>
-        <span className="absolute left-[8px] top-[80px]">
+        <span className="absolute left-[10px] top-[80px]">
           <CalendarMonthIcon className="text-primary" />
         </span>
         <ViewState
@@ -544,7 +561,7 @@ const AllAppointment = ({
         <Resources data={resources} mainResourceName="priorityId" />
         <IntegratedGrouping />
         <IntegratedEditing />
-        <AppointmentTooltip
+        <MemoizedAppointmentTooltip
           showCloseButton
           contentComponent={(props) => (
             <div>
@@ -555,7 +572,7 @@ const AllAppointment = ({
                 // setOpenFormDialog={setOpenEditFormDialog}
                 // getUpdatePopupData={getUpdatePopupData}
                 isStatusDone={isStatusDone}
-                isStatusProcessing={isStatusProcessing}
+                // isStatusProcessing={isStatusProcessing}
                 deleteAppointmentHandler={deleteAppointmentHandler}
               />
               {/* )} */}
@@ -565,7 +582,7 @@ const AllAppointment = ({
         <GroupingPanel />
         <Toolbar />
         <ViewSwitcher />
-        <DateNavigator />
+        <DateNavigator navigationButtonComponent={CustomNavigationButton} />
       </Scheduler>
       {/* {openEditFormDialog && (
         <UpdateAppointmentPopup

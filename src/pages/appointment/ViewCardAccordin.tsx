@@ -3,6 +3,8 @@ import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import LocalPhoneOutlinedIcon from '@mui/icons-material/LocalPhoneOutlined';
 import UpdateOutlinedIcon from '@mui/icons-material/UpdateOutlined';
+// import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
+import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
 import StarIcon from '@mui/icons-material/Star';
 import EditIcon from '@mui/icons-material/Edit';
 import HistoryIcon from '@mui/icons-material/History';
@@ -15,6 +17,7 @@ import dayjs from 'dayjs';
 import * as React from 'react';
 import moment from 'moment';
 import IconButton from '@mui/material/IconButton';
+import { CircularProgress } from '@mui/material';
 import assets from '../../assets';
 import storeAppointmentService from '../../services/adminapp/adminStoreAppointment';
 import { APPOINTMENT_STATUS } from '../../utils/constants';
@@ -63,6 +66,7 @@ function ViewCardAccordin({
   const [openEditFormDialog, setOpenEditFormDialog] = React.useState(false);
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
+  const [statusLoader, setStatusLoader] = React.useState(false);
 
   const handleChange =
     (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
@@ -235,7 +239,100 @@ function ViewCardAccordin({
     setAppointmentDataById(appointmentData);
   };
 
-  // console.log('getDataById', getDataById);
+  const isStatusProcess = async (appointmentId: string) => {
+    try {
+      setStatusLoader(true);
+      const [statusResponse] = await Promise.all([
+        storeAppointmentService.appointmentProcessing(appointmentId),
+      ]);
+      if (statusResponse.data.success) {
+        setStatusLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: statusResponse.data.message,
+          type: 'success',
+        });
+        setData((newObj: any) => {
+          return {
+            ...newObj,
+            services: newObj.services.map((el: any) => {
+              if (el.id === statusResponse.data.data.id) {
+                el.status = statusResponse.data.data.status;
+              }
+              return el;
+            }),
+          };
+        });
+      } else {
+        // throw new Error(paidStatusResponse.data.message);
+        setStatusLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: statusResponse.data.message,
+          type: 'error',
+        });
+      }
+    } catch (error: Error | any) {
+      setStatusLoader(false);
+      setIsNotify(true);
+      setNotifyMessage({
+        text: error.message,
+        type: 'error',
+      });
+    }
+  };
+
+  const isStatusDone = async (appointmentId: string) => {
+    try {
+      setStatusLoader(true);
+      const [statusResponse] = await Promise.all([
+        storeAppointmentService.appointmentPaid(appointmentId),
+      ]);
+      if (statusResponse.data.success) {
+        setStatusLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: statusResponse.data.message,
+          type: 'success',
+        });
+        setData((newObj: any) => {
+          return {
+            ...newObj,
+            status: statusResponse.data.data.status,
+            services: newObj.services.map((el: any) => {
+              if (el.id === statusResponse.data.data.id) {
+                el.status = statusResponse.data.data.status;
+              }
+              return el;
+            }),
+          };
+        });
+      } else {
+        // throw new Error(paidStatusResponse.data.message);
+        setStatusLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: statusResponse.data.message,
+          type: 'error',
+        });
+      }
+    } catch (error: Error | any) {
+      setStatusLoader(false);
+      setIsNotify(true);
+      setNotifyMessage({
+        text: error.message,
+        type: 'error',
+      });
+    }
+  };
+
+  const getStatusColor = (status: string) => {
+    if (statusLoader) return `bg-white`;
+    if (status === APPOINTMENT_STATUS.NEW) return `bg-slate-300`;
+    if (status === APPOINTMENT_STATUS.PROCESSING) return `bg-yellow-200`;
+    if (status === APPOINTMENT_STATUS.DONE) return `bg-green-400`;
+    return false;
+  };
 
   const statusCancelHandler = () => {
     onDeleteAppointment(serviceId);
@@ -275,11 +372,11 @@ function ViewCardAccordin({
                       >
                         <div className="flex items-center">
                           <img
-                            className="ml-[-1px] h-[20px] w-[40px] rounded-full"
+                            className="ml-[-1px] h-[30px] w-[30px] rounded-full object-contain"
                             src={
-                              item.appointmentType !== 'AnyProfessional'
+                              item.storeEmployee?.avatar !== null
                                 ? item.storeEmployee?.avatar
-                                : assets.images.avatarUser2
+                                : assets.images.appProfile
                             }
                             alt="app-head"
                           />
@@ -330,43 +427,65 @@ function ViewCardAccordin({
                         </div>
                       ) : (
                         <div
-                          //   onClick={() => {
-                          //     setIsTooltipOpen(false);
-                          //     if (appointmentData?.status === 'New') {
-                          //       isStatusProcessing(appointmentData.id);
-                          //     } else if (
-                          //       data?.status === APPOINTMENT_STATUS.PROCESSING
-                          //     ) {
-                          //       isStatusDone(appointmentData.id);
-                          //     }
-                          //   }}
-                          className="mt-3 flex w-[40%] cursor-pointer items-center justify-center rounded border-[3px] bg-slate-200 shadow"
+                          onClick={() => {
+                            // setIsTooltipOpen(false);
+                            if (item?.status === APPOINTMENT_STATUS.NEW) {
+                              isStatusProcess(item.id);
+                            } else if (
+                              item?.status === APPOINTMENT_STATUS.PROCESSING
+                            ) {
+                              isStatusDone(item.id);
+                            } else if (
+                              item?.status === APPOINTMENT_STATUS.DONE
+                            ) {
+                              setIsNotify(true);
+                              setNotifyMessage({
+                                text: 'This Service has been done',
+                                type: 'success',
+                              });
+                            }
+                          }}
+                          className={`mt-3 flex w-[40%] cursor-pointer items-center justify-center rounded p-1 
+                            ${getStatusColor(item?.status)} shadow`}
                         >
                           <IconButton
                             size="small"
-                            name="Done"
-                            // disabled={
-                            //   data?.status === APPOINTMENT_STATUS.PROCESSING
-                            // }
-                            className="icon-btn mx-[4px] p-0"
+                            name="status"
+                            disabled={
+                              statusLoader ||
+                              item?.status === APPOINTMENT_STATUS.DONE
+                            }
+                            className="icon-btn mx-[0px] p-0"
                             // onClick={() => isStatusDone(appointmentData.id)}
                           >
-                            {item?.status === APPOINTMENT_STATUS.NEW ? (
+                            {statusLoader ? (
+                              ''
+                            ) : item?.status === APPOINTMENT_STATUS.NEW ? (
+                              <AccessTimeOutlinedIcon fontSize="small" />
+                            ) : item?.status ===
+                              APPOINTMENT_STATUS.PROCESSING ? (
+                              // <InfoOutlinedIcon fontSize="small" />
                               <UpdateOutlinedIcon fontSize="small" />
                             ) : (
-                              item?.status ===
-                                APPOINTMENT_STATUS.PROCESSING && (
+                              item?.status === APPOINTMENT_STATUS.DONE && (
                                 // <InfoOutlinedIcon fontSize="small" />
                                 <CheckCircleOutlineIcon fontSize="small" />
                               )
                             )}
                           </IconButton>
-                          <span className="text-sm">
-                            {item?.status === APPOINTMENT_STATUS.NEW
-                              ? 'Process'
-                              : item?.status === APPOINTMENT_STATUS.PROCESSING
-                              ? 'Processing'
-                              : ''}
+                          <span className="flex justify-center px-[1px] text-sm">
+                            {statusLoader ? (
+                              <CircularProgress size={15} color="inherit" />
+                            ) : item?.status === APPOINTMENT_STATUS.NEW ? (
+                              'Process'
+                            ) : item?.status ===
+                              APPOINTMENT_STATUS.PROCESSING ? (
+                              'Processing'
+                            ) : item?.status === APPOINTMENT_STATUS.DONE ? (
+                              'Done'
+                            ) : (
+                              ''
+                            )}
                           </span>
                         </div>
                       )}
@@ -375,6 +494,7 @@ function ViewCardAccordin({
                           disabled={
                             item?.status === APPOINTMENT_STATUS.CANCELLED ||
                             item?.status === APPOINTMENT_STATUS.COMPLETED ||
+                            item?.status === APPOINTMENT_STATUS.DONE ||
                             item?.status === APPOINTMENT_STATUS.RESCHEDULE ||
                             item?.status === APPOINTMENT_STATUS.PROCESSING ||
                             item?.status === APPOINTMENT_STATUS.MISSED
@@ -396,6 +516,7 @@ function ViewCardAccordin({
                           disabled={
                             item?.status === APPOINTMENT_STATUS.CANCELLED ||
                             item?.status === APPOINTMENT_STATUS.COMPLETED ||
+                            item?.status === APPOINTMENT_STATUS.DONE ||
                             item?.status === APPOINTMENT_STATUS.RESCHEDULE ||
                             item?.status === APPOINTMENT_STATUS.PROCESSING ||
                             item?.status === APPOINTMENT_STATUS.MISSED
@@ -414,6 +535,7 @@ function ViewCardAccordin({
                           disabled={
                             item?.status === APPOINTMENT_STATUS.CANCELLED ||
                             item?.status === APPOINTMENT_STATUS.COMPLETED ||
+                            item?.status === APPOINTMENT_STATUS.DONE ||
                             item?.status === APPOINTMENT_STATUS.RESCHEDULE ||
                             item?.status === APPOINTMENT_STATUS.PROCESSING ||
                             item?.status === APPOINTMENT_STATUS.MISSED
@@ -464,7 +586,11 @@ function ViewCardAccordin({
                     </div>
                     <div className="mt-[1px] flex items-center">
                       <div>
-                        <img
+                        <AccessTimeOutlinedIcon
+                          className="ml-[-2px]"
+                          fontSize="inherit"
+                        />
+                        {/* <img
                           className="ml-[-1px] h-[14px] w-[14px] rounded-full"
                           src={
                             item.appointmentType !== 'AnyProfessional'
@@ -472,11 +598,11 @@ function ViewCardAccordin({
                               : assets.images.avatarUser2
                           }
                           alt="app-head"
-                        />
+                        /> */}
                       </div>
                       <div>
-                        <span className="mx-2 text-xs text-[#6A6A6A]">
-                          {item?.storeEmployee?.name}
+                        <span className="mx-[5px] text-xs text-[#6A6A6A]">
+                          {item?.serviceTime} mints
                         </span>
                       </div>
                     </div>

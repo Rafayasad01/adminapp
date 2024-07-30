@@ -10,7 +10,7 @@ import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined
 import PeopleOutlineOutlinedIcon from '@mui/icons-material/PeopleOutlineOutlined';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import QuestionAnswerOutlinedIcon from '@mui/icons-material/QuestionAnswerOutlined';
-import WalletIcon from '@mui/icons-material/Wallet';
+// import WalletIcon from '@mui/icons-material/Wallet';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import SplitscreenOutlinedIcon from '@mui/icons-material/SplitscreenOutlined';
 import TwitterIcon from '@mui/icons-material/Twitter';
@@ -67,12 +67,12 @@ const links = [
         permission: 'Category List',
         icon: <VisitIcon />,
       },
-      {
-        name: 'Wallet',
-        path: 'store-appointment/wallet',
-        permission: 'Category List',
-        icon: <WalletIcon fontSize="inherit" />,
-      },
+      // {
+      //   name: 'Wallet',
+      //   path: 'store-appointment/wallet',
+      //   permission: 'Category List',
+      //   icon: <WalletIcon fontSize="inherit" />,
+      // },
       {
         name: 'Leave management',
         path: 'store-appointment/leaves-management',

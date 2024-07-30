@@ -46,7 +46,7 @@ import {
 import { listingRolePermission } from '../../utils/helper';
 import DragDropFile from './DragDropFile';
 import SocialLinksPopup from './SocialLinksPopup';
-import CustomQRPrintLayout from '../../utils/CustomPrintLayout/CustomQRPrintLayout';
+// import CustomQRPrintLayout from '../../utils/CustomPrintLayout/CustomQRPrintLayout';
 
 type AssetsImages = keyof typeof assets.images;
 
@@ -87,7 +87,7 @@ function SettingsApp() {
   const [isLoader, setIsLoader] = useState(true);
   const [isNotify, setIsNotify] = useState(false);
   const [notifyMessage, setNotifyMessage] = useState({});
-  const [isPrintEnabled, setPrintEnabled] = useState<any>([false]);
+  // const [isPrintEnabled, setPrintEnabled] = useState<any>([false]);
   const {
     register,
     handleSubmit,
@@ -387,13 +387,13 @@ function SettingsApp() {
             </Tabs>
           </div>
           <div className="Content w-full px-4 py-5">
-            <div className="mb-4">
+            {/* <div className="mb-4">
               <CustomQRPrintLayout
                 isPrintEnabled={isPrintEnabled}
                 setPrintEnabled={setPrintEnabled}
               />
               {/* <button><PrintOutlinedIcon /> Order Slip</button> */}
-            </div>
+            {/* </div> */}
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="flex justify-between">
                 <div className="mb-3 text-base">
@@ -688,7 +688,7 @@ function SettingsApp() {
                 </FormControl>
               </div>
               <div className="mt-3 flex items-center justify-between gap-4">
-                <div className="w-full">
+                {/* <div className="w-full">
                   <FormControl className="FormControl" variant="standard">
                     <label className="FormLabel">
                       Attendance Distance
@@ -716,7 +716,7 @@ function SettingsApp() {
                       />
                     )}
                   </FormControl>
-                </div>
+                </div> */}
                 <div className="w-full">
                   <TimePicker
                     timePickerLabel="Shop Time In"

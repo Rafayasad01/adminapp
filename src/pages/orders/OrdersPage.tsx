@@ -347,11 +347,12 @@ function OrdersPage() {
               <thead>
                 <tr className="border-opacity">
                   <th className="w-[22%]">Customers</th>
-                  <th>Pickup Time</th>
-                  <th>Drop-off Time</th>
-                  <th>Amount</th>
-                  <th className="w-36">Status</th>
+                  {/* <th>Pickup Time</th>
+                  <th>Drop-off Time</th> */}
                   <th>Order ID</th>
+                  <th>Amount</th>
+                  <th>Created Date</th>
+                  <th className="w-36">Status</th>
                   <th aria-label="empty table header">&nbsp;</th>
                 </tr>
               </thead>
@@ -373,7 +374,7 @@ function OrdersPage() {
                             </span>
                           </div>
                         </td>
-                        <td>
+                        {/* <td>
                           <div className="flex flex-col">
                             <span className="text-sm font-normal text-secondary">
                               {dayjs(Item.pickupDateTime)?.format('hh:mm:ssA')}{' '}
@@ -387,7 +388,8 @@ function OrdersPage() {
                                 'ddd, MMM DD, YYYY'
                               )}
                             </span>
-                          </div>
+                          </div
+                          >
                         </td>
                         <td>
                           <div className="flex flex-col">
@@ -403,9 +405,17 @@ function OrdersPage() {
                               )}
                             </span>
                           </div>
-                        </td>
+                        </td> */}
+                        <td>{Item.orderNumber}</td>
                         <td className="text-sm font-semibold text-secondary">
                           PKR {Item.grandTotal}
+                        </td>
+                        <td>
+                          <span className="text-xs font-normal text-[#6A6A6A]">
+                            {dayjs(Item.createdDate)?.format(
+                              'ddd, MMM DD, YYYY'
+                            )}
+                          </span>
                         </td>
                         <td>
                           <span
@@ -416,7 +426,6 @@ function OrdersPage() {
                             {setOrderStatus(Item.status)}
                           </span>
                         </td>
-                        <td>{Item.orderNumber}</td>
                         <td aria-label="go to reviews">
                           <div className="flex flex-row-reverse">
                             <IconButton
