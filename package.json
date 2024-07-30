@@ -39,6 +39,7 @@
     "@mui/styled-engine-sc": "5.11.11",
     "@mui/x-date-pickers": "6.0.3",
     "@reduxjs/toolkit": "^1.9.3",
+    "@types/quill": "^2.0.14",
     "@types/react-big-calendar": "^1.8.9",
     "axios": "^1.4.0",
     "chart.js": "^4.2.1",
