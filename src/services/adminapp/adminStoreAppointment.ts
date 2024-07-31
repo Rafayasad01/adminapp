@@ -119,6 +119,12 @@ const getAppointment = (storeAppId: any) => {
   return network.get(`${STORE_PREFIX}/${APPOINTMENT_PREFIX}/get/${storeAppId}`);
 };
 
+const getAppointmentByCode = (code: any) => {
+  return network.get(
+    `${STORE_PREFIX}/${APPOINTMENT_PREFIX}/get/byCode/${code}`
+  );
+};
+
 const getAppointmentById = (storeAppId: any) => {
   return network.get(`${STORE_PREFIX}/${APPOINTMENT_PREFIX}/get/${storeAppId}`);
 };
@@ -154,10 +160,12 @@ const appointmentRescheduleById = (storeAppId: any, data: any) => {
 };
 
 // invoice
-const AppointmentInvoiceDetailById = (storeAppId: string) => {
-  return network.get(
-    `${STORE_PREFIX}/${APPOINTMENT_PREFIX}/invoice/${storeAppId}`
-  );
+// const AppointmentInvoiceDetailById = (id: string) => {
+//   return network.get(`${STORE_PREFIX}/${APPOINTMENT_PREFIX}/invoice/${id}`);
+// };
+
+const AppointmentInvoiceDetailByCode = (code: string) => {
+  return network.get(`${STORE_PREFIX}/${APPOINTMENT_PREFIX}/invoice/${code}`);
 };
 
 export default {
@@ -167,6 +175,7 @@ export default {
   appointmentUpdate,
   getAllAppointments,
   getAppointment,
+  getAppointmentByCode,
   getAppointmentById,
   appointmentReschedule,
   fetchAllAppointments,
@@ -177,5 +186,6 @@ export default {
   appointmentAllCancelled,
   AppointmentStoreEmployeeList,
   appointmentRescheduleById,
-  AppointmentInvoiceDetailById,
+  // AppointmentInvoiceDetailById,
+  AppointmentInvoiceDetailByCode,
 };

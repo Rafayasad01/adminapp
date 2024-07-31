@@ -29,14 +29,14 @@ import Notify from '../../components/common/Notify';
 type AccordionsProps = {
   data: Array<object> | any;
   setData?: any;
-  setIsRescheduled?: any;
+  // setIsRescheduled?: any;
 };
 
 function ViewCardAccordin({
   data,
   setData,
-  setIsRescheduled,
-}: AccordionsProps) {
+}: // setIsRescheduled,
+AccordionsProps) {
   const [isLoader, setIsLoader] = React.useState<boolean>(false);
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
     null
@@ -67,6 +67,7 @@ function ViewCardAccordin({
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
   const [statusLoader, setStatusLoader] = React.useState(false);
+  const [doneStatusLoader, setDoneStatusLoader] = React.useState(false);
 
   const handleChange =
     (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
@@ -86,7 +87,7 @@ function ViewCardAccordin({
           setIsLoader(false);
           handleClosePop();
           setIsNotify(true);
-          setIsRescheduled(true);
+          // setIsRescheduled(true);
           setNotifyMessage({
             text: item.data.message,
             type: 'success',
@@ -118,6 +119,12 @@ function ViewCardAccordin({
             setIsNotify(true);
             setNotifyMessage({
               text: updatedText,
+              type: 'error',
+            });
+          } else {
+            setIsNotify(true);
+            setNotifyMessage({
+              text: item.data.message,
               type: 'error',
             });
           }
@@ -284,12 +291,12 @@ function ViewCardAccordin({
 
   const isStatusDone = async (appointmentId: string) => {
     try {
-      setStatusLoader(true);
+      setDoneStatusLoader(true);
       const [statusResponse] = await Promise.all([
         storeAppointmentService.appointmentPaid(appointmentId),
       ]);
       if (statusResponse.data.success) {
-        setStatusLoader(false);
+        setDoneStatusLoader(false);
         setIsNotify(true);
         setNotifyMessage({
           text: statusResponse.data.message,
@@ -309,7 +316,7 @@ function ViewCardAccordin({
         });
       } else {
         // throw new Error(paidStatusResponse.data.message);
-        setStatusLoader(false);
+        setDoneStatusLoader(false);
         setIsNotify(true);
         setNotifyMessage({
           text: statusResponse.data.message,
@@ -317,7 +324,7 @@ function ViewCardAccordin({
         });
       }
     } catch (error: Error | any) {
-      setStatusLoader(false);
+      setDoneStatusLoader(false);
       setIsNotify(true);
       setNotifyMessage({
         text: error.message,
@@ -426,68 +433,101 @@ function ViewCardAccordin({
                           </span>
                         </div>
                       ) : (
-                        <div
-                          onClick={() => {
-                            // setIsTooltipOpen(false);
-                            if (item?.status === APPOINTMENT_STATUS.NEW) {
-                              isStatusProcess(item.id);
-                            } else if (
+                        <>
+                          <div
+                            onClick={() => {
+                              // setIsTooltipOpen(false);
+                              if (item?.status === APPOINTMENT_STATUS.NEW) {
+                                isStatusProcess(item.id);
+                              } else if (
+                                item?.status === APPOINTMENT_STATUS.DONE
+                              ) {
+                                setIsNotify(true);
+                                setNotifyMessage({
+                                  text: 'This Service has been done',
+                                  type: 'success',
+                                });
+                              }
+                            }}
+                            className={`mt-3 flex w-[40%] cursor-pointer items-center justify-center rounded p-1 
+                            ${getStatusColor(item?.status)} ${
                               item?.status === APPOINTMENT_STATUS.PROCESSING
-                            ) {
-                              isStatusDone(item.id);
-                            } else if (
-                              item?.status === APPOINTMENT_STATUS.DONE
-                            ) {
-                              setIsNotify(true);
-                              setNotifyMessage({
-                                text: 'This Service has been done',
-                                type: 'success',
-                              });
-                            }
-                          }}
-                          className={`mt-3 flex w-[40%] cursor-pointer items-center justify-center rounded p-1 
-                            ${getStatusColor(item?.status)} shadow`}
-                        >
-                          <IconButton
-                            size="small"
-                            name="status"
-                            disabled={
-                              statusLoader ||
-                              item?.status === APPOINTMENT_STATUS.DONE
-                            }
-                            className="icon-btn mx-[0px] p-0"
-                            // onClick={() => isStatusDone(appointmentData.id)}
+                                ? 'cursor-default'
+                                : 'cursor-pointer'
+                            } shadow`}
                           >
-                            {statusLoader ? (
-                              ''
-                            ) : item?.status === APPOINTMENT_STATUS.NEW ? (
-                              <AccessTimeOutlinedIcon fontSize="small" />
-                            ) : item?.status ===
-                              APPOINTMENT_STATUS.PROCESSING ? (
-                              // <InfoOutlinedIcon fontSize="small" />
-                              <UpdateOutlinedIcon fontSize="small" />
-                            ) : (
-                              item?.status === APPOINTMENT_STATUS.DONE && (
+                            <IconButton
+                              size="small"
+                              name="status"
+                              disabled={
+                                statusLoader ||
+                                item?.status === APPOINTMENT_STATUS.DONE ||
+                                item?.status === APPOINTMENT_STATUS.PROCESSING
+                              }
+                              className="icon-btn mx-[0px] p-0"
+                              // onClick={() => isStatusDone(appointmentData.id)}
+                            >
+                              {statusLoader ? (
+                                ''
+                              ) : item?.status === APPOINTMENT_STATUS.NEW ? (
+                                <AccessTimeOutlinedIcon fontSize="small" />
+                              ) : item?.status ===
+                                APPOINTMENT_STATUS.PROCESSING ? (
                                 // <InfoOutlinedIcon fontSize="small" />
-                                <CheckCircleOutlineIcon fontSize="small" />
-                              )
-                            )}
-                          </IconButton>
-                          <span className="flex justify-center px-[1px] text-sm">
-                            {statusLoader ? (
-                              <CircularProgress size={15} color="inherit" />
-                            ) : item?.status === APPOINTMENT_STATUS.NEW ? (
-                              'Process'
-                            ) : item?.status ===
-                              APPOINTMENT_STATUS.PROCESSING ? (
-                              'Processing'
-                            ) : item?.status === APPOINTMENT_STATUS.DONE ? (
-                              'Done'
-                            ) : (
-                              ''
-                            )}
-                          </span>
-                        </div>
+                                <UpdateOutlinedIcon fontSize="small" />
+                              ) : (
+                                item?.status === APPOINTMENT_STATUS.DONE && (
+                                  // <InfoOutlinedIcon fontSize="small" />
+                                  <CheckCircleOutlineIcon fontSize="small" />
+                                )
+                              )}
+                            </IconButton>
+                            <span className="flex justify-center px-[1px] text-sm">
+                              {statusLoader ? (
+                                <CircularProgress size={15} color="inherit" />
+                              ) : item?.status === APPOINTMENT_STATUS.NEW ? (
+                                'Process'
+                              ) : item?.status ===
+                                APPOINTMENT_STATUS.PROCESSING ? (
+                                'Processing'
+                              ) : item?.status === APPOINTMENT_STATUS.DONE ? (
+                                'Done'
+                              ) : (
+                                ''
+                              )}
+                            </span>
+                          </div>
+                          {item?.status === APPOINTMENT_STATUS.PROCESSING && (
+                            <div
+                              className={`mt-3 flex w-[19%] cursor-pointer items-center justify-center rounded bg-green-500 
+                            p-1 shadow`}
+                              onClick={() => {
+                                if (
+                                  item?.status === APPOINTMENT_STATUS.PROCESSING
+                                ) {
+                                  isStatusDone(item.id);
+                                }
+                              }}
+                            >
+                              <IconButton
+                                size="small"
+                                name="status"
+                                disabled={
+                                  doneStatusLoader ||
+                                  item?.status === APPOINTMENT_STATUS.PROCESSING
+                                }
+                                className="icon-btn mx-[0px] p-0"
+                              />
+                              <span className="flex justify-center text-sm">
+                                {doneStatusLoader ? (
+                                  <CircularProgress size={15} color="inherit" />
+                                ) : (
+                                  'Done'
+                                )}
+                              </span>
+                            </div>
+                          )}
+                        </>
                       )}
                       <div>
                         <IconButton

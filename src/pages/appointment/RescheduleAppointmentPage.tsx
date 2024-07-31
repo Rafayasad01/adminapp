@@ -321,7 +321,7 @@ export default function RescheduleAppointmentPage() {
   const getAppointment = async () => {
     setIsLoader(true);
     await storeAppointmentService
-      .getAppointment(id)
+      .getAppointmentByCode(id)
       .then((res: any) => {
         if (res.data.success) {
           setValue('name', res.data.data.name);

@@ -230,10 +230,10 @@ const AllAppointment = ({
       const deleteStatusResponse =
         await storeAppointmentService.appointmentAllCancelled(code);
       if (deleteStatusResponse.data.success) {
-        console.log(
-          '🚀 ~ deleteAppointmentHandler ~ deleteStatusResponse:',
-          deleteStatusResponse
-        );
+        // console.log(
+        //   '🚀 ~ deleteAppointmentHandler ~ deleteStatusResponse:',
+        //   deleteStatusResponse
+        // );
         setIsLoader(false);
         setIsNotify(true);
         setNotifyMessage({

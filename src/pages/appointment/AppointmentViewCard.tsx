@@ -55,7 +55,7 @@ const AppointmentViewCard = ({
   const [isLoader, setIsLoader] = useState<boolean>(true);
   // const [isWalletLoader, setIsWalletLoader] = useState<boolean>(false);
   const [isPrintEnabled, setIsPrintEnabled] = useState<boolean>(false);
-  const [isRescheduled, setIsRescheduled] = useState(false);
+  // const [isRescheduled, setIsRescheduled] = useState(false);
 
   const [isNotify, setIsNotify] = useState(false);
   const [notifyMessage, setNotifyMessage] = useState({});
@@ -99,6 +99,59 @@ const AppointmentViewCard = ({
       }
     };
   }, []);
+
+  const showPaidHandler = () => {
+    const checkDone: boolean = data.services.some(
+      (el: any) => el.status === APPOINTMENT_STATUS.DONE
+    );
+    if (checkDone) {
+      return (
+        <div
+          onClick={() => setPaidDialogOpen(true)}
+          className="mb-2 mt-3 flex w-[100%] cursor-pointer items-center justify-center rounded bg-green-500 p-1 text-sm text-white shadow"
+        >
+          <CheckCircleOutlineIcon fontSize="inherit" className="mx-1" />
+          <span>Paid</span>
+        </div>
+      );
+    }
+    return (
+      <div
+        onClick={() => {
+          setIsNotify(true);
+          setNotifyMessage({
+            text: 'Paid button will enable when any one service get done..',
+            type: 'info',
+          });
+        }}
+        className="mb-2 mt-3 flex w-[100%] cursor-pointer items-center justify-center rounded bg-primary p-1 text-sm text-white shadow"
+      >
+        <span className="px-2 text-xs">Paid</span>
+      </div>
+    );
+  };
+
+  const checkStatusHandler = (type: string) => {
+    const checkDone: boolean = data.services.some(
+      (el: any) =>
+        el.status === APPOINTMENT_STATUS.DONE ||
+        el.status === APPOINTMENT_STATUS.PROCESSING ||
+        el.status === APPOINTMENT_STATUS.COMPLETED
+    );
+    if (checkDone) {
+      const text =
+        type === 'delete'
+          ? 'Some services were processing, Please delete individually'
+          : 'Some services were processing, Please reschedule individually';
+      setIsNotify(true);
+      setNotifyMessage({
+        text,
+        type: 'error',
+      });
+      return false;
+    }
+    return true;
+  };
 
   // const onWalletSubmit = (payload: any) => {
   //   // console.log('🚀 ~ onWalletSubmit ~ data:', payload);
@@ -146,6 +199,25 @@ const AppointmentViewCard = ({
     isStatusDone(data.code);
   };
 
+  const getInvoice = (code: string) => {
+    console.log('🚀 ~ getInvoice ~ code:', code);
+    setIsLoader(true);
+    storeAppointmentService
+      .AppointmentInvoiceDetailByCode(code)
+      .then((res) => {
+        setIsLoader(false);
+        setInvoiceData(res.data.data);
+      })
+      .catch((err: Error) => {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
+        });
+      });
+  };
+
   useEffect(() => {
     if (appointmentData) {
       storeAppointmentService
@@ -166,18 +238,19 @@ const AppointmentViewCard = ({
           const endDateFormat = endDate.format('HH:mm');
           // console.log('SALON', formattedDateWithHour1, formattedDateWithHour2);
           setIsLoader(false);
-          res.data.data?.services?.forEach((el: any) => {
-            if (el.status === APPOINTMENT_STATUS.RESCHEDULE) {
-              // setData({ ...data, service: el });
-              setIsRescheduled(true);
-            }
-          });
+          // res.data.data?.services?.forEach((el: any) => {
+          //   if (el.status === APPOINTMENT_STATUS.RESCHEDULE) {
+          //     // setData({ ...data, service: el });
+          //     setIsRescheduled(true);
+          //   }
+          // });
           setData({
             ...res.data.data,
             startDateFormat,
             endDateFormat,
           });
-          setInvoiceData(res.data.data);
+          getInvoice(res.data.data.code);
+          // setInvoiceData(res.data.data);
         });
     }
   }, []);
@@ -213,44 +286,52 @@ const AppointmentViewCard = ({
               <EditIcon />
             </IconButton> */}
               <IconButton
-                disabled={
-                  isRescheduled ||
-                  appointmentData?.status === APPOINTMENT_STATUS.CANCELLED ||
-                  appointmentData?.status === APPOINTMENT_STATUS.DONE ||
-                  appointmentData?.status === APPOINTMENT_STATUS.COMPLETED ||
-                  appointmentData?.status === APPOINTMENT_STATUS.RESCHEDULE ||
-                  appointmentData?.status === APPOINTMENT_STATUS.PROCESSING ||
-                  appointmentData?.status === APPOINTMENT_STATUS.MISSED
-                }
+                // disabled={
+                //   isRescheduled ||
+                //   appointmentData?.status === APPOINTMENT_STATUS.CANCELLED ||
+                //   appointmentData?.status === APPOINTMENT_STATUS.DONE ||
+                //   appointmentData?.status === APPOINTMENT_STATUS.COMPLETED ||
+                //   appointmentData?.status === APPOINTMENT_STATUS.RESCHEDULE ||
+                //   appointmentData?.status === APPOINTMENT_STATUS.PROCESSING ||
+                //   appointmentData?.status === APPOINTMENT_STATUS.MISSED
+                // }
                 className="icon-btn mr-3.5 p-0"
-                onClick={() => setCancelDialogOpen(true)}
+                onClick={() => {
+                  if (checkStatusHandler('delete')) {
+                    setCancelDialogOpen(true);
+                  }
+                }}
               >
                 <DeleteIcon />
               </IconButton>
               <IconButton
-                disabled={
-                  isRescheduled ||
-                  appointmentData?.status === APPOINTMENT_STATUS.CANCELLED ||
-                  appointmentData?.status === APPOINTMENT_STATUS.DONE ||
-                  appointmentData?.status === APPOINTMENT_STATUS.COMPLETED ||
-                  appointmentData?.status === APPOINTMENT_STATUS.RESCHEDULE ||
-                  appointmentData?.status === APPOINTMENT_STATUS.PROCESSING ||
-                  appointmentData?.status === APPOINTMENT_STATUS.MISSED
-                }
+                // disabled={
+                //   isRescheduled ||
+                //   appointmentData?.status === APPOINTMENT_STATUS.CANCELLED ||
+                //   appointmentData?.status === APPOINTMENT_STATUS.DONE ||
+                //   appointmentData?.status === APPOINTMENT_STATUS.COMPLETED ||
+                //   appointmentData?.status === APPOINTMENT_STATUS.RESCHEDULE ||
+                //   appointmentData?.status === APPOINTMENT_STATUS.PROCESSING ||
+                //   appointmentData?.status === APPOINTMENT_STATUS.MISSED
+                // }
                 name="Reschedule"
                 className="icon-btn mr-3.5 p-0"
-                onClick={() =>
-                  navigate(`./reschedule-appointment/${appointmentData.id}`)
-                }
+                onClick={() => {
+                  if (checkStatusHandler('reschedule')) {
+                    navigate(`./reschedule-appointment/${data.code}`);
+                  }
+                }}
               >
                 <HistoryIcon />
               </IconButton>
               <IconButton name="Print Slip" className="icon-btn p-0">
+                {/* {isPrintEnabled && ( */}
                 <CustomAppointmentLayoutCash
                   isPrintEnabled={isPrintEnabled}
                   setPrintEnabled={setIsPrintEnabled}
                   data={invoiceData}
                 />
+                {/* )} */}
               </IconButton>
               {/* {appointmentData?.status !== APPOINTMENT_STATUS.NEW &&
             appointmentData?.status !== APPOINTMENT_STATUS.PROCESSING &&
@@ -270,76 +351,7 @@ const AppointmentViewCard = ({
               </div>
             )  */}
               {/* : ( */}
-              {data?.status === APPOINTMENT_STATUS.COMPLETED ? (
-                <div className="mb-2 mt-3 flex w-[100%] cursor-pointer items-center justify-center rounded bg-green-500 p-1 text-sm text-white shadow">
-                  <span>Paid</span>
-                </div>
-              ) : data?.status === APPOINTMENT_STATUS.MISSED ? (
-                <div className="mt-3 flex w-[100%] items-center justify-center rounded bg-red-500 p-1 text-sm text-white shadow">
-                  <span>Missed</span>
-                </div>
-              ) : data?.status === APPOINTMENT_STATUS.CANCELLED ? (
-                <div className="mt-3 flex w-[100%] items-center justify-center rounded bg-red-500 p-1 text-sm text-white shadow">
-                  <span>Cancelled</span>
-                </div>
-              ) : isRescheduled ? (
-                <div className="mt-3 flex w-[100%] items-center justify-center rounded bg-primary p-1 text-sm shadow">
-                  <span>Rescheduled</span>
-                </div>
-              ) : (
-                <div
-                  onClick={() => {
-                    if (data?.status === APPOINTMENT_STATUS.DONE) {
-                      setPaidDialogOpen(true);
-                    } else {
-                      setIsNotify(true);
-                      setNotifyMessage({
-                        text: 'Services has been under processing',
-                        type: 'info',
-                      });
-                    }
-                  }}
-                  // onClick={() => {
-                  // setIsTooltipOpen(false);
-                  // isStatusDone(data.code);
-                  // if (appointmentData?.status === 'New') {
-                  //   isStatusProcessing(appointmentData.id);
-                  // } else if (data?.status === APPOINTMENT_STATUS.PROCESSING) {
-                  //   isStatusDone(data.code);
-                  // }
-                  // }}
-                  className="mt-3 flex w-[100%] cursor-pointer items-center justify-center rounded bg-primary p-1 shadow"
-                >
-                  <IconButton
-                    size="small"
-                    name="Done"
-                    disabled={
-                      data?.status === APPOINTMENT_STATUS.PROCESSING ||
-                      data?.status === APPOINTMENT_STATUS.CANCELLED
-                    }
-                    className="icon-btn mx-[4px] p-0 text-foreground"
-                    // onClick={() => isStatusDone(data.code)}
-                  >
-                    <CheckCircleOutlineIcon fontSize="small" />
-                    {/* {data?.status === APPOINTMENT_STATUS.NEW ? (
-                    <UpdateOutlinedIcon fontSize="small" />
-                  ) : (
-                    data?.status === APPOINTMENT_STATUS.PROCESSING && (
-                      // <InfoOutlinedIcon fontSize="small" />
-                      <CheckCircleOutlineIcon fontSize="small" />
-                    )
-                  )} */}
-                  </IconButton>
-                  <span className="text-sm text-foreground">
-                    Paid
-                    {/* {data?.status === APPOINTMENT_STATUS.NEW
-                    ? 'Done'
-                    : data?.status === APPOINTMENT_STATUS.PROCESSING
-                    ? 'Complete'
-                    : ''} */}
-                  </span>
-                </div>
-              )}
+              {showPaidHandler()}
               {/* )} */}
             </div>
             {/* <div>
@@ -371,7 +383,7 @@ const AppointmentViewCard = ({
           </div>
         </div>
         <ViewCardAccordin
-          setIsRescheduled={setIsRescheduled}
+          // setIsRescheduled={setIsRescheduled}
           data={data}
           setData={setData}
         />
