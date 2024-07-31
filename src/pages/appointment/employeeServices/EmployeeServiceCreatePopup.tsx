@@ -145,6 +145,14 @@ function EmployeeServiceCreatePopup({
       fields,
       watch('storeServiceCategoryItem')
     );
+    if (watch('storeServiceCategoryItem') === 'none') {
+      setIsNotify(true);
+      setNotifyMessage({
+        text: 'Add one service atleast',
+        type: 'error',
+      });
+      return;
+    }
     if (isDuplicate) {
       setIsNotify(true);
       setNotifyMessage({
@@ -170,37 +178,7 @@ function EmployeeServiceCreatePopup({
       return;
     }
     append(obj);
-    // const check: boolean = fields?.some((el: any) =>
-    //   dayjs(el.date).isSame(dayjs(watch('bonusDate')), 'day')
-    // );
-    // if (check) {
-    //   setIsNotify(true);
-    //   setNotifyMessage({
-    //     text: 'This date you already selected, Please select another date',
-    //     type: 'error',
-    //   });
-    //   return;
-    // }
-    // if (
-    //   watch('employeeName') &&
-    //   watch('type') !== 'none' &&
-    //   watch('amount') &&
-    //   watch('deductionDate')
-    // ) {
-    //   // setValue("servicesId", 'none')
-    //   // setValue("servicesAmount", 'none')
-    //   // setValue("price", null)
-    //   // setStartServiceTime(null)
-    // } else {
-    //   setIsNotify(true);
-    //   setNotifyMessage({
-    //     text: 'All Fields are Required',
-    //     type: 'error',
-    //   });
-    // }
   };
-
-  // console.log('empDetail', empDetail);
 
   return (
     <Dialog
@@ -339,7 +317,7 @@ function EmployeeServiceCreatePopup({
                     {item.categoryId}{' '}
                   </div>
                   <div className="col-span-3 truncate px-1">
-                    {getCatItemName(item.storeServiceCategoryItem) ?? '--'}
+                    {getCatItemName(item.storeServiceCategoryItem) ?? 'None'}
                   </div>
                   <div className="col-span-3 px-2 capitalize">
                     {item.amount ? (
