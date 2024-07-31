@@ -101,9 +101,26 @@ const AppointmentViewCard = ({
   }, []);
 
   const showPaidHandler = () => {
-    const checkDone: boolean = data.services.some(
+    const checkDone: boolean = data?.services?.some(
       (el: any) => el.status === APPOINTMENT_STATUS.DONE
     );
+    console.log('🚀 ~ showPaidHandler ~ appointmentData:', data);
+    if (data?.status === APPOINTMENT_STATUS.COMPLETED) {
+      return (
+        <div
+          onClick={() => {
+            setIsNotify(true);
+            setNotifyMessage({
+              text: 'Its Paid',
+              type: 'success',
+            });
+          }}
+          className="mb-2 mt-3 flex w-[100%] cursor-pointer items-center justify-center rounded bg-primary p-1 text-sm text-white shadow"
+        >
+          <span className="px-2 text-xs">Paid</span>
+        </div>
+      );
+    }
     if (checkDone) {
       return (
         <div
