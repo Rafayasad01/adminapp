@@ -2,11 +2,11 @@ import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
-import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined';
-import RadioButtonUncheckedOutlinedIcon from '@mui/icons-material/RadioButtonUncheckedOutlined';
+// import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined';
+// import RadioButtonUncheckedOutlinedIcon from '@mui/icons-material/RadioButtonUncheckedOutlined';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { FormControlLabel, FormLabel, Radio, RadioGroup } from '@mui/material';
+// import { FormControlLabel, FormLabel, Radio, RadioGroup } from '@mui/material';
 
 import TextField from '@mui/material/TextField';
 import '../../assets/css/PopupStyle.css';
@@ -29,7 +29,7 @@ function NotificationCreatePopup({
   setOpenFormDialog,
   callback,
 }: NotificationCreatePopupProps) {
-  const [notificationType, setNotificationType] = useState('Customers');
+  const [notificationType] = useState('Customers');
   const {
     register,
     handleSubmit,
@@ -45,9 +45,9 @@ function NotificationCreatePopup({
     setOpenFormDialog(false);
   };
 
-  const handleUserChange = (event: any) => {
-    setNotificationType(event.target.value);
-  };
+  // const handleUserChange = (event: any) => {
+  //   setNotificationType(event.target.value);
+  // };
 
   return (
     <Dialog
@@ -120,7 +120,7 @@ function NotificationCreatePopup({
                 )}
               </FormControl>
             </div>
-            <div className="mt-3 flex items-center justify-between">
+            {/* <div className="mt-3 flex items-center justify-between">
               <div>
                 <FormControl className="">
                   <FormLabel
@@ -174,7 +174,7 @@ function NotificationCreatePopup({
                   </RadioGroup>
                 </FormControl>
               </div>
-            </div>
+            </div> */}
           </div>
           <div className="FormFooter">
             <Button

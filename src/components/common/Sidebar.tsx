@@ -5,7 +5,7 @@ import GridViewOutlinedIcon from '@mui/icons-material/GridViewOutlined';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
-import ManageAccountsOutlinedIcon from '@mui/icons-material/ManageAccountsOutlined';
+// import ManageAccountsOutlinedIcon from '@mui/icons-material/ManageAccountsOutlined';
 import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
 import PeopleOutlineOutlinedIcon from '@mui/icons-material/PeopleOutlineOutlined';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
@@ -73,12 +73,12 @@ const links = [
       //   permission: 'Category List',
       //   icon: <WalletIcon fontSize="inherit" />,
       // },
-      {
-        name: 'Leave management',
-        path: 'store-appointment/leaves-management',
-        permission: 'Category List',
-        icon: <ManageAccountsOutlinedIcon fontSize="inherit" />,
-      },
+      // {
+      //   name: 'Leave management',
+      //   path: 'store-appointment/leaves-management',
+      //   permission: 'Category List',
+      //   icon: <ManageAccountsOutlinedIcon fontSize="inherit" />,
+      // },
       // {
       //   name: 'Ratings',
       //   path: 'store-appointment/ratings',
