@@ -25,6 +25,7 @@ export interface BarberItemServices {
   amount: string | any;
   amountType: string;
   categoryId?: string;
+  storeServiceCategoryItem: string;
   serviceType: string;
   store: string;
 }

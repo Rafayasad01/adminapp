@@ -39,6 +39,7 @@ function EmployeeServices() {
   // const [page, setPage] = useState(0);
   // const [total, setTotal] = useState(0);
   const [list, setList] = useState<any>([]);
+  const [allEmployeelist, setAllEmployeeList] = useState<any>([]);
   const [editFormData, setEditFormData] = useState<any>(null);
   // const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [actionMenuItemid, setActionMenuItemid] = React.useState('');
@@ -106,10 +107,34 @@ function EmployeeServices() {
       });
   }, []);
 
+  const getAllEmployees = useCallback(async () => {
+    await employeeService
+      .StoreEmployeeServiceAllList(empId)
+      .then((res) => {
+        if (res.data.success) {
+          setAllEmployeeList(res.data.data);
+        } else {
+          setIsNotify(true);
+          setNotifyMessage({
+            text: res.data.message,
+            type: 'error',
+          });
+        }
+      })
+      .catch((err) => {
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
+        });
+      });
+  }, []);
+
   const handleFormClickOpen = () => {
     if (listingRolePermission(dataRole, 'Category Create')) {
       setOpenFormDialog(true);
       catLovService();
+      getAllEmployees();
       getEmployee();
     } else {
       setIsNotify(true);
@@ -181,11 +206,12 @@ function EmployeeServices() {
   };
 
   const createFormHandler = (data: any) => {
-    setIsLoader(true);
+    // setIsLoader(true);
     employeeService
       .StoreEmployeeServiceCreate(empId, data)
       .then((item: any) => {
         if (item.data.success) {
+          console.log('🚀 ~ .then ~ item.data.:', item.data.data);
           setOpenFormDialog(false);
           setIsLoader(false);
           setIsNotify(true);
@@ -193,7 +219,7 @@ function EmployeeServices() {
             text: item.data.message,
             type: 'success',
           });
-          setList([item.data.data, ...list]);
+          setList([...item.data.data, ...list]);
         } else {
           setIsLoader(false);
           setIsNotify(true);
@@ -377,9 +403,9 @@ function EmployeeServices() {
               <thead>
                 <tr>
                   <th className="w-[20%]">Name</th>
-                  <th className="w-[20%]">Description</th>
+                  {/* <th className="w-[20%]">Description</th> */}
                   <th className="w-[12%]">Amount Type</th>
-                  <th className="w-[10%]">Amount / Percentage</th>
+                  <th className="w-[25%]">Amount / Percentage</th>
                   {/* <th className="w-[10%]">Service Time (mints)</th> */}
                   <th>Created Date</th>
                   <th>Status</th>
@@ -393,12 +419,12 @@ function EmployeeServices() {
                       <tr key={index}>
                         <td>
                           <div className="avatar flex flex-row items-center">
-                            {item.storeServiceCategoryItem?.avatar ? (
+                            {item?.storeServiceCategoryItem?.avatar ? (
                               <button onClick={() => openModal(item.icon)}>
                                 <img
                                   className="cursor-pointer"
-                                  src={item.storeServiceCategoryItem?.avatar}
-                                  alt={item.storeServiceCategoryItem?.name}
+                                  src={item?.storeServiceCategoryItem?.avatar}
+                                  alt={item?.storeServiceCategoryItem?.name}
                                 />
                               </button>
                             ) : (
@@ -409,37 +435,37 @@ function EmployeeServices() {
                             )}
                             <div className="flex flex-col items-start justify-start">
                               <span className="text-sm font-semibold">
-                                {item.storeServiceCategoryItem?.name}
+                                {item?.storeServiceCategoryItem?.name}
                               </span>
                             </div>
                           </div>
                         </td>
-                        <td>
-                          {item.storeServiceCategoryItem.description
-                            ? item.storeServiceCategoryItem.description
+                        {/* <td>
+                          {item?.storeServiceCategoryItem?.description
+                            ? item?.storeServiceCategoryItem?.description
                             : '--'}
-                        </td>
-                        <td>{item.amountType ? item.amountType : '--'}</td>
+                        </td> */}
+                        <td>{item?.amountType ? item.amountType : '--'}</td>
                         <td>
-                          {item.amount ? Math.floor(item.amount) : '--'}{' '}
-                          {item.amountType === 'Percentage'
+                          {item?.amount ? Math.floor(item.amount) : '--'}{' '}
+                          {item?.amountType === 'Percentage'
                             ? '%'
-                            : item.amountType === 'None'
+                            : item?.amountType === 'None'
                             ? ''
                             : import.meta.env.VITE_CURRENCY_SYMBOL}
                         </td>
                         {/* <td>{item.serviceTime ? item.serviceTime : '--'}</td> */}
                         <td>
                           {dayjs(
-                            item.storeServiceCategoryItem.createdDate
+                            item?.storeServiceCategoryItem?.createdDate
                           ).isValid()
                             ? dayjs(
-                                item.storeServiceCategoryItem.createdDate
+                                item?.storeServiceCategoryItem?.createdDate
                               )?.format('ddd, MMM DD, YYYY')
                             : '--'}
                         </td>
                         <td>
-                          {item.isActive ? (
+                          {item?.isActive ? (
                             <span className="badge badge-success">Enabled</span>
                           ) : (
                             <span className="badge badge-danger">Disabled</span>
@@ -524,6 +550,7 @@ function EmployeeServices() {
           openFormDialog={openFormDialog}
           setOpenFormDialog={setOpenFormDialog}
           catlov={catLovlist}
+          emplov={allEmployeelist}
           callback={createFormHandler}
         />
       )}
