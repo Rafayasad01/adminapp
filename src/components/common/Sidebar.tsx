@@ -3,18 +3,18 @@ import CorporateFareIcon from '@mui/icons-material/CorporateFare';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import GridViewOutlinedIcon from '@mui/icons-material/GridViewOutlined';
 import InstagramIcon from '@mui/icons-material/Instagram';
-import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
+// import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 // import ManageAccountsOutlinedIcon from '@mui/icons-material/ManageAccountsOutlined';
-import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
+// import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
 import PeopleOutlineOutlinedIcon from '@mui/icons-material/PeopleOutlineOutlined';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
-import QuestionAnswerOutlinedIcon from '@mui/icons-material/QuestionAnswerOutlined';
+// import QuestionAnswerOutlinedIcon from '@mui/icons-material/QuestionAnswerOutlined';
 // import WalletIcon from '@mui/icons-material/Wallet';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import SplitscreenOutlinedIcon from '@mui/icons-material/SplitscreenOutlined';
 import TwitterIcon from '@mui/icons-material/Twitter';
-import ViewCarouselOutlinedIcon from '@mui/icons-material/ViewCarouselOutlined';
+// import ViewCarouselOutlinedIcon from '@mui/icons-material/ViewCarouselOutlined';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import YouTubeIcon from '@mui/icons-material/YouTube';
 import Drawer from '@mui/material/Drawer';
@@ -30,9 +30,9 @@ import CAN, { defineRules } from '../../services/permissions/permissions';
 import { MODULE_EMPLOYEES, MODULE_SETTINGS } from '../../utils/constants';
 import ArrowDown from '../icons/ArrowDown';
 import ArrowUp from '../icons/ArrowUp';
-import CategoryIcon from '../icons/CategoryIcon';
-import OrderIcon from '../icons/OrderIcon';
-import VoucherIcon from '../icons/VoucherIcon';
+// import CategoryIcon from '../icons/CategoryIcon';
+// import OrderIcon from '../icons/OrderIcon';
+// import VoucherIcon from '../icons/VoucherIcon';
 import ProviderIcon from '../icons/providerIcon';
 import VisitIcon from '../icons/visitIcon';
 
@@ -87,44 +87,44 @@ const links = [
       // },
     ],
   },
-  {
-    name: 'Store Product',
-    path: 'store-product',
-    permission: 'Appointment Parent',
-    icon: <Inventory2OutlinedIcon fontSize="inherit" />,
-    childLinks: [
-      {
-        name: 'Products',
-        path: 'store-product/product',
-        permission: 'Category List',
-        icon: <CategoryIcon />,
-      },
-      {
-        name: 'Orders',
-        path: 'store-product/orders',
-        permission: 'Order List',
-        icon: <OrderIcon />,
-      },
-      {
-        name: 'Rating',
-        path: 'store-product/ratings',
-        permission: 'Banners List',
-        icon: <ViewCarouselOutlinedIcon className="w-[17px]" />,
-      },
-    ],
-  },
+  // {
+  //   name: 'Store Product',
+  //   path: 'store-product',
+  //   permission: 'Appointment Parent',
+  //   icon: <Inventory2OutlinedIcon fontSize="inherit" />,
+  //   childLinks: [
+  //     {
+  //       name: 'Products',
+  //       path: 'store-product/product',
+  //       permission: 'Category List',
+  //       icon: <CategoryIcon />,
+  //     },
+  //     {
+  //       name: 'Orders',
+  //       path: 'store-product/orders',
+  //       permission: 'Order List',
+  //       icon: <OrderIcon />,
+  //     },
+  //     {
+  //       name: 'Rating',
+  //       path: 'store-product/ratings',
+  //       permission: 'Banners List',
+  //       icon: <ViewCarouselOutlinedIcon className="w-[17px]" />,
+  //     },
+  //   ],
+  // },
   {
     name: 'User',
     path: 'user',
     permission: 'Appointment Parent',
     icon: <PersonOutlineOutlinedIcon fontSize="inherit" />,
     childLinks: [
-      {
-        name: 'App User',
-        path: 'user/app-user/list',
-        permission: 'Customer List',
-        icon: <PersonOutlineOutlinedIcon fontSize="inherit" />,
-      },
+      // {
+      //   name: 'App User',
+      //   path: 'user/app-user/list',
+      //   permission: 'Customer List',
+      //   icon: <PersonOutlineOutlinedIcon fontSize="inherit" />,
+      // },
       {
         name: 'Admin Users',
         path: 'user/employees',
@@ -140,30 +140,30 @@ const links = [
     // permission: 'Banners List',
     icon: <CorporateFareIcon className="w-[17px]" />,
   },
-  {
-    name: 'Banners',
-    path: 'banners',
-    permission: 'Banners List',
-    icon: <ViewCarouselOutlinedIcon className="w-[17px]" />,
-  },
-  {
-    name: 'FAQs',
-    path: 'faq',
-    permission: 'Notification List',
-    icon: <QuestionAnswerOutlinedIcon fontSize="inherit" />,
-  },
-  {
-    name: 'Notifications',
-    path: 'notification',
-    permission: 'Notification List',
-    icon: <NotificationsOutlinedIcon fontSize="inherit" />,
-  },
-  {
-    name: 'Vouchers',
-    path: 'vouchers',
-    permission: 'Voucher List',
-    icon: <VoucherIcon />,
-  },
+  // {
+  //   name: 'Banners',
+  //   path: 'banners',
+  //   permission: 'Banners List',
+  //   icon: <ViewCarouselOutlinedIcon className="w-[17px]" />,
+  // },
+  // {
+  //   name: 'FAQs',
+  //   path: 'faq',
+  //   permission: 'Notification List',
+  //   icon: <QuestionAnswerOutlinedIcon fontSize="inherit" />,
+  // },
+  // {
+  //   name: 'Notifications',
+  //   path: 'notification',
+  //   permission: 'Notification List',
+  //   icon: <NotificationsOutlinedIcon fontSize="inherit" />,
+  // },
+  // {
+  //   name: 'Vouchers',
+  //   path: 'vouchers',
+  //   permission: 'Voucher List',
+  //   icon: <VoucherIcon />,
+  // },
   {
     name: 'Settings',
     path: 'settings',

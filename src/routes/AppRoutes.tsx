@@ -623,7 +623,8 @@ export const routeObjects: RouteObject[] = [
             children: [
               {
                 index: true,
-                element: <Navigate to="app-user/list" replace />,
+                // element: <Navigate to="app-user/list" replace />,
+                element: <Navigate to="employees" replace />,
               },
               {
                 path: 'app-user',

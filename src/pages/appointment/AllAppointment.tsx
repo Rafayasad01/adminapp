@@ -341,7 +341,7 @@ const AllAppointment = ({
     if (!restProps.data) {
       return null; // or handle the case where data is undefined
     }
-    // console.log('🚀 ~ AppointmentContent ~ restProps:', restProps.data);
+    console.log('🚀 ~ AppointmentContent ~ restProps:', restProps.data.status);
     const startDate = restProps?.data?.startDate;
     const endDate = restProps?.data?.endDate;
     const sdformat = dayjs(startDate);
