@@ -31,6 +31,7 @@ import { listingRolePermission } from '../../../utils/helper';
 import AppointmentProviderCards from './AppointmentProviderCards';
 import CustomSwiperDialog from './CustomAddSwiperDialog';
 import CustomEditSwiperDialog from './CustomEditSwiperDialog';
+import PayrollPopup from './PayrollPopup';
 
 function AppointmentProviderPage() {
   const navigate = useNavigate();
@@ -56,6 +57,11 @@ function AppointmentProviderPage() {
     // 'Attendance',
     'Rating',
     'Schedule',
+    'Deductions',
+    'Commissions',
+    'Bonus',
+    'Overtime',
+    'Payroll',
     'Edit',
     'Delete',
   ];
@@ -66,6 +72,7 @@ function AppointmentProviderPage() {
   const [isNotify, setIsNotify] = useState(false);
   const [notifyMessage, setNotifyMessage] = useState({});
   const [cancelDialogOpen, setCancelDialogOpen] = useState<boolean>(false);
+  const [payrollPopup, setPayrollPopup] = useState<boolean>(false);
   const [dialogText] = useState<any>(
     'Are you sure you want to delete this Staff ?'
   );
@@ -547,6 +554,67 @@ function AppointmentProviderPage() {
         listingRolePermission(dataRole, 'Appointment Provider Service View')
       ) {
         navigate(`../review/${actionMenuItemid}`);
+      } else {
+        setIsNotify(true);
+        setNotifyMessage({
+          text: NOT_AUTHORIZED_MESSAGE,
+          type: 'warning',
+        });
+      }
+    } else if (option === 'Deductions') {
+      if (
+        listingRolePermission(dataRole, 'Appointment Provider Service View')
+      ) {
+        navigate(`../deduction/${actionMenuItemid}`);
+      } else {
+        setIsNotify(true);
+        setNotifyMessage({
+          text: NOT_AUTHORIZED_MESSAGE,
+          type: 'warning',
+        });
+      }
+    } else if (option === 'Commissions') {
+      if (
+        listingRolePermission(dataRole, 'Appointment Provider Service View')
+      ) {
+        navigate(`../commission/${actionMenuItemid}`);
+      } else {
+        setIsNotify(true);
+        setNotifyMessage({
+          text: NOT_AUTHORIZED_MESSAGE,
+          type: 'warning',
+        });
+      }
+    } else if (option === 'Bonus') {
+      if (
+        listingRolePermission(dataRole, 'Appointment Provider Service View')
+      ) {
+        navigate(`../bonus/${actionMenuItemid}`);
+      } else {
+        setIsNotify(true);
+        setNotifyMessage({
+          text: NOT_AUTHORIZED_MESSAGE,
+          type: 'warning',
+        });
+      }
+    } else if (option === 'Overtime') {
+      if (
+        listingRolePermission(dataRole, 'Appointment Provider Service View')
+      ) {
+        navigate(`../overtime/${actionMenuItemid}`);
+      } else {
+        setIsNotify(true);
+        setNotifyMessage({
+          text: NOT_AUTHORIZED_MESSAGE,
+          type: 'warning',
+        });
+      }
+    } else if (option === 'Payroll') {
+      if (
+        listingRolePermission(dataRole, 'Appointment Provider Service View')
+      ) {
+        setPayrollPopup(true);
+        // navigate(`../overtime/${actionMenuItemid}`);
       } else {
         setIsNotify(true);
         setNotifyMessage({
@@ -1055,6 +1123,13 @@ function AppointmentProviderPage() {
           setOpen={setCancelDialogOpen}
           dialogText={dialogText}
           callback={statusCancelHandler}
+        />
+      )}
+      {payrollPopup && (
+        <PayrollPopup
+          payrollDialog={payrollPopup}
+          setPayrollDialog={setPayrollPopup}
+          empId="1"
         />
       )}
       {/* <CustomersCreatePopup
