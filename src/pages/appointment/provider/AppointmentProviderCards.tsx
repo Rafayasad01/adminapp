@@ -1,7 +1,7 @@
 import BadgeOutlinedIcon from '@mui/icons-material/BadgeOutlined';
 import LocalPhoneOutlinedIcon from '@mui/icons-material/LocalPhoneOutlined';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
-import PaymentOutlinedIcon from '@mui/icons-material/PaymentOutlined';
+// import PaymentOutlinedIcon from '@mui/icons-material/PaymentOutlined';
 import MailOutlineOutlinedIcon from '@mui/icons-material/MailOutlineOutlined';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import StarIcon from '@mui/icons-material/Star';
@@ -12,6 +12,7 @@ import Switch from '@mui/material/Switch';
 import dayjs from 'dayjs';
 import React, { useState } from 'react';
 import Avatar from '@mui/material/Avatar';
+import assets from '../../../assets';
 
 type AppointmentProviderCardsProps = {
   data: any;
@@ -161,8 +162,13 @@ const AppointmentProviderCards = ({
                       </span>
                     </div>
                     <div className="flex items-center justify-between">
-                      <div className="mr-5">
-                        <PaymentOutlinedIcon fontSize="small" />
+                      <div className="mr-7">
+                        <img
+                          src={assets.images.salaryPayrollImage}
+                          alt="salary-payroll"
+                          className="mt-1 w-[22px] object-contain"
+                        />
+                        {/* <PaymentOutlinedIcon fontSize="small" /> */}
                       </div>
                       <span className="text-sm font-medium">
                         {item.payrollType}

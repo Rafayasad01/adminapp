@@ -62,6 +62,7 @@ import userPermissionIcon from './images/userPermission.svg';
 import wash from './images/wash.svg';
 import morningImage from './images/morning.svg';
 import noonImage from './images/noon.png';
+import salaryPayrollImage from './images/salary-payroll.svg';
 
 const assets = {
   images: {
@@ -116,6 +117,7 @@ const assets = {
     Star,
     morningImage,
     noonImage,
+    salaryPayrollImage,
   },
   tempImages: {
     wash,
