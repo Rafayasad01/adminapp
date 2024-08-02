@@ -892,7 +892,9 @@ export default function AddAppointmentPage() {
       return e;
     });
     data.status = paymentMethod ? 'Processing' : 'New';
-    data.appUser = loginDetails?.id;
+    // data.appUser = loginDetails?.id;
+    console.log('ONSUBMIT', data);
+
     storeAppointmentService
       .appointmentCreate(data)
       .then((res: any) => {
@@ -959,6 +961,8 @@ export default function AddAppointmentPage() {
     // console.log('🚀 ~ callbackValue ~ value:', value);
     setActiveLoginOption(value);
   };
+
+  console.log('fields?.length <= 0', fields?.length);
 
   return isLoader ? (
     <Loader />
@@ -1051,7 +1055,6 @@ export default function AddAppointmentPage() {
                             customFontClass="font-semibold mb-1"
                             customClass="border-[2px] border-[#949EAE] rounded-xl px-2 py-1 text-sm"
                             register={register}
-                            requiredType
                             error={errors.phone}
                             inputType="text"
                           />
@@ -1073,6 +1076,7 @@ export default function AddAppointmentPage() {
                             customFontClass="font-semibold mb-1"
                             customClass="border-[2px] border-[#949EAE] rounded-xl px-2 py-1 text-sm"
                             register={register}
+                            requiredType
                             error={errors.email}
                             inputType="text"
                           />
@@ -1466,22 +1470,23 @@ export default function AddAppointmentPage() {
                     height: '35px',
                   }}
                 />
-                {loginDetails ? (
-                  <CustomButton
-                    disabled={fields?.length < 1 && true}
-                    buttonType="button"
-                    title="Submit"
-                    className="btn-black-outline"
-                    type="submit"
-                    // onclick={() => setOpenFormDialog(true)}
-                    sx={{
-                      padding: '0.375rem 2rem !important',
-                      width: '15%',
-                      height: '35px',
-                    }}
-                  />
-                ) : (
-                  <CustomButton
+                {/* {loginDetails ? ( */}
+                <CustomButton
+                  disabled={fields?.length < 1 && true}
+                  buttonType="button"
+                  title="Submit"
+                  className="btn-black-outline"
+                  type="submit"
+                  // onclick={() => setOpenFormDialog(true)}
+                  sx={{
+                    padding: '0.375rem 2rem !important',
+                    width: '15%',
+                    height: '35px',
+                  }}
+                />
+                {/* )  */}
+                {/* : ( */}
+                {/* <CustomButton
                     // disabled={fields?.length < 1 && true}
                     buttonType="button"
                     title="Verify User"
@@ -1493,8 +1498,8 @@ export default function AddAppointmentPage() {
                       width: '15%',
                       height: '35px',
                     }}
-                  />
-                )}
+                  /> */}
+                {/* )} */}
               </div>
             </form>
           </div>
