@@ -505,10 +505,9 @@ AccordionsProps) {
                               ) : item?.status ===
                                 APPOINTMENT_STATUS.PROCESSING ? (
                                 'Processing'
+                              ) : item?.status === APPOINTMENT_STATUS.DONE ? (
+                                'Done'
                               ) : (
-                                // : item?.status === APPOINTMENT_STATUS.DONE ? (
-                                //   'Done'
-                                // )
                                 ''
                               )}
                             </span>

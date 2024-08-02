@@ -109,6 +109,27 @@ const AppointmentViewCard = ({
     const checkDone: boolean = data?.services?.some(
       (el: any) => el.status === APPOINTMENT_STATUS.DONE
     );
+    const statusNewProcess: boolean = data?.services?.some(
+      (el: any) =>
+        el.status === APPOINTMENT_STATUS.NEW ||
+        el.status === APPOINTMENT_STATUS.PROCESSING
+    );
+    if (statusNewProcess) {
+      return (
+        <div
+          onClick={() => {
+            setIsNotify(true);
+            setNotifyMessage({
+              text: 'Some Process are in processing...',
+              type: 'info',
+            });
+          }}
+          className="mb-2 mt-3 flex w-[30%] cursor-pointer items-center justify-center rounded bg-primary p-1 text-sm text-white shadow"
+        >
+          <span className="px-2 text-xs">Paid</span>
+        </div>
+      );
+    }
     if (data?.status === APPOINTMENT_STATUS.COMPLETED) {
       return (
         <div className="mt-3 flex items-center justify-between">
@@ -163,7 +184,7 @@ const AppointmentViewCard = ({
         onClick={() => {
           setIsNotify(true);
           setNotifyMessage({
-            text: 'Paid button will enable when any one service get done..',
+            text: 'Paid button will enable when all services get done..',
             type: 'info',
           });
         }}
