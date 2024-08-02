@@ -2631,3 +2631,26 @@ main.min-h-screen.w-full.flex-grow.bg-gray-50.p-3.MuiBox-root.css-0 {
   padding-top: 1px !important ;
   border: 1px solid gray; /* Example blue border color */
 }
+
+/* .css-71a9mb-MuiButtonBase-root-MuiIconButton-root.NavigationButton-button {
+  display: none !important;
+} */
+
+.customDateNav {
+  /* display: none !important; */
+}
+
+.dx-scheduler-navigator-previous {
+  visibility: hidden;
+}
+.dx-scheduler-navigator-next {
+  visibility: hidden;
+}
+
+.css-1b7ni76-MuiToolbar-root.Toolbar-toolbar {
+  margin-left: 8px !important ;
+}
+
+.css-1ps6pg7-MuiPaper-root {
+  position: relative !important;
+}

@@ -36,9 +36,16 @@ const appointmentReschedule = (storeAppId: any, data: any) => {
   );
 };
 
+const appointmentPaidAll = (code: any) => {
+  return network.patch(
+    `${STORE_PREFIX}/${APPOINTMENT_PREFIX}/service/paid/${code}`,
+    {}
+  );
+};
+
 const appointmentPaid = (storeAppId: any) => {
   return network.patch(
-    `${STORE_PREFIX}/${APPOINTMENT_PREFIX}/service/paid/${storeAppId}`,
+    `${STORE_PREFIX}/${APPOINTMENT_PREFIX}/service/done/${storeAppId}`,
     {}
   );
 };
@@ -56,6 +63,50 @@ const appointmentCancelled = (storeAppId: any) => {
     {}
   );
 };
+// interface AppointmentAllCancelledResponse {
+//   success: boolean;
+//   code: number;
+//   message: string;
+//   data: AppointmentAllCancelledData[];
+// }
+
+// interface AppointmentAllCancelledData {
+//   id: string;
+//   name: string;
+//   phone: string;
+//   email: string;
+//   gender: string;
+//   note: string;
+//   tenant: string;
+//   appointmentNumber: string;
+//   status: string;
+//   gstPercentage: number;
+//   gstAmount: string;
+//   discountAmount: string;
+//   totalAmount: string;
+//   grandTotalAmount: string;
+//   createdBy: string;
+//   updatedBy: string;
+//   createdDate: string;
+//   updatedDate: string;
+//   storeEmployee: string;
+//   storeServiceCategoryItem: string;
+//   appointmentTime: string;
+//   serviceTime: string;
+//   storeServiceCategory: string;
+//   paymentStatus: string;
+//   code: string;
+//   appUser: string;
+//   appointmentType: string;
+//   guestType: string;
+// }
+
+const appointmentAllCancelled = (code: any) => {
+  return network.patch(
+    `${STORE_PREFIX}/${APPOINTMENT_PREFIX}/service/cancelled/all/${code}`,
+    {}
+  );
+};
 
 const getAllAppointments = (date: any, view: string) => {
   return network.get(
@@ -67,6 +118,12 @@ const getAllAppointments = (date: any, view: string) => {
 
 const getAppointment = (storeAppId: any) => {
   return network.get(`${STORE_PREFIX}/${APPOINTMENT_PREFIX}/get/${storeAppId}`);
+};
+
+const getAppointmentByCode = (code: any) => {
+  return network.get(
+    `${STORE_PREFIX}/${APPOINTMENT_PREFIX}/get/byCode/${code}`
+  );
 };
 
 const getAppointmentById = (storeAppId: any) => {
@@ -95,11 +152,21 @@ const AppointmentStoreEmployeeList = (
   );
 };
 
-// invoice
-const AppointmentInvoiceDetailById = (storeAppId: string) => {
-  return network.get(
-    `${STORE_PREFIX}/${APPOINTMENT_PREFIX}/invoice/${storeAppId}`
+// reschedule individual
+const appointmentRescheduleById = (storeAppId: any, data: any) => {
+  return network.post(
+    `${STORE_PREFIX}/${APPOINTMENT_PREFIX}/re-schedule/individual/${storeAppId}`,
+    data
   );
+};
+
+// invoice
+// const AppointmentInvoiceDetailById = (id: string) => {
+//   return network.get(`${STORE_PREFIX}/${APPOINTMENT_PREFIX}/invoice/${id}`);
+// };
+
+const AppointmentInvoiceDetailByCode = (code: string) => {
+  return network.get(`${STORE_PREFIX}/${APPOINTMENT_PREFIX}/invoice/${code}`);
 };
 
 export default {
@@ -109,12 +176,17 @@ export default {
   appointmentUpdate,
   getAllAppointments,
   getAppointment,
+  getAppointmentByCode,
   getAppointmentById,
   appointmentReschedule,
   fetchAllAppointments,
   appointmentPaid,
+  appointmentPaidAll,
   appointmentProcessing,
   appointmentCancelled,
+  appointmentAllCancelled,
   AppointmentStoreEmployeeList,
-  AppointmentInvoiceDetailById,
+  appointmentRescheduleById,
+  // AppointmentInvoiceDetailById,
+  AppointmentInvoiceDetailByCode,
 };

@@ -43,7 +43,13 @@ export const appSlice = createSlice({
     setTenantConfig: (state, action: PayloadAction<any>) => {
       state.UserItems = {
         ...state.UserItems,
-        tenantConfig: action.payload,
+        tenantConfig: { ...state.UserItems.tenantConfig, ...action.payload },
+      };
+    },
+    setOfficeTimeOut: (state, action: PayloadAction<any>) => {
+      state.UserItems = {
+        ...state.UserItems,
+        tenantConfig: { ...state.UserItems.tenantConfig, ...action.payload },
       };
     },
     setLogo: (state, action: PayloadAction<any>) => {
@@ -68,6 +74,7 @@ export const {
   setEmployeeLimit,
   setTenantConfig,
   setProfileAvatar,
+  setOfficeTimeOut,
 } = appSlice.actions;
 
 export default appSlice.reducer;

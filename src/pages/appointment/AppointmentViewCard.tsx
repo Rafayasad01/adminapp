@@ -1,49 +1,57 @@
 import HistoryIcon from '@mui/icons-material/History';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
-import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
-import PhoneIphoneOutlinedIcon from '@mui/icons-material/PhoneIphoneOutlined';
+// import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+// import PhoneIphoneOutlinedIcon from '@mui/icons-material/PhoneIphoneOutlined';
 // import CloseIcon from '@mui/icons-material/Close';
-import UpdateOutlinedIcon from '@mui/icons-material/UpdateOutlined';
+// import UpdateOutlinedIcon from '@mui/icons-material/UpdateOutlined';
+// import WalletIcon from '@mui/icons-material/Wallet';
 import DeleteIcon from '@mui/icons-material/Delete';
 import WalletIcon from '@mui/icons-material/Wallet';
-import EditIcon from '@mui/icons-material/Edit';
-import StarIcon from '@mui/icons-material/Star';
-import Avatar from '@mui/material/Avatar';
+// import EditIcon from '@mui/icons-material/Edit';
+// import StarIcon from '@mui/icons-material/Star';
+// import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 // import moment from 'moment';
-import assets from '../../assets';
+// import assets from '../../assets';
 import storeAppointmentService from '../../services/adminapp/adminStoreAppointment';
 import walletService from '../../services/adminapp/adminWallet';
 import Loader from '../../components/common/Loader2';
-import { APPOINTMENT_STATUS } from '../../utils/constants';
-import CustomButton from '../../components/common/CustomButton';
-import ViewWalletPopupCard from './ViewWalletPopupCard';
+import { APPOINTMENT_STATUS, CURRENCY_PREFIX } from '../../utils/constants';
+// import CustomButton from '../../components/common/CustomButton';
+// import ViewWalletPopupCard from './ViewWalletPopupCard';
 import CustomAppointmentLayoutCash from '../../utils/CustomPrintLayout/CustomAppointmentLayoutCash';
+import ViewCardAccordin from './ViewCardAccordin';
+import Notify from '../../components/common/Notify';
+import PermissionPopup from '../../utils/PermissionPopup';
+import ViewWalletPopupCard from './ViewWalletPopupCard';
+import CustomButton from '../../components/common/CustomButton';
 
 type AppointmentViewCardProps = {
   appointmentData?: any;
+  setAllAppointments?: any;
   // setAppointmentTooltipData?: any;
   setIsTooltipOpen?: any;
-  setOpenFormDialog?: any;
-  getUpdatePopupData?: any;
+  // setOpenFormDialog?: any;
+  // getUpdatePopupData?: any;
   isTooltipOpen?: boolean;
   isStatusDone?: any;
-  isStatusProcessing?: any;
+  // isStatusProcessing?: any;
   deleteAppointmentHandler?: any;
 };
 
 const AppointmentViewCard = ({
   appointmentData,
-  getUpdatePopupData,
+  setAllAppointments,
+  // getUpdatePopupData,
   isTooltipOpen: _isTooltipOpen,
   // setAppointmentTooltipData,
   setIsTooltipOpen,
-  setOpenFormDialog,
+  // setOpenFormDialog,
   isStatusDone,
-  isStatusProcessing,
+  // isStatusProcessing,
   deleteAppointmentHandler,
 }: AppointmentViewCardProps) => {
   const navigate = useNavigate();
@@ -52,6 +60,20 @@ const AppointmentViewCard = ({
   const [isLoader, setIsLoader] = useState<boolean>(true);
   const [isWalletLoader, setIsWalletLoader] = useState<boolean>(false);
   const [isPrintEnabled, setIsPrintEnabled] = useState<boolean>(false);
+  // const [isRescheduled, setIsRescheduled] = useState(false);
+
+  const [isNotify, setIsNotify] = useState(false);
+  const [notifyMessage, setNotifyMessage] = useState({});
+
+  const [cancelDialogOpen, setCancelDialogOpen] = useState<boolean>(false);
+  const [dialogText] = useState<any>(
+    'Are you sure you want to delete this Appointment ?'
+  );
+
+  const [paidDialogOpen, setPaidDialogOpen] = useState<boolean>(false);
+  const [dialogPaidText] = useState<any>(
+    'Are you sure you want to change status to paid ?'
+  );
   // popover navigation of wallet button
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const handleClickPop = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -62,6 +84,8 @@ const AppointmentViewCard = ({
   };
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
+
+  // console.log("DATATA", appointmentData);
 
   useEffect(() => {
     // Select the element
@@ -80,6 +104,97 @@ const AppointmentViewCard = ({
       }
     };
   }, []);
+
+  const showPaidHandler = () => {
+    const checkDone: boolean = data?.services?.some(
+      (el: any) => el.status === APPOINTMENT_STATUS.DONE
+    );
+    if (data?.status === APPOINTMENT_STATUS.COMPLETED) {
+      return (
+        <div className="mt-3 flex items-center justify-between">
+          <div
+            onClick={() => {
+              setIsNotify(true);
+              setNotifyMessage({
+                text: 'Its Paid',
+                type: 'success',
+              });
+            }}
+            className="mb-2 mt-3 flex w-[30%] cursor-pointer items-center justify-center rounded bg-primary p-1 text-sm text-white shadow"
+          >
+            <span className="px-2 text-xs">Paid</span>
+          </div>
+          {data?.wallet === null ? (
+            <div className="flex">
+              <CustomButton
+                // sx={{
+                //   height: '20px',
+                //   // width: '20px',
+                // }}
+                buttonType="button"
+                title="Wallet"
+                icon={<WalletIcon />}
+                className="btn-black-outline btn-icon"
+                onclick={handleClickPop}
+              />
+            </div>
+          ) : (
+            <div>
+              <WalletIcon className="mx-1 text-primary" fontSize="small" />
+              <span className="text-xs">{`${data?.wallet?.balance} ${CURRENCY_PREFIX}`}</span>
+            </div>
+          )}
+        </div>
+      );
+    }
+    if (checkDone) {
+      return (
+        <div
+          onClick={() => setPaidDialogOpen(true)}
+          className="mb-2 mt-3 flex w-[30%] cursor-pointer items-center justify-center rounded bg-green-500 p-1 text-sm text-white shadow"
+        >
+          <CheckCircleOutlineIcon fontSize="inherit" className="mx-1" />
+          <span>Paid</span>
+        </div>
+      );
+    }
+    return (
+      <div
+        onClick={() => {
+          setIsNotify(true);
+          setNotifyMessage({
+            text: 'Paid button will enable when any one service get done..',
+            type: 'info',
+          });
+        }}
+        className="mb-2 mt-3 flex w-[30%] cursor-pointer items-center justify-center rounded bg-primary p-1 text-sm text-white shadow"
+      >
+        <span className="px-2 text-xs">Paid</span>
+      </div>
+    );
+  };
+
+  const checkStatusHandler = (type: string) => {
+    const checkDone: boolean = data.services.some(
+      (el: any) =>
+        el.status === APPOINTMENT_STATUS.DONE ||
+        el.status === APPOINTMENT_STATUS.PROCESSING ||
+        el.status === APPOINTMENT_STATUS.COMPLETED
+    );
+    if (checkDone) {
+      const text =
+        type === 'delete'
+          ? 'Some services were processing, Please delete individually'
+          : 'Some services were processing, Please reschedule individually';
+      setIsNotify(true);
+      setNotifyMessage({
+        text,
+        type: 'error',
+      });
+      return false;
+    }
+    return true;
+  };
 
   const onWalletSubmit = (payload: any) => {
     // console.log('🚀 ~ onWalletSubmit ~ data:', payload);
@@ -103,25 +218,63 @@ const AppointmentViewCard = ({
       })
       .catch((error) => {
         setIsWalletLoader(false);
-        console.log('🚀 ~ onWalletSubmit ~ error:', error);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: error.message,
+          type: 'error',
+        });
+        // return false;
+        // console.log('🚀 ~ onWalletSubmit ~ error:', error);
       });
   };
 
-  useEffect(() => {
-    // if (data?.status === APPOINTMENT_STATUS.COMPLETED) {
+  // useEffect(() => {
+  //   // if (data?.status === APPOINTMENT_STATUS.COMPLETED) {
+  //   storeAppointmentService
+  //     .AppointmentInvoiceDetailById(appointmentData.id)
+  //     .then((res) => {
+  //       setInvoiceData(res.data.data);
+  //     });
+  //   // }
+  // }, []);
+
+  const statusCancelConfirmationHandler = () => {
+    setIsTooltipOpen(false);
+    deleteAppointmentHandler(data.code);
+  };
+
+  const statusPaidConfirmationHandler = () => {
+    setIsTooltipOpen(false);
+    isStatusDone(data.code);
+  };
+
+  const getInvoice = (code: string) => {
+    // console.log('🚀 ~ getInvoice ~ code:', code);
+    setIsLoader(true);
     storeAppointmentService
-      .AppointmentInvoiceDetailById(appointmentData.id)
+      .AppointmentInvoiceDetailByCode(code)
       .then((res) => {
+        setIsLoader(false);
         setInvoiceData(res.data.data);
+      })
+      .catch((err: Error) => {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
+        });
       });
-    // }
-  }, []);
+  };
+
+  // console.log('appointmentData', appointmentData);
 
   useEffect(() => {
     if (appointmentData) {
       storeAppointmentService
-        .getAppointmentById(appointmentData.id)
+        .getAppointmentByCode(appointmentData.code)
         .then((res) => {
+          // console.log('🚀 ~ useEffect ~ appointmentData:', res.data.data);
           const date = dayjs(res.data.data.appointmentTime);
           const formattedDateWithHour1 = dayjs(date).format(
             'ddd MMM DD YYYY h:mm:ss A'
@@ -136,23 +289,38 @@ const AppointmentViewCard = ({
           const endDateFormat = endDate.format('HH:mm');
           // console.log('SALON', formattedDateWithHour1, formattedDateWithHour2);
           setIsLoader(false);
+          // res.data.data?.services?.forEach((el: any) => {
+          //   if (el.status === APPOINTMENT_STATUS.RESCHEDULE) {
+          //     // setData({ ...data, service: el });
+          //     setIsRescheduled(true);
+          //   }
+          // });
           setData({
             ...res.data.data,
             startDateFormat,
             endDateFormat,
           });
+          getInvoice(res.data.data.code);
         });
     }
-  }, [appointmentData, isWalletLoader]);
+  }, []);
+
+  // console.log('data2222222222222222', data, appointmentData);
 
   return isLoader ? (
     <Loader />
   ) : (
-    <div className="custom-appo">
-      <div className="bg-[#B8DFF2] p-5 pb-12">
-        <div className="flex justify-between">
-          <div>
-            <IconButton
+    <>
+      <Notify
+        isOpen={isNotify}
+        setIsOpen={setIsNotify}
+        displayMessage={notifyMessage}
+      />
+      <div className="custom-appo">
+        <div className="bg-[#B8DFF2] p-5 pb-4">
+          <div className="flex justify-between">
+            <div className="w-full">
+              {/* <IconButton
               disabled={
                 appointmentData?.status === APPOINTMENT_STATUS.CANCELLED ||
                 appointmentData?.status === APPOINTMENT_STATUS.COMPLETED ||
@@ -168,217 +336,95 @@ const AppointmentViewCard = ({
               }}
             >
               <EditIcon />
-            </IconButton>
-            <IconButton
-              disabled={
-                appointmentData?.status === APPOINTMENT_STATUS.CANCELLED ||
-                appointmentData?.status === APPOINTMENT_STATUS.COMPLETED ||
-                appointmentData?.status === APPOINTMENT_STATUS.RESCHEDULE ||
-                appointmentData?.status === APPOINTMENT_STATUS.PROCESSING ||
-                appointmentData?.status === APPOINTMENT_STATUS.MISSED
-              }
-              className="icon-btn mr-3.5 p-0"
-              onClick={() => {
-                setIsTooltipOpen(false);
-                deleteAppointmentHandler(appointmentData.id);
-              }}
-            >
-              <DeleteIcon />
-            </IconButton>
-            <IconButton
-              disabled={
-                appointmentData?.status === APPOINTMENT_STATUS.CANCELLED ||
-                appointmentData?.status === APPOINTMENT_STATUS.COMPLETED ||
-                appointmentData?.status === APPOINTMENT_STATUS.RESCHEDULE ||
-                appointmentData?.status === APPOINTMENT_STATUS.PROCESSING ||
-                appointmentData?.status === APPOINTMENT_STATUS.MISSED
-              }
-              name="Reschedule"
-              className="icon-btn mr-3.5 p-0"
-              onClick={() =>
-                navigate(`./reschedule-appointment/${appointmentData.id}`)
-              }
-            >
-              <HistoryIcon />
-            </IconButton>
-            <IconButton name="Print Slip" className="icon-btn p-0">
-              <CustomAppointmentLayoutCash
-                isPrintEnabled={isPrintEnabled}
-                setPrintEnabled={setIsPrintEnabled}
-                data={invoiceData}
-              />
-            </IconButton>
-            {appointmentData?.status !== APPOINTMENT_STATUS.NEW &&
-            appointmentData?.status !== APPOINTMENT_STATUS.PROCESSING &&
-            appointmentData?.status !== APPOINTMENT_STATUS.DONE ? (
-              <div className="mt-3">
-                <span className="rounded bg-slate-200 px-2 py-1 text-sm">
-                  {appointmentData?.status === APPOINTMENT_STATUS.COMPLETED
-                    ? 'Appointment has been Completed'
-                    : appointmentData?.status === APPOINTMENT_STATUS.MISSED
-                    ? 'Appointment has been Missed'
-                    : appointmentData?.status === APPOINTMENT_STATUS.CANCELLED
-                    ? 'Appointment has been Cancelled'
-                    : appointmentData?.status === APPOINTMENT_STATUS.RESCHEDULE
-                    ? 'Appointment has been Rescheduled'
-                    : ''}
-                </span>
-              </div>
-            ) : (
-              <div
+            </IconButton> */}
+              <IconButton
+                // disabled={
+                //   isRescheduled ||
+                //   appointmentData?.status === APPOINTMENT_STATUS.CANCELLED ||
+                //   appointmentData?.status === APPOINTMENT_STATUS.DONE ||
+                //   appointmentData?.status === APPOINTMENT_STATUS.COMPLETED ||
+                //   appointmentData?.status === APPOINTMENT_STATUS.RESCHEDULE ||
+                //   appointmentData?.status === APPOINTMENT_STATUS.PROCESSING ||
+                //   appointmentData?.status === APPOINTMENT_STATUS.MISSED
+                // }
+                className="icon-btn mr-3.5 p-0"
                 onClick={() => {
-                  setIsTooltipOpen(false);
-                  if (appointmentData?.status === 'New') {
-                    isStatusProcessing(appointmentData.id);
-                  } else if (data?.status === APPOINTMENT_STATUS.DONE) {
-                    isStatusDone(appointmentData.id);
+                  if (checkStatusHandler('delete')) {
+                    setCancelDialogOpen(true);
                   }
                 }}
-                className={`mt-3 flex w-[100%] ${
-                  data?.status === APPOINTMENT_STATUS.PROCESSING
-                    ? 'cursor-default'
-                    : 'cursor-pointer border-[3px] bg-slate-200 shadow'
-                } items-center justify-center rounded`}
               >
-                <IconButton
-                  size="small"
-                  name="Done"
-                  disabled={data?.status === APPOINTMENT_STATUS.PROCESSING}
-                  className="icon-btn mx-[4px] p-0"
-                  // onClick={() => isStatusDone(appointmentData.id)}
-                >
-                  {data?.status === APPOINTMENT_STATUS.NEW ? (
-                    <UpdateOutlinedIcon fontSize="small" />
-                  ) : data?.status === APPOINTMENT_STATUS.PROCESSING ? (
-                    <InfoOutlinedIcon fontSize="small" />
-                  ) : (
-                    <CheckCircleOutlineIcon fontSize="small" />
-                  )}
-                </IconButton>
-                <span className="text-sm">
-                  {data?.status === APPOINTMENT_STATUS.NEW
-                    ? 'Processing'
-                    : data?.status === APPOINTMENT_STATUS.PROCESSING
-                    ? 'This must be done by the staff.'
-                    : data?.status === APPOINTMENT_STATUS.DONE
-                    ? 'Complete'
-                    : ''}
-                </span>
-              </div>
-            )}
-          </div>
-          {/* <div>
-            <IconButton className="icon-btn p-0" onClick={handleClose}>
-              <CloseIcon style={{ fontSize: '28px' }} />
-            </IconButton>
-          </div> */}
-        </div>
-        <div className="mt-3">
-          {appointmentData?.status === APPOINTMENT_STATUS.COMPLETED &&
-            data?.wallets === null && (
-              <div>
-                <CustomButton
-                  // sx={{
-                  //   width: '20px',
-                  // }}
-                  buttonType="button"
-                  title="Wallet"
-                  icon={<WalletIcon />}
-                  className="btn-black-outline btn-icon"
-                  onclick={handleClickPop}
-                  // onclick={handleFormClickOpen}
+                <DeleteIcon />
+              </IconButton>
+              <IconButton
+                // disabled={
+                //   isRescheduled ||
+                //   appointmentData?.status === APPOINTMENT_STATUS.CANCELLED ||
+                //   appointmentData?.status === APPOINTMENT_STATUS.DONE ||
+                //   appointmentData?.status === APPOINTMENT_STATUS.COMPLETED ||
+                //   appointmentData?.status === APPOINTMENT_STATUS.RESCHEDULE ||
+                //   appointmentData?.status === APPOINTMENT_STATUS.PROCESSING ||
+                //   appointmentData?.status === APPOINTMENT_STATUS.MISSED
+                // }
+                name="Reschedule"
+                className="icon-btn mr-3.5 p-0"
+                onClick={() => {
+                  if (checkStatusHandler('reschedule')) {
+                    navigate(`./reschedule-appointment/${data.code}`);
+                  }
+                }}
+              >
+                <HistoryIcon />
+              </IconButton>
+              <IconButton name="Print Slip" className="icon-btn p-0">
+                {/* {isPrintEnabled && ( */}
+                <CustomAppointmentLayoutCash
+                  isPrintEnabled={isPrintEnabled}
+                  setPrintEnabled={setIsPrintEnabled}
+                  data={invoiceData}
                 />
-              </div>
-            )}
+              </IconButton>
+              {showPaidHandler()}
+            </div>
+          </div>
+          <div className="flex items-center justify-center">
+            <span className="text-xl font-semibold">{data?.name}</span>
+          </div>
         </div>
-      </div>
-      <div className="relative h-14">
-        <hr className="border-1 border-[#1D4675]" />
-        <div className="absolute left-1/2 top-[-50px] -translate-x-1/2 transform">
-          <Avatar
-            alt="barber-pic"
-            src={data?.storeEmployee?.avatar}
-            sx={{
-              width: 100,
-              height: 100,
-            }}
+        <ViewCardAccordin
+          // setIsRescheduled={setIsRescheduled}
+          data={data}
+          setData={setData}
+          setAllAppointments={setAllAppointments}
+        />
+        {cancelDialogOpen && (
+          <PermissionPopup
+            type="shock"
+            open={cancelDialogOpen}
+            setOpen={setCancelDialogOpen}
+            dialogText={dialogText}
+            callback={statusCancelConfirmationHandler}
           />
-        </div>
+        )}
+        {paidDialogOpen && (
+          <PermissionPopup
+            type="thumb"
+            open={paidDialogOpen}
+            setOpen={setPaidDialogOpen}
+            dialogText={dialogPaidText}
+            callback={statusPaidConfirmationHandler}
+          />
+        )}
+        <ViewWalletPopupCard
+          id={id}
+          open={open}
+          anchorEl={anchorEl}
+          onclose={handleClosePop}
+          isWalletLoader={isWalletLoader}
+          callback={onWalletSubmit}
+        />
       </div>
-      <div className="flex flex-col items-center justify-center">
-        <div>
-          <span className="text-xl font-semibold">
-            {data?.storeEmployee?.name}
-          </span>
-        </div>
-        <div>
-          <div className="mt-1 flex items-center justify-center rounded-full bg-[#1D1D1D] px-4 py-1 text-white">
-            <StarIcon className="text-lg text-inherit" />
-            <span className="mx-1 text-base">{data?.rating}</span>
-          </div>
-        </div>
-      </div>
-      <div className="m-3 mt-5 rounded-xl border-[1px] border-[#949EAE] p-3">
-        <div className="my-2 flex items-center">
-          <div>
-            <img src={assets.images.appProfile} alt="app-head" />
-          </div>
-          <div className="flex items-center">
-            <span className="mx-2 text-xs text-[#6A6A6A]">{data?.name}</span>
-          </div>
-        </div>
-        <div className="mt-2 flex items-center">
-          <div>
-            <PhoneIphoneOutlinedIcon
-              className="m-0 p-0 text-[0.9rem] text-[#6A6A6A]"
-              fontSize="small"
-            />
-          </div>
-          <div className="">
-            <span className="mx-2 text-xs text-[#6A6A6A]">{data?.phone}</span>
-          </div>
-        </div>
-        <div className="mt-2 flex items-center">
-          <div>
-            <img src={assets.images.appHead} alt="app-head" />
-          </div>
-          <div>
-            <span className="mx-2 text-xs text-[#6A6A6A]">
-              {data?.storeServiceCategoryItem?.name}
-            </span>
-          </div>
-        </div>
-        <div className="my-2 flex items-center">
-          <div>
-            <img src={assets.images.appCalender} alt="app-head" />
-          </div>
-          <div>
-            <span className="mx-2 text-xs text-[#6A6A6A]">
-              {dayjs(data?.appointmentTime)?.format('MMMM DD, YYYY') ?? '--'}
-            </span>
-          </div>
-        </div>
-        <div className="flex items-center">
-          <div>
-            <img src={assets.images.appClock} alt="app-head" />
-          </div>
-          <div>
-            <span className="mx-2 text-xs text-[#6A6A6A]">
-              {dayjs(appointmentData?.startDate).format('h:mm A')} -{' '}
-              {dayjs(appointmentData?.endDate).format('h:mm A')}
-            </span>
-          </div>
-        </div>
-      </div>
-      <ViewWalletPopupCard
-        id={id}
-        open={open}
-        anchorEl={anchorEl}
-        onclose={handleClosePop}
-        isWalletLoader={isWalletLoader}
-        callback={onWalletSubmit}
-      />
-    </div>
+    </>
   );
 };
 

@@ -38,9 +38,9 @@ function UpdateAppointmentPopup({
     reset,
     formState: { errors },
   } = useForm<UpdateAppointmentForm>();
+  console.log('datass', formData);
 
   const onSubmit = (data: any) => {
-    // console.log('data', formData, data);
     data.id = formData?.id;
     setOpenFormDialog(false);
     callback(data);

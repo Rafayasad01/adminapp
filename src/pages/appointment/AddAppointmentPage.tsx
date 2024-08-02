@@ -9,6 +9,7 @@ import Dialog from '@mui/material/Dialog';
 import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { CircularProgress, Divider, InputAdornment } from '@mui/material';
+import { useDispatch } from 'react-redux';
 import Button from '@mui/material/Button';
 import FormLabel from '@mui/material/FormLabel';
 import Input from '@mui/material/Input';
@@ -37,7 +38,6 @@ import { Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import appUserService from '../../services/adminapp/adminAppUser';
 import assets from '../../assets';
-import '../../assets/css/PopupStyle.css';
 import CustomButton from '../../components/common/CustomButton';
 import CustomDropDown from '../../components/common/CustomDropDown';
 import CustomInputBox from '../../components/common/CustomInputBox';
@@ -53,6 +53,8 @@ import storeEmployeeService from '../../services/adminapp/adminStoreEmployee';
 import storeLovService from '../../services/adminapp/adminStoreService';
 import { GENDER, MAX_LENGTH_EXCEEDED, PATTERN } from '../../utils/constants';
 import { useAppSelector } from '../../redux/redux-hooks';
+import { setOfficeTimeOut } from '../../redux/features/appSlice';
+import '../../assets/css/PopupStyle.css';
 // import { useAppSelector } from '../../redux/redux-hooks';
 // import { useAppSelector } from '../../redux/redux-hooks';
 
@@ -96,6 +98,7 @@ const UserPopup = ({
   const [isExistingUser, setIsExistingUser] = useState<'TRUE' | 'FALSE'>(
     'FALSE'
   );
+
   const handleUserChange = (event: any) => {
     setIsExistingUser(event.target.value);
     callbackValue(event.target.value);
@@ -247,6 +250,7 @@ const UserPopup = ({
 
 export default function AddAppointmentPage() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const authState: any = useAppSelector((state: any) => state?.authState);
   // console.log('🚀 ~ AddAppointmentPage ~ shopSchedule:', shopScheduleWorkDays);
   const [activeLoginOption, setActiveLoginOption] = useState<any>(null);
@@ -293,9 +297,11 @@ export default function AddAppointmentPage() {
     control,
   } = useForm<AddAppointmentForm>();
 
-  const officeTimings = useAppSelector(
-    (state) => state?.persistedReducer.appState.UserItems
+  const officeTimeOut = useAppSelector(
+    (state) =>
+      state?.persistedReducer.appState.UserItems.tenantConfig.officeTimeOut
   );
+  // console.log('🚀 ~ AddAppointmentPage ~ officeTimings:', officeTimings);
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -339,6 +345,10 @@ export default function AddAppointmentPage() {
 
   const checkIsAfterTime = (date: any, appointmentDate: any) => {
     return dayjs(date).isAfter(appointmentDate, 'minutes');
+  };
+
+  const checkIsBeforeTime = (appointmentDate: any, date: any) => {
+    return dayjs(appointmentDate).isBefore(date, 'minute');
   };
 
   const checkIsBetweenTime = (
@@ -701,24 +711,30 @@ export default function AddAppointmentPage() {
       if (startTime.hour() > endTime.hour()) {
         endTime = endTime.add(1, 'day');
       }
-      const officeTimeIn = dayjs(officeTimings?.tenantConfig?.officeTimeIn)
-        .set('date', time.date())
-        .set('month', time.month())
-        .set('year', time.year());
-      let officeTimeOut = dayjs(officeTimings?.tenantConfig?.officeTimeOut)
-        .set('date', time.date())
-        .set('month', time.month())
-        .set('year', time.year());
-      if (officeTimeIn.hour() > officeTimeOut.hour()) {
-        officeTimeOut = officeTimeOut.add(1, 'day');
-      }
+      // const officeTimeIn = dayjs(officeTimings?.tenantConfig?.officeTimeIn)
+      //   .set('date', time.date())
+      //   .set('month', time.month())
+      //   .set('year', time.year());
+      // let officeTimeOut = dayjs(officeTimings?.tenantConfig?.officeTimeOut)
+      //   .set('date', time.date())
+      //   .set('month', time.month())
+      //   .set('year', time.year());
+      // if (officeTimeIn.hour() > officeTimeOut.hour()) {
+      //   officeTimeOut = officeTimeOut.add(1, 'day');
+      // }
       let prevTime = startTime;
       const addTime = dayjs(time).add(activeBarberData?.serviceTime, 'minutes');
       if (scheduleData.length > 0) {
-        if (
-          !checkIsBetweenTime(time, startTime, endTime) ||
-          !checkIsBetweenTime(time, officeTimeIn, officeTimeOut)
-        ) {
+        // console.log('time, startTime', time, startTime);
+
+        // console.log(
+        //   '!checkIsBeforeTime(time, startTime)',
+        //   checkIsBeforeTime(startTime, time)
+        // );
+
+        if (!checkIsBeforeTime(startTime, time)) {
+          // console.log('1');
+
           setIsNotify(true);
           setNotifyMessage({
             text: 'Barber is not available at this time',
@@ -764,8 +780,9 @@ export default function AddAppointmentPage() {
               'minute'
             );
             if (
-              time > dayjs(serviceTime) &&
-              checkIsAfterTime(endTime, serviceTime)
+              time > dayjs(serviceTime)
+              // &&
+              // checkIsAfterTime(endTime, serviceTime)
             ) {
               prevTime = dayjs(serviceTime);
             } else if (
@@ -773,6 +790,7 @@ export default function AddAppointmentPage() {
               !checkIsBetweenTime(addTime, prevTime, dayjs(el.appointmentTime))
             ) {
               // break;
+              // console.log('2');
               setIsNotify(true);
               setNotifyMessage({
                 text: `Barber is not available at this time`,
@@ -818,6 +836,7 @@ export default function AddAppointmentPage() {
         //   });
         // }
       } else {
+        console.log('3');
         setIsNotify(true);
         setNotifyMessage({
           text: `Barber is not available at ${currentDay}`,
@@ -837,18 +856,35 @@ export default function AddAppointmentPage() {
 
   const onSubmit = (data: any) => {
     setIsLoader(true);
+    const newOfficeTimeOut = dayjs(officeTimeOut)
+      .set('hours', dayjs(officeTimeOut).hour())
+      .set('minute', dayjs(officeTimeOut).minute());
+
+    let checkTimeOut = false;
     delete data.storeServiceCategoryItem;
     delete data.storeServiceCategory;
     delete data.categoryId;
     delete data.appointmentDate;
     const updatedAppointmentArray = data.appointments.map((item: any) => {
-      // console.log('🚀 ~ updatedAppointmentArray ~ item:', item);
+      const appTime = dayjs(item.appointmentTime)
+        .set('hours', dayjs(item.appointmentTime).hour())
+        .set('minute', dayjs(item.appointmentTime).minute());
+
+      if (checkIsAfterTime(appTime, newOfficeTimeOut)) {
+        checkTimeOut = true;
+      }
+
       const { amount, barber, id, ...rest } = item;
       return rest;
     });
-    // data.appointments = updatedAppointmentArray;
+    if (checkTimeOut) {
+      const addOneHour: any = newOfficeTimeOut.add(1, 'hour');
+      const convertedOfficeTimeOut: any = `${dayjs().format(
+        'YYYY-MM-DD'
+      )} ${dayjs(addOneHour).format('HH:mm:ss')}`;
+      dispatch(setOfficeTimeOut({ officeTimeOut: convertedOfficeTimeOut }));
+    }
     data.appointments = updatedAppointmentArray.map((e: any) => {
-      // const formattedDateTime = formatISO(dayjs(e.appointmentTime).toDate());
       const formattedDateTime = dayjs(e.appointmentTime)
         .utc()
         .format('YYYY-MM-DD HH:mm:ss');
