@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import CorporateFareIcon from '@mui/icons-material/CorporateFare';
+// import CorporateFareIcon from '@mui/icons-material/CorporateFare';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import GridViewOutlinedIcon from '@mui/icons-material/GridViewOutlined';
 import InstagramIcon from '@mui/icons-material/Instagram';
@@ -133,13 +133,13 @@ const links = [
       },
     ],
   },
-  {
-    name: 'Branches',
-    path: 'branches',
-    permission: 'Branch List',
-    // permission: 'Banners List',
-    icon: <CorporateFareIcon className="w-[17px]" />,
-  },
+  // {
+  //   name: 'Branches',
+  //   path: 'branches',
+  //   permission: 'Branch List',
+  //   // permission: 'Banners List',
+  //   icon: <CorporateFareIcon className="w-[17px]" />,
+  // },
   // {
   //   name: 'Banners',
   //   path: 'banners',
