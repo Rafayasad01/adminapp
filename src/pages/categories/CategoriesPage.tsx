@@ -22,7 +22,7 @@ import TopBar from '../../components/common/TopBar';
 import { useAppSelector } from '../../redux/redux-hooks';
 import categoryService from '../../services/adminapp/adminCategory';
 import PermissionPopup from '../../utils/PermissionPopup';
-import { NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
+import { ALL_PERMISSIONS, NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
 import { CheckRolePermission, listingRolePermission } from '../../utils/helper';
 import CategoriesCreatePopup from './CategoriesCreatePopup';
 import CategoriesEditPopup from './CategoriesEditPopup';
@@ -57,7 +57,9 @@ function CategoriesPage() {
   const [modalImage, setModalImage] = useState('');
 
   const handleFormClickOpen = () => {
-    if (listingRolePermission(dataRole, 'Category Create')) {
+    if (
+      listingRolePermission(dataRole, ALL_PERMISSIONS.storeProduct.addCategory)
+    ) {
       setOpenFormDialog(true);
     } else {
       setIsNotify(true);
@@ -69,7 +71,9 @@ function CategoriesPage() {
   };
 
   useEffect(() => {
-    if (listingRolePermission(dataRole, 'Category List')) {
+    if (
+      listingRolePermission(dataRole, ALL_PERMISSIONS.storeProduct.viewCategory)
+    ) {
       categoryService
         .getListService(authState.user.tenant, page, rowsPerPage)
         .then((item: any) => {
@@ -188,7 +192,12 @@ function CategoriesPage() {
 
   const manuHandler = (option: string) => {
     if (option === 'Edit') {
-      if (listingRolePermission(dataRole, 'Category Update')) {
+      if (
+        listingRolePermission(
+          dataRole,
+          ALL_PERMISSIONS.storeProduct.editCategory
+        )
+      ) {
         categoryService.getCategory(actionMenuItemid).then((item: any) => {
           if (item.data.success) {
             // console.log('tem.data.data:::::::', item.data.data);
@@ -206,13 +215,18 @@ function CategoriesPage() {
     } else if (option === 'Products') {
       // navigate(`../item/${actionMenuItemid}`);
       CheckRolePermission(
-        'Category Service Get',
+        ALL_PERMISSIONS.storeProduct.viewItem,
         dataRole,
         navigate,
         `item/${actionMenuItemid}`
       );
     } else if (option === 'Delete') {
-      if (listingRolePermission(dataRole, 'Category Delete')) {
+      if (
+        listingRolePermission(
+          dataRole,
+          ALL_PERMISSIONS.storeProduct.deleteCategory
+        )
+      ) {
         setCancelDialogOpen(true);
       } else {
         setIsNotify(true);
@@ -319,7 +333,9 @@ function CategoriesPage() {
   };
 
   const handleSwitchChange = (event: any, id: string) => {
-    if (listingRolePermission(dataRole, 'Category Update Status')) {
+    if (
+      listingRolePermission(dataRole, ALL_PERMISSIONS.storeProduct.editCategory)
+    ) {
       const data = {
         is_active: event.target.checked,
         updated_by: authState.user.id,

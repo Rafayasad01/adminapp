@@ -20,7 +20,7 @@ import TopBar from '../../components/common/TopBar';
 import { useAppSelector } from '../../redux/redux-hooks';
 import categoryService from '../../services/adminapp/adminCategory';
 import PermissionPopup from '../../utils/PermissionPopup';
-import { NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
+import { ALL_PERMISSIONS, NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
 import { CheckRolePermission, listingRolePermission } from '../../utils/helper';
 import ServicesCreatePopup from './CategoriesServicesCreatePopup';
 import ServicesEditPopup from './CategoriesServicesEditPopup';
@@ -45,7 +45,7 @@ function CategoriesServicesPage() {
   const actionMenuOptions = ["Product faq's", 'Edit', 'Delete'];
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
-  const [isLoader, setIsLoader] = React.useState(true);
+  const [isLoader, setIsLoader] = React.useState(false);
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
   const [cancelDialogOpen, setCancelDialogOpen] = useState<boolean>(false);
@@ -94,7 +94,7 @@ function CategoriesServicesPage() {
   };
 
   const handleAddNew = () => {
-    if (listingRolePermission(dataRole, 'Category Service Create')) {
+    if (listingRolePermission(dataRole, ALL_PERMISSIONS.storeProduct.addItem)) {
       setOpenFormDialog(true);
     } else {
       setIsNotify(true);
@@ -130,15 +130,15 @@ function CategoriesServicesPage() {
   };
 
   useEffect(() => {
-    if (listingRolePermission(dataRole, 'Category Service List')) {
+    if (
+      listingRolePermission(dataRole, ALL_PERMISSIONS.storeProduct.viewItem)
+    ) {
       categoryService
         .getCategoryServiceList(productId, page, rowsPerPage)
         .then((item: any) => {
-          if (listingRolePermission(dataRole, 'Category Service Get')) {
-            setIsLoader(false);
-            setList(item.data.data.list);
-            setTotal(item.data.data.total);
-          }
+          setIsLoader(false);
+          setList(item.data.data.list);
+          setTotal(item.data.data.total);
         })
         .catch((error) => {
           setIsLoader(false);
@@ -147,8 +147,14 @@ function CategoriesServicesPage() {
             text: error.message,
             type: 'error',
           });
-          // console.log('error::::::::', error);
         });
+    } else {
+      setIsLoader(false);
+      setIsNotify(true);
+      setNotifyMessage({
+        text: NOT_AUTHORIZED_MESSAGE,
+        type: 'error',
+      });
     }
   }, [null]);
 
@@ -192,30 +198,35 @@ function CategoriesServicesPage() {
 
   const manuHandler = (option: string) => {
     if (option === 'Edit') {
-      categoryService.getCategoryService(actionMenuItemid).then((item: any) => {
-        if (item.data.success) {
-          if (listingRolePermission(dataRole, 'Category Service Update')) {
-            setEditFormData(item.data.data);
-            setOpenEditFormDialog(true);
-          } else {
-            setIsNotify(true);
-            setNotifyMessage({
-              text: NOT_AUTHORIZED_MESSAGE,
-              type: 'warning',
-            });
-          }
-        }
-      });
+      if (
+        listingRolePermission(dataRole, ALL_PERMISSIONS.storeProduct.editItem)
+      ) {
+        categoryService
+          .getCategoryService(actionMenuItemid)
+          .then((item: any) => {
+            if (item.data.success) {
+              setEditFormData(item.data.data);
+              setOpenEditFormDialog(true);
+            }
+          });
+      } else {
+        setIsNotify(true);
+        setNotifyMessage({
+          text: NOT_AUTHORIZED_MESSAGE,
+          type: 'warning',
+        });
+      }
     } else if (option === "Product faq's") {
       CheckRolePermission(
-        'Category Service List',
+        ALL_PERMISSIONS.storeProduct.viewFaq,
         dataRole,
         navigate,
         `../item/faq/${actionMenuItemid}`
       );
-      // navigate(`../service/faq/${actionMenuItemid}`);
     } else if (option === 'Delete') {
-      if (listingRolePermission(dataRole, 'Category Service Delete')) {
+      if (
+        listingRolePermission(dataRole, ALL_PERMISSIONS.storeProduct.deleteItem)
+      ) {
         setCancelDialogOpen(true);
       } else {
         setIsNotify(true);
@@ -316,7 +327,9 @@ function CategoriesServicesPage() {
   };
 
   const handleSwitchChange = (event: any, id: string) => {
-    if (listingRolePermission(dataRole, 'Category Service Update Status')) {
+    if (
+      listingRolePermission(dataRole, ALL_PERMISSIONS.storeProduct.editItem)
+    ) {
       // setIsLoader(true);
       const data = {
         isActive: event.target.checked,
@@ -431,7 +444,7 @@ function CategoriesServicesPage() {
               </thead>
               <tbody>
                 {list &&
-                  list.map((item: any, index: number) => {
+                  list?.map((item: any, index: number) => {
                     return (
                       <tr key={item.id}>
                         <td>

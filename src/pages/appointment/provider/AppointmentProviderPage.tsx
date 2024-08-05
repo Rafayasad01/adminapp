@@ -23,6 +23,7 @@ import StoreEmployeeService from '../../../services/adminapp/adminStoreEmployee'
 import StoreLovService from '../../../services/adminapp/adminStoreService';
 import PermissionPopup from '../../../utils/PermissionPopup';
 import {
+  ALL_PERMISSIONS,
   NOT_AUTHORIZED_MESSAGE,
   PATTERN,
   imageAllowedTypes,
@@ -53,7 +54,7 @@ function AppointmentProviderPage() {
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
   const actionMenuOptions = [
     'Services',
-    // 'Attendance',
+    'Attendance',
     'Rating',
     'Schedule',
     'Edit',
@@ -319,7 +320,12 @@ function AppointmentProviderPage() {
 
   const handleFormClickOpen = async () => {
     // reset();
-    if (listingRolePermission(dataRole, 'Appointment Provider Create')) {
+    if (
+      listingRolePermission(
+        dataRole,
+        ALL_PERMISSIONS.storeAppointment.addEmployee
+      )
+    ) {
       setOpenFormDialog(true);
       catLovService();
       remove();
@@ -432,7 +438,12 @@ function AppointmentProviderPage() {
 
   const manuHandler = (option: string) => {
     if (option === 'Edit') {
-      if (listingRolePermission(dataRole, 'Appointment Provider Edit')) {
+      if (
+        listingRolePermission(
+          dataRole,
+          ALL_PERMISSIONS.storeAppointment.editEmployee
+        )
+      ) {
         setIsLoader(true);
         StoreEmployeeService.StoreEmployeeFind(actionMenuItemid)
           .then((item: any) => {
@@ -497,7 +508,12 @@ function AppointmentProviderPage() {
         });
       }
     } else if (option === 'Delete') {
-      if (listingRolePermission(dataRole, 'Appointment Provider Delete')) {
+      if (
+        listingRolePermission(
+          dataRole,
+          ALL_PERMISSIONS.storeAppointment.deleteEmployee
+        )
+      ) {
         setCancelDialogOpen(true);
       } else {
         setIsNotify(true);
@@ -508,7 +524,10 @@ function AppointmentProviderPage() {
       }
     } else if (option === 'Schedule') {
       if (
-        listingRolePermission(dataRole, 'Appointment Provider Schedule View')
+        listingRolePermission(
+          dataRole,
+          ALL_PERMISSIONS.storeAppointment.viewEmployeeSchedule
+        )
       ) {
         navigate(`../schedule/${actionMenuItemid}`);
       } else {
@@ -520,7 +539,10 @@ function AppointmentProviderPage() {
       }
     } else if (option === 'Attendance') {
       if (
-        listingRolePermission(dataRole, 'Appointment Provider Service View')
+        listingRolePermission(
+          dataRole,
+          ALL_PERMISSIONS.storeAppointment.viewEmployeeAttendance
+        )
       ) {
         navigate(`../attendance/${actionMenuItemid}`);
       } else {
@@ -532,7 +554,10 @@ function AppointmentProviderPage() {
       }
     } else if (option === 'Services') {
       if (
-        listingRolePermission(dataRole, 'Appointment Provider Service View')
+        listingRolePermission(
+          dataRole,
+          ALL_PERMISSIONS.storeAppointment.viewServices
+        )
       ) {
         navigate(`../services/list/${actionMenuItemid}`);
       } else {
@@ -544,7 +569,10 @@ function AppointmentProviderPage() {
       }
     } else if (option === 'Rating') {
       if (
-        listingRolePermission(dataRole, 'Appointment Provider Service View')
+        listingRolePermission(
+          dataRole,
+          ALL_PERMISSIONS.storeAppointment.viewEmployeeRating
+        )
       ) {
         navigate(`../review/${actionMenuItemid}`);
       } else {
@@ -558,7 +586,12 @@ function AppointmentProviderPage() {
   };
 
   useEffect(() => {
-    if (listingRolePermission(dataRole, 'Appointment Provider List')) {
+    if (
+      listingRolePermission(
+        dataRole,
+        ALL_PERMISSIONS.storeAppointment.viewEmployees
+      )
+    ) {
       StoreEmployeeService.StoreEmployeeAllList(search, page, rowsPerPage)
         .then((item: any) => {
           if (item.data.success) {
@@ -772,7 +805,12 @@ function AppointmentProviderPage() {
   };
 
   const handleSwitchChange = (event: any, id: string) => {
-    if (listingRolePermission(dataRole, 'Appointment Provider Update Status')) {
+    if (
+      listingRolePermission(
+        dataRole,
+        ALL_PERMISSIONS.storeAppointment.editEmployee
+      )
+    ) {
       const data = {
         isActive: event.target.checked,
       };

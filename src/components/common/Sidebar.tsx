@@ -27,7 +27,11 @@ import { NavLink } from 'react-router-dom';
 import assets from '../../assets';
 import { useAppSelector } from '../../redux/redux-hooks';
 import CAN, { defineRules } from '../../services/permissions/permissions';
-import { MODULE_EMPLOYEES, MODULE_SETTINGS } from '../../utils/constants';
+import {
+  ALL_PERMISSIONS,
+  MODULE_EMPLOYEES,
+  MODULE_SETTINGS,
+} from '../../utils/constants';
 import ArrowDown from '../icons/ArrowDown';
 import ArrowUp from '../icons/ArrowUp';
 import CategoryIcon from '../icons/CategoryIcon';
@@ -46,43 +50,43 @@ const links = [
   {
     name: 'Store Appointment',
     path: 'store-appointment',
-    permission: 'Appointment Parent',
+    permission: ALL_PERMISSIONS.storeAppointment.viewAppointments,
     icon: <SplitscreenOutlinedIcon fontSize="inherit" />,
     childLinks: [
       {
         name: 'Services',
         path: 'store-appointment/service',
-        permission: 'Category List',
+        permission: ALL_PERMISSIONS.storeAppointment.viewServices,
         icon: <GridViewOutlinedIcon fontSize="inherit" />,
       },
       {
         name: 'Employees',
         path: 'store-appointment/employees',
-        permission: 'Category List',
+        permission: ALL_PERMISSIONS.storeAppointment.viewEmployees,
         icon: <ProviderIcon />,
       },
       {
         name: 'Appointments',
         path: 'store-appointment/appointments',
-        permission: 'Category List',
+        permission: ALL_PERMISSIONS.storeAppointment.viewAppointment,
         icon: <VisitIcon />,
       },
       {
         name: 'Wallet',
         path: 'store-appointment/wallet',
-        permission: 'Category List',
+        permission: ALL_PERMISSIONS.storeAppointment.viewWallets,
         icon: <WalletIcon fontSize="inherit" />,
       },
       {
         name: 'Leave management',
         path: 'store-appointment/leaves-management',
-        permission: 'Category List',
+        permission: ALL_PERMISSIONS.storeAppointment.viewLeaveManagement,
         icon: <ManageAccountsOutlinedIcon fontSize="inherit" />,
       },
       // {
       //   name: 'Ratings',
       //   path: 'store-appointment/ratings',
-      //   permission: 'Category List',
+      //   permission: ALL_PERMISSIONS.storeAppointment.viewRatings,
       //   icon: <VisitIcon />,
       // },
     ],
@@ -90,25 +94,25 @@ const links = [
   {
     name: 'Store Product',
     path: 'store-product',
-    permission: 'Appointment Parent',
+    permission: ALL_PERMISSIONS.storeProduct.viewProducts,
     icon: <Inventory2OutlinedIcon fontSize="inherit" />,
     childLinks: [
       {
         name: 'Products',
         path: 'store-product/product',
-        permission: 'Category List',
+        permission: ALL_PERMISSIONS.storeProduct.viewCategory,
         icon: <CategoryIcon />,
       },
       {
         name: 'Orders',
         path: 'store-product/orders',
-        permission: 'Order List',
+        permission: ALL_PERMISSIONS.storeProduct.viewOrders,
         icon: <OrderIcon />,
       },
       {
         name: 'Rating',
         path: 'store-product/ratings',
-        permission: 'Banners List',
+        permission: ALL_PERMISSIONS.storeProduct.viewRatings,
         icon: <ViewCarouselOutlinedIcon className="w-[17px]" />,
       },
     ],
@@ -289,6 +293,7 @@ function Sidebar() {
   }
 
   useEffect(() => {
+    console.log('🚀 ~ useEffect ~ permissions:', permissions);
     defineRules(permissions);
     if (permissions) {
       const tempList = links.filter((el) => {
@@ -304,7 +309,7 @@ function Sidebar() {
         }
         return CAN('canView', el.permission as string);
       });
-      // console.log("tempList", tempList);
+      console.log('tempList', links, tempList);
       tempList.unshift({
         name: 'Dashboard',
         path: 'home',

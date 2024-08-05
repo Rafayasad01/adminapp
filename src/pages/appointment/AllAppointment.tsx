@@ -33,7 +33,8 @@ import { useAppSelector } from '../../redux/redux-hooks';
 import storeAppointmentService from '../../services/adminapp/adminStoreAppointment';
 import AppointmentViewCard from './AppointmentViewCard';
 // import UpdateAppointmentPopup from './UpdateAppointmentPopup';
-import { APPOINTMENT_STATUS } from '../../utils/constants';
+import { ALL_PERMISSIONS, APPOINTMENT_STATUS } from '../../utils/constants';
+import { listingRolePermission } from '../../utils/helper';
 
 dayjs.extend(weekOfYear);
 // dayjs.extend(timezone);
@@ -59,6 +60,9 @@ const AllAppointment = ({
   // const [appointmentData, setAppointmentData] = useState();
   const officeTimings = useAppSelector(
     (state) => state?.persistedReducer.appState.UserItems
+  );
+  const dataRole = useAppSelector(
+    (state: any) => state?.persistedReducer?.roleState?.role?.permissions
   );
 
   const tempShopStartTime = dayjs(officeTimings?.tenantConfig?.officeTimeIn);
@@ -154,17 +158,30 @@ const AllAppointment = ({
       });
   };
 
+  // eslint-disable-next-line consistent-return
   useEffect(() => {
-    getAllAppointments(currentWeek, 'week');
-    const intervalId = setInterval(() => {
-      getAllAppointments(
-        currentViewRef.current === 'Month'
-          ? currentMonthRef.current
-          : currentWeekRef.current,
-        currentViewRef.current === 'Month' ? 'Month' : 'week'
-      );
-    }, 600000);
-    return () => clearInterval(intervalId);
+    if (
+      listingRolePermission(
+        dataRole,
+        ALL_PERMISSIONS.storeAppointment.viewAppointment
+      )
+    ) {
+      getAllAppointments(currentWeek, 'week');
+      const intervalId = setInterval(() => {
+        getAllAppointments(
+          currentViewRef.current === 'Month'
+            ? currentMonthRef.current
+            : currentWeekRef.current,
+          currentViewRef.current === 'Month' ? 'Month' : 'week'
+        );
+      }, 600000);
+      return () => clearInterval(intervalId);
+    }
+    setIsNotify(true);
+    setNotifyMessage({
+      text: 'You are not authorized to view this page.',
+      type: 'error',
+    });
   }, []);
 
   const resources: any = [

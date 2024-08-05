@@ -19,7 +19,11 @@ import { useNavigate } from 'react-router-dom';
 import storeAppointmentService from '../../services/adminapp/adminStoreAppointment';
 import walletService from '../../services/adminapp/adminWallet';
 import Loader from '../../components/common/Loader2';
-import { APPOINTMENT_STATUS, CURRENCY_PREFIX } from '../../utils/constants';
+import {
+  ALL_PERMISSIONS,
+  APPOINTMENT_STATUS,
+  CURRENCY_PREFIX,
+} from '../../utils/constants';
 // import CustomButton from '../../components/common/CustomButton';
 // import ViewWalletPopupCard from './ViewWalletPopupCard';
 import CustomAppointmentLayoutCash from '../../utils/CustomPrintLayout/CustomAppointmentLayoutCash';
@@ -28,6 +32,8 @@ import Notify from '../../components/common/Notify';
 import PermissionPopup from '../../utils/PermissionPopup';
 import ViewWalletPopupCard from './ViewWalletPopupCard';
 import CustomButton from '../../components/common/CustomButton';
+import { listingRolePermission } from '../../utils/helper';
+import { useAppSelector } from '../../redux/redux-hooks';
 
 type AppointmentViewCardProps = {
   appointmentData?: any;
@@ -54,6 +60,9 @@ const AppointmentViewCard = ({
   // isStatusProcessing,
   deleteAppointmentHandler,
 }: AppointmentViewCardProps) => {
+  const dataRole = useAppSelector(
+    (state: any) => state?.persistedReducer?.roleState?.role?.permissions
+  );
   const navigate = useNavigate();
   const [data, setData] = useState<any>(null);
   const [invoiceData, setInvoiceData] = useState<any>(null);
@@ -370,8 +379,20 @@ const AppointmentViewCard = ({
                 // }
                 className="icon-btn mr-3.5 p-0"
                 onClick={() => {
-                  if (checkStatusHandler('delete')) {
+                  if (
+                    checkStatusHandler('delete') &&
+                    listingRolePermission(
+                      dataRole,
+                      ALL_PERMISSIONS.storeAppointment.deleteAppointment
+                    )
+                  ) {
                     setCancelDialogOpen(true);
+                  } else {
+                    setIsNotify(true);
+                    setNotifyMessage({
+                      text: 'You are not authorized to view this page.',
+                      type: 'error',
+                    });
                   }
                 }}
               >
@@ -390,8 +411,20 @@ const AppointmentViewCard = ({
                 name="Reschedule"
                 className="icon-btn mr-3.5 p-0"
                 onClick={() => {
-                  if (checkStatusHandler('reschedule')) {
+                  if (
+                    checkStatusHandler('reschedule') &&
+                    listingRolePermission(
+                      dataRole,
+                      ALL_PERMISSIONS.storeAppointment.editAppointment
+                    )
+                  ) {
                     navigate(`./reschedule-appointment/${data.code}`);
+                  } else {
+                    setIsNotify(true);
+                    setNotifyMessage({
+                      text: 'You are not authorized to view this page.',
+                      type: 'error',
+                    });
                   }
                 }}
               >
@@ -399,11 +432,16 @@ const AppointmentViewCard = ({
               </IconButton>
               <IconButton name="Print Slip" className="icon-btn p-0">
                 {/* {isPrintEnabled && ( */}
-                <CustomAppointmentLayoutCash
-                  isPrintEnabled={isPrintEnabled}
-                  setPrintEnabled={setIsPrintEnabled}
-                  data={invoiceData}
-                />
+                {listingRolePermission(
+                  dataRole,
+                  ALL_PERMISSIONS.storeAppointment.editAppointment
+                ) && (
+                  <CustomAppointmentLayoutCash
+                    isPrintEnabled={isPrintEnabled}
+                    setPrintEnabled={setIsPrintEnabled}
+                    data={invoiceData}
+                  />
+                )}
               </IconButton>
               {showPaidHandler()}
             </div>

@@ -28,7 +28,10 @@ import TopBar from '../../../components/common/TopBar';
 import { useAppSelector } from '../../../redux/redux-hooks';
 import employeeService from '../../../services/adminapp/adminStoreEmployee';
 // import PermissionPopup from '../../../utils/PermissionPopup';
-import { NOT_AUTHORIZED_MESSAGE } from '../../../utils/constants';
+import {
+  ALL_PERMISSIONS,
+  NOT_AUTHORIZED_MESSAGE,
+} from '../../../utils/constants';
 import {
   // CheckRolePermission,
   listingRolePermission,
@@ -78,7 +81,12 @@ function LeaveManagement() {
   // };
 
   useEffect(() => {
-    if (listingRolePermission(dataRole, 'Category List')) {
+    if (
+      listingRolePermission(
+        dataRole,
+        ALL_PERMISSIONS.storeAppointment.viewLeaveManagement
+      )
+    ) {
       employeeService
         .StoreEmployeeAttendanceLeaveService(search, page, rowsPerPage)
         .then((item: any) => {
@@ -186,8 +194,13 @@ function LeaveManagement() {
   };
 
   const handleLeave = (id: any, type: string) => {
-    setIsLoader(true);
-    if (listingRolePermission(dataRole, 'Category List')) {
+    if (
+      listingRolePermission(
+        dataRole,
+        ALL_PERMISSIONS.storeAppointment.editLeaveManagement
+      )
+    ) {
+      setIsLoader(true);
       employeeService
         .StoreEmployeeLeaveStatusUpdateService(id, type)
         .then((item: any) => {

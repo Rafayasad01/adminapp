@@ -20,7 +20,7 @@ import Notify from '../../components/common/Notify';
 import TopBar from '../../components/common/TopBar';
 import { useAppSelector } from '../../redux/redux-hooks';
 import storeService from '../../services/adminapp/adminStoreService';
-import { NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
+import { ALL_PERMISSIONS, NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
 import { listingRolePermission } from '../../utils/helper';
 import ServiceItemCreatePopup from './ServiceItemCreatePopup';
 import ServiceItemEditPopup from './ServiceItemEditPopup';
@@ -88,7 +88,12 @@ function ServiceItemPage() {
   };
 
   const handleAddNew = () => {
-    if (listingRolePermission(dataRole, 'Category Service Create')) {
+    if (
+      listingRolePermission(
+        dataRole,
+        ALL_PERMISSIONS.storeAppointment.addService
+      )
+    ) {
       setOpenFormDialog(true);
     } else {
       setIsNotify(true);
@@ -115,15 +120,18 @@ function ServiceItemPage() {
   };
 
   useEffect(() => {
-    if (listingRolePermission(dataRole, 'Category Service List')) {
+    if (
+      listingRolePermission(
+        dataRole,
+        ALL_PERMISSIONS.storeAppointment.viewServices
+      )
+    ) {
       storeService
         .StoreCatItemsList(CatId, search, page, rowsPerPage)
         .then((item: any) => {
-          if (listingRolePermission(dataRole, 'Category Service Get')) {
-            setIsLoader(false);
-            setList(item.data.data.list);
-            setTotal(item.data.data.total);
-          }
+          setIsLoader(false);
+          setList(item.data.data.list);
+          setTotal(item.data.data.total);
         })
         .catch((error) => {
           setIsLoader(false);
@@ -174,7 +182,12 @@ function ServiceItemPage() {
 
   const manuHandler = (option: string) => {
     if (option === 'Edit') {
-      if (listingRolePermission(dataRole, 'Category Service Update')) {
+      if (
+        listingRolePermission(
+          dataRole,
+          ALL_PERMISSIONS.storeAppointment.editService
+        )
+      ) {
         const editFormDatas = list?.find(
           (el: any) => el.id === actionMenuItemid
         );
@@ -189,7 +202,12 @@ function ServiceItemPage() {
         });
       }
     } else if (option === 'Delete') {
-      if (listingRolePermission(dataRole, 'Category Service Delete')) {
+      if (
+        listingRolePermission(
+          dataRole,
+          ALL_PERMISSIONS.storeAppointment.deleteService
+        )
+      ) {
         setCancelDialogOpen(true);
       } else {
         setIsNotify(true);

@@ -51,10 +51,16 @@ import storeAppointmentService from '../../services/adminapp/adminStoreAppointme
 import storeEmployeeService from '../../services/adminapp/adminStoreEmployee';
 // import storeSettingService from '../../services/adminapp/adminShopSchedule';
 import storeLovService from '../../services/adminapp/adminStoreService';
-import { GENDER, MAX_LENGTH_EXCEEDED, PATTERN } from '../../utils/constants';
+import {
+  ALL_PERMISSIONS,
+  GENDER,
+  MAX_LENGTH_EXCEEDED,
+  PATTERN,
+} from '../../utils/constants';
 import { useAppSelector } from '../../redux/redux-hooks';
 import { setOfficeTimeOut } from '../../redux/features/appSlice';
 import '../../assets/css/PopupStyle.css';
+import { listingRolePermission } from '../../utils/helper';
 // import { useAppSelector } from '../../redux/redux-hooks';
 // import { useAppSelector } from '../../redux/redux-hooks';
 
@@ -300,6 +306,9 @@ export default function AddAppointmentPage() {
   const officeTimeOut = useAppSelector(
     (state) =>
       state?.persistedReducer.appState.UserItems.tenantConfig.officeTimeOut
+  );
+  const dataRole = useAppSelector(
+    (state: any) => state?.persistedReducer?.roleState?.role?.permissions
   );
   // console.log('🚀 ~ AddAppointmentPage ~ officeTimings:', officeTimings);
 
@@ -853,6 +862,14 @@ export default function AddAppointmentPage() {
     }
     return null;
   };
+
+  console.log(
+    'sAAS',
+    listingRolePermission(
+      dataRole,
+      ALL_PERMISSIONS.storeAppointment.verifyAddAppointment
+    )
+  );
 
   const onSubmit = (data: any) => {
     setIsLoader(true);
@@ -1466,7 +1483,11 @@ export default function AddAppointmentPage() {
                     height: '35px',
                   }}
                 />
-                {loginDetails ? (
+                {loginDetails ||
+                listingRolePermission(
+                  dataRole,
+                  ALL_PERMISSIONS.storeAppointment.verifyAddAppointment
+                ) === false ? (
                   <CustomButton
                     disabled={fields?.length < 1 && true}
                     buttonType="button"

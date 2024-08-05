@@ -20,7 +20,7 @@ import TopBar from '../../components/common/TopBar';
 import { useAppSelector } from '../../redux/redux-hooks';
 import categoryService from '../../services/adminapp/adminCategory';
 import PermissionPopup from '../../utils/PermissionPopup';
-import { NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
+import { ALL_PERMISSIONS, NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
 import { listingRolePermission } from '../../utils/helper';
 import CategoriesServicesFaqCreatePopup from './CategoriesServicesFaqCreatePopup';
 import CategoriesServicesFaqEditPopup from './CategoriesServicesFaqEditPopup';
@@ -129,7 +129,7 @@ function CategoriesServicesFaqPage() {
   };
 
   useEffect(() => {
-    if (listingRolePermission(dataRole, 'Category Service Faq List')) {
+    if (listingRolePermission(dataRole, ALL_PERMISSIONS.storeProduct.viewFaq)) {
       categoryService
         .getCategoryServiceFaqList(categoryServiceId, page, rowsPerPage)
         .then((item: any) => {
@@ -196,7 +196,9 @@ function CategoriesServicesFaqPage() {
 
   const manuHandler = (option: string) => {
     if (option === 'Edit') {
-      if (listingRolePermission(dataRole, 'Category Service Faq Update')) {
+      if (
+        listingRolePermission(dataRole, ALL_PERMISSIONS.storeProduct.editFaq)
+      ) {
         categoryService
           .getCategoryServiceFaq(actionMenuItemid)
           .then((item: any) => {
@@ -213,7 +215,9 @@ function CategoriesServicesFaqPage() {
         });
       }
     } else if (option === 'Delete') {
-      if (listingRolePermission(dataRole, 'Category Service Faq Delete')) {
+      if (
+        listingRolePermission(dataRole, ALL_PERMISSIONS.storeProduct.deleteFaq)
+      ) {
         setCancelDialogOpen(true);
       } else {
         setIsNotify(true);
@@ -284,36 +288,36 @@ function CategoriesServicesFaqPage() {
   };
 
   const handleSwitchChange = (event: any, id: string) => {
-    // if () {
-    const data = {
-      is_active: event.target.checked,
-      updated_by: authState.user.id,
-    };
-    categoryService
-      .updateCategoryServiceFaqStatus(id, data)
-      .then((updateItem) => {
-        if (updateItem.data.success) {
-          setList((newArr: any) => {
-            return newArr.map((item: any) => {
-              if (item.id === id) {
-                item.isActive = updateItem.data.data.isActive;
-              }
-              return { ...item };
+    if (listingRolePermission(dataRole, ALL_PERMISSIONS.storeProduct.editFaq)) {
+      const data = {
+        is_active: event.target.checked,
+        updated_by: authState.user.id,
+      };
+      categoryService
+        .updateCategoryServiceFaqStatus(id, data)
+        .then((updateItem) => {
+          if (updateItem.data.success) {
+            setList((newArr: any) => {
+              return newArr.map((item: any) => {
+                if (item.id === id) {
+                  item.isActive = updateItem.data.data.isActive;
+                }
+                return { ...item };
+              });
             });
-          });
-        }
+          }
+        });
+    } else {
+      setIsNotify(true);
+      setNotifyMessage({
+        text: NOT_AUTHORIZED_MESSAGE,
+        type: 'warning',
       });
-    // } else {
-    //   setIsNotify(true);
-    //   setNotifyMessage({
-    //     text: NOT_AUTHORIZED_MESSAGE,
-    //     type: 'warning',
-    //   });
-    // }
+    }
   };
 
   const handleAddNew = () => {
-    if (listingRolePermission(dataRole, 'Category Service Faq Create')) {
+    if (listingRolePermission(dataRole, ALL_PERMISSIONS.storeProduct.addFaq)) {
       setOpenFormDialog(true);
     } else {
       setIsNotify(true);

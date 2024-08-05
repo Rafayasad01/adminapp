@@ -13,6 +13,7 @@ import { useAppSelector } from '../../../redux/redux-hooks';
 import appointmentService from '../../../services/adminapp/adminAppointment';
 import employeeService from '../../../services/adminapp/adminStoreEmployee';
 import {
+  ALL_PERMISSIONS,
   APPOINTMENT_TYPE,
   NOT_AUTHORIZED_MESSAGE,
 } from '../../../utils/constants';
@@ -50,7 +51,12 @@ function AppointmentVisitPage() {
   const { reset } = useForm<AppointmentVisit>();
 
   const handleFormClickOpen = () => {
-    if (listingRolePermission(dataRole, 'Appointment Create')) {
+    if (
+      listingRolePermission(
+        dataRole,
+        ALL_PERMISSIONS.storeAppointment.addAppointment
+      )
+    ) {
       navigate('./add-appointment');
       // setOpenFormDialog(true);
     } else {

@@ -20,11 +20,13 @@ import IconButton from '@mui/material/IconButton';
 import { CircularProgress } from '@mui/material';
 import assets from '../../assets';
 import storeAppointmentService from '../../services/adminapp/adminStoreAppointment';
-import { APPOINTMENT_STATUS } from '../../utils/constants';
+import { ALL_PERMISSIONS, APPOINTMENT_STATUS } from '../../utils/constants';
 import ViewCardAccordinReschedule from './ViewCardAccordinReschedule';
 import PermissionPopup from '../../utils/PermissionPopup';
 import UpdateAppointmentPopup from './UpdateAppointmentPopup';
 import Notify from '../../components/common/Notify';
+import { listingRolePermission } from '../../utils/helper';
+import { useAppSelector } from '../../redux/redux-hooks';
 
 type AccordionsProps = {
   data: Array<object> | any;
@@ -48,10 +50,12 @@ AccordionsProps) {
     event: React.MouseEvent<HTMLButtonElement>,
     id: string
   ) => {
-    console.log('🚀 ~ handleClickPop ~ event:', event, id);
     setServiceId(id);
     setAnchorEl(event.currentTarget);
   };
+  const dataRole = useAppSelector(
+    (state: any) => state?.persistedReducer?.roleState?.role?.permissions
+  );
   const handleClosePop = () => {
     setAnchorEl(null);
   };
@@ -556,8 +560,21 @@ AccordionsProps) {
                           }
                           className="icon-btn mr-1.5 mt-3 p-0 text-primary"
                           onClick={() => {
-                            setOpenEditFormDialog(true);
-                            getDataById(item.id);
+                            if (
+                              listingRolePermission(
+                                dataRole,
+                                ALL_PERMISSIONS.storeAppointment.editAppointment
+                              )
+                            ) {
+                              setOpenEditFormDialog(true);
+                              getDataById(item.id);
+                            } else {
+                              setIsNotify(true);
+                              setNotifyMessage({
+                                text: 'You are not authorized to view this page.',
+                                type: 'error',
+                              });
+                            }
                           }}
                           // onClick={() => {
                           //   setOpenFormDialog(true);
@@ -578,10 +595,21 @@ AccordionsProps) {
                           }
                           className="icon-btn mr-1.5 mt-3 p-0 text-primary"
                           onClick={() => {
-                            setServiceId(item.id);
-                            setCancelDialogOpen(true);
-                            // setIsTooltipOpen(false);
-                            // deleteAppointmentHandler(appointmentData.id);
+                            if (
+                              listingRolePermission(
+                                dataRole,
+                                ALL_PERMISSIONS.storeAppointment.editAppointment
+                              )
+                            ) {
+                              setServiceId(item.id);
+                              setCancelDialogOpen(true);
+                            } else {
+                              setIsNotify(true);
+                              setNotifyMessage({
+                                text: 'You are not authorized to view this page.',
+                                type: 'error',
+                              });
+                            }
                           }}
                         >
                           <DeleteIcon />
@@ -597,7 +625,22 @@ AccordionsProps) {
                           }
                           name="Reschedule"
                           className="icon-btn mr-1.5 mt-3 p-0 text-primary"
-                          onClick={(e) => handleClickPop(e, item.id)}
+                          onClick={(e) => {
+                            if (
+                              listingRolePermission(
+                                dataRole,
+                                ALL_PERMISSIONS.storeAppointment.editAppointment
+                              )
+                            ) {
+                              handleClickPop(e, item.id);
+                            } else {
+                              setIsNotify(true);
+                              setNotifyMessage({
+                                text: 'You are not authorized to view this page.',
+                                type: 'error',
+                              });
+                            }
+                          }}
                         >
                           <HistoryIcon />
                         </IconButton>

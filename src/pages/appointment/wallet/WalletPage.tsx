@@ -17,6 +17,7 @@ import TopBar from '../../../components/common/TopBar';
 import { useAppSelector } from '../../../redux/redux-hooks';
 import walletService from '../../../services/adminapp/adminWallet';
 import {
+  ALL_PERMISSIONS,
   CURRENCY_PREFIX,
   NOT_AUTHORIZED_MESSAGE,
 } from '../../../utils/constants';
@@ -52,7 +53,12 @@ function WalletPage() {
   const [walletId, setWalletId] = useState('');
 
   useEffect(() => {
-    if (listingRolePermission(dataRole, 'Category List')) {
+    if (
+      listingRolePermission(
+        dataRole,
+        ALL_PERMISSIONS.storeAppointment.viewWallets
+      )
+    ) {
       walletService
         .WalletList(search, page, rowsPerPage)
         .then((item: any) => {
@@ -159,7 +165,20 @@ function WalletPage() {
 
   const editHandler = (id: string, type: string) => {
     if (type === 'update') {
-      setOpenEditFormDialog(true);
+      if (
+        listingRolePermission(
+          dataRole,
+          ALL_PERMISSIONS.storeAppointment.editWallet
+        )
+      ) {
+        setOpenEditFormDialog(true);
+      } else {
+        setIsNotify(true);
+        setNotifyMessage({
+          text: 'You are not authorized to view.',
+          type: 'warning',
+        });
+      }
     } else {
       setOpenDetailDialog(true);
     }
@@ -209,10 +228,14 @@ function WalletPage() {
   };
 
   const handleDetailPopup = (id: string) => {
-    if (listingRolePermission(dataRole, 'Category List')) {
+    if (
+      listingRolePermission(
+        dataRole,
+        ALL_PERMISSIONS.storeAppointment.viewWallets
+      )
+    ) {
       setWalletId(id);
       setOpenDetailDialog(true);
-      console.log('🚀 ~ handleDetailPopup ~ id:', id);
     } else {
       setIsNotify(true);
       setNotifyMessage({
