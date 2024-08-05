@@ -7,8 +7,13 @@ import {
   fetchItemsByCategory,
   setNotifyState,
 } from '../../redux/features/itemSlice';
+import { listingRolePermission } from '../../utils/helper';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
-import { CURRENCY_PREFIX } from '../../utils/constants';
+import {
+  ALL_PERMISSIONS,
+  CURRENCY_PREFIX,
+  NOT_AUTHORIZED_MESSAGE,
+} from '../../utils/constants';
 import HomePagePopup from './HomePagePopup';
 
 interface CategoryItemsListProps {
@@ -20,6 +25,9 @@ const CategoryItemsList: React.FC<CategoryItemsListProps> = ({
   search,
 }) => {
   const dispatch = useAppDispatch();
+  const dataRole = useAppSelector(
+    (state: any) => state?.persistedReducer?.roleState?.role?.permissions
+  );
   const { items, notify, notifyMessage } = useAppSelector((x) => x.itemState);
   const [searchedItems, setSearchedItems] = useState<AppCategoryItems[]>([]);
   const navigate = useNavigate();
@@ -27,6 +35,8 @@ const CategoryItemsList: React.FC<CategoryItemsListProps> = ({
     null
   );
   const [openAddToCart, setOpenAddToCart] = useState<boolean>(false);
+  const [isNotify, setIsNotify] = useState(false);
+  const [notifyMessages, setNotifyMessage] = useState({});
 
   useEffect(() => {
     if (!_.isEmpty(categoryId)) {
@@ -56,6 +66,11 @@ const CategoryItemsList: React.FC<CategoryItemsListProps> = ({
 
   return (
     <div className="categories-list">
+      <Notify
+        isOpen={isNotify}
+        setIsOpen={setIsNotify}
+        displayMessage={notifyMessages}
+      />
       {searchedItems.map((item: AppCategoryItems) => (
         <div key={item.id} className="item">
           <button
@@ -76,7 +91,22 @@ const CategoryItemsList: React.FC<CategoryItemsListProps> = ({
             <button
               className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium btn-add css-sghohy-MuiButtonBase-root-MuiButton-root bg-primary"
               tabIndex={0}
-              onClick={() => handleItemSelected(item)}
+              onClick={() => {
+                if (
+                  listingRolePermission(
+                    dataRole,
+                    ALL_PERMISSIONS.storeProduct.addOrder
+                  )
+                ) {
+                  handleItemSelected(item);
+                } else {
+                  setIsNotify(true);
+                  setNotifyMessage({
+                    text: NOT_AUTHORIZED_MESSAGE,
+                    type: 'warning',
+                  });
+                }
+              }}
               type="button"
             >
               Add
@@ -117,7 +147,22 @@ const CategoryItemsList: React.FC<CategoryItemsListProps> = ({
               <button
                 className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium btn-add css-sghohy-MuiButtonBase-root-MuiButton-root bg-primary"
                 tabIndex={0}
-                onClick={() => handleItemSelected(item)}
+                onClick={() => {
+                  if (
+                    listingRolePermission(
+                      dataRole,
+                      ALL_PERMISSIONS.storeProduct.addOrder
+                    )
+                  ) {
+                    handleItemSelected(item);
+                  } else {
+                    setIsNotify(true);
+                    setNotifyMessage({
+                      text: NOT_AUTHORIZED_MESSAGE,
+                      type: 'warning',
+                    });
+                  }
+                }}
                 type="button"
               >
                 Add

@@ -18,6 +18,7 @@ import { useAppSelector } from '../../redux/redux-hooks';
 import notificationService from '../../services/adminapp/adminNotification';
 import AlertBox from '../../utils/Alert';
 import {
+  ALL_PERMISSIONS,
   NOTIFICATION_STATUS,
   NOT_AUTHORIZED_MESSAGE,
 } from '../../utils/constants';
@@ -46,7 +47,9 @@ function NotificationPage() {
   const [notifyMessage, setNotifyMessage] = useState({});
 
   const handleFormClickOpen = () => {
-    if (listingRolePermission(dataRole, 'Notification Sent')) {
+    if (
+      listingRolePermission(dataRole, ALL_PERMISSIONS.storeNotification.sent)
+    ) {
       setOpenFormDialog(true);
     } else {
       setIsNotify(true);
@@ -119,7 +122,12 @@ function NotificationPage() {
   };
 
   useEffect(() => {
-    if (listingRolePermission(dataRole, 'Notification List')) {
+    if (
+      listingRolePermission(
+        dataRole,
+        ALL_PERMISSIONS.storeNotification.viewNotifications
+      )
+    ) {
       notificationService
         .getListService(authState.user.tenant, page, rowsPerPage)
         .then((item: any) => {
@@ -199,7 +207,12 @@ function NotificationPage() {
   };
 
   const detailButtonHandler = (getItem: any, index: number) => {
-    if (listingRolePermission(dataRole, 'Notification Batch Detail')) {
+    if (
+      listingRolePermission(
+        dataRole,
+        ALL_PERMISSIONS.storeNotification.viewNotifications
+      )
+    ) {
       notificationService.batchDetailService(list[index].id).then((item) => {
         if (item.data.success) {
           setBatchDetail({ ...getItem, ...item.data.data });

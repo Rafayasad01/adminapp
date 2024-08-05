@@ -20,7 +20,11 @@ import { AppFaq } from '../../interfaces/app-faq.interface';
 import { useAppSelector } from '../../redux/redux-hooks';
 import appFaqsService from '../../services/adminapp/adminAppFaqs';
 import PermissionPopup from '../../utils/PermissionPopup';
-import { NOT_AUTHORIZED_MESSAGE, PATTERN } from '../../utils/constants';
+import {
+  ALL_PERMISSIONS,
+  NOT_AUTHORIZED_MESSAGE,
+  PATTERN,
+} from '../../utils/constants';
 import { listingRolePermission } from '../../utils/helper';
 
 function FaqPage() {
@@ -76,7 +80,7 @@ function FaqPage() {
   ];
 
   const handleFormClickOpen = () => {
-    if (listingRolePermission(dataRole, 'Employee Create')) {
+    if (listingRolePermission(dataRole, ALL_PERMISSIONS.storeFaq.add)) {
       setOpenFormDialog(true);
     } else {
       setIsNotify(true);
@@ -169,7 +173,7 @@ function FaqPage() {
   };
 
   const handleEdit = (id: string) => {
-    if (listingRolePermission(dataRole, 'Employee Update')) {
+    if (listingRolePermission(dataRole, ALL_PERMISSIONS.storeFaq.edit)) {
       setIsLoader(true);
       appFaqsService.FaqFindById(id).then((item: any) => {
         if (item.data.success) {
@@ -184,7 +188,7 @@ function FaqPage() {
   };
 
   useEffect(() => {
-    if (listingRolePermission(dataRole, 'Employee List')) {
+    if (listingRolePermission(dataRole, ALL_PERMISSIONS.storeFaq.viewFaqs)) {
       appFaqsService
         .FaqList(authState.user.tenant, search, page, rowsPerPage)
         .then((item: any) => {
@@ -302,7 +306,7 @@ function FaqPage() {
   };
 
   const handleSwitchChange = (event: any, id: string) => {
-    if (listingRolePermission(dataRole, 'Employee Update Status')) {
+    if (listingRolePermission(dataRole, ALL_PERMISSIONS.storeFaq.edit)) {
       const data = {
         isActive: event.target.checked,
         updatedBy: authState.user.id,

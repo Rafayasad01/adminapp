@@ -13,10 +13,13 @@ import '../../assets/css/PopupStyle.css';
 import ErrorSpanBox from '../../components/common/ErrorSpanBox';
 import { Notification } from '../../interfaces/notification.interface';
 import {
+  ALL_PERMISSIONS,
   INVALID_CHAR,
   MAX_LENGTH_EXCEEDED,
   PATTERN,
 } from '../../utils/constants';
+import { listingRolePermission } from '../../utils/helper';
+import { useAppSelector } from '../../redux/redux-hooks';
 
 type NotificationCreatePopupProps = {
   openFormDialog: boolean;
@@ -35,6 +38,11 @@ function NotificationCreatePopup({
     handleSubmit,
     formState: { errors },
   } = useForm<Notification>();
+
+  const dataRole = useAppSelector(
+    (state: any) => state?.persistedReducer?.roleState?.role?.permissions
+  );
+
   const onSubmit = (data: Notification) => {
     setOpenFormDialog(false);
     data.notificationType = notificationType;
@@ -120,61 +128,66 @@ function NotificationCreatePopup({
                 )}
               </FormControl>
             </div>
-            <div className="mt-3 flex items-center justify-between">
-              <div>
-                <FormControl className="">
-                  <FormLabel
-                    id="demo-row-radio-buttons-group-label"
-                    className="font-open-sans text-sm text-secondary"
-                  >
-                    User Type
-                  </FormLabel>
-                  <RadioGroup
-                    row
-                    aria-labelledby="demo-row-radio-buttons-group-label"
-                    name="row-radio-buttons-group"
-                    value={notificationType ?? ''}
-                    onClick={handleUserChange}
-                  >
-                    <FormControlLabel
-                      sx={{
-                        color: '#6A6A6A',
-                        fontFamily: 'Open Sans',
-                        fonWeight: 400,
-                        fonSize: '14px',
-                      }}
-                      // disabled={FALSE}
-                      value="Customers"
-                      control={
-                        <Radio
-                          className="text-sm text-[#1D1D1D]"
-                          icon={<RadioButtonUncheckedOutlinedIcon />}
-                          checkedIcon={<CheckCircleOutlinedIcon />}
-                        />
-                      }
-                      label="Customers"
-                    />
-                    <FormControlLabel
-                      sx={{
-                        color: '#6A6A6A',
-                        fontFamily: 'Open Sans',
-                        fonWeight: 400,
-                        fonSize: '14px',
-                      }}
-                      value="StaffUsers"
-                      control={
-                        <Radio
-                          className="text-[#1D1D1D]"
-                          icon={<RadioButtonUncheckedOutlinedIcon />}
-                          checkedIcon={<CheckCircleOutlinedIcon />}
-                        />
-                      }
-                      label="Staff Users"
-                    />
-                  </RadioGroup>
-                </FormControl>
+            {listingRolePermission(
+              dataRole,
+              ALL_PERMISSIONS.storeNotification.selectType
+            ) && (
+              <div className="mt-3 flex items-center justify-between">
+                <div>
+                  <FormControl className="">
+                    <FormLabel
+                      id="demo-row-radio-buttons-group-label"
+                      className="font-open-sans text-sm text-secondary"
+                    >
+                      User Type
+                    </FormLabel>
+                    <RadioGroup
+                      row
+                      aria-labelledby="demo-row-radio-buttons-group-label"
+                      name="row-radio-buttons-group"
+                      value={notificationType ?? ''}
+                      onClick={handleUserChange}
+                    >
+                      <FormControlLabel
+                        sx={{
+                          color: '#6A6A6A',
+                          fontFamily: 'Open Sans',
+                          fonWeight: 400,
+                          fonSize: '14px',
+                        }}
+                        // disabled={FALSE}
+                        value="Customers"
+                        control={
+                          <Radio
+                            className="text-sm text-[#1D1D1D]"
+                            icon={<RadioButtonUncheckedOutlinedIcon />}
+                            checkedIcon={<CheckCircleOutlinedIcon />}
+                          />
+                        }
+                        label="Customers"
+                      />
+                      <FormControlLabel
+                        sx={{
+                          color: '#6A6A6A',
+                          fontFamily: 'Open Sans',
+                          fonWeight: 400,
+                          fonSize: '14px',
+                        }}
+                        value="StaffUsers"
+                        control={
+                          <Radio
+                            className="text-[#1D1D1D]"
+                            icon={<RadioButtonUncheckedOutlinedIcon />}
+                            checkedIcon={<CheckCircleOutlinedIcon />}
+                          />
+                        }
+                        label="Staff Users"
+                      />
+                    </RadioGroup>
+                  </FormControl>
+                </div>
               </div>
-            </div>
+            )}
           </div>
           <div className="FormFooter">
             <Button

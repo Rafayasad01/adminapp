@@ -10,7 +10,7 @@ import ActionMenu from '../../components/common/ActionMenu';
 import CustomText from '../../components/common/CustomText';
 import { useAppSelector } from '../../redux/redux-hooks';
 import appUserService from '../../services/adminapp/adminAppUser';
-import { NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
+import { ALL_PERMISSIONS, NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
 import { CheckRolePermission, listingRolePermission } from '../../utils/helper';
 
 type AppUserTabProps = {
@@ -68,7 +68,9 @@ function AppUserTab({
   const manuHandler = (option: string) => {
     // setIsLoader(true);
     if (option === 'Edit') {
-      if (listingRolePermission(dataRole, 'Customer Update')) {
+      if (
+        listingRolePermission(dataRole, ALL_PERMISSIONS.storeUser.editUserApp)
+      ) {
         appUserService.appUserEdit(actionMenuItemid?.id).then((item: any) => {
           if (item.data.success) {
             setIsLoader(false);
@@ -92,14 +94,16 @@ function AppUserTab({
       }
     } else if (option === 'Address') {
       CheckRolePermission(
-        'Customer Address Detail',
+        ALL_PERMISSIONS.storeUser.viewUserAddress,
         dataRole,
         navigate,
         `address/${actionMenuItemid?.id}`
       );
       // navigate(`address/${actionMenuItemid?.id}`);
     } else if (option === 'Delete') {
-      if (listingRolePermission(dataRole, 'Customer Delete')) {
+      if (
+        listingRolePermission(dataRole, ALL_PERMISSIONS.storeUser.deleteUserApp)
+      ) {
         setCancelDialogOpen(true);
       } else {
         setIsNotify(true);
@@ -110,19 +114,34 @@ function AppUserTab({
       }
     } else if (option === 'Detail') {
       CheckRolePermission(
-        'Customer Detail',
+        ALL_PERMISSIONS.storeUser.editUserApp,
         dataRole,
         navigate,
         `../detail/${actionMenuItemid?.id}`
       );
       // navigate(`detail/${actionMenuItemid?.id}`);
     } else if (option === 'Reward History') {
-      navigate(`../reward/history/${actionMenuItemid?.id}`);
+      if (
+        listingRolePermission(
+          dataRole,
+          ALL_PERMISSIONS.storeUser.viewUserAppRating
+        )
+      ) {
+        navigate(`../reward/history/${actionMenuItemid?.id}`);
+      } else {
+        setIsNotify(true);
+        setNotifyMessage({
+          text: NOT_AUTHORIZED_MESSAGE,
+          type: 'warning',
+        });
+      }
     }
   };
 
   const handleSwitchChange = (event: any, id: string) => {
-    if (listingRolePermission(dataRole, 'Customer Update Status')) {
+    if (
+      listingRolePermission(dataRole, ALL_PERMISSIONS.storeUser.editUserApp)
+    ) {
       setIsLoader(true);
       const data = {
         id,

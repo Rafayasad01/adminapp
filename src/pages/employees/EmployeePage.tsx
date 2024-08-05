@@ -120,10 +120,7 @@ function EmployeePage() {
 
   const handleFormClickOpen = () => {
     if (
-      listingRolePermission(
-        dataRole,
-        ALL_PERMISSIONS.storeAppointment.addEmployee
-      )
+      listingRolePermission(dataRole, ALL_PERMISSIONS.storeUser.addUserEmployee)
     ) {
       if (total < employeeLimit) {
         setOpenFormDialog(true);
@@ -261,7 +258,7 @@ function EmployeePage() {
       if (
         listingRolePermission(
           dataRole,
-          ALL_PERMISSIONS.storeAppointment.editEmployee
+          ALL_PERMISSIONS.storeUser.editUserEmployee
         )
       ) {
         setIsLoader(true);
@@ -287,7 +284,7 @@ function EmployeePage() {
       if (
         listingRolePermission(
           dataRole,
-          ALL_PERMISSIONS.storeAppointment.deleteEmployee
+          ALL_PERMISSIONS.storeUser.deleteUserEmployee
         )
       ) {
         setCancelDialogOpen(true);
@@ -305,7 +302,7 @@ function EmployeePage() {
     if (
       listingRolePermission(
         dataRole,
-        ALL_PERMISSIONS.storeAppointment.viewEmployees
+        ALL_PERMISSIONS.storeUser.viewUserEmployee
       )
     ) {
       employeeService
@@ -451,7 +448,7 @@ function EmployeePage() {
     if (
       listingRolePermission(
         dataRole,
-        ALL_PERMISSIONS.storeAppointment.editEmployee
+        ALL_PERMISSIONS.storeUser.editUserEmployee
       )
     ) {
       const data = {

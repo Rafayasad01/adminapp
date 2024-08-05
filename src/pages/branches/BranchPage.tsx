@@ -32,6 +32,7 @@ import branchService from '../../services/adminapp/adminBranch';
 import { listingRolePermission } from '../../utils/helper';
 import BranchCreatePopup from './BranchCreatePopup';
 import BranchUpdatePopup from './BranchUpdatePopup';
+import { ALL_PERMISSIONS, NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
 
 function BranchPage() {
   const navigate = useNavigate();
@@ -56,7 +57,10 @@ function BranchPage() {
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
   const [totalBranches, setTotalBranches] = useState<number>(0);
-  const [storeLimitVal, setStateLimitVal] = useState(0);
+  const [
+    storeLimitVal,
+    // setStateLimitVal
+  ] = useState(0);
   const { reset } = useForm<AppUserEmployees>();
 
   const handleClickSearch = (event: any) => {
@@ -138,7 +142,9 @@ function BranchPage() {
 
   useEffect(() => {
     setIsLoader(true);
-    if (listingRolePermission(dataRole, 'Employee List')) {
+    if (
+      listingRolePermission(dataRole, ALL_PERMISSIONS.storeBranch.viewBranches)
+    ) {
       branchService
         .getListService(authState?.shopTenantDetails.tenant, page, rowsPerPage)
         .then((item: any) => {
@@ -209,27 +215,27 @@ function BranchPage() {
       });
   };
 
-  const editHandler = (id: string) => {
-    setIsLoader(true);
-    branchService
-      .editBranch(id)
-      .then((item: any) => {
-        if (item.data.success) {
-          setStateLimitVal(item.data.data.userLimit);
-          setFormDetail(item.data.data);
-          setOpenEditFormDialog(true);
-          setIsLoader(false);
-        }
-      })
-      .catch((err) => {
-        setIsLoader(false);
-        setIsNotify(true);
-        setNotifyMessage({
-          text: err.message,
-          type: 'error',
-        });
-      });
-  };
+  // const editHandler = (id: string) => {
+  //   setIsLoader(true);
+  //   branchService
+  //     .editBranch(id)
+  //     .then((item: any) => {
+  //       if (item.data.success) {
+  //         setStateLimitVal(item.data.data.userLimit);
+  //         setFormDetail(item.data.data);
+  //         setOpenEditFormDialog(true);
+  //         setIsLoader(false);
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       setIsLoader(false);
+  //       setIsNotify(true);
+  //       setNotifyMessage({
+  //         text: err.message,
+  //         type: 'error',
+  //       });
+  //     });
+  // };
 
   const updateFormHandler = (id: string, data: any) => {
     setIsLoader(true);
@@ -333,14 +339,22 @@ function BranchPage() {
   };
 
   const handleAddNew = () => {
-    if (totalBranches >= authState.user.branchLimit) {
+    if (listingRolePermission(dataRole, ALL_PERMISSIONS.storeBranch.add)) {
+      if (totalBranches >= authState.user.branchLimit) {
+        setIsNotify(true);
+        setNotifyMessage({
+          text: 'Branch limit has been reached',
+          type: 'error',
+        });
+      } else {
+        setOpenFormDialog(true);
+      }
+    } else {
       setIsNotify(true);
       setNotifyMessage({
-        text: 'Branch limit has been reached',
-        type: 'error',
+        text: NOT_AUTHORIZED_MESSAGE,
+        type: 'warning',
       });
-    } else {
-      setOpenFormDialog(true);
     }
   };
 
@@ -643,15 +657,42 @@ function BranchPage() {
                           <div className="flex flex-row-reverse">
                             <IconButton
                               className="icon-btn mr-3.5 p-0"
-                              onClick={() => navigate(`detail/${item.id}`)}
+                              onClick={() => {
+                                if (
+                                  listingRolePermission(
+                                    dataRole,
+                                    ALL_PERMISSIONS.storeBranch.edit
+                                  )
+                                ) {
+                                  navigate(`detail/${item.id}`);
+                                } else {
+                                  setIsNotify(true);
+                                  setNotifyMessage({
+                                    text: NOT_AUTHORIZED_MESSAGE,
+                                    type: 'warning',
+                                  });
+                                }
+                              }}
                             >
                               <WysiwygOutlinedIcon />
                             </IconButton>
                             <IconButton
                               className="icon-btn mr-3.5 p-0"
-                              onClick={() =>
-                                item.isActive ? editHandler(item.id) : null
-                              }
+                              // onClick={() => {
+                              //   if (listingRolePermission(
+                              //     dataRole,
+                              //     ALL_PERMISSIONS.storeBranch.edit
+                              //   )) {
+                              //     item.isActive ? editHandler(item.id) : null
+                              //   } else {
+                              //     setIsNotify(true);
+                              //     setNotifyMessage({
+                              //       text: NOT_AUTHORIZED_MESSAGE,
+                              //       type: 'warning',
+                              //     });
+                              //   }
+                              // }
+                              // }
                             >
                               <EditIcon />
                             </IconButton>

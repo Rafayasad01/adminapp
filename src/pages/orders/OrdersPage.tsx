@@ -18,7 +18,11 @@ import Notify from '../../components/common/Notify';
 import TopBar from '../../components/common/TopBar';
 import { useAppSelector } from '../../redux/redux-hooks';
 import orderService from '../../services/adminapp/adminOrders';
-import { ORDER_STATUSES } from '../../utils/constants';
+import {
+  ALL_PERMISSIONS,
+  NOT_AUTHORIZED_MESSAGE,
+  ORDER_STATUSES,
+} from '../../utils/constants';
 import promiseHandler, {
   CheckRolePermission,
   listingRolePermission,
@@ -234,22 +238,34 @@ function OrdersPage() {
       );
       setTotal(getOrderListResult.data.data.total);
     }
-    if (listingRolePermission(dataRole, 'Order List')) {
+    if (
+      listingRolePermission(dataRole, ALL_PERMISSIONS.storeProduct.viewOrder)
+    ) {
       getOrderList();
+    } else {
+      setIsNotify(true);
+      setNotifyMessage({
+        text: NOT_AUTHORIZED_MESSAGE,
+        type: 'warning',
+      });
     }
   }, [null]);
 
   const menuHandler = (option: string) => {
     let doOption = '';
+    let checkPermission = '';
     if (option === 'Edit') {
       doOption = 'edit';
+      checkPermission = ALL_PERMISSIONS.storeProduct.editOrder;
     } else if (option === 'Detail') {
       doOption = 'detail';
+      checkPermission = ALL_PERMISSIONS.storeProduct.editOrder;
     } else {
       doOption = 'download';
+      checkPermission = ALL_PERMISSIONS.storeProduct.editOrder;
     }
     CheckRolePermission(
-      'Order View',
+      checkPermission,
       dataRole,
       navigate,
       `${doOption}/${actionMenuItemid}`
@@ -335,7 +351,22 @@ function OrdersPage() {
                 <Button
                   variant="contained"
                   className="btn-black-fill btn-icon"
-                  onClick={() => navigate('./create')}
+                  onClick={() => {
+                    if (
+                      listingRolePermission(
+                        dataRole,
+                        ALL_PERMISSIONS.storeProduct.addOrder
+                      )
+                    ) {
+                      navigate('./create');
+                    } else {
+                      setIsNotify(true);
+                      setNotifyMessage({
+                        text: NOT_AUTHORIZED_MESSAGE,
+                        type: 'warning',
+                      });
+                    }
+                  }}
                 >
                   <AddOutlinedIcon /> Add New
                 </Button>

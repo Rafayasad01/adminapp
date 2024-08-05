@@ -34,6 +34,7 @@ import {
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 import adminService from '../../services/adminapp/admin';
 import {
+  ALL_PERMISSIONS,
   DOMAIN_PREFIX,
   DOMAIN_PROTOCOL,
   INVALID_CHAR,
@@ -185,7 +186,7 @@ function SettingsApp() {
   const onSubmit = (data: any) => {
     // console.log('SETTTING DATA', data);
     setIsLoader(true);
-    if (listingRolePermission(dataRole, 'Setting Update')) {
+    if (listingRolePermission(dataRole, ALL_PERMISSIONS.storeSetting.add)) {
       // setIsLoader(true);
       const formData = new FormData();
       // formData.append('name', data.name ? data.name : '');
@@ -313,7 +314,9 @@ function SettingsApp() {
   };
 
   useEffect(() => {
-    if (listingRolePermission(dataRole, 'Setting View')) {
+    if (
+      listingRolePermission(dataRole, ALL_PERMISSIONS.storeSetting.viewSettings)
+    ) {
       adminService
         .getService(authState.user.tenant)
         .then((item: any) => {
@@ -387,13 +390,18 @@ function SettingsApp() {
             </Tabs>
           </div>
           <div className="Content w-full px-4 py-5">
-            <div className="mb-4">
-              <CustomQRPrintLayout
-                isPrintEnabled={isPrintEnabled}
-                setPrintEnabled={setPrintEnabled}
-              />
-              {/* <button><PrintOutlinedIcon /> Order Slip</button> */}
-            </div>
+            {listingRolePermission(
+              dataRole,
+              ALL_PERMISSIONS.storeSetting.viewDownloadQRCode
+            ) && (
+              <div className="mb-4">
+                <CustomQRPrintLayout
+                  isPrintEnabled={isPrintEnabled}
+                  setPrintEnabled={setPrintEnabled}
+                />
+                {/* <button><PrintOutlinedIcon /> Order Slip</button> */}
+              </div>
+            )}
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="flex justify-between">
                 <div className="mb-3 text-base">
@@ -505,27 +513,31 @@ function SettingsApp() {
                     <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
                   )}
                 </FormControl> */}
-                {authState?.user?.userType === 'ShopUser' && (
-                  <FormControl className="FormControl" variant="standard">
-                    <label className="FormLabel">Employee Limit</label>
-                    <Input
-                      className="FormInput"
-                      {...register('userLimit', {
-                        value: detail ? detail.userLimit : 0,
-                        validate: (value: any) =>
-                          VALIDATE_NON_NEGATIVE_NUM(value),
-                      })}
-                      defaultValue={0}
-                      type="number"
-                      id="userLimits"
-                      placeholder="Enter max user limits"
-                      disableUnderline
-                    />
-                    {errors?.userLimit && (
-                      <ErrorSpanBox error={errors?.userLimit?.message} />
-                    )}
-                  </FormControl>
-                )}
+                {authState?.user?.userType === 'ShopUser' &&
+                  listingRolePermission(
+                    dataRole,
+                    ALL_PERMISSIONS.storeSetting.viewEmployeeLimit
+                  ) && (
+                    <FormControl className="FormControl" variant="standard">
+                      <label className="FormLabel">Employee Limit</label>
+                      <Input
+                        className="FormInput"
+                        {...register('userLimit', {
+                          value: detail ? detail.userLimit : 0,
+                          validate: (value: any) =>
+                            VALIDATE_NON_NEGATIVE_NUM(value),
+                        })}
+                        defaultValue={0}
+                        type="number"
+                        id="userLimits"
+                        placeholder="Enter max user limits"
+                        disableUnderline
+                      />
+                      {errors?.userLimit && (
+                        <ErrorSpanBox error={errors?.userLimit?.message} />
+                      )}
+                    </FormControl>
+                  )}
                 <FormControl className="FormControl" variant="standard">
                   <label className="FormLabel">Tax</label>
                   <Input
@@ -571,30 +583,35 @@ function SettingsApp() {
                     <ErrorSpanBox error="Enter a valid amount" />
                   )}
                 </FormControl> */}
-                <FormControl className="FormControl" variant="standard">
-                  <label className="FormLabel">Minimum Delivery Days</label>
-                  <Input
-                    id="minimumDeliveryTime"
-                    placeholder="Enter minimum delivery time"
-                    type="number"
-                    className="FormInput"
-                    defaultValue={0}
-                    {...register('minimumDeliveryTime', {
-                      validate: (value: any) =>
-                        VALIDATE_NON_NEGATIVE_NUM(value),
-                      maxLength: {
-                        value: 10,
-                        message: MAX_LENGTH_EXCEEDED,
-                      },
-                    })}
-                    disableUnderline
-                  />
-                  {errors?.minimumDeliveryTime && (
-                    <ErrorSpanBox
-                      error={errors?.minimumDeliveryTime?.message}
+                {listingRolePermission(
+                  dataRole,
+                  ALL_PERMISSIONS.storeSetting.viewMinimumDelivery
+                ) && (
+                  <FormControl className="FormControl" variant="standard">
+                    <label className="FormLabel">Minimum Delivery Days</label>
+                    <Input
+                      id="minimumDeliveryTime"
+                      placeholder="Enter minimum delivery time"
+                      type="number"
+                      className="FormInput"
+                      defaultValue={0}
+                      {...register('minimumDeliveryTime', {
+                        validate: (value: any) =>
+                          VALIDATE_NON_NEGATIVE_NUM(value),
+                        maxLength: {
+                          value: 10,
+                          message: MAX_LENGTH_EXCEEDED,
+                        },
+                      })}
+                      disableUnderline
                     />
-                  )}
-                </FormControl>
+                    {errors?.minimumDeliveryTime && (
+                      <ErrorSpanBox
+                        error={errors?.minimumDeliveryTime?.message}
+                      />
+                    )}
+                  </FormControl>
+                )}
                 {/* <FormControl className="FormControl" variant="standard">
                   <label className="FormLabel">Rider Delivery Charges</label>
                   <Input
@@ -688,35 +705,40 @@ function SettingsApp() {
                 </FormControl>
               </div>
               <div className="mt-3 flex items-center justify-between gap-4">
-                <div className="w-full">
-                  <FormControl className="FormControl" variant="standard">
-                    <label className="FormLabel">
-                      Attendance Distance
-                      <span className="SubLabel">(in meters)</span>
-                    </label>
-                    <Input
-                      id="attendanceDistance"
-                      placeholder="Enter Shop Distance in meters"
-                      type="number"
-                      className="FormInput"
-                      defaultValue={0}
-                      {...register('attendanceDistance', {
-                        validate: (value: any) =>
-                          VALIDATE_NON_NEGATIVE_NUM(value),
-                        maxLength: {
-                          value: 10,
-                          message: MAX_LENGTH_EXCEEDED,
-                        },
-                      })}
-                      disableUnderline
-                    />
-                    {errors?.attendanceDistance && (
-                      <ErrorSpanBox
-                        error={errors?.attendanceDistance?.message}
+                {listingRolePermission(
+                  dataRole,
+                  ALL_PERMISSIONS.storeSetting.viewAttendanceDistance
+                ) && (
+                  <div className="w-full">
+                    <FormControl className="FormControl" variant="standard">
+                      <label className="FormLabel">
+                        Attendance Distance
+                        <span className="SubLabel">(in meters)</span>
+                      </label>
+                      <Input
+                        id="attendanceDistance"
+                        placeholder="Enter Shop Distance in meters"
+                        type="number"
+                        className="FormInput"
+                        defaultValue={0}
+                        {...register('attendanceDistance', {
+                          validate: (value: any) =>
+                            VALIDATE_NON_NEGATIVE_NUM(value),
+                          maxLength: {
+                            value: 10,
+                            message: MAX_LENGTH_EXCEEDED,
+                          },
+                        })}
+                        disableUnderline
                       />
-                    )}
-                  </FormControl>
-                </div>
+                      {errors?.attendanceDistance && (
+                        <ErrorSpanBox
+                          error={errors?.attendanceDistance?.message}
+                        />
+                      )}
+                    </FormControl>
+                  </div>
+                )}
                 <div className="w-full">
                   <TimePicker
                     timePickerLabel="Shop Time In"
@@ -754,84 +776,95 @@ function SettingsApp() {
                   />
                 </FormControl>
               </div>
-              <div className="FormField">
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      icon={
-                        <RadioButtonUncheckedOutlinedIcon
-                          style={{ color: '#1D1D1D' }}
+              {listingRolePermission(
+                dataRole,
+                ALL_PERMISSIONS.storeSetting.viewLoyaltyProgram
+              ) && (
+                <>
+                  <div className="FormField">
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          icon={
+                            <RadioButtonUncheckedOutlinedIcon
+                              style={{ color: '#1D1D1D' }}
+                            />
+                          }
+                          checkedIcon={
+                            <CheckCircleOutlinedIcon
+                              style={{ color: '#1D1D1D' }}
+                            />
+                          }
+                          {...register('enableLoyaltyProgram')}
+                          checked={watch('enableLoyaltyProgram')}
                         />
                       }
-                      checkedIcon={
-                        <CheckCircleOutlinedIcon style={{ color: '#1D1D1D' }} />
-                      }
-                      {...register('enableLoyaltyProgram')}
-                      checked={watch('enableLoyaltyProgram')}
+                      label="Loyality Program"
                     />
-                  }
-                  label="Loyality Program"
-                />
-              </div>
-              {watch('enableLoyaltyProgram') === true && (
-                <div className="FormFields">
-                  <FormControl className="FormControl" variant="standard">
-                    <label className="FormLabel">
-                      Loyality Conversion Rate
-                    </label>
-                    <Input
-                      id="loyaltyCoinConversionRate"
-                      placeholder="Enter Conversion Rate"
-                      type="number"
-                      className="FormInput"
-                      defaultValue={0}
-                      {...register('loyaltyCoinConversionRate', {
-                        required:
-                          watch('enableLoyaltyProgram') === true &&
-                          'Loyality rate is required in numbers',
-                        validate: (value: any) =>
-                          VALIDATE_NON_NEGATIVE_NUM(value),
-                        maxLength: {
-                          value: 10,
-                          message: MAX_LENGTH_EXCEEDED,
-                        },
-                      })}
-                      disableUnderline
-                    />
-                    {errors?.loyaltyCoinConversionRate && (
-                      <ErrorSpanBox
-                        error={errors?.loyaltyCoinConversionRate?.message}
-                      />
-                    )}
-                  </FormControl>
-                  <FormControl className="FormControl" variant="standard">
-                    <label className="FormLabel">Minimum Loyality Coins</label>
-                    <Input
-                      id="requiredCoinsToRedeem"
-                      placeholder="Enter Minimum Loyality coins"
-                      type="number"
-                      className="FormInput"
-                      defaultValue={0}
-                      {...register('requiredCoinsToRedeem', {
-                        required:
-                          watch('enableLoyaltyProgram') === true &&
-                          'Loyality coins is required in numbers',
-                        validate: (value: any) =>
-                          VALIDATE_NON_NEGATIVE_NUM(value),
-                        maxLength: {
-                          value: 10,
-                          message: MAX_LENGTH_EXCEEDED,
-                        },
-                      })}
-                      disableUnderline
-                    />
-                    {errors?.requiredCoinsToRedeem && (
-                      <ErrorSpanBox
-                        error={errors?.requiredCoinsToRedeem?.message}
-                      />
-                    )}
-                  </FormControl>
-                </div>
+                  </div>
+                  {watch('enableLoyaltyProgram') === true && (
+                    <div className="FormFields">
+                      <FormControl className="FormControl" variant="standard">
+                        <label className="FormLabel">
+                          Loyality Conversion Rate
+                        </label>
+                        <Input
+                          id="loyaltyCoinConversionRate"
+                          placeholder="Enter Conversion Rate"
+                          type="number"
+                          className="FormInput"
+                          defaultValue={0}
+                          {...register('loyaltyCoinConversionRate', {
+                            required:
+                              watch('enableLoyaltyProgram') === true &&
+                              'Loyality rate is required in numbers',
+                            validate: (value: any) =>
+                              VALIDATE_NON_NEGATIVE_NUM(value),
+                            maxLength: {
+                              value: 10,
+                              message: MAX_LENGTH_EXCEEDED,
+                            },
+                          })}
+                          disableUnderline
+                        />
+                        {errors?.loyaltyCoinConversionRate && (
+                          <ErrorSpanBox
+                            error={errors?.loyaltyCoinConversionRate?.message}
+                          />
+                        )}
+                      </FormControl>
+                      <FormControl className="FormControl" variant="standard">
+                        <label className="FormLabel">
+                          Minimum Loyality Coins
+                        </label>
+                        <Input
+                          id="requiredCoinsToRedeem"
+                          placeholder="Enter Minimum Loyality coins"
+                          type="number"
+                          className="FormInput"
+                          defaultValue={0}
+                          {...register('requiredCoinsToRedeem', {
+                            required:
+                              watch('enableLoyaltyProgram') === true &&
+                              'Loyality coins is required in numbers',
+                            validate: (value: any) =>
+                              VALIDATE_NON_NEGATIVE_NUM(value),
+                            maxLength: {
+                              value: 10,
+                              message: MAX_LENGTH_EXCEEDED,
+                            },
+                          })}
+                          disableUnderline
+                        />
+                        {errors?.requiredCoinsToRedeem && (
+                          <ErrorSpanBox
+                            error={errors?.requiredCoinsToRedeem?.message}
+                          />
+                        )}
+                      </FormControl>
+                    </div>
+                  )}
+                </>
               )}
               <div className="FormField mb-4">
                 <FormControl className="FormControl" variant="standard">

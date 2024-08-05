@@ -12,7 +12,7 @@ import TopBar from '../../components/common/TopBar';
 import { useAppSelector } from '../../redux/redux-hooks';
 import appUserService from '../../services/adminapp/adminAppUser';
 import PermissionPopup from '../../utils/PermissionPopup';
-import { weekDays } from '../../utils/constants';
+import { ALL_PERMISSIONS, weekDays } from '../../utils/constants';
 import { listingRolePermission } from '../../utils/helper';
 import AppUserAddressTabPage from './AppUserAddressTab/AppUserAddressTabPage';
 import AppUserScheduleTabPage from './AppUserScheduleTab/AppUserScheduleTabPage';
@@ -48,7 +48,9 @@ function AppUserDetailPage() {
   };
 
   useEffect(() => {
-    if (listingRolePermission(dataRole, 'Driver Address Detail')) {
+    if (
+      listingRolePermission(dataRole, ALL_PERMISSIONS.storeUser.viewUserApp)
+    ) {
       appUserService
         .appUserDetails(appuserId)
         .then((item: any) => {

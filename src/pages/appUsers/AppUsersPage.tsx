@@ -15,7 +15,7 @@ import TopBar from '../../components/common/TopBar';
 import { useAppSelector } from '../../redux/redux-hooks';
 import appUserService from '../../services/adminapp/adminAppUser';
 import PermissionPopup from '../../utils/PermissionPopup';
-import { NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
+import { ALL_PERMISSIONS, NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
 import { listingRolePermission } from '../../utils/helper';
 import AppUserCreatePopup from './AppUserCreatePopup';
 // import AppUserOtherTab from './AppUserOtherTab';
@@ -70,7 +70,7 @@ function AppUsersPage() {
   ];
 
   const handleFormClickOpen = () => {
-    if (listingRolePermission(dataRole, 'Customer Create')) {
+    if (listingRolePermission(dataRole, ALL_PERMISSIONS.storeUser.addUserApp)) {
       setOpenFormDialog(true);
     } else {
       setIsNotify(true);
@@ -148,7 +148,9 @@ function AppUsersPage() {
 
   useEffect(() => {
     setIsLoader(true);
-    if (listingRolePermission(dataRole, 'Customer List')) {
+    if (
+      listingRolePermission(dataRole, ALL_PERMISSIONS.storeUser.viewUserApp)
+    ) {
       appUserService
         .appList(
           authState.user.tenant,

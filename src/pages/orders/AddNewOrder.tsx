@@ -32,7 +32,7 @@ const AddNewOrder = () => {
   );
 
   useEffect(() => {
-    dispatch(fetchCategories(authState.user?.tenant));
+    dispatch(fetchCategories(authState?.user?.tenant));
   }, []);
 
   const handleCategoryChange = (value: string) => {
@@ -108,7 +108,7 @@ const AddNewOrder = () => {
         </div>
         <div className="selected-categories">
           <div className="mb-4 items-center justify-between sm:flex">
-            <h4 className="heading">{category?.name ?? ''} </h4>
+            <h4 className="heading">{category?.name ?? ''}</h4>
             <FormControl className="search-sub-cats">
               <Input
                 className="field"

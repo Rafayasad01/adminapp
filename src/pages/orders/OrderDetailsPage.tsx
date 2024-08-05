@@ -25,6 +25,7 @@ import CustomOrderPrintLayoutInvoice from '../../utils/CustomPrintLayout/CustomO
 import PermissionPopup from '../../utils/PermissionPopup';
 import cn from '../../utils/class-names';
 import {
+  ALL_PERMISSIONS,
   NOT_AUTHORIZED_MESSAGE,
   ORDER_STATUS,
   ORDER_STATUSES,
@@ -95,7 +96,9 @@ function OrderDetailsPage() {
   };
 
   useEffect(() => {
-    if (listingRolePermission(dataRole, 'Order View')) {
+    if (
+      listingRolePermission(dataRole, ALL_PERMISSIONS.storeProduct.viewOrder)
+    ) {
       orderService
         .viewService(id)
         .then((item) => {
@@ -251,7 +254,9 @@ function OrderDetailsPage() {
     if (viewData.status === ORDER_STATUS.COMPLETED) {
       return;
     }
-    if (listingRolePermission(dataRole, 'Order Statuses Create')) {
+    if (
+      listingRolePermission(dataRole, ALL_PERMISSIONS.storeProduct.editOrder)
+    ) {
       const data = {
         app_order: id,
         status: getNextStatusButton?.value?.status,
@@ -268,7 +273,9 @@ function OrderDetailsPage() {
   };
 
   const statusCancelHandler = () => {
-    if (listingRolePermission(dataRole, 'Order Statuses Create')) {
+    if (
+      listingRolePermission(dataRole, ALL_PERMISSIONS.storeProduct.editOrder)
+    ) {
       const data = {
         app_order: id,
         status: ORDER_STATUS.CANCELLED,

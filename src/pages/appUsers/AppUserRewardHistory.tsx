@@ -12,6 +12,7 @@ import PermissionPopup from '../../utils/PermissionPopup';
 import { listingRolePermission } from '../../utils/helper';
 import AppUserLoyaltyTab from './AppUserRewardHistoryTabs/AppUserLoyaltyTab';
 import AppUserPromotionTab from './AppUserRewardHistoryTabs/AppUserPromotionTab';
+import { ALL_PERMISSIONS } from '../../utils/constants';
 
 function AppUserRewardHistory() {
   const dataRole = useAppSelector(
@@ -76,7 +77,12 @@ function AppUserRewardHistory() {
   useEffect(() => {
     setList([]);
     setIsLoader(true);
-    if (listingRolePermission(dataRole, 'Driver Address Detail')) {
+    if (
+      listingRolePermission(
+        dataRole,
+        ALL_PERMISSIONS.storeUser.viewUserAppRating
+      )
+    ) {
       if (selectedTab === 'PROMOTION HISTORY') {
         apiExecution(appUserService.appUserVocuherHistoryList);
       } else {

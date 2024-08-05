@@ -19,7 +19,7 @@ import TopBar from '../../components/common/TopBar';
 import { useAppSelector } from '../../redux/redux-hooks';
 import vouchersService from '../../services/adminapp/adminVouchers';
 import PermissionPopup from '../../utils/PermissionPopup';
-import { NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
+import { ALL_PERMISSIONS, NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
 import { listingRolePermission } from '../../utils/helper';
 import VouchersPromoCreatePopup from './VouchersPromoCreatePopup';
 import VouchersPromoEditPopup from './VouchersPromoEditPopup';
@@ -69,7 +69,7 @@ function VouchersPage() {
   };
 
   const handleAddNew = () => {
-    if (listingRolePermission(dataRole, 'Voucher Create')) {
+    if (listingRolePermission(dataRole, ALL_PERMISSIONS.storeVoucher.add)) {
       setVouchersPromoDialog(true);
     } else {
       setIsNotify(true);
@@ -89,7 +89,7 @@ function VouchersPage() {
   const handleSelectedMenuClose = (option: string) => {
     setAnchorEl(null);
     if (option === 'Edit') {
-      if (listingRolePermission(dataRole, 'Voucher Update')) {
+      if (listingRolePermission(dataRole, ALL_PERMISSIONS.storeVoucher.edit)) {
         setVouchersPromoEditDialog(true);
       } else {
         setIsNotify(true);
@@ -100,7 +100,9 @@ function VouchersPage() {
       }
     }
     if (option === 'Delete') {
-      if (listingRolePermission(dataRole, 'Voucher Delete')) {
+      if (
+        listingRolePermission(dataRole, ALL_PERMISSIONS.storeVoucher.delete)
+      ) {
         setOpenDialog(true);
       } else {
         setIsNotify(true);
@@ -147,7 +149,9 @@ function VouchersPage() {
   };
 
   useEffect(() => {
-    if (listingRolePermission(dataRole, 'Voucher List')) {
+    if (
+      listingRolePermission(dataRole, ALL_PERMISSIONS.storeVoucher.viewVouchers)
+    ) {
       vouchersService
         .listVouchers(authState.user.tenant, page, rowsPerPage, search)
         .then((response: any) => {
@@ -245,7 +249,7 @@ function VouchersPage() {
 
   const handleSwitchChange = (event: any, id: string) => {
     setIsLoader(true);
-    if (listingRolePermission(dataRole, 'Category Update Status')) {
+    if (listingRolePermission(dataRole, ALL_PERMISSIONS.storeVoucher.edit)) {
       const data = {
         id,
         isActive: event.target.checked,

@@ -68,6 +68,8 @@ import EmployeeRatingReviewsPage from '../pages/appointment/provider/rating/Empl
 import AppointmentRatingPage from '../pages/appointment/rating/AppointmentRatingPage';
 import AppointmentRatingReviewsPage from '../pages/appointment/rating/AppointmentRatingReviewsPage';
 import WalletPage from '../pages/appointment/wallet/WalletPage';
+import { ALL_PERMISSIONS } from '../utils/constants';
+import CAN from '../services/permissions/permissions';
 
 // import UpdateAppointmentPage from '../pages/appointment/UpdateAppointmentPage';
 
@@ -341,7 +343,15 @@ export const routeObjects: RouteObject[] = [
             children: [
               {
                 index: true,
-                element: <BranchPage />,
+                element: CAN(
+                  'canView',
+                  ALL_PERMISSIONS.storeBranch.viewBranches
+                ) ? (
+                  <BranchPage />
+                ) : (
+                  <Page404 />
+                ),
+                // element: <BranchPage />,
               },
               {
                 path: 'detail/:branchId',

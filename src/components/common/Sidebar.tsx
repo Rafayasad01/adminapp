@@ -120,19 +120,19 @@ const links = [
   {
     name: 'User',
     path: 'user',
-    permission: 'Appointment Parent',
+    permission: ALL_PERMISSIONS.storeUser.viewUsers,
     icon: <PersonOutlineOutlinedIcon fontSize="inherit" />,
     childLinks: [
       {
         name: 'App User',
         path: 'user/app-user/list',
-        permission: 'Customer List',
+        permission: ALL_PERMISSIONS.storeUser.viewUserApp,
         icon: <PersonOutlineOutlinedIcon fontSize="inherit" />,
       },
       {
         name: 'Admin Users',
         path: 'user/employees',
-        permission: 'Employee List',
+        permission: ALL_PERMISSIONS.storeUser.viewUserEmployee,
         icon: <PeopleOutlineOutlinedIcon className="w-[17px]" />,
       },
     ],
@@ -140,38 +140,38 @@ const links = [
   {
     name: 'Branches',
     path: 'branches',
-    permission: 'Branch List',
+    permission: ALL_PERMISSIONS.storeBranch.viewBranches,
     // permission: 'Banners List',
     icon: <CorporateFareIcon className="w-[17px]" />,
   },
   {
     name: 'Banners',
     path: 'banners',
-    permission: 'Banners List',
+    permission: ALL_PERMISSIONS.storeBanner.viewBanners,
     icon: <ViewCarouselOutlinedIcon className="w-[17px]" />,
   },
   {
     name: 'FAQs',
     path: 'faq',
-    permission: 'Notification List',
+    permission: ALL_PERMISSIONS.storeFaq.viewFaqs,
     icon: <QuestionAnswerOutlinedIcon fontSize="inherit" />,
   },
   {
     name: 'Notifications',
     path: 'notification',
-    permission: 'Notification List',
+    permission: ALL_PERMISSIONS.storeNotification.viewNotifications,
     icon: <NotificationsOutlinedIcon fontSize="inherit" />,
   },
   {
     name: 'Vouchers',
     path: 'vouchers',
-    permission: 'Voucher List',
+    permission: ALL_PERMISSIONS.storeVoucher.viewVouchers,
     icon: <VoucherIcon />,
   },
   {
     name: 'Settings',
     path: 'settings',
-    permission: 'Setting View',
+    permission: ALL_PERMISSIONS.storeSetting.viewSettings,
     icon: <SettingsOutlinedIcon fontSize="inherit" />,
   },
 ];

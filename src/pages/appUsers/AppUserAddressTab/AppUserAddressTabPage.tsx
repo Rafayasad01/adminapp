@@ -9,7 +9,10 @@ import Loader from '../../../components/common/Loader';
 import Notify from '../../../components/common/Notify';
 import { useAppSelector } from '../../../redux/redux-hooks';
 import appUserService from '../../../services/adminapp/adminAppUser';
-import { NOT_AUTHORIZED_MESSAGE } from '../../../utils/constants';
+import {
+  ALL_PERMISSIONS,
+  NOT_AUTHORIZED_MESSAGE,
+} from '../../../utils/constants';
 import { listingRolePermission } from '../../../utils/helper';
 import AppUserAddressCreatePopup from './AppUserAddressCreatePopup';
 import AppUserAddressUpdatePopup from './AppUserAddressUpdatePopup';
@@ -153,7 +156,9 @@ function AppUserAddressTabPage({
   };
 
   const handleSwitchChange = (event: any, id: string) => {
-    if (listingRolePermission(dataRole, 'Customer Update Status')) {
+    if (
+      listingRolePermission(dataRole, ALL_PERMISSIONS.storeUser.editUserAddress)
+    ) {
       setIsLoader(true);
       const data = {
         id,
@@ -193,7 +198,9 @@ function AppUserAddressTabPage({
   };
 
   const handleFormClickOpen = () => {
-    if (listingRolePermission(dataRole, 'Customer Create')) {
+    if (
+      listingRolePermission(dataRole, ALL_PERMISSIONS.storeUser.addUserAddress)
+    ) {
       if (list?.length >= 5) {
         setIsNotify(true);
         setNotifyMessage({
@@ -213,7 +220,9 @@ function AppUserAddressTabPage({
   };
 
   const handleEdit = (id: string) => {
-    if (listingRolePermission(dataRole, 'Banners Edit')) {
+    if (
+      listingRolePermission(dataRole, ALL_PERMISSIONS.storeUser.editUserAddress)
+    ) {
       setIsLoader(true);
       appUserService
         .appUserAddressEdit(id)
