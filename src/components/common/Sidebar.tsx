@@ -170,7 +170,7 @@ const links = [
   },
   {
     name: 'Settings',
-    path: 'settings',
+    path: 'settings/app',
     permission: ALL_PERMISSIONS.storeSetting.viewSettings,
     icon: <SettingsOutlinedIcon fontSize="inherit" />,
   },
@@ -292,33 +292,94 @@ function Sidebar() {
     );
   }
 
+  // useEffect(() => {
+  //   // console.log('🚀 ~ useEffect ~ permissions:', permissions);
+  //   defineRules(permissions);
+  //   if (permissions) {
+  //     const tempList = links.filter((el) => {
+  //       if (el.name === MODULE_EMPLOYEES) {
+  //         if (appItems.employeeLimit <= 0) {
+  //           return null;
+  //         }
+  //       }
+  //       if (el.name === MODULE_SETTINGS) {
+  //         if (authState.user.userType !== 'ShopUser') {
+  //           return null;
+  //         }
+  //       }
+  //       // console.log('el.permission', el.permission);
+
+  //       return CAN('canView', el.permission as string);
+  //     });
+  //     const tempListChild = links.filter((el) => {
+  //       return CAN('canView', el.permission as string);
+  //     });
+  //     // console.log('tempList', links, tempList);
+  //     tempList.unshift({
+  //       name: 'Dashboard',
+  //       path: 'home',
+  //       permission: 'Dashboard List',
+  //       icon: <GridViewOutlinedIcon fontSize="inherit" />,
+  //     });
+  //     setList(tempList);
+  //     console.log('🚀 ~ useEffect ~ tempList:', tempList);
+  //   }
+  // }, [null, appItems?.employeeLimit, authState]);
+
   useEffect(() => {
-    console.log('🚀 ~ useEffect ~ permissions:', permissions);
+    // console.log('INITAIL ROUTES', permissions);
+
     defineRules(permissions);
     if (permissions) {
-      const tempList = links.filter((el) => {
-        if (el.name === MODULE_EMPLOYEES) {
-          if (appItems.employeeLimit <= 0) {
-            return null;
-          }
-        }
-        if (el.name === MODULE_SETTINGS) {
-          if (authState.user.userType !== 'ShopUser') {
-            return null;
-          }
-        }
-        return CAN('canView', el.permission as string);
-      });
-      console.log('tempList', links, tempList);
+      const filterLinks = (allLinks: any) => {
+        return allLinks
+          .map((link: any) => {
+            // Specific condition for MODULE_EMPLOYEES
+            if (link.name === MODULE_EMPLOYEES && appItems.employeeLimit <= 0) {
+              return null;
+            }
+            // Specific condition for MODULE_SETTINGS
+            if (
+              link.name === MODULE_SETTINGS &&
+              authState.user.userType !== 'ShopUser'
+            ) {
+              return null;
+            }
+            // Filter child links
+            if (link.childLinks) {
+              const filteredChildLinks = link.childLinks.filter(
+                (childLink: any) => CAN('canView', childLink.permission)
+              );
+
+              // Include parent link if it has visible child links or passes its own permission
+              if (
+                filteredChildLinks.length > 0 ||
+                CAN('canView', link.permission)
+              ) {
+                return {
+                  ...link,
+                  childLinks: filteredChildLinks,
+                };
+              }
+              return null;
+            }
+            return CAN('canView', link.permission) ? link : null;
+          })
+          .filter((link: any) => link !== null);
+      };
+
+      const tempList = filterLinks(links);
       tempList.unshift({
         name: 'Dashboard',
         path: 'home',
         permission: 'Dashboard List',
         icon: <GridViewOutlinedIcon fontSize="inherit" />,
       });
+
       setList(tempList);
+      // console.log('🚀 ~ useEffect ~ tempList:', tempList);
     }
-  }, [null, appItems?.employeeLimit, authState]);
+  }, [permissions, appItems?.employeeLimit, authState]);
 
   return (
     <Drawer

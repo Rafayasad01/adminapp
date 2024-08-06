@@ -3,6 +3,7 @@ import { AbilityBuilder, AbilityClass, PureAbility } from '@casl/ability';
 const ability: any = new PureAbility();
 
 export default (action: string, subject: string): any => {
+  // console.log('🚀 ~ action:', action, subject, ability.can(action, subject));
   return ability.can(action, subject);
 };
 
@@ -20,6 +21,8 @@ export const defineRules = (permissions: any): any => {
       can('canView', item.name);
       can('canUpdate', item.name);
       can('canDelete', item.name);
+    } else {
+      can('canView', item.name);
     }
   });
 

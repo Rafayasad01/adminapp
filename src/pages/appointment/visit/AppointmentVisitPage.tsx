@@ -109,8 +109,21 @@ function AppointmentVisitPage() {
         // console.log('🚀 ~ temp ~ temp:', temp);
         setPriorityData(temp);
       };
-
-      getStoreEmployeeList();
+      if (
+        listingRolePermission(
+          dataRole,
+          ALL_PERMISSIONS.storeAppointment.viewAppointment
+        )
+      ) {
+        getStoreEmployeeList();
+      } else {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: NOT_AUTHORIZED_MESSAGE,
+          type: 'warning',
+        });
+      }
     }
   }, []);
 

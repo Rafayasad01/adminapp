@@ -557,7 +557,6 @@ function BranchPage() {
               <tbody>
                 {list &&
                   list?.map((item: any, index: number) => {
-                    console.log('🚀 ~ list?.map ~ item:', item);
                     return (
                       <tr key={index}>
                         <td>
