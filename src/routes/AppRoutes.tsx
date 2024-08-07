@@ -423,7 +423,7 @@ export const routeObjects: RouteObject[] = [
                       <ProtectedRoute
                         page={<ServicesCatPage />}
                         condition={
-                          ALL_PERMISSIONS.storeAppointment.viewServices
+                          ALL_PERMISSIONS.storeAppointment.viewCategory
                         }
                       />
                     ),

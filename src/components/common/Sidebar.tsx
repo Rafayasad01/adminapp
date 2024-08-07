@@ -56,7 +56,7 @@ const links = [
       {
         name: 'Services',
         path: 'store-appointment/service',
-        permission: ALL_PERMISSIONS.storeAppointment.viewServices,
+        permission: ALL_PERMISSIONS.storeAppointment.viewCategory,
         icon: <GridViewOutlinedIcon fontSize="inherit" />,
       },
       {
