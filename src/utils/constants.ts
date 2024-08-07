@@ -7,6 +7,8 @@ export const BASE_URL =
 export const BASE_SYSTEM_URL =
   import.meta.env.VITE_SYSTEM_BASE_URL || `${HOST}/api/v1/system/config/`;
 export const MODULE_EMPLOYEES = 'Employees';
+export const MODULE_SETTINGS = 'Settings';
+export const MODULE_BRANCHES = 'Branches';
 export const RATING = 'rating';
 export const FAQ = 'faq';
 export const EMPLOYEE_PREFIX = 'employee';
@@ -477,3 +479,98 @@ export const GENDER = [
     name: 'Other',
   },
 ];
+
+export const ALL_PERMISSIONS = {
+  storeAppointment: {
+    viewServices: 'viewAppointmentService',
+    viewEmployees: 'viewAppointmentEmployee',
+    viewAppointments: 'viewStoreAppointment',
+    viewWallets: 'viewAppointmentWallet',
+    viewLeaveManagement: 'viewAppointmentLeaveManagement',
+    viewEmployeeSchedule: 'viewAppointmentEmployeeSchedule',
+    viewEmployeeRating: 'viewAppointmentEmployeeRating',
+    viewEmployeeAttendance: 'viewAppointmentEmployeeAttendance',
+    addService: 'addAppointmentService',
+    editService: 'editAppointmentService',
+    deleteService: 'deleteAppointmentService',
+    addEmployee: 'addAppointmentEmployee',
+    editEmployee: 'editAppointmentEmployee',
+    deleteEmployee: 'deleteAppointmentEmployee',
+    addEmployeeSchedule: 'addAppointmentEmployeeSchedule',
+    editEmployeeSchedule: 'editAppointmentEmployeeSchedule',
+    deleteEmployeeSchedule: 'deleteAppointmentEmployeeSchedule',
+    viewAppointment: 'viewAppointment',
+    addAppointment: 'addAppointment',
+    editAppointment: 'editAppointment',
+    deleteAppointment: 'deleteAppointment',
+    verifyAddAppointment: 'verifyAddAppointment',
+    editWallet: 'editAppointmentWallet',
+    editLeaveManagement: 'editAppointmentLeaveManagement',
+  },
+  storeProduct: {
+    viewProducts: 'viewStoreProduct',
+    viewOrders: 'viewProductOrder',
+    viewRatings: 'viewProductRating',
+    add: 'addProduct',
+    edit: 'editProduct',
+    delete: 'deleteProduct',
+    view: 'viewProduct',
+    viewOrder: 'viewProductOrder',
+    addOrder: 'addProductOrder',
+    editOrder: 'editProductOrder',
+    viewRating: 'viewProductRating',
+  },
+  storeUser: {
+    viewUsers: 'viewStoreUser',
+    viewUserApp: 'viewUserApp',
+    addUserApp: 'addUserApp',
+    editUserApp: 'editUserApp',
+    deleteUserApp: 'deleteUserApp',
+    viewUserAddress: 'viewUserAddress',
+    addUserAddress: 'addUserAddress',
+    editUserAddress: 'editUserAddress',
+    deleteUserAddress: 'deleteUserAddress',
+    viewUserEmployee: 'viewUserEmployee',
+    addUserEmployee: 'addUserEmployee',
+    editUserEmployee: 'editUserEmployee',
+    deleteUserEmployee: 'deleteUserEmployee',
+    viewUserAppRewardHistory: 'viewUserAppRewardHistory',
+  },
+  storeBranch: {
+    viewBranches: 'viewStoreBranch',
+    add: 'addBranch',
+    edit: 'editBranch',
+  },
+  storeBanner: {
+    viewBanners: 'viewStoreBanner',
+    add: 'addBanner',
+    edit: 'editBanner',
+    delete: 'deleteBanner',
+  },
+  storeFaq: {
+    viewFaqs: 'viewStoreFaq',
+    add: 'addFaq',
+    edit: 'editFaq',
+  },
+  storeNotification: {
+    viewNotifications: 'viewStoreNotification',
+    sent: 'sentNotification',
+    selectType: 'selectNotificationType',
+  },
+  storeVoucher: {
+    viewVouchers: 'viewStoreVoucher',
+    add: 'addVoucher',
+    edit: 'editVoucher',
+    delete: 'deleteVoucher',
+  },
+  storeSetting: {
+    viewSettings: 'viewStoreSetting',
+    add: 'addSetting',
+    editSetting: 'editSetting',
+    viewDownloadQRCode: 'viewDownloadQRCode',
+    viewAttendanceDistance: 'viewAttendanceDistance',
+    viewMinimumDelivery: 'viewMinimumDelivery',
+    viewEmployeeLimit: 'viewEmployeeLimit',
+    viewLoyaltyProgram: 'viewLoyaltyProgram',
+  },
+};

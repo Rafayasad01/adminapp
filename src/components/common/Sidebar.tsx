@@ -24,7 +24,12 @@ import { NavLink } from 'react-router-dom';
 import assets from '../../assets';
 import { useAppSelector } from '../../redux/redux-hooks';
 import CAN, { defineRules } from '../../services/permissions/permissions';
-import { MODULE_EMPLOYEES } from '../../utils/constants';
+import {
+  ALL_PERMISSIONS,
+  MODULE_BRANCHES,
+  MODULE_EMPLOYEES,
+  MODULE_SETTINGS,
+} from '../../utils/constants';
 import ArrowDown from '../icons/ArrowDown';
 import ArrowUp from '../icons/ArrowUp';
 import CategoryIcon from '../icons/CategoryIcon';
@@ -86,31 +91,31 @@ const links = [
   {
     name: 'Store Product',
     path: 'store-product',
-    permission: 'Appointment Parent',
+    permission: ALL_PERMISSIONS.storeProduct.viewProducts,
     icon: <Inventory2OutlinedIcon fontSize="inherit" />,
     childLinks: [
       {
         name: 'Products',
         path: 'store-product/product',
-        permission: 'Category List',
+        permission: ALL_PERMISSIONS.storeProduct.view,
         icon: <CategoryIcon />,
       },
       {
         name: 'Orders',
         path: 'store-product/orders',
-        permission: 'Order List',
+        permission: ALL_PERMISSIONS.storeProduct.viewOrders,
         icon: <OrderIcon />,
       },
       {
         name: 'Rating',
         path: 'store-product/ratings',
-        permission: 'Banners List',
+        permission: ALL_PERMISSIONS.storeProduct.viewRatings,
         icon: <ViewCarouselOutlinedIcon className="w-[17px]" />,
       },
       {
         name: 'Driver History',
         path: 'store-product/drivers',
-        permission: 'Driver List',
+        permission: ALL_PERMISSIONS.storeProduct.edit,
         icon: <DriverIcon />,
       },
     ],
@@ -118,19 +123,19 @@ const links = [
   {
     name: 'User',
     path: 'user',
-    permission: 'Appointment Parent',
+    permission: ALL_PERMISSIONS.storeUser.viewUsers,
     icon: <PersonOutlineOutlinedIcon fontSize="inherit" />,
     childLinks: [
       {
         name: 'App User',
         path: 'user/app-user/list',
-        permission: 'Customer List',
+        permission: ALL_PERMISSIONS.storeUser.viewUserApp,
         icon: <PersonOutlineOutlinedIcon fontSize="inherit" />,
       },
       {
         name: 'Admin Users',
         path: 'user/employees',
-        permission: 'Employee List',
+        permission: ALL_PERMISSIONS.storeUser.viewUserEmployee,
         icon: <PeopleOutlineOutlinedIcon className="w-[17px]" />,
       },
     ],
@@ -138,38 +143,38 @@ const links = [
   {
     name: 'Branches',
     path: 'branches',
-    permission: 'Branch List',
+    permission: ALL_PERMISSIONS.storeBranch.viewBranches,
     // permission: 'Banners List',
     icon: <CorporateFareIcon className="w-[17px]" />,
   },
   {
     name: 'Banners',
     path: 'banners',
-    permission: 'Banners List',
+    permission: ALL_PERMISSIONS.storeBanner.viewBanners,
     icon: <ViewCarouselOutlinedIcon className="w-[17px]" />,
   },
   {
     name: 'FAQs',
     path: 'faq',
-    permission: 'Notification List',
+    permission: ALL_PERMISSIONS.storeFaq.viewFaqs,
     icon: <QuestionAnswerOutlinedIcon fontSize="inherit" />,
   },
   {
     name: 'Notifications',
     path: 'notification',
-    permission: 'Notification List',
+    permission: ALL_PERMISSIONS.storeNotification.viewNotifications,
     icon: <NotificationsOutlinedIcon fontSize="inherit" />,
   },
   {
     name: 'Vouchers',
     path: 'vouchers',
-    permission: 'Voucher List',
+    permission: ALL_PERMISSIONS.storeVoucher.viewVouchers,
     icon: <VoucherIcon />,
   },
   {
     name: 'Settings',
-    path: 'settings',
-    permission: 'Setting View',
+    path: 'settings/app',
+    permission: ALL_PERMISSIONS.storeSetting.viewSettings,
     icon: <SettingsOutlinedIcon fontSize="inherit" />,
   },
 ];
@@ -293,24 +298,66 @@ function Sidebar() {
   useEffect(() => {
     defineRules(permissions);
     if (permissions) {
-      const tempList = links.filter((el) => {
-        if (el.name === MODULE_EMPLOYEES) {
-          if (appItems.employeeLimit <= 0) {
-            return null;
-          }
-        }
-        return CAN('canView', el.permission as string);
-      });
-      // console.log("tempList", tempList);
+      const filterLinks = (allLinks: any) => {
+        return allLinks
+          .map((link: any) => {
+            // Specific condition for MODULE_EMPLOYEES
+            if (
+              link.name === MODULE_EMPLOYEES &&
+              authState.user.userType !== 'ShopUser' &&
+              authState.user.userType !== 'BranchUser'
+            ) {
+              return null;
+            }
+            // Specific condition for MODULE_BRANCES
+            if (
+              link.name === MODULE_BRANCHES &&
+              authState.user.userType !== 'ShopUser'
+            ) {
+              return null;
+            }
+            // Specific condition for MODULE_SETTINGS
+            if (
+              link.name === MODULE_SETTINGS &&
+              authState.user.userType !== 'ShopUser'
+            ) {
+              return null;
+            }
+            // Filter child links
+            if (link.childLinks) {
+              const filteredChildLinks = link.childLinks.filter(
+                (childLink: any) => CAN('canView', childLink.permission)
+              );
+
+              // Include parent link if it has visible child links or passes its own permission
+              if (
+                filteredChildLinks.length > 0 ||
+                CAN('canView', link.permission)
+              ) {
+                return {
+                  ...link,
+                  childLinks: filteredChildLinks,
+                };
+              }
+              return null;
+            }
+            return CAN('canView', link.permission) ? link : null;
+          })
+          .filter((link: any) => link !== null);
+      };
+
+      const tempList = filterLinks(links);
       tempList.unshift({
         name: 'Dashboard',
         path: 'home',
         permission: 'Dashboard List',
         icon: <GridViewOutlinedIcon fontSize="inherit" />,
       });
+
       setList(tempList);
+      // console.log('🚀 ~ useEffect ~ tempList:', tempList);
     }
-  }, [null, appItems?.employeeLimit]);
+  }, [permissions, appItems?.employeeLimit, authState]);
 
   return (
     <Drawer
