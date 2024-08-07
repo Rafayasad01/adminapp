@@ -56,7 +56,7 @@ const links = [
       {
         name: 'Services',
         path: 'store-appointment/service',
-        permission: ALL_PERMISSIONS.storeAppointment.viewCategory,
+        permission: ALL_PERMISSIONS.storeAppointment.viewServices,
         icon: <GridViewOutlinedIcon fontSize="inherit" />,
       },
       {
@@ -100,7 +100,7 @@ const links = [
       {
         name: 'Products',
         path: 'store-product/product',
-        permission: ALL_PERMISSIONS.storeProduct.viewCategory,
+        permission: ALL_PERMISSIONS.storeProduct.view,
         icon: <CategoryIcon />,
       },
       {

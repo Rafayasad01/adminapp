@@ -94,7 +94,7 @@ function CategoriesServicesPage() {
   };
 
   const handleAddNew = () => {
-    if (listingRolePermission(dataRole, ALL_PERMISSIONS.storeProduct.addItem)) {
+    if (listingRolePermission(dataRole, ALL_PERMISSIONS.storeProduct.add)) {
       setOpenFormDialog(true);
     } else {
       setIsNotify(true);
@@ -130,9 +130,7 @@ function CategoriesServicesPage() {
   };
 
   useEffect(() => {
-    if (
-      listingRolePermission(dataRole, ALL_PERMISSIONS.storeProduct.viewItem)
-    ) {
+    if (listingRolePermission(dataRole, ALL_PERMISSIONS.storeProduct.view)) {
       categoryService
         .getCategoryServiceList(productId, page, rowsPerPage)
         .then((item: any) => {
@@ -198,9 +196,7 @@ function CategoriesServicesPage() {
 
   const manuHandler = (option: string) => {
     if (option === 'Edit') {
-      if (
-        listingRolePermission(dataRole, ALL_PERMISSIONS.storeProduct.editItem)
-      ) {
+      if (listingRolePermission(dataRole, ALL_PERMISSIONS.storeProduct.edit)) {
         categoryService
           .getCategoryService(actionMenuItemid)
           .then((item: any) => {
@@ -218,14 +214,14 @@ function CategoriesServicesPage() {
       }
     } else if (option === "Product faq's") {
       CheckRolePermission(
-        ALL_PERMISSIONS.storeProduct.viewFaq,
+        ALL_PERMISSIONS.storeProduct.view,
         dataRole,
         navigate,
         `../item/faq/${actionMenuItemid}`
       );
     } else if (option === 'Delete') {
       if (
-        listingRolePermission(dataRole, ALL_PERMISSIONS.storeProduct.deleteItem)
+        listingRolePermission(dataRole, ALL_PERMISSIONS.storeProduct.delete)
       ) {
         setCancelDialogOpen(true);
       } else {
@@ -327,9 +323,7 @@ function CategoriesServicesPage() {
   };
 
   const handleSwitchChange = (event: any, id: string) => {
-    if (
-      listingRolePermission(dataRole, ALL_PERMISSIONS.storeProduct.editItem)
-    ) {
+    if (listingRolePermission(dataRole, ALL_PERMISSIONS.storeProduct.edit)) {
       // setIsLoader(true);
       const data = {
         isActive: event.target.checked,

@@ -556,7 +556,7 @@ function AppointmentProviderPage() {
       if (
         listingRolePermission(
           dataRole,
-          ALL_PERMISSIONS.storeAppointment.viewServices
+          ALL_PERMISSIONS.storeAppointment.viewEmployees
         )
       ) {
         navigate(`../services/list/${actionMenuItemid}`);

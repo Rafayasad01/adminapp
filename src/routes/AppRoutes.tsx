@@ -383,7 +383,7 @@ export const routeObjects: RouteObject[] = [
                       {
                         path: 'service',
                         condition:
-                          ALL_PERMISSIONS.storeAppointment.viewCategory,
+                          ALL_PERMISSIONS.storeAppointment.viewServices,
                       },
                       {
                         path: 'employees',
@@ -423,7 +423,7 @@ export const routeObjects: RouteObject[] = [
                       <ProtectedRoute
                         page={<ServicesCatPage />}
                         condition={
-                          ALL_PERMISSIONS.storeAppointment.viewCategory
+                          ALL_PERMISSIONS.storeAppointment.viewServices
                         }
                       />
                     ),
@@ -630,7 +630,7 @@ export const routeObjects: RouteObject[] = [
                     element: (
                       <ProtectedRoute
                         page={<CategoriesPage />}
-                        condition={ALL_PERMISSIONS.storeProduct.viewCategory}
+                        condition={ALL_PERMISSIONS.storeProduct.view}
                       />
                     ),
                     // element: <CategoriesPage />,

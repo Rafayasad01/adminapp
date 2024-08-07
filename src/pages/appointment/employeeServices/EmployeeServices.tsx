@@ -16,7 +16,10 @@ import { useAppSelector } from '../../../redux/redux-hooks';
 import employeeService from '../../../services/adminapp/adminStoreEmployee';
 import storeLovService from '../../../services/adminapp/adminStoreService';
 import PermissionPopup from '../../../utils/PermissionPopup';
-import { NOT_AUTHORIZED_MESSAGE } from '../../../utils/constants';
+import {
+  ALL_PERMISSIONS,
+  NOT_AUTHORIZED_MESSAGE,
+} from '../../../utils/constants';
 import {
   CheckRolePermission,
   listingRolePermission,
@@ -131,7 +134,12 @@ function EmployeeServices() {
   }, []);
 
   const handleFormClickOpen = () => {
-    if (listingRolePermission(dataRole, 'Category Create')) {
+    if (
+      listingRolePermission(
+        dataRole,
+        ALL_PERMISSIONS.storeAppointment.addEmployee
+      )
+    ) {
       setOpenFormDialog(true);
       catLovService();
       getAllEmployees();
@@ -146,7 +154,12 @@ function EmployeeServices() {
   };
 
   useEffect(() => {
-    if (listingRolePermission(dataRole, 'Category List')) {
+    if (
+      listingRolePermission(
+        dataRole,
+        ALL_PERMISSIONS.storeAppointment.viewEmployees
+      )
+    ) {
       employeeService
         .StoreEmployeeServiceList(empId)
         .then((item: any) => {
@@ -167,7 +180,12 @@ function EmployeeServices() {
 
   const manuHandler = (option: string) => {
     if (option === 'Edit') {
-      if (listingRolePermission(dataRole, 'Category Update')) {
+      if (
+        listingRolePermission(
+          dataRole,
+          ALL_PERMISSIONS.storeAppointment.editEmployee
+        )
+      ) {
         // console.log('actionMenuItemid', actionMenuItemid, list);
         const editFormDatas = list?.find(
           (el: any) => el.id === actionMenuItemid
@@ -186,14 +204,32 @@ function EmployeeServices() {
       }
     } else if (option === 'Items') {
       // navigate(`../item/${actionMenuItemid}`);
-      CheckRolePermission(
-        'Category Service Get',
-        dataRole,
-        navigate,
-        `services/${actionMenuItemid}`
-      );
+      if (
+        listingRolePermission(
+          dataRole,
+          ALL_PERMISSIONS.storeAppointment.viewEmployees
+        )
+      ) {
+        CheckRolePermission(
+          ALL_PERMISSIONS.storeAppointment.viewEmployees,
+          dataRole,
+          navigate,
+          `services/${actionMenuItemid}`
+        );
+      } else {
+        setIsNotify(true);
+        setNotifyMessage({
+          text: NOT_AUTHORIZED_MESSAGE,
+          type: 'warning',
+        });
+      }
     } else if (option === 'Delete') {
-      if (listingRolePermission(dataRole, 'Category Delete')) {
+      if (
+        listingRolePermission(
+          dataRole,
+          ALL_PERMISSIONS.storeAppointment.deleteEmployee
+        )
+      ) {
         setCancelDialogOpen(true);
       } else {
         setIsNotify(true);
@@ -281,7 +317,12 @@ function EmployeeServices() {
   };
 
   const handleSwitchChange = (event: any, id: string) => {
-    if (listingRolePermission(dataRole, 'Category Update Status')) {
+    if (
+      listingRolePermission(
+        dataRole,
+        ALL_PERMISSIONS.storeAppointment.editEmployee
+      )
+    ) {
       const data = {
         isActive: event.target.checked,
       };
@@ -310,7 +351,12 @@ function EmployeeServices() {
 
   const statusCancelHandler = (isDel: string) => {
     setIsLoader(true);
-    if (listingRolePermission(dataRole, 'Category Update Status')) {
+    if (
+      listingRolePermission(
+        dataRole,
+        ALL_PERMISSIONS.storeAppointment.deleteEmployee
+      )
+    ) {
       const data = {
         isDeleted: !!isDel,
       };

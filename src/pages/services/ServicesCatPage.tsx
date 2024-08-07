@@ -62,7 +62,7 @@ function ServicesPage() {
     if (
       listingRolePermission(
         dataRole,
-        ALL_PERMISSIONS.storeAppointment.addCategory
+        ALL_PERMISSIONS.storeAppointment.addService
       )
     ) {
       setOpenFormDialog(true);
@@ -79,7 +79,7 @@ function ServicesPage() {
     if (
       listingRolePermission(
         dataRole,
-        ALL_PERMISSIONS.storeAppointment.viewCategory
+        ALL_PERMISSIONS.storeAppointment.viewServices
       )
     ) {
       storeService
@@ -182,7 +182,7 @@ function ServicesPage() {
       if (
         listingRolePermission(
           dataRole,
-          ALL_PERMISSIONS.storeAppointment.editCategory
+          ALL_PERMISSIONS.storeAppointment.editService
         )
       ) {
         // console.log('actionMenuItemid', actionMenuItemid, list);
@@ -201,17 +201,30 @@ function ServicesPage() {
       }
     } else if (option === 'Services') {
       // navigate(`../item/${actionMenuItemid}`);
-      CheckRolePermission(
-        ALL_PERMISSIONS.storeAppointment.viewServices,
-        dataRole,
-        navigate,
-        `services/${actionMenuItemid}`
-      );
+      if (
+        listingRolePermission(
+          dataRole,
+          ALL_PERMISSIONS.storeAppointment.viewServices
+        )
+      ) {
+        CheckRolePermission(
+          ALL_PERMISSIONS.storeAppointment.viewServices,
+          dataRole,
+          navigate,
+          `services/${actionMenuItemid}`
+        );
+      } else {
+        setIsNotify(true);
+        setNotifyMessage({
+          text: NOT_AUTHORIZED_MESSAGE,
+          type: 'warning',
+        });
+      }
     } else if (option === 'Delete') {
       if (
         listingRolePermission(
           dataRole,
-          ALL_PERMISSIONS.storeAppointment.deleteCategory
+          ALL_PERMISSIONS.storeAppointment.deleteService
         )
       ) {
         setCancelDialogOpen(true);
@@ -311,7 +324,7 @@ function ServicesPage() {
     if (
       listingRolePermission(
         dataRole,
-        ALL_PERMISSIONS.storeAppointment.editCategory
+        ALL_PERMISSIONS.storeAppointment.editService
       )
     ) {
       const data = {

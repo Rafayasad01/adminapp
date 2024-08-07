@@ -311,7 +311,12 @@ function ServiceItemPage() {
   };
 
   const handleSwitchChange = (event: any, id: string) => {
-    if (listingRolePermission(dataRole, 'Category Service Update Status')) {
+    if (
+      listingRolePermission(
+        dataRole,
+        ALL_PERMISSIONS.storeAppointment.editService
+      )
+    ) {
       // setIsLoader(true);
       const data = {
         isActive: event.target.checked,

@@ -57,9 +57,7 @@ function CategoriesPage() {
   const [modalImage, setModalImage] = useState('');
 
   const handleFormClickOpen = () => {
-    if (
-      listingRolePermission(dataRole, ALL_PERMISSIONS.storeProduct.addCategory)
-    ) {
+    if (listingRolePermission(dataRole, ALL_PERMISSIONS.storeProduct.add)) {
       setOpenFormDialog(true);
     } else {
       setIsNotify(true);
@@ -71,9 +69,7 @@ function CategoriesPage() {
   };
 
   useEffect(() => {
-    if (
-      listingRolePermission(dataRole, ALL_PERMISSIONS.storeProduct.viewCategory)
-    ) {
+    if (listingRolePermission(dataRole, ALL_PERMISSIONS.storeProduct.view)) {
       categoryService
         .getListService(authState.user.tenant, page, rowsPerPage)
         .then((item: any) => {
@@ -192,12 +188,7 @@ function CategoriesPage() {
 
   const manuHandler = (option: string) => {
     if (option === 'Edit') {
-      if (
-        listingRolePermission(
-          dataRole,
-          ALL_PERMISSIONS.storeProduct.editCategory
-        )
-      ) {
+      if (listingRolePermission(dataRole, ALL_PERMISSIONS.storeProduct.edit)) {
         categoryService.getCategory(actionMenuItemid).then((item: any) => {
           if (item.data.success) {
             // console.log('tem.data.data:::::::', item.data.data);
@@ -215,17 +206,14 @@ function CategoriesPage() {
     } else if (option === 'Products') {
       // navigate(`../item/${actionMenuItemid}`);
       CheckRolePermission(
-        ALL_PERMISSIONS.storeProduct.viewItem,
+        ALL_PERMISSIONS.storeProduct.view,
         dataRole,
         navigate,
         `item/${actionMenuItemid}`
       );
     } else if (option === 'Delete') {
       if (
-        listingRolePermission(
-          dataRole,
-          ALL_PERMISSIONS.storeProduct.deleteCategory
-        )
+        listingRolePermission(dataRole, ALL_PERMISSIONS.storeProduct.delete)
       ) {
         setCancelDialogOpen(true);
       } else {
@@ -333,9 +321,7 @@ function CategoriesPage() {
   };
 
   const handleSwitchChange = (event: any, id: string) => {
-    if (
-      listingRolePermission(dataRole, ALL_PERMISSIONS.storeProduct.editCategory)
-    ) {
+    if (listingRolePermission(dataRole, ALL_PERMISSIONS.storeProduct.edit)) {
       const data = {
         is_active: event.target.checked,
         updated_by: authState.user.id,

@@ -129,7 +129,7 @@ function CategoriesServicesFaqPage() {
   };
 
   useEffect(() => {
-    if (listingRolePermission(dataRole, ALL_PERMISSIONS.storeProduct.viewFaq)) {
+    if (listingRolePermission(dataRole, ALL_PERMISSIONS.storeProduct.view)) {
       categoryService
         .getCategoryServiceFaqList(categoryServiceId, page, rowsPerPage)
         .then((item: any) => {
@@ -196,9 +196,7 @@ function CategoriesServicesFaqPage() {
 
   const manuHandler = (option: string) => {
     if (option === 'Edit') {
-      if (
-        listingRolePermission(dataRole, ALL_PERMISSIONS.storeProduct.editFaq)
-      ) {
+      if (listingRolePermission(dataRole, ALL_PERMISSIONS.storeProduct.edit)) {
         categoryService
           .getCategoryServiceFaq(actionMenuItemid)
           .then((item: any) => {
@@ -216,7 +214,7 @@ function CategoriesServicesFaqPage() {
       }
     } else if (option === 'Delete') {
       if (
-        listingRolePermission(dataRole, ALL_PERMISSIONS.storeProduct.deleteFaq)
+        listingRolePermission(dataRole, ALL_PERMISSIONS.storeProduct.delete)
       ) {
         setCancelDialogOpen(true);
       } else {
@@ -288,7 +286,7 @@ function CategoriesServicesFaqPage() {
   };
 
   const handleSwitchChange = (event: any, id: string) => {
-    if (listingRolePermission(dataRole, ALL_PERMISSIONS.storeProduct.editFaq)) {
+    if (listingRolePermission(dataRole, ALL_PERMISSIONS.storeProduct.edit)) {
       const data = {
         is_active: event.target.checked,
         updated_by: authState.user.id,
@@ -317,7 +315,7 @@ function CategoriesServicesFaqPage() {
   };
 
   const handleAddNew = () => {
-    if (listingRolePermission(dataRole, ALL_PERMISSIONS.storeProduct.addFaq)) {
+    if (listingRolePermission(dataRole, ALL_PERMISSIONS.storeProduct.add)) {
       setOpenFormDialog(true);
     } else {
       setIsNotify(true);
