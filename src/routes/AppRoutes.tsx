@@ -383,7 +383,7 @@ export const routeObjects: RouteObject[] = [
                       {
                         path: 'service',
                         condition:
-                          ALL_PERMISSIONS.storeAppointment.viewServices,
+                          ALL_PERMISSIONS.storeAppointment.viewCategory,
                       },
                       {
                         path: 'employees',
