@@ -428,7 +428,22 @@ function FaqPage() {
                           <div className="flex flex-row-reverse items-center">
                             <div
                               className="mx-3 cursor-pointer"
-                              onClick={() => handleEdit(item.id)}
+                              onClick={() => {
+                                if (
+                                  listingRolePermission(
+                                    dataRole,
+                                    ALL_PERMISSIONS.storeFaq.edit
+                                  )
+                                ) {
+                                  handleEdit(item.id);
+                                } else {
+                                  setIsNotify(true);
+                                  setNotifyMessage({
+                                    text: NOT_AUTHORIZED_MESSAGE,
+                                    type: 'warning',
+                                  });
+                                }
+                              }}
                             >
                               <ModeEditOutlineOutlinedIcon />
                             </div>

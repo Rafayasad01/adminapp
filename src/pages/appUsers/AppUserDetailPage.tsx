@@ -206,36 +206,41 @@ function AppUserDetailPage() {
             </div>
           </div>
           <div className="mt-3 grid grid-cols-12">
-            <div className="col-span-12 rounded-lg bg-[#fff] px-4 py-5 shadow-lg">
-              {detail?.userType === 'Driver' && (
-                <Tabs value={selectedTab} onChange={handleTabChange}>
-                  <Tab
-                    label="address"
-                    value="ADDRESS"
-                    // onClick={() => navigate(`./detail/${appuserId}`)}
+            {listingRolePermission(
+              dataRole,
+              ALL_PERMISSIONS.storeUser.viewUserAddress
+            ) && (
+              <div className="col-span-12 rounded-lg bg-[#fff] px-4 py-5 shadow-lg">
+                {detail?.userType === 'Driver' && (
+                  <Tabs value={selectedTab} onChange={handleTabChange}>
+                    <Tab
+                      label="address"
+                      value="ADDRESS"
+                      // onClick={() => navigate(`./detail/${appuserId}`)}
+                    />
+                    <Tab
+                      label="Schedule"
+                      value="SCHEDULE"
+                      // onClick={() => navigate('../shop')}
+                    />
+                  </Tabs>
+                )}
+                {selectedTab === 'ADDRESS' && (
+                  <AppUserAddressTabPage
+                    addressList={detail?.appUserAddress}
+                    appUserId={appuserId}
+                    setAddress={setAddress}
                   />
-                  <Tab
-                    label="Schedule"
-                    value="SCHEDULE"
-                    // onClick={() => navigate('../shop')}
+                )}
+                {selectedTab === 'SCHEDULE' && (
+                  <AppUserScheduleTabPage
+                    appUserId={appuserId}
+                    scheduleList={detail?.appDriverWorkingSchedule}
+                    filteredWeekdays={filteredWeekDays}
                   />
-                </Tabs>
-              )}
-              {selectedTab === 'ADDRESS' && (
-                <AppUserAddressTabPage
-                  addressList={detail?.appUserAddress}
-                  appUserId={appuserId}
-                  setAddress={setAddress}
-                />
-              )}
-              {selectedTab === 'SCHEDULE' && (
-                <AppUserScheduleTabPage
-                  appUserId={appuserId}
-                  scheduleList={detail?.appDriverWorkingSchedule}
-                  filteredWeekdays={filteredWeekDays}
-                />
-              )}
-            </div>
+                )}
+              </div>
+            )}
           </div>
         </div>
       )}

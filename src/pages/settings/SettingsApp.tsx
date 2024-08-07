@@ -39,6 +39,7 @@ import {
   DOMAIN_PROTOCOL,
   INVALID_CHAR,
   MAX_LENGTH_EXCEEDED,
+  NOT_AUTHORIZED_MESSAGE,
   PATTERN,
   PH_MINI_LENGTH,
   SOCIAL_MEDIA,
@@ -185,9 +186,11 @@ function SettingsApp() {
 
   const onSubmit = (data: any) => {
     // console.log('SETTTING DATA', data);
-    setIsLoader(true);
-    if (listingRolePermission(dataRole, ALL_PERMISSIONS.storeSetting.add)) {
+    if (
+      listingRolePermission(dataRole, ALL_PERMISSIONS.storeSetting.editSetting)
+    ) {
       // setIsLoader(true);
+      setIsLoader(true);
       const formData = new FormData();
       // formData.append('name', data.name ? data.name : '');
       formData.append('desc', data.desc ? data.desc : '');
@@ -310,6 +313,12 @@ function SettingsApp() {
             type: 'error',
           });
         });
+    } else {
+      setIsNotify(true);
+      setNotifyMessage({
+        text: NOT_AUTHORIZED_MESSAGE,
+        type: 'warning',
+      });
     }
   };
 

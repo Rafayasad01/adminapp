@@ -9,12 +9,15 @@ import Notify from '../../components/common/Notify';
 import { DateRange } from '../../interfaces/shop-schedule.interface';
 import {
   fetchSchedule,
+  setNotifyMessageError,
   setNotifyScheduleError,
 } from '../../redux/features/shopScheduleStateSlice';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 import SettingsCreateSchedulePopup from './SettingsCreateSchedulePopup';
 import SettingsDateRangePicker from './SettingsDateRangePicker';
 import SettingsEditSchedulePopup from './SettingsEditSchedulePopup';
+import { ALL_PERMISSIONS, NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
+import { listingRolePermission } from '../../utils/helper';
 
 interface Holiday {
   id: string;
@@ -28,6 +31,9 @@ interface Holiday {
 
 function SettingsShopScheduling() {
   const navigate = useNavigate();
+  const dataRole = useAppSelector(
+    (state: any) => state?.persistedReducer?.roleState?.role?.permissions
+  );
   const [scheduleAddPopup, setScheduleAddPopup] = useState(false);
   const [scheduleEditPopup, setScheduleEditPopup] = useState(false);
   const dispatch = useAppDispatch();
@@ -142,7 +148,30 @@ function SettingsShopScheduling() {
                 <Button
                   variant="contained"
                   className="btn-black-fill btn-icon"
-                  onClick={() => setScheduleAddPopup(true)}
+                  onClick={() => {
+                    if (
+                      listingRolePermission(
+                        dataRole,
+                        ALL_PERMISSIONS.storeSetting.add
+                      )
+                    ) {
+                      setScheduleAddPopup(true);
+                    } else {
+                      SetNotify(true);
+                      dispatch(
+                        setNotifyMessageError({
+                          text: NOT_AUTHORIZED_MESSAGE,
+                          type: 'warning',
+                        })
+                      );
+                      // notifyMessage('')
+                      // setIsNotify(true);
+                      // setNotifyMessage({
+                      //   text: ,
+                      //   type: 'warning',
+                      // });
+                    }
+                  }}
                 >
                   <AddOutlinedIcon /> Set Schedule
                 </Button>

@@ -84,7 +84,9 @@ const OrderBasket = () => {
         ?.minimumDeliveryTime
   );
   const currentDate = dayjs();
-  const DeliveryDate = currentDate.add(dropOffDate, 'day');
+  const DeliveryDate = currentDate;
+  // const DeliveryDate = currentDate.add(dropOffDate ?? dayjs(), 'day');
+  console.log('🚀 ~ OrderBasket ~ dropOffDate:', dropOffDate);
   const dispatch = useAppDispatch();
   const totalAmount = cartItems.reduce(
     (p: any, c: any) => p + Number(c.price) * Number(c.quantity),

@@ -63,7 +63,25 @@ function AppUserTab({
   const [actionMenuAnchorEl, setActionMenuAnchorEl] =
     useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
-  const actionMenuOptions = ['Detail', 'Reward History', 'Edit', 'Delete'];
+  let actionMenuOptions = ['Detail', 'Edit', 'Delete'];
+
+  const renderMenuOptions = () => {
+    if (
+      listingRolePermission(
+        dataRole,
+        ALL_PERMISSIONS.storeUser.viewUserAppRewardHistory
+      )
+    ) {
+      const newActionMenuOptions = [
+        'View',
+        'Reward History',
+        'Update',
+        'Remove',
+      ];
+      actionMenuOptions = newActionMenuOptions;
+    }
+    return actionMenuOptions;
+  };
 
   const manuHandler = (option: string) => {
     // setIsLoader(true);
@@ -113,18 +131,30 @@ function AppUserTab({
         });
       }
     } else if (option === 'Detail') {
-      CheckRolePermission(
-        ALL_PERMISSIONS.storeUser.editUserApp,
-        dataRole,
-        navigate,
-        `../detail/${actionMenuItemid?.id}`
-      );
+      if (
+        listingRolePermission(dataRole, ALL_PERMISSIONS.storeUser.viewUserApp)
+      ) {
+        CheckRolePermission(
+          ALL_PERMISSIONS.storeUser.viewUserApp,
+          dataRole,
+          navigate,
+          `../detail/${actionMenuItemid?.id}`
+        );
+      } else {
+        setIsNotify(true);
+        setNotifyMessage({
+          text: NOT_AUTHORIZED_MESSAGE,
+          type: 'warning',
+        });
+      }
       // navigate(`detail/${actionMenuItemid?.id}`);
     } else if (option === 'Reward History') {
+      console.log('sss');
+
       if (
         listingRolePermission(
           dataRole,
-          ALL_PERMISSIONS.storeUser.viewUserAppRating
+          ALL_PERMISSIONS.storeUser.viewUserAppRewardHistory
         )
       ) {
         navigate(`../reward/history/${actionMenuItemid?.id}`);
@@ -349,7 +379,7 @@ function AppUserTab({
           open={actionMenuOpen}
           anchorEl={actionMenuAnchorEl}
           setAnchorEl={setActionMenuAnchorEl}
-          options={actionMenuOptions}
+          options={renderMenuOptions()}
           callback={manuHandler}
         />
       )}

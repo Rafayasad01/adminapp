@@ -422,10 +422,23 @@ function OrderDetailsPage() {
                   <Button
                     type="button"
                     onClick={() => {
-                      setDialogText(
-                        'Are you sure you want to cancel this Order'
-                      );
-                      setCancelDialogOpen(true);
+                      if (
+                        listingRolePermission(
+                          dataRole,
+                          ALL_PERMISSIONS.storeProduct.editOrder
+                        )
+                      ) {
+                        setDialogText(
+                          'Are you sure you want to cancel this Order'
+                        );
+                        setCancelDialogOpen(true);
+                      } else {
+                        setIsNotify(true);
+                        setNotifyMessage({
+                          text: NOT_AUTHORIZED_MESSAGE,
+                          type: 'warning',
+                        });
+                      }
                     }}
                     className={`bg-ord-del rounded-xl px-12 py-2 font-open-sans text-sm font-semibold ${
                       false

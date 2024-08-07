@@ -46,7 +46,7 @@ import OrderBasket from '../pages/orders/OrderBasket';
 import OrderDetailsPage from '../pages/orders/OrderDetailsPage';
 import OrderItemDetailPage from '../pages/orders/OrderItemDetailPage';
 import OrdersAssignPage from '../pages/orders/OrdersAssignPage';
-import OrdersCreatePage from '../pages/orders/OrdersCreatePage';
+// import OrdersCreatePage from '../pages/orders/OrdersCreatePage';
 import OrdersEditPage from '../pages/orders/OrdersEditPage';
 import OrdersPage from '../pages/orders/OrdersPage';
 import ProfilePage from '../pages/profile/ProfilePage';
@@ -239,7 +239,6 @@ export const routeObjects: RouteObject[] = [
               {
                 index: true,
                 element: <AppUsersPage />,
-                // element: CAN("canView", "Customer List") ? <CustomersPage /> : <p>not authorized</p>,
               },
               {
                 path: 'detail/:appuserId',
@@ -328,11 +327,6 @@ export const routeObjects: RouteObject[] = [
                 index: true,
                 element: <AppointmentVisitPage />,
               },
-              // { index: true, element: <Navigate to="list" replace /> },
-              // {
-              //   path: 'list',
-              //   element: <AppointmentVisitPage />,
-              // },
               {
                 path: 'detail/:id',
                 element: <AppointmentVisitDetailPage />,
@@ -341,10 +335,6 @@ export const routeObjects: RouteObject[] = [
                 path: 'add-appointment',
                 element: <AddAppointmentPage />,
               },
-              // {
-              //   path: 'update-appointment/:id',
-              //   element: <UpdateAppointmentPage />,
-              // },
               {
                 path: 'reschedule-appointment/:id',
                 element: <RescheduleAppointmentPage />,
@@ -474,10 +464,6 @@ export const routeObjects: RouteObject[] = [
                     path: 'attendance/:empId',
                     element: <AppointmentEmployeesAttendancePage />,
                   },
-                  // {
-                  //   path: 'rating/:empId',
-                  //   element: <EmployeeRatingPage />,
-                  // },
                   {
                     path: 'review/:empId',
                     element: <EmployeeRatingReviewsPage />,
@@ -507,11 +493,6 @@ export const routeObjects: RouteObject[] = [
                     path: 'list',
                     element: <StoreAppointmentsList />,
                   },
-                  // { index: true, element: <Navigate to="list" replace /> },
-                  // {
-                  //   path: 'list',
-                  //   element: <AppointmentVisitPage />,
-                  // },
                   {
                     path: 'detail/:id',
                     element: <AppointmentVisitDetailPage />,
@@ -637,11 +618,23 @@ export const routeObjects: RouteObject[] = [
                   },
                   {
                     path: 'item/:productId',
-                    element: <CategoriesServicesPage />,
+                    element: (
+                      <ProtectedRoute
+                        page={<CategoriesServicesPage />}
+                        condition={ALL_PERMISSIONS.storeProduct.view}
+                      />
+                    ),
+                    // element: <CategoriesServicesPage />,
                   },
                   {
                     path: 'item/faq/:categoryServiceId',
-                    element: <CategoriesServicesFaqPage />,
+                    element: (
+                      <ProtectedRoute
+                        page={<CategoriesServicesFaqPage />}
+                        condition={ALL_PERMISSIONS.storeProduct.view}
+                      />
+                    ),
+                    // element: <CategoriesServicesFaqPage />,
                   },
                 ],
               },
@@ -657,13 +650,12 @@ export const routeObjects: RouteObject[] = [
                       />
                     ),
                     // element: <OrdersPage />,
-                    // element: CAN("canView", "Order List") ? <OrdersPage /> : <p>not authorized</p>,
                   },
                   {
                     path: 'create',
                     element: (
                       <ProtectedRoute
-                        page={<OrdersPage />}
+                        page={<AddNewOrder />}
                         condition={ALL_PERMISSIONS.storeProduct.addOrder}
                       />
                     ),
@@ -671,23 +663,13 @@ export const routeObjects: RouteObject[] = [
                   },
                   {
                     path: 'detail/:orderId',
-                    element: <OrderDetailsPage />,
-                  },
-                  {
-                    path: 'edit/:orderId',
-                    element: <OrdersEditPage />,
-                  },
-                  {
-                    path: 'assign/:orderId',
-                    element: <OrdersAssignPage />,
-                  },
-                  {
-                    path: 'view-driver',
-                    element: <DriverHistory />,
-                  },
-                  {
-                    path: 'item/:itemId',
-                    element: <OrderItemDetailPage />,
+                    element: (
+                      <ProtectedRoute
+                        page={<OrderDetailsPage />}
+                        condition={ALL_PERMISSIONS.storeProduct.viewOrder}
+                      />
+                    ),
+                    // element: <OrderDetailsPage />,
                   },
                   {
                     path: 'basket',
@@ -698,7 +680,6 @@ export const routeObjects: RouteObject[] = [
                       />
                     ),
                     // element: <OrderBasket />,
-                    // element: CAN("canView", "Order List") ? <OrdersPage /> : <p>not authorized</p>,
                   },
                 ],
               },
@@ -717,64 +698,13 @@ export const routeObjects: RouteObject[] = [
                   },
                   {
                     path: 'reviews/:itemId',
-                    element: <RatingReviewsPage />,
-                  },
-                ],
-              },
-            ],
-          },
-          {
-            path: 'salon',
-            children: [
-              {
-                index: true,
-                element: <Navigate to="product/list" replace />,
-              },
-              {
-                path: 'product',
-                children: [
-                  {
-                    path: 'list',
-                    index: true,
-                    element: <CategoriesPage />,
-                    // element: CAN("canView", "Category List") ? <CategoriesPage /> : <p>not authorized</p>,
-                  },
-                  {
-                    path: 'item/:productId',
-                    element: <CategoriesServicesPage />,
-                  },
-                  {
-                    path: 'item/faq/:categoryServiceId',
-                    element: <CategoriesServicesFaqPage />,
-                  },
-                ],
-              },
-              {
-                path: 'orders',
-                children: [
-                  {
-                    index: true,
-                    element: <OrdersPage />,
-                  },
-                  {
-                    path: 'create',
-                    element: <OrdersCreatePage />,
-                  },
-                  {
-                    path: 'detail/:orderId',
-                    element: <OrderDetailsPage />,
-                  },
-                  {
-                    path: 'edit/:orderId',
-                    element: <OrdersEditPage />,
-                  },
-                  {
-                    path: 'assign/:orderId',
-                    element: <OrdersAssignPage />,
-                  },
-                  {
-                    path: 'view-driver',
-                    element: <DriverHistory />,
+                    element: (
+                      <ProtectedRoute
+                        page={<RatingReviewsPage />}
+                        condition={ALL_PERMISSIONS.storeProduct.viewRating}
+                      />
+                    ),
+                    // element: <RatingReviewsPage />,
                   },
                 ],
               },
@@ -814,11 +744,16 @@ export const routeObjects: RouteObject[] = [
                       />
                     ),
                     // element: <AppUsersPage />,
-                    // element: CAN("canView", "Customer List") ? <CustomersPage /> : <p>not authorized</p>,
                   },
                   {
                     path: 'detail/:appuserId',
-                    element: <AppUserDetailPage />,
+                    element: (
+                      <ProtectedRoute
+                        page={<AppUserDetailPage />}
+                        condition={ALL_PERMISSIONS.storeUser.viewUserApp}
+                      />
+                    ),
+                    // element: <AppUserDetailPage />,
                   },
                   {
                     path: 'reward',
@@ -830,15 +765,15 @@ export const routeObjects: RouteObject[] = [
                       },
                       {
                         path: 'history/:userId',
-                        element: <AppUserRewardHistory />,
-                      },
-                      {
-                        path: 'history/voucher/detail/:historyId',
-                        element: <AppUserPromotionDetailPage />,
-                      },
-                      {
-                        path: 'history/loyalty/detail/:loyaltyId',
-                        element: <AppUserLoyaltyDetailPage />,
+                        element: (
+                          <ProtectedRoute
+                            page={<AppUserRewardHistory />}
+                            condition={
+                              ALL_PERMISSIONS.storeUser.viewUserAppRewardHistory
+                            }
+                          />
+                        ),
+                        // element: <AppUserRewardHistory />,
                       },
                     ],
                   },
@@ -888,7 +823,6 @@ export const routeObjects: RouteObject[] = [
                   />
                 ),
                 // element: <VouchersPage />,
-                // element: CAN("canView", "Voucher List") ? <VouchersPage /> : <p>not authorized</p>,
               },
             ],
           },
@@ -903,13 +837,7 @@ export const routeObjects: RouteObject[] = [
                     condition={ALL_PERMISSIONS.storeSetting.viewSettings}
                   />
                 ),
-                // element: <SettingsPage />,
-                // element: CAN("canView", "Setting View") ? <SettingsPage /> : <p>not authorized</p>,
                 children: [
-                  // {
-                  //   index: true,
-                  //   // element: <Navigate to="app" replace />,
-                  // },
                   {
                     index: true,
                     path: 'app',
@@ -982,21 +910,6 @@ export const routeObjects: RouteObject[] = [
                     }
                   />
                 ),
-                // element: <NotificationPage />,
-                // element: CAN("canView", "Notification List") ? <NotificationPage /> : <p>not authorized</p>,
-              },
-            ],
-          },
-          {
-            path: 'service',
-            children: [
-              {
-                index: true,
-                element: <ServicesCatPage />,
-              },
-              {
-                path: 'services/:CatId',
-                element: <ServiceItemPage />,
               },
             ],
           },

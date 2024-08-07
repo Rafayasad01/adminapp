@@ -88,6 +88,13 @@ export const shopScheduleSlice = createSlice({
     setNotifyScheduleError: (state, action: PayloadAction<boolean>) => {
       state.notify = action.payload;
     },
+    setNotifyMessageError: (
+      state,
+      action: PayloadAction<{ text?: string; type?: string }>
+    ) => {
+      state.notify = true;
+      state.notifyMessage = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -174,6 +181,7 @@ export const {
   setScheduleMonthDate,
   setScheduleMonthDateForWeek,
   setNotifyScheduleError,
+  setNotifyMessageError,
 } = shopScheduleSlice.actions;
 
 export default shopScheduleSlice.reducer;

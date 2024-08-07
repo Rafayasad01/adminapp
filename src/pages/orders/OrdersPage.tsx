@@ -378,8 +378,8 @@ function OrdersPage() {
               <thead>
                 <tr className="border-opacity">
                   <th className="w-[22%]">Customers</th>
-                  <th>Pickup Time</th>
-                  <th>Drop-off Time</th>
+                  <th>Order Date</th>
+                  {/* <th>Drop-off Time</th> */}
                   <th>Amount</th>
                   <th className="w-36">Status</th>
                   <th>Order ID</th>
@@ -407,20 +407,16 @@ function OrdersPage() {
                         <td>
                           <div className="flex flex-col">
                             <span className="text-sm font-normal text-secondary">
-                              {dayjs(Item.pickupDateTime)?.format('hh:mm:ssA')}{' '}
-                              -{' '}
-                              {dayjs(Item.pickupDateTime)
-                                .add(1, 'hour')
-                                .format('hh:mm:ssA')}
+                              {dayjs(Item.createdDate)?.format('hh:mm:ssA')}
                             </span>
                             <span className="text-xs font-normal text-[#6A6A6A]">
-                              {dayjs(Item.pickupDateTime)?.format(
+                              {dayjs(Item.createdDate)?.format(
                                 'ddd, MMM DD, YYYY'
                               )}
                             </span>
                           </div>
                         </td>
-                        <td>
+                        {/* <td>
                           <div className="flex flex-col">
                             <span className="text-sm font-normal text-secondary">
                               {dayjs(Item.dropDateTime)?.format('hh:mm:ssA')} -{' '}
@@ -434,7 +430,7 @@ function OrdersPage() {
                               )}
                             </span>
                           </div>
-                        </td>
+                        </td> */}
                         <td className="text-sm font-semibold text-secondary">
                           PKR {Item.grandTotal}
                         </td>

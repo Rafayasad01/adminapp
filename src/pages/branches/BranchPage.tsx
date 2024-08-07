@@ -57,10 +57,7 @@ function BranchPage() {
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
   const [totalBranches, setTotalBranches] = useState<number>(0);
-  const [
-    storeLimitVal,
-    // setStateLimitVal
-  ] = useState(0);
+  const [storeLimitVal, setStateLimitVal] = useState(0);
   const { reset } = useForm<AppUserEmployees>();
 
   const handleClickSearch = (event: any) => {
@@ -215,27 +212,27 @@ function BranchPage() {
       });
   };
 
-  // const editHandler = (id: string) => {
-  //   setIsLoader(true);
-  //   branchService
-  //     .editBranch(id)
-  //     .then((item: any) => {
-  //       if (item.data.success) {
-  //         setStateLimitVal(item.data.data.userLimit);
-  //         setFormDetail(item.data.data);
-  //         setOpenEditFormDialog(true);
-  //         setIsLoader(false);
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       setIsLoader(false);
-  //       setIsNotify(true);
-  //       setNotifyMessage({
-  //         text: err.message,
-  //         type: 'error',
-  //       });
-  //     });
-  // };
+  const editHandler = (id: string) => {
+    setIsLoader(true);
+    branchService
+      .editBranch(id)
+      .then((item: any) => {
+        if (item.data.success) {
+          setStateLimitVal(item.data.data.userLimit);
+          setFormDetail(item.data.data);
+          setOpenEditFormDialog(true);
+          setIsLoader(false);
+        }
+      })
+      .catch((err) => {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
+        });
+      });
+  };
 
   const updateFormHandler = (id: string, data: any) => {
     setIsLoader(true);
@@ -286,44 +283,52 @@ function BranchPage() {
   // console.log('EVENT HITT', openEditFormDialog);
 
   const handleSwitchChange = (event: any, id: string) => {
-    setOpenEditFormDialog(false);
-    setIsLoader(true);
-    const data = {
-      isActive: event.target.checked,
-      // trialMode: event.target.checked,
-      updatedBy: authState.user.id,
-    };
-    branchService
-      .updateBranchStatus(data, id)
-      .then((updateItem) => {
-        if (updateItem.data.success) {
-          setIsLoader(false);
-          setList((newArr: any) => {
-            return newArr.map((item: any) => {
-              if (item.id === id) {
-                item.isActive = updateItem.data.data.isActive;
-                item.trialMode = updateItem.data.data.trialMode;
-              }
-              return { ...item };
+    if (listingRolePermission(dataRole, ALL_PERMISSIONS.storeBranch.edit)) {
+      setOpenEditFormDialog(false);
+      setIsLoader(true);
+      const data = {
+        isActive: event.target.checked,
+        // trialMode: event.target.checked,
+        updatedBy: authState.user.id,
+      };
+      branchService
+        .updateBranchStatus(data, id)
+        .then((updateItem) => {
+          if (updateItem.data.success) {
+            setIsLoader(false);
+            setList((newArr: any) => {
+              return newArr.map((item: any) => {
+                if (item.id === id) {
+                  item.isActive = updateItem.data.data.isActive;
+                  item.trialMode = updateItem.data.data.trialMode;
+                }
+                return { ...item };
+              });
             });
-          });
-        } else {
+          } else {
+            setIsLoader(false);
+            setIsNotify(true);
+            setNotifyMessage({
+              text: updateItem.data.message,
+              type: 'error',
+            });
+          }
+        })
+        .catch((err) => {
           setIsLoader(false);
           setIsNotify(true);
           setNotifyMessage({
-            text: updateItem.data.message,
+            text: err.message,
             type: 'error',
           });
-        }
-      })
-      .catch((err) => {
-        setIsLoader(false);
-        setIsNotify(true);
-        setNotifyMessage({
-          text: err.message,
-          type: 'error',
         });
+    } else {
+      setIsNotify(true);
+      setNotifyMessage({
+        text: NOT_AUTHORIZED_MESSAGE,
+        type: 'warning',
       });
+    }
   };
 
   const handleTrialModeStatus = (status: any, trialMode: boolean): any => {
@@ -638,15 +643,28 @@ function BranchPage() {
                                   ? 'green'
                                   : 'black',
                             }}
-                            onClick={() =>
-                              handleVendor(
-                                item.id,
-                                item.name,
-                                item.maxUserLimit,
-                                item.maxBranchLimit,
-                                item.tenantType
-                              )
-                            }
+                            onClick={() => {
+                              if (
+                                listingRolePermission(
+                                  dataRole,
+                                  ALL_PERMISSIONS.storeBranch.edit
+                                )
+                              ) {
+                                handleVendor(
+                                  item.id,
+                                  item.name,
+                                  item.maxUserLimit,
+                                  item.maxBranchLimit,
+                                  item.tenantType
+                                );
+                              } else {
+                                setIsNotify(true);
+                                setNotifyMessage({
+                                  text: NOT_AUTHORIZED_MESSAGE,
+                                  type: 'warning',
+                                });
+                              }
+                            }}
                           >
                             <AirplayIcon />
                           </div>
@@ -660,7 +678,7 @@ function BranchPage() {
                                 if (
                                   listingRolePermission(
                                     dataRole,
-                                    ALL_PERMISSIONS.storeBranch.edit
+                                    ALL_PERMISSIONS.storeBranch.viewBranches
                                   )
                                 ) {
                                   navigate(`detail/${item.id}`);
@@ -677,21 +695,24 @@ function BranchPage() {
                             </IconButton>
                             <IconButton
                               className="icon-btn mr-3.5 p-0"
-                              // onClick={() => {
-                              //   if (listingRolePermission(
-                              //     dataRole,
-                              //     ALL_PERMISSIONS.storeBranch.edit
-                              //   )) {
-                              //     item.isActive ? editHandler(item.id) : null
-                              //   } else {
-                              //     setIsNotify(true);
-                              //     setNotifyMessage({
-                              //       text: NOT_AUTHORIZED_MESSAGE,
-                              //       type: 'warning',
-                              //     });
-                              //   }
-                              // }
-                              // }
+                              onClick={() => {
+                                if (
+                                  listingRolePermission(
+                                    dataRole,
+                                    ALL_PERMISSIONS.storeBranch.edit
+                                  )
+                                ) {
+                                  if (item.isActive) {
+                                    editHandler(item.id);
+                                  }
+                                } else {
+                                  setIsNotify(true);
+                                  setNotifyMessage({
+                                    text: NOT_AUTHORIZED_MESSAGE,
+                                    type: 'warning',
+                                  });
+                                }
+                              }}
                             >
                               <EditIcon />
                             </IconButton>

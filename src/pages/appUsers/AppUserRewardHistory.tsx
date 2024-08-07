@@ -80,7 +80,7 @@ function AppUserRewardHistory() {
     if (
       listingRolePermission(
         dataRole,
-        ALL_PERMISSIONS.storeUser.viewUserAppRating
+        ALL_PERMISSIONS.storeUser.viewUserAppRewardHistory
       )
     ) {
       if (selectedTab === 'PROMOTION HISTORY') {

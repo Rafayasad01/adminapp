@@ -29,6 +29,7 @@ import { useAppSelector } from '../../redux/redux-hooks';
 import CAN, { defineRules } from '../../services/permissions/permissions';
 import {
   ALL_PERMISSIONS,
+  MODULE_BRANCHES,
   MODULE_EMPLOYEES,
   MODULE_SETTINGS,
 } from '../../utils/constants';
@@ -335,7 +336,18 @@ function Sidebar() {
         return allLinks
           .map((link: any) => {
             // Specific condition for MODULE_EMPLOYEES
-            if (link.name === MODULE_EMPLOYEES && appItems.employeeLimit <= 0) {
+            if (
+              link.name === MODULE_EMPLOYEES &&
+              authState.user.userType !== 'ShopUser' &&
+              authState.user.userType !== 'BranchUser'
+            ) {
+              return null;
+            }
+            // Specific condition for MODULE_BRANCES
+            if (
+              link.name === MODULE_BRANCHES &&
+              authState.user.userType !== 'ShopUser'
+            ) {
               return null;
             }
             // Specific condition for MODULE_SETTINGS
