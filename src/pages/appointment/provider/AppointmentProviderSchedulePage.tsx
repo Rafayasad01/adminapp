@@ -479,7 +479,22 @@ function AppointmentProviderSchedulePage() {
                 ),
               };
             });
+          } else {
+            setIsLoader(false);
+            setIsNotify(true);
+            setNotifyMessage({
+              text: updateItem.data.message,
+              type: 'error',
+            });
           }
+        })
+        .catch((err: Error) => {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: err.message,
+            type: 'error',
+          });
         });
     } else {
       setIsLoader(false);
