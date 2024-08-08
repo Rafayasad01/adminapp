@@ -19,7 +19,7 @@ import TopBar from '../../components/common/TopBar';
 import { useAppSelector } from '../../redux/redux-hooks';
 import vouchersService from '../../services/adminapp/adminVouchers';
 import PermissionPopup from '../../utils/PermissionPopup';
-import { CURRENCY_PREFIX, NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
+import { ALL_PERMISSIONS, NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
 import { listingRolePermission } from '../../utils/helper';
 import VouchersPromoCreatePopup from './VouchersPromoCreatePopup';
 import VouchersPromoEditPopup from './VouchersPromoEditPopup';
@@ -69,7 +69,7 @@ function VouchersPage() {
   };
 
   const handleAddNew = () => {
-    if (listingRolePermission(dataRole, 'Voucher Create')) {
+    if (listingRolePermission(dataRole, ALL_PERMISSIONS.storeVoucher.add)) {
       setVouchersPromoDialog(true);
     } else {
       setIsNotify(true);
@@ -89,7 +89,7 @@ function VouchersPage() {
   const handleSelectedMenuClose = (option: string) => {
     setAnchorEl(null);
     if (option === 'Edit') {
-      if (listingRolePermission(dataRole, 'Voucher Update')) {
+      if (listingRolePermission(dataRole, ALL_PERMISSIONS.storeVoucher.edit)) {
         setVouchersPromoEditDialog(true);
       } else {
         setIsNotify(true);
@@ -100,7 +100,9 @@ function VouchersPage() {
       }
     }
     if (option === 'Delete') {
-      if (listingRolePermission(dataRole, 'Voucher Delete')) {
+      if (
+        listingRolePermission(dataRole, ALL_PERMISSIONS.storeVoucher.delete)
+      ) {
         setOpenDialog(true);
       } else {
         setIsNotify(true);
@@ -137,7 +139,7 @@ function VouchersPage() {
     setRowsPerPage(newRowPerPage);
     setPage(newPage);
     vouchersService
-      .listVouchers(authState.user.tenant, newPage, rowsPerPage, search)
+      .listVouchers(authState.user.tenant, newPage, newRowPerPage, search)
       .then((response) => {
         if (response.data.success) {
           setList(response.data.data.result);
@@ -147,7 +149,9 @@ function VouchersPage() {
   };
 
   useEffect(() => {
-    if (listingRolePermission(dataRole, 'Voucher List')) {
+    if (
+      listingRolePermission(dataRole, ALL_PERMISSIONS.storeVoucher.viewVouchers)
+    ) {
       vouchersService
         .listVouchers(authState.user.tenant, page, rowsPerPage, search)
         .then((response: any) => {
@@ -245,7 +249,7 @@ function VouchersPage() {
 
   const handleSwitchChange = (event: any, id: string) => {
     setIsLoader(true);
-    if (listingRolePermission(dataRole, 'Category Update Status')) {
+    if (listingRolePermission(dataRole, ALL_PERMISSIONS.storeVoucher.edit)) {
       const data = {
         id,
         isActive: event.target.checked,
@@ -369,8 +373,8 @@ function VouchersPage() {
                   <th>Min Withdrawl</th>
                   {/* <th>Type</th> */}
                   <th>Redeem</th>
-                  <th>Limitation</th>
                   <th>User Redeem</th>
+                  <th>Limitation</th>
                   <th>Status</th>
                   <th aria-label="empty table header">&nbsp;</th>
                 </tr>
@@ -387,37 +391,35 @@ function VouchersPage() {
                                 {item.voucherCode}
                               </span>
                               <span className="text-xs font-normal text-[#6A6A6A]">
-                                {item.type}
+                                {dayjs(item.createdDate).format(
+                                  'MMMM DD, YYYY'
+                                )}
                               </span>
                             </div>
                           </div>
                         </td>
                         <td>{dayjs(item.validFrom).format('MMMM DD, YYYY')}</td>
                         <td>{dayjs(item.validTill).format('MMMM DD, YYYY')}</td>
-                        <td>
-                          {CURRENCY_PREFIX} {Number(item.value)}
-                        </td>
-                        <td>
-                          {CURRENCY_PREFIX} {Number(item.minAmount)}
-                        </td>
+                        <td>{`${Number(item.value)} PKR`}</td>
+                        <td>{Number(item.minAmount)} PKR</td>
                         {/* <td>{item.discountType}</td> */}
                         <td>
                           {item.isUnlimitedRedeem
                             ? '0'
                             : `${item.maxRedeem} - ${item.redeemCount}`}
                         </td>
+                        <td>{item.maxUserRedeem}</td>
                         <td>
                           <span
                             className={`${
                               item.isUnlimitedRedeem
-                                ? 'badge badge-success'
-                                : 'badge badge-primary'
+                                ? 'badge badge-primary'
+                                : 'badge badge-success'
                             }`}
                           >
-                            {item.isUnlimitedRedeem ? 'unlimited' : 'limited'}
+                            {item.isUnlimitedRedeem ? 'limited' : 'unlimited'}
                           </span>
                         </td>
-                        <td>{item.maxUserRedeem}</td>
                         <td>
                           {item.status === 'Expired' ||
                           item.status === 'Deleted' ? (

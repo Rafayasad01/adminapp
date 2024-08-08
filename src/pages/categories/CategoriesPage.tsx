@@ -86,6 +86,8 @@ function CategoriesPage() {
           });
           // console.log('error::::::::', error);
         });
+    } else {
+      setIsLoader(false);
     }
   }, [null]);
 

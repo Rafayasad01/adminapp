@@ -18,6 +18,7 @@ import { useAppSelector } from '../../redux/redux-hooks';
 import notificationService from '../../services/adminapp/adminNotification';
 import AlertBox from '../../utils/Alert';
 import {
+  ALL_PERMISSIONS,
   NOTIFICATION_STATUS,
   NOT_AUTHORIZED_MESSAGE,
 } from '../../utils/constants';
@@ -46,7 +47,9 @@ function NotificationPage() {
   const [notifyMessage, setNotifyMessage] = useState({});
 
   const handleFormClickOpen = () => {
-    if (listingRolePermission(dataRole, 'Notification Sent')) {
+    if (
+      listingRolePermission(dataRole, ALL_PERMISSIONS.storeNotification.sent)
+    ) {
       setOpenFormDialog(true);
     } else {
       setIsNotify(true);
@@ -103,14 +106,14 @@ function NotificationPage() {
     setPage(newPage);
     if (search === '' || search === null || search === undefined) {
       notificationService
-        .getListService(authState.user.tenant, newPage, rowsPerPage)
+        .getListService(authState.user.tenant, newPage, newRowperPage)
         .then((item) => {
           setList(item.data.data.list);
           setTotal(item.data.data.total);
         });
     } else {
       notificationService
-        .searchService(authState.user.tenant, search, newPage, rowsPerPage)
+        .searchService(authState.user.tenant, search, newPage, newRowperPage)
         .then((item) => {
           setList(item.data.data.list);
           setTotal(item.data.data.total);
@@ -119,7 +122,12 @@ function NotificationPage() {
   };
 
   useEffect(() => {
-    if (listingRolePermission(dataRole, 'Notification List')) {
+    if (
+      listingRolePermission(
+        dataRole,
+        ALL_PERMISSIONS.storeNotification.viewNotifications
+      )
+    ) {
       notificationService
         .getListService(authState.user.tenant, page, rowsPerPage)
         .then((item: any) => {
@@ -199,7 +207,12 @@ function NotificationPage() {
   };
 
   const detailButtonHandler = (getItem: any, index: number) => {
-    if (listingRolePermission(dataRole, 'Notification Batch Detail')) {
+    if (
+      listingRolePermission(
+        dataRole,
+        ALL_PERMISSIONS.storeNotification.viewNotifications
+      )
+    ) {
       notificationService.batchDetailService(list[index].id).then((item) => {
         if (item.data.success) {
           setBatchDetail({ ...getItem, ...item.data.data });
@@ -325,12 +338,14 @@ function NotificationPage() {
                           </span>
                         </td>
                         <td aria-label="show detail button">
-                          <IconButton
-                            className="icon-btn mr-3.5 p-0"
-                            onClick={() => detailButtonHandler(item, index)}
-                          >
-                            <WysiwygOutlinedIcon />
-                          </IconButton>
+                          <div className="flex flex-row-reverse">
+                            <IconButton
+                              className="icon-btn mr-3.5 p-0"
+                              onClick={() => detailButtonHandler(item, index)}
+                            >
+                              <WysiwygOutlinedIcon />
+                            </IconButton>
+                          </div>
                         </td>
                       </tr>
                     );

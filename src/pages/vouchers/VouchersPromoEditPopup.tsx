@@ -4,9 +4,9 @@ import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
-import MenuItem from '@mui/material/MenuItem';
-import Select from '@mui/material/Select';
-import Switch from '@mui/material/Switch';
+// import MenuItem from '@mui/material/MenuItem';
+// import Select from '@mui/material/Select';
+// import Switch from '@mui/material/Switch';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
@@ -23,7 +23,7 @@ import CustomDateTimePicker from '../../components/common/CustomDateTimePicker';
 import ErrorSpanBox from '../../components/common/ErrorSpanBox';
 import { useAppSelector } from '../../redux/redux-hooks';
 import {
-  // PATTERN,
+  PATTERN,
   VALIDATE_NON_NEGATIVE_NUM,
   VALIDATE_NON_NEGATIVE_NUM_AND_CHECK_LENGTH,
 } from '../../utils/constants';
@@ -83,20 +83,20 @@ function VouchersPromoEditPopup({
   const handleFormClose = () => setVouchersPromoEditDialog(false);
   const [checked, setChecked] = useState(true);
 
-  const handleSwitchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setChecked(event.target.checked);
-  };
+  // const handleSwitchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   setChecked(event.target.checked);
+  // };
 
   const onSubmit = (data: UpdateVoucherFromData) => {
     handleFormClose();
     const updateVoucherPayload: UpdateVoucherPayload = {
-      type: data.type as 'Referral' | 'Promo',
-      discountType: data.discountType as 'Amount' | 'Percentage',
+      type: 'Promo',
+      discountType: 'Amount',
       voucherCode: data.voucherCode,
       value: +data.value,
       minAmount: +data.minAmount,
       maxRedeem: data.isUnlimitedRedeem ? 0 : data.maxRedeem,
-      isActive: data.isActive,
+      isActive: checked,
       backOfficeUser: authState.user.id,
       validFrom: dayjs(data.validFrom)?.format('YYYY-MM-DD HH:mm:ss'),
       validTill: dayjs(data.validTill)?.format('YYYY-MM-DD HH:mm:ss'),
@@ -111,6 +111,7 @@ function VouchersPromoEditPopup({
     if (watch('isUnlimitedRedeem')) {
       setValue('maxRedeem', 0);
     } else {
+      setValue('maxRedeem', item.maxRedeem);
       setValue('maxUserRedeem', '0');
     }
   }, [watch('isUnlimitedRedeem')]);
@@ -138,7 +139,7 @@ function VouchersPromoEditPopup({
               <span className="Title">Edit Voucher</span>
             </div>
             <div className="FormBody">
-              <div className="FormFields">
+              {/* <div className="FormFields">
                 <FormControl className="FormControl" variant="standard">
                   <label className="FormLabel">Coupon Type</label>
                   <Select
@@ -179,7 +180,7 @@ function VouchersPromoEditPopup({
                     <ErrorSpanBox error="Offer Type is required" />
                   )}
                 </FormControl>
-              </div>
+              </div> */}
               <div className="FormFields">
                 <FormControl className="FormControl" variant="standard">
                   <CustomDateTimePicker
@@ -202,7 +203,7 @@ function VouchersPromoEditPopup({
                   />
                 </FormControl>
               </div>
-              {/* <div className="FormFields">
+              <div className="FormFields">
                 <FormControl className="FormControl" variant="standard">
                   <label className="FormLabel">Coupon Code</label>
                   <Input
@@ -242,7 +243,7 @@ function VouchersPromoEditPopup({
                     <ErrorSpanBox error={errors?.value?.message} />
                   )}
                 </FormControl>
-              </div> */}
+              </div>
               <div className="FormFields">
                 <FormControl className="FormControl" variant="standard">
                   <label className="FormLabel">Min Amount</label>
@@ -291,9 +292,9 @@ function VouchersPromoEditPopup({
                   )}
                 </FormControl>
               </div>
-              <div className="FormField">
+              {/* <div className="FormField">
                 <FormControl className="FormControl" variant="standard">
-                  <label className="FormLabel mt-2">Status</label>
+                  <label className="FormLabel my-1 mt-2">Status</label>
                   <Switch
                     {...register('isActive')}
                     id="isActive"
@@ -304,7 +305,7 @@ function VouchersPromoEditPopup({
                     className="custom-switch"
                   />
                 </FormControl>
-              </div>
+              </div> */}
               <div className="FormField">
                 <FormControlLabel
                   control={

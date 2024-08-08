@@ -42,7 +42,7 @@ function ServicesPage() {
   const [editFormData, setEditFormData] = useState<any>(null);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [actionMenuItemid, setActionMenuItemid] = React.useState('');
-  const [isLoader, setIsLoader] = React.useState(true);
+  const [isLoader, setIsLoader] = React.useState(false);
   const [actionMenuAnchorEl, setActionMenuAnchorEl] =
     useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
@@ -87,6 +87,10 @@ function ServicesPage() {
             type: 'error',
           });
         });
+    } else {
+      console.log('S');
+
+      setIsLoader(false);
     }
   }, [null]);
 

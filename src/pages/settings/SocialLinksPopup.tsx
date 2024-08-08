@@ -11,6 +11,8 @@ import { SocialMedia } from '../../interfaces/app.interface';
 import { setItemState } from '../../redux/features/appSlice';
 import { useAppSelector } from '../../redux/redux-hooks';
 import adminService from '../../services/adminapp/admin';
+import { listingRolePermission } from '../../utils/helper';
+import { ALL_PERMISSIONS, NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
 
 type SocialLinksPopupProps = {
   openDialog: boolean;
@@ -29,6 +31,9 @@ function SocialLinksPopup({
 }: SocialLinksPopupProps) {
   const { register, handleSubmit } = useForm<SocialMedia>();
   const dispatch = useDispatch();
+  const dataRole = useAppSelector(
+    (state: any) => state?.persistedReducer?.roleState?.role?.permissions
+  );
   const authState: any = useAppSelector((state) => state?.authState);
 
   // const [isLoader, setIsLoader] = useState(true);
@@ -38,70 +43,80 @@ function SocialLinksPopup({
   const handleFormClose = () => setOpenDialog(false);
 
   const onSubmit = (data: SocialMedia) => {
-    setIsLoader(true);
-    // console.log('data', data);
-    setOpenDialog(false);
-    const formData = {
-      facebook: data.facebook ? data.facebook : null,
-      instagram: data.instagram ? data.instagram : null,
-      linkedin: data.linkedin ? data.linkedin : null,
-      twitter: data.twitter ? data.twitter : null,
-      youtube: data.youtube ? data.youtube : null,
-      whatsapp: data.whatsapp ? data.whatsapp : null,
-      updatedBy: authState.user.id,
-    };
-    adminService
-      .updateMediaService(authState.user.tenant, formData)
-      .then((item: any) => {
-        if (item.data.success) {
-          setIsLoader(false);
-          setIsNotify(true);
-          setNotifyMessage({
-            text: item.data.message,
-            type: 'success',
-          });
-          // console.log('item', item.data.data);
-          const tenantConfig: any = {
-            facebook: item.data.data.facebook,
-            instagram: item.data.data.instagram,
-            linkedin: item.data.data.linkedin,
-            twitter: item.data.data.twitter,
-            whatsapp: item.data.data.whatsapp,
-            youtube: item.data.data.youtube,
-          };
-
-          dispatch(setItemState({ tenantConfig }));
-          setDetail((prev: any) => {
-            return {
-              ...prev,
-              tenantConfig: {
-                ...prev.tenantConfig,
-                facebook: item.data.data.facebook,
-                instagram: item.data.data.instagram,
-                linkedin: item.data.data.linkedin,
-                twitter: item.data.data.twitter,
-                whatsapp: item.data.data.whatsapp,
-                youtube: item.data.data.youtube,
-              },
+    if (
+      listingRolePermission(dataRole, ALL_PERMISSIONS.storeSetting.editSetting)
+    ) {
+      setIsLoader(true);
+      // console.log('data', data);
+      setOpenDialog(false);
+      const formData = {
+        facebook: data.facebook ? data.facebook : null,
+        instagram: data.instagram ? data.instagram : null,
+        linkedin: data.linkedin ? data.linkedin : null,
+        twitter: data.twitter ? data.twitter : null,
+        youtube: data.youtube ? data.youtube : null,
+        whatsapp: data.whatsapp ? data.whatsapp : null,
+        updatedBy: authState.user.id,
+      };
+      adminService
+        .updateMediaService(authState.user.tenant, formData)
+        .then((item: any) => {
+          if (item.data.success) {
+            setIsLoader(false);
+            setIsNotify(true);
+            setNotifyMessage({
+              text: item.data.message,
+              type: 'success',
+            });
+            // console.log('item', item.data.data);
+            const tenantConfig: any = {
+              facebook: item.data.data.facebook,
+              instagram: item.data.data.instagram,
+              linkedin: item.data.data.linkedin,
+              twitter: item.data.data.twitter,
+              whatsapp: item.data.data.whatsapp,
+              youtube: item.data.data.youtube,
             };
-          });
-        } else {
+
+            dispatch(setItemState({ tenantConfig }));
+            setDetail((prev: any) => {
+              return {
+                ...prev,
+                tenantConfig: {
+                  ...prev.tenantConfig,
+                  facebook: item.data.data.facebook,
+                  instagram: item.data.data.instagram,
+                  linkedin: item.data.data.linkedin,
+                  twitter: item.data.data.twitter,
+                  whatsapp: item.data.data.whatsapp,
+                  youtube: item.data.data.youtube,
+                },
+              };
+            });
+          } else {
+            setIsLoader(false);
+            setIsNotify(true);
+            setNotifyMessage({
+              text: item.data.message,
+              type: 'error',
+            });
+          }
+        })
+        .catch((err) => {
           setIsLoader(false);
           setIsNotify(true);
           setNotifyMessage({
-            text: item.data.message,
+            text: err.message,
             type: 'error',
           });
-        }
-      })
-      .catch((err) => {
-        setIsLoader(false);
-        setIsNotify(true);
-        setNotifyMessage({
-          text: err.message,
-          type: 'error',
         });
+    } else {
+      setIsNotify(true);
+      setNotifyMessage({
+        text: NOT_AUTHORIZED_MESSAGE,
+        type: 'warning',
       });
+    }
   };
 
   return (

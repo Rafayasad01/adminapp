@@ -27,7 +27,7 @@ import promiseHandler, {
 // import Stack from '@mui/material/Stack';
 
 function OrdersPage() {
-  const authState: any = useAppSelector((state) => state?.authState);
+  const authState: any = useAppSelector((state: any) => state?.authState);
   const dataRole = useAppSelector(
     (state: any) => state?.persistedReducer?.roleState?.role?.permissions
   );
@@ -236,6 +236,8 @@ function OrdersPage() {
     }
     if (listingRolePermission(dataRole, 'Order List')) {
       getOrderList();
+    } else {
+      setIsLoader(false);
     }
   }, [null]);
 

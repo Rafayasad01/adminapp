@@ -10,7 +10,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Input from '@mui/material/Input';
 // import MenuItem from '@mui/material/MenuItem';
 // import Select from '@mui/material/Select';
-import Switch from '@mui/material/Switch';
+// import Switch from '@mui/material/Switch';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import dayjs from 'dayjs';
@@ -80,11 +80,11 @@ function VouchersPromoCreatePopup({
 
   const authState: any = useAppSelector((state) => state?.authState);
   const handleFormClose = () => setVouchersPromoDialog(false);
-  const [checked, setChecked] = React.useState(true);
+  // const [checked, setChecked] = React.useState(true);
 
-  const handleSwitchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setChecked(event.target.checked);
-  };
+  // const handleSwitchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   setChecked(event.target.checked);
+  // };
 
   const onSubmit = (data: CreateVoucherFromData) => {
     handleFormClose();
@@ -95,7 +95,7 @@ function VouchersPromoCreatePopup({
       value: +data.value,
       minAmount: +data.minAmount,
       maxRedeem: data.isUnlimitedRedeem ? 0 : data.maxRedeem,
-      isActive: data.isActive,
+      isActive: true,
       backOfficeUser: authState.user.id,
       validFrom: dayjs(data.validFrom)?.format('YYYY-MM-DD HH:mm:ss'),
       validTill: dayjs(data.validTill)?.format('YYYY-MM-DD HH:mm:ss'),
@@ -105,8 +105,6 @@ function VouchersPromoCreatePopup({
     callback(createVoucherPayload);
     // reset();
   };
-
-  console.log('ERRORS', errors);
 
   useEffect(() => {
     if (watch('isUnlimitedRedeem')) {
@@ -132,8 +130,8 @@ function VouchersPromoCreatePopup({
               <span className="Title">Add Voucher</span>
             </div>
             <div className="FormBody">
-              {/* <div className="FormFields">
-                <FormControl className="FormControl" variant="standard">
+              <div className="FormFields">
+                {/* <FormControl className="FormControl" variant="standard">
                   <label className="FormLabel">Coupon Type</label>
                   <Select
                     {...register('type', { required: true })}
@@ -158,8 +156,8 @@ function VouchersPromoCreatePopup({
                       Coupon Type is required
                     </span>
                   )}
-                </FormControl>
-                <FormControl className="FormControl" variant="standard">
+                </FormControl> */}
+                {/* <FormControl className="FormControl" variant="standard">
                   <label className="FormLabel">Offer Type</label>
                   <Select
                     {...register('discountType', { required: true })}
@@ -185,8 +183,8 @@ function VouchersPromoCreatePopup({
                       Offer Type is required
                     </span>
                   )}
-                </FormControl>
-              </div> */}
+                </FormControl> */}
+              </div>
               <div className="FormFields">
                 <FormControl className="FormControl" variant="standard">
                   <CustomDateTimePicker
@@ -284,9 +282,7 @@ function VouchersPromoCreatePopup({
                           ? 'Max Redeem is required in numbers'
                           : false,
                       validate: (value: any) =>
-                        watch('isUnlimitedRedeem') === false
-                          ? VALIDATE_NON_NEGATIVE_NUM_AND_CHECK_LENGTH(value, 0)
-                          : true,
+                        VALIDATE_NON_NEGATIVE_NUM_AND_CHECK_LENGTH(value, 0),
                     })}
                     disabled={watch('isUnlimitedRedeem')}
                     className="FormInput"
@@ -304,9 +300,9 @@ function VouchersPromoCreatePopup({
                 </FormControl>
                 {/* } */}
               </div>
-              <div className="FormField">
+              {/* <div className="FormField">
                 <FormControl className="FormControl" variant="standard">
-                  <label className="FormLabel mt-2">Status</label>
+                  <label className="FormLabel my-1 mt-2">Status</label>
                   <Switch
                     {...register('isActive')}
                     checked={checked}
@@ -317,7 +313,7 @@ function VouchersPromoCreatePopup({
                     className="custom-switch"
                   />
                 </FormControl>
-              </div>
+              </div> */}
               <div className="FormField">
                 <FormControlLabel
                   control={

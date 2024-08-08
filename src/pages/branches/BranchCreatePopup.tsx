@@ -2,8 +2,8 @@ import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
-import InputAdornment from '@mui/material/InputAdornment';
-import TextField from '@mui/material/TextField';
+// import InputAdornment from '@mui/material/InputAdornment';
+// import TextField from '@mui/material/TextField';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import '../../assets/css/PopupStyle.css';
@@ -12,8 +12,8 @@ import ErrorSpanBox from '../../components/common/ErrorSpanBox';
 import { Tenant } from '../../interfaces/superadmin/tenant.interface';
 import { useAppSelector } from '../../redux/redux-hooks';
 import {
-  DOMAIN_PREFIX,
-  DOMAIN_PROTOCOL,
+  // DOMAIN_PREFIX,
+  // DOMAIN_PROTOCOL,
   INVALID_CHAR,
   MAX_LENGTH_EXCEEDED,
   PATTERN,
@@ -54,7 +54,7 @@ function BranchCreatePopup({
       tenantName: data.tenantName,
       address: data.address,
       // domainWebapp: data.domainWebapp,
-      domain: data.domain,
+      // domain: data.domain,
       userLimit: data.userLimit,
       userId: authState.user.id,
       // enableLoyaltyProgram: data.enableLoyaltyProgram,
@@ -78,28 +78,18 @@ function BranchCreatePopup({
     setOpenFormDialog(false);
   };
 
-  // const debouceRequest = debounce((value) => {
-  //   setValue('domain', `devadminapp-${kabakCase(value)}`);
-  //   // setValue('domainWebapp', `devwebapp-${kabakCase(value)}`);
-  // }, 1000);
-
-  // const shopFieldHangler = (val: any) => {
-  //   debouceRequest(val);
-  // };
-
   return (
     <Dialog
       open={openFormDialog}
       onClose={handleFormClose}
-      // scroll='paper'
-      // disableScrollLock
+      scroll="paper"
+      disableScrollLock
       PaperProps={{
         className: 'Dialog',
-        style: { maxWidth: '100%', minHeight: '400px', height: '400px' },
       }}
     >
-      <div className="Content p-3">
-        <form onSubmit={handleSubmit(onSubmit)} className="overflow-auto px-2">
+      <div className="Content">
+        <form onSubmit={handleSubmit(onSubmit)} className="">
           <div className="FormHeader">
             <span className="Title">{type ? 'Add Branch' : 'Add Shop'}</span>
           </div>
@@ -252,7 +242,7 @@ function BranchCreatePopup({
                 )}
               </FormControl>
             </div>
-            <div className="FormField">
+            {/* <div className="FormField">
               <FormControl className="FormControl" variant="standard">
                 <label className="FormLabel">Domain</label>
                 <TextField
@@ -288,7 +278,7 @@ function BranchCreatePopup({
                   <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
                 )}
               </FormControl>
-            </div>
+            </div> */}
             {/* <div className="FormField mb-4">
               <FormControl className="FormControl" variant="standard">
                 <label className="FormLabel">Web-App Domain</label>

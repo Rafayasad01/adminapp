@@ -52,8 +52,8 @@ function AppUserAddressTabPage({
   ];
 
   useEffect(() => {
+    setIsLoader(false);
     if (addressList?.length > 0) {
-      setIsLoader(false);
       setList(addressList);
     }
   }, ['']);

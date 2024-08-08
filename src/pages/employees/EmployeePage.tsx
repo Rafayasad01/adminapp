@@ -25,7 +25,11 @@ import { AppUserEmployees } from '../../interfaces/app-user.interface';
 import { useAppSelector } from '../../redux/redux-hooks';
 import employeeService from '../../services/adminapp/adminEmployee';
 import PermissionPopup from '../../utils/PermissionPopup';
-import { NOT_AUTHORIZED_MESSAGE, PATTERN } from '../../utils/constants';
+import {
+  ALL_PERMISSIONS,
+  NOT_AUTHORIZED_MESSAGE,
+  PATTERN,
+} from '../../utils/constants';
 import { listingRolePermission } from '../../utils/helper';
 
 function EmployeePage() {
@@ -115,7 +119,9 @@ function EmployeePage() {
   ];
 
   const handleFormClickOpen = () => {
-    if (listingRolePermission(dataRole, 'Employee Create')) {
+    if (
+      listingRolePermission(dataRole, ALL_PERMISSIONS.storeUser.addUserEmployee)
+    ) {
       if (total < employeeLimit) {
         setOpenFormDialog(true);
       } else {
@@ -250,7 +256,12 @@ function EmployeePage() {
 
   const manuHandler = (option: string) => {
     if (option === 'Edit') {
-      if (listingRolePermission(dataRole, 'Employee Update')) {
+      if (
+        listingRolePermission(
+          dataRole,
+          ALL_PERMISSIONS.storeUser.editUserEmployee
+        )
+      ) {
         setIsLoader(true);
         employeeService.getService(actionMenuItemid).then((item: any) => {
           if (item.data.success) {
@@ -271,7 +282,12 @@ function EmployeePage() {
         });
       }
     } else if (option === 'Delete') {
-      if (listingRolePermission(dataRole, 'Employee delete')) {
+      if (
+        listingRolePermission(
+          dataRole,
+          ALL_PERMISSIONS.storeUser.deleteUserEmployee
+        )
+      ) {
         setIsLoader(true);
         const data = {
           updatedBy: authState.user.id,
@@ -313,7 +329,12 @@ function EmployeePage() {
   };
 
   useEffect(() => {
-    if (listingRolePermission(dataRole, 'Employee List')) {
+    if (
+      listingRolePermission(
+        dataRole,
+        ALL_PERMISSIONS.storeUser.viewUserEmployee
+      )
+    ) {
       employeeService
         .getListService(authState.user.tenant, page, rowsPerPage)
         .then((item: any) => {
@@ -454,7 +475,12 @@ function EmployeePage() {
   };
 
   const handleSwitchChange = (event: any, id: string) => {
-    if (listingRolePermission(dataRole, 'Employee Update Status')) {
+    if (
+      listingRolePermission(
+        dataRole,
+        ALL_PERMISSIONS.storeUser.editUserEmployee
+      )
+    ) {
       const data = {
         isActive: event.target.checked,
         updatedBy: authState.user.id,
