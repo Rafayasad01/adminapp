@@ -123,7 +123,7 @@ function OrdersPage() {
       const getOrderListPromise = orderService.getListService(
         authState.user.tenant,
         newPage,
-        newRowPerPage
+        rowsPerPage
       );
       const [getOrderListResult, getOrderListError, getOrderListOk] =
         await promiseHandler(getOrderListPromise);
@@ -243,11 +243,7 @@ function OrdersPage() {
     ) {
       getOrderList();
     } else {
-      setIsNotify(true);
-      setNotifyMessage({
-        text: NOT_AUTHORIZED_MESSAGE,
-        type: 'warning',
-      });
+      setIsLoader(false);
     }
   }, [null]);
 
@@ -315,7 +311,7 @@ function OrdersPage() {
         setIsOpen={setIsNotify}
         displayMessage={notifyMessage}
       />
-      <TopBar title="Orders" />
+      <TopBar title="Orders Service" />
       <div className="container m-auto mt-5">
         <div className="w-full rounded-lg bg-white shadow-lg">
           <div className="grid grid-cols-12 px-4 py-5">
@@ -386,10 +382,10 @@ function OrdersPage() {
               <thead>
                 <tr className="border-opacity">
                   <th className="w-[22%]">Customers</th>
-                  <th>Order Date</th>
-                  {/* <th>Drop-off Time</th> */}
+                  <th>Pickup Time</th>
+                  <th>Drop-off Time</th>
                   <th>Amount</th>
-                  <th className="w-36">Status</th>
+                  <th className="w-60">Status</th>
                   <th>Order ID</th>
                   <th aria-label="empty table header">&nbsp;</th>
                 </tr>
@@ -415,16 +411,20 @@ function OrdersPage() {
                         <td>
                           <div className="flex flex-col">
                             <span className="text-sm font-normal text-secondary">
-                              {dayjs(Item.createdDate)?.format('hh:mm:ssA')}
+                              {dayjs(Item.pickupDateTime)?.format('hh:mm:ssA')}{' '}
+                              -{' '}
+                              {dayjs(Item.pickupDateTime)
+                                .add(1, 'hour')
+                                .format('hh:mm:ssA')}
                             </span>
                             <span className="text-xs font-normal text-[#6A6A6A]">
-                              {dayjs(Item.createdDate)?.format(
+                              {dayjs(Item.pickupDateTime)?.format(
                                 'ddd, MMM DD, YYYY'
                               )}
                             </span>
                           </div>
                         </td>
-                        {/* <td>
+                        <td>
                           <div className="flex flex-col">
                             <span className="text-sm font-normal text-secondary">
                               {dayjs(Item.dropDateTime)?.format('hh:mm:ssA')} -{' '}
@@ -438,7 +438,7 @@ function OrdersPage() {
                               )}
                             </span>
                           </div>
-                        </td> */}
+                        </td>
                         <td className="text-sm font-semibold text-secondary">
                           PKR {Item.grandTotal}
                         </td>
@@ -452,7 +452,7 @@ function OrdersPage() {
                           </span>
                         </td>
                         <td>{Item.orderNumber}</td>
-                        <td aria-label="go to reviews">
+                        <td>
                           <div className="flex flex-row-reverse">
                             <IconButton
                               className="icon-btn"

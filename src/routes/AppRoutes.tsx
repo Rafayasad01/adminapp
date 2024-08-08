@@ -41,14 +41,19 @@ import LocationsPage from '../pages/locations/LocationsPage';
 import NotAuthorized from '../pages/notAuthorized/notAuthorized';
 import NotificationPage from '../pages/notification/NotificationPage';
 import AddNewOrder from '../pages/orders/AddNewOrder';
+import AddNewOrderService from '../pages/ordersService/AddNewOrder';
 import DriverHistory from '../pages/orders/DriverHistory';
+import DriverHistoryService from '../pages/ordersService/DriverHistory';
 import OrderBasket from '../pages/orders/OrderBasket';
+import OrderBasketService from '../pages/ordersService/OrderBasket';
+import OrderDetailsServicePage from '../pages/ordersService/OrderDetailsPage';
 import OrderDetailsPage from '../pages/orders/OrderDetailsPage';
 import OrderItemDetailPage from '../pages/orders/OrderItemDetailPage';
 import OrdersAssignPage from '../pages/orders/OrdersAssignPage';
 // import OrdersCreatePage from '../pages/orders/OrdersCreatePage';
 import OrdersEditPage from '../pages/orders/OrdersEditPage';
 import OrdersPage from '../pages/orders/OrdersPage';
+import OrderServicePage from '../pages/ordersService/OrdersPage';
 import ProfilePage from '../pages/profile/ProfilePage';
 import RatingPage from '../pages/rating/RatingPage';
 import RatingReviewsPage from '../pages/rating/RatingReviewsPage';
@@ -594,6 +599,11 @@ export const routeObjects: RouteObject[] = [
                         path: 'orders',
                         condition: ALL_PERMISSIONS.storeProduct.viewOrders,
                       },
+                      // {
+                      //   path: 'orders',
+                      //   condition:
+                      //     ALL_PERMISSIONS.storeProduct.viewServiceOrder,
+                      // },
                       {
                         path: 'ratings',
                         condition: ALL_PERMISSIONS.storeProduct.viewRatings,
@@ -651,6 +661,18 @@ export const routeObjects: RouteObject[] = [
                     ),
                     // element: <OrdersPage />,
                   },
+                  // {
+                  //   index: true,
+                  //   element: (
+                  //     <ProtectedRoute
+                  //       page={<OrderServicePage />}
+                  //       condition={
+                  //         ALL_PERMISSIONS.storeProduct.viewServiceOrder
+                  //       }
+                  //     />
+                  //   ),
+                  //   // element: <OrdersPage />,
+                  // },
                   {
                     path: 'create',
                     element: (
@@ -706,6 +728,170 @@ export const routeObjects: RouteObject[] = [
                     ),
                     // element: <RatingReviewsPage />,
                   },
+                ],
+              },
+            ],
+          },
+          {
+            path: 'store-service',
+            children: [
+              {
+                index: true,
+                element: (
+                  <GetInitialRoute
+                    routes={[
+                      {
+                        path: 'product',
+                        condition: ALL_PERMISSIONS.storeProduct.view,
+                      },
+                      {
+                        path: 'orders',
+                        condition: ALL_PERMISSIONS.storeProduct.viewOrders,
+                      },
+                      {
+                        path: 'drivers',
+                        condition:
+                          ALL_PERMISSIONS.storeProduct.viewDriverHistory,
+                      },
+                      {
+                        path: 'ratings',
+                        condition: ALL_PERMISSIONS.storeProduct.viewRatings,
+                      },
+                    ]}
+                  />
+                ),
+                // element: <Navigate to="product" replace />,
+              },
+              {
+                path: 'product',
+                children: [
+                  {
+                    index: true,
+                    element: (
+                      <ProtectedRoute
+                        page={<CategoriesPage />}
+                        condition={ALL_PERMISSIONS.storeProduct.view}
+                      />
+                    ),
+                    // element: <CategoriesPage />,
+                  },
+                  {
+                    path: 'item/:productId',
+                    element: (
+                      <ProtectedRoute
+                        page={<CategoriesServicesPage />}
+                        condition={ALL_PERMISSIONS.storeProduct.view}
+                      />
+                    ),
+                    // element: <CategoriesServicesPage />,
+                  },
+                  {
+                    path: 'item/faq/:categoryServiceId',
+                    element: (
+                      <ProtectedRoute
+                        page={<CategoriesServicesFaqPage />}
+                        condition={ALL_PERMISSIONS.storeProduct.view}
+                      />
+                    ),
+                    // element: <CategoriesServicesFaqPage />,
+                  },
+                ],
+              },
+              {
+                path: 'orders',
+                children: [
+                  {
+                    index: true,
+                    element: (
+                      <ProtectedRoute
+                        page={<OrderServicePage />}
+                        condition={ALL_PERMISSIONS.storeProduct.viewOrder}
+                      />
+                    ),
+                    // element: <OrdersPage />,
+                  },
+                  {
+                    path: 'create',
+                    element: (
+                      <ProtectedRoute
+                        page={<AddNewOrderService />}
+                        condition={ALL_PERMISSIONS.storeProduct.addOrder}
+                      />
+                    ),
+                    // element: <AddNewOrder />,
+                  },
+                  {
+                    path: 'detail/:orderId',
+                    element: (
+                      <ProtectedRoute
+                        page={<OrderDetailsServicePage />}
+                        condition={ALL_PERMISSIONS.storeProduct.viewOrder}
+                      />
+                    ),
+                    // element: <OrderDetailsPage />,
+                  },
+                  {
+                    path: 'basket',
+                    element: (
+                      <ProtectedRoute
+                        page={<OrderBasketService />}
+                        condition={ALL_PERMISSIONS.storeProduct.addOrder}
+                      />
+                    ),
+                    // element: <OrderBasket />,
+                  },
+                ],
+              },
+              {
+                path: 'ratings',
+                children: [
+                  {
+                    index: true,
+                    element: (
+                      <ProtectedRoute
+                        page={<RatingPage />}
+                        condition={ALL_PERMISSIONS.storeProduct.viewRating}
+                      />
+                    ),
+                    // element: <RatingPage />,
+                  },
+                  {
+                    path: 'reviews/:itemId',
+                    element: (
+                      <ProtectedRoute
+                        page={<RatingReviewsPage />}
+                        condition={ALL_PERMISSIONS.storeProduct.viewRating}
+                      />
+                    ),
+                    // element: <RatingReviewsPage />,
+                  },
+                ],
+              },
+              {
+                path: 'drivers',
+                children: [
+                  {
+                    index: true,
+                    element: (
+                      <ProtectedRoute
+                        page={<DriverHistoryService />}
+                        condition={
+                          ALL_PERMISSIONS.storeProduct.viewDriverHistory
+                        }
+                      />
+                    ),
+                    // element: <RatingPage />,
+                  },
+                  // {
+                  //   path: 'reviews/:itemId',
+                  //   element: (
+                  //     <ProtectedRoute
+                  //       page={<RatingReviewsPage />}
+                  //       condition={ALL_PERMISSIONS.storeProduct.viewRating}
+                  //     />
+                  //   ),
+                  //   // element: <RatingReviewsPage />,
+                  // },
                 ],
               },
             ],

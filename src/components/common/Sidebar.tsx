@@ -24,6 +24,7 @@ import Stack from '@mui/material/Stack';
 import Toolbar from '@mui/material/Toolbar';
 import { Fragment, useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
+import DriverIcon from '../icons/DriverIcon';
 import assets from '../../assets';
 import { useAppSelector } from '../../redux/redux-hooks';
 import CAN, { defineRules } from '../../services/permissions/permissions';
@@ -115,6 +116,38 @@ const links = [
         path: 'store-product/ratings',
         permission: ALL_PERMISSIONS.storeProduct.viewRatings,
         icon: <ViewCarouselOutlinedIcon className="w-[17px]" />,
+      },
+    ],
+  },
+  {
+    name: 'Store Services',
+    path: 'store-service',
+    permission: ALL_PERMISSIONS.storeProduct.viewServices,
+    icon: <Inventory2OutlinedIcon fontSize="inherit" />,
+    childLinks: [
+      {
+        name: 'Services',
+        path: 'store-service/product',
+        permission: ALL_PERMISSIONS.storeProduct.view,
+        icon: <CategoryIcon />,
+      },
+      {
+        name: 'Orders',
+        path: 'store-service/orders',
+        permission: ALL_PERMISSIONS.storeProduct.viewOrders,
+        icon: <OrderIcon />,
+      },
+      {
+        name: 'Rating',
+        path: 'store-service/ratings',
+        permission: ALL_PERMISSIONS.storeProduct.viewRatings,
+        icon: <ViewCarouselOutlinedIcon className="w-[17px]" />,
+      },
+      {
+        name: 'Driver History',
+        path: 'store-service/drivers',
+        permission: ALL_PERMISSIONS.storeProduct.viewDriverHistory,
+        icon: <DriverIcon />,
       },
     ],
   },
@@ -360,7 +393,9 @@ function Sidebar() {
             // Filter child links
             if (link.childLinks) {
               const filteredChildLinks = link.childLinks.filter(
-                (childLink: any) => CAN('canView', childLink.permission)
+                (childLink: any) =>
+                  CAN('canView', childLink.permission) &&
+                  CAN('canView', link.permission)
               );
 
               // Include parent link if it has visible child links or passes its own permission
@@ -389,7 +424,6 @@ function Sidebar() {
       });
 
       setList(tempList);
-      // console.log('🚀 ~ useEffect ~ tempList:', tempList);
     }
   }, [permissions, appItems?.employeeLimit, authState]);
 
