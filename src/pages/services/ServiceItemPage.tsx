@@ -12,6 +12,7 @@ import Switch from '@mui/material/Switch';
 import TablePagination from '@mui/material/TablePagination';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import dayjs from 'dayjs';
 import ActionMenu from '../../components/common/ActionMenu';
 import CustomText from '../../components/common/CustomText';
 import Loader from '../../components/common/Loader';
@@ -19,7 +20,7 @@ import Notify from '../../components/common/Notify';
 import TopBar from '../../components/common/TopBar';
 import { useAppSelector } from '../../redux/redux-hooks';
 import storeService from '../../services/adminapp/adminStoreService';
-import { NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
+import { ALL_PERMISSIONS, NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
 import { listingRolePermission } from '../../utils/helper';
 import ServiceItemCreatePopup from './ServiceItemCreatePopup';
 import ServiceItemEditPopup from './ServiceItemEditPopup';
@@ -87,7 +88,12 @@ function ServiceItemPage() {
   };
 
   const handleAddNew = () => {
-    if (listingRolePermission(dataRole, 'Category Service Create')) {
+    if (
+      listingRolePermission(
+        dataRole,
+        ALL_PERMISSIONS.storeAppointment.addService
+      )
+    ) {
       setOpenFormDialog(true);
     } else {
       setIsNotify(true);
@@ -106,7 +112,7 @@ function ServiceItemPage() {
     setRowsPerPage(newRowperPage);
     setPage(newPage);
     storeService
-      .StoreCatItemsList(CatId, search, newPage, rowsPerPage)
+      .StoreCatItemsList(CatId, search, newPage, newRowperPage)
       .then((item) => {
         setList(item.data.data.list);
         setTotal(item.data.data.total);
@@ -114,15 +120,18 @@ function ServiceItemPage() {
   };
 
   useEffect(() => {
-    if (listingRolePermission(dataRole, 'Category Service List')) {
+    if (
+      listingRolePermission(
+        dataRole,
+        ALL_PERMISSIONS.storeAppointment.viewServices
+      )
+    ) {
       storeService
         .StoreCatItemsList(CatId, search, page, rowsPerPage)
         .then((item: any) => {
-          if (listingRolePermission(dataRole, 'Category Service Get')) {
-            setIsLoader(false);
-            setList(item.data.data.list);
-            setTotal(item.data.data.total);
-          }
+          setIsLoader(false);
+          setList(item.data.data.list);
+          setTotal(item.data.data.total);
         })
         .catch((error) => {
           setIsLoader(false);
@@ -173,7 +182,12 @@ function ServiceItemPage() {
 
   const manuHandler = (option: string) => {
     if (option === 'Edit') {
-      if (listingRolePermission(dataRole, 'Category Service Update')) {
+      if (
+        listingRolePermission(
+          dataRole,
+          ALL_PERMISSIONS.storeAppointment.editService
+        )
+      ) {
         const editFormDatas = list?.find(
           (el: any) => el.id === actionMenuItemid
         );
@@ -188,7 +202,12 @@ function ServiceItemPage() {
         });
       }
     } else if (option === 'Delete') {
-      if (listingRolePermission(dataRole, 'Category Service Delete')) {
+      if (
+        listingRolePermission(
+          dataRole,
+          ALL_PERMISSIONS.storeAppointment.deleteService
+        )
+      ) {
         setCancelDialogOpen(true);
       } else {
         setIsNotify(true);
@@ -205,6 +224,8 @@ function ServiceItemPage() {
     const formData = new FormData();
     formData.append('name', data.name);
     formData.append('price', data.price);
+    formData.append('serviceTime', data.serviceTime);
+    // formData.append('serviceType', data.serviceType);
     formData.append('description', data.description);
     formData.append('avatar', data.avatar);
     formData.append('storeServiceCategory', CatId);
@@ -212,6 +233,7 @@ function ServiceItemPage() {
       .StoreCatItemsCreate(formData)
       .then((item) => {
         if (item.data.success) {
+          setOpenFormDialog(false);
           setIsLoader(false);
           setIsNotify(true);
           setNotifyMessage({
@@ -243,6 +265,8 @@ function ServiceItemPage() {
     const formData = new FormData();
     formData.append('name', data.name);
     formData.append('price', data.price);
+    formData.append('serviceTime', data.serviceTime);
+    // formData.append('serviceType', data.serviceType);
     formData.append('description', data.description);
     if (data.avatar) formData.append('avatar', data.avatar);
     storeService
@@ -260,6 +284,8 @@ function ServiceItemPage() {
               list[i].name = updateItem.data.data.name;
               list[i].description = updateItem.data.data.description;
               list[i].price = updateItem.data.data.price;
+              list[i].serviceTime = updateItem.data.data.serviceTime;
+              // list[i].serviceType = updateItem.data.data.serviceType;
               if (updateItem.data.data.avatar) {
                 list[i].avatar = updateItem.data.data.avatar;
               }
@@ -285,7 +311,12 @@ function ServiceItemPage() {
   };
 
   const handleSwitchChange = (event: any, id: string) => {
-    if (listingRolePermission(dataRole, 'Category Service Update Status')) {
+    if (
+      listingRolePermission(
+        dataRole,
+        ALL_PERMISSIONS.storeAppointment.editService
+      )
+    ) {
       // setIsLoader(true);
       const data = {
         isActive: event.target.checked,
@@ -321,6 +352,17 @@ function ServiceItemPage() {
     setModalImage('');
     setIsModalImage(false);
   };
+
+  function convertMinutesToHours(minutes: any) {
+    const duration = dayjs.duration(minutes, 'minutes');
+    const hours = Math.floor(duration.asHours()); // Extract the whole number of hours
+    const remainingMinutes = duration.minutes(); // Get the remaining minutes
+
+    const formattedHours = String(hours).padStart(2, '0');
+    const formattedMinutes = String(remainingMinutes).padStart(2, '0');
+
+    return `${formattedHours}:${formattedMinutes}`;
+  }
 
   return isLoader ? (
     <Loader />
@@ -387,8 +429,9 @@ function ServiceItemPage() {
               <thead>
                 <tr>
                   <th className="w-[20%]">Item Name</th>
-                  <th className="w-[50%]">Description</th>
-                  {/* <th>Min Quantity</th> */}
+                  <th className="w-[25%]">Description</th>
+                  <th>Service Time</th>
+                  <th>Service Type</th>
                   <th>Price</th>
                   <th>Status</th>
                   <th>&nbsp;</th>
@@ -398,7 +441,7 @@ function ServiceItemPage() {
                 {list &&
                   list.map((item: any, index: number) => {
                     return (
-                      <tr key={item.id}>
+                      <tr key={index}>
                         <td>
                           <div className="avatar flex flex-row items-center">
                             <button onClick={() => openModal(item.icon)}>
@@ -416,7 +459,10 @@ function ServiceItemPage() {
                           </div>
                         </td>
                         <td>{item.description ? item.description : '--'}</td>
-                        {/* <td>{item.quantity}</td> */}
+                        <td>
+                          {convertMinutesToHours(item.serviceTime) ?? '--'}
+                        </td>
+                        <td>{item.serviceType ?? '--'}</td>
                         <td>{item.price}</td>
                         <td>
                           {item.isActive ? (
@@ -451,7 +497,7 @@ function ServiceItemPage() {
                               checked={!!item.isActive}
                               onChange={(
                                 event: React.ChangeEvent<HTMLInputElement>
-                              ) => handleSwitchChange(event, list[index].id)}
+                              ) => handleSwitchChange(event, item.id)}
                               inputProps={{ 'aria-label': 'controlled' }}
                             />
                           </div>

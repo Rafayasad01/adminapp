@@ -13,11 +13,14 @@ function App() {
   const dispatch = useAppDispatch();
   const { showBoundary } = useErrorBoundary();
   const [isPageLoader, setIsPageLoader] = useState(true);
-  // if (process.env.NODE_ENV === 'production') {
-  //   console.log = () => {};
-  //   console.error = () => {};
-  //   console.warn = () => {};
-  // }
+  if (
+    process.env.NODE_ENV === 'production' ||
+    process.env.NODE_ENV === 'staging'
+  ) {
+    console.log = () => {};
+    console.error = () => {};
+    console.warn = () => {};
+  }
 
   const getDomain = () => {
     const domain = window.location.hostname;

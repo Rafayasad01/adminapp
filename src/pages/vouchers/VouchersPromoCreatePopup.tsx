@@ -8,9 +8,9 @@ import Dialog from '@mui/material/Dialog';
 import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Input from '@mui/material/Input';
-import MenuItem from '@mui/material/MenuItem';
-import Select from '@mui/material/Select';
-import Switch from '@mui/material/Switch';
+// import MenuItem from '@mui/material/MenuItem';
+// import Select from '@mui/material/Select';
+// import Switch from '@mui/material/Switch';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import dayjs from 'dayjs';
@@ -80,22 +80,22 @@ function VouchersPromoCreatePopup({
 
   const authState: any = useAppSelector((state) => state?.authState);
   const handleFormClose = () => setVouchersPromoDialog(false);
-  const [checked, setChecked] = React.useState(true);
+  // const [checked, setChecked] = React.useState(true);
 
-  const handleSwitchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setChecked(event.target.checked);
-  };
+  // const handleSwitchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   setChecked(event.target.checked);
+  // };
 
   const onSubmit = (data: CreateVoucherFromData) => {
     handleFormClose();
     const createVoucherPayload: CreateVoucherPayload = {
-      type: data.type as 'Referral' | 'Promo',
-      discountType: data.discountType as 'Amount' | 'Percentage',
+      type: 'Promo',
+      discountType: 'Amount',
       voucherCode: data.voucherCode,
       value: +data.value,
       minAmount: +data.minAmount,
       maxRedeem: data.isUnlimitedRedeem ? 0 : data.maxRedeem,
-      isActive: data.isActive,
+      isActive: true,
       backOfficeUser: authState.user.id,
       validFrom: dayjs(data.validFrom)?.format('YYYY-MM-DD HH:mm:ss'),
       validTill: dayjs(data.validTill)?.format('YYYY-MM-DD HH:mm:ss'),
@@ -131,7 +131,7 @@ function VouchersPromoCreatePopup({
             </div>
             <div className="FormBody">
               <div className="FormFields">
-                <FormControl className="FormControl" variant="standard">
+                {/* <FormControl className="FormControl" variant="standard">
                   <label className="FormLabel">Coupon Type</label>
                   <Select
                     {...register('type', { required: true })}
@@ -156,8 +156,8 @@ function VouchersPromoCreatePopup({
                       Coupon Type is required
                     </span>
                   )}
-                </FormControl>
-                <FormControl className="FormControl" variant="standard">
+                </FormControl> */}
+                {/* <FormControl className="FormControl" variant="standard">
                   <label className="FormLabel">Offer Type</label>
                   <Select
                     {...register('discountType', { required: true })}
@@ -183,7 +183,7 @@ function VouchersPromoCreatePopup({
                       Offer Type is required
                     </span>
                   )}
-                </FormControl>
+                </FormControl> */}
               </div>
               <div className="FormFields">
                 <FormControl className="FormControl" variant="standard">
@@ -300,9 +300,9 @@ function VouchersPromoCreatePopup({
                 </FormControl>
                 {/* } */}
               </div>
-              <div className="FormField">
+              {/* <div className="FormField">
                 <FormControl className="FormControl" variant="standard">
-                  <label className="FormLabel">Status</label>
+                  <label className="FormLabel my-1 mt-2">Status</label>
                   <Switch
                     {...register('isActive')}
                     checked={checked}
@@ -310,9 +310,10 @@ function VouchersPromoCreatePopup({
                     name="isActive"
                     onChange={handleSwitchChange}
                     inputProps={{ 'aria-label': 'controlled' }}
+                    className="custom-switch"
                   />
                 </FormControl>
-              </div>
+              </div> */}
               <div className="FormField">
                 <FormControlLabel
                   control={

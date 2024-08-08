@@ -313,8 +313,18 @@ function WorkDaysForm({
               return (
                 <tr key={d.day}>
                   <th>{d.day}</th>
-                  <td> {d.openTime?.format('h:mm A') || '--'} </td>
-                  <td> {d.closeTime?.format('h:mm A') || '--'} </td>
+                  <td>
+                    {' '}
+                    {dayjs(d.openTime).isValid()
+                      ? d.openTime?.format('h:mm A')
+                      : '--'}{' '}
+                  </td>
+                  <td>
+                    {' '}
+                    {dayjs(d.closeTime).isValid()
+                      ? d.closeTime?.format('h:mm A')
+                      : '--'}{' '}
+                  </td>
                   {/* <td>
                     {d.breakTime && d.breakTime?.isValid()
                       ? d.breakTime?.format('h:mm A')

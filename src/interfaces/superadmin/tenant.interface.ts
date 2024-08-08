@@ -7,7 +7,7 @@ export interface Tenant {
   trialMode: boolean;
   trialUpdateMode: boolean;
   trialStartDate: string;
-  domain: string;
+  // domain: string;
   // domainWebapp: string;
   enableLoyaltyProgram: boolean;
   loyaltyCoinConversionRate: string;

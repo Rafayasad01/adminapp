@@ -1,5 +1,5 @@
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
-import { Button } from '@mui/material';
+// import { Button } from '@mui/material';
 import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
 import _ from 'lodash';
@@ -26,13 +26,13 @@ const AddNewOrder = () => {
   const authState = useAppSelector((state) => state?.authState);
   const [category, setCategory] = useState<AppCategories | null>(null);
   const [search, setSearch] = useState('');
-  const [searchInputValue, setInputValue] = useState('');
+  // const [searchInputValue, setInputValue] = useState('');
   const { items: cartItems } = useAppSelector(
     (x) => x.persistedReducer.cartState
   );
 
   useEffect(() => {
-    dispatch(fetchCategories(authState.user?.tenant));
+    dispatch(fetchCategories(authState?.user?.tenant));
   }, []);
 
   const handleCategoryChange = (value: string) => {
@@ -82,12 +82,9 @@ const AddNewOrder = () => {
               type="button"
             >
               <span className="MuiBadge-root css-1c32n2y-MuiBadge-root">
-                <div
-                  className="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium p-0 text-gray-50 "
-                  aria-label="cart-button"
-                >
+                <div className="p-0 text-gray-50 " aria-label="cart-button">
                   <svg
-                    className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+                    className="custom-baskets-icon"
                     focusable="false"
                     aria-hidden="true"
                     viewBox="0 0 24 24"
@@ -111,14 +108,14 @@ const AddNewOrder = () => {
         </div>
         <div className="selected-categories">
           <div className="mb-4 items-center justify-between sm:flex">
-            <h4 className="heading">{category?.name ?? ''} </h4>
+            <h4 className="heading">{category?.name ?? ''}</h4>
             <FormControl className="search-sub-cats">
               <Input
                 className="field"
                 id="search"
                 type="text"
                 onChange={(e) => {
-                  setInputValue(e.target.value);
+                  setSearch(e.target.value);
                   if (e.target.value === '') {
                     setSearch('');
                   }
@@ -128,9 +125,9 @@ const AddNewOrder = () => {
                 }}
                 disableUnderline
                 endAdornment={
-                  <Button onClick={() => setSearch(searchInputValue)}>
-                    <SearchOutlinedIcon />
-                  </Button>
+                  // <Button onChange={() => setSearch(searchInputValue)}>
+                  <SearchOutlinedIcon />
+                  // </Button>
                 }
               />
             </FormControl>

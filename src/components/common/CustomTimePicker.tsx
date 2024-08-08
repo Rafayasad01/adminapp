@@ -58,14 +58,26 @@ function CustomTimePicker({
     setTimePicker(null);
   };
 
-  // console.log("timePickerValue", errors);
+  console.log('WATCH', watch(id));
 
   const open = Boolean(timePicker);
   const idProp = open ? id : undefined;
 
+  // const handleChange = (value: dayjs.Dayjs | null) => {
+  //   setValue(id, value);
+  //   setTimePickerValue(value);
+  //   handleClose();
+  // };
+
   const handleChange = (value: dayjs.Dayjs | null) => {
-    setValue(id, value);
-    setTimePickerValue(value);
+    if (value) {
+      const formattedValue = dayjs(value);
+      setValue(id, formattedValue);
+      setTimePickerValue(formattedValue);
+    } else {
+      setValue(id, null);
+      setTimePickerValue(null);
+    }
     handleClose();
   };
 
@@ -90,7 +102,9 @@ function CustomTimePicker({
           type="text"
           placeholder="HH:MM"
           value={
-            (watch(id) && watch(id) !== null && watch(id)?.format('HH:mm A')) ||
+            (watch(id) &&
+              dayjs(watch(id)).isValid() &&
+              dayjs(watch(id)).format('hh:mm A')) ||
             ''
           }
           onChange={() => null}
@@ -129,6 +143,7 @@ function CustomTimePicker({
             <StaticTimePicker
               displayStaticWrapperAs="desktop"
               defaultValue={dayjs('2023-01-01T00:00')}
+              value={dayjs(watch(id)) || null}
               onAccept={handleChange}
             />
           </LocalizationProvider>

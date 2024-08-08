@@ -3,6 +3,7 @@ import Dialog from '@mui/material/Dialog';
 import Divider from '@mui/material/Divider';
 import FormControl from '@mui/material/FormControl';
 import WalletIcon from '@mui/icons-material/Wallet';
+import WysiwygOutlinedIcon from '@mui/icons-material/WysiwygOutlined';
 import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -16,6 +17,7 @@ import TopBar from '../../../components/common/TopBar';
 import { useAppSelector } from '../../../redux/redux-hooks';
 import walletService from '../../../services/adminapp/adminWallet';
 import {
+  ALL_PERMISSIONS,
   CURRENCY_PREFIX,
   NOT_AUTHORIZED_MESSAGE,
 } from '../../../utils/constants';
@@ -24,6 +26,7 @@ import {
   listingRolePermission,
 } from '../../../utils/helper';
 import WalletUpdatePopup from './WalletUpdatePopup';
+import WalletDetailPopup from './WalletDetailPopup';
 
 function WalletPage() {
   const dataRole = useAppSelector(
@@ -38,11 +41,7 @@ function WalletPage() {
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [isLoader, setIsLoader] = React.useState(true);
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
-  const [
-    ,
-    // openDetailDialog
-    setOpenDetailDialog,
-  ] = useState(false);
+  const [openDetailDialog, setOpenDetailDialog] = useState(false);
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
   // const [cancelDialogOpen, setCancelDialogOpen] = useState<boolean>(false);
@@ -51,9 +50,15 @@ function WalletPage() {
   // );
   const [isModalImage, setIsModalImage] = useState(false);
   const [modalImage, setModalImage] = useState('');
+  const [walletId, setWalletId] = useState('');
 
   useEffect(() => {
-    if (listingRolePermission(dataRole, 'Category List')) {
+    if (
+      listingRolePermission(
+        dataRole,
+        ALL_PERMISSIONS.storeAppointment.viewWallets
+      )
+    ) {
       walletService
         .WalletList(search, page, rowsPerPage)
         .then((item: any) => {
@@ -86,7 +91,7 @@ function WalletPage() {
         type: 'warning',
       });
     }
-  }, [null]);
+  }, []);
 
   const handleClickSearch = (event: any) => {
     if (event.key === 'Enter') {
@@ -160,7 +165,20 @@ function WalletPage() {
 
   const editHandler = (id: string, type: string) => {
     if (type === 'update') {
-      setOpenEditFormDialog(true);
+      if (
+        listingRolePermission(
+          dataRole,
+          ALL_PERMISSIONS.storeAppointment.editWallet
+        )
+      ) {
+        setOpenEditFormDialog(true);
+      } else {
+        setIsNotify(true);
+        setNotifyMessage({
+          text: 'You are not authorized to view.',
+          type: 'warning',
+        });
+      }
     } else {
       setOpenDetailDialog(true);
     }
@@ -188,7 +206,7 @@ function WalletPage() {
           setIsNotify(true);
           setNotifyMessage({
             text: updateItem.data.message,
-            type: 'sccuess',
+            type: 'success',
           });
         } else {
           setIsLoader(false);
@@ -207,6 +225,24 @@ function WalletPage() {
           type: 'error',
         });
       });
+  };
+
+  const handleDetailPopup = (id: string) => {
+    if (
+      listingRolePermission(
+        dataRole,
+        ALL_PERMISSIONS.storeAppointment.viewWallets
+      )
+    ) {
+      setWalletId(id);
+      setOpenDetailDialog(true);
+    } else {
+      setIsNotify(true);
+      setNotifyMessage({
+        text: NOT_AUTHORIZED_MESSAGE,
+        type: 'warning',
+      });
+    }
   };
 
   const closeModal = () => {
@@ -229,7 +265,7 @@ function WalletPage() {
           <div className="grid grid-cols-12 px-4 py-5">
             <div className="col-span-7">
               <span className="font-open-sans text-xl font-semibold text-[#252733]">
-                All Remaining Wallets
+                All Wallets
               </span>
             </div>
             <div className="col-span-5">
@@ -275,7 +311,7 @@ function WalletPage() {
                   <th>Name</th>
                   <th>Email</th>
                   {/* <th>Service</th> */}
-                  <th>Credit</th>
+                  <th>Balance</th>
                   <th>Type</th>
                   {/* <th>Status</th> */}
                   <th aria-label="empty table header">&nbsp;</th>
@@ -283,7 +319,7 @@ function WalletPage() {
               </thead>
               <tbody>
                 {list &&
-                  list.map((item: any, index: number) => {
+                  list?.map((item: any, index: number) => {
                     return (
                       <tr key={index}>
                         <td>
@@ -310,6 +346,12 @@ function WalletPage() {
                         <td>{item?.referenceType}</td>
                         <td>
                           <div className="flex flex-row-reverse">
+                            <IconButton
+                              className="icon-btn mr-3.5 p-0"
+                              onClick={() => handleDetailPopup(item.id)}
+                            >
+                              <WysiwygOutlinedIcon />
+                            </IconButton>
                             <IconButton
                               disabled={!!(item.status === 'Completed')}
                               className="icon-btn mr-3.5 p-0"
@@ -350,15 +392,13 @@ function WalletPage() {
           callback={updateFormHandler}
         />
       )}
-      {/* {openDetailDialog && (
+      {openDetailDialog && (
         <WalletDetailPopup
-          // setIsNotify={setIsNotify}
-          // setNotifyMessage={setNotifyMessage}
           openFormDialog={openDetailDialog}
           setOpenFormDialog={setOpenDetailDialog}
-          formData={editFormData[0]}
+          walletId={walletId}
         />
-      )} */}
+      )}
       {modalImage && (
         <Dialog
           open={isModalImage}

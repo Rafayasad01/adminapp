@@ -16,7 +16,10 @@ import { useAppSelector } from '../../../redux/redux-hooks';
 import employeeService from '../../../services/adminapp/adminStoreEmployee';
 import storeLovService from '../../../services/adminapp/adminStoreService';
 import PermissionPopup from '../../../utils/PermissionPopup';
-import { NOT_AUTHORIZED_MESSAGE } from '../../../utils/constants';
+import {
+  ALL_PERMISSIONS,
+  NOT_AUTHORIZED_MESSAGE,
+} from '../../../utils/constants';
 import {
   CheckRolePermission,
   listingRolePermission,
@@ -39,6 +42,7 @@ function EmployeeServices() {
   // const [page, setPage] = useState(0);
   // const [total, setTotal] = useState(0);
   const [list, setList] = useState<any>([]);
+  const [allEmployeelist, setAllEmployeeList] = useState<any>([]);
   const [editFormData, setEditFormData] = useState<any>(null);
   // const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [actionMenuItemid, setActionMenuItemid] = React.useState('');
@@ -58,6 +62,7 @@ function EmployeeServices() {
   const [, /* isModalImage */ setIsModalImage] = useState(false);
   const [, /* modalImage */ setModalImage] = useState('');
   const [catLovlist, setCatLovList] = useState<any>([]);
+  const [empDetail, setEmpDetail] = useState<any>();
 
   const catLovService = useCallback(async () => {
     await storeLovService
@@ -82,10 +87,63 @@ function EmployeeServices() {
       });
   }, []);
 
+  const getEmployee = useCallback(async () => {
+    await employeeService
+      .StoreEmployeeFind(empId)
+      .then((res) => {
+        if (res.data.success) {
+          setEmpDetail(res.data.data);
+        } else {
+          setIsNotify(true);
+          setNotifyMessage({
+            text: res.data.message,
+            type: 'error',
+          });
+        }
+      })
+      .catch((err) => {
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
+        });
+      });
+  }, []);
+
+  const getAllEmployees = useCallback(async () => {
+    await employeeService
+      .StoreEmployeeServiceAllList(empId)
+      .then((res) => {
+        if (res.data.success) {
+          setAllEmployeeList(res.data.data);
+        } else {
+          setIsNotify(true);
+          setNotifyMessage({
+            text: res.data.message,
+            type: 'error',
+          });
+        }
+      })
+      .catch((err) => {
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
+        });
+      });
+  }, []);
+
   const handleFormClickOpen = () => {
-    if (listingRolePermission(dataRole, 'Category Create')) {
+    if (
+      listingRolePermission(
+        dataRole,
+        ALL_PERMISSIONS.storeAppointment.addEmployee
+      )
+    ) {
       setOpenFormDialog(true);
       catLovService();
+      getAllEmployees();
+      getEmployee();
     } else {
       setIsNotify(true);
       setNotifyMessage({
@@ -96,7 +154,12 @@ function EmployeeServices() {
   };
 
   useEffect(() => {
-    if (listingRolePermission(dataRole, 'Category List')) {
+    if (
+      listingRolePermission(
+        dataRole,
+        ALL_PERMISSIONS.storeAppointment.viewEmployees
+      )
+    ) {
       employeeService
         .StoreEmployeeServiceList(empId)
         .then((item: any) => {
@@ -115,100 +178,19 @@ function EmployeeServices() {
     }
   }, [null]);
 
-  /* const handleClickSearch = (event: any) => {
-    if (event.key === 'Enter') {
-      const searchTxt = event.target.value as string;
-      const newPage = 0;
-      setSearch(searchTxt);
-      setPage(newPage);
-      StoreLovService.StoreCatList(searchTxt, newPage, rowsPerPage).then(
-        (item) => {
-          setList(item.data.data.list);
-          setTotal(item.data.data.total);
-        }
-      );
-    }
-  }; */
-
-  /* const handleChangePage = (
-    event: React.MouseEvent<HTMLButtonElement> | null,
-    newPage: number
-  ) => {
-    setPage(newPage);
-    StoreLovService.StoreCatList(
-      authState.user.tenant,
-      newPage,
-      rowsPerPage
-    ).then((item: any) => {
-      setList(item.data.data.list);
-      setTotal(item.data.data.total);
-    });
-  }; */
-  /* 
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const newRowperPage = parseInt(event.target.value, 10);
-    const newPage = 0;
-    setRowsPerPage(newRowperPage);
-    setPage(newPage);
-    StoreLovService.StoreCatList(
-      authState.user.tenant,
-      newPage,
-      rowsPerPage
-    ).then((item) => {
-      setList(item.data.data.list);
-      setTotal(item.data.data.total);
-    });
-  }; */
-
-  // const deleteHandler = (id: string) => {
-  //     setIsLoader(true);
-  //     const data = {
-  //         is_active: false,
-  //         is_deleted: true,
-  //         updated_by: authState.user.id,
-  //     };
-  //     StoreLovService
-  //         .deleteCategory(id, data)
-  //         .then((updateItem) => {
-  //             if (updateItem.data.success) {
-  //                 setIsLoader(false);
-  //                 setIsNotify(true);
-  //                 setNotifyMessage({
-  //                     text: updateItem.data.message,
-  //                     type: 'success',
-  //                 });
-  //                 setList((newArr: any) => {
-  //                     return newArr.filter((item: any) => item.id !== id);
-  //                 });
-  //                 let newtotal = total;
-  //                 setTotal((newtotal -= 1));
-  //             }
-  //         })
-  //         .catch((err) => {
-  //             setIsLoader(false);
-  //             setIsNotify(true);
-  //             setNotifyMessage({
-  //                 text: err.message,
-  //                 type: 'error',
-  //             });
-  //         });
-  // };
-
-  // const statusCancelHandler = () => {
-  //     deleteHandler(actionMenuItemid);
-  // };
-
-  // console.log(list);
-
   const manuHandler = (option: string) => {
     if (option === 'Edit') {
-      if (listingRolePermission(dataRole, 'Category Update')) {
-        console.log('actionMenuItemid', actionMenuItemid, list);
+      if (
+        listingRolePermission(
+          dataRole,
+          ALL_PERMISSIONS.storeAppointment.editEmployee
+        )
+      ) {
+        // console.log('actionMenuItemid', actionMenuItemid, list);
         const editFormDatas = list?.find(
           (el: any) => el.id === actionMenuItemid
         );
+        getEmployee();
         catLovService();
         setActionMenuItemid(editFormDatas.id);
         setEditFormData(editFormDatas);
@@ -222,14 +204,32 @@ function EmployeeServices() {
       }
     } else if (option === 'Items') {
       // navigate(`../item/${actionMenuItemid}`);
-      CheckRolePermission(
-        'Category Service Get',
-        dataRole,
-        navigate,
-        `services/${actionMenuItemid}`
-      );
+      if (
+        listingRolePermission(
+          dataRole,
+          ALL_PERMISSIONS.storeAppointment.viewEmployees
+        )
+      ) {
+        CheckRolePermission(
+          ALL_PERMISSIONS.storeAppointment.viewEmployees,
+          dataRole,
+          navigate,
+          `services/${actionMenuItemid}`
+        );
+      } else {
+        setIsNotify(true);
+        setNotifyMessage({
+          text: NOT_AUTHORIZED_MESSAGE,
+          type: 'warning',
+        });
+      }
     } else if (option === 'Delete') {
-      if (listingRolePermission(dataRole, 'Category Delete')) {
+      if (
+        listingRolePermission(
+          dataRole,
+          ALL_PERMISSIONS.storeAppointment.deleteEmployee
+        )
+      ) {
         setCancelDialogOpen(true);
       } else {
         setIsNotify(true);
@@ -242,11 +242,12 @@ function EmployeeServices() {
   };
 
   const createFormHandler = (data: any) => {
-    setIsLoader(true);
+    // setIsLoader(true);
     employeeService
       .StoreEmployeeServiceCreate(empId, data)
       .then((item: any) => {
         if (item.data.success) {
+          console.log('🚀 ~ .then ~ item.data.:', item.data.data);
           setOpenFormDialog(false);
           setIsLoader(false);
           setIsNotify(true);
@@ -254,7 +255,7 @@ function EmployeeServices() {
             text: item.data.message,
             type: 'success',
           });
-          setList([item.data.data, ...list]);
+          setList([...item.data.data, ...list]);
         } else {
           setIsLoader(false);
           setIsNotify(true);
@@ -316,7 +317,12 @@ function EmployeeServices() {
   };
 
   const handleSwitchChange = (event: any, id: string) => {
-    if (listingRolePermission(dataRole, 'Category Update Status')) {
+    if (
+      listingRolePermission(
+        dataRole,
+        ALL_PERMISSIONS.storeAppointment.editEmployee
+      )
+    ) {
       const data = {
         isActive: event.target.checked,
       };
@@ -345,7 +351,12 @@ function EmployeeServices() {
 
   const statusCancelHandler = (isDel: string) => {
     setIsLoader(true);
-    if (listingRolePermission(dataRole, 'Category Update Status')) {
+    if (
+      listingRolePermission(
+        dataRole,
+        ALL_PERMISSIONS.storeAppointment.deleteEmployee
+      )
+    ) {
       const data = {
         isDeleted: !!isDel,
       };
@@ -402,11 +413,6 @@ function EmployeeServices() {
     setIsModalImage(true);
   };
 
-  /* const closeModal = () => {
-    setModalImage('');
-    setIsModalImage(false);
-  }; */
-
   return isLoader ? (
     <Loader />
   ) : (
@@ -427,36 +433,6 @@ function EmployeeServices() {
             </div>
             <div className="col-span-5">
               <div className="flex flex-row justify-end gap-3">
-                {/* <FormControl
-                                    className="search-grey-outline placeholder-grey w-60"
-                                    variant="filled"
-                                >
-                                    <Input
-                                        className="input-with-icon after:border-b-secondary"
-                                        id="search"
-                                        type="text"
-                                        placeholder="Search"
-                                        onKeyDown={(
-                                            event: React.KeyboardEvent<
-                                                HTMLInputElement | HTMLTextAreaElement
-                                            >
-                                        ) => {
-                                            handleClickSearch(event);
-                                        }}
-                                        endAdornment={
-                                            <InputAdornment position="end">
-                                                <Divider
-                                                    sx={{ height: 28, m: 0.5 }}
-                                                    orientation="vertical"
-                                                />
-                                                <IconButton aria-label="toggle password visibility">
-                                                    <SearchIcon className="text-[#6A6A6A]" />
-                                                </IconButton>
-                                            </InputAdornment>
-                                        }
-                                        disableUnderline
-                                    />
-                                </FormControl> */}
                 <Button
                   variant="contained"
                   className="btn-black-fill btn-icon"
@@ -472,11 +448,11 @@ function EmployeeServices() {
             <table className="table-border table-auto">
               <thead>
                 <tr>
-                  <th>Name</th>
-                  <th className="w-[30%]">Description</th>
-                  <th>Amount Type</th>
-                  <th>Amount</th>
-                  <th>Service Time (mints)</th>
+                  <th className="w-[20%]">Name</th>
+                  {/* <th className="w-[20%]">Description</th> */}
+                  <th className="w-[12%]">Amount Type</th>
+                  <th className="w-[25%]">Amount / Percentage</th>
+                  {/* <th className="w-[10%]">Service Time (mints)</th> */}
                   <th>Created Date</th>
                   <th>Status</th>
                   <th>&nbsp;</th>
@@ -489,12 +465,12 @@ function EmployeeServices() {
                       <tr key={index}>
                         <td>
                           <div className="avatar flex flex-row items-center">
-                            {item.storeServiceCategoryItem?.avatar ? (
+                            {item?.storeServiceCategoryItem?.avatar ? (
                               <button onClick={() => openModal(item.icon)}>
                                 <img
                                   className="cursor-pointer"
-                                  src={item.storeServiceCategoryItem?.avatar}
-                                  alt={item.storeServiceCategoryItem?.name}
+                                  src={item?.storeServiceCategoryItem?.avatar}
+                                  alt={item?.storeServiceCategoryItem?.name}
                                 />
                               </button>
                             ) : (
@@ -505,30 +481,37 @@ function EmployeeServices() {
                             )}
                             <div className="flex flex-col items-start justify-start">
                               <span className="text-sm font-semibold">
-                                {item.storeServiceCategoryItem?.name}
+                                {item?.storeServiceCategoryItem?.name}
                               </span>
                             </div>
                           </div>
                         </td>
-                        <td>
-                          {item.storeServiceCategoryItem.description
-                            ? item.storeServiceCategoryItem.description
+                        {/* <td>
+                          {item?.storeServiceCategoryItem?.description
+                            ? item?.storeServiceCategoryItem?.description
                             : '--'}
+                        </td> */}
+                        <td>{item?.amountType ? item.amountType : '--'}</td>
+                        <td>
+                          {item?.amount ? Math.floor(item.amount) : '--'}{' '}
+                          {item?.amountType === 'Percentage'
+                            ? '%'
+                            : item?.amountType === 'None'
+                            ? ''
+                            : import.meta.env.VITE_CURRENCY_SYMBOL}
                         </td>
-                        <td>{item.amountType ? item.amountType : '--'}</td>
-                        <td>{item.amount ? item.amount : '--'}</td>
-                        <td>{item.serviceTime ? item.serviceTime : '--'}</td>
+                        {/* <td>{item.serviceTime ? item.serviceTime : '--'}</td> */}
                         <td>
                           {dayjs(
-                            item.storeServiceCategoryItem.createdDate
+                            item?.storeServiceCategoryItem?.createdDate
                           ).isValid()
                             ? dayjs(
-                                item.storeServiceCategoryItem.createdDate
-                              )?.format('ddd, MMM DD, YYYY hh:mm:ssA')
+                                item?.storeServiceCategoryItem?.createdDate
+                              )?.format('ddd, MMM DD, YYYY')
                             : '--'}
                         </td>
                         <td>
-                          {item.isActive ? (
+                          {item?.isActive ? (
                             <span className="badge badge-success">Enabled</span>
                           ) : (
                             <span className="badge badge-danger">Disabled</span>
@@ -607,16 +590,19 @@ function EmployeeServices() {
       )}
       {openFormDialog && (
         <EmployeeServiceCreatePopup
+          empDetail={empDetail}
           setIsNotify={setIsNotify}
           setNotifyMessage={setNotifyMessage}
           openFormDialog={openFormDialog}
           setOpenFormDialog={setOpenFormDialog}
           catlov={catLovlist}
+          emplov={allEmployeelist}
           callback={createFormHandler}
         />
       )}
       {openEditFormDialog && (
         <EmployeeServiceEditPopup
+          empDetail={empDetail}
           setIsNotify={setIsNotify}
           setNotifyMessage={setNotifyMessage}
           openFormDialog={openEditFormDialog}

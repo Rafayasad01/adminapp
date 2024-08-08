@@ -9,7 +9,11 @@ import CustomDropDown from '../../../components/common/CustomDropDown';
 import CustomInputBox from '../../../components/common/CustomInputBox';
 import { BarberItemServices } from '../../../interfaces/services.interface';
 import storeLovService from '../../../services/adminapp/adminStoreService';
-import { BARBER_SERVICES_AMOUNT, PATTERN } from '../../../utils/constants';
+import {
+  BARBER_SERVICES_AMOUNT,
+  // GENDER,
+  PATTERN,
+} from '../../../utils/constants';
 
 type EmployeeServiceEditPopupProps = {
   callback: (...args: any[]) => any;
@@ -18,6 +22,7 @@ type EmployeeServiceEditPopupProps = {
   openFormDialog: boolean;
   setIsNotify: any;
   setNotifyMessage: any;
+  empDetail: any;
   setOpenFormDialog: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
@@ -29,6 +34,7 @@ function EmployeeServiceEditPopup({
   setIsNotify: _setIsNotify,
   setNotifyMessage: _setNotifyMessage,
   setOpenFormDialog,
+  empDetail,
 }: EmployeeServiceEditPopupProps) {
   const {
     control,
@@ -48,18 +54,23 @@ function EmployeeServiceEditPopup({
     });
   };
 
+  console.log('empDetail', empDetail);
+
   useEffect(() => {
     if (
       getValues('categoryId') !== undefined &&
       getValues('categoryId') !== 'none'
     ) {
       getCatItems(watch('categoryId'));
-      // console.log("hit");
     }
   }, [watch('categoryId')]);
 
   const onSubmit = (data: BarberItemServices) => {
-    console.log(`onSubmit -> data:`, data);
+    // console.log(`onSubmit -> data:`, data);
+    if (empDetail.payrollType === 'Salary') {
+      data.amount = 0;
+      data.amountType = 'None';
+    }
     delete data?.categoryId;
     callback(data);
   };
@@ -83,80 +94,104 @@ function EmployeeServiceEditPopup({
             <span className="Title">Edit Staff Service</span>
           </div>
           <div className="FormBody mt-2">
-            <div className="FormFields">
-              <FormControl className="FormControl" variant="standard">
-                <CustomDropDown
-                  validateRequired
-                  id="categoryId"
-                  control={control}
-                  error={errors}
-                  register={register}
-                  setValue={setValue}
-                  options={{
-                    roles: catlov,
-                    role: formData?.storeServiceCategoryItem
-                      ?.storeServiceCategory,
-                  }}
-                  defaultValue="Select Category"
-                  customClassInputTitle="font-bold"
-                  inputTitle="Select Category"
-                />
-              </FormControl>
-              <FormControl className="FormControl" variant="standard">
-                <CustomDropDown
-                  validateRequired
-                  id="storeServiceCategoryItem"
-                  control={control}
-                  error={errors}
-                  register={register}
-                  setValue={setValue}
-                  options={{
-                    roles: catItemsLovlist,
-                    role: formData?.storeServiceCategoryItem?.id,
-                  }}
-                  defaultValue="Select Services"
-                  customClassInputTitle="font-bold"
-                  inputTitle="Select Services"
-                />
-              </FormControl>
-            </div>
-            <div className="mt-3 grid grid-cols-12 gap-4">
-              <div className="col-span-4">
+            <div className="grid grid-cols-12 gap-4">
+              <div className="col-span-6">
                 <FormControl className="FormControl" variant="standard">
                   <CustomDropDown
                     validateRequired
-                    id="amountType"
+                    id="categoryId"
                     control={control}
                     error={errors}
                     register={register}
                     setValue={setValue}
-                    // options={{ roles: providerlov }}
-                    customClassInputTitle="font-bold"
-                    inputTitle="Amount Type"
                     options={{
-                      roles: BARBER_SERVICES_AMOUNT,
-                      role: formData?.amountType,
+                      roles: catlov,
+                      role: formData?.storeServiceCategoryItem
+                        ?.storeServiceCategory,
+                    }}
+                    defaultValue="Select Category"
+                    customClassInputTitle="font-bold"
+                    inputTitle="Select Category"
+                  />
+                </FormControl>
+              </div>
+              {/* <div className="col-span-4">
+                <FormControl className="FormControl" variant="standard">
+                  <CustomDropDown
+                    validateRequired
+                    id="serviceType"
+                    control={control}
+                    error={errors}
+                    register={register}
+                    setValue={setValue}
+                    options={{
+                      roles: GENDER,
+                      role: formData?.serviceType,
                     }}
                     defaultValue="Select Type"
+                    customClassInputTitle="font-bold"
+                    inputTitle="Select Type"
                   />
                 </FormControl>
-              </div>
-              <div className="col-span-4">
+              </div> */}
+              <div className="col-span-6">
                 <FormControl className="FormControl" variant="standard">
-                  <CustomInputBox
-                    value={formData?.amount}
-                    pattern={PATTERN.ONLY_NUM}
-                    maxLetterLimit={15}
-                    inputTitle="Price"
-                    placeholder="Enter Service Amount"
-                    id="amount"
+                  <CustomDropDown
+                    validateRequired
+                    id="storeServiceCategoryItem"
+                    control={control}
+                    error={errors}
                     register={register}
-                    error={errors.amount}
-                    inputType="text"
+                    setValue={setValue}
+                    options={{
+                      roles: catItemsLovlist,
+                      role: formData?.storeServiceCategoryItem?.id,
+                    }}
+                    defaultValue="Select Services"
+                    customClassInputTitle="font-bold"
+                    inputTitle="Select Services"
                   />
                 </FormControl>
               </div>
-              <div className="col-span-4">
+            </div>
+            {empDetail && empDetail.payrollType !== 'Salary' && (
+              <div className="mt-3 grid grid-cols-12 gap-4">
+                <div className="col-span-6">
+                  <FormControl className="FormControl" variant="standard">
+                    <CustomDropDown
+                      validateRequired
+                      id="amountType"
+                      control={control}
+                      error={errors}
+                      register={register}
+                      setValue={setValue}
+                      // options={{ roles: providerlov }}
+                      customClassInputTitle="font-bold"
+                      inputTitle="Amount Type"
+                      options={{
+                        roles: BARBER_SERVICES_AMOUNT,
+                        role: formData?.amountType,
+                      }}
+                      defaultValue="Select Type"
+                    />
+                  </FormControl>
+                </div>
+                <div className="col-span-6">
+                  <FormControl className="FormControl" variant="standard">
+                    <CustomInputBox
+                      value={Math.floor(formData?.amount)}
+                      pattern={PATTERN.ONLY_NUM}
+                      maxLetterLimit={15}
+                      inputTitle="Commission"
+                      placeholder="Enter Amount / Percentage"
+                      id="amount"
+                      register={register}
+                      error={errors.amount}
+                      inputType="text"
+                    />
+                  </FormControl>
+                </div>
+                {/* <div className="col-span-4">
                 <FormControl className="FormControl" variant="standard">
                   <CustomInputBox
                     value={formData?.serviceTime}
@@ -164,14 +199,15 @@ function EmployeeServiceEditPopup({
                     maxLetterLimit={4}
                     inputTitle="Service Time (Minutes)"
                     placeholder="Enter time (Minutes)"
-                    id="minutes"
+                    id="serviceTime"
                     register={register}
-                    error={errors.minutes}
+                    error={errors.serviceTime}
                     inputType="text"
                   />
                 </FormControl>
+              </div> */}
               </div>
-            </div>
+            )}
           </div>
           <div className="FormFooter">
             <Button

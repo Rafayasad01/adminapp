@@ -1,4 +1,4 @@
-import SettingsIcon from '@mui/icons-material/Settings';
+// import SettingsIcon from '@mui/icons-material/Settings';
 import ViewListIcon from '@mui/icons-material/ViewList';
 import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
@@ -22,35 +22,38 @@ function BranchDetailPage() {
   const [isLoader, setIsLoader] = useState<boolean>(true);
   const [categories, setCategories] = useState<any>([]);
   const [subCategories, setSubCategories] = useState<any>([]);
-  const [settingDetail, setSettingDetail] = useState<any>(null);
+  const [
+    settingDetail,
+    // setSettingDetail
+  ] = useState<any>(null);
   const [openCategoryDialog, setOpenCategoryDialog] = useState<boolean>(false);
   const [openSettingDialog, setOpenSettingDialog] = useState(false);
   const [isNotify, setIsNotify] = useState(false);
   const [notifyMessage, setNotifyMessage] = useState({});
 
-  const getSettingById = () => {
-    setIsLoader(true);
-    branchService
-      .getSettingService(branchId)
-      .then((item: any) => {
-        if (item.data.success) {
-          setSettingDetail(item.data.data.tenantConfig);
-          setOpenSettingDialog(true);
-          setIsLoader(false);
-        } else {
-          setIsLoader(false);
-        }
-      })
-      .catch((err) => {
-        setIsLoader(false);
-        setOpenSettingDialog(false);
-        setIsNotify(true);
-        setNotifyMessage({
-          text: err.message,
-          type: 'error',
-        });
-      });
-  };
+  // const getSettingById = () => {
+  //   setIsLoader(true);
+  //   branchService
+  //     .getSettingService(branchId)
+  //     .then((item: any) => {
+  //       if (item.data.success) {
+  //         setSettingDetail(item.data.data.tenantConfig);
+  //         setOpenSettingDialog(true);
+  //         setIsLoader(false);
+  //       } else {
+  //         setIsLoader(false);
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       setIsLoader(false);
+  //       setOpenSettingDialog(false);
+  //       setIsNotify(true);
+  //       setNotifyMessage({
+  //         text: err.message,
+  //         type: 'error',
+  //       });
+  //     });
+  // };
 
   const getCategoryById = () => {
     setIsLoader(true);
@@ -58,10 +61,19 @@ function BranchDetailPage() {
       .getCategoryService(branchId)
       .then((item: any) => {
         if (item.data.success) {
-          setCategories(item.data.data);
-          setSubCategories(item.data.data[0].homeCatItem);
-          setOpenCategoryDialog(true);
-          setIsLoader(false);
+          if (item.data.data.length <= 0) {
+            setIsLoader(false);
+            setIsNotify(true);
+            setNotifyMessage({
+              text: 'No category found',
+              type: 'info',
+            });
+          } else {
+            setCategories(item.data.data);
+            setSubCategories(item.data.data[0].homeCatItem);
+            setOpenCategoryDialog(true);
+            setIsLoader(false);
+          }
         } else {
           setIsLoader(false);
           setIsNotify(true);
@@ -126,7 +138,7 @@ function BranchDetailPage() {
                   </p>
                 </div>
                 <div className="flex items-center">
-                  <div className="">
+                  {/* <div className="">
                     <IconButton
                       title="Branch Setting"
                       className="mx-2 p-0"
@@ -134,7 +146,7 @@ function BranchDetailPage() {
                     >
                       <SettingsIcon className="text-faded" />
                     </IconButton>
-                  </div>
+                  </div> */}
                   <IconButton
                     title="Branch Category"
                     className="mr-3 p-0 "

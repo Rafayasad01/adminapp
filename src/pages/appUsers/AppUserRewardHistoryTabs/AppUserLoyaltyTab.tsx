@@ -72,7 +72,7 @@ function AppUserLoyaltyTab({
     setPage(newPage);
     if (search === '' || search === null || search === undefined) {
       appUserService
-        .appList(authState.user.tenant, 'Other', newPage, rowsPerPage)
+        .appList(authState.user.tenant, 'Other', newPage, newRowperPage)
         .then((item) => {
           setList(item.data.data.list);
           setTotal(item.data.data.total);
@@ -84,7 +84,7 @@ function AppUserLoyaltyTab({
           'Other',
           search,
           newPage,
-          rowsPerPage
+          newRowperPage
         )
         .then((item) => {
           setList(item.data.data.list);

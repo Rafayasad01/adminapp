@@ -2,13 +2,13 @@ import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
-import InputAdornment from '@mui/material/InputAdornment';
-import TextField from '@mui/material/TextField';
-import { debounce } from '@mui/material/utils';
+// import InputAdornment from '@mui/material/InputAdornment';
+// import TextField from '@mui/material/TextField';
+// import { debounce } from '@mui/material/utils';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 import isBetween from 'dayjs/plugin/isBetween';
-import kabakCase from 'lodash/kebabCase';
+// import kabakCase from 'lodash/kebabCase';
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import '../../assets/css/PopupStyle.css';
@@ -16,8 +16,8 @@ import CustomButton from '../../components/common/CustomButton';
 import ErrorSpanBox from '../../components/common/ErrorSpanBox';
 import { Tenant } from '../../interfaces/superadmin/tenant.interface';
 import {
-  DOMAIN_PREFIX,
-  DOMAIN_PROTOCOL,
+  // DOMAIN_PREFIX,
+  // DOMAIN_PROTOCOL,
   INVALID_CHAR,
   MAX_LENGTH_EXCEEDED,
   PATTERN,
@@ -79,21 +79,21 @@ function BranchUpdatePopup({
       setValue('firstName', item.backofficeUser.firstName);
       setValue('lastName', item.backofficeUser.lastName);
       // setValue('domainWebapp', item.systemConfig.domainWebapp);
-      setValue('domain', item.systemConfig.domain);
+      // setValue('domain', item.systemConfig.domain);
       // setValue('enableLoyaltyProgram', item.tenantExt.enableLoyaltyProgram);
     }
   }, [item]);
 
   // console.log('ITEM', item.tenantExt.enableLoyaltyProgram);
 
-  const debouceRequest = debounce((value) => {
-    setValue('domain', `devadminapp-${kabakCase(value)}`);
-    // setValue('domainWebapp', `devwebapp-${kabakCase(value)}`);
-  }, 1000);
+  // const debouceRequest = debounce((value) => {
+  //   setValue('domain', `devadminapp-${kabakCase(value)}`);
+  //   // setValue('domainWebapp', `devwebapp-${kabakCase(value)}`);
+  // }, 1000);
 
-  const shopFieldHangler = (val: any) => {
-    debouceRequest(val);
-  };
+  // const shopFieldHangler = (val: any) => {
+  //   debouceRequest(val);
+  // };
 
   return (
     item && (
@@ -124,7 +124,7 @@ function BranchUpdatePopup({
                     type="text"
                     id="tenantName"
                     disableUnderline
-                    onChange={(val: any) => shopFieldHangler(val.target.value)}
+                    // onChange={(val: any) => shopFieldHangler(val.target.value)}
                   />
                   {errors.tenantName?.type === 'required' && (
                     <ErrorSpanBox error="Shop name is required" />
@@ -212,7 +212,7 @@ function BranchUpdatePopup({
               </div>
               <div className="FormField">
                 <FormControl className="FormControl" variant="standard">
-                  <label className="FormLabel">Email</label>
+                  <label className="FormLabel mt-2">Email</label>
                   <Input
                     disabled
                     className="FormInput"
@@ -237,7 +237,7 @@ function BranchUpdatePopup({
                   )}
                 </FormControl>
               </div>
-              <div className="FormField">
+              {/* <div className="FormField">
                 <FormControl className="FormControl" variant="standard">
                   <label className="FormLabel">Domain</label>
                   <TextField
@@ -273,7 +273,7 @@ function BranchUpdatePopup({
                     <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
                   )}
                 </FormControl>
-              </div>
+              </div> */}
               {/* <div className="FormField mb-4">
                 <FormControl className="FormControl" variant="standard">
                   <label className="FormLabel">Web-App Domain</label>

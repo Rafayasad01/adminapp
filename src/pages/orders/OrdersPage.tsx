@@ -18,7 +18,11 @@ import Notify from '../../components/common/Notify';
 import TopBar from '../../components/common/TopBar';
 import { useAppSelector } from '../../redux/redux-hooks';
 import orderService from '../../services/adminapp/adminOrders';
-import { ORDER_STATUSES } from '../../utils/constants';
+import {
+  ALL_PERMISSIONS,
+  NOT_AUTHORIZED_MESSAGE,
+  ORDER_STATUSES,
+} from '../../utils/constants';
 import promiseHandler, {
   CheckRolePermission,
   listingRolePermission,
@@ -119,7 +123,7 @@ function OrdersPage() {
       const getOrderListPromise = orderService.getListService(
         authState.user.tenant,
         newPage,
-        rowsPerPage
+        newRowPerPage
       );
       const [getOrderListResult, getOrderListError, getOrderListOk] =
         await promiseHandler(getOrderListPromise);
@@ -234,26 +238,46 @@ function OrdersPage() {
       );
       setTotal(getOrderListResult.data.data.total);
     }
-    if (listingRolePermission(dataRole, 'Order List')) {
+    if (
+      listingRolePermission(dataRole, ALL_PERMISSIONS.storeProduct.viewOrder)
+    ) {
       getOrderList();
+    } else {
+      setIsNotify(true);
+      setNotifyMessage({
+        text: NOT_AUTHORIZED_MESSAGE,
+        type: 'warning',
+      });
     }
   }, [null]);
 
   const menuHandler = (option: string) => {
     let doOption = '';
+    let checkPermission = '';
     if (option === 'Edit') {
       doOption = 'edit';
+      checkPermission = ALL_PERMISSIONS.storeProduct.editOrder;
     } else if (option === 'Detail') {
       doOption = 'detail';
+      checkPermission = ALL_PERMISSIONS.storeProduct.editOrder;
     } else {
       doOption = 'download';
+      checkPermission = ALL_PERMISSIONS.storeProduct.editOrder;
     }
-    CheckRolePermission(
-      'Order View',
-      dataRole,
-      navigate,
-      `${doOption}/${actionMenuItemid}`
-    );
+    if (listingRolePermission(dataRole, checkPermission)) {
+      CheckRolePermission(
+        checkPermission,
+        dataRole,
+        navigate,
+        `${doOption}/${actionMenuItemid}`
+      );
+    } else {
+      setIsNotify(true);
+      setNotifyMessage({
+        text: NOT_AUTHORIZED_MESSAGE,
+        type: 'warning',
+      });
+    }
   };
 
   const getStatusBackground = (status: string) => {
@@ -335,7 +359,22 @@ function OrdersPage() {
                 <Button
                   variant="contained"
                   className="btn-black-fill btn-icon"
-                  onClick={() => navigate('./create')}
+                  onClick={() => {
+                    if (
+                      listingRolePermission(
+                        dataRole,
+                        ALL_PERMISSIONS.storeProduct.addOrder
+                      )
+                    ) {
+                      navigate('./create');
+                    } else {
+                      setIsNotify(true);
+                      setNotifyMessage({
+                        text: NOT_AUTHORIZED_MESSAGE,
+                        type: 'warning',
+                      });
+                    }
+                  }}
                 >
                   <AddOutlinedIcon /> Add New
                 </Button>
@@ -347,11 +386,12 @@ function OrdersPage() {
               <thead>
                 <tr className="border-opacity">
                   <th className="w-[22%]">Customers</th>
-                  <th>Pickup Time</th>
-                  <th>Drop-off Time</th>
+                  <th>Order Date</th>
+                  {/* <th>Drop-off Time</th> */}
                   <th>Amount</th>
                   <th className="w-36">Status</th>
                   <th>Order ID</th>
+                  <th aria-label="empty table header">&nbsp;</th>
                 </tr>
               </thead>
               <tbody>
@@ -375,20 +415,16 @@ function OrdersPage() {
                         <td>
                           <div className="flex flex-col">
                             <span className="text-sm font-normal text-secondary">
-                              {dayjs(Item.pickupDateTime)?.format('hh:mm:ssA')}{' '}
-                              -{' '}
-                              {dayjs(Item.pickupDateTime)
-                                .add(1, 'hour')
-                                .format('hh:mm:ssA')}
+                              {dayjs(Item.createdDate)?.format('hh:mm:ssA')}
                             </span>
                             <span className="text-xs font-normal text-[#6A6A6A]">
-                              {dayjs(Item.pickupDateTime)?.format(
+                              {dayjs(Item.createdDate)?.format(
                                 'ddd, MMM DD, YYYY'
                               )}
                             </span>
                           </div>
                         </td>
-                        <td>
+                        {/* <td>
                           <div className="flex flex-col">
                             <span className="text-sm font-normal text-secondary">
                               {dayjs(Item.dropDateTime)?.format('hh:mm:ssA')} -{' '}
@@ -402,7 +438,7 @@ function OrdersPage() {
                               )}
                             </span>
                           </div>
-                        </td>
+                        </td> */}
                         <td className="text-sm font-semibold text-secondary">
                           PKR {Item.grandTotal}
                         </td>
@@ -416,7 +452,7 @@ function OrdersPage() {
                           </span>
                         </td>
                         <td>{Item.orderNumber}</td>
-                        <td>
+                        <td aria-label="go to reviews">
                           <div className="flex flex-row-reverse">
                             <IconButton
                               className="icon-btn"

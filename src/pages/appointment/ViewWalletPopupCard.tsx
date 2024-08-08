@@ -73,6 +73,7 @@ const ViewWalletPopupCard = ({
                     }}
                     pattern={PATTERN.ONLY_NUM}
                     maxLetterLimit={15}
+                    min={1}
                     inputTitle="Balance"
                     placeholder="2000"
                     id="balance"

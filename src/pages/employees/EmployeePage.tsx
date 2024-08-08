@@ -25,7 +25,11 @@ import { AppUserEmployees } from '../../interfaces/app-user.interface';
 import { useAppSelector } from '../../redux/redux-hooks';
 import employeeService from '../../services/adminapp/adminEmployee';
 import PermissionPopup from '../../utils/PermissionPopup';
-import { NOT_AUTHORIZED_MESSAGE, PATTERN } from '../../utils/constants';
+import {
+  ALL_PERMISSIONS,
+  NOT_AUTHORIZED_MESSAGE,
+  PATTERN,
+} from '../../utils/constants';
 import { listingRolePermission } from '../../utils/helper';
 
 function EmployeePage() {
@@ -54,7 +58,7 @@ function EmployeePage() {
   const [notifyMessage, setNotifyMessage] = React.useState({});
   const [cancelDialogOpen, setCancelDialogOpen] = useState<boolean>(false);
   const [dialogText] = useState<any>(
-    'Are you sure you want to delete this customer ?'
+    'Are you sure you want to delete this employee ?'
   );
   const [showPassword, setShowPassword] = useState(true);
   const {
@@ -115,7 +119,9 @@ function EmployeePage() {
   ];
 
   const handleFormClickOpen = () => {
-    if (listingRolePermission(dataRole, 'Employee Create')) {
+    if (
+      listingRolePermission(dataRole, ALL_PERMISSIONS.storeUser.addUserEmployee)
+    ) {
       if (total < employeeLimit) {
         setOpenFormDialog(true);
       } else {
@@ -191,7 +197,7 @@ function EmployeePage() {
     setPage(newPage);
     if (search === '' || search === null || search === undefined) {
       employeeService
-        .getListService(authState.user.tenant, newPage, rowsPerPage)
+        .getListService(authState.user.tenant, newPage, newRowperPage)
         .then((item) => {
           setList(item.data.data.list);
           setTotal(item.data.data.total);
@@ -202,7 +208,7 @@ function EmployeePage() {
           authState.user.tenant,
           search,
           newPage,
-          rowsPerPage
+          newRowperPage
         )
         .then((item) => {
           setList(item.data.data.list);
@@ -211,46 +217,50 @@ function EmployeePage() {
     }
   };
 
-  // const deleteHandler = (id: string) => {
-  //   setIsLoader(true);
-  //   // const data = {
-  //   //   updatedBy: authState.user.id,
-  //   // };
-  //   // console.log(actionMenuItemid);
-
-  //   // Service.deleteService(actionMenuItemid, data)
-  //   //   .then((item: any) => {
-  //   //     if (item.data.success) {
-  //   //       setIsLoader(false);
-  //   //       setIsNotify(true);
-  //   //       setNotifyMessage({
-  //   //         text: item.data.message,
-  //   //         type: 'success',
-  //   //       });
-  //   //       setList((newArr: any) => {
-  //   //         return newArr.filter(
-  //   //           (newItem: any) => newItem.id !== item.data.data.id
-  //   //         );
-  //   //       });
-  //   //     }
-  //   //   })
-  //   //   .catch((err) => {
-  //   //     setIsLoader(false);
-  //   //     setIsNotify(true);
-  //   //     setNotifyMessage({
-  //   //       text: err.message,
-  //   //       type: 'error',
-  //   //     });
-  //   //   });
-  // };
+  const deleteHandler = (id: string) => {
+    setIsLoader(true);
+    const data = {
+      updatedBy: authState.user.id,
+    };
+    employeeService
+      .deleteService(id, data)
+      .then((item: any) => {
+        if (item.data.success) {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'success',
+          });
+          setList((newArr: any) => {
+            return newArr.filter(
+              (newItem: any) => newItem.id !== item.data.data.id
+            );
+          });
+        }
+      })
+      .catch((err) => {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
+        });
+      });
+  };
 
   const statusCancelHandler = () => {
-    // deleteHandler(actionMenuItemid);
+    deleteHandler(actionMenuItemid);
   };
 
   const manuHandler = (option: string) => {
     if (option === 'Edit') {
-      if (listingRolePermission(dataRole, 'Employee Update')) {
+      if (
+        listingRolePermission(
+          dataRole,
+          ALL_PERMISSIONS.storeUser.editUserEmployee
+        )
+      ) {
         setIsLoader(true);
         employeeService.getService(actionMenuItemid).then((item: any) => {
           if (item.data.success) {
@@ -271,37 +281,13 @@ function EmployeePage() {
         });
       }
     } else if (option === 'Delete') {
-      if (listingRolePermission(dataRole, 'Employee delete')) {
-        setIsLoader(true);
-        const data = {
-          updatedBy: authState.user.id,
-        };
-        // console.log(actionMenuItemid);
-        employeeService
-          .deleteService(actionMenuItemid, data)
-          .then((item: any) => {
-            if (item.data.success) {
-              setIsLoader(false);
-              setIsNotify(true);
-              setNotifyMessage({
-                text: item.data.message,
-                type: 'success',
-              });
-              setList((newArr: any) => {
-                return newArr.filter(
-                  (newItem: any) => newItem.id !== item.data.data.id
-                );
-              });
-            }
-          })
-          .catch((err) => {
-            setIsLoader(false);
-            setIsNotify(true);
-            setNotifyMessage({
-              text: err.message,
-              type: 'error',
-            });
-          });
+      if (
+        listingRolePermission(
+          dataRole,
+          ALL_PERMISSIONS.storeUser.deleteUserEmployee
+        )
+      ) {
+        setCancelDialogOpen(true);
       } else {
         setIsNotify(true);
         setNotifyMessage({
@@ -313,7 +299,12 @@ function EmployeePage() {
   };
 
   useEffect(() => {
-    if (listingRolePermission(dataRole, 'Employee List')) {
+    if (
+      listingRolePermission(
+        dataRole,
+        ALL_PERMISSIONS.storeUser.viewUserEmployee
+      )
+    ) {
       employeeService
         .getListService(authState.user.tenant, page, rowsPerPage)
         .then((item: any) => {
@@ -454,7 +445,12 @@ function EmployeePage() {
   };
 
   const handleSwitchChange = (event: any, id: string) => {
-    if (listingRolePermission(dataRole, 'Employee Update Status')) {
+    if (
+      listingRolePermission(
+        dataRole,
+        ALL_PERMISSIONS.storeUser.editUserEmployee
+      )
+    ) {
       const data = {
         isActive: event.target.checked,
         updatedBy: authState.user.id,

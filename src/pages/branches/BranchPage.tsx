@@ -32,6 +32,7 @@ import branchService from '../../services/adminapp/adminBranch';
 import { listingRolePermission } from '../../utils/helper';
 import BranchCreatePopup from './BranchCreatePopup';
 import BranchUpdatePopup from './BranchUpdatePopup';
+import { ALL_PERMISSIONS, NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
 
 function BranchPage() {
   const navigate = useNavigate();
@@ -116,7 +117,7 @@ function BranchPage() {
     setPage(newPage);
     if (search === '' || search === null || search === undefined) {
       branchService
-        .getListService(authState.user.tenant, newPage, rowsPerPage)
+        .getListService(authState.user.tenant, newPage, newRowPerPage)
         .then((item) => {
           setList(item.data.data.list);
           setTotal(item.data.data.total);
@@ -127,7 +128,7 @@ function BranchPage() {
           authState.user.tenant,
           search,
           newPage,
-          rowsPerPage
+          newRowPerPage
         )
         .then((item) => {
           setList(item.data.data.list);
@@ -138,7 +139,9 @@ function BranchPage() {
 
   useEffect(() => {
     setIsLoader(true);
-    if (listingRolePermission(dataRole, 'Employee List')) {
+    if (
+      listingRolePermission(dataRole, ALL_PERMISSIONS.storeBranch.viewBranches)
+    ) {
       branchService
         .getListService(authState?.shopTenantDetails.tenant, page, rowsPerPage)
         .then((item: any) => {
@@ -280,44 +283,52 @@ function BranchPage() {
   // console.log('EVENT HITT', openEditFormDialog);
 
   const handleSwitchChange = (event: any, id: string) => {
-    setOpenEditFormDialog(false);
-    setIsLoader(true);
-    const data = {
-      isActive: event.target.checked,
-      // trialMode: event.target.checked,
-      updatedBy: authState.user.id,
-    };
-    branchService
-      .updateBranchStatus(data, id)
-      .then((updateItem) => {
-        if (updateItem.data.success) {
-          setIsLoader(false);
-          setList((newArr: any) => {
-            return newArr.map((item: any) => {
-              if (item.id === id) {
-                item.isActive = updateItem.data.data.isActive;
-                item.trialMode = updateItem.data.data.trialMode;
-              }
-              return { ...item };
+    if (listingRolePermission(dataRole, ALL_PERMISSIONS.storeBranch.edit)) {
+      setOpenEditFormDialog(false);
+      setIsLoader(true);
+      const data = {
+        isActive: event.target.checked,
+        // trialMode: event.target.checked,
+        updatedBy: authState.user.id,
+      };
+      branchService
+        .updateBranchStatus(data, id)
+        .then((updateItem) => {
+          if (updateItem.data.success) {
+            setIsLoader(false);
+            setList((newArr: any) => {
+              return newArr.map((item: any) => {
+                if (item.id === id) {
+                  item.isActive = updateItem.data.data.isActive;
+                  item.trialMode = updateItem.data.data.trialMode;
+                }
+                return { ...item };
+              });
             });
-          });
-        } else {
+          } else {
+            setIsLoader(false);
+            setIsNotify(true);
+            setNotifyMessage({
+              text: updateItem.data.message,
+              type: 'error',
+            });
+          }
+        })
+        .catch((err) => {
           setIsLoader(false);
           setIsNotify(true);
           setNotifyMessage({
-            text: updateItem.data.message,
+            text: err.message,
             type: 'error',
           });
-        }
-      })
-      .catch((err) => {
-        setIsLoader(false);
-        setIsNotify(true);
-        setNotifyMessage({
-          text: err.message,
-          type: 'error',
         });
+    } else {
+      setIsNotify(true);
+      setNotifyMessage({
+        text: NOT_AUTHORIZED_MESSAGE,
+        type: 'warning',
       });
+    }
   };
 
   const handleTrialModeStatus = (status: any, trialMode: boolean): any => {
@@ -333,14 +344,22 @@ function BranchPage() {
   };
 
   const handleAddNew = () => {
-    if (totalBranches >= authState.user.branchLimit) {
+    if (listingRolePermission(dataRole, ALL_PERMISSIONS.storeBranch.add)) {
+      if (totalBranches >= authState.user.branchLimit) {
+        setIsNotify(true);
+        setNotifyMessage({
+          text: 'Branch limit has been reached',
+          type: 'error',
+        });
+      } else {
+        setOpenFormDialog(true);
+      }
+    } else {
       setIsNotify(true);
       setNotifyMessage({
-        text: 'Branch limit has been reached',
-        type: 'error',
+        text: NOT_AUTHORIZED_MESSAGE,
+        type: 'warning',
       });
-    } else {
-      setOpenFormDialog(true);
     }
   };
 
@@ -348,7 +367,8 @@ function BranchPage() {
     tenantId: string,
     name: string,
     maxEmployeeLimit: string,
-    maxBranchLimit: string
+    maxBranchLimit: string,
+    userType: string
   ) => {
     const userObj = {
       ...authState.user,
@@ -356,6 +376,7 @@ function BranchPage() {
       tenantName: name,
       maxEmployeeLimit,
       branchLimit: maxBranchLimit,
+      userType,
     };
     dispatch(login(userObj));
     dispatch(setItemState(userObj));
@@ -518,7 +539,8 @@ function BranchPage() {
                     authState.shopTenantDetails.tenant,
                     authState.shopTenantDetails.tenantName,
                     authState.shopTenantDetails.maxEmployeeLimit,
-                    authState.shopTenantDetails.branchLimit
+                    authState.shopTenantDetails.branchLimit,
+                    'ShopUser'
                   )
                 }
               />
@@ -621,14 +643,28 @@ function BranchPage() {
                                   ? 'green'
                                   : 'black',
                             }}
-                            onClick={() =>
-                              handleVendor(
-                                item.id,
-                                item.name,
-                                item.maxUserLimit,
-                                item.maxBranchLimit
-                              )
-                            }
+                            onClick={() => {
+                              if (
+                                listingRolePermission(
+                                  dataRole,
+                                  ALL_PERMISSIONS.storeBranch.edit
+                                )
+                              ) {
+                                handleVendor(
+                                  item.id,
+                                  item.name,
+                                  item.maxUserLimit,
+                                  item.maxBranchLimit,
+                                  item.tenantType
+                                );
+                              } else {
+                                setIsNotify(true);
+                                setNotifyMessage({
+                                  text: NOT_AUTHORIZED_MESSAGE,
+                                  type: 'warning',
+                                });
+                              }
+                            }}
                           >
                             <AirplayIcon />
                           </div>
@@ -638,15 +674,45 @@ function BranchPage() {
                           <div className="flex flex-row-reverse">
                             <IconButton
                               className="icon-btn mr-3.5 p-0"
-                              onClick={() => navigate(`detail/${item.id}`)}
+                              onClick={() => {
+                                if (
+                                  listingRolePermission(
+                                    dataRole,
+                                    ALL_PERMISSIONS.storeBranch.viewBranches
+                                  )
+                                ) {
+                                  navigate(`detail/${item.id}`);
+                                } else {
+                                  setIsNotify(true);
+                                  setNotifyMessage({
+                                    text: NOT_AUTHORIZED_MESSAGE,
+                                    type: 'warning',
+                                  });
+                                }
+                              }}
                             >
                               <WysiwygOutlinedIcon />
                             </IconButton>
                             <IconButton
                               className="icon-btn mr-3.5 p-0"
-                              onClick={() =>
-                                item.isActive ? editHandler(item.id) : null
-                              }
+                              onClick={() => {
+                                if (
+                                  listingRolePermission(
+                                    dataRole,
+                                    ALL_PERMISSIONS.storeBranch.edit
+                                  )
+                                ) {
+                                  if (item.isActive) {
+                                    editHandler(item.id);
+                                  }
+                                } else {
+                                  setIsNotify(true);
+                                  setNotifyMessage({
+                                    text: NOT_AUTHORIZED_MESSAGE,
+                                    type: 'warning',
+                                  });
+                                }
+                              }}
                             >
                               <EditIcon />
                             </IconButton>

@@ -3,8 +3,8 @@ import Dialog from '@mui/material/Dialog';
 import Link from '@mui/material/Link';
 import assets from '../../assets';
 import {
-  DOMAIN_PREFIX,
-  DOMAIN_PROTOCOL,
+  // DOMAIN_PREFIX,
+  // DOMAIN_PROTOCOL,
   SOCIAL_MEDIA,
 } from '../../utils/constants';
 
@@ -100,7 +100,7 @@ function BranchSettingPopup({
                     {detail.name ? detail.name : '--'}
                   </div>
                 </div>
-                <div className="mt-4 flex w-full flex-row gap-3">
+                {/* <div className="mt-4 flex w-full flex-row gap-3">
                   <div className="flex w-full flex-col">
                     <span className="font-open-sans text-base font-semibold not-italic text-secondary">
                       Theme Color
@@ -131,7 +131,7 @@ function BranchSettingPopup({
                       />
                     </div>
                   </div>
-                </div>
+                </div> */}
                 <div className="mt-4 flex w-full flex-col">
                   <span className="font-open-sans text-base font-semibold not-italic text-secondary">
                     GST Percentage
@@ -140,19 +140,19 @@ function BranchSettingPopup({
                     {detail.gstPercentage ? detail.gstPercentage : '0.00'}%
                   </div>
                 </div>
-                <div className="mt-4 flex w-full flex-col">
+                {/* <div className="mt-4 flex w-full flex-col">
                   <span className="font-open-sans text-base font-semibold not-italic text-secondary">
                     Email
                   </span>
                   <div className="mt-1 font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
                     {detail.email ? detail.email : '--'}
                   </div>
-                </div>
+                </div> */}
                 <div className="mt-4 flex w-full flex-col">
                   <span className="font-open-sans text-base font-semibold not-italic text-secondary">
                     Description
                   </span>
-                  <div className="mt-1 font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
+                  <div className="mt-1 w-full font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
                     {detail.desc ? detail.desc : '--'}
                   </div>
                 </div>
@@ -160,14 +160,14 @@ function BranchSettingPopup({
             </div>
             <div className="col-span-4">
               <div className="flex flex-col px-5 py-[2rem]">
-                <div className="flex w-full flex-col">
+                {/* <div className="flex w-full flex-col">
                   <span className="font-open-sans text-base font-semibold not-italic text-secondary">
                     Minimum Order Amount
                   </span>
                   <div className="mt-1 font-open-sans text-sm font-normal not-italic text-[#6A6A6A]">
                     {detail.minOrderAmount ? detail.minOrderAmount : '--'}
                   </div>
-                </div>
+                </div> */}
                 <div className="mt-4 flex w-full flex-col">
                   <span className="font-open-sans text-base font-semibold not-italic text-secondary">
                     Delivery Fee
@@ -177,7 +177,7 @@ function BranchSettingPopup({
                   </div>
                 </div>
 
-                <div className="mt-4 flex w-full flex-col">
+                {/* <div className="mt-4 flex w-full flex-col">
                   <span className="font-open-sans text-base font-semibold not-italic text-secondary">
                     Development Domain
                   </span>
@@ -188,8 +188,8 @@ function BranchSettingPopup({
                         DOMAIN_PREFIX
                       : '--'}
                   </div>
-                </div>
-                <div className="mt-4 flex w-full flex-col">
+                </div> */}
+                {/* <div className="mt-4 flex w-full flex-col">
                   <span className="font-open-sans text-base font-semibold not-italic text-secondary">
                     Live Domain
                   </span>
@@ -198,7 +198,7 @@ function BranchSettingPopup({
                       ? DOMAIN_PROTOCOL + detail.liveDomain + DOMAIN_PREFIX
                       : '--'}
                   </div>
-                </div>
+                </div> */}
                 <div className="mt-4 flex w-full flex-col">
                   <span className="font-open-sans text-base font-semibold not-italic text-secondary">
                     Social Media Icons

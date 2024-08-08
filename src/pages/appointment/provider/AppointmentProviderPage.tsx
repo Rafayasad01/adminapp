@@ -23,6 +23,7 @@ import StoreEmployeeService from '../../../services/adminapp/adminStoreEmployee'
 import StoreLovService from '../../../services/adminapp/adminStoreService';
 import PermissionPopup from '../../../utils/PermissionPopup';
 import {
+  ALL_PERMISSIONS,
   NOT_AUTHORIZED_MESSAGE,
   PATTERN,
   imageAllowedTypes,
@@ -52,9 +53,9 @@ function AppointmentProviderPage() {
     useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
   const actionMenuOptions = [
+    'Services',
     'Attendance',
     'Rating',
-    'Services',
     'Schedule',
     'Edit',
     'Delete',
@@ -319,7 +320,12 @@ function AppointmentProviderPage() {
 
   const handleFormClickOpen = async () => {
     // reset();
-    if (listingRolePermission(dataRole, 'Appointment Provider Create')) {
+    if (
+      listingRolePermission(
+        dataRole,
+        ALL_PERMISSIONS.storeAppointment.addEmployee
+      )
+    ) {
       setOpenFormDialog(true);
       catLovService();
       remove();
@@ -375,8 +381,8 @@ function AppointmentProviderPage() {
       const newPage = 0;
       setSearch(searchTxt);
       setPage(newPage);
-      Service.ProviderSearchList(
-        authState.user.tenant,
+      StoreEmployeeService.StoreEmployeeAllList(
+        // authState.user.tenant,
         searchTxt,
         newPage,
         rowsPerPage
@@ -432,32 +438,37 @@ function AppointmentProviderPage() {
 
   const manuHandler = (option: string) => {
     if (option === 'Edit') {
-      if (listingRolePermission(dataRole, 'Appointment Provider Edit')) {
+      if (
+        listingRolePermission(
+          dataRole,
+          ALL_PERMISSIONS.storeAppointment.editEmployee
+        )
+      ) {
         setIsLoader(true);
-        StoreEmployeeService.StoreEmployeeFind(actionMenuItemid).then(
-          (item: any) => {
+        StoreEmployeeService.StoreEmployeeFind(actionMenuItemid)
+          .then((item: any) => {
             if (item.data.success) {
               catLovService();
               setIsLoader(false);
               setEditFormData(item.data.data);
-              const filteredServices = item.data.data.services.map(
-                (el: any) => ({
-                  id: el.id,
-                  amount: el.amount,
-                  amountType: el.amountType,
-                  // storeEmployee: el.storeEmployee,
-                  serviceTime: el.serviceTime,
-                  storeServiceCategoryItem: el.storeServiceCategoryItem.id,
-                })
-              );
-              append(filteredServices);
+              // const filteredServices = item.data.data.services.map(
+              //   (el: any) => ({
+              //     id: el.id,
+              //     amount: el.amount,
+              //     amountType: el.amountType,
+              //     // storeEmployee: el.storeEmployee,
+              //     serviceTime: el.serviceTime,
+              //     storeServiceCategoryItem: el.storeServiceCategoryItem.id,
+              //   })
+              // );
+              // append(filteredServices);
               // console.log('🚀 ~ .then CAT ~ res.data.data:', item.data.data);
-              const catItems = item.data.data.services.map((elItems: any) => ({
-                id: elItems.storeServiceCategoryItem.id,
-                name: elItems.storeServiceCategoryItem.name,
-              }));
-              console.log('🚀 ~ catItems ~ catItems:', catItems);
-              setusedCatItemsLovList([...usedCatItemsLovlist, ...catItems]);
+              // const catItems = item.data.data.services.map((elItems: any) => ({
+              //   id: elItems.storeServiceCategoryItem.id,
+              //   name: elItems.storeServiceCategoryItem.name,
+              // }));
+              // console.log('🚀 ~ catItems ~ catItems:', catItems);
+              // setusedCatItemsLovList([...usedCatItemsLovlist, ...catItems]);
               // console.log("filteredServices", filteredServices);
               // [filteredServices].forEach((service: any) => {
               //   append(service);
@@ -479,8 +490,15 @@ function AppointmentProviderPage() {
                 type: 'error',
               });
             }
-          }
-        );
+          })
+          .catch((err) => {
+            setIsLoader(false);
+            setIsNotify(true);
+            setNotifyMessage({
+              text: err.message,
+              type: 'error',
+            });
+          });
       } else {
         setIsLoader(false);
         setIsNotify(true);
@@ -490,7 +508,12 @@ function AppointmentProviderPage() {
         });
       }
     } else if (option === 'Delete') {
-      if (listingRolePermission(dataRole, 'Appointment Provider Delete')) {
+      if (
+        listingRolePermission(
+          dataRole,
+          ALL_PERMISSIONS.storeAppointment.deleteEmployee
+        )
+      ) {
         setCancelDialogOpen(true);
       } else {
         setIsNotify(true);
@@ -501,7 +524,10 @@ function AppointmentProviderPage() {
       }
     } else if (option === 'Schedule') {
       if (
-        listingRolePermission(dataRole, 'Appointment Provider Schedule View')
+        listingRolePermission(
+          dataRole,
+          ALL_PERMISSIONS.storeAppointment.viewEmployeeSchedule
+        )
       ) {
         navigate(`../schedule/${actionMenuItemid}`);
       } else {
@@ -513,7 +539,10 @@ function AppointmentProviderPage() {
       }
     } else if (option === 'Attendance') {
       if (
-        listingRolePermission(dataRole, 'Appointment Provider Service View')
+        listingRolePermission(
+          dataRole,
+          ALL_PERMISSIONS.storeAppointment.viewEmployeeAttendance
+        )
       ) {
         navigate(`../attendance/${actionMenuItemid}`);
       } else {
@@ -525,7 +554,10 @@ function AppointmentProviderPage() {
       }
     } else if (option === 'Services') {
       if (
-        listingRolePermission(dataRole, 'Appointment Provider Service View')
+        listingRolePermission(
+          dataRole,
+          ALL_PERMISSIONS.storeAppointment.viewEmployees
+        )
       ) {
         navigate(`../services/list/${actionMenuItemid}`);
       } else {
@@ -537,7 +569,10 @@ function AppointmentProviderPage() {
       }
     } else if (option === 'Rating') {
       if (
-        listingRolePermission(dataRole, 'Appointment Provider Service View')
+        listingRolePermission(
+          dataRole,
+          ALL_PERMISSIONS.storeAppointment.viewEmployeeRating
+        )
       ) {
         navigate(`../review/${actionMenuItemid}`);
       } else {
@@ -551,7 +586,12 @@ function AppointmentProviderPage() {
   };
 
   useEffect(() => {
-    if (listingRolePermission(dataRole, 'Appointment Provider List')) {
+    if (
+      listingRolePermission(
+        dataRole,
+        ALL_PERMISSIONS.storeAppointment.viewEmployees
+      )
+    ) {
       StoreEmployeeService.StoreEmployeeAllList(search, page, rowsPerPage)
         .then((item: any) => {
           if (item.data.success) {
@@ -607,19 +647,16 @@ function AppointmentProviderPage() {
   // console.log("delte idss", delIds);
 
   const onSubmitUpdateDialogBox = async (data: any) => {
-    console.log('Update data', data);
+    // console.log('Update data', data);
     setIsLoader(true);
+    delete data.services;
     delete data.servicesName;
     delete data.servicesAmount;
     delete data.price;
     delete data.categoryId;
     delete data.servicesId;
     delete data.mints;
-    // const obj = {
-    //   ...data,
-    //   avatar: image,
-    // };
-    // console.log('🚀 ~ onSubmitUpdateDialogBox ~ data:2', obj);
+
     const formData = new FormData();
     formData.append('name', data.name);
     formData.append('address', data.address);
@@ -629,96 +666,79 @@ function AppointmentProviderPage() {
     formData.append('note', data.note);
     if (data.password) formData.append('password', data.password);
     formData.append('dob', dayjs(data.dob).format('YYYY-MM-DD'));
-    formData.append('services', JSON.stringify(data.services));
+    // formData.append('services', JSON.stringify(data.services));
     formData.append('payrollType', data.payrollType);
     formData.append('deletedIds', JSON.stringify(delIds));
     if (image) formData.append('avatar', image);
-    StoreEmployeeService.StoreEmployeeUpdate(formData, actionMenuItemid)
-      .then((res) => {
-        if (res.data.success) {
-          setIsLoader(false);
-          setOpenEditFormDialog(false);
-          console.log('res', res.data.data);
-          for (let i = 0; i < list.length; i += 1) {
-            if (list[i].id === res.data.data.id) {
-              list[i].name = res.data.data.name;
-              list[i].address = res.data.data.address;
-              list[i].email = res.data.data.email;
-              list[i].phone = res.data.data.phone;
-              list[i].cnic = res.data.data.cnic;
+    if (data) {
+      StoreEmployeeService.StoreEmployeeUpdate(formData, actionMenuItemid)
+        .then((res) => {
+          if (res.data.success) {
+            setIsLoader(false);
+            setOpenEditFormDialog(false);
+            // console.log('res', res.data.data);
+            for (let i = 0; i < list.length; i += 1) {
+              if (list[i].id === res.data.data.id) {
+                list[i].name = res.data.data.name;
+                list[i].address = res.data.data.address;
+                list[i].email = res.data.data.email;
+                list[i].phone = res.data.data.phone;
+                list[i].cnic = res.data.data.cnic;
+              }
             }
+            remove();
+            setIsNotify(true);
+            setNotifyMessage({
+              text: res.data.message,
+              type: 'success',
+            });
+          } else {
+            setIsLoader(false);
+            setIsNotify(true);
+            setNotifyMessage({
+              text: res.data.message,
+              type: 'error',
+            });
           }
-          setIsNotify(true);
-          setNotifyMessage({
-            text: res.data.message,
-            type: 'success',
-          });
-        } else {
+        })
+        .catch((err) => {
           setIsLoader(false);
           setIsNotify(true);
           setNotifyMessage({
-            text: res.data.message,
+            text: err.message,
             type: 'error',
           });
-        }
-      })
-      .catch((err) => {
-        setIsNotify(true);
-        setNotifyMessage({
-          text: err.message,
-          type: 'error',
         });
+    } else {
+      setIsLoader(false);
+      setIsNotify(true);
+      setNotifyMessage({
+        text: 'All fields are required',
+        type: 'error',
       });
+      // setNotifyMessage({
+      //   text: `All fields are required
+      //    ${
+      //      data?.services?.length < 1
+      //        ? '& you must need to add atleast one service.'
+      //        : ''
+      //    }`,
+      //   type: 'error',
+      // });
+    }
   };
 
   const onSubmitDialogBox = async (data: any) => {
-    // console.log(`onSubmitDialogBox -> data:`, data);
-    // setIsLoader(true);
+    setIsLoader(true);
+    delete data.servicess;
     delete data.servicesName;
     delete data.servicesAmount;
     delete data.price;
     delete data.categoryId;
     delete data.servicesId;
     delete data.mints;
-    // const _object = {
-    //   ...data,
-    //   weekDays,
-    //   startTime,
-    //   endTime,
-    //   avatar: image,
-    // };
-    console.log('🚀 ~ onSubmitDialogBox ~ endTime:', endTime);
-    console.log('🚀 ~ onSubmitDialogBox ~ startTime:', startTime);
 
-    // const TshopOpenTime = dayjs(officeTimings?.tenantConfig?.officeTimeIn);
-    // let TshopCloseTime = dayjs(officeTimings?.tenantConfig?.officeTimeOut);
-    // const startT = dayjs(startTime);
-    // let endT = dayjs(endTime);
-
-    // const hourStartT = TshopOpenTime.hour();
-    // const hourEndT = TshopCloseTime.hour();
-    // const hourST1 = TshopOpenTime.hour();
-    // const hourST2 = TshopCloseTime.hour();
-
-    // if (hour1 > hour2) {
-    //   TshopCloseTime = TshopCloseTime.add(1, 'day');
-    //   // return console.log('err');
-    // }
-
-    // if (
-    //   dayjs(startTime).format('HH:mm') <
-    //     dayjs(officeTimings?.tenantConfig?.officeTimeIn).format('HH:mm') ||
-    //   dayjs(endTime).format('HH:mm') >
-    //     dayjs(officeTimings?.tenantConfig?.officeTimeOut).format('HH:mm')
-    // ) {
-    //   setIsLoader(false);
-    //   setIsNotify(true);
-    //   setNotifyMessage({
-    //     text: 'You should check your shop time before creating staff',
-    //     type: 'error',
-    //   });
-    //   return null;
-    // }
+    console.log(`onSubmitDialogBox -> data:`, data);
     const formData = new FormData();
     formData.append('name', data.name);
     formData.append('address', data.address);
@@ -729,7 +749,7 @@ function AppointmentProviderPage() {
     formData.append('dob', dayjs().format('YYYY-MM-DD'));
     formData.append('note', data.note);
     if (image) formData.append('avatar', image);
-    formData.append('services', JSON.stringify(data.services));
+    // formData.append('services', JSON.stringify(data.services));
     formData.append('payrollType', data.payrollType);
     formData.append('workDays', JSON.stringify(weekDays));
     formData.append(
@@ -737,13 +757,13 @@ function AppointmentProviderPage() {
       dayjs(startTime).format('YYYY-MM-DD HH:mm:ss')
     );
     formData.append('endTime', dayjs(endTime).format('YYYY-MM-DD HH:mm:ss'));
-    if (weekDays && startTime && endTime && data.services.length > 0) {
+    if (weekDays && startTime && endTime) {
       StoreEmployeeService.StoreEmployeeCreate(formData)
         .then((res) => {
           if (res.data.success) {
             setIsLoader(false);
             setOpenFormDialog(false);
-            setList([res.data.data, ...list]);
+            setList((prev: any) => [res.data.data, ...prev]);
             setIsNotify(true);
             setNotifyMessage({
               text: res.data.message,
@@ -785,7 +805,12 @@ function AppointmentProviderPage() {
   };
 
   const handleSwitchChange = (event: any, id: string) => {
-    if (listingRolePermission(dataRole, 'Appointment Provider Update Status')) {
+    if (
+      listingRolePermission(
+        dataRole,
+        ALL_PERMISSIONS.storeAppointment.editEmployee
+      )
+    ) {
       const data = {
         isActive: event.target.checked,
       };

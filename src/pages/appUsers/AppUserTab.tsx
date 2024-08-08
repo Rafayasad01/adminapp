@@ -10,7 +10,7 @@ import ActionMenu from '../../components/common/ActionMenu';
 import CustomText from '../../components/common/CustomText';
 import { useAppSelector } from '../../redux/redux-hooks';
 import appUserService from '../../services/adminapp/adminAppUser';
-import { NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
+import { ALL_PERMISSIONS, NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
 import { CheckRolePermission, listingRolePermission } from '../../utils/helper';
 
 type AppUserTabProps = {
@@ -33,6 +33,7 @@ type AppUserTabProps = {
   setPage: any;
   search: any;
   setRowsPerPage: any;
+  setCancelDialogOpen: any;
 };
 
 function AppUserTab({
@@ -52,6 +53,7 @@ function AppUserTab({
   setActionMenuItemid,
   setEditFormData,
   setOpenEditFormDialog,
+  setCancelDialogOpen,
 }: AppUserTabProps) {
   const navigate = useNavigate();
   const authState: any = useAppSelector((state) => state?.authState);
@@ -61,12 +63,27 @@ function AppUserTab({
   const [actionMenuAnchorEl, setActionMenuAnchorEl] =
     useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
-  const actionMenuOptions = ['Detail', 'Reward History', 'Edit', 'Delete'];
+  let actionMenuOptions = ['Detail', 'Edit', 'Delete'];
+
+  const renderMenuOptions = () => {
+    if (
+      listingRolePermission(
+        dataRole,
+        ALL_PERMISSIONS.storeUser.viewUserAppRewardHistory
+      )
+    ) {
+      const newActionMenuOptions = ['View', 'Reward History', 'Edit', 'Delete'];
+      actionMenuOptions = newActionMenuOptions;
+    }
+    return actionMenuOptions;
+  };
 
   const manuHandler = (option: string) => {
-    setIsLoader(true);
+    // setIsLoader(true);
     if (option === 'Edit') {
-      if (listingRolePermission(dataRole, 'Customer Update')) {
+      if (
+        listingRolePermission(dataRole, ALL_PERMISSIONS.storeUser.editUserApp)
+      ) {
         appUserService.appUserEdit(actionMenuItemid?.id).then((item: any) => {
           if (item.data.success) {
             setIsLoader(false);
@@ -90,51 +107,17 @@ function AppUserTab({
       }
     } else if (option === 'Address') {
       CheckRolePermission(
-        'Customer Address Detail',
+        ALL_PERMISSIONS.storeUser.viewUserAddress,
         dataRole,
         navigate,
         `address/${actionMenuItemid?.id}`
       );
       // navigate(`address/${actionMenuItemid?.id}`);
     } else if (option === 'Delete') {
-      if (listingRolePermission(dataRole, 'Customer Delete')) {
-        setIsLoader(true);
-        const data = {
-          id: actionMenuItemid?.id,
-          updatedBy: authState.user.id,
-        };
-        appUserService
-          .appUserDelete(data)
-          .then((item: any) => {
-            if (item.data.success) {
-              setIsLoader(false);
-              setIsNotify(true);
-              setNotifyMessage({
-                text: item.data.message,
-                type: 'success',
-              });
-              setList((newArr: any) => {
-                return newArr.filter(
-                  (newItem: any) => newItem.id !== item.data.data.id
-                );
-              });
-            } else {
-              setIsLoader(false);
-              setIsNotify(true);
-              setNotifyMessage({
-                text: item.data.message,
-                type: 'error',
-              });
-            }
-          })
-          .catch((err: Error) => {
-            setIsLoader(false);
-            setIsNotify(true);
-            setNotifyMessage({
-              text: err.message,
-              type: 'error',
-            });
-          });
+      if (
+        listingRolePermission(dataRole, ALL_PERMISSIONS.storeUser.deleteUserApp)
+      ) {
+        setCancelDialogOpen(true);
       } else {
         setIsNotify(true);
         setNotifyMessage({
@@ -143,20 +126,47 @@ function AppUserTab({
         });
       }
     } else if (option === 'Detail') {
-      CheckRolePermission(
-        'Customer Detail',
-        dataRole,
-        navigate,
-        `../detail/${actionMenuItemid?.id}`
-      );
+      if (
+        listingRolePermission(dataRole, ALL_PERMISSIONS.storeUser.viewUserApp)
+      ) {
+        CheckRolePermission(
+          ALL_PERMISSIONS.storeUser.viewUserApp,
+          dataRole,
+          navigate,
+          `../detail/${actionMenuItemid?.id}`
+        );
+      } else {
+        setIsNotify(true);
+        setNotifyMessage({
+          text: NOT_AUTHORIZED_MESSAGE,
+          type: 'warning',
+        });
+      }
       // navigate(`detail/${actionMenuItemid?.id}`);
     } else if (option === 'Reward History') {
-      navigate(`../reward/history/${actionMenuItemid?.id}`);
+      console.log('sss');
+
+      if (
+        listingRolePermission(
+          dataRole,
+          ALL_PERMISSIONS.storeUser.viewUserAppRewardHistory
+        )
+      ) {
+        navigate(`../reward/history/${actionMenuItemid?.id}`);
+      } else {
+        setIsNotify(true);
+        setNotifyMessage({
+          text: NOT_AUTHORIZED_MESSAGE,
+          type: 'warning',
+        });
+      }
     }
   };
 
   const handleSwitchChange = (event: any, id: string) => {
-    if (listingRolePermission(dataRole, 'Customer Update Status')) {
+    if (
+      listingRolePermission(dataRole, ALL_PERMISSIONS.storeUser.editUserApp)
+    ) {
       setIsLoader(true);
       const data = {
         id,
@@ -224,7 +234,7 @@ function AppUserTab({
     setPage(newPage);
     if (search === '' || search === null || search === undefined) {
       appUserService
-        .appList(authState.user.tenant, 'App', newPage, rowsPerPage)
+        .appList(authState.user.tenant, 'App', newPage, newRowperPage)
         .then((item) => {
           setList(item.data.data.list);
           setTotal(item.data.data.total);
@@ -236,7 +246,7 @@ function AppUserTab({
           'App',
           search,
           newPage,
-          rowsPerPage
+          newRowperPage
         )
         .then((item) => {
           setList(item.data.data.list);
@@ -364,7 +374,7 @@ function AppUserTab({
           open={actionMenuOpen}
           anchorEl={actionMenuAnchorEl}
           setAnchorEl={setActionMenuAnchorEl}
-          options={actionMenuOptions}
+          options={renderMenuOptions()}
           callback={manuHandler}
         />
       )}

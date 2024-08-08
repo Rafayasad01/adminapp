@@ -13,12 +13,15 @@ import '../../assets/css/PopupStyle.css';
 import ErrorSpanBox from '../../components/common/ErrorSpanBox';
 import { CategoryService } from '../../interfaces/category.interface';
 import {
+  ALL_PERMISSIONS,
   INVALID_CHAR,
   MAX_LENGTH_EXCEEDED,
   PATTERN,
   VALIDATE_NON_NEGATIVE_NUM,
   imageAllowedTypes,
 } from '../../utils/constants';
+import { useAppSelector } from '../../redux/redux-hooks';
+import { listingRolePermission } from '../../utils/helper';
 
 type CategoriesServicesCreatePopupProps = {
   openFormDialog: boolean;
@@ -36,7 +39,9 @@ function CategoriesServicesCreatePopup({
   setNotifyMessage,
 }: CategoriesServicesCreatePopupProps) {
   const [image, setImage] = useState<any>(null);
-
+  const dataRole = useAppSelector(
+    (state) => state?.persistedReducer?.roleState?.role?.permissions
+  );
   const {
     register,
     handleSubmit,
@@ -121,7 +126,16 @@ function CategoriesServicesCreatePopup({
                 )}
               </FormControl>
             </div>
-            <div className="FormFields">
+            <div
+              className={`${
+                listingRolePermission(
+                  dataRole,
+                  ALL_PERMISSIONS.storeSetting.viewLoyaltyProgram
+                )
+                  ? 'FormFields'
+                  : 'FormField'
+              }`}
+            >
               <FormControl className="FormControl" variant="standard">
                 <label className="FormLabel">Price</label>
                 <Input
@@ -141,37 +155,43 @@ function CategoriesServicesCreatePopup({
                 />
                 {errors.price && <ErrorSpanBox error={errors.price?.message} />}
               </FormControl>
-              <FormControl className="FormControl" variant="standard">
-                <label className="FormLabel">Loyality Coins</label>
-                <Input
-                  className="FormInput"
-                  id="loyaltyCoins"
-                  placeholder="Enter loyalty Coins"
-                  {...register('loyaltyCoins', {
-                    required: false,
-                    pattern: {
-                      value: PATTERN.POINT_NUM,
-                      message: 'Enter a valid loyalty coins in numbers',
-                    },
-                    maxLength: {
-                      value: 10,
-                      message: 'Length should not be excceed from 10 numbers.',
-                    },
-                    validate: (value: any) =>
-                      value ? VALIDATE_NON_NEGATIVE_NUM(value) : true,
-                  })}
-                  disableUnderline
-                />
-                {errors.loyaltyCoins && (
-                  <ErrorSpanBox error={errors.loyaltyCoins?.message} />
-                )}
-              </FormControl>
+              {listingRolePermission(
+                dataRole,
+                ALL_PERMISSIONS.storeSetting.viewLoyaltyProgram
+              ) && (
+                <FormControl className="FormControl" variant="standard">
+                  <label className="FormLabel">Loyality Coins</label>
+                  <Input
+                    className="FormInput"
+                    id="loyaltyCoins"
+                    placeholder="Enter loyalty Coins"
+                    {...register('loyaltyCoins', {
+                      required: false,
+                      pattern: {
+                        value: PATTERN.POINT_NUM,
+                        message: 'Enter a valid loyalty coins in numbers',
+                      },
+                      maxLength: {
+                        value: 10,
+                        message:
+                          'Length should not be excceed from 10 numbers.',
+                      },
+                      validate: (value: any) =>
+                        value ? VALIDATE_NON_NEGATIVE_NUM(value) : true,
+                    })}
+                    disableUnderline
+                  />
+                  {errors.loyaltyCoins && (
+                    <ErrorSpanBox error={errors.loyaltyCoins?.message} />
+                  )}
+                </FormControl>
+              )}
             </div>
             <div className="FormField">
               <FormControl className="FormControl" variant="standard">
                 <label className="FormLabel">
                   Message{' '}
-                  <span className="SubLabel">Write 01-350 Characters</span>
+                  <span className="SubLabel">Write 01-370 Characters</span>
                 </label>
                 <TextField
                   className="FormTextarea"
@@ -187,7 +207,7 @@ function CategoriesServicesCreatePopup({
                       message: 'Minimum One Characters',
                     },
                     maxLength: {
-                      value: 350,
+                      value: 370,
                       message: MAX_LENGTH_EXCEEDED,
                     },
                   })}

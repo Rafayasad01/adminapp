@@ -12,7 +12,7 @@ import TopBar from '../../components/common/TopBar';
 import { useAppSelector } from '../../redux/redux-hooks';
 import appUserService from '../../services/adminapp/adminAppUser';
 import PermissionPopup from '../../utils/PermissionPopup';
-import { weekDays } from '../../utils/constants';
+import { ALL_PERMISSIONS, weekDays } from '../../utils/constants';
 import { listingRolePermission } from '../../utils/helper';
 import AppUserAddressTabPage from './AppUserAddressTab/AppUserAddressTabPage';
 import AppUserScheduleTabPage from './AppUserScheduleTab/AppUserScheduleTabPage';
@@ -36,7 +36,7 @@ function AppUserDetailPage() {
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
   const actionMenuOptions = ['Edit', 'Delete'];
 
-  const [isLoader, setIsLoader] = React.useState(true);
+  const [isLoader, setIsLoader] = React.useState(false);
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
   const [selectedTab, setSelectedTab] = useState('ADDRESS');
@@ -48,7 +48,9 @@ function AppUserDetailPage() {
   };
 
   useEffect(() => {
-    if (listingRolePermission(dataRole, 'Driver Address Detail')) {
+    if (
+      listingRolePermission(dataRole, ALL_PERMISSIONS.storeUser.viewUserApp)
+    ) {
       appUserService
         .appUserDetails(appuserId)
         .then((item: any) => {
@@ -94,7 +96,9 @@ function AppUserDetailPage() {
           });
         });
     }
-  }, [null]);
+  }, []);
+
+  console.log('🚀 ~ AppUserDetailPage ~ isLoader:', isLoader);
 
   return isLoader ? (
     <Loader />
@@ -202,36 +206,41 @@ function AppUserDetailPage() {
             </div>
           </div>
           <div className="mt-3 grid grid-cols-12">
-            <div className="col-span-12 rounded-lg bg-[#fff] px-4 py-5 shadow-lg">
-              {detail?.userType === 'Driver' && (
-                <Tabs value={selectedTab} onChange={handleTabChange}>
-                  <Tab
-                    label="address"
-                    value="ADDRESS"
-                    // onClick={() => navigate(`./detail/${appuserId}`)}
+            {listingRolePermission(
+              dataRole,
+              ALL_PERMISSIONS.storeUser.viewUserAddress
+            ) && (
+              <div className="col-span-12 rounded-lg bg-[#fff] px-4 py-5 shadow-lg">
+                {detail?.userType === 'Driver' && (
+                  <Tabs value={selectedTab} onChange={handleTabChange}>
+                    <Tab
+                      label="address"
+                      value="ADDRESS"
+                      // onClick={() => navigate(`./detail/${appuserId}`)}
+                    />
+                    <Tab
+                      label="Schedule"
+                      value="SCHEDULE"
+                      // onClick={() => navigate('../shop')}
+                    />
+                  </Tabs>
+                )}
+                {selectedTab === 'ADDRESS' && (
+                  <AppUserAddressTabPage
+                    addressList={detail?.appUserAddress}
+                    appUserId={appuserId}
+                    setAddress={setAddress}
                   />
-                  <Tab
-                    label="Schedule"
-                    value="SCHEDULE"
-                    // onClick={() => navigate('../shop')}
+                )}
+                {selectedTab === 'SCHEDULE' && (
+                  <AppUserScheduleTabPage
+                    appUserId={appuserId}
+                    scheduleList={detail?.appDriverWorkingSchedule}
+                    filteredWeekdays={filteredWeekDays}
                   />
-                </Tabs>
-              )}
-              {selectedTab === 'ADDRESS' && (
-                <AppUserAddressTabPage
-                  addressList={detail?.appUserAddress}
-                  appUserId={appuserId}
-                  setAddress={setAddress}
-                />
-              )}
-              {selectedTab === 'SCHEDULE' && (
-                <AppUserScheduleTabPage
-                  appUserId={appuserId}
-                  scheduleList={detail?.appDriverWorkingSchedule}
-                  filteredWeekdays={filteredWeekDays}
-                />
-              )}
-            </div>
+                )}
+              </div>
+            )}
           </div>
         </div>
       )}

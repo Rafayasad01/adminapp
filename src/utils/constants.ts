@@ -7,6 +7,8 @@ export const BASE_URL =
 export const BASE_SYSTEM_URL =
   import.meta.env.VITE_SYSTEM_BASE_URL || `${HOST}/api/v1/system/config/`;
 export const MODULE_EMPLOYEES = 'Employees';
+export const MODULE_SETTINGS = 'Settings';
+export const MODULE_BRANCHES = 'Branches';
 export const RATING = 'rating';
 export const FAQ = 'faq';
 export const EMPLOYEE_PREFIX = 'employee';
@@ -86,6 +88,247 @@ export const setText = (text: string) => {
   TEXT_STORE_KEY = text;
 };
 export { TEXT_STORE_KEY };
+
+// ORDER SERVICE
+
+export const ORDER_STATUS_SERVICE = {
+  NEW: 'New',
+  DRIVER_ASSIGNED_FOR_ITEM_PICKUP: 'Driver-Assigned-For-Item-Pickup',
+  DRIVER_ACCEPTED_TO_PICK_UP_ITEM_FROM_CUSTOMER:
+    'Driver-Accepted-To-Pick-Up-Item-From-Customer',
+  DRIVER_DECLINED_TO_PICKUP_ITEM_FROM_CUSTOMER:
+    'Driver-Declined-To-Pickup-Item-From-Customer',
+  DRIVER_PICKED_UP_ITEM_FROM_CUSTOMER: 'Driver-Picked-Up-Item-From-Customer',
+  DRIVER_RETURNED_ITEM_TO_CUSTOMER: 'Driver-Returned-Item-To-Customer',
+  DRIVER_DELIVERED_ITEM_TO_SHOP: 'Driver-Delivered-Item-To-Shop',
+  PROCESSING_ITEM: 'Processing-Item',
+  DRIVER_ASSIGNED_FOR_ITEM_DELIVERY: 'Driver-Assigned-For-Item-Delivery',
+  DRIVER_ACCEPTED_TO_PICK_UP_ITEM_FROM_SHOP:
+    'Driver-Accepted-To-Pick-Up-Item-From-Shop',
+  DRIVER_DECLINED_TO_PICKUP_ITEM_FROM_SHOP:
+    'Driver-Declined-To-Pickup-Item-From-Shop',
+  DRIVER_PICKED_UP_ITEM_FROM_SHOP: 'Driver-Picked-Up-Item-From-Shop',
+  DRIVER_RETURNED_ITEM_TO_SHOP: 'Driver-Returned-Item-To-Shop',
+  DRIVER_DELIVERED_ITEM_TO_CUSTOMER: 'Driver-Delivered-Item-To-Customer',
+  CUSTOMER_PICK_UP: 'Customer-Pick-Up',
+  COMPLETED: 'Completed',
+  CANCELLED: 'Cancelled',
+} as const;
+
+export const ORDER_STATUSES_SERVICE = new Map([
+  [
+    ORDER_STATUS_SERVICE.NEW,
+    {
+      status: ORDER_STATUS_SERVICE.NEW,
+      title: 'Order Received',
+      color: 'text-cyan-500',
+      background: 'bg-cyan-500',
+      text: 'you have have received an order',
+      iconText: 'CheckCircleOutlineOutlined',
+      progress: 10,
+    },
+  ],
+  [
+    ORDER_STATUS_SERVICE.DRIVER_ASSIGNED_FOR_ITEM_PICKUP,
+    {
+      status: ORDER_STATUS_SERVICE.DRIVER_ASSIGNED_FOR_ITEM_PICKUP,
+      title: 'Pickup Driver Assigned',
+      color: 'text-cyan-500',
+      background: 'bg-cyan-500',
+      text: 'you have assigned driver for items pickup',
+      iconText: 'CheckCircleOutlineOutlined',
+      progress: 20,
+    },
+  ],
+  [
+    ORDER_STATUS_SERVICE.DRIVER_ACCEPTED_TO_PICK_UP_ITEM_FROM_CUSTOMER,
+    {
+      status:
+        ORDER_STATUS_SERVICE.DRIVER_ACCEPTED_TO_PICK_UP_ITEM_FROM_CUSTOMER,
+      title: 'Driver Accepted To Pickup',
+      color: 'text-sky-500',
+      background: 'bg-sky-500',
+      text: 'the driver has accepted to pickup items',
+      iconText: 'CheckCircleOutlineOutlined',
+      progress: 30,
+    },
+  ],
+  [
+    ORDER_STATUS_SERVICE.DRIVER_DECLINED_TO_PICKUP_ITEM_FROM_CUSTOMER,
+    {
+      status: ORDER_STATUS_SERVICE.DRIVER_DECLINED_TO_PICKUP_ITEM_FROM_CUSTOMER,
+      title: 'Driver Declined Items',
+      color: 'text-indigo-500',
+      background: 'bg-indigo-500',
+      text: 'driver has returned items to customer',
+      iconText: 'CheckCircleOutlineOutlined',
+      progress: 40,
+    },
+  ],
+  [
+    ORDER_STATUS_SERVICE.DRIVER_PICKED_UP_ITEM_FROM_CUSTOMER,
+    {
+      status: ORDER_STATUS_SERVICE.DRIVER_PICKED_UP_ITEM_FROM_CUSTOMER,
+      title: 'Driver Pickup Items',
+      color: 'text-blue-500',
+      background: 'bg-blue-500',
+      text: 'driver has customers items',
+      iconText: 'CheckCircleOutlineOutlined',
+      progress: 40,
+    },
+  ],
+  [
+    ORDER_STATUS_SERVICE.DRIVER_RETURNED_ITEM_TO_CUSTOMER,
+    {
+      status: ORDER_STATUS_SERVICE.DRIVER_RETURNED_ITEM_TO_CUSTOMER,
+      title: 'Driver Returned Items',
+      color: 'text-indigo-500',
+      background: 'bg-indigo-500',
+      text: 'driver has returned items to customer',
+      iconText: 'CheckCircleOutlineOutlined',
+      progress: 40,
+    },
+  ],
+  [
+    ORDER_STATUS_SERVICE.DRIVER_DELIVERED_ITEM_TO_SHOP,
+    {
+      status: ORDER_STATUS_SERVICE.DRIVER_DELIVERED_ITEM_TO_SHOP,
+      title: 'Driver Delivered Item To Shop',
+      color: 'text-indigo-500',
+      background: 'bg-indigo-500',
+      text: 'driver has delivered items to shop',
+      iconText: 'CheckCircleOutlineOutlined',
+      progress: 50,
+    },
+  ],
+  [
+    ORDER_STATUS_SERVICE.PROCESSING_ITEM,
+    {
+      status: ORDER_STATUS_SERVICE.PROCESSING_ITEM,
+      title: 'Processing Items',
+      color: 'text-fuchsia-500',
+      background: 'bg-fuchsia-500',
+      text: 'items are processing',
+      iconText: 'CheckCircleOutlineOutlined',
+      progress: 60,
+    },
+  ],
+  [
+    ORDER_STATUS_SERVICE.DRIVER_ASSIGNED_FOR_ITEM_DELIVERY,
+    {
+      status: ORDER_STATUS_SERVICE.DRIVER_ASSIGNED_FOR_ITEM_DELIVERY,
+      title: 'Delivery Driver Assigned',
+      color: 'text-fuchsia-500',
+      background: 'bg-fuchsia-500',
+      text: 'you have assigned driver for items delivery',
+      iconText: 'CheckCircleOutlineOutlined',
+      progress: 70,
+    },
+  ],
+  [
+    ORDER_STATUS_SERVICE.DRIVER_ACCEPTED_TO_PICK_UP_ITEM_FROM_SHOP,
+    {
+      status: ORDER_STATUS_SERVICE.DRIVER_ACCEPTED_TO_PICK_UP_ITEM_FROM_SHOP,
+      title: 'Driver Accepted To Deliver',
+      color: 'text-fuchsia-500',
+      background: 'bg-fuchsia-500',
+      text: 'driver has accepted to deliver items',
+      iconText: 'CheckCircleOutlineOutlined',
+      progress: 80,
+    },
+  ],
+  [
+    ORDER_STATUS_SERVICE.DRIVER_DECLINED_TO_PICKUP_ITEM_FROM_SHOP,
+    {
+      status: ORDER_STATUS_SERVICE.DRIVER_DECLINED_TO_PICKUP_ITEM_FROM_SHOP,
+      title: 'Driver Declined Items',
+      color: 'text-indigo-500',
+      background: 'bg-indigo-500',
+      text: 'driver has returned items to customer',
+      iconText: 'CheckCircleOutlineOutlined',
+      progress: 70,
+    },
+  ],
+  [
+    ORDER_STATUS_SERVICE.DRIVER_PICKED_UP_ITEM_FROM_SHOP,
+    {
+      status: ORDER_STATUS_SERVICE.DRIVER_PICKED_UP_ITEM_FROM_SHOP,
+      title: 'Driver Deliver Items',
+      color: 'text-pink-500',
+      background: 'bg-pink-500',
+      text: 'driver has customers items',
+      iconText: 'CheckCircleOutlineOutlined',
+      progress: 90,
+    },
+  ],
+  [
+    ORDER_STATUS_SERVICE.DRIVER_RETURNED_ITEM_TO_SHOP,
+    {
+      status: ORDER_STATUS_SERVICE.DRIVER_RETURNED_ITEM_TO_SHOP,
+      title: 'Driver Returned Items',
+      color: 'text-indigo-500',
+      background: 'bg-indigo-500',
+      text: 'driver has returned items to customer',
+      iconText: 'CheckCircleOutlineOutlined',
+      progress: 70,
+    },
+  ],
+  [
+    ORDER_STATUS_SERVICE.DRIVER_DELIVERED_ITEM_TO_CUSTOMER,
+    {
+      status: ORDER_STATUS_SERVICE.DRIVER_DELIVERED_ITEM_TO_CUSTOMER,
+      title: 'Delivered',
+      color: 'text-rose-500',
+      background: 'bg-rose-500',
+      text: 'driver has delivered items',
+      iconText: 'CheckCircleOutlineOutlined',
+      progress: 100,
+    },
+  ],
+  [
+    ORDER_STATUS_SERVICE.CUSTOMER_PICK_UP,
+    {
+      status: ORDER_STATUS_SERVICE.CUSTOMER_PICK_UP,
+      title: 'Items Ready',
+      color: 'text-green-500',
+      background: 'bg-green-500',
+      text: 'Items are ready for customers to pick up',
+      iconText: 'CheckCircleOutlineOutlined',
+      progress: 90,
+    },
+  ],
+  [
+    ORDER_STATUS_SERVICE.COMPLETED,
+    {
+      status: ORDER_STATUS_SERVICE.COMPLETED,
+      title: 'Order Completed',
+      color: 'text-amber-500',
+      background: 'bg-amber-500',
+      text: 'order has been completed',
+      iconText: 'CheckCircleOutlineOutlined',
+      progress: 100,
+    },
+  ],
+  [
+    ORDER_STATUS_SERVICE.CANCELLED,
+    {
+      status: ORDER_STATUS_SERVICE.CANCELLED,
+      title: 'Order Canceled',
+      color: 'text-red-500',
+      background: 'bg-red-500',
+      text: 'the order has been canceled',
+      iconText: 'CheckCircleOutlineOutlined',
+      progress: 100,
+    },
+  ],
+]);
+
+export const ORDER_FULFILLMENT_METHOD = {
+  DELIVERY: 'Delivery',
+  SELF: 'Self',
+} as const;
+
+// ORDER PRODUCT
 
 export const ORDER_STATUS = {
   NEW: 'New',
@@ -318,11 +561,6 @@ export const ORDER_STATUSES = new Map([
   ],
 ]);
 
-export const ORDER_FULFILLMENT_METHOD = {
-  DELIVERY: 'Delivery',
-  SELF: 'Self',
-} as const;
-
 export const weekDays = [
   { id: 'Sunday', name: 'Sunday' },
   { id: 'Monday', name: 'Monday' },
@@ -387,7 +625,7 @@ export const VALIDATE_NON_NEGATIVE_NUM_AND_CHECK_LENGTH = (
 ) => {
   const parsedValue = parseInt(value, 10);
 
-  if (parsedValue >= 0 && parsedValue > length) {
+  if (parsedValue >= 0 && parsedValue >= length) {
     return true; // Validation passes
   }
   if (parsedValue < 0) {
@@ -476,3 +714,108 @@ export const GENDER = [
     name: 'Other',
   },
 ];
+
+export const ALL_PERMISSIONS = {
+  storeAppointment: {
+    viewServices: 'viewAppointmentService',
+    viewEmployees: 'viewAppointmentEmployee',
+    viewAppointments: 'viewStoreAppointment',
+    viewWallets: 'viewAppointmentWallet',
+    viewLeaveManagement: 'viewAppointmentLeaveManagement',
+    // viewCategory: 'viewAppointmentCategory',
+    viewEmployeeSchedule: 'viewAppointmentEmployeeSchedule',
+    viewEmployeeRating: 'viewAppointmentEmployeeRating',
+    viewEmployeeAttendance: 'viewAppointmentEmployeeAttendance',
+    // addCategory: 'addAppointmentCategory',
+    // editCategory: 'editAppointmentCategory',
+    // deleteCategory: 'deleteAppointmentCategory',
+    addService: 'addAppointmentService',
+    editService: 'editAppointmentService',
+    deleteService: 'deleteAppointmentService',
+    addEmployee: 'addAppointmentEmployee',
+    editEmployee: 'editAppointmentEmployee',
+    deleteEmployee: 'deleteAppointmentEmployee',
+    addEmployeeSchedule: 'addAppointmentEmployeeSchedule',
+    editEmployeeSchedule: 'editAppointmentEmployeeSchedule',
+    deleteEmployeeSchedule: 'deleteAppointmentEmployeeSchedule',
+    viewAppointment: 'viewAppointment',
+    addAppointment: 'addAppointment',
+    editAppointment: 'editAppointment',
+    deleteAppointment: 'deleteAppointment',
+    verifyAddAppointment: 'verifyAddAppointment',
+    editWallet: 'editAppointmentWallet',
+    editLeaveManagement: 'editAppointmentLeaveManagement',
+  },
+  storeProduct: {
+    viewProducts: 'viewStoreProduct',
+    viewServices: 'viewStoreService',
+    viewOrders: 'viewProductOrder',
+    viewRatings: 'viewProductRating',
+    add: 'addProduct',
+    edit: 'editProduct',
+    delete: 'deleteProduct',
+    view: 'viewProduct',
+    viewServiceOrder: 'viewServiceOrder',
+    viewDriverHistory: 'viewProductDriverHistory',
+    viewOrder: 'viewProductOrder',
+    addOrder: 'addProductOrder',
+    editOrder: 'editProductOrder',
+    viewRating: 'viewProductRating',
+    assignDriver: 'assignDriver',
+  },
+  storeUser: {
+    viewUsers: 'viewStoreUser',
+    viewUserApp: 'viewUserApp',
+    addUserApp: 'addUserApp',
+    editUserApp: 'editUserApp',
+    deleteUserApp: 'deleteUserApp',
+    viewUserAddress: 'viewUserAddress',
+    addUserAddress: 'addUserAddress',
+    editUserAddress: 'editUserAddress',
+    deleteUserAddress: 'deleteUserAddress',
+    viewUserEmployee: 'viewUserEmployee',
+    addUserEmployee: 'addUserEmployee',
+    editUserEmployee: 'editUserEmployee',
+    deleteUserEmployee: 'deleteUserEmployee',
+    viewUserAppRewardHistory: 'viewUserAppRewardHistory',
+    viewDriverUserApp: 'viewDriverUserApp',
+  },
+  storeBranch: {
+    viewBranches: 'viewStoreBranch',
+    add: 'addBranch',
+    edit: 'editBranch',
+  },
+  storeBanner: {
+    viewBanners: 'viewStoreBanner',
+    add: 'addBanner',
+    edit: 'editBanner',
+    delete: 'deleteBanner',
+  },
+  storeFaq: {
+    viewFaqs: 'viewStoreFaq',
+    add: 'addFaq',
+    edit: 'editFaq',
+  },
+  storeNotification: {
+    viewNotifications: 'viewStoreNotification',
+    sent: 'sentNotification',
+    selectType: 'selectNotificationType',
+  },
+  storeVoucher: {
+    viewVouchers: 'viewStoreVoucher',
+    add: 'addVoucher',
+    edit: 'editVoucher',
+    delete: 'deleteVoucher',
+  },
+  storeSetting: {
+    viewSettings: 'viewStoreSetting',
+    add: 'addSetting',
+    editSetting: 'editSetting',
+    viewDownloadQRCode: 'viewDownloadQRCode',
+    viewAttendanceDistance: 'viewAttendanceDistance',
+    viewMinimumDelivery: 'viewMinimumDelivery',
+    viewEmployeeLimit: 'viewEmployeeLimit',
+    viewLoyaltyProgram: 'viewLoyaltyProgram',
+    viewOfficeTime: 'viewOfficeTime',
+  },
+};

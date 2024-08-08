@@ -23,6 +23,7 @@ function ActionMenu({
     setAnchorEl(null);
     callback(option);
   };
+  console.log('🚀 ~ options:', options);
   return (
     <Menu
       id="long-menu"

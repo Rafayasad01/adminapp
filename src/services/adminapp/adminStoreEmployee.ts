@@ -102,6 +102,12 @@ const StoreEmployeeServiceList = (empId: any) => {
   );
 };
 
+const StoreEmployeeServiceAllList = (empId: any) => {
+  return network.get(
+    `${STORE_PREFIX}/${EMPLOYEE_PREFIX}/${SERVICE_PREFIX}/lov/${empId}`
+  );
+};
+
 const StoreEmployeeServiceCreate = (empId: any, data: any) => {
   return network.post(
     `${STORE_PREFIX}/${EMPLOYEE_PREFIX}/${SERVICE_PREFIX}/create/${empId}`,
@@ -189,6 +195,7 @@ export default {
   StoreEmployeeUpdate,
   StoreEmployeeUpdateStatus,
   StoreEmployeeServiceList,
+  StoreEmployeeServiceAllList,
   StoreEmployeeServiceCreate,
   StoreEmployeeServiceUpdate,
   StoreEmployeeServiceUpdateStatus,

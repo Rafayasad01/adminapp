@@ -1,10 +1,10 @@
-import AddIcon from '@mui/icons-material/Add';
-import ArrowCircleLeftOutlinedIcon from '@mui/icons-material/ArrowCircleLeftOutlined';
-import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
+// import AddIcon from '@mui/icons-material/Add';
+// import ArrowCircleLeftOutlinedIcon from '@mui/icons-material/ArrowCircleLeftOutlined';
+// import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
-import EastIcon from '@mui/icons-material/East';
+// import EastIcon from '@mui/icons-material/East';
 import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
-import Button from '@mui/material/Button';
+// import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import FormControl from '@mui/material/FormControl';
 import IconButton from '@mui/material/IconButton';
@@ -21,10 +21,10 @@ import CustomWorkDaysForm from '../../../components/common/CustomWorkDaysForm';
 import ErrorSpanBox from '../../../components/common/ErrorSpanBox';
 import CustomTimePicker from '../../../components/common/TimePicker';
 import {
-  BARBER_SERVICES_AMOUNT,
+  // BARBER_SERVICES_AMOUNT,
   INVALID_CHAR,
   MAX_LENGTH_EXCEEDED,
-  PATTERN,
+  // PATTERN,
 } from '../../../utils/constants';
 
 type CustomSwiperDialogProps = {
@@ -74,19 +74,19 @@ function CustomSwiperDialog({
   setStartServiceTime: _setStartServiceTime,
   startServiceTime: _startServiceTime,
   addScheduleFormat,
-  append,
-  catItemsLov,
-  usedCatItemsLovlist,
-  catLov,
-  control,
+  // append,
+  // catItemsLov,
+  // usedCatItemsLovlist,
+  // catLov,
+  // control,
   DialogSliderOne,
-  DialogSliderTwo,
+  // DialogSliderTwo,
   DialogSubHeader,
   endTime,
   errors,
   getValues: _getValues,
-  handleNextSlide,
-  handlePrevSlide,
+  // handleNextSlide,
+  // handlePrevSlide,
   handleSubmit,
   inputFieldsData,
   inputScheduleData,
@@ -94,15 +94,15 @@ function CustomSwiperDialog({
   onSubmit,
   openFormDialog,
   register,
-  remove,
+  // remove,
   reset,
-  ServicesFields,
+  // ServicesFields,
   setAvater,
   setError: _setError,
-  setIsNotify,
-  setNotifyMessage,
+  // setIsNotify,
+  // setNotifyMessage,
   setOpenFormDialog,
-  setValue,
+  // setValue,
   setWeekDays,
   singleField,
   specailCase,
@@ -128,83 +128,83 @@ function CustomSwiperDialog({
     }
   };
 
-  const handleServices = () => {
-    const obj = {
-      storeServiceCategoryItem: watch('servicesId'),
-      serviceTime: watch('mints'),
-      amountType: watch('servicesAmount'),
-      amount: watch('price'),
-    };
-    if (
-      !PATTERN.ONLY_NUM.test(watch('price')) &&
-      !PATTERN.ONLY_NUM.test(watch('mints'))
-    ) {
-      setIsNotify(true);
-      setNotifyMessage({
-        text: 'Price and Service time should be in digits(number)',
-        type: 'error',
-      });
-      return;
-    }
-    if (!PATTERN.ONLY_NUM.test(watch('price'))) {
-      setIsNotify(true);
-      setNotifyMessage({
-        text: 'Price should be in digits(number)',
-        type: 'error',
-      });
-      return;
-    }
-    if (!PATTERN.ONLY_NUM.test(watch('mints'))) {
-      setIsNotify(true);
-      setNotifyMessage({
-        text: 'Service Time should be in digits(number)',
-        type: 'error',
-      });
-      return;
-    }
+  // const handleServices = () => {
+  //   const obj = {
+  //     storeServiceCategoryItem: watch('servicesId'),
+  //     serviceTime: watch('mints'),
+  //     amountType: watch('servicesAmount'),
+  //     amount: watch('price'),
+  //   };
+  //   if (
+  //     !PATTERN.ONLY_NUM.test(watch('price')) &&
+  //     !PATTERN.ONLY_NUM.test(watch('mints'))
+  //   ) {
+  //     setIsNotify(true);
+  //     setNotifyMessage({
+  //       text: 'Price and Service time should be in digits(number)',
+  //       type: 'error',
+  //     });
+  //     return;
+  //   }
+  //   if (!PATTERN.ONLY_NUM.test(watch('price'))) {
+  //     setIsNotify(true);
+  //     setNotifyMessage({
+  //       text: 'Price should be in digits(number)',
+  //       type: 'error',
+  //     });
+  //     return;
+  //   }
+  //   if (!PATTERN.ONLY_NUM.test(watch('mints'))) {
+  //     setIsNotify(true);
+  //     setNotifyMessage({
+  //       text: 'Service Time should be in digits(number)',
+  //       type: 'error',
+  //     });
+  //     return;
+  //   }
 
-    const check: boolean =
-      ServicesFields?.find(
-        (el: any) => el.storeServiceCategoryItem === watch('servicesId')
-      ) !== undefined;
-    if (check) {
-      setIsNotify(true);
-      setNotifyMessage({
-        text: 'This service you already selected, Please select another service',
-        type: 'error',
-      });
-      return;
-    }
-    console.log(
-      "🚀 ~ handleServices ~ watch('servicesId'):",
-      watch('servicesId')
-    );
-    if (
-      watch('servicesId') &&
-      watch('servicesId') !== 'none' &&
-      watch('servicesAmount') &&
-      watch('price') &&
-      watch('mints')
-    ) {
-      append(obj);
-      // setValue("servicesId", 'none')
-      // setValue("servicesAmount", 'none')
-      // setValue("price", null)
-      // setStartServiceTime(null)
-    } else {
-      setIsNotify(true);
-      setNotifyMessage({
-        text: 'All Services Fields are Required',
-        type: 'error',
-      });
-    }
-  };
+  //   const check: boolean =
+  //     ServicesFields?.find(
+  //       (el: any) => el.storeServiceCategoryItem === watch('servicesId')
+  //     ) !== undefined;
+  //   if (check) {
+  //     setIsNotify(true);
+  //     setNotifyMessage({
+  //       text: 'This service you already selected, Please select another service',
+  //       type: 'error',
+  //     });
+  //     return;
+  //   }
+  //   console.log(
+  //     "🚀 ~ handleServices ~ watch('servicesId'):",
+  //     watch('servicesId')
+  //   );
+  //   if (
+  //     watch('servicesId') &&
+  //     watch('servicesId') !== 'none' &&
+  //     watch('servicesAmount') &&
+  //     watch('price') &&
+  //     watch('mints')
+  //   ) {
+  //     append(obj);
+  //     // setValue("servicesId", 'none')
+  //     // setValue("servicesAmount", 'none')
+  //     // setValue("price", null)
+  //     // setStartServiceTime(null)
+  //   } else {
+  //     setIsNotify(true);
+  //     setNotifyMessage({
+  //       text: 'All Services Fields are Required',
+  //       type: 'error',
+  //     });
+  //   }
+  // };
 
-  const getCatItemName = (id: any) => {
-    let tempAr: any[] = [];
-    tempAr = usedCatItemsLovlist;
-    return tempAr?.find((el: any) => el.id === id)?.name;
-  };
+  // const getCatItemName = (id: any) => {
+  //   let tempAr: any[] = [];
+  //   tempAr = usedCatItemsLovlist;
+  //   return tempAr?.find((el: any) => el.id === id)?.name;
+  // };
 
   /* const customRenderTimeViewClock = (props: any) => {
     return renderTimeViewClock({
@@ -525,10 +525,10 @@ function CustomSwiperDialog({
               />
               <CustomButton
                 buttonType="button"
-                title="Next"
-                iconRight={<EastIcon className="text-base" />}
-                onclick={handleNextSlide}
-                // type={'submit'}
+                title="Submit"
+                // iconRight={<EastIcon className="text-base" />}
+                // onclick={handleNextSlide}
+                type="submit"
                 className="btn-black-fill"
                 sx={{
                   padding: '0.375rem 2rem !important',
@@ -538,7 +538,7 @@ function CustomSwiperDialog({
               />
             </div>
           </SwiperSlide>
-          <SwiperSlide className="custom-swiper-slide swiper-no-swiping">
+          {/* <SwiperSlide className="custom-swiper-slide swiper-no-swiping">
             <div className="FormHeader">
               <div className="flex items-center">
                 <ArrowCircleLeftOutlinedIcon
@@ -696,7 +696,7 @@ function CustomSwiperDialog({
                 }}
               />
             </div>
-          </SwiperSlide>
+          </SwiperSlide> */}
         </Swiper>
       </form>
     </Dialog>

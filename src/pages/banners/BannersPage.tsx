@@ -15,7 +15,7 @@ import TopBar from '../../components/common/TopBar';
 import { AppUserEmployees } from '../../interfaces/app-user.interface';
 import { useAppSelector } from '../../redux/redux-hooks';
 import bannerService from '../../services/adminapp/adminBanner';
-import { NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
+import { ALL_PERMISSIONS, NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
 import { listingRolePermission } from '../../utils/helper';
 import BannerUpdatePopup from './BannerUpdatePopup';
 import BannersCreatePopup from './BannersCreatePopup';
@@ -35,7 +35,7 @@ function BannersPage() {
   const { reset } = useForm<AppUserEmployees>();
 
   const handleFormClickOpen = () => {
-    if (listingRolePermission(dataRole, 'Banners Create')) {
+    if (listingRolePermission(dataRole, ALL_PERMISSIONS.storeBanner.add)) {
       setOpenFormDialog(true);
     } else {
       setIsNotify(true);
@@ -84,7 +84,9 @@ function BannersPage() {
   // };
 
   useEffect(() => {
-    if (listingRolePermission(dataRole, 'Banners List')) {
+    if (
+      listingRolePermission(dataRole, ALL_PERMISSIONS.storeBanner.viewBanners)
+    ) {
       bannerService
         .getBanners(authState.user.tenant)
         .then((item: any) => {
@@ -109,7 +111,7 @@ function BannersPage() {
   }, [null]);
 
   const createFormHandler = (bannerData: any) => {
-    if (listingRolePermission(dataRole, 'Banners Create')) {
+    if (listingRolePermission(dataRole, ALL_PERMISSIONS.storeBanner.add)) {
       setIsLoader(true);
       const formData = new FormData();
       formData.append('name', bannerData.name ?? '');
@@ -163,7 +165,7 @@ function BannersPage() {
   };
 
   const updateFormHandler = (data: any) => {
-    if (listingRolePermission(dataRole, 'Banners Update')) {
+    if (listingRolePermission(dataRole, ALL_PERMISSIONS.storeBanner.edit)) {
       setIsLoader(true);
       const formDetails = new FormData();
       formDetails.append('name', data.name ?? '');
@@ -227,7 +229,7 @@ function BannersPage() {
   };
 
   const handleEdit = (id: string) => {
-    if (listingRolePermission(dataRole, 'Banners Edit')) {
+    if (listingRolePermission(dataRole, ALL_PERMISSIONS.storeBanner.edit)) {
       setIsLoader(true);
       bannerService
         .editBanners(id)
@@ -264,7 +266,7 @@ function BannersPage() {
   };
 
   const handleDelete = (id: string) => {
-    if (listingRolePermission(dataRole, 'Banners Delete')) {
+    if (listingRolePermission(dataRole, ALL_PERMISSIONS.storeBanner.delete)) {
       setIsLoader(true);
       const deleteObj = {
         updatedBy: authState.user.id,
@@ -307,7 +309,7 @@ function BannersPage() {
   };
 
   const handleSwitchChange = (event: any, id: string) => {
-    if (listingRolePermission(dataRole, 'Banners Update Status')) {
+    if (listingRolePermission(dataRole, ALL_PERMISSIONS.storeBanner.edit)) {
       const data = {
         isActive: event.target.checked,
         updatedBy: authState.user.id,

@@ -71,6 +71,7 @@ function CustomInputBox({
         )}
       </div>
       <Input
+        name={id}
         disabled={disable || false}
         sx={sx ?? { width: length }}
         className={`FormInput ${customClass}`}

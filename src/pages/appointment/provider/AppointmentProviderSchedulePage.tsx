@@ -17,7 +17,10 @@ import { AppointmentProviderSchedule } from '../../../interfaces/app.appointment
 import { useAppSelector } from '../../../redux/redux-hooks';
 import adminAppointmentService from '../../../services/adminapp/adminAppointment';
 import PermissionPopup from '../../../utils/PermissionPopup';
-import { NOT_AUTHORIZED_MESSAGE } from '../../../utils/constants';
+import {
+  ALL_PERMISSIONS,
+  NOT_AUTHORIZED_MESSAGE,
+} from '../../../utils/constants';
 import { listingRolePermission } from '../../../utils/helper';
 import AppointmentProviderScheduleUpdatePopup from './AppointmentProviderScheduleUpdatePopup';
 
@@ -97,8 +100,10 @@ function AppointmentProviderSchedulePage() {
 
   const handleFormClickOpen = () => {
     if (
-      listingRolePermission(dataRole, 'Appointment Provider Schedule Create') &&
-      listingRolePermission(dataRole, 'Appointment Provider Schedule List')
+      listingRolePermission(
+        dataRole,
+        ALL_PERMISSIONS.storeAppointment.addEmployeeSchedule
+      )
     ) {
       // console.log('done1');
       // setOpenFormDialog(true);
@@ -158,7 +163,12 @@ function AppointmentProviderSchedulePage() {
   // };
 
   const editHandler = (editId: string) => {
-    if (listingRolePermission(dataRole, 'Appointment Provider Schedule Edit')) {
+    if (
+      listingRolePermission(
+        dataRole,
+        ALL_PERMISSIONS.storeAppointment.editEmployeeSchedule
+      )
+    ) {
       // setIsLoader(true);
       const editFormData = list.storeEmployeeSchedule?.find(
         (el: any) => el.id === editId
@@ -187,7 +197,10 @@ function AppointmentProviderSchedulePage() {
   const manuHandler = (option: string) => {
     if (option === 'Edit') {
       if (
-        listingRolePermission(dataRole, 'Appointment Provider Schedule Edit')
+        listingRolePermission(
+          dataRole,
+          ALL_PERMISSIONS.storeAppointment.editEmployeeSchedule
+        )
       ) {
         setIsLoader(true);
         // Service.ProviderScheduleEdit(actionMenuItemid).then((item: any) => {
@@ -205,56 +218,65 @@ function AppointmentProviderSchedulePage() {
           type: 'warning',
         });
       }
-    } else if (option === 'Delete') {
-      if (
-        listingRolePermission(dataRole, 'Appointment Provider Schedule Delete')
-      ) {
-        setIsLoader(true);
-        const data = {
-          id: actionMenuItemid,
-          updatedBy: authState.user.id,
-        };
-        adminAppointmentService
-          .ProviderScheduleDelete(data)
-          .then((item: any) => {
-            if (item.data.success) {
-              setIsLoader(false);
-              setIsNotify(true);
-              setNotifyMessage({
-                text: item.data.message,
-                type: 'success',
-              });
-              setList((prevList: any) => {
-                return {
-                  ...prevList,
-                  appointmentProviderSchedule:
-                    prevList.appointmentProviderSchedule?.filter(
-                      (items: any) => items.id !== item.data.data.id
-                    ),
-                };
-              });
-            }
-          })
-          .catch((err: Error) => {
-            setIsLoader(false);
-            setIsNotify(true);
-            setNotifyMessage({
-              text: err.message,
-              type: 'error',
-            });
-          });
-      } else {
-        setIsNotify(true);
-        setNotifyMessage({
-          text: NOT_AUTHORIZED_MESSAGE,
-          type: 'warning',
-        });
-      }
     }
+    //  else if (option === 'Delete') {
+    //   if (
+    //     listingRolePermission(
+    //       dataRole,
+    //       ALL_PERMISSIONS.storeAppointment.deleteEmployeeSchedule
+    //     )
+    //   ) {
+    //     setIsLoader(true);
+    //     const data = {
+    //       id: actionMenuItemid,
+    //       updatedBy: authState.user.id,
+    //     };
+    //     adminAppointmentService
+    //       .ProviderScheduleDelete(data)
+    //       .then((item: any) => {
+    //         if (item.data.success) {
+    //           setIsLoader(false);
+    //           setIsNotify(true);
+    //           setNotifyMessage({
+    //             text: item.data.message,
+    //             type: 'success',
+    //           });
+    //           setList((prevList: any) => {
+    //             return {
+    //               ...prevList,
+    //               appointmentProviderSchedule:
+    //                 prevList.appointmentProviderSchedule?.filter(
+    //                   (items: any) => items.id !== item.data.data.id
+    //                 ),
+    //             };
+    //           });
+    //         }
+    //       })
+    //       .catch((err: Error) => {
+    //         setIsLoader(false);
+    //         setIsNotify(true);
+    //         setNotifyMessage({
+    //           text: err.message,
+    //           type: 'error',
+    //         });
+    //       });
+    //   } else {
+    //     setIsNotify(true);
+    //     setNotifyMessage({
+    //       text: NOT_AUTHORIZED_MESSAGE,
+    //       type: 'warning',
+    //     });
+    //   }
+    // }
   };
 
   useEffect(() => {
-    if (listingRolePermission(dataRole, 'Appointment Provider Schedule List')) {
+    if (
+      listingRolePermission(
+        dataRole,
+        ALL_PERMISSIONS.storeAppointment.viewEmployeeSchedule
+      )
+    ) {
       adminAppointmentService
         .ProviderScheduleList(id)
         .then((item: any) => {
@@ -380,8 +402,8 @@ function AppointmentProviderSchedulePage() {
                   if (items.id === item.data.data.id) {
                     return {
                       ...items,
-                      startTime: item.data.data.startTime,
-                      endTime: item.data.data.endTime,
+                      startTime: dayjs(item.data.data.startTime).utc(),
+                      endTime: dayjs(item.data.data.endTime).utc(),
                     };
                   }
                   return items;
@@ -426,13 +448,13 @@ function AppointmentProviderSchedulePage() {
   };
 
   const handleSwitchChange = (event: any, switchId: string) => {
-    setIsLoader(true);
     if (
       listingRolePermission(
         dataRole,
-        'Appointment Provider Schedule Update Status'
+        ALL_PERMISSIONS.storeAppointment.editEmployeeSchedule
       )
     ) {
+      setIsLoader(true);
       const data = {
         isActive: event.target.checked,
       };
@@ -461,11 +483,26 @@ function AppointmentProviderSchedulePage() {
             setIsLoader(false);
             setIsNotify(true);
             setNotifyMessage({
-              text: NOT_AUTHORIZED_MESSAGE,
-              type: 'warning',
+              text: updateItem.data.message,
+              type: 'error',
             });
           }
+        })
+        .catch((err: Error) => {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: err.message,
+            type: 'error',
+          });
         });
+    } else {
+      setIsLoader(false);
+      setIsNotify(true);
+      setNotifyMessage({
+        text: NOT_AUTHORIZED_MESSAGE,
+        type: 'warning',
+      });
     }
   };
 

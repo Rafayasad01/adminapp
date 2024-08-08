@@ -21,7 +21,7 @@ import Notify from '../../components/common/Notify';
 import TopBar from '../../components/common/TopBar';
 import { useAppSelector } from '../../redux/redux-hooks';
 import storeService from '../../services/adminapp/adminStoreService';
-import { NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
+import { ALL_PERMISSIONS, NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
 import { CheckRolePermission, listingRolePermission } from '../../utils/helper';
 import ServiceCatCreatePopup from './ServiceCatCreatePopup';
 import ServiceCatEditPopup from './ServiceCatEditPopup';
@@ -30,7 +30,7 @@ import PermissionPopup from '../../utils/PermissionPopup';
 // import CategoriesEditPopup from './CategoriesEditPopup';
 
 function ServicesPage() {
-  const authState: any = useAppSelector((state) => state?.authState);
+  // const authState: any = useAppSelector((state) => state?.authState);
   const dataRole = useAppSelector(
     (state) => state?.persistedReducer?.roleState?.role?.permissions
   );
@@ -59,7 +59,12 @@ function ServicesPage() {
   const [modalImage, setModalImage] = useState('');
 
   const handleFormClickOpen = () => {
-    if (listingRolePermission(dataRole, 'Category Create')) {
+    if (
+      listingRolePermission(
+        dataRole,
+        ALL_PERMISSIONS.storeAppointment.addService
+      )
+    ) {
       setOpenFormDialog(true);
     } else {
       setIsNotify(true);
@@ -71,7 +76,12 @@ function ServicesPage() {
   };
 
   useEffect(() => {
-    if (listingRolePermission(dataRole, 'Category List')) {
+    if (
+      listingRolePermission(
+        dataRole,
+        ALL_PERMISSIONS.storeAppointment.viewServices
+      )
+    ) {
       storeService
         .StoreCatList(search, page, rowsPerPage)
         .then((item: any) => {
@@ -111,7 +121,7 @@ function ServicesPage() {
   ) => {
     setPage(newPage);
     storeService
-      .StoreCatList(authState.user.tenant, newPage, rowsPerPage)
+      .StoreCatList(search, newPage, rowsPerPage)
       .then((item: any) => {
         setList(item.data.data.list);
         setTotal(item.data.data.total);
@@ -125,12 +135,10 @@ function ServicesPage() {
     const newPage = 0;
     setRowsPerPage(newRowperPage);
     setPage(newPage);
-    storeService
-      .StoreCatList(authState.user.tenant, newPage, rowsPerPage)
-      .then((item) => {
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-      });
+    storeService.StoreCatList(search, newPage, newRowperPage).then((item) => {
+      setList(item.data.data.list);
+      setTotal(item.data.data.total);
+    });
   };
 
   const deleteHandler = (id: string) => {
@@ -171,7 +179,12 @@ function ServicesPage() {
 
   const manuHandler = (option: string) => {
     if (option === 'Edit') {
-      if (listingRolePermission(dataRole, 'Category Update')) {
+      if (
+        listingRolePermission(
+          dataRole,
+          ALL_PERMISSIONS.storeAppointment.editService
+        )
+      ) {
         // console.log('actionMenuItemid', actionMenuItemid, list);
         const editFormDatas = list?.find(
           (el: any) => el.id === actionMenuItemid
@@ -188,14 +201,32 @@ function ServicesPage() {
       }
     } else if (option === 'Services') {
       // navigate(`../item/${actionMenuItemid}`);
-      CheckRolePermission(
-        'Category Service Get',
-        dataRole,
-        navigate,
-        `services/${actionMenuItemid}`
-      );
+      if (
+        listingRolePermission(
+          dataRole,
+          ALL_PERMISSIONS.storeAppointment.viewServices
+        )
+      ) {
+        CheckRolePermission(
+          ALL_PERMISSIONS.storeAppointment.viewServices,
+          dataRole,
+          navigate,
+          `services/${actionMenuItemid}`
+        );
+      } else {
+        setIsNotify(true);
+        setNotifyMessage({
+          text: NOT_AUTHORIZED_MESSAGE,
+          type: 'warning',
+        });
+      }
     } else if (option === 'Delete') {
-      if (listingRolePermission(dataRole, 'Category Delete')) {
+      if (
+        listingRolePermission(
+          dataRole,
+          ALL_PERMISSIONS.storeAppointment.deleteService
+        )
+      ) {
         setCancelDialogOpen(true);
       } else {
         setIsNotify(true);
@@ -290,7 +321,12 @@ function ServicesPage() {
   };
 
   const handleSwitchChange = (event: any, id: string) => {
-    if (listingRolePermission(dataRole, 'Category Update Status')) {
+    if (
+      listingRolePermission(
+        dataRole,
+        ALL_PERMISSIONS.storeAppointment.editService
+      )
+    ) {
       const data = {
         isActive: event.target.checked,
       };
@@ -457,7 +493,7 @@ function ServicesPage() {
                               onClick={(
                                 event: React.MouseEvent<HTMLElement>
                               ) => {
-                                setActionMenuItemid(list[index].id);
+                                setActionMenuItemid(item.id);
                                 setActionMenuAnchorEl(event.currentTarget);
                               }}
                             >

@@ -38,9 +38,9 @@ function UpdateAppointmentPopup({
     reset,
     formState: { errors },
   } = useForm<UpdateAppointmentForm>();
+  console.log('datass', formData);
 
   const onSubmit = (data: any) => {
-    // console.log('data', formData, data);
     data.id = formData?.id;
     setOpenFormDialog(false);
     callback(data);
@@ -147,12 +147,7 @@ function UpdateAppointmentPopup({
                       defaultValue=""
                       placeholder="Write Description"
                       {...register('note', {
-                        required: 'Description is required',
                         value: formData?.note,
-                        minLength: {
-                          value: 1,
-                          message: 'Minimum One Characters',
-                        },
                         maxLength: {
                           value: 250,
                           message: MAX_LENGTH_EXCEEDED,

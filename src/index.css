@@ -1154,7 +1154,7 @@ label + .css-1aa5qj0-MuiInputBase-root-MuiInput-root {
 }
 
 .print-area .rowss {
-  margin-bottom: 8px;
+  margin-bottom: 0px;
 }
 
 .print-area .print-row .col-1 span {
@@ -1164,7 +1164,7 @@ label + .css-1aa5qj0-MuiInputBase-root-MuiInput-root {
   font-weight: 500;
   line-height: 117.182%;
   display: block;
-  margin-bottom: 6px;
+  /* margin-bottom: 2px; */
 }
 
 .print-area .print-row .col-2 span {
@@ -1174,7 +1174,7 @@ label + .css-1aa5qj0-MuiInputBase-root-MuiInput-root {
   font-weight: 600;
   line-height: 117.182%;
   display: block;
-  margin-bottom: 6px;
+  /* margin-bottom: 2px; */
 }
 
 .print-area .print-banker {
@@ -1783,8 +1783,12 @@ main .container:nth-child(3){
 }
 
 .custom-swiper-slider .swiper-slide {
-  width: 15% !important;
+  width: 22% !important;
 }
+
+/* .custom-swiper-slider .swiper-slide {
+  width: 15% !important;
+} */
 
 .swiper-wrapper {
   padding-left: 150px;
@@ -1916,7 +1920,7 @@ main .container:nth-child(3){
 
 .all-categories .categories-list .item .cat-img {
   position: relative;
-  width: 100px;
+  width: 70px;
   right: -10px;
 }
 
@@ -2179,7 +2183,7 @@ main .container:nth-child(3){
   color: #fff;
   position: absolute;
   font-size: 10px;
-  top: 0;
+  top: -3px;
   left: 9px;
   background: #ff4848;
   border-radius: 50%;
@@ -2520,4 +2524,133 @@ main.min-h-screen.w-full.flex-grow.bg-gray-50.p-3.MuiBox-root.css-0 {
   left: 0 !important;
   margin: auto;
   height: fit-content;
+}
+
+.css-8ludsl.Header-flexContainer {
+  position: absolute !important;
+  right: 6px !important;
+  top: 5px !important;
+}
+
+.css-8ludsl .Header-line {
+  background: transparent !important;
+}
+
+/* CategoriesCard.css */
+
+/* Ensure the swiper container is positioned relatively */
+.categories-swiper-container {
+  position: relative;
+  width: 100%;
+  padding-bottom: 60px; /* Extra space for arrows below */
+}
+
+/* Position and style the navigation arrows */
+.swiper-navigation-container {
+  display: flex;
+  justify-content: flex-start; /* Center align the buttons */
+  align-items: center;
+  position: absolute;
+  bottom: -10px; /* Position arrows below the cards */
+  /* right: 400px; */
+  width: 100%;
+  gap: 10px; /* Space between the buttons */
+}
+
+/* Swiper navigation arrows styling */
+.custom-swiper-button-next,
+.custom-swiper-button-prev {
+  background-color: rgba(255, 255, 255, 0.8); /* Light background for arrows */
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px; /* Adjust arrow size */
+  color: #000; /* Change arrow color */
+  cursor: pointer;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Optional shadow */
+}
+
+.custom-swiper-button-next:hover,
+.custom-swiper-button-prev:hover {
+  background-color: rgba(0, 0, 0, 0.1); /* Hover effect */
+}
+
+/* Optional: Adjust arrow position and size based on screen size */
+@media (max-width: 1024px) {
+  .custom-swiper-button-next,
+  .custom-swiper-button-prev {
+    width: 30px;
+    height: 30px;
+    font-size: 16px;
+  }
+
+  .swiper-navigation-container {
+    bottom: -20px;
+  }
+}
+
+.css-1uvydh2 {
+  padding: 4px 10px !important;
+  font: -webkit-mini-control !important;
+}
+
+.css-11a8txn-MuiStack-root > :not(style) ~ :not(style) {
+  border-color: rgb(26 26 26 / 30%) !important;
+}
+
+.css-yrkqu1 {
+  border-color: rgb(26 26 26 / 30%) !important;
+}
+
+/* .FormControl .MuiSwitch-switchBase {
+  padding: 5px !important;
+} */
+
+.custom-baskets-icon {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  width: 1em;
+  height: 1em;
+  display: inline-block;
+  fill: currentColor;
+  -webkit-flex-shrink: 0;
+  -ms-flex-negative: 0;
+  flex-shrink: 0;
+  -webkit-transition: fill 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  transition: fill 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  font-size: 1.5rem;
+}
+
+.custom-border {
+  padding: 0% !important;
+  padding-top: 1px !important ;
+  border: 1px solid gray; /* Example blue border color */
+}
+
+/* .css-71a9mb-MuiButtonBase-root-MuiIconButton-root.NavigationButton-button {
+  display: none !important;
+} */
+
+.customDateNav {
+  /* display: none !important; */
+}
+
+.dx-scheduler-navigator-previous {
+  visibility: hidden;
+}
+.dx-scheduler-navigator-next {
+  visibility: hidden;
+}
+
+.css-1b7ni76-MuiToolbar-root.Toolbar-toolbar {
+  margin-left: 8px !important ;
+}
+
+.css-1ps6pg7-MuiPaper-root {
+  position: relative !important;
 }

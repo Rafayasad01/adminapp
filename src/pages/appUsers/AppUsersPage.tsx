@@ -6,8 +6,8 @@ import FormControl from '@mui/material/FormControl';
 import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
-// import Tab from '@mui/material/Tab';
-// import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import Tabs from '@mui/material/Tabs';
 import React, { useEffect, useState } from 'react';
 import Loader from '../../components/common/Loader';
 import Notify from '../../components/common/Notify';
@@ -15,12 +15,13 @@ import TopBar from '../../components/common/TopBar';
 import { useAppSelector } from '../../redux/redux-hooks';
 import appUserService from '../../services/adminapp/adminAppUser';
 import PermissionPopup from '../../utils/PermissionPopup';
-import { NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
+import { ALL_PERMISSIONS, NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
 import { listingRolePermission } from '../../utils/helper';
 import AppUserCreatePopup from './AppUserCreatePopup';
 // import AppUserOtherTab from './AppUserOtherTab';
 import AppUserTab from './AppUserTab';
 import AppUserUpdatePopup from './AppUserUpdatePopup';
+import AppUserOtherTab from './AppUserOtherTab';
 // import CustomersCreatePopup from './CustomersCreatePopup';
 // import CustomersEditPopup from './CustomersEditPopup';
 
@@ -49,14 +50,11 @@ function AppUsersPage() {
   const [dialogText] = useState<any>(
     'Are you sure you want to delete this customer ?'
   );
-  const [
-    selectedTab,
-    //  setSelectedTab
-  ] = useState('APP USER');
+  const [selectedTab, setSelectedTab] = useState('APP USER');
 
-  // const handleTabChange = (event: any, newValue: any) => {
-  //   setSelectedTab(newValue);
-  // };
+  const handleTabChange = (event: any, newValue: any) => {
+    setSelectedTab(newValue);
+  };
 
   const appUserRoleLov = [
     {
@@ -70,7 +68,7 @@ function AppUsersPage() {
   ];
 
   const handleFormClickOpen = () => {
-    if (listingRolePermission(dataRole, 'Customer Create')) {
+    if (listingRolePermission(dataRole, ALL_PERMISSIONS.storeUser.addUserApp)) {
       setOpenFormDialog(true);
     } else {
       setIsNotify(true);
@@ -106,7 +104,7 @@ function AppUsersPage() {
     setIsLoader(true);
     const data = {
       id,
-      updated_by: authState.user.id,
+      updatedBy: authState.user.id,
     };
     appUserService
       .appUserDelete(data)
@@ -123,9 +121,16 @@ function AppUsersPage() {
               (newItem: any) => newItem.id !== item.data.data.id
             );
           });
+        } else {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'error',
+          });
         }
       })
-      .catch((err) => {
+      .catch((err: Error) => {
         setIsLoader(false);
         setIsNotify(true);
         setNotifyMessage({
@@ -141,7 +146,9 @@ function AppUsersPage() {
 
   useEffect(() => {
     setIsLoader(true);
-    if (listingRolePermission(dataRole, 'Customer List')) {
+    if (
+      listingRolePermission(dataRole, ALL_PERMISSIONS.storeUser.viewUserApp)
+    ) {
       appUserService
         .appList(
           authState.user.tenant,
@@ -345,10 +352,35 @@ function AppUsersPage() {
               </div>
             </div>
           </div>
-          {/* <Tabs value={selectedTab} onChange={handleTabChange}>
-            <Tab label="app user" value="APP USER" />
-            {/* <Tab label="other" value="OTHER" /> */}
-          {/* </Tabs> */}
+          <Tabs
+            className={`${
+              listingRolePermission(
+                dataRole,
+                ALL_PERMISSIONS.storeUser.viewDriverUserApp
+              )
+                ? 'inline-block'
+                : 'hidden'
+            } `}
+            value={selectedTab}
+            onChange={handleTabChange}
+          >
+            <Tab
+              hidden={listingRolePermission(
+                dataRole,
+                !!ALL_PERMISSIONS.storeUser.viewDriverUserApp
+              )}
+              label="app user"
+              value="APP USER"
+            />
+            <Tab
+              hidden={listingRolePermission(
+                dataRole,
+                !!ALL_PERMISSIONS.storeUser.viewDriverUserApp
+              )}
+              label="other"
+              value="OTHER"
+            />
+          </Tabs>
           {selectedTab === 'APP USER' && (
             <AppUserTab
               // isLoader={isLoader}
@@ -370,9 +402,10 @@ function AppUsersPage() {
               setIsNotify={setIsNotify}
               // notifyMessage={notifyMessage}
               setNotifyMessage={setNotifyMessage}
+              setCancelDialogOpen={setCancelDialogOpen}
             />
           )}
-          {/* {selectedTab === 'OTHER' && (
+          {selectedTab === 'OTHER' && (
             <AppUserOtherTab
               // isLoader={isLoader}
               setIsLoader={setIsLoader}
@@ -394,7 +427,7 @@ function AppUsersPage() {
               // notifyMessage={notifyMessage}
               setNotifyMessage={setNotifyMessage}
             />
-          )} */}
+          )}
         </div>
       </div>
       {cancelDialogOpen && (

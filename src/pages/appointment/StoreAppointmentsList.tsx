@@ -195,7 +195,7 @@ const StoreAppointmentsList = ({ today = false }) => {
             <div className="mt-3 flex w-[100%] justify-center py-3">
               <TablePagination
                 component="div"
-                count={total}
+                count={Number(total)}
                 page={page}
                 onPageChange={handleChangePage}
                 rowsPerPage={rowsPerPage}
