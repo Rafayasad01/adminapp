@@ -152,7 +152,6 @@ function OrderDetailsPage() {
   };
 
   const createOrderStatusesService = (data: any) => {
-    console.log('🚀 ~ createOrderStatusesService ~ data:', data, viewData);
     // setStatus({
     //   paymentType: viewData.paymentType,
     //   status: data.status,
@@ -335,37 +334,42 @@ function OrderDetailsPage() {
 
   const handleDriverStatus = () => {
     if (
-      viewData.paymentType === 'Shop' &&
-      viewData.fulfillmentMethod === ORDER_FULFILLMENT_METHOD.SELF
+      listingRolePermission(dataRole, ALL_PERMISSIONS.storeProduct.assignDriver)
     ) {
+      if (
+        viewData.paymentType === 'Shop' &&
+        viewData.fulfillmentMethod === ORDER_FULFILLMENT_METHOD.SELF
+      ) {
+        return (
+          <div className="flex items-center font-open-sans text-sm font-normal text-neutral-500">
+            <ShopIcon color="black" />
+            <p className="mx-3">Order has been delivered by shop</p>
+          </div>
+        );
+      }
+      if (!showSelectDriverButton) {
+        return null;
+      }
       return (
-        <div className="flex items-center font-open-sans text-sm font-normal text-neutral-500">
-          <ShopIcon color="black" />
-          <p className="mx-3">Order has been delivered by shop</p>
-        </div>
+        <IconButton
+          aria-label="delete"
+          className="p-0"
+          disableRipple
+          onClick={() => navigate(`../assign/${id}`)}
+          disabled={false}
+        >
+          <Avatar
+            alt="Truck Driver Icon"
+            src={assets.images.truckDriverIcon}
+            sx={{ width: 24, height: 24, marginRight: '5px' }}
+          />
+          <div className="font-open-sans text-sm font-normal text-neutral-500">
+            Choose a driver
+          </div>
+        </IconButton>
       );
     }
-    if (!showSelectDriverButton) {
-      return null;
-    }
-    return (
-      <IconButton
-        aria-label="delete"
-        className="p-0"
-        disableRipple
-        onClick={() => navigate(`../assign/${id}`)}
-        disabled={false}
-      >
-        <Avatar
-          alt="Truck Driver Icon"
-          src={assets.images.truckDriverIcon}
-          sx={{ width: 24, height: 24, marginRight: '5px' }}
-        />
-        <div className="font-open-sans text-sm font-normal text-neutral-500">
-          Choose a driver
-        </div>
-      </IconButton>
-    );
+    return false;
   };
 
   const isCancelledOrCompleted = useMemo(() => {
@@ -654,7 +658,10 @@ function OrderDetailsPage() {
                   handleDriverStatus()
                 )}
               </div>
-              <hr className="my-3 h-0.5 w-full bg-neutral-200" />
+              {listingRolePermission(
+                dataRole,
+                ALL_PERMISSIONS.storeProduct.assignDriver
+              ) && <hr className="my-3 h-0.5 w-full bg-neutral-200" />}
               <div className="max-h-48 flex-none overflow-y-scroll scroll-smooth px-4">
                 {viewData.orderItems &&
                   viewData.orderItems.map((item: any, index: number) => {

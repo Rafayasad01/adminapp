@@ -44,6 +44,7 @@ import {
 import promiseHandler from '../../utils/helper';
 import { ValuesOf } from '../../utils/ts-helpers';
 import PromotionListPopup from './PromotionListPopup';
+import CustomDateTimePicker from '../../components/common/CustomDateTimePicker';
 
 const OrderBasket = () => {
   const {
@@ -72,10 +73,10 @@ const OrderBasket = () => {
   const authState = useAppSelector((state) => state?.authState);
 
   const {
-    /*  register, */
+    register,
     watch,
-    /*   setValue, */
-    /*  formState: { errors }, */
+    setValue,
+    formState: { errors },
   } = useForm<Order>();
 
   const dropOffDate: any = useAppSelector(
@@ -615,7 +616,7 @@ const OrderBasket = () => {
           </div>
           <div className="col-span-5 rounded-lg bg-white py-5 shadow-lg">
             <div className="w-full px-4">
-              {/*   <FormControl className="w-full">
+              <FormControl className="w-full">
                 <FormLabel
                   id="demo-row-radio-buttons-group-label"
                   className="font-open-sans text-xl font-semibold text-secondary"
@@ -670,7 +671,8 @@ const OrderBasket = () => {
                       </span>
                     </div>
                   )}
-              </FormControl> */}
+              </FormControl>
+              <Divider flexItem className="mt-5" />
             </div>
             <div className="w-full px-4">
               {/* <FormControl className="w-full" variant="filled">

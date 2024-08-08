@@ -14,7 +14,7 @@ export const CheckRolePermission = (
   }
 };
 
-export const listingRolePermission = (permissions: any, name: string) => {
+export const listingRolePermission = (permissions: any, name: string | any) => {
   const isTrue = permissions?.find((el: any) => el.name === name);
   if (isTrue) {
     return true;
@@ -67,4 +67,8 @@ export const convertDayJSToString = (
     });
     return newObj;
   });
+};
+
+export const formatNumberWithCommas = (number: number | any) => {
+  return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 };

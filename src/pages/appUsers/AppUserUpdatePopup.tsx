@@ -8,11 +8,14 @@ import '../../assets/css/PopupStyle.css';
 import ErrorSpanBox from '../../components/common/ErrorSpanBox';
 import { AppUser } from '../../interfaces/app-user.interface';
 import {
+  ALL_PERMISSIONS,
   INVALID_CHAR,
   MAX_LENGTH_EXCEEDED,
   PATTERN,
   PH_MINI_LENGTH,
 } from '../../utils/constants';
+import { listingRolePermission } from '../../utils/helper';
+import { useAppSelector } from '../../redux/redux-hooks';
 
 type AppUserUpdatePopupProps = {
   openFormDialog: boolean;
@@ -39,6 +42,10 @@ function AppUserUpdatePopup({
     handleSubmit,
     formState: { errors },
   } = useForm<AppUser>();
+
+  const dataRole = useAppSelector(
+    (state: any) => state?.persistedReducer?.roleState?.role?.permissions
+  );
 
   const handleFormClose = () => {
     setOpenFormDialog(false);
@@ -169,7 +176,16 @@ function AppUserUpdatePopup({
                     )}
                   </FormControl>
                 </div>
-                <div className="FormFields">
+                <div
+                  className={`${
+                    listingRolePermission(
+                      dataRole,
+                      ALL_PERMISSIONS.storeUser.viewDriverUserApp
+                    )
+                      ? 'FormFields'
+                      : 'FormField'
+                  }`}
+                >
                   <FormControl className="FormControl" variant="standard">
                     <label className="FormLabel">Email</label>
                     <Input
@@ -184,20 +200,25 @@ function AppUserUpdatePopup({
                       })}
                     />
                   </FormControl>
-                  <FormControl className="FormControl" variant="standard">
-                    <label className="FormLabel">User Type</label>
-                    <Input
-                      disabled
-                      className="FormInput"
-                      id="appuserRole"
-                      placeholder="user type"
-                      type="text"
-                      disableUnderline
-                      {...register('appuserRole', {
-                        value: formData?.userType,
-                      })}
-                    />
-                  </FormControl>
+                  {listingRolePermission(
+                    dataRole,
+                    ALL_PERMISSIONS.storeUser.viewDriverUserApp
+                  ) && (
+                    <FormControl className="FormControl" variant="standard">
+                      <label className="FormLabel">User Type</label>
+                      <Input
+                        disabled
+                        className="FormInput"
+                        id="appuserRole"
+                        placeholder="user type"
+                        type="text"
+                        disableUnderline
+                        {...register('appuserRole', {
+                          value: formData?.userType,
+                        })}
+                      />
+                    </FormControl>
+                  )}
                 </div>
                 <div className="FormFields">
                   {formData?.userType === 'Driver' && (

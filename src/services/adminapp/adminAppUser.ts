@@ -11,6 +11,47 @@ const appAnonymousLogin = (data: any) => {
   return network.post(`${APP_PREFIX}/anonymous/login`, data);
 };
 
+const driverList = (search: string, page: number, size: number) => {
+  return network.getWithQueryParam(`${APP_PREFIX}/driver/list`, {
+    search,
+    page: page.toString(),
+    size: size.toString(),
+  });
+};
+
+const driverDetail = (
+  appUser: string,
+  page: number,
+  size: number,
+  to: string,
+  from: string
+) => {
+  return network.getWithQueryParam(`${APP_PREFIX}/driver/detail/${appUser}`, {
+    page: page.toString(),
+    size: size.toString(),
+    to,
+    from,
+  });
+};
+
+const driverWalletDetail = (
+  wallets: string,
+  page: number,
+  size: number,
+  to: string,
+  from: string
+) => {
+  return network.getWithQueryParam(
+    `${APP_PREFIX}/driver/wallet/detail/${wallets}`,
+    {
+      page: page.toString(),
+      size: size.toString(),
+      to,
+      from,
+    }
+  );
+};
+
 const appCreateUser = (data: any) => {
   return network.post(`${APP_PREFIX}/create`, data);
 };
@@ -168,4 +209,7 @@ export default {
   appUserVocuherHistoryDetails,
   appUserLoyaltyHistoryDetails,
   appAnonymousDetail,
+  driverList,
+  driverDetail,
+  driverWalletDetail,
 };

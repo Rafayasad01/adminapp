@@ -72,12 +72,7 @@ function AppUserTab({
         ALL_PERMISSIONS.storeUser.viewUserAppRewardHistory
       )
     ) {
-      const newActionMenuOptions = [
-        'View',
-        'Reward History',
-        'Update',
-        'Remove',
-      ];
+      const newActionMenuOptions = ['View', 'Reward History', 'Edit', 'Delete'];
       actionMenuOptions = newActionMenuOptions;
     }
     return actionMenuOptions;

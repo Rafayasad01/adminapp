@@ -14,11 +14,14 @@ import CustomDropDown from '../../components/common/CustomDropDown';
 import ErrorSpanBox from '../../components/common/ErrorSpanBox';
 import { AppUser } from '../../interfaces/app-user.interface';
 import {
+  ALL_PERMISSIONS,
   INVALID_CHAR,
   MAX_LENGTH_EXCEEDED,
   PATTERN,
   PH_MINI_LENGTH,
 } from '../../utils/constants';
+import { listingRolePermission } from '../../utils/helper';
+import { useAppSelector } from '../../redux/redux-hooks';
 
 type AppUserCreatePopupProps = {
   openFormDialog: boolean;
@@ -36,6 +39,9 @@ function AppUserCreatePopup({
   callback,
   appUserRoleLov,
 }: AppUserCreatePopupProps) {
+  const dataRole = useAppSelector(
+    (state: any) => state?.persistedReducer?.roleState?.role?.permissions
+  );
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const {
@@ -50,6 +56,14 @@ function AppUserCreatePopup({
 
   const onSubmit = (data: AppUser) => {
     // console.log('SUB DATA', data);
+    if (
+      !listingRolePermission(
+        dataRole,
+        ALL_PERMISSIONS.storeUser.viewDriverUserApp
+      )
+    ) {
+      data.appuserRole = 'AppUser';
+    }
     setOpenFormDialog(false);
     callback(data);
   };
@@ -225,20 +239,34 @@ function AppUserCreatePopup({
                 )}
               </FormControl>
             </div>
-            <div className="FormFields">
-              <FormControl className="FormControl" variant="standard">
-                <CustomDropDown
-                  validateRequired
-                  id="appuserRole"
-                  control={control}
-                  error={errors}
-                  register={register}
-                  options={{ roles: appUserRoleLov }}
-                  customClassInputTitle="font-bold"
-                  inputTitle="User Type"
-                  defaultValue="Select type"
-                />
-              </FormControl>
+            <div
+              className={`${
+                listingRolePermission(
+                  dataRole,
+                  ALL_PERMISSIONS.storeUser.viewDriverUserApp
+                )
+                  ? 'FormFields'
+                  : 'FormField'
+              }`}
+            >
+              {listingRolePermission(
+                dataRole,
+                ALL_PERMISSIONS.storeUser.viewDriverUserApp
+              ) && (
+                <FormControl className="FormControl" variant="standard">
+                  <CustomDropDown
+                    validateRequired
+                    id="appuserRole"
+                    control={control}
+                    error={errors}
+                    register={register}
+                    options={{ roles: appUserRoleLov }}
+                    customClassInputTitle="font-bold"
+                    inputTitle="User Type"
+                    defaultValue="Select type"
+                  />
+                </FormControl>
+              )}
               <FormControl className="FormControl" variant="standard">
                 <label className="FormLabel">Address</label>
                 <Input

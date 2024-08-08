@@ -748,24 +748,31 @@ function SettingsApp() {
                     </FormControl>
                   </div>
                 )}
-                <div className="w-full">
-                  <TimePicker
-                    timePickerLabel="Shop Time In"
-                    timePickerValue={startTime}
-                    setTimePickerValue={setStartTime}
-                    id="startTime"
-                    // setError={setError}
-                  />
-                </div>
-                <div className="w-full">
-                  <TimePicker
-                    timePickerLabel="Shop Time Out"
-                    timePickerValue={endTime}
-                    setTimePickerValue={setEndTime}
-                    id="endTime"
-                    // setError={setError}
-                  />
-                </div>
+                {listingRolePermission(
+                  dataRole,
+                  ALL_PERMISSIONS.storeSetting.viewOfficeTime
+                ) && (
+                  <>
+                    <div className="w-full">
+                      <TimePicker
+                        timePickerLabel="Shop Time In"
+                        timePickerValue={startTime}
+                        setTimePickerValue={setStartTime}
+                        id="startTime"
+                        // setError={setError}
+                      />
+                    </div>
+                    <div className="w-full">
+                      <TimePicker
+                        timePickerLabel="Shop Time Out"
+                        timePickerValue={endTime}
+                        setTimePickerValue={setEndTime}
+                        id="endTime"
+                        // setError={setError}
+                      />
+                    </div>
+                  </>
+                )}
               </div>
               <div className="FormField mb-4">
                 <FormControl className="FormControl" variant="standard">

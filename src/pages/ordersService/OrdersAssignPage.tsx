@@ -18,6 +18,7 @@ import { useAppSelector } from '../../redux/redux-hooks';
 import orderService from '../../services/adminapp/adminOrders';
 import AlertBox from '../../utils/Alert';
 import {
+  ALL_PERMISSIONS,
   APP_USER_STATUS_OFFLINE,
   ORDER_STATUS_SERVICE,
 } from '../../utils/constants';
@@ -49,9 +50,6 @@ function OrdersAssignPage() {
       if (!orderId) {
         return;
       }
-      if (!listingRolePermission(dataRole, 'Order View')) {
-        return;
-      }
       orderService
         .viewService(orderId)
         .then((item) => {
@@ -69,7 +67,13 @@ function OrdersAssignPage() {
           });
         });
     }
-    getOrderDetails();
+    if (
+      listingRolePermission(dataRole, ALL_PERMISSIONS.storeProduct.assignDriver)
+    ) {
+      getOrderDetails();
+    } else {
+      setIsLoader(false);
+    }
   }, []);
 
   const handleClickSearch = (event: any) => {
@@ -161,7 +165,9 @@ function OrdersAssignPage() {
   };
 
   useEffect(() => {
-    if (listingRolePermission(dataRole, 'Order Assign List')) {
+    if (
+      listingRolePermission(dataRole, ALL_PERMISSIONS.storeProduct.assignDriver)
+    ) {
       orderService
         .getListAssignService(authState.user.tenant, page, rowsPerPage)
         .then((item: any) => {
@@ -215,7 +221,9 @@ function OrdersAssignPage() {
     if (!data) {
       return;
     }
-    if (listingRolePermission(dataRole, 'Order Assign Create')) {
+    if (
+      listingRolePermission(dataRole, ALL_PERMISSIONS.storeProduct.assignDriver)
+    ) {
       const payload = {
         // app_user: userId,
         app_user: userId,

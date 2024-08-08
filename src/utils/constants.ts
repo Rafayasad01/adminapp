@@ -761,6 +761,7 @@ export const ALL_PERMISSIONS = {
     addOrder: 'addProductOrder',
     editOrder: 'editProductOrder',
     viewRating: 'viewProductRating',
+    assignDriver: 'assignDriver',
   },
   storeUser: {
     viewUsers: 'viewStoreUser',
@@ -777,6 +778,7 @@ export const ALL_PERMISSIONS = {
     editUserEmployee: 'editUserEmployee',
     deleteUserEmployee: 'deleteUserEmployee',
     viewUserAppRewardHistory: 'viewUserAppRewardHistory',
+    viewDriverUserApp: 'viewDriverUserApp',
   },
   storeBranch: {
     viewBranches: 'viewStoreBranch',
@@ -814,5 +816,6 @@ export const ALL_PERMISSIONS = {
     viewMinimumDelivery: 'viewMinimumDelivery',
     viewEmployeeLimit: 'viewEmployeeLimit',
     viewLoyaltyProgram: 'viewLoyaltyProgram',
+    viewOfficeTime: 'viewOfficeTime',
   },
 };

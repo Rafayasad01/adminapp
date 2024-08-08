@@ -43,13 +43,16 @@ import NotificationPage from '../pages/notification/NotificationPage';
 import AddNewOrder from '../pages/orders/AddNewOrder';
 import AddNewOrderService from '../pages/ordersService/AddNewOrder';
 import DriverHistory from '../pages/orders/DriverHistory';
-import DriverHistoryService from '../pages/ordersService/DriverHistory';
+// import DriverHistory from '../pages/ordersService/DriverHistory';
+import DriverHistoryService from '../pages/drivers/DriverPage';
+import DriverHistoryDetailService from '../pages/drivers/DriverDetailPage';
 import OrderBasket from '../pages/orders/OrderBasket';
 import OrderBasketService from '../pages/ordersService/OrderBasket';
 import OrderDetailsServicePage from '../pages/ordersService/OrderDetailsPage';
 import OrderDetailsPage from '../pages/orders/OrderDetailsPage';
 import OrderItemDetailPage from '../pages/orders/OrderItemDetailPage';
 import OrdersAssignPage from '../pages/orders/OrdersAssignPage';
+import OrdersAssignServicePage from '../pages/ordersService/OrdersAssignPage';
 // import OrdersCreatePage from '../pages/orders/OrdersCreatePage';
 import OrdersEditPage from '../pages/orders/OrdersEditPage';
 import OrdersPage from '../pages/orders/OrdersPage';
@@ -840,6 +843,20 @@ export const routeObjects: RouteObject[] = [
                     ),
                     // element: <OrderBasket />,
                   },
+                  {
+                    path: 'assign/:orderId',
+                    element: (
+                      <ProtectedRoute
+                        page={<OrdersAssignServicePage />}
+                        condition={ALL_PERMISSIONS.storeProduct.assignDriver}
+                      />
+                    ),
+                    // element: <OrdersAssignServicePage />,
+                  },
+                  {
+                    path: 'view-driver',
+                    element: <DriverHistory />,
+                  },
                 ],
               },
               {
@@ -882,16 +899,18 @@ export const routeObjects: RouteObject[] = [
                     ),
                     // element: <RatingPage />,
                   },
-                  // {
-                  //   path: 'reviews/:itemId',
-                  //   element: (
-                  //     <ProtectedRoute
-                  //       page={<RatingReviewsPage />}
-                  //       condition={ALL_PERMISSIONS.storeProduct.viewRating}
-                  //     />
-                  //   ),
-                  //   // element: <RatingReviewsPage />,
-                  // },
+                  {
+                    path: 'detail/:appUser',
+                    element: (
+                      <ProtectedRoute
+                        page={<DriverHistoryDetailService />}
+                        condition={
+                          ALL_PERMISSIONS.storeProduct.viewDriverHistory
+                        }
+                      />
+                    ),
+                    // element: <RatingReviewsPage />,
+                  },
                 ],
               },
             ],
