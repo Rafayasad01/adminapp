@@ -20,7 +20,11 @@ import TopBar from '../../components/common/TopBar';
 import { useAppSelector } from '../../redux/redux-hooks';
 import categoryService from '../../services/adminapp/adminCategory';
 import PermissionPopup from '../../utils/PermissionPopup';
-import { ALL_PERMISSIONS, NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
+import {
+  ALL_PERMISSIONS,
+  NOT_AUTHORIZED_MESSAGE,
+  TITLE_TEXT,
+} from '../../utils/constants';
 import { CheckRolePermission, listingRolePermission } from '../../utils/helper';
 import ServicesCreatePopup from './CategoriesServicesCreatePopup';
 import ServicesEditPopup from './CategoriesServicesEditPopup';
@@ -42,7 +46,7 @@ function CategoriesServicesPage() {
   const [actionMenuAnchorEl, setActionMenuAnchorEl] =
     useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
-  const actionMenuOptions = ["Product faq's", 'Edit', 'Delete'];
+  const actionMenuOptions = [`${TITLE_TEXT} faq's`, 'Edit', 'Delete'];
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
   const [isLoader, setIsLoader] = React.useState(false);
@@ -212,7 +216,7 @@ function CategoriesServicesPage() {
           type: 'warning',
         });
       }
-    } else if (option === "Product faq's") {
+    } else if (option === `${TITLE_TEXT} faq's`) {
       CheckRolePermission(
         ALL_PERMISSIONS.storeProduct.view,
         dataRole,
@@ -372,13 +376,13 @@ function CategoriesServicesPage() {
         setIsOpen={setIsNotify}
         displayMessage={notifyMessage}
       />
-      <TopBar isNestedRoute title="Products" />
+      <TopBar isNestedRoute title={TITLE_TEXT} />
       <div className="container m-auto mt-5">
         <div className="w-full rounded-lg bg-white shadow-lg">
           <div className="grid grid-cols-12 px-4 py-5">
             <div className="col-span-7">
               <span className="font-open-sans text-xl font-semibold text-[#252733]">
-                All Products Services
+                All {TITLE_TEXT}s
               </span>
             </div>
             <div className="col-span-5">

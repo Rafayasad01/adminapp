@@ -21,6 +21,7 @@ import { useAppDispatch, useAppSelector } from '../../../redux/redux-hooks';
 import authService from '../../../services/adminapp/admin';
 import { setItem } from '../../../utils/storage';
 import FastSpinner from '../../../components/common/CustomSpinner';
+import { handleTitleText } from '../../../utils/constants';
 
 interface LoginFields {
   email: string;
@@ -97,6 +98,7 @@ function LoginPage() {
           setItem('AUTH_TOKEN', newUserData.accessToken);
           setItem('REFRESH_TOKEN', newUserData.refreshToken);
           dispatch(setRolePermissions(newUserData.role));
+          handleTitleText(newUserData.role.permissions);
           delete newUserData.role;
           dispatch(login(newUserData));
           dispatch(setItemState(newUserData));

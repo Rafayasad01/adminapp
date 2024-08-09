@@ -22,7 +22,11 @@ import TopBar from '../../components/common/TopBar';
 import { useAppSelector } from '../../redux/redux-hooks';
 import categoryService from '../../services/adminapp/adminCategory';
 import PermissionPopup from '../../utils/PermissionPopup';
-import { ALL_PERMISSIONS, NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
+import {
+  ALL_PERMISSIONS,
+  NOT_AUTHORIZED_MESSAGE,
+  TITLE_TEXT,
+} from '../../utils/constants';
 import { CheckRolePermission, listingRolePermission } from '../../utils/helper';
 import CategoriesCreatePopup from './CategoriesCreatePopup';
 import CategoriesEditPopup from './CategoriesEditPopup';
@@ -44,7 +48,7 @@ function CategoriesPage() {
   const [actionMenuAnchorEl, setActionMenuAnchorEl] =
     useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
-  const actionMenuOptions = ['Products', 'Edit', 'Delete'];
+  const actionMenuOptions = [TITLE_TEXT, 'Edit', 'Delete'];
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
   const [isNotify, setIsNotify] = React.useState(false);
@@ -203,7 +207,7 @@ function CategoriesPage() {
           type: 'warning',
         });
       }
-    } else if (option === 'Products') {
+    } else if (option === TITLE_TEXT) {
       // navigate(`../item/${actionMenuItemid}`);
       CheckRolePermission(
         ALL_PERMISSIONS.storeProduct.view,
@@ -366,13 +370,13 @@ function CategoriesPage() {
         setIsOpen={setIsNotify}
         displayMessage={notifyMessage}
       />
-      <TopBar title="Products" />
+      <TopBar title={TITLE_TEXT} />
       <div className="cs-dialog container mx-auto mt-5 w-full">
         <div className="w-full rounded-lg bg-white shadow-lg">
           <div className="grid grid-cols-12 px-4 py-5">
             <div className="col-span-7">
               <span className="font-open-sans text-xl font-semibold text-[#252733]">
-                All Product Categories
+                All {TITLE_TEXT} Categories
               </span>
             </div>
             <div className="col-span-5">

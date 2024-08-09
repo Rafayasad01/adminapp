@@ -20,7 +20,11 @@ import TopBar from '../../components/common/TopBar';
 import { useAppSelector } from '../../redux/redux-hooks';
 import categoryService from '../../services/adminapp/adminCategory';
 import PermissionPopup from '../../utils/PermissionPopup';
-import { ALL_PERMISSIONS, NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
+import {
+  ALL_PERMISSIONS,
+  NOT_AUTHORIZED_MESSAGE,
+  TITLE_TEXT,
+} from '../../utils/constants';
 import { listingRolePermission } from '../../utils/helper';
 import CategoriesServicesFaqCreatePopup from './CategoriesServicesFaqCreatePopup';
 import CategoriesServicesFaqEditPopup from './CategoriesServicesFaqEditPopup';
@@ -335,13 +339,13 @@ function CategoriesServicesFaqPage() {
         setIsOpen={setIsNotify}
         displayMessage={notifyMessage}
       />
-      <TopBar isNestedRoute title="Products" />
+      <TopBar isNestedRoute title={TITLE_TEXT} />
       <div className="container m-auto">
         <div className="w-full rounded-lg bg-white shadow-lg">
           <div className="grid grid-cols-12 px-4 py-5">
             <div className="col-span-7">
               <span className="font-open-sans text-xl font-semibold text-[#252733]">
-                All Product Faq&apos;s
+                All {TITLE_TEXT} Faq&apos;s
               </span>
             </div>
             <div className="col-span-5">

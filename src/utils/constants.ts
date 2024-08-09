@@ -1,5 +1,6 @@
 import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined';
 import PersonOutlinedIcon from '@mui/icons-material/PersonOutlined';
+import { listingRolePermission } from './helper';
 
 const HOST = 'https://dev.urapptech.com';
 export const BASE_URL =
@@ -819,3 +820,21 @@ export const ALL_PERMISSIONS = {
     viewOfficeTime: 'viewOfficeTime',
   },
 };
+
+export const SERVICES = 'Service';
+export const PRODUCT = 'Product';
+let TITLE_TEXT = '';
+export const handleTitleText = (permissions: any) => {
+  console.log('PPPPPPPPPPPP', permissions);
+  if (
+    listingRolePermission(
+      permissions,
+      ALL_PERMISSIONS.storeProduct.viewServices
+    )
+  ) {
+    TITLE_TEXT = SERVICES;
+  } else {
+    TITLE_TEXT = PRODUCT;
+  }
+};
+export { TITLE_TEXT };
