@@ -723,13 +723,9 @@ export const ALL_PERMISSIONS = {
     viewAppointments: 'viewStoreAppointment',
     viewWallets: 'viewAppointmentWallet',
     viewLeaveManagement: 'viewAppointmentLeaveManagement',
-    // viewCategory: 'viewAppointmentCategory',
     viewEmployeeSchedule: 'viewAppointmentEmployeeSchedule',
     viewEmployeeRating: 'viewAppointmentEmployeeRating',
     viewEmployeeAttendance: 'viewAppointmentEmployeeAttendance',
-    // addCategory: 'addAppointmentCategory',
-    // editCategory: 'editAppointmentCategory',
-    // deleteCategory: 'deleteAppointmentCategory',
     addService: 'addAppointmentService',
     editService: 'editAppointmentService',
     deleteService: 'deleteAppointmentService',
@@ -819,13 +815,92 @@ export const ALL_PERMISSIONS = {
     viewLoyaltyProgram: 'viewLoyaltyProgram',
     viewOfficeTime: 'viewOfficeTime',
   },
+  storeDeduction: {
+    view: 'vieStorExpenseDeduction',
+    add: 'addExpenseDeduction',
+    edit: 'editExpenseDeduction',
+    delete: 'deleteExpenseDeduction',
+  },
+  storeCommission: {
+    view: 'viewStoreExpenseCommission',
+    add: 'addExpenseCommission',
+    edit: 'editExpenseCommission',
+    delete: 'deleteExpenseCommission',
+  },
+  storeOvertime: {
+    view: 'viewStoreExpenseOvertime',
+    add: 'addExpenseOvertime',
+    edit: 'editExpenseOvertime',
+    delete: 'deleteExpenseOvertime',
+  },
+  storeBonus: {
+    view: 'viewStoreExpenseBonus',
+    add: 'addExpenseBonus',
+    edit: 'editExpenseBonus',
+    delete: 'deleteExpenseBonus',
+  },
+  storePayroll: {
+    view: 'viewStorePayroll',
+  },
 };
+
+export const DEDUCTION_TYPE = [
+  {
+    id: 'LateArrival',
+    name: 'Late Arrival',
+  },
+  {
+    id: 'Uniform',
+    name: 'Uniform',
+  },
+  {
+    id: 'Absent',
+    name: 'Absent',
+  },
+  {
+    id: 'HalfDay',
+    name: 'Half Day',
+  },
+  {
+    id: 'EarlyGoing',
+    name: 'Early Going',
+  },
+  {
+    id: 'Others',
+    name: 'Others',
+  },
+];
+
+export const COMMISSION_TYPE = [
+  {
+    id: 'Service',
+    name: 'Service',
+  },
+  {
+    id: 'Product',
+    name: 'Product',
+  },
+];
+
+export const USER_TYPE = [
+  {
+    id: 'StaffUser',
+    name: 'Staff User',
+  },
+  {
+    id: 'AppUser',
+    name: 'App User',
+  },
+  {
+    id: 'Employee',
+    name: 'Employee',
+  },
+];
 
 export const SERVICES = 'Service';
 export const PRODUCT = 'Product';
 let TITLE_TEXT = '';
 export const handleTitleText = (permissions: any) => {
-  console.log('PPPPPPPPPPPP', permissions);
   if (
     listingRolePermission(
       permissions,
@@ -838,3 +913,17 @@ export const handleTitleText = (permissions: any) => {
   }
 };
 export { TITLE_TEXT };
+
+export const EXPENSE_TYPES = {
+  deduction: 'Deduction',
+  commission: 'Commission',
+  bonus: 'Bonus',
+  overtime: 'Overtime',
+  payroll: 'Payroll',
+};
+
+export const USER_TYPES = {
+  employee: 'Employee',
+  appUser: 'AppUser',
+  staffUser: 'StaffUser',
+};

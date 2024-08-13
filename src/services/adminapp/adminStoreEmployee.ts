@@ -96,6 +96,10 @@ const StoreEmployeeDelete = (empId: any, data: any) => {
 
 // Store Employee Services
 
+const StoreAllEmployeeLov = () => {
+  return network.get(`${STORE_PREFIX}/${EMPLOYEE_PREFIX}/lov`);
+};
+
 const StoreEmployeeServiceList = (empId: any) => {
   return network.get(
     `${STORE_PREFIX}/${EMPLOYEE_PREFIX}/${SERVICE_PREFIX}/list/${empId}`
@@ -208,4 +212,5 @@ export default {
   StoreEmployeeReviewStarListService,
   StoreEmployeeScheduleService,
   StoreEmployeeLeaveStatusUpdateService,
+  StoreAllEmployeeLov,
 };

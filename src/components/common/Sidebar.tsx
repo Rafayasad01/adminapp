@@ -235,9 +235,10 @@ function Sidebar() {
   //   dispatch(setLogo(null));
   //   dispatch(setRolePermissions({ id: '', name: '', permissions: [] }));
   // };
-  // console.log("ei",expandedIndex);
+  console.log('ei', expandedIndex);
 
   const handleToggle = (index: number) => {
+    console.log('🚀 ~ handleToggle ~ index:', index);
     if (expandedIndex === index) {
       setExpandedIndex(null);
     } else {

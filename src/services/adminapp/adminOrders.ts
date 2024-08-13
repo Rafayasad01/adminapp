@@ -73,6 +73,12 @@ const OrderPlace = (data: any) => {
   return network.post(`${ORDER_PREFIX}/${PLACE_PREFIX}/newOrder`, data);
 };
 
+// commission
+
+const GetOrderCommissionItems = (orderId: any) => {
+  return network.get(`${ORDER_PREFIX}/get/items/${orderId}`);
+};
+
 export default {
   getListService,
   searchService,
@@ -86,4 +92,5 @@ export default {
   OrderGetCart,
   OrderUpdateCart,
   OrderPlace,
+  GetOrderCommissionItems,
 };

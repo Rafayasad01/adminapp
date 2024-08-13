@@ -2,6 +2,7 @@
 /* eslint-disable import/prefer-default-export */
 
 import { Navigate, RouteObject } from 'react-router-dom';
+import { memo } from 'react';
 import AppLayout from '../components/layout/AppLayout';
 import AuthLayout from '../components/layout/AuthLayout';
 import LayoutOutlet from '../components/layout/LayoutOutlet';
@@ -76,6 +77,11 @@ import EmployeeRatingReviewsPage from '../pages/appointment/provider/rating/Empl
 import AppointmentRatingPage from '../pages/appointment/rating/AppointmentRatingPage';
 import AppointmentRatingReviewsPage from '../pages/appointment/rating/AppointmentRatingReviewsPage';
 import WalletPage from '../pages/appointment/wallet/WalletPage';
+import DeductionPage from '../pages/appointment/provider/deduction/DeductionPage';
+import CommissionPage from '../pages/appointment/provider/commission/CommissionPage';
+import BonusPage from '../pages/appointment/provider/bonus/BonusPage';
+import OvertimePage from '../pages/appointment/provider/overtime/OvertimePage';
+
 import { ALL_PERMISSIONS } from '../utils/constants';
 import CAN from '../services/permissions/permissions';
 
@@ -85,6 +91,7 @@ const ProtectedRoute = ({ page, condition }: any) => {
 };
 
 const GetInitialRoute = ({ routes }: any) => {
+  // console.log('🚀 ~ GetInitialRoute ~ routes:', routes);
   const permittedRoute = routes.find((route: any) =>
     CAN('canView', route.condition)
   );
@@ -93,6 +100,8 @@ const GetInitialRoute = ({ routes }: any) => {
   }
   return null;
 };
+
+export default memo(GetInitialRoute);
 
 export const routeObjects: RouteObject[] = [
   {
@@ -475,6 +484,28 @@ export const routeObjects: RouteObject[] = [
                   {
                     path: 'review/:empId',
                     element: <EmployeeRatingReviewsPage />,
+                  },
+                  {
+                    path: 'deduction/:empId',
+                    element: (
+                      <ProtectedRoute
+                        page={<DeductionPage />}
+                        condition={ALL_PERMISSIONS.storeDeduction.view}
+                      />
+                    ),
+                    // element: <DeductionPage />,
+                  },
+                  {
+                    path: 'commission/:empId',
+                    element: <CommissionPage />,
+                  },
+                  {
+                    path: 'bonus/:empId',
+                    element: <BonusPage />,
+                  },
+                  {
+                    path: 'overtime/:empId',
+                    element: <OvertimePage />,
                   },
                 ],
               },

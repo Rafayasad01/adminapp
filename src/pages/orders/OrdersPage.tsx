@@ -5,6 +5,7 @@ import WysiwygOutlinedIcon from '@mui/icons-material/WysiwygOutlined';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import FormControl from '@mui/material/FormControl';
+import CreditCardIcon from '@mui/icons-material/CreditCard';
 import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -18,15 +19,19 @@ import Notify from '../../components/common/Notify';
 import TopBar from '../../components/common/TopBar';
 import { useAppSelector } from '../../redux/redux-hooks';
 import orderService from '../../services/adminapp/adminOrders';
+import storeDeduction from '../../services/adminapp/adminDeduction';
 import {
   ALL_PERMISSIONS,
+  EXPENSE_TYPES,
   NOT_AUTHORIZED_MESSAGE,
   ORDER_STATUSES,
+  USER_TYPES,
 } from '../../utils/constants';
 import promiseHandler, {
   CheckRolePermission,
   listingRolePermission,
 } from '../../utils/helper';
+import CommissionAddPopup from './CommissionAddPopup';
 // import Pagination from '@mui/material/Pagination';
 // import Stack from '@mui/material/Stack';
 
@@ -42,9 +47,12 @@ function OrdersPage() {
   const [list, setList] = useState<any>([]);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [actionMenuItemid] = React.useState('');
+  const [isCommissionPopup, setIsCommissionPopup] = React.useState(false);
   const [isLoader, setIsLoader] = useState(true);
+  const [isButLoader, setIsButLoader] = useState(false);
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
+  const [orderId, setOrderId] = React.useState<string | undefined>();
   const [actionMenuAnchorEl, setActionMenuAnchorEl] =
     useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
@@ -280,6 +288,52 @@ function OrdersPage() {
     }
   };
 
+  const handleCommissionDetail = (data: any, id: string) => {
+    console.log('🚀 ~ handleCommissionDetail ~ data: 1', data);
+    setIsButLoader(true);
+    data.userId = id;
+    data.expenseType = EXPENSE_TYPES.commission;
+    data.userType = USER_TYPES.employee;
+    // console.log('🚀 ~ handleCommissionDetail ~ data: 2', data);
+    storeDeduction
+      .commissionCreate(data, orderId)
+      .then((item: any) => {
+        if (item.data.success) {
+          setIsCommissionPopup(false);
+          setIsButLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'success',
+          });
+          setList((newArr: any) => {
+            return newArr.map((el: any) => {
+              if (el.id === orderId) {
+                el.isCommission = true;
+              }
+              return { ...el };
+            });
+          });
+          navigate(`../../store-appointment/employees/commission/${id}`);
+        } else {
+          setIsButLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'error',
+          });
+        }
+      })
+      .catch((err: Error) => {
+        setIsButLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
+        });
+      });
+  };
+
   const getStatusBackground = (status: string) => {
     const newStatuses = [...ORDER_STATUSES].map(([key, value]) => ({
       key,
@@ -301,6 +355,16 @@ function OrdersPage() {
     <Loader />
   ) : (
     <>
+      {isCommissionPopup && (
+        <CommissionAddPopup
+          isButLoader={isButLoader}
+          openFormDialog={isCommissionPopup}
+          setOpenFormDialog={setIsCommissionPopup}
+          callback={handleCommissionDetail}
+          setIsNotify={setIsNotify}
+          setNotifyMessage={setNotifyMessage}
+        />
+      )}
       {actionMenuAnchorEl && (
         <ActionMenu
           open={actionMenuOpen}
@@ -460,7 +524,19 @@ function OrdersPage() {
                             >
                               <WysiwygOutlinedIcon />
                             </IconButton>
+                            {!Item.isCommission && (
+                              <IconButton
+                                className="icon-btn"
+                                onClick={() => {
+                                  setOrderId(Item.id);
+                                  setIsCommissionPopup(true);
+                                }}
+                              >
+                                <CreditCardIcon />
+                              </IconButton>
+                            )}
                           </div>
+
                           {/* <IconButton
                             className="btn-dot"
                             aria-label="more"
