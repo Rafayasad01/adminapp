@@ -2,6 +2,7 @@
 /* eslint-disable import/prefer-default-export */
 
 import { Navigate, RouteObject } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 import AppLayout from '../components/layout/AppLayout';
 import AuthLayout from '../components/layout/AuthLayout';
 import LayoutOutlet from '../components/layout/LayoutOutlet';
@@ -78,11 +79,28 @@ import AppointmentRatingReviewsPage from '../pages/appointment/rating/Appointmen
 import WalletPage from '../pages/appointment/wallet/WalletPage';
 import { ALL_PERMISSIONS } from '../utils/constants';
 import CAN from '../services/permissions/permissions';
+import ExpensePage from '../pages/expense';
 
 const ProtectedRoute = ({ page, condition }: any) => {
-  const canView = CAN('canView', condition);
+  const [canView, setCanView] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    const checkPermission = async () => {
+      const result = await CAN('canView', condition);
+      setCanView(result);
+    };
+    checkPermission();
+  }, [condition]);
+  if (canView === null) {
+    return <div>Loading...</div>;
+  }
   return canView ? page : <Page404 error={{ message: 'Page not found' }} />;
 };
+
+// const ProtectedRoute = ({ page, condition }: any) => {
+//   const canView = CAN('canView', condition);
+//   return canView ? page : <Page404 error={{ message: 'Page not found' }} />;
+// };
 
 const GetInitialRoute = ({ routes }: any) => {
   const permittedRoute = routes.find((route: any) =>
@@ -1013,6 +1031,150 @@ export const routeObjects: RouteObject[] = [
                   />
                 ),
                 // element: <BannersPage />,
+              },
+            ],
+          },
+          // {
+          //   path: 'expense',
+          //   children: [
+          //     {
+          //       index: true,
+          //       element: (
+          //         <GetInitialRoute
+          //           routes={[
+          //             {
+          //               path: 'summary',
+          //               condition: ALL_PERMISSIONS.storeUser.viewUserApp,
+          //             },
+          //             {
+          //               path: 'salary',
+          //               condition: ALL_PERMISSIONS.storeUser.viewUserEmployee,
+          //             },
+          //             {
+          //               path: 'utility',
+          //               condition: ALL_PERMISSIONS.storeUser.viewUserEmployee,
+          //             },
+          //             {
+          //               path: 'maintenance',
+          //               condition: ALL_PERMISSIONS.storeUser.viewUserEmployee,
+          //             },
+          //             {
+          //               path: 'equipment-purchase',
+          //               condition: ALL_PERMISSIONS.storeUser.viewUserEmployee,
+          //             },
+          //             {
+          //               path: 'other',
+          //               condition: ALL_PERMISSIONS.storeUser.viewUserEmployee,
+          //             },
+          //           ]}
+          //         />
+          //       ),
+          //       // element: <BannersPage />,
+          //     },
+          //     {
+          //       path: 'summary',
+          //       children: [
+          //         {
+          //           index: true,
+          //           element: (
+          //             <ProtectedRoute
+          //               page={<VouchersPage />}
+          //               condition={ALL_PERMISSIONS.storeVoucher.viewVouchers}
+          //             />
+          //           ),
+          //           // element: <VouchersPage />,
+          //         },
+          //       ],
+          //     },
+          //     {
+          //       path: 'salary',
+          //       children: [
+          //         {
+          //           index: true,
+          //           element: (
+          //             <ProtectedRoute
+          //               page={<VouchersPage />}
+          //               condition={ALL_PERMISSIONS.storeVoucher.viewVouchers}
+          //             />
+          //           ),
+          //           // element: <VouchersPage />,
+          //         },
+          //       ],
+          //     },
+          //     {
+          //       path: 'utility',
+          //       children: [
+          //         {
+          //           index: true,
+          //           element: (
+          //             <ProtectedRoute
+          //               page={<VouchersPage />}
+          //               condition={ALL_PERMISSIONS.storeVoucher.viewVouchers}
+          //             />
+          //           ),
+          //           // element: <VouchersPage />,
+          //         },
+          //       ],
+          //     },
+          //     {
+          //       path: 'maintenance',
+          //       children: [
+          //         {
+          //           index: true,
+          //           element: (
+          //             <ProtectedRoute
+          //               page={<VouchersPage />}
+          //               condition={ALL_PERMISSIONS.storeVoucher.viewVouchers}
+          //             />
+          //           ),
+          //           // element: <VouchersPage />,
+          //         },
+          //       ],
+          //     },
+          //     {
+          //       path: 'equipment-purchase',
+          //       children: [
+          //         {
+          //           index: true,
+          //           element: (
+          //             <ProtectedRoute
+          //               page={<VouchersPage />}
+          //               condition={ALL_PERMISSIONS.storeVoucher.viewVouchers}
+          //             />
+          //           ),
+          //           // element: <VouchersPage />,
+          //         },
+          //       ],
+          //     },
+          //     {
+          //       path: 'other',
+          //       children: [
+          //         {
+          //           index: true,
+          //           element: (
+          //             <ProtectedRoute
+          //               page={<VouchersPage />}
+          //               condition={ALL_PERMISSIONS.storeVoucher.viewVouchers}
+          //             />
+          //           ),
+          //           // element: <VouchersPage />,
+          //         },
+          //       ],
+          //     },
+          //   ],
+          // },
+          {
+            path: 'expense',
+            children: [
+              {
+                index: true,
+                element: (
+                  <ProtectedRoute
+                    page={<ExpensePage />}
+                    condition={ALL_PERMISSIONS.storeExpense.viewExpenses}
+                  />
+                ),
+                // element: <VouchersPage />,
               },
             ],
           },

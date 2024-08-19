@@ -7,6 +7,7 @@ import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import ManageAccountsOutlinedIcon from '@mui/icons-material/ManageAccountsOutlined';
 import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
+import Groups2Icon from '@mui/icons-material/Groups2';
 import PeopleOutlineOutlinedIcon from '@mui/icons-material/PeopleOutlineOutlined';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import QuestionAnswerOutlinedIcon from '@mui/icons-material/QuestionAnswerOutlined';
@@ -177,6 +178,14 @@ const links = [
     permission: ALL_PERMISSIONS.storeBranch.viewBranches,
     // permission: 'Banners List',
     icon: <CorporateFareIcon className="w-[17px]" />,
+  },
+  {
+    name: 'Expense',
+    path: 'expense',
+    permission: ALL_PERMISSIONS.storeBranch.viewBranches,
+    // permission: ALL_PERMISSIONS.storeExpense.viewExpenses,
+    // permission: 'Banners List',
+    icon: <Groups2Icon className="w-[17px]" />,
   },
   {
     name: 'Banners',
@@ -426,6 +435,7 @@ function Sidebar() {
       setList(tempList);
     }
   }, [permissions, appItems?.employeeLimit, authState]);
+  console.log('🚀 ~ useEffect ~ permissions:', permissions);
 
   return (
     <Drawer

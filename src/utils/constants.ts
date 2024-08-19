@@ -792,6 +792,12 @@ export const ALL_PERMISSIONS = {
     edit: 'editBanner',
     delete: 'deleteBanner',
   },
+  storeExpense: {
+    viewExpenses: 'viewStoreExpense',
+    add: 'addExpense',
+    edit: 'editExpense',
+    delete: 'deleteExpense',
+  },
   storeFaq: {
     viewFaqs: 'viewStoreFaq',
     add: 'addFaq',
@@ -825,7 +831,6 @@ export const SERVICES = 'Service';
 export const PRODUCT = 'Product';
 let TITLE_TEXT = '';
 export const handleTitleText = (permissions: any) => {
-  console.log('PPPPPPPPPPPP', permissions);
   if (
     listingRolePermission(
       permissions,
