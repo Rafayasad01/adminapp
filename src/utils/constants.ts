@@ -636,6 +636,11 @@ export const VALIDATE_NON_NEGATIVE_NUM_AND_CHECK_LENGTH = (
 };
 
 export const imageAllowedTypes = ['image/png', 'image/jpeg', 'image/jpg'];
+export const excelAllowedTypes = [
+  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  'xlsx',
+  'xlsm',
+];
 
 export const THEME_COLORS = [
   'primary',
@@ -716,6 +721,36 @@ export const GENDER = [
   },
 ];
 
+export const PROJECT_PLAN_TYPE = [
+  {
+    id: 'Male',
+    name: 'Male',
+  },
+  {
+    id: 'Female',
+    name: 'Female',
+  },
+];
+
+export const CONSTRUCTION_TYPE = [
+  {
+    id: 'ResidentialConstruction',
+    name: 'Residential construction',
+  },
+  {
+    id: 'CommercialConstruction',
+    name: 'Commercial construction',
+  },
+  {
+    id: 'Building',
+    name: 'Building',
+  },
+  {
+    id: 'PersonalResidenace',
+    name: 'Personal Residenace',
+  },
+];
+
 export const ALL_PERMISSIONS = {
   storeAppointment: {
     viewServices: 'viewAppointmentService',
@@ -791,6 +826,12 @@ export const ALL_PERMISSIONS = {
     add: 'addBanner',
     edit: 'editBanner',
     delete: 'deleteBanner',
+  },
+  storePlans: {
+    viewPlans: 'viewStorePlans',
+    add: 'addPlan',
+    edit: 'editPlan',
+    delete: 'deletePlan',
   },
   storeFaq: {
     viewFaqs: 'viewStoreFaq',

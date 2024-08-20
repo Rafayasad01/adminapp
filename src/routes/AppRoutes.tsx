@@ -78,6 +78,8 @@ import AppointmentRatingReviewsPage from '../pages/appointment/rating/Appointmen
 import WalletPage from '../pages/appointment/wallet/WalletPage';
 import { ALL_PERMISSIONS } from '../utils/constants';
 import CAN from '../services/permissions/permissions';
+// import ProjectPlanPage from '../pages/projectPlans/plans/ProjectPlanPage';
+import ProjectPage from '../pages/projectPlans/project/ProjectPage';
 
 const ProtectedRoute = ({ page, condition }: any) => {
   const canView = CAN('canView', condition);
@@ -1013,6 +1015,15 @@ export const routeObjects: RouteObject[] = [
                   />
                 ),
                 // element: <BannersPage />,
+              },
+            ],
+          },
+          {
+            path: 'projects',
+            children: [
+              {
+                index: true,
+                element: <ProjectPage />,
               },
             ],
           },

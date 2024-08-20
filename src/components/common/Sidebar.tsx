@@ -185,6 +185,12 @@ const links = [
     icon: <ViewCarouselOutlinedIcon className="w-[17px]" />,
   },
   {
+    name: 'Project Plans',
+    path: 'projects',
+    permission: ALL_PERMISSIONS.storePlans.viewPlans,
+    icon: <ViewCarouselOutlinedIcon className="w-[17px]" />,
+  },
+  {
     name: 'FAQs',
     path: 'faq',
     permission: ALL_PERMISSIONS.storeFaq.viewFaqs,
