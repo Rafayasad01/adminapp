@@ -275,9 +275,10 @@ function ProjectPage() {
 
   const createFormHandler = (data: any) => {
     console.log('data==>', data);
-    setIsLoader(true);
+    data.tenant = authState.user.tenant;
+    // setIsLoader(true);
     storeProjectPlanService
-      .fileUploadService(authState.user.tenant, data)
+      .addProjectService(data)
       .then((item: any) => {
         if (item.data.success) {
           setOpenFormDialog(false);

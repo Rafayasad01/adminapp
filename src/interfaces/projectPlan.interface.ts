@@ -1,9 +1,9 @@
 export interface Project {
-  projectName: string;
+  name: string;
   clientName: string;
   supervisorName: string;
   type: string;
-  contructionType: string;
+  constructionType: string;
   budget: string;
   address: string;
   startDate: any;

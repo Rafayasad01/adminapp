@@ -19,6 +19,7 @@ import {
   MAX_LENGTH_EXCEEDED,
   PATTERN,
   PROJECT_PLAN_TYPE,
+  VALIDATE_NON_NEGATIVE_NUM,
 } from '../../../utils/constants';
 import { Project } from '../../../interfaces/projectPlan.interface';
 import ErrorSpanBox from '../../../components/common/ErrorSpanBox';
@@ -56,11 +57,14 @@ Props) {
     },
   });
 
-  // console.log('Errors', errors, watch('file'));
-
   const onSubmit = (data: any) => {
-    console.log('🚀 ~ onSubmit ~ data:', data);
-    callback();
+    const obj = {
+      ...data,
+      startDate: dayjs(data.startDate).utc().format('YYYY-MM-DD HH:mm:ss'),
+      endDate: dayjs(data.endDate).utc().format('YYYY-MM-DD HH:mm:ss'),
+    };
+    console.log('🚀 ~ onSubmit ~ data:', obj);
+    callback(obj);
   };
 
   const handleFormClose = () => {
@@ -92,23 +96,23 @@ Props) {
                 <label className="FormLabel">Project Name</label>
                 <Input
                   className="FormInput"
-                  {...register('projectName', {
+                  {...register('name', {
                     required: true,
                     pattern: PATTERN.CHAR_SPACE_DASH,
                     validate: (value) => value.length <= 150,
                   })}
                   placeholder="Enter Project Name"
                   type="text"
-                  id="projectName"
+                  id="name"
                   disableUnderline
                 />
-                {errors.projectName?.type === 'required' && (
+                {errors.name?.type === 'required' && (
                   <ErrorSpanBox error="Project Name is required" />
                 )}
-                {errors.projectName?.type === 'pattern' && (
+                {errors.name?.type === 'pattern' && (
                   <ErrorSpanBox error={INVALID_CHAR} />
                 )}
-                {errors.projectName?.type === 'validate' && (
+                {errors.name?.type === 'validate' && (
                   <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
                 )}
               </FormControl>
@@ -220,7 +224,7 @@ Props) {
               <FormControl className="FormControl" variant="standard">
                 <CustomDropDown
                   validateRequired
-                  id="contructionType"
+                  id="constructionType"
                   control={control}
                   error={errors}
                   register={register}
@@ -231,9 +235,9 @@ Props) {
                 />
               </FormControl>
             </div>
-            <div className="FormField">
+            <div className="FormFields">
               <FormControl className="FormControl" variant="standard">
-                <label className="FormLabel mt-2">Supervisor Name</label>
+                <label className="FormLabel">Supervisor Name</label>
                 <Input
                   className="FormInput"
                   {...register('supervisorName', {
@@ -254,6 +258,27 @@ Props) {
                 )}
                 {errors.supervisorName?.type === 'validate' && (
                   <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
+                )}
+              </FormControl>
+              <FormControl className="FormControl" variant="standard">
+                <label className="FormLabel">Budget</label>
+                <Input
+                  className="FormInput"
+                  id="name"
+                  type="number"
+                  placeholder="Enter Amount"
+                  {...register('budget', {
+                    required: 'Amount is required in numbers',
+                    validate: (value: any) => VALIDATE_NON_NEGATIVE_NUM(value),
+                    maxLength: {
+                      value: 10,
+                      message: 'Length should not be excceed from 10 numbers.',
+                    },
+                  })}
+                  disableUnderline
+                />
+                {errors.budget && (
+                  <ErrorSpanBox error={errors.budget?.message} />
                 )}
               </FormControl>
             </div>

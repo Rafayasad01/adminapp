@@ -9,11 +9,8 @@ const getListProjectService = (tenant: string) => {
   return network.get(`${NEW_EARTH_PREFIX}/${PROJECTS_PREFIX}/list/${tenant}`);
 };
 
-const addProjectService = (data: any, tenant: string) => {
-  return network.get(
-    `${NEW_EARTH_PREFIX}/${PROJECTS_PREFIX}/list/${tenant}`,
-    data
-  );
+const addProjectService = (data: any) => {
+  return network.post(`${NEW_EARTH_PREFIX}/${PROJECTS_PREFIX}/create`, data);
 };
 
 // plans

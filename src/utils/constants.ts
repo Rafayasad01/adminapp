@@ -723,12 +723,12 @@ export const GENDER = [
 
 export const PROJECT_PLAN_TYPE = [
   {
-    id: 'Male',
-    name: 'Male',
+    id: 'typeone',
+    name: 'Type one',
   },
   {
-    id: 'Female',
-    name: 'Female',
+    id: 'typetwo',
+    name: 'Type two',
   },
 ];
 
