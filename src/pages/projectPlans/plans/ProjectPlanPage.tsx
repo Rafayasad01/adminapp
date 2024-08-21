@@ -300,8 +300,8 @@ function ProjectPlanPage() {
             <table className="table-border table-auto">
               <thead>
                 <tr>
-                  <th className="w-[80%]">Day</th>
-                  <th className="w-[10%]">Count</th>
+                  <th className="w-[75%]">Day</th>
+                  <th className="w-[15%]">Working Days</th>
                   <th>&nbsp;</th>
                 </tr>
               </thead>
