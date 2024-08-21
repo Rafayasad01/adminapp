@@ -100,6 +100,14 @@
   @apply mt-3 grid grid-cols-2 gap-3 !important;
 }
 
+.Content .FormFields3columns {
+  @apply mt-3 grid grid-cols-3 gap-3 !important;
+}
+
+.Content .FormFields4columns {
+  @apply mt-3 grid grid-cols-4 gap-3 !important;
+}
+
 .Content .FormField {
   @apply mt-3 grid !important;
 }

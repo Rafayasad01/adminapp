@@ -17,7 +17,7 @@ import {
   NOT_AUTHORIZED_MESSAGE,
 } from '../../../utils/constants';
 import { listingRolePermission } from '../../../utils/helper';
-import SalaryAddPopup from './SalaryAddPopup';
+import EquipmentPurchaseAddPopup from './EquipmentPurchaseAddPopup';
 
 type QueryParams = {
   page?: string | null | any;
@@ -27,7 +27,7 @@ type QueryParams = {
   endDate?: string | null;
 };
 
-function SalaryPage() {
+function EquipmentPurchasePage() {
   dayjs.extend(advancedFormat);
   const dataRole = useAppSelector(
     (state) => state?.persistedReducer?.roleState?.role?.permissions
@@ -43,7 +43,7 @@ function SalaryPage() {
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
 
-  const expenseType = `Salary`;
+  const expenseType = `EquipmentPurchase`;
 
   const [startDate, setStartDate] = useState<string | null>(
     dayjs().subtract(1, 'month').add(1, 'day').format('YYYY-MM-DD')
@@ -167,7 +167,7 @@ function SalaryPage() {
   };
 
   const createFormHandler = (data: any) => {
-    // console.log('data::::::::', data);
+    // console.log('data::::::', data);
     setIsButLoader(true);
     const formData = {
       expenseType,
@@ -223,7 +223,7 @@ function SalaryPage() {
         return null;
       }
       return (
-        <span className="flex w-full capitalize" key={key}>
+        <span className="flex w-full capitalize" key={key + value}>
           {Number(value).toLocaleString()} {CURRENCY_PREFIX}
         </span>
       );
@@ -302,13 +302,11 @@ function SalaryPage() {
               <thead>
                 <tr>
                   <th>Name</th>
-                  <th>Month</th>
                   <th>Pay</th>
                   <th>Amount</th>
                   <th>Payment Date</th>
                   <th>Payment Method</th>
                   <th>Total Amount</th>
-                  <th>&nbsp;</th>
                 </tr>
               </thead>
               <tbody>
@@ -317,9 +315,6 @@ function SalaryPage() {
                     return (
                       <tr key={index}>
                         <td>{item.expenseDetails.name}</td>
-                        <td>
-                          {dayjs(item.expenseDetails.month)?.format('MMMM')}
-                        </td>
                         <td>
                           {renderAditionalFieldKey(
                             item.expenseDetails.amountDetails
@@ -351,7 +346,7 @@ function SalaryPage() {
               </tbody>
               <tfoot>
                 <tr>
-                  <td colSpan={6}>Grand Total</td>
+                  <td colSpan={5}>Grand Total</td>
                   <td>
                     {Number(totalAmount).toLocaleString()}
                     <span className="font-medium"> {CURRENCY_PREFIX}</span>
@@ -376,7 +371,7 @@ function SalaryPage() {
         </div>
       </div>
       {openFormDialog && (
-        <SalaryAddPopup
+        <EquipmentPurchaseAddPopup
           loader={isButLoader}
           setIsNotify={setIsNotify}
           setNotifyMessage={setNotifyMessage}
@@ -389,4 +384,4 @@ function SalaryPage() {
   );
 }
 
-export default SalaryPage;
+export default EquipmentPurchasePage;

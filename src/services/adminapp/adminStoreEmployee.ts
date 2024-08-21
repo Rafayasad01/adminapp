@@ -187,6 +187,10 @@ const StoreEmployeeLeaveStatusUpdateService = (empId: string, status: any) => {
   );
 };
 
+const StoreEmployeeLov = () => {
+  return network.get(`${STORE_PREFIX}/${EMPLOYEE_PREFIX}/lov`);
+};
+
 export default {
   StoreEmployeeList,
   StoreEmployeeAllList,
@@ -208,4 +212,5 @@ export default {
   StoreEmployeeReviewStarListService,
   StoreEmployeeScheduleService,
   StoreEmployeeLeaveStatusUpdateService,
+  StoreEmployeeLov,
 };

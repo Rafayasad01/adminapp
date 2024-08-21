@@ -33,6 +33,7 @@ export const TENANT_PREFIX = 'tenant';
 export const ROLE_PREFIX = 'role';
 export const SHOP_PREFIX = 'shop';
 export const APP_IMAGE_PREFIX = 'appImage';
+export const EXPENSE_PREFIX = 'expense';
 
 export const APP_USER_STATUS_OFFLINE = 'Offline';
 export const APP_USER_STATUS_ONLINE = 'Online';

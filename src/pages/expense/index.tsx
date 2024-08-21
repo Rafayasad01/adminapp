@@ -1,20 +1,14 @@
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import React, { useState } from 'react';
-// import { useParams } from 'react-router-dom';
-// import ActionMenu from '../../components/common/ActionMenu';
-// import Loader from '../../components/common/Loader';
 import Notify from '../../components/common/Notify';
 import TopBar from '../../components/common/TopBar';
-// import { useAppSelector } from '../../redux/redux-hooks';
-// import appUserService from '../../services/adminapp/adminAppUser';
-// import PermissionPopup from '../../utils/PermissionPopup';
-// import { listingRolePermission } from '../../utils/helper';
-// import { ALL_PERMISSIONS } from '../../utils/constants';
-import SummaryPage from './summary/SummaryPage';
-import SalaryPage from './salary/SalaryPage';
-import UtilityPage from './utility/UtilityPage';
+import EquipmentPurchasePage from './equipmentPurchase/EquipmentPurchasePage';
 import MaintenancePage from './maintenance/MaintenancePage';
+import OtherPage from './other/OtherPage';
+import SalaryPage from './salary/SalaryPage';
+import SummaryPage from './summary/SummaryPage';
+import UtilityPage from './utility/UtilityPage';
 
 function Expense() {
   //   const dataRole = useAppSelector(
@@ -38,7 +32,7 @@ function Expense() {
         setIsOpen={setIsNotify}
         displayMessage={notifyMessage}
       />
-      <TopBar isNestedRoute title="Expenses" />
+      <TopBar title="Expense" />
       <div className="container m-auto mt-5">
         <div className="mt-3 grid grid-cols-12">
           <div className="col-span-12 rounded-lg bg-[#fff] px-4 py-5 shadow-lg">
@@ -54,6 +48,8 @@ function Expense() {
             {selectedTab === 'SALARY' && <SalaryPage />}
             {selectedTab === 'UTILITY' && <UtilityPage />}
             {selectedTab === 'MAINTENANCE' && <MaintenancePage />}
+            {selectedTab === 'EQUIPMENT PURCHASE' && <EquipmentPurchasePage />}
+            {selectedTab === 'OTHER' && <OtherPage />}
           </div>
         </div>
       </div>
