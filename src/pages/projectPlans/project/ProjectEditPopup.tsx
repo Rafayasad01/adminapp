@@ -1,17 +1,31 @@
-import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
-import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
-import FormControl from '@mui/material/FormControl';
-import IconButton from '@mui/material/IconButton';
+// import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
-import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import React, { useEffect, useState } from 'react';
+import { useForm, Controller } from 'react-hook-form';
+// import TextField from '@mui/material/TextField';
 import '../../../assets/css/PopupStyle.css';
+import ThemeProvider from '@mui/material/styles/ThemeProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import dayjs from 'dayjs';
+import FormControl from '@mui/material/FormControl';
+import { createTheme } from '@mui/material';
+import storeAppUsers from '../../../services/adminapp/adminAppUser';
+import {
+  CONSTRUCTION_TYPE,
+  INVALID_CHAR,
+  MAX_LENGTH_EXCEEDED,
+  PATTERN,
+  PROJECT_PLAN_TYPE,
+  VALIDATE_NON_NEGATIVE_NUM,
+} from '../../../utils/constants';
+import { Project } from '../../../interfaces/projectPlan.interface';
 import ErrorSpanBox from '../../../components/common/ErrorSpanBox';
-import { excelAllowedTypes } from '../../../utils/constants';
 import CustomDropDown from '../../../components/common/CustomDropDown';
-import { ProjectPlan } from '../../../interfaces/projectPlan.interface';
+import { useAppSelector } from '../../../redux/redux-hooks';
 
 type Props = {
   openFormDialog: boolean;
@@ -19,99 +33,63 @@ type Props = {
   callback: (...args: any[]) => any;
   setIsNotify: any;
   setNotifyMessage: any;
+  formData: any;
 };
 
-function ProjectPlanEditPopup({
+function ProjectEditPopup({
   openFormDialog,
   setOpenFormDialog,
   callback,
-  setIsNotify,
-  setNotifyMessage,
-}: Props) {
-  const [planFile, setPlanFile] = useState<any>(null);
-  const [videoPlanFiles, setVideoPlanFiles] = useState<File[]>([]); // State to manage multiple files
-  const [error, setError] = useState<string | null>(null);
-
+  formData,
+}: // setIsNotify,
+// setNotifyMessage,
+Props) {
   const {
     register,
     handleSubmit,
     setValue,
-    clearErrors,
     control,
     // watch,
     formState: { errors },
-  } = useForm<ProjectPlan>();
+  } = useForm<Project>();
+  const authState: any = useAppSelector((state) => state?.authState);
+  const [users, setUsers] = useState([]);
 
-  // console.log('Errors', errors, watch('avatar'));
+  const darkTheme = createTheme({
+    palette: {
+      primary: {
+        main: '#171717',
+      },
+    },
+  });
 
   const onSubmit = (data: any) => {
-    // console.log('🚀 ~ onSubmit ~ data:', data);
-    data.avatar = planFile;
-    const res = {
-      name: data.categoryName,
-      description: data.categoryDesc,
-      avatar: planFile,
+    const obj = {
+      ...data,
+      startDate: dayjs(data.startDate).utc().format('YYYY-MM-DD HH:mm:ss'),
+      endDate: dayjs(data.endDate).utc().format('YYYY-MM-DD HH:mm:ss'),
     };
-    callback(res);
+    // console.log('🚀 ~ onSubmit ~ data:', obj);
+    callback(obj);
   };
+
+  useEffect(() => {
+    if (formData) {
+      setValue('startDate', dayjs(formData.startDate));
+      setValue('endDate', dayjs(formData.endDate));
+    }
+    storeAppUsers.usersLov(authState.user.tenant).then((item: any) => {
+      setUsers(item.data.data.list);
+    });
+  }, []);
 
   const handleFormClose = () => {
     setOpenFormDialog(false);
   };
 
-  const handleFileChange = (event: any) => {
-    const selectedFile = event.target.files[0];
-    console.log('🚀 ~ handleFileChange ~ selectedFile:', selectedFile);
-    if (selectedFile) {
-      const fileType = selectedFile.type;
-      if (excelAllowedTypes.includes(fileType)) {
-        setPlanFile(event.target.files[0]);
-        setValue('file', event.target.files[0]);
-        clearErrors('file');
-      } else {
-        setIsNotify(true);
-        setNotifyMessage({
-          text: 'Only .xls, .xlsx, .xlsm files are allowed',
-          type: 'error',
-        });
-      }
-    }
-  };
-
-  const handleFileOnClick = (event: any) => {
-    event.target.value = null;
-    setPlanFile(null);
-    setValue('file', '');
-  };
-
-  const handleVideoFileOnClick = (event: any) => {
-    event.target.value = null;
-    setVideoPlanFiles([]);
-    setValue('videos', '');
-  };
-
-  const handleVideoFileChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const files = Array.from(event.target.files || []);
-    console.log('🚀 ~ files:', files);
-    const validFiles: any = files.filter((file) => file.type === 'video/mp4');
-
-    if (validFiles.length === files.length) {
-      setVideoPlanFiles(validFiles);
-      setValue('videos', validFiles);
-      setError(null);
-    } else {
-      setError('Only MP4 video files are allowed');
-    }
-  };
-
-  const handleVideoFileRemove = (fileName: string) => {
-    const updatedFiles: any = videoPlanFiles.filter(
-      (file) => file.name !== fileName
-    );
-    setVideoPlanFiles(updatedFiles);
-    setValue('videos', updatedFiles);
+  const handleDateChange = (date: any, field: any) => {
+    // console.log('HIT', date, activeBarberData);
+    field.onChange(date);
   };
 
   return (
@@ -126,181 +104,194 @@ function ProjectPlanEditPopup({
       <div className="Content">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="FormHeader">
-            <span className="Title">Edit Plan</span>
+            <span className="Title">Add Project</span>
           </div>
           <div className="FormBody mt-2">
-            {/* <div className="FormField">
+            <div className="FormFields">
               <FormControl className="FormControl" variant="standard">
-                <label className="FormLabel">Category Name</label>
+                <label className="FormLabel">Project Name</label>
                 <Input
                   className="FormInput"
-                  {...register('categoryName', {
+                  {...register('name', {
+                    value: formData?.name,
                     required: true,
                     pattern: PATTERN.CHAR_SPACE_DASH,
                     validate: (value) => value.length <= 150,
                   })}
-                  placeholder="Enter Category Name"
+                  placeholder="Enter Project Name"
                   type="text"
-                  id="categoryName"
+                  id="name"
                   disableUnderline
                 />
-                {errors.categoryName?.type === 'required' && (
-                  <ErrorSpanBox error="Category name is required" />
+                {errors.name?.type === 'required' && (
+                  <ErrorSpanBox error="Project Name is required" />
                 )}
-                {errors.categoryName?.type === 'pattern' && (
+                {errors.name?.type === 'pattern' && (
                   <ErrorSpanBox error={INVALID_CHAR} />
                 )}
-                {errors.categoryName?.type === 'validate' && (
+                {errors.name?.type === 'validate' && (
                   <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
                 )}
               </FormControl>
-            </div>
-            <div className="FormField">
               <FormControl className="FormControl" variant="standard">
-                <label className="FormLabel mt-2">
-                  Description{' '}
-                  <span className="SubLabel">Write 01-250 Characters</span>
-                </label>
-                <TextField
-                  className="FormTextarea"
-                  id="categoryDesc"
-                  multiline
-                  rows={4}
-                  defaultValue=""
-                  placeholder="Write Description"
-                  {...register('categoryDesc', {
-                    maxLength: {
-                      value: 250,
-                      message: MAX_LENGTH_EXCEEDED,
-                    },
-                  })}
+                <CustomDropDown
+                  validateRequired
+                  id="type"
+                  control={control}
+                  error={errors}
+                  register={register}
+                  options={{ roles: PROJECT_PLAN_TYPE, role: formData?.type }}
+                  customClassInputTitle="font-bold"
+                  inputTitle="Project Type"
+                  defaultValue="Select type"
                 />
-                {errors.categoryDesc && (
-                  <ErrorSpanBox error={errors.categoryDesc?.message} />
+              </FormControl>
+            </div>
+            <div className="FormFields">
+              <div className="w-full">
+                <ThemeProvider theme={darkTheme}>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    {/* <DemoItem label="Desktop variant"> */}
+                    <div>
+                      <span className="text-sm">Select Start Date</span>
+                    </div>
+                    <Controller
+                      name="startDate"
+                      control={control}
+                      rules={{
+                        required: 'Start date is required',
+                      }}
+                      defaultValue={dayjs()}
+                      render={({ field }) => (
+                        <DesktopDatePicker
+                          {...field}
+                          className="custom-border-2 w-full"
+                          onChange={(date) => handleDateChange(date, field)}
+                          // onChange={(date) => field.onChange(date)}
+                          value={field.value || dayjs()}
+                          minDate={dayjs()}
+                        />
+                      )}
+                    />
+                    {errors && errors.startDate && (
+                      <ErrorSpanBox error={errors.startDate.message} />
+                    )}
+                    {/* </DemoItem> */}
+                  </LocalizationProvider>
+                </ThemeProvider>
+              </div>
+              <div className="w-full">
+                <ThemeProvider theme={darkTheme}>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    {/* <DemoItem label="Desktop variant"> */}
+                    <div>
+                      <span className="text-sm">Select End Date</span>
+                    </div>
+                    <Controller
+                      name="endDate"
+                      control={control}
+                      rules={{
+                        required: 'End date is required',
+                      }}
+                      // defaultValue={dayjs()}
+                      render={({ field }) => (
+                        <DesktopDatePicker
+                          {...field}
+                          className="custom-border-2 w-full"
+                          onChange={(date) => handleDateChange(date, field)}
+                          // onChange={(date) => field.onChange(date)}
+                          value={field.value || dayjs()}
+                          minDate={dayjs()}
+                        />
+                      )}
+                    />
+                    {errors && errors.endDate && (
+                      <ErrorSpanBox error={errors.endDate.message} />
+                    )}
+                    {/* </DemoItem> */}
+                  </LocalizationProvider>
+                </ThemeProvider>
+              </div>
+            </div>
+            <div className="FormFields">
+              <FormControl className="FormControl" variant="standard">
+                <CustomDropDown
+                  validateRequired
+                  id="clientName"
+                  control={control}
+                  error={errors}
+                  register={register}
+                  options={{ roles: users, role: formData.clientName }}
+                  customClassInputTitle="font-bold"
+                  inputTitle="Client Name"
+                  defaultValue="Select Client"
+                />
+              </FormControl>
+              <FormControl className="FormControl" variant="standard">
+                <CustomDropDown
+                  validateRequired
+                  id="constructionType"
+                  control={control}
+                  error={errors}
+                  register={register}
+                  options={{
+                    roles: CONSTRUCTION_TYPE,
+                    role: formData.constructionType,
+                  }}
+                  customClassInputTitle="font-bold"
+                  inputTitle="Construction Type"
+                  defaultValue="Select type"
+                />
+              </FormControl>
+            </div>
+            <div className="FormFields">
+              <FormControl className="FormControl" variant="standard">
+                <label className="FormLabel">Supervisor Name</label>
+                <Input
+                  className="FormInput"
+                  {...register('supervisorName', {
+                    value: formData?.supervisorName,
+                    required: true,
+                    pattern: PATTERN.CHAR_SPACE_DASH,
+                    validate: (value) => value.length <= 150,
+                  })}
+                  placeholder="Enter Supervisor Name"
+                  type="text"
+                  id="supervisorName"
+                  disableUnderline
+                />
+                {errors.supervisorName?.type === 'required' && (
+                  <ErrorSpanBox error="Supervisor Name is required" />
+                )}
+                {errors.supervisorName?.type === 'pattern' && (
+                  <ErrorSpanBox error={INVALID_CHAR} />
+                )}
+                {errors.supervisorName?.type === 'validate' && (
+                  <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
                 )}
               </FormControl>
-            </div> */}
-            <FormControl className="FormControl" variant="standard">
-              <CustomDropDown
-                validateRequired
-                id="day"
-                control={control}
-                error={errors}
-                register={register}
-                options={{
-                  roles: [
-                    { id: 'day1', name: 'Day 1' },
-                    { id: 'day2', name: 'Day 2' },
-                  ],
-                }}
-                customClassInputTitle="font-bold"
-                inputTitle="Day Count"
-                defaultValue="Select Day"
-              />
-            </FormControl>
-            <div className="FormField">
-              <label className="FormLabel mt-2">
-                Upload File
-                <span className="SubLabel">
-                  ( File should be in xlxs format )
-                </span>
-              </label>
-              <div className="ImageBox">
-                <input
-                  accept=".xls,.xlsx"
-                  style={{ display: 'none' }}
-                  {...register('file')}
-                  id="raised-button-file"
-                  type="file"
-                  onChange={(
-                    event: React.InputHTMLAttributes<HTMLInputElement>
-                  ) => {
-                    handleFileChange(event);
-                  }}
-                  onClick={(
-                    event: React.InputHTMLAttributes<HTMLInputElement>
-                  ) => {
-                    handleFileOnClick(event);
-                  }}
+              <FormControl className="FormControl" variant="standard">
+                <label className="FormLabel">Budget</label>
+                <Input
+                  className="FormInput"
+                  id="name"
+                  type="number"
+                  placeholder="Enter Amount"
+                  {...register('budget', {
+                    value: formData?.budget,
+                    required: 'Amount is required in numbers',
+                    validate: (value: any) => VALIDATE_NON_NEGATIVE_NUM(value),
+                    maxLength: {
+                      value: 10,
+                      message: 'Length should not be excceed from 10 numbers.',
+                    },
+                  })}
+                  disableUnderline
                 />
-                <label htmlFor="raised-button-file" className="ImageLabel">
-                  <Button component="span" className="ImageBtn">
-                    <FileUploadOutlinedIcon sx={{ marginRight: '0.5rem' }} />
-                    Upload
-                  </Button>
-                </label>
-
-                {planFile ? (
-                  <div className="ShowImageBox bg-background">
-                    <label className="ShowImageLabel">{planFile.name}</label>
-                    <IconButton
-                      className="btn-dot"
-                      onClick={() => {
-                        setPlanFile(null);
-                        setValue('file', '');
-                      }}
-                    >
-                      <CloseOutlinedIcon
-                        sx={{
-                          color: '#1D1D1D',
-                          fontSize: '1rem',
-                          lineHeight: '1.5rem',
-                        }}
-                      />
-                    </IconButton>
-                  </div>
-                ) : (
-                  ''
+                {errors.budget && (
+                  <ErrorSpanBox error={errors.budget?.message} />
                 )}
-              </div>
-              {planFile === null && <ErrorSpanBox error="file is required" />}
-            </div>
-            <div className="ImageBox">
-              <label className="FormLabel mt-2">
-                Upload Videos
-                <span className="SubLabel">
-                  ( Video should be in mp4 format )
-                </span>
-              </label>
-              <input
-                accept="video/mp4" // Only accept MP4 videos
-                multiple
-                style={{ display: 'none' }}
-                {...register('videos')}
-                id="raised-button-file-video"
-                type="file"
-                onChange={handleVideoFileChange}
-                onClick={handleVideoFileOnClick}
-              />
-              <label htmlFor="raised-button-file-video" className="ImageLabel">
-                <Button component="span" className="ImageBtn">
-                  <FileUploadOutlinedIcon sx={{ marginRight: '0.5rem' }} />
-                  Upload MP4 Videos
-                </Button>
-              </label>
-
-              {videoPlanFiles.length > 0 && (
-                <div className="ShowImageBox bg-background">
-                  {videoPlanFiles.map((file) => (
-                    <div key={file.name} className="FileItem">
-                      <label className="ShowImageLabel">{file.name}</label>
-                      <IconButton
-                        className="btn-dot"
-                        onClick={() => handleVideoFileRemove(file.name)}
-                      >
-                        <CloseOutlinedIcon
-                          sx={{
-                            color: '#1D1D1D',
-                            fontSize: '1rem',
-                            lineHeight: '1.5rem',
-                          }}
-                        />
-                      </IconButton>
-                    </div>
-                  ))}
-                </div>
-              )}
-              {error && <ErrorSpanBox error={error} />}
+              </FormControl>
             </div>
           </div>
           <div className="FormFooter">
@@ -321,7 +312,7 @@ function ProjectPlanEditPopup({
               className="btn-black-fill"
               disableUnderline
               sx={{
-                padding: '0.15rem 1rem !important',
+                padding: '0.15rem 2rem !important',
               }}
             />
           </div>
@@ -331,4 +322,4 @@ function ProjectPlanEditPopup({
   );
 }
 
-export default ProjectPlanEditPopup;
+export default ProjectEditPopup;

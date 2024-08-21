@@ -2,7 +2,7 @@ import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 // import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 // import TextField from '@mui/material/TextField';
 import '../../../assets/css/PopupStyle.css';
@@ -14,6 +14,7 @@ import dayjs from 'dayjs';
 import FormControl from '@mui/material/FormControl';
 import { createTheme } from '@mui/material';
 import {
+  ALL_PERMISSIONS,
   CONSTRUCTION_TYPE,
   INVALID_CHAR,
   MAX_LENGTH_EXCEEDED,
@@ -23,7 +24,10 @@ import {
 } from '../../../utils/constants';
 import { Project } from '../../../interfaces/projectPlan.interface';
 import ErrorSpanBox from '../../../components/common/ErrorSpanBox';
+import storeAppUsers from '../../../services/adminapp/adminAppUser';
 import CustomDropDown from '../../../components/common/CustomDropDown';
+import { listingRolePermission } from '../../../utils/helper';
+import { useAppSelector } from '../../../redux/redux-hooks';
 
 type Props = {
   openFormDialog: boolean;
@@ -48,6 +52,11 @@ Props) {
     // watch,
     formState: { errors },
   } = useForm<Project>();
+  const [users, setUsers] = useState([]);
+  const authState: any = useAppSelector((state) => state?.authState);
+  const dataRole = useAppSelector(
+    (state) => state?.persistedReducer?.roleState?.role?.permissions
+  );
 
   const darkTheme = createTheme({
     palette: {
@@ -56,6 +65,14 @@ Props) {
       },
     },
   });
+
+  useEffect(() => {
+    if (listingRolePermission(dataRole, ALL_PERMISSIONS.storePlans.add)) {
+      storeAppUsers.usersLov(authState.user.tenant).then((item: any) => {
+        setUsers(item.data.data.list);
+      });
+    }
+  }, []);
 
   const onSubmit = (data: any) => {
     const obj = {
@@ -198,28 +215,17 @@ Props) {
             </div>
             <div className="FormFields">
               <FormControl className="FormControl" variant="standard">
-                <label className="FormLabel">Client Name</label>
-                <Input
-                  className="FormInput"
-                  {...register('clientName', {
-                    required: true,
-                    pattern: PATTERN.CHAR_SPACE_DASH,
-                    validate: (value) => value.length <= 150,
-                  })}
-                  placeholder="Enter Project Name"
-                  type="text"
+                <CustomDropDown
+                  validateRequired
                   id="clientName"
-                  disableUnderline
+                  control={control}
+                  error={errors}
+                  register={register}
+                  options={{ roles: users }}
+                  customClassInputTitle="font-bold"
+                  inputTitle="Client Name"
+                  defaultValue="Select Client"
                 />
-                {errors.clientName?.type === 'required' && (
-                  <ErrorSpanBox error="Client Name is required" />
-                )}
-                {errors.clientName?.type === 'pattern' && (
-                  <ErrorSpanBox error={INVALID_CHAR} />
-                )}
-                {errors.clientName?.type === 'validate' && (
-                  <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
-                )}
               </FormControl>
               <FormControl className="FormControl" variant="standard">
                 <CustomDropDown

@@ -13,6 +13,27 @@ const addProjectService = (data: any) => {
   return network.post(`${NEW_EARTH_PREFIX}/${PROJECTS_PREFIX}/create`, data);
 };
 
+const updateProjectService = (id: string, data: any) => {
+  return network.post(
+    `${NEW_EARTH_PREFIX}/${PROJECTS_PREFIX}/update/${id}`,
+    data
+  );
+};
+
+const updateStatusProjectService = (id: string, data: any) => {
+  return network.post(
+    `${NEW_EARTH_PREFIX}/${PROJECTS_PREFIX}/update/status/${id}`,
+    data
+  );
+};
+
+const deleteStatusProjectService = (id: string, data: any) => {
+  return network.post(
+    `${NEW_EARTH_PREFIX}/${PROJECTS_PREFIX}/delete/${id}`,
+    data
+  );
+};
+
 // plans
 const getListPlanService = (tenant: string) => {
   return network.get(
@@ -30,6 +51,9 @@ const fileUploadService = (tenant: string, data: any) => {
 export default {
   getListProjectService,
   addProjectService,
+  updateProjectService,
+  updateStatusProjectService,
+  deleteStatusProjectService,
   getListPlanService,
   fileUploadService,
 };

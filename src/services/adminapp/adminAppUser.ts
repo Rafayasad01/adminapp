@@ -184,6 +184,11 @@ const appAnonymousDetail = () => {
   return network.get(`${BACKOFFICE_PREFIX}/anonymous/detail`);
 };
 
+// user's lov
+const usersLov = (tenant: string) => {
+  return network.get(`${APP_PREFIX}/lov/${tenant}`);
+};
+
 export default {
   appLogin,
   appAnonymousLogin,
@@ -212,4 +217,5 @@ export default {
   driverList,
   driverDetail,
   driverWalletDetail,
+  usersLov,
 };

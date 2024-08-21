@@ -67,14 +67,10 @@ function ProjectPage() {
       remarks: 'completed',
     },
   ]);
-  const [
-    ,
-    // editFormData
-    setEditFormData,
-  ] = useState<any>(null);
+  const [editFormData, setEditFormData] = useState<any>(null);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [actionMenuItemid, setActionMenuItemid] = React.useState('');
-  const [isLoader, setIsLoader] = React.useState(false);
+  const [isLoader, setIsLoader] = React.useState(true);
   const [actionMenuAnchorEl, setActionMenuAnchorEl] =
     useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
@@ -168,8 +164,8 @@ function ProjectPage() {
     const data = {
       isDeleted: true,
     };
-    storeService
-      .StoreCatDelete(id, data)
+    storeProjectPlanService
+      .deleteStatusProjectService(id, data)
       .then((updateItem) => {
         if (updateItem.data.success) {
           setIsLoader(false);
@@ -214,12 +210,7 @@ function ProjectPage() {
 
   const manuHandler = (option: string) => {
     if (option === 'Edit') {
-      if (
-        listingRolePermission(
-          dataRole,
-          ALL_PERMISSIONS.storeAppointment.editService
-        )
-      ) {
+      if (listingRolePermission(dataRole, ALL_PERMISSIONS.storePlans.edit)) {
         // console.log('actionMenuItemid', actionMenuItemid, list);
         const editFormDatas = list?.find(
           (el: any) => el.id === actionMenuItemid
@@ -234,16 +225,13 @@ function ProjectPage() {
           type: 'warning',
         });
       }
-    } else if (option === 'Services') {
+    } else if (option === 'Plans') {
       // navigate(`../item/${actionMenuItemid}`);
       if (
-        listingRolePermission(
-          dataRole,
-          ALL_PERMISSIONS.storeAppointment.viewServices
-        )
+        listingRolePermission(dataRole, ALL_PERMISSIONS.storePlans.viewPlans)
       ) {
         CheckRolePermission(
-          ALL_PERMISSIONS.storeAppointment.viewServices,
+          ALL_PERMISSIONS.storePlans.viewPlans,
           dataRole,
           navigate,
           `services/${actionMenuItemid}`
@@ -256,12 +244,7 @@ function ProjectPage() {
         });
       }
     } else if (option === 'Delete') {
-      if (
-        listingRolePermission(
-          dataRole,
-          ALL_PERMISSIONS.storeAppointment.deleteService
-        )
-      ) {
+      if (listingRolePermission(dataRole, ALL_PERMISSIONS.storePlans.delete)) {
         setCancelDialogOpen(true);
       } else {
         setIsNotify(true);
@@ -274,9 +257,8 @@ function ProjectPage() {
   };
 
   const createFormHandler = (data: any) => {
-    console.log('data==>', data);
     data.tenant = authState.user.tenant;
-    // setIsLoader(true);
+    setIsLoader(true);
     storeProjectPlanService
       .addProjectService(data)
       .then((item: any) => {
@@ -308,50 +290,49 @@ function ProjectPage() {
       });
   };
 
-  const handleUpdatePlan = (data: any) => {
-    console.log('🚀 ~ handleUpdatePlan ~ data:', data);
-    // setEditFormData(true);
-    // setIsLoader(true);
-    // const formData = new FormData();
-    // formData.append('name', data.name);
-    // formData.append('description', data.description);
-    // if (data.avatar) formData.append('avatar', data.avatar);
-    // storeService
-    //   .StoreCatUpdate(actionMenuItemid, formData)
-    //   .then((updateItem: any) => {
-    //     if (updateItem.data.success) {
-    //       setIsLoader(false);
-    //       setIsNotify(true);
-    //       setNotifyMessage({
-    //         text: updateItem.data.message,
-    //         type: 'success',
-    //       });
-    //       for (let i = 0; i < list.length; i += 1) {
-    //         if (list[i].id === updateItem.data.data.id) {
-    //           list[i].name = updateItem.data.data.name;
-    //           list[i].description = updateItem.data.data.description;
-    //           if (updateItem.data.data.avatar) {
-    //             list[i].avatar = updateItem.data.data.avatar;
-    //           }
-    //         }
-    //       }
-    //     } else {
-    //       setIsLoader(false);
-    //       setIsNotify(true);
-    //       setNotifyMessage({
-    //         text: updateItem.data.message,
-    //         type: 'error',
-    //       });
-    //     }
-    //   })
-    //   .catch((err) => {
-    //     setIsLoader(false);
-    //     setIsNotify(true);
-    //     setNotifyMessage({
-    //       text: err.message,
-    //       type: 'error',
-    //     });
-    //   });
+  const updateFormHandler = (data: any) => {
+    // console.log('🚀 ~ handleUpdatePlan ~ data:', data);
+    setIsLoader(true);
+    storeProjectPlanService
+      .updateProjectService(actionMenuItemid, data)
+      .then((updateItem: any) => {
+        if (updateItem.data.success) {
+          setIsLoader(false);
+          setOpenEditFormDialog(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: updateItem.data.message,
+            type: 'success',
+          });
+          for (let i = 0; i < list.length; i += 1) {
+            if (list[i].id === updateItem.data.data.id) {
+              list[i].name = updateItem.data.data.name;
+              list[i].clientName = updateItem.data.data.clientName;
+              list[i].supervisorName = updateItem.data.data.supervisorName;
+              list[i].type = updateItem.data.data.type;
+              list[i].constructionType = updateItem.data.data.constructionType;
+              list[i].budget = updateItem.data.data.budget;
+              list[i].startDate = updateItem.data.data.startDate;
+              list[i].endDate = updateItem.data.data.endDate;
+            }
+          }
+        } else {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: updateItem.data.message,
+            type: 'error',
+          });
+        }
+      })
+      .catch((err) => {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
+        });
+      });
   };
 
   const handleSwitchChange = (event: any, id: string) => {
@@ -359,18 +340,20 @@ function ProjectPage() {
       const data = {
         isActive: event.target.checked,
       };
-      storeService.StoreCatUpdateStatus(id, data).then((updateItem) => {
-        if (updateItem.data.success) {
-          setList((newArr: any) => {
-            return newArr.map((item: any) => {
-              if (item.id === id) {
-                item.isActive = updateItem.data.data.isActive;
-              }
-              return { ...item };
+      storeProjectPlanService
+        .updateStatusProjectService(id, data)
+        .then((updateItem) => {
+          if (updateItem.data.success) {
+            setList((newArr: any) => {
+              return newArr.map((item: any) => {
+                if (item.id === id) {
+                  item.isActive = updateItem.data.data.isActive;
+                }
+                return { ...item };
+              });
             });
-          });
-        }
-      });
+          }
+        });
     } else {
       setIsNotify(true);
       setNotifyMessage({
@@ -461,9 +444,12 @@ function ProjectPage() {
               <thead>
                 <tr>
                   <th>Name</th>
-                  <th className="w-[30%]">Address</th>
+                  <th className="">Client Name</th>
                   <th>Budget</th>
+                  <th>Type</th>
+                  <th>Construction Type</th>
                   <th>Start Date</th>
+                  <th>End Date</th>
                   <th>Created Date</th>
                   <th>&nbsp;</th>
                 </tr>
@@ -474,11 +460,22 @@ function ProjectPage() {
                     return (
                       <tr key={index}>
                         <td>{item.name ? item.name : '--'}</td>
-                        <td>{item.address ? item.address : '--'}</td>
+                        <td>{item.clientName ? item.clientName : '--'}</td>
                         <td>{item.budget ? item.budget : '--'}</td>
+                        <td>{item.type ? item.type : '--'}</td>
+                        <td>
+                          {item.constructionType ? item.constructionType : '--'}
+                        </td>
                         <td>
                           {dayjs(item.startDate).isValid()
                             ? dayjs(item.startDate)?.format(
+                                'ddd, MMM DD, YYYY hh:mm:ssA'
+                              )
+                            : '--'}
+                        </td>
+                        <td>
+                          {dayjs(item.endDate).isValid()
+                            ? dayjs(item.endDate)?.format(
                                 'ddd, MMM DD, YYYY hh:mm:ssA'
                               )
                             : '--'}
@@ -582,8 +579,8 @@ function ProjectPage() {
           setNotifyMessage={setNotifyMessage}
           openFormDialog={openEditFormDialog}
           setOpenFormDialog={setOpenEditFormDialog}
-          // formData={editFormData}
-          callback={handleUpdatePlan}
+          formData={editFormData}
+          callback={updateFormHandler}
         />
       )}
       {modalImage && (
