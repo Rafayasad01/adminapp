@@ -81,6 +81,7 @@ import CAN from '../services/permissions/permissions';
 // import ProjectPlanPage from '../pages/projectPlans/plans/ProjectPlanPage';
 import ProjectPage from '../pages/projectPlans/project/ProjectPage';
 import ProjectPlanPage from '../pages/projectPlans/plans/ProjectPlanPage';
+import ProjectAttachment from '../pages/projectAttachments';
 
 const ProtectedRoute = ({ page, condition }: any) => {
   const canView = CAN('canView', condition);
@@ -1029,6 +1030,15 @@ export const routeObjects: RouteObject[] = [
               {
                 path: 'plans/:projectId',
                 element: <ProjectPlanPage />,
+              },
+            ],
+          },
+          {
+            path: 'attachments',
+            children: [
+              {
+                index: true,
+                element: <ProjectAttachment />,
               },
             ],
           },

@@ -20,7 +20,7 @@ function AppLayout() {
   return (
     <Box className="flex">
       {systemConfig !== null && (
-        <Box component="nav" className="w-64 flex-shrink-0">
+        <Box component="nav" className="w-[100px] flex-shrink-0">
           <Sidebar />
         </Box>
       )}

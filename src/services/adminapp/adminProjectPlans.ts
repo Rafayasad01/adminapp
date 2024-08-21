@@ -5,8 +5,17 @@ const PLANS_PREFIX = 'plans';
 const PROJECTS_PREFIX = 'projects';
 
 // projects
-const getListProjectService = (tenant: string) => {
-  return network.get(`${NEW_EARTH_PREFIX}/${PROJECTS_PREFIX}/list/${tenant}`);
+const getListProjectService = (
+  tenant: string,
+  search: string,
+  page: number,
+  size: number
+) => {
+  return network.get(`${NEW_EARTH_PREFIX}/${PROJECTS_PREFIX}/list/${tenant}`, {
+    search,
+    page: page.toString(),
+    size: size.toString(),
+  });
 };
 
 const addProjectService = (data: any) => {

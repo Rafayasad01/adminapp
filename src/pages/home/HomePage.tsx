@@ -1,14 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable prettier/prettier */
 
-import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
-import TextSnippetIcon from '@mui/icons-material/TextSnippet';
-import IconButton from '@mui/material/IconButton';
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router';
-import AdminDashboardRevenueLineChart from '../../components/common/Dashboard/AdminDashboardRevenueLineChart';
-import AdminDashboardTopServices from '../../components/common/Dashboard/AdminDashboardTopServices';
-import AdminTopCustomerList from '../../components/common/Dashboard/AdminTopCustomerList';
+// import { useNavigate } from 'react-router';
 import Loader from '../../components/common/Loader';
 import Notify from '../../components/common/Notify';
 import TopBar from '../../components/common/TopBar';
@@ -17,14 +11,13 @@ import {
   setNotifyState,
 } from '../../redux/features/dashboardSlice';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
-import AppointmentsStatistics from './AppointmentsStatistics';
 
 function HomePage() {
   const authState = useAppSelector((state) => state?.authState);
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const {
-    todayAppointments,
-    totalAppointments,
+    // todayAppointments,
+    // totalAppointments,
     notify: isNotify,
     notifyMessage,
     loading: isLoader,
@@ -50,8 +43,8 @@ function HomePage() {
         displayMessage={notifyMessage}
       />
       <TopBar title="Dashboard" />
-      <div className="container m-auto mt-3">
-        <div className="mt-2 grid flex-1 grid-cols-4 gap-3">
+      <div className="container m-auto mt-3 px-3">
+        {/* <div className="mt-2 grid flex-1 grid-cols-4 gap-3">
           <div
             onClick={() =>
               navigate(
@@ -105,7 +98,7 @@ function HomePage() {
               </span>
             </div>
             <div className="mt-6 flex px-3">
-              {/* <TotalSaleChart /> */}
+              
               <AdminDashboardRevenueLineChart />
             </div>
             <div className="mt-3 flex justify-center gap-4">
@@ -143,6 +136,9 @@ function HomePage() {
           <div className="col-span-4 rounded-3xl bg-white p-5 px-3 py-5 shadow-lg ">
             <AdminDashboardTopServices />
           </div>
+        </div> */}
+        <div className="flex h-full min-h-[400px] w-full items-center justify-center text-[40px] font-bold leading-normal text-black">
+          Coming Soon
         </div>
       </div>
     </>

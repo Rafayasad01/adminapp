@@ -2,89 +2,60 @@ import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 // import MoreVertIcon from '@mui/icons-material/MoreVert';
 import SearchIcon from '@mui/icons-material/Search';
 import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
 import Divider from '@mui/material/Divider';
 import FormControl from '@mui/material/FormControl';
 import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
 import InputAdornment from '@mui/material/InputAdornment';
-// import Switch from '@mui/material/Switch';
-// import EditIcon from '@mui/icons-material/Edit';
+// import VisibilityIcon from '@mui/icons-material/Visibility';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 import TablePagination from '@mui/material/TablePagination';
-// import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-// import { styled } from '@mui/material/styles';
-// import LinearProgress, {
-//   linearProgressClasses,
-// } from '@mui/material/LinearProgress';
-// import assets from '../../assets';
 import dayjs from 'dayjs';
-import Switch from '@mui/material/Switch';
-import ActionMenu from '../../../components/common/ActionMenu';
+// import Switch from '@mui/material/Switch';
 import CustomText from '../../../components/common/CustomText';
 import Loader from '../../../components/common/Loader';
 import Notify from '../../../components/common/Notify';
-import TopBar from '../../../components/common/TopBar';
 import { useAppSelector } from '../../../redux/redux-hooks';
-import storeProjectPlanService from '../../../services/adminapp/adminProjectPlans';
+import storeAttachmentService from '../../../services/adminapp/adminProjectAttachments';
 import {
   ALL_PERMISSIONS,
   NOT_AUTHORIZED_MESSAGE,
 } from '../../../utils/constants';
-import {
-  CheckRolePermission,
-  // CheckRolePermission,
-  listingRolePermission,
-} from '../../../utils/helper';
-// import ServiceCatCreatePopup from './ServiceCatCreatePopup';
-// import ServiceCatEditPopup from './ServiceCatEditPopup';
+import { listingRolePermission } from '../../../utils/helper';
+import VideoAddPopup from './ImageAddPopup';
+import VideoEditPopup from './ImageEditPopup';
+import ActionMenu from '../../../components/common/ActionMenu';
 import PermissionPopup from '../../../utils/PermissionPopup';
-// import ProjectPlanAddPopup from './ProjectAddPopup';
-import ProjectPlanEditPopup from './ProjectEditPopup';
-import ProjectAddPopup from './ProjectAddPopup';
-// import Switch from '@mui/material/Switch';
+import assets from '../../../assets';
 
-// import CategoriesCreatePopup from './CategoriesCreatePopup';
-// import CategoriesEditPopup from './CategoriesEditPopup';
-
-function ProjectPage() {
+function ImagePage() {
   const authState: any = useAppSelector((state) => state?.authState);
   const dataRole = useAppSelector(
     (state) => state?.persistedReducer?.roleState?.role?.permissions
   );
-  const navigate = useNavigate();
+
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(0);
   const [total, setTotal] = useState(0);
-  const [list, setList] = useState<any>([
-    {
-      stage: 'Demo',
-      room: 'Room 1',
-      activity: 'floor tiles removal, skirting removal, wall demonstration',
-      status: '75',
-      remarks: 'completed',
-    },
-  ]);
-  const [editFormData, setEditFormData] = useState<any>(null);
+  const [list, setList] = useState<any>([]);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const [actionMenuItemid, setActionMenuItemid] = React.useState('');
+  const actionMenuOptions = ['Edit', 'Delete'];
+  // const [actionMenuItemid, setActionMenuItemid] = React.useState('');
   const [isLoader, setIsLoader] = React.useState(true);
+  const [openFormDialog, setOpenFormDialog] = useState(false);
   const [actionMenuAnchorEl, setActionMenuAnchorEl] =
     useState<null | HTMLElement>(null);
+  const [editFormData, setEditFormData] = useState<any>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
-  const actionMenuOptions = ['Plans', 'Edit', 'Delete'];
-  const [openFormDialog, setOpenFormDialog] = useState(false);
+  const [actionMenuItemid, setActionMenuItemid] = React.useState('');
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
+  const [cancelDialogOpen, setCancelDialogOpen] = useState<boolean>(false);
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
-  const [cancelDialogOpen, setCancelDialogOpen] = useState<boolean>(false);
   const [dialogText] = useState<any>(
     'Are you sure you want to delete this Category ?'
   );
-  const [isModalImage, setIsModalImage] = useState(false);
-  const [modalImage, setModalImage] = useState('');
 
   const handleFormClickOpen = () => {
     if (listingRolePermission(dataRole, ALL_PERMISSIONS.storePlans.add)) {
@@ -98,10 +69,39 @@ function ProjectPage() {
     }
   };
 
+  // const handleSwitchChange = (event: any, id: string) => {
+  //   if (listingRolePermission(dataRole, ALL_PERMISSIONS.storeProduct.edit)) {
+  //     const data = {
+  //       is_active: event.target.checked,
+  //       updated_by: authState.user.id,
+  //     };
+  //     storeAttachmentService
+  //       .updateStatusProjectService(id, data)
+  //       .then((updateItem) => {
+  //         if (updateItem.data.success) {
+  //           setList((newArr: any) => {
+  //             return newArr.map((item: any) => {
+  //               if (item.id === id) {
+  //                 item.isActive = updateItem.data.data.isActive;
+  //               }
+  //               return { ...item };
+  //             });
+  //           });
+  //         }
+  //       });
+  //   } else {
+  //     setIsNotify(true);
+  //     setNotifyMessage({
+  //       text: NOT_AUTHORIZED_MESSAGE,
+  //       type: 'warning',
+  //     });
+  //   }
+  // };
+
   useEffect(() => {
     if (listingRolePermission(dataRole, ALL_PERMISSIONS.storePlans.viewPlans)) {
-      storeProjectPlanService
-        .getListProjectService(authState.user.tenant, search, page, rowsPerPage)
+      storeAttachmentService
+        .getListProjectAttachmentService('image', search, page, rowsPerPage)
         .then((item: any) => {
           setIsLoader(false);
           setList(item.data.data.list);
@@ -124,13 +124,8 @@ function ProjectPage() {
       const newPage = 0;
       setSearch(searchTxt);
       setPage(newPage);
-      storeProjectPlanService
-        .getListProjectService(
-          authState.user.tenant,
-          searchTxt,
-          newPage,
-          rowsPerPage
-        )
+      storeAttachmentService
+        .getListProjectAttachmentService('image', searchTxt, page, rowsPerPage)
         .then((item) => {
           setList(item.data.data.list);
           setTotal(item.data.data.total);
@@ -143,13 +138,8 @@ function ProjectPage() {
     newPage: number
   ) => {
     setPage(newPage);
-    storeProjectPlanService
-      .getListProjectService(
-        authState.user.tenant,
-        search,
-        newPage,
-        rowsPerPage
-      )
+    storeAttachmentService
+      .getListProjectAttachmentService('image', search, newPage, rowsPerPage)
       .then((item: any) => {
         setList(item.data.data.list);
         setTotal(item.data.data.total);
@@ -163,16 +153,98 @@ function ProjectPage() {
     const newPage = 0;
     setRowsPerPage(newRowperPage);
     setPage(newPage);
-    storeProjectPlanService
-      .getListProjectService(
-        authState.user.tenant,
-        search,
-        newPage,
-        newRowperPage
-      )
+    storeAttachmentService
+      .getListProjectAttachmentService('image', search, newPage, newRowperPage)
       .then((item) => {
         setList(item.data.data.list);
         setTotal(item.data.data.total);
+      });
+  };
+  const createFormHandler = (data: any) => {
+    console.log('data==>', data);
+    // setIsLoader(true);
+    const formData = new FormData();
+    if (data.file !== null) formData.append('file', data.file);
+    formData.append('projectId', data.projectId);
+    formData.append('day', data.day);
+    formData.append('title', data.title);
+    formData.append('description', data.description);
+    storeAttachmentService
+      .addProjectAttachmentService(formData, authState.user.tenant)
+      .then((item: any) => {
+        if (item.data.success) {
+          setOpenFormDialog(false);
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'success',
+          });
+          setList([item.data.data, ...list]);
+        } else {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'error',
+          });
+        }
+      })
+      .catch((err: Error) => {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
+        });
+      });
+  };
+
+  const updateFormHandler = (data: any) => {
+    console.log('🚀 ~ updateFormHandler ~ data:', data);
+    setIsLoader(true);
+    const formData = new FormData();
+    if (data.file !== null) formData.append('file', data.file);
+    formData.append('projectId', data.projectId);
+    formData.append('day', data.day);
+    formData.append('title', data.title);
+    formData.append('description', data.description);
+    storeAttachmentService
+      .updateProjectAttachmentService(actionMenuItemid, formData)
+      .then((item: any) => {
+        if (item.data.success) {
+          setOpenEditFormDialog(false);
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'success',
+          });
+          for (let i = 0; i < list.length; i += 1) {
+            if (list[i].id === item.data.data.id) {
+              list[i].filePath = item.data.data.filePath;
+              list[i].projectId = item.data.data.projectId;
+              list[i].day = item.data.data.day;
+              list[i].title = item.data.data.title;
+              list[i].description = item.data.data.description;
+            }
+          }
+        } else {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'error',
+          });
+        }
+      })
+      .catch((err: Error) => {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
+        });
       });
   };
 
@@ -181,7 +253,7 @@ function ProjectPage() {
     const data = {
       isDeleted: true,
     };
-    storeProjectPlanService
+    storeAttachmentService
       .deleteStatusProjectService(id, data)
       .then((updateItem) => {
         if (updateItem.data.success) {
@@ -215,30 +287,12 @@ function ProjectPage() {
   const manuHandler = (option: string) => {
     if (option === 'Edit') {
       if (listingRolePermission(dataRole, ALL_PERMISSIONS.storePlans.edit)) {
-        // console.log('actionMenuItemid', actionMenuItemid, list);
         const editFormDatas = list?.find(
           (el: any) => el.id === actionMenuItemid
         );
         setActionMenuItemid(editFormDatas.id);
         setEditFormData(editFormDatas);
         setOpenEditFormDialog(true);
-      } else {
-        setIsNotify(true);
-        setNotifyMessage({
-          text: NOT_AUTHORIZED_MESSAGE,
-          type: 'warning',
-        });
-      }
-    } else if (option === 'Plans') {
-      if (
-        listingRolePermission(dataRole, ALL_PERMISSIONS.storePlans.viewPlans)
-      ) {
-        CheckRolePermission(
-          ALL_PERMISSIONS.storePlans.viewPlans,
-          dataRole,
-          navigate,
-          `./plans/${actionMenuItemid}`
-        );
       } else {
         setIsNotify(true);
         setNotifyMessage({
@@ -259,123 +313,6 @@ function ProjectPage() {
     }
   };
 
-  const createFormHandler = (data: any) => {
-    data.tenant = authState.user.tenant;
-    setIsLoader(true);
-    storeProjectPlanService
-      .addProjectService(data)
-      .then((item: any) => {
-        if (item.data.success) {
-          setOpenFormDialog(false);
-          setIsLoader(false);
-          setIsNotify(true);
-          setNotifyMessage({
-            text: item.data.message,
-            type: 'success',
-          });
-          setList([item.data.data, ...list]);
-        } else {
-          setIsLoader(false);
-          setIsNotify(true);
-          setNotifyMessage({
-            text: item.data.message,
-            type: 'error',
-          });
-        }
-      })
-      .catch((err: Error) => {
-        setIsLoader(false);
-        setIsNotify(true);
-        setNotifyMessage({
-          text: err.message,
-          type: 'error',
-        });
-      });
-  };
-
-  const updateFormHandler = (data: any) => {
-    // console.log('🚀 ~ handleUpdatePlan ~ data:', data);
-    setIsLoader(true);
-    storeProjectPlanService
-      .updateProjectService(actionMenuItemid, data)
-      .then((updateItem: any) => {
-        if (updateItem.data.success) {
-          setIsLoader(false);
-          setOpenEditFormDialog(false);
-          setIsNotify(true);
-          setNotifyMessage({
-            text: updateItem.data.message,
-            type: 'success',
-          });
-          for (let i = 0; i < list.length; i += 1) {
-            if (list[i].id === updateItem.data.data.id) {
-              list[i].name = updateItem.data.data.name;
-              list[i].clientName = updateItem.data.data.clientName;
-              list[i].supervisorName = updateItem.data.data.supervisorName;
-              list[i].type = updateItem.data.data.type;
-              list[i].constructionType = updateItem.data.data.constructionType;
-              list[i].budget = updateItem.data.data.budget;
-              list[i].startDate = updateItem.data.data.startDate;
-              list[i].endDate = updateItem.data.data.endDate;
-            }
-          }
-        } else {
-          setIsLoader(false);
-          setIsNotify(true);
-          setNotifyMessage({
-            text: updateItem.data.message,
-            type: 'error',
-          });
-        }
-      })
-      .catch((err) => {
-        setIsLoader(false);
-        setIsNotify(true);
-        setNotifyMessage({
-          text: err.message,
-          type: 'error',
-        });
-      });
-  };
-
-  const handleSwitchChange = (event: any, id: string) => {
-    if (listingRolePermission(dataRole, ALL_PERMISSIONS.storePlans.edit)) {
-      const data = {
-        isActive: event.target.checked,
-      };
-      storeProjectPlanService
-        .updateStatusProjectService(id, data)
-        .then((updateItem) => {
-          if (updateItem.data.success) {
-            setList((newArr: any) => {
-              return newArr.map((item: any) => {
-                if (item.id === id) {
-                  item.isActive = updateItem.data.data.isActive;
-                }
-                return { ...item };
-              });
-            });
-          }
-        });
-    } else {
-      setIsNotify(true);
-      setNotifyMessage({
-        text: NOT_AUTHORIZED_MESSAGE,
-        type: 'warning',
-      });
-    }
-  };
-
-  const closeModal = () => {
-    setModalImage('');
-    setIsModalImage(false);
-  };
-
-  // const randomBadgeColor = (colors: string) => {
-  //   const randomIndex = Math.floor(Math.random() * colors.length);
-  //   return colors[randomIndex];
-  // };
-
   return isLoader ? (
     <Loader />
   ) : (
@@ -385,13 +322,12 @@ function ProjectPage() {
         setIsOpen={setIsNotify}
         displayMessage={notifyMessage}
       />
-      <TopBar title="Projects" />
       <div className="cs-dialog container mx-auto mt-5 w-full">
         <div className="w-full rounded-lg bg-white shadow-lg">
           <div className="grid grid-cols-12 px-4 py-5">
             <div className="col-span-7">
               <span className="font-open-sans text-xl font-semibold text-[#252733]">
-                All Projects
+                All Images
               </span>
             </div>
             <div className="col-span-5">
@@ -431,23 +367,19 @@ function ProjectPage() {
                   className="btn-black-fill btn-icon"
                   onClick={handleFormClickOpen}
                 >
-                  <AddOutlinedIcon /> Add New
+                  <AddOutlinedIcon /> Add Image
                 </Button>
               </div>
             </div>
           </div>
-
           <div className="mt-3 grid grid-cols-none">
             <table className="table-border table-auto">
               <thead>
                 <tr>
-                  <th>Name</th>
-                  <th className="">Client Name</th>
-                  <th>Budget</th>
-                  <th>Type</th>
-                  <th>Construction Type</th>
-                  <th>Start Date</th>
-                  <th>End Date</th>
+                  <th>Image</th>
+                  <th className="w-[30%]">Description</th>
+                  <th>Project Name</th>
+                  <th>Day</th>
                   <th>Created Date</th>
                   <th>&nbsp;</th>
                 </tr>
@@ -457,42 +389,44 @@ function ProjectPage() {
                   list.map((item: any, index: number) => {
                     return (
                       <tr key={index}>
-                        <td>{item.name ? item.name : '--'}</td>
-                        <td>{item.clientName ? item.clientName : '--'}</td>
-                        <td>{item.budget ? item.budget : '--'}</td>
-                        <td>{item.type ? item.type : '--'}</td>
                         <td>
-                          {item.constructionType ? item.constructionType : '--'}
+                          {' '}
+                          <div className="avatar flex flex-row items-center">
+                            {item.filePath ? (
+                              <button
+                              // onClick={() => openModal(item.icon)}
+                              >
+                                <img
+                                  className="cursor-pointer"
+                                  src={item.filePath}
+                                  alt={item.title}
+                                />
+                              </button>
+                            ) : (
+                              <img
+                                src={assets.tempImages.avatarDryCLean}
+                                alt=""
+                              />
+                            )}
+                            <div className="flex flex-col items-start justify-start">
+                              <span className="text-sm font-semibold">
+                                {item.title}
+                              </span>
+                            </div>
+                          </div>
                         </td>
+                        <td>{item.description ? item.description : '--'}</td>
+                        <td>{item.projectName ? item.projectName : '--'}</td>
+                        <td>{item.day ? item.day : '--'}</td>
                         <td>
-                          {dayjs(item.startDate).isValid()
-                            ? dayjs(item.startDate)?.format(
-                                'ddd, MMM DD, YYYY hh:mm:ssA'
-                              )
-                            : '--'}
-                        </td>
-                        <td>
-                          {dayjs(item.endDate).isValid()
-                            ? dayjs(item.endDate)?.format(
-                                'ddd, MMM DD, YYYY hh:mm:ssA'
-                              )
-                            : '--'}
-                        </td>
-                        <td>
-                          {dayjs(item.createdDate).isValid()
-                            ? dayjs(item.createdDate)?.format(
+                          {dayjs(item.uploadedAt).isValid()
+                            ? dayjs(item.uploadedAt)?.format(
                                 'ddd, MMM DD, YYYY hh:mm:ssA'
                               )
                             : '--'}
                         </td>
                         <td>
                           <div className="flex flex-row-reverse">
-                            {/* <div
-                              className="cursor-pointer"
-                              onClick={() => setOpenEditFormDialog(true)}
-                            >
-                              <EditIcon />
-                            </div> */}
                             <IconButton
                               className="btn-dot"
                               aria-label="more"
@@ -513,13 +447,13 @@ function ProjectPage() {
                             >
                               <MoreVertIcon />
                             </IconButton>
-                            <Switch
+                            {/* <Switch
                               checked={item.isActive}
                               onChange={(
                                 event: React.ChangeEvent<HTMLInputElement>
                               ) => handleSwitchChange(event, list[index].id)}
                               inputProps={{ 'aria-label': 'controlled' }}
-                            />
+                            /> */}
                           </div>
                         </td>
                       </tr>
@@ -562,7 +496,7 @@ function ProjectPage() {
         />
       )}
       {openFormDialog && (
-        <ProjectAddPopup
+        <VideoAddPopup
           setIsNotify={setIsNotify}
           setNotifyMessage={setNotifyMessage}
           openFormDialog={openFormDialog}
@@ -572,7 +506,7 @@ function ProjectPage() {
       )}
 
       {openEditFormDialog && (
-        <ProjectPlanEditPopup
+        <VideoEditPopup
           setIsNotify={setIsNotify}
           setNotifyMessage={setNotifyMessage}
           openFormDialog={openEditFormDialog}
@@ -581,33 +515,8 @@ function ProjectPage() {
           callback={updateFormHandler}
         />
       )}
-      {modalImage && (
-        <Dialog
-          open={isModalImage}
-          onClose={closeModal}
-          PaperProps={{
-            className: 'max-w-[25%] 2xl:min-h-[35%] xl:min-h-[45%]',
-            style: {
-              // maxWidth: '25%',
-              // minHeight: '45%',
-              borderRadius: '5%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            },
-          }}
-        >
-          <div className="flex h-[100%] items-center justify-center">
-            <img
-              className="max-w-[250px] xl:max-h-[100px] 2xl:max-h-[150px]"
-              src={modalImage}
-              alt=""
-            />
-          </div>
-        </Dialog>
-      )}
     </>
   );
 }
 
-export default ProjectPage;
+export default ImagePage;
