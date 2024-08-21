@@ -74,6 +74,67 @@ select {
   border-width: 1px solid !important;
 }
 
+.btn-flips:hover img {
+  filter: invert(1) brightness(1);
+  mix-blend-mode: color-dodge;
+}
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+  }
+
+  8.33%,
+  16.66% {
+    opacity: 1;
+  }
+
+  33.33% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Add the animation properties for each image */
+.ne-fade-image {
+  animation: fadeInOut 12s infinite;
+}
+
+.ne-fade-image:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.ne-fade-image:nth-child(2) {
+  animation-delay: 2s;
+}
+
+.ne-fade-image:nth-child(3) {
+  animation-delay: 4s;
+}
+
+.ne-fade-image:nth-child(4) {
+  animation-delay: 6s;
+}
+
+.ne-fade-image:nth-child(5) {
+  animation-delay: 8s;
+}
+
+.ne-fade-image:nth-child(6) {
+  animation-delay: 10s;
+}
+
+.side-bar-menu .active button.MuiButtonBase-root {
+  background: #f27426 !important;
+}
+
+.side-bar-menu .active button.MuiButtonBase-root img {
+  filter: invert(1) brightness(1);
+}
+
 .css-1kp21md-MuiFormControl-root-MuiTextField-root {
   @apply border-secondary !important;
 }
@@ -2490,13 +2551,16 @@ main.min-h-screen.w-full.flex-grow.bg-gray-50.p-3.MuiBox-root.css-0 {
 .customImgBox .ShowImageLabel {
   margin-right: 0 !important;
 }
+
 .ShowImageBox.bg-background {
   width: unset !important;
   padding-right: 10px;
 }
+
 .ShowImageBox.bg-background .ShowImageLabel {
   margin-right: 0 !important;
 }
+
 .ShowImageBox.bg-background button {
   padding: 0 4px 0 2px !important;
 }
@@ -2509,6 +2573,7 @@ main.min-h-screen.w-full.flex-grow.bg-gray-50.p-3.MuiBox-root.css-0 {
 .css-1dyqkes.Appointment-appointment {
   background-color: transparent !important;
 }
+
 .css-sizvqo-MuiTableCell-root {
   border-bottom: 0 !important;
 }
@@ -2542,40 +2607,49 @@ main.min-h-screen.w-full.flex-grow.bg-gray-50.p-3.MuiBox-root.css-0 {
 .categories-swiper-container {
   position: relative;
   width: 100%;
-  padding-bottom: 60px; /* Extra space for arrows below */
+  padding-bottom: 60px;
+  /* Extra space for arrows below */
 }
 
 /* Position and style the navigation arrows */
 .swiper-navigation-container {
   display: flex;
-  justify-content: flex-start; /* Center align the buttons */
+  justify-content: flex-start;
+  /* Center align the buttons */
   align-items: center;
   position: absolute;
-  bottom: -10px; /* Position arrows below the cards */
+  bottom: -10px;
+  /* Position arrows below the cards */
   /* right: 400px; */
   width: 100%;
-  gap: 10px; /* Space between the buttons */
+  gap: 10px;
+  /* Space between the buttons */
 }
 
 /* Swiper navigation arrows styling */
 .custom-swiper-button-next,
 .custom-swiper-button-prev {
-  background-color: rgba(255, 255, 255, 0.8); /* Light background for arrows */
+  background-color: rgba(255, 255, 255, 0.8);
+  /* Light background for arrows */
   border-radius: 50%;
   width: 40px;
   height: 40px;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 20px; /* Adjust arrow size */
-  color: #000; /* Change arrow color */
+  font-size: 20px;
+  /* Adjust arrow size */
+  color: #000;
+  /* Change arrow color */
   cursor: pointer;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Optional shadow */
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  /* Optional shadow */
 }
 
 .custom-swiper-button-next:hover,
 .custom-swiper-button-prev:hover {
-  background-color: rgba(0, 0, 0, 0.1); /* Hover effect */
+  background-color: rgba(0, 0, 0, 0.1);
+  /* Hover effect */
 }
 
 /* Optional: Adjust arrow position and size based on screen size */
@@ -2628,8 +2702,9 @@ main.min-h-screen.w-full.flex-grow.bg-gray-50.p-3.MuiBox-root.css-0 {
 
 .custom-border {
   padding: 0% !important;
-  padding-top: 1px !important ;
-  border: 1px solid gray; /* Example blue border color */
+  padding-top: 1px !important;
+  border: 1px solid gray;
+  /* Example blue border color */
 }
 
 /* .css-71a9mb-MuiButtonBase-root-MuiIconButton-root.NavigationButton-button {
@@ -2643,12 +2718,13 @@ main.min-h-screen.w-full.flex-grow.bg-gray-50.p-3.MuiBox-root.css-0 {
 .dx-scheduler-navigator-previous {
   visibility: hidden;
 }
+
 .dx-scheduler-navigator-next {
   visibility: hidden;
 }
 
 .css-1b7ni76-MuiToolbar-root.Toolbar-toolbar {
-  margin-left: 8px !important ;
+  margin-left: 8px !important;
 }
 
 .css-1ps6pg7-MuiPaper-root {

@@ -3,16 +3,19 @@ import Dialog from '@mui/material/Dialog';
 // import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
 import React from 'react';
-import { useForm, Controller } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 // import TextField from '@mui/material/TextField';
-import '../../../assets/css/PopupStyle.css';
+import { createTheme } from '@mui/material';
+import FormControl from '@mui/material/FormControl';
 import ThemeProvider from '@mui/material/styles/ThemeProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import dayjs from 'dayjs';
-import FormControl from '@mui/material/FormControl';
-import { createTheme } from '@mui/material';
+import '../../../assets/css/PopupStyle.css';
+import CustomDropDown from '../../../components/common/CustomDropDown';
+import ErrorSpanBox from '../../../components/common/ErrorSpanBox';
+import { Project } from '../../../interfaces/projectPlan.interface';
 import {
   CONSTRUCTION_TYPE,
   INVALID_CHAR,
@@ -20,9 +23,6 @@ import {
   PATTERN,
   PROJECT_PLAN_TYPE,
 } from '../../../utils/constants';
-import { Project } from '../../../interfaces/projectPlan.interface';
-import ErrorSpanBox from '../../../components/common/ErrorSpanBox';
-import CustomDropDown from '../../../components/common/CustomDropDown';
 
 type Props = {
   openFormDialog: boolean;
@@ -83,7 +83,7 @@ Props) {
     >
       <div className="Content">
         <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="FormHeader">
+          <div className="FormHeader w-full">
             <span className="Title">Add Project</span>
           </div>
           <div className="FormBody mt-2">

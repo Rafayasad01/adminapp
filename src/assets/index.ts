@@ -1,4 +1,5 @@
 /* eslint-disable prettier/prettier */
+
 import facebook from './images/Facebook.svg';
 import instagram from './images/Instagram.svg';
 import linkedin from './images/Linkedin.svg';
@@ -18,6 +19,15 @@ import avatarCustomer from './images/avatar-customer.png';
 import avatarUrLaundry from './images/avatar-ur-laundry.png';
 import avatarUser from './images/avatar-user.svg';
 import avatarUser2 from './images/avatar-user2.svg';
+import nelogo from './images/banner/ne-logo.png';
+import splash1 from './images/banner/ne-splash(1).png';
+import splash2 from './images/banner/ne-splash(2).png';
+import splash3 from './images/banner/ne-splash(3).png';
+import splash4 from './images/banner/ne-splash(4).png';
+import splash5 from './images/banner/ne-splash(5).png';
+import splash6 from './images/banner/ne-splash(6).png';
+import splash7 from './images/banner/ne-splash(7).png';
+import splash8 from './images/banner/ne-splash(8).png';
 import avatarBaseballJacket from './images/baseball-jacket.svg';
 import bgLogin from './images/bg-login.png';
 import removeIcon from './images/cancel.svg';
@@ -35,11 +45,25 @@ import iconMap from './images/icon-map.png';
 import noMapLocation from './images/icon-noMapLocation.svg';
 import iconOverDue from './images/icon-overdue.svg';
 import iconPickup from './images/icon-pickup.svg';
+import avatar1 from './images/icons/ic-avatar.png';
+import bellIcon from './images/icons/ic-bell.png';
+import busnessIcon from './images/icons/ic-business-man.png';
+import clipboardIcon from './images/icons/ic-clipboard.png';
+import cloudIcon from './images/icons/ic-cloud.png';
+import logoutIcon from './images/icons/ic-logout.png';
+import photoIcon from './images/icons/ic-photo.png';
+import playIcon from './images/icons/ic-play.png';
+import slIcon from './images/icons/ic-slack.png';
+import startegyIcon from './images/icons/ic-strategy.png';
+import logo from './images/icons/main-logo.png';
 import imageIcon from './images/image-icon.png';
 import inactiveShopsIcon from './images/inactive-shops-icon.svg';
 import keyIcon from './images/keyIcon.png';
+import morningImage from './images/morning.svg';
+import noonImage from './images/noon.png';
 import otpMSg from './images/otp-msg.png';
 import pants from './images/pants.svg';
+import projectIcon from './images/project-icon.svg';
 import ReferralCodeIcon from './images/referral-code.png';
 import roleIcon from './images/role.svg';
 import shirt from './images/shirt.svg';
@@ -56,12 +80,9 @@ import logoBlack from './images/ur-laundry-logo-black.svg';
 import logoBlackPng from './images/ur-laundry-logo-blackpng.png';
 import urAppLogoWhite from './images/ur-laundry-logo-white.png';
 import urAppLogo from './images/ur-laundry-logo.png';
-import logo from './images/ur-laundry-logo.svg';
 import avatarUser3 from './images/user3.svg';
 import userPermissionIcon from './images/userPermission.svg';
 import wash from './images/wash.svg';
-import morningImage from './images/morning.svg';
-import noonImage from './images/noon.png';
 
 const assets = {
   images: {
@@ -116,9 +137,28 @@ const assets = {
     Star,
     morningImage,
     noonImage,
+    avatar1,
+    bellIcon,
+    clipboardIcon,
+    cloudIcon,
+    logoutIcon,
+    photoIcon,
+    slIcon,
+    startegyIcon,
+    busnessIcon,
+    playIcon,
+    splash1,
+    splash2,
+    splash3,
+    splash4,
+    splash5,
+    splash6,
+    splash7,
+    splash8,
+    nelogo,
+    projectIcon,
   },
   tempImages: {
-    wash,
     shirt,
     pants,
     avatarUser3,
@@ -130,6 +170,7 @@ const assets = {
     soapyLaundry,
     spotlessLaundry,
     freshCleanLaundry,
+    wash,
   },
 } as const;
 
