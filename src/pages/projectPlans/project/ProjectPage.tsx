@@ -36,6 +36,7 @@ import {
 } from '../../../utils/constants';
 import {
   CheckRolePermission,
+  // CheckRolePermission,
   listingRolePermission,
 } from '../../../utils/helper';
 // import ServiceCatCreatePopup from './ServiceCatCreatePopup';
@@ -226,7 +227,6 @@ function ProjectPage() {
         });
       }
     } else if (option === 'Plans') {
-      // navigate(`../item/${actionMenuItemid}`);
       if (
         listingRolePermission(dataRole, ALL_PERMISSIONS.storePlans.viewPlans)
       ) {
@@ -234,7 +234,7 @@ function ProjectPage() {
           ALL_PERMISSIONS.storePlans.viewPlans,
           dataRole,
           navigate,
-          `services/${actionMenuItemid}`
+          `./plans/${actionMenuItemid}`
         );
       } else {
         setIsNotify(true);
