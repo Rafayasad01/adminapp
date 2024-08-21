@@ -80,6 +80,7 @@ import { ALL_PERMISSIONS } from '../utils/constants';
 import CAN from '../services/permissions/permissions';
 // import ProjectPlanPage from '../pages/projectPlans/plans/ProjectPlanPage';
 import ProjectPage from '../pages/projectPlans/project/ProjectPage';
+import ProjectPlanPage from '../pages/projectPlans/plans/ProjectPlanPage';
 
 const ProtectedRoute = ({ page, condition }: any) => {
   const canView = CAN('canView', condition);
@@ -1024,6 +1025,10 @@ export const routeObjects: RouteObject[] = [
               {
                 index: true,
                 element: <ProjectPage />,
+              },
+              {
+                path: 'plans/:projectId',
+                element: <ProjectPlanPage />,
               },
             ],
           },

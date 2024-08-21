@@ -35,7 +35,7 @@ import {
   NOT_AUTHORIZED_MESSAGE,
 } from '../../../utils/constants';
 import {
-  CheckRolePermission,
+  // CheckRolePermission,
   listingRolePermission,
 } from '../../../utils/helper';
 // import ServiceCatCreatePopup from './ServiceCatCreatePopup';
@@ -212,6 +212,10 @@ function ProjectPage() {
     deleteHandler(actionMenuItemid);
   };
 
+  const handleProjectPlanClick = (id: string) => {
+    navigate(`./plans/${id}`);
+  };
+
   const manuHandler = (option: string) => {
     if (option === 'Edit') {
       if (
@@ -234,27 +238,9 @@ function ProjectPage() {
           type: 'warning',
         });
       }
-    } else if (option === 'Services') {
+    } else if (option === 'Plans') {
       // navigate(`../item/${actionMenuItemid}`);
-      if (
-        listingRolePermission(
-          dataRole,
-          ALL_PERMISSIONS.storeAppointment.viewServices
-        )
-      ) {
-        CheckRolePermission(
-          ALL_PERMISSIONS.storeAppointment.viewServices,
-          dataRole,
-          navigate,
-          `services/${actionMenuItemid}`
-        );
-      } else {
-        setIsNotify(true);
-        setNotifyMessage({
-          text: NOT_AUTHORIZED_MESSAGE,
-          type: 'warning',
-        });
-      }
+      handleProjectPlanClick(actionMenuItemid);
     } else if (option === 'Delete') {
       if (
         listingRolePermission(

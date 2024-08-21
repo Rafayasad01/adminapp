@@ -30,9 +30,41 @@ const fileUploadService = (tenant: string, data: any) => {
   );
 };
 
+/**
+ * Update project plan by reading excel file
+ * @param tenant Tenant Id
+ * @param data request body
+ * @returns promise
+ */
+const updatePlanService = (tenant: string, data: any) => {
+  return network.postMultipart(
+    `${NEW_EARTH_PREFIX}/${PLANS_PREFIX}/update/${tenant}`,
+    data
+  );
+};
+
+/**
+ * Get all project plans for a given tenant and project
+ * @param data anything
+ * @param tenant tenant id
+ * @returns promise
+ */
+const addProjectPlansService = (
+  data: any,
+  tenant: string,
+  projectId: string
+) => {
+  return network.getWithQueryParam(
+    `${NEW_EARTH_PREFIX}/${PLANS_PREFIX}/list/${projectId}/${tenant}`,
+    data
+  );
+};
+
 export default {
   getListProjectService,
   addProjectService,
   getListPlanService,
   fileUploadService,
+  addProjectPlansService,
+  updatePlanService,
 };
