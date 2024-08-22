@@ -375,7 +375,7 @@ function EquipmentPurchaseAddPopup({
                     {Number(item.total).toLocaleString()}
                     <span className="font-medium"> {CURRENCY_PREFIX}</span>
                   </div>
-                  <div className="col-span-1 px-2" />
+                  <div className="col-span-2 px-2" />
                   <div className="flex h-full cursor-pointer items-center justify-center bg-primary text-center">
                     <ClearOutlinedIcon
                       className="cursor-pointer"
