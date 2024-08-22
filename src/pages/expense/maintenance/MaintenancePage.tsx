@@ -348,10 +348,15 @@ function MaintenancePage() {
               </tbody>
               <tfoot>
                 <tr>
-                  <td colSpan={6}>Grand Total</td>
+                  <td colSpan={6}>
+                    <div className="custom-tbody-txt">Grand Total</div>
+                  </td>
                   <td>
-                    {Number(totalAmount).toLocaleString()}
-                    <span className="font-medium"> {CURRENCY_PREFIX}</span>
+                    <div className="custom-tbody-txt">
+                      {`${Number(
+                        totalAmount
+                      ).toLocaleString()} ${CURRENCY_PREFIX}`}
+                    </div>
                   </td>
                 </tr>
               </tfoot>

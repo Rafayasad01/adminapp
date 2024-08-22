@@ -126,11 +126,13 @@ table > thead > tr > th {
 }
 
 table > tbody > tr > td,
-table > tbody > tr > th {
+table > tbody > tr > th,
+table > tfoot > tr > td {
   @apply py-5 pl-4 pr-1 text-left font-open-sans text-xs font-normal text-secondary;
 }
 
-table > tbody > tr:nth-child(odd) {
+table > tbody > tr:nth-child(odd),
+table > tfoot > tr:nth-child(odd) {
   @apply bg-[#f8f8f8];
 }
 
@@ -140,7 +142,8 @@ table > tbody > tr:nth-child(odd) {
 }
 
 .avatar-table > tbody > tr > td,
-.avatar-table > tbody > tr > th {
+.avatar-table > tbody > tr > th,
+.avatar-table > tfoot > tr > td {
   @apply py-2.5 pl-5 pr-1;
 }
 
@@ -157,21 +160,28 @@ table.table-border > thead > tr > th {
   border-bottom: 1.5px solid #dfe0eb !important;
 }
 
-table.table-border > tbody > tr {
+table.table-border > tbody > tr,
+table.table-border > tfoot > tr {
   @apply relative border-b border-solid border-faded !important;
   border-bottom: 1.5px solid #dfe0eb !important;
 }
 
-table.table-border > tbody > tr:nth-child(odd) {
+table.table-border > tbody > tr:nth-child(odd),
+table.table-border > tfoot > tr:nth-child(odd) {
   @apply bg-transparent;
 }
 
-table.no-border-table > tbody > tr:nth-child(odd) {
+table.no-border-table > tbody > tr:nth-child(odd),
+table.no-border-table > tfoot > tr:nth-child(odd) {
   @apply bg-transparent;
 }
 
-table > tbody > tr:last-child {
+table > tbody > tr:last-child,
+table > tfoot > tr:last-child {
   border-bottom: none !important;
+}
+.custom-tbody-txt {
+  @apply flex text-lg;
 }
 
 .btn-dot {
