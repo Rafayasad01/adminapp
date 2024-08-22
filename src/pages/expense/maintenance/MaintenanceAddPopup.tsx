@@ -360,7 +360,7 @@ function MaintenanceAddPopup({
             </div>
           </div>
           {fields?.length > 0 && (
-            <div className="mx-[2px] px-[8px]">
+            <div className="w-full">
               <div className="mt-2 grid grid-cols-12 items-center justify-between gap-4 rounded-md border-[1px] border-[#949EAE] py-1 text-sm text-[#1A1A1A]">
                 <div className="col-span-1 px-2 font-semibold">Type</div>
                 <div className="col-span-2 px-2 font-semibold">Name</div>
@@ -373,7 +373,7 @@ function MaintenanceAddPopup({
               </div>
             </div>
           )}
-          <div className="mx-[2px] overflow-x-hidden overflow-y-scroll px-[8px] xl:max-h-[180px] xl:min-h-[0px] 2xl:h-[150px]">
+          <div className="overflow-x-hidden overflow-y-scroll xl:max-h-[180px] xl:min-h-[0px] 2xl:h-[150px]">
             {fields?.map((item: any, index: number) => {
               return (
                 <div
