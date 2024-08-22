@@ -7,15 +7,14 @@ import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import ManageAccountsOutlinedIcon from '@mui/icons-material/ManageAccountsOutlined';
 import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
-import Groups2Icon from '@mui/icons-material/Groups2';
 import PeopleOutlineOutlinedIcon from '@mui/icons-material/PeopleOutlineOutlined';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import QuestionAnswerOutlinedIcon from '@mui/icons-material/QuestionAnswerOutlined';
-import WalletIcon from '@mui/icons-material/Wallet';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import SplitscreenOutlinedIcon from '@mui/icons-material/SplitscreenOutlined';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import ViewCarouselOutlinedIcon from '@mui/icons-material/ViewCarouselOutlined';
+import WalletIcon from '@mui/icons-material/Wallet';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import YouTubeIcon from '@mui/icons-material/YouTube';
 import Drawer from '@mui/material/Drawer';
@@ -25,7 +24,6 @@ import Stack from '@mui/material/Stack';
 import Toolbar from '@mui/material/Toolbar';
 import { Fragment, useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import DriverIcon from '../icons/DriverIcon';
 import assets from '../../assets';
 import { useAppSelector } from '../../redux/redux-hooks';
 import CAN, { defineRules } from '../../services/permissions/permissions';
@@ -38,7 +36,9 @@ import {
 import ArrowDown from '../icons/ArrowDown';
 import ArrowUp from '../icons/ArrowUp';
 import CategoryIcon from '../icons/CategoryIcon';
+import DriverIcon from '../icons/DriverIcon';
 import OrderIcon from '../icons/OrderIcon';
+import PayIcon from '../icons/PayIcon';
 import VoucherIcon from '../icons/VoucherIcon';
 import ProviderIcon from '../icons/providerIcon';
 import VisitIcon from '../icons/visitIcon';
@@ -182,10 +182,8 @@ const links = [
   {
     name: 'Expense',
     path: 'expense',
-    permission: ALL_PERMISSIONS.storeBranch.viewBranches,
-    // permission: ALL_PERMISSIONS.storeExpense.viewExpenses,
-    // permission: 'Banners List',
-    icon: <Groups2Icon className="w-[17px]" />,
+    permission: ALL_PERMISSIONS.storeExpense.viewExpenses,
+    icon: <PayIcon />,
   },
   {
     name: 'Banners',
