@@ -257,8 +257,8 @@ function SummaryPage() {
                           )}
                         </td>
                         <td>
-                          {dayjs(item.expenseDetails.paymentDate)?.format(
-                            'MMMM'
+                          {dayjs(item.expenseDetails.paymentDate).format(
+                            'Do MMMM YYYY'
                           )}
                         </td>
                         <td>{item.expenseDetails.paymentMethod}</td>
