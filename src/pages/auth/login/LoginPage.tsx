@@ -280,11 +280,11 @@ function LoginPage() {
                   alt="Image 4"
                   className="ne-fade-image absolute left-0 top-0 h-full w-full object-contain opacity-0"
                 />
-                <img
+                {/* <img
                   src={assets.images.splash5}
                   alt="Image 5"
                   className="ne-fade-image absolute left-0 top-0 h-full w-full object-contain opacity-0"
-                />
+                /> */}
                 <img
                   src={assets.images.splash6}
                   alt="Image 6"

@@ -54,7 +54,7 @@ function VideoPage({ projectId }: any) {
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
   const [dialogText] = useState<any>(
-    'Are you sure you want to delete this Category ?'
+    'Are you sure you want to delete this Video ?'
   );
 
   const handleFormClickOpen = () => {
@@ -249,11 +249,8 @@ function VideoPage({ projectId }: any) {
 
   const deleteHandler = (id: string) => {
     setIsLoader(true);
-    const data = {
-      isDeleted: true,
-    };
     storeAttachmentService
-      .deleteStatusProjectService(id, data)
+      .deleteStatusProjectService(id)
       .then((updateItem) => {
         if (updateItem.data.success) {
           setIsLoader(false);

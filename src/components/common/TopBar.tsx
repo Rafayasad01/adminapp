@@ -1,6 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { Button } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
+import dayjs from 'dayjs';
 import assets from '../../assets';
 import { useAppSelector } from '../../redux/redux-hooks';
 
@@ -14,6 +15,7 @@ function TopBar({ title, isNestedRoute }: TopBarProps) {
 
   const userData = useAppSelector((state: any) => state?.authState?.user);
   const [greeting, setGreeting] = useState('');
+  const [time, setTime] = useState(new Date());
   useEffect(() => {
     const currentTime = new Date().getHours();
 
@@ -59,6 +61,16 @@ function TopBar({ title, isNestedRoute }: TopBarProps) {
     return () => {
       document.body.removeEventListener('click', handleClickOutside);
     };
+  }, []);
+
+  useEffect(() => {
+    // Update the time every second
+    const timerId = setInterval(() => {
+      setTime(new Date());
+    }, 1000);
+
+    // Cleanup the interval on component unmount
+    return () => clearInterval(timerId);
   }, []);
 
   return (
@@ -197,16 +209,16 @@ function TopBar({ title, isNestedRoute }: TopBarProps) {
               </Button>
             </div>
             <div className="px-2">
-              <div className="h-[40px] w-[100px] rounded-[20px] bg-white p-2 text-center hover:bg-[#ccc]">
+              <div className="h-[35px] w-[100px] rounded-[20px] bg-white p-2 text-center hover:bg-[#ccc]">
                 <span className="block text-[12px] font-medium leading-normal text-secondary">
-                  12:20 PM
+                  {dayjs(time).format('hh:mm A')}
                 </span>
               </div>
             </div>
             <div className="px-2">
               <div className="w-[100px]  rounded-[20px]  text-center">
                 <span className="block w-full text-left text-[10px] font-medium capitalize leading-normal text-secondary">
-                  25 June, Tuesday{' '}
+                  {dayjs().format('D MMMM, dddd')}{' '}
                 </span>
                 <div className=" flex items-end justify-between gap-1">
                   <span className="block max-w-[50px] text-[14px] font-medium leading-normal text-secondary">

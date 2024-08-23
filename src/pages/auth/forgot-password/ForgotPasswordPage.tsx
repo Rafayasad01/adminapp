@@ -146,7 +146,7 @@ function ForgotPasswordPage() {
           <div className="w-[70%] px-3 py-2">
             <div className="mx-auto flex max-h-[834px] items-center justify-center overflow-hidden rounded-lg max-[1560px]:max-h-[96vh]">
               <img
-                src={systemConfig?.logoffImage || assets.images.bgLogin}
+                src={assets.images.splash1}
                 alt="urlaundry"
                 className="h-full w-full object-contain"
               />

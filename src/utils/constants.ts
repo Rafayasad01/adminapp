@@ -735,11 +735,11 @@ export const PROJECT_PLAN_TYPE = [
 export const PROJECT_IMAGE_TYPE = [
   {
     id: 'Blueprint',
-    name: 'Blueprint ',
+    name: 'Blueprints',
   },
   {
     id: '3d',
-    name: '3d',
+    name: '3D render',
   },
 ];
 
@@ -753,8 +753,8 @@ export const CONSTRUCTION_TYPE = [
     name: 'Commercial construction',
   },
   {
-    id: 'Building',
-    name: 'Building',
+    id: 'WorkSpace',
+    name: 'Work Space',
   },
   {
     id: 'PersonalResidenace',

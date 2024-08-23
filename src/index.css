@@ -2734,3 +2734,7 @@ main.min-h-screen.w-full.flex-grow.bg-gray-50.p-3.MuiBox-root.css-0 {
 .css-1l6rwmg-MuiLinearProgress-root .MuiLinearProgress-bar {
   @apply bg-primary;
 }
+
+.MuiTabs-indicator {
+  @apply bg-primary !important;
+}

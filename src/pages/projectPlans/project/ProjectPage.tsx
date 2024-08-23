@@ -32,6 +32,7 @@ import storeProjectPlanService from '../../../services/adminapp/adminProjectPlan
 import storeAppUsers from '../../../services/adminapp/adminAppUser';
 import {
   ALL_PERMISSIONS,
+  CONSTRUCTION_TYPE,
   NOT_AUTHORIZED_MESSAGE,
 } from '../../../utils/constants';
 import {
@@ -130,6 +131,12 @@ function ProjectPage() {
 
   const handleClientNames: any = (clientId: any) => {
     return users.find((item: any) => item.id === clientId)?.name;
+  };
+
+  const handleConstructionTypeNames: any = (typeId: any) => {
+    return (
+      CONSTRUCTION_TYPE.find((item: any) => item.id === typeId)?.name ?? '--'
+    );
   };
 
   const handleClickSearch = (event: any) => {
@@ -503,7 +510,8 @@ function ProjectPage() {
                         <td>{item.dueAmount ? item.dueAmount : '--'}</td>
                         <td>{item.type ? item.type : '--'}</td>
                         <td>
-                          {item.constructionType ? item.constructionType : '--'}
+                          {item.constructionType &&
+                            handleConstructionTypeNames(item.constructionType)}
                         </td>
                         <td>
                           {dayjs(item.startDate).isValid()

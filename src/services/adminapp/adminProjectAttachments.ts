@@ -40,11 +40,10 @@ const updateStatusProjectService = (id: string, data: any) => {
   );
 };
 
-const deleteStatusProjectService = (id: string, data: any) => {
-  return network.post(
-    `${NEW_EARTH_PREFIX}/${ATTACHMENT_PREFIX}/delete/${id}`,
-    data
-  );
+const deleteStatusProjectService = (id: string) => {
+  return network.post(`${NEW_EARTH_PREFIX}/${ATTACHMENT_PREFIX}/delete`, {
+    id,
+  });
 };
 
 // lov

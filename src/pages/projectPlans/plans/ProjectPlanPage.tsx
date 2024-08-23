@@ -70,7 +70,8 @@ function ProjectPlanPage() {
       listingRolePermission(dataRole, ALL_PERMISSIONS.storePlans.edit || true)
     ) {
       if (list?.length > 0) {
-        setOpenEditFormDialog(true);
+        setCancelDialogOpen(true);
+        // setOpenEditFormDialog(true);
       } else {
         setIsNotify(true);
         setNotifyMessage({
@@ -193,54 +194,52 @@ function ProjectPlanPage() {
       });
   };
 
-  const handleUpdatePlan = (type: string) => {
-    setCancelDialogOpen(true);
-    console.log('🚀 ~ handleUpdatePlan ~ data:', type);
-    // updateExcute()
+  const handleUpdatePlan = () => {
+    setCancelDialogOpen(false);
+    setOpenEditFormDialog(true);
   };
 
   const updateExcute = (data: any) => {
-    // setIsLoader(true);
+    setIsLoader(true);
     const formData = new FormData();
     formData.append('planFile', data.file);
     formData.append('projectId', projectId || '');
-    console.log('🚀 ~ handleUpdatePlan ~ data:', data);
-    // storePlanService
-    //   .updatePlanService(authState.user.tenant, formData)
-    //   .then((item: any) => {
-    //     if (item.data.success) {
-    //       setOpenEditFormDialog(false);
-    //       setIsLoader(false);
-    //       setIsNotify(true);
-    //       setNotifyMessage({
-    //         text: item.data.message,
-    //         type: 'success',
-    //       });
-    //       const dayList = [
-    //         ...item.data.data.list,
-    //         ...list.filter(
-    //           (z: any) =>
-    //             !!item.data.data.list.find((x: any) => x.day !== z.day)
-    //         ),
-    //       ];
-    //       setList(sortArrayByKey(dayList, 'day', 'asc'));
-    //     } else {
-    //       setIsLoader(false);
-    //       setIsNotify(true);
-    //       setNotifyMessage({
-    //         text: item.data.message,
-    //         type: 'error',
-    //       });
-    //     }
-    //   })
-    //   .catch((err: Error) => {
-    //     setIsLoader(false);
-    //     setIsNotify(true);
-    //     setNotifyMessage({
-    //       text: err.message,
-    //       type: 'error',
-    //     });
-    //   });
+    storePlanService
+      .updatePlanService(authState.user.tenant, formData)
+      .then((item: any) => {
+        if (item.data.success) {
+          setOpenEditFormDialog(false);
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'success',
+          });
+          const dayList = [
+            ...item.data.data.list,
+            ...list.filter(
+              (z: any) =>
+                !!item.data.data.list.find((x: any) => x.day !== z.day)
+            ),
+          ];
+          setList(sortArrayByKey(dayList, 'day', 'asc'));
+        } else {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'error',
+          });
+        }
+      })
+      .catch((err: Error) => {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
+        });
+      });
   };
 
   // const randomBadgeColor = (colors: string) => {
@@ -261,12 +260,12 @@ function ProjectPlanPage() {
       <div className="cs-dialog container mx-auto mt-5 w-full">
         <div className="w-full rounded-lg bg-white shadow-lg">
           <div className="grid grid-cols-12 px-4 py-5">
-            <div className="col-span-7">
+            <div className="col-span-4">
               <span className="font-open-sans text-xl font-semibold text-[#252733]">
                 All Plans
               </span>
             </div>
-            <div className="col-span-5">
+            <div className="col-span-8">
               <div className="flex flex-row items-center justify-end gap-3">
                 <FormControl
                   className="search-grey-outline placeholder-grey w-60"
@@ -300,14 +299,14 @@ function ProjectPlanPage() {
                 </FormControl>
                 <Button
                   variant="contained"
-                  className="btn-black-fill btn-icon w-[50%]"
+                  className="btn-black-fill btn-icon w-[25%]"
                   onClick={handleFormClickOpen}
                 >
-                  <AddOutlinedIcon /> Add Plan
+                  <AddOutlinedIcon /> Add Project Plan
                 </Button>
                 <Button
                   variant="contained"
-                  className="btn-black-fill btn-icon w-[50%]"
+                  className="btn-black-fill btn-icon w-[20%]"
                   onClick={handleUpdatePlanClick}
                 >
                   <AddOutlinedIcon /> Update Plan
@@ -376,7 +375,7 @@ function ProjectPlanPage() {
       </div>
       {cancelDialogOpen && (
         <PermissionPopup
-          type="shock"
+          type="thumb"
           open={cancelDialogOpen}
           setOpen={setCancelDialogOpen}
           dialogText={dialogText}

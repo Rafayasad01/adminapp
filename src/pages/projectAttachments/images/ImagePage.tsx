@@ -254,11 +254,8 @@ function ImagePage({ projectId }: any) {
 
   const deleteHandler = (id: string) => {
     setIsLoader(true);
-    const data = {
-      isDeleted: true,
-    };
     storeAttachmentService
-      .deleteStatusProjectService(id, data)
+      .deleteStatusProjectService(id)
       .then((updateItem) => {
         if (updateItem.data.success) {
           setIsLoader(false);
