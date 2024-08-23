@@ -6,7 +6,7 @@ import Dialog from '@mui/material/Dialog';
 import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
 import React, { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 // import TextField from '@mui/material/TextField';
 import '../../../assets/css/PopupStyle.css';
 import TextField from '@mui/material/TextField';
@@ -18,13 +18,14 @@ import {
   MAX_LENGTH_EXCEEDED,
   PATTERN,
 } from '../../../utils/constants';
-import { ProjectVideoAttachment } from '../../../interfaces/projectAttachments.interface';
+import { ProjectAttachment } from '../../../interfaces/projectAttachments.interface';
 import CustomDropDown from '../../../components/common/CustomDropDown';
 import { listingRolePermission } from '../../../utils/helper';
 import { useAppSelector } from '../../../redux/redux-hooks';
 import storeAttachmentService from '../../../services/adminapp/adminProjectAttachments';
 
 type Props = {
+  projectId: string;
   openFormDialog: boolean;
   setOpenFormDialog: React.Dispatch<React.SetStateAction<boolean>>;
   callback: (...args: any[]) => any;
@@ -33,6 +34,7 @@ type Props = {
 };
 
 function VideoAddPopup({
+  projectId,
   openFormDialog,
   setOpenFormDialog,
   callback,
@@ -51,11 +53,10 @@ function VideoAddPopup({
     register,
     handleSubmit,
     setValue,
-    clearErrors,
     control,
     watch,
     formState: { errors },
-  } = useForm<ProjectVideoAttachment>();
+  } = useForm<ProjectAttachment>();
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -69,6 +70,7 @@ function VideoAddPopup({
             );
           const projectList = projectResponse.data.data.list;
           setProjects(projectList);
+          if (projectId) setValue('projectId', projectId);
         } catch (error: Error | any) {
           setIsNotify(true);
           setNotifyMessage({
@@ -109,6 +111,7 @@ function VideoAddPopup({
   }, [watch('projectId')]);
 
   const onSubmit = (data: any) => {
+    // console.log('🚀 ~ onSubmit ~ data:', data);
     const obj = {
       ...data,
       title: data.name,
@@ -121,15 +124,16 @@ function VideoAddPopup({
     setOpenFormDialog(false);
   };
 
-  const handleFileChange = (event: any) => {
+  const handleFileChange = (onChange: any, event: any | undefined) => {
     const selectedFile = event.target.files[0];
     if (selectedFile) {
       const fileType = selectedFile.type;
       if (fileType === 'video/mp4') {
+        // clearErrors('file');
         setPlanFile(selectedFile);
-        setValue('file', selectedFile);
-        clearErrors('file');
+        onChange(selectedFile);
       } else {
+        setValue('file', null);
         setIsNotify(true);
         setNotifyMessage({
           text: 'Only .mp4 video files are allowed',
@@ -144,6 +148,8 @@ function VideoAddPopup({
     setPlanFile(null);
     setValue('file', '');
   };
+
+  console.log('errors', errors);
 
   return (
     <Dialog
@@ -176,7 +182,7 @@ function VideoAddPopup({
                   disableUnderline
                 />
                 {errors.name?.type === 'required' && (
-                  <ErrorSpanBox error="Category name is required" />
+                  <ErrorSpanBox error="Video name is required" />
                 )}
                 {errors.name?.type === 'pattern' && (
                   <ErrorSpanBox error={INVALID_CHAR} />
@@ -217,10 +223,11 @@ function VideoAddPopup({
                   control={control}
                   error={errors}
                   register={register}
-                  options={{ roles: projects }}
+                  options={{ roles: projects, role: projectId }}
                   customClassInputTitle="font-bold"
                   inputTitle="Project Name"
                   defaultValue="Select Project"
+                  disabled={!!projectId}
                 />
               </FormControl>
               <FormControl className="FormControl" variant="standard">
@@ -245,54 +252,61 @@ function VideoAddPopup({
                 </span>
               </label>
               <div className="ImageBox">
-                <input
-                  accept=".mp4"
-                  style={{ display: 'none' }}
-                  {...register('file')}
-                  id="raised-button-video"
-                  type="file"
-                  onChange={(
-                    event: React.InputHTMLAttributes<HTMLInputElement>
-                  ) => {
-                    handleFileChange(event);
-                  }}
-                  onClick={(
-                    event: React.InputHTMLAttributes<HTMLInputElement>
-                  ) => {
-                    handleFileOnClick(event);
-                  }}
-                />
-                <label htmlFor="raised-button-video" className="ImageLabel">
-                  <Button component="span" className="ImageBtn">
-                    <FileUploadOutlinedIcon sx={{ marginRight: '0.5rem' }} />
-                    Upload
-                  </Button>
-                </label>
-
-                {planFile ? (
-                  <div className="ShowImageBox bg-background">
-                    <label className="ShowImageLabel">{planFile.name}</label>
-                    <IconButton
-                      className="btn-dot"
-                      onClick={() => {
-                        setPlanFile(null);
-                        setValue('file', '');
-                      }}
-                    >
-                      <CloseOutlinedIcon
-                        sx={{
-                          color: '#1D1D1D',
-                          fontSize: '1rem',
-                          lineHeight: '1.5rem',
-                        }}
+                <Controller
+                  name="file"
+                  control={control}
+                  rules={{ required: 'Video is required' }}
+                  render={({ field: { onChange } }) => (
+                    <>
+                      <input
+                        accept=".mp4"
+                        style={{ display: 'none' }}
+                        id="raised-button-video"
+                        type="file"
+                        onChange={(event) => handleFileChange(onChange, event)}
+                        onClick={handleFileOnClick}
                       />
-                    </IconButton>
-                  </div>
-                ) : (
-                  ''
-                )}
+                      <label
+                        htmlFor="raised-button-video"
+                        className="ImageLabel"
+                      >
+                        <Button component="span" className="ImageBtn">
+                          <FileUploadOutlinedIcon
+                            sx={{ marginRight: '0.5rem' }}
+                          />
+                          Upload
+                        </Button>
+                      </label>
+
+                      {planFile ? (
+                        <div className="ShowImageBox bg-background">
+                          <label className="ShowImageLabel">
+                            {planFile.name}
+                          </label>
+                          <IconButton
+                            className="btn-dot"
+                            onClick={() => {
+                              setPlanFile(null);
+                              onChange(null); // Clear the file from react-hook-form state
+                            }}
+                          >
+                            <CloseOutlinedIcon
+                              sx={{
+                                color: '#1D1D1D',
+                                fontSize: '1rem',
+                                lineHeight: '1.5rem',
+                              }}
+                            />
+                          </IconButton>
+                        </div>
+                      ) : (
+                        ''
+                      )}
+                    </>
+                  )}
+                />
+                {errors.file && <ErrorSpanBox error={errors.file?.message} />}
               </div>
-              {planFile === null && <ErrorSpanBox error="video is required" />}
             </div>
           </div>
           <div className="FormFooter">

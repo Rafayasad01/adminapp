@@ -17,7 +17,7 @@ import {
   INVALID_CHAR,
   MAX_LENGTH_EXCEEDED,
   PATTERN,
-  PROJECT_IMAGE_TYPE,
+  mimiType,
 } from '../../../utils/constants';
 import { ProjectAttachment } from '../../../interfaces/projectAttachments.interface';
 import CustomDropDown from '../../../components/common/CustomDropDown';
@@ -129,16 +129,18 @@ function VideoAddPopup({
     if (selectedFile) {
       const fileType = selectedFile.type;
       if (
-        fileType === 'image/jpeg' ||
-        fileType === 'image/png' ||
-        fileType === 'image/jpg'
+        fileType === mimiType.word ||
+        fileType === mimiType.wordsheet ||
+        fileType === mimiType.pdf ||
+        fileType === mimiType.excel ||
+        fileType === mimiType.excelsheet
       ) {
         setPlanFile(selectedFile);
         onChange(selectedFile);
       } else {
         setIsNotify(true);
         setNotifyMessage({
-          text: 'Only .jpeg, .jpg, .png image files are allowed',
+          text: 'Only .doc, .docx, .pdf, .xls, and .xlsx files are allowed',
           type: 'error',
         });
       }
@@ -163,10 +165,10 @@ function VideoAddPopup({
       <div className="Content">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="FormHeader">
-            <span className="Title">Add Image</span>
+            <span className="Title">Add Document</span>
           </div>
           <div className="FormBody mt-2">
-            <div className="FormFields">
+            <div className="FormField">
               <FormControl className="FormControl" variant="standard">
                 <label className="FormLabel">Name</label>
                 <Input
@@ -176,13 +178,13 @@ function VideoAddPopup({
                     pattern: PATTERN.CHAR_SPACE_DASH,
                     validate: (value) => value.length <= 150,
                   })}
-                  placeholder="Enter Image Name"
+                  placeholder="Enter Document Name"
                   type="text"
                   id="name"
                   disableUnderline
                 />
                 {errors.name?.type === 'required' && (
-                  <ErrorSpanBox error="Image name is required" />
+                  <ErrorSpanBox error="Document name is required" />
                 )}
                 {errors.name?.type === 'pattern' && (
                   <ErrorSpanBox error={INVALID_CHAR} />
@@ -190,19 +192,6 @@ function VideoAddPopup({
                 {errors.name?.type === 'validate' && (
                   <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
                 )}
-              </FormControl>
-              <FormControl className="FormControl" variant="standard">
-                <CustomDropDown
-                  validateRequired
-                  id="type"
-                  control={control}
-                  error={errors}
-                  register={register}
-                  options={{ roles: PROJECT_IMAGE_TYPE }}
-                  customClassInputTitle="font-bold"
-                  inputTitle="Type"
-                  defaultValue="Select Type"
-                />
               </FormControl>
             </div>
             <div className="FormField">
@@ -259,28 +248,28 @@ function VideoAddPopup({
             </div>
             <div className="FormField">
               <label className="FormLabel mt-2">
-                Upload Image
+                Upload Document
                 <span className="SubLabel">
-                  ( Image should be in JPG, JPEG, or PNG format )
+                  ( Document should be in DOC, DOCX, or PDF format )
                 </span>
               </label>
               <div className="ImageBox">
                 <Controller
                   name="file"
                   control={control}
-                  rules={{ required: 'Image is required' }}
+                  rules={{ required: 'Document is required' }}
                   render={({ field: { onChange } }) => (
                     <>
                       <input
-                        accept="image/jpeg,image/png,image/jpg"
+                        accept=".doc,.docx,.pdf"
                         style={{ display: 'none' }}
-                        id="raised-button-image"
+                        id="raised-button-docs"
                         type="file"
                         onChange={(event) => handleFileChange(onChange, event)}
                         onClick={handleFileOnClick}
                       />
                       <label
-                        htmlFor="raised-button-image"
+                        htmlFor="raised-button-docs"
                         className="ImageLabel"
                       >
                         <Button component="span" className="ImageBtn">
@@ -340,7 +329,7 @@ function VideoAddPopup({
               className="btn-black-fill"
               disableUnderline
               sx={{
-                padding: '0.375rem 2rem !important',
+                padding: '0.175rem 2rem !important',
               }}
             />
           </div>

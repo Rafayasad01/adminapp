@@ -21,15 +21,16 @@ import storeAttachmentService from '../../../services/adminapp/adminProjectAttac
 import {
   ALL_PERMISSIONS,
   NOT_AUTHORIZED_MESSAGE,
+  mimiType,
 } from '../../../utils/constants';
 import { listingRolePermission } from '../../../utils/helper';
-import ImageAddPopup from './ImageAddPopup';
-import ImageEditPopup from './ImageEditPopup';
+import DocsAddPopup from './DocsAddPopup';
+import DocsEditPopup from './DocsEditPopup';
 import ActionMenu from '../../../components/common/ActionMenu';
 import PermissionPopup from '../../../utils/PermissionPopup';
 import assets from '../../../assets';
 
-function ImagePage({ projectId }: any) {
+function DocsPage({ projectId }: any) {
   const authState: any = useAppSelector((state) => state?.authState);
   const dataRole = useAppSelector(
     (state) => state?.persistedReducer?.roleState?.role?.permissions
@@ -101,7 +102,7 @@ function ImagePage({ projectId }: any) {
   useEffect(() => {
     if (listingRolePermission(dataRole, ALL_PERMISSIONS.storePlans.viewPlans)) {
       storeAttachmentService
-        .getListProjectAttachmentService('image', search, page, rowsPerPage)
+        .getListProjectAttachmentService('document', search, page, rowsPerPage)
         .then((item: any) => {
           setIsLoader(false);
           setList(item.data.data.list);
@@ -125,7 +126,12 @@ function ImagePage({ projectId }: any) {
       setSearch(searchTxt);
       setPage(newPage);
       storeAttachmentService
-        .getListProjectAttachmentService('image', searchTxt, page, rowsPerPage)
+        .getListProjectAttachmentService(
+          'document',
+          searchTxt,
+          page,
+          rowsPerPage
+        )
         .then((item) => {
           setList(item.data.data.list);
           setTotal(item.data.data.total);
@@ -139,7 +145,7 @@ function ImagePage({ projectId }: any) {
   ) => {
     setPage(newPage);
     storeAttachmentService
-      .getListProjectAttachmentService('image', search, newPage, rowsPerPage)
+      .getListProjectAttachmentService('document', search, newPage, rowsPerPage)
       .then((item: any) => {
         setList(item.data.data.list);
         setTotal(item.data.data.total);
@@ -154,7 +160,12 @@ function ImagePage({ projectId }: any) {
     setRowsPerPage(newRowperPage);
     setPage(newPage);
     storeAttachmentService
-      .getListProjectAttachmentService('image', search, newPage, newRowperPage)
+      .getListProjectAttachmentService(
+        'document',
+        search,
+        newPage,
+        newRowperPage
+      )
       .then((item) => {
         setList(item.data.data.list);
         setTotal(item.data.data.total);
@@ -168,7 +179,6 @@ function ImagePage({ projectId }: any) {
     formData.append('projectId', data.projectId);
     formData.append('day', data.day);
     formData.append('title', data.title);
-    formData.append('category', data.type);
     formData.append('description', data.description);
     storeAttachmentService
       .addProjectAttachmentService(formData, authState.user.tenant)
@@ -209,7 +219,6 @@ function ImagePage({ projectId }: any) {
     formData.append('projectId', data.projectId);
     formData.append('day', data.day);
     formData.append('title', data.title);
-    formData.append('category', data.type);
     formData.append('description', data.description);
     storeAttachmentService
       .updateProjectAttachmentService(actionMenuItemid, formData)
@@ -228,9 +237,8 @@ function ImagePage({ projectId }: any) {
               list[i].projectId = item.data.data.projectId;
               list[i].day = item.data.data.day;
               list[i].title = item.data.data.title;
-              list[i].category = item.data.data.category;
               list[i].description = item.data.data.description;
-              list[i].mimiType = item.data.data.mimiType;
+              list[i].mimeType = item.data.data.mimeType;
             }
           }
         } else {
@@ -288,6 +296,24 @@ function ImagePage({ projectId }: any) {
     deleteHandler(actionMenuItemid);
   };
 
+  const handleSrcImage = (mimitype: string | undefined, filePath: any) => {
+    let source;
+    if (mimitype === mimiType.pdf) {
+      source = assets.images.pdf;
+    }
+    if (mimitype === mimiType.word || mimitype === mimiType.wordsheet) {
+      source = assets.images.word;
+    }
+    if (mimitype === mimiType.excel || mimitype === mimiType.excelsheet) {
+      source = assets.images.excel;
+    }
+    return (
+      <a href={filePath} target="_blank" rel="noopener noreferrer">
+        <img className="cursor-pointer" src={source} alt="img" />
+      </a>
+    );
+  };
+
   const manuHandler = (option: string) => {
     if (option === 'Edit') {
       if (listingRolePermission(dataRole, ALL_PERMISSIONS.storePlans.edit)) {
@@ -331,7 +357,7 @@ function ImagePage({ projectId }: any) {
           <div className="grid grid-cols-12 px-4 py-5">
             <div className="col-span-7">
               <span className="font-open-sans text-xl font-semibold text-[#252733]">
-                All Renders
+                All Reports
               </span>
             </div>
             <div className="col-span-5">
@@ -381,7 +407,6 @@ function ImagePage({ projectId }: any) {
               <thead>
                 <tr>
                   <th>Image</th>
-                  <th>Category</th>
                   <th className="w-[30%]">Description</th>
                   <th>Project Name</th>
                   <th>Day</th>
@@ -398,14 +423,8 @@ function ImagePage({ projectId }: any) {
                           {' '}
                           <div className="avatar flex flex-row items-center">
                             {item.filePath ? (
-                              <button
-                              // onClick={() => openModal(item.icon)}
-                              >
-                                <img
-                                  className="cursor-pointer"
-                                  src={item.filePath}
-                                  alt={item.title}
-                                />
+                              <button>
+                                {handleSrcImage(item.mimeType, item.filePath)}
                               </button>
                             ) : (
                               <img
@@ -420,7 +439,6 @@ function ImagePage({ projectId }: any) {
                             </div>
                           </div>
                         </td>
-                        <td>{item.category ? item.category : '--'}</td>
                         <td>{item.description ? item.description : '--'}</td>
                         <td>{item.projectName ? item.projectName : '--'}</td>
                         <td>{item.day ? item.day : '--'}</td>
@@ -502,7 +520,7 @@ function ImagePage({ projectId }: any) {
         />
       )}
       {openFormDialog && (
-        <ImageAddPopup
+        <DocsAddPopup
           projectId={projectId}
           setIsNotify={setIsNotify}
           setNotifyMessage={setNotifyMessage}
@@ -513,7 +531,7 @@ function ImagePage({ projectId }: any) {
       )}
 
       {openEditFormDialog && (
-        <ImageEditPopup
+        <DocsEditPopup
           projectId={projectId}
           setIsNotify={setIsNotify}
           setNotifyMessage={setNotifyMessage}
@@ -527,4 +545,4 @@ function ImagePage({ projectId }: any) {
   );
 }
 
-export default ImagePage;
+export default DocsPage;

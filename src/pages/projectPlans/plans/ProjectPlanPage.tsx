@@ -25,6 +25,7 @@ import { listingRolePermission, sortArrayByKey } from '../../../utils/helper';
 import ProjectPlanAddPopup from './ProjectPlanAddPopup';
 import ProjectPlanEditPopup from './ProjectPlanEditPopup';
 import ProjectPlanDayDetailsPopup, { Day } from './ProjectPlanDayDetailsPopup';
+import PermissionPopup from '../../../utils/PermissionPopup';
 
 function ProjectPlanPage() {
   const authState: any = useAppSelector((state) => state?.authState);
@@ -47,6 +48,10 @@ function ProjectPlanPage() {
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
   const [planDay, setPlanDay] = useState<Day | null>();
+  const [cancelDialogOpen, setCancelDialogOpen] = useState<boolean>(false);
+  const [dialogText] = useState<any>(
+    'Are you sure you want to update your plan ?'
+  );
 
   const handleFormClickOpen = () => {
     if (listingRolePermission(dataRole, ALL_PERMISSIONS.storePlans.add)) {
@@ -64,7 +69,15 @@ function ProjectPlanPage() {
     if (
       listingRolePermission(dataRole, ALL_PERMISSIONS.storePlans.edit || true)
     ) {
-      setOpenEditFormDialog(true);
+      if (list?.length > 0) {
+        setOpenEditFormDialog(true);
+      } else {
+        setIsNotify(true);
+        setNotifyMessage({
+          text: 'Please add a new plan first',
+          type: 'info',
+        });
+      }
     } else {
       setIsNotify(true);
       setNotifyMessage({
@@ -180,47 +193,54 @@ function ProjectPlanPage() {
       });
   };
 
-  const handleUpdatePlan = (data: any) => {
-    setIsLoader(true);
+  const handleUpdatePlan = (type: string) => {
+    setCancelDialogOpen(true);
+    console.log('🚀 ~ handleUpdatePlan ~ data:', type);
+    // updateExcute()
+  };
+
+  const updateExcute = (data: any) => {
+    // setIsLoader(true);
     const formData = new FormData();
     formData.append('planFile', data.file);
     formData.append('projectId', projectId || '');
-    storePlanService
-      .updatePlanService(authState.user.tenant, formData)
-      .then((item: any) => {
-        if (item.data.success) {
-          setOpenEditFormDialog(false);
-          setIsLoader(false);
-          setIsNotify(true);
-          setNotifyMessage({
-            text: item.data.message,
-            type: 'success',
-          });
-          const dayList = [
-            ...item.data.data.list,
-            ...list.filter(
-              (z: any) =>
-                !!item.data.data.list.find((x: any) => x.day !== z.day)
-            ),
-          ];
-          setList(sortArrayByKey(dayList, 'day', 'asc'));
-        } else {
-          setIsLoader(false);
-          setIsNotify(true);
-          setNotifyMessage({
-            text: item.data.message,
-            type: 'error',
-          });
-        }
-      })
-      .catch((err: Error) => {
-        setIsLoader(false);
-        setIsNotify(true);
-        setNotifyMessage({
-          text: err.message,
-          type: 'error',
-        });
-      });
+    console.log('🚀 ~ handleUpdatePlan ~ data:', data);
+    // storePlanService
+    //   .updatePlanService(authState.user.tenant, formData)
+    //   .then((item: any) => {
+    //     if (item.data.success) {
+    //       setOpenEditFormDialog(false);
+    //       setIsLoader(false);
+    //       setIsNotify(true);
+    //       setNotifyMessage({
+    //         text: item.data.message,
+    //         type: 'success',
+    //       });
+    //       const dayList = [
+    //         ...item.data.data.list,
+    //         ...list.filter(
+    //           (z: any) =>
+    //             !!item.data.data.list.find((x: any) => x.day !== z.day)
+    //         ),
+    //       ];
+    //       setList(sortArrayByKey(dayList, 'day', 'asc'));
+    //     } else {
+    //       setIsLoader(false);
+    //       setIsNotify(true);
+    //       setNotifyMessage({
+    //         text: item.data.message,
+    //         type: 'error',
+    //       });
+    //     }
+    //   })
+    //   .catch((err: Error) => {
+    //     setIsLoader(false);
+    //     setIsNotify(true);
+    //     setNotifyMessage({
+    //       text: err.message,
+    //       type: 'error',
+    //     });
+    //   });
   };
 
   // const randomBadgeColor = (colors: string) => {
@@ -247,7 +267,7 @@ function ProjectPlanPage() {
               </span>
             </div>
             <div className="col-span-5">
-              <div className="flex flex-row justify-end gap-3">
+              <div className="flex flex-row items-center justify-end gap-3">
                 <FormControl
                   className="search-grey-outline placeholder-grey w-60"
                   variant="filled"
@@ -280,14 +300,14 @@ function ProjectPlanPage() {
                 </FormControl>
                 <Button
                   variant="contained"
-                  className="btn-black-fill btn-icon"
+                  className="btn-black-fill btn-icon w-[50%]"
                   onClick={handleFormClickOpen}
                 >
                   <AddOutlinedIcon /> Add Plan
                 </Button>
                 <Button
                   variant="contained"
-                  className="btn-black-fill btn-icon"
+                  className="btn-black-fill btn-icon w-[50%]"
                   onClick={handleUpdatePlanClick}
                 >
                   <AddOutlinedIcon /> Update Plan
@@ -354,6 +374,15 @@ function ProjectPlanPage() {
           </div>
         </div>
       </div>
+      {cancelDialogOpen && (
+        <PermissionPopup
+          type="shock"
+          open={cancelDialogOpen}
+          setOpen={setCancelDialogOpen}
+          dialogText={dialogText}
+          callback={handleUpdatePlan}
+        />
+      )}
       {openFormDialog && (
         <ProjectPlanAddPopup
           setIsNotify={setIsNotify}
@@ -378,7 +407,7 @@ function ProjectPlanPage() {
           openFormDialog={openEditFormDialog}
           setOpenFormDialog={setOpenEditFormDialog}
           // formData={editFormData}
-          callback={handleUpdatePlan}
+          callback={updateExcute}
         />
       )}
     </>

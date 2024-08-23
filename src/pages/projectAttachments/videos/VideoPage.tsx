@@ -23,13 +23,13 @@ import {
   ALL_PERMISSIONS,
   NOT_AUTHORIZED_MESSAGE,
 } from '../../../utils/constants';
-import { listingRolePermission, sortArrayByKey } from '../../../utils/helper';
+import { listingRolePermission } from '../../../utils/helper';
 import VideoAddPopup from './VideoAddPopup';
 import VideoEditPopup from './VideoEditPopup';
 import ActionMenu from '../../../components/common/ActionMenu';
 import PermissionPopup from '../../../utils/PermissionPopup';
 
-function VideoPage() {
+function VideoPage({ projectId }: any) {
   const authState: any = useAppSelector((state) => state?.authState);
   const dataRole = useAppSelector(
     (state) => state?.persistedReducer?.roleState?.role?.permissions
@@ -162,7 +162,7 @@ function VideoPage() {
   };
   const createFormHandler = (data: any) => {
     console.log('data==>', data);
-    // setIsLoader(true);
+    setIsLoader(true);
     const formData = new FormData();
     if (data.file !== null) formData.append('file', data.file);
     formData.append('projectId', data.projectId);
@@ -180,7 +180,7 @@ function VideoPage() {
             text: item.data.message,
             type: 'success',
           });
-          setList(sortArrayByKey(item.data.data.list, 'day', 'asc'));
+          setList([item.data.data, ...list]);
         } else {
           setIsLoader(false);
           setIsNotify(true);
@@ -366,7 +366,7 @@ function VideoPage() {
                   className="btn-black-fill btn-icon"
                   onClick={handleFormClickOpen}
                 >
-                  <AddOutlinedIcon /> Add Video
+                  <AddOutlinedIcon /> Add
                 </Button>
               </div>
             </div>
@@ -485,6 +485,7 @@ function VideoPage() {
       )}
       {openFormDialog && (
         <VideoAddPopup
+          projectId={projectId}
           setIsNotify={setIsNotify}
           setNotifyMessage={setNotifyMessage}
           openFormDialog={openFormDialog}
@@ -495,6 +496,7 @@ function VideoPage() {
 
       {openEditFormDialog && (
         <VideoEditPopup
+          projectId={projectId}
           setIsNotify={setIsNotify}
           setNotifyMessage={setNotifyMessage}
           openFormDialog={openEditFormDialog}

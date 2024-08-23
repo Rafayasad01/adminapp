@@ -80,6 +80,9 @@ import logoBlack from './images/ur-laundry-logo-black.svg';
 import logoBlackPng from './images/ur-laundry-logo-blackpng.png';
 import urAppLogoWhite from './images/ur-laundry-logo-white.png';
 import urAppLogo from './images/ur-laundry-logo.png';
+import pdf from './images/pdf.png';
+import word from './images/word.png';
+import excel from './images/excel.png';
 import avatarUser3 from './images/user3.svg';
 import userPermissionIcon from './images/userPermission.svg';
 import wash from './images/wash.svg';
@@ -157,6 +160,9 @@ const assets = {
     splash8,
     nelogo,
     projectIcon,
+    pdf,
+    word,
+    excel,
   },
   tempImages: {
     shirt,

@@ -606,15 +606,15 @@ function Sidebar() {
     // </Drawer>
     <div className="side-bar-menu relative">
       <div className="space-between fixed left-0 top-0 flex h-full w-full max-w-[100px] flex-grow flex-col bg-[#f5f5f5] p-2">
-        <div className="basis-[20%]">
+        <div className="mb-2 basis-[20%]">
           <div className="mx-auto max-w-[60px]">
             <img src={assets.images.logo} alt="logo" />
           </div>
         </div>
-        <div className="basis-[60%]">
-          <div className="max-h-[470px] w-[80px] rounded-[45px] bg-[#C9C9C9] text-center">
+        <div className="basis-[60%] self-center">
+          <div className="max-h-[470px] w-[70px] rounded-[45px] bg-[#C9C9C9] text-center">
             <NavLink to="/admin/dashboard/home" end>
-              <Button className="btn-flips my-[10px] h-[56px] min-w-[56px] rounded-[28px] bg-transparent hover:bg-[#F27426]">
+              <Button className="btn-flips my-[10px] h-[50px] min-w-[50px] rounded-[28px] bg-transparent hover:bg-[#F27426]">
                 <img
                   src={assets.images.slIcon}
                   alt="icon"
@@ -623,7 +623,7 @@ function Sidebar() {
               </Button>
             </NavLink>
             <NavLink to="/admin/dashboard/projects" end>
-              <Button className="btn-flips my-[10px] h-[56px] min-w-[56px] rounded-[28px] bg-transparent hover:bg-[#F27426]">
+              <Button className="btn-flips my-[10px] h-[50px] min-w-[50px] rounded-[28px] bg-transparent hover:bg-[#F27426]">
                 <img
                   src={assets.images.projectIcon}
                   alt="icon"
@@ -632,7 +632,7 @@ function Sidebar() {
               </Button>
             </NavLink>
             <NavLink to="/admin/dashboard/attachments" end>
-              <Button className="btn-flips my-[10px] h-[56px] min-w-[56px] rounded-[28px] bg-transparent hover:bg-[#F27426]">
+              <Button className="btn-flips my-[10px] h-[50px] min-w-[50px] rounded-[28px] bg-transparent hover:bg-[#F27426]">
                 <img
                   src={assets.images.photoIcon}
                   alt="icon"
@@ -640,21 +640,24 @@ function Sidebar() {
                 />
               </Button>
             </NavLink>
-
-            <Button className="btn-flips my-[10px] h-[56px] min-w-[56px] rounded-[28px] bg-transparent hover:bg-[#F27426]">
-              <img
-                src={assets.images.clipboardIcon}
-                alt="icon"
-                className="w-[24px]"
-              />
-            </Button>
-            <Button className="btn-flips my-[10px] h-[56px] min-w-[56px] rounded-[28px] bg-transparent hover:bg-[#F27426]">
-              <img
-                src={assets.images.startegyIcon}
-                alt="icon"
-                className="w-[24px]"
-              />
-            </Button>
+            <NavLink to="/admin/dashboard/ne-users" end>
+              <Button className="btn-flips my-[10px] h-[50px] min-w-[50px] rounded-[28px] bg-transparent hover:bg-[#F27426]">
+                <img
+                  src={assets.images.clipboardIcon}
+                  alt="icon"
+                  className="w-[24px]"
+                />
+              </Button>
+            </NavLink>
+            <NavLink to="/admin/dashboard/settings" end>
+              <Button className="btn-flips my-[10px] h-[50px] min-w-[50px] rounded-[28px] bg-transparent hover:bg-[#F27426]">
+                <img
+                  src={assets.images.startegyIcon}
+                  alt="icon"
+                  className="w-[24px]"
+                />
+              </Button>
+            </NavLink>
             {/* <Button className="btn-flips my-[10px] h-[56px] min-w-[56px] rounded-[28px] bg-transparent hover:bg-[#F27426]">
               <img
                 src={assets.images.busnessIcon}
@@ -666,7 +669,7 @@ function Sidebar() {
         </div>
         <div className="basis-[20%]">
           <div className="flex flex-col items-center justify-center gap-2">
-            <Button className="my-[10px] h-[56px] min-w-[56px] rounded-[28px] bg-transparent p-0">
+            <Button className="my-[10px] h-[50px] min-w-[50px] rounded-[28px] bg-transparent p-0">
               <img
                 src={assets.images.avatar1}
                 alt="icon"
@@ -679,7 +682,7 @@ function Sidebar() {
                   logOut();
                   navigate('/admin');
                 }}
-                className="btn-flips my-[10px] h-[56px] min-w-[56px] rounded-[28px] bg-[#C9C9C9]"
+                className="btn-flips my-[4px] h-[50px] min-w-[50px] rounded-[28px] bg-[#C9C9C9]"
               >
                 <img
                   src={assets.images.logoutIcon}

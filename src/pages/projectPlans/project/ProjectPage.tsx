@@ -29,6 +29,7 @@ import Notify from '../../../components/common/Notify';
 import TopBar from '../../../components/common/TopBar';
 import { useAppSelector } from '../../../redux/redux-hooks';
 import storeProjectPlanService from '../../../services/adminapp/adminProjectPlans';
+import storeAppUsers from '../../../services/adminapp/adminAppUser';
 import {
   ALL_PERMISSIONS,
   NOT_AUTHORIZED_MESSAGE,
@@ -74,7 +75,7 @@ function ProjectPage() {
   const [actionMenuAnchorEl, setActionMenuAnchorEl] =
     useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
-  const actionMenuOptions = ['Plans', 'Edit', 'Delete'];
+  const actionMenuOptions = ['Plans', 'Attachments', 'Edit', 'Delete'];
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
   const [isNotify, setIsNotify] = React.useState(false);
@@ -85,6 +86,7 @@ function ProjectPage() {
   );
   const [isModalImage, setIsModalImage] = useState(false);
   const [modalImage, setModalImage] = useState('');
+  const [users, setUsers] = useState<any>([]);
 
   const handleFormClickOpen = () => {
     if (listingRolePermission(dataRole, ALL_PERMISSIONS.storePlans.add)) {
@@ -97,6 +99,14 @@ function ProjectPage() {
       });
     }
   };
+
+  useEffect(() => {
+    if (listingRolePermission(dataRole, ALL_PERMISSIONS.storePlans.viewPlans)) {
+      storeAppUsers.usersLov(authState.user.tenant).then((item: any) => {
+        setUsers(item.data.data.list);
+      });
+    }
+  }, []);
 
   useEffect(() => {
     if (listingRolePermission(dataRole, ALL_PERMISSIONS.storePlans.viewPlans)) {
@@ -117,6 +127,10 @@ function ProjectPage() {
         });
     }
   }, [null]);
+
+  const handleClientNames: any = (clientId: any) => {
+    return users.find((item: any) => item.id === clientId)?.name;
+  };
 
   const handleClickSearch = (event: any) => {
     if (event.key === 'Enter') {
@@ -246,6 +260,23 @@ function ProjectPage() {
           type: 'warning',
         });
       }
+    } else if (option === 'Attachments') {
+      if (
+        listingRolePermission(dataRole, ALL_PERMISSIONS.storePlans.viewPlans)
+      ) {
+        CheckRolePermission(
+          ALL_PERMISSIONS.storePlans.viewPlans,
+          dataRole,
+          navigate,
+          `./project-attachments/${actionMenuItemid}`
+        );
+      } else {
+        setIsNotify(true);
+        setNotifyMessage({
+          text: NOT_AUTHORIZED_MESSAGE,
+          type: 'warning',
+        });
+      }
     } else if (option === 'Delete') {
       if (listingRolePermission(dataRole, ALL_PERMISSIONS.storePlans.delete)) {
         setCancelDialogOpen(true);
@@ -315,6 +346,8 @@ function ProjectPage() {
               list[i].type = updateItem.data.data.type;
               list[i].constructionType = updateItem.data.data.constructionType;
               list[i].budget = updateItem.data.data.budget;
+              list[i].totalPaid = updateItem.data.data.totalPaid;
+              list[i].dueAmount = updateItem.data.data.dueAmount;
               list[i].startDate = updateItem.data.data.startDate;
               list[i].endDate = updateItem.data.data.endDate;
             }
@@ -444,6 +477,8 @@ function ProjectPage() {
                   <th>Name</th>
                   <th className="">Client Name</th>
                   <th>Budget</th>
+                  <th>Total Paid</th>
+                  <th>Due Amount</th>
                   <th>Type</th>
                   <th>Construction Type</th>
                   <th>Start Date</th>
@@ -458,8 +493,14 @@ function ProjectPage() {
                     return (
                       <tr key={index}>
                         <td>{item.name ? item.name : '--'}</td>
-                        <td>{item.clientName ? item.clientName : '--'}</td>
+                        <td>
+                          {item.clientName
+                            ? handleClientNames(item.clientName)
+                            : '--'}
+                        </td>
                         <td>{item.budget ? item.budget : '--'}</td>
+                        <td>{item.totalPaid ? item.totalPaid : '--'}</td>
+                        <td>{item.dueAmount ? item.dueAmount : '--'}</td>
                         <td>{item.type ? item.type : '--'}</td>
                         <td>
                           {item.constructionType ? item.constructionType : '--'}

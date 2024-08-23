@@ -1,14 +1,8 @@
 /* eslint-disable prettier/prettier */
-import { Button, Input } from '@mui/material';
+import { Button } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
-// import { useDispatch } from 'react-redux';
-// import { useNavigate } from 'react-router-dom';
 import assets from '../../assets';
 import { useAppSelector } from '../../redux/redux-hooks';
-// import { setLogo, setRemoveItemState } from '../../redux/features/appSlice';
-// import { logout, setShopAdminTenant } from '../../redux/features/authSlice';
-// import { setRolePermissions } from '../../redux/features/permissionsStateSlice';
-// import { useAppSelector } from '../../redux/redux-hooks';
 
 type TopBarProps = {
   title?: string;
@@ -187,11 +181,11 @@ function TopBar({ title, isNestedRoute }: TopBarProps) {
         <div className="basis-[50%]">
           <div className="  flex items-center justify-between gap-4">
             <div className="w-full">
-              <Input
+              {/* <Input
                 type="search"
                 placeholder="Search"
                 className="w-full rounded-[20px] border-none bg-white px-2 py-1 text-[14px] outline-none focus-visible:ring-0"
-              />
+              /> */}
             </div>
             <div className="px-2">
               <Button className="h-[40px] min-w-[40px] rounded-[20px] bg-white p-2 hover:bg-[#ccc]">

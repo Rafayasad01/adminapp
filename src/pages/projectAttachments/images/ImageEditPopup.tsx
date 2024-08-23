@@ -17,14 +17,16 @@ import {
   INVALID_CHAR,
   MAX_LENGTH_EXCEEDED,
   PATTERN,
+  PROJECT_IMAGE_TYPE,
 } from '../../../utils/constants';
-import { ProjectVideoAttachment } from '../../../interfaces/projectAttachments.interface';
+import { ProjectAttachment } from '../../../interfaces/projectAttachments.interface';
 import CustomDropDown from '../../../components/common/CustomDropDown';
 import { listingRolePermission } from '../../../utils/helper';
 import { useAppSelector } from '../../../redux/redux-hooks';
 import storeAttachmentService from '../../../services/adminapp/adminProjectAttachments';
 
 type Props = {
+  projectId: string;
   openFormDialog: boolean;
   setOpenFormDialog: React.Dispatch<React.SetStateAction<boolean>>;
   callback: (...args: any[]) => any;
@@ -34,6 +36,7 @@ type Props = {
 };
 
 function VideoEditPopup({
+  projectId,
   openFormDialog,
   setOpenFormDialog,
   callback,
@@ -48,6 +51,7 @@ function VideoEditPopup({
   const [planFile, setPlanFile] = useState<any>(null);
   const [projects, setProjects] = useState<any>([]);
   const [plans, setPlans] = useState<any>([]);
+  const [filePath, setFilePath] = useState<any>(null);
 
   const {
     register,
@@ -57,12 +61,13 @@ function VideoEditPopup({
     control,
     watch,
     formState: { errors },
-  } = useForm<ProjectVideoAttachment>();
+  } = useForm<ProjectAttachment>();
 
   useEffect(() => {
     const fetchProjects = async () => {
       setValue('file', formData?.filePath);
       setPlanFile({ name: formData?.filePath });
+      setFilePath(formData?.filePath);
       if (
         listingRolePermission(dataRole, ALL_PERMISSIONS.storePlans.viewPlans)
       ) {
@@ -118,20 +123,19 @@ function VideoEditPopup({
       projectId: data.projectId,
       file: data.file,
       title: data.name,
+      type: data.type,
       description: data.desc,
     };
-    console.log('🚀 ~ onSubmit ~ formData?.filePath:', formData?.filePath);
-    if (formData?.filePath !== null) obj.file = null;
-    callback(obj);
+    if (filePath !== null) obj.file = null;
+    if (planFile || filePath) callback(obj);
   };
 
   const handleFormClose = () => {
     setOpenFormDialog(false);
   };
-  console.log('🚀 ~ handleFileChange ~ formData:', formData);
 
   const handleFileChange = (event: any) => {
-    formData.filePath = null;
+    setFilePath(null);
     const selectedFile = event.target.files[0];
     if (selectedFile) {
       const fileType = selectedFile.type;
@@ -157,6 +161,7 @@ function VideoEditPopup({
     event.target.value = null;
     setPlanFile(null);
     setValue('file', '');
+    setFilePath(null);
   };
 
   return (
@@ -174,7 +179,7 @@ function VideoEditPopup({
             <span className="Title">Edit Image</span>
           </div>
           <div className="FormBody mt-2">
-            <div className="FormField">
+            <div className="FormFields">
               <FormControl className="FormControl" variant="standard">
                 <label className="FormLabel">Name</label>
                 <Input
@@ -185,13 +190,13 @@ function VideoEditPopup({
                     pattern: PATTERN.CHAR_SPACE_DASH,
                     validate: (value) => value.length <= 150,
                   })}
-                  placeholder="Enter Video Name"
+                  placeholder="Enter Image Name"
                   type="text"
                   id="name"
                   disableUnderline
                 />
                 {errors.name?.type === 'required' && (
-                  <ErrorSpanBox error="Category name is required" />
+                  <ErrorSpanBox error="Image name is required" />
                 )}
                 {errors.name?.type === 'pattern' && (
                   <ErrorSpanBox error={INVALID_CHAR} />
@@ -199,6 +204,19 @@ function VideoEditPopup({
                 {errors.name?.type === 'validate' && (
                   <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
                 )}
+              </FormControl>
+              <FormControl className="FormControl" variant="standard">
+                <CustomDropDown
+                  validateRequired
+                  id="type"
+                  control={control}
+                  error={errors}
+                  register={register}
+                  options={{ roles: PROJECT_IMAGE_TYPE, role: formData?.type }}
+                  customClassInputTitle="font-bold"
+                  inputTitle="Type"
+                  defaultValue="Select Type"
+                />
               </FormControl>
             </div>
             <div className="FormField">
@@ -237,6 +255,7 @@ function VideoEditPopup({
                   customClassInputTitle="font-bold"
                   inputTitle="Project Name"
                   defaultValue="Select Project"
+                  disabled={!!projectId}
                 />
               </FormControl>
               <FormControl className="FormControl" variant="standard">
@@ -264,7 +283,9 @@ function VideoEditPopup({
                 <input
                   accept="image/jpeg,image/png,image/jpg"
                   style={{ display: 'none' }}
-                  {...register('file')}
+                  {...register('file', {
+                    value: formData?.filePath,
+                  })}
                   id="raised-button-image"
                   type="file"
                   onChange={(
@@ -292,6 +313,7 @@ function VideoEditPopup({
                       className="btn-dot"
                       onClick={() => {
                         setPlanFile(null);
+                        setFilePath(null);
                         setValue('file', '');
                       }}
                     >
@@ -308,7 +330,7 @@ function VideoEditPopup({
                   ''
                 )}
               </div>
-              {planFile === null && <ErrorSpanBox error="image is required" />}
+              {planFile === null && <ErrorSpanBox error="Image is required" />}
             </div>
           </div>
           <div className="FormFooter">
@@ -329,7 +351,7 @@ function VideoEditPopup({
               className="btn-black-fill"
               disableUnderline
               sx={{
-                padding: '0.375rem 2rem !important',
+                padding: '0.175rem 2rem !important',
               }}
             />
           </div>

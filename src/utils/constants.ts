@@ -723,12 +723,23 @@ export const GENDER = [
 
 export const PROJECT_PLAN_TYPE = [
   {
-    id: 'typeone',
-    name: 'Type one',
+    id: 'Renovation',
+    name: 'Renovation ',
   },
   {
-    id: 'typetwo',
-    name: 'Type two',
+    id: 'Construction',
+    name: 'Construction',
+  },
+];
+
+export const PROJECT_IMAGE_TYPE = [
+  {
+    id: 'Blueprint',
+    name: 'Blueprint ',
+  },
+  {
+    id: '3d',
+    name: '3d',
   },
 ];
 
@@ -879,3 +890,13 @@ export const handleTitleText = (permissions: any) => {
   }
 };
 export { TITLE_TEXT };
+
+export const mimiType: any = {
+  pdf: 'application/pdf',
+  word: 'application/msword',
+  wordsheet:
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  excel: 'application/vnd.ms-excel',
+  excelsheet:
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+};

@@ -5,6 +5,8 @@ export interface Project {
   type: string;
   constructionType: string;
   budget: string;
+  totalPaid: string;
+  dueAmount: string;
   address: string;
   startDate: any;
   endDate: any;

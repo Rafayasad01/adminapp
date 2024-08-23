@@ -1,17 +1,20 @@
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import { useState } from 'react';
+import { useParams } from 'react-router';
 import TopBar from '../../components/common/TopBar';
 import { useAppSelector } from '../../redux/redux-hooks';
 import { ALL_PERMISSIONS } from '../../utils/constants';
 import { listingRolePermission } from '../../utils/helper';
 import VideoPage from './videos/VideoPage';
 import ImagePage from './images/ImagePage';
+import DocsPage from './docs/DocsPage';
 
 function ProjectAttachment() {
   const dataRole = useAppSelector(
     (state: any) => state?.persistedReducer?.roleState?.role?.permissions
   );
+  const { projectId } = useParams();
   const [selectedTab, setSelectedTab] = useState('VIDEOS');
 
   const handleTabChange = (event: any, newValue: any) => {
@@ -25,7 +28,7 @@ function ProjectAttachment() {
           <div className="grid grid-cols-12 px-4 py-5">
             <div className="col-span-7">
               <span className="font-open-sans text-xl font-semibold text-[#252733]">
-                All Attachments
+                Project Assets/Media
               </span>
             </div>
           </div>
@@ -47,7 +50,7 @@ function ProjectAttachment() {
                   dataRole,
                   !!ALL_PERMISSIONS.storePlans.viewPlans
                 )}
-                label="videos"
+                label="project videos"
                 value="VIDEOS"
               />
               <Tab
@@ -55,12 +58,27 @@ function ProjectAttachment() {
                   dataRole,
                   !!ALL_PERMISSIONS.storePlans.viewPlans
                 )}
-                label="images"
+                label="3D-renders / blue print"
                 value="IMAGES"
               />
+              <Tab
+                hidden={listingRolePermission(
+                  dataRole,
+                  !!ALL_PERMISSIONS.storePlans.viewPlans
+                )}
+                label="approval and reports"
+                value="DOCS"
+              />
             </Tabs>
-            {selectedTab === 'VIDEOS' && <VideoPage />}
-            {selectedTab === 'IMAGES' && <ImagePage />}
+            {selectedTab === 'VIDEOS' && (
+              <VideoPage projectId={projectId ?? null} />
+            )}
+            {selectedTab === 'IMAGES' && (
+              <ImagePage projectId={projectId ?? null} />
+            )}
+            {selectedTab === 'DOCS' && (
+              <DocsPage projectId={projectId ?? null} />
+            )}
           </div>
         </div>
       </div>

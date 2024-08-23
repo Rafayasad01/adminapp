@@ -6,7 +6,7 @@ import Dialog from '@mui/material/Dialog';
 import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
 import React, { useEffect, useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 // import TextField from '@mui/material/TextField';
 import '../../../assets/css/PopupStyle.css';
 import TextField from '@mui/material/TextField';
@@ -17,7 +17,6 @@ import {
   INVALID_CHAR,
   MAX_LENGTH_EXCEEDED,
   PATTERN,
-  PROJECT_IMAGE_TYPE,
 } from '../../../utils/constants';
 import { ProjectAttachment } from '../../../interfaces/projectAttachments.interface';
 import CustomDropDown from '../../../components/common/CustomDropDown';
@@ -32,15 +31,17 @@ type Props = {
   callback: (...args: any[]) => any;
   setIsNotify: any;
   setNotifyMessage: any;
+  formData: any;
 };
 
-function VideoAddPopup({
+function VideoEditPopup({
   projectId,
   openFormDialog,
   setOpenFormDialog,
   callback,
   setIsNotify,
   setNotifyMessage,
+  formData,
 }: Props) {
   const authState: any = useAppSelector((state) => state?.authState);
   const dataRole = useAppSelector(
@@ -49,11 +50,13 @@ function VideoAddPopup({
   const [planFile, setPlanFile] = useState<any>(null);
   const [projects, setProjects] = useState<any>([]);
   const [plans, setPlans] = useState<any>([]);
+  const [filePath, setFilePath] = useState<any>(null);
 
   const {
     register,
     handleSubmit,
     setValue,
+    clearErrors,
     control,
     watch,
     formState: { errors },
@@ -61,6 +64,9 @@ function VideoAddPopup({
 
   useEffect(() => {
     const fetchProjects = async () => {
+      setValue('file', formData?.filePath);
+      setPlanFile({ name: formData?.filePath });
+      setFilePath(formData?.filePath);
       if (
         listingRolePermission(dataRole, ALL_PERMISSIONS.storePlans.viewPlans)
       ) {
@@ -71,7 +77,6 @@ function VideoAddPopup({
             );
           const projectList = projectResponse.data.data.list;
           setProjects(projectList);
-          if (projectId) setValue('projectId', projectId);
         } catch (error: Error | any) {
           setIsNotify(true);
           setNotifyMessage({
@@ -113,32 +118,42 @@ function VideoAddPopup({
 
   const onSubmit = (data: any) => {
     const obj = {
-      ...data,
+      day: data.day,
+      projectId: data.projectId,
+      file: data.file,
       title: data.name,
       description: data.desc,
     };
-    callback(obj);
+    if (filePath !== null) obj.file = null;
+    if (planFile || filePath) callback(obj);
   };
 
   const handleFormClose = () => {
     setOpenFormDialog(false);
   };
+  console.log('🚀 ~ handleFileChange ~ formData:', formData);
 
-  const handleFileChange = (onChange: any, event: any | undefined) => {
+  const handleFileChange = (event: any) => {
+    setFilePath(null);
     const selectedFile = event.target.files[0];
     if (selectedFile) {
       const fileType = selectedFile.type;
       if (
-        fileType === 'image/jpeg' ||
-        fileType === 'image/png' ||
-        fileType === 'image/jpg'
+        fileType === 'application/msword' ||
+        fileType ===
+          'application/vnd.openxmlformats-officedocument.wordprocessingml.document' ||
+        fileType === 'application/pdf' ||
+        fileType === 'application/vnd.ms-excel' ||
+        fileType ===
+          'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
       ) {
         setPlanFile(selectedFile);
-        onChange(selectedFile);
+        setValue('file', selectedFile);
+        clearErrors('file');
       } else {
         setIsNotify(true);
         setNotifyMessage({
-          text: 'Only .jpeg, .jpg, .png image files are allowed',
+          text: 'Only .doc, .docx, .pdf, .xls, and .xlsx files are allowed',
           type: 'error',
         });
       }
@@ -148,6 +163,7 @@ function VideoAddPopup({
   const handleFileOnClick = (event: any) => {
     event.target.value = null;
     setPlanFile(null);
+    setFilePath(null);
     setValue('file', '');
   };
 
@@ -163,26 +179,27 @@ function VideoAddPopup({
       <div className="Content">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="FormHeader">
-            <span className="Title">Add Image</span>
+            <span className="Title">Edit Document</span>
           </div>
           <div className="FormBody mt-2">
-            <div className="FormFields">
+            <div className="FormField">
               <FormControl className="FormControl" variant="standard">
                 <label className="FormLabel">Name</label>
                 <Input
                   className="FormInput"
                   {...register('name', {
+                    value: formData?.title,
                     required: true,
                     pattern: PATTERN.CHAR_SPACE_DASH,
                     validate: (value) => value.length <= 150,
                   })}
-                  placeholder="Enter Image Name"
+                  placeholder="Enter Document Name"
                   type="text"
                   id="name"
                   disableUnderline
                 />
                 {errors.name?.type === 'required' && (
-                  <ErrorSpanBox error="Image name is required" />
+                  <ErrorSpanBox error="Document name is required" />
                 )}
                 {errors.name?.type === 'pattern' && (
                   <ErrorSpanBox error={INVALID_CHAR} />
@@ -190,19 +207,6 @@ function VideoAddPopup({
                 {errors.name?.type === 'validate' && (
                   <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
                 )}
-              </FormControl>
-              <FormControl className="FormControl" variant="standard">
-                <CustomDropDown
-                  validateRequired
-                  id="type"
-                  control={control}
-                  error={errors}
-                  register={register}
-                  options={{ roles: PROJECT_IMAGE_TYPE }}
-                  customClassInputTitle="font-bold"
-                  inputTitle="Type"
-                  defaultValue="Select Type"
-                />
               </FormControl>
             </div>
             <div className="FormField">
@@ -219,6 +223,7 @@ function VideoAddPopup({
                   defaultValue=""
                   placeholder="Write Description"
                   {...register('desc', {
+                    value: formData?.description,
                     maxLength: {
                       value: 250,
                       message: MAX_LENGTH_EXCEEDED,
@@ -236,7 +241,7 @@ function VideoAddPopup({
                   control={control}
                   error={errors}
                   register={register}
-                  options={{ roles: projects }}
+                  options={{ roles: projects, role: formData?.projectId }}
                   customClassInputTitle="font-bold"
                   inputTitle="Project Name"
                   defaultValue="Select Project"
@@ -250,7 +255,7 @@ function VideoAddPopup({
                   control={control}
                   error={errors}
                   register={register}
-                  options={{ roles: plans }}
+                  options={{ roles: plans, role: formData?.day }}
                   customClassInputTitle="font-bold"
                   inputTitle="Day"
                   defaultValue="Select Day"
@@ -259,67 +264,65 @@ function VideoAddPopup({
             </div>
             <div className="FormField">
               <label className="FormLabel mt-2">
-                Upload Image
+                Upload Document
                 <span className="SubLabel">
-                  ( Image should be in JPG, JPEG, or PNG format )
+                  ( Document should be in DOC, DOCX, or PDF format )
                 </span>
               </label>
               <div className="ImageBox">
-                <Controller
-                  name="file"
-                  control={control}
-                  rules={{ required: 'Image is required' }}
-                  render={({ field: { onChange } }) => (
-                    <>
-                      <input
-                        accept="image/jpeg,image/png,image/jpg"
-                        style={{ display: 'none' }}
-                        id="raised-button-image"
-                        type="file"
-                        onChange={(event) => handleFileChange(onChange, event)}
-                        onClick={handleFileOnClick}
-                      />
-                      <label
-                        htmlFor="raised-button-image"
-                        className="ImageLabel"
-                      >
-                        <Button component="span" className="ImageBtn">
-                          <FileUploadOutlinedIcon
-                            sx={{ marginRight: '0.5rem' }}
-                          />
-                          Upload
-                        </Button>
-                      </label>
-
-                      {planFile ? (
-                        <div className="ShowImageBox bg-background">
-                          <label className="ShowImageLabel">
-                            {planFile.name}
-                          </label>
-                          <IconButton
-                            className="btn-dot"
-                            onClick={() => {
-                              setPlanFile(null);
-                              onChange(null);
-                            }}
-                          >
-                            <CloseOutlinedIcon
-                              sx={{
-                                color: '#1D1D1D',
-                                fontSize: '1rem',
-                                lineHeight: '1.5rem',
-                              }}
-                            />
-                          </IconButton>
-                        </div>
-                      ) : (
-                        ''
-                      )}
-                    </>
-                  )}
+                <input
+                  accept=".doc,.docx,.pdf"
+                  style={{ display: 'none' }}
+                  {...register('file', {
+                    value: formData?.filePath,
+                  })}
+                  id="raised-button-document"
+                  type="file"
+                  onChange={(
+                    event: React.InputHTMLAttributes<HTMLInputElement>
+                  ) => {
+                    handleFileChange(event);
+                  }}
+                  onClick={(
+                    event: React.InputHTMLAttributes<HTMLInputElement>
+                  ) => {
+                    handleFileOnClick(event);
+                  }}
                 />
-                {errors.file && <ErrorSpanBox error={errors.file?.message} />}
+                <label htmlFor="raised-button-document" className="ImageLabel">
+                  <Button component="span" className="ImageBtn">
+                    <FileUploadOutlinedIcon sx={{ marginRight: '0.5rem' }} />
+                    Upload
+                  </Button>
+                </label>
+
+                {planFile ? (
+                  <div className="ShowImageBox bg-background">
+                    <label className="ShowImageLabel">{planFile.name}</label>
+                    <IconButton
+                      className="btn-dot"
+                      onClick={() => {
+                        setPlanFile(null);
+                        setFilePath(null);
+                        setValue('file', '');
+                      }}
+                    >
+                      <CloseOutlinedIcon
+                        sx={{
+                          color: '#1D1D1D',
+                          fontSize: '1rem',
+                          lineHeight: '1.5rem',
+                        }}
+                      />
+                    </IconButton>
+                  </div>
+                ) : (
+                  ''
+                )}
               </div>
+              {planFile === null && (
+                <ErrorSpanBox error="Document is required" />
+              )}
             </div>
           </div>
           <div className="FormFooter">
@@ -336,11 +339,11 @@ function VideoAddPopup({
             </Button>
             <Input
               type="submit"
-              value="Add"
+              value="Update"
               className="btn-black-fill"
               disableUnderline
               sx={{
-                padding: '0.375rem 2rem !important',
+                padding: '0.175rem 2rem !important',
               }}
             />
           </div>
@@ -350,4 +353,4 @@ function VideoAddPopup({
   );
 }
 
-export default VideoAddPopup;
+export default VideoEditPopup;

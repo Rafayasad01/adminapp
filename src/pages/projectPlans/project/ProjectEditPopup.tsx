@@ -293,6 +293,52 @@ Props) {
                 )}
               </FormControl>
             </div>
+            <div className="FormFields">
+              <FormControl className="FormControl" variant="standard">
+                <label className="FormLabel">Total Paid</label>
+                <Input
+                  className="FormInput"
+                  id="totalPaid"
+                  type="number"
+                  placeholder="Enter Amount"
+                  {...register('totalPaid', {
+                    value: formData.totalPaid,
+                    // required: 'Amount is required in numbers',
+                    validate: (value: any) => VALIDATE_NON_NEGATIVE_NUM(value),
+                    maxLength: {
+                      value: 10,
+                      message: 'Length should not be excceed from 10 numbers.',
+                    },
+                  })}
+                  disableUnderline
+                />
+                {errors.totalPaid && (
+                  <ErrorSpanBox error={errors.totalPaid?.message} />
+                )}
+              </FormControl>
+              <FormControl className="FormControl" variant="standard">
+                <label className="FormLabel">Due Amount</label>
+                <Input
+                  className="FormInput"
+                  id="dueAmount"
+                  type="number"
+                  placeholder="Enter Amount"
+                  {...register('dueAmount', {
+                    value: formData.dueAmount,
+                    // required: 'Amount is required in numbers',
+                    validate: (value: any) => VALIDATE_NON_NEGATIVE_NUM(value),
+                    maxLength: {
+                      value: 10,
+                      message: 'Length should not be excceed from 10 numbers.',
+                    },
+                  })}
+                  disableUnderline
+                />
+                {errors.dueAmount && (
+                  <ErrorSpanBox error={errors.dueAmount?.message} />
+                )}
+              </FormControl>
+            </div>
           </div>
           <div className="FormFooter">
             <Button

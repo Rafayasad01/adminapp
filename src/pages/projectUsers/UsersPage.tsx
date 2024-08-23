@@ -6,8 +6,8 @@ import FormControl from '@mui/material/FormControl';
 import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
-import Tab from '@mui/material/Tab';
-import Tabs from '@mui/material/Tabs';
+// import Tab from '@mui/material/Tab';
+// import Tabs from '@mui/material/Tabs';
 import React, { useEffect, useState } from 'react';
 import Loader from '../../components/common/Loader';
 import Notify from '../../components/common/Notify';
@@ -17,15 +17,14 @@ import appUserService from '../../services/adminapp/adminAppUser';
 import PermissionPopup from '../../utils/PermissionPopup';
 import { ALL_PERMISSIONS, NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
 import { listingRolePermission } from '../../utils/helper';
-import AppUserCreatePopup from './AppUserCreatePopup';
+import AppUserCreatePopup from './UserAddPopup';
 // import AppUserOtherTab from './AppUserOtherTab';
-import AppUserTab from './AppUserTab';
-import AppUserUpdatePopup from './AppUserUpdatePopup';
-import AppUserOtherTab from './AppUserOtherTab';
+import AppUserTab from './UserRenders';
+import AppUserUpdatePopup from './UserEditPopup';
 // import CustomersCreatePopup from './CustomersCreatePopup';
 // import CustomersEditPopup from './CustomersEditPopup';
 
-function AppUsersPage() {
+function UsersPage() {
   const authState: any = useAppSelector((state) => state?.authState);
   const dataRole = useAppSelector(
     (state: any) => state?.persistedReducer?.roleState?.role?.permissions
@@ -50,11 +49,14 @@ function AppUsersPage() {
   const [dialogText] = useState<any>(
     'Are you sure you want to delete this customer ?'
   );
-  const [selectedTab, setSelectedTab] = useState('APP USER');
+  const [
+    selectedTab,
+    //  setSelectedTab
+  ] = useState('APP USER');
 
-  const handleTabChange = (event: any, newValue: any) => {
-    setSelectedTab(newValue);
-  };
+  // const handleTabChange = (event: any, newValue: any) => {
+  //   setSelectedTab(newValue);
+  // };
 
   const appUserRoleLov = [
     {
@@ -68,7 +70,7 @@ function AppUsersPage() {
   ];
 
   const handleFormClickOpen = () => {
-    if (listingRolePermission(dataRole, ALL_PERMISSIONS.storeUser.addUserApp)) {
+    if (listingRolePermission(dataRole, ALL_PERMISSIONS.storePlans.viewPlans)) {
       setOpenFormDialog(true);
     } else {
       setIsNotify(true);
@@ -146,9 +148,7 @@ function AppUsersPage() {
 
   useEffect(() => {
     setIsLoader(true);
-    if (
-      listingRolePermission(dataRole, ALL_PERMISSIONS.storeUser.viewUserApp)
-    ) {
+    if (listingRolePermission(dataRole, ALL_PERMISSIONS.storePlans.viewPlans)) {
       appUserService
         .appList(
           authState.user.tenant,
@@ -179,7 +179,7 @@ function AppUsersPage() {
   }, [null, selectedTab]);
 
   const createFormHandler = (data: any) => {
-    // setIsLoader(true);
+    setIsLoader(true);
     const formData = {
       firstName: data.firstName,
       lastName: data.lastName,
@@ -187,7 +187,7 @@ function AppUsersPage() {
       email: data.email,
       phone: data.phone ? data.phone : null,
       address: data.address,
-      userType: data.appuserRole,
+      userType: 'App',
       postalCode: data.postalCode ? data.postalCode : null,
       licenseNumber: data.licenseNumber ? data.licenseNumber : null,
       tenant: authState.user.tenant,
@@ -211,7 +211,7 @@ function AppUsersPage() {
             type: 'success',
           });
           if (dataRender) {
-            setList([...list, item.data.data]);
+            setList([item.data.data, ...list]);
           }
         } else {
           setIsLoader(false);
@@ -239,7 +239,7 @@ function AppUsersPage() {
       firstName: data.firstName,
       lastName: data.lastName,
       phone: data.phone ? data.phone : null,
-      userType: data.appuserRole,
+      userType: 'App',
       postalCode: data.postalCode ? data.postalCode : null,
       licenseNumber: data.licenseNumber ? data.licenseNumber : null,
       updatedBy: authState.user.id,
@@ -352,35 +352,6 @@ function AppUsersPage() {
               </div>
             </div>
           </div>
-          <Tabs
-            className={`${
-              listingRolePermission(
-                dataRole,
-                ALL_PERMISSIONS.storeUser.viewDriverUserApp
-              )
-                ? 'inline-block'
-                : 'hidden'
-            } `}
-            value={selectedTab}
-            onChange={handleTabChange}
-          >
-            <Tab
-              hidden={listingRolePermission(
-                dataRole,
-                !!ALL_PERMISSIONS.storeUser.viewDriverUserApp
-              )}
-              label="app user"
-              value="APP USER"
-            />
-            <Tab
-              hidden={listingRolePermission(
-                dataRole,
-                !!ALL_PERMISSIONS.storeUser.viewDriverUserApp
-              )}
-              label="other"
-              value="OTHER"
-            />
-          </Tabs>
           {selectedTab === 'APP USER' && (
             <AppUserTab
               // isLoader={isLoader}
@@ -405,7 +376,7 @@ function AppUsersPage() {
               setCancelDialogOpen={setCancelDialogOpen}
             />
           )}
-          {selectedTab === 'OTHER' && (
+          {/* {selectedTab === 'OTHER' && (
             <AppUserOtherTab
               // isLoader={isLoader}
               setIsLoader={setIsLoader}
@@ -427,7 +398,7 @@ function AppUsersPage() {
               // notifyMessage={notifyMessage}
               setNotifyMessage={setNotifyMessage}
             />
-          )}
+          )} */}
         </div>
       </div>
       {cancelDialogOpen && (
@@ -463,4 +434,4 @@ function AppUsersPage() {
   );
 }
 
-export default AppUsersPage;
+export default UsersPage;

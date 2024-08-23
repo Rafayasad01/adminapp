@@ -18,13 +18,14 @@ import {
   MAX_LENGTH_EXCEEDED,
   PATTERN,
 } from '../../../utils/constants';
-import { ProjectVideoAttachment } from '../../../interfaces/projectAttachments.interface';
+import { ProjectAttachment } from '../../../interfaces/projectAttachments.interface';
 import CustomDropDown from '../../../components/common/CustomDropDown';
 import { listingRolePermission } from '../../../utils/helper';
 import { useAppSelector } from '../../../redux/redux-hooks';
 import storeAttachmentService from '../../../services/adminapp/adminProjectAttachments';
 
 type Props = {
+  projectId: string;
   openFormDialog: boolean;
   setOpenFormDialog: React.Dispatch<React.SetStateAction<boolean>>;
   callback: (...args: any[]) => any;
@@ -34,6 +35,7 @@ type Props = {
 };
 
 function VideoEditPopup({
+  projectId,
   openFormDialog,
   setOpenFormDialog,
   callback,
@@ -48,6 +50,7 @@ function VideoEditPopup({
   const [planFile, setPlanFile] = useState<any>(null);
   const [projects, setProjects] = useState<any>([]);
   const [plans, setPlans] = useState<any>([]);
+  const [filePath, setFilePath] = useState<any>(null);
 
   const {
     register,
@@ -57,12 +60,13 @@ function VideoEditPopup({
     control,
     watch,
     formState: { errors },
-  } = useForm<ProjectVideoAttachment>();
+  } = useForm<ProjectAttachment>();
 
   useEffect(() => {
     const fetchProjects = async () => {
       setValue('file', formData?.filePath);
       setPlanFile({ name: formData?.filePath });
+      setFilePath(formData?.filePath);
       if (
         listingRolePermission(dataRole, ALL_PERMISSIONS.storePlans.viewPlans)
       ) {
@@ -82,6 +86,7 @@ function VideoEditPopup({
         }
       }
     };
+    console.log('🚀 ~ fetchProjects ~ formData:', formData);
 
     fetchProjects();
   }, []);
@@ -113,6 +118,7 @@ function VideoEditPopup({
   }, [watch('projectId')]);
 
   const onSubmit = (data: any) => {
+    console.log('🚀 ~ onSubmit ~ planFile:', planFile, formData?.filePath);
     const obj = {
       day: data.day,
       projectId: data.projectId,
@@ -120,9 +126,8 @@ function VideoEditPopup({
       title: data.name,
       description: data.desc,
     };
-    if (formData?.filePath !== null) obj.file = null;
-    console.log('🚀 ~ onSubmit ~ data:', obj);
-    callback(obj);
+    if (filePath !== null) obj.file = null;
+    if (planFile || filePath) callback(obj);
   };
 
   const handleFormClose = () => {
@@ -130,7 +135,7 @@ function VideoEditPopup({
   };
 
   const handleFileChange = (event: any) => {
-    formData.filePath = null;
+    setFilePath(null);
     const selectedFile = event.target.files[0];
     if (selectedFile) {
       const fileType = selectedFile.type;
@@ -150,6 +155,7 @@ function VideoEditPopup({
 
   const handleFileOnClick = (event: any) => {
     event.target.value = null;
+    setFilePath(null);
     setPlanFile(null);
     setValue('file', '');
   };
@@ -166,7 +172,7 @@ function VideoEditPopup({
       <div className="Content">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="FormHeader">
-            <span className="Title">Add Video</span>
+            <span className="Title">Edit Video</span>
           </div>
           <div className="FormBody mt-2">
             <div className="FormField">
@@ -186,7 +192,7 @@ function VideoEditPopup({
                   disableUnderline
                 />
                 {errors.name?.type === 'required' && (
-                  <ErrorSpanBox error="Category name is required" />
+                  <ErrorSpanBox error="Video name is required" />
                 )}
                 {errors.name?.type === 'pattern' && (
                   <ErrorSpanBox error={INVALID_CHAR} />
@@ -232,6 +238,7 @@ function VideoEditPopup({
                   customClassInputTitle="font-bold"
                   inputTitle="Project Name"
                   defaultValue="Select Project"
+                  disabled={!!projectId}
                 />
               </FormControl>
               <FormControl className="FormControl" variant="standard">
@@ -259,7 +266,9 @@ function VideoEditPopup({
                 <input
                   accept=".mp4"
                   style={{ display: 'none' }}
-                  {...register('file')}
+                  {...register('file', {
+                    value: formData?.filePath,
+                  })}
                   id="raised-button-video"
                   type="file"
                   onChange={(
@@ -287,6 +296,7 @@ function VideoEditPopup({
                       className="btn-dot"
                       onClick={() => {
                         setPlanFile(null);
+                        setFilePath(null);
                         setValue('file', '');
                       }}
                     >
@@ -303,7 +313,7 @@ function VideoEditPopup({
                   ''
                 )}
               </div>
-              {planFile === null && <ErrorSpanBox error="video is required" />}
+              {planFile === null && <ErrorSpanBox error="Video is required" />}
             </div>
           </div>
           <div className="FormFooter">
@@ -320,11 +330,11 @@ function VideoEditPopup({
             </Button>
             <Input
               type="submit"
-              value="Add"
+              value="Update"
               className="btn-black-fill"
               disableUnderline
               sx={{
-                padding: '0.375rem 2rem !important',
+                padding: '0.1rem 2rem !important',
               }}
             />
           </div>

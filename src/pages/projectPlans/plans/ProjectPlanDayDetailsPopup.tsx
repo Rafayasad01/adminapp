@@ -103,7 +103,7 @@ function ProjectPlanDayDetailsPopup({
                                 return (
                                   <span
                                     key={activityIndex}
-                                    className="me-2 rounded border border-blue-300 bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-800 dark:bg-gray-700 dark:text-blue-300"
+                                    className="me-2 rounded border border-blue-300 bg-primary px-2.5 py-0.5 text-xs font-medium text-foreground dark:bg-gray-700 dark:text-blue-300"
                                   >
                                     {activity}
                                   </span>
@@ -115,6 +115,7 @@ function ProjectPlanDayDetailsPopup({
                         <BorderLinearProgress
                           variant="determinate"
                           value={Number(item.progress)}
+                          className="text-primary"
                         />
                       </td>
                       <td>{item.remarks ? item.remarks : '--'}</td>

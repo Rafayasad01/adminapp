@@ -2730,3 +2730,7 @@ main.min-h-screen.w-full.flex-grow.bg-gray-50.p-3.MuiBox-root.css-0 {
 .css-1ps6pg7-MuiPaper-root {
   position: relative !important;
 }
+
+.css-1l6rwmg-MuiLinearProgress-root .MuiLinearProgress-bar {
+  @apply bg-primary;
+}

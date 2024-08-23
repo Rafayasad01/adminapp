@@ -64,9 +64,9 @@ import ReportsPage from '../pages/reports/ReportsPage';
 import ServiceItemPage from '../pages/services/ServiceItemPage';
 import ServicesCatPage from '../pages/services/ServicesCatPage';
 import SettingConfig from '../pages/settings/SettingConfig';
-import SettingsApp from '../pages/settings/SettingsApp';
+// import SettingsApp from '../pages/settings/SettingsApp';
 import SettingsPage from '../pages/settings/SettingsPage';
-import SettingsShopScheduling from '../pages/settings/SettingsShopScheduling';
+// import SettingsShopScheduling from '../pages/settings/SettingsShopScheduling';
 import VouchersPage from '../pages/vouchers/VouchersPage';
 import StoreAppointmentsList from '../pages/appointment/StoreAppointmentsList';
 import AppointmentEmployeesAttendancePage from '../pages/appointment/provider/attendance/AppointmentEmployeesAttendancePage';
@@ -82,6 +82,7 @@ import CAN from '../services/permissions/permissions';
 import ProjectPage from '../pages/projectPlans/project/ProjectPage';
 import ProjectPlanPage from '../pages/projectPlans/plans/ProjectPlanPage';
 import ProjectAttachment from '../pages/projectAttachments';
+import UsersPage from '../pages/projectUsers/UsersPage';
 
 const ProtectedRoute = ({ page, condition }: any) => {
   const canView = CAN('canView', condition);
@@ -1031,6 +1032,10 @@ export const routeObjects: RouteObject[] = [
                 path: 'plans/:projectId',
                 element: <ProjectPlanPage />,
               },
+              {
+                path: 'project-attachments/:projectId',
+                element: <ProjectAttachment />,
+              },
             ],
           },
           {
@@ -1039,6 +1044,15 @@ export const routeObjects: RouteObject[] = [
               {
                 index: true,
                 element: <ProjectAttachment />,
+              },
+            ],
+          },
+          {
+            path: 'ne-users',
+            children: [
+              {
+                index: true,
+                element: <UsersPage />,
               },
             ],
           },
@@ -1061,49 +1075,67 @@ export const routeObjects: RouteObject[] = [
             path: 'settings',
             children: [
               {
-                path: '',
-                element: (
-                  <ProtectedRoute
-                    page={<SettingsPage />}
-                    condition={ALL_PERMISSIONS.storeSetting.viewSettings}
-                  />
-                ),
-                children: [
-                  {
-                    index: true,
-                    path: 'app',
-                    element: (
-                      <ProtectedRoute
-                        page={<SettingsApp />}
-                        condition={ALL_PERMISSIONS.storeSetting.viewSettings}
-                      />
-                    ),
-                    // element: <SettingsApp />,
-                  },
-                  {
-                    path: 'shop',
-                    element: (
-                      <ProtectedRoute
-                        page={<SettingsShopScheduling />}
-                        condition={ALL_PERMISSIONS.storeSetting.viewSettings}
-                      />
-                    ),
-                    // element: <SettingsShopScheduling />,
-                  },
-                  {
-                    path: 'config',
-                    element: (
-                      <ProtectedRoute
-                        page={<SettingConfig />}
-                        condition={ALL_PERMISSIONS.storeSetting.viewSettings}
-                      />
-                    ),
-                    // element: <SettingConfig />,
-                  },
-                ],
+                index: true,
+                element: <SettingsPage />,
+              },
+              {
+                path: 'app',
+                element: <ProjectPlanPage />,
+              },
+              {
+                path: 'shop',
+                element: <SettingConfig />,
               },
             ],
           },
+          // {
+          //   path: 'settings',
+          //   children: [
+          //     {
+          //       index:true,
+          //       element: <SettingsPage />,
+          //       // element: (
+          //       //   <ProtectedRoute
+          //       //     page={<SettingsPage />}
+          //       //     condition={ALL_PERMISSIONS.storeSetting.viewSettings}
+          //       //   />
+          //       // ),
+          //       children: [
+          //         {
+          //           index: true,
+          //           path: 'app',
+          //           // element: (
+          //           //   <ProtectedRoute
+          //           //     page={<SettingsApp />}
+          //           //     condition={ALL_PERMISSIONS.storeSetting.viewSettings}
+          //           //   />
+          //           // ),
+          //           element: <SettingsApp />,
+          //         },
+          //         {
+          //           path: 'shop',
+          //           // element: (
+          //           //   <ProtectedRoute
+          //           //     page={<SettingsShopScheduling />}
+          //           //     condition={ALL_PERMISSIONS.storeSetting.viewSettings}
+          //           //   />
+          //           // ),
+          //           element: <SettingsShopScheduling />,
+          //         },
+          //         {
+          //           path: 'config',
+          //           // element: (
+          //           //   <ProtectedRoute
+          //           //     page={<SettingConfig />}
+          //           //     condition={ALL_PERMISSIONS.storeSetting.viewSettings}
+          //           //   />
+          //           // ),
+          //           element: <SettingConfig />,
+          //         },
+          //       ],
+          //     },
+          //   ],
+          // },
           {
             path: 'profile',
             children: [
