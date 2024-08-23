@@ -69,7 +69,7 @@ function ProjectPlanDayDetailsPopup({
         style: { maxWidth: '100%', maxHeight: 'auto' },
       }}
     >
-      <div className="Content px-5">
+      <div className="Content thin-scrollbar px-5">
         <div className="mt-2">
           <h1 className="my-4 text-center text-lg font-bold">
             {' '}
@@ -109,7 +109,7 @@ function ProjectPlanDayDetailsPopup({
                   })}
               </tr>
             </thead>
-            <tbody>
+            <tbody className="thin-scrollbar">
               {day &&
                 day.data &&
                 day.data.map((item: any, index: number) => {
@@ -118,22 +118,24 @@ function ProjectPlanDayDetailsPopup({
                   );
 
                   return (
-                    <tr key={index}>
+                    <tr className="thin-scrollbar" key={index}>
                       <td>{item.stage ? item.stage : '--'}</td>
                       <td>{item.room ? item.room : '--'}</td>
                       <td>
-                        {item.activity
-                          ? item.activity
-                              .split(',')
-                              .map((activity: any, activityIndex: number) => (
-                                <span
-                                  key={activityIndex}
-                                  className="me-2 rounded border border-blue-300 bg-primary px-2.5 py-0.5 text-xs font-medium text-foreground dark:bg-gray-700 dark:text-blue-300"
-                                >
-                                  {activity}
-                                </span>
-                              ))
-                          : '--'}
+                        <div className="flex items-center truncate ">
+                          {item.activity
+                            ? item.activity
+                                .split(',')
+                                .map((activity: any, activityIndex: number) => (
+                                  <span
+                                    key={activityIndex}
+                                    className="me-2 rounded border border-blue-300 bg-primary px-2.5 py-0.5 text-xs font-medium text-foreground dark:bg-gray-700 dark:text-blue-300"
+                                  >
+                                    {activity}
+                                  </span>
+                                ))
+                            : '--'}
+                        </div>
                       </td>
                       <td>
                         <BorderLinearProgress
