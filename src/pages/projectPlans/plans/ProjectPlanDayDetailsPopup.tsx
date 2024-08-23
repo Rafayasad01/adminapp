@@ -31,6 +31,10 @@ type Props = {
   day?: Day | null;
 };
 
+const formatHeader = (key: string) => {
+  return key.replace(/([a-z])([A-Z])/g, '$1 $2');
+};
+
 const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
   height: 10,
   borderRadius: 5,
@@ -43,6 +47,8 @@ const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'light' ? '#1a90ff' : '#308fe8',
   },
 }));
+
+const fixedColumns = ['stage', 'room', 'activity', 'progress', 'remarks'];
 
 function ProjectPlanDayDetailsPopup({
   openFormDialog,
@@ -80,17 +86,37 @@ function ProjectPlanDayDetailsPopup({
           <table className="table-border table-auto">
             <thead>
               <tr>
-                <th>Stage</th>
-                <th>Room</th>
-                <th>Activity</th>
-                <th>Completed</th>
-                <th>Remarks</th>
+                {/* Render fixed columns */}
+                {fixedColumns.map((col) => (
+                  <th key={col}>
+                    {formatHeader(col.charAt(0).toUpperCase() + col.slice(1))}
+                  </th>
+                ))}
+                {/* Render additional columns dynamically */}
+                {day &&
+                  day.data &&
+                  Object.keys(day.data[0]).map((key) => {
+                    if (!fixedColumns.includes(key)) {
+                      return (
+                        <th key={key}>
+                          {formatHeader(
+                            key.charAt(0).toUpperCase() + key.slice(1)
+                          )}
+                        </th>
+                      );
+                    }
+                    return null;
+                  })}
               </tr>
             </thead>
             <tbody>
               {day &&
                 day.data &&
-                day.data.map((item: DayActivity, index: number) => {
+                day.data.map((item: any, index: number) => {
+                  const additionalColumns = Object.keys(item).filter(
+                    (key) => !fixedColumns.includes(key)
+                  );
+
                   return (
                     <tr key={index}>
                       <td>{item.stage ? item.stage : '--'}</td>
@@ -99,16 +125,14 @@ function ProjectPlanDayDetailsPopup({
                         {item.activity
                           ? item.activity
                               .split(',')
-                              .map((activity, activityIndex) => {
-                                return (
-                                  <span
-                                    key={activityIndex}
-                                    className="me-2 rounded border border-blue-300 bg-primary px-2.5 py-0.5 text-xs font-medium text-foreground dark:bg-gray-700 dark:text-blue-300"
-                                  >
-                                    {activity}
-                                  </span>
-                                );
-                              })
+                              .map((activity: any, activityIndex: number) => (
+                                <span
+                                  key={activityIndex}
+                                  className="me-2 rounded border border-blue-300 bg-primary px-2.5 py-0.5 text-xs font-medium text-foreground dark:bg-gray-700 dark:text-blue-300"
+                                >
+                                  {activity}
+                                </span>
+                              ))
                           : '--'}
                       </td>
                       <td>
@@ -119,6 +143,10 @@ function ProjectPlanDayDetailsPopup({
                         />
                       </td>
                       <td>{item.remarks ? item.remarks : '--'}</td>
+                      {/* Render additional columns dynamically */}
+                      {additionalColumns.map((key: any) => (
+                        <td key={key}>{item[key] ? item[key] : '--'}</td>
+                      ))}
                     </tr>
                   );
                 })}
