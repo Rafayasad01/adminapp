@@ -649,7 +649,7 @@ function Sidebar() {
                 />
               </Button>
             </NavLink>
-            <NavLink to="/admin/dashboard/settings" end>
+            <NavLink to="/admin/dashboard/ne-admin-users" end>
               <Button className="btn-flips my-[10px] h-[50px] min-w-[50px] rounded-[28px] bg-transparent hover:bg-[#F27426]">
                 <img
                   src={assets.images.startegyIcon}
@@ -658,13 +658,15 @@ function Sidebar() {
                 />
               </Button>
             </NavLink>
-            {/* <Button className="btn-flips my-[10px] h-[56px] min-w-[56px] rounded-[28px] bg-transparent hover:bg-[#F27426]">
-              <img
-                src={assets.images.busnessIcon}
-                alt="icon"
-                className="w-[24px]"
-              />
-            </Button> */}
+            <NavLink to="/admin/dashboard/ne-role" end>
+              <Button className="btn-flips my-[10px] h-[56px] min-w-[56px] rounded-[28px] bg-transparent hover:bg-[#F27426]">
+                <img
+                  src={assets.images.busnessIcon}
+                  alt="icon"
+                  className="w-[24px]"
+                />
+              </Button>
+            </NavLink>
           </div>
         </div>
         <div className="basis-[20%]">

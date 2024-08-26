@@ -58,7 +58,9 @@ function VideoPage({ projectId }: any) {
   );
 
   const handleFormClickOpen = () => {
-    if (listingRolePermission(dataRole, ALL_PERMISSIONS.storePlans.add)) {
+    if (
+      listingRolePermission(dataRole, ALL_PERMISSIONS.storePlans.addVideoPlans)
+    ) {
       setOpenFormDialog(true);
     } else {
       setIsNotify(true);
@@ -99,7 +101,9 @@ function VideoPage({ projectId }: any) {
   // };
 
   useEffect(() => {
-    if (listingRolePermission(dataRole, ALL_PERMISSIONS.storePlans.viewPlans)) {
+    if (
+      listingRolePermission(dataRole, ALL_PERMISSIONS.storePlans.viewVideoPlans)
+    ) {
       storeAttachmentService
         .getListProjectAttachmentService('video', search, page, rowsPerPage)
         .then((item: any) => {
@@ -115,6 +119,8 @@ function VideoPage({ projectId }: any) {
             type: 'error',
           });
         });
+    } else {
+      setIsLoader(false);
     }
   }, [null]);
 
@@ -282,7 +288,12 @@ function VideoPage({ projectId }: any) {
 
   const manuHandler = (option: string) => {
     if (option === 'Edit') {
-      if (listingRolePermission(dataRole, ALL_PERMISSIONS.storePlans.edit)) {
+      if (
+        listingRolePermission(
+          dataRole,
+          ALL_PERMISSIONS.storePlans.editVideoPlans
+        )
+      ) {
         const editFormDatas = list?.find(
           (el: any) => el.id === actionMenuItemid
         );
@@ -297,7 +308,12 @@ function VideoPage({ projectId }: any) {
         });
       }
     } else if (option === 'Delete') {
-      if (listingRolePermission(dataRole, ALL_PERMISSIONS.storePlans.delete)) {
+      if (
+        listingRolePermission(
+          dataRole,
+          ALL_PERMISSIONS.storePlans.deleteVideoPlans
+        )
+      ) {
         setCancelDialogOpen(true);
       } else {
         setIsNotify(true);

@@ -1,6 +1,6 @@
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import TopBar from '../../components/common/TopBar';
 import { useAppSelector } from '../../redux/redux-hooks';
@@ -20,6 +20,27 @@ function ProjectAttachment() {
   const handleTabChange = (event: any, newValue: any) => {
     setSelectedTab(newValue);
   };
+
+  useEffect(() => {
+    if (
+      listingRolePermission(dataRole, ALL_PERMISSIONS.storePlans.viewVideoPlans)
+    ) {
+      setSelectedTab('VIDEOS');
+    }
+    if (
+      listingRolePermission(
+        dataRole,
+        ALL_PERMISSIONS.storePlans.viewImagesPlans
+      )
+    ) {
+      setSelectedTab('IMAGES');
+    }
+    if (
+      listingRolePermission(dataRole, ALL_PERMISSIONS.storePlans.viewDocsPlans)
+    ) {
+      setSelectedTab('DOCS');
+    }
+  }, []);
   return (
     <>
       <TopBar title="Attachments" />
@@ -45,30 +66,45 @@ function ProjectAttachment() {
               value={selectedTab}
               onChange={handleTabChange}
             >
-              <Tab
-                hidden={listingRolePermission(
-                  dataRole,
-                  !!ALL_PERMISSIONS.storePlans.viewPlans
-                )}
-                label="project videos"
-                value="VIDEOS"
-              />
-              <Tab
-                hidden={listingRolePermission(
-                  dataRole,
-                  !!ALL_PERMISSIONS.storePlans.viewPlans
-                )}
-                label="3D-renders / blue print"
-                value="IMAGES"
-              />
-              <Tab
-                hidden={listingRolePermission(
-                  dataRole,
-                  !!ALL_PERMISSIONS.storePlans.viewPlans
-                )}
-                label="approval and reports"
-                value="DOCS"
-              />
+              {listingRolePermission(
+                dataRole,
+                ALL_PERMISSIONS.storePlans.viewVideoPlans
+              ) && (
+                <Tab
+                  hidden={listingRolePermission(
+                    dataRole,
+                    !!ALL_PERMISSIONS.storePlans.viewVideoPlans
+                  )}
+                  label="project videos"
+                  value="VIDEOS"
+                />
+              )}
+              {listingRolePermission(
+                dataRole,
+                ALL_PERMISSIONS.storePlans.viewImagesPlans
+              ) && (
+                <Tab
+                  hidden={listingRolePermission(
+                    dataRole,
+                    !!ALL_PERMISSIONS.storePlans.viewImagesPlans
+                  )}
+                  label="3D-renders / blue print"
+                  value="IMAGES"
+                />
+              )}
+              {listingRolePermission(
+                dataRole,
+                ALL_PERMISSIONS.storePlans.viewDocsPlans
+              ) && (
+                <Tab
+                  hidden={listingRolePermission(
+                    dataRole,
+                    !!ALL_PERMISSIONS.storePlans.viewDocsPlans
+                  )}
+                  label="approval and reports"
+                  value="DOCS"
+                />
+              )}
             </Tabs>
             {selectedTab === 'VIDEOS' && (
               <VideoPage projectId={projectId ?? null} />

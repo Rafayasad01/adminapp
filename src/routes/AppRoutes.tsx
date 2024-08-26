@@ -83,6 +83,10 @@ import ProjectPage from '../pages/projectPlans/project/ProjectPage';
 import ProjectPlanPage from '../pages/projectPlans/plans/ProjectPlanPage';
 import ProjectAttachment from '../pages/projectAttachments';
 import UsersPage from '../pages/projectUsers/UsersPage';
+import AdminUsersPage from '../pages/projectAdminUsers/AdminUsersPage';
+import AddRolePage from '../pages/projectAdminRoles/AddRolePage';
+import EditRolePage from '../pages/projectAdminRoles/EditRolePage';
+import RolesPage from '../pages/projectAdminRoles/RolesPage';
 
 const ProtectedRoute = ({ page, condition }: any) => {
   const canView = CAN('canView', condition);
@@ -1053,6 +1057,44 @@ export const routeObjects: RouteObject[] = [
               {
                 index: true,
                 element: <UsersPage />,
+              },
+            ],
+          },
+          {
+            path: 'ne-admin-users',
+            children: [
+              {
+                index: true,
+                // element: (
+                //   <ProtectedRoute
+                //     page={<EmployeePage />}
+                //     condition={ALL_PERMISSIONS.storeUser.viewUserEmployee}
+                //   />
+                // ),
+                element: <AdminUsersPage />,
+              },
+            ],
+          },
+          {
+            path: 'ne-role',
+            children: [
+              {
+                index: true,
+                // element: (
+                //   <ProtectedRoute
+                //     page={<EmployeePage />}
+                //     condition={ALL_PERMISSIONS.storeUser.viewUserEmployee}
+                //   />
+                // ),
+                element: <RolesPage />,
+              },
+              {
+                path: 'add',
+                element: <AddRolePage />,
+              },
+              {
+                path: 'edit/:id',
+                element: <EditRolePage />,
               },
             ],
           },
