@@ -24,7 +24,12 @@ function App() {
 
   const getDomain = () => {
     const domain = window.location.hostname;
+    const domainArr = domain.split('.');
+    if (domainArr.length > 1) {
+      return domain.split('.')[1];
+    }
     return domain.split('.')[0];
+
     // return 'asdasdsa';
   };
 
