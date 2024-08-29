@@ -85,6 +85,7 @@ function ProductPage() {
   );
   const [isModalImage, setIsModalImage] = useState(false);
   const [modalImage, setModalImage] = useState('');
+  const [price, setPrice] = useState();
 
   const handleFormClickOpen = () => {
     if (
@@ -119,6 +120,8 @@ function ProductPage() {
             type: 'error',
           });
         });
+    } else {
+      setIsLoader(false);
     }
   }, [null]);
 
@@ -303,9 +306,17 @@ function ProductPage() {
     }
   };
 
+  const handleOnColorClick = (data: any) => {
+    const priceTax = data.price;
+    setPrice(priceTax);
+  };
+
   const handleColors = (colorsArr: any) => {
-    const handleOnColorClick = (data: any) => console.log('onColorClick', data);
-    // console.log('🚀 ~ list?.map ~ colors:', colorsArr);
+    const temp: any =
+      Number(parseFloat(colorsArr[0].price)) +
+      (Number(parseFloat(colorsArr[0].price)) *
+        Number(parseFloat(colorsArr[0].tax))) /
+        100;
     return (
       <div>
         <div className="">
@@ -317,7 +328,7 @@ function ProductPage() {
         </div>
         <div className="">
           <span className="text-[10px]">
-            {formatCurrency(2000)} (inclusive tax)
+            {formatCurrency(price ?? temp)} (inclusive tax)
           </span>
         </div>
       </div>
@@ -435,8 +446,7 @@ function ProductPage() {
                           {/* {item.productCustomization?.length > 0
                             ? item.productCustomization?.map(
                                 (el: any, i: number) => {
-                                  const colors = [];
-                                  colors.push(el.color);
+                                  const colors = [];s
                                   console.log(
                                     '🚀 ~ list?.map ~ colors:',
                                     colors
