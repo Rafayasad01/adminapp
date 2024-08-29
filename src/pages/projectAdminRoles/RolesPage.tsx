@@ -18,10 +18,19 @@ import Notify from '../../components/common/Notify';
 import TopBar from '../../components/common/TopBar';
 import { useAppSelector } from '../../redux/redux-hooks';
 import Service from '../../services/adminapp/adminRolePermission';
-import { TEXT_STORE_KEY, setText } from '../../utils/constants';
+import {
+  ALL_PERMISSIONS,
+  NOT_AUTHORIZED_MESSAGE,
+  TEXT_STORE_KEY,
+  setText,
+} from '../../utils/constants';
+import { listingRolePermission } from '../../utils/helper';
 
 function SuperAdminRolePermissionsPage() {
   const authState: any = useAppSelector((state) => state?.authState);
+  const dataRole = useAppSelector(
+    (state: any) => state?.persistedReducer?.roleState?.role?.permissions
+  );
   const navigate = useNavigate();
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(0);
@@ -31,10 +40,17 @@ function SuperAdminRolePermissionsPage() {
   const [isLoader, setIsLoader] = React.useState(false);
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
-  const [emptyVariable] = useState(null);
 
   const handleFormClickOpen = () => {
-    navigate('./add');
+    if (listingRolePermission(dataRole, ALL_PERMISSIONS.storePlans.addRole)) {
+      navigate('./add');
+    } else {
+      setIsNotify(true);
+      setNotifyMessage({
+        text: NOT_AUTHORIZED_MESSAGE,
+        type: 'warning',
+      });
+    }
   };
 
   const handleClickSearch = (event: any) => {
@@ -95,57 +111,80 @@ function SuperAdminRolePermissionsPage() {
   };
 
   useEffect(() => {
-    if (TEXT_STORE_KEY) {
-      setIsNotify(true);
-      setNotifyMessage({
-        text: TEXT_STORE_KEY,
-        type: 'success',
-      });
-      setText('');
-    } else {
-      setIsLoader(true);
-    }
-    Service.getListService(page, rowsPerPage)
-      .then((item: any) => {
-        if (item.data.success) {
-          // console.log("DAATA", item.data.data);
-          setIsLoader(false);
-          setList(item.data.data.list);
-          setTotal(item.data.data.total);
-        }
-      })
-      .catch((error) => {
-        setIsLoader(false);
+    if (listingRolePermission(dataRole, ALL_PERMISSIONS.storePlans.viewRole)) {
+      if (TEXT_STORE_KEY) {
         setIsNotify(true);
         setNotifyMessage({
-          text: error.message,
+          text: TEXT_STORE_KEY,
           type: 'success',
         });
-        // console.log('error::::::::', error);
+        setText('');
+      } else {
+        setIsLoader(true);
+      }
+      Service.getListService(page, rowsPerPage)
+        .then((item: any) => {
+          if (item.data.success) {
+            // console.log("DAATA", item.data.data);
+            setIsLoader(false);
+            setList(item.data.data.list);
+            setTotal(item.data.data.total);
+          }
+        })
+        .catch((error) => {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: error.message,
+            type: 'success',
+          });
+        });
+    } else {
+      setIsNotify(true);
+      setNotifyMessage({
+        text: NOT_AUTHORIZED_MESSAGE,
+        type: 'warning',
       });
-  }, [emptyVariable]);
+    }
+  }, []);
 
   const editHandler = (id: string) => {
-    navigate(`./edit/${id}`);
+    if (listingRolePermission(dataRole, ALL_PERMISSIONS.storePlans.editRole)) {
+      navigate(`./edit/${id}`);
+    } else {
+      setIsNotify(true);
+      setNotifyMessage({
+        text: NOT_AUTHORIZED_MESSAGE,
+        type: 'warning',
+      });
+    }
   };
 
   const handleSwitchChange = (event: any, id: string) => {
-    const data = {
-      is_active: event.target.checked,
-      updated_by: authState.user.id,
-    };
-    Service.updateStatus(id, data).then((updateItem) => {
-      if (updateItem.data.success) {
-        setList((newArr: any) => {
-          return newArr.map((item: any) => {
-            if (item.id === id) {
-              item.isActive = updateItem.data.data.isActive;
-            }
-            return { ...item };
+    if (listingRolePermission(dataRole, ALL_PERMISSIONS.storePlans.editRole)) {
+      const data = {
+        is_active: event.target.checked,
+        updated_by: authState.user.id,
+      };
+      Service.updateStatus(id, data).then((updateItem) => {
+        if (updateItem.data.success) {
+          setList((newArr: any) => {
+            return newArr.map((item: any) => {
+              if (item.id === id) {
+                item.isActive = updateItem.data.data.isActive;
+              }
+              return { ...item };
+            });
           });
-        });
-      }
-    });
+        }
+      });
+    } else {
+      setIsNotify(true);
+      setNotifyMessage({
+        text: NOT_AUTHORIZED_MESSAGE,
+        type: 'warning',
+      });
+    }
   };
 
   return isLoader ? (

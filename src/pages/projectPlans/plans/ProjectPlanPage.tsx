@@ -54,7 +54,9 @@ function ProjectPlanPage() {
   );
 
   const handleFormClickOpen = () => {
-    if (listingRolePermission(dataRole, ALL_PERMISSIONS.storePlans.add)) {
+    if (
+      listingRolePermission(dataRole, ALL_PERMISSIONS.storePlans.addProjectPlan)
+    ) {
       setOpenFormDialog(true);
     } else {
       setIsNotify(true);
@@ -67,7 +69,10 @@ function ProjectPlanPage() {
 
   const handleUpdatePlanClick = () => {
     if (
-      listingRolePermission(dataRole, ALL_PERMISSIONS.storePlans.edit || true)
+      listingRolePermission(
+        dataRole,
+        ALL_PERMISSIONS.storePlans.editProjectPlan
+      )
     ) {
       if (list?.length > 0) {
         setCancelDialogOpen(true);
@@ -106,7 +111,12 @@ function ProjectPlanPage() {
   };
 
   useEffect(() => {
-    if (listingRolePermission(dataRole, ALL_PERMISSIONS.storePlans.viewPlans)) {
+    if (
+      listingRolePermission(
+        dataRole,
+        ALL_PERMISSIONS.storePlans.viewProjectPlans
+      )
+    ) {
       getProjectPlans(projectId ?? '');
     }
   }, [null]);

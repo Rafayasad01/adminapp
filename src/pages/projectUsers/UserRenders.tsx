@@ -69,7 +69,10 @@ function UserRendersPage({
     // setIsLoader(true);
     if (option === 'Edit') {
       if (
-        listingRolePermission(dataRole, ALL_PERMISSIONS.storePlans.viewPlans)
+        listingRolePermission(
+          dataRole,
+          ALL_PERMISSIONS.storePlans.editProjectUsers
+        )
       ) {
         appUserService.appUserEdit(actionMenuItemid?.id).then((item: any) => {
           if (item.data.success) {
@@ -92,19 +95,12 @@ function UserRendersPage({
           type: 'warning',
         });
       }
-    }
-    // else if (option === 'Address') {
-    //   CheckRolePermission(
-    //     ALL_PERMISSIONS.storePlans.viewPlans,
-    //     dataRole,
-    //     navigate,
-    //     `address/${actionMenuItemid?.id}`
-    //   );
-    //   // navigate(`address/${actionMenuItemid?.id}`);
-    // }
-    else if (option === 'Delete') {
+    } else if (option === 'Delete') {
       if (
-        listingRolePermission(dataRole, ALL_PERMISSIONS.storePlans.viewPlans)
+        listingRolePermission(
+          dataRole,
+          ALL_PERMISSIONS.storePlans.deleteProjectUsers
+        )
       ) {
         setCancelDialogOpen(true);
       } else {
@@ -115,21 +111,15 @@ function UserRendersPage({
         });
       }
     }
-    // else if (option === 'Detail') {
-    //   CheckRolePermission(
-    //     ALL_PERMISSIONS.storePlans.viewPlans,
-    //     dataRole,
-    //     navigate,
-    //     `../detail/${actionMenuItemid?.id}`
-    //   );
-    //   // navigate(`detail/${actionMenuItemid?.id}`);
-    // } else if (option === 'Reward History') {
-    //   navigate(`../reward/history/${actionMenuItemid?.id}`);
-    // }
   };
 
   const handleSwitchChange = (event: any, id: string) => {
-    if (listingRolePermission(dataRole, ALL_PERMISSIONS.storePlans.viewPlans)) {
+    if (
+      listingRolePermission(
+        dataRole,
+        ALL_PERMISSIONS.storePlans.editProjectUsers
+      )
+    ) {
       setIsLoader(true);
       const data = {
         id,

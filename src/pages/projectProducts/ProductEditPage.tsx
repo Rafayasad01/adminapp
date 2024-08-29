@@ -5,7 +5,7 @@ import Input from '@mui/material/Input';
 import React, { useEffect, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 // import TextField from '@mui/material/TextField';
-import '../../../assets/css/PopupStyle.css';
+import '../../assets/css/PopupStyle.css';
 import ThemeProvider from '@mui/material/styles/ThemeProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
@@ -13,7 +13,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import dayjs from 'dayjs';
 import FormControl from '@mui/material/FormControl';
 import { createTheme } from '@mui/material';
-import storeAppUsers from '../../../services/adminapp/adminAppUser';
+import storeAppUsers from '../../services/adminapp/adminAppUser';
 import {
   CONSTRUCTION_TYPE,
   INVALID_CHAR,
@@ -21,33 +21,17 @@ import {
   PATTERN,
   PROJECT_PLAN_TYPE,
   VALIDATE_NON_NEGATIVE_NUM,
-} from '../../../utils/constants';
-import { Project } from '../../../interfaces/projectPlan.interface';
-import ErrorSpanBox from '../../../components/common/ErrorSpanBox';
-import CustomDropDown from '../../../components/common/CustomDropDown';
-import { useAppSelector } from '../../../redux/redux-hooks';
+} from '../../utils/constants';
+import { Project } from '../../interfaces/projectPlan.interface';
+import ErrorSpanBox from '../../components/common/ErrorSpanBox';
+import CustomDropDown from '../../components/common/CustomDropDown';
+import { useAppSelector } from '../../redux/redux-hooks';
 
-type Props = {
-  openFormDialog: boolean;
-  setOpenFormDialog: React.Dispatch<React.SetStateAction<boolean>>;
-  callback: (...args: any[]) => any;
-  setIsNotify: any;
-  setNotifyMessage: any;
-  formData: any;
-};
-
-function ProjectEditPopup({
-  openFormDialog,
-  setOpenFormDialog,
-  callback,
-  formData,
-}: // setIsNotify,
-// setNotifyMessage,
-Props) {
+function ProductEditPopup() {
   const {
     register,
     handleSubmit,
-    setValue,
+    // setValue,
     control,
     // watch,
     formState: { errors },
@@ -64,27 +48,28 @@ Props) {
   });
 
   const onSubmit = (data: any) => {
-    const obj = {
-      ...data,
-      startDate: dayjs(data.startDate).utc().format('YYYY-MM-DD HH:mm:ss'),
-      endDate: dayjs(data.endDate).utc().format('YYYY-MM-DD HH:mm:ss'),
-    };
+    console.log('🚀 ~ onSubmit ~ data:', data);
+    // const obj = {
+    //   ...data,
+    //   startDate: dayjs(data.startDate).utc().format('YYYY-MM-DD HH:mm:ss'),
+    //   endDate: dayjs(data.endDate).utc().format('YYYY-MM-DD HH:mm:ss'),
+    // };
     // console.log('🚀 ~ onSubmit ~ data:', obj);
-    callback(obj);
+    // callback(obj);
   };
 
   useEffect(() => {
-    if (formData) {
-      setValue('startDate', dayjs(formData.startDate));
-      setValue('endDate', dayjs(formData.endDate));
-    }
+    // if (formData) {
+    //   setValue('startDate', dayjs(formData.startDate));
+    //   setValue('endDate', dayjs(formData.endDate));
+    // }
     storeAppUsers.usersLov(authState.user.tenant).then((item: any) => {
       setUsers(item.data.data.list);
     });
   }, []);
 
   const handleFormClose = () => {
-    setOpenFormDialog(false);
+    // setOpenFormDialog(false);
   };
 
   const handleDateChange = (date: any, field: any) => {
@@ -94,7 +79,7 @@ Props) {
 
   return (
     <Dialog
-      open={openFormDialog}
+      open={false}
       onClose={handleFormClose}
       PaperProps={{
         className: 'Dialog',
@@ -113,7 +98,7 @@ Props) {
                 <Input
                   className="FormInput"
                   {...register('name', {
-                    value: formData?.name,
+                    // value: formData?.name,
                     required: true,
                     pattern: PATTERN.CHAR_SPACE_DASH,
                     validate: (value) => value.length <= 150,
@@ -140,7 +125,7 @@ Props) {
                   control={control}
                   error={errors}
                   register={register}
-                  options={{ roles: PROJECT_PLAN_TYPE, role: formData?.type }}
+                  options={{ roles: PROJECT_PLAN_TYPE }}
                   customClassInputTitle="font-bold"
                   inputTitle="Project Type"
                   defaultValue="Select type"
@@ -221,7 +206,7 @@ Props) {
                   control={control}
                   error={errors}
                   register={register}
-                  options={{ roles: users, role: formData.clientName }}
+                  options={{ roles: users }}
                   customClassInputTitle="font-bold"
                   inputTitle="Client Name"
                   defaultValue="Select Client"
@@ -236,7 +221,7 @@ Props) {
                   register={register}
                   options={{
                     roles: CONSTRUCTION_TYPE,
-                    role: formData.constructionType,
+                    // role: formData.constructionType,
                   }}
                   customClassInputTitle="font-bold"
                   inputTitle="Construction Type"
@@ -250,7 +235,7 @@ Props) {
                 <Input
                   className="FormInput"
                   {...register('supervisorName', {
-                    value: formData?.supervisorName,
+                    // value: formData?.supervisorName,
                     required: true,
                     pattern: PATTERN.CHAR_SPACE_DASH,
                     validate: (value) => value.length <= 150,
@@ -278,7 +263,7 @@ Props) {
                   type="number"
                   placeholder="Enter Amount"
                   {...register('budget', {
-                    value: formData?.budget,
+                    // value: formData?.budget,
                     required: 'Amount is required in numbers',
                     validate: (value: any) => VALIDATE_NON_NEGATIVE_NUM(value),
                     maxLength: {
@@ -302,7 +287,7 @@ Props) {
                   type="number"
                   placeholder="Enter Amount"
                   {...register('totalPaid', {
-                    value: formData.totalPaid,
+                    // value: formData.totalPaid,
                     // required: 'Amount is required in numbers',
                     validate: (value: any) => VALIDATE_NON_NEGATIVE_NUM(value),
                     maxLength: {
@@ -324,7 +309,7 @@ Props) {
                   type="number"
                   placeholder="Enter Amount"
                   {...register('dueAmount', {
-                    value: formData.dueAmount,
+                    // value: formData.dueAmount,
                     // required: 'Amount is required in numbers',
                     validate: (value: any) => VALIDATE_NON_NEGATIVE_NUM(value),
                     maxLength: {
@@ -368,4 +353,4 @@ Props) {
   );
 }
 
-export default ProjectEditPopup;
+export default ProductEditPopup;

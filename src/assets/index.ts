@@ -86,6 +86,7 @@ import excel from './images/excel.png';
 import avatarUser3 from './images/user3.svg';
 import userPermissionIcon from './images/userPermission.svg';
 import wash from './images/wash.svg';
+import box from './images/box.png';
 
 const assets = {
   images: {
@@ -163,6 +164,7 @@ const assets = {
     pdf,
     word,
     excel,
+    box,
   },
   tempImages: {
     shirt,

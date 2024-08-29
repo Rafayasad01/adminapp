@@ -87,6 +87,9 @@ import AdminUsersPage from '../pages/projectAdminUsers/AdminUsersPage';
 import AddRolePage from '../pages/projectAdminRoles/AddRolePage';
 import EditRolePage from '../pages/projectAdminRoles/EditRolePage';
 import RolesPage from '../pages/projectAdminRoles/RolesPage';
+import ProductPage from '../pages/projectProducts/ProductPage';
+import ProductAddPopup from '../pages/projectProducts/ProductAddPage';
+import ProductEditPopup from '../pages/projectProducts/ProductEditPage';
 
 const ProtectedRoute = ({ page, condition }: any) => {
   const canView = CAN('canView', condition);
@@ -1095,6 +1098,29 @@ export const routeObjects: RouteObject[] = [
               {
                 path: 'edit/:id',
                 element: <EditRolePage />,
+              },
+            ],
+          },
+          {
+            path: 'products',
+            children: [
+              {
+                index: true,
+                // element: (
+                //   <ProtectedRoute
+                //     page={<EmployeePage />}
+                //     condition={ALL_PERMISSIONS.storeUser.viewUserEmployee}
+                //   />
+                // ),
+                element: <ProductPage />,
+              },
+              {
+                path: 'add',
+                element: <ProductAddPopup />,
+              },
+              {
+                path: 'edit/:id',
+                element: <ProductEditPopup />,
               },
             ],
           },

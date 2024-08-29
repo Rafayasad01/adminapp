@@ -22,42 +22,37 @@ import { useNavigate } from 'react-router-dom';
 // import assets from '../../assets';
 import dayjs from 'dayjs';
 import Switch from '@mui/material/Switch';
-import ActionMenu from '../../../components/common/ActionMenu';
-import CustomText from '../../../components/common/CustomText';
-import Loader from '../../../components/common/Loader';
-import Notify from '../../../components/common/Notify';
-import TopBar from '../../../components/common/TopBar';
-import { useAppSelector } from '../../../redux/redux-hooks';
-import storeProjectPlanService from '../../../services/adminapp/adminProjectPlans';
-import storeAppUsers from '../../../services/adminapp/adminAppUser';
+import ActionMenu from '../../components/common/ActionMenu';
+import CustomText from '../../components/common/CustomText';
+import Loader from '../../components/common/Loader';
+import Notify from '../../components/common/Notify';
+import TopBar from '../../components/common/TopBar';
+import { useAppSelector } from '../../redux/redux-hooks';
+import storeProjectPlanService from '../../services/adminapp/adminProjectPlans';
+import storeProjectProductService from '../../services/adminapp/adminProjectProducts';
+// import storeAppUsers from '../../services/adminapp/adminAppUser';
 import {
   ALL_PERMISSIONS,
-  CONSTRUCTION_TYPE,
+  // CONSTRUCTION_TYPE,
   NOT_AUTHORIZED_MESSAGE,
-} from '../../../utils/constants';
+} from '../../utils/constants';
 import {
   CheckRolePermission,
   formatCurrency,
   // CheckRolePermission,
   listingRolePermission,
-} from '../../../utils/helper';
-// import ServiceCatCreatePopup from './ServiceCatCreatePopup';
-// import ServiceCatEditPopup from './ServiceCatEditPopup';
-import PermissionPopup from '../../../utils/PermissionPopup';
-// import ProjectPlanAddPopup from './ProjectAddPopup';
-import ProjectPlanEditPopup from './ProjectEditPopup';
-import ProjectAddPopup from './ProjectAddPopup';
-// import Switch from '@mui/material/Switch';
+} from '../../utils/helper';
+import PermissionPopup from '../../utils/PermissionPopup';
+// import ProjectPlanEditPopup from './ProductEditPage';
+// import ProjectAddPopup from './ProductAddPage';
+import ColorRowWithTooltips from '../../components/common/ColorRowWithTooltips';
 
-// import CategoriesCreatePopup from './CategoriesCreatePopup';
-// import CategoriesEditPopup from './CategoriesEditPopup';
-
-function ProjectPage() {
+function ProductPage() {
+  const navigate = useNavigate();
   const authState: any = useAppSelector((state) => state?.authState);
   const dataRole = useAppSelector(
     (state) => state?.persistedReducer?.roleState?.role?.permissions
   );
-  const navigate = useNavigate();
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(0);
   const [total, setTotal] = useState(0);
@@ -70,16 +65,18 @@ function ProjectPage() {
       remarks: 'completed',
     },
   ]);
-  const [editFormData, setEditFormData] = useState<any>(null);
+  const [
+    // editFormData,
+    setEditFormData,
+  ] = useState<any>(null);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [actionMenuItemid, setActionMenuItemid] = React.useState('');
   const [isLoader, setIsLoader] = React.useState(true);
   const [actionMenuAnchorEl, setActionMenuAnchorEl] =
     useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
-  const actionMenuOptions = ['Plans', 'Attachments', 'Edit', 'Delete'];
-  const [openFormDialog, setOpenFormDialog] = useState(false);
-  const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
+  const actionMenuOptions = ['Details', 'Edit', 'Delete'];
+  // const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
   const [cancelDialogOpen, setCancelDialogOpen] = useState<boolean>(false);
@@ -88,13 +85,12 @@ function ProjectPage() {
   );
   const [isModalImage, setIsModalImage] = useState(false);
   const [modalImage, setModalImage] = useState('');
-  const [users, setUsers] = useState<any>([]);
 
   const handleFormClickOpen = () => {
     if (
       listingRolePermission(dataRole, ALL_PERMISSIONS.storePlans.addProjects)
     ) {
-      setOpenFormDialog(true);
+      navigate(`./add`);
     } else {
       setIsNotify(true);
       setNotifyMessage({
@@ -108,20 +104,8 @@ function ProjectPage() {
     if (
       listingRolePermission(dataRole, ALL_PERMISSIONS.storePlans.viewProjects)
     ) {
-      storeAppUsers.usersLov(authState.user.tenant).then((item: any) => {
-        setUsers(item.data.data.list);
-      });
-    } else {
-      setIsLoader(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (
-      listingRolePermission(dataRole, ALL_PERMISSIONS.storePlans.viewProjects)
-    ) {
-      storeProjectPlanService
-        .getListProjectService(authState.user.tenant, search, page, rowsPerPage)
+      storeProjectProductService
+        .getListProductService(authState.user.tenant, search, page, rowsPerPage)
         .then((item: any) => {
           setIsLoader(false);
           setList(item.data.data.list);
@@ -135,20 +119,8 @@ function ProjectPage() {
             type: 'error',
           });
         });
-    } else {
-      setIsLoader(false);
     }
   }, [null]);
-
-  const handleClientNames: any = (clientId: any) => {
-    return users.find((item: any) => item.id === clientId)?.name;
-  };
-
-  const handleConstructionTypeNames: any = (typeId: any) => {
-    return (
-      CONSTRUCTION_TYPE.find((item: any) => item.id === typeId)?.name ?? '--'
-    );
-  };
 
   const handleClickSearch = (event: any) => {
     if (event.key === 'Enter') {
@@ -255,7 +227,7 @@ function ProjectPage() {
         );
         setActionMenuItemid(editFormDatas.id);
         setEditFormData(editFormDatas);
-        setOpenEditFormDialog(true);
+        // setOpenEditFormDialog(true);
       } else {
         setIsNotify(true);
         setNotifyMessage({
@@ -263,7 +235,7 @@ function ProjectPage() {
           type: 'warning',
         });
       }
-    } else if (option === 'Plans') {
+    } else if (option === 'Details') {
       if (
         listingRolePermission(
           dataRole,
@@ -275,26 +247,6 @@ function ProjectPage() {
           dataRole,
           navigate,
           `./plans/${actionMenuItemid}`
-        );
-      } else {
-        setIsNotify(true);
-        setNotifyMessage({
-          text: NOT_AUTHORIZED_MESSAGE,
-          type: 'warning',
-        });
-      }
-    } else if (option === 'Attachments') {
-      if (
-        listingRolePermission(
-          dataRole,
-          ALL_PERMISSIONS.storePlans.viewProjectAttachments
-        )
-      ) {
-        CheckRolePermission(
-          ALL_PERMISSIONS.storePlans.viewProjectAttachments,
-          dataRole,
-          navigate,
-          `./project-attachments/${actionMenuItemid}`
         );
       } else {
         setIsNotify(true);
@@ -319,87 +271,6 @@ function ProjectPage() {
         });
       }
     }
-  };
-
-  const createFormHandler = (data: any) => {
-    data.tenant = authState.user.tenant;
-    setIsLoader(true);
-    storeProjectPlanService
-      .addProjectService(data)
-      .then((item: any) => {
-        if (item.data.success) {
-          setOpenFormDialog(false);
-          setIsLoader(false);
-          setIsNotify(true);
-          setNotifyMessage({
-            text: item.data.message,
-            type: 'success',
-          });
-          setList([item.data.data, ...list]);
-        } else {
-          setIsLoader(false);
-          setIsNotify(true);
-          setNotifyMessage({
-            text: item.data.message,
-            type: 'error',
-          });
-        }
-      })
-      .catch((err: Error) => {
-        setIsLoader(false);
-        setIsNotify(true);
-        setNotifyMessage({
-          text: err.message,
-          type: 'error',
-        });
-      });
-  };
-
-  const updateFormHandler = (data: any) => {
-    // console.log('🚀 ~ handleUpdatePlan ~ data:', data);
-    setIsLoader(true);
-    storeProjectPlanService
-      .updateProjectService(actionMenuItemid, data)
-      .then((updateItem: any) => {
-        if (updateItem.data.success) {
-          setIsLoader(false);
-          setOpenEditFormDialog(false);
-          setIsNotify(true);
-          setNotifyMessage({
-            text: updateItem.data.message,
-            type: 'success',
-          });
-          for (let i = 0; i < list.length; i += 1) {
-            if (list[i].id === updateItem.data.data.id) {
-              list[i].name = updateItem.data.data.name;
-              list[i].clientName = updateItem.data.data.clientName;
-              list[i].supervisorName = updateItem.data.data.supervisorName;
-              list[i].type = updateItem.data.data.type;
-              list[i].constructionType = updateItem.data.data.constructionType;
-              list[i].budget = updateItem.data.data.budget;
-              list[i].totalPaid = updateItem.data.data.totalPaid;
-              list[i].dueAmount = updateItem.data.data.dueAmount;
-              list[i].startDate = updateItem.data.data.startDate;
-              list[i].endDate = updateItem.data.data.endDate;
-            }
-          }
-        } else {
-          setIsLoader(false);
-          setIsNotify(true);
-          setNotifyMessage({
-            text: updateItem.data.message,
-            type: 'error',
-          });
-        }
-      })
-      .catch((err) => {
-        setIsLoader(false);
-        setIsNotify(true);
-        setNotifyMessage({
-          text: err.message,
-          type: 'error',
-        });
-      });
   };
 
   const handleSwitchChange = (event: any, id: string) => {
@@ -432,15 +303,32 @@ function ProjectPage() {
     }
   };
 
+  const handleColors = (colorsArr: any) => {
+    const handleOnColorClick = (data: any) => console.log('onColorClick', data);
+    // console.log('🚀 ~ list?.map ~ colors:', colorsArr);
+    return (
+      <div>
+        <div className="">
+          <ColorRowWithTooltips
+            onclick={handleOnColorClick}
+            type="array"
+            colors={colorsArr}
+          />
+        </div>
+        <div className="">
+          <span className="text-[10px]">
+            {formatCurrency(2000)} (inclusive tax)
+          </span>
+        </div>
+      </div>
+    );
+    // });
+  };
+
   const closeModal = () => {
     setModalImage('');
     setIsModalImage(false);
   };
-
-  // const randomBadgeColor = (colors: string) => {
-  //   const randomIndex = Math.floor(Math.random() * colors.length);
-  //   return colors[randomIndex];
-  // };
 
   return isLoader ? (
     <Loader />
@@ -457,7 +345,7 @@ function ProjectPage() {
           <div className="grid grid-cols-12 px-4 py-5">
             <div className="col-span-7">
               <span className="font-open-sans text-xl font-semibold text-[#252733]">
-                All Projects
+                All Products
               </span>
             </div>
             <div className="col-span-5">
@@ -507,65 +395,91 @@ function ProjectPage() {
             <table className="table-border table-auto">
               <thead>
                 <tr>
-                  <th>Name</th>
-                  <th className="">Client Name</th>
-                  <th>Budget</th>
-                  <th>Total Paid</th>
-                  <th>Due Amount</th>
-                  <th>Type</th>
-                  <th>Construction Type</th>
-                  <th>Start Date</th>
-                  <th>End Date</th>
+                  <th>Prod. group</th>
+                  <th className="">Prod. name</th>
+                  <th>M. No.</th>
+                  <th>Image</th>
+                  <th className="w-[15%]">Color & prices</th>
+                  <th>item code</th>
+                  <th>BR name</th>
+                  <th>Dimension</th>
+                  <th>Weight</th>
+                  <th>Price w/o & w TAX</th>
+                  <th>Warranty</th>
+                  <th>Stock</th>
                   <th>Created Date</th>
                   <th>&nbsp;</th>
                 </tr>
               </thead>
               <tbody>
                 {list &&
-                  list.map((item: any, index: number) => {
+                  list?.map((item: any, index: number) => {
                     return (
                       <tr key={index}>
-                        <td>{item.name ? item.name : '--'}</td>
+                        <td>{item.productGroup ? item.productGroup : '--'}</td>
+                        <td>{item.productName ? item.productName : '--'}</td>
+                        <td>{item.mobileNumber ? item.mobileNumber : '--'}</td>
                         <td>
-                          {item.clientName
-                            ? handleClientNames(item.clientName)
-                            : '--'}
+                          {item.productImages?.length > 0 ? (
+                            <img
+                              className=""
+                              src={item.productImages[0]}
+                              alt="img"
+                            />
+                          ) : (
+                            '--'
+                          )}
                         </td>
                         <td>
-                          {item.budget ? formatCurrency(item.budget) : '--'}
-                        </td>
-                        <td>
-                          {item.totalPaid
-                            ? formatCurrency(item.totalPaid)
-                            : '--'}
-                        </td>
-                        <td>
-                          {item.dueAmount
-                            ? formatCurrency(item.dueAmount)
-                            : '--'}
-                        </td>
-                        <td>{item.type ? item.type : '--'}</td>
-                        <td>
-                          {item.constructionType &&
-                            handleConstructionTypeNames(item.constructionType)}
-                        </td>
-                        <td>
-                          {dayjs(item.startDate).isValid()
-                            ? dayjs(item.startDate)?.format(
-                                'ddd, MMM DD, YYYY hh:mm:ssA'
+                          {handleColors(item.productCustomization)}
+                          {/* {item.productCustomization?.length > 0
+                            ? item.productCustomization?.map(
+                                (el: any, i: number) => {
+                                  const colors = [];
+                                  colors.push(el.color);
+                                  console.log(
+                                    '🚀 ~ list?.map ~ colors:',
+                                    colors
+                                  );
+                                  return (
+                                    <div key={i}>
+                                      <div className="flex items-center justify-center">
+                                        <ColorRowWithTooltips
+                                          type="object"
+                                          productcolor={el.color}
+                                        />
+                                      </div>
+                                      <div className="text-xs">
+                                        <span className="text-[10px]">
+                                          {formatCurrency(el.tax)}
+                                        </span>
+                                        <span> ------ </span>
+                                        <span className="text-[10px]">
+                                          {formatCurrency(el.price)}
+                                        </span>
+                                      </div>
+                                    </div>
+                                  );
+                                }
                               )
+                            : '--'} */}
+                        </td>
+                        <td>{item.itemCode ? item.itemCode : '--'}</td>
+                        <td>{item.brandName ? item.brandName : '--'}</td>
+                        <td>
+                          {item.itemDimension ? item.itemDimension : '--'}
+                        </td>
+                        <td>{item.itemWeight ? item.itemWeight : '--'}</td>
+                        <td>{item.costPrice ? item.costPrice : '--'}</td>
+                        <td>{item.warranty ? item.warranty : '--'}</td>
+                        <td>
+                          {item.stockAvailability
+                            ? item.stockAvailability
                             : '--'}
                         </td>
                         <td>
-                          {dayjs(item.endDate).isValid()
-                            ? dayjs(item.endDate)?.format(
-                                'ddd, MMM DD, YYYY hh:mm:ssA'
-                              )
-                            : '--'}
-                        </td>
-                        <td>
-                          {dayjs(item.createdDate).isValid()
-                            ? dayjs(item.createdDate)?.format(
+                          {dayjs(item.updatedAt).isValid()
+                            ? dayjs(item.updatedAt)?.format(
                                 'ddd, MMM DD, YYYY hh:mm:ssA'
                               )
                             : '--'}
@@ -646,26 +560,6 @@ function ProjectPage() {
           callback={manuHandler}
         />
       )}
-      {openFormDialog && (
-        <ProjectAddPopup
-          setIsNotify={setIsNotify}
-          setNotifyMessage={setNotifyMessage}
-          openFormDialog={openFormDialog}
-          setOpenFormDialog={setOpenFormDialog}
-          callback={createFormHandler}
-        />
-      )}
-
-      {openEditFormDialog && (
-        <ProjectPlanEditPopup
-          setIsNotify={setIsNotify}
-          setNotifyMessage={setNotifyMessage}
-          openFormDialog={openEditFormDialog}
-          setOpenFormDialog={setOpenEditFormDialog}
-          formData={editFormData}
-          callback={updateFormHandler}
-        />
-      )}
       {modalImage && (
         <Dialog
           open={isModalImage}
@@ -695,4 +589,4 @@ function ProjectPage() {
   );
 }
 
-export default ProjectPage;
+export default ProductPage;

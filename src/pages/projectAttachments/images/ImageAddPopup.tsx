@@ -62,7 +62,10 @@ function VideoAddPopup({
   useEffect(() => {
     const fetchProjects = async () => {
       if (
-        listingRolePermission(dataRole, ALL_PERMISSIONS.storePlans.viewPlans)
+        listingRolePermission(
+          dataRole,
+          ALL_PERMISSIONS.storePlans.addImagesPlans
+        )
       ) {
         try {
           const projectResponse =
@@ -88,7 +91,10 @@ function VideoAddPopup({
   useEffect(() => {
     const fetchPlans = async () => {
       if (
-        listingRolePermission(dataRole, ALL_PERMISSIONS.storePlans.viewPlans) &&
+        listingRolePermission(
+          dataRole,
+          ALL_PERMISSIONS.storePlans.addImagesPlans
+        ) &&
         watch('projectId') !== 'none' &&
         watch('projectId') !== undefined
       ) {

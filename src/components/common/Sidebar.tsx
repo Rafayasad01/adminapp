@@ -25,6 +25,8 @@ import // ALL_PERMISSIONS,
 // MODULE_EMPLOYEES,
 // MODULE_SETTINGS,
 '../../utils/constants';
+import { listingRolePermission } from '../../utils/helper';
+import { ALL_PERMISSIONS } from '../../utils/constants';
 // import ArrowDown from '../icons/ArrowDown';
 // import ArrowUp from '../icons/ArrowUp';
 // import CategoryIcon from '../icons/CategoryIcon';
@@ -210,6 +212,9 @@ import // ALL_PERMISSIONS,
 
 function Sidebar() {
   const navigate = useNavigate();
+  const dataRole = useAppSelector(
+    (state) => state?.persistedReducer?.roleState?.role?.permissions
+  );
   // function handleClick() {
   //   navigate("./projects");
   // }
@@ -606,15 +611,15 @@ function Sidebar() {
     // </Drawer>
     <div className="side-bar-menu relative">
       <div className="space-between fixed left-0 top-0 flex h-full w-full max-w-[100px] flex-grow flex-col bg-[#f5f5f5] p-2">
-        <div className="mb-2 basis-[20%]">
-          <div className="mx-auto max-w-[60px]">
+        <div className="mb-2 basis-[10%]">
+          <div className="mx-auto max-w-[50px]">
             <img src={assets.images.logo} alt="logo" />
           </div>
         </div>
-        <div className="basis-[60%] self-center">
-          <div className="max-h-[470px] w-[70px] rounded-[45px] bg-[#C9C9C9] text-center">
-            <NavLink to="/admin/dashboard/home" end>
-              <Button className="btn-flips my-[10px] h-[50px] min-w-[50px] rounded-[28px] bg-transparent hover:bg-[#F27426]">
+        <div className="basis-[60%] self-center overflow-auto">
+          <div className="max-h-[470px] w-[60px] rounded-[45px] bg-[#C9C9C9] text-center">
+            <NavLink to="/admin/dashboard/home">
+              <Button className="btn-flips my-[5px] h-[50px] min-w-[50px] rounded-[28px] bg-transparent hover:bg-[#F27426]">
                 <img
                   src={assets.images.slIcon}
                   alt="icon"
@@ -622,56 +627,95 @@ function Sidebar() {
                 />
               </Button>
             </NavLink>
-            <NavLink to="/admin/dashboard/projects" end>
-              <Button className="btn-flips my-[10px] h-[50px] min-w-[50px] rounded-[28px] bg-transparent hover:bg-[#F27426]">
-                <img
-                  src={assets.images.projectIcon}
-                  alt="icon"
-                  className="w-[24px]"
-                />
-              </Button>
-            </NavLink>
-            <NavLink to="/admin/dashboard/attachments" end>
-              <Button className="btn-flips my-[10px] h-[50px] min-w-[50px] rounded-[28px] bg-transparent hover:bg-[#F27426]">
-                <img
-                  src={assets.images.photoIcon}
-                  alt="icon"
-                  className="w-[24px]"
-                />
-              </Button>
-            </NavLink>
-            <NavLink to="/admin/dashboard/ne-users" end>
-              <Button className="btn-flips my-[10px] h-[50px] min-w-[50px] rounded-[28px] bg-transparent hover:bg-[#F27426]">
-                <img
-                  src={assets.images.clipboardIcon}
-                  alt="icon"
-                  className="w-[24px]"
-                />
-              </Button>
-            </NavLink>
-            <NavLink to="/admin/dashboard/ne-admin-users" end>
-              <Button className="btn-flips my-[10px] h-[50px] min-w-[50px] rounded-[28px] bg-transparent hover:bg-[#F27426]">
-                <img
-                  src={assets.images.startegyIcon}
-                  alt="icon"
-                  className="w-[24px]"
-                />
-              </Button>
-            </NavLink>
-            <NavLink to="/admin/dashboard/ne-role" end>
-              <Button className="btn-flips my-[10px] h-[56px] min-w-[56px] rounded-[28px] bg-transparent hover:bg-[#F27426]">
-                <img
-                  src={assets.images.busnessIcon}
-                  alt="icon"
-                  className="w-[24px]"
-                />
-              </Button>
-            </NavLink>
+            {listingRolePermission(
+              dataRole,
+              ALL_PERMISSIONS.storePlans.viewProjects
+            ) && (
+              <NavLink to="/admin/dashboard/projects">
+                <Button className="btn-flips my-[5px] h-[50px] min-w-[50px] rounded-[28px] bg-transparent hover:bg-[#F27426]">
+                  <img
+                    src={assets.images.projectIcon}
+                    alt="icon"
+                    className="w-[24px]"
+                  />
+                </Button>
+              </NavLink>
+            )}
+            {listingRolePermission(
+              dataRole,
+              ALL_PERMISSIONS.storePlans.viewProjects
+            ) && (
+              <NavLink to="/admin/dashboard/products">
+                <Button className="btn-flips my-[5px] h-[50px] min-w-[50px] rounded-[28px] bg-transparent hover:bg-[#F27426]">
+                  <img
+                    src={assets.images.box}
+                    alt="icon"
+                    className="w-[24px]"
+                  />
+                </Button>
+              </NavLink>
+            )}
+            {listingRolePermission(
+              dataRole,
+              ALL_PERMISSIONS.storePlans.viewProjectAttachments
+            ) && (
+              <NavLink to="/admin/dashboard/attachments">
+                <Button className="btn-flips my-[5px] h-[50px] min-w-[50px] rounded-[28px] bg-transparent hover:bg-[#F27426]">
+                  <img
+                    src={assets.images.photoIcon}
+                    alt="icon"
+                    className="w-[24px]"
+                  />
+                </Button>
+              </NavLink>
+            )}
+            {listingRolePermission(
+              dataRole,
+              ALL_PERMISSIONS.storePlans.viewProjectUsers
+            ) && (
+              <NavLink to="/admin/dashboard/ne-users">
+                <Button className="btn-flips my-[5px] h-[50px] min-w-[50px] rounded-[28px] bg-transparent hover:bg-[#F27426]">
+                  <img
+                    src={assets.images.busnessIcon}
+                    alt="icon"
+                    className="w-[24px]"
+                  />
+                </Button>
+              </NavLink>
+            )}
+            {listingRolePermission(
+              dataRole,
+              ALL_PERMISSIONS.storePlans.viewProjectAdminUsers
+            ) && (
+              <NavLink to="/admin/dashboard/ne-admin-users">
+                <Button className="btn-flips my-[5px] h-[50px] min-w-[50px] rounded-[28px] bg-transparent hover:bg-[#F27426]">
+                  <img
+                    src={assets.images.startegyIcon}
+                    alt="icon"
+                    className="w-[24px]"
+                  />
+                </Button>
+              </NavLink>
+            )}
+            {listingRolePermission(
+              dataRole,
+              ALL_PERMISSIONS.storePlans.viewRole
+            ) && (
+              <NavLink to="/admin/dashboard/ne-role">
+                <Button className="btn-flips my-[5px] h-[50px] min-w-[50px] rounded-[28px] bg-transparent hover:bg-[#F27426]">
+                  <img
+                    src={assets.images.clipboardIcon}
+                    alt="icon"
+                    className="w-[24px]"
+                  />
+                </Button>
+              </NavLink>
+            )}
           </div>
         </div>
         <div className="basis-[20%]">
           <div className="flex flex-col items-center justify-center gap-2">
-            <Button className="my-[10px] h-[50px] min-w-[50px] rounded-[28px] bg-transparent p-0">
+            <Button className="my-[5px] h-[50px] min-w-[50px] rounded-[28px] bg-transparent p-0">
               <img
                 src={assets.images.avatar1}
                 alt="icon"
@@ -684,7 +728,7 @@ function Sidebar() {
                   logOut();
                   navigate('/admin');
                 }}
-                className="btn-flips my-[4px] h-[50px] min-w-[50px] rounded-[28px] bg-[#C9C9C9]"
+                className="btn-flips h-[50px] min-w-[50px] rounded-[28px] bg-[#C9C9C9]"
               >
                 <img
                   src={assets.images.logoutIcon}

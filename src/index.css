@@ -155,6 +155,10 @@ select {
   animation-delay: 10s;
 }
 
+.ne-active-class {
+  @apply active my-[5px] h-[50px] min-w-[50px] rounded-[28px] bg-transparent hover:bg-[#F27426];
+}
+
 .side-bar-menu .active button.MuiButtonBase-root {
   background: #f27426 !important;
 }

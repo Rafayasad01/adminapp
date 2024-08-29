@@ -35,9 +35,9 @@ import { listingRolePermission } from '../../utils/helper';
 
 function AdminUsersPage() {
   const authState: any = useAppSelector((state: any) => state?.authState);
-  const employeeLimit: any = useAppSelector(
-    (state: any) => state?.persistedReducer?.appState?.UserItems?.employeeLimit
-  );
+  // const employeeLimit: any = useAppSelector(
+  //   (state: any) => state?.persistedReducer?.appState?.UserItems?.employeeLimit
+  // );
   const dataRole = useAppSelector(
     (state: any) => state?.persistedReducer?.roleState?.role?.permissions
   );
@@ -68,6 +68,7 @@ function AdminUsersPage() {
     handleSubmit,
     reset,
     getValues,
+    watch,
     control,
     setValue,
     formState: { errors },
@@ -128,6 +129,7 @@ function AdminUsersPage() {
       error: errors.role,
       type: 'select',
       options: {
+        role: watch('role') ?? 'none',
         roles: rolesLov,
       },
     },
@@ -159,16 +161,13 @@ function AdminUsersPage() {
   }, []);
 
   const handleFormClickOpen = () => {
-    if (listingRolePermission(dataRole, ALL_PERMISSIONS.storePlans.viewPlans)) {
-      if (total < employeeLimit) {
-        setOpenFormDialog(true);
-      } else {
-        setIsNotify(true);
-        setNotifyMessage({
-          text: 'Employees limit has been excceed',
-          type: 'warning',
-        });
-      }
+    if (
+      listingRolePermission(
+        dataRole,
+        ALL_PERMISSIONS.storePlans.addProjectAdminUsers
+      )
+    ) {
+      setOpenFormDialog(true);
     } else {
       setIsNotify(true);
       setNotifyMessage({
@@ -294,7 +293,12 @@ function AdminUsersPage() {
 
   const manuHandler = (option: string) => {
     if (option === 'Edit') {
-      if (listingRolePermission(dataRole, 'Employee Update')) {
+      if (
+        listingRolePermission(
+          dataRole,
+          ALL_PERMISSIONS.storePlans.editProjectAdminUsers
+        )
+      ) {
         setIsLoader(true);
         employeeService.getService(actionMenuItemid).then((item: any) => {
           if (item.data.success) {
@@ -303,6 +307,7 @@ function AdminUsersPage() {
             setValue('first_name', item.data.data.firstName);
             setValue('last_name', item.data.data.lastName);
             setValue('email', item.data.data.email);
+            setValue('role', item.data.data.role);
             setOpenEditFormDialog(true);
           }
         });
@@ -315,7 +320,12 @@ function AdminUsersPage() {
         });
       }
     } else if (option === 'Delete') {
-      if (listingRolePermission(dataRole, 'Employee delete')) {
+      if (
+        listingRolePermission(
+          dataRole,
+          ALL_PERMISSIONS.storePlans.deleteProjectAdminUsers
+        )
+      ) {
         setIsLoader(true);
         const data = {
           updatedBy: authState.user.id,
@@ -357,7 +367,12 @@ function AdminUsersPage() {
   };
 
   useEffect(() => {
-    if (listingRolePermission(dataRole, ALL_PERMISSIONS.storePlans.viewPlans)) {
+    if (
+      listingRolePermission(
+        dataRole,
+        ALL_PERMISSIONS.storePlans.viewProjectAdminUsers
+      )
+    ) {
       employeeService
         .getListService(authState.user.tenant, page, rowsPerPage)
         .then((item: any) => {
@@ -501,7 +516,12 @@ function AdminUsersPage() {
   };
 
   const handleSwitchChange = (event: any, id: string) => {
-    if (listingRolePermission(dataRole, 'Employee Update Status')) {
+    if (
+      listingRolePermission(
+        dataRole,
+        ALL_PERMISSIONS.storePlans.editProjectAdminUsers
+      )
+    ) {
       const data = {
         isActive: event.target.checked,
         updatedBy: authState.user.id,

@@ -48,18 +48,18 @@ function AddRolePage() {
       .then((item: any) => {
         if (item.data.success) {
           setIsLoader(false);
-          const data = item.data.data.data
-            .filter((x: any) => x.data.every((s: any) => s.status))
-            .map((e: any) => {
-              return {
-                ...e,
-                data: e.data.map((detail: any) => ({
-                  ...detail,
-                  status: false,
-                })),
-              };
-            });
-          setList(data);
+          // const data = item.data.data.data
+          //   .filter((x: any) => x.data.every((s: any) => s.status))
+          //   .map((e: any) => {
+          //     return {
+          //       ...e,
+          //       data: e.data.map((detail: any) => ({
+          //         ...detail,
+          //         status: false,
+          //       })),
+          //     };
+          //   });
+          setList(item.data.data.data);
           // console.log('DAATAssP', item.data.data.data);
         }
       })

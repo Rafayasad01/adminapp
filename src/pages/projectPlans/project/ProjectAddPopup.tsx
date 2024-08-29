@@ -67,7 +67,9 @@ Props) {
   });
 
   useEffect(() => {
-    if (listingRolePermission(dataRole, ALL_PERMISSIONS.storePlans.add)) {
+    if (
+      listingRolePermission(dataRole, ALL_PERMISSIONS.storePlans.viewProjects)
+    ) {
       storeAppUsers.usersLov(authState.user.tenant).then((item: any) => {
         setUsers(item.data.data.list);
       });
@@ -169,7 +171,7 @@ Props) {
                           onChange={(date) => handleDateChange(date, field)}
                           // onChange={(date) => field.onChange(date)}
                           value={field.value || dayjs()}
-                          minDate={dayjs()}
+                          // minDate={dayjs()}
                         />
                       )}
                     />
@@ -201,7 +203,7 @@ Props) {
                           onChange={(date) => handleDateChange(date, field)}
                           // onChange={(date) => field.onChange(date)}
                           value={field.value || dayjs()}
-                          minDate={dayjs()}
+                          // minDate={dayjs()}
                         />
                       )}
                     />

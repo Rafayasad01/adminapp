@@ -68,7 +68,10 @@ function VideoEditPopup({
       setPlanFile({ name: formData?.filePath });
       setFilePath(formData?.filePath);
       if (
-        listingRolePermission(dataRole, ALL_PERMISSIONS.storePlans.viewPlans)
+        listingRolePermission(
+          dataRole,
+          ALL_PERMISSIONS.storePlans.editDocsPlans
+        )
       ) {
         try {
           const projectResponse =
@@ -93,7 +96,10 @@ function VideoEditPopup({
   useEffect(() => {
     const fetchPlans = async () => {
       if (
-        listingRolePermission(dataRole, ALL_PERMISSIONS.storePlans.viewPlans) &&
+        listingRolePermission(
+          dataRole,
+          ALL_PERMISSIONS.storePlans.editDocsPlans
+        ) &&
         watch('projectId') !== 'none' &&
         watch('projectId') !== undefined
       ) {

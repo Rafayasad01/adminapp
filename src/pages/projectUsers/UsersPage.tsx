@@ -70,7 +70,12 @@ function UsersPage() {
   ];
 
   const handleFormClickOpen = () => {
-    if (listingRolePermission(dataRole, ALL_PERMISSIONS.storePlans.viewPlans)) {
+    if (
+      listingRolePermission(
+        dataRole,
+        ALL_PERMISSIONS.storePlans.addProjectUsers
+      )
+    ) {
       setOpenFormDialog(true);
     } else {
       setIsNotify(true);
@@ -148,7 +153,12 @@ function UsersPage() {
 
   useEffect(() => {
     setIsLoader(true);
-    if (listingRolePermission(dataRole, ALL_PERMISSIONS.storePlans.viewPlans)) {
+    if (
+      listingRolePermission(
+        dataRole,
+        ALL_PERMISSIONS.storePlans.viewProjectUsers
+      )
+    ) {
       appUserService
         .appList(
           authState.user.tenant,

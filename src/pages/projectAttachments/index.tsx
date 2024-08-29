@@ -26,6 +26,7 @@ function ProjectAttachment() {
       listingRolePermission(dataRole, ALL_PERMISSIONS.storePlans.viewVideoPlans)
     ) {
       setSelectedTab('VIDEOS');
+      return;
     }
     if (
       listingRolePermission(
@@ -34,6 +35,7 @@ function ProjectAttachment() {
       )
     ) {
       setSelectedTab('IMAGES');
+      return;
     }
     if (
       listingRolePermission(dataRole, ALL_PERMISSIONS.storePlans.viewDocsPlans)
@@ -58,7 +60,7 @@ function ProjectAttachment() {
               className={`${
                 listingRolePermission(
                   dataRole,
-                  ALL_PERMISSIONS.storePlans.viewPlans
+                  ALL_PERMISSIONS.storePlans.viewProjectAttachments
                 )
                   ? 'inline-block'
                   : 'hidden'

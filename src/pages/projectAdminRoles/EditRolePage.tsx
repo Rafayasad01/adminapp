@@ -84,7 +84,7 @@ function EditRolePage() {
           if (item.data.success) {
             // setIsLoader(false);
             setText(item.data.message);
-            navigate('../list');
+            navigate(-1);
           } else {
             setIsLoader(false);
             setIsNotify(true);
