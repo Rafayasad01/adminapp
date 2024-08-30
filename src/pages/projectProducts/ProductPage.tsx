@@ -312,6 +312,8 @@ function ProductPage() {
   };
 
   const handleColors = (colorsArr: any) => {
+    console.log('ARR', colorsArr);
+
     const temp: any =
       Number(parseFloat(colorsArr[0].price)) +
       (Number(parseFloat(colorsArr[0].price)) *
@@ -320,11 +322,13 @@ function ProductPage() {
     return (
       <div>
         <div className="">
-          <ColorRowWithTooltips
-            onclick={handleOnColorClick}
-            type="array"
-            colors={colorsArr}
-          />
+          {colorsArr?.length > 0 && (
+            <ColorRowWithTooltips
+              onclick={handleOnColorClick}
+              type="array"
+              colors={colorsArr}
+            />
+          )}
         </div>
         <div className="">
           <span className="text-[10px]">
