@@ -4,8 +4,8 @@ export interface Product {
   mobileNumber: string;
   itemCode: string;
   brandName: string;
-  costPrice: string;
-  productTax: string;
+  costPrice: string | any;
+  tax: string;
   itemWeight: string;
   itemDimension: string;
   address: any;
@@ -14,14 +14,16 @@ export interface Product {
   stockAvailability: any;
   stockQuantity: any;
   stockDimension: any;
+  stockDimensionType: any;
+  spareAvailability: any;
   warranty: any;
   serviceCenter: any;
   rustProof: any;
   averageLife: any;
-  features: any;
+  feature: string;
   productCustomization: any;
   color: string;
   price: string;
-  tax: string;
+  ColorTax: string;
   file: any;
 }

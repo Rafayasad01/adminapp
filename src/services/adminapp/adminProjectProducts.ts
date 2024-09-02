@@ -18,10 +18,21 @@ const getListProductService = (
 };
 
 const create = (data: any) => {
-  return network.post(`${NEW_EARTH_PREFIX}/${PRODUCTS_PREFIX}/create`, data);
+  return network.postMultipart(
+    `${NEW_EARTH_PREFIX}/${PRODUCTS_PREFIX}/create`,
+    data
+  );
+};
+
+const update = (id: string, data: any) => {
+  return network.postMultipart(
+    `${NEW_EARTH_PREFIX}/${PRODUCTS_PREFIX}/update/${id}`,
+    data
+  );
 };
 
 export default {
   getListProductService,
   create,
+  update,
 };

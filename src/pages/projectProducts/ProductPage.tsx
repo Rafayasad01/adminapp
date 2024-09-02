@@ -65,13 +65,9 @@ function ProductPage() {
       remarks: 'completed',
     },
   ]);
-  const [
-    // editFormData,
-    setEditFormData,
-  ] = useState<any>(null);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const [actionMenuItemid, setActionMenuItemid] = React.useState('');
   const [isLoader, setIsLoader] = React.useState(true);
+  const [actionMenuItemid, setActionMenuItemid] = React.useState('');
   const [actionMenuAnchorEl, setActionMenuAnchorEl] =
     useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
@@ -86,6 +82,7 @@ function ProductPage() {
   const [isModalImage, setIsModalImage] = useState(false);
   const [modalImage, setModalImage] = useState('');
   const [price, setPrice] = useState();
+  const [mIndex, setMIndex] = useState(0);
 
   const handleFormClickOpen = () => {
     if (
@@ -220,17 +217,21 @@ function ProductPage() {
   };
 
   const manuHandler = (option: string) => {
+    console.log('🚀 ~ manuHandler ~ option:', option);
     if (option === 'Edit') {
       if (
-        listingRolePermission(dataRole, ALL_PERMISSIONS.storePlans.editProjects)
+        listingRolePermission(
+          dataRole,
+          ALL_PERMISSIONS.storePlans.editProjectPlan
+        )
       ) {
-        // console.log('actionMenuItemid', actionMenuItemid, list);
         const editFormDatas = list?.find(
           (el: any) => el.id === actionMenuItemid
         );
-        setActionMenuItemid(editFormDatas.id);
-        setEditFormData(editFormDatas);
-        // setOpenEditFormDialog(true);
+        navigate(`./edit/${editFormDatas.id}`, {
+          state: { data: editFormDatas },
+        });
+        // console.log('🚀 ~ manuHandler ~ editFormDatas:', editFormDatas);
       } else {
         setIsNotify(true);
         setNotifyMessage({
@@ -307,19 +308,21 @@ function ProductPage() {
   };
 
   const handleOnColorClick = (data: any) => {
+    // console.log('datata', data);
+    setMIndex(data.mainIndex);
     const priceTax = data.price;
     setPrice(priceTax);
   };
 
-  const handleColors = (colorsArr: any) => {
-    console.log('ARR', colorsArr);
-
+  const handleColors = (colorsArr: any, mainIndex: number | any) => {
+    // console.log('ARR', colorsArr);
+    const selectedColor = colorsArr;
     const temp: any =
-      Number(parseFloat(colorsArr[0].price)) +
-      (Number(parseFloat(colorsArr[0].price)) *
-        Number(parseFloat(colorsArr[0].tax))) /
+      Number(parseFloat(selectedColor[0]?.price)) +
+      (Number(parseFloat(selectedColor[0]?.price)) *
+        Number(parseFloat(selectedColor[0]?.tax))) /
         100;
-    return (
+    return colorsArr?.length > 0 ? (
       <div>
         <div className="">
           {colorsArr?.length > 0 && (
@@ -327,17 +330,27 @@ function ProductPage() {
               onclick={handleOnColorClick}
               type="array"
               colors={colorsArr}
+              mainIndex={mainIndex}
             />
           )}
         </div>
-        <div className="">
-          <span className="text-[10px]">
-            {formatCurrency(price ?? temp)} (inclusive tax)
-          </span>
-        </div>
+        {mainIndex === mIndex ? (
+          <div className="">
+            <span className="text-[10px]">
+              {formatCurrency(price ?? temp)} (inclusive tax)
+            </span>
+          </div>
+        ) : (
+          <div className="">
+            <span className="text-[10px]">
+              {formatCurrency(temp)} (inclusive tax)
+            </span>
+          </div>
+        )}
       </div>
+    ) : (
+      '--'
     );
-    // });
   };
 
   const closeModal = () => {
@@ -354,7 +367,7 @@ function ProductPage() {
         setIsOpen={setIsNotify}
         displayMessage={notifyMessage}
       />
-      <TopBar title="Projects" />
+      <TopBar />
       <div className="cs-dialog container mx-auto mt-5 w-full">
         <div className="w-full rounded-lg bg-white shadow-lg">
           <div className="grid grid-cols-12 px-4 py-5">
@@ -446,7 +459,7 @@ function ProductPage() {
                           )}
                         </td>
                         <td>
-                          {handleColors(item.productCustomization)}
+                          {handleColors(item.productCustomization, index)}
                           {/* {item.productCustomization?.length > 0
                             ? item.productCustomization?.map(
                                 (el: any, i: number) => {

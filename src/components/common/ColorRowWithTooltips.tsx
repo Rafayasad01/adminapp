@@ -6,6 +6,7 @@ type ColorRowWithTooltipsProps = {
   colors?: any;
   productcolor?: string;
   onclick?: any;
+  mainIndex?: any;
 };
 
 function ColorRowWithTooltips({
@@ -13,6 +14,7 @@ function ColorRowWithTooltips({
   type,
   productcolor,
   onclick,
+  mainIndex,
 }: ColorRowWithTooltipsProps) {
   return (
     <div className="flex max-w-[240px] flex-wrap items-center">
@@ -36,6 +38,8 @@ function ColorRowWithTooltips({
                       Number(parseFloat(color.tax))) /
                       100,
                   color: color.color,
+                  index,
+                  mainIndex,
                 })
               }
               key={index}

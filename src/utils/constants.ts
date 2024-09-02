@@ -617,6 +617,9 @@ export const PASSWORD_SHOULD_SAME = 'Password must same to the new one.';
 export const PH_MINI_LENGTH = 'Minimum length should be 15';
 
 export const VALIDATE_NON_NEGATIVE_NUM = (value: any) => {
+  if (value === '' || value === null || value === undefined) {
+    return true; // Allow empty values
+  }
   return parseInt(value, 10) >= 0 || 'Must be a non-negative number';
 };
 
