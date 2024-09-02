@@ -903,6 +903,12 @@ export const ALL_PERMISSIONS = {
     viewLoyaltyProgram: 'viewLoyaltyProgram',
     viewOfficeTime: 'viewOfficeTime',
   },
+  vendors: {
+    view: 'viewVendor',
+    add: 'addVendor',
+    edit: 'editVendor',
+    delete: 'deleteVendor',
+  },
 };
 
 export const SERVICES = 'Service';

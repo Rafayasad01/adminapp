@@ -711,6 +711,17 @@ function Sidebar() {
                 </Button>
               </NavLink>
             )}
+            {listingRolePermission(dataRole, ALL_PERMISSIONS.vendors.view) && (
+              <NavLink to="/admin/dashboard/vendors">
+                <Button className="btn-flips my-[5px] h-[50px] min-w-[50px] rounded-[28px] bg-transparent hover:bg-[#F27426]">
+                  <img
+                    src={assets.images.supplyIcon}
+                    alt="icon"
+                    className="w-[24px]"
+                  />
+                </Button>
+              </NavLink>
+            )}
           </div>
         </div>
         <div className="basis-[20%]">

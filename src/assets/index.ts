@@ -87,6 +87,7 @@ import avatarUser3 from './images/user3.svg';
 import userPermissionIcon from './images/userPermission.svg';
 import wash from './images/wash.svg';
 import box from './images/box.png';
+import supplyIcon from './images/icons/supply.png';
 
 const assets = {
   images: {
@@ -165,6 +166,7 @@ const assets = {
     word,
     excel,
     box,
+    supplyIcon,
   },
   tempImages: {
     shirt,
