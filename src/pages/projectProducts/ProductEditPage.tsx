@@ -2,11 +2,11 @@
 // import Dialog from '@mui/material/Dialog';
 // import FormControl from '@mui/material/FormControl';
 // import Input from '@mui/material/Input';
-import IconButton from '@mui/material/IconButton';
+// import IconButton from '@mui/material/IconButton';
 import React, { useEffect, useState } from 'react';
 import CloseIcon from '@mui/icons-material/Close';
 import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
-import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
+// import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 // import { useForm, Controller } from 'react-hook-form';
 // import TextField from '@mui/material/TextField';
 // import { createTheme } from '@mui/material';
@@ -36,6 +36,7 @@ import Input from '@mui/material/Input';
 import FormControl from '@mui/material/FormControl';
 import TextField from '@mui/material/TextField';
 import { useLocation, useParams } from 'react-router';
+import { CircularProgress } from '@mui/material';
 import productServices from '../../services/adminapp/adminProjectProducts';
 import assets from '../../assets';
 import {
@@ -59,7 +60,6 @@ function ProductEditPopup() {
   const { id }: any = useParams();
   const { state: editData } = useLocation();
   const { data } = editData;
-  // console.log('🚀 ~ ProductEditPopup ~ params:', data);
   const {
     register,
     handleSubmit,
@@ -95,8 +95,15 @@ function ProductEditPopup() {
   // const dataRole = useAppSelector(
   //   (state) => state?.persistedReducer?.roleState?.role?.permissions
   // );
-  const [file, setFile] = useState<any>(null);
+  const [
+    ,
+    // file
+    setFile,
+  ] = useState<any>(null);
+  const [files, setFiles] = useState<any>([]);
   const [images, setImages] = useState<any>([]);
+  const [deletedImages, setDeletedImages] = useState<any>([]);
+  const [isLoader, setIsLoader] = React.useState(false);
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
   // const authState: any = useAppSelector((state) => state?.authState);
@@ -119,6 +126,10 @@ function ProductEditPopup() {
         featureAppend({ feature });
       });
     }
+    console.log('data.productImages', data.productImages);
+    setImages((img: string) => [...img, ...data.productImages]);
+    setFiles((img: string) => [...img, ...data.productImages]);
+    // const fil = new File(data.productImages, 'uploaded');
     setValue('productGroup', data.productGroup);
     setValue('productName', data.productName);
     setValue('mobileNumber', data.mobileNumber);
@@ -145,12 +156,12 @@ function ProductEditPopup() {
     setValue('file', data.file);
   }, []);
 
+  // console.log('featureArr', data);
   const onSubmit = (submitFormData: any) => {
+    setIsLoader(true);
     const featureArr = submitFormData.features.map(
       (element: any) => element.feature
     );
-    console.log('featureArr', featureArr);
-
     const formData = new FormData();
     formData.append('productGroup', submitFormData.productGroup);
     formData.append('productName', submitFormData.productName);
@@ -183,30 +194,28 @@ function ProductEditPopup() {
     formData.append('rustProof', submitFormData.rustProof);
     formData.append('averageLife', submitFormData.averageLife);
     formData.append('features', featureArr.join(', ') ?? '');
-    // featureArr.forEach((element: any) => {
-    //   formData.append('features[]', element ?? null);
-    // });
     formData.append(
       'productCustomization',
       JSON.stringify(submitFormData.productCustomization) ?? []
     );
-    formData.append('productImages', submitFormData.file);
-    console.log('🚀 ~ onSubmit ~ formData: update', submitFormData);
-
+    files
+      .filter((el: any) => typeof el !== 'string')
+      .forEach((imageFile: any) => {
+        formData.append('productImages', imageFile);
+      });
+    formData.append('deletedProductImages', deletedImages.join(', ') ?? '');
     productServices
       .update(id, formData)
       .then((item: any) => {
         if (item.data.success) {
-          // setOpenFormDialog(false);
-          // setIsLoader(false);
+          setIsLoader(false);
           setIsNotify(true);
           setNotifyMessage({
             text: item.data.message,
             type: 'success',
           });
-          // setList([item.data.data, ...list]);
         } else {
-          // setIsLoader(false);
+          setIsLoader(false);
           setIsNotify(true);
           setNotifyMessage({
             text: item.data.message,
@@ -215,7 +224,7 @@ function ProductEditPopup() {
         }
       })
       .catch((err: Error) => {
-        // setIsLoader(false);
+        setIsLoader(false);
         setIsNotify(true);
         setNotifyMessage({
           text: err.message,
@@ -223,8 +232,6 @@ function ProductEditPopup() {
         });
       });
   };
-
-  console.log('feeeeeeeeeeeeeeeeeeeeeeeee', featureFields);
 
   const handleProductCustomizationServices = () => {
     const obj = {
@@ -248,16 +255,7 @@ function ProductEditPopup() {
       feature: watch('feature'),
     };
     featureAppend(obj);
-    // else {
-    //   setIsNotify(true);
-    //   setNotifyMessage({
-    //     text: 'Features are Required',
-    //     type: 'error',
-    //   });
-    // }
   };
-
-  console.log('FEAAAA', data.features);
 
   const handleFileChange = (onChange: any, event: any | undefined) => {
     const selectedFile = event.target.files[0];
@@ -278,9 +276,13 @@ function ProductEditPopup() {
             );
           }
         };
-
         reader.readAsDataURL(selectedFile);
         setFile(selectedFile);
+        setFiles((prevFile: any) => [...prevFile, selectedFile]);
+        // const newImages = newFiles.map((newfile: any) =>
+        //   URL.createObjectURL(newfile)
+        // );
+        // setImages((prevImages: any) => [...prevImages, ...newImages]);
         onChange(selectedFile);
       } else {
         setIsNotify(true);
@@ -298,6 +300,40 @@ function ProductEditPopup() {
     setValue('file', '');
   };
 
+  const handleSelectedFileImages = (imgIndex: number) => {
+    const deletedImgs = images.filter(
+      (img: any, index: number) => index === imgIndex
+    );
+    setDeletedImages((prev: any) => [...prev, ...deletedImgs]);
+    // setImages(images.filter((_: any, index: number) => index !== imgIndex));
+    // setImages((prevImages: any) =>
+    //   prevImages.filter((_: any, i: number) => i !== imgIndex)
+    // );
+    setImages((prevFiles: any) =>
+      prevFiles.filter((_: any, i: number) => i !== imgIndex)
+    );
+    setFiles((prevFiles: any) =>
+      prevFiles.filter((_: any, i: number) => i !== imgIndex)
+    );
+    // setImages((prevImages: any) => {
+    //   return [
+    //     ...prevImages.slice(0, imgIndex),
+    //     ...prevImages.slice(imgIndex + 1),
+    //   ];
+    // });
+    // setFiles((prevFiles: any) => {
+    //   return prevFiles.filter((_: any, index: number) => index !== imgIndex);
+    // });
+    // setFiles((prevFiles: any) =>
+    //   prevFiles.filter((_: any, index: number) => index !== imgIndex)
+    // );
+    // return [
+    //   ...prevFiles.splice(0, imgIndex),
+    //   ...prevFiles.splice(imgIndex + 1),
+    // ];
+    // );
+  };
+
   const handleStockAvailability = (type: string) => {
     setValue('stockAvailability', type);
   };
@@ -313,7 +349,7 @@ function ProductEditPopup() {
         setIsOpen={setIsNotify}
         displayMessage={notifyMessage}
       />
-      <div className="cs-dialog container mx-auto mt-3 w-full">
+      <div className="Content cs-dialog container mx-auto mt-3 w-full">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="w-full rounded-lg bg-white shadow-lg">
             <div className="grid grid-cols-12 gap-4">
@@ -351,11 +387,8 @@ function ProductEditPopup() {
                             </Button>
                           </label>
 
-                          {file ? (
+                          {/* {file ? (
                             <div className="ShowImageBox bg-background">
-                              <label className="ShowImageLabel">
-                                {file.name}
-                              </label>
                               <IconButton
                                 className="btn-dot"
                                 onClick={() => {
@@ -374,7 +407,7 @@ function ProductEditPopup() {
                             </div>
                           ) : (
                             ''
-                          )}
+                          )} */}
                         </>
                       )}
                     />
@@ -386,16 +419,28 @@ function ProductEditPopup() {
                 </div>
                 {images?.map((img: any, i: number) => {
                   return (
-                    <div
-                      key={i}
-                      className="flex h-[266px] cursor-pointer items-center justify-center rounded-3xl bg-slate-200 xl:col-span-2 2xl:col-span-1"
-                    >
-                      <img src={img} alt="img" />
+                    <div className="relative" key={i}>
+                      <div
+                        key={i}
+                        className="mt-4 flex h-[266px] cursor-pointer items-center justify-center rounded-3xl bg-slate-200 xl:col-span-2 2xl:col-span-1"
+                      >
+                        <img
+                          className="max-w-[220px] rounded"
+                          src={img}
+                          alt="img"
+                        />
+                      </div>
+                      <div
+                        onClick={() => handleSelectedFileImages(i)}
+                        className="absolute right-[-10px] top-[-6px] cursor-pointer"
+                      >
+                        <img src={assets.images.removeIcon} alt="cancel" />
+                      </div>
                     </div>
                   );
                 })}
               </div>
-              <div className="col-span-6 m-3">
+              <div className="col-span-6 mt-3 border-r-2 border-[#808080bd] px-6">
                 <div className="FormFields">
                   <FormControl className="FormControl" variant="standard">
                     <label className="FormLabel">Project Group</label>
@@ -495,7 +540,7 @@ function ProductEditPopup() {
                     )}
                   </FormControl>
                 </div>
-                <div className="flex grid-cols-12 items-center justify-center gap-4">
+                <div className="mt-4 flex grid-cols-12 items-end justify-center gap-4">
                   <div className="col-span-6">
                     <FormControl className="FormControl" variant="standard">
                       <label className="FormLabel">Product Color</label>
@@ -604,7 +649,7 @@ function ProductEditPopup() {
                 </div>
                 <div className="FormField">
                   <FormControl className="FormControl" variant="standard">
-                    <label className="FormLabel">Brand Name</label>
+                    <label className="FormLabel mt-4">Brand Name</label>
                     <Input
                       className="FormInput"
                       {...register('brandName', {
@@ -676,7 +721,7 @@ function ProductEditPopup() {
                 </div>
                 <div className="FormFields">
                   <FormControl className="FormControl" variant="standard">
-                    <label className="FormLabel">Item Weight</label>
+                    <label className=" FormLabel">Item Weight</label>
                     <Input
                       className="FormInput"
                       id="itemWeight"
@@ -724,7 +769,7 @@ function ProductEditPopup() {
                 </div>
                 <div className="FormField">
                   <FormControl className="FormControl" variant="standard">
-                    <label className="FormLabel">Address</label>
+                    <label className="FormLabel mt-4">Address</label>
                     <Input
                       className="FormInput"
                       {...register('address', {
@@ -750,7 +795,7 @@ function ProductEditPopup() {
                 </div>
                 <div className="FormField">
                   <FormControl className="FormControl" variant="standard">
-                    <label className="FormLabel mt-2">
+                    <label className="FormLabel mt-4">
                       Item Description{' '}
                       <span className="SubLabel">Write 01-250 Characters</span>
                     </label>
@@ -773,9 +818,9 @@ function ProductEditPopup() {
                     )}
                   </FormControl>
                 </div>
-                <div>
+                <div className="FormFields">
                   <FormControl className="FormControl" variant="standard">
-                    <label className="FormLabel">Vendor Discounts</label>
+                    <label className="FormLabel mt-4">Vendor Discounts</label>
                     <Input
                       className="FormInput"
                       id="vendorDiscount"
@@ -833,7 +878,7 @@ function ProductEditPopup() {
                     <div className="mt-2 flex items-center justify-start">
                       <FormControl className="FormControl" variant="standard">
                         <Input
-                          className="FormInput w-[100px]"
+                          className="FormInput w-[80px]"
                           id="stockQuantity"
                           type="number"
                           placeholder="quantity"
@@ -856,7 +901,7 @@ function ProductEditPopup() {
                       </FormControl>
                       <FormControl className="FormControl" variant="standard">
                         <Input
-                          className="FormInput w-[100px]"
+                          className="FormInput w-[80px]"
                           id="stockDimension"
                           type="number"
                           placeholder="Dimensions"
@@ -891,6 +936,7 @@ function ProductEditPopup() {
                             ],
                             role: 'cm',
                           }}
+                          customDDcss="mt-1"
                           customClassInputTitle="font-bold"
                           // inputTitle="Deduction Type"
                           defaultValue="Select type"
@@ -970,14 +1016,16 @@ function ProductEditPopup() {
                     </div>
                   </div>
                 </div>
-                <div className="FormField mt-4">
+                <div className="FormField">
                   <FormControl className="FormControl" variant="standard">
-                    <label className="FormLabel"># of Service Center</label>
+                    <label className="FormLabel mt-4">
+                      # of Service Center
+                    </label>
                     <Input
                       className="FormInput"
                       id="serviceCenter"
                       type="number"
-                      placeholder="Enter Item Weight"
+                      placeholder="Enter No. of Service Centers"
                       {...register('serviceCenter', {
                         // required: 'Amount is required in numbers',
                         validate: (value: any) =>
@@ -995,7 +1043,7 @@ function ProductEditPopup() {
                     )}
                   </FormControl>
                 </div>
-                <div>
+                <div className="mt-4">
                   <span className="text-xs font-semibold">Rust Proof</span>
                   <div className="mt-1 flex items-center justify-start gap-2">
                     <span
@@ -1020,9 +1068,9 @@ function ProductEditPopup() {
                     </span>
                   </div>
                 </div>
-                <div className="FormField mt-4">
+                <div className="FormField">
                   <FormControl className="FormControl" variant="standard">
-                    <label className="FormLabel">Average Life</label>
+                    <label className="FormLabel mt-4">Average Life</label>
                     <Input
                       className="FormInput"
                       {...register('averageLife', {
@@ -1099,28 +1147,34 @@ function ProductEditPopup() {
                   </div>
                 </div>
               </div>
-              <div className="FormFooter">
-                <Button
-                  className="btn-black-outline"
-                  type="submit"
-                  // onClick={handleFormClose}
-                  sx={{
-                    marginRight: '0.5rem',
-                    padding: '0.375rem 1.5rem !important',
-                  }}
-                >
-                  Cancel
-                </Button>
-                <Input
-                  type="submit"
-                  value="Update"
-                  className="btn-black-fill"
-                  disableUnderline
-                  sx={{
-                    padding: '0.175rem 2rem !important',
-                  }}
-                />
-              </div>
+            </div>
+            <div className="flex w-[100%] items-center justify-center p-4">
+              <Button
+                className="btn-black-outline"
+                type="submit"
+                // onClick={handleFormClose}
+                sx={{
+                  marginRight: '0.5rem',
+                  padding: '0.375rem 1.5rem !important',
+                }}
+              >
+                Cancel
+              </Button>
+              <Button
+                className="btn-black-fill w-[40%]"
+                type="submit"
+                // onClick={handleFormClose}
+                sx={{
+                  marginRight: '0.5rem',
+                  padding: '0.375rem 1.5rem !important',
+                }}
+              >
+                {isLoader ? (
+                  <CircularProgress size={20} color="inherit" />
+                ) : (
+                  'Update'
+                )}
+              </Button>
             </div>
           </div>
         </form>

@@ -6,6 +6,7 @@ type CustomDropDownProps = {
   inputTitle?: string;
   customWidth?: string;
   customHeight?: string;
+  customDDcss?: string;
   options?: any;
   register?: any;
   control?: any;
@@ -26,6 +27,7 @@ function CustomDropDown({
   inputTitle,
   customWidth,
   customHeight,
+  customDDcss,
   options,
   control,
   id,
@@ -68,7 +70,7 @@ function CustomDropDown({
                 style={{
                   border: border || '1px solid',
                 }}
-                className={`${customHeight || 'fixed-height'} ${
+                className={`${customDDcss} ${customHeight || 'fixed-height'} ${
                   customWidth || 'w-[100%]'
                 }`}
                 labelId="demo-simple-select-label"

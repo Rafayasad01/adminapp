@@ -26,4 +26,5 @@ export interface Product {
   price: string;
   ColorTax: string;
   file: any;
+  vendorId: string;
 }

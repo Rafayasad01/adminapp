@@ -56,15 +56,7 @@ function ProductPage() {
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(0);
   const [total, setTotal] = useState(0);
-  const [list, setList] = useState<any>([
-    {
-      stage: 'Demo',
-      room: 'Room 1',
-      activity: 'floor tiles removal, skirting removal, wall demonstration',
-      status: '75',
-      remarks: 'completed',
-    },
-  ]);
+  const [list, setList] = useState<any>([]);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [isLoader, setIsLoader] = React.useState(true);
   const [actionMenuItemid, setActionMenuItemid] = React.useState('');
@@ -450,7 +442,7 @@ function ProductPage() {
                         <td>
                           {item.productImages?.length > 0 ? (
                             <img
-                              className=""
+                              className="w-[35px]"
                               src={item.productImages[0]}
                               alt="img"
                             />

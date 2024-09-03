@@ -2,11 +2,11 @@
 // import Dialog from '@mui/material/Dialog';
 // import FormControl from '@mui/material/FormControl';
 // import Input from '@mui/material/Input';
-import IconButton from '@mui/material/IconButton';
-import React, { useState } from 'react';
+// import IconButton from '@mui/material/IconButton';
+import React, { useEffect, useState } from 'react';
 import CloseIcon from '@mui/icons-material/Close';
-import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
-import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
+// import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
+// import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 // import { useForm, Controller } from 'react-hook-form';
 // import TextField from '@mui/material/TextField';
 // import { createTheme } from '@mui/material';
@@ -35,6 +35,7 @@ import Button from '@mui/material/Button';
 import Input from '@mui/material/Input';
 import FormControl from '@mui/material/FormControl';
 import TextField from '@mui/material/TextField';
+import { CircularProgress } from '@mui/material';
 import productServices from '../../services/adminapp/adminProjectProducts';
 import assets from '../../assets';
 import {
@@ -89,19 +90,44 @@ function ProductAddPopup() {
   });
 
   const authState: any = useAppSelector((state) => state?.authState);
-  const [file, setFile] = useState<any>(null);
+  const [
+    ,
+    // file
+    setFile,
+  ] = useState<any>(null);
+  const [files, setFiles] = useState<any>([]);
   const [images, setImages] = useState<any>([]);
+  const [vendors, setVendors] = useState<any>([]);
+  const [isLoader, setIsLoader] = useState<any>(false);
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
+
+  useEffect(() => {
+    productServices
+      .getVendorLov()
+      .then((item: any) => {
+        if (item.data.success) {
+          setVendors(item.data.data);
+        }
+      })
+      .catch((err: Error) => {
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
+        });
+      });
+  }, []);
 
   const onSubmit = (data: any) => {
     const featureArr: any = [];
     data.features.forEach((element: any) => featureArr.push(element.feature));
-
+    setIsLoader(true);
     const formData = new FormData();
     formData.append('productGroup', data.productGroup);
     formData.append('productName', data.productName);
     formData.append('mobileNumber', data.mobileNumber);
+    formData.append('vendorId', data.vendorId);
     formData.append('itemCode', data.itemCode);
     formData.append('brandName', data.brandName);
     formData.append('costPrice', String(Number(data.costPrice)));
@@ -128,25 +154,23 @@ function ProductAddPopup() {
       'productCustomization',
       JSON.stringify(data.productCustomization) ?? []
     );
-    formData.append('productImages', data.file);
+    files.forEach((imageFile: any) => {
+      formData.append('productImages', imageFile);
+    });
     formData.append('tenant', authState.user.tenant);
-    console.log('🚀 ~ onSubmit ~ data:', data, formData);
-    // callback(obj);
 
     productServices
       .create(formData)
       .then((item: any) => {
         if (item.data.success) {
-          // setOpenFormDialog(false);
-          // setIsLoader(false);
+          setIsLoader(false);
           setIsNotify(true);
           setNotifyMessage({
             text: item.data.message,
             type: 'success',
           });
-          // setList([item.data.data, ...list]);
         } else {
-          // setIsLoader(false);
+          setIsLoader(false);
           setIsNotify(true);
           setNotifyMessage({
             text: item.data.message,
@@ -155,7 +179,7 @@ function ProductAddPopup() {
         }
       })
       .catch((err: Error) => {
-        // setIsLoader(false);
+        setIsLoader(false);
         setIsNotify(true);
         setNotifyMessage({
           text: err.message,
@@ -217,6 +241,7 @@ function ProductAddPopup() {
 
         reader.readAsDataURL(selectedFile);
         setFile(selectedFile);
+        setFiles((prevFile: any) => [...prevFile, selectedFile]);
         onChange(selectedFile);
       } else {
         setIsNotify(true);
@@ -232,6 +257,21 @@ function ProductAddPopup() {
     event.target.value = null;
     setFile(null);
     setValue('file', '');
+  };
+
+  const handleSelectedFileImages = (imgIndex: number) => {
+    setImages((prevImages: any) => {
+      return [
+        ...prevImages.slice(0, imgIndex),
+        ...prevImages.slice(imgIndex + 1),
+      ];
+    });
+    setFiles((prevFiles: any) => {
+      return [
+        ...prevFiles.slice(0, imgIndex),
+        ...prevFiles.slice(imgIndex + 1),
+      ];
+    });
   };
 
   const handleStockAvailability = (type: string) => {
@@ -513,11 +553,11 @@ function ProductAddPopup() {
         setIsOpen={setIsNotify}
         displayMessage={notifyMessage}
       />
-      <div className="cs-dialog container mx-auto mt-3 w-full">
+      <div className="Content cs-dialog container mx-auto mt-3 w-full">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="w-full rounded-lg bg-white shadow-lg">
             <div className="grid grid-cols-12 gap-4">
-              <div className="col-span-3 p-3">
+              <div className="col-span-3 mt-3 p-3">
                 <div
                   // onClick={() => handleAddMore()}
                   className="flex h-[266px] cursor-pointer items-center justify-center rounded-3xl bg-slate-200 xl:col-span-2 2xl:col-span-1"
@@ -541,40 +581,10 @@ function ProductAddPopup() {
                           />
                           <label
                             htmlFor="raised-button-image"
-                            className="ImageLabel"
+                            className="ImageLabe flex items-center justify-center"
                           >
-                            <Button component="span" className="ImageBtn">
-                              <FileUploadOutlinedIcon
-                                sx={{ marginRight: '0.5rem' }}
-                              />
-                              Upload
-                            </Button>
+                            <img alt="add" src={assets.images.addImg} />
                           </label>
-
-                          {file ? (
-                            <div className="ShowImageBox bg-background">
-                              <label className="ShowImageLabel">
-                                {file.name}
-                              </label>
-                              <IconButton
-                                className="btn-dot"
-                                onClick={() => {
-                                  file(null);
-                                  onChange(null);
-                                }}
-                              >
-                                <CloseOutlinedIcon
-                                  sx={{
-                                    color: '#1D1D1D',
-                                    fontSize: '1rem',
-                                    lineHeight: '1.5rem',
-                                  }}
-                                />
-                              </IconButton>
-                            </div>
-                          ) : (
-                            ''
-                          )}
                         </>
                       )}
                     />
@@ -582,20 +592,31 @@ function ProductAddPopup() {
                       <ErrorSpanBox error={errors.file?.message} />
                     )}
                   </div>
-                  <img alt="add" src={assets.images.addImg} />
                 </div>
                 {images?.map((img: any, i: number) => {
                   return (
-                    <div
-                      key={i}
-                      className="flex h-[266px] cursor-pointer items-center justify-center rounded-3xl bg-slate-200 xl:col-span-2 2xl:col-span-1"
-                    >
-                      <img src={img} alt="img" />
+                    <div className="relative" key={i}>
+                      <div
+                        key={i}
+                        className="mt-4 flex h-[266px] cursor-pointer items-center justify-center rounded-3xl bg-slate-200 xl:col-span-2 2xl:col-span-1"
+                      >
+                        <img
+                          className="max-w-[220px] rounded"
+                          src={img}
+                          alt="img"
+                        />
+                      </div>
+                      <div
+                        onClick={() => handleSelectedFileImages(i)}
+                        className="absolute right-[-10px] top-[-6px] cursor-pointer"
+                      >
+                        <img src={assets.images.removeIcon} alt="cancel" />
+                      </div>
                     </div>
                   );
                 })}
               </div>
-              <div className="col-span-6 m-3">
+              <div className="col-span-6 mt-3 border-r-2 border-[#808080bd] px-6">
                 <div className="FormFields">
                   <FormControl className="FormControl" variant="standard">
                     <label className="FormLabel">Project Group</label>
@@ -695,7 +716,7 @@ function ProductAddPopup() {
                     )}
                   </FormControl>
                 </div>
-                <div className="flex grid-cols-12 items-center justify-center gap-4">
+                <div className="mt-4 flex grid-cols-12 items-end justify-center gap-4">
                   <div className="col-span-6">
                     <FormControl className="FormControl" variant="standard">
                       <label className="FormLabel">Product Color</label>
@@ -802,7 +823,7 @@ function ProductAddPopup() {
                     );
                   })}
                 </div>
-                <div className="FormField">
+                <div className="FormFields">
                   <FormControl className="FormControl" variant="standard">
                     <label className="FormLabel">Brand Name</label>
                     <Input
@@ -826,6 +847,18 @@ function ProductAddPopup() {
                     {errors.brandName?.type === 'validate' && (
                       <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
                     )}
+                  </FormControl>
+                  <FormControl className="FormControl" variant="standard">
+                    <CustomDropDown
+                      id="vendorId"
+                      control={control}
+                      customClassInputTitle="font-normal"
+                      error={errors}
+                      register={register}
+                      options={{ roles: vendors }}
+                      inputTitle="Vendors"
+                      defaultValue="Select Vendors"
+                    />
                   </FormControl>
                 </div>
                 <div className="FormFields">
@@ -924,7 +957,7 @@ function ProductAddPopup() {
                 </div>
                 <div className="FormField">
                   <FormControl className="FormControl" variant="standard">
-                    <label className="FormLabel">Address</label>
+                    <label className="FormLabel mt-4">Address</label>
                     <Input
                       className="FormInput"
                       {...register('address', {
@@ -950,7 +983,7 @@ function ProductAddPopup() {
                 </div>
                 <div className="FormField">
                   <FormControl className="FormControl" variant="standard">
-                    <label className="FormLabel mt-2">
+                    <label className="FormLabel mt-4">
                       Item Description{' '}
                       <span className="SubLabel">Write 01-250 Characters</span>
                     </label>
@@ -975,7 +1008,7 @@ function ProductAddPopup() {
                 </div>
                 <div>
                   <FormControl className="FormControl" variant="standard">
-                    <label className="FormLabel">Vendor Discounts</label>
+                    <label className="FormLabel mt-4">Vendor Discounts</label>
                     <Input
                       className="FormInput"
                       id="vendorDiscount"
@@ -1012,7 +1045,7 @@ function ProductAddPopup() {
                       onClick={() => handleStockAvailability('No')}
                       className={`cursor-pointer rounded-full border-[1px] border-[gray] px-4 py-1 ${
                         watch('stockAvailability') === 'No'
-                          ? 'bg-black text-foreground'
+                          ? 'bg-primary text-foreground'
                           : ''
                       }`}
                     >
@@ -1022,7 +1055,7 @@ function ProductAddPopup() {
                       onClick={() => handleStockAvailability('Yes')}
                       className={`cursor-pointer rounded-full border-[1px] border-[gray] px-4 py-1 ${
                         watch('stockAvailability') === 'Yes'
-                          ? 'bg-black text-foreground'
+                          ? 'bg-primary text-foreground'
                           : ''
                       }`}
                     >
@@ -1033,7 +1066,7 @@ function ProductAddPopup() {
                     <div className="mt-2 flex items-center justify-start">
                       <FormControl className="FormControl" variant="standard">
                         <Input
-                          className="FormInput w-[100px]"
+                          className="FormInput w-[80px]"
                           id="stockQuantity"
                           type="number"
                           placeholder="quantity"
@@ -1055,7 +1088,7 @@ function ProductAddPopup() {
                       </FormControl>
                       <FormControl className="FormControl" variant="standard">
                         <Input
-                          className="FormInput w-[100px]"
+                          className="FormInput w-[80px]"
                           id="stockDimension"
                           type="number"
                           placeholder="Dimensions"
@@ -1090,6 +1123,7 @@ function ProductAddPopup() {
                             ],
                             role: 'cm',
                           }}
+                          customDDcss="mt-1"
                           customClassInputTitle="font-bold"
                           // inputTitle="Deduction Type"
                           defaultValue="Select type"
@@ -1108,7 +1142,7 @@ function ProductAddPopup() {
                         onClick={() => handleSpareAvailability('Available')}
                         className={`cursor-pointer rounded-full border-[1px] border-[gray] px-4 py-1 ${
                           watch('spareAvailability') === 'Available'
-                            ? 'bg-black text-foreground'
+                            ? 'bg-primary text-foreground'
                             : ''
                         }`}
                       >
@@ -1118,7 +1152,7 @@ function ProductAddPopup() {
                         onClick={() => handleSpareAvailability('Not Available')}
                         className={`cursor-pointer rounded-full border-[1px] border-[gray] px-4 py-1 ${
                           watch('spareAvailability') === 'Not Available'
-                            ? 'bg-black text-foreground'
+                            ? 'bg-primary text-foreground'
                             : ''
                         }`}
                       >
@@ -1135,7 +1169,7 @@ function ProductAddPopup() {
                         onClick={() => setValue('warranty', 'No')}
                         className={`cursor-pointer rounded-full border-[1px] border-[gray] px-4 py-1 ${
                           watch('warranty') === 'No'
-                            ? 'bg-black text-foreground'
+                            ? 'bg-primary text-foreground'
                             : ''
                         }`}
                       >
@@ -1169,14 +1203,16 @@ function ProductAddPopup() {
                     </div>
                   </div>
                 </div>
-                <div className="FormField mt-4">
+                <div className="FormField">
                   <FormControl className="FormControl" variant="standard">
-                    <label className="FormLabel"># of Service Center</label>
+                    <label className="FormLabel mt-4">
+                      # of Service Center
+                    </label>
                     <Input
                       className="FormInput"
                       id="serviceCenter"
                       type="number"
-                      placeholder="Enter Item Weight"
+                      placeholder="Enter No. of Service Centers"
                       {...register('serviceCenter', {
                         // required: 'Amount is required in numbers',
                         validate: (value: any) =>
@@ -1194,14 +1230,14 @@ function ProductAddPopup() {
                     )}
                   </FormControl>
                 </div>
-                <div>
+                <div className="mt-4">
                   <span className="text-xs font-semibold">Rust Proof</span>
                   <div className="mt-1 flex items-center justify-start gap-2">
                     <span
                       onClick={() => setValue('rustProof', 'No')}
                       className={`cursor-pointer rounded-full border-[1px] border-[gray] px-4 py-1 ${
                         watch('rustProof') === 'No'
-                          ? 'bg-black text-foreground'
+                          ? 'bg-primary text-foreground'
                           : ''
                       }`}
                     >
@@ -1211,7 +1247,7 @@ function ProductAddPopup() {
                       onClick={() => setValue('rustProof', 'Yes')}
                       className={`cursor-pointer rounded-full border-[1px] border-[gray] px-4 py-1 ${
                         watch('rustProof') === 'Yes'
-                          ? 'bg-black text-foreground'
+                          ? 'bg-primary text-foreground'
                           : ''
                       }`}
                     >
@@ -1221,7 +1257,7 @@ function ProductAddPopup() {
                 </div>
                 <div className="FormField mt-4">
                   <FormControl className="FormControl" variant="standard">
-                    <label className="FormLabel">Average Life</label>
+                    <label className="FormLabel mt-4">Average Life</label>
                     <Input
                       className="FormInput"
                       {...register('averageLife', {
@@ -1298,28 +1334,34 @@ function ProductAddPopup() {
                   </div>
                 </div>
               </div>
-              <div className="FormFooter">
-                <Button
-                  className="btn-black-outline"
-                  type="submit"
-                  // onClick={handleFormClose}
-                  sx={{
-                    marginRight: '0.5rem',
-                    padding: '0.375rem 1.5rem !important',
-                  }}
-                >
-                  Cancel
-                </Button>
-                <Input
-                  type="submit"
-                  value="Add"
-                  className="btn-black-fill"
-                  disableUnderline
-                  sx={{
-                    padding: '0.175rem 2rem !important',
-                  }}
-                />
-              </div>
+            </div>
+            <div className="flex w-[100%] items-center justify-center p-6">
+              <Button
+                className="btn-black-outline"
+                type="submit"
+                // onClick={handleFormClose}
+                sx={{
+                  marginRight: '0.5rem',
+                  padding: '0.375rem 1.5rem !important',
+                }}
+              >
+                Cancel
+              </Button>
+              <Button
+                className="btn-black-fill w-[40%]"
+                type="submit"
+                // onClick={handleFormClose}
+                sx={{
+                  marginRight: '0.5rem',
+                  padding: '0.375rem 1.5rem !important',
+                }}
+              >
+                {isLoader ? (
+                  <CircularProgress size={20} color="inherit" />
+                ) : (
+                  'Submit'
+                )}
+              </Button>
             </div>
           </div>
         </form>

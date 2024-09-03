@@ -2,6 +2,7 @@ import network from '../../utils/network';
 
 const NEW_EARTH_PREFIX = 'new-earth';
 const PRODUCTS_PREFIX = 'products';
+const VENDORS_PREFIX = 'vendors';
 
 // projects
 const getListProductService = (
@@ -31,7 +32,13 @@ const update = (id: string, data: any) => {
   );
 };
 
+// vendor
+const getVendorLov = () => {
+  return network.get(`${NEW_EARTH_PREFIX}/${VENDORS_PREFIX}/list/lov`);
+};
+
 export default {
+  getVendorLov,
   getListProductService,
   create,
   update,
