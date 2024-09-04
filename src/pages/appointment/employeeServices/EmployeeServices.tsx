@@ -244,7 +244,7 @@ function EmployeeServices() {
   const createFormHandler = (data: any) => {
     setIsLoader(true);
     employeeService
-      .StoreEmployeeServiceCreate(empId, data)
+      .StoreEmployeeServiceCreateSingle(empId, data)
       .then((item: any) => {
         if (item.data.success) {
           setOpenFormDialog(false);
@@ -474,8 +474,8 @@ function EmployeeServices() {
                 <tr>
                   <th className="w-[20%]">Name</th>
                   <th className="w-[20%]">Description</th>
-                  <th>Amount Type</th>
-                  <th>Amount</th>
+                  {/* <th>Amount Type</th>
+                  <th>Amount</th> */}
                   <th>Service Time (mints)</th>
                   <th>Created Date</th>
                   <th>Status</th>
@@ -515,9 +515,13 @@ function EmployeeServices() {
                             ? item.storeServiceCategoryItem.description
                             : '--'}
                         </td>
-                        <td>{item.amountType ? item.amountType : '--'}</td>
-                        <td>{item.amount ? item.amount : '--'}</td>
-                        <td>{item.serviceTime ? item.serviceTime : '--'}</td>
+                        {/* <td>{item.amountType ? item.amountType : '--'}</td>
+                        <td>{item.amount ? item.amount : '--'}</td> */}
+                        <td>
+                          {item.serviceTime
+                            ? item.serviceTime
+                            : item.storeServiceCategoryItem.serviceTime}
+                        </td>
                         <td>
                           {dayjs(
                             item.storeServiceCategoryItem.createdDate

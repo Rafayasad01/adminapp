@@ -21,9 +21,9 @@ import { useAppSelector } from '../../redux/redux-hooks';
 import storeService from '../../services/adminapp/adminStoreService';
 import { NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
 import { listingRolePermission } from '../../utils/helper';
+import PermissionPopup from '../../utils/PermissionPopup';
 import ServiceItemCreatePopup from './ServiceItemCreatePopup';
 import ServiceItemEditPopup from './ServiceItemEditPopup';
-import PermissionPopup from '../../utils/PermissionPopup';
 // import ServicesCreatePopup from './CategoriesServicesCreatePopup';
 // import ServicesEditPopup from './CategoriesServicesEditPopup';
 
@@ -393,6 +393,7 @@ function ServiceItemPage() {
                   <th className="w-[50%]">Description</th>
                   {/* <th>Min Quantity</th> */}
                   <th>Price</th>
+                  <th>Service Time</th>
                   <th>Status</th>
                   <th>&nbsp;</th>
                 </tr>
@@ -421,6 +422,7 @@ function ServiceItemPage() {
                         <td>{item.description ? item.description : '--'}</td>
                         {/* <td>{item.quantity}</td> */}
                         <td>{item.price}</td>
+                        <td>{item.serviceTime}</td>
                         <td>
                           {item.isActive ? (
                             <span className="badge badge-success">Enabled</span>

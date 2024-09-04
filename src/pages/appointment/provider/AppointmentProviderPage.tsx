@@ -52,8 +52,8 @@ function AppointmentProviderPage() {
     useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
   const actionMenuOptions = [
-    'Attendance',
-    'Rating',
+    // 'Attendance',
+    // 'Rating',
     'Services',
     'Schedule',
     'Edit',

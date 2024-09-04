@@ -109,6 +109,13 @@ const StoreEmployeeServiceCreate = (empId: any, data: any) => {
   );
 };
 
+const StoreEmployeeServiceCreateSingle = (empId: any, data: any) => {
+  return network.post(
+    `${STORE_PREFIX}/${EMPLOYEE_PREFIX}/${SERVICE_PREFIX}/create/single/${empId}`,
+    data
+  );
+};
+
 const StoreEmployeeServiceUpdate = (serviceId: any, data: any) => {
   return network.post(
     `${STORE_PREFIX}/${EMPLOYEE_PREFIX}/${SERVICE_PREFIX}/update/${serviceId}`,
@@ -190,6 +197,7 @@ export default {
   StoreEmployeeUpdateStatus,
   StoreEmployeeServiceList,
   StoreEmployeeServiceCreate,
+  StoreEmployeeServiceCreateSingle,
   StoreEmployeeServiceUpdate,
   StoreEmployeeServiceUpdateStatus,
   StoreEmployeeServiceDelete,

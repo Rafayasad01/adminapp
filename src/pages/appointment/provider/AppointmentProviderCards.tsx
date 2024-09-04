@@ -1,16 +1,15 @@
 import BadgeOutlinedIcon from '@mui/icons-material/BadgeOutlined';
-import LocalPhoneOutlinedIcon from '@mui/icons-material/LocalPhoneOutlined';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
+import LocalPhoneOutlinedIcon from '@mui/icons-material/LocalPhoneOutlined';
 import MailOutlineOutlinedIcon from '@mui/icons-material/MailOutlineOutlined';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import StarIcon from '@mui/icons-material/Star';
+import Avatar from '@mui/material/Avatar';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import IconButton from '@mui/material/IconButton';
 import Switch from '@mui/material/Switch';
 import dayjs from 'dayjs';
 import React, { useState } from 'react';
-import Avatar from '@mui/material/Avatar';
 
 type AppointmentProviderCardsProps = {
   data: any;
@@ -62,10 +61,10 @@ const AppointmentProviderCards = ({
                         <span className="text-sm font-semibold capitalize">
                           {`${item.name}`}{' '}
                         </span>
-                        <div className="flex items-center px-1">
+                        {/* <div className="flex items-center px-1">
                           <StarIcon className="text-base text-inherit text-yellow-500" />{' '}
                           <span className="px-[1px] font-semibold">{`${item.rating}`}</span>
-                        </div>
+                        </div> */}
                       </div>
                       <div className="flex w-[100%] items-center justify-between">
                         <div className="">
