@@ -13,6 +13,7 @@ export type QuotationItem = {
 type Quotation = {
   id: string;
   appUserId: string;
+  appUserName: string;
   quoteNumber: string;
   expiryDate: string;
   tax: string | null;

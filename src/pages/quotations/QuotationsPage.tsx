@@ -266,6 +266,7 @@ const QuotationsPage = () => {
               <thead>
                 <tr>
                   <th>Quote</th>
+                  <th>Customer</th>
                   <th className="">Expiry</th>
                   <th>Discount</th>
                   <th>Total</th>
@@ -278,6 +279,7 @@ const QuotationsPage = () => {
                     return (
                       <tr key={index}>
                         <td>{item.quoteNumber ?? '--'}</td>
+                        <td>{item.appUserName ?? '--'}</td>
                         <td>
                           {dayjs(item.expiryDate).isValid()
                             ? dayjs(item.expiryDate)?.format(
