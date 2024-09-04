@@ -21,7 +21,19 @@ const create = (data: any) => {
   return network.post(`${NEW_EARTH_PREFIX}/${PRODUCTS_PREFIX}/create`, data);
 };
 
+/**
+ * Get the level of value for products.
+ * @param data object containing information
+ * @returns Promise
+ */
+const getByVendorService = (id: string) => {
+  return network.get(
+    `${NEW_EARTH_PREFIX}/${PRODUCTS_PREFIX}/list/vendor/${id}`
+  );
+};
+
 export default {
+  getByVendorService,
   getListProductService,
   create,
 };

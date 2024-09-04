@@ -8,6 +8,10 @@ const getVendorService = (data: object) => {
   return network.get(`${NEW_EARTH_PREFIX}/${VENDOR_PREFIX}/list`, data);
 };
 
+const getVendorLovService = (data?: object) => {
+  return network.get(`${NEW_EARTH_PREFIX}/${VENDOR_PREFIX}/list/lov`, data);
+};
+
 const createVendorService = (data: any) => {
   return network.post(`${NEW_EARTH_PREFIX}/${VENDOR_PREFIX}/create`, data);
 };
@@ -25,6 +29,7 @@ const deleteStatusVendorService = (data: { id: string }) => {
 
 export default {
   getVendorService,
+  getVendorLovService,
   createVendorService,
   updateVendorService,
   deleteStatusVendorService,
