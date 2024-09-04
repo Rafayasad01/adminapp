@@ -11,10 +11,12 @@ import moment from 'moment';
 import assets from '../../assets';
 
 type RatingAccordionsProps = {
-  data: Array<object>;
+  data: Array<object> | any;
 };
 
 function ViewCardAccordin({ data }: RatingAccordionsProps) {
+  console.log('dataaaaa', data);
+
   const [expanded, setExpanded] = React.useState<string | false>(`panel0`);
 
   const handleChange =
@@ -24,8 +26,8 @@ function ViewCardAccordin({ data }: RatingAccordionsProps) {
 
   return (
     <div className="max-h-[250px]">
-      {data?.length > 0 ? (
-        data?.map((item: any, index: number) => {
+      {data?.services?.length > 0 ? (
+        data?.services?.map((item: any, index: number) => {
           const date = dayjs(item.appointmentTime);
           const formattedDateTime = dayjs(date).format('h:mm:ss A');
           //   const date2 = date.add(item.serviceTime, 'minute');
