@@ -32,6 +32,20 @@ const update = (id: string, data: any) => {
   );
 };
 
+const updateStatus = (id: string, data: any) => {
+  return network.post(
+    `${NEW_EARTH_PREFIX}/${PRODUCTS_PREFIX}/update/status/${id}`,
+    data
+  );
+};
+
+const deleteStatus = (id: string, data: any) => {
+  return network.post(
+    `${NEW_EARTH_PREFIX}/${PRODUCTS_PREFIX}/delete/${id}`,
+    data
+  );
+};
+
 // vendor
 const getVendorLov = () => {
   return network.get(`${NEW_EARTH_PREFIX}/${VENDORS_PREFIX}/list/lov`);
@@ -42,4 +56,6 @@ export default {
   getListProductService,
   create,
   update,
+  updateStatus,
+  deleteStatus,
 };

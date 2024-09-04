@@ -28,7 +28,6 @@ import Loader from '../../components/common/Loader';
 import Notify from '../../components/common/Notify';
 import TopBar from '../../components/common/TopBar';
 import { useAppSelector } from '../../redux/redux-hooks';
-import storeProjectPlanService from '../../services/adminapp/adminProjectPlans';
 import storeProjectProductService from '../../services/adminapp/adminProjectProducts';
 // import storeAppUsers from '../../services/adminapp/adminAppUser';
 import {
@@ -120,8 +119,8 @@ function ProductPage() {
       const newPage = 0;
       setSearch(searchTxt);
       setPage(newPage);
-      storeProjectPlanService
-        .getListProjectService(
+      storeProjectProductService
+        .getListProductService(
           authState.user.tenant,
           searchTxt,
           newPage,
@@ -139,8 +138,8 @@ function ProductPage() {
     newPage: number
   ) => {
     setPage(newPage);
-    storeProjectPlanService
-      .getListProjectService(
+    storeProjectProductService
+      .getListProductService(
         authState.user.tenant,
         search,
         newPage,
@@ -159,8 +158,8 @@ function ProductPage() {
     const newPage = 0;
     setRowsPerPage(newRowperPage);
     setPage(newPage);
-    storeProjectPlanService
-      .getListProjectService(
+    storeProjectProductService
+      .getListProductService(
         authState.user.tenant,
         search,
         newPage,
@@ -177,8 +176,8 @@ function ProductPage() {
     const data = {
       isDeleted: true,
     };
-    storeProjectPlanService
-      .deleteStatusProjectService(id, data)
+    storeProjectProductService
+      .deleteStatus(id, data)
       .then((updateItem) => {
         if (updateItem.data.success) {
           setIsLoader(false);
@@ -276,20 +275,18 @@ function ProductPage() {
       const data = {
         isActive: event.target.checked,
       };
-      storeProjectPlanService
-        .updateStatusProjectService(id, data)
-        .then((updateItem) => {
-          if (updateItem.data.success) {
-            setList((newArr: any) => {
-              return newArr.map((item: any) => {
-                if (item.id === id) {
-                  item.isActive = updateItem.data.data.isActive;
-                }
-                return { ...item };
-              });
+      storeProjectProductService.updateStatus(id, data).then((updateItem) => {
+        if (updateItem.data.success) {
+          setList((newArr: any) => {
+            return newArr.map((item: any) => {
+              if (item.id === id) {
+                item.isActive = updateItem.data.data.isActive;
+              }
+              return { ...item };
             });
-          }
-        });
+          });
+        }
+      });
     } else {
       setIsNotify(true);
       setNotifyMessage({
@@ -417,7 +414,7 @@ function ProductPage() {
                 <tr>
                   <th>Prod. group</th>
                   <th className="">Prod. name</th>
-                  <th>M. No.</th>
+                  <th>Mob. No.</th>
                   <th>Image</th>
                   <th className="w-[15%]">Color & prices</th>
                   <th>item code</th>

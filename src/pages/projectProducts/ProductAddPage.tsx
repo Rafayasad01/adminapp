@@ -55,6 +55,7 @@ import { formatCurrency } from '../../utils/helper';
 // import CustomBgDropdown from '../../components/common/CustomBgDropdown';
 import CustomDropDown from '../../components/common/CustomDropDown';
 import { useAppSelector } from '../../redux/redux-hooks';
+import TopBar from '../../components/common/TopBar';
 
 function ProductAddPopup() {
   const {
@@ -68,7 +69,7 @@ function ProductAddPopup() {
     defaultValues: {
       stockAvailability: 'Yes',
       spareAvailability: 'Available',
-      warranty: 'No',
+      // warranty: 'No',
       rustProof: 'No',
     },
   });
@@ -272,7 +273,18 @@ function ProductAddPopup() {
         ...prevFiles.slice(imgIndex + 1),
       ];
     });
+    // const temp = [...images];
+    // if (temp?.length <= 0) {
+
+    // }
   };
+
+  useEffect(() => {
+    if (images?.length === 0) {
+      setFile(null);
+      setValue('file', '');
+    }
+  }, [images]);
 
   const handleStockAvailability = (type: string) => {
     setValue('stockAvailability', type);
@@ -548,14 +560,19 @@ function ProductAddPopup() {
     //   </div>
     // </Dialog>
     <>
+      <TopBar />
       <Notify
         isOpen={isNotify}
         setIsOpen={setIsNotify}
         displayMessage={notifyMessage}
       />
-      <div className="Content cs-dialog container mx-auto mt-3 w-full">
+      <div className="Content cs-dialog container mx-auto mt-1 w-full">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="w-full rounded-lg bg-white shadow-lg">
+            <div className="FormHeader mx-4 w-full px-2 py-2">
+              <span className="Title">Add Product</span>
+            </div>
+            <hr className="mx-4" />
             <div className="grid grid-cols-12 gap-4">
               <div className="col-span-3 mt-3 p-3">
                 <div
@@ -566,7 +583,7 @@ function ProductAddPopup() {
                     <Controller
                       name="file"
                       control={control}
-                      // rules={{ required: 'Image is required' }}
+                      rules={{ required: 'Image is required' }}
                       render={({ field: { onChange } }) => (
                         <>
                           <input
@@ -588,33 +605,35 @@ function ProductAddPopup() {
                         </>
                       )}
                     />
-                    {errors.file && (
-                      <ErrorSpanBox error={errors.file?.message} />
-                    )}
                   </div>
                 </div>
-                {images?.map((img: any, i: number) => {
-                  return (
-                    <div className="relative" key={i}>
-                      <div
-                        key={i}
-                        className="mt-4 flex h-[266px] cursor-pointer items-center justify-center rounded-3xl bg-slate-200 xl:col-span-2 2xl:col-span-1"
-                      >
-                        <img
-                          className="max-w-[220px] rounded"
-                          src={img}
-                          alt="img"
-                        />
+                <div>
+                  {errors.file && <ErrorSpanBox error={errors.file?.message} />}
+                </div>
+                <div className="flex flex-wrap gap-6">
+                  {images?.map((img: any, i: number) => {
+                    return (
+                      <div className="relative mt-6" key={i}>
+                        <div
+                          key={i}
+                          className="flex h-[90px] cursor-pointer items-center justify-center rounded-3xl xl:col-span-2 2xl:col-span-1"
+                        >
+                          <img
+                            className=" max-w-[110px] rounded"
+                            src={img}
+                            alt="img"
+                          />
+                        </div>
+                        <div
+                          onClick={() => handleSelectedFileImages(i)}
+                          className="absolute right-[-12px] top-[-4px] cursor-pointer"
+                        >
+                          <img src={assets.images.removeIcon} alt="cancel" />
+                        </div>
                       </div>
-                      <div
-                        onClick={() => handleSelectedFileImages(i)}
-                        className="absolute right-[-10px] top-[-6px] cursor-pointer"
-                      >
-                        <img src={assets.images.removeIcon} alt="cancel" />
-                      </div>
-                    </div>
-                  );
-                })}
+                    );
+                  })}
+                </div>
               </div>
               <div className="col-span-6 mt-3 border-r-2 border-[#808080bd] px-6">
                 <div className="FormFields">
@@ -676,13 +695,13 @@ function ProductAddPopup() {
                       type="number"
                       placeholder="Enter Mobile Number"
                       {...register('mobileNumber', {
-                        // required: 'Amount is required in numbers',
+                        required: 'Mobile Number is required in numbers',
                         validate: (value: any) =>
                           VALIDATE_NON_NEGATIVE_NUM(value),
                         maxLength: {
-                          value: 10,
+                          value: 13,
                           message:
-                            'Length should not be excceed from 10 numbers.',
+                            'Length should not be excceed from 13 numbers.',
                         },
                       })}
                       disableUnderline
@@ -696,7 +715,7 @@ function ProductAddPopup() {
                     <Input
                       className="FormInput"
                       {...register('itemCode', {
-                        required: false,
+                        required: true,
                         pattern: PATTERN.CHAR_SPACE_DASH,
                         validate: (value) => value.length <= 150,
                       })}
@@ -777,7 +796,7 @@ function ProductAddPopup() {
                         type="number"
                         placeholder="Enter Mobile Number"
                         {...register('ColorTax', {
-                          // required: 'Amount is required in numbers',
+                          // required: 'Tax is required in numbers',
                           validate: (value: any) =>
                             VALIDATE_NON_NEGATIVE_NUM(value),
                           maxLength: {
@@ -829,17 +848,17 @@ function ProductAddPopup() {
                     <Input
                       className="FormInput"
                       {...register('brandName', {
-                        required: false,
+                        required: true,
                         pattern: PATTERN.CHAR_SPACE_DASH,
                         validate: (value) => value.length <= 150,
                       })}
-                      placeholder="Enter Model No."
+                      placeholder="Enter Brand Name"
                       type="text"
                       id="brandName"
                       disableUnderline
                     />
                     {errors.brandName?.type === 'required' && (
-                      <ErrorSpanBox error="Brand name is required" />
+                      <ErrorSpanBox error="Brand Name is required" />
                     )}
                     {errors.brandName?.type === 'pattern' && (
                       <ErrorSpanBox error={INVALID_CHAR} />
@@ -858,6 +877,7 @@ function ProductAddPopup() {
                       options={{ roles: vendors }}
                       inputTitle="Vendors"
                       defaultValue="Select Vendors"
+                      validateRequired
                     />
                   </FormControl>
                 </div>
@@ -870,7 +890,7 @@ function ProductAddPopup() {
                       type="number"
                       placeholder="Enter Cost Price"
                       {...register('costPrice', {
-                        // required: 'Amount is required in numbers',
+                        required: 'Amount is required in numbers',
                         validate: (value: any) =>
                           VALIDATE_NON_NEGATIVE_NUM(value),
                         maxLength: {
@@ -893,13 +913,13 @@ function ProductAddPopup() {
                       type="number"
                       placeholder="Enter Tax %"
                       {...register('tax', {
-                        // required: 'Amount is required in numbers',
+                        required: 'Tax is required in numbers',
                         validate: (value: any) =>
                           VALIDATE_NON_NEGATIVE_NUM(value),
                         maxLength: {
-                          value: 10,
+                          value: 3,
                           message:
-                            'Length should not be excceed from 10 numbers.',
+                            'Length should not be excceed from 3 numbers.',
                         },
                       })}
                       disableUnderline
@@ -916,7 +936,7 @@ function ProductAddPopup() {
                       type="number"
                       placeholder="Enter Item Weight"
                       {...register('itemWeight', {
-                        // required: 'Amount is required in numbers',
+                        required: 'Weight is required in numbers',
                         validate: (value: any) =>
                           VALIDATE_NON_NEGATIVE_NUM(value),
                         maxLength: {
@@ -939,7 +959,7 @@ function ProductAddPopup() {
                       type="number"
                       placeholder="Enter Item Dimensions"
                       {...register('itemDimension', {
-                        // required: 'Amount is required in numbers',
+                        required: 'Dimensions is required in numbers',
                         validate: (value: any) =>
                           VALIDATE_NON_NEGATIVE_NUM(value),
                         maxLength: {
@@ -961,7 +981,7 @@ function ProductAddPopup() {
                     <Input
                       className="FormInput"
                       {...register('address', {
-                        required: false,
+                        required: true,
                         pattern: PATTERN.CHAR_SPACE_DASH,
                         validate: (value) => value.length <= 150,
                       })}
@@ -1015,7 +1035,7 @@ function ProductAddPopup() {
                       type="number"
                       placeholder="Enter Number"
                       {...register('vendorDiscount', {
-                        // required: 'Amount is required in numbers',
+                        required: 'Discount is required in numbers',
                         validate: (value: any) =>
                           VALIDATE_NON_NEGATIVE_NUM(value),
                         maxLength: {
@@ -1071,7 +1091,9 @@ function ProductAddPopup() {
                           type="number"
                           placeholder="quantity"
                           {...register('stockQuantity', {
-                            // required: 'Amount is required in numbers',
+                            required:
+                              watch('stockAvailability') === 'Yes' &&
+                              'Required',
                             validate: (value: any) =>
                               VALIDATE_NON_NEGATIVE_NUM(value),
                             maxLength: {
@@ -1093,7 +1115,9 @@ function ProductAddPopup() {
                           type="number"
                           placeholder="Dimensions"
                           {...register('stockDimension', {
-                            // required: 'Amount is required in numbers',
+                            required:
+                              watch('stockAvailability') === 'Yes' &&
+                              'Required',
                             validate: (value: any) =>
                               VALIDATE_NON_NEGATIVE_NUM(value),
                             maxLength: {
@@ -1125,8 +1149,8 @@ function ProductAddPopup() {
                           }}
                           customDDcss="mt-1"
                           customClassInputTitle="font-bold"
-                          // inputTitle="Deduction Type"
                           defaultValue="Select type"
+                          validateRequired
                         />
                       </FormControl>
                     </div>
@@ -1180,7 +1204,7 @@ function ProductAddPopup() {
                           <Input
                             className="FormInput"
                             {...register('warranty', {
-                              required: false,
+                              required: true,
                               pattern: PATTERN.CHAR_SPACE_DASH,
                               validate: (value) => value.length <= 150,
                             })}
@@ -1214,13 +1238,13 @@ function ProductAddPopup() {
                       type="number"
                       placeholder="Enter No. of Service Centers"
                       {...register('serviceCenter', {
-                        // required: 'Amount is required in numbers',
+                        required: 'No. of Service is required in numbers',
                         validate: (value: any) =>
                           VALIDATE_NON_NEGATIVE_NUM(value),
                         maxLength: {
-                          value: 10,
+                          value: 5,
                           message:
-                            'Length should not be excceed from 10 numbers.',
+                            'Length should not be excceed from 5 numbers.',
                         },
                       })}
                       disableUnderline
@@ -1261,7 +1285,7 @@ function ProductAddPopup() {
                     <Input
                       className="FormInput"
                       {...register('averageLife', {
-                        required: false,
+                        required: true,
                         pattern: PATTERN.CHAR_SPACE_DASH,
                         validate: (value) => value.length <= 150,
                       })}
