@@ -25,7 +25,7 @@ import { Fragment, useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import assets from '../../assets';
 import { useAppSelector } from '../../redux/redux-hooks';
-import CAN, { defineRules } from '../../services/permissions/permissions';
+import { defineRules } from '../../services/permissions/permissions';
 import { MODULE_EMPLOYEES } from '../../utils/constants';
 import ArrowDown from '../icons/ArrowDown';
 import ArrowUp from '../icons/ArrowUp';
@@ -39,31 +39,31 @@ const links = [
   {
     name: 'Dashboard',
     path: 'home',
-    permission: 'Dashboard List',
+    // permission: 'Dashboard List',
     icon: <GridViewOutlinedIcon fontSize="inherit" />,
   },
   {
     name: 'Store Appointment',
     path: 'store-appointment',
-    permission: 'Appointment Parent',
+    // permission: 'Appointment Parent',
     icon: <SplitscreenOutlinedIcon fontSize="inherit" />,
     childLinks: [
       {
         name: 'Services',
         path: 'store-appointment/service',
-        permission: 'Category List',
+        // permission: 'Category List',
         icon: <GridViewOutlinedIcon fontSize="inherit" />,
       },
       {
         name: 'Employees',
         path: 'store-appointment/employees',
-        permission: 'Category List',
+        // permission: 'Category List',
         icon: <ProviderIcon />,
       },
       {
         name: 'Appointments',
         path: 'store-appointment/appointments',
-        permission: 'Category List',
+        // permission: 'Category List',
         icon: <VisitIcon />,
       },
       // {
@@ -109,19 +109,19 @@ const links = [
   {
     name: 'User',
     path: 'user',
-    permission: 'Appointment Parent',
+    // permission: 'Appointment Parent',
     icon: <PersonOutlineOutlinedIcon fontSize="inherit" />,
     childLinks: [
       {
         name: 'Customers',
         path: 'user/app-user/list',
-        permission: 'Customer List',
+        // permission: 'Customer List',
         icon: <PersonOutlineOutlinedIcon fontSize="inherit" />,
       },
       {
         name: 'Admin Users',
         path: 'user/employees',
-        permission: 'Employee List',
+        // permission: 'Employee List',
         icon: <PeopleOutlineOutlinedIcon className="w-[17px]" />,
       },
     ],
@@ -136,7 +136,7 @@ const links = [
   {
     name: 'Banners',
     path: 'banners',
-    permission: 'Banners List',
+    // permission: 'Banners List',
     icon: <ViewCarouselOutlinedIcon className="w-[17px]" />,
   },
   // {
@@ -148,7 +148,7 @@ const links = [
   {
     name: 'Notifications',
     path: 'notification',
-    permission: 'Notification List',
+    // permission: 'Notification List',
     icon: <NotificationsOutlinedIcon fontSize="inherit" />,
   },
   // {
@@ -160,7 +160,7 @@ const links = [
   {
     name: 'Settings',
     path: 'settings',
-    permission: 'Setting View',
+    // permission: 'Setting View',
     icon: <SettingsOutlinedIcon fontSize="inherit" />,
   },
 ];
@@ -290,15 +290,16 @@ function Sidebar() {
             return null;
           }
         }
-        return CAN('canView', el.permission as string);
+        // return CAN('canView', el.permission as string);
+        return true;
       });
       // console.log("tempList", tempList);
-      tempList.unshift({
-        name: 'Dashboard',
-        path: 'home',
-        permission: 'Dashboard List',
-        icon: <GridViewOutlinedIcon fontSize="inherit" />,
-      });
+      // tempList.unshift({
+      //   name: 'Dashboard',
+      //   path: 'home',
+      //   //permission: 'Dashboard List',
+      //   icon: <GridViewOutlinedIcon fontSize="inherit" />,
+      // });
       setList(tempList);
     }
   }, [null, appItems?.employeeLimit]);
