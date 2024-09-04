@@ -5,7 +5,7 @@
 // import IconButton from '@mui/material/IconButton';
 import React, { useEffect, useState } from 'react';
 import CloseIcon from '@mui/icons-material/Close';
-import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
+// import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
 // import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 // import { useForm, Controller } from 'react-hook-form';
 // import TextField from '@mui/material/TextField';
@@ -55,6 +55,7 @@ import {
 import { formatCurrency } from '../../utils/helper';
 // import CustomBgDropdown from '../../components/common/CustomBgDropdown';
 import CustomDropDown from '../../components/common/CustomDropDown';
+import TopBar from '../../components/common/TopBar';
 
 function ProductEditPopup() {
   const { id }: any = useParams();
@@ -126,7 +127,7 @@ function ProductEditPopup() {
         featureAppend({ feature });
       });
     }
-    console.log('data.productImages', data.productImages);
+    // console.log('data.productImages', data.productImages);
     setImages((img: string) => [...img, ...data.productImages]);
     setFiles((img: string) => [...img, ...data.productImages]);
     // const fil = new File(data.productImages, 'uploaded');
@@ -158,6 +159,22 @@ function ProductEditPopup() {
 
   // console.log('featureArr', data);
   const onSubmit = (submitFormData: any) => {
+    if (fields.length <= 0) {
+      setIsNotify(true);
+      setNotifyMessage({
+        text: 'At least one product color, price and tax should be added',
+        type: 'error',
+      });
+      return;
+    }
+    if (featureFields.length <= 0) {
+      setIsNotify(true);
+      setNotifyMessage({
+        text: 'At least one feature should be added',
+        type: 'error',
+      });
+      return;
+    }
     setIsLoader(true);
     const featureArr = submitFormData.features.map(
       (element: any) => element.feature
@@ -300,6 +317,13 @@ function ProductEditPopup() {
     setValue('file', '');
   };
 
+  useEffect(() => {
+    if (images?.length === 0) {
+      setFile(null);
+      setValue('file', '');
+    }
+  }, [images]);
+
   const handleSelectedFileImages = (imgIndex: number) => {
     const deletedImgs = images.filter(
       (img: any, index: number) => index === imgIndex
@@ -344,6 +368,7 @@ function ProductEditPopup() {
 
   return (
     <>
+      <TopBar />
       <Notify
         isOpen={isNotify}
         setIsOpen={setIsNotify}
@@ -352,6 +377,10 @@ function ProductEditPopup() {
       <div className="Content cs-dialog container mx-auto mt-3 w-full">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="w-full rounded-lg bg-white shadow-lg">
+            <div className="FormHeader mx-4 w-full px-2 py-2">
+              <span className="Title">Update Product</span>
+            </div>
+            <hr className="mx-4" />
             <div className="grid grid-cols-12 gap-4">
               <div className="col-span-3 p-3">
                 <div
@@ -377,37 +406,10 @@ function ProductEditPopup() {
                           />
                           <label
                             htmlFor="raised-button-image"
-                            className="ImageLabel"
+                            className="ImageLabe flex items-center justify-center"
                           >
-                            <Button component="span" className="ImageBtn">
-                              <FileUploadOutlinedIcon
-                                sx={{ marginRight: '0.5rem' }}
-                              />
-                              Upload
-                            </Button>
+                            <img alt="add" src={assets.images.addImg} />
                           </label>
-
-                          {/* {file ? (
-                            <div className="ShowImageBox bg-background">
-                              <IconButton
-                                className="btn-dot"
-                                onClick={() => {
-                                  file(null);
-                                  onChange(null);
-                                }}
-                              >
-                                <CloseOutlinedIcon
-                                  sx={{
-                                    color: '#1D1D1D',
-                                    fontSize: '1rem',
-                                    lineHeight: '1.5rem',
-                                  }}
-                                />
-                              </IconButton>
-                            </div>
-                          ) : (
-                            ''
-                          )} */}
                         </>
                       )}
                     />
@@ -415,30 +417,31 @@ function ProductEditPopup() {
                       <ErrorSpanBox error={errors.file?.message} />
                     )}
                   </div>
-                  <img alt="add" src={assets.images.addImg} />
                 </div>
-                {images?.map((img: any, i: number) => {
-                  return (
-                    <div className="relative" key={i}>
-                      <div
-                        key={i}
-                        className="mt-4 flex h-[266px] cursor-pointer items-center justify-center rounded-3xl bg-slate-200 xl:col-span-2 2xl:col-span-1"
-                      >
-                        <img
-                          className="max-w-[220px] rounded"
-                          src={img}
-                          alt="img"
-                        />
+                <div className="flex flex-wrap gap-6">
+                  {images?.map((img: any, i: number) => {
+                    return (
+                      <div className="relative mt-6" key={i}>
+                        <div
+                          key={i}
+                          className="flex h-[90px] cursor-pointer items-center justify-center rounded-3xl xl:col-span-2 2xl:col-span-1"
+                        >
+                          <img
+                            className=" max-w-[110px] rounded"
+                            src={img}
+                            alt="img"
+                          />
+                        </div>
+                        <div
+                          onClick={() => handleSelectedFileImages(i)}
+                          className="absolute right-[-12px] top-[-4px] cursor-pointer"
+                        >
+                          <img src={assets.images.removeIcon} alt="cancel" />
+                        </div>
                       </div>
-                      <div
-                        onClick={() => handleSelectedFileImages(i)}
-                        className="absolute right-[-10px] top-[-6px] cursor-pointer"
-                      >
-                        <img src={assets.images.removeIcon} alt="cancel" />
-                      </div>
-                    </div>
-                  );
-                })}
+                    );
+                  })}
+                </div>
               </div>
               <div className="col-span-6 mt-3 border-r-2 border-[#808080bd] px-6">
                 <div className="FormFields">
@@ -451,13 +454,13 @@ function ProductEditPopup() {
                         pattern: PATTERN.CHAR_SPACE_DASH,
                         validate: (value) => value.length <= 150,
                       })}
-                      placeholder="Enter Project Name"
+                      placeholder="Enter Project Group"
                       type="text"
                       id="productGroup"
                       disableUnderline
                     />
                     {errors.productGroup?.type === 'required' && (
-                      <ErrorSpanBox error="Project Name is required" />
+                      <ErrorSpanBox error="Project Group is required" />
                     )}
                     {errors.productGroup?.type === 'pattern' && (
                       <ErrorSpanBox error={INVALID_CHAR} />
@@ -467,7 +470,7 @@ function ProductEditPopup() {
                     )}
                   </FormControl>
                   <FormControl className="FormControl" variant="standard">
-                    <label className="FormLabel">Project Name</label>
+                    <label className="FormLabel">Product Name</label>
                     <Input
                       className="FormInput"
                       {...register('productName', {
@@ -475,13 +478,13 @@ function ProductEditPopup() {
                         pattern: PATTERN.CHAR_SPACE_DASH,
                         validate: (value) => value.length <= 150,
                       })}
-                      placeholder="Enter Project Name"
+                      placeholder="Enter Product Name"
                       type="text"
                       id="productName"
                       disableUnderline
                     />
                     {errors.productName?.type === 'required' && (
-                      <ErrorSpanBox error="Project Name is required" />
+                      <ErrorSpanBox error="Product Name is required" />
                     )}
                     {errors.productName?.type === 'pattern' && (
                       <ErrorSpanBox error={INVALID_CHAR} />
@@ -500,13 +503,13 @@ function ProductEditPopup() {
                       type="number"
                       placeholder="Enter Mobile Number"
                       {...register('mobileNumber', {
-                        // required: 'Amount is required in numbers',
+                        required: 'Mobile Number is required in numbers',
                         validate: (value: any) =>
                           VALIDATE_NON_NEGATIVE_NUM(value),
                         maxLength: {
-                          value: 10,
+                          value: 13,
                           message:
-                            'Length should not be excceed from 10 numbers.',
+                            'Length should not be excceed from 13 numbers.',
                         },
                       })}
                       disableUnderline
@@ -520,7 +523,7 @@ function ProductEditPopup() {
                     <Input
                       className="FormInput"
                       {...register('itemCode', {
-                        required: false,
+                        required: true,
                         pattern: PATTERN.CHAR_SPACE_DASH,
                         validate: (value) => value.length <= 150,
                       })}
@@ -653,11 +656,11 @@ function ProductEditPopup() {
                     <Input
                       className="FormInput"
                       {...register('brandName', {
-                        required: false,
+                        required: true,
                         pattern: PATTERN.CHAR_SPACE_DASH,
                         validate: (value) => value.length <= 150,
                       })}
-                      placeholder="Enter Model No."
+                      placeholder="Enter Brand Name"
                       type="text"
                       id="brandName"
                       disableUnderline
@@ -682,7 +685,7 @@ function ProductEditPopup() {
                       type="number"
                       placeholder="Enter Cost Price"
                       {...register('costPrice', {
-                        // required: 'Amount is required in numbers',
+                        required: 'Price is required in numbers',
                         validate: (value: any) =>
                           VALIDATE_NON_NEGATIVE_NUM(value),
                         maxLength: {
@@ -705,13 +708,13 @@ function ProductEditPopup() {
                       type="number"
                       placeholder="Enter Tax %"
                       {...register('tax', {
-                        // required: 'Amount is required in numbers',
+                        required: 'Tax is required in numbers',
                         validate: (value: any) =>
                           VALIDATE_NON_NEGATIVE_NUM(value),
                         maxLength: {
-                          value: 10,
+                          value: 3,
                           message:
-                            'Length should not be excceed from 10 numbers.',
+                            'Length should not be excceed from 3 numbers.',
                         },
                       })}
                       disableUnderline
@@ -728,7 +731,7 @@ function ProductEditPopup() {
                       type="number"
                       placeholder="Enter Item Weight"
                       {...register('itemWeight', {
-                        // required: 'Amount is required in numbers',
+                        required: 'Weight required in numbers',
                         validate: (value: any) =>
                           VALIDATE_NON_NEGATIVE_NUM(value),
                         maxLength: {
@@ -751,7 +754,7 @@ function ProductEditPopup() {
                       type="number"
                       placeholder="Enter Item Dimensions"
                       {...register('itemDimension', {
-                        // required: 'Amount is required in numbers',
+                        required: 'Dimension is required in numbers',
                         validate: (value: any) =>
                           VALIDATE_NON_NEGATIVE_NUM(value),
                         maxLength: {
@@ -773,7 +776,7 @@ function ProductEditPopup() {
                     <Input
                       className="FormInput"
                       {...register('address', {
-                        required: false,
+                        required: true,
                         pattern: PATTERN.CHAR_SPACE_DASH,
                         validate: (value) => value.length <= 150,
                       })}
@@ -883,7 +886,9 @@ function ProductEditPopup() {
                           type="number"
                           placeholder="quantity"
                           {...register('stockQuantity', {
-                            // required: 'Amount is required in numbers',
+                            required:
+                              watch('stockAvailability') === 'Yes' &&
+                              'Required',
                             // value: Number(data.stockQuantity),
                             validate: (value: any) =>
                               VALIDATE_NON_NEGATIVE_NUM(value),
@@ -906,7 +911,9 @@ function ProductEditPopup() {
                           type="number"
                           placeholder="Dimensions"
                           {...register('stockDimension', {
-                            // required: 'Amount is required in numbers',
+                            required:
+                              watch('stockAvailability') === 'Yes' &&
+                              'Required',
                             validate: (value: any) =>
                               VALIDATE_NON_NEGATIVE_NUM(value),
                             maxLength: {
@@ -993,7 +1000,7 @@ function ProductEditPopup() {
                           <Input
                             className="FormInput"
                             {...register('warranty', {
-                              required: false,
+                              required: true,
                               pattern: PATTERN.CHAR_SPACE_DASH,
                               validate: (value) => value.length <= 150,
                             })}
@@ -1027,7 +1034,7 @@ function ProductEditPopup() {
                       type="number"
                       placeholder="Enter No. of Service Centers"
                       {...register('serviceCenter', {
-                        // required: 'Amount is required in numbers',
+                        required: 'No. Service Centers is required in numbers',
                         validate: (value: any) =>
                           VALIDATE_NON_NEGATIVE_NUM(value),
                         maxLength: {
@@ -1074,7 +1081,7 @@ function ProductEditPopup() {
                     <Input
                       className="FormInput"
                       {...register('averageLife', {
-                        required: false,
+                        required: true,
                         pattern: PATTERN.CHAR_SPACE_DASH,
                         validate: (value) => value.length <= 150,
                       })}

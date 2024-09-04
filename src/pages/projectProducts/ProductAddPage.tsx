@@ -36,6 +36,7 @@ import Input from '@mui/material/Input';
 import FormControl from '@mui/material/FormControl';
 import TextField from '@mui/material/TextField';
 import { CircularProgress } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 import productServices from '../../services/adminapp/adminProjectProducts';
 import assets from '../../assets';
 import {
@@ -73,7 +74,7 @@ function ProductAddPopup() {
       rustProof: 'No',
     },
   });
-
+  const navigate = useNavigate();
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'productCustomization', // Name of the array field
@@ -121,6 +122,22 @@ function ProductAddPopup() {
   }, []);
 
   const onSubmit = (data: any) => {
+    if (fields.length <= 0) {
+      setIsNotify(true);
+      setNotifyMessage({
+        text: 'At least one product color, price and tax should be added',
+        type: 'error',
+      });
+      return;
+    }
+    if (featureFields.length <= 0) {
+      setIsNotify(true);
+      setNotifyMessage({
+        text: 'At least one feature should be added',
+        type: 'error',
+      });
+      return;
+    }
     const featureArr: any = [];
     data.features.forEach((element: any) => featureArr.push(element.feature));
     setIsLoader(true);
@@ -142,10 +159,7 @@ function ProductAddPopup() {
     formData.append('stockQuantity', data.stockQuantity);
     formData.append('stockDimension', data.stockDimension);
     formData.append('stockDimensionType', data.stockDimensionType);
-    formData.append(
-      'sparePartAvailability',
-      JSON.stringify(data.spareAvailability)
-    );
+    formData.append('sparePartAvailability', data.spareAvailability);
     formData.append('warranty', data.warranty);
     formData.append('serviceCenter', String(Number(data.serviceCenter)));
     formData.append('rustProof', data.rustProof);
@@ -170,6 +184,7 @@ function ProductAddPopup() {
             text: item.data.message,
             type: 'success',
           });
+          navigate(-1);
         } else {
           setIsLoader(false);
           setIsNotify(true);
@@ -210,14 +225,15 @@ function ProductAddPopup() {
     const obj = {
       feature: watch('feature'),
     };
-    featureAppend(obj);
-    // else {
-    //   setIsNotify(true);
-    //   setNotifyMessage({
-    //     text: 'Features are Required',
-    //     type: 'error',
-    //   });
-    // }
+    if (watch('feature')) {
+      featureAppend(obj);
+    } else {
+      setIsNotify(true);
+      setNotifyMessage({
+        text: 'Field is empty',
+        type: 'error',
+      });
+    }
   };
 
   const handleFileChange = (onChange: any, event: any | undefined) => {
@@ -638,7 +654,7 @@ function ProductAddPopup() {
               <div className="col-span-6 mt-3 border-r-2 border-[#808080bd] px-6">
                 <div className="FormFields">
                   <FormControl className="FormControl" variant="standard">
-                    <label className="FormLabel">Project Group</label>
+                    <label className="FormLabel">Product Group</label>
                     <Input
                       className="FormInput"
                       {...register('productGroup', {
@@ -646,13 +662,13 @@ function ProductAddPopup() {
                         pattern: PATTERN.CHAR_SPACE_DASH,
                         validate: (value) => value.length <= 150,
                       })}
-                      placeholder="Enter Project Name"
+                      placeholder="Enter Product Group"
                       type="text"
                       id="productGroup"
                       disableUnderline
                     />
                     {errors.productGroup?.type === 'required' && (
-                      <ErrorSpanBox error="Project Name is required" />
+                      <ErrorSpanBox error="Product Name is required" />
                     )}
                     {errors.productGroup?.type === 'pattern' && (
                       <ErrorSpanBox error={INVALID_CHAR} />
@@ -662,7 +678,7 @@ function ProductAddPopup() {
                     )}
                   </FormControl>
                   <FormControl className="FormControl" variant="standard">
-                    <label className="FormLabel">Project Name</label>
+                    <label className="FormLabel">Product Name</label>
                     <Input
                       className="FormInput"
                       {...register('productName', {
@@ -670,13 +686,13 @@ function ProductAddPopup() {
                         pattern: PATTERN.CHAR_SPACE_DASH,
                         validate: (value) => value.length <= 150,
                       })}
-                      placeholder="Enter Project Name"
+                      placeholder="Enter Product Name"
                       type="text"
                       id="productName"
                       disableUnderline
                     />
                     {errors.productName?.type === 'required' && (
-                      <ErrorSpanBox error="Project Name is required" />
+                      <ErrorSpanBox error="Product Name is required" />
                     )}
                     {errors.productName?.type === 'pattern' && (
                       <ErrorSpanBox error={INVALID_CHAR} />
@@ -1035,7 +1051,7 @@ function ProductAddPopup() {
                       type="number"
                       placeholder="Enter Number"
                       {...register('vendorDiscount', {
-                        required: 'Discount is required in numbers',
+                        // required: 'Discount is required in numbers',
                         validate: (value: any) =>
                           VALIDATE_NON_NEGATIVE_NUM(value),
                         maxLength: {
