@@ -610,14 +610,14 @@ function Sidebar() {
     //   </List>
     // </Drawer>
     <div className="side-bar-menu relative">
-      <div className="space-between fixed left-0 top-0 flex h-full w-full max-w-[100px] flex-grow flex-col bg-[#f5f5f5] p-2">
-        <div className="mb-2 basis-[10%]">
+      <div className="space-between left-0 top-0 flex h-full w-full max-w-[100px] flex-grow flex-col bg-[#f5f5f5] p-2">
+        <div className="mb-4 basis-[10%]">
           <div className="mx-auto max-w-[50px]">
             <img src={assets.images.logo} alt="logo" />
           </div>
         </div>
-        <div className="basis-[60%] self-center overflow-auto">
-          <div className="max-h-[470px] w-[60px] rounded-[45px] bg-[#C9C9C9] text-center">
+        <div className="basis-[60%] self-center">
+          <div className="max-h-[550px] w-[60px] rounded-[45px] bg-[#C9C9C9] text-center">
             <NavLink to="/admin/dashboard/home">
               <Button className="btn-flips my-[5px] h-[50px] min-w-[50px] rounded-[28px] bg-transparent hover:bg-[#F27426]">
                 <img
@@ -641,10 +641,7 @@ function Sidebar() {
                 </Button>
               </NavLink>
             )}
-            {listingRolePermission(
-              dataRole,
-              ALL_PERMISSIONS.storePlans.viewProjects
-            ) && (
+            {listingRolePermission(dataRole, ALL_PERMISSIONS.products.view) && (
               <NavLink to="/admin/dashboard/products">
                 <Button className="btn-flips my-[5px] h-[50px] min-w-[50px] rounded-[28px] bg-transparent hover:bg-[#F27426]">
                   <img
@@ -722,11 +719,14 @@ function Sidebar() {
                 </Button>
               </NavLink>
             )}
-            {listingRolePermission(dataRole, ALL_PERMISSIONS.vendors.view) && (
+            {listingRolePermission(
+              dataRole,
+              ALL_PERMISSIONS.quotations.view
+            ) && (
               <NavLink to="/admin/dashboard/quotations">
                 <Button className="btn-flips my-[5px] h-[50px] min-w-[50px] rounded-[28px] bg-transparent hover:bg-[#F27426]">
                   <img
-                    src={assets.images.supplyIcon}
+                    src={assets.images.quotationIcon}
                     alt="icon"
                     className="w-[24px]"
                   />
@@ -737,7 +737,7 @@ function Sidebar() {
         </div>
         <div className="basis-[20%]">
           <div className="flex flex-col items-center justify-center gap-2">
-            <Button className="my-[5px] h-[50px] min-w-[50px] rounded-[28px] bg-transparent p-0">
+            <Button className="my-[8px] h-[50px] min-w-[50px] rounded-[28px] bg-transparent p-0">
               <img
                 src={assets.images.avatar1}
                 alt="icon"

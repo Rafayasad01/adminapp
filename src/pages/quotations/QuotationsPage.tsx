@@ -84,7 +84,7 @@ const QuotationsPage = () => {
   };
 
   const handleFormClickOpen = () => {
-    handlePermissionCheck(ALL_PERMISSIONS.vendors.add, () => {
+    handlePermissionCheck(ALL_PERMISSIONS.quotations.add, () => {
       navigate('./create');
     });
   };
@@ -140,7 +140,7 @@ const QuotationsPage = () => {
 
   const menuHandler = (option: string) => {
     if (option === 'Edit') {
-      handlePermissionCheck(ALL_PERMISSIONS.vendors.edit, () => {
+      handlePermissionCheck(ALL_PERMISSIONS.quotations.edit, () => {
         const editFormData = list?.find(
           (el: any) => el.id === actionMenuItemid
         );
@@ -152,7 +152,7 @@ const QuotationsPage = () => {
         }
       });
     } else if (option === 'Delete') {
-      handlePermissionCheck(ALL_PERMISSIONS.vendors.delete, () =>
+      handlePermissionCheck(ALL_PERMISSIONS.quotations.delete, () =>
         setCancelDialogOpen(true)
       );
     }

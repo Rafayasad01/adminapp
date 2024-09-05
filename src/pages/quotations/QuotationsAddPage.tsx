@@ -98,7 +98,7 @@ const QuotationsAddPage = () => {
   };
 
   const fetchClients = () => {
-    handlePermissionCheck(ALL_PERMISSIONS.storePlans.viewProjects, () => {
+    handlePermissionCheck(ALL_PERMISSIONS.quotations.add, () => {
       setIsLoader(true);
       adminAppUser
         .usersLov(authState.user.tenant)
@@ -112,7 +112,7 @@ const QuotationsAddPage = () => {
   };
 
   const fetchVendors = () => {
-    handlePermissionCheck(ALL_PERMISSIONS.vendors.view, () => {
+    handlePermissionCheck(ALL_PERMISSIONS.quotations.add, () => {
       setIsLoader(true);
       adminVendors
         .getVendorLovService()
@@ -168,7 +168,7 @@ const QuotationsAddPage = () => {
       subtotal: items.reduce((acc, item) => acc + item.total, 0),
       items,
     };
-    console.log('🚀 ~ onSubmit ~ data:', payload, rows);
+    // console.log('🚀 ~ onSubmit ~ data:', payload, rows);
 
     setIsLoader(true);
     const success = await adminQuotation

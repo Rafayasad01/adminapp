@@ -88,6 +88,7 @@ import userPermissionIcon from './images/userPermission.svg';
 import wash from './images/wash.svg';
 import box from './images/box.png';
 import supplyIcon from './images/icons/supply.png';
+import quotationIcon from './images/quotation.png';
 
 const assets = {
   images: {
@@ -167,6 +168,7 @@ const assets = {
     excel,
     box,
     supplyIcon,
+    quotationIcon,
   },
   tempImages: {
     shirt,

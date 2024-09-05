@@ -1,5 +1,4 @@
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
-// import MoreVertIcon from '@mui/icons-material/MoreVert';
 import SearchIcon from '@mui/icons-material/Search';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -9,17 +8,9 @@ import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import InputAdornment from '@mui/material/InputAdornment';
-// import Switch from '@mui/material/Switch';
-// import EditIcon from '@mui/icons-material/Edit';
 import TablePagination from '@mui/material/TablePagination';
-// import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-// import { styled } from '@mui/material/styles';
-// import LinearProgress, {
-//   linearProgressClasses,
-// } from '@mui/material/LinearProgress';
-// import assets from '../../assets';
 import dayjs from 'dayjs';
 import Switch from '@mui/material/Switch';
 import ActionMenu from '../../components/common/ActionMenu';
@@ -29,21 +20,13 @@ import Notify from '../../components/common/Notify';
 import TopBar from '../../components/common/TopBar';
 import { useAppSelector } from '../../redux/redux-hooks';
 import storeProjectProductService from '../../services/adminapp/adminProjectProducts';
-// import storeAppUsers from '../../services/adminapp/adminAppUser';
 import {
   ALL_PERMISSIONS,
   // CONSTRUCTION_TYPE,
   NOT_AUTHORIZED_MESSAGE,
 } from '../../utils/constants';
-import {
-  CheckRolePermission,
-  formatCurrency,
-  // CheckRolePermission,
-  listingRolePermission,
-} from '../../utils/helper';
+import { formatCurrency, listingRolePermission } from '../../utils/helper';
 import PermissionPopup from '../../utils/PermissionPopup';
-// import ProjectPlanEditPopup from './ProductEditPage';
-// import ProjectAddPopup from './ProductAddPage';
 import ColorRowWithTooltips from '../../components/common/ColorRowWithTooltips';
 
 function ProductPage() {
@@ -76,9 +59,7 @@ function ProductPage() {
   const [mIndex, setMIndex] = useState(0);
 
   const handleFormClickOpen = () => {
-    if (
-      listingRolePermission(dataRole, ALL_PERMISSIONS.storePlans.addProjects)
-    ) {
+    if (listingRolePermission(dataRole, ALL_PERMISSIONS.products.add)) {
       navigate(`./add`);
     } else {
       setIsNotify(true);
@@ -90,9 +71,7 @@ function ProductPage() {
   };
 
   useEffect(() => {
-    if (
-      listingRolePermission(dataRole, ALL_PERMISSIONS.storePlans.viewProjects)
-    ) {
+    if (listingRolePermission(dataRole, ALL_PERMISSIONS.products.view)) {
       storeProjectProductService
         .getListProductService(authState.user.tenant, search, page, rowsPerPage)
         .then((item: any) => {
@@ -208,14 +187,9 @@ function ProductPage() {
   };
 
   const manuHandler = (option: string) => {
-    console.log('🚀 ~ manuHandler ~ option:', option);
+    // console.log('🚀 ~ manuHandler ~ option:', option);
     if (option === 'Edit') {
-      if (
-        listingRolePermission(
-          dataRole,
-          ALL_PERMISSIONS.storePlans.editProjectPlan
-        )
-      ) {
+      if (listingRolePermission(dataRole, ALL_PERMISSIONS.products.edit)) {
         const editFormDatas = list?.find(
           (el: any) => el.id === actionMenuItemid
         );
@@ -230,33 +204,8 @@ function ProductPage() {
           type: 'warning',
         });
       }
-    } else if (option === 'Details') {
-      if (
-        listingRolePermission(
-          dataRole,
-          ALL_PERMISSIONS.storePlans.viewProjectPlans
-        )
-      ) {
-        CheckRolePermission(
-          ALL_PERMISSIONS.storePlans.viewProjectPlans,
-          dataRole,
-          navigate,
-          `./plans/${actionMenuItemid}`
-        );
-      } else {
-        setIsNotify(true);
-        setNotifyMessage({
-          text: NOT_AUTHORIZED_MESSAGE,
-          type: 'warning',
-        });
-      }
     } else if (option === 'Delete') {
-      if (
-        listingRolePermission(
-          dataRole,
-          ALL_PERMISSIONS.storePlans.deleteProjects
-        )
-      ) {
+      if (listingRolePermission(dataRole, ALL_PERMISSIONS.products.delete)) {
         setCancelDialogOpen(true);
       } else {
         setIsNotify(true);
@@ -269,9 +218,7 @@ function ProductPage() {
   };
 
   const handleSwitchChange = (event: any, id: string) => {
-    if (
-      listingRolePermission(dataRole, ALL_PERMISSIONS.storePlans.editProjects)
-    ) {
+    if (listingRolePermission(dataRole, ALL_PERMISSIONS.products.edit)) {
       const data = {
         isActive: event.target.checked,
       };

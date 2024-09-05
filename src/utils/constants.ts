@@ -912,13 +912,25 @@ export const ALL_PERMISSIONS = {
     edit: 'editVendor',
     delete: 'deleteVendor',
   },
+  products: {
+    view: 'neViewProducts',
+    add: 'neAddProduct',
+    edit: 'neEditProduct',
+    delete: 'neDeleteProduct',
+  },
+  quotations: {
+    view: 'viewQuotations',
+    add: 'addQuotation',
+    edit: 'editQuotation',
+    delete: 'deleteQuotation',
+  },
 };
 
 export const SERVICES = 'Service';
 export const PRODUCT = 'Product';
 let TITLE_TEXT = '';
 export const handleTitleText = (permissions: any) => {
-  console.log('PPPPPPPPPPPP', permissions);
+  // console.log('PPPPPPPPPPPP', permissions);
   if (
     listingRolePermission(
       permissions,

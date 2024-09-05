@@ -1,35 +1,6 @@
-// import Button from '@mui/material/Button';
-// import Dialog from '@mui/material/Dialog';
-// import FormControl from '@mui/material/FormControl';
-// import Input from '@mui/material/Input';
-// import IconButton from '@mui/material/IconButton';
 import React, { useEffect, useState } from 'react';
 import CloseIcon from '@mui/icons-material/Close';
-// import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
-// import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
-// import { useForm, Controller } from 'react-hook-form';
-// import TextField from '@mui/material/TextField';
-// import { createTheme } from '@mui/material';
-// import FormControl from '@mui/material/FormControl';
-// import ThemeProvider from '@mui/material/styles/ThemeProvider';
-// import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-// import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
-// import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-// import dayjs from 'dayjs';
 import '../../assets/css/PopupStyle.css';
-import // ALL_PERMISSIONS,
-// CONSTRUCTION_TYPE,
-// INVALID_CHAR,
-// MAX_LENGTH_EXCEEDED,
-// PATTERN,
-// PROJECT_PLAN_TYPE,
-// VALIDATE_NON_NEGATIVE_NUM,
-'../../utils/constants';
-// import { Project } from '../../interfaces/projectPlan.interface';
-// import ErrorSpanBox from '../../components/common/ErrorSpanBox';
-// import CustomDropDown from '../../components/common/CustomDropDown';
-// import { listingRolePermission } from '../../utils/helper';
-// import { useAppSelector } from '../../redux/redux-hooks';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import Button from '@mui/material/Button';
 import Input from '@mui/material/Input';
@@ -79,7 +50,7 @@ function ProductEditPopup() {
 
   const { fields, append, remove } = useFieldArray({
     control,
-    name: 'productCustomization', // Name of the array field
+    name: 'productCustomization',
     keyName: 'key',
   });
 
@@ -89,13 +60,10 @@ function ProductEditPopup() {
     remove: featureRemove,
   } = useFieldArray({
     control,
-    name: 'features', // Name of the array field
+    name: 'features',
     keyName: 'key',
   });
 
-  // const dataRole = useAppSelector(
-  //   (state) => state?.persistedReducer?.roleState?.role?.permissions
-  // );
   const [
     ,
     // file
@@ -107,18 +75,6 @@ function ProductEditPopup() {
   const [isLoader, setIsLoader] = React.useState(false);
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
-  // const authState: any = useAppSelector((state) => state?.authState);
-  // const dataRole = useAppSelector(
-  //   (state) => state?.persistedReducer?.roleState?.role?.permissions
-  // );
-
-  // const darkTheme = createTheme({
-  //   palette: {
-  //     primary: {
-  //       main: '#171717',
-  //     },
-  //   },
-  // });
 
   useEffect(() => {
     const featuresData = data?.features?.split(',');

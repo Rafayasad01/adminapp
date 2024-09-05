@@ -101,7 +101,7 @@ const QuotationsEditPage = () => {
   };
 
   const fetchClients = () => {
-    handlePermissionCheck(ALL_PERMISSIONS.storePlans.viewProjects, () => {
+    handlePermissionCheck(ALL_PERMISSIONS.quotations.edit, () => {
       setIsLoader(true);
       adminAppUser
         .usersLov(authState.user.tenant)
@@ -115,7 +115,7 @@ const QuotationsEditPage = () => {
   };
 
   const fetchVendors = () => {
-    handlePermissionCheck(ALL_PERMISSIONS.vendors.view, () => {
+    handlePermissionCheck(ALL_PERMISSIONS.quotations.edit, () => {
       setIsLoader(true);
       adminVendors
         .getVendorLovService()
