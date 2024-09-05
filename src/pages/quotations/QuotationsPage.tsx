@@ -16,7 +16,7 @@ import dayjs from 'dayjs';
 import Notify from '../../components/common/Notify';
 import TopBar from '../../components/common/TopBar';
 import CustomText from '../../components/common/CustomText';
-import { listingRolePermission } from '../../utils/helper';
+import { formatCurrency, listingRolePermission } from '../../utils/helper';
 import { ALL_PERMISSIONS, NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
 import { useAppSelector } from '../../redux/redux-hooks';
 import ActionMenu from '../../components/common/ActionMenu';
@@ -291,7 +291,7 @@ const QuotationsPage = () => {
                           {item.discount ?? '--'}{' '}
                           {item.discountType === 'percentage' ? '%' : '/='}{' '}
                         </td>
-                        <td>{item.total ?? '00'} /=</td>
+                        <td>{formatCurrency(Number(item.total) ?? 0)}</td>
                         <td>
                           <div className="flex flex-row-reverse">
                             <IconButton
