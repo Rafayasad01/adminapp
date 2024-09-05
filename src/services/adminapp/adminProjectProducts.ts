@@ -51,8 +51,20 @@ const getVendorLov = () => {
   return network.get(`${NEW_EARTH_PREFIX}/${VENDORS_PREFIX}/list/lov`);
 };
 
+/**
+ * Get the level of value for products.
+ * @param data object containing information
+ * @returns Promise
+ */
+const getByVendorService = (id: string) => {
+  return network.get(
+    `${NEW_EARTH_PREFIX}/${PRODUCTS_PREFIX}/list/vendor/${id}`
+  );
+};
+
 export default {
   getVendorLov,
+  getByVendorService,
   getListProductService,
   create,
   update,

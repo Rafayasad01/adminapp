@@ -1,0 +1,22 @@
+export type Vendor = {
+  id: string;
+  name: string;
+  email: string;
+  vendorType: string;
+  serviceType: string;
+  contact: string;
+  bankName: string;
+  iban: string;
+  location: string;
+  city: string;
+  country: string;
+  deliveryTime: string;
+  deliveryTerms: string;
+  paymentTerms: string;
+  createdBy: string;
+  updatedBy: string | null;
+  createdAt: string;
+  updatedAt: string;
+  tenant: string;
+  deletedAt: string | null;
+};

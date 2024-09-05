@@ -90,6 +90,11 @@ import RolesPage from '../pages/projectAdminRoles/RolesPage';
 import ProductPage from '../pages/projectProducts/ProductPage';
 import ProductAddPopup from '../pages/projectProducts/ProductAddPage';
 import ProductEditPopup from '../pages/projectProducts/ProductEditPage';
+// Vendor Components
+import VendorsPage from '../pages/vendors/VendorsPage';
+import QuotationsPage from '../pages/quotations/QuotationsPage';
+import QuotationsAddPage from '../pages/quotations/QuotationsAddPage';
+import QuotationsEditPage from '../pages/quotations/QuotationsEditPage';
 
 const ProtectedRoute = ({ page, condition }: any) => {
   const canView = CAN('canView', condition);
@@ -1121,6 +1126,32 @@ export const routeObjects: RouteObject[] = [
               {
                 path: 'edit/:id',
                 element: <ProductEditPopup />,
+              },
+            ],
+          },
+          {
+            path: 'vendors',
+            children: [
+              {
+                index: true,
+                element: <VendorsPage />,
+              },
+            ],
+          },
+          {
+            path: 'quotations',
+            children: [
+              {
+                index: true,
+                element: <QuotationsPage />,
+              },
+              {
+                path: 'create',
+                element: <QuotationsAddPage />,
+              },
+              {
+                path: 'edit/:id',
+                element: <QuotationsEditPage />,
               },
             ],
           },
