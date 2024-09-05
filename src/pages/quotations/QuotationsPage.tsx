@@ -42,7 +42,7 @@ const QuotationsPage = () => {
   const [actionMenuAnchorEl, setActionMenuAnchorEl] =
     useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
-  const actionMenuOptions = ['Details', 'Edit', 'Delete'];
+  const actionMenuOptions = ['Edit', 'Delete'];
   const [isLoader, setIsLoader] = useState(false);
   // const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
   const [dialogText] = useState<any>(
@@ -146,7 +146,9 @@ const QuotationsPage = () => {
         );
         if (editFormData) {
           setActionMenuItemid(editFormData.id);
-          navigate(`./edit/${editFormData.id}`);
+          navigate(`./edit/${editFormData.id}`, {
+            state: { data: editFormData },
+          });
         }
       });
     } else if (option === 'Delete') {

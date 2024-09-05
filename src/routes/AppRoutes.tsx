@@ -94,6 +94,7 @@ import ProductEditPopup from '../pages/projectProducts/ProductEditPage';
 import VendorsPage from '../pages/vendors/VendorsPage';
 import QuotationsPage from '../pages/quotations/QuotationsPage';
 import QuotationsAddPage from '../pages/quotations/QuotationsAddPage';
+import QuotationsEditPage from '../pages/quotations/QuotationsEditPage';
 
 const ProtectedRoute = ({ page, condition }: any) => {
   const canView = CAN('canView', condition);
@@ -1147,6 +1148,10 @@ export const routeObjects: RouteObject[] = [
               {
                 path: 'create',
                 element: <QuotationsAddPage />,
+              },
+              {
+                path: 'edit/:id',
+                element: <QuotationsEditPage />,
               },
             ],
           },

@@ -15,7 +15,8 @@ import {
   IconButton,
 } from '@mui/material';
 import { Add, Delete } from '@mui/icons-material';
-import { useNavigate } from 'react-router';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import dayjs from 'dayjs';
 import ErrorSpanBox from '../../components/common/ErrorSpanBox';
 import TopBar from '../../components/common/TopBar';
 import Loader from '../../components/common/Loader';
@@ -40,7 +41,10 @@ type Row = {
   products: Product[];
 };
 
-const QuotationsAddPage = () => {
+const QuotationsEditPage = () => {
+  const { id } = useParams();
+  const { state: quotationState } = useLocation();
+  const { data: quotationData } = quotationState;
   const {
     register,
     handleSubmit,
@@ -49,13 +53,12 @@ const QuotationsAddPage = () => {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      quote_number: '',
-      exp_date: '',
-      items: [],
+      quote_number: quotationData?.quoteNumber ?? '',
+      exp_date: dayjs(quotationData?.expiryDate).format('YYYY-MM-DD') ?? '',
+      items: quotationData?.items ?? [],
     },
     mode: 'onSubmit',
   });
-
   const [rows, setRows] = useState<Row[]>([
     {
       vendor: '',
@@ -125,10 +128,10 @@ const QuotationsAddPage = () => {
     });
   };
 
-  const fetchVendorProducts = async (id: string) => {
+  const fetchVendorProducts = async (vendorid: string) => {
     setIsLoader(true);
     const p = adminProjectProducts
-      .getByVendorService(id)
+      .getByVendorService(vendorid)
       .then((item: any) => {
         return item.data.data ?? [];
       })
@@ -144,6 +147,38 @@ const QuotationsAddPage = () => {
   useEffect(() => {
     fetchClients();
     fetchVendors();
+  }, []);
+
+  useEffect(() => {
+    const fetchVendorsAndSetRows = async () => {
+      const newRows = await Promise.all(
+        quotationData.items.map(async (row: any) => {
+          return {
+            vendor: row.vendorId,
+            product: row.productId,
+            color: row.color || '',
+            quantity: row.quantity || 0,
+            unitPrice: row.unitPrice || 0,
+            total: row.total || 0,
+            products:
+              quotationData?.items.map((el: any) => ({
+                id: el.productId,
+                name: el.productName,
+                productCustomization: el.productCustomization,
+              })) || [],
+          };
+        })
+      );
+      setRows(newRows);
+    };
+    if (quotationData.items.length > 0) {
+      fetchVendorsAndSetRows();
+    }
+    setGrandTotal(Number(quotationData?.total));
+    setDiscount({
+      type: quotationData.discountType ?? 'percentage',
+      value: quotationData?.discount ?? 0,
+    });
   }, []);
 
   const onSubmit = async (data: any) => {
@@ -168,11 +203,11 @@ const QuotationsAddPage = () => {
       subtotal: items.reduce((acc, item) => acc + item.total, 0),
       items,
     };
-    console.log('🚀 ~ onSubmit ~ data:', payload, rows);
+    // console.log('🚀 ~ onSubmit ~ data: UPDATE==>', payload);
 
     setIsLoader(true);
     const success = await adminQuotation
-      .createQuotationService(payload)
+      .updateQuotationService(id, payload)
       .then((res) => {
         setIsLoader(false);
         if (res.data.success === false) {
@@ -323,7 +358,10 @@ const QuotationsAddPage = () => {
                         control={control}
                         error={errors}
                         register={register}
-                        options={{ roles: users }}
+                        options={{
+                          roles: users,
+                          role: quotationData?.appUserId,
+                        }}
                         customClassInputTitle="font-bold"
                         inputTitle="Client Name"
                         defaultValue="Select Client"
@@ -420,11 +458,16 @@ const QuotationsAddPage = () => {
                                 }
                                 disabled={!row.vendor}
                               >
-                                {row.products?.map((product: Product) => (
-                                  <MenuItem key={product.id} value={product.id}>
-                                    {product.name}
-                                  </MenuItem>
-                                ))}
+                                {row.products?.map(
+                                  (product: Product, ProductIndex: number) => (
+                                    <MenuItem
+                                      key={ProductIndex}
+                                      value={product.id}
+                                    >
+                                      {product.name}
+                                    </MenuItem>
+                                  )
+                                )}
                               </Select>
                             </FormControl>
                           </TableCell>
@@ -583,4 +626,4 @@ const QuotationsAddPage = () => {
   );
 };
 
-export default QuotationsAddPage;
+export default QuotationsEditPage;

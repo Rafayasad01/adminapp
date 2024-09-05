@@ -16,7 +16,7 @@ const createQuotationService = (data: any) => {
   return network.post(`${NEW_EARTH_PREFIX}/${QUOTATION_PREFIX}/create`, data);
 };
 
-const updateQuotationService = (id: string, data: any) => {
+const updateQuotationService = (id: string | any, data: any) => {
   return network.post(
     `${NEW_EARTH_PREFIX}/${QUOTATION_PREFIX}/update/${id}`,
     data
