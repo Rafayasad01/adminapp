@@ -7,7 +7,7 @@ import FormControl from '@mui/material/FormControl';
 import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
-import VisibilityIcon from '@mui/icons-material/Visibility';
+// import VisibilityIcon from '@mui/icons-material/Visibility';
 import TablePagination from '@mui/material/TablePagination';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
@@ -26,6 +26,7 @@ import ProjectPlanAddPopup from './ProjectPlanAddPopup';
 import ProjectPlanEditPopup from './ProjectPlanEditPopup';
 import ProjectPlanDayDetailsPopup, { Day } from './ProjectPlanDayDetailsPopup';
 import PermissionPopup from '../../../utils/PermissionPopup';
+import ProjectPlanAccordin from './ProjectPlanAccordin';
 
 function ProjectPlanPage() {
   const authState: any = useAppSelector((state) => state?.authState);
@@ -41,16 +42,19 @@ function ProjectPlanPage() {
   const [list, setList] = useState<any>([]);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   // const [actionMenuItemid, setActionMenuItemid] = React.useState('');
-  const [isLoader, setIsLoader] = React.useState(false);
+  const [isLoader, setIsLoader] = React.useState(true);
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
-  const [planDay, setPlanDay] = useState<Day | null>();
+  const [
+    planDay,
+    // setPlanDay
+  ] = useState<Day | null>();
   const [cancelDialogOpen, setCancelDialogOpen] = useState<boolean>(false);
   const [dialogText] = useState<any>(
-    'Are you sure you want to update your plan ?'
+    'Are you sure you want to update your daily plan ?'
   );
 
   const handleFormClickOpen = () => {
@@ -117,14 +121,12 @@ function ProjectPlanPage() {
         ALL_PERMISSIONS.storePlans.viewProjectPlans
       )
     ) {
+      setIsLoader(false);
       getProjectPlans(projectId ?? '');
+    } else {
+      setIsLoader(false);
     }
   }, [null]);
-
-  const showDayDetails = (day: Day) => {
-    setPlanDay(day);
-    setOpenDetailsDialog(true);
-  };
 
   const handleClickSearch = (event: any) => {
     if (event.key === 'Enter') {
@@ -267,7 +269,7 @@ function ProjectPlanPage() {
         displayMessage={notifyMessage}
       />
       <TopBar title="Plans" />
-      <div className="cs-dialog container mx-auto mt-5 w-full">
+      <div className="cs-dialog container mx-auto mt-2 w-full px-3">
         <div className="w-full rounded-lg bg-white shadow-lg">
           <div className="grid grid-cols-12 px-4 py-5">
             <div className="col-span-4">
@@ -309,64 +311,24 @@ function ProjectPlanPage() {
                 </FormControl>
                 <Button
                   variant="contained"
-                  className="btn-black-fill btn-icon w-[25%]"
+                  className="btn-black-fill btn-icon w-[30%]"
                   onClick={handleFormClickOpen}
                 >
-                  <AddOutlinedIcon /> Add Project Plan
+                  <AddOutlinedIcon /> Upload Project Plan
                 </Button>
                 <Button
                   variant="contained"
-                  className="btn-black-fill btn-icon w-[20%]"
+                  className="btn-black-fill btn-icon w-[25%]"
                   onClick={handleUpdatePlanClick}
                 >
-                  <AddOutlinedIcon /> Update Plan
+                  <AddOutlinedIcon /> Upload Daily Plan
                 </Button>
               </div>
             </div>
           </div>
 
           <div className="mt-3 grid grid-cols-none">
-            <table className="table-border table-auto">
-              <thead>
-                <tr>
-                  <th className="w-[75%]">Day</th>
-                  <th className="w-[15%]">Working Days</th>
-                  <th>&nbsp;</th>
-                </tr>
-              </thead>
-              <tbody>
-                {list &&
-                  list.map((item: any, index: number) => {
-                    let count = 0;
-                    if (item.data && item.data.length > 0) {
-                      count = item.data.reduce(
-                        // eslint-disable-next-line @typescript-eslint/no-shadow
-                        (total: number, item: any) =>
-                          total + (item?.count ?? 0),
-                        0
-                      );
-                    }
-                    return (
-                      <tr key={index}>
-                        <td>{item.day ? item.day : '--'}</td>
-                        <td>
-                          <span className="">{count}</span>
-                        </td>
-                        <td>
-                          <div className="flex">
-                            <div
-                              className="cursor-pointer"
-                              onClick={() => showDayDetails(item)}
-                            >
-                              <VisibilityIcon />
-                            </div>
-                          </div>
-                        </td>
-                      </tr>
-                    );
-                  })}
-              </tbody>
-            </table>
+            <ProjectPlanAccordin data={list} />
           </div>
           {list?.length < 1 ? (
             <CustomText noRoundedBorders text="No Records Found" />

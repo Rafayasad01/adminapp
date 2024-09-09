@@ -733,6 +733,10 @@ export const PROJECT_PLAN_TYPE = [
     id: 'Construction',
     name: 'Construction',
   },
+  {
+    id: 'Remodeling',
+    name: 'Remodeling',
+  },
 ];
 
 export const PROJECT_IMAGE_TYPE = [

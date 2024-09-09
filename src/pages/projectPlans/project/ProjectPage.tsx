@@ -452,7 +452,7 @@ function ProjectPage() {
         displayMessage={notifyMessage}
       />
       <TopBar title="Projects" />
-      <div className="cs-dialog container mx-auto mt-5 w-full">
+      <div className="cs-dialog container mx-auto mt-2 w-full px-3">
         <div className="w-full rounded-lg bg-white shadow-lg">
           <div className="grid grid-cols-12 px-4 py-5">
             <div className="col-span-7">
@@ -507,16 +507,18 @@ function ProjectPage() {
             <table className="table-border table-auto">
               <thead>
                 <tr>
-                  <th>Name</th>
+                  <th className="w-[10%]">Project Name</th>
                   <th className="">Client Name</th>
-                  <th>Budget</th>
+                  <th>Quotation</th>
                   <th>Total Paid</th>
                   <th>Due Amount</th>
+                  <th>Total Plan Days</th>
+                  <th>Total Plan Activities</th>
                   <th>Type</th>
                   <th>Construction Type</th>
                   <th>Start Date</th>
                   <th>End Date</th>
-                  <th>Created Date</th>
+                  {/* <th>Created Date</th> */}
                   <th>&nbsp;</th>
                 </tr>
               </thead>
@@ -525,7 +527,24 @@ function ProjectPage() {
                   list.map((item: any, index: number) => {
                     return (
                       <tr key={index}>
-                        <td>{item.name ? item.name : '--'}</td>
+                        <td>
+                          {item.name ? (
+                            <div className="avatar flex flex-row items-center">
+                              <div className="flex flex-col items-start justify-start">
+                                <span className="text-sm font-semibold">
+                                  {item.name}
+                                </span>
+                                <span className="text-xs font-normal text-[#6A6A6A]">
+                                  {dayjs(item.createdDate).format(
+                                    'MMMM DD, YYYY'
+                                  )}
+                                </span>
+                              </div>
+                            </div>
+                          ) : (
+                            '--'
+                          )}
+                        </td>
                         <td>
                           {item.clientName
                             ? handleClientNames(item.clientName)
@@ -543,6 +562,21 @@ function ProjectPage() {
                           {item.dueAmount
                             ? formatCurrency(item.dueAmount)
                             : '--'}
+                        </td>
+                        <td>
+                          {item.plans?.length > 0 ? item.plans?.length : '0'}
+                        </td>
+                        <td>
+                          {item.plans?.length > 0
+                            ? item.plans.reduce((acc: number, el: any) => {
+                                return (
+                                  acc +
+                                  (el.data && el.data.length
+                                    ? el.data.length
+                                    : 0)
+                                );
+                              }, 0)
+                            : '0'}
                         </td>
                         <td>{item.type ? item.type : '--'}</td>
                         <td>
@@ -563,13 +597,13 @@ function ProjectPage() {
                               )
                             : '--'}
                         </td>
-                        <td>
+                        {/* <td>
                           {dayjs(item.createdDate).isValid()
                             ? dayjs(item.createdDate)?.format(
                                 'ddd, MMM DD, YYYY hh:mm:ssA'
                               )
                             : '--'}
-                        </td>
+                        </td> */}
                         <td>
                           <div className="flex flex-row-reverse">
                             {/* <div

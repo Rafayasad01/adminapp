@@ -212,6 +212,14 @@ function ProductEditPopup() {
       price: watch('price'),
       tax: watch('ColorTax'),
     };
+    if (fields.some((field: any) => field.color === watch('color'))) {
+      setIsNotify(true);
+      setNotifyMessage({
+        text: 'This color already exists',
+        type: 'error',
+      });
+      return;
+    }
     if (watch('color') && watch('price') && watch('ColorTax')) {
       append(obj);
     } else {
@@ -227,7 +235,25 @@ function ProductEditPopup() {
     const obj = {
       feature: watch('feature'),
     };
-    featureAppend(obj);
+    if (
+      featureFields.some((field: any) => field.feature === watch('feature'))
+    ) {
+      setIsNotify(true);
+      setNotifyMessage({
+        text: 'Feature already exists',
+        type: 'error',
+      });
+      return;
+    }
+    if (watch('feature')) {
+      featureAppend(obj);
+    } else {
+      setIsNotify(true);
+      setNotifyMessage({
+        text: 'Field is empty',
+        type: 'error',
+      });
+    }
   };
 
   const handleFileChange = (onChange: any, event: any | undefined) => {
@@ -330,7 +356,7 @@ function ProductEditPopup() {
         setIsOpen={setIsNotify}
         displayMessage={notifyMessage}
       />
-      <div className="Content cs-dialog container mx-auto mt-3 w-full">
+      <div className="Content cs-dialog cs-dialog container mx-auto mt-1 w-full px-3">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="w-full rounded-lg bg-white shadow-lg">
             <div className="FormHeader mx-4 w-full px-2 py-2">
@@ -553,7 +579,7 @@ function ProductEditPopup() {
                   </div>
                   <div className="col-span-2">
                     <FormControl className="FormControl" variant="standard">
-                      <label className="FormLabel">Tax Price</label>
+                      <label className="FormLabel">Tax Price (%)</label>
                       <Input
                         className="FormInput"
                         id="ColorTax"

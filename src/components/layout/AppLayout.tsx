@@ -26,7 +26,7 @@ function AppLayout() {
       )}
       <Box
         component="main"
-        className="min-h-screen w-full flex-grow bg-gray-50 p-3"
+        className="min-h-screen w-full flex-grow bg-gray-50"
       >
         <NotificationProvider>
           <Outlet />

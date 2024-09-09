@@ -157,7 +157,7 @@ function EditRolePage() {
         displayMessage={notifyMessage}
       />
       <TopBar isNestedRoute title="Edit Role Permissions" />
-      <div className="m-auto mx-5 mt-5">
+      <div className="cs-dialog container mx-auto mt-2 w-full px-3">
         <div className="w-full rounded-lg bg-white py-5 shadow-lg">
           <form onSubmit={handleSubmit(onSubmit)} className="FormBody m-5">
             <div className="FormField">

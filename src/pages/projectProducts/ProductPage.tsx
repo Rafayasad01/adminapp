@@ -45,7 +45,7 @@ function ProductPage() {
   const [actionMenuAnchorEl, setActionMenuAnchorEl] =
     useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
-  const actionMenuOptions = ['Details', 'Edit', 'Delete'];
+  const actionMenuOptions = ['Edit', 'Delete'];
   // const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
@@ -304,7 +304,7 @@ function ProductPage() {
         displayMessage={notifyMessage}
       />
       <TopBar />
-      <div className="cs-dialog container mx-auto mt-5 w-full">
+      <div className="cs-dialog container mx-auto mt-2 w-full px-3">
         <div className="w-full rounded-lg bg-white shadow-lg">
           <div className="grid grid-cols-12 px-4 py-5">
             <div className="col-span-7">

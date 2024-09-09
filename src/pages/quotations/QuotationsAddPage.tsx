@@ -303,7 +303,7 @@ const QuotationsAddPage = () => {
         displayMessage={notifyMessage}
       />
       <TopBar title="Projects" />
-      <div className="cs-dialog container mx-auto mt-5 w-full">
+      <div className="cs-dialog container mx-auto mt-2 w-full px-3">
         <div className="w-full rounded-lg bg-white shadow-lg">
           <div className="grid grid-cols-12 px-4 py-5">
             <div className="col-span-12">
@@ -384,7 +384,7 @@ const QuotationsAddPage = () => {
                               variant="standard"
                             >
                               <Select
-                                value={row.vendor}
+                                value={row.vendor || 'none'}
                                 defaultValue="none"
                                 disableUnderline
                                 className="FormInput"
@@ -412,7 +412,7 @@ const QuotationsAddPage = () => {
                               variant="standard"
                             >
                               <Select
-                                value={row.product}
+                                value={row.product || 'none'}
                                 className="FormInput"
                                 disableUnderline
                                 onChange={(e) =>
@@ -420,6 +420,9 @@ const QuotationsAddPage = () => {
                                 }
                                 disabled={!row.vendor}
                               >
+                                <MenuItem value="none">
+                                  -- Select Product --
+                                </MenuItem>
                                 {row.products?.map((product: Product) => (
                                   <MenuItem key={product.id} value={product.id}>
                                     {product.name}
@@ -434,7 +437,7 @@ const QuotationsAddPage = () => {
                               variant="standard"
                             >
                               <Select
-                                value={row.color}
+                                value={row.color || 'none'}
                                 className="FormInput"
                                 disableUnderline
                                 onChange={(e) =>
@@ -445,6 +448,9 @@ const QuotationsAddPage = () => {
                                 }
                                 disabled={!row.vendor}
                               >
+                                <MenuItem value="none">
+                                  -- Select Color --
+                                </MenuItem>
                                 {row.products
                                   ?.find((x) => x.id === row.product)
                                   ?.productCustomization?.map(
@@ -514,7 +520,7 @@ const QuotationsAddPage = () => {
                           </label>
                           <Select
                             value={discount.type}
-                            className="FormInput"
+                            className="FormInput mb-3"
                             onChange={(e) =>
                               handleDiscountChange(
                                 e.target.value as 'percentage' | 'fixed',

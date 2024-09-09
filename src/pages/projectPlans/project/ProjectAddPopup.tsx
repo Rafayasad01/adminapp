@@ -49,7 +49,7 @@ Props) {
     handleSubmit,
     // setValue,
     control,
-    // watch,
+    watch,
     formState: { errors },
   } = useForm<Project>();
   const [users, setUsers] = useState([]);
@@ -91,7 +91,6 @@ Props) {
   };
 
   const handleDateChange = (date: any, field: any) => {
-    // console.log('HIT', date, activeBarberData);
     field.onChange(date);
   };
 
@@ -112,28 +111,17 @@ Props) {
           <div className="FormBody mt-2">
             <div className="FormFields">
               <FormControl className="FormControl" variant="standard">
-                <label className="FormLabel">Project Name</label>
-                <Input
-                  className="FormInput"
-                  {...register('name', {
-                    required: true,
-                    pattern: PATTERN.CHAR_SPACE_DASH,
-                    validate: (value) => value.length <= 150,
-                  })}
-                  placeholder="Enter Project Name"
-                  type="text"
-                  id="name"
-                  disableUnderline
+                <CustomDropDown
+                  validateRequired
+                  id="clientName"
+                  control={control}
+                  error={errors}
+                  register={register}
+                  options={{ roles: users }}
+                  customClassInputTitle="font-bold"
+                  inputTitle="Client Name"
+                  defaultValue="Select Client"
                 />
-                {errors.name?.type === 'required' && (
-                  <ErrorSpanBox error="Project Name is required" />
-                )}
-                {errors.name?.type === 'pattern' && (
-                  <ErrorSpanBox error={INVALID_CHAR} />
-                )}
-                {errors.name?.type === 'validate' && (
-                  <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
-                )}
               </FormControl>
               <FormControl className="FormControl" variant="standard">
                 <CustomDropDown
@@ -195,7 +183,7 @@ Props) {
                       rules={{
                         required: 'End date is required',
                       }}
-                      // defaultValue={dayjs()}
+                      defaultValue={dayjs()}
                       render={({ field }) => (
                         <DesktopDatePicker
                           {...field}
@@ -203,7 +191,7 @@ Props) {
                           onChange={(date) => handleDateChange(date, field)}
                           // onChange={(date) => field.onChange(date)}
                           value={field.value || dayjs()}
-                          // minDate={dayjs()}
+                          minDate={dayjs(watch('startDate'))}
                         />
                       )}
                     />
@@ -217,17 +205,28 @@ Props) {
             </div>
             <div className="FormFields">
               <FormControl className="FormControl" variant="standard">
-                <CustomDropDown
-                  validateRequired
-                  id="clientName"
-                  control={control}
-                  error={errors}
-                  register={register}
-                  options={{ roles: users }}
-                  customClassInputTitle="font-bold"
-                  inputTitle="Client Name"
-                  defaultValue="Select Client"
+                <label className="FormLabel">Project Name</label>
+                <Input
+                  className="FormInput"
+                  {...register('name', {
+                    required: true,
+                    pattern: PATTERN.CHAR_SPACE_DASH,
+                    validate: (value) => value.length <= 150,
+                  })}
+                  placeholder="Enter Project Name"
+                  type="text"
+                  id="name"
+                  disableUnderline
                 />
+                {errors.name?.type === 'required' && (
+                  <ErrorSpanBox error="Project Name is required" />
+                )}
+                {errors.name?.type === 'pattern' && (
+                  <ErrorSpanBox error={INVALID_CHAR} />
+                )}
+                {errors.name?.type === 'validate' && (
+                  <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
+                )}
               </FormControl>
               <FormControl className="FormControl" variant="standard">
                 <CustomDropDown
@@ -245,7 +244,7 @@ Props) {
             </div>
             <div className="FormFields">
               <FormControl className="FormControl" variant="standard">
-                <label className="FormLabel">Supervisor Name</label>
+                <label className="FormLabel">Site Supervisor Name</label>
                 <Input
                   className="FormInput"
                   {...register('supervisorName', {
@@ -253,13 +252,13 @@ Props) {
                     pattern: PATTERN.CHAR_SPACE_DASH,
                     validate: (value) => value.length <= 150,
                   })}
-                  placeholder="Enter Supervisor Name"
+                  placeholder="Enter Site Supervisor Name"
                   type="text"
                   id="supervisorName"
                   disableUnderline
                 />
                 {errors.supervisorName?.type === 'required' && (
-                  <ErrorSpanBox error="Supervisor Name is required" />
+                  <ErrorSpanBox error="Site Supervisor Name is required" />
                 )}
                 {errors.supervisorName?.type === 'pattern' && (
                   <ErrorSpanBox error={INVALID_CHAR} />
@@ -269,18 +268,18 @@ Props) {
                 )}
               </FormControl>
               <FormControl className="FormControl" variant="standard">
-                <label className="FormLabel">Budget</label>
+                <label className="FormLabel">Quotation</label>
                 <Input
                   className="FormInput"
                   id="name"
                   type="number"
-                  placeholder="Enter Amount"
+                  placeholder="Enter Quotation Amount"
                   {...register('budget', {
                     required: 'Amount is required in numbers',
                     validate: (value: any) => VALIDATE_NON_NEGATIVE_NUM(value),
                     maxLength: {
-                      value: 10,
-                      message: 'Length should not be excceed from 10 numbers.',
+                      value: 20,
+                      message: 'Length should not be excceed from 20 numbers.',
                     },
                   })}
                   disableUnderline
@@ -299,11 +298,18 @@ Props) {
                   type="number"
                   placeholder="Enter Amount"
                   {...register('totalPaid', {
-                    // required: 'Amount is required in numbers',
-                    validate: (value: any) => VALIDATE_NON_NEGATIVE_NUM(value),
+                    required: 'Amount is required in numbers',
+                    // validate: (value: any) => VALIDATE_NON_NEGATIVE_NUM(value),
+                    validate: (value: any) => {
+                      const isNonNegative = VALIDATE_NON_NEGATIVE_NUM(value);
+                      const isValidAmount =
+                        parseFloat(value) <= parseFloat(watch('budget')) ||
+                        'Total paid cannot exceed quotation amount';
+                      return isNonNegative && isValidAmount;
+                    },
                     maxLength: {
-                      value: 10,
-                      message: 'Length should not be excceed from 10 numbers.',
+                      value: 20,
+                      message: 'Length should not be excceed from 20 numbers.',
                     },
                   })}
                   disableUnderline
@@ -320,11 +326,21 @@ Props) {
                   type="number"
                   placeholder="Enter Amount"
                   {...register('dueAmount', {
-                    // required: 'Amount is required in numbers',
-                    validate: (value: any) => VALIDATE_NON_NEGATIVE_NUM(value),
+                    required: 'Amount is required in numbers',
+                    // validate: (value: any) => VALIDATE_NON_NEGATIVE_NUM(value),
+                    validate: (value) => {
+                      const calculatedDue =
+                        parseFloat(watch('budget')) -
+                        parseFloat(watch('totalPaid'));
+                      const isNonNegative = VALIDATE_NON_NEGATIVE_NUM(value);
+                      const isValidDue =
+                        parseFloat(value) === calculatedDue ||
+                        `Due amount should be ${calculatedDue}`;
+                      return isNonNegative && isValidDue;
+                    },
                     maxLength: {
-                      value: 10,
-                      message: 'Length should not be excceed from 10 numbers.',
+                      value: 20,
+                      message: 'Length should not be excceed from 20 numbers.',
                     },
                   })}
                   disableUnderline

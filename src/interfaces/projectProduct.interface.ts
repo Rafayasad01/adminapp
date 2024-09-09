@@ -20,7 +20,7 @@ export interface Product {
   serviceCenter: any;
   rustProof: any;
   averageLife: any;
-  feature: string;
+  feature: string | any;
   productCustomization: any;
   color: string;
   price: string;

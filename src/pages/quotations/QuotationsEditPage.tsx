@@ -338,12 +338,12 @@ const QuotationsEditPage = () => {
         displayMessage={notifyMessage}
       />
       <TopBar title="Projects" />
-      <div className="cs-dialog container mx-auto mt-5 w-full">
+      <div className="cs-dialog container mx-auto mt-2 w-full px-3">
         <div className="w-full rounded-lg bg-white shadow-lg">
           <div className="grid grid-cols-12 px-4 py-5">
             <div className="col-span-12">
               <span className="font-open-sans text-xl font-semibold text-[#252733]">
-                Quotation Information
+                Update Quotation Information
               </span>
             </div>
             <div className="Content col-span-12 p-4">
@@ -422,7 +422,7 @@ const QuotationsEditPage = () => {
                               variant="standard"
                             >
                               <Select
-                                value={row.vendor}
+                                value={row.vendor || 'none'}
                                 defaultValue="none"
                                 disableUnderline
                                 className="FormInput"
@@ -450,7 +450,7 @@ const QuotationsEditPage = () => {
                               variant="standard"
                             >
                               <Select
-                                value={row.product}
+                                value={row.product || 'none'}
                                 className="FormInput"
                                 disableUnderline
                                 onChange={(e) =>
@@ -458,6 +458,9 @@ const QuotationsEditPage = () => {
                                 }
                                 disabled={!row.vendor}
                               >
+                                <MenuItem value="none">
+                                  -- Select Product --
+                                </MenuItem>
                                 {row.products?.map(
                                   (product: Product, ProductIndex: number) => (
                                     <MenuItem
@@ -477,7 +480,7 @@ const QuotationsEditPage = () => {
                               variant="standard"
                             >
                               <Select
-                                value={row.color}
+                                value={row.color || 'none'}
                                 className="FormInput"
                                 disableUnderline
                                 onChange={(e) =>
@@ -488,6 +491,9 @@ const QuotationsEditPage = () => {
                                 }
                                 disabled={!row.vendor}
                               >
+                                <MenuItem value="none">
+                                  -- Select Color --
+                                </MenuItem>
                                 {row.products
                                   ?.find((x) => x.id === row.product)
                                   ?.productCustomization?.map(
@@ -557,7 +563,7 @@ const QuotationsEditPage = () => {
                           </label>
                           <Select
                             value={discount.type}
-                            className="FormInput"
+                            className="FormInput mb-3"
                             onChange={(e) =>
                               handleDiscountChange(
                                 e.target.value as 'percentage' | 'fixed',
@@ -611,7 +617,7 @@ const QuotationsEditPage = () => {
                   </Button>
                   <Input
                     type="submit"
-                    value="Submit"
+                    value="Update"
                     className="btn-black-fill col-span-8"
                     sx={{ padding: '0.175rem 2rem !important' }}
                     disableUnderline

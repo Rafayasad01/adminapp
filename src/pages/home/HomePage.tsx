@@ -43,7 +43,7 @@ function HomePage() {
         displayMessage={notifyMessage}
       />
       <TopBar title="Dashboard" />
-      <div className="container m-auto mt-3 px-3">
+      <div className="cs-dialog container mx-auto mt-2 w-full px-3">
         {/* <div className="mt-2 grid flex-1 grid-cols-4 gap-3">
           <div
             onClick={() =>
