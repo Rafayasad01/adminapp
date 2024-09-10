@@ -96,11 +96,13 @@ const VendorAddPopup = ({
                 <label className="FormLabel">Vendor Type</label>
                 <Select
                   className="FormInput"
+                  defaultValue="none"
                   disableUnderline
                   {...register('vendorType', {
                     required: 'Vendor Type is required',
                   })}
                 >
+                  <MenuItem value="none">-- Select Type --</MenuItem>
                   <MenuItem value="Supplier">Supplier</MenuItem>
                   <MenuItem value="Manufacturer">Manufacturer</MenuItem>
                   <MenuItem value="Distributor">Distributor</MenuItem>

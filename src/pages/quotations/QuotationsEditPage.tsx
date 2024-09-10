@@ -192,6 +192,16 @@ const QuotationsEditPage = () => {
       total: row.total,
     }));
 
+    const areFieldsValid = items.every((x: any) => {
+      return (
+        x.vendorId !== 'none' &&
+        x.productId !== 'none' &&
+        x.quantity >= 1 &&
+        x.color !== 'none' &&
+        x.color !== ''
+      );
+    });
+
     // Construct payload for submission
     const payload = {
       appUserId: data.clientName,
@@ -204,40 +214,47 @@ const QuotationsEditPage = () => {
       items,
     };
     // console.log('🚀 ~ onSubmit ~ data: UPDATE==>', payload);
+    if (areFieldsValid) {
+      setIsLoader(true);
+      const success = await adminQuotation
+        .updateQuotationService(id, payload)
+        .then((res) => {
+          setIsLoader(false);
+          if (res.data.success === false) {
+            setIsNotify(true);
+            setNotifyMessage({
+              text: res.data.message,
+              type: 'error',
+            });
+            return false;
+          }
 
-    setIsLoader(true);
-    const success = await adminQuotation
-      .updateQuotationService(id, payload)
-      .then((res) => {
-        setIsLoader(false);
-        if (res.data.success === false) {
           setIsNotify(true);
           setNotifyMessage({
             text: res.data.message,
+            type: 'success',
+          });
+          return true;
+        })
+        .catch((err) => {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: err.message,
             type: 'error',
           });
           return false;
-        }
-
-        setIsNotify(true);
-        setNotifyMessage({
-          text: res.data.message,
-          type: 'success',
         });
-        return true;
-      })
-      .catch((err) => {
-        setIsLoader(false);
-        setIsNotify(true);
-        setNotifyMessage({
-          text: err.message,
-          type: 'error',
-        });
-        return false;
+      if (success) {
+        reset();
+        navigate('../');
+      }
+    } else {
+      setIsNotify(true);
+      setNotifyMessage({
+        text: 'All Fields Must be Required',
+        type: 'error',
       });
-    if (success) {
-      reset();
-      navigate('../');
     }
   };
 

@@ -5,13 +5,8 @@ import dayjs from 'dayjs';
 import assets from '../../assets';
 import { useAppSelector } from '../../redux/redux-hooks';
 
-type TopBarProps = {
-  title?: string;
-  isNestedRoute?: boolean;
-};
-
-function TopBar({ title, isNestedRoute }: TopBarProps) {
-  console.log(title, isNestedRoute);
+function TopBar(_TopBarProps: any) {
+  // console.log(title, isNestedRoute);
 
   const userData = useAppSelector((state: any) => state?.authState?.user);
   const [greeting, setGreeting] = useState('');

@@ -157,6 +157,16 @@ const QuotationsAddPage = () => {
       total: row.total,
     }));
 
+    const areFieldsValid = items.every((x: any) => {
+      return (
+        x.vendorId !== 'none' &&
+        x.productId !== 'none' &&
+        x.quantity >= 1 &&
+        x.color !== 'none' &&
+        x.color !== ''
+      );
+    });
+
     // Construct payload for submission
     const payload = {
       appUserId: data.clientName,
@@ -168,41 +178,48 @@ const QuotationsAddPage = () => {
       subtotal: items.reduce((acc, item) => acc + item.total, 0),
       items,
     };
-    // console.log('🚀 ~ onSubmit ~ data:', payload, rows);
+    // console.log('🚀 ~ onSubmit ~ data:', areFieldsEmpty, items);
+    if (areFieldsValid) {
+      setIsLoader(true);
+      const success = await adminQuotation
+        .createQuotationService(payload)
+        .then((res) => {
+          setIsLoader(false);
+          if (res.data.success === false) {
+            setIsNotify(true);
+            setNotifyMessage({
+              text: res.data.message,
+              type: 'error',
+            });
+            return false;
+          }
 
-    setIsLoader(true);
-    const success = await adminQuotation
-      .createQuotationService(payload)
-      .then((res) => {
-        setIsLoader(false);
-        if (res.data.success === false) {
           setIsNotify(true);
           setNotifyMessage({
             text: res.data.message,
+            type: 'success',
+          });
+          return true;
+        })
+        .catch((err) => {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: err.message,
             type: 'error',
           });
           return false;
-        }
-
-        setIsNotify(true);
-        setNotifyMessage({
-          text: res.data.message,
-          type: 'success',
         });
-        return true;
-      })
-      .catch((err) => {
-        setIsLoader(false);
-        setIsNotify(true);
-        setNotifyMessage({
-          text: err.message,
-          type: 'error',
-        });
-        return false;
+      if (success) {
+        reset();
+        navigate('../');
+      }
+    } else {
+      setIsNotify(true);
+      setNotifyMessage({
+        text: 'All Fields Must Be Required',
+        type: 'error',
       });
-    if (success) {
-      reset();
-      navigate('../');
     }
   };
 
@@ -240,7 +257,7 @@ const QuotationsAddPage = () => {
   const handleVendorChange = (index: number, vendor: string) => {
     const newRows = [...rows];
     newRows[index].vendor = vendor;
-    newRows[index].product = ''; // Clear product when vendor changes
+    newRows[index].product = 'none'; // Clear product when vendor changes
     setRows(newRows);
 
     // Fetch products specific to the selected vendor
@@ -437,7 +454,7 @@ const QuotationsAddPage = () => {
                               variant="standard"
                             >
                               <Select
-                                value={row.color || 'none'}
+                                value={row.color ? row.color : 'none'}
                                 className="FormInput"
                                 disableUnderline
                                 onChange={(e) =>
