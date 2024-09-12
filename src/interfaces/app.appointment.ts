@@ -19,6 +19,7 @@ export interface AppointmentProvider {
   price: any;
   mints: any;
   payrollType: any;
+  salary: any;
 }
 
 export interface AppointmentService {

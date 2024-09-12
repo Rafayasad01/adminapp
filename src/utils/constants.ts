@@ -747,6 +747,8 @@ export const ALL_PERMISSIONS = {
     verifyAddAppointment: 'verifyAddAppointment',
     editWallet: 'editAppointmentWallet',
     editLeaveManagement: 'editAppointmentLeaveManagement',
+    viewSalayAppointmentEmployee: 'viewSalayAppointmentEmployee',
+    viewOtherAppointments: 'viewOtherAppointments',
   },
   storeProduct: {
     viewProducts: 'viewStoreProduct',
@@ -781,6 +783,11 @@ export const ALL_PERMISSIONS = {
     deleteUserEmployee: 'deleteUserEmployee',
     viewUserAppRewardHistory: 'viewUserAppRewardHistory',
     viewDriverUserApp: 'viewDriverUserApp',
+    viewCustomers: 'viewCustomers',
+    addCustomer: 'addCustomer',
+    editCustomer: 'editCustomer',
+    deleteCustomer: 'deleteCustomer',
+    viewAddressCustomer: 'viewAddressCustomer',
   },
   storeBranch: {
     viewBranches: 'viewStoreBranch',
@@ -830,7 +837,11 @@ export const ALL_PERMISSIONS = {
 
 export const SERVICES = 'Service';
 export const PRODUCT = 'Product';
+export const OTHER_APPOINTMENT = 'Other Appointments';
+export const APPOINTMENT = 'Appointments';
 let TITLE_TEXT = '';
+let APPOINTMENT_TEXT = '';
+
 export const handleTitleText = (permissions: any) => {
   if (
     listingRolePermission(
@@ -839,8 +850,28 @@ export const handleTitleText = (permissions: any) => {
     )
   ) {
     TITLE_TEXT = SERVICES;
-  } else {
-    TITLE_TEXT = PRODUCT;
   }
+  if (
+    listingRolePermission(
+      permissions,
+      ALL_PERMISSIONS.storeAppointment.viewOtherAppointments
+    )
+  ) {
+    APPOINTMENT_TEXT = OTHER_APPOINTMENT;
+  }
+  //  else {
+  //   TITLE_TEXT = PRODUCT;
+  // }
+
+  // if (
+  //   listingRolePermission(
+  //     permissions,
+  //     ALL_PERMISSIONS.storeAppointment.viewOtherAppointments
+  //   )
+  // ) {
+  //   APPOINTMENT_TEXT = OTHER_APPOINTMENT;
+  // } else {
+  //   APPOINTMENT_TEXT = APPOINTMENT;
+  // }
 };
-export { TITLE_TEXT };
+export { TITLE_TEXT, APPOINTMENT_TEXT };

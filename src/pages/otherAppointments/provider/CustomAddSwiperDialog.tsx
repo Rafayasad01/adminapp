@@ -1,10 +1,10 @@
-// import AddIcon from '@mui/icons-material/Add';
-// import ArrowCircleLeftOutlinedIcon from '@mui/icons-material/ArrowCircleLeftOutlined';
-// import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
+import AddIcon from '@mui/icons-material/Add';
+import ArrowCircleLeftOutlinedIcon from '@mui/icons-material/ArrowCircleLeftOutlined';
+import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
-// import EastIcon from '@mui/icons-material/East';
+import EastIcon from '@mui/icons-material/East';
 import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
-// import Button from '@mui/material/Button';
+import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import FormControl from '@mui/material/FormControl';
 import IconButton from '@mui/material/IconButton';
@@ -21,7 +21,6 @@ import CustomWorkDaysForm from '../../../components/common/CustomWorkDaysForm';
 import ErrorSpanBox from '../../../components/common/ErrorSpanBox';
 import CustomTimePicker from '../../../components/common/TimePicker';
 import {
-  // BARBER_SERVICES_AMOUNT,
   INVALID_CHAR,
   MAX_LENGTH_EXCEEDED,
   // PATTERN,
@@ -74,19 +73,19 @@ function CustomSwiperDialog({
   setStartServiceTime: _setStartServiceTime,
   startServiceTime: _startServiceTime,
   addScheduleFormat,
-  // append,
-  // catItemsLov,
-  // usedCatItemsLovlist,
-  // catLov,
-  // control,
+  append,
+  catItemsLov,
+  usedCatItemsLovlist,
+  catLov,
+  control,
   DialogSliderOne,
-  // DialogSliderTwo,
+  DialogSliderTwo,
   DialogSubHeader,
   endTime,
   errors,
   getValues: _getValues,
-  // handleNextSlide,
-  // handlePrevSlide,
+  handleNextSlide,
+  handlePrevSlide,
   handleSubmit,
   inputFieldsData,
   inputScheduleData,
@@ -94,15 +93,15 @@ function CustomSwiperDialog({
   onSubmit,
   openFormDialog,
   register,
-  // remove,
+  remove,
   reset,
-  // ServicesFields,
+  ServicesFields,
   setAvater,
   setError: _setError,
-  // setIsNotify,
-  // setNotifyMessage,
+  setIsNotify,
+  setNotifyMessage,
   setOpenFormDialog,
-  // setValue,
+  setValue,
   setWeekDays,
   singleField,
   specailCase,
@@ -127,6 +126,72 @@ function CustomSwiperDialog({
       setOpenFormDialog(false);
     }
   };
+
+  const handleServices = () => {
+    const obj = {
+      storeServiceCategoryItem: watch('servicesId'),
+      // serviceTime: watch('mints'),
+      // amountType: watch('servicesAmount'),
+      // amount: watch('price'),
+    };
+    // if (!PATTERN.ONLY_NUM.test(watch('mints'))) {
+    //   setIsNotify(true);
+    //   setNotifyMessage({
+    //     text: 'Service Time should be in digits(number)',
+    //     type: 'error',
+    //   });
+    //   return;
+    // }
+
+    const check: boolean =
+      ServicesFields?.find(
+        (el: any) => el.storeServiceCategoryItem === watch('servicesId')
+      ) !== undefined;
+    if (check) {
+      setIsNotify(true);
+      setNotifyMessage({
+        text: 'This service you already selected, Please select another service',
+        type: 'error',
+      });
+      return;
+    }
+    // console.log(
+    //   "🚀 ~ handleServices ~ watch('servicesId'):",
+    //   watch('servicesId')
+    // );
+    if (
+      watch('servicesId') &&
+      watch('servicesId') !== 'none'
+      // watch('mints')
+      // watch('servicesAmount') &&
+      // watch('price') &&
+    ) {
+      append(obj);
+      // setValue("servicesId", 'none')
+      // setValue("servicesAmount", 'none')
+      // setValue("price", null)
+      // setStartServiceTime(null)
+    } else {
+      setIsNotify(true);
+      setNotifyMessage({
+        text: 'Both Fields are Required',
+        type: 'error',
+      });
+    }
+  };
+
+  const getCatItemName = (id: any) => {
+    let tempAr: any[] = [];
+    tempAr = usedCatItemsLovlist;
+    return tempAr?.find((el: any) => el.id === id)?.name;
+  };
+
+  /* const customRenderTimeViewClock = (props: any) => {
+    return renderTimeViewClock({
+      ...props,
+      getClockNumber: (value: any) => (value < 10 ? `0${value}` : value),
+    });
+  }; */
 
   return (
     <Dialog
@@ -207,7 +272,7 @@ function CustomSwiperDialog({
                             />
                           </FormControl>
                         ) : items.type === 'textarea' ? (
-                          <div className="">
+                          <div className="w-[475px]">
                             <FormControl
                               className="FormControl py-2"
                               variant="standard"
@@ -267,7 +332,7 @@ function CustomSwiperDialog({
                             <label className="FormLabel">
                               Upload Image
                               <span className="SubLabel">
-                                Image should be 1080px x 1080px
+                                (1080px by 1080px)
                               </span>
                             </label>
                             <div className="ImageBox">
@@ -440,10 +505,10 @@ function CustomSwiperDialog({
               />
               <CustomButton
                 buttonType="button"
-                title="Submit"
-                // iconRight={<EastIcon className="text-base" />}
-                // onclick={handleNextSlide}
-                type="submit"
+                title="Next"
+                iconRight={<EastIcon className="text-base" />}
+                onclick={handleNextSlide}
+                // type={'submit'}
                 className="btn-black-fill"
                 sx={{
                   padding: '0.375rem 2rem !important',
@@ -453,7 +518,7 @@ function CustomSwiperDialog({
               />
             </div>
           </SwiperSlide>
-          {/* <SwiperSlide className="custom-swiper-slide swiper-no-swiping">
+          <SwiperSlide className="custom-swiper-slide swiper-no-swiping">
             <div className="FormHeader">
               <div className="flex items-center">
                 <ArrowCircleLeftOutlinedIcon
@@ -464,7 +529,7 @@ function CustomSwiperDialog({
                 <span className="Title">{DialogSliderTwo}</span>
               </div>
             </div>
-            <div className="FormBody">
+            <div className="FormBody mt-3">
               <div className="FormFields">
                 <FormControl className="FormControl" variant="standard">
                   <CustomDropDown
@@ -494,9 +559,23 @@ function CustomSwiperDialog({
                     inputTitle="Select Services"
                   />
                 </FormControl>
+                {/* <FormControl className="FormControl" variant="standard">
+                  <CustomInputBox
+                    pattern={PATTERN.ONLY_NUM}
+                    maxLetterLimit={4}
+                    inputTitle="Service Time"
+                    subInputTitle="(Minutes)"
+                    placeholder="Enter time (Minutes)"
+                    id="mints"
+                    requiredType
+                    register={register}
+                    error={errors.mints}
+                    inputType="text"
+                  />
+                </FormControl> */}
               </div>
               <div className="mt-3 grid grid-cols-12 gap-4">
-                <div className="col-span-4">
+                {/* <div className="col-span-4">
                   <FormControl className="FormControl" variant="standard">
                     <CustomDropDown
                       // validateRequired
@@ -512,8 +591,8 @@ function CustomSwiperDialog({
                       defaultValue="Select Type"
                     />
                   </FormControl>
-                </div>
-                <div className="col-span-4">
+                </div> */}
+                {/* <div className="col-span-4">
                   <FormControl className="FormControl" variant="standard">
                     <CustomInputBox
                       pattern={PATTERN.ONLY_NUM}
@@ -527,23 +606,8 @@ function CustomSwiperDialog({
                       inputType="text"
                     />
                   </FormControl>
-                </div>
-                <div className="col-span-4">
-                  <FormControl className="FormControl" variant="standard">
-                    <CustomInputBox
-                      pattern={PATTERN.ONLY_NUM}
-                      maxLetterLimit={4}
-                      inputTitle="Service Time"
-                      subInputTitle="(Minutes)"
-                      placeholder="Enter time (Minutes)"
-                      id="mints"
-                      requiredType
-                      register={register}
-                      error={errors.mints}
-                      inputType="text"
-                    />
-                  </FormControl>
-                </div>
+                </div> */}
+                {/* <div className="col-span-4"></div> */}
               </div>
               <div className="ImageBox">
                 <label htmlFor="" className="ImageLabel mb-3 mt-4 w-full">
@@ -568,11 +632,11 @@ function CustomSwiperDialog({
                     >
                       <div>{getCatItemName(item.storeServiceCategoryItem)}</div>
                       <div className="flex  items-center justify-between gap-2">
-                        <div className="flex items-center">
+                        {/* <div className="flex items-center">
                           <span className="text-sm">{item.serviceTime}</span>
                           <span> mints</span>
-                        </div>
-                        <div>RS{item.amount}.00</div>
+                        </div> */}
+                        {/* <div>RS{item.amount}.00</div> */}
                         <div>
                           <ClearOutlinedIcon
                             className="cursor-pointer"
@@ -611,7 +675,7 @@ function CustomSwiperDialog({
                 }}
               />
             </div>
-          </SwiperSlide> */}
+          </SwiperSlide>
         </Swiper>
       </form>
     </Dialog>

@@ -13,15 +13,17 @@ import AppUserLoyaltyDetailPage from '../pages/appUsers/AppUserRewardHistoryTabs
 import AppUserPromotionDetailPage from '../pages/appUsers/AppUserRewardHistoryTabs/AppUserPromotionDetailPage';
 import AppUsersPage from '../pages/appUsers/AppUsersPage';
 import AddAppointmentPage from '../pages/appointment/AddAppointmentPage';
+import OtherAddAppointmentPage from '../pages/otherAppointments/AddAppointmentPage';
 import RescheduleAppointmentPage from '../pages/appointment/RescheduleAppointmentPage';
+import OtherRescheduleAppointmentPage from '../pages/otherAppointments/RescheduleAppointmentPage';
 import EmployeeServices from '../pages/appointment/employeeServices/EmployeeServices';
 import AppointmentProviderAddSchedulePage from '../pages/appointment/provider/AppointmentProviderAddSchedulePage';
 import AppointmentProviderByIdPage from '../pages/appointment/provider/AppointmentProviderByIdPage';
 import AppointmentProviderPage from '../pages/appointment/provider/AppointmentProviderPage';
 import AppointmentProviderSchedulePage from '../pages/appointment/provider/AppointmentProviderSchedulePage';
 import AppointmentProviderServicesList from '../pages/appointment/provider/AppointmentProviderServicesList';
-import AppointmentVisitDetailPage from '../pages/appointment/visit/AppointmentVisitDetailPage';
-import AppointmentVisitPage from '../pages/appointment/visit/AppointmentVisitPage';
+// import AppointmentVisitDetailPage from '../pages/appointment/visit/AppointmentVisitDetailPage';
+import AppointmentVisitPage from '../pages/appointment/visit/AppointmentPage';
 import ForgotPasswordPage from '../pages/auth/forgot-password/ForgotPasswordPage';
 import LoginPage from '../pages/auth/login/LoginPage';
 import NewPasswordPage from '../pages/auth/new-password/NewPasswordPage';
@@ -70,6 +72,7 @@ import SettingsPage from '../pages/settings/SettingsPage';
 import SettingsShopScheduling from '../pages/settings/SettingsShopScheduling';
 import VouchersPage from '../pages/vouchers/VouchersPage';
 import StoreAppointmentsList from '../pages/appointment/StoreAppointmentsList';
+import OtherStoreAppointmentsList from '../pages/otherAppointments/StoreAppointmentsList';
 import AppointmentEmployeesAttendancePage from '../pages/appointment/provider/attendance/AppointmentEmployeesAttendancePage';
 import LeaveManagement from '../pages/appointment/leaveManagement/LeaveManagement';
 // import EmployeeRatingPage from '../pages/appointment/provider/rating/EmployeeRatingPage';
@@ -77,9 +80,12 @@ import EmployeeRatingReviewsPage from '../pages/appointment/provider/rating/Empl
 import AppointmentRatingPage from '../pages/appointment/rating/AppointmentRatingPage';
 import AppointmentRatingReviewsPage from '../pages/appointment/rating/AppointmentRatingReviewsPage';
 import WalletPage from '../pages/appointment/wallet/WalletPage';
-import { ALL_PERMISSIONS } from '../utils/constants';
+import { ALL_PERMISSIONS, APPOINTMENT_TEXT } from '../utils/constants';
 import CAN from '../services/permissions/permissions';
 import ExpensePage from '../pages/expense';
+import AppUsersCustomerPage from '../pages/customers/AppUsersCustomersPage';
+import AppUserCustomerDetailPage from '../pages/customers/AppUserCustomerDetailPage';
+import OtherAppointmentPage from '../pages/otherAppointments/visit/AppointmentVisitPage';
 
 const ProtectedRoute = ({ page, condition }: any) => {
   const [canView, setCanView] = useState<boolean | null>(null);
@@ -111,6 +117,8 @@ const GetInitialRoute = ({ routes }: any) => {
   }
   return null;
 };
+
+console.log('ssddssdsddsds', APPOINTMENT_TEXT);
 
 export const routeObjects: RouteObject[] = [
   {
@@ -353,10 +361,10 @@ export const routeObjects: RouteObject[] = [
                 index: true,
                 element: <AppointmentVisitPage />,
               },
-              {
-                path: 'detail/:id',
-                element: <AppointmentVisitDetailPage />,
-              },
+              // {
+              //   path: 'detail/:id',
+              //   element: <AppointmentVisitDetailPage />,
+              // },
               {
                 path: 'add-appointment',
                 element: <AddAppointmentPage />,
@@ -410,6 +418,12 @@ export const routeObjects: RouteObject[] = [
                         path: 'appointments',
                         condition:
                           ALL_PERMISSIONS.storeAppointment.viewAppointments,
+                      },
+                      {
+                        path: 'o-appointments',
+                        condition:
+                          ALL_PERMISSIONS.storeAppointment
+                            .viewOtherAppointments,
                       },
                       {
                         path: 'wallet',
@@ -519,10 +533,10 @@ export const routeObjects: RouteObject[] = [
                     path: 'list',
                     element: <StoreAppointmentsList />,
                   },
-                  {
-                    path: 'detail/:id',
-                    element: <AppointmentVisitDetailPage />,
-                  },
+                  // {
+                  //   path: 'detail/:id',
+                  //   element: <AppointmentVisitDetailPage />,
+                  // },
                   {
                     path: 'add-appointment',
                     element: (
@@ -540,6 +554,59 @@ export const routeObjects: RouteObject[] = [
                     element: (
                       <ProtectedRoute
                         page={<RescheduleAppointmentPage />}
+                        condition={
+                          ALL_PERMISSIONS.storeAppointment.editAppointment
+                        }
+                      />
+                    ),
+                    // element: <RescheduleAppointmentPage />,
+                  },
+                ],
+              },
+              {
+                path: 'all-appointments',
+                children: [
+                  {
+                    index: true,
+                    element: (
+                      <ProtectedRoute
+                        page={<OtherAppointmentPage />}
+                        condition={
+                          ALL_PERMISSIONS.storeAppointment.viewOtherAppointments
+                        }
+                      />
+                    ),
+                    // element: <AppointmentVisitPage />,
+                  },
+                  {
+                    path: 'today/list',
+                    element: <OtherStoreAppointmentsList today />,
+                  },
+                  {
+                    path: 'list',
+                    element: <OtherStoreAppointmentsList />,
+                  },
+                  // {
+                  //   path: 'detail/:id',
+                  //   element: <AppointmentVisitDetailPage />,
+                  // },
+                  {
+                    path: 'add-appointment',
+                    element: (
+                      <ProtectedRoute
+                        page={<OtherAddAppointmentPage />}
+                        condition={
+                          ALL_PERMISSIONS.storeAppointment.addAppointment
+                        }
+                      />
+                    ),
+                    // element: <AddAppointmentPage />,
+                  },
+                  {
+                    path: 'reschedule-appointment/:id',
+                    element: (
+                      <ProtectedRoute
+                        page={<OtherRescheduleAppointmentPage />}
                         condition={
                           ALL_PERMISSIONS.storeAppointment.editAppointment
                         }
@@ -946,6 +1013,10 @@ export const routeObjects: RouteObject[] = [
                         condition: ALL_PERMISSIONS.storeUser.viewUserApp,
                       },
                       {
+                        path: 'customers/list',
+                        condition: ALL_PERMISSIONS.storeUser.viewCustomers,
+                      },
+                      {
                         path: 'employees',
                         condition: ALL_PERMISSIONS.storeUser.viewUserEmployee,
                       },
@@ -999,6 +1070,32 @@ export const routeObjects: RouteObject[] = [
                         // element: <AppUserRewardHistory />,
                       },
                     ],
+                  },
+                ],
+              },
+              {
+                path: 'customers',
+                children: [
+                  {
+                    path: 'list',
+                    index: true,
+                    element: (
+                      <ProtectedRoute
+                        page={<AppUsersCustomerPage />}
+                        condition={ALL_PERMISSIONS.storeUser.viewCustomers}
+                      />
+                    ),
+                    // element: <AppUsersPage />,
+                  },
+                  {
+                    path: 'detail/:appuserId',
+                    element: (
+                      <ProtectedRoute
+                        page={<AppUserCustomerDetailPage />}
+                        condition={ALL_PERMISSIONS.storeUser.viewCustomers}
+                      />
+                    ),
+                    // element: <AppUserDetailPage />,
                   },
                 ],
               },

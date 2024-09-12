@@ -62,6 +62,7 @@ import userPermissionIcon from './images/userPermission.svg';
 import wash from './images/wash.svg';
 import morningImage from './images/morning.svg';
 import noonImage from './images/noon.png';
+import usersIcon from './images/users.png';
 
 const assets = {
   images: {
@@ -116,6 +117,7 @@ const assets = {
     Star,
     morningImage,
     noonImage,
+    usersIcon,
   },
   tempImages: {
     wash,

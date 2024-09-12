@@ -282,15 +282,15 @@ function AppointmentVisitDetailPage() {
                   )}
                   <div className="mb-2 flex justify-between text-sm font-medium">
                     <span>Total Amount :</span>
-                    <span className="font-bold">PKR {list.totalAmount}</span>
+                    <span className="font-bold">${list.totalAmount}</span>
                   </div>
                   <div className="mb-2 flex justify-between text-sm font-medium">
                     <span>HST {list.gstPercentage}% :</span>
-                    <span className="font-bold">PKR {list.gstAmount}</span>
+                    <span className="font-bold">${list.gstAmount}</span>
                   </div>
                   <div className="mt-2 flex justify-between text-lg font-medium ">
                     <span>Grand Total Amount :</span>
-                    <span className="font-bold">PKR {list.grandTotal}</span>
+                    <span className="font-bold">${list.grandTotal}</span>
                   </div>
                 </div>
               </div>

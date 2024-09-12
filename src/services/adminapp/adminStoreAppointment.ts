@@ -120,14 +120,14 @@ const getAppointment = (storeAppId: any) => {
   return network.get(`${STORE_PREFIX}/${APPOINTMENT_PREFIX}/get/${storeAppId}`);
 };
 
+const getAppointmentById = (storeAppId: any) => {
+  return network.get(`${STORE_PREFIX}/${APPOINTMENT_PREFIX}/get/${storeAppId}`);
+};
+
 const getAppointmentByCode = (code: any) => {
   return network.get(
     `${STORE_PREFIX}/${APPOINTMENT_PREFIX}/get/byCode/${code}`
   );
-};
-
-const getAppointmentById = (storeAppId: any) => {
-  return network.get(`${STORE_PREFIX}/${APPOINTMENT_PREFIX}/get/${storeAppId}`);
 };
 
 const fetchAllAppointments = (tenant: any, body: any) => {

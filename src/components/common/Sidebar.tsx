@@ -75,6 +75,12 @@ const links = [
         icon: <VisitIcon />,
       },
       {
+        name: 'Appointments',
+        path: 'store-appointment/all-appointments',
+        permission: ALL_PERMISSIONS.storeAppointment.viewOtherAppointments,
+        icon: <VisitIcon />,
+      },
+      {
         name: 'Wallet',
         path: 'store-appointment/wallet',
         permission: ALL_PERMISSIONS.storeAppointment.viewWallets,
@@ -162,6 +168,12 @@ const links = [
         name: 'App User',
         path: 'user/app-user/list',
         permission: ALL_PERMISSIONS.storeUser.viewUserApp,
+        icon: <PersonOutlineOutlinedIcon fontSize="inherit" />,
+      },
+      {
+        name: 'Customers',
+        path: 'user/customers/list',
+        permission: ALL_PERMISSIONS.storeUser.viewCustomers,
         icon: <PersonOutlineOutlinedIcon fontSize="inherit" />,
       },
       {
