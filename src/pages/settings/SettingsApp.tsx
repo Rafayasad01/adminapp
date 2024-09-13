@@ -503,28 +503,7 @@ function SettingsApp() {
                   {errors.desc && <ErrorSpanBox error={errors.desc?.message} />}
                 </FormControl>
               </div>
-              <div className="FormFields mb-4">
-                {/* <FormControl className="FormControl" variant="standard">
-                  <label className="FormLabel">Contact Email</label>
-                  <Input
-                    className="FormInput"
-                    id="email"
-                    type="text"
-                    placeholder="warning@urlaundry.com"
-                    disableUnderline
-                    {...register('email', {
-                      pattern: PATTERN.CHAR_NUM_DOT_AT,
-                      validate: (value) => value?.length <= 150,
-                      value: detail?.email ? detail.email : '',
-                    })}
-                  />
-                  {errors.email?.type === 'pattern' && (
-                    <ErrorSpanBox error={INVALID_CHAR} />
-                  )}
-                  {errors.email?.type === 'validate' && (
-                    <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
-                  )}
-                </FormControl> */}
+              <div className="FormFields">
                 {authState?.user?.userType === 'ShopUser' &&
                   listingRolePermission(
                     dataRole,
@@ -550,30 +529,35 @@ function SettingsApp() {
                       )}
                     </FormControl>
                   )}
-                <FormControl className="FormControl" variant="standard">
-                  <label className="FormLabel">Tax</label>
-                  <Input
-                    className="FormInput"
-                    id="gst_percentage"
-                    placeholder="1%"
-                    disableUnderline
-                    {...register('gstPercentage', {
-                      pattern: PATTERN.POINT_NUM,
-                      maxLength: {
-                        value: 15,
-                        message: MAX_LENGTH_EXCEEDED,
-                      },
-                      value: detail ? detail.gstPercentage : '',
-                    })}
-                    type="text"
-                  />
-                  {errors.gstPercentage?.type === 'pattern' && (
-                    <ErrorSpanBox error={INVALID_CHAR} />
-                  )}
-                  {errors.gstPercentage?.type === 'maxLength' && (
-                    <ErrorSpanBox error={PH_MINI_LENGTH} />
-                  )}
-                </FormControl>
+                {listingRolePermission(
+                  dataRole,
+                  ALL_PERMISSIONS.storeSetting.viewTax
+                ) && (
+                  <FormControl className="FormControl" variant="standard">
+                    <label className="FormLabel">Tax</label>
+                    <Input
+                      className="FormInput"
+                      id="gst_percentage"
+                      placeholder="1%"
+                      disableUnderline
+                      {...register('gstPercentage', {
+                        pattern: PATTERN.POINT_NUM,
+                        maxLength: {
+                          value: 15,
+                          message: MAX_LENGTH_EXCEEDED,
+                        },
+                        value: detail ? detail.gstPercentage : '',
+                      })}
+                      type="text"
+                    />
+                    {errors.gstPercentage?.type === 'pattern' && (
+                      <ErrorSpanBox error={INVALID_CHAR} />
+                    )}
+                    {errors.gstPercentage?.type === 'maxLength' && (
+                      <ErrorSpanBox error={PH_MINI_LENGTH} />
+                    )}
+                  </FormControl>
+                )}
               </div>
               <div className="FormField">
                 {/* <FormControl className="FormControl" variant="standard">
@@ -668,54 +652,59 @@ function SettingsApp() {
                   )}
                 </FormControl> */}
               {/* </div> */}
-              <div className="FormFields">
-                <FormControl className="FormControl" variant="standard">
-                  <label className="FormLabel">Latitude</label>
-                  <Input
-                    disabled
-                    id="latitude"
-                    placeholder="Enter Latitude"
-                    type="number"
-                    className="FormInput"
-                    defaultValue={0}
-                    {...register('latitude', {
-                      validate: (value: any) =>
-                        VALIDATE_NON_NEGATIVE_NUM(value),
-                      maxLength: {
-                        value: 10,
-                        message: MAX_LENGTH_EXCEEDED,
-                      },
-                    })}
-                    disableUnderline
-                  />
-                  {errors?.latitude && (
-                    <ErrorSpanBox error={errors?.latitude?.message} />
-                  )}
-                </FormControl>
-                <FormControl className="FormControl" variant="standard">
-                  <label className="FormLabel">Longitude</label>
-                  <Input
-                    disabled
-                    id="longitude"
-                    placeholder="Enter Delivery Urgent Fees"
-                    type="number"
-                    className="FormInput"
-                    defaultValue={0}
-                    {...register('longitude', {
-                      validate: (value: any) =>
-                        VALIDATE_NON_NEGATIVE_NUM(value),
-                      maxLength: {
-                        value: 10,
-                        message: MAX_LENGTH_EXCEEDED,
-                      },
-                    })}
-                    disableUnderline
-                  />
-                  {errors?.longitude && (
-                    <ErrorSpanBox error={errors?.longitude?.message} />
-                  )}
-                </FormControl>
-              </div>
+              {listingRolePermission(
+                dataRole,
+                ALL_PERMISSIONS.storeSetting.viewAttendanceDistance
+              ) && (
+                <div className="FormFields">
+                  <FormControl className="FormControl" variant="standard">
+                    <label className="FormLabel">Latitude</label>
+                    <Input
+                      disabled
+                      id="latitude"
+                      placeholder="Enter Latitude"
+                      type="number"
+                      className="FormInput"
+                      defaultValue={0}
+                      {...register('latitude', {
+                        validate: (value: any) =>
+                          VALIDATE_NON_NEGATIVE_NUM(value),
+                        maxLength: {
+                          value: 10,
+                          message: MAX_LENGTH_EXCEEDED,
+                        },
+                      })}
+                      disableUnderline
+                    />
+                    {errors?.latitude && (
+                      <ErrorSpanBox error={errors?.latitude?.message} />
+                    )}
+                  </FormControl>
+                  <FormControl className="FormControl" variant="standard">
+                    <label className="FormLabel">Longitude</label>
+                    <Input
+                      disabled
+                      id="longitude"
+                      placeholder="Enter Delivery Urgent Fees"
+                      type="number"
+                      className="FormInput"
+                      defaultValue={0}
+                      {...register('longitude', {
+                        validate: (value: any) =>
+                          VALIDATE_NON_NEGATIVE_NUM(value),
+                        maxLength: {
+                          value: 10,
+                          message: MAX_LENGTH_EXCEEDED,
+                        },
+                      })}
+                      disableUnderline
+                    />
+                    {errors?.longitude && (
+                      <ErrorSpanBox error={errors?.longitude?.message} />
+                    )}
+                  </FormControl>
+                </div>
+              )}
               <div className="mt-3 flex items-center justify-between gap-4">
                 {listingRolePermission(
                   dataRole,
@@ -777,24 +766,29 @@ function SettingsApp() {
                   </>
                 )}
               </div>
-              <div className="FormField mb-4">
-                <FormControl className="FormControl" variant="standard">
-                  <label className="FormLabel mt-2">Domain</label>
-                  <Input
-                    className="FormInput"
-                    id="domainAdminapp"
-                    placeholder="Domain"
-                    value={
-                      watch('domainAdminapp') &&
-                      `${DOMAIN_PROTOCOL}${watch(
-                        'domainAdminapp'
-                      )}${DOMAIN_PREFIX}`
-                    }
-                    disableUnderline
-                    disabled
-                  />
-                </FormControl>
-              </div>
+              {listingRolePermission(
+                dataRole,
+                ALL_PERMISSIONS.storeSetting.viewDomain
+              ) && (
+                <div className="FormField mb-4">
+                  <FormControl className="FormControl" variant="standard">
+                    <label className="FormLabel mt-2">Domain</label>
+                    <Input
+                      className="FormInput"
+                      id="domainAdminapp"
+                      placeholder="Domain"
+                      value={
+                        watch('domainAdminapp') &&
+                        `${DOMAIN_PROTOCOL}${watch(
+                          'domainAdminapp'
+                        )}${DOMAIN_PREFIX}`
+                      }
+                      disableUnderline
+                      disabled
+                    />
+                  </FormControl>
+                </div>
+              )}
               {listingRolePermission(
                 dataRole,
                 ALL_PERMISSIONS.storeSetting.viewLoyaltyProgram
@@ -887,7 +881,7 @@ function SettingsApp() {
               )}
               <div className="FormField mb-4">
                 <FormControl className="FormControl" variant="standard">
-                  <label className="FormLabel">Social Links</label>
+                  <label className="FormLabel mt-2">Social Links</label>
                   <div className="mt-2 flex flex-row items-center gap-3">
                     {detail &&
                       detail?.tenantConfig?.facebook &&

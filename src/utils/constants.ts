@@ -833,6 +833,8 @@ export const ALL_PERMISSIONS = {
     viewEmployeeLimit: 'viewEmployeeLimit',
     viewLoyaltyProgram: 'viewLoyaltyProgram',
     viewOfficeTime: 'viewOfficeTime',
+    viewTax: 'viewTax',
+    viewDomain: 'viewDomain',
   },
 };
 
