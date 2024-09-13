@@ -2650,6 +2650,14 @@ main.min-h-screen.w-full.flex-grow.bg-gray-50.p-3.MuiBox-root.css-0 {
   /* display: none !important; */
 }
 
+/* .css-71a9mb-MuiButtonBase-root-MuiIconButton-root.NavigationButton-button {
+  visibility: hidden;
+}
+
+.css-vnscjq-MuiButtonBase-root-MuiButton-root.OpenButton-textButton {
+  left: -53px;
+} */
+
 .dx-scheduler-navigator-previous {
   visibility: hidden;
 }

@@ -448,10 +448,27 @@ function EmployeeServices() {
             <table className="table-border table-auto">
               <thead>
                 <tr>
-                  <th className="w-[20%]">Name</th>
+                  <th
+                    className={`${listingRolePermission(
+                      dataRole,
+                      ALL_PERMISSIONS.storeAppointment
+                        .commissionAppointmentEmployee
+                    )} ? "w-[20%]" : "w-[100%]"`}
+                  >
+                    Name
+                  </th>
+                  <th className="w-[20%]">Description</th>
                   {/* <th className="w-[20%]">Description</th> */}
-                  <th className="w-[12%]">Amount Type</th>
-                  <th className="w-[25%]">Amount / Percentage</th>
+                  {listingRolePermission(
+                    dataRole,
+                    ALL_PERMISSIONS.storeAppointment
+                      .commissionAppointmentEmployee
+                  ) && (
+                    <>
+                      <th className="w-[12%]">Amount Type</th>
+                      <th className="w-[25%]">Amount / Percentage</th>
+                    </>
+                  )}
                   {/* <th className="w-[10%]">Service Time (mints)</th> */}
                   <th>Created Date</th>
                   <th>Status</th>
@@ -486,20 +503,28 @@ function EmployeeServices() {
                             </div>
                           </div>
                         </td>
-                        {/* <td>
+                        <td>
                           {item?.storeServiceCategoryItem?.description
                             ? item?.storeServiceCategoryItem?.description
                             : '--'}
-                        </td> */}
-                        <td>{item?.amountType ? item.amountType : '--'}</td>
-                        <td>
-                          {item?.amount ? Math.floor(item.amount) : '--'}{' '}
-                          {item?.amountType === 'Percentage'
-                            ? '%'
-                            : item?.amountType === 'None'
-                            ? ''
-                            : import.meta.env.VITE_CURRENCY_SYMBOL}
                         </td>
+                        {listingRolePermission(
+                          dataRole,
+                          ALL_PERMISSIONS.storeAppointment
+                            .commissionAppointmentEmployee
+                        ) && (
+                          <>
+                            <td>{item?.amountType ? item.amountType : '--'}</td>
+                            <td>
+                              {item?.amount ? Math.floor(item.amount) : '--'}{' '}
+                              {item?.amountType === 'Percentage'
+                                ? '%'
+                                : item?.amountType === 'None'
+                                ? ''
+                                : import.meta.env.VITE_CURRENCY_SYMBOL}
+                            </td>
+                          </>
+                        )}
                         {/* <td>{item.serviceTime ? item.serviceTime : '--'}</td> */}
                         <td>
                           {dayjs(

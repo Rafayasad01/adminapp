@@ -17,6 +17,7 @@ import {
   ViewSwitcher,
   WeekView,
 } from '@devexpress/dx-react-scheduler-material-ui';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import PersonOutlinedIcon from '@mui/icons-material/PersonOutlined';
 import Paper from '@mui/material/Paper';
 import dayjs from 'dayjs';
@@ -539,6 +540,11 @@ const AllAppointment = ({
     }
   };
 
+  const CustomNavigationButton = (props: any) => {
+    // console.log(props);
+    return <DateNavigator.NavigationButton className="hidden" {...props} />;
+  };
+
   return isLoader ? (
     <Loader />
   ) : (
@@ -559,6 +565,9 @@ const AllAppointment = ({
       </div>
       <hr />
       <Scheduler data={data} height={580}>
+        <span className="absolute left-[10px] top-[80px]">
+          <CalendarMonthIcon className="text-primary" />
+        </span>
         <ViewState
           defaultCurrentViewName={currentView}
           defaultCurrentDate={dayjs().toDate()}
@@ -572,28 +581,13 @@ const AllAppointment = ({
           grouping={grouping}
           groupOrientation={groupOrientation}
         />
-        {/* <WeekView
-          name="Vertical Orientation"
-          startDayHour={0}
-          endDayHour={16}
-          displayName="Week"  
-          // excludedDays={[0, 6]}
-        /> */}
         <WeekView
           name="Vertical Orientation"
-          // startDayHour={23}
-          // endDayHour={24}
           startDayHour={shopStartTime < shopEndTime ? shopStartTime : 0}
           endDayHour={shopStartTime > shopEndTime ? 24 : shopEndTime}
-          // excludedDays={[0, 6]}
           displayName="Week"
         />
-        <MonthView
-        // timeTableLayoutComponent={CustomTimeTableLayout}
-        // timeTableRowComponent={CustomTimeTableLayout}
-        // timeTableCellComponent={CustomTimeTableCell}
-        // dayScaleCellComponent={CustomDayScaleCell}
-        />
+        <MonthView />
         <Appointments appointmentContentComponent={AppointmentContent} />
         <Resources data={resources} mainResourceName="priorityId" />
         <IntegratedGrouping />
@@ -621,8 +615,9 @@ const AllAppointment = ({
         <GroupingPanel />
         <Toolbar />
         <ViewSwitcher />
+        <DateNavigator navigationButtonComponent={CustomNavigationButton} />
         {/* <AppointmentForm /> */}
-        <DateNavigator />
+        {/* <DateNavigator /> */}
         {/* <DragDropProvider /> */}
         {/* <DateNavigator /> */}
       </Scheduler>

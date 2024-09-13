@@ -431,7 +431,7 @@ function ServiceItemPage() {
                   <th className="w-[20%]">Item Name</th>
                   <th className="w-[25%]">Description</th>
                   <th>Service Time</th>
-                  <th>Service Type</th>
+                  {/* <th>Service Type</th> */}
                   <th>Price</th>
                   <th>Status</th>
                   <th>&nbsp;</th>
@@ -462,7 +462,7 @@ function ServiceItemPage() {
                         <td>
                           {convertMinutesToHours(item.serviceTime) ?? '--'}
                         </td>
-                        <td>{item.serviceType ?? '--'}</td>
+                        {/* <td>{item.serviceType ?? '--'}</td> */}
                         <td>{item.price}</td>
                         <td>
                           {item.isActive ? (

@@ -23,6 +23,7 @@ import StoreEmployeeService from '../../../services/adminapp/adminStoreEmployee'
 import StoreLovService from '../../../services/adminapp/adminStoreService';
 import PermissionPopup from '../../../utils/PermissionPopup';
 import {
+  ALL_PERMISSIONS,
   NOT_AUTHORIZED_MESSAGE,
   PATTERN,
   imageAllowedTypes,
@@ -432,7 +433,12 @@ function AppointmentProviderPage() {
 
   const manuHandler = (option: string) => {
     if (option === 'Edit') {
-      if (listingRolePermission(dataRole, 'Appointment Provider Edit')) {
+      if (
+        listingRolePermission(
+          dataRole,
+          ALL_PERMISSIONS.storeAppointment.editEmployee
+        )
+      ) {
         setIsLoader(true);
         StoreEmployeeService.StoreEmployeeFind(actionMenuItemid)
           .then((item: any) => {
@@ -498,7 +504,12 @@ function AppointmentProviderPage() {
         });
       }
     } else if (option === 'Delete') {
-      if (listingRolePermission(dataRole, 'Appointment Provider Delete')) {
+      if (
+        listingRolePermission(
+          dataRole,
+          ALL_PERMISSIONS.storeAppointment.deleteEmployee
+        )
+      ) {
         setCancelDialogOpen(true);
       } else {
         setIsNotify(true);
@@ -509,7 +520,10 @@ function AppointmentProviderPage() {
       }
     } else if (option === 'Schedule') {
       if (
-        listingRolePermission(dataRole, 'Appointment Provider Schedule View')
+        listingRolePermission(
+          dataRole,
+          ALL_PERMISSIONS.storeAppointment.viewEmployeeSchedule
+        )
       ) {
         navigate(`../schedule/${actionMenuItemid}`);
       } else {
@@ -521,7 +535,10 @@ function AppointmentProviderPage() {
       }
     } else if (option === 'Attendance') {
       if (
-        listingRolePermission(dataRole, 'Appointment Provider Service View')
+        listingRolePermission(
+          dataRole,
+          ALL_PERMISSIONS.storeAppointment.viewEmployeeAttendance
+        )
       ) {
         navigate(`../attendance/${actionMenuItemid}`);
       } else {
@@ -533,7 +550,10 @@ function AppointmentProviderPage() {
       }
     } else if (option === 'Services') {
       if (
-        listingRolePermission(dataRole, 'Appointment Provider Service View')
+        listingRolePermission(
+          dataRole,
+          ALL_PERMISSIONS.storeAppointment.viewEmployees
+        )
       ) {
         navigate(`../services/list/${actionMenuItemid}`);
       } else {
@@ -545,7 +565,10 @@ function AppointmentProviderPage() {
       }
     } else if (option === 'Rating') {
       if (
-        listingRolePermission(dataRole, 'Appointment Provider Service View')
+        listingRolePermission(
+          dataRole,
+          ALL_PERMISSIONS.storeAppointment.viewEmployeeRating
+        )
       ) {
         navigate(`../review/${actionMenuItemid}`);
       } else {
