@@ -10,7 +10,7 @@ import FormControl from '@mui/material/FormControl';
 import IconButton from '@mui/material/IconButton';
 import TextField from '@mui/material/TextField';
 import dayjs from 'dayjs';
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useMemo, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import '../../../assets/css/PopupStyle.css';
 import CustomButton from '../../../components/common/CustomButton';
@@ -19,12 +19,14 @@ import CustomDropDown from '../../../components/common/CustomDropDown';
 import CustomInputBox from '../../../components/common/CustomInputBox';
 import ErrorSpanBox from '../../../components/common/ErrorSpanBox';
 import CustomTimePicker from '../../../components/common/TimePicker';
+import { useAppSelector } from '../../../redux/redux-hooks';
 import {
+  ALL_PERMISSIONS,
   // BARBER_SERVICES_AMOUNT,
   INVALID_CHAR,
   MAX_LENGTH_EXCEEDED,
-  // PATTERN,
 } from '../../../utils/constants';
+import { listingRolePermission } from '../../../utils/helper';
 
 type CustomEditSwiperDialogProps = {
   addScheduleFormat?: boolean;
@@ -118,6 +120,23 @@ function CustomEditSwiperDialog({
   weekDays: _weekDays,
 }: CustomEditSwiperDialogProps) {
   const [imageName, setImageName] = useState<any>(null);
+  const dataRole = useAppSelector(
+    (state: any) => state?.persistedReducer?.roleState?.role?.permissions
+  );
+
+  const sortedTnputFieldsData = useMemo(() => {
+    if (
+      !listingRolePermission(
+        dataRole,
+        ALL_PERMISSIONS.storeAppointment.viewSalayAppointmentEmployee
+      )
+    )
+      return inputFieldsData;
+    const noteInput = inputFieldsData.find((item: any) => item.id === 'note');
+    return inputFieldsData
+      .filter((item: any) => item.id !== 'note')
+      .concat([noteInput]);
+  }, [inputFieldsData]);
 
   const handleFormClose = () => {
     if (type === 'edit' && specailCase) {
@@ -246,7 +265,7 @@ function CustomEditSwiperDialog({
             </div>
             <div className="FormBody">
               <div className={singleField ? 'FormField' : 'FormFields'}>
-                {inputFieldsData?.map((items: any, index: number) => {
+                {sortedTnputFieldsData?.map((items: any, index: number) => {
                   return (
                     <Fragment key={index}>
                       {

@@ -1,8 +1,8 @@
+import AddIcon from '@mui/icons-material/Add';
+import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import FormControl from '@mui/material/FormControl';
-import AddIcon from '@mui/icons-material/Add';
-import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
 import Input from '@mui/material/Input';
 import React, { useEffect, useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
@@ -10,6 +10,7 @@ import '../../../assets/css/PopupStyle.css';
 import CustomDropDown from '../../../components/common/CustomDropDown';
 import CustomInputBox from '../../../components/common/CustomInputBox';
 import { BarberItemServices } from '../../../interfaces/services.interface';
+import { useAppSelector } from '../../../redux/redux-hooks';
 import storeLovService from '../../../services/adminapp/adminStoreService';
 import {
   ALL_PERMISSIONS,
@@ -19,7 +20,6 @@ import {
   PATTERN,
 } from '../../../utils/constants';
 import { listingRolePermission } from '../../../utils/helper';
-import { useAppSelector } from '../../../redux/redux-hooks';
 
 type EmployeeServiceCreatePopupProps = {
   callback: (...args: any[]) => any;
@@ -122,6 +122,13 @@ function EmployeeServiceCreatePopup({
 
   const handleFormClose = () => {
     setOpenFormDialog(false);
+  };
+
+  const getCatName = (id: any) => {
+    // console.log('🚀 ~ getCatItemName ~ id:', id, allCatItemsLovlist);
+    let tempAr: any[] = [];
+    tempAr = catlov;
+    return tempAr?.find((el: any) => el.id === id)?.name;
   };
 
   const getCatItemName = (id: any) => {
@@ -312,7 +319,7 @@ function EmployeeServiceCreatePopup({
               <div className="mt-2 grid grid-cols-12 items-center justify-between gap-4 rounded-md border-[1px] border-[#949EAE] py-1 text-sm text-[#1A1A1A]">
                 <div className="col-span-2 px-2 font-semibold">Category</div>
                 <div className="col-span-3 font-semibold">Service</div>
-                <div className="col-span-3 font-semibold">Amount</div>
+                <div className="col-span-3 font-semibold">Commission</div>
                 <div className="col-span-3 font-semibold">Type</div>
                 <div className="" />
               </div>
@@ -326,7 +333,7 @@ function EmployeeServiceCreatePopup({
                   key={index}
                 >
                   <div className="col-span-2 truncate px-2 capitalize">
-                    {item.categoryId}{' '}
+                    {getCatName(item.categoryId) ?? 'None'}
                   </div>
                   <div className="col-span-3 truncate px-1">
                     {getCatItemName(item.storeServiceCategoryItem) ?? 'None'}

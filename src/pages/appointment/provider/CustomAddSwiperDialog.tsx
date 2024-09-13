@@ -10,7 +10,7 @@ import FormControl from '@mui/material/FormControl';
 import IconButton from '@mui/material/IconButton';
 import TextField from '@mui/material/TextField';
 import dayjs from 'dayjs';
-import React, { Fragment } from 'react';
+import React, { Fragment, useMemo } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import '../../../assets/css/PopupStyle.css';
 import CustomButton from '../../../components/common/CustomButton';
@@ -20,12 +20,14 @@ import CustomInputBox from '../../../components/common/CustomInputBox';
 import CustomWorkDaysForm from '../../../components/common/CustomWorkDaysForm';
 import ErrorSpanBox from '../../../components/common/ErrorSpanBox';
 import CustomTimePicker from '../../../components/common/TimePicker';
+import { useAppSelector } from '../../../redux/redux-hooks';
 import {
+  ALL_PERMISSIONS,
   // BARBER_SERVICES_AMOUNT,
   INVALID_CHAR,
   MAX_LENGTH_EXCEEDED,
-  // PATTERN,
 } from '../../../utils/constants';
+import { listingRolePermission } from '../../../utils/helper';
 
 type CustomSwiperDialogProps = {
   addScheduleFormat?: boolean;
@@ -112,6 +114,9 @@ function CustomSwiperDialog({
   watch,
   weekDays,
 }: CustomSwiperDialogProps) {
+  const dataRole = useAppSelector(
+    (state: any) => state?.persistedReducer?.roleState?.role?.permissions
+  );
   const handleFormClose = () => {
     if (type === 'edit' && specailCase) {
       reset({
@@ -127,6 +132,20 @@ function CustomSwiperDialog({
       setOpenFormDialog(false);
     }
   };
+
+  const sortedTnputFieldsData = useMemo(() => {
+    if (
+      !listingRolePermission(
+        dataRole,
+        ALL_PERMISSIONS.storeAppointment.viewSalayAppointmentEmployee
+      )
+    )
+      return inputFieldsData;
+    const noteInput = inputFieldsData.find((item: any) => item.id === 'note');
+    return inputFieldsData
+      .filter((item: any) => item.id !== 'note')
+      .concat([noteInput]);
+  }, [inputFieldsData]);
 
   return (
     <Dialog
@@ -155,7 +174,7 @@ function CustomSwiperDialog({
             </div>
             <div className="FormBody">
               <div className={singleField ? 'FormField' : 'FormFields'}>
-                {inputFieldsData?.map((items: any, index: number) => {
+                {sortedTnputFieldsData?.map((items: any, index: number) => {
                   const lastDayOfMonth = dayjs().endOf('month');
                   const minDate = lastDayOfMonth.subtract(12, 'year');
                   const formattedMinDate = dayjs(minDate);

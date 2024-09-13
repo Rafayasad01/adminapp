@@ -52,16 +52,13 @@ function AppointmentProviderPage() {
   const [actionMenuAnchorEl, setActionMenuAnchorEl] =
     useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
-  const [
-    actionMenuOptions,
-    //  setAcionMenuOptions
-  ] = useState<any>([
-    'Services',
-    'Attendance',
-    'Rating',
-    'Schedule',
-    'Edit',
-    'Delete',
+  const [actionMenuOptions, setAcionMenuOptions] = useState<any>([
+    // 'Services',
+    // 'Attendance',
+    // 'Rating',
+    // 'Schedule',
+    // 'Edit',
+    // 'Delete',
   ]);
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
@@ -111,52 +108,52 @@ function AppointmentProviderPage() {
     keyName: 'key',
   });
 
-  // const renderMenuOptions = () => {
-  //   const newActionMenuOptions: any = [];
-  //   const constantsOptions: any = ['Edit', 'Delete'];
-  //   if (
-  //     listingRolePermission(
-  //       dataRole,
-  //       ALL_PERMISSIONS.storeAppointment.viewServices
-  //     )
-  //   ) {
-  //     newActionMenuOptions.push('Services');
-  //   }
+  const renderMenuOptions = () => {
+    // const newActionMenuOptions: any = [];
+    const constantsOptions: any = ['Services', 'Edit', 'Delete'];
+    // if (
+    //   listingRolePermission(
+    //     dataRole,
+    //     ALL_PERMISSIONS.storeAppointment.viewServices
+    //   )
+    // ) {
+    //   newActionMenuOptions.push('Services');
+    // }
 
-  //   if (
-  //     listingRolePermission(
-  //       dataRole,
-  //       ALL_PERMISSIONS.storeAppointment.viewEmployeeAttendance
-  //     )
-  //   ) {
-  //     newActionMenuOptions.push('Attendance');
-  //   }
+    if (
+      listingRolePermission(
+        dataRole,
+        ALL_PERMISSIONS.storeAppointment.viewEmployeeAttendance
+      )
+    ) {
+      constantsOptions.push('Attendance');
+    }
 
-  //   if (
-  //     listingRolePermission(
-  //       dataRole,
-  //       ALL_PERMISSIONS.storeAppointment.viewEmployeeRating
-  //     )
-  //   ) {
-  //     newActionMenuOptions.push('Rating');
-  //   }
+    if (
+      listingRolePermission(
+        dataRole,
+        ALL_PERMISSIONS.storeAppointment.viewEmployeeRating
+      )
+    ) {
+      constantsOptions.push('Rating');
+    }
 
-  //   if (
-  //     listingRolePermission(
-  //       dataRole,
-  //       ALL_PERMISSIONS.storeAppointment.viewEmployeeSchedule
-  //     )
-  //   ) {
-  //     newActionMenuOptions.push('Schedule');
-  //   }
+    if (
+      listingRolePermission(
+        dataRole,
+        ALL_PERMISSIONS.storeAppointment.viewEmployeeSchedule
+      )
+    ) {
+      constantsOptions.push('Schedule');
+    }
 
-  //   setAcionMenuOptions((prev: any) => [...prev, ...constantsOptions]);
-  //   return actionMenuOptions;
-  // };
+    setAcionMenuOptions((prev: any) => [...prev, ...constantsOptions]);
+    // return actionMenuOptions;
+  };
 
-  // useEffect(() => {
-  //   renderMenuOptions();
-  // }, []);
+  useEffect(() => {
+    renderMenuOptions();
+  }, []);
 
   // image handler
 
@@ -182,10 +179,7 @@ function AppointmentProviderPage() {
     setImage(null);
   };
 
-  const [
-    inputFieldsData,
-    // setInputFieldsData
-  ] = useState([
+  const [inputFieldsData, setInputFieldsData] = useState([
     {
       fieldName: 'Staff Name',
       id: 'name',
@@ -281,44 +275,124 @@ function AppointmentProviderPage() {
     //   error: errors.dob,
     //   type: 'text',
     // },
-    {
-      fieldName: 'Payroll Type',
-      id: 'payrollType',
-      defaultValue: 'Select Payroll Type',
-      control,
-      register,
-      setValue,
-      error: errors.payrollType,
-      type: 'select',
-      options: {
-        role: watch('payrollType'),
-        roles: [
-          {
-            id: 'Both',
-            name: 'Both',
-          },
-          {
-            id: 'Salary',
-            name: 'Salary',
-          },
-          {
-            id: 'Commission',
-            name: 'Commission',
-          },
-        ],
+    // {
+    //   fieldName: 'Payroll Type',
+    //   id: 'payrollType',
+    //   defaultValue: 'Select Payroll Type',
+    //   control,
+    //   register,
+    //   setValue,
+    //   error: errors.payrollType,
+    //   type: 'select',
+    //   options: {
+    //     role: watch('payrollType'),
+    //     roles: [
+    //       {
+    //         id: 'Both',
+    //         name: 'Both',
+    //       },
+    //       {
+    //         id: 'Salary',
+    //         name: 'Salary',
+    //       },
+    //       {
+    //         id: 'Commission',
+    //         name: 'Commission',
+    //       },
+    //     ],
+    //   },
+    // },
+    // {
+    //   fieldName: 'Salary',
+    //   id: 'salary',
+    //   placeholder: 'Enter Salary',
+    //   register,
+    //   error: errors.salary,
+    //   type: 'text',
+    //   pattern: PATTERN.PHONE,
+    //   maxLetterLimit: 15,
+    // },
+    // {
+    //   fieldName: 'Note',
+    //   id: 'note',
+    //   placeholder: 'Enter your description',
+    //   register,
+    //   error: errors.note,
+    //   type: 'textarea',
+    //   notRequired: true,
+    //   pattern: PATTERN.CHAR_NUM_SPACE_DASH,
+    //   maxLetterLimit: 150,
+    // },
+  ]);
+
+  useEffect(() => {
+    const addionalFields: any = [
+      {
+        fieldName: 'Payroll Type',
+        id: 'payrollType',
+        defaultValue: 'Select Payroll Type',
+        control,
+        register,
+        setValue,
+        error: errors.payrollType,
+        type: 'select',
+        options: {
+          role: watch('payrollType'),
+          roles: [
+            {
+              id: 'Both',
+              name: 'Both',
+            },
+            {
+              id: 'Salary',
+              name: 'Salary',
+            },
+            {
+              id: 'Commission',
+              name: 'Commission',
+            },
+          ],
+        },
       },
-    },
-    {
-      fieldName: 'Salary',
-      id: 'salary',
-      placeholder: 'Enter Salary',
-      register,
-      error: errors.salary,
-      type: 'text',
-      pattern: PATTERN.PHONE,
-      maxLetterLimit: 15,
-    },
-    {
+      {
+        fieldName: 'Salary',
+        id: 'salary',
+        placeholder: 'Enter Salary',
+        register,
+        error: errors.salary,
+        type: 'text',
+        pattern: PATTERN.PHONE,
+        maxLetterLimit: 15,
+      },
+    ];
+    if (
+      listingRolePermission(
+        dataRole,
+        ALL_PERMISSIONS.storeAppointment.viewSalayAppointmentEmployee
+      )
+    ) {
+      // Initialize with base input fields to ensure fields don't duplicate
+      let updatedFields = inputFieldsData.filter(
+        (field) => field.id !== 'payrollType' && field.id !== 'salary'
+      );
+
+      // Add the payrollType field
+      updatedFields = [...updatedFields, addionalFields[0]];
+
+      // If payrollType is 'Salary', add the salary field
+      if (
+        watch('payrollType') === 'Salary' ||
+        watch('payrollType') === 'Both'
+      ) {
+        updatedFields = [...updatedFields, addionalFields[1]];
+      }
+      // Update the state with the new fields
+      setInputFieldsData(updatedFields);
+    }
+  }, [watch('payrollType')]);
+
+  useEffect(() => {
+    const note = {
       fieldName: 'Note',
       id: 'note',
       placeholder: 'Enter your description',
@@ -328,37 +402,9 @@ function AppointmentProviderPage() {
       notRequired: true,
       pattern: PATTERN.CHAR_NUM_SPACE_DASH,
       maxLetterLimit: 150,
-    },
-  ]);
-
-  // useEffect(() => {
-  //   const addionalFields: any = [];
-  //   if (
-  //     listingRolePermission(
-  //       dataRole,
-  //       ALL_PERMISSIONS.storeAppointment.viewSalayAppointmentEmployee
-  //     )
-  //   ) {
-  //     // Initialize with base input fields to ensure fields don't duplicate
-  //     let updatedFields = inputFieldsData.filter(
-  //       (field) => field.id !== 'payrollType' && field.id !== 'salary'
-  //     );
-
-  //     // Add the payrollType field
-  //     updatedFields = [...updatedFields, addionalFields[0]];
-
-  //     // If payrollType is 'Salary', add the salary field
-  //     if (
-  //       watch('payrollType') === 'Salary' ||
-  //       watch('payrollType') === 'Both'
-  //     ) {
-  //       updatedFields = [...updatedFields, addionalFields[1]];
-  //     }
-
-  //     // Update the state with the new fields
-  //     setInputFieldsData(updatedFields);
-  //   }
-  // }, []);
+    };
+    setInputFieldsData((prev: any) => [...prev, note]);
+  }, []);
 
   const inputScheduleData = [
     {

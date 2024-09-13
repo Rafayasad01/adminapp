@@ -1,5 +1,5 @@
-import HistoryIcon from '@mui/icons-material/History';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import HistoryIcon from '@mui/icons-material/History';
 // import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 // import PhoneIphoneOutlinedIcon from '@mui/icons-material/PhoneIphoneOutlined';
 // import CloseIcon from '@mui/icons-material/Close';
@@ -16,9 +16,9 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 // import moment from 'moment';
 // import assets from '../../assets';
+import Loader from '../../components/common/Loader2';
 import storeAppointmentService from '../../services/adminapp/adminStoreAppointment';
 import walletService from '../../services/adminapp/adminWallet';
-import Loader from '../../components/common/Loader2';
 import {
   ALL_PERMISSIONS,
   APPOINTMENT_STATUS,
@@ -26,14 +26,14 @@ import {
 } from '../../utils/constants';
 // import CustomButton from '../../components/common/CustomButton';
 // import ViewWalletPopupCard from './ViewWalletPopupCard';
-import CustomAppointmentLayoutCash from '../../utils/CustomPrintLayout/CustomAppointmentLayoutCash';
-import ViewCardAccordin from './ViewCardAccordin';
-import Notify from '../../components/common/Notify';
-import PermissionPopup from '../../utils/PermissionPopup';
-import ViewWalletPopupCard from './ViewWalletPopupCard';
 import CustomButton from '../../components/common/CustomButton';
-import { listingRolePermission } from '../../utils/helper';
+import Notify from '../../components/common/Notify';
 import { useAppSelector } from '../../redux/redux-hooks';
+import CustomAppointmentLayoutCash from '../../utils/CustomPrintLayout/CustomAppointmentLayoutCash';
+import { listingRolePermission } from '../../utils/helper';
+import PermissionPopup from '../../utils/PermissionPopup';
+import ViewCardAccordin from './ViewCardAccordin';
+import ViewWalletPopupCard from './ViewWalletPopupCard';
 
 type AppointmentViewCardProps = {
   appointmentData?: any;
@@ -242,6 +242,10 @@ const AppointmentViewCard = ({
         if (item.data.success) {
           setIsWalletLoader(false);
           handleClosePop();
+          setData((prev: any) => ({
+            ...prev,
+            wallet: item.data.data,
+          }));
         } else {
           setIsWalletLoader(false);
         }
