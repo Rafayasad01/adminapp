@@ -207,7 +207,7 @@ function CustomSwiperDialog({
                             />
                           </FormControl>
                         ) : items.type === 'textarea' ? (
-                          <div className="">
+                          <div className="FormField">
                             <FormControl
                               className="FormControl py-2"
                               variant="standard"

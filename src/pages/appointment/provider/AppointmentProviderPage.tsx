@@ -1108,7 +1108,9 @@ function AppointmentProviderPage() {
           DialogSliderOne="Add Staff"
           DialogSliderTwo="Add Staff Services"
           DialogSubHeader="Select Schedule"
-          inputFieldsData={inputFieldsData}
+          inputFieldsData={inputFieldsData.sort((a: any) =>
+            a.id === 'note' ? 1 : -1
+          )}
           inputScheduleData={inputScheduleData}
           handleSubmit={handleSubmit}
           onSubmit={onSubmitDialogBox}

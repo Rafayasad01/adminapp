@@ -749,6 +749,7 @@ export const ALL_PERMISSIONS = {
     editLeaveManagement: 'editAppointmentLeaveManagement',
     viewSalayAppointmentEmployee: 'viewSalayAppointmentEmployee',
     viewOtherAppointments: 'viewOtherAppointments',
+    commissionAppointmentEmployee: 'commissionAppointmentEmployee',
   },
   storeProduct: {
     viewProducts: 'viewStoreProduct',
