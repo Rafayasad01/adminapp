@@ -12,11 +12,14 @@ import CustomInputBox from '../../../components/common/CustomInputBox';
 import { BarberItemServices } from '../../../interfaces/services.interface';
 import storeLovService from '../../../services/adminapp/adminStoreService';
 import {
+  ALL_PERMISSIONS,
   BARBER_SERVICES_AMOUNT,
   CURRENCY_PREFIX,
   // GENDER,
   PATTERN,
 } from '../../../utils/constants';
+import { listingRolePermission } from '../../../utils/helper';
+import { useAppSelector } from '../../../redux/redux-hooks';
 
 type EmployeeServiceCreatePopupProps = {
   callback: (...args: any[]) => any;
@@ -48,6 +51,10 @@ function EmployeeServiceCreatePopup({
     watch,
     formState: { errors },
   } = useForm<BarberItemServices>();
+
+  const dataRole = useAppSelector(
+    (state: any) => state?.persistedReducer?.roleState?.role?.permissions
+  );
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -245,40 +252,45 @@ function EmployeeServiceCreatePopup({
                 </FormControl>
               </div>
             </div>
-            {empDetail && empDetail.payrollType !== 'Salary' && (
-              <div className="mt-3 grid grid-cols-12 gap-4">
-                <div className="col-span-6">
-                  <FormControl className="FormControl" variant="standard">
-                    <CustomDropDown
-                      validateRequired
-                      id="amountType"
-                      control={control}
-                      error={errors}
-                      register={register}
-                      setValue={setValue}
-                      // options={{ roles: providerlov }}
-                      customClassInputTitle="font-bold"
-                      inputTitle="Amount Type"
-                      options={{ roles: BARBER_SERVICES_AMOUNT }}
-                      defaultValue="Select Type"
-                    />
-                  </FormControl>
-                </div>
-                <div className="col-span-6">
-                  <FormControl className="FormControl" variant="standard">
-                    <CustomInputBox
-                      pattern={PATTERN.ONLY_NUM}
-                      maxLetterLimit={6}
-                      inputTitle="Commission"
-                      placeholder="Enter Amount / Percentage"
-                      id="amount"
-                      register={register}
-                      error={errors.amount}
-                      inputType="text"
-                    />
-                  </FormControl>
-                </div>
-                {/* <div className="col-span-4">
+            {empDetail &&
+              empDetail.payrollType !== 'Salary' &&
+              listingRolePermission(
+                dataRole,
+                ALL_PERMISSIONS.storeAppointment.commissionAppointmentEmployee
+              ) && (
+                <div className="mt-3 grid grid-cols-12 gap-4">
+                  <div className="col-span-6">
+                    <FormControl className="FormControl" variant="standard">
+                      <CustomDropDown
+                        validateRequired
+                        id="amountType"
+                        control={control}
+                        error={errors}
+                        register={register}
+                        setValue={setValue}
+                        // options={{ roles: providerlov }}
+                        customClassInputTitle="font-bold"
+                        inputTitle="Amount Type"
+                        options={{ roles: BARBER_SERVICES_AMOUNT }}
+                        defaultValue="Select Type"
+                      />
+                    </FormControl>
+                  </div>
+                  <div className="col-span-6">
+                    <FormControl className="FormControl" variant="standard">
+                      <CustomInputBox
+                        pattern={PATTERN.ONLY_NUM}
+                        maxLetterLimit={6}
+                        inputTitle="Commission"
+                        placeholder="Enter Amount / Percentage"
+                        id="amount"
+                        register={register}
+                        error={errors.amount}
+                        inputType="text"
+                      />
+                    </FormControl>
+                  </div>
+                  {/* <div className="col-span-4">
                 <FormControl className="FormControl" variant="standard">
                   <CustomInputBox
                     pattern={PATTERN.ONLY_NUM}
@@ -292,8 +304,8 @@ function EmployeeServiceCreatePopup({
                   />
                 </FormControl>
               </div> */}
-              </div>
-            )}
+                </div>
+              )}
           </div>
           {fields?.length > 0 && (
             <div className="mx-[2px] px-[8px]">
