@@ -52,13 +52,16 @@ function AppointmentProviderPage() {
   const [actionMenuAnchorEl, setActionMenuAnchorEl] =
     useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
-  const [actionMenuOptions, setAcionMenuOptions] = useState<any>([
-    // 'Services',
-    // 'Attendance',
-    // 'Rating',
-    // 'Schedule',
-    // 'Edit',
-    // 'Delete',
+  const [
+    actionMenuOptions,
+    //  setAcionMenuOptions
+  ] = useState<any>([
+    'Services',
+    'Attendance',
+    'Rating',
+    'Schedule',
+    'Edit',
+    'Delete',
   ]);
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
@@ -108,58 +111,55 @@ function AppointmentProviderPage() {
     keyName: 'key',
   });
 
-  const renderMenuOptions = () => {
-    const newActionMenuOptions: any = [];
-    const constantsOptions: any = ['Edit', 'Delete'];
-    if (
-      listingRolePermission(
-        dataRole,
-        ALL_PERMISSIONS.storeAppointment.viewServices
-      )
-    ) {
-      newActionMenuOptions.push('Services');
-    }
+  // const renderMenuOptions = () => {
+  //   const newActionMenuOptions: any = [];
+  //   const constantsOptions: any = ['Edit', 'Delete'];
+  //   if (
+  //     listingRolePermission(
+  //       dataRole,
+  //       ALL_PERMISSIONS.storeAppointment.viewServices
+  //     )
+  //   ) {
+  //     newActionMenuOptions.push('Services');
+  //   }
 
-    if (
-      listingRolePermission(
-        dataRole,
-        ALL_PERMISSIONS.storeAppointment.viewEmployeeAttendance
-      )
-    ) {
-      newActionMenuOptions.push('Attendance');
-    }
+  //   if (
+  //     listingRolePermission(
+  //       dataRole,
+  //       ALL_PERMISSIONS.storeAppointment.viewEmployeeAttendance
+  //     )
+  //   ) {
+  //     newActionMenuOptions.push('Attendance');
+  //   }
 
-    if (
-      listingRolePermission(
-        dataRole,
-        ALL_PERMISSIONS.storeAppointment.viewEmployeeRating
-      )
-    ) {
-      newActionMenuOptions.push('Rating');
-    }
+  //   if (
+  //     listingRolePermission(
+  //       dataRole,
+  //       ALL_PERMISSIONS.storeAppointment.viewEmployeeRating
+  //     )
+  //   ) {
+  //     newActionMenuOptions.push('Rating');
+  //   }
 
-    if (
-      listingRolePermission(
-        dataRole,
-        ALL_PERMISSIONS.storeAppointment.viewEmployeeSchedule
-      )
-    ) {
-      newActionMenuOptions.push('Schedule');
-    }
+  //   if (
+  //     listingRolePermission(
+  //       dataRole,
+  //       ALL_PERMISSIONS.storeAppointment.viewEmployeeSchedule
+  //     )
+  //   ) {
+  //     newActionMenuOptions.push('Schedule');
+  //   }
 
-    setAcionMenuOptions((prev: any) => [
-      ...prev,
-      ...newActionMenuOptions,
-      ...constantsOptions,
-    ]);
-    return actionMenuOptions;
-  };
+  //   setAcionMenuOptions((prev: any) => [...prev, ...constantsOptions]);
+  //   return actionMenuOptions;
+  // };
 
-  useEffect(() => {
-    renderMenuOptions();
-  }, []);
+  // useEffect(() => {
+  //   renderMenuOptions();
+  // }, []);
 
   // image handler
+
   const handleFileChange = (event: any) => {
     // console.log('event', event);
     const selectedFile = event.target.files[0];
@@ -182,7 +182,10 @@ function AppointmentProviderPage() {
     setImage(null);
   };
 
-  const [inputFieldsData, setInputFieldsData] = useState([
+  const [
+    inputFieldsData,
+    // setInputFieldsData
+  ] = useState([
     {
       fieldName: 'Staff Name',
       id: 'name',
@@ -279,6 +282,43 @@ function AppointmentProviderPage() {
     //   type: 'text',
     // },
     {
+      fieldName: 'Payroll Type',
+      id: 'payrollType',
+      defaultValue: 'Select Payroll Type',
+      control,
+      register,
+      setValue,
+      error: errors.payrollType,
+      type: 'select',
+      options: {
+        role: watch('payrollType'),
+        roles: [
+          {
+            id: 'Both',
+            name: 'Both',
+          },
+          {
+            id: 'Salary',
+            name: 'Salary',
+          },
+          {
+            id: 'Commission',
+            name: 'Commission',
+          },
+        ],
+      },
+    },
+    {
+      fieldName: 'Salary',
+      id: 'salary',
+      placeholder: 'Enter Salary',
+      register,
+      error: errors.salary,
+      type: 'text',
+      pattern: PATTERN.PHONE,
+      maxLetterLimit: 15,
+    },
+    {
       fieldName: 'Note',
       id: 'note',
       placeholder: 'Enter your description',
@@ -291,72 +331,34 @@ function AppointmentProviderPage() {
     },
   ]);
 
-  useEffect(() => {
-    const addionalFields: any = [
-      {
-        fieldName: 'Payroll Type',
-        id: 'payrollType',
-        defaultValue: 'Select Payroll Type',
-        control,
-        register,
-        setValue,
-        error: errors.payrollType,
-        type: 'select',
-        options: {
-          role: watch('payrollType'),
-          roles: [
-            {
-              id: 'Both',
-              name: 'Both',
-            },
-            {
-              id: 'Salary',
-              name: 'Salary',
-            },
-            {
-              id: 'Commission',
-              name: 'Commission',
-            },
-          ],
-        },
-      },
-      {
-        fieldName: 'Salary',
-        id: 'salary',
-        placeholder: 'Enter Salary',
-        register,
-        error: errors.salary,
-        type: 'text',
-        pattern: PATTERN.PHONE,
-        maxLetterLimit: 15,
-      },
-    ];
-    if (
-      listingRolePermission(
-        dataRole,
-        ALL_PERMISSIONS.storeAppointment.viewSalayAppointmentEmployee
-      )
-    ) {
-      // Initialize with base input fields to ensure fields don't duplicate
-      let updatedFields = inputFieldsData.filter(
-        (field) => field.id !== 'payrollType' && field.id !== 'salary'
-      );
+  // useEffect(() => {
+  //   const addionalFields: any = [];
+  //   if (
+  //     listingRolePermission(
+  //       dataRole,
+  //       ALL_PERMISSIONS.storeAppointment.viewSalayAppointmentEmployee
+  //     )
+  //   ) {
+  //     // Initialize with base input fields to ensure fields don't duplicate
+  //     let updatedFields = inputFieldsData.filter(
+  //       (field) => field.id !== 'payrollType' && field.id !== 'salary'
+  //     );
 
-      // Add the payrollType field
-      updatedFields = [...updatedFields, addionalFields[0]];
+  //     // Add the payrollType field
+  //     updatedFields = [...updatedFields, addionalFields[0]];
 
-      // If payrollType is 'Salary', add the salary field
-      if (
-        watch('payrollType') === 'Salary' ||
-        watch('payrollType') === 'Both'
-      ) {
-        updatedFields = [...updatedFields, addionalFields[1]];
-      }
+  //     // If payrollType is 'Salary', add the salary field
+  //     if (
+  //       watch('payrollType') === 'Salary' ||
+  //       watch('payrollType') === 'Both'
+  //     ) {
+  //       updatedFields = [...updatedFields, addionalFields[1]];
+  //     }
 
-      // Update the state with the new fields
-      setInputFieldsData(updatedFields);
-    }
-  }, [watch('payrollType')]);
+  //     // Update the state with the new fields
+  //     setInputFieldsData(updatedFields);
+  //   }
+  // }, []);
 
   const inputScheduleData = [
     {
@@ -567,6 +569,7 @@ function AppointmentProviderPage() {
               setValue('email', item.data.data.email);
               setValue('cnic', item.data.data.cnic);
               setValue('note', item.data.data.note);
+              setValue('salary', item.data.data.salary);
               setValue('dob', dayjs(item.data.data.dob).format('YYYY-MM-DD'));
               setValue('payrollType', item.data.data.payrollType ?? 'none');
               setOpenEditFormDialog(true);
@@ -751,6 +754,7 @@ function AppointmentProviderPage() {
     formData.append('email', data.email);
     formData.append('phone', data.phone);
     formData.append('cnic', data.cnic);
+    formData.append('salary', data.salary);
     formData.append('note', data.note);
     if (data.password) formData.append('password', data.password);
     formData.append('dob', dayjs(data.dob).format('YYYY-MM-DD'));
@@ -834,6 +838,7 @@ function AppointmentProviderPage() {
     formData.append('phone', data.phone);
     formData.append('cnic', data.cnic);
     formData.append('password', data.password);
+    formData.append('salary', data.salary);
     formData.append('dob', dayjs().format('YYYY-MM-DD'));
     formData.append('note', data.note);
     if (image) formData.append('avatar', image);
@@ -1108,9 +1113,7 @@ function AppointmentProviderPage() {
           DialogSliderOne="Add Staff"
           DialogSliderTwo="Add Staff Services"
           DialogSubHeader="Select Schedule"
-          inputFieldsData={inputFieldsData.sort((a: any) =>
-            a.id === 'note' ? 1 : -1
-          )}
+          inputFieldsData={inputFieldsData}
           inputScheduleData={inputScheduleData}
           handleSubmit={handleSubmit}
           onSubmit={onSubmitDialogBox}

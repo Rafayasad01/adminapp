@@ -16,7 +16,7 @@ import Notify from '../../components/common/Notify';
 import { setProfileAvatar } from '../../redux/features/appSlice';
 import { useAppSelector } from '../../redux/redux-hooks';
 import profileService from '../../services/adminapp/adminProfile';
-import { listingRolePermission } from '../../utils/helper';
+// import { listingRolePermission } from '../../utils/helper';
 import ProfileEditPopup from './ProfileEditPopup';
 
 // const data = [
@@ -34,9 +34,9 @@ import ProfileEditPopup from './ProfileEditPopup';
 function ProfilePage() {
   const dispatch = useDispatch();
   const authState: any = useAppSelector((state: any) => state?.authState);
-  const dataRole = useAppSelector(
-    (state: any) => state?.persistedReducer?.roleState?.role?.permissions
-  );
+  // const dataRole = useAppSelector(
+  //   (state: any) => state?.persistedReducer?.roleState?.role?.permissions
+  // );
   const { setValue, getValues } = useForm<any>();
   const [changePassword, setChangePassword] = useState(false);
   const [openFormDialog, setOpenFormDialog] = useState(false);
@@ -47,118 +47,106 @@ function ProfilePage() {
 
   useEffect(() => {
     setIsLoader(true);
-    if (listingRolePermission(dataRole, 'Banners List')) {
-      profileService
-        .getProfile(authState.user.id)
-        .then((item: any) => {
-          if (item.data.success) {
-            setIsLoader(false);
-            setDetail(item.data.data);
-          } else {
-            setIsLoader(false);
-            setIsNotify(true);
-            setNotifyMessage({
-              text: item.data.message,
-              type: 'error',
-            });
-          }
-        })
-        .catch((err) => {
+    profileService
+      .getProfile(authState.user.id)
+      .then((item: any) => {
+        if (item.data.success) {
+          setIsLoader(false);
+          setDetail(item.data.data);
+        } else {
           setIsLoader(false);
           setIsNotify(true);
           setNotifyMessage({
-            text: err.message,
+            text: item.data.message,
             type: 'error',
           });
+        }
+      })
+      .catch((err) => {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
         });
-    } else {
-      setIsLoader(false);
-    }
-    // setMarkers(data);
+      });
   }, []);
 
   const updateProfileHandler = (dataEl: any) => {
     setIsLoader(true);
-    if (listingRolePermission(dataRole, 'Banners List')) {
-      const formData = new FormData();
-      formData.append('id', authState.user.id);
-      formData.append('address', dataEl.address);
-      formData.append('firstName', dataEl.firstName);
-      formData.append('lastName', dataEl.lastName);
-      formData.append('country', dataEl.country);
-      formData.append('phone', dataEl.phone);
-      formData.append('state', dataEl.state);
-      formData.append('zipCode', dataEl.zipCode);
-      formData.append('city', dataEl.city);
-      if (dataEl.avatar) formData.append('avatar', dataEl.avatar);
-      profileService
-        .updateProfile(formData)
-        .then((item: any) => {
-          if (item.data.success) {
-            setDetail(item.data.data);
-            // console.log(item.data.data);
-            dispatch(setProfileAvatar(item.data.data.avatar));
-            setIsLoader(false);
-            setOpenFormDialog(false);
-            setIsNotify(true);
-            setNotifyMessage({
-              text: item.data.message,
-              type: 'success',
-            });
-          }
-        })
-        .catch((err) => {
+    const formData = new FormData();
+    formData.append('id', authState.user.id);
+    formData.append('address', dataEl.address);
+    formData.append('firstName', dataEl.firstName);
+    formData.append('lastName', dataEl.lastName);
+    formData.append('country', dataEl.country);
+    formData.append('phone', dataEl.phone);
+    formData.append('state', dataEl.state);
+    formData.append('zipCode', dataEl.zipCode);
+    formData.append('city', dataEl.city);
+    if (dataEl.avatar) formData.append('avatar', dataEl.avatar);
+    profileService
+      .updateProfile(formData)
+      .then((item: any) => {
+        if (item.data.success) {
+          setDetail(item.data.data);
+          // console.log(item.data.data);
+          dispatch(setProfileAvatar(item.data.data.avatar));
           setIsLoader(false);
+          setOpenFormDialog(false);
           setIsNotify(true);
           setNotifyMessage({
-            text: err.message,
-            type: 'error',
+            text: item.data.message,
+            type: 'success',
           });
+        }
+      })
+      .catch((err) => {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
         });
-    } else {
-      setIsLoader(false);
-    }
+      });
   };
 
   const updatePasswordHandler = (dataItems: any) => {
     setIsLoader(true);
-    if (listingRolePermission(dataRole, 'Banners List')) {
-      const NewPass = {
-        id: authState.user.id,
-        currentParole: dataItems.currentPassword,
-        newParole: dataItems.newPassword,
-      };
-      profileService
-        .newPassword(NewPass)
-        .then((item: any) => {
-          if (item.data.success) {
-            setIsLoader(false);
-            setChangePassword(false);
-            setIsNotify(true);
-            setNotifyMessage({
-              text: item.data.message,
-              type: 'success',
-            });
-          } else {
-            setIsLoader(false);
-            setIsNotify(true);
-            setNotifyMessage({
-              text: item.data.message,
-              type: 'error',
-            });
-          }
-        })
-        .catch((err) => {
+
+    const NewPass = {
+      id: authState.user.id,
+      currentParole: dataItems.currentPassword,
+      newParole: dataItems.newPassword,
+    };
+    profileService
+      .newPassword(NewPass)
+      .then((item: any) => {
+        if (item.data.success) {
+          setIsLoader(false);
+          setChangePassword(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'success',
+          });
+        } else {
           setIsLoader(false);
           setIsNotify(true);
           setNotifyMessage({
-            text: err.message,
+            text: item.data.message,
             type: 'error',
           });
+        }
+      })
+      .catch((err) => {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
         });
-    } else {
-      setIsLoader(false);
-    }
+      });
   };
 
   return isLoader ? (

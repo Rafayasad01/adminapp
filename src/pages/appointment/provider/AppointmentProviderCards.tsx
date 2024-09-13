@@ -175,7 +175,7 @@ const AppointmentProviderCards = ({
                       <div className="mr-5">
                         <HomeOutlinedIcon fontSize="small" />
                       </div>
-                      <span className="text-sm font-medium">
+                      <span className="truncate text-sm font-medium">
                         {item.address ? item.address : '----'}
                       </span>
                     </div>
