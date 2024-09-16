@@ -30,6 +30,7 @@ import {
 import { listingRolePermission } from '../../../utils/helper';
 
 type CustomSwiperDialogProps = {
+  img?: any;
   addScheduleFormat?: boolean;
   append?: any;
   catItemsLov?: any;
@@ -76,6 +77,7 @@ function CustomSwiperDialog({
   setStartServiceTime: _setStartServiceTime,
   startServiceTime: _startServiceTime,
   addScheduleFormat,
+  img,
   // append,
   // catItemsLov,
   // usedCatItemsLovlist,
@@ -147,6 +149,7 @@ function CustomSwiperDialog({
       .concat([noteInput]);
   }, [inputFieldsData]);
 
+  // console.log('sortedTnputFieldsData', image);
   return (
     <Dialog
       open={openFormDialog}
@@ -218,7 +221,7 @@ function CustomSwiperDialog({
                               id={items.id}
                               value={items.value ? items.value : ''}
                               register={items.register}
-                              error={items.error}
+                              error={errors?.[items.id]}
                               inputType={items.type}
                               onclick={items.onclick}
                               showPassVisibility={items.showPassVisibility}
@@ -286,7 +289,7 @@ function CustomSwiperDialog({
                             <label className="FormLabel">
                               Upload Image
                               <span className="SubLabel">
-                                Image should be 1080px x 1080px
+                                (1080px x 1080px)
                               </span>
                             </label>
                             <div className="ImageBox">
@@ -310,10 +313,10 @@ function CustomSwiperDialog({
                                   items.onclick(event);
                                 }}
                               />
-                              {items.image ? (
+                              {img ? (
                                 <div className="ShowImageBox bg-background">
                                   <label className="ShowImageLabel">
-                                    {items.image.name}
+                                    {img?.name}
                                   </label>
                                   <IconButton
                                     className="btn-dot"

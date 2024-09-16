@@ -713,7 +713,7 @@ function SettingsApp() {
                   <div className="w-full">
                     <FormControl className="FormControl" variant="standard">
                       <label className="FormLabel">
-                        Attendance Distance
+                        Distance
                         <span className="SubLabel">(in meters)</span>
                       </label>
                       <Input

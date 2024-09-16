@@ -20,7 +20,7 @@ import { AppointmentProvider } from '../../../interfaces/app.appointment';
 import { useAppSelector } from '../../../redux/redux-hooks';
 import Service from '../../../services/adminapp/adminAppointment';
 import StoreEmployeeService from '../../../services/adminapp/adminStoreEmployee';
-import StoreLovService from '../../../services/adminapp/adminStoreService';
+// import StoreLovService from '../../../services/adminapp/adminStoreService';
 import PermissionPopup from '../../../utils/PermissionPopup';
 import {
   ALL_PERMISSIONS,
@@ -74,10 +74,10 @@ function AppointmentProviderPage() {
   const [startServiceTime, setStartServiceTime] = useState<dayjs.Dayjs | any>(
     null
   );
-  // lovs
-  const [catLovlist, setCatLovList] = useState<any>([]);
-  const [catItemsLovlist, setCatItemsLovList] = useState<any>([]);
-  const [usedCatItemsLovlist, setusedCatItemsLovList] = useState<any>([]);
+  // // lovs
+  // const [catLovlist, setCatLovList] = useState<any>([]);
+  // const [catItemsLovlist, setCatItemsLovList] = useState<any>([]);
+  // const [usedCatItemsLovlist, setusedCatItemsLovList] = useState<any>([]);
   // edit formdata
   const [editFormData, setEditFormData] = useState<any>();
   // delete Id's
@@ -109,17 +109,7 @@ function AppointmentProviderPage() {
   });
 
   const renderMenuOptions = () => {
-    // const newActionMenuOptions: any = [];
     const constantsOptions: any = ['Services', 'Edit', 'Delete'];
-    // if (
-    //   listingRolePermission(
-    //     dataRole,
-    //     ALL_PERMISSIONS.storeAppointment.viewServices
-    //   )
-    // ) {
-    //   newActionMenuOptions.push('Services');
-    // }
-
     if (
       listingRolePermission(
         dataRole,
@@ -147,7 +137,7 @@ function AppointmentProviderPage() {
       constantsOptions.push('Schedule');
     }
 
-    setAcionMenuOptions((prev: any) => [...prev, ...constantsOptions]);
+    setAcionMenuOptions([...constantsOptions]);
     // return actionMenuOptions;
   };
 
@@ -433,29 +423,29 @@ function AppointmentProviderPage() {
     },
   ];
 
-  const catLovService = () => {
-    StoreLovService.StoreCatLov()
-      .then((res) => {
-        if (res.data.success) {
-          setCatLovList(res.data.data);
-        } else {
-          setCatLovList([]);
-          setIsNotify(true);
-          setNotifyMessage({
-            text: res.data.message,
-            type: 'error',
-          });
-        }
-      })
-      .catch((err) => {
-        setCatLovList([]);
-        setIsNotify(true);
-        setNotifyMessage({
-          text: err.message,
-          type: 'error',
-        });
-      });
-  };
+  // const catLovService = () => {
+  //   StoreLovService.StoreCatLov()
+  //     .then((res) => {
+  //       if (res.data.success) {
+  //         setCatLovList(res.data.data);
+  //       } else {
+  //         setCatLovList([]);
+  //         setIsNotify(true);
+  //         setNotifyMessage({
+  //           text: res.data.message,
+  //           type: 'error',
+  //         });
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       setCatLovList([]);
+  //       setIsNotify(true);
+  //       setNotifyMessage({
+  //         text: err.message,
+  //         type: 'error',
+  //       });
+  //     });
+  // };
 
   const handleFormClickOpen = async () => {
     // reset();
@@ -466,7 +456,7 @@ function AppointmentProviderPage() {
       )
     ) {
       setOpenFormDialog(true);
-      catLovService();
+      // catLovService();
       remove();
     } else {
       setIsNotify(true);
@@ -477,41 +467,41 @@ function AppointmentProviderPage() {
     }
   };
 
-  const getCatItems = async (id: any) => {
-    await StoreLovService.StoreCatItemsLov(id)
-      .then((res) => {
-        if (res.data.success) {
-          setCatItemsLovList(res.data.data);
-          const uniqueData = res.data.data.filter(
-            (item: any) =>
-              !usedCatItemsLovlist.some(
-                (existingItem: any) => existingItem.id === item.id
-              )
-          );
-          setusedCatItemsLovList([...usedCatItemsLovlist, ...uniqueData]);
-        } else {
-          setCatItemsLovList([]);
-        }
-        // console.log("res items", res.data.data);
-      })
-      .catch((err: any) => {
-        setIsNotify(true);
-        setNotifyMessage({
-          text: err.message,
-          type: 'warning',
-        });
-      });
-  };
+  // const getCatItems = async (id: any) => {
+  //   await StoreLovService.StoreCatItemsLov(id)
+  //     .then((res) => {
+  //       if (res.data.success) {
+  //         setCatItemsLovList(res.data.data);
+  //         const uniqueData = res.data.data.filter(
+  //           (item: any) =>
+  //             !usedCatItemsLovlist.some(
+  //               (existingItem: any) => existingItem.id === item.id
+  //             )
+  //         );
+  //         setusedCatItemsLovList([...usedCatItemsLovlist, ...uniqueData]);
+  //       } else {
+  //         setCatItemsLovList([]);
+  //       }
+  //       // console.log("res items", res.data.data);
+  //     })
+  //     .catch((err: any) => {
+  //       setIsNotify(true);
+  //       setNotifyMessage({
+  //         text: err.message,
+  //         type: 'warning',
+  //       });
+  //     });
+  // };
 
-  useEffect(() => {
-    if (
-      getValues('categoryId') !== undefined &&
-      getValues('categoryId') !== 'none'
-    ) {
-      getCatItems(watch('categoryId'));
-      // console.log("hit");
-    }
-  }, [watch('categoryId')]);
+  // useEffect(() => {
+  //   if (
+  //     getValues('categoryId') !== undefined &&
+  //     getValues('categoryId') !== 'none'
+  //   ) {
+  //     getCatItems(watch('categoryId'));
+  //     // console.log("hit");
+  //   }
+  // }, [watch('categoryId')]);
 
   const handleClickSearch = (event: any) => {
     if (event.key === 'Enter') {
@@ -586,29 +576,10 @@ function AppointmentProviderPage() {
         StoreEmployeeService.StoreEmployeeFind(actionMenuItemid)
           .then((item: any) => {
             if (item.data.success) {
-              catLovService();
+              // catLovService();
+              setImage(null);
               setIsLoader(false);
               setEditFormData(item.data.data);
-              // const filteredServices = item.data.data.services.map(
-              //   (el: any) => ({
-              //     id: el.id,
-              //     amount: el.amount,
-              //     amountType: el.amountType,
-              //     // storeEmployee: el.storeEmployee,
-              //     serviceTime: el.serviceTime,
-              //     storeServiceCategoryItem: el.storeServiceCategoryItem.id,
-              //   })
-              // );
-              // append(filteredServices);
-              // const catItems = item.data.data.services.map((elItems: any) => ({
-              //   id: elItems.storeServiceCategoryItem.id,
-              //   name: elItems.storeServiceCategoryItem.name,
-              // }));
-              // setusedCatItemsLovList([...usedCatItemsLovlist, ...catItems]);
-              // console.log("filteredServices", filteredServices);
-              // [filteredServices].forEach((service: any) => {
-              //   append(service);
-              // });
               setValue('name', item.data.data.name);
               setValue('address', item.data.data.address);
               setValue('phone', item.data.data.phone);
@@ -781,8 +752,6 @@ function AppointmentProviderPage() {
     if (length > 0) handlePrevSlide();
   }, [errors]);
 
-  // console.log("delte idss", delIds);
-
   const onSubmitUpdateDialogBox = async (data: any) => {
     // console.log('Update data', data);
     setIsLoader(true);
@@ -854,15 +823,6 @@ function AppointmentProviderPage() {
         text: 'All fields are required',
         type: 'error',
       });
-      // setNotifyMessage({
-      //   text: `All fields are required
-      //    ${
-      //      data?.services?.length < 1
-      //        ? '& you must need to add atleast one service.'
-      //        : ''
-      //    }`,
-      //   type: 'error',
-      // });
     }
   };
 
@@ -876,7 +836,7 @@ function AppointmentProviderPage() {
     delete data.servicesId;
     delete data.mints;
 
-    console.log(`onSubmitDialogBox -> data:`, data);
+    // console.log(`onSubmitDialogBox -> data:`, data);
     const formData = new FormData();
     formData.append('name', data.name);
     formData.append('address', data.address);
@@ -884,7 +844,7 @@ function AppointmentProviderPage() {
     formData.append('phone', data.phone);
     formData.append('cnic', data.cnic);
     formData.append('password', data.password);
-    formData.append('salary', data.salary);
+    formData.append('salary', data.salary ? data.salary : 0);
     formData.append('dob', dayjs().format('YYYY-MM-DD'));
     formData.append('note', data.note);
     if (image) formData.append('avatar', image);
@@ -930,12 +890,7 @@ function AppointmentProviderPage() {
       setIsLoader(false);
       setIsNotify(true);
       setNotifyMessage({
-        text: `All fields are required
-         ${
-           data?.services?.length < 1
-             ? '& you must need to add atleast one service.'
-             : ''
-         }`,
+        text: `Must add Schedule`,
         type: 'error',
       });
     }
@@ -1159,6 +1114,7 @@ function AppointmentProviderPage() {
           DialogSliderOne="Add Staff"
           DialogSliderTwo="Add Staff Services"
           DialogSubHeader="Select Schedule"
+          img={image}
           inputFieldsData={inputFieldsData}
           inputScheduleData={inputScheduleData}
           handleSubmit={handleSubmit}
@@ -1172,23 +1128,12 @@ function AppointmentProviderPage() {
           endTime={endTime}
           setStartServiceTime={setStartServiceTime}
           startServiceTime={startServiceTime}
-          catLov={catLovlist}
-          catItemsLov={catItemsLovlist}
-          usedCatItemsLovlist={usedCatItemsLovlist}
+          // catLov={catLovlist}
+          // catItemsLov={catItemsLovlist}
+          // usedCatItemsLovlist={usedCatItemsLovlist}
         />
       )}
       {openEditFormDialog && (
-        // <CustomDialog
-        //   DialogHeader="Edit Provider"
-        //   type="edit"
-        //   specailCase={false}
-        //   reset={reset}
-        //   inputFieldsData={inputFieldsData}
-        //   handleSubmit={handleSubmit}
-        //   onSubmit={onSubmitDialogBox}
-        //   openFormDialog={openEditFormDialog}
-        //   setOpenFormDialog={setOpenEditFormDialog}
-        // />
         <CustomEditSwiperDialog
           type="edit"
           reset={reset}
@@ -1210,6 +1155,7 @@ function AppointmentProviderPage() {
           ServicesFields={fields}
           DialogSliderOne="Edit Staff"
           DialogSliderTwo="Edit Staff Services"
+          img={image}
           inputFieldsData={inputFieldsData}
           inputScheduleData={inputScheduleData}
           handleSubmit={handleSubmit}
@@ -1218,10 +1164,10 @@ function AppointmentProviderPage() {
           setOpenFormDialog={setOpenEditFormDialog}
           setStartServiceTime={setStartServiceTime}
           startServiceTime={startServiceTime}
-          catLov={catLovlist}
-          catItemsLov={catItemsLovlist}
-          usedCatItemsLovlist={usedCatItemsLovlist}
-          setUsedCatItemsLovlist={setusedCatItemsLovList}
+          // catLov={catLovlist}
+          // catItemsLov={catItemsLovlist}
+          // usedCatItemsLovlist={usedCatItemsLovlist}
+          // setUsedCatItemsLovlist={setusedCatItemsLovList}
           setDelIds={setDelIds}
         />
       )}
@@ -1234,23 +1180,6 @@ function AppointmentProviderPage() {
           callback={statusCancelHandler}
         />
       )}
-      {/* <CustomersCreatePopup
-        setIsNotify={setIsNotify}
-        setNotifyMessage={setNotifyMessage}
-        openFormDialog={openFormDialog}
-        setOpenFormDialog={setOpenFormDialog}
-        callback={createFormHandler}
-      />
-      <CustomersEditPopup
-        setIsNotify={setIsNotify}
-        setNotifyMessage={setNotifyMessage}
-        openFormDialog={openEditFormDialog}
-        setOpenFormDialog={setOpenEditFormDialog}
-        formData={editFormData}
-        setEditFormData={setEditFormData}
-        callback={updateFormHandler}
-        setActionMenuItemid={setActionMenuItemid}
-      /> */}
     </>
   );
 }

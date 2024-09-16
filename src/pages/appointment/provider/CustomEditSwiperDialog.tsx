@@ -29,6 +29,7 @@ import {
 import { listingRolePermission } from '../../../utils/helper';
 
 type CustomEditSwiperDialogProps = {
+  img?: any;
   addScheduleFormat?: boolean;
   append?: any;
   catItemsLov?: any;
@@ -75,6 +76,7 @@ type CustomEditSwiperDialogProps = {
 };
 
 function CustomEditSwiperDialog({
+  img,
   addScheduleFormat: _addScheduleFormat,
   // append,
   // catItemsLov,
@@ -306,7 +308,7 @@ function CustomEditSwiperDialog({
                               id={items.id}
                               value={items.value ? items.value : ''}
                               register={items.register}
-                              error={items.error}
+                              error={errors?.[items.id]}
                               inputType={items.type}
                               onclick={items.onclick}
                               showPassVisibility={items.showPassVisibility}
@@ -374,7 +376,7 @@ function CustomEditSwiperDialog({
                             <label className="FormLabel">
                               Upload Image
                               <span className="SubLabel">
-                                Image should be 1080px x 1080px
+                                (1080px x 1080px)
                               </span>
                             </label>
                             <div className="ImageBox">
@@ -399,12 +401,10 @@ function CustomEditSwiperDialog({
                                   items.onclick(event);
                                 }}
                               />
-                              {items.image || imageName ? (
+                              {items.image || imageName || img ? (
                                 <div className="ShowImageBox customImgBox bg-background">
                                   <label className="ShowImageLabel">
-                                    {items?.image?.name
-                                      ? items?.image?.name
-                                      : imageName}
+                                    {img ? img?.name : imageName}
                                   </label>
                                   <IconButton
                                     className="btn-dot"
