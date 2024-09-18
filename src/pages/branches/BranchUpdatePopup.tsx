@@ -75,9 +75,9 @@ function BranchUpdatePopup({
   useEffect(() => {
     if (item) {
       setValue('tenantName', item.name);
-      setValue('email', item.backofficeUser.email);
-      setValue('firstName', item.backofficeUser.firstName);
-      setValue('lastName', item.backofficeUser.lastName);
+      setValue('email', item.backofficeUser?.email);
+      setValue('firstName', item.backofficeUser?.firstName);
+      setValue('lastName', item.backofficeUser?.lastName);
       // setValue('domainWebapp', item.systemConfig.domainWebapp);
       // setValue('domain', item.systemConfig.domain);
       // setValue('enableLoyaltyProgram', item.tenantExt.enableLoyaltyProgram);
