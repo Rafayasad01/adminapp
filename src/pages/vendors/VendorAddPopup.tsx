@@ -3,11 +3,12 @@ import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
+// import adminVendors from '../../services/adminapp/adminVendors';
 import { useForm } from 'react-hook-form';
 import '../../assets/css/PopupStyle.css';
-import { MenuItem, Select } from '@mui/material';
 import ErrorSpanBox from '../../components/common/ErrorSpanBox';
 import { Vendor } from '../../interfaces/Vendor';
+import CustomDropDown from '../../components/common/CustomDropDown';
 
 type VendorFormProps = {
   openFormDialog: boolean;
@@ -15,19 +16,23 @@ type VendorFormProps = {
   callback: (data: Vendor) => Promise<boolean>;
   setIsNotify: any;
   setNotifyMessage: any;
+  vendorTypes: any;
 };
 
 const VendorAddPopup = ({
   openFormDialog,
   setOpenFormDialog,
   callback,
+  vendorTypes,
 }: VendorFormProps) => {
   const {
     register,
     handleSubmit,
+    control,
     reset,
     formState: { errors },
   } = useForm<Vendor>();
+  // const [vendorTypes, setVendorTypes] = useState([]);
 
   const handleFormClose = () => setOpenFormDialog(false);
 
@@ -93,6 +98,19 @@ const VendorAddPopup = ({
 
               {/* Vendor Type Dropdown */}
               <FormControl className="FormControl" variant="standard">
+                <CustomDropDown
+                  validateRequired
+                  id="vendorType"
+                  control={control}
+                  error={errors}
+                  register={register}
+                  options={{ roles: vendorTypes }}
+                  customClassInputTitle="font-bold"
+                  inputTitle="Vendor Type"
+                  defaultValue="Select Vendor type"
+                />
+              </FormControl>
+              {/* <FormControl className="FormControl" variant="standard">
                 <label className="FormLabel">Vendor Type</label>
                 <Select
                   className="FormInput"
@@ -107,11 +125,6 @@ const VendorAddPopup = ({
                   <MenuItem value="Manufacturer">Manufacturer</MenuItem>
                   <MenuItem value="Distributor">Distributor</MenuItem>
                   {/* Add more options as needed */}
-                </Select>
-                {errors.vendorType && (
-                  <ErrorSpanBox error={errors.vendorType.message} />
-                )}
-              </FormControl>
 
               {/* Service Type */}
               <FormControl className="FormControl" variant="standard">

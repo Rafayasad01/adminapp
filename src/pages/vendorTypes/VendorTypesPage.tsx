@@ -161,8 +161,11 @@ const VendorTypePage = () => {
 
   const deleteHandler = (id: string) => {
     setIsLoader(true);
+    const data = {
+      isDeleted: true,
+    };
     adminVendors
-      .deleteStatusVendorTypeService({ id })
+      .deleteStatusVendorTypeService(id, data)
       .then((updateItem) => {
         if (updateItem.data.success) {
           setIsLoader(false);

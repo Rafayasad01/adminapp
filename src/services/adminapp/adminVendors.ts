@@ -61,9 +61,9 @@ const updateStatusVendorTypeService = (id: string, data: any) => {
   );
 };
 
-const deleteStatusVendorTypeService = (data: { id: string }) => {
+const deleteStatusVendorTypeService = (id: string, data: any) => {
   return network.post(
-    `${NEW_EARTH_PREFIX}/${VENDOR_TYPES_PREFIX}/delete`,
+    `${NEW_EARTH_PREFIX}/${VENDOR_TYPES_PREFIX}/delete/${id}`,
     data
   );
 };

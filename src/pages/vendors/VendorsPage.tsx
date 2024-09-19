@@ -38,7 +38,7 @@ const VendorsPage = () => {
   const dataRole = useAppSelector(
     (state) => state?.persistedReducer?.roleState?.role?.permissions
   );
-
+  const [vendorTypes, setVendorTypes] = useState([]);
   const [openCreateDialog, setOpenCreateDialog] = useState(false);
   const [openEditDialog, setOpenEditDialog] = useState(false);
   const [vendorData, setVendorData] = useState<Vendor>();
@@ -201,13 +201,24 @@ const VendorsPage = () => {
     deleteHandler(actionMenuItemid);
   };
 
+  const fetchVendorTypes = () => {
+    adminVendors.getVendorTypeLovService().then((item: any) => {
+      setVendorTypes(item.data.data.list);
+    });
+  };
+
   useEffect(() => {
     fetchVendors({
       search: search ?? null,
       page,
       size: rowsPerPage,
     });
+    fetchVendorTypes();
   }, []);
+
+  const handleVendorTypeName: any = (vendorId: any) => {
+    return vendorTypes?.find((x: any) => x.id === vendorId);
+  };
 
   const createFormHandler = async (data: Vendor) => {
     setIsLoader(true);
@@ -382,7 +393,11 @@ const VendorsPage = () => {
                         <td>{item.name ?? '--'}</td>
                         <td>{item.email ?? '--'}</td>
                         <td>{item.contact ?? '--'}</td>
-                        <td>{item.vendorType ?? '--'}</td>
+                        <td>
+                          {item.vendorType
+                            ? handleVendorTypeName(item.vendorType)?.name
+                            : '--'}
+                        </td>
                         <td>{item.paymentTerms ?? '--'}</td>
                         <td>{item.iban ?? '--'}</td>
                         <td>{item.deliveryTerms ?? '--'}</td>
@@ -458,6 +473,7 @@ const VendorsPage = () => {
         openFormDialog={openCreateDialog}
         setOpenFormDialog={setOpenCreateDialog}
         callback={createFormHandler}
+        vendorTypes={vendorTypes}
       />
       <VendorEditPopup
         setIsNotify={setIsNotify}
@@ -466,6 +482,7 @@ const VendorsPage = () => {
         setOpenFormDialog={setOpenEditDialog}
         callback={updateFormHandler}
         existingVendorData={vendorData}
+        vendorTypes={vendorTypes}
       />
 
       <VendorDetailsPopup

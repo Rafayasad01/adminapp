@@ -113,8 +113,10 @@ function ProductAddPopup() {
     formData.append('vendorId', data.vendorId);
     formData.append('itemCode', data.itemCode);
     formData.append('brandName', data.brandName);
-    formData.append('costPrice', String(Number(data.costPrice)));
-    formData.append('tax', String(Number(data.tax)));
+    // formData.append('costPrice', String(Number(data.costPrice)));
+    formData.append('costPrice', String(Number(0)));
+    // formData.append('tax', String(Number(data.tax)));
+    formData.append('tax', String(Number(0)));
     formData.append('itemWeight', String(Number(data.itemWeight)));
     formData.append('itemDimension', String(Number(data.itemDimension)));
     formData.append('address', data.address);
@@ -292,6 +294,16 @@ function ProductAddPopup() {
   const handleSpareAvailability = (type: string) => {
     setValue('spareAvailability', type);
   };
+
+  const priceWithTax: number =
+    fields?.length > 0
+      ? Number(parseFloat((fields.at(-1) as any)?.price)) +
+        (Number(parseFloat((fields.at(-1) as any)?.price)) *
+          Number(parseFloat((fields.at(-1) as any)?.tax))) /
+          100
+      : 0;
+
+  // console.log("fields[-1]", priceWithTax, fields.at(-1));
 
   return (
     <>
@@ -548,6 +560,34 @@ function ProductAddPopup() {
                       )}
                     </FormControl>
                   </div>
+                  <div className="col-span-2">
+                    <FormControl className="FormControl" variant="standard">
+                      <label className="FormLabel">Price with Tax</label>
+                      <Input
+                        className="FormInput"
+                        id="pricewtax"
+                        type="number"
+                        disabled
+                        inputProps={{ step: '0.01' }}
+                        placeholder="Enter Tax in %"
+                        value={priceWithTax}
+                        // {...register('ColorTax', {
+                        //   // required: 'Tax is required in numbers',
+                        //   validate: (value: any) =>
+                        //     VALIDATE_NON_NEGATIVE_NUM(value),
+                        //   maxLength: {
+                        //     value: 10,
+                        //     message:
+                        //       'Length should not be excceed from 10 numbers.',
+                        //   },
+                        // })}
+                        disableUnderline
+                      />
+                      {/* {errors.ColorTax && (
+                        <ErrorSpanBox error={errors.ColorTax?.message} />
+                      )} */}
+                    </FormControl>
+                  </div>
                   <div
                     onClick={handleProductCustomizationServices}
                     className="col-span-2 cursor-pointer rounded-full bg-primary px-4 py-2"
@@ -617,7 +657,7 @@ function ProductAddPopup() {
                     />
                   </FormControl>
                 </div>
-                <div className="FormFields">
+                {/* <div className="FormFields">
                   <FormControl className="FormControl" variant="standard">
                     <label className="FormLabel">Cost Price w/o Tax</label>
                     <Input
@@ -662,7 +702,7 @@ function ProductAddPopup() {
                     />
                     {errors.tax && <ErrorSpanBox error={errors.tax?.message} />}
                   </FormControl>
-                </div>
+                </div> */}
                 <div className="FormFields">
                   <FormControl className="FormControl" variant="standard">
                     <label className="FormLabel">Item Weight</label>

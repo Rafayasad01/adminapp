@@ -5,9 +5,9 @@ import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
 import { useForm } from 'react-hook-form';
 import '../../assets/css/PopupStyle.css';
-import { MenuItem, Select } from '@mui/material';
 import ErrorSpanBox from '../../components/common/ErrorSpanBox';
 import { Vendor } from '../../interfaces/Vendor';
+import CustomDropDown from '../../components/common/CustomDropDown';
 
 type VendorFormProps = {
   openFormDialog: boolean;
@@ -16,6 +16,7 @@ type VendorFormProps = {
   setIsNotify: any;
   setNotifyMessage: any;
   existingVendorData?: Vendor; // This is for the edit feature
+  vendorTypes: any;
 };
 
 const VendorEditPopup = ({
@@ -23,10 +24,12 @@ const VendorEditPopup = ({
   setOpenFormDialog,
   callback,
   existingVendorData, // Existing vendor data to be edited
+  vendorTypes,
 }: VendorFormProps) => {
   const {
     register,
     handleSubmit,
+    control,
     setValue,
     reset,
     formState: { errors },
@@ -107,23 +110,20 @@ const VendorEditPopup = ({
 
               {/* Vendor Type Dropdown */}
               <FormControl className="FormControl" variant="standard">
-                <label className="FormLabel">Vendor Type</label>
-                <Select
-                  className="FormInput"
-                  disableUnderline
-                  defaultValue={existingVendorData?.vendorType || ''} // Pre-fill for edit
-                  {...register('vendorType', {
-                    required: 'Vendor Type is required',
-                  })}
-                >
-                  <MenuItem value="Supplier">Supplier</MenuItem>
-                  <MenuItem value="Manufacturer">Manufacturer</MenuItem>
-                  <MenuItem value="Distributor">Distributor</MenuItem>
-                  {/* Add more options as needed */}
-                </Select>
-                {errors.vendorType && (
-                  <ErrorSpanBox error={errors.vendorType.message} />
-                )}
+                <CustomDropDown
+                  validateRequired
+                  id="vendorType"
+                  control={control}
+                  error={errors}
+                  register={register}
+                  options={{
+                    roles: vendorTypes,
+                    role: existingVendorData?.vendorType ?? 'none',
+                  }}
+                  customClassInputTitle="font-bold"
+                  inputTitle="Vendor Type"
+                  defaultValue="Select Vendor type"
+                />
               </FormControl>
 
               {/* Service Type */}

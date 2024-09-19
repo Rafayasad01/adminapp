@@ -138,11 +138,11 @@ function ProductEditPopup() {
     const formData = new FormData();
     formData.append('productGroup', submitFormData.productGroup);
     formData.append('productName', submitFormData.productName);
-    formData.append('mobileNumber', submitFormData.mobileNumber);
+    formData.append('mobileNumber', submitFormData.mobileNumber ?? 0);
     formData.append('itemCode', submitFormData.itemCode);
     formData.append('brandName', submitFormData.brandName);
-    formData.append('costPrice', String(Number(submitFormData.costPrice)));
-    formData.append('tax', String(Number(submitFormData.tax)));
+    formData.append('costPrice', String(Number(0)));
+    formData.append('tax', String(Number(0)));
     formData.append('itemWeight', String(Number(submitFormData.itemWeight)));
     formData.append(
       'itemDimension',
@@ -348,6 +348,14 @@ function ProductEditPopup() {
     setValue('spareAvailability', type);
   };
 
+  const priceWithTax: number =
+    fields?.length > 0
+      ? Number(parseFloat((fields.at(-1) as any)?.price)) +
+        (Number(parseFloat((fields.at(-1) as any)?.price)) *
+          Number(parseFloat((fields.at(-1) as any)?.tax))) /
+          100
+      : 0;
+
   return (
     <>
       <TopBar />
@@ -476,8 +484,8 @@ function ProductEditPopup() {
                     )}
                   </FormControl>
                 </div>
-                <div className="FormFields">
-                  <FormControl className="FormControl" variant="standard">
+                <div className="FormField">
+                  {/* <FormControl className="FormControl" variant="standard">
                     <label className="FormLabel">Mobile Number</label>
                     <Input
                       className="FormInput"
@@ -499,9 +507,9 @@ function ProductEditPopup() {
                     {errors.mobileNumber && (
                       <ErrorSpanBox error={errors.mobileNumber?.message} />
                     )}
-                  </FormControl>
+                  </FormControl> */}
                   <FormControl className="FormControl" variant="standard">
-                    <label className="FormLabel">Item Code</label>
+                    <label className="FormLabel mt-3">Item Code</label>
                     <Input
                       className="FormInput"
                       {...register('itemCode', {
@@ -603,6 +611,34 @@ function ProductEditPopup() {
                       )}
                     </FormControl>
                   </div>
+                  <div className="col-span-2">
+                    <FormControl className="FormControl" variant="standard">
+                      <label className="FormLabel">Price with Tax</label>
+                      <Input
+                        className="FormInput"
+                        id="pricewtax"
+                        type="number"
+                        disabled
+                        inputProps={{ step: '0.01' }}
+                        placeholder="Enter Tax in %"
+                        value={priceWithTax}
+                        // {...register('ColorTax', {
+                        //   // required: 'Tax is required in numbers',
+                        //   validate: (value: any) =>
+                        //     VALIDATE_NON_NEGATIVE_NUM(value),
+                        //   maxLength: {
+                        //     value: 10,
+                        //     message:
+                        //       'Length should not be excceed from 10 numbers.',
+                        //   },
+                        // })}
+                        disableUnderline
+                      />
+                      {/* {errors.ColorTax && (
+                        <ErrorSpanBox error={errors.ColorTax?.message} />
+                      )} */}
+                    </FormControl>
+                  </div>
                   <div
                     onClick={handleProductCustomizationServices}
                     className="col-span-2 cursor-pointer rounded-full bg-primary px-4 py-2"
@@ -659,7 +695,7 @@ function ProductEditPopup() {
                     )}
                   </FormControl>
                 </div>
-                <div className="FormFields">
+                {/* <div className="FormFields">
                   <FormControl className="FormControl" variant="standard">
                     <label className="FormLabel">Cost Price w/o Tax</label>
                     <Input
@@ -704,7 +740,7 @@ function ProductEditPopup() {
                     />
                     {errors.tax && <ErrorSpanBox error={errors.tax?.message} />}
                   </FormControl>
-                </div>
+                </div> */}
                 <div className="FormFields">
                   <FormControl className="FormControl" variant="standard">
                     <label className=" FormLabel">Item Weight</label>
