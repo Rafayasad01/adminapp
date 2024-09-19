@@ -16,13 +16,20 @@ import {
 } from '@mui/material';
 import { Add, Delete } from '@mui/icons-material';
 import { useNavigate } from 'react-router';
+import dayjs from 'dayjs';
 import ErrorSpanBox from '../../components/common/ErrorSpanBox';
 import TopBar from '../../components/common/TopBar';
 import Loader from '../../components/common/Loader';
 import Notify from '../../components/common/Notify';
 import CustomDropDown from '../../components/common/CustomDropDown';
-import { ALL_PERMISSIONS, NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
-import adminAppUser from '../../services/adminapp/adminAppUser';
+import {
+  ALL_PERMISSIONS,
+  CURRENCY_PREFIX,
+  NOT_AUTHORIZED_MESSAGE,
+  VALIDATE_NON_NEGATIVE_NUM,
+} from '../../utils/constants';
+// import adminAppUser from '../../services/adminapp/adminAppUser';
+import projectService from '../../services/adminapp/adminProjectAttachments';
 import { listingRolePermission } from '../../utils/helper';
 import { useAppSelector } from '../../redux/redux-hooks';
 import adminVendors from '../../services/adminapp/adminVendors';
@@ -49,7 +56,8 @@ const QuotationsAddPage = () => {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      quote_number: '',
+      // quote_number: '',
+      project_completion_days: '',
       exp_date: '',
       items: [],
     },
@@ -69,10 +77,18 @@ const QuotationsAddPage = () => {
   ]);
 
   const [discount, setDiscount] = useState({ type: 'percentage', value: 0 });
+  const [serviceCharge, setServiceCharge] = useState({
+    type: 'percentage',
+    value: 0,
+  });
   const [isLoader, setIsLoader] = useState(false);
-  const [users, setUsers] = useState([]);
+  const [projects, setProjects] = useState([]);
   const [vendors, setVendors] = useState([]);
   const [grandTotal, setGrandTotal] = useState(0);
+  const [
+    totalProjectCostWithServiceCharge,
+    setTotalProjectCostWithServiceCharge,
+  ] = useState(0);
   const [isNotify, setIsNotify] = useState(false);
   const [notifyMessage, setNotifyMessage] = useState({});
   const navigate = useNavigate();
@@ -100,10 +116,10 @@ const QuotationsAddPage = () => {
   const fetchClients = () => {
     handlePermissionCheck(ALL_PERMISSIONS.quotations.add, () => {
       setIsLoader(true);
-      adminAppUser
-        .usersLov(authState.user.tenant)
+      projectService
+        .getListProjectLovService(authState.user.tenant)
         .then((item: any) => {
-          setUsers(item.data.data.list);
+          setProjects(item.data.data.list);
         })
         .finally(() => {
           setIsLoader(false);
@@ -169,16 +185,21 @@ const QuotationsAddPage = () => {
 
     // Construct payload for submission
     const payload = {
-      appUserId: data.clientName,
-      quoteNumber: data.quote_number,
-      expiryDate: data.exp_date,
+      projectId: data.clientName,
+      // quoteNumber: data.quote_number,
+      // expiryDate: data.exp_date,
+      expiryDate: dayjs().add(3, 'day').format('YYYY-MM-DD'),
+      projectCompletionDays: Number(data.project_completion_days),
       discount: discount.value,
       discountType: discount.type,
+      serviceCharges: serviceCharge.value,
+      serviceChargesType: serviceCharge.type,
       total: grandTotal,
+      totalProjectServiceCost: totalProjectCostWithServiceCharge,
       subtotal: items.reduce((acc, item) => acc + item.total, 0),
       items,
     };
-    // console.log('🚀 ~ onSubmit ~ data:', areFieldsEmpty, items);
+    // console.log('🚀 ~ onSubmit ~ data:', payload);
     if (areFieldsValid) {
       setIsLoader(true);
       const success = await adminQuotation
@@ -238,14 +259,42 @@ const QuotationsAddPage = () => {
     ]);
   };
 
-  const calculateGrandTotal = (r: any[], dis: typeof discount = discount) => {
+  const totalConstructionCost =
+    rows?.length > 0 ? rows?.reduce((acc, row) => acc + row.total, 0) : 0;
+
+  const calculateGrandTotal = (
+    r: any[],
+    dis: typeof discount = discount,
+    servCharge: typeof serviceCharge = serviceCharge
+  ) => {
     let total = r.reduce((acc, row) => acc + row.total, 0);
+
+    // Apply discount to the total
     if (dis.type === 'percentage') {
-      total -= (total * dis.value) / 100;
+      total -= (total * Number(dis.value)) / 100;
     } else {
-      total -= dis.value;
+      total -= Number(dis.value);
     }
-    setGrandTotal(total);
+
+    // Calculate service charge based on the original total (before discount)
+    let totalWithServiceCharge = r.reduce((acc, row) => acc + row.total, 0); // Start with the original total
+    if (servCharge.type === 'percentage') {
+      totalWithServiceCharge +=
+        (totalWithServiceCharge * Number(servCharge.value)) / 100;
+    } else {
+      totalWithServiceCharge += Number(servCharge.value);
+    }
+
+    // Grand total is now the total after discount plus the service charge
+    let gTotal = total;
+    if (servCharge.type === 'percentage') {
+      gTotal += (total * Number(servCharge.value)) / 100;
+    } else {
+      gTotal += Number(servCharge.value);
+    }
+
+    setGrandTotal(gTotal);
+    setTotalProjectCostWithServiceCharge(totalWithServiceCharge);
   };
 
   const handleDeleteRow = (index: number) => {
@@ -306,9 +355,14 @@ const QuotationsAddPage = () => {
     calculateGrandTotal(newRows);
   };
 
-  const handleDiscountChange = (type: string, value: number) => {
+  const handleDiscountChange = (type: string, value: number | any) => {
     setDiscount({ type, value });
-    calculateGrandTotal(rows, { type, value });
+    calculateGrandTotal(rows, { type, value }, serviceCharge);
+  };
+
+  const handleServiceChargeChange = (type: string, value: number | any) => {
+    setServiceCharge({ type, value });
+    calculateGrandTotal(rows, discount, { type, value });
   };
 
   return (
@@ -331,7 +385,7 @@ const QuotationsAddPage = () => {
             <div className="Content col-span-12 p-4">
               <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="FormBody">
-                  <div className="FormFields grid grid-cols-4">
+                  <div className="mb-4 grid grid-cols-4">
                     {/* Customer Selection */}
                     <FormControl className="FormControl" variant="standard">
                       <CustomDropDown
@@ -340,30 +394,44 @@ const QuotationsAddPage = () => {
                         control={control}
                         error={errors}
                         register={register}
-                        options={{ roles: users }}
+                        options={{ roles: projects }}
                         customClassInputTitle="font-bold"
-                        inputTitle="Client Name"
-                        defaultValue="Select Client"
+                        inputTitle="Project Name"
+                        defaultValue="Select Project"
                       />
                     </FormControl>
                     {/* Quotation Number */}
-                    <FormControl className="FormControl" variant="standard">
-                      <label className="FormLabel">Quotation Number</label>
-                      <Input
-                        className="FormInput"
-                        placeholder="Enter Quote Number"
-                        disableUnderline
-                        {...register('quote_number', {
-                          required: 'Quotation number required',
-                        })}
-                      />
-                      {errors.quote_number && (
-                        <ErrorSpanBox error={errors.quote_number.message} />
-                      )}
-                    </FormControl>
+                    <div className="mx-5">
+                      <FormControl className="FormControl" variant="standard">
+                        <label className="FormLabel">
+                          Project Completion Days
+                        </label>
+                        <Input
+                          type="number"
+                          className="FormInput"
+                          placeholder="Enter Days in numebr"
+                          disableUnderline
+                          {...register('project_completion_days', {
+                            required: 'Days is required',
+                            validate: (value: any) =>
+                              VALIDATE_NON_NEGATIVE_NUM(value),
+                            maxLength: {
+                              value: 10,
+                              message:
+                                'Length should not be excceed from 10 numbers.',
+                            },
+                          })}
+                        />
+                        {errors.project_completion_days && (
+                          <ErrorSpanBox
+                            error={errors.project_completion_days.message}
+                          />
+                        )}
+                      </FormControl>
+                    </div>
 
                     {/* Expiry Date */}
-                    <FormControl className="FormControl" variant="standard">
+                    {/* <FormControl className="FormControl" variant="standard">
                       <label className="FormLabel">Expiry</label>
                       <Input
                         className="FormInput"
@@ -376,7 +444,7 @@ const QuotationsAddPage = () => {
                       {errors.exp_date && (
                         <ErrorSpanBox error={errors.exp_date.message} />
                       )}
-                    </FormControl>
+                    </FormControl> */}
                   </div>
 
                   {/* Products Table */}
@@ -523,11 +591,66 @@ const QuotationsAddPage = () => {
                   </Table>
                 </div>
                 <hr className="mt-5" />
-                <div className="mt-5 flex justify-end">
+                <div className="mt-5">
                   <div className="DiscountTotalSection">
                     {/* Discount and Total */}
-                    <div className="grid grid-cols-12">
-                      <div className="col-span-12">
+                    <div className="flex w-full items-center justify-end">
+                      <div className="">
+                        {/* <FormControl className="FormControl" variant="standard">
+                          <CustomDropDown
+                            id="vendorId"
+                            control={control}
+                            customClassInputTitle="font-normal"
+                            error={errors}
+                            register={register}
+                            options={{ roles: vendors }}
+                            inputTitle="Service Charge"
+                            customDDcss="mb-2"
+                            defaultValue="Select Service Charge"
+                            validateRequired
+                          />
+                        </FormControl> */}
+                        <FormControl
+                          className="FormControl mt-4 w-full"
+                          variant="outlined"
+                        >
+                          <label className="FormLabel font-bold">
+                            Service Charge Type
+                          </label>
+                          <Select
+                            value={serviceCharge.type}
+                            className="FormInput mb-3"
+                            onChange={(e) =>
+                              handleServiceChargeChange(
+                                e.target.value as 'percentage' | 'fixed',
+                                serviceCharge.value
+                              )
+                            }
+                          >
+                            <MenuItem value="percentage">Percentage</MenuItem>
+                            <MenuItem value="fixed">Fixed Amount</MenuItem>
+                          </Select>
+                        </FormControl>
+                        <FormControl
+                          className="FormControl mt-4 w-full"
+                          variant="standard"
+                        >
+                          <label className="FormLabel font-bold">
+                            Service Charge
+                          </label>
+                          <Input
+                            type="number"
+                            className="FormInput"
+                            disableUnderline
+                            value={serviceCharge.value}
+                            onChange={(e) =>
+                              handleServiceChargeChange(
+                                serviceCharge.type,
+                                Number(e.target.value)
+                              )
+                            }
+                          />
+                        </FormControl>
                         <FormControl
                           className="FormControl mt-4 w-full"
                           variant="outlined"
@@ -569,11 +692,32 @@ const QuotationsAddPage = () => {
                             }
                           />
                         </FormControl>
+                        {/* <hr className="mt-5" /> */}
+                        <div className="FormTotal pt-3">
+                          <span className="text-sm font-semibold">
+                            Cost of Construction:{' '}
+                          </span>
+                          <span>
+                            {CURRENCY_PREFIX} {totalConstructionCost.toFixed(2)}
+                          </span>
+                        </div>
+                        <div className="FormTotal pb-2">
+                          <span className="text-sm font-semibold">
+                            Total Cost of Project (including service charges):{' '}
+                          </span>
+                          <span>
+                            {CURRENCY_PREFIX}{' '}
+                            {totalProjectCostWithServiceCharge.toFixed(2)}
+                          </span>
+                        </div>
+                        <div className="FormTotal pb-3">
+                          <span className="font-bold">Grand Total: </span>
+                          <span>
+                            {' '}
+                            {CURRENCY_PREFIX} {grandTotal.toFixed(2)}
+                          </span>
+                        </div>
                       </div>
-                    </div>
-                    <div className="FormTotal py-3">
-                      <span className="FormLabel font-bold">Grand Total: </span>
-                      <span>{grandTotal.toFixed(2)}</span>
                     </div>
                   </div>
                 </div>

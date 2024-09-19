@@ -5,27 +5,29 @@ import {
   IconButton,
   Input,
   InputAdornment,
+  Switch,
   TablePagination,
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { useEffect, useState } from 'react';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
-import { useNavigate } from 'react-router';
 import dayjs from 'dayjs';
 import Notify from '../../components/common/Notify';
 import TopBar from '../../components/common/TopBar';
 import CustomText from '../../components/common/CustomText';
-import { formatCurrency, listingRolePermission } from '../../utils/helper';
+import { listingRolePermission } from '../../utils/helper';
+import adminVendors from '../../services/adminapp/adminVendors';
 import { ALL_PERMISSIONS, NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
 import { useAppSelector } from '../../redux/redux-hooks';
 import ActionMenu from '../../components/common/ActionMenu';
 import PermissionPopup from '../../utils/PermissionPopup';
 import Loader from '../../components/common/Loader';
-import adminQuotation from '../../services/adminapp/adminQuotation';
-import Quotation from '../../interfaces/Quotation';
+import { Vendor, VendorTypes } from '../../interfaces/Vendor';
+import VendorAddPopup from './VendorTypesAddPopup';
+import VendorEditPopup from './VendorTypesEditPopup';
 
-const QuotationsPage = () => {
+const VendorTypePage = () => {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [isNotify, setIsNotify] = useState(false);
   const [search, setSearch] = useState('');
@@ -34,28 +36,29 @@ const QuotationsPage = () => {
   const [total, setTotal] = useState<number>(0);
   const [cancelDialogOpen, setCancelDialogOpen] = useState<boolean>(false);
   const [notifyMessage, setNotifyMessage] = useState({});
+  const authState: any = useAppSelector((state) => state?.authState);
   const dataRole = useAppSelector(
     (state) => state?.persistedReducer?.roleState?.role?.permissions
   );
 
-  const [list, setList] = useState<Quotation[]>([]);
+  const [openCreateDialog, setOpenCreateDialog] = useState(false);
+  const [openEditDialog, setOpenEditDialog] = useState(false);
+  const [vendorData, setVendorData] = useState<VendorTypes>();
+  const [list, setList] = useState<VendorTypes[]>([]);
   const [actionMenuAnchorEl, setActionMenuAnchorEl] =
     useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
   const actionMenuOptions = ['Edit', 'Delete'];
-  const [isLoader, setIsLoader] = useState(true);
-  // const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
+  const [isLoader, setIsLoader] = useState(false);
   const [dialogText] = useState<any>(
-    'Are you sure you want to delete this Quotation ?'
+    'Are you sure you want to delete this Vendor Type ?'
   );
-  const navigate = useNavigate();
 
-  const fetchQuotations = (data = {}) => {
-    adminQuotation
-      .getQuotationService(data)
+  const fetchVendorType = (data = {}) => {
+    adminVendors
+      .getVendorTypeService(data)
       .then((res) => {
         if (res.data.success) {
-          setIsLoader(false);
           setList(res.data.data.list);
           setTotal(res.data.data.total);
         }
@@ -68,8 +71,6 @@ const QuotationsPage = () => {
           type: 'error',
         });
       });
-    setList([]);
-    setTotal(0);
   };
 
   const handlePermissionCheck = (permission: string, callback: () => void) => {
@@ -85,8 +86,8 @@ const QuotationsPage = () => {
   };
 
   const handleFormClickOpen = () => {
-    handlePermissionCheck(ALL_PERMISSIONS.quotations.add, () => {
-      navigate('./create');
+    handlePermissionCheck(ALL_PERMISSIONS.vendors.addVendorTypes, () => {
+      setOpenCreateDialog(true);
     });
   };
 
@@ -94,7 +95,7 @@ const QuotationsPage = () => {
     const searchTxt = search;
     const newPage = 0;
     setPage(newPage);
-    fetchQuotations({
+    fetchVendorType({
       search: searchTxt,
       page: newPage,
       size: rowsPerPage,
@@ -105,7 +106,7 @@ const QuotationsPage = () => {
       const searchTxt = event.target.value as string;
       const newPage = 0;
       setPage(newPage);
-      fetchQuotations({
+      fetchVendorType({
         search: searchTxt,
         page: newPage,
         size: rowsPerPage,
@@ -118,7 +119,7 @@ const QuotationsPage = () => {
     newPage: number
   ) => {
     setPage(newPage);
-    fetchQuotations({
+    fetchVendorType({
       search: search ?? null,
       page: newPage,
       size: rowsPerPage,
@@ -132,7 +133,7 @@ const QuotationsPage = () => {
     const newPage = 0;
     setRowsPerPage(newRowperPage);
     setPage(newPage);
-    fetchQuotations({
+    fetchVendorType({
       search: search ?? null,
       page: newPage,
       size: newRowperPage,
@@ -141,19 +142,18 @@ const QuotationsPage = () => {
 
   const menuHandler = (option: string) => {
     if (option === 'Edit') {
-      handlePermissionCheck(ALL_PERMISSIONS.quotations.edit, () => {
+      handlePermissionCheck(ALL_PERMISSIONS.vendors.editVendorTypes, () => {
         const editFormData = list?.find(
           (el: any) => el.id === actionMenuItemid
         );
         if (editFormData) {
           setActionMenuItemid(editFormData.id);
-          navigate(`./edit/${editFormData.id}`, {
-            state: { data: editFormData },
-          });
+          setVendorData(editFormData);
+          setOpenEditDialog(true);
         }
       });
     } else if (option === 'Delete') {
-      handlePermissionCheck(ALL_PERMISSIONS.quotations.delete, () =>
+      handlePermissionCheck(ALL_PERMISSIONS.vendors.deleteVendorTypes, () =>
         setCancelDialogOpen(true)
       );
     }
@@ -161,8 +161,8 @@ const QuotationsPage = () => {
 
   const deleteHandler = (id: string) => {
     setIsLoader(true);
-    adminQuotation
-      .deleteStatusQuotationService({ id })
+    adminVendors
+      .deleteStatusVendorTypeService({ id })
       .then((updateItem) => {
         if (updateItem.data.success) {
           setIsLoader(false);
@@ -192,12 +192,121 @@ const QuotationsPage = () => {
   };
 
   useEffect(() => {
-    fetchQuotations({
+    fetchVendorType({
       search: search ?? null,
       page,
       size: rowsPerPage,
     });
   }, []);
+
+  const createFormHandler = async (data: VendorTypes) => {
+    data.tenant = authState.user.tenant;
+    setIsLoader(true);
+    const success = await adminVendors
+      .createVendorTypeService(data)
+      .then((res) => {
+        setIsLoader(false);
+        if (res.data.success === false) {
+          setIsNotify(true);
+          setNotifyMessage({
+            text: res.data.message,
+            type: 'error',
+          });
+          return false;
+        }
+
+        setIsNotify(true);
+        setNotifyMessage({
+          text: res.data.message,
+          type: 'success',
+        });
+        const t = parseInt(total.toString(), 10) + 1;
+        setTotal(t);
+        setList([res.data.data, ...list]);
+        return true;
+      })
+      .catch((err) => {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
+        });
+        return false;
+      });
+    return success;
+  };
+
+  const updateFormHandler = async (data: Vendor) => {
+    setIsLoader(true);
+    const success = await adminVendors
+      .updateVendorTypeService(vendorData?.id ?? '', data)
+      .then((res) => {
+        setIsLoader(false);
+        if (res.data.success === false) {
+          setIsNotify(true);
+          setNotifyMessage({
+            text: res.data.message,
+            type: 'error',
+          });
+          setOpenEditDialog(true);
+          return false;
+        }
+
+        setIsNotify(true);
+        setNotifyMessage({
+          text: res.data.message,
+          type: 'success',
+        });
+        const vendor: VendorTypes = res.data.data;
+        const updatedList = list.map((item: VendorTypes) =>
+          item.id === vendor.id ? vendor : item
+        );
+        setList([...updatedList]);
+        setVendorData(undefined);
+        return true;
+      })
+      .catch((err) => {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
+        });
+        return false;
+      });
+    return success;
+  };
+
+  const handleSwitchChange = (event: any, id: string) => {
+    if (
+      listingRolePermission(dataRole, ALL_PERMISSIONS.vendors.editVendorTypes)
+    ) {
+      const data = {
+        isActive: event.target.checked,
+      };
+      adminVendors
+        .updateStatusVendorTypeService(id, data)
+        .then((updateItem) => {
+          if (updateItem.data.success) {
+            setList((newArr: any) => {
+              return newArr.map((item: any) => {
+                if (item.id === id) {
+                  item.isActive = updateItem.data.data.isActive;
+                }
+                return { ...item };
+              });
+            });
+          }
+        });
+    } else {
+      setIsNotify(true);
+      setNotifyMessage({
+        text: NOT_AUTHORIZED_MESSAGE,
+        type: 'warning',
+      });
+    }
+  };
 
   return (
     <>
@@ -207,14 +316,14 @@ const QuotationsPage = () => {
         setIsOpen={setIsNotify}
         displayMessage={notifyMessage}
       />
-      <TopBar title="Projects" />
+      <TopBar title="Vendor Types" />
 
       <div className="cs-dialog container mx-auto mt-2 w-full px-3">
         <div className="w-full rounded-lg bg-white shadow-lg">
           <div className="grid grid-cols-12 px-4 py-5">
             <div className="col-span-7">
               <span className="font-open-sans text-xl font-semibold text-[#252733]">
-                All Quotations
+                All Vendor Types
               </span>
             </div>
             <div className="col-span-5">
@@ -268,40 +377,26 @@ const QuotationsPage = () => {
             <table className="table-border table-auto">
               <thead>
                 <tr>
-                  <th>Quote</th>
-                  {/* <th>Customer</th> */}
-                  <th className="">Expiry</th>
-                  <th className="">Project Completion Days</th>
-                  <th>Discount</th>
-                  <th>Service Charges</th>
-                  <th>Total</th>
+                  <th>Name</th>
+                  <th className="">Description</th>
+                  <th>Created Date</th>
                   <th>&nbsp;</th>
                 </tr>
               </thead>
               <tbody>
                 {list &&
-                  list?.map((item: Quotation, index: number) => {
+                  list?.map((item: VendorTypes, index: number) => {
                     return (
                       <tr key={index}>
-                        <td>{item.quoteNumber ?? '--'}</td>
-                        {/* <td>{item.appUserName ?? '--'}</td> */}
+                        <td>{item.name ?? '--'}</td>
+                        <td>{item.desc ?? '--'}</td>
                         <td>
-                          {dayjs(item.expiryDate).isValid()
-                            ? dayjs(item.expiryDate)?.format(
-                                'ddd, MMM DD, YYYY '
+                          {dayjs(item.createdAt).isValid()
+                            ? dayjs(item.createdAt)?.format(
+                                'ddd, MMM DD, YYYY hh:mm:ssA'
                               )
                             : '--'}
                         </td>
-                        <td>{item.projectCompletionDays ?? '--'} </td>
-                        <td>
-                          {item.discount ?? '--'}{' '}
-                          {item.discountType === 'percentage' ? '%' : '/='}{' '}
-                        </td>
-                        <td>
-                          {item.serviceCharges ?? '--'}{' '}
-                          {item.discountType === 'percentage' ? '%' : '/='}{' '}
-                        </td>
-                        <td>{formatCurrency(Number(item.total) ?? 0)}</td>
                         <td>
                           <div className="flex flex-row-reverse">
                             <IconButton
@@ -324,6 +419,13 @@ const QuotationsPage = () => {
                             >
                               <MoreVertIcon />
                             </IconButton>
+                            <Switch
+                              checked={item.isActive}
+                              onChange={(
+                                event: React.ChangeEvent<HTMLInputElement>
+                              ) => handleSwitchChange(event, list[index].id)}
+                              inputProps={{ 'aria-label': 'controlled' }}
+                            />
                           </div>
                         </td>
                       </tr>
@@ -365,8 +467,24 @@ const QuotationsPage = () => {
           callback={menuHandler}
         />
       )}
+
+      <VendorAddPopup
+        setIsNotify={setIsNotify}
+        setNotifyMessage={setNotifyMessage}
+        openFormDialog={openCreateDialog}
+        setOpenFormDialog={setOpenCreateDialog}
+        callback={createFormHandler}
+      />
+      <VendorEditPopup
+        setIsNotify={setIsNotify}
+        setNotifyMessage={setNotifyMessage}
+        openFormDialog={openEditDialog}
+        setOpenFormDialog={setOpenEditDialog}
+        callback={updateFormHandler}
+        existingVendorData={vendorData}
+      />
     </>
   );
 };
 
-export default QuotationsPage;
+export default VendorTypePage;

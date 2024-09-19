@@ -609,7 +609,7 @@ function Sidebar() {
     //     </div>
     //   </List>
     // </Drawer>
-    <div className="side-bar-menu relative">
+    <div className="side-bar-menu relative h-full">
       <div className="space-between left-0 top-0 flex h-full w-full max-w-[100px] flex-grow flex-col bg-[#f5f5f5] p-2">
         <div className="mb-4 basis-[10%]">
           <div className="mx-auto max-w-[50px]">
@@ -617,7 +617,7 @@ function Sidebar() {
           </div>
         </div>
         <div className="basis-[60%] self-center">
-          <div className="max-h-[550px] w-[60px] rounded-[45px] bg-[#C9C9C9] text-center">
+          <div className="max-h-[650px] w-[60px] rounded-[45px] bg-[#C9C9C9] text-center">
             <NavLink to="/admin/dashboard/home">
               <Button className="btn-flips my-[5px] h-[50px] min-w-[50px] rounded-[28px] bg-transparent hover:bg-[#F27426]">
                 <img
@@ -702,6 +702,20 @@ function Sidebar() {
                 <Button className="btn-flips my-[5px] h-[50px] min-w-[50px] rounded-[28px] bg-transparent hover:bg-[#F27426]">
                   <img
                     src={assets.images.clipboardIcon}
+                    alt="icon"
+                    className="w-[24px]"
+                  />
+                </Button>
+              </NavLink>
+            )}
+            {listingRolePermission(
+              dataRole,
+              ALL_PERMISSIONS.vendors.viewVendorTypes
+            ) && (
+              <NavLink to="/admin/dashboard/vendor-types">
+                <Button className="btn-flips my-[5px] h-[50px] min-w-[50px] rounded-[28px] bg-transparent hover:bg-[#F27426]">
+                  <img
+                    src={assets.images.vendorTypesIcon}
                     alt="icon"
                     className="w-[24px]"
                   />

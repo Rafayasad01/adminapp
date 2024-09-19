@@ -20,3 +20,14 @@ export type Vendor = {
   tenant: string;
   deletedAt: string | null;
 };
+
+export type VendorTypes = {
+  id: string;
+  name: string;
+  desc: string;
+  createdAt: string;
+  updatedAt: string;
+  tenant: string;
+  isDeleted: string | any;
+  isActive: string | any;
+};

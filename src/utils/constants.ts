@@ -915,6 +915,10 @@ export const ALL_PERMISSIONS = {
     add: 'addVendor',
     edit: 'editVendor',
     delete: 'deleteVendor',
+    viewVendorTypes: 'viewVendorTypes',
+    addVendorTypes: 'addVendorTypes',
+    editVendorTypes: 'editVendorTypes',
+    deleteVendorTypes: 'deleteVendorTypes',
   },
   products: {
     view: 'neViewProducts',

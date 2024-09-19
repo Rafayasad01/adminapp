@@ -95,6 +95,7 @@ import VendorsPage from '../pages/vendors/VendorsPage';
 import QuotationsPage from '../pages/quotations/QuotationsPage';
 import QuotationsAddPage from '../pages/quotations/QuotationsAddPage';
 import QuotationsEditPage from '../pages/quotations/QuotationsEditPage';
+import VendorTypePage from '../pages/vendorTypes/VendorTypesPage';
 
 const ProtectedRoute = ({ page, condition }: any) => {
   const canView = CAN('canView', condition);
@@ -1126,6 +1127,15 @@ export const routeObjects: RouteObject[] = [
               {
                 path: 'edit/:id',
                 element: <ProductEditPopup />,
+              },
+            ],
+          },
+          {
+            path: 'vendor-types',
+            children: [
+              {
+                index: true,
+                element: <VendorTypePage />,
               },
             ],
           },

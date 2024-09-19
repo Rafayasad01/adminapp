@@ -421,8 +421,8 @@ function ProductAddPopup() {
                     )}
                   </FormControl>
                 </div>
-                <div className="FormFields">
-                  <FormControl className="FormControl" variant="standard">
+                <div className="FormField">
+                  {/* <FormControl className="FormControl" variant="standard">
                     <label className="FormLabel">Mobile Number</label>
                     <Input
                       className="FormInput"
@@ -444,9 +444,9 @@ function ProductAddPopup() {
                     {errors.mobileNumber && (
                       <ErrorSpanBox error={errors.mobileNumber?.message} />
                     )}
-                  </FormControl>
+                  </FormControl> */}
                   <FormControl className="FormControl" variant="standard">
-                    <label className="FormLabel">Item Code</label>
+                    <label className="FormLabel mt-3">Item Code</label>
                     <Input
                       className="FormInput"
                       {...register('itemCode', {
@@ -529,6 +529,7 @@ function ProductAddPopup() {
                         className="FormInput"
                         id="ColorTax"
                         type="number"
+                        inputProps={{ step: '0.01' }}
                         placeholder="Enter Tax in %"
                         {...register('ColorTax', {
                           // required: 'Tax is required in numbers',
@@ -710,7 +711,7 @@ function ProductAddPopup() {
                     )}
                   </FormControl>
                 </div>
-                <div className="FormField">
+                {/* <div className="FormField">
                   <FormControl className="FormControl" variant="standard">
                     <label className="FormLabel mt-4">Address</label>
                     <Input
@@ -735,7 +736,7 @@ function ProductAddPopup() {
                       <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
                     )}
                   </FormControl>
-                </div>
+                </div> */}
                 <div className="FormField">
                   <FormControl className="FormControl" variant="standard">
                     <label className="FormLabel mt-4">

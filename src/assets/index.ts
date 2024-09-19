@@ -89,6 +89,7 @@ import wash from './images/wash.svg';
 import box from './images/box.png';
 import supplyIcon from './images/icons/supply.png';
 import quotationIcon from './images/quotation.png';
+import vendorTypesIcon from './images/vendor-types.png';
 
 const assets = {
   images: {
@@ -169,6 +170,7 @@ const assets = {
     box,
     supplyIcon,
     quotationIcon,
+    vendorTypesIcon,
   },
   tempImages: {
     shirt,

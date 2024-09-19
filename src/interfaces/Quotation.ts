@@ -20,6 +20,9 @@ type Quotation = {
   total: string;
   discount: string;
   discountType: string;
+  serviceCharges: string;
+  serviceChargesType: string;
+  projectCompletionDays: string;
   subtotal: string;
   items: QuotationItem[];
   createdBy: string;

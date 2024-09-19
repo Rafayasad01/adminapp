@@ -584,6 +584,7 @@ function ProductEditPopup() {
                         className="FormInput"
                         id="ColorTax"
                         type="number"
+                        inputProps={{ step: '0.01' }}
                         placeholder="10"
                         {...register('ColorTax', {
                           // required: 'Amount is required in numbers',
