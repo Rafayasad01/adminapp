@@ -27,6 +27,7 @@ import promiseHandler, {
   CheckRolePermission,
   listingRolePermission,
 } from '../../utils/helper';
+import CustomText from '../../components/common/CustomText';
 // import Pagination from '@mui/material/Pagination';
 // import Stack from '@mui/material/Stack';
 
@@ -396,7 +397,7 @@ function OrdersPage() {
               </thead>
               <tbody>
                 {list &&
-                  list.map((Item: any, index: number) => {
+                  list?.map((Item: any, index: number) => {
                     return (
                       <tr key={index}>
                         <td>
@@ -484,6 +485,9 @@ function OrdersPage() {
               </tbody>
             </table>
           </div>
+          {list?.length < 1 ? (
+            <CustomText noRoundedBorders text="No Records Found" />
+          ) : null}
           <div className="mt-3 flex w-[100%] justify-center py-3">
             <TablePagination
               component="div"
