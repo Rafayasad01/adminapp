@@ -86,6 +86,10 @@ import ExpensePage from '../pages/expense';
 import AppUsersCustomerPage from '../pages/customers/AppUsersCustomersPage';
 import AppUserCustomerDetailPage from '../pages/customers/AppUserCustomerDetailPage';
 import OtherAppointmentPage from '../pages/otherAppointments/visit/AppointmentVisitPage';
+import DeductionPage from '../pages/appointment/provider/deduction/DeductionPage';
+import CommissionPage from '../pages/appointment/provider/commission/CommissionPage';
+import BonusPage from '../pages/appointment/provider/bonus/BonusPage';
+import OvertimePage from '../pages/appointment/provider/overtime/OvertimePage';
 
 const ProtectedRoute = ({ page, condition }: any) => {
   const [canView, setCanView] = useState<boolean | null>(null);
@@ -507,6 +511,22 @@ export const routeObjects: RouteObject[] = [
                   {
                     path: 'review/:empId',
                     element: <EmployeeRatingReviewsPage />,
+                  },
+                  {
+                    path: 'deduction/:empId',
+                    element: <DeductionPage />,
+                  },
+                  {
+                    path: 'commission/:empId',
+                    element: <CommissionPage />,
+                  },
+                  {
+                    path: 'bonus/:empId',
+                    element: <BonusPage />,
+                  },
+                  {
+                    path: 'overtime/:empId',
+                    element: <OvertimePage />,
                   },
                 ],
               },

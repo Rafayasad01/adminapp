@@ -1,7 +1,7 @@
 import BadgeOutlinedIcon from '@mui/icons-material/BadgeOutlined';
 import LocalPhoneOutlinedIcon from '@mui/icons-material/LocalPhoneOutlined';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
-import PaymentOutlinedIcon from '@mui/icons-material/PaymentOutlined';
+// import PaymentOutlinedIcon from '@mui/icons-material/PaymentOutlined';
 import MailOutlineOutlinedIcon from '@mui/icons-material/MailOutlineOutlined';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import StarIcon from '@mui/icons-material/Star';
@@ -15,6 +15,7 @@ import Avatar from '@mui/material/Avatar';
 import { listingRolePermission } from '../../../utils/helper';
 import { ALL_PERMISSIONS } from '../../../utils/constants';
 import { useAppSelector } from '../../../redux/redux-hooks';
+import assets from '../../../assets';
 
 type AppointmentProviderCardsProps = {
   data: any;
@@ -186,7 +187,11 @@ const AppointmentProviderCards = ({
                     ) && (
                       <div className="flex items-center justify-between">
                         <div className="mr-5">
-                          <PaymentOutlinedIcon fontSize="small" />
+                          <img
+                            src={assets.images.salaryPayrollImage}
+                            alt="salary-payroll"
+                            className="mt-1 w-[22px] object-contain"
+                          />
                         </div>
                         <span className="text-sm font-medium">
                           {item.payrollType}

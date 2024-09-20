@@ -63,6 +63,7 @@ import wash from './images/wash.svg';
 import morningImage from './images/morning.svg';
 import noonImage from './images/noon.png';
 import usersIcon from './images/users.png';
+import salaryPayrollImage from './images/salary-payroll.svg';
 
 const assets = {
   images: {
@@ -118,6 +119,7 @@ const assets = {
     morningImage,
     noonImage,
     usersIcon,
+    salaryPayrollImage,
   },
   tempImages: {
     wash,
