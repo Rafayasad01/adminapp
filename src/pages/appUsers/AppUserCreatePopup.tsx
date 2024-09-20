@@ -62,7 +62,7 @@ function AppUserCreatePopup({
         ALL_PERMISSIONS.storeUser.viewDriverUserApp
       )
     ) {
-      data.appuserRole = 'AppUser';
+      data.appuserRole = 'App';
     }
     setOpenFormDialog(false);
     callback(data);

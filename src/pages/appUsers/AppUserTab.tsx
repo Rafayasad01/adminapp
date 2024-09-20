@@ -144,7 +144,7 @@ function AppUserTab({
       }
       // navigate(`detail/${actionMenuItemid?.id}`);
     } else if (option === 'Reward History') {
-      console.log('sss');
+      // console.log('sss');
 
       if (
         listingRolePermission(

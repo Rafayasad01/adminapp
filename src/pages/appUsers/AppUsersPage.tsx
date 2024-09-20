@@ -193,6 +193,7 @@ function AppUsersPage() {
       tenant: authState.user.tenant,
       createdBy: authState.user.id,
     };
+    // console.log('🚀 ~ createFormHandler ~ formData:', formData);
 
     let dataRender = false;
     if (data.appuserRole === 'Driver' && selectedTab === 'OTHER') {
@@ -211,7 +212,7 @@ function AppUsersPage() {
             type: 'success',
           });
           if (dataRender) {
-            setList([...list, item.data.data]);
+            setList([item.data.data, ...list]);
           }
         } else {
           setIsLoader(false);
