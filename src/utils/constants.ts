@@ -1,6 +1,7 @@
 import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined';
 import PersonOutlinedIcon from '@mui/icons-material/PersonOutlined';
 import { listingRolePermission } from './helper';
+import { setItem } from './storage';
 
 const HOST = 'https://dev.urapptech.com';
 export const BASE_URL =
@@ -856,8 +857,8 @@ export const SERVICES = 'Service';
 export const PRODUCT = 'Product';
 export const OTHER_APPOINTMENT = 'Other Appointments';
 export const APPOINTMENT = 'Appointments';
-let TITLE_TEXT = '';
 
+// let TITLE_TEXT = '';
 export const handleTitleText = (permissions: any) => {
   if (
     listingRolePermission(
@@ -865,12 +866,12 @@ export const handleTitleText = (permissions: any) => {
       ALL_PERMISSIONS.storeProduct.viewServices
     ) === true
   ) {
-    TITLE_TEXT = SERVICES;
+    setItem('TITLE_TEXT', SERVICES);
   } else {
-    TITLE_TEXT = PRODUCT;
+    setItem('TITLE_TEXT', PRODUCT);
   }
 };
-export { TITLE_TEXT };
+// export { TITLE_TEXT };
 
 export const DEDUCTION_TYPE = [
   {

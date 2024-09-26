@@ -20,17 +20,15 @@ import TopBar from '../../components/common/TopBar';
 import { useAppSelector } from '../../redux/redux-hooks';
 import categoryService from '../../services/adminapp/adminCategory';
 import PermissionPopup from '../../utils/PermissionPopup';
-import {
-  ALL_PERMISSIONS,
-  NOT_AUTHORIZED_MESSAGE,
-  TITLE_TEXT,
-} from '../../utils/constants';
+import { ALL_PERMISSIONS, NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
 import { CheckRolePermission, listingRolePermission } from '../../utils/helper';
 import ServicesCreatePopup from './CategoriesServicesCreatePopup';
 import ServicesEditPopup from './CategoriesServicesEditPopup';
+import { getItem } from '../../utils/storage';
 
 function CategoriesServicesPage() {
   const params = useParams();
+  const TITLE_TEXT: any = getItem('TITLE_TEXT');
   const authState: any = useAppSelector((state) => state?.authState);
   const dataRole = useAppSelector(
     (state: any) => state?.persistedReducer?.roleState?.role?.permissions

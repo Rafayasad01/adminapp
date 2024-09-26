@@ -88,6 +88,8 @@ function AppointmentProviderPage() {
   const [showPassword, setShowPassword] = useState(true);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
+  // console.log('showPassword', showPassword);
+
   // const officeTimings = useAppSelector(
   //   (state) => state?.persistedReducer.appState.UserItems
   // );
@@ -249,6 +251,7 @@ function AppointmentProviderPage() {
       error: errors.password,
       notRequired: true,
       type: 'password',
+      setShowPassword,
       onclick: handleClickShowPassword,
       showPassVisibility: showPassword,
       pattern: PATTERN.PASSWORD,
@@ -1269,6 +1272,7 @@ function AppointmentProviderPage() {
           endTime={endTime}
           setStartServiceTime={setStartServiceTime}
           startServiceTime={startServiceTime}
+          setInputFieldsData={setInputFieldsData}
           // catLov={catLovlist}
           // catItemsLov={catItemsLovlist}
           // usedCatItemsLovlist={usedCatItemsLovlist}
@@ -1305,6 +1309,7 @@ function AppointmentProviderPage() {
           setOpenFormDialog={setOpenEditFormDialog}
           setStartServiceTime={setStartServiceTime}
           startServiceTime={startServiceTime}
+          setInputFieldsData={setInputFieldsData}
           // catLov={catLovlist}
           // catItemsLov={catItemsLovlist}
           // usedCatItemsLovlist={usedCatItemsLovlist}

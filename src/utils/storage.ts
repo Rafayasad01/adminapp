@@ -4,7 +4,8 @@ type Key =
   | 'THEME'
   | 'SYSTEM_CONFIG'
   | 'REFRESH_TOKEN'
-  | 'SHOP_TENANT';
+  | 'SHOP_TENANT'
+  | 'TITLE_TEXT';
 
 function addKeyPrefix(key: string) {
   const prefix = 'WEB_ADMIN';

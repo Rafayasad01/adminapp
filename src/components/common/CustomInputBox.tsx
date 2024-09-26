@@ -29,6 +29,8 @@ type CustomInputBoxProps = {
   subInputTitle?: string;
   typeImportant?: boolean;
   value?: any;
+  setShowPassword?: any;
+  setInputFieldsData?: any;
 };
 
 function CustomInputBox({
@@ -44,7 +46,7 @@ function CustomInputBox({
   sx,
   maxLetterLimit,
   min,
-  onclick,
+  // onclick,
   pattern,
   placeholder,
   register,
@@ -53,8 +55,21 @@ function CustomInputBox({
   subInputTitle,
   typeImportant,
   value,
+  setInputFieldsData,
 }: CustomInputBoxProps) {
-  // console.log('error', error);
+  const handleShowPasswordClick = () => {
+    setInputFieldsData((newArr: any) => {
+      return newArr.map((el: any) => {
+        if (el.type === 'password') {
+          return {
+            ...el,
+            showPassVisibility: !el.showPassVisibility,
+          };
+        }
+        return el;
+      });
+    });
+  };
   return (
     <>
       <div className="flex">
@@ -108,7 +123,10 @@ function CustomInputBox({
               <IconButton
                 style={{ padding: 0 }}
                 aria-label="toggle password visibility"
-                onClick={onclick || (() => {})}
+                // onClick={() => setShowPassword((show: any) => !show)}
+                onClick={
+                  inputType === 'password' ? handleShowPasswordClick : () => {}
+                }
               >
                 {showPassVisibility ? <VisibilityOff /> : <Visibility />}
               </IconButton>

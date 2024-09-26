@@ -71,6 +71,7 @@ type CustomSwiperDialogProps = {
   type?: any;
   watch?: any;
   weekDays?: any;
+  setInputFieldsData?: any;
 };
 
 function CustomSwiperDialog({
@@ -115,6 +116,7 @@ function CustomSwiperDialog({
   type,
   watch,
   weekDays,
+  setInputFieldsData,
 }: CustomSwiperDialogProps) {
   const dataRole = useAppSelector(
     (state: any) => state?.persistedReducer?.roleState?.role?.permissions
@@ -182,6 +184,7 @@ function CustomSwiperDialog({
                   const minDate = lastDayOfMonth.subtract(12, 'year');
                   const formattedMinDate = dayjs(minDate);
                   const formattedMaxDate = dayjs(formattedMinDate);
+                  // console.log('items.showPassVisibility', items);
                   return (
                     <Fragment key={index}>
                       {
@@ -224,8 +227,10 @@ function CustomSwiperDialog({
                               error={errors?.[items.id]}
                               inputType={items.type}
                               onclick={items.onclick}
+                              setShowPassword={items.setShowPassword}
                               showPassVisibility={items.showPassVisibility}
                               typeImportant={items.typeImportant}
+                              setInputFieldsData={setInputFieldsData}
                             />
                           </FormControl>
                         ) : items.type === 'textarea' ? (

@@ -121,7 +121,7 @@ function PayrollPopup({
                 </div>
                 <div className="flex w-full items-end justify-end">
                   <div className="mx-2">
-                    <p className="m-0 py-1 text-xs">Start Date</p>
+                    <p className="m-0 py-1 text-xs">Select Month</p>
                     <Controller
                       name="startDate"
                       control={control}

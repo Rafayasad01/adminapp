@@ -73,6 +73,7 @@ type CustomEditSwiperDialogProps = {
   type?: any;
   watch?: any;
   weekDays?: any;
+  setInputFieldsData?: any;
 };
 
 function CustomEditSwiperDialog({
@@ -120,6 +121,7 @@ function CustomEditSwiperDialog({
   type,
   watch,
   weekDays: _weekDays,
+  setInputFieldsData,
 }: CustomEditSwiperDialogProps) {
   const [imageName, setImageName] = useState<any>(null);
   const dataRole = useAppSelector(
@@ -313,6 +315,7 @@ function CustomEditSwiperDialog({
                               onclick={items.onclick}
                               showPassVisibility={items.showPassVisibility}
                               typeImportant={items.typeImportant}
+                              setInputFieldsData={setInputFieldsData}
                             />
                           </FormControl>
                         ) : items.type === 'textarea' ? (

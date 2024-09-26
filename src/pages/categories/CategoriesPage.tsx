@@ -22,17 +22,15 @@ import TopBar from '../../components/common/TopBar';
 import { useAppSelector } from '../../redux/redux-hooks';
 import categoryService from '../../services/adminapp/adminCategory';
 import PermissionPopup from '../../utils/PermissionPopup';
-import {
-  ALL_PERMISSIONS,
-  NOT_AUTHORIZED_MESSAGE,
-  TITLE_TEXT,
-} from '../../utils/constants';
+import { ALL_PERMISSIONS, NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
 import { CheckRolePermission, listingRolePermission } from '../../utils/helper';
 import CategoriesCreatePopup from './CategoriesCreatePopup';
 import CategoriesEditPopup from './CategoriesEditPopup';
+import { getItem } from '../../utils/storage';
 
 function CategoriesPage() {
   const authState: any = useAppSelector((state) => state?.authState);
+  const TITLE_TEXT: any = getItem('TITLE_TEXT');
   const dataRole = useAppSelector(
     (state) => state?.persistedReducer?.roleState?.role?.permissions
   );
