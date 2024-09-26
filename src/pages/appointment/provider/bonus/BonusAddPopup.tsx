@@ -22,8 +22,8 @@ import { BonusCreate } from '../../../../interfaces/bonus.interface';
 import ErrorSpanBox from '../../../../components/common/ErrorSpanBox';
 
 import {
+  BONUS_TYPE,
   CURRENCY_PREFIX,
-  DEDUCTION_TYPE,
   INVALID_CHAR,
   MAX_LENGTH_EXCEEDED,
   PATTERN,
@@ -33,6 +33,7 @@ import {
 import '../../../../assets/css/PopupStyle.css';
 
 type Props = {
+  loader: boolean;
   openFormDialog: boolean;
   setOpenFormDialog: React.Dispatch<React.SetStateAction<boolean>>;
   callback: (...args: any[]) => any;
@@ -41,6 +42,7 @@ type Props = {
 };
 
 function DeductionAddPopup({
+  loader,
   openFormDialog,
   setOpenFormDialog,
   callback,
@@ -59,7 +61,7 @@ function DeductionAddPopup({
 
   const { fields, append, remove } = useFieldArray({
     control,
-    name: 'deductions', // Name of the array field
+    name: 'bonus', // Name of the array field
     keyName: 'key',
   });
 
@@ -78,60 +80,36 @@ function DeductionAddPopup({
 
   const handleServices = () => {
     const obj = {
-      employeeName: watch('employeeName'),
       type: watch('type'),
       amount: watch('amount'),
       date: watch('bonusDate'),
       details: watch('details'),
     };
-    if (watch('amount').length > 6) {
+    if (watch('amount').length > 10) {
       setIsNotify(true);
       setNotifyMessage({
-        text: 'length must not be greater than 6',
+        text: 'length must not be greater than 10',
         type: 'error',
       });
       return;
     }
-    append(obj);
-    // const check: boolean = fields?.some((el: any) =>
-    //   dayjs(el.date).isSame(dayjs(watch('bonusDate')), 'day')
-    // );
-    // if (check) {
-    //   setIsNotify(true);
-    //   setNotifyMessage({
-    //     text: 'This date you already selected, Please select another date',
-    //     type: 'error',
-    //   });
-    //   return;
-    // }
-    // if (
-    //   watch('employeeName') &&
-    //   watch('type') !== 'none' &&
-    //   watch('amount') &&
-    //   watch('deductionDate')
-    // ) {
-    //   // setValue("servicesId", 'none')
-    //   // setValue("servicesAmount", 'none')
-    //   // setValue("price", null)
-    //   // setStartServiceTime(null)
-    // } else {
-    //   setIsNotify(true);
-    //   setNotifyMessage({
-    //     text: 'All Fields are Required',
-    //     type: 'error',
-    //   });
-    // }
+    if (watch('type') && watch('type') !== 'none' && watch('amount')) {
+      append(obj);
+    } else {
+      setIsNotify(true);
+      setNotifyMessage({
+        text: 'All Fields are Required',
+        type: 'error',
+      });
+    }
   };
 
   const onSubmit = (data: any) => {
-    console.log('🚀 ~ onSubmit ~ data:', data);
-    // data.avatar = image;
-    // const res = {
-    //   name: data.categoryName,
-    //   description: data.categoryDesc,
-    //   avatar: image,
-    // };
-    callback(data);
+    delete data.amount;
+    delete data.bonusDate;
+    delete data.details;
+    delete data.type;
+    callback({ expenseDetails: data.bonus });
   };
 
   const handleDateChange = (date: any, field: any) => {
@@ -190,14 +168,14 @@ function DeductionAddPopup({
                   control={control}
                   error={errors}
                   register={register}
-                  options={{ roles: DEDUCTION_TYPE }}
+                  options={{ roles: BONUS_TYPE }}
                   customClassInputTitle="font-bold"
                   inputTitle="Bonus Type"
                   defaultValue="Select type"
                 />
               </FormControl>
             </div>
-            {watch('type') === 'others' && (
+            {watch('type') === 'Others' && (
               <div className="FormField">
                 <FormControl className="FormControl" variant="standard">
                   <label className="FormLabel mt-2">Add Details</label>
@@ -366,7 +344,8 @@ function DeductionAddPopup({
             </Button>
             <Input
               type="submit"
-              value="Add"
+              disabled={loader}
+              value={loader ? 'loading...' : 'Add'}
               className="btn-black-fill"
               disableUnderline
               sx={{

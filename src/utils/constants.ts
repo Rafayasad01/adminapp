@@ -592,6 +592,7 @@ export const PATTERN = {
   POINT_NUM: /^[+-]?([0-9]*[.])?[0-9]+$/,
   CHAR_NUM_MINUS_AT_SPACE: /^[a-zA-Z0-9@ -]+$/,
   CHAR_NUM_MIN_AT_HASH_COM_DOT_SPA: /^[a-zA-Z0-9@,\-.# ]+$/,
+  HOURS_MINTS_FORMAT: /^([0-9]|1[0-9]|2[0-3]):([0-5][0-9])$/,
 
   // CHAR_NUM_DOT_AT: /^[A-Za-z0-9\s.@]+$/,
   // CHAR_NUM_DOT_AT: /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/, // used for email fields
@@ -836,6 +837,19 @@ export const ALL_PERMISSIONS = {
     viewTax: 'viewTax',
     viewDomain: 'viewDomain',
   },
+  storeEmployeeExpense: {
+    viewStoreAppointmentEmployeeOvertime:
+      'viewStoreAppointmentEmployeeOvertime',
+    viewStoreAppointmentEmployeeBonus: 'viewStoreAppointmentEmployeeBonus',
+    viewStoreAppointmentEmployeePayroll: 'viewStoreAppointmentEmployeePayroll',
+    viewStoreAppointmentEmployeeDeduction:
+      'viewStoreAppointmentEmployeeDeduction',
+    viewStoreAppointmentEmployeeCommission:
+      'viewStoreAppointmentEmployeeCommission',
+    addAppointmentEmployeeExpense: 'addAppointmentEmployeeExpense',
+    editAppointmentEmployeeExpense: 'editAppointmentEmployeeExpense',
+    deleteAppointmentEmployeeExpense: 'deleteAppointmentEmployeeExpense',
+  },
 };
 
 export const SERVICES = 'Service';
@@ -843,65 +857,118 @@ export const PRODUCT = 'Product';
 export const OTHER_APPOINTMENT = 'Other Appointments';
 export const APPOINTMENT = 'Appointments';
 let TITLE_TEXT = '';
-let APPOINTMENT_TEXT = '';
 
 export const handleTitleText = (permissions: any) => {
   if (
     listingRolePermission(
       permissions,
       ALL_PERMISSIONS.storeProduct.viewServices
-    )
+    ) === true
   ) {
     TITLE_TEXT = SERVICES;
+  } else {
+    TITLE_TEXT = PRODUCT;
   }
-  if (
-    listingRolePermission(
-      permissions,
-      ALL_PERMISSIONS.storeAppointment.viewOtherAppointments
-    )
-  ) {
-    APPOINTMENT_TEXT = OTHER_APPOINTMENT;
-  }
-  //  else {
-  //   TITLE_TEXT = PRODUCT;
-  // }
-
-  // if (
-  //   listingRolePermission(
-  //     permissions,
-  //     ALL_PERMISSIONS.storeAppointment.viewOtherAppointments
-  //   )
-  // ) {
-  //   APPOINTMENT_TEXT = OTHER_APPOINTMENT;
-  // } else {
-  //   APPOINTMENT_TEXT = APPOINTMENT;
-  // }
 };
-export { TITLE_TEXT, APPOINTMENT_TEXT };
+export { TITLE_TEXT };
 
 export const DEDUCTION_TYPE = [
   {
-    id: 'lateArrival',
+    id: 'LateArrival',
     name: 'Late Arrival',
   },
   {
-    id: 'uniform',
+    id: 'Uniform',
     name: 'Uniform',
   },
   {
-    id: 'absent',
+    id: 'Absent',
     name: 'Absent',
   },
   {
-    id: 'halfDay',
+    id: 'HalfDay',
     name: 'Half Day',
   },
   {
-    id: 'earlyGoing',
+    id: 'EarlyGoing',
     name: 'Early Going',
   },
   {
-    id: 'others',
+    id: 'Others',
     name: 'Others',
   },
 ];
+
+export const BONUS_TYPE = [
+  {
+    id: 'PerformanceBased',
+    name: 'Performance Based',
+  },
+  {
+    id: 'AnnualBonus',
+    name: 'Annual Bonus',
+  },
+  {
+    id: 'ClientRefferal',
+    name: 'Client Refferal',
+  },
+  {
+    id: 'StaffRefferal',
+    name: 'Staff Refferal',
+  },
+  {
+    id: 'Others',
+    name: 'Others',
+  },
+];
+
+export const COMMISSION_TYPE = [
+  {
+    id: 'Service',
+    name: 'Service',
+  },
+  {
+    id: 'Product',
+    name: 'Product',
+  },
+];
+
+export const COMMISSION_AMOUNT_TYPE = [
+  {
+    id: 'amount',
+    name: 'Amount',
+  },
+  {
+    id: 'percentage',
+    name: 'Percentage',
+  },
+];
+
+export const USER_TYPE = [
+  {
+    id: 'StaffUser',
+    name: 'Staff User',
+  },
+  {
+    id: 'AppUser',
+    name: 'App User',
+  },
+  {
+    id: 'Employee',
+    name: 'Employee',
+  },
+];
+
+export const EXPENSE_TYPES = {
+  deduction: 'Deduction',
+  commission: 'Commission',
+  bonus: 'Bonus',
+  overtime: 'Overtime',
+  payroll: 'Payroll',
+};
+
+export const USER_TYPES = {
+  employee: 'Employee',
+  appUser: 'AppUser',
+  staffUser: 'StaffUser',
+};

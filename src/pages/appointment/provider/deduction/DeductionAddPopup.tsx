@@ -15,7 +15,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import dayjs from 'dayjs';
-import TextField from '@mui/material/TextField';
+// import TextField from '@mui/material/TextField';
 import CustomDropDown from '../../../../components/common/CustomDropDown';
 import TimePicker from '../../../../components/common/TimePicker';
 
@@ -24,15 +24,16 @@ import { DeductionCreate } from '../../../../interfaces/deduction.interface';
 import {
   CURRENCY_PREFIX,
   DEDUCTION_TYPE,
-  INVALID_CHAR,
-  MAX_LENGTH_EXCEEDED,
-  PATTERN,
+  // INVALID_CHAR,
+  // MAX_LENGTH_EXCEEDED,
+  // PATTERN,
   VALIDATE_NON_NEGATIVE_NUM,
   //   imageAllowedTypes,
 } from '../../../../utils/constants';
 import '../../../../assets/css/PopupStyle.css';
 
 type Props = {
+  loader: boolean;
   openFormDialog: boolean;
   setOpenFormDialog: React.Dispatch<React.SetStateAction<boolean>>;
   callback: (...args: any[]) => any;
@@ -41,6 +42,7 @@ type Props = {
 };
 
 function DeductionAddPopup({
+  loader,
   openFormDialog,
   setOpenFormDialog,
   callback,
@@ -63,7 +65,7 @@ function DeductionAddPopup({
 
   const { fields, append, remove } = useFieldArray({
     control,
-    name: 'deductions', // Name of the array field
+    name: 'expenseDetails', // Name of the array field
     keyName: 'key',
   });
 
@@ -77,36 +79,41 @@ function DeductionAddPopup({
   });
 
   const handleServices = () => {
+    let newtimeIn = timeIn;
+    let newtimeOut = timeOut;
+    if (
+      watch('type') !== 'LateArrival' &&
+      watch('type') !== 'EarlyGoing' &&
+      watch('type') !== 'HalfDay'
+    ) {
+      setTimeOut(null);
+      setTimeIn(null);
+      newtimeIn = null;
+      newtimeOut = null;
+    }
     const obj = {
-      employeeName: watch('employeeName'),
       type: watch('type'),
       amount: watch('amount'),
       date: watch('deductionDate'),
-      timeIn,
-      timeOut,
+      timeIn: newtimeIn,
+      timeOut: newtimeOut,
     };
-    const check: boolean = fields?.some((el: any) =>
-      dayjs(el.date).isSame(dayjs(watch('deductionDate')), 'day')
-    );
-    if (check) {
-      setIsNotify(true);
-      setNotifyMessage({
-        text: 'This date you already selected, Please select another date',
-        type: 'error',
-      });
-      return;
-    }
-    if (
-      watch('employeeName') &&
-      watch('type') !== 'none' &&
-      watch('amount') &&
-      watch('deductionDate')
-    ) {
+    if (watch('type') !== 'none' && watch('amount') && watch('deductionDate')) {
+      if (
+        (watch('type') !== 'LateArrival' &&
+          watch('type') !== 'EarlyGoing' &&
+          watch('type') !== 'HalfDay' &&
+          timeIn === null) ||
+        timeOut === null
+      ) {
+        setIsNotify(true);
+        setNotifyMessage({
+          text: 'Time is required',
+          type: 'error',
+        });
+        return;
+      }
       append(obj);
-      // setValue("servicesId", 'none')
-      // setValue("servicesAmount", 'none')
-      // setValue("price", null)
-      // setStartServiceTime(null)
     } else {
       setIsNotify(true);
       setNotifyMessage({
@@ -117,13 +124,20 @@ function DeductionAddPopup({
   };
 
   const onSubmit = (data: any) => {
-    console.log('🚀 ~ onSubmit ~ data:', data);
-    // data.avatar = image;
-    // const res = {
-    //   name: data.categoryName,
-    //   description: data.categoryDesc,
-    //   avatar: image,
-    // };
+    delete data.amount;
+    delete data.deductionDate;
+    delete data.desc;
+    delete data.employeeName;
+    delete data.type;
+    data.expenseDetails = fields.map((e: any) => {
+      const formattedDateTime = dayjs(e.date)
+        .utc()
+        .format('YYYY-MM-DD HH:mm:ss');
+      e.date = formattedDateTime;
+      delete e.key;
+      return e;
+    });
+    // console.log('🚀 ~ onSubmit ~ data:', data);
     callback(data);
   };
 
@@ -166,7 +180,8 @@ function DeductionAddPopup({
       onClose={handleFormClose}
       PaperProps={{
         className: 'Dialog',
-        style: { maxWidth: '100%', maxHeight: 'auto' },
+        style: { minWidth: '750px', width: '700px' },
+        // style: { maxWidth: '100%', maxHeight: 'auto' },
       }}
     >
       <div className="Content">
@@ -176,7 +191,7 @@ function DeductionAddPopup({
           </div>
           <div className="FormBody mt-2">
             <div className="FormFields">
-              <FormControl className="FormControl" variant="standard">
+              {/* <FormControl className="FormControl" variant="standard">
                 <label className="FormLabel">Employee Name</label>
                 <Input
                   className="FormInput"
@@ -199,6 +214,27 @@ function DeductionAddPopup({
                 {errors.employeeName?.type === 'validate' && (
                   <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
                 )}
+              </FormControl> */}
+              <FormControl className="FormControl" variant="standard">
+                <label className="FormLabel">Amount</label>
+                <Input
+                  className="FormInput"
+                  id="name"
+                  type="number"
+                  placeholder="Enter Amount"
+                  {...register('amount', {
+                    required: 'Amount is required in numbers',
+                    validate: (value: any) => VALIDATE_NON_NEGATIVE_NUM(value),
+                    maxLength: {
+                      value: 10,
+                      message: 'Length should not be excceed from 10 numbers.',
+                    },
+                  })}
+                  disableUnderline
+                />
+                {errors.amount && (
+                  <ErrorSpanBox error={errors.amount?.message} />
+                )}
               </FormControl>
               <FormControl className="FormControl" variant="standard">
                 <CustomDropDown
@@ -214,6 +250,30 @@ function DeductionAddPopup({
                 />
               </FormControl>
             </div>
+            {(watch('type') === 'LateArrival' ||
+              watch('type') === 'EarlyGoing' ||
+              watch('type') === 'HalfDay') && (
+              <div className="FormFields">
+                <TimePicker
+                  timePickerLabel="Time In"
+                  timePickerSubLabel="Select Time In"
+                  timePickerValue={timeIn}
+                  setTimePickerValue={setTimeIn}
+                  id="timeIn"
+                  // errors={items.error}
+                  // setError={setError}
+                />
+                <TimePicker
+                  timePickerLabel="Time Out"
+                  timePickerSubLabel="Select Time Out"
+                  timePickerValue={timeOut}
+                  setTimePickerValue={setTimeOut}
+                  id="timeOut"
+                  // errors={items.error}
+                  // setError={setError}
+                />
+              </div>
+            )}
             <div className="FormFields">
               <div className="w-full">
                 <ThemeProvider theme={darkTheme}>
@@ -241,53 +301,9 @@ function DeductionAddPopup({
                   </LocalizationProvider>
                 </ThemeProvider>
               </div>
-              <FormControl className="FormControl" variant="standard">
-                <label className="FormLabel">Amount</label>
-                <Input
-                  className="FormInput"
-                  id="name"
-                  type="number"
-                  placeholder="Enter Amount"
-                  {...register('amount', {
-                    required: 'Amount is required in numbers',
-                    validate: (value: any) => VALIDATE_NON_NEGATIVE_NUM(value),
-                    maxLength: {
-                      value: 10,
-                      message: 'Length should not be excceed from 10 numbers.',
-                    },
-                  })}
-                  disableUnderline
-                />
-                {errors.amount && (
-                  <ErrorSpanBox error={errors.amount?.message} />
-                )}
-              </FormControl>
             </div>
-            {(watch('type') === 'lateArrival' ||
-              watch('type') === 'earlyGoing' ||
-              watch('type') === 'halfDay') && (
-              <div className="FormFields">
-                <TimePicker
-                  timePickerLabel="Time In"
-                  timePickerSubLabel="Select Time In"
-                  timePickerValue={timeIn}
-                  setTimePickerValue={setTimeIn}
-                  id="timeIn"
-                  // errors={items.error}
-                  // setError={setError}
-                />
-                <TimePicker
-                  timePickerLabel="Time Out"
-                  timePickerSubLabel="Select Time Out"
-                  timePickerValue={timeOut}
-                  setTimePickerValue={setTimeOut}
-                  id="timeOut"
-                  // errors={items.error}
-                  // setError={setError}
-                />
-              </div>
-            )}
-            <div className="FormField">
+
+            {/* <div className="FormField">
               <FormControl className="FormControl" variant="standard">
                 <label className="FormLabel mt-2">
                   Description{' '}
@@ -309,7 +325,7 @@ function DeductionAddPopup({
                 />
                 {errors.desc && <ErrorSpanBox error={errors.desc?.message} />}
               </FormControl>
-            </div>
+            </div> */}
           </div>
           {fields?.length > 0 && (
             <div className="mx-[2px] px-[8px]">
@@ -333,12 +349,12 @@ function DeductionAddPopup({
                   key={index}
                 >
                   <div className="col-span-2 px-2 capitalize">{item.type}</div>
-                  <div className="col-span-2 px-2 capitalize">
+                  <div className="col-span-2 px-4 capitalize">
                     {dayjs(item.timeIn).isValid()
                       ? dayjs(item.timeIn).format('hh:mm')
                       : '00:00'}
                   </div>
-                  <div className="col-span-2 text-center capitalize">
+                  <div className="col-span-2 px-3 capitalize">
                     {dayjs(item.timeOut).isValid()
                       ? dayjs(item.timeOut).format('hh:mm')
                       : '00:00'}
@@ -388,7 +404,8 @@ function DeductionAddPopup({
             </Button>
             <Input
               type="submit"
-              value="Add"
+              disabled={loader}
+              value={loader ? 'loading...' : 'Add'}
               className="btn-black-fill"
               disableUnderline
               sx={{

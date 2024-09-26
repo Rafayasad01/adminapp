@@ -80,7 +80,7 @@ import EmployeeRatingReviewsPage from '../pages/appointment/provider/rating/Empl
 import AppointmentRatingPage from '../pages/appointment/rating/AppointmentRatingPage';
 import AppointmentRatingReviewsPage from '../pages/appointment/rating/AppointmentRatingReviewsPage';
 import WalletPage from '../pages/appointment/wallet/WalletPage';
-import { ALL_PERMISSIONS, APPOINTMENT_TEXT } from '../utils/constants';
+import { ALL_PERMISSIONS } from '../utils/constants';
 import CAN from '../services/permissions/permissions';
 import ExpensePage from '../pages/expense';
 import AppUsersCustomerPage from '../pages/customers/AppUsersCustomersPage';
@@ -122,7 +122,7 @@ const GetInitialRoute = ({ routes }: any) => {
   return null;
 };
 
-console.log('ssddssdsddsds', APPOINTMENT_TEXT);
+// console.log('ssddssdsddsds', APPOINTMENT_TEXT);
 
 export const routeObjects: RouteObject[] = [
   {

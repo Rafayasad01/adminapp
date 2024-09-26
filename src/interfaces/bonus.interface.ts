@@ -1,5 +1,5 @@
 export interface BonusCreate {
-  employeeName: string;
+  // employeeName: string;
   type: string;
   details: string | any;
   amount: string | any;

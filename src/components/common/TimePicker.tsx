@@ -31,7 +31,7 @@ type TimePickerProps = {
   setTimePickerValue: React.Dispatch<React.SetStateAction<dayjs.Dayjs | null>>;
   timePickerLabel?: string;
   timePickerSubLabel?: string;
-  timePickerValue: dayjs.Dayjs | null;
+  timePickerValue?: dayjs.Dayjs | null;
   // minTime?: dayjs.Dayjs | undefined;
   // maxTime?: dayjs.Dayjs | undefined;
 };

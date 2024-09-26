@@ -142,7 +142,8 @@ function AppointmentProviderPage() {
     if (
       listingRolePermission(
         dataRole,
-        ALL_PERMISSIONS.storeAppointment.viewEmployeeAttendance
+        ALL_PERMISSIONS.storeEmployeeExpense
+          .viewStoreAppointmentEmployeeDeduction
       )
     ) {
       constantsOptions.push('Deductions');
@@ -151,7 +152,8 @@ function AppointmentProviderPage() {
     if (
       listingRolePermission(
         dataRole,
-        ALL_PERMISSIONS.storeAppointment.viewEmployeeAttendance
+        ALL_PERMISSIONS.storeEmployeeExpense
+          .viewStoreAppointmentEmployeeCommission
       )
     ) {
       constantsOptions.push('Commissions');
@@ -160,7 +162,7 @@ function AppointmentProviderPage() {
     if (
       listingRolePermission(
         dataRole,
-        ALL_PERMISSIONS.storeAppointment.viewEmployeeAttendance
+        ALL_PERMISSIONS.storeEmployeeExpense.viewStoreAppointmentEmployeeBonus
       )
     ) {
       constantsOptions.push('Bonus');
@@ -169,7 +171,8 @@ function AppointmentProviderPage() {
     if (
       listingRolePermission(
         dataRole,
-        ALL_PERMISSIONS.storeAppointment.viewEmployeeAttendance
+        ALL_PERMISSIONS.storeEmployeeExpense
+          .viewStoreAppointmentEmployeeOvertime
       )
     ) {
       constantsOptions.push('Overtime');
@@ -178,7 +181,7 @@ function AppointmentProviderPage() {
     if (
       listingRolePermission(
         dataRole,
-        ALL_PERMISSIONS.storeAppointment.viewEmployeeAttendance
+        ALL_PERMISSIONS.storeEmployeeExpense.viewStoreAppointmentEmployeePayroll
       )
     ) {
       constantsOptions.push('Payroll');
@@ -741,7 +744,8 @@ function AppointmentProviderPage() {
       if (
         listingRolePermission(
           dataRole,
-          ALL_PERMISSIONS.storeAppointment.viewEmployeeRating
+          ALL_PERMISSIONS.storeEmployeeExpense
+            .viewStoreAppointmentEmployeeDeduction
         )
       ) {
         navigate(`../deduction/${actionMenuItemid}`);
@@ -756,7 +760,8 @@ function AppointmentProviderPage() {
       if (
         listingRolePermission(
           dataRole,
-          ALL_PERMISSIONS.storeAppointment.viewEmployeeRating
+          ALL_PERMISSIONS.storeEmployeeExpense
+            .viewStoreAppointmentEmployeeCommission
         )
       ) {
         navigate(`../commission/${actionMenuItemid}`);
@@ -771,7 +776,7 @@ function AppointmentProviderPage() {
       if (
         listingRolePermission(
           dataRole,
-          ALL_PERMISSIONS.storeAppointment.viewEmployeeRating
+          ALL_PERMISSIONS.storeEmployeeExpense.viewStoreAppointmentEmployeeBonus
         )
       ) {
         navigate(`../bonus/${actionMenuItemid}`);
@@ -786,7 +791,8 @@ function AppointmentProviderPage() {
       if (
         listingRolePermission(
           dataRole,
-          ALL_PERMISSIONS.storeAppointment.viewEmployeeRating
+          ALL_PERMISSIONS.storeEmployeeExpense
+            .viewStoreAppointmentEmployeeOvertime
         )
       ) {
         navigate(`../overtime/${actionMenuItemid}`);
@@ -801,7 +807,8 @@ function AppointmentProviderPage() {
       if (
         listingRolePermission(
           dataRole,
-          ALL_PERMISSIONS.storeAppointment.viewEmployeeRating
+          ALL_PERMISSIONS.storeEmployeeExpense
+            .viewStoreAppointmentEmployeePayroll
         )
       ) {
         setPayrollPopup(true);
@@ -1212,7 +1219,11 @@ function AppointmentProviderPage() {
         <PayrollPopup
           payrollDialog={payrollPopup}
           setPayrollDialog={setPayrollPopup}
-          empId="1"
+          empData={
+            list?.length > 0
+              ? list?.find((x: any) => x.id === actionMenuItemid)
+              : null
+          }
         />
       )}
       {actionMenuAnchorEl && (

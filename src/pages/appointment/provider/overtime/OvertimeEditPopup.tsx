@@ -8,9 +8,10 @@ import FormControl from '@mui/material/FormControl';
 // import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
 // import { createTheme } from '@mui/material';
 import Input from '@mui/material/Input';
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import TimePicker from '../../../../components/common/TimePicker';
+import dayjs from 'dayjs';
+// import TimePicker from '../../../../components/common/TimePicker';
 // import ThemeProvider from '@mui/material/styles/ThemeProvider';
 // import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 // import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
@@ -40,37 +41,78 @@ type Props = {
   setIsNotify: any;
   setNotifyMessage: any;
   formData: any;
+  loader?: boolean;
 };
 
 function OvertimeEditPopup({
   openFormDialog,
   setOpenFormDialog,
   callback,
+  formData,
+  loader,
 }: // setIsNotify,
 // setNotifyMessage,
 Props) {
   const {
     register,
     handleSubmit,
-    // setValue,
+    setValue,
     // clearErrors,
     // control,
-    // watch,
+    watch,
     formState: { errors },
-  } = useForm<OvertimeCreate>();
+  } = useForm<OvertimeCreate>({
+    defaultValues: {
+      extraOvertimeHours:
+        formData?.overtimeData?.data?.extraOvertimeHours ?? '0:00',
+    },
+  });
 
-  const [overtimeHours, setOvertimeHours] = useState<any>(null);
+  // const [overtimeHours, setOvertimeHours] = useState<any>(null);
 
   const onSubmit = (data: any) => {
-    console.log('🚀 ~ onSubmit ~ data:', data);
-    // data.avatar = image;
-    // const res = {
-    //   name: data.categoryName,
-    //   description: data.categoryDesc,
-    //   avatar: image,
-    // };
-    callback(data);
+    // console.log('🚀 ~ onSubmit ~ data:', data);
+    const arrObj = {
+      overtimeHours: data.overtimeHours,
+      extraOvertimeHours: data.extraOvertimeHours,
+      hourlyRate: data.hourlyAmount,
+      amount: data.overtimeAmount,
+      date: dayjs(formData?.overtimeData?.data?.date)
+        .endOf('month')
+        .format('YYYY-MM-DD HH:mm:ss'),
+    };
+    // console.log('🚀 ~ onSubmit ~ data:', arrObj);
+    callback({ expenseDetails: arrObj, id: formData?.overtimeData?.id });
   };
+
+  // console.log('formData', formData);
+
+  const calculateOvertimePay = (time: string, hourlyRate: number) => {
+    // Split the time string into hours and minutes (e.g., '4:07')
+    const [hours, minutes] = time?.split(':').map(Number);
+    const [extraHours, extraMinutes] = watch('extraOvertimeHours')
+      ?.split(':')
+      .map(Number);
+
+    // Calculate total minutes
+    const totalMinutes = hours * 60 + minutes;
+    const extratotalMinutes = extraHours * 60 + extraMinutes;
+
+    const calculateMints = totalMinutes + extratotalMinutes;
+
+    // Convert total minutes to hours (with decimals for partial hours)
+    const totalHours = calculateMints / 60;
+
+    // Calculate the overtime pay based on the hourly rate
+    const overtimePay = totalHours * hourlyRate;
+    setValue('overtimeAmount', overtimePay.toFixed(0));
+
+    return overtimePay;
+  };
+
+  useEffect(() => {
+    calculateOvertimePay(formData?.totalHours, watch('hourlyAmount'));
+  }, [watch('hourlyAmount'), watch('extraOvertimeHours')]);
 
   const handleFormClose = () => {
     setOpenFormDialog(false);
@@ -112,20 +154,47 @@ Props) {
       <div className="Content">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="FormHeader">
-            <span className="Title">Add New Bonus</span>
+            <span className="Title">Edit Overtime</span>
           </div>
           <div className="FormBody mt-2">
-            <div className="FormField">
-              <TimePicker
-                timePickerLabel="Overtime Hours"
-                timePickerSubLabel="Select Overtime Hours"
-                timePickerValue={overtimeHours}
-                setTimePickerValue={setOvertimeHours}
-                id="overtimeHours"
-                // views={['hours']}
-                // errors={items.error}
-                // setError={setError}
-              />
+            <div className="FormFields">
+              <FormControl className="FormControl" variant="standard">
+                <label className="FormLabel">Overtime Hours</label>
+                <Input
+                  className="FormInput"
+                  id="overtimeHours"
+                  type="text"
+                  placeholder="3:30"
+                  disabled
+                  {...register('overtimeHours', {
+                    value: formData?.totalHours,
+                    // required: 'Hourly Amount is required in numbers',
+                    // validate: (value: any) => VALIDATE_NON_NEGATIVE_NUM(value),
+                  })}
+                  disableUnderline
+                />
+                {/* {errors.hourlyAmount && (
+                  <ErrorSpanBox error={errors.hourlyAmount?.message} />
+                )} */}
+              </FormControl>
+              <FormControl className="FormControl" variant="standard">
+                <label className="FormLabel">Extra Overtime Hours</label>
+                <Input
+                  className="FormInput"
+                  id="extraOvertimeHours"
+                  type="text"
+                  placeholder="Enter Extra Hours (ex: 4:30)"
+                  {...register('extraOvertimeHours', {
+                    // value: ,
+                    // required: 'Hourly Amount is required in numbers',
+                    // validate: (value: any) => VALIDATE_NON_NEGATIVE_NUM(value),
+                  })}
+                  disableUnderline
+                />
+                {/* {errors.hourlyAmount && (
+                  <ErrorSpanBox error={errors.hourlyAmount?.message} />
+                )} */}
+              </FormControl>
             </div>
             <div className="FormFields">
               <FormControl className="FormControl" variant="standard">
@@ -136,6 +205,7 @@ Props) {
                   type="number"
                   placeholder="Enter Hourly Amount"
                   {...register('hourlyAmount', {
+                    value: formData?.overtimeData?.data?.hourlyRate,
                     required: 'Hourly Amount is required in numbers',
                     validate: (value: any) => VALIDATE_NON_NEGATIVE_NUM(value),
                     maxLength: {
@@ -152,6 +222,7 @@ Props) {
               <FormControl className="FormControl" variant="standard">
                 <label className="FormLabel">Overtime Amount</label>
                 <Input
+                  disabled
                   className="FormInput"
                   id="overtimeAmount"
                   type="number"
@@ -186,7 +257,8 @@ Props) {
             </Button>
             <Input
               type="submit"
-              value="Add"
+              disabled={loader}
+              value={loader ? 'Loading...' : 'Update'}
               className="btn-black-fill"
               disableUnderline
               sx={{

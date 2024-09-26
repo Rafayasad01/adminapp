@@ -191,6 +191,12 @@ const StoreEmployeeLov = () => {
   return network.get(`${STORE_PREFIX}/${EMPLOYEE_PREFIX}/lov`);
 };
 
+const StoreEmployeeScheduleById = (empId: string | any) => {
+  return network.get(
+    `${STORE_PREFIX}/${EMPLOYEE_PREFIX}/schedule/list/${empId}`
+  );
+};
+
 export default {
   StoreEmployeeList,
   StoreEmployeeAllList,
@@ -213,4 +219,5 @@ export default {
   StoreEmployeeScheduleService,
   StoreEmployeeLeaveStatusUpdateService,
   StoreEmployeeLov,
+  StoreEmployeeScheduleById,
 };
