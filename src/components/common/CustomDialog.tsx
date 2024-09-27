@@ -135,6 +135,7 @@ function CustomDialog({
                             onclick={items.onclick}
                             showPassVisibility={items.showPassVisibility}
                             typeImportant={items.typeImportant}
+                            clickType={items.clickType}
                           />
                         </FormControl>
                       ) : items.type === 'textarea' ? (

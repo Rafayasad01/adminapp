@@ -112,6 +112,7 @@ function EmployeePage() {
       error: errors.password,
       type: 'password',
       onclick: handleClickShowPassword,
+      clickType: 'onclick',
       showPassVisibility: showPassword,
       pattern: PATTERN.PASSWORD,
       maxLetterLimit: 100,

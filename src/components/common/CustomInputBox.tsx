@@ -31,6 +31,7 @@ type CustomInputBoxProps = {
   value?: any;
   setShowPassword?: any;
   setInputFieldsData?: any;
+  clickType?: any;
 };
 
 function CustomInputBox({
@@ -46,7 +47,7 @@ function CustomInputBox({
   sx,
   maxLetterLimit,
   min,
-  // onclick,
+  onclick,
   pattern,
   placeholder,
   register,
@@ -56,6 +57,7 @@ function CustomInputBox({
   typeImportant,
   value,
   setInputFieldsData,
+  clickType,
 }: CustomInputBoxProps) {
   const handleShowPasswordClick = () => {
     setInputFieldsData((newArr: any) => {
@@ -125,7 +127,11 @@ function CustomInputBox({
                 aria-label="toggle password visibility"
                 // onClick={() => setShowPassword((show: any) => !show)}
                 onClick={
-                  inputType === 'password' ? handleShowPasswordClick : () => {}
+                  inputType === 'password'
+                    ? clickType
+                      ? onclick
+                      : handleShowPasswordClick
+                    : () => {}
                 }
               >
                 {showPassVisibility ? <VisibilityOff /> : <Visibility />}
