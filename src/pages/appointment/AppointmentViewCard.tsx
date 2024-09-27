@@ -154,7 +154,7 @@ const AppointmentViewCard = ({
           >
             <span className="px-2 text-xs">Paid</span>
           </div>
-          {data?.wallet === null ? (
+          {data?.wallet === null && data?.isAppUser ? (
             <div className="flex">
               <CustomButton
                 // sx={{
@@ -169,10 +169,12 @@ const AppointmentViewCard = ({
               />
             </div>
           ) : (
-            <div>
-              <WalletIcon className="mx-1 text-primary" fontSize="small" />
-              <span className="text-xs">{`${data?.wallet?.balance} ${CURRENCY_PREFIX}`}</span>
-            </div>
+            data?.isAppUser && (
+              <div>
+                <WalletIcon className="mx-1 text-primary" fontSize="small" />
+                <span className="text-xs">{`${data?.wallet?.balance} ${CURRENCY_PREFIX}`}</span>
+              </div>
+            )
           )}
         </div>
       );
@@ -339,7 +341,7 @@ const AppointmentViewCard = ({
     }
   }, []);
 
-  // console.log('data2222222222222222', data, appointmentData);
+  console.log('data2222222222222222', data);
 
   return isLoader ? (
     <Loader />
