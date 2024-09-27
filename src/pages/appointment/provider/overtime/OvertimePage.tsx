@@ -1,9 +1,12 @@
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import Button from '@mui/material/Button';
 import EditIcon from '@mui/icons-material/Edit';
-import TextField from '@mui/material/TextField';
+// import TextField from '@mui/material/TextField';
 import dayjs from 'dayjs';
 import React, { useEffect, useMemo, useState } from 'react';
+import { DesktopDatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { Controller, useForm } from 'react-hook-form';
 import { useParams } from 'react-router';
 import CustomText from '../../../../components/common/CustomText';
 import Loader from '../../../../components/common/Loader';
@@ -37,6 +40,7 @@ function OvertimePage() {
   const dataRole = useAppSelector(
     (state) => state?.persistedReducer?.roleState?.role?.permissions
   );
+  const { control } = useForm();
   //   const navigate = useNavigate();
   const [startDate, setStartDate] = useState<string | null>(
     dayjs().format('YYYY-MM-DD')
@@ -424,7 +428,7 @@ function OvertimePage() {
           </div>
           <div className="flex justify-start gap-3 px-4 md:col-span-12 lg:col-span-8">
             <div className="flex justify-start gap-3 md:col-span-12 lg:col-span-8">
-              <TextField
+              {/* <TextField
                 label="Start Date"
                 className="en-date"
                 sx={{ padding: 0 }}
@@ -435,7 +439,40 @@ function OvertimePage() {
                 InputLabelProps={{
                   shrink: true,
                 }}
-              />
+              /> */}
+              <div className="">
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <div className="flex w-full items-end justify-end">
+                    <div className="">
+                      {/* <p className="m-0 py-1 text-xs">Select Month</p> */}
+                      <Controller
+                        name="startDate"
+                        control={control}
+                        // defaultValue={dayjs().startOf('month').toDate()}
+                        render={({ field }) => (
+                          <DesktopDatePicker
+                            {...field}
+                            label="Select Month"
+                            views={['year', 'month']}
+                            className="p-[1px]"
+                            format="YYYY-MM"
+                            value={dayjs(startDate)}
+                            // value={dayjs(field.value)}
+                            // onChange={(date) => handleDateChange(date, field)}
+                            onChange={(date) => fetchData(date)}
+                            // onChange={(date) => {
+                            //   const firstDayOfMonth = dayjs(date)
+                            //     .startOf('month')
+                            //     .toDate();
+                            //   field.onChange(firstDayOfMonth); // Set to first day of the selected month
+                            // }}
+                          />
+                        )}
+                      />
+                    </div>
+                  </div>
+                </LocalizationProvider>
+              </div>
             </div>
           </div>
           {overtimeData?.data && (

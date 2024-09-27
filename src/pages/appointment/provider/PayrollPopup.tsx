@@ -145,15 +145,6 @@ function PayrollPopup({
                       )}
                     />
                   </div>
-                  {/* <div className="mx-2">
-                    <Button
-                      type="submit"
-                      variant="outlined"
-                      className="btn-icon col-span-12 items-end  border-primary text-primary md:col-span-3"
-                    >
-                      Find
-                    </Button>
-                  </div> */}
                 </div>
               </LocalizationProvider>
             </div>
