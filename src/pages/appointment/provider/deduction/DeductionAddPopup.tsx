@@ -100,11 +100,11 @@ function DeductionAddPopup({
     };
     if (watch('type') !== 'none' && watch('amount') && watch('deductionDate')) {
       if (
-        (watch('type') !== 'LateArrival' &&
-          watch('type') !== 'EarlyGoing' &&
-          watch('type') !== 'HalfDay' &&
-          timeIn === null) ||
-        timeOut === null
+        (watch('type') === 'LateArrival' ||
+          watch('type') === 'EarlyGoing' ||
+          watch('type') === 'HalfDay') &&
+        !newtimeIn &&
+        !newtimeOut
       ) {
         setIsNotify(true);
         setNotifyMessage({
