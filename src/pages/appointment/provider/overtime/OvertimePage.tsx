@@ -412,7 +412,7 @@ function OvertimePage() {
                 All {overtimeEmp?.name} Overtime
               </span>
             </div>
-            {list?.length < 1 && (
+            {!overtimeData && (
               <div className="col-span-5">
                 <div className="flex flex-row justify-end gap-3">
                   <Button
