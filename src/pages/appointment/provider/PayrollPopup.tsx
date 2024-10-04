@@ -6,6 +6,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 import { Controller, useForm } from 'react-hook-form';
 import { DesktopDatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import RemoveIcon from '@mui/icons-material/Remove';
 // import Button from '@mui/material/Button/Button';
 import CustomText from '../../../components/common/CustomText';
 import Loader from '../../../components/common/Loader2';
@@ -42,6 +43,7 @@ function PayrollPopup({
   const [payrollData, setPayrollData] = useState<any>(null);
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
+  const [salaryError, setSalaryError] = React.useState('');
 
   const getPayrollList = (
     queryParams: QueryParams | any,
@@ -54,12 +56,15 @@ function PayrollPopup({
           setIsLoader(false);
           setPayrollData(item.data.data);
         } else {
+          setSalaryError(item.data.message);
           setIsLoader(false);
-          setIsNotify(true);
-          setNotifyMessage({
-            text: item.data.message,
-            type: 'error',
-          });
+          if (item.data.message !== 'noSalaryFound') {
+            setIsNotify(true);
+            setNotifyMessage({
+              text: item.data.message,
+              type: 'error',
+            });
+          }
         }
       })
       .catch((error: Error) => {
@@ -123,6 +128,7 @@ function PayrollPopup({
                   <div className="mx-2">
                     <p className="m-0 py-1 text-xs">Select Month</p>
                     <Controller
+                      disabled={salaryError === 'noSalaryFound'}
                       name="startDate"
                       control={control}
                       defaultValue={dayjs().startOf('month').toDate()}
@@ -167,14 +173,6 @@ function PayrollPopup({
                       </td>
                     </tr>{' '}
                     <tr>
-                      <td className="font-semibold">Deductions</td>
-                      <td className="font-medium">
-                        {handleAmountFormat(
-                          payrollData?.payRoll?.deductionAmount
-                        )}
-                      </td>
-                    </tr>
-                    <tr>
                       <td className="font-semibold">Bonus</td>
                       <td className="font-medium">
                         {handleAmountFormat(payrollData?.payRoll?.bonusAmount)}
@@ -193,6 +191,15 @@ function PayrollPopup({
                       <td className="font-medium">
                         {handleAmountFormat(
                           payrollData?.payRoll?.overtimeAmount
+                        )}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="font-semibold">Deductions</td>
+                      <td className="font-medium">
+                        <RemoveIcon color="error" fontSize="inherit" />
+                        {handleAmountFormat(
+                          payrollData?.payRoll?.deductionAmount
                         )}
                       </td>
                     </tr>
@@ -216,7 +223,13 @@ function PayrollPopup({
                 </table>
               </div>
             )}
-            {payrollData === null ? (
+            {salaryError === 'noSalaryFound' && (
+              <CustomText
+                noRoundedBorders
+                text="Salary is not setted for this employee"
+              />
+            )}
+            {salaryError !== 'noSalaryFound' && payrollData === null ? (
               <CustomText noRoundedBorders text="No Records Found" />
             ) : null}
           </>
