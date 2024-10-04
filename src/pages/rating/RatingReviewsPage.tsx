@@ -22,6 +22,7 @@ import { useAppSelector } from '../../redux/redux-hooks';
 import ratingService from '../../services/adminapp/rating';
 import { listingRolePermission } from '../../utils/helper';
 import RatingAccordions from './RatingAccordin';
+import { ALL_PERMISSIONS } from '../../utils/constants';
 
 dayjs.extend(relativeTime);
 
@@ -47,7 +48,12 @@ function RatingReviewsPage() {
     const fetchData = async () => {
       try {
         setIsLoader(true);
-        if (listingRolePermission(dataRole, 'Employee List')) {
+        if (
+          listingRolePermission(
+            dataRole,
+            ALL_PERMISSIONS.storeProduct.viewRatings
+          )
+        ) {
           const [catListResponse, catStarRatingResponse, catDetailResponse] =
             await Promise.all([
               ratingService.getCatListService(

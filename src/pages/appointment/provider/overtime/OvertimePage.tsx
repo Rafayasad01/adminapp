@@ -508,7 +508,9 @@ function OvertimePage() {
                 </div>
                 <div>
                   <div className="font-open-sans text-sm text-[#252733]">
-                    <span className="font-semibold">Overtime Amount: </span>{' '}
+                    <span className="font-semibold">
+                      Total Overtime Amount:{' '}
+                    </span>{' '}
                     {`${Number(
                       overtimeData?.data?.amount
                     ).toLocaleString()} ${CURRENCY_PREFIX}`}
@@ -602,6 +604,7 @@ function OvertimePage() {
           openFormDialog={openFormDialog}
           setOpenFormDialog={setOpenFormDialog}
           callback={createFormHandler}
+          monthDate={startDate}
         />
       )}
 

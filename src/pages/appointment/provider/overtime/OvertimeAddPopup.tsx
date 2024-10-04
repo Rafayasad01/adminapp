@@ -40,12 +40,14 @@ type Props = {
   setNotifyMessage: any;
   overtimeHours: any;
   loader: boolean;
+  monthDate: any;
 };
 
 function OvertimeAddPopup({
   openFormDialog,
   setOpenFormDialog,
   callback,
+  monthDate,
   overtimeHours,
   loader,
 }: // setIsNotify,
@@ -62,10 +64,13 @@ Props) {
   } = useForm<OvertimeCreate>({
     defaultValues: {
       extraOvertimeHours: '0:00',
+      overtimeAmount: '0',
+      date: dayjs(monthDate),
     },
   });
 
   // const [overtimeHours, setOvertimeHours] = useState<any>(null);
+  // console.log('🚀 ~ onSubmit ~ data:', monthDate);
 
   const onSubmit = (data: any) => {
     const arrObj = [
@@ -73,7 +78,7 @@ Props) {
         overtimeHours: data.overtimeHours,
         hourlyRate: data.hourlyAmount,
         amount: data.overtimeAmount,
-        date: dayjs(data.date).endOf('month').format('YYYY-MM-DD HH:mm:ss'),
+        date: dayjs(monthDate).endOf('month').format('YYYY-MM-DD HH:mm:ss'),
         extraOvertimeHours: data.extraOvertimeHours ?? '0',
       },
     ];
@@ -143,7 +148,7 @@ Props) {
   //     setValue('avatar', '');
   //   };
 
-  console.log(errors);
+  // console.log(errors);
 
   return (
     <Dialog
@@ -198,6 +203,7 @@ Props) {
                     name="date"
                     control={control}
                     defaultValue={dayjs()}
+                    disabled
                     render={({ field }) => (
                       <DesktopDatePicker
                         {...field}
@@ -277,12 +283,12 @@ Props) {
                   placeholder="Enter Overtime Amount"
                   {...register('overtimeAmount', {
                     // value: 0,
-                    required: 'Overtime Amount is required in numbers',
-                    validate: (value: any) => VALIDATE_NON_NEGATIVE_NUM(value),
-                    maxLength: {
-                      value: 6,
-                      message: 'Length should not be excceed from 6 numbers.',
-                    },
+                    // required: 'Overtime Amount is required in numbers',
+                    // validate: (value: any) => VALIDATE_NON_NEGATIVE_NUM(value),
+                    // maxLength: {
+                    //   value: 15,
+                    //   message: 'Length should not be excceed from 15 numbers.',
+                    // },
                   })}
                   disableUnderline
                 />
