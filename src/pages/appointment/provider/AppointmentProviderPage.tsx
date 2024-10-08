@@ -237,6 +237,7 @@ function AppointmentProviderPage() {
       id: 'email',
       placeholder: 'Enter email address',
       disable: openEditFormDialog && true,
+      notRequired: true,
       register,
       error: errors.email,
       type: 'text',

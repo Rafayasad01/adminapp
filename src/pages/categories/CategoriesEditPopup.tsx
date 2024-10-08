@@ -55,7 +55,11 @@ function CategoriesEditPopup({
       };
       setOpenFormDialog(false);
       callback(res);
-    } else if (data.desc && data.name && imageName) {
+    } else if (
+      data.name
+      //  && imageName
+      // data.desc
+    ) {
       const res = {
         name: data.name,
         desc: data.desc,
@@ -98,12 +102,16 @@ function CategoriesEditPopup({
   };
 
   useEffect(() => {
-    let icon = formData.icon.split('/').slice(-1)[0];
-    const regexExp = /[a-z,0-9,-]{36}/;
-    if (regexExp.test(icon)) {
-      icon = icon.split('-').splice(5)[0].at(0);
+    if (formData.icon) {
+      let icon = formData.icon.split('/').slice(-1)[0];
+      const regexExp = /[a-z,0-9,-]{36}/;
+      if (regexExp.test(icon)) {
+        icon = icon.split('-').splice(5)[0].at(0);
+      }
+      setImageName(icon);
+    } else {
+      setImageName(null);
     }
-    setImageName(icon);
   }, [formData]);
   // console.log(image);
 
@@ -126,7 +134,7 @@ function CategoriesEditPopup({
               <div className="FormBody">
                 <div className="FormField">
                   <FormControl className="FormControl" variant="standard">
-                    <label className="FormLabel">Category Name</label>
+                    <label className="FormLabel mt-2">Category Name</label>
                     <Input
                       className="FormInput"
                       type="text"
@@ -153,7 +161,7 @@ function CategoriesEditPopup({
                 </div>
                 <div className="FormField">
                   <FormControl className="FormControl" variant="standard">
-                    <label className="FormLabel">
+                    <label className="FormLabel mt-2">
                       Message{' '}
                       <span className="SubLabel">Write 01-250 Characters</span>
                     </label>
@@ -165,12 +173,12 @@ function CategoriesEditPopup({
                       defaultValue=""
                       placeholder="Write Description"
                       {...register('desc', {
-                        required: 'Description is required',
+                        // required: 'Description is required',
                         value: formData.desc,
-                        minLength: {
-                          value: 1,
-                          message: 'Minimum One Characters',
-                        },
+                        // minLength: {
+                        //   value: 1,
+                        //   message: 'Minimum One Characters',
+                        // },
                         maxLength: {
                           value: 250,
                           message: MAX_LENGTH_EXCEEDED,
@@ -183,7 +191,7 @@ function CategoriesEditPopup({
                   </FormControl>
                 </div>
                 <div className="FormField">
-                  <label className="FormLabel">
+                  <label className="FormLabel mt-2">
                     Upload Image
                     <span className="SubLabel">
                       Image should be 1080px x 1080px
@@ -236,9 +244,9 @@ function CategoriesEditPopup({
                       ''
                     )}
                   </div>
-                  {image === null && imageName === null && (
+                  {/* {image === null && imageName === null && (
                     <ErrorSpanBox error="Image is required" />
-                  )}
+                  )} */}
                 </div>
               </div>
               <div className="FormFooter">

@@ -43,7 +43,11 @@ function CategoriesCreatePopup({
   } = useForm<Category>();
 
   const onSubmit = (data: Category) => {
-    if (data.desc && image && data.name) {
+    if (
+      // data.desc
+      // && image &&
+      data.name
+    ) {
       data.icon = image;
       setOpenFormDialog(false);
       callback(data);
@@ -98,7 +102,7 @@ function CategoriesCreatePopup({
           <div className="FormBody">
             <div className="FormField">
               <FormControl className="FormControl" variant="standard">
-                <label className="FormLabel">Category Name</label>
+                <label className="FormLabel mt-2">Category Name</label>
                 <Input
                   className="FormInput"
                   {...register('name', {
@@ -124,8 +128,8 @@ function CategoriesCreatePopup({
             </div>
             <div className="FormField">
               <FormControl className="FormControl" variant="standard">
-                <label className="FormLabel">
-                  Message{' '}
+                <label className="FormLabel mt-2">
+                  Description{' '}
                   <span className="SubLabel">Write 01-370 Characters</span>
                 </label>
                 <TextField
@@ -136,11 +140,11 @@ function CategoriesCreatePopup({
                   defaultValue=""
                   placeholder="Write Description"
                   {...register('desc', {
-                    required: 'Description is required',
-                    minLength: {
-                      value: 1,
-                      message: 'Minimum One Characters',
-                    },
+                    // required: 'Description is required',
+                    // minLength: {
+                    //   value: 1,
+                    //   message: 'Minimum One Characters',
+                    // },
                     maxLength: {
                       value: 370,
                       message: MAX_LENGTH_EXCEEDED,
@@ -151,7 +155,7 @@ function CategoriesCreatePopup({
               </FormControl>
             </div>
             <div className="FormField">
-              <label className="FormLabel">
+              <label className="FormLabel mt-2">
                 Upload Image
                 <span className="SubLabel">
                   Image should be 1080px x 1080px
@@ -161,7 +165,10 @@ function CategoriesCreatePopup({
                 <input
                   accept="image/*"
                   style={{ display: 'none' }}
-                  {...register('icon', { required: 'Icon is required' })}
+                  {...register(
+                    'icon'
+                    // { required: 'Icon is required' }
+                  )}
                   id="raised-button-file"
                   type="file"
                   onChange={(
@@ -202,7 +209,7 @@ function CategoriesCreatePopup({
                   ''
                 )}
               </div>
-              {image === null && <ErrorSpanBox error={errors.icon?.message} />}
+              {/* {image === null && <ErrorSpanBox error={errors.icon?.message} />} */}
             </div>
           </div>
           <div className="FormFooter">

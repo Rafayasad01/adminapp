@@ -448,7 +448,7 @@ function AppointmentPage() {
               </div>
             )}
           </div>
-          <div className="mt-5">
+          <div className="relative mt-5">
             <AllAppointment
               appointmentType={appointmentType?.text}
               priorityData={priorityData.length ? priorityData : [{}]}

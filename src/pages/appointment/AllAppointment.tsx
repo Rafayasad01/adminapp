@@ -531,7 +531,7 @@ const AllAppointment = ({
         setIsOpen={setIsNotify}
         displayMessage={notifyMessage}
       />
-      <div className="h-16 p-[15px]">
+      <div className="h-36 p-[10px]">
         {priorityData?.length ? (
           <SwiperComponent
             isActiveUser={isActiveUser}
@@ -542,7 +542,7 @@ const AllAppointment = ({
       </div>
       <hr />
       <Scheduler data={data} height={580}>
-        <span className="absolute left-[10px] top-[80px]">
+        <span className="absolute left-[10px] top-[160px] ml-[-6px]">
           <CalendarMonthIcon className="text-primary" />
         </span>
         <ViewState

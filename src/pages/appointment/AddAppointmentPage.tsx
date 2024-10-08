@@ -845,7 +845,7 @@ export default function AddAppointmentPage() {
         //   });
         // }
       } else {
-        console.log('3');
+        // console.log('3');
         setIsNotify(true);
         setNotifyMessage({
           text: `Barber is not available at ${currentDay}`,
@@ -863,15 +863,15 @@ export default function AddAppointmentPage() {
     return null;
   };
 
-  console.log(
-    'sAAS',
-    listingRolePermission(
-      dataRole,
-      ALL_PERMISSIONS.storeAppointment.verifyAddAppointment
-    )
-  );
-
   const onSubmit = (data: any) => {
+    if (fields?.length < 1) {
+      setIsNotify(true);
+      setNotifyMessage({
+        text: 'Add atleast one appointment',
+        type: 'error',
+      });
+      return;
+    }
     setIsLoader(true);
     const newOfficeTimeOut = dayjs(officeTimeOut)
       .set('hours', dayjs(officeTimeOut).hour())
@@ -1038,7 +1038,7 @@ export default function AddAppointmentPage() {
                           variant="standard"
                         >
                           <CustomDropDown
-                            validateRequired
+                            // validateRequired
                             id="gender"
                             control={control}
                             error={errors}
@@ -1068,7 +1068,6 @@ export default function AddAppointmentPage() {
                             customFontClass="font-semibold mb-1"
                             customClass="border-[2px] border-[#949EAE] rounded-xl px-2 py-1 text-sm"
                             register={register}
-                            requiredType
                             error={errors.phone}
                             inputType="text"
                           />
@@ -1087,6 +1086,7 @@ export default function AddAppointmentPage() {
                             inputTitle="Email"
                             placeholder="Enter email address"
                             id="email"
+                            requiredType
                             customFontClass="font-semibold mb-1"
                             customClass="border-[2px] border-[#949EAE] rounded-xl px-2 py-1 text-sm"
                             register={register}
@@ -1103,7 +1103,7 @@ export default function AddAppointmentPage() {
                           variant="standard"
                         >
                           <CustomDropDown
-                            validateRequired
+                            // validateRequired
                             id="categoryId"
                             control={control}
                             error={errors}
@@ -1123,7 +1123,7 @@ export default function AddAppointmentPage() {
                           variant="standard"
                         >
                           <CustomDropDown
-                            validateRequired
+                            // validateRequired
                             id="storeServiceCategoryItem"
                             control={control}
                             error={errors}
@@ -1489,7 +1489,7 @@ export default function AddAppointmentPage() {
                   ALL_PERMISSIONS.storeAppointment.verifyAddAppointment
                 ) === false ? (
                   <CustomButton
-                    disabled={fields?.length < 1 && true}
+                    // disabled={fields?.length < 1 && true}
                     buttonType="button"
                     title="Submit"
                     className="btn-black-outline"

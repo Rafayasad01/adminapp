@@ -237,7 +237,10 @@ function CategoriesPage() {
     formData.append('tenant', authState.user.tenant);
     formData.append('created_by', authState.user.id);
     formData.append('updated_by', authState.user.id);
-    if (data.name && data.desc && data.icon) {
+    if (
+      data.name
+      // && data.desc && data.icon
+    ) {
       categoryService
         .create(formData)
         .then((item) => {
@@ -447,8 +450,9 @@ function CategoriesPage() {
                               </button>
                             ) : (
                               <img
-                                src={assets.tempImages.avatarDryCLean}
-                                alt=""
+                                className="ms-[6px] w-[30px]"
+                                src={assets.images.noItems}
+                                alt="no-items-img"
                               />
                             )}
                             <div className="flex flex-col items-start justify-start">

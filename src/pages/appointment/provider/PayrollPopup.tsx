@@ -84,7 +84,6 @@ function PayrollPopup({
       startDate: dayjs(startDate).startOf('month').format('YYYY-MM-DD'),
       endDate: dayjs(startDate).endOf('month').format('YYYY-MM-DD'),
     };
-    console.log('empData', empData);
 
     if (empData) {
       getPayrollList(queryParams, empData?.id);

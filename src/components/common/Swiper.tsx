@@ -1,7 +1,7 @@
-import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
-import { useEffect } from 'react';
-import Swiper from 'swiper';
-import 'swiper/swiper-bundle.css';
+import 'swiper/css';
+import 'swiper/css/pagination';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation } from 'swiper/modules';
 import assets from '../../assets';
 
 type SwiperComponentProps = {
@@ -15,107 +15,77 @@ const SwiperComponent = ({
   isActiveUser,
   selectedUser,
 }: SwiperComponentProps) => {
-  function getDirection() {
-    const windowWidth = window.innerWidth;
-    return windowWidth <= 760 ? 'vertical' : 'horizontal';
-  }
-
-  useEffect(() => {
-    const swiper = new Swiper('.swiper', {
-      slidesPerView: 4,
-      direction: getDirection(),
-      navigation: {
-        nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev',
-      },
-      on: {
-        resize() {
-          swiper.changeDirection(getDirection());
-        },
-        reachEnd() {
-          document
-            .querySelector('.swiper-button-next')
-            ?.classList.add('swiper-button-disabled');
-        },
-        reachBeginning() {
-          document
-            .querySelector('.swiper-button-prev')
-            ?.classList.add('swiper-button-disabled');
-        },
-        fromEdge() {
-          document
-            .querySelector('.swiper-button-next')
-            ?.classList.remove('swiper-button-disabled');
-          document
-            .querySelector('.swiper-button-prev')
-            ?.classList.remove('swiper-button-disabled');
-        },
-      },
-    });
-
-    // Event handler for clicking the right arrow button
-    const handleNextButtonClick = () => {
-      swiper.slideNext();
-    };
-
-    // Event handler for clicking the left arrow button
-    const handlePrevButtonClick = () => {
-      swiper.slidePrev();
-    };
-
-    // Add event listeners to the arrow buttons
-    const nextButton = document.querySelector('.swiper-button-next');
-    const prevButton = document.querySelector('.swiper-button-prev');
-    nextButton!.addEventListener('click', handleNextButtonClick);
-    prevButton!.addEventListener('click', handlePrevButtonClick);
-
-    // Remove event listeners when component unmounts
-    return () => {
-      nextButton!.removeEventListener('click', handleNextButtonClick);
-      prevButton!.removeEventListener('click', handlePrevButtonClick);
-    };
-  }, []);
-
   const handleUser = (name: string) => {
     selectedUser(name);
   };
 
   return (
-    <div className="swiper">
-      <div className="swiper-wrapper">
+    <div className="categories-swiper-container">
+      <Swiper
+        slidesPerView={10}
+        spaceBetween={30}
+        navigation={{
+          nextEl: '.custom-swiper-button-next',
+          prevEl: '.custom-swiper-button-prev',
+        }}
+        breakpoints={{
+          // Large screens
+          1800: {
+            slidesPerView: 100,
+          },
+          // Laptop screens
+          1000: {
+            slidesPerView: 10,
+          },
+        }}
+        modules={[Navigation]}
+        className="mySwiper custom-swiper"
+      >
         {data?.length > 0
           ? data?.map((item: any, index: number) => {
               return (
-                <div key={index} className="swiper-slide flex items-center">
-                  {item.id === isActiveUser && (
-                    <div className="mr-3">
-                      <FiberManualRecordIcon />
-                    </div>
-                  )}
-                  <div className="flex items-center">
-                    <div className="h-[35px] w-[35px] ">
-                      <img
-                        className="h-full w-full max-w-full rounded-[20px] object-fill"
-                        src={item.imageUrl ?? assets.tempImages.avatarCustomer}
-                        alt="avatar-img"
-                      />
-                    </div>
+                <SwiperSlide className="categories-list" key={index}>
+                  <div key={index} className="swiper-slide flex items-center">
+                    {/* {item.id === isActiveUser && (
+                      <div className="">
+                        <FiberManualRecordIcon />
+                      </div>
+                    )} */}
                     <div
                       onClick={() => handleUser(item.id)}
-                      className="cursor-pointer truncate"
+                      className={`w-[100%] cursor-pointer truncate rounded-xl p-1 ${
+                        item.id === isActiveUser && 'border-2 border-primary'
+                      }`}
                     >
-                      <span className="mx-2 text-base font-semibold">
-                        {item.text}
-                      </span>
+                      <div className="flex h-[35px] items-center justify-center">
+                        <img
+                          className="flex h-full w-[35px] max-w-full items-center rounded-[20px] object-fill"
+                          src={
+                            item.imageUrl ?? assets.tempImages.avatarCustomer
+                          }
+                          alt="avatar-img"
+                        />
+                      </div>
+                      <div className="flex w-[100%] cursor-pointer items-center justify-center truncate">
+                        <span className="truncate text-base font-semibold capitalize">
+                          {item.text}
+                        </span>
+                      </div>
                     </div>
                   </div>
-                </div>
+                </SwiperSlide>
               );
             })
           : null}
+      </Swiper>
+      <div className="swiper-navigation-container my-4 px-1">
+        <div className="custom-swiper-button-prev border-2 border-primary text-primary">
+          &#10094;
+        </div>{' '}
+        <div className="custom-swiper-button-next border-2 border-primary text-primary">
+          &#10095;
+        </div>{' '}
       </div>
-      <div className="swiper-button-next bg-[#fff] p-2" />
-      <div className="swiper-button-prev bg-[#fff] p-2" />
     </div>
   );
 };

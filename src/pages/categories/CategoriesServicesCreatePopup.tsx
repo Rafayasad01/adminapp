@@ -47,15 +47,20 @@ function CategoriesServicesCreatePopup({
     handleSubmit,
     formState: { errors },
   } = useForm<CategoryService>();
+
   const onSubmit = (data: CategoryService) => {
-    if (data.desc && image && data.name && data.price) {
+    if (
+      // data.desc && image &&
+      data.name &&
+      data.price
+    ) {
       data.icon = image;
       setOpenFormDialog(false);
       callback(data);
     } else {
       setIsNotify(true);
       setNotifyMessage({
-        text: 'All fields are required!',
+        text: 'Fields are required!',
         type: 'error',
       });
     }
@@ -189,8 +194,8 @@ function CategoriesServicesCreatePopup({
             </div>
             <div className="FormField">
               <FormControl className="FormControl" variant="standard">
-                <label className="FormLabel">
-                  Message{' '}
+                <label className="FormLabel mt-2">
+                  Description{' '}
                   <span className="SubLabel">Write 01-370 Characters</span>
                 </label>
                 <TextField
@@ -201,11 +206,11 @@ function CategoriesServicesCreatePopup({
                   defaultValue=""
                   placeholder="Write Description"
                   {...register('desc', {
-                    required: 'Description is required',
-                    minLength: {
-                      value: 1,
-                      message: 'Minimum One Characters',
-                    },
+                    // required: 'Description is required',
+                    // minLength: {
+                    //   value: 1,
+                    //   message: 'Minimum One Characters',
+                    // },
                     maxLength: {
                       value: 370,
                       message: MAX_LENGTH_EXCEEDED,
@@ -216,7 +221,7 @@ function CategoriesServicesCreatePopup({
               </FormControl>
             </div>
             <div className="FormField">
-              <label className="FormLabel">
+              <label className="FormLabel mt-2">
                 Upload Image
                 <span className="SubLabel">
                   Image should be 1080px x 1080px
@@ -228,7 +233,10 @@ function CategoriesServicesCreatePopup({
                   style={{ display: 'none' }}
                   id="raised-button-file"
                   type="file"
-                  {...register('icon', { required: 'Icon is required' })}
+                  {...register(
+                    'icon'
+                    //  { required: 'Icon is required' }
+                  )}
                   onChange={(
                     event: React.InputHTMLAttributes<HTMLInputElement>
                   ) => {
@@ -266,9 +274,9 @@ function CategoriesServicesCreatePopup({
                   ''
                 )}
               </div>
-              {image === null && errors.icon && (
+              {/* {image === null && errors.icon && (
                 <ErrorSpanBox error={errors.icon?.message} />
-              )}
+              )} */}
             </div>
           </div>
           <div className="FormFooter">

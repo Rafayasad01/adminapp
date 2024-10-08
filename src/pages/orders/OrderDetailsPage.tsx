@@ -137,7 +137,7 @@ function OrderDetailsPage() {
     return icon;
   };
 
-  const createOrderStatusesService = (data: any) => {
+  const createOrderStatusesService = (data: any, message: string) => {
     setIsLoader(true);
     data.app_user = authState.user.anonAppUser;
     orderService
@@ -147,7 +147,7 @@ function OrderDetailsPage() {
           setIsLoader(false);
           setIsNotify(true);
           setNotifyMessage({
-            text: item.data.message,
+            text: message,
             type: 'success',
           });
           const tempData = structuredClone(viewData);
@@ -262,7 +262,10 @@ function OrderDetailsPage() {
         status: getNextStatusButton?.value?.status,
       };
 
-      createOrderStatusesService(data);
+      createOrderStatusesService(
+        data,
+        'Order Statuses has been updated successfully.'
+      );
     } else {
       setIsNotify(true);
       setNotifyMessage({
@@ -280,7 +283,10 @@ function OrderDetailsPage() {
         app_order: id,
         status: ORDER_STATUS.CANCELLED,
       };
-      createOrderStatusesService(data);
+      createOrderStatusesService(
+        data,
+        'Order Cancelled has been successfully.'
+      );
     } else {
       setIsNotify(true);
       setNotifyMessage({

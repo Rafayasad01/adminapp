@@ -25,6 +25,7 @@ import { CheckRolePermission, listingRolePermission } from '../../utils/helper';
 import ServicesCreatePopup from './CategoriesServicesCreatePopup';
 import ServicesEditPopup from './CategoriesServicesEditPopup';
 import { getItem } from '../../utils/storage';
+import assets from '../../assets';
 
 function CategoriesServicesPage() {
   const params = useParams();
@@ -429,7 +430,7 @@ function CategoriesServicesPage() {
             <table className="table-border table-auto">
               <thead>
                 <tr>
-                  <th className="w-[20%]">Item Name</th>
+                  <th className="w-[20%]">Item</th>
                   <th className="w-[50%]">Description</th>
                   {/* <th>Min Quantity</th> */}
                   <th>Coins</th>
@@ -445,13 +446,21 @@ function CategoriesServicesPage() {
                       <tr key={item.id}>
                         <td>
                           <div className="avatar flex flex-row items-center">
-                            <button onClick={() => openModal(item.icon)}>
+                            {item.icon !== 'null' ? (
+                              <button onClick={() => openModal(item.icon)}>
+                                <img
+                                  className="cursor-pointer"
+                                  src={item.icon}
+                                  alt={item.name}
+                                />
+                              </button>
+                            ) : (
                               <img
-                                className="cursor-pointer"
-                                src={item.icon}
-                                alt={item.name}
+                                className="ms-[6px] w-[30px]"
+                                src={assets.images.noItems}
+                                alt="no-items-img"
                               />
-                            </button>
+                            )}
                             <div className="flex flex-col items-start justify-start">
                               <span className="text-sm font-semibold">
                                 {item.name}
