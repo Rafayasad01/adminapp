@@ -356,7 +356,6 @@ const AllAppointment = ({
   };
 
   const AppointmentContent = ({ ...restProps }: any) => {
-    console.log('🚀 ~ AppointmentContent ~ restProps:', restProps.data.status);
     if (!restProps.data) {
       return null; // or handle the case where data is undefined
     }
@@ -542,7 +541,7 @@ const AllAppointment = ({
       </div>
       <hr />
       <Scheduler data={data} height={580}>
-        <span className="absolute left-[10px] top-[160px] ml-[-6px]">
+        <span className="absolute left-[25px] top-[160px]">
           <CalendarMonthIcon className="text-primary" />
         </span>
         <ViewState

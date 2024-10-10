@@ -511,7 +511,7 @@ function CustomEditSwiperDialog({
               />
               <CustomButton
                 buttonType="button"
-                title="Submit"
+                title="Update"
                 // iconRight={<EastIcon className="text-base" />}
                 // onclick={handleNextSlide}
                 type="submit"

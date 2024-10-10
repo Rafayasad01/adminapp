@@ -2676,3 +2676,8 @@ main.min-h-screen.w-full.flex-grow.bg-gray-50.p-3.MuiBox-root.css-0 {
 .w-475px {
   width: '475px' !important;
 }
+
+/* Date Navigator */
+.css-vnscjq-MuiButtonBase-root-MuiButton-root.OpenButton-textButton {
+  margin-left: 20px !important;
+}

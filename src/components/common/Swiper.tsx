@@ -79,7 +79,7 @@ const SwiperComponent = ({
           : null}
       </Swiper>
       <div className="swiper-navigation-container my-4 px-1">
-        <div className="custom-swiper-button-prev border-2 border-primary text-primary">
+        <div className="custom-swiper-button-prev border-2 border-primary text-primary focus:bg-none">
           &#10094;
         </div>{' '}
         <div className="custom-swiper-button-next border-2 border-primary text-primary">

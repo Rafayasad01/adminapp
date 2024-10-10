@@ -121,6 +121,18 @@ function LeaveManagement() {
     }
   }, [null]);
 
+  const handleSearch = () => {
+    const newPage = 0;
+    setSearch(search);
+    setPage(newPage);
+    employeeService
+      .StoreEmployeeAttendanceLeaveService(search, page, rowsPerPage)
+      .then((item) => {
+        setTotal(item.data.data.totalPages);
+        setList(item.data.data.leaves);
+      });
+  };
+
   const handleClickSearch = (event: any) => {
     if (event.key === 'Enter') {
       const searchTxt = event.target.value as string;
@@ -280,6 +292,7 @@ function LeaveManagement() {
                     id="search"
                     type="text"
                     placeholder="Search"
+                    onChange={(e) => setSearch(e.target.value)}
                     onKeyDown={(
                       event: React.KeyboardEvent<
                         HTMLInputElement | HTMLTextAreaElement
@@ -293,7 +306,10 @@ function LeaveManagement() {
                           sx={{ height: 28, m: 0.5 }}
                           orientation="vertical"
                         />
-                        <IconButton aria-label="toggle password visibility">
+                        <IconButton
+                          onClick={() => handleSearch()}
+                          aria-label="toggle password visibility"
+                        >
                           <SearchIcon className="text-[#6A6A6A]" />
                         </IconButton>
                       </InputAdornment>

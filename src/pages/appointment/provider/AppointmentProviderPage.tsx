@@ -595,6 +595,8 @@ function AppointmentProviderPage() {
               (newItem: any) => newItem.id !== item.data.data.id
             );
           });
+          let newtotal = total;
+          setTotal((newtotal -= 1));
         } else {
           setIsLoader(false);
           setIsNotify(true);
@@ -640,7 +642,7 @@ function AppointmentProviderPage() {
               setValue('email', item.data.data.email);
               setValue('cnic', item.data.data.cnic);
               setValue('note', item.data.data.note);
-              setValue('salary', item.data.data.salary);
+              setValue('salary', Number(item.data.data.salary).toFixed(0));
               setValue('dob', dayjs(item.data.data.dob).format('YYYY-MM-DD'));
               setValue('payrollType', item.data.data.payrollType ?? 'none');
               setOpenEditFormDialog(true);
@@ -1311,7 +1313,7 @@ function AppointmentProviderPage() {
           setStartServiceTime={setStartServiceTime}
           startServiceTime={startServiceTime}
           setInputFieldsData={setInputFieldsData}
-          // catLov={catLovlist}
+          // catLov={catLovlist}x
           // catItemsLov={catItemsLovlist}
           // usedCatItemsLovlist={usedCatItemsLovlist}
           // setUsedCatItemsLovlist={setusedCatItemsLovList}
