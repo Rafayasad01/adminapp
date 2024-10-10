@@ -100,7 +100,7 @@ function SettingsApp() {
   } = useForm<Setting>();
 
   const setData = (item: any) => {
-    // console.log('itesmssss', item);
+    console.log('itesmssss', item);
 
     // setValue('name', item.tenantConfig.name);
     // setLocation()
@@ -182,6 +182,12 @@ function SettingsApp() {
       item.tenantConfig.loyaltyCoinConversionRate
     );
     setValue('requiredCoinsToRedeem', item.tenantConfig.requiredCoinsToRedeem);
+    setValue(
+      'attendanceDistance',
+      item.tenantConfig.attendanceDistance
+        ? item.tenantConfig.attendanceDistance
+        : 0
+    );
   };
 
   const onSubmit = (data: any) => {
@@ -721,7 +727,7 @@ function SettingsApp() {
                         placeholder="Enter Shop Distance in meters"
                         type="number"
                         className="FormInput"
-                        defaultValue={0}
+                        // defaultValue={0}
                         {...register('attendanceDistance', {
                           validate: (value: any) =>
                             VALIDATE_NON_NEGATIVE_NUM(value),
