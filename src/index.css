@@ -2681,3 +2681,7 @@ main.min-h-screen.w-full.flex-grow.bg-gray-50.p-3.MuiBox-root.css-0 {
 .css-vnscjq-MuiButtonBase-root-MuiButton-root.OpenButton-textButton {
   margin-left: 20px !important;
 }
+
+button.MuiButtonBase-root.MuiButton-root.MuiButton-text.MuiButton-textPrimary.MuiButton-sizeMedium.MuiButton-textSizeMedium.MuiButton-root.MuiButton-text.MuiButton-textPrimary.MuiButton-sizeMedium.MuiButton-textSizeMedium.OpenButton-textButton.css-1kf53p2 {
+  padding-left: 36px !important;
+}
