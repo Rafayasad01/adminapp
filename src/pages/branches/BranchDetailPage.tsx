@@ -12,11 +12,13 @@ import TopBar from '../../components/common/TopBar';
 import StarBadgeGreen from '../../components/icons/StarBadgeGreen';
 import StarBadgeRed from '../../components/icons/StarBadgeRed';
 import branchService from '../../services/adminapp/adminBranch';
-import { formatName } from '../../utils/helper';
+// import { formatName } from '../../utils/helper';
 import BranchCategoryPopup from './BranchCategoryPopup';
 import BranchSettingPopup from './BranchSettingPopup';
+import { useAppSelector } from '../../redux/redux-hooks';
 
 function BranchDetailPage() {
+  const authState: any = useAppSelector((state: any) => state?.authState);
   const { branchId } = useParams();
   const [userDetail, setUserDetail] = useState<any>();
   const [isLoader, setIsLoader] = useState<boolean>(true);
@@ -96,7 +98,7 @@ function BranchDetailPage() {
 
   useEffect(() => {
     branchService
-      .getDetailService(branchId)
+      .getDetailService(authState.user.tenant, branchId)
       .then((item) => {
         if (item.data.success) {
           setIsLoader(false);
@@ -181,15 +183,14 @@ function BranchDetailPage() {
                           fontSize: '26px',
                         }}
                       >
-                        {userDetail.firstName?.charAt(0)}
-                        {userDetail.lastName?.charAt(0)}
+                        {userDetail.name?.charAt(0)}
                       </Avatar>
                     )}
                   </div>
                   <div className="px-5">
                     <div className="flex items-center justify-center">
                       <p className="text-sm font-semibold text-secondary">
-                        {formatName(userDetail.firstName, userDetail.lastName)}
+                        {userDetail.name}
                       </p>
                       <div className="pl-2">
                         {userDetail.isActive ? (
@@ -200,9 +201,6 @@ function BranchDetailPage() {
                       </div>
                     </div>
                     <div className="text-center">
-                      <p className="text-sm font-medium lowercase text-secondary">
-                        {userDetail.email}
-                      </p>
                       <span className="text-sm font-medium text-secondary">
                         {dayjs(userDetail.createdDate).isValid() &&
                           dayjs(userDetail.createdDate)?.format(

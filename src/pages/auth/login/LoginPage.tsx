@@ -106,8 +106,10 @@ function LoginPage() {
             dispatch(setLogo(user?.data?.data?.tenantConfig?.logo));
           }
           if (newUserData?.userType === 'ShopUser') {
+            setItem('BRANCH_ID', newUserData.branch);
             dispatch(
               setShopAdminTenant({
+                branch: newUserData.branch,
                 tenant: newUserData.tenant,
                 tenantName: newUserData.tenantName,
                 maxEmployeeLimit: newUserData.maxEmployeeLimit,

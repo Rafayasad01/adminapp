@@ -10,14 +10,14 @@ import '../../assets/css/PopupStyle.css';
 import CustomButton from '../../components/common/CustomButton';
 import ErrorSpanBox from '../../components/common/ErrorSpanBox';
 import { Tenant } from '../../interfaces/superadmin/tenant.interface';
-import { useAppSelector } from '../../redux/redux-hooks';
+// import { useAppSelector } from '../../redux/redux-hooks';
 import {
   // DOMAIN_PREFIX,
   // DOMAIN_PROTOCOL,
   INVALID_CHAR,
   MAX_LENGTH_EXCEEDED,
   PATTERN,
-  VALIDATE_NON_NEGATIVE_NUM,
+  // VALIDATE_NON_NEGATIVE_NUM,
 } from '../../utils/constants';
 
 type BranchCreatePopupProps = {
@@ -43,20 +43,20 @@ function BranchCreatePopup({
     formState: { errors },
   } = useForm<Tenant>();
 
-  const authState: any = useAppSelector((state: any) => state?.authState);
+  // const authState: any = useAppSelector((state: any) => state?.authState);
 
   const onSubmit = (data: Tenant) => {
     // console.log("dataCREATE", data);
     const details = {
+      name: data.tenantName,
       email: data.email,
       firstName: data.firstName,
       lastName: data.lastName,
-      tenantName: data.tenantName,
       address: data.address,
       // domainWebapp: data.domainWebapp,
       // domain: data.domain,
-      userLimit: data.userLimit,
-      userId: authState.user.id,
+      // userLimit: data.userLimit,
+      // userId: authState.user.id,
       // enableLoyaltyProgram: data.enableLoyaltyProgram,
       // loyaltyCoinConversionRate: data.enableLoyaltyProgram ? data.loyaltyCoinConversionRate : 0,
       // requiredCoinsToRedeem: data.enableLoyaltyProgram ? data.requiredCoinsToRedeem : 0,
@@ -195,9 +195,9 @@ function BranchCreatePopup({
                 )}
               </FormControl>
             </div>
-            <div className="FormFields">
+            <div className="FormField">
               <FormControl className="FormControl" variant="standard">
-                <label className="FormLabel">Shop Address</label>
+                <label className="FormLabel mt-2">Shop Address</label>
                 <Input
                   className="FormInput"
                   {...register('address', {
@@ -220,7 +220,7 @@ function BranchCreatePopup({
                   <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
                 )}
               </FormControl>
-              <FormControl className="FormControl" variant="standard">
+              {/* <FormControl className="FormControl" variant="standard">
                 <label className="FormLabel">Employees Limits</label>
                 <Input
                   className="FormInput"
@@ -240,7 +240,7 @@ function BranchCreatePopup({
                 {errors?.userLimit && (
                   <ErrorSpanBox error={errors?.userLimit?.message} />
                 )}
-              </FormControl>
+              </FormControl> */}
             </div>
             {/* <div className="FormField">
               <FormControl className="FormControl" variant="standard">

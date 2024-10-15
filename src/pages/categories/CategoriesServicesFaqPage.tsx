@@ -29,7 +29,7 @@ import { getItem } from '../../utils/storage';
 function CategoriesServicesFaqPage() {
   const params = useParams();
   const TITLE_TEXT: any = getItem('TITLE_TEXT');
-  const authState: any = useAppSelector((state) => state?.authState);
+  // const authState: any = useAppSelector((state) => state?.authState);
   const dataRole = useAppSelector(
     (state) => state?.persistedReducer?.roleState?.role?.permissions
   );
@@ -62,12 +62,11 @@ function CategoriesServicesFaqPage() {
     setSearch(searchTxt);
     setPage(newPage);
     categoryService
-      .searchCategoryServiceFaq(
-        categoryServiceId,
-        searchTxt,
-        newPage,
-        rowsPerPage
-      )
+      .getCategoryServiceFaqList(categoryServiceId, {
+        search: searchTxt,
+        page: newPage,
+        size: rowsPerPage,
+      })
       .then((item) => {
         setList(item.data.data.list);
         setTotal(item.data.data.total);
@@ -80,26 +79,16 @@ function CategoriesServicesFaqPage() {
   ) => {
     setPage(newPage);
     // offset? ,limit rowsperpage hoga ofset page * rowsperPage
-    if (search === '' || search === null || search === undefined) {
-      categoryService
-        .getCategoryServiceFaqList(categoryServiceId, newPage, rowsPerPage)
-        .then((item) => {
-          setList(item.data.data.list);
-          setTotal(item.data.data.total);
-        });
-    } else {
-      categoryService
-        .searchCategoryServiceFaq(
-          categoryServiceId,
-          search,
-          newPage,
-          rowsPerPage
-        )
-        .then((item) => {
-          setList(item.data.data.list);
-          setTotal(item.data.data.total);
-        });
-    }
+    categoryService
+      .getCategoryServiceFaqList(categoryServiceId, {
+        search,
+        page: newPage,
+        size: rowsPerPage,
+      })
+      .then((item) => {
+        setList(item.data.data.list);
+        setTotal(item.data.data.total);
+      });
   };
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -108,32 +97,26 @@ function CategoriesServicesFaqPage() {
     const newPage = 0;
     setRowsPerPage(newRowperPage);
     setPage(newPage);
-    if (search === '' || search === null || search === undefined) {
-      categoryService
-        .getCategoryServiceFaqList(categoryServiceId, newPage, newRowperPage)
-        .then((item) => {
-          setList(item.data.data.list);
-          setTotal(item.data.data.total);
-        });
-    } else {
-      categoryService
-        .searchCategoryServiceFaq(
-          categoryServiceId,
-          search,
-          newPage,
-          newRowperPage
-        )
-        .then((item) => {
-          setList(item.data.data.list);
-          setTotal(item.data.data.total);
-        });
-    }
+    categoryService
+      .getCategoryServiceFaqList(categoryServiceId, {
+        search,
+        page: newPage,
+        size: newRowperPage,
+      })
+      .then((item) => {
+        setList(item.data.data.list);
+        setTotal(item.data.data.total);
+      });
   };
 
   useEffect(() => {
     if (listingRolePermission(dataRole, ALL_PERMISSIONS.storeProduct.view)) {
       categoryService
-        .getCategoryServiceFaqList(categoryServiceId, page, rowsPerPage)
+        .getCategoryServiceFaqList(categoryServiceId, {
+          search,
+          page,
+          size: rowsPerPage,
+        })
         .then((item: any) => {
           setIsLoader(false);
           setList(item.data.data.list);
@@ -153,13 +136,13 @@ function CategoriesServicesFaqPage() {
 
   const deleteHandler = (id: string) => {
     setIsLoader(true);
-    const data = {
-      is_active: false,
-      is_deleted: true,
-      updated_by: authState.user.id,
-    };
+    // const data = {
+    //   is_active: false,
+    //   is_deleted: true,
+    //   updated_by: authState.user.id,
+    // };
     categoryService
-      .deleteCategoryServiceFaq(id, data)
+      .deleteCategoryServiceFaq(id)
       .then((updateItem) => {
         if (updateItem.data.success) {
           setIsLoader(false);
@@ -199,14 +182,11 @@ function CategoriesServicesFaqPage() {
   const manuHandler = (option: string) => {
     if (option === 'Edit') {
       if (listingRolePermission(dataRole, ALL_PERMISSIONS.storeProduct.edit)) {
-        categoryService
-          .getCategoryServiceFaq(actionMenuItemid)
-          .then((item: any) => {
-            if (item.data.success) {
-              setEditFormData(item.data.data);
-              setOpenEditFormDialog(true);
-            }
-          });
+        const editCatData = list.find(
+          (item: any) => item.id === actionMenuItemid
+        );
+        setEditFormData(editCatData);
+        setOpenEditFormDialog(true);
       } else {
         setIsNotify(true);
         setNotifyMessage({
@@ -231,8 +211,8 @@ function CategoriesServicesFaqPage() {
 
   const createFormHandler = (data: any) => {
     setIsLoader(true);
-    data.created_by = authState.user.id;
-    data.updated_by = authState.user.id;
+    // data.created_by = authState.user.id;
+    // data.updated_by = authState.user.id;
     categoryService
       .categoryServiceCreateFaq(categoryServiceId, data)
       .then((item) => {
@@ -258,7 +238,7 @@ function CategoriesServicesFaqPage() {
 
   const updateFormHandler = (data: any) => {
     setIsLoader(true);
-    data.updated_by = authState.user.id;
+    // data.updated_by = authState.user.id;
     categoryService
       .updateCategoryServiceFaq(actionMenuItemid, data)
       .then((updateItem: any) => {
@@ -290,8 +270,8 @@ function CategoriesServicesFaqPage() {
   const handleSwitchChange = (event: any, id: string) => {
     if (listingRolePermission(dataRole, ALL_PERMISSIONS.storeProduct.edit)) {
       const data = {
-        is_active: event.target.checked,
-        updated_by: authState.user.id,
+        isActive: event.target.checked,
+        // updated_by: authState.user.id,
       };
       categoryService
         .updateCategoryServiceFaqStatus(id, data)

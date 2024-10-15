@@ -4,7 +4,7 @@ import ApartmentIcon from '@mui/icons-material/Apartment';
 import EditIcon from '@mui/icons-material/Edit';
 import PeopleOutlineIcon from '@mui/icons-material/PeopleOutline';
 import SearchIcon from '@mui/icons-material/Search';
-import WysiwygOutlinedIcon from '@mui/icons-material/WysiwygOutlined';
+// import WysiwygOutlinedIcon from '@mui/icons-material/WysiwygOutlined';
 import Badge from '@mui/material/Badge';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
@@ -18,7 +18,7 @@ import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 import CustomButton from '../../components/common/CustomButton';
 import CustomText from '../../components/common/CustomText';
 import Loader from '../../components/common/Loader';
@@ -35,7 +35,7 @@ import BranchUpdatePopup from './BranchUpdatePopup';
 import { ALL_PERMISSIONS, NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
 
 function BranchPage() {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const dispatch = useDispatch();
   const authState: any = useAppSelector((state: any) => state?.authState);
   // console.log('🚀 ~ BranchPage ~ authState:', authState);
@@ -44,7 +44,7 @@ function BranchPage() {
     (state: any) => state?.persistedReducer?.roleState?.role?.permissions
   );
   const [search, setSearch] = useState<any>('');
-  const [maxTotalEmployeeLimit, setTotalMaxEmployeeLimit] = useState<any>();
+  // const [maxTotalEmployeeLimit, setTotalMaxEmployeeLimit] = useState<any>();
   const [maxTotalEmployees, setTotalMaxEmployees] = useState();
   const [page, setPage] = useState(0);
   const [total, setTotal] = useState(0);
@@ -57,7 +57,7 @@ function BranchPage() {
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
   const [totalBranches, setTotalBranches] = useState<number>(0);
-  const [storeLimitVal, setStateLimitVal] = useState(0);
+  // const [storeLimitVal, setStateLimitVal] = useState(0);
   const { reset } = useForm<AppUserEmployees>();
 
   const handleClickSearch = (event: any) => {
@@ -151,7 +151,7 @@ function BranchPage() {
             setList(item.data.data.list);
             setTotal(item.data.data.total);
             setTotalBranches(item.data.data.list.length);
-            setTotalMaxEmployeeLimit(item.data.data.totalEmployeeLimitCounts);
+            // setTotalMaxEmployeeLimit(item.data.data.totalEmployeeLimitCounts);
             setTotalMaxEmployees(item.data.data.totalEmployees);
           } else {
             setIsLoader(false);
@@ -187,11 +187,11 @@ function BranchPage() {
             text: item.data.message,
             type: 'success',
           });
-          setList([item.data.data, ...list]);
+          setList([item.data.data.branch, ...list]);
           setTotal((prev) => prev + 1);
-          setTotalMaxEmployeeLimit(
-            (prev: any) => prev + item.data.data.userLimit
-          );
+          // setTotalMaxEmployeeLimit(
+          //   (prev: any) => prev + item.data.data.userLimit
+          // );
           reset();
         } else {
           setIsLoader(false);
@@ -213,34 +213,15 @@ function BranchPage() {
   };
 
   const editHandler = (id: string) => {
-    setIsLoader(true);
-    branchService
-      .editBranch(id)
-      .then((item: any) => {
-        if (item.data.success) {
-          setStateLimitVal(item.data.data.userLimit);
-          setFormDetail(item.data.data);
-          setOpenEditFormDialog(true);
-          setIsLoader(false);
-        }
-      })
-      .catch((err) => {
-        setIsLoader(false);
-        setIsNotify(true);
-        setNotifyMessage({
-          text: err.message,
-          type: 'error',
-        });
-      });
+    setOpenEditFormDialog(true);
+    const editFormDatas = list?.find((el: any) => el.id === id);
+    setFormDetail(editFormDatas);
   };
 
   const updateFormHandler = (id: string, data: any) => {
     setIsLoader(true);
-    delete data.email;
-    data.userId = authState?.user?.id;
-    const temp = Number(maxTotalEmployeeLimit) - storeLimitVal;
     branchService
-      .updateBranch(data, id)
+      .updateBranch(data, authState.user.tenant, id)
       .then((item: any) => {
         if (item.data.success) {
           setIsLoader(false);
@@ -249,16 +230,10 @@ function BranchPage() {
             text: item.data.message,
             type: 'success',
           });
-          setTotalMaxEmployeeLimit(Number(data.userLimit) + temp);
-          setFormDetail(item.data.data);
           setOpenEditFormDialog(false);
           for (let i = 0; i < list.length; i += 1) {
             if (list[i].id === item.data.data.id) {
-              list[i].name = item.data.data.tenantName;
-              list[i].isActive = item.data.data.isActive;
-              list[i].trialMode = item.data.data.trialMode;
-              list[i].trialStartDate = item.data.data.trialStartDate;
-              list[i].userLimit = item.data.data.userLimit;
+              list[i].name = item.data.data.name;
             }
           }
           reset();
@@ -288,11 +263,10 @@ function BranchPage() {
       setIsLoader(true);
       const data = {
         isActive: event.target.checked,
-        // trialMode: event.target.checked,
         updatedBy: authState.user.id,
       };
       branchService
-        .updateBranchStatus(data, id)
+        .updateBranchStatus(data, authState.user.tenant, id)
         .then((updateItem) => {
           if (updateItem.data.success) {
             setIsLoader(false);
@@ -364,7 +338,7 @@ function BranchPage() {
   };
 
   const handleVendor = (
-    tenantId: string,
+    branchId: string,
     name: string,
     maxEmployeeLimit: string,
     maxBranchLimit: string,
@@ -372,7 +346,7 @@ function BranchPage() {
   ) => {
     const userObj = {
       ...authState.user,
-      tenant: tenantId,
+      branch: branchId,
       tenantName: name,
       maxEmployeeLimit,
       branchLimit: maxBranchLimit,
@@ -381,6 +355,8 @@ function BranchPage() {
     dispatch(login(userObj));
     dispatch(setItemState(userObj));
   };
+
+  console.log('authState?.user', authState);
 
   return isLoader ? (
     <Loader />
@@ -426,7 +402,7 @@ function BranchPage() {
                     </span> */}
                       </div>
                     </div>
-                    <div className="flex-col items-center justify-center">
+                    {/* <div className="flex-col items-center justify-center">
                       <p className="text-sm font-semibold">
                         Employees Distribution
                       </p>
@@ -454,8 +430,8 @@ function BranchPage() {
                       {authState.user.maxEmployeeLimit} -{' '}
                       {maxTotalEmployeeLimit || 0}
                     </span> */}
-                      </div>
-                    </div>
+                    {/* </div> */}
+                    {/* </div> */}
                     <div className=" flex-col items-center justify-center px-2">
                       <p className="text-sm font-semibold">
                         Branches Distribution
@@ -528,15 +504,15 @@ function BranchPage() {
               </div>
             </div>
           </div>
-          {authState?.user?.tenant !== authState?.shopTenantDetails.tenant && (
+          {authState?.user?.branch !== authState?.shopTenantDetails.branch && (
             <div className="flex items-center justify-end">
               <CustomButton
-                title="Switch to main shop"
+                title="Switch to main admin shop"
                 buttonType="button"
                 className="mx-5 rounded-full bg-primary text-foreground"
                 onclick={() =>
                   handleVendor(
-                    authState.shopTenantDetails.tenant,
+                    authState.shopTenantDetails.branch,
                     authState.shopTenantDetails.tenantName,
                     authState.shopTenantDetails.maxEmployeeLimit,
                     authState.shopTenantDetails.branchLimit,
@@ -551,7 +527,7 @@ function BranchPage() {
               <thead>
                 <tr>
                   <th>Name</th>
-                  <th>Employee Limit</th>
+                  {/* <th>Employee Limit</th> */}
                   <th>Trial Mode</th>
                   <th>Trial Start Date</th>
                   <th>Status</th>
@@ -580,9 +556,9 @@ function BranchPage() {
                             </div>
                           </div>
                         </td>
-                        <td>
+                        {/* <td>
                           {item.userLimit} - {item.userCounts}
-                        </td>
+                        </td> */}
                         <td>
                           <span
                             className={
@@ -639,11 +615,19 @@ function BranchPage() {
                             className="flex cursor-pointer justify-center"
                             style={{
                               color:
-                                item.id === authState?.user?.tenant
+                                item.id === authState?.user?.branch
                                   ? 'green'
                                   : 'black',
                             }}
                             onClick={() => {
+                              if (item.id === authState?.user?.branch) {
+                                setIsNotify(true);
+                                setNotifyMessage({
+                                  text: 'You already in main branch',
+                                  type: 'info',
+                                });
+                                return;
+                              }
                               if (
                                 listingRolePermission(
                                   dataRole,
@@ -672,7 +656,7 @@ function BranchPage() {
                         </td>
                         <td>
                           <div className="flex flex-row-reverse">
-                            <IconButton
+                            {/* <IconButton
                               className="icon-btn mr-3.5 p-0"
                               onClick={() => {
                                 if (
@@ -692,7 +676,7 @@ function BranchPage() {
                               }}
                             >
                               <WysiwygOutlinedIcon />
-                            </IconButton>
+                            </IconButton> */}
                             <IconButton
                               className="icon-btn mr-3.5 p-0"
                               onClick={() => {

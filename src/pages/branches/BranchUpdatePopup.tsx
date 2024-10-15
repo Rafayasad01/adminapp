@@ -21,7 +21,7 @@ import {
   INVALID_CHAR,
   MAX_LENGTH_EXCEEDED,
   PATTERN,
-  VALIDATE_NON_NEGATIVE_NUM,
+  // VALIDATE_NON_NEGATIVE_NUM,
 } from '../../utils/constants';
 
 dayjs.extend(duration);
@@ -51,14 +51,10 @@ function BranchUpdatePopup({
     formState: { errors },
   } = useForm<Tenant>();
   const onSubmit = (data: Partial<Tenant>) => {
-    // console.log('onsubmiotupdate', data, item);
-    if (data.enableLoyaltyProgram === false) {
-      delete data.loyaltyCoinConversionRate;
-      delete data.requiredCoinsToRedeem;
-    }
+    // console.log('onsubmiotupdate', data);
     if (data.tenantName) {
       setOpenFormDialog(false);
-      callback(item.id, data);
+      callback(item.id, { name: data.tenantName });
     } else {
       setIsNotify(true);
       setNotifyMessage({
@@ -75,25 +71,8 @@ function BranchUpdatePopup({
   useEffect(() => {
     if (item) {
       setValue('tenantName', item.name);
-      setValue('email', item.backofficeUser?.email);
-      setValue('firstName', item.backofficeUser?.firstName);
-      setValue('lastName', item.backofficeUser?.lastName);
-      // setValue('domainWebapp', item.systemConfig.domainWebapp);
-      // setValue('domain', item.systemConfig.domain);
-      // setValue('enableLoyaltyProgram', item.tenantExt.enableLoyaltyProgram);
     }
   }, [item]);
-
-  // console.log('ITEM', item.tenantExt.enableLoyaltyProgram);
-
-  // const debouceRequest = debounce((value) => {
-  //   setValue('domain', `devadminapp-${kabakCase(value)}`);
-  //   // setValue('domainWebapp', `devwebapp-${kabakCase(value)}`);
-  // }, 1000);
-
-  // const shopFieldHangler = (val: any) => {
-  //   debouceRequest(val);
-  // };
 
   return (
     item && (
@@ -110,9 +89,9 @@ function BranchUpdatePopup({
               <span className="Title">Edit Branch</span>
             </div>
             <div className="FormBody">
-              <div className="FormFields">
+              <div className="FormField">
                 <FormControl className="FormControl" variant="standard">
-                  <label className="FormLabel">Shop Name</label>
+                  <label className="FormLabel mt-2">Shop Name</label>
                   <Input
                     className="FormInput"
                     {...register('tenantName', {
@@ -136,7 +115,7 @@ function BranchUpdatePopup({
                     <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
                   )}
                 </FormControl>
-                <FormControl className="FormControl" variant="standard">
+                {/* <FormControl className="FormControl" variant="standard">
                   <label className="FormLabel">Employees Limits</label>
                   <Input
                     className="FormInput"
@@ -158,9 +137,9 @@ function BranchUpdatePopup({
                   {errors?.userLimit && (
                     <ErrorSpanBox error={errors?.userLimit?.message} />
                   )}
-                </FormControl>
+                </FormControl> */}
               </div>
-              <div className="FormFields">
+              {/* <div className="FormFields">
                 <FormControl className="FormControl" variant="standard">
                   <label className="FormLabel">First Name</label>
                   <Input
@@ -236,7 +215,7 @@ function BranchUpdatePopup({
                     <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
                   )}
                 </FormControl>
-              </div>
+              </div> */}
               {/* <div className="FormField">
                 <FormControl className="FormControl" variant="standard">
                   <label className="FormLabel">Domain</label>

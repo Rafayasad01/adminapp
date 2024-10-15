@@ -30,7 +30,7 @@ import assets from '../../assets';
 function CategoriesServicesPage() {
   const params = useParams();
   const TITLE_TEXT: any = getItem('TITLE_TEXT');
-  const authState: any = useAppSelector((state) => state?.authState);
+  // const authState: any = useAppSelector((state) => state?.authState);
   const dataRole = useAppSelector(
     (state: any) => state?.persistedReducer?.roleState?.role?.permissions
   );
@@ -66,7 +66,11 @@ function CategoriesServicesPage() {
     setSearch(searchTxt);
     setPage(newPage);
     categoryService
-      .searchCategoryService(productId, searchTxt, newPage, rowsPerPage)
+      .getCategoryServiceList(productId, {
+        search: searchTxt,
+        page: newPage,
+        size: rowsPerPage,
+      })
       .then((item) => {
         setList(item.data.data.list);
         setTotal(item.data.data.total);
@@ -79,21 +83,16 @@ function CategoriesServicesPage() {
   ) => {
     setPage(newPage);
     // offset? ,limit rowsperpage hoga ofset page * rowsperPage
-    if (search === '' || search === null || search === undefined) {
-      categoryService
-        .getCategoryServiceList(productId, newPage, rowsPerPage)
-        .then((item) => {
-          setList(item.data.data.list);
-          setTotal(item.data.data.total);
-        });
-    } else {
-      categoryService
-        .searchCategoryService(productId, search, newPage, rowsPerPage)
-        .then((item) => {
-          setList(item.data.data.list);
-          setTotal(item.data.data.total);
-        });
-    }
+    categoryService
+      .getCategoryServiceList(productId, {
+        search,
+        page: newPage,
+        size: rowsPerPage,
+      })
+      .then((item) => {
+        setList(item.data.data.list);
+        setTotal(item.data.data.total);
+      });
   };
 
   const handleAddNew = () => {
@@ -115,27 +114,22 @@ function CategoriesServicesPage() {
     const newPage = 0;
     setRowsPerPage(newRowperPage);
     setPage(newPage);
-    if (search === '' || search === null || search === undefined) {
-      categoryService
-        .getCategoryServiceList(productId, newPage, newRowperPage)
-        .then((item) => {
-          setList(item.data.data.list);
-          setTotal(item.data.data.total);
-        });
-    } else {
-      categoryService
-        .searchCategoryService(productId, search, newPage, newRowperPage)
-        .then((item) => {
-          setList(item.data.data.list);
-          setTotal(item.data.data.total);
-        });
-    }
+    categoryService
+      .getCategoryServiceList(productId, {
+        search,
+        page: newPage,
+        size: newRowperPage,
+      })
+      .then((item) => {
+        setList(item.data.data.list);
+        setTotal(item.data.data.total);
+      });
   };
 
   useEffect(() => {
     if (listingRolePermission(dataRole, ALL_PERMISSIONS.storeProduct.view)) {
       categoryService
-        .getCategoryServiceList(productId, page, rowsPerPage)
+        .getCategoryServiceList(productId, { search, page, size: rowsPerPage })
         .then((item: any) => {
           setIsLoader(false);
           setList(item.data.data.list);
@@ -161,13 +155,13 @@ function CategoriesServicesPage() {
 
   const deleteHandler = (id: string) => {
     setIsLoader(true);
-    const data = {
-      isActive: false,
-      isDeleted: true,
-      updatedBy: authState.user.id,
-    };
+    // const data = {
+    //   isActive: false,
+    //   isDeleted: true,
+    //   updatedBy: authState.user.id,
+    // };
     categoryService
-      .deleteCategoryService(id, data)
+      .deleteCategoryService(id)
       .then((updateItem) => {
         if (updateItem.data.success) {
           setIsLoader(false);
@@ -200,14 +194,9 @@ function CategoriesServicesPage() {
   const manuHandler = (option: string) => {
     if (option === 'Edit') {
       if (listingRolePermission(dataRole, ALL_PERMISSIONS.storeProduct.edit)) {
-        categoryService
-          .getCategoryService(actionMenuItemid)
-          .then((item: any) => {
-            if (item.data.success) {
-              setEditFormData(item.data.data);
-              setOpenEditFormDialog(true);
-            }
-          });
+        const editData = list.find((item: any) => item.id === actionMenuItemid);
+        setEditFormData(editData);
+        setOpenEditFormDialog(true);
       } else {
         setIsNotify(true);
         setNotifyMessage({
@@ -245,7 +234,7 @@ function CategoriesServicesPage() {
     formData.append('icon', data.icon);
     formData.append('price', data.price);
     formData.append('desc', data.desc);
-    formData.append('createdBy', authState.user.id);
+    // formData.append('createdBy', authState.user.id);
     categoryService
       .categoryServiceCreate(productId, formData)
       .then((item) => {
@@ -282,10 +271,10 @@ function CategoriesServicesPage() {
     formData.append('loyaltyCoins', data.loyaltyCoins);
     formData.append('price', data.price);
     formData.append('desc', data.desc);
-    formData.append('updatedBy', authState.user.id);
+    // formData.append('updatedBy', authState.user.id);
     if (data.icon) formData.append('icon', data.icon);
     categoryService
-      .updateCategoryService(actionMenuItemid, formData)
+      .updateCategoryService(productId, actionMenuItemid, formData)
       .then((updateItem: any) => {
         if (updateItem.data.success) {
           setIsLoader(false);
@@ -330,10 +319,10 @@ function CategoriesServicesPage() {
       // setIsLoader(true);
       const data = {
         isActive: event.target.checked,
-        updatedBy: authState.user.id,
+        // updatedBy: authState.user.id,
       };
       categoryService
-        .updateCategoryServiceStatus(id, data)
+        .updateCategoryServiceStatus(productId, id, data)
         .then((updateItem) => {
           if (updateItem.data.success) {
             // setIsLoader(false);

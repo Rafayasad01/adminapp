@@ -17,8 +17,8 @@ const getListServiceSearch = (
   );
 };
 
-const getDetailService = (tenantID: any) => {
-  return network.get(`${BRANCH_PREFIX}/detail/${tenantID}`);
+const getDetailService = (tenantID: any, branchId: string | any) => {
+  return network.get(`${BRANCH_PREFIX}/detail/${tenantID}/${branchId}`);
 };
 
 const getSettingService = (tenantID: any) => {
@@ -33,16 +33,19 @@ const insertBranch = (data: any, tenantID: string) => {
   return network.post(`${BRANCH_PREFIX}/insert/${tenantID}`, data);
 };
 
-const editBranch = (tenantID: string) => {
-  return network.get(`${BRANCH_PREFIX}/edit/${tenantID}`);
+const editBranch = (tenantId: string, branchId: string) => {
+  return network.get(`${BRANCH_PREFIX}/detail/${tenantId}/${branchId}`);
 };
 
-const updateBranch = (data: any, tenantID: string) => {
-  return network.post(`${BRANCH_PREFIX}/update/${tenantID}`, data);
+const updateBranch = (data: any, tenantID: string, branchId: string) => {
+  return network.post(`${BRANCH_PREFIX}/update/${tenantID}/${branchId}`, data);
 };
 
-const updateBranchStatus = (data: any, tenantID: string) => {
-  return network.post(`${BRANCH_PREFIX}/update/status/${tenantID}`, data);
+const updateBranchStatus = (data: any, tenantID: string, branchId: string) => {
+  return network.post(
+    `${BRANCH_PREFIX}/update/${tenantID}/${branchId}/status`,
+    data
+  );
 };
 
 export default {
