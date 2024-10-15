@@ -10,18 +10,18 @@ import { useForm } from 'react-hook-form';
 import { NavLink, useNavigate } from 'react-router-dom';
 import assets from '../../../assets';
 import { useNotification } from '../../../components/Contexts/NotificationContext';
+import FastSpinner from '../../../components/common/CustomSpinner';
 import ErrorSpanBox from '../../../components/common/ErrorSpanBox';
 import Notify from '../../../components/common/Notify';
 import { UserLogin } from '../../../interfaces/auth.interface';
-import appUserService from '../../../services/adminapp/adminAppUser';
 import { setItemState, setLogo } from '../../../redux/features/appSlice';
-import { login, setShopAdminTenant } from '../../../redux/features/authSlice';
+import { login } from '../../../redux/features/authSlice';
 import { setRolePermissions } from '../../../redux/features/permissionsStateSlice';
 import { useAppDispatch, useAppSelector } from '../../../redux/redux-hooks';
 import authService from '../../../services/adminapp/admin';
-import { setItem } from '../../../utils/storage';
-import FastSpinner from '../../../components/common/CustomSpinner';
+import appUserService from '../../../services/adminapp/adminAppUser';
 import { handleTitleText } from '../../../utils/constants';
+import { setItem } from '../../../utils/storage';
 
 interface LoginFields {
   email: string;
@@ -92,8 +92,11 @@ function LoginPage() {
       .loginService(userData)
       .then(async (user) => {
         if (user && user.data.success) {
+          const [branch] = user.data.data.branches;
           await handleAnonAppUser(user.data.data);
           const newUserData = user.data.data;
+          delete newUserData.branches;
+          newUserData.branch = branch.id;
           setIsLoader(false);
           setItem('AUTH_TOKEN', newUserData.accessToken);
           setItem('REFRESH_TOKEN', newUserData.refreshToken);
@@ -105,19 +108,21 @@ function LoginPage() {
           if (newUserData?.tenantConfig) {
             dispatch(setLogo(user?.data?.data?.tenantConfig?.logo));
           }
-          if (newUserData?.userType === 'ShopUser') {
-            setItem('BRANCH_ID', newUserData.branch);
-            dispatch(
-              setShopAdminTenant({
-                branch: newUserData.branch,
-                tenant: newUserData.tenant,
-                tenantName: newUserData.tenantName,
-                maxEmployeeLimit: newUserData.maxEmployeeLimit,
-                branchLimit: newUserData.branchLimit,
-              })
-            );
+          setItem('BRANCH_ID', newUserData.branch);
+          // if (newUserData?.userType === 'ShopUser') {
+          //   dispatch(
+          //     setShopAdminTenant({
+          //       branch: newUserData.branch,
+          //       tenant: newUserData.tenant,
+          //       tenantName: newUserData.tenantName,
+          //       maxEmployeeLimit: newUserData.maxEmployeeLimit,
+          //       branchLimit: newUserData.branchLimit,
+          //     })
+          //   );
+          // }
+          if (user.data.data.branches.length === 1) {
+            navigate('../../../dashboard');
           }
-          navigate('../../../dashboard');
         } else {
           setIsLoader(false);
           showNotification(user.data.message, 'error');
