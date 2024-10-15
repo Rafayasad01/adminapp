@@ -1,73 +1,59 @@
 import { CATEGORY_PREFIX } from '../../utils/constants';
 import network from '../../utils/network';
-import { getItem } from '../../utils/storage';
+// import { getItem } from '../../utils/storage';
 
 const SERVICE_PREFIX = 'service';
 const SERVICE_FAQ_PREFIX = 'faq';
-const BRANCH_ID = getItem('BRANCH_ID');
+// const BRANCH_ID = getItem('BRANCH_ID');
 
 const getListService = (quaryParams: any) => {
-  return network.get(`${CATEGORY_PREFIX}/list/${BRANCH_ID}`, {
+  return network.get(`${CATEGORY_PREFIX}/list`, {
     ...quaryParams,
   });
 };
 
 const create = (data: any) => {
-  return network.postMultipart(`${CATEGORY_PREFIX}/create/${BRANCH_ID}`, data);
+  return network.postMultipart(`${CATEGORY_PREFIX}/create`, data);
 };
 
 const getCategory = (id: string) => {
-  return network.get(`${CATEGORY_PREFIX}/details/${BRANCH_ID}/${id}`);
+  return network.get(`${CATEGORY_PREFIX}/details/${id}`);
 };
 
 const updateCategory = (productId: string, data: any) => {
-  return network.postMultipart(
-    `${CATEGORY_PREFIX}/update/${BRANCH_ID}/${productId}`,
-    data
-  );
+  return network.postMultipart(`${CATEGORY_PREFIX}/update/${productId}`, data);
 };
 
 const updateStatus = (productId: string, data: any) => {
-  return network.post(
-    `${CATEGORY_PREFIX}/update/${BRANCH_ID}/${productId}/status`,
-    data
-  );
+  return network.post(`${CATEGORY_PREFIX}/update/${productId}/status`, data);
 };
 
 const deleteCategory = (productId: string) => {
-  return network.post(
-    `${CATEGORY_PREFIX}/delete/${BRANCH_ID}/${productId}`,
-    {}
-  );
+  return network.post(`${CATEGORY_PREFIX}/delete/${productId}`, {});
 };
 
 // services
 
 const getCategoryServiceList = (productId: string, quaryParams: any) => {
-  return network.get(
-    `${CATEGORY_PREFIX}/${SERVICE_PREFIX}/list/${BRANCH_ID}/${productId}`,
-    {
-      ...quaryParams,
-    }
-  );
+  return network.get(`${CATEGORY_PREFIX}/${SERVICE_PREFIX}/list/${productId}`, {
+    ...quaryParams,
+  });
 };
 
 const categoryServiceCreate = (productId: string, data: any) => {
   return network.postMultipart(
-    `${CATEGORY_PREFIX}/${SERVICE_PREFIX}/create/${BRANCH_ID}/${productId}`,
+    `${CATEGORY_PREFIX}/${SERVICE_PREFIX}/create/${productId}`,
     data
   );
 };
 
 const getCategoryService = (id: string) => {
-  return network.get(
-    `${CATEGORY_PREFIX}/${SERVICE_PREFIX}/details/${BRANCH_ID}/${id}`
-  );
+  return network.get(`${CATEGORY_PREFIX}/${SERVICE_PREFIX}/details/${id}`);
 };
 
 const updateCategoryService = (catId: any, id: string, data: any) => {
   return network.postMultipart(
-    `${CATEGORY_PREFIX}/${SERVICE_PREFIX}/update/${BRANCH_ID}/${catId}/${id}`,
+    `${CATEGORY_PREFIX}/${SERVICE_PREFIX}/update/${catId}/${id}`,
     data
   );
 };
@@ -78,14 +64,14 @@ const updateCategoryServiceStatus = (
   data: any
 ) => {
   return network.post(
-    `${CATEGORY_PREFIX}/${SERVICE_PREFIX}/update/${BRANCH_ID}/${catId}/${categoryServiceId}/status`,
+    `${CATEGORY_PREFIX}/${SERVICE_PREFIX}/update/${catId}/${categoryServiceId}/status`,
     data
   );
 };
 
 const deleteCategoryService = (categoryServiceId: string) => {
   return network.post(
-    `${CATEGORY_PREFIX}/${SERVICE_PREFIX}/delete/${BRANCH_ID}/${categoryServiceId}`,
+    `${CATEGORY_PREFIX}/${SERVICE_PREFIX}/delete/${categoryServiceId}`,
     {}
   );
 };
@@ -97,27 +83,27 @@ const getCategoryServiceFaqList = (
   quaryParams: any
 ) => {
   return network.get(
-    `${CATEGORY_PREFIX}/${SERVICE_PREFIX}/${SERVICE_FAQ_PREFIX}/list/${BRANCH_ID}/${categoryServiceId}`,
+    `${CATEGORY_PREFIX}/${SERVICE_PREFIX}/${SERVICE_FAQ_PREFIX}/list/${categoryServiceId}`,
     { ...quaryParams }
   );
 };
 
 const categoryServiceCreateFaq = (categoryServiceId: string, data: any) => {
   return network.post(
-    `${CATEGORY_PREFIX}/${SERVICE_PREFIX}/${SERVICE_FAQ_PREFIX}/create/${BRANCH_ID}/${categoryServiceId}`,
+    `${CATEGORY_PREFIX}/${SERVICE_PREFIX}/${SERVICE_FAQ_PREFIX}/create/${categoryServiceId}`,
     data
   );
 };
 
 const getCategoryServiceFaq = (id: string) => {
   return network.get(
-    `${CATEGORY_PREFIX}/${SERVICE_PREFIX}/${SERVICE_FAQ_PREFIX}/details/${BRANCH_ID}/${id}`
+    `${CATEGORY_PREFIX}/${SERVICE_PREFIX}/${SERVICE_FAQ_PREFIX}/details/${id}`
   );
 };
 
 const updateCategoryServiceFaq = (id: string, data: any) => {
   return network.post(
-    `${CATEGORY_PREFIX}/${SERVICE_PREFIX}/${SERVICE_FAQ_PREFIX}/update/${BRANCH_ID}/${id}`,
+    `${CATEGORY_PREFIX}/${SERVICE_PREFIX}/${SERVICE_FAQ_PREFIX}/update/${id}`,
     data
   );
 };
@@ -127,14 +113,14 @@ const updateCategoryServiceFaqStatus = (
   data: any
 ) => {
   return network.post(
-    `${CATEGORY_PREFIX}/${SERVICE_PREFIX}/${SERVICE_FAQ_PREFIX}/update/${BRANCH_ID}/${categoryServiceFaqId}/status`,
+    `${CATEGORY_PREFIX}/${SERVICE_PREFIX}/${SERVICE_FAQ_PREFIX}/update/${categoryServiceFaqId}/status`,
     data
   );
 };
 
 const deleteCategoryServiceFaq = (categoryServiceFaqId: string) => {
   return network.post(
-    `${CATEGORY_PREFIX}/${SERVICE_PREFIX}/${SERVICE_FAQ_PREFIX}/delete/${BRANCH_ID}/${categoryServiceFaqId}`,
+    `${CATEGORY_PREFIX}/${SERVICE_PREFIX}/${SERVICE_FAQ_PREFIX}/delete/${categoryServiceFaqId}`,
     {}
   );
 };
