@@ -48,6 +48,7 @@ function AppUserCreatePopup({
     register,
     handleSubmit,
     watch,
+    reset,
     formState: { errors },
     control,
   } = useForm<AppUser>();
@@ -65,7 +66,7 @@ function AppUserCreatePopup({
       data.appuserRole = 'App';
     }
     setOpenFormDialog(false);
-    callback(data);
+    callback(data, reset);
   };
   // console.log('errrr', errors);
 

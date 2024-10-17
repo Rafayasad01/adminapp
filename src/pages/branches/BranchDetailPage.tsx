@@ -98,7 +98,7 @@ function BranchDetailPage() {
 
   useEffect(() => {
     branchService
-      .getDetailService(authState.user.tenant, branchId)
+      .getDetailService(authState.user.tenant)
       .then((item) => {
         if (item.data.success) {
           setIsLoader(false);

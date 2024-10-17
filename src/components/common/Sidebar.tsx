@@ -445,7 +445,7 @@ function Sidebar() {
       setList(tempList);
     }
   }, [permissions, appItems?.employeeLimit, authState]);
-  console.log('🚀 ~ useEffect ~ permissions:', permissions);
+  // console.log('🚀 ~ useEffect ~ permissions:', permissions);
 
   return (
     <Drawer

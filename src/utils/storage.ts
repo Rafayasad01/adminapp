@@ -3,6 +3,7 @@ type Key =
   | 'AUTH_TOKEN'
   | 'THEME'
   | 'SYSTEM_CONFIG'
+  | 'TENANT_CONFIG'
   | 'REFRESH_TOKEN'
   | 'SHOP_TENANT'
   | 'TITLE_TEXT'

@@ -24,6 +24,7 @@ import Notify from '../../components/common/Notify';
 import { AppUserEmployees } from '../../interfaces/app-user.interface';
 import { useAppSelector } from '../../redux/redux-hooks';
 import employeeService from '../../services/adminapp/adminEmployee';
+import branchService from '../../services/adminapp/adminBranch';
 import PermissionPopup from '../../utils/PermissionPopup';
 import {
   ALL_PERMISSIONS,
@@ -31,19 +32,22 @@ import {
   PATTERN,
 } from '../../utils/constants';
 import { listingRolePermission } from '../../utils/helper';
+import { getItem } from '../../utils/storage';
 
 function EmployeePage() {
   const authState: any = useAppSelector((state: any) => state?.authState);
-  const employeeLimit: any = useAppSelector(
-    (state: any) => state?.persistedReducer?.appState?.UserItems?.employeeLimit
-  );
+  // const employeeLimit: any = useAppSelector(
+  //   (state: any) => state?.persistedReducer?.appState?.UserItems?.employeeLimit
+  // );
   const dataRole = useAppSelector(
     (state: any) => state?.persistedReducer?.roleState?.role?.permissions
   );
+  const branchId: any = getItem('BRANCH_ID');
   const [search, setSearch] = useState<any>('');
   const [page, setPage] = useState(0);
   const [total, setTotal] = useState(0);
   const [list, setList] = useState<any>([]);
+  const [branchesLov, setBranchesLov] = useState<any>([]);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [actionMenuItemid, setActionMenuItemid] = React.useState('');
   const [actionMenuAnchorEl, setActionMenuAnchorEl] =
@@ -65,14 +69,16 @@ function EmployeePage() {
     register,
     handleSubmit,
     reset,
+    control,
     getValues,
     setValue,
+    watch,
     formState: { errors },
   } = useForm<AppUserEmployees>();
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
-  const inputFieldsData = [
+  const [inputFieldsData, setInputFieldsData] = useState([
     {
       fieldName: 'First Name',
       id: 'first_name',
@@ -117,21 +123,97 @@ function EmployeePage() {
       pattern: PATTERN.PASSWORD,
       maxLetterLimit: 100,
     },
-  ];
+    {
+      fieldName: 'Employee Type',
+      id: 'employeeType',
+      defaultValue: 'Select Employee Type',
+      control,
+      register,
+      setValue,
+      error: errors.employeeType,
+      type: 'select',
+      options: {
+        role: watch('employeeType'),
+        roles: [
+          {
+            id: 'USER',
+            name: 'User',
+          },
+          {
+            id: 'MANAGER',
+            name: 'Manager',
+          },
+        ],
+      },
+    },
+  ]);
+
+  useEffect(() => {
+    if (openFormDialog) {
+      branchService.getBranchesLov().then((item: any) => {
+        if (item.data.success) {
+          const filtered = item.data.data.map(({ id, name }: any) => ({
+            id,
+            name,
+          }));
+          setBranchesLov(filtered);
+        }
+      });
+    }
+  }, [openFormDialog]);
+
+  useEffect(() => {
+    const updatedFields: any = [...inputFieldsData];
+    const branchesFieldIndex = updatedFields.findIndex(
+      (field: any) => field.id === 'branches'
+    );
+    if (watch('employeeType') === 'USER') {
+      if (branchesFieldIndex !== -1) {
+        updatedFields.splice(branchesFieldIndex, 1);
+      }
+    } else if (watch('employeeType') === 'MANAGER') {
+      if (branchesFieldIndex === -1) {
+        updatedFields.push({
+          fieldName: 'Branches',
+          id: 'branches',
+          defaultFieldValue: 'Select Branches',
+          control,
+          register,
+          setValue,
+          error: errors.branches,
+          type: 'multipleSelect',
+          options: {
+            role: watch('branches'),
+            roles: branchesLov,
+          },
+        });
+      }
+    } else {
+      updatedFields[branchesFieldIndex] = {
+        ...updatedFields[branchesFieldIndex],
+        options: {
+          ...updatedFields[branchesFieldIndex]?.options,
+          roles: branchesLov,
+        },
+      };
+    }
+
+    setInputFieldsData(updatedFields);
+  }, [watch('employeeType'), branchesLov]);
 
   const handleFormClickOpen = () => {
     if (
       listingRolePermission(dataRole, ALL_PERMISSIONS.storeUser.addUserEmployee)
     ) {
-      if (total < employeeLimit) {
-        setOpenFormDialog(true);
-      } else {
-        setIsNotify(true);
-        setNotifyMessage({
-          text: 'Employees limit has been excceed',
-          type: 'warning',
-        });
-      }
+      setOpenFormDialog(true);
+      // if (total < employeeLimit) {
+      // } else {
+      //   setIsNotify(true);
+      //   setNotifyMessage({
+      //     text: 'Employees limit has been excceed',
+      //     type: 'warning',
+      //   });
+      // }
     } else {
       setIsNotify(true);
       setNotifyMessage({
@@ -148,12 +230,7 @@ function EmployeePage() {
       setSearch(searchTxt);
       setPage(newPage);
       employeeService
-        .getListServiceSearch(
-          authState.user.tenant,
-          searchTxt,
-          newPage,
-          rowsPerPage
-        )
+        .getListServiceSearch(searchTxt, newPage, rowsPerPage)
         .then((item) => {
           setList(item.data.data.list);
           setTotal(item.data.data.total);
@@ -168,20 +245,13 @@ function EmployeePage() {
     setPage(newPage);
     // offset? ,limit rowsperpage hoga ofset page * rowsperPage
     if (search === '' || search === null || search === undefined) {
-      employeeService
-        .getListService(authState.user.tenant, newPage, rowsPerPage)
-        .then((item) => {
-          setList(item.data.data.list);
-          setTotal(item.data.data.total);
-        });
+      employeeService.getListService(newPage, rowsPerPage).then((item) => {
+        setList(item.data.data.list);
+        setTotal(item.data.data.total);
+      });
     } else {
       employeeService
-        .getListServiceSearch(
-          authState.user.tenant,
-          search,
-          newPage,
-          rowsPerPage
-        )
+        .getListServiceSearch(search, newPage, rowsPerPage)
         .then((item) => {
           setList(item.data.data.list);
           setTotal(item.data.data.total);
@@ -197,20 +267,13 @@ function EmployeePage() {
     setRowsPerPage(newRowperPage);
     setPage(newPage);
     if (search === '' || search === null || search === undefined) {
-      employeeService
-        .getListService(authState.user.tenant, newPage, newRowperPage)
-        .then((item) => {
-          setList(item.data.data.list);
-          setTotal(item.data.data.total);
-        });
+      employeeService.getListService(newPage, newRowperPage).then((item) => {
+        setList(item.data.data.list);
+        setTotal(item.data.data.total);
+      });
     } else {
       employeeService
-        .getListServiceSearch(
-          authState.user.tenant,
-          search,
-          newPage,
-          newRowperPage
-        )
+        .getListServiceSearch(search, newPage, newRowperPage)
         .then((item) => {
           setList(item.data.data.list);
           setTotal(item.data.data.total);
@@ -299,6 +362,8 @@ function EmployeePage() {
     }
   };
 
+  console.log(branchesLov);
+
   useEffect(() => {
     if (
       listingRolePermission(
@@ -307,7 +372,7 @@ function EmployeePage() {
       )
     ) {
       employeeService
-        .getListService(authState.user.tenant, page, rowsPerPage)
+        .getListService(page, rowsPerPage)
         .then((item: any) => {
           if (item.data.success) {
             setIsLoader(false);
@@ -331,20 +396,21 @@ function EmployeePage() {
   }, [null]);
 
   const createFormHandler = (data: any) => {
-    setIsLoader(true);
+    // setIsLoader(true);
     const userData = {
       firstName: data.first_name,
       lastName: data.last_name,
       password: data.password,
       email: data.email,
-      createdBy: authState.user.id,
-      tenant: authState.user.tenant,
+      branch: data.employeeType === 'USER' ? [branchId] : data.branches,
+      employeeType: data.employeeType,
     };
+    // console.log('🚀 ~ createFormHandler ~ datas:', userData);
     employeeService
       .create(userData)
       .then((item) => {
         if (item.data.success) {
-          reset();
+          // reset();
           setIsLoader(false);
           setIsNotify(true);
           setNotifyMessage({
@@ -353,7 +419,7 @@ function EmployeePage() {
           });
           setList([...list, item.data.data]);
         } else {
-          reset();
+          // reset();
           setIsLoader(false);
           setIsNotify(true);
           setNotifyMessage({

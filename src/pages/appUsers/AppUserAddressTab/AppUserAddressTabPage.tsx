@@ -28,7 +28,7 @@ function AppUserAddressTabPage({
   appUserId,
   setAddress,
 }: AppUserAddressTabPageProps) {
-  const authState: any = useAppSelector((state) => state?.authState);
+  // const authState: any = useAppSelector((state) => state?.authState);
   const [list, setList] = useState<any>();
   const dataRole = useAppSelector(
     (state: any) => state?.persistedReducer?.roleState?.role?.permissions
@@ -68,7 +68,6 @@ function AppUserAddressTabPage({
       longitude: data.longitude ? data.longitude : null,
       type: data.type,
       address: data.address,
-      tenant: authState.user.tenant,
       appUser: appUserId,
     };
     appUserService

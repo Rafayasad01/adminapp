@@ -4,7 +4,6 @@ import network from '../../utils/network';
 
 const SERVICE_PREFIX = 'service';
 const SERVICE_FAQ_PREFIX = 'faq';
-// const BRANCH_ID = getItem('BRANCH_ID');
 
 const getListService = (quaryParams: any) => {
   return network.get(`${CATEGORY_PREFIX}/list`, {

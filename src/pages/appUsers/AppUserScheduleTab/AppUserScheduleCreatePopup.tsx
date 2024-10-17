@@ -11,7 +11,7 @@ import TimePicker from '../../../components/common/CustomTimePicker';
 import Loader from '../../../components/common/Loader';
 import '../../../index.css';
 import { AppSchedule } from '../../../interfaces/app-user.interface';
-import { useAppSelector } from '../../../redux/redux-hooks';
+// import { useAppSelector } from '../../../redux/redux-hooks';
 
 type AppUserScheduleCreatePageProps = {
   openFormDialog: boolean;
@@ -30,7 +30,7 @@ function AppUserScheduleCreatePage({
   filteredWeekdays,
   appUserId,
 }: AppUserScheduleCreatePageProps) {
-  const authState: any = useAppSelector((state) => state?.authState);
+  // const authState: any = useAppSelector((state) => state?.authState);
   const [isLoader, setIsLoader] = useState<boolean>(false);
   const [count, setCount] = useState(0);
   const [startTime, setStartTime] = useState<dayjs.Dayjs | any>(null);
@@ -156,7 +156,6 @@ function AppUserScheduleCreatePage({
     // console.log('data3', data);
     setIsLoader(true);
     const parent: any = {
-      createdBy: authState.user.id,
       appUser: appUserId,
       workDays: [],
     };

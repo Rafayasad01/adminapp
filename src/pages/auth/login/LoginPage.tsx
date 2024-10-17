@@ -14,14 +14,15 @@ import FastSpinner from '../../../components/common/CustomSpinner';
 import ErrorSpanBox from '../../../components/common/ErrorSpanBox';
 import Notify from '../../../components/common/Notify';
 import { UserLogin } from '../../../interfaces/auth.interface';
-import { setItemState, setLogo } from '../../../redux/features/appSlice';
-import { login } from '../../../redux/features/authSlice';
+import { setItemState } from '../../../redux/features/appSlice';
+import { login, setShopAdminTenant } from '../../../redux/features/authSlice';
 import { setRolePermissions } from '../../../redux/features/permissionsStateSlice';
 import { useAppDispatch, useAppSelector } from '../../../redux/redux-hooks';
 import authService from '../../../services/adminapp/admin';
 import appUserService from '../../../services/adminapp/adminAppUser';
 import { handleTitleText } from '../../../utils/constants';
 import { setItem } from '../../../utils/storage';
+import LoginBranchPopup from './LoginBranchPopup';
 
 interface LoginFields {
   email: string;
@@ -38,7 +39,10 @@ function LoginPage() {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [isLoader, setIsLoader] = useState(false);
+  const [openPopup, setOpenPopup] = useState(false);
   const [greeting, setGreeting] = useState('');
+  const [loginData, setLoginData] = useState<null>();
+  const [userLoginData, setUserLoginData] = useState<any>();
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const handleMouseDownPassword = (
     event: React.MouseEvent<HTMLButtonElement>
@@ -90,38 +94,47 @@ function LoginPage() {
     };
     await authService
       .loginService(userData)
-      .then(async (user) => {
+      .then(async (user: any) => {
         if (user && user.data.success) {
-          const [branch] = user.data.data.branches;
-          await handleAnonAppUser(user.data.data);
+          const [branch] = user.data.data.backofficeUserTenantBranch;
+          setLoginData(user.data.data.branches);
+          // console.log(
+          //   'user.data.data.branches',
+          //   user.data.data.backofficeUserTenantBranch.length
+          // );
+          setUserLoginData(user.data.data);
           const newUserData = user.data.data;
-          delete newUserData.branches;
-          newUserData.branch = branch.id;
+          // console.log('new user data:', branch);
+
+          newUserData.branch = branch.branch;
           setIsLoader(false);
-          setItem('AUTH_TOKEN', newUserData.accessToken);
-          setItem('REFRESH_TOKEN', newUserData.refreshToken);
           dispatch(setRolePermissions(newUserData.role));
           handleTitleText(newUserData.role.permissions);
           delete newUserData.role;
           dispatch(login(newUserData));
           dispatch(setItemState(newUserData));
-          if (newUserData?.tenantConfig) {
-            dispatch(setLogo(user?.data?.data?.tenantConfig?.logo));
-          }
           setItem('BRANCH_ID', newUserData.branch);
-          // if (newUserData?.userType === 'ShopUser') {
-          //   dispatch(
-          //     setShopAdminTenant({
-          //       branch: newUserData.branch,
-          //       tenant: newUserData.tenant,
-          //       tenantName: newUserData.tenantName,
-          //       maxEmployeeLimit: newUserData.maxEmployeeLimit,
-          //       branchLimit: newUserData.branchLimit,
-          //     })
-          //   );
-          // }
-          if (user.data.data.branches.length === 1) {
-            navigate('../../../dashboard');
+
+          if (newUserData?.userType === 'ShopUser') {
+            dispatch(
+              setShopAdminTenant({
+                branch: newUserData.branch,
+              })
+            );
+          }
+          if (user.data.data.backofficeUserTenantBranch.length === 1) {
+            const tokens: any = await authService.createToken({
+              tenant: newUserData.tenant,
+              branch: branch.branch,
+              userId: newUserData.id,
+            });
+            setItem('AUTH_TOKEN', tokens.data.data?.accessToken);
+            setItem('REFRESH_TOKEN', tokens.data.data?.refreshToken);
+            await handleAnonAppUser(user.data.data);
+            // navigate('../../../dashboard');
+          } else {
+            setOpenPopup(true);
+            return null;
           }
         } else {
           setIsLoader(false);
@@ -130,6 +143,7 @@ function LoginPage() {
           // setAlertSeverity('error');
           // setShowAlert(true);
         }
+        return null;
       })
       .catch((err) => {
         setIsLoader(false);
@@ -138,6 +152,24 @@ function LoginPage() {
         // setAlertSeverity('error');
         // setShowAlert(true);
       });
+  };
+
+  const getBranchhPopupCallback = async (branchId: any) => {
+    if (branchId !== 'none' && branchId !== undefined) {
+      // console.log('userLoginData', userLoginData);
+      const tokens: any = await authService.createToken({
+        tenant: userLoginData.tenant,
+        branch: branchId,
+        userId: userLoginData.id,
+      });
+      // console.log('🚀 ~ getBranchhPopupCallback ~ tokens:', tokens);
+      setItem('AUTH_TOKEN', tokens.data.data?.accessToken);
+      setItem('REFRESH_TOKEN', tokens.data.data?.refreshToken);
+      setItem('BRANCH_ID', branchId);
+      await handleAnonAppUser(userLoginData);
+      navigate('../../dashboard');
+      // console.log('branchId', branchId);
+    }
   };
 
   return (
@@ -268,6 +300,14 @@ function LoginPage() {
             )}
           </div>
         </div>
+        {openPopup && (
+          <LoginBranchPopup
+            openFormDialog={openPopup}
+            setOpenFormDialog={setOpenPopup}
+            branches={loginData}
+            callback={getBranchhPopupCallback}
+          />
+        )}
         {notification && (
           <Notify
             isOpen

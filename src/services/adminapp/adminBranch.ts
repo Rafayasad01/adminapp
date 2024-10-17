@@ -2,23 +2,16 @@ import network from '../../utils/network';
 
 const BRANCH_PREFIX = 'branch';
 
-const getListService = (tenantID: string, page: number, size: number) => {
-  return network.get(`${BRANCH_PREFIX}/list/${tenantID}/${page}/${size}`);
+const getListService = (page: number, size: number) => {
+  return network.get(`${BRANCH_PREFIX}/list/${page}/${size}`);
 };
 
-const getListServiceSearch = (
-  tenantID: string,
-  search: string,
-  page: number,
-  size: number
-) => {
-  return network.get(
-    `${BRANCH_PREFIX}/list/${tenantID}/${search}/${page}/${size}`
-  );
+const getListServiceSearch = (search: string, page: number, size: number) => {
+  return network.get(`${BRANCH_PREFIX}/list/${search}/${page}/${size}`);
 };
 
-const getDetailService = (tenantID: any, branchId: string | any) => {
-  return network.get(`${BRANCH_PREFIX}/detail/${tenantID}/${branchId}`);
+const getDetailService = (branchId: string | any) => {
+  return network.get(`${BRANCH_PREFIX}/detail/${branchId}`);
 };
 
 const getSettingService = (tenantID: any) => {
@@ -29,24 +22,23 @@ const getCategoryService = (tenantID: any) => {
   return network.get(`${BRANCH_PREFIX}/category/${tenantID}`);
 };
 
-const insertBranch = (data: any, tenantID: string) => {
-  return network.post(`${BRANCH_PREFIX}/insert/${tenantID}`, data);
+const insertBranch = (data: any) => {
+  return network.post(`${BRANCH_PREFIX}/insert`, data);
 };
 
 const editBranch = (tenantId: string, branchId: string) => {
   return network.get(`${BRANCH_PREFIX}/detail/${tenantId}/${branchId}`);
 };
 
-const updateBranch = (data: any, tenantID: string, branchId: string) => {
-  return network.post(`${BRANCH_PREFIX}/update/${tenantID}/${branchId}`, data);
+const updateBranch = (data: any, branchId: string) => {
+  return network.post(`${BRANCH_PREFIX}/update/${branchId}`, data);
 };
 
-const updateBranchStatus = (data: any, tenantID: string, branchId: string) => {
-  return network.post(
-    `${BRANCH_PREFIX}/update/${tenantID}/${branchId}/status`,
-    data
-  );
+const updateBranchStatus = (data: any, branchId: string) => {
+  return network.post(`${BRANCH_PREFIX}/update/${branchId}/status`, data);
 };
+
+const getBranchesLov = () => network.get(`${BRANCH_PREFIX}/list/lov`);
 
 export default {
   getListService,
@@ -58,4 +50,5 @@ export default {
   editBranch,
   updateBranch,
   updateBranchStatus,
+  getBranchesLov,
 };

@@ -147,9 +147,9 @@ function AppUserOtherTab({
         'Customer Detail',
         dataRole,
         navigate,
-        `detail/${actionMenuItemid?.id}`
+        `../detail/${actionMenuItemid?.id}`
       );
-      navigate(`detail/${actionMenuItemid?.id}`);
+      navigate(`../detail/${actionMenuItemid?.id}`);
     }
   };
 

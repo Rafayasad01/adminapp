@@ -36,7 +36,7 @@ function AppUserDetailPage() {
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
   const actionMenuOptions = ['Edit', 'Delete'];
 
-  const [isLoader, setIsLoader] = React.useState(false);
+  const [isLoader, setIsLoader] = React.useState(true);
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
   const [selectedTab, setSelectedTab] = useState('ADDRESS');
@@ -95,10 +95,10 @@ function AppUserDetailPage() {
             type: 'error',
           });
         });
+    } else {
+      setIsLoader(false);
     }
   }, []);
-
-  console.log('🚀 ~ AppUserDetailPage ~ isLoader:', isLoader);
 
   return isLoader ? (
     <Loader />
@@ -109,7 +109,7 @@ function AppUserDetailPage() {
         setIsOpen={setIsNotify}
         displayMessage={notifyMessage}
       />
-      <TopBar isNestedRoute title="Details" />
+      <TopBar isNestedRoute isAdditionalRoute="../list" title="Details" />
       {detail && (
         <div className="container m-auto mt-5">
           <div className="grid grid-cols-12 gap-3">

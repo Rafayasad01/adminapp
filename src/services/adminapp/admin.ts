@@ -35,6 +35,10 @@ const newPasswordService = (data: any) => {
   return network.post(`${BACKOFFICE_PREFIX}/new-password`, data);
 };
 
+const createToken = (data: any) => {
+  return network.post(`${BACKOFFICE_PREFIX}/create/token`, data);
+};
+
 export default {
   getService,
   updateService,
@@ -44,4 +48,5 @@ export default {
   updateMediaService,
   getOtpService,
   newPasswordService,
+  createToken,
 };

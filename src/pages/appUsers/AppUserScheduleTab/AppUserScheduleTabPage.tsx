@@ -10,7 +10,10 @@ import Loader from '../../../components/common/Loader';
 import Notify from '../../../components/common/Notify';
 import { useAppSelector } from '../../../redux/redux-hooks';
 import Service from '../../../services/adminapp/adminAppUser';
-import { NOT_AUTHORIZED_MESSAGE } from '../../../utils/constants';
+import {
+  ALL_PERMISSIONS,
+  NOT_AUTHORIZED_MESSAGE,
+} from '../../../utils/constants';
 import { listingRolePermission } from '../../../utils/helper';
 import AppUserScheduleCreatePopup from './AppUserScheduleCreatePopup';
 import AppUserScheduleUpdatePopup from './AppUserScheduleUpdatePopup';
@@ -119,7 +122,12 @@ function AppUserScheduleTabPage({
 
   const handleSwitchChange = (event: any, id: string) => {
     setIsLoader(true);
-    if (listingRolePermission(dataRole, 'Customer Update Status')) {
+    if (
+      listingRolePermission(
+        dataRole,
+        ALL_PERMISSIONS.storeUser.viewDriverUserApp
+      )
+    ) {
       setIsLoader(true);
       const data = {
         id,
@@ -156,7 +164,12 @@ function AppUserScheduleTabPage({
   };
 
   const handleFormClickOpen = () => {
-    if (listingRolePermission(dataRole, 'Customer Create')) {
+    if (
+      listingRolePermission(
+        dataRole,
+        ALL_PERMISSIONS.storeUser.viewDriverUserApp
+      )
+    ) {
       if (list?.length >= 7) {
         setIsNotify(true);
         setNotifyMessage({
@@ -176,7 +189,12 @@ function AppUserScheduleTabPage({
   };
 
   const handleEdit = (id: string) => {
-    if (listingRolePermission(dataRole, 'Banners Edit')) {
+    if (
+      listingRolePermission(
+        dataRole,
+        ALL_PERMISSIONS.storeUser.viewDriverUserApp
+      )
+    ) {
       setIsLoader(true);
       Service.appUserScheduleEdit(id)
         .then((item: any) => {

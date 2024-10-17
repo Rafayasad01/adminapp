@@ -125,7 +125,7 @@ function AppUserTab({
           type: 'warning',
         });
       }
-    } else if (option === 'Detail') {
+    } else if (option === 'View') {
       if (
         listingRolePermission(dataRole, ALL_PERMISSIONS.storeUser.viewUserApp)
       ) {

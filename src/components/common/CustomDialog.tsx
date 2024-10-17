@@ -14,6 +14,7 @@ import CustomDropDown from './CustomDropDown';
 import CustomInputBox from './CustomInputBox';
 import ErrorSpanBox from './ErrorSpanBox';
 import TimePicker from './TimePicker';
+import CustomMultipleSelectBox from './CustomMultipleSelect';
 
 type CustomDialogProps = {
   openFormDialog: boolean;
@@ -110,6 +111,21 @@ function CustomDialog({
                             register={items.register}
                             options={items.options}
                             inputTitle={items.fieldName}
+                          />
+                        </FormControl>
+                      ) : items.type === 'multipleSelect' ? (
+                        <FormControl className="FormControl" variant="standard">
+                          <CustomMultipleSelectBox
+                            validateRequired
+                            id={items.id}
+                            control={items.control}
+                            error={items.errors}
+                            setValue={items.setValue}
+                            register={items.register}
+                            options={items.options}
+                            customClassInputTitle="font-bold"
+                            inputTitle={items.fieldName}
+                            defaultFieldValue={items.defaultFieldValue}
                           />
                         </FormControl>
                       ) : items.type === 'number' ||

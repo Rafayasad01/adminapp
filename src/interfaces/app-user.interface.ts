@@ -38,6 +38,8 @@ export type AppUserEmployees = {
   last_name: string;
   email: string;
   password: string;
+  employeeType: string;
+  branches: any | undefined;
 };
 
 export type AppSchedule = {

@@ -11,14 +11,14 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import ActionMenu from '../../../components/common/ActionMenu';
-import CustomButton from '../../../components/common/CustomButton';
+// import CustomButton from '../../../components/common/CustomButton';
 import CustomText from '../../../components/common/CustomText';
 import Loader from '../../../components/common/Loader';
 import Notify from '../../../components/common/Notify';
 import TopBar from '../../../components/common/TopBar';
 import { AppointmentProvider } from '../../../interfaces/app.appointment';
 import { useAppSelector } from '../../../redux/redux-hooks';
-import Service from '../../../services/adminapp/adminAppointment';
+// import Service from '../../../services/adminapp/adminAppointment';
 import StoreEmployeeService from '../../../services/adminapp/adminStoreEmployee';
 // import StoreLovService from '../../../services/adminapp/adminStoreService';
 import PermissionPopup from '../../../utils/PermissionPopup';
@@ -36,7 +36,7 @@ import PayrollPopup from './PayrollPopup';
 
 function AppointmentProviderPage() {
   const navigate = useNavigate();
-  const authState: any = useAppSelector((state: any) => state?.authState);
+  // const authState: any = useAppSelector((state: any) => state?.authState);
   const dataRole: any = useAppSelector(
     (state: any) => state?.persistedReducer?.roleState?.role?.permissions
   );
@@ -47,7 +47,7 @@ function AppointmentProviderPage() {
   const [page, setPage] = useState(0);
   const [total, setTotal] = useState(0);
   const [list, setList] = useState<any>([]);
-  const [currentList, setCurrentList] = useState<any>([]);
+  // const [currentList, setCurrentList] = useState<any>([]);
   const [rowsPerPage] = React.useState(2000);
   const [actionMenuItemid, setActionMenuItemid] = React.useState('');
   const [actionMenuAnchorEl, setActionMenuAnchorEl] =
@@ -64,7 +64,7 @@ function AppointmentProviderPage() {
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
   const [isLoader, setIsLoader] = useState(true);
-  const [, setIsLoaderPagination] = useState(false);
+  // const [, setIsLoaderPagination] = useState(false);
   const [isNotify, setIsNotify] = useState(false);
   const [notifyMessage, setNotifyMessage] = useState({});
   const [payrollPopup, setPayrollPopup] = useState<boolean>(false);
@@ -1073,51 +1073,51 @@ function AppointmentProviderPage() {
     }
   };
 
-  const handleViewMore = () => {
-    setIsLoaderPagination(true);
-    const newPage = page + 1;
-    setPage(newPage);
-    Service.ProviderList(authState.user.tenant, newPage, rowsPerPage)
-      .then((item) => {
-        setIsLoaderPagination(false);
-        setCurrentList(item.data.data.list);
-        setList((prev: any) => [...prev, ...item.data.data.list]);
-        setTotal(item.data.data.total);
-      })
-      .catch((error: Error) => {
-        setIsLoaderPagination(false);
-        setIsNotify(true);
-        setNotifyMessage({
-          text: error.message,
-          type: 'error',
-        });
-      });
-  };
+  // const handleViewMore = () => {
+  //   setIsLoaderPagination(true);
+  //   const newPage = page + 1;
+  //   setPage(newPage);
+  //   Service.ProviderList(authState.user.tenant, newPage, rowsPerPage)
+  //     .then((item) => {
+  //       setIsLoaderPagination(false);
+  //       setCurrentList(item.data.data.list);
+  //       setList((prev: any) => [...prev, ...item.data.data.list]);
+  //       setTotal(item.data.data.total);
+  //     })
+  //     .catch((error: Error) => {
+  //       setIsLoaderPagination(false);
+  //       setIsNotify(true);
+  //       setNotifyMessage({
+  //         text: error.message,
+  //         type: 'error',
+  //       });
+  //     });
+  // };
 
-  const handleViewLess = () => {
-    setIsLoaderPagination(true);
-    const newPage = page - 1;
-    setPage(newPage);
-    Service.ProviderList(authState.user.tenant, newPage, rowsPerPage)
-      .then((item) => {
-        setIsLoaderPagination(false);
-        setList((prev: any) =>
-          prev?.filter(
-            (el: any) => !currentList.some((items: any) => items.id === el.id)
-          )
-        );
-        setCurrentList(item.data.data.list);
-        setTotal(item.data.data.total);
-      })
-      .catch((error: Error) => {
-        setIsLoaderPagination(false);
-        setIsNotify(true);
-        setNotifyMessage({
-          text: error.message,
-          type: 'error',
-        });
-      });
-  };
+  // const handleViewLess = () => {
+  //   setIsLoaderPagination(true);
+  //   const newPage = page - 1;
+  //   setPage(newPage);
+  //   Service.ProviderList(authState.user.tenant, newPage, rowsPerPage)
+  //     .then((item) => {
+  //       setIsLoaderPagination(false);
+  //       setList((prev: any) =>
+  //         prev?.filter(
+  //           (el: any) => !currentList.some((items: any) => items.id === el.id)
+  //         )
+  //       );
+  //       setCurrentList(item.data.data.list);
+  //       setTotal(item.data.data.total);
+  //     })
+  //     .catch((error: Error) => {
+  //       setIsLoaderPagination(false);
+  //       setIsNotify(true);
+  //       setNotifyMessage({
+  //         text: error.message,
+  //         type: 'error',
+  //       });
+  //     });
+  // };
 
   return isLoader ? (
     <Loader />
@@ -1192,7 +1192,7 @@ function AppointmentProviderPage() {
           {list?.length < 1 ? (
             <CustomText noRoundedBorders text="No Records Found" />
           ) : null}
-          <div className="mt-3 flex w-[100%] justify-end py-3">
+          {/* <div className="mt-3 flex w-[100%] justify-end py-3">
             {list?.length > rowsPerPage && (
               <CustomButton
                 onclick={handleViewLess}
@@ -1209,7 +1209,7 @@ function AppointmentProviderPage() {
                 buttonType="button"
               />
             )}
-          </div>
+          </div> */}
         </div>
       </div>
       {cancelDialogOpen && (

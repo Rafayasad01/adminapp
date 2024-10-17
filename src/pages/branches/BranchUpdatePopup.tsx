@@ -2,26 +2,21 @@ import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
-// import InputAdornment from '@mui/material/InputAdornment';
-// import TextField from '@mui/material/TextField';
-// import { debounce } from '@mui/material/utils';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 import isBetween from 'dayjs/plugin/isBetween';
-// import kabakCase from 'lodash/kebabCase';
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import '../../assets/css/PopupStyle.css';
+import { TextField } from '@mui/material';
 import CustomButton from '../../components/common/CustomButton';
 import ErrorSpanBox from '../../components/common/ErrorSpanBox';
 import { Tenant } from '../../interfaces/superadmin/tenant.interface';
 import {
-  // DOMAIN_PREFIX,
-  // DOMAIN_PROTOCOL,
   INVALID_CHAR,
   MAX_LENGTH_EXCEEDED,
   PATTERN,
-  // VALIDATE_NON_NEGATIVE_NUM,
+  PH_MINI_LENGTH,
 } from '../../utils/constants';
 
 dayjs.extend(duration);
@@ -54,7 +49,13 @@ function BranchUpdatePopup({
     // console.log('onsubmiotupdate', data);
     if (data.tenantName) {
       setOpenFormDialog(false);
-      callback(item.id, { name: data.tenantName });
+      callback(item.id, {
+        name: data.tenantName,
+        description: data.description,
+        mobile: data.mobile,
+        landline: data.landline,
+        address: data.address,
+      });
     } else {
       setIsNotify(true);
       setNotifyMessage({
@@ -71,6 +72,10 @@ function BranchUpdatePopup({
   useEffect(() => {
     if (item) {
       setValue('tenantName', item.name);
+      setValue('description', item.description);
+      setValue('mobile', item.mobile);
+      setValue('landline', item.landline);
+      setValue('address', item.address);
     }
   }, [item]);
 
@@ -91,7 +96,7 @@ function BranchUpdatePopup({
             <div className="FormBody">
               <div className="FormField">
                 <FormControl className="FormControl" variant="standard">
-                  <label className="FormLabel mt-2">Shop Name</label>
+                  <label className="FormLabel mt-2">Branch Name</label>
                   <Input
                     className="FormInput"
                     {...register('tenantName', {
@@ -106,7 +111,7 @@ function BranchUpdatePopup({
                     // onChange={(val: any) => shopFieldHangler(val.target.value)}
                   />
                   {errors.tenantName?.type === 'required' && (
-                    <ErrorSpanBox error="Shop name is required" />
+                    <ErrorSpanBox error="Branch name is required" />
                   )}
                   {errors.tenantName?.type === 'pattern' && (
                     <ErrorSpanBox error={INVALID_CHAR} />
@@ -115,240 +120,111 @@ function BranchUpdatePopup({
                     <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
                   )}
                 </FormControl>
-                {/* <FormControl className="FormControl" variant="standard">
-                  <label className="FormLabel">Employees Limits</label>
+              </div>
+              <div className="FormFields">
+                <FormControl className="FormControl" variant="standard">
+                  <label className="FormLabel">Landline Number</label>
                   <Input
                     className="FormInput"
-                    {...register('userLimit', {
-                      value: item.userLimit,
-                      required: 'User limit is required in numbers',
-                      validate: (value: any) =>
-                        VALIDATE_NON_NEGATIVE_NUM(value),
+                    id="landline"
+                    placeholder="Enter your landline number"
+                    disableUnderline
+                    {...register('landline', {
+                      pattern: PATTERN.PHONE,
                       maxLength: {
-                        value: 20,
+                        value: 15,
                         message: MAX_LENGTH_EXCEEDED,
                       },
                     })}
-                    type="number"
-                    id="userLimit"
-                    placeholder="Enter user limits"
-                    disableUnderline
-                  />
-                  {errors?.userLimit && (
-                    <ErrorSpanBox error={errors?.userLimit?.message} />
-                  )}
-                </FormControl> */}
-              </div>
-              {/* <div className="FormFields">
-                <FormControl className="FormControl" variant="standard">
-                  <label className="FormLabel">First Name</label>
-                  <Input
-                    className="FormInput"
-                    {...register('firstName', {
-                      required: true,
-                      pattern: PATTERN.CHAR_SPACE_DASH,
-                      validate: (value) => value.length <= 150,
-                      value: item.firstName,
-                    })}
                     type="text"
-                    id="firstName"
-                    disableUnderline
                   />
-                  {errors.firstName?.type === 'required' && (
-                    <ErrorSpanBox error="First name is required" />
-                  )}
-                  {errors.firstName?.type === 'pattern' && (
+                  {errors.landline?.type === 'pattern' && (
                     <ErrorSpanBox error={INVALID_CHAR} />
                   )}
-                  {errors.firstName?.type === 'validate' && (
-                    <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
+                  {errors.landline?.type === 'maxLength' && (
+                    <ErrorSpanBox error={PH_MINI_LENGTH} />
                   )}
                 </FormControl>
                 <FormControl className="FormControl" variant="standard">
-                  <label className="FormLabel">Last Name</label>
+                  <label className="FormLabel">Mobile Number</label>
                   <Input
                     className="FormInput"
-                    {...register('lastName', {
-                      required: true,
-                      pattern: PATTERN.CHAR_SPACE_DASH,
-                      validate: (value) => value.length <= 150,
-                      value: item.lastName,
+                    id="mobile"
+                    placeholder="Enter your mobile number"
+                    disableUnderline
+                    {...register('mobile', {
+                      pattern: PATTERN.PHONE,
+                      maxLength: {
+                        value: 15,
+                        message: MAX_LENGTH_EXCEEDED,
+                      },
                     })}
                     type="text"
-                    id="lastName"
-                    disableUnderline
                   />
-                  {errors.lastName?.type === 'required' && (
-                    <ErrorSpanBox error="Last name is required" />
-                  )}
-                  {errors.lastName?.type === 'pattern' && (
+                  {errors.mobile?.type === 'pattern' && (
                     <ErrorSpanBox error={INVALID_CHAR} />
                   )}
-                  {errors.lastName?.type === 'validate' && (
+                  {errors.mobile?.type === 'maxLength' && (
+                    <ErrorSpanBox error={PH_MINI_LENGTH} />
+                  )}
+                </FormControl>
+              </div>
+              <div className="FormField">
+                <FormControl className="FormControl" variant="standard">
+                  <label className="FormLabel mt-2">Address</label>
+                  <Input
+                    className="FormInput"
+                    {...register('address', {
+                      // required: true,
+                      pattern: PATTERN.CHAR_NUM_SPACE_DASH,
+                      validate: (value) => value.length <= 150,
+                    })}
+                    type="text"
+                    id="address"
+                    placeholder="Enter Address"
+                    disableUnderline
+                  />
+                  {/* {errors.address?.type === 'required' && (
+                  <ErrorSpanBox error="Address is required" />
+                )} */}
+                  {errors.address?.type === 'pattern' && (
+                    <ErrorSpanBox error={INVALID_CHAR} />
+                  )}
+                  {errors.address?.type === 'validate' && (
                     <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
                   )}
                 </FormControl>
               </div>
               <div className="FormField">
                 <FormControl className="FormControl" variant="standard">
-                  <label className="FormLabel mt-2">Email</label>
-                  <Input
-                    disabled
-                    className="FormInput"
-                    {...register('email', {
-                      required: true,
-                      pattern: PATTERN.CHAR_NUM_DOT_AT,
-                      validate: (value) => value.length <= 100,
-                      value: item.email,
-                    })}
-                    type="text"
-                    id="email"
-                    disableUnderline
-                  />
-                  {errors.email?.type === 'required' && (
-                    <ErrorSpanBox error="Email is required" />
-                  )}
-                  {errors.email?.type === 'pattern' && (
-                    <ErrorSpanBox error={INVALID_CHAR} />
-                  )}
-                  {errors.email?.type === 'validate' && (
-                    <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
-                  )}
-                </FormControl>
-              </div> */}
-              {/* <div className="FormField">
-                <FormControl className="FormControl" variant="standard">
-                  <label className="FormLabel">Domain</label>
+                  <label className="FormLabel mt-2">
+                    Description{' '}
+                    <span className="SubLabel">Write 01-370 Characters</span>
+                  </label>
                   <TextField
-                    className="FormInput"
-                    sx={{ padding: 0 }}
-                    id="development_domain"
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          {DOMAIN_PROTOCOL}
-                        </InputAdornment>
-                      ),
-                      endAdornment: (
-                        <InputAdornment position="end">
-                          {DOMAIN_PREFIX}
-                        </InputAdornment>
-                      ),
-                    }}
-                    variant="outlined"
-                    {...register('domain', {
-                      required: true,
-                      pattern: PATTERN?.CHAR_NUM_DASH,
-                      validate: (value) => value.length <= 100,
+                    className="FormTextarea"
+                    id="message"
+                    multiline
+                    rows={4}
+                    defaultValue=""
+                    placeholder="Write Description"
+                    {...register('description', {
+                      // required: 'Description is required',
+                      // minLength: {
+                      //   value: 1,
+                      //   message: 'Minimum One Characters',
+                      // },
+                      maxLength: {
+                        value: 370,
+                        message: MAX_LENGTH_EXCEEDED,
+                      },
                     })}
                   />
-                  {errors.domain?.type === 'required' && (
-                    <ErrorSpanBox error="domain is required" />
-                  )}
-                  {errors.domain?.type === 'pattern' && (
-                    <ErrorSpanBox error={INVALID_CHAR} />
-                  )}
-                  {errors.domain?.type === 'validate' && (
-                    <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
+                  {errors.description && (
+                    <ErrorSpanBox error={errors.description?.message} />
                   )}
                 </FormControl>
-              </div> */}
-              {/* <div className="FormField mb-4">
-                <FormControl className="FormControl" variant="standard">
-                  <label className="FormLabel">Web-App Domain</label>
-                  <TextField
-                    className="FormInput"
-                    sx={{ padding: 0 }}
-                    id="development_domain"
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          {DOMAIN_PROTOCOL}
-                        </InputAdornment>
-                      ),
-                      endAdornment: (
-                        <InputAdornment position="end">
-                          {DOMAIN_PREFIX}
-                        </InputAdornment>
-                      ),
-                    }}
-                    variant="outlined"
-                    {...register('domainWebapp')}
-                    disabled
-                  />
-                </FormControl>
-              </div> */}
-              {/* <div className="FormField">
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      defaultChecked={item.tenantExt.enableLoyaltyProgram}
-                      icon={
-                        <RadioButtonUncheckedOutlinedIcon
-                          style={{ color: '#1D1D1D' }}
-                        />
-                      }
-                      checkedIcon={
-                        <CheckCircleOutlinedIcon style={{ color: '#1D1D1D' }} />
-                      }
-                      {...register('enableLoyaltyProgram')}
-                    />
-                  }
-                  label="Loyality Program"
-                />
               </div>
-              {watch('enableLoyaltyProgram') === true && (
-                <div className='FormFields'>
-                  <FormControl className="FormControl" variant="standard">
-                    <label className="FormLabel">Loyality Conversion Rate</label>
-                    <Input
-                      id="loyaltyCoinConversionRate"
-                      placeholder="Enter Conversion Rate"
-                      type="number"
-                      className="FormInput"
-                      {...register('loyaltyCoinConversionRate', {
-                        value: item?.tenantExt?.loyaltyCoinConversionRate,
-                        required:
-                          watch('enableLoyaltyProgram') === true &&
-                          'Loyality rate is required in numbers',
-                        validate: (value: any) => VALIDATE_NON_NEGATIVE_NUM(value),
-                        maxLength: {
-                          value: 10,
-                          message: MAX_LENGTH_EXCEEDED
-                        }
-                      })}
-                      disableUnderline
-                    />
-                    {errors?.loyaltyCoinConversionRate && (
-                      <ErrorSpanBox error={errors?.loyaltyCoinConversionRate?.message} />
-                    )}
-                  </FormControl>
-                  <FormControl className="FormControl" variant="standard">
-                    <label className="FormLabel">Minimum Loyality Coins</label>
-                    <Input
-                      id="requiredCoinsToRedeem"
-                      placeholder="Enter Minimum Loyality coins"
-                      type="number"
-                      className="FormInput"
-                      {...register('requiredCoinsToRedeem', {
-                        value: item?.tenantExt?.requiredCoinsToRedeem,
-                        required:
-                          watch('enableLoyaltyProgram') === true &&
-                          'Loyality coins is required in numbers',
-                        validate: (value: any) => VALIDATE_NON_NEGATIVE_NUM(value),
-                        maxLength: {
-                          value: 10,
-                          message: MAX_LENGTH_EXCEEDED
-                        }
-                      })}
-                      disableUnderline
-                    />
-                    {errors?.requiredCoinsToRedeem && (
-                      <ErrorSpanBox error={errors?.requiredCoinsToRedeem?.message} />
-                    )}
-                  </FormControl>
-                </div>
-              )} */}
             </div>
             <div className="FormFooter">
               <Button
@@ -373,15 +249,6 @@ function BranchUpdatePopup({
                   height: '35px',
                 }}
               />
-              {/* <Input
-                type="submit"
-                value="Update"
-                className="btn-black-fill"
-                disableUnderline
-                sx={{
-                  padding: '0.375rem 2rem !important',
-                }}
-              /> */}
             </div>
           </form>
         </div>

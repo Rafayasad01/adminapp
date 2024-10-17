@@ -29,6 +29,7 @@ type CustomMultipleSelectBoxProps = {
   setValue?: any;
   callback?: (...args: any[]) => any;
   defaultVal?: string;
+  defaultFieldValue?: string;
   border?: string;
   valuesBoxBgColor?: string;
 };
@@ -45,6 +46,7 @@ function CustomMultipleSelectBox({
   customHeight,
   options,
   defaultVal,
+  defaultFieldValue,
   border,
 }: CustomMultipleSelectBoxProps) {
   // console.log('optionsss', options);
@@ -91,7 +93,13 @@ function CustomMultipleSelectBox({
               input={<OutlinedInput />}
               renderValue={(selected) => {
                 if (selected?.length === 0) {
-                  return <span>{defaultVal || `-- Select Services --`}</span>;
+                  return (
+                    <span>
+                      {defaultVal || defaultFieldValue
+                        ? defaultFieldValue
+                        : `-- Select Services --`}
+                    </span>
+                  );
                 }
                 return selected
                   ?.map(
@@ -105,7 +113,7 @@ function CustomMultipleSelectBox({
               MenuProps={MenuProps}
             >
               <MenuItem disabled value="">
-                <em>-- Select Services --</em>
+                <em>{defaultFieldValue || `-- Select Services --`}</em>
               </MenuItem>
               {/* <MenuItem value={[]}>-- Select Services --</MenuItem> */}
               {options?.roles?.map((item: any, index: number) => (

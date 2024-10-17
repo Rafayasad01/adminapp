@@ -14,13 +14,19 @@ import { setRolePermissions } from '../../redux/features/permissionsStateSlice';
 import { useAppSelector } from '../../redux/redux-hooks';
 import BackArrowIcon from '../icons/BackArrowIcon';
 import ShopIcon from '../icons/ShopIcon';
+import { removeItem } from '../../utils/storage';
 
 type TopBarProps = {
   title?: string;
   isNestedRoute?: boolean;
+  isAdditionalRoute?: string | any;
 };
 
-function TopBar({ title, isNestedRoute = false }: TopBarProps) {
+function TopBar({
+  title,
+  isNestedRoute = false,
+  isAdditionalRoute,
+}: TopBarProps) {
   const userData = useAppSelector((state: any) => state?.authState?.user);
   const ProfileAvatar = useAppSelector(
     (state: any) => state?.persistedReducer?.appState?.profileAvatar
@@ -32,6 +38,7 @@ function TopBar({ title, isNestedRoute = false }: TopBarProps) {
   const divRef = useRef<HTMLDivElement>(null);
   const [profileToggler, setProfileToggler] = useState(false);
   const backHandler = () => {
+    if (isAdditionalRoute) navigate(-1);
     navigate(-1);
   };
 
@@ -41,6 +48,7 @@ function TopBar({ title, isNestedRoute = false }: TopBarProps) {
     dispatch(setShopAdminTenant(null));
     dispatch(setLogo(null));
     dispatch(setRolePermissions({ id: '', name: '', permissions: [] }));
+    removeItem('AUTH_TOKEN');
     // dispatch(setSystemConfig(null));
   };
 
@@ -97,7 +105,7 @@ function TopBar({ title, isNestedRoute = false }: TopBarProps) {
               className="header-user-box ml-3.5 cursor-pointer"
               onClick={() => setProfileToggler(!profileToggler)}
             >
-              <span className="capitalize">{`${userData.firstName} ${userData.lastName}`}</span>
+              <span className="capitalize">{`${userData?.firstName} ${userData?.lastName}`}</span>
               {ProfileAvatar ? (
                 <Avatar
                   sx={{ width: 56, height: 56 }}
@@ -113,9 +121,9 @@ function TopBar({ title, isNestedRoute = false }: TopBarProps) {
               ) : (
                 <Avatar
                   sx={{ bgcolor: 'black', fontSize: '18px' }}
-                >{`${userData.firstName?.charAt(0)}${userData.lastName?.charAt(
+                >{`${userData?.firstName?.charAt(
                   0
-                )}`}</Avatar>
+                )}${userData?.lastName?.charAt(0)}`}</Avatar>
               )}
             </div>
           </div>

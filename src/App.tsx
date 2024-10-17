@@ -8,6 +8,7 @@ import { setSystemConfig, setTheme } from './redux/features/authSlice';
 import { useAppDispatch } from './redux/redux-hooks';
 import { routeObjects } from './routes/AppRoutes';
 import systemConfigService from './services/adminapp/systemConfig';
+import { setLogo, setTenantConfig } from './redux/features/appSlice';
 
 function App() {
   const dispatch = useAppDispatch();
@@ -49,6 +50,10 @@ function App() {
           };
           dispatch(setTheme(res.data.data.theme.value.themeColor));
           dispatch(setSystemConfig(systemConfigData));
+          if (res.data.data?.tenantConfig) {
+            dispatch(setLogo(res.data.data?.tenantConfig?.logo));
+            dispatch(setTenantConfig(res.data.data?.tenant));
+          }
         } else {
           setIsPageLoader(false);
           console.log('4041');

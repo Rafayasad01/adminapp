@@ -178,7 +178,7 @@ function AppUsersPage() {
     }
   }, [null, selectedTab]);
 
-  const createFormHandler = (data: any) => {
+  const createFormHandler = (data: any, reset: any) => {
     // setIsLoader(true);
     const formData = {
       firstName: data.firstName,
@@ -190,8 +190,6 @@ function AppUsersPage() {
       userType: data.appuserRole,
       postalCode: data.postalCode ? data.postalCode : null,
       licenseNumber: data.licenseNumber ? data.licenseNumber : null,
-      tenant: authState.user.tenant,
-      createdBy: authState.user.id,
     };
     // console.log('🚀 ~ createFormHandler ~ formData:', formData);
 
@@ -211,6 +209,7 @@ function AppUsersPage() {
             text: item.data.message,
             type: 'success',
           });
+          reset();
           if (dataRender) {
             setList([item.data.data, ...list]);
           }

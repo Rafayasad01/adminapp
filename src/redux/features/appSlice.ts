@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { setItem } from '../../utils/storage';
 
 // type AppUserItems = {
 //   UserItems: {
@@ -45,6 +46,7 @@ export const appSlice = createSlice({
         ...state.UserItems,
         tenantConfig: { ...state.UserItems.tenantConfig, ...action.payload },
       };
+      setItem('TENANT_CONFIG', state.UserItems);
     },
     setOfficeTimeOut: (state, action: PayloadAction<any>) => {
       state.UserItems = {
