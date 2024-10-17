@@ -992,7 +992,7 @@ const OrderBasket = () => {
                 </div> */}
                 <div className="flex items-center justify-between py-2">
                   <div className="font-open-sans text-xs font-normal text-neutral-900">
-                    GST ({authState.user?.tenantConfig.gstPercentage}%)
+                    GST ({authState.user?.tenantConfig?.gstPercentage}%)
                   </div>
                   <div className="font-open-sans text-sm font-bold text-neutral-900">
                     {CURRENCY_PREFIX} {gstAmount.toFixed(2)}

@@ -224,17 +224,17 @@ function SettingsApp() {
       formData.append(
         'officeTimeIn',
         startTime
-          ? `${dayjs().format('YYYY-MM-DD')} ${dayjs(startTime).format(
-              'HH:mm:ss'
-            )}`
+          ? `${dayjs().format('YYYY-MM-DD')} ${dayjs(startTime)
+              .utc()
+              .format('HH:mm:ss')}`
           : ''
       );
       formData.append(
         'officeTimeOut',
         endTime
-          ? `${dayjs().format('YYYY-MM-DD')} ${dayjs(endTime).format(
-              'HH:mm:ss'
-            )}`
+          ? `${dayjs().format('YYYY-MM-DD')} ${dayjs(endTime)
+              .utc()
+              .format('HH:mm:ss')}`
           : ''
       );
       formData.append(

@@ -989,9 +989,12 @@ function AppointmentProviderPage() {
     formData.append('workDays', JSON.stringify(weekDays));
     formData.append(
       'startTime',
-      dayjs(startTime).format('YYYY-MM-DD HH:mm:ss')
+      dayjs(startTime).utc().format('YYYY-MM-DD HH:mm:ss')
     );
-    formData.append('endTime', dayjs(endTime).format('YYYY-MM-DD HH:mm:ss'));
+    formData.append(
+      'endTime',
+      dayjs(endTime).utc().format('YYYY-MM-DD HH:mm:ss')
+    );
     if (weekDays && startTime && endTime) {
       StoreEmployeeService.StoreEmployeeCreate(formData)
         .then((res) => {

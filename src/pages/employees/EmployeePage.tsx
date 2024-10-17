@@ -48,6 +48,8 @@ function EmployeePage() {
   const [total, setTotal] = useState(0);
   const [list, setList] = useState<any>([]);
   const [branchesLov, setBranchesLov] = useState<any>([]);
+  const [delBranchesId, setDelBranchesId] = useState<any>([]);
+  const [storeDelIds, setStoreDelIds] = useState<any>([]);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [actionMenuItemid, setActionMenuItemid] = React.useState('');
   const [actionMenuAnchorEl, setActionMenuAnchorEl] =
@@ -70,7 +72,6 @@ function EmployeePage() {
     handleSubmit,
     reset,
     control,
-    getValues,
     setValue,
     watch,
     formState: { errors },
@@ -149,62 +150,24 @@ function EmployeePage() {
   ]);
 
   useEffect(() => {
-    if (openFormDialog) {
-      branchService.getBranchesLov().then((item: any) => {
-        if (item.data.success) {
-          const filtered = item.data.data.map(({ id, name }: any) => ({
-            id,
-            name,
-          }));
-          setBranchesLov(filtered);
-        }
-      });
-    }
-  }, [openFormDialog]);
-
-  useEffect(() => {
-    const updatedFields: any = [...inputFieldsData];
-    const branchesFieldIndex = updatedFields.findIndex(
-      (field: any) => field.id === 'branches'
-    );
-    if (watch('employeeType') === 'USER') {
-      if (branchesFieldIndex !== -1) {
-        updatedFields.splice(branchesFieldIndex, 1);
+    branchService.getBranchesLov().then((item: any) => {
+      if (item.data.success) {
+        const filtered = item.data.data.map(({ id, name }: any) => ({
+          id,
+          name,
+        }));
+        setBranchesLov(filtered);
       }
-    } else if (watch('employeeType') === 'MANAGER') {
-      if (branchesFieldIndex === -1) {
-        updatedFields.push({
-          fieldName: 'Branches',
-          id: 'branches',
-          defaultFieldValue: 'Select Branches',
-          control,
-          register,
-          setValue,
-          error: errors.branches,
-          type: 'multipleSelect',
-          options: {
-            role: watch('branches'),
-            roles: branchesLov,
-          },
-        });
-      }
-    } else {
-      updatedFields[branchesFieldIndex] = {
-        ...updatedFields[branchesFieldIndex],
-        options: {
-          ...updatedFields[branchesFieldIndex]?.options,
-          roles: branchesLov,
-        },
-      };
-    }
-
-    setInputFieldsData(updatedFields);
-  }, [watch('employeeType'), branchesLov]);
+    });
+  }, []);
 
   const handleFormClickOpen = () => {
     if (
       listingRolePermission(dataRole, ALL_PERMISSIONS.storeUser.addUserEmployee)
     ) {
+      setValue('branches', []);
+      setStoreDelIds([]);
+      setDelBranchesId([]);
       setOpenFormDialog(true);
       // if (total < employeeLimit) {
       // } else {
@@ -325,17 +288,22 @@ function EmployeePage() {
           ALL_PERMISSIONS.storeUser.editUserEmployee
         )
       ) {
-        setIsLoader(true);
-        employeeService.getService(actionMenuItemid).then((item: any) => {
-          if (item.data.success) {
-            setIsLoader(false);
-            setValue('user_id', item.data.data.id);
-            setValue('first_name', item.data.data.firstName);
-            setValue('last_name', item.data.data.lastName);
-            setValue('email', item.data.data.email);
-            setOpenEditFormDialog(true);
-          }
-        });
+        const editData = list.find((x: any) => x.id === actionMenuItemid);
+        setValue('first_name', editData.firstName);
+        setValue('last_name', editData.lastName);
+        setValue('email', editData.email);
+        setValue('branches', editData.branches);
+        setValue(
+          'employeeType',
+          editData.userType === 'BranchUser' ? 'MANAGER' : 'USER'
+        );
+        setStoreDelIds(editData.branches);
+        setOpenEditFormDialog(true);
+        // employeeService.getService(actionMenuItemid).then((item: any) => {
+        //   if (item.data.success) {
+        //     setIsLoader(false);
+        //   }
+        // });
       } else {
         setIsLoader(false);
         setIsNotify(true);
@@ -362,7 +330,7 @@ function EmployeePage() {
     }
   };
 
-  console.log(branchesLov);
+  console.log('branchesLov', branchesLov);
 
   useEffect(() => {
     if (
@@ -444,13 +412,15 @@ function EmployeePage() {
     const userData = {
       firstName: data.first_name,
       lastName: data.last_name,
-      updatedBy: authState.user.id,
-      tenant: authState.user.tenant,
+      email: data.email,
+      branch: data.employeeType === 'USER' ? [branchId] : data.branches,
+      branchDelIds: delBranchesId,
+      employeeType: data.employeeType,
     };
-    // console.log('User', userData);
+    // console.log('🚀 ~ createFormHandler ~ datas:', userData);
 
     employeeService
-      .updateService(getValues('user_id'), userData)
+      .updateService(actionMenuItemid, userData)
       .then((item) => {
         if (item.data.success) {
           // console.log('LISSST', list, item.data.data, getValues('user_id'));
@@ -461,9 +431,10 @@ function EmployeePage() {
             type: 'success',
           });
           for (let i = 0; i < list.length; i += 1) {
-            if (list[i].id === getValues('user_id')) {
+            if (list[i].id === item.data.data.id) {
               list[i].firstName = item.data.data.firstName;
               list[i].lastName = item.data.data.lastName;
+              list[i].email = item.data.data.email;
             }
           }
           reset();
@@ -542,6 +513,57 @@ function EmployeePage() {
       });
     }
   };
+
+  useEffect(() => {
+    const updatedFields: any = [...inputFieldsData];
+    const branchesFieldIndex = updatedFields.findIndex(
+      (field: any) => field.id === 'branches'
+    );
+
+    if (watch('employeeType') === 'USER') {
+      if (branchesFieldIndex !== -1) {
+        updatedFields.splice(branchesFieldIndex, 1);
+      }
+    } else if (watch('employeeType') === 'MANAGER') {
+      if (branchesFieldIndex === -1) {
+        updatedFields.push({
+          fieldName: 'Branches',
+          id: 'branches',
+          defaultFieldValue: 'Select Branches',
+          control,
+          register,
+          setValue,
+          error: errors.branches,
+          type: 'multipleSelect',
+          options: {
+            role: watch('branches'),
+            roles: branchesLov,
+          },
+        });
+      }
+    } else {
+      updatedFields[branchesFieldIndex] = {
+        ...updatedFields[branchesFieldIndex],
+        options: {
+          ...updatedFields[branchesFieldIndex]?.options,
+          roles: branchesLov,
+        },
+      };
+    }
+
+    setInputFieldsData(updatedFields);
+  }, [watch('employeeType'), branchesLov]);
+
+  useEffect(() => {
+    const branches = watch('branches') || [];
+    const filteredDelIds = storeDelIds.filter(
+      (storeId: any) => !branches.includes(storeId)
+    );
+    setDelBranchesId(filteredDelIds);
+  }, [watch('branches')]);
+
+  // console.log('deleted BranchesId', delBranchesId);
+  // console.log('added BranchesId', watch('branches'));
 
   return isLoader ? (
     <Loader />

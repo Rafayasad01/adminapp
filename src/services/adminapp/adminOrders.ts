@@ -7,18 +7,11 @@ const ASSIGN_PREFIX = 'assign';
 const PLACE_PREFIX = 'place';
 const CATEGORY_PREFIX = 'category';
 
-const getListService = (tenant: string, page: number, size: number) => {
-  return network.get(`${ORDER_PREFIX}/list/${tenant}/${page}/${size}`);
+const getListService = (page: number, size: number) => {
+  return network.get(`${ORDER_PREFIX}/list/${page}/${size}`);
 };
-const searchService = (
-  tenant: string,
-  search: string,
-  page: number,
-  size: number
-) => {
-  return network.get(
-    `${ORDER_PREFIX}/list/${tenant}/${search}/${page}/${size}`
-  );
+const searchService = (search: string, page: number, size: number) => {
+  return network.get(`${ORDER_PREFIX}/list/${search}/${page}/${size}`);
 };
 
 const viewService = (id: string) => {

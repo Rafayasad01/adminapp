@@ -305,7 +305,8 @@ export default function AddAppointmentPage() {
 
   const officeTimeOut = useAppSelector(
     (state) =>
-      state?.persistedReducer.appState.UserItems.tenantConfig.officeTimeOut
+      state?.persistedReducer.appState.UserItems.tenantConfig.tenantConfig
+        .officeTimeOut
   );
   const dataRole = useAppSelector(
     (state: any) => state?.persistedReducer?.roleState?.role?.permissions

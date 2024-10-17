@@ -65,13 +65,19 @@ const AllAppointment = ({
     (state: any) => state?.persistedReducer?.roleState?.role?.permissions
   );
 
-  const tempShopStartTime = dayjs(officeTimings?.tenantConfig?.officeTimeIn);
+  console.log('officeTimings', officeTimings);
+
+  const tempShopStartTime = dayjs(
+    officeTimings?.tenantConfig?.tenantConfig?.officeTimeIn
+  );
 
   const shopStartTimeIsValid = tempShopStartTime.isValid();
 
   const shopStartTime = shopStartTimeIsValid ? tempShopStartTime.hour() : 9;
 
-  const tempShopEndTime = dayjs(officeTimings?.tenantConfig?.officeTimeOut);
+  const tempShopEndTime = dayjs(
+    officeTimings?.tenantConfig?.tenantConfig?.officeTimeOut
+  );
 
   const shopEndTimeIsValid = tempShopEndTime.isValid();
 

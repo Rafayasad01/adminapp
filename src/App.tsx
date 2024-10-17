@@ -52,7 +52,7 @@ function App() {
           dispatch(setSystemConfig(systemConfigData));
           if (res.data.data?.tenantConfig) {
             dispatch(setLogo(res.data.data?.tenantConfig?.logo));
-            dispatch(setTenantConfig(res.data.data?.tenant));
+            dispatch(setTenantConfig(res.data.data));
           }
         } else {
           setIsPageLoader(false);

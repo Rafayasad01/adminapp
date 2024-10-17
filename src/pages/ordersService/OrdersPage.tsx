@@ -31,7 +31,7 @@ import promiseHandler, {
 // import Stack from '@mui/material/Stack';
 
 function OrdersPage() {
-  const authState: any = useAppSelector((state) => state?.authState);
+  // const authState: any = useAppSelector((state) => state?.authState);
   const dataRole = useAppSelector(
     (state: any) => state?.persistedReducer?.roleState?.role?.permissions
   );
@@ -57,7 +57,6 @@ function OrdersPage() {
     // offset? ,limit rowsperpage hoga ofset page * rowsperPage
     if (search === '' || search === null || search === undefined) {
       const getOrderListPromise = orderService.getListService(
-        authState.user.tenant,
         newPage,
         rowsPerPage
       );
@@ -84,7 +83,6 @@ function OrdersPage() {
       setTotal(getOrderListResult.data.data.total);
     } else {
       const orderSearchPromise = orderService.searchService(
-        authState.user.tenant,
         search,
         newPage,
         rowsPerPage
@@ -121,7 +119,6 @@ function OrdersPage() {
     setPage(newPage);
     if (search === '' || search === null || search === undefined) {
       const getOrderListPromise = orderService.getListService(
-        authState.user.tenant,
         newPage,
         rowsPerPage
       );
@@ -147,18 +144,16 @@ function OrdersPage() {
       );
       setTotal(getOrderListResult.data.data.total);
     } else {
-      orderService
-        .searchService(authState.user.tenant, search, newPage, rowsPerPage)
-        .then((item) => {
-          setList(
-            item.data.data.list.map((newItem: any) => ({
-              ...newItem,
-              isSelected: false,
-              orderStatus: newItem.status,
-            }))
-          );
-          setTotal(item.data.data.total);
-        });
+      orderService.searchService(search, newPage, rowsPerPage).then((item) => {
+        setList(
+          item.data.data.list.map((newItem: any) => ({
+            ...newItem,
+            isSelected: false,
+            orderStatus: newItem.status,
+          }))
+        );
+        setTotal(item.data.data.total);
+      });
     }
     // order.searchService(search, page, rowsPerPage).then(item => {
     //   setList(item.data.data.list.map((item: any) => ({ ...item, isSelected: false, orderStatus: item.status })));
@@ -175,18 +170,16 @@ function OrdersPage() {
       const searchTxt = event.target.value as string;
       setSearch(searchTxt);
       setPage(0);
-      orderService
-        .searchService(authState.user.tenant, searchTxt, page, rowsPerPage)
-        .then((item) => {
-          setList(
-            item.data.data.list.map((newItem: any) => ({
-              ...newItem,
-              isSelected: false,
-              orderStatus: newItem.status,
-            }))
-          );
-          setTotal(item.data.data.total);
-        });
+      orderService.searchService(searchTxt, page, rowsPerPage).then((item) => {
+        setList(
+          item.data.data.list.map((newItem: any) => ({
+            ...newItem,
+            isSelected: false,
+            orderStatus: newItem.status,
+          }))
+        );
+        setTotal(item.data.data.total);
+      });
     }
   };
 
@@ -204,7 +197,6 @@ function OrdersPage() {
   useEffect(() => {
     async function getOrderList() {
       const getOrderListPromise = orderService.getListService(
-        authState.user.tenant,
         page,
         rowsPerPage
       );
