@@ -271,6 +271,7 @@ function SettingsApp() {
               // SET OFFICE TIMINGS
               const officeTimeData = {
                 ...branchData,
+                name: itemData?.branch?.name,
                 officeTimeIn: itemData?.tenantConfig?.officeTimeIn,
                 officeTimeOut: itemData?.tenantConfig?.officeTimeOut,
               };

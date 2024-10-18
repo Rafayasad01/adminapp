@@ -28,6 +28,7 @@ function TopBar({
   isAdditionalRoute,
 }: TopBarProps) {
   const branchData: any = getItem('BRANCH_DATA');
+  // console.log('🚀 ~ branchData:', branchData);
   const userData = useAppSelector((state: any) => state?.authState?.user);
   const ProfileAvatar = useAppSelector(
     (state: any) => state?.persistedReducer?.appState?.profileAvatar
