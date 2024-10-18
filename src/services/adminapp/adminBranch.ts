@@ -40,6 +40,9 @@ const updateBranchStatus = (data: any, branchId: string) => {
 
 const getBranchesLov = () => network.get(`${BRANCH_PREFIX}/list/lov`);
 
+const getBranchById = (branchId: string) =>
+  network.get(`${BRANCH_PREFIX}/get/${branchId}`);
+
 export default {
   getListService,
   getDetailService,
@@ -51,4 +54,5 @@ export default {
   updateBranch,
   updateBranchStatus,
   getBranchesLov,
+  getBranchById,
 };

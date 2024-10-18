@@ -42,7 +42,7 @@ function EmployeePage() {
   const dataRole = useAppSelector(
     (state: any) => state?.persistedReducer?.roleState?.role?.permissions
   );
-  const branchId: any = getItem('BRANCH_ID');
+  const branch: any = getItem('BRANCH_DATA');
   const [search, setSearch] = useState<any>('');
   const [page, setPage] = useState(0);
   const [total, setTotal] = useState(0);
@@ -370,7 +370,7 @@ function EmployeePage() {
       lastName: data.last_name,
       password: data.password,
       email: data.email,
-      branch: data.employeeType === 'USER' ? [branchId] : data.branches,
+      branch: data.employeeType === 'USER' ? [branch.id] : data.branches,
       employeeType: data.employeeType,
     };
     // console.log('🚀 ~ createFormHandler ~ datas:', userData);
@@ -413,7 +413,7 @@ function EmployeePage() {
       firstName: data.first_name,
       lastName: data.last_name,
       email: data.email,
-      branch: data.employeeType === 'USER' ? [branchId] : data.branches,
+      branch: data.employeeType === 'USER' ? [branch.id] : data.branches,
       branchDelIds: delBranchesId,
       employeeType: data.employeeType,
     };

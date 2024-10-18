@@ -31,7 +31,7 @@ import {
   ALL_PERMISSIONS,
   MODULE_BRANCHES,
   MODULE_EMPLOYEES,
-  MODULE_SETTINGS,
+  // MODULE_SETTINGS,
 } from '../../utils/constants';
 import ArrowDown from '../icons/ArrowDown';
 import ArrowUp from '../icons/ArrowUp';
@@ -403,12 +403,12 @@ function Sidebar() {
               return null;
             }
             // Specific condition for MODULE_SETTINGS
-            if (
-              link.name === MODULE_SETTINGS &&
-              authState.user.userType !== 'ShopUser'
-            ) {
-              return null;
-            }
+            // if (
+            //   link.name === MODULE_SETTINGS &&
+            //   authState.user.userType !== 'ShopUser'
+            // ) {
+            //   return null;
+            // }
             // Filter child links
             if (link.childLinks) {
               const filteredChildLinks = link.childLinks.filter(

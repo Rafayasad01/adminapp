@@ -10,7 +10,9 @@ export interface SocialMedia {
 export interface Setting {
   name: string;
   address: string;
-  desc: string;
+  landline: string;
+  mobile: string;
+  description: string;
   color1: string;
   color2: string;
   color3: string;

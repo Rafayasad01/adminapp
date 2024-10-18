@@ -1,13 +1,8 @@
 import { RATING } from '../../utils/constants';
 import network from '../../utils/network';
 
-const getListService = (
-  tenant: string,
-  search: string,
-  page: number,
-  size: number
-) => {
-  return network.getWithQueryParam(`${RATING}/list/${tenant}`, {
+const getListService = (search: string, page: number, size: number) => {
+  return network.getWithQueryParam(`${RATING}/list`, {
     search,
     page: page.toString(),
     size: size.toString(),

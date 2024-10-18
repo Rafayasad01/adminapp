@@ -34,7 +34,7 @@ function SocialLinksPopup({
   const dataRole = useAppSelector(
     (state: any) => state?.persistedReducer?.roleState?.role?.permissions
   );
-  const authState: any = useAppSelector((state) => state?.authState);
+  // const authState: any = useAppSelector((state) => state?.authState);
 
   // const [isLoader, setIsLoader] = useState(true);
   const [isNotify, setIsNotify] = useState(false);
@@ -56,10 +56,9 @@ function SocialLinksPopup({
         twitter: data.twitter ? data.twitter : null,
         youtube: data.youtube ? data.youtube : null,
         whatsapp: data.whatsapp ? data.whatsapp : null,
-        updatedBy: authState.user.id,
       };
       adminService
-        .updateMediaService(authState.user.tenant, formData)
+        .updateMediaService(formData)
         .then((item: any) => {
           if (item.data.success) {
             setIsLoader(false);

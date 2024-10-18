@@ -481,17 +481,6 @@ export default function RescheduleAppointmentPage() {
       if (startTime.hour() > endTime.hour()) {
         endTime = endTime.add(1, 'day');
       }
-      // const officeTimeIn = dayjs(officeTimings?.tenantConfig?.officeTimeIn)
-      //   .set('date', time.date())
-      //   .set('month', time.month())
-      //   .set('year', time.year());
-      // let officeTimeOut = dayjs(officeTimings?.tenantConfig?.officeTimeOut)
-      //   .set('date', time.date())
-      //   .set('month', time.month())
-      //   .set('year', time.year());
-      // if (officeTimeIn.hour() > officeTimeOut.hour()) {
-      //   officeTimeOut = officeTimeOut.add(1, 'day');
-      // }
       let prevTime = startTime;
       const addTime = dayjs(time).add(activeBarberData?.serviceTime, 'minutes');
       if (scheduleData.length > 0) {

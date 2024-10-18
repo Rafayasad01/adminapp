@@ -22,7 +22,7 @@ import { listingRolePermission } from '../../../utils/helper';
 
 function AppointmentRatingPage() {
   const navigate = useNavigate();
-  const authState: any = useAppSelector((state: any) => state?.authState);
+  // const authState: any = useAppSelector((state: any) => state?.authState);
   const dataRole = useAppSelector(
     (state: any) => state?.persistedReducer?.roleState?.role?.permissions
   );
@@ -42,7 +42,7 @@ function AppointmentRatingPage() {
       setSearch(searchTxt);
       setPage(newPage);
       ratingService
-        .getListService(authState.user.tenant, searchTxt, newPage, rowsPerPage)
+        .getListService(searchTxt, newPage, rowsPerPage)
         .then((item) => {
           setList(item.data.data.list);
           setTotal(item.data.data.total);
@@ -57,7 +57,7 @@ function AppointmentRatingPage() {
     setPage(newPage);
     // offset? ,limit rowsperpage hoga ofset page * rowsperPage
     ratingService
-      .getListService(authState.user.tenant, search, newPage, rowsPerPage)
+      .getListService(search, newPage, rowsPerPage)
       .then((item) => {
         setList(item.data.data.list);
         setTotal(item.data.data.total);
@@ -80,7 +80,7 @@ function AppointmentRatingPage() {
     setRowsPerPage(newRowperPage);
     setPage(newPage);
     ratingService
-      .getListService(authState.user.tenant, search, newPage, newRowperPage)
+      .getListService(search, newPage, newRowperPage)
       .then((item) => {
         setList(item.data.data.list);
         setTotal(item.data.data.total);
@@ -104,7 +104,7 @@ function AppointmentRatingPage() {
   useEffect(() => {
     if (listingRolePermission(dataRole, 'Employee List')) {
       ratingService
-        .getListService(authState.user.tenant, search, page, rowsPerPage)
+        .getListService(search, page, rowsPerPage)
         .then((item: any) => {
           if (item.data.success) {
             setIsLoader(false);

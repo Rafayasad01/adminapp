@@ -3,16 +3,16 @@ import network from '../../utils/network';
 
 import { UserLogin } from '../../interfaces/auth.interface';
 
-const getService = (tenant: string) => {
-  return network.get(`${SETTING_PREFIX}/get/${tenant}`);
+const getService = () => {
+  return network.get(`${SETTING_PREFIX}/get`);
 };
 
-const updateService = <T = any>(tenant: string, data: T) => {
-  return network.postMultipart(`${SETTING_PREFIX}/update/${tenant}`, data);
+const updateService = <T = any>(data: T) => {
+  return network.postMultipart(`${SETTING_PREFIX}/update`, data);
 };
 
-const updateMediaService = <T = any>(tenantId: string, data: T) => {
-  return network.post(`${SETTING_PREFIX}/update/media/${tenantId}`, data);
+const updateMediaService = <T = any>(data: T) => {
+  return network.post(`${SETTING_PREFIX}/update/media`, data);
 };
 
 const loginService = (userData: UserLogin) => {

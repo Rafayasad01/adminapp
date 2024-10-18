@@ -7,7 +7,7 @@ type Key =
   | 'REFRESH_TOKEN'
   | 'SHOP_TENANT'
   | 'TITLE_TEXT'
-  | 'BRANCH_ID';
+  | 'BRANCH_DATA';
 
 function addKeyPrefix(key: string) {
   const prefix = 'WEB_ADMIN';

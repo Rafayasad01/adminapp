@@ -7,7 +7,7 @@ import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import assets from '../../../assets';
 import { useNotification } from '../../../components/Contexts/NotificationContext';
 import FastSpinner from '../../../components/common/CustomSpinner';
@@ -20,6 +20,7 @@ import { setRolePermissions } from '../../../redux/features/permissionsStateSlic
 import { useAppDispatch, useAppSelector } from '../../../redux/redux-hooks';
 import authService from '../../../services/adminapp/admin';
 import appUserService from '../../../services/adminapp/adminAppUser';
+import branchService from '../../../services/adminapp/adminBranch';
 import { handleTitleText } from '../../../utils/constants';
 import { setItem } from '../../../utils/storage';
 import LoginBranchPopup from './LoginBranchPopup';
@@ -36,7 +37,7 @@ function LoginPage() {
   );
   const { notification, hideNotification, showNotification } =
     useNotification();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [isLoader, setIsLoader] = useState(false);
   const [openPopup, setOpenPopup] = useState(false);
@@ -86,6 +87,19 @@ function LoginPage() {
       });
   };
 
+  const getBranchById = (bId: any) => {
+    branchService
+      .getBranchById(bId)
+      .then((res) => {
+        if (res.data.success) {
+          setItem('BRANCH_DATA', res.data.data);
+        }
+      })
+      .catch((err) => {
+        showNotification(err.message, 'error');
+      });
+  };
+
   const loginHandler = async (data: LoginFields) => {
     setIsLoader(true);
     const userData: UserLogin = {
@@ -113,7 +127,6 @@ function LoginPage() {
           delete newUserData.role;
           dispatch(login(newUserData));
           dispatch(setItemState(newUserData));
-          setItem('BRANCH_ID', newUserData.branch);
 
           if (newUserData?.userType === 'ShopUser') {
             dispatch(
@@ -131,6 +144,7 @@ function LoginPage() {
             setItem('AUTH_TOKEN', tokens.data.data?.accessToken);
             setItem('REFRESH_TOKEN', tokens.data.data?.refreshToken);
             await handleAnonAppUser(user.data.data);
+            await getBranchById(branch.branch);
             // navigate('../../../dashboard');
           } else {
             setOpenPopup(true);
@@ -165,9 +179,9 @@ function LoginPage() {
       // console.log('🚀 ~ getBranchhPopupCallback ~ tokens:', tokens);
       setItem('AUTH_TOKEN', tokens.data.data?.accessToken);
       setItem('REFRESH_TOKEN', tokens.data.data?.refreshToken);
-      setItem('BRANCH_ID', branchId);
       await handleAnonAppUser(userLoginData);
-      navigate('../../dashboard');
+      await getBranchById(branchId);
+      // navigate('../../dashboard');
       // console.log('branchId', branchId);
     }
   };

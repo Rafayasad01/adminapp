@@ -35,6 +35,7 @@ import AppointmentViewCard from './AppointmentViewCard';
 // import UpdateAppointmentPopup from './UpdateAppointmentPopup';
 import { ALL_PERMISSIONS, APPOINTMENT_STATUS } from '../../utils/constants';
 import { listingRolePermission } from '../../utils/helper';
+import { getItem } from '../../utils/storage';
 
 dayjs.extend(weekOfYear);
 // dayjs.extend(timezone);
@@ -58,26 +59,24 @@ const AllAppointment = ({
 }: AllAppointmentProps) => {
   const [data, setData] = useState<any>([]);
   // const [appointmentData, setAppointmentData] = useState();
-  const officeTimings = useAppSelector(
-    (state) => state?.persistedReducer.appState.UserItems
-  );
+  // const officeTimings = useAppSelector(
+  //   (state) => state?.persistedReducer.appState.UserItems
+  // );
+  const officeTimings: any = getItem('BRANCH_DATA');
+
   const dataRole = useAppSelector(
     (state: any) => state?.persistedReducer?.roleState?.role?.permissions
   );
 
-  console.log('officeTimings', officeTimings);
+  // console.log('officeTimings', officeTimings);
 
-  const tempShopStartTime = dayjs(
-    officeTimings?.tenantConfig?.tenantConfig?.officeTimeIn
-  );
+  const tempShopStartTime = dayjs(officeTimings?.officeTimeIn);
 
   const shopStartTimeIsValid = tempShopStartTime.isValid();
 
   const shopStartTime = shopStartTimeIsValid ? tempShopStartTime.hour() : 9;
 
-  const tempShopEndTime = dayjs(
-    officeTimings?.tenantConfig?.tenantConfig?.officeTimeOut
-  );
+  const tempShopEndTime = dayjs(officeTimings?.officeTimeOut);
 
   const shopEndTimeIsValid = tempShopEndTime.isValid();
 

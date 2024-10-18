@@ -61,6 +61,7 @@ import { useAppSelector } from '../../redux/redux-hooks';
 import { setOfficeTimeOut } from '../../redux/features/appSlice';
 import '../../assets/css/PopupStyle.css';
 import { listingRolePermission } from '../../utils/helper';
+import { getItem } from '../../utils/storage';
 // import { useAppSelector } from '../../redux/redux-hooks';
 // import { useAppSelector } from '../../redux/redux-hooks';
 
@@ -303,11 +304,14 @@ export default function AddAppointmentPage() {
     control,
   } = useForm<AddAppointmentForm>();
 
-  const officeTimeOut = useAppSelector(
-    (state) =>
-      state?.persistedReducer.appState.UserItems.tenantConfig.tenantConfig
-        .officeTimeOut
-  );
+  // const officeTimeOut = useAppSelector(
+  //   (state) =>
+  //     state?.persistedReducer.appState.UserItems.tenantConfig.tenantConfig
+  //       .officeTimeOut
+  // );
+  const officeTimings: any = getItem('BRANCH_DATA');
+  const officeTimeOut = officeTimings?.officeTimeOut ?? 0;
+
   const dataRole = useAppSelector(
     (state: any) => state?.persistedReducer?.roleState?.role?.permissions
   );

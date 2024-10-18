@@ -27,7 +27,7 @@ import TimePicker from '../../components/common/TimePicker';
 import PlusIcon from '../../components/icons/PlusIcon';
 import { Setting } from '../../interfaces/app.interface';
 import {
-  setEmployeeLimit,
+  // setEmployeeLimit,
   setLogo,
   setTenantConfig,
 } from '../../redux/features/appSlice';
@@ -49,6 +49,7 @@ import { listingRolePermission } from '../../utils/helper';
 import DragDropFile from './DragDropFile';
 import SocialLinksPopup from './SocialLinksPopup';
 import CustomQRPrintLayout from '../../utils/CustomPrintLayout/CustomQRPrintLayout';
+import { getItem, setItem } from '../../utils/storage';
 
 type AssetsImages = keyof typeof assets.images;
 
@@ -73,6 +74,7 @@ function HelpingIcon(elements: any) {
 }
 
 function SettingsApp() {
+  const branchData: any = getItem('BRANCH_DATA');
   const authState: any = useAppSelector((state) => state?.authState);
   const dataRole = useAppSelector(
     (state: any) => state?.persistedReducer?.roleState?.role?.permissions
@@ -100,17 +102,19 @@ function SettingsApp() {
   } = useForm<Setting>();
 
   const setData = (item: any) => {
-    console.log('itesmssss', item);
+    // console.log('itesmssss', item);
 
-    // setValue('name', item.tenantConfig.name);
+    setValue('name', item.branch.name);
+    setValue('landline', item.branch.landline);
+    setValue('mobile', item.branch.mobile);
     // setLocation()
-    setValue('latitude', item.tenantConfig.latitude);
-    setValue('longitude', item.tenantConfig.longitude);
-    setValue('desc', item.tenantConfig.desc);
+    setValue('latitude', item.branch.latitude);
+    setValue('longitude', item.branch.longitude);
+    setValue('description', item.branch.description);
     setValue('email', item.tenantConfig.email);
     setValue('deliveryUrgentFees', item.tenantConfig.deliveryUrgentFees);
-    setStartTime(item.tenantConfig.officeTimeIn);
-    setEndTime(item.tenantConfig.officeTimeOut);
+    setStartTime(item.branch.officeTimeIn);
+    setEndTime(item.branch.officeTimeOut);
     setValue(
       'minimumDeliveryTime',
       Number(item.tenantConfig.minimumDeliveryTime)
@@ -167,10 +171,7 @@ function SettingsApp() {
       'whatsapp',
       item.tenantConfig.whatsapp ? item.tenantConfig.whatsapp : ''
     );
-    setValue(
-      'address',
-      item.tenantConfig.shopAddress ? item.tenantConfig.shopAddress : ''
-    );
+    setValue('address', item.branch.address ? item.branch.address : '');
     if (
       item.tenantConfig.enableLoyaltyProgram === 'true' ||
       item.tenantConfig.enableLoyaltyProgram === true
@@ -184,9 +185,7 @@ function SettingsApp() {
     setValue('requiredCoinsToRedeem', item.tenantConfig.requiredCoinsToRedeem);
     setValue(
       'attendanceDistance',
-      item.tenantConfig.attendanceDistance
-        ? item.tenantConfig.attendanceDistance
-        : 0
+      item.branch.attendanceDistance ? item.branch.attendanceDistance : 0
     );
   };
 
@@ -199,7 +198,7 @@ function SettingsApp() {
       setIsLoader(true);
       const formData = new FormData();
       // formData.append('name', data.name ? data.name : '');
-      formData.append('desc', data.desc ? data.desc : '');
+      formData.append('description', data.description ? data.description : '');
       formData.append(
         'gstPercentage',
         data.gstPercentage ? data.gstPercentage : ''
@@ -219,6 +218,8 @@ function SettingsApp() {
         data.deliveryUrgentFees ? data.deliveryUrgentFees : 0
       );
       formData.append('address', data.address ? data.address : '');
+      formData.append('landline', data.landline ? data.landline : '');
+      formData.append('mobile', data.mobile ? data.mobile : '');
       formData.append('latitude', watch('latitude') ? watch('latitude') : 0);
       formData.append('longitude', watch('longitude') ? watch('longitude') : 0);
       formData.append(
@@ -241,16 +242,6 @@ function SettingsApp() {
         'attendanceDistance',
         data.attendanceDistance ? data.attendanceDistance : 0
       );
-      // formData.append('facebook', detail ? detail.facebook : '');
-      // formData.append('instagram', detail ? detail.instagram : '');
-      // formData.append('linkedin', detail ? detail.linkedin : '');
-      // formData.append('twitter', detail ? detail.twitter : '');
-      // formData.append('youtube', detail ? detail.youtube : '');
-      // formData.append('whatsapp', detail ? detail.whatsapp : '');
-      formData.append('updatedBy', authState.user.id);
-      // formData.append('color1', color1);
-      // formData.append('color2', color2);
-      // formData.append('color3', color3);
       formData.append(
         'enableLoyaltyProgram',
         data.enableLoyaltyProgram ?? false
@@ -262,37 +253,32 @@ function SettingsApp() {
       formData.append('requiredCoinsToRedeem', data.requiredCoinsToRedeem);
       // formData.append('domain', data.domainAdminapp);
       // formData.append('domainWebapp', data.domainWebapp);
-      if (authState?.user?.userType === 'ShopUser')
-        formData.append('userLimit', data.userLimit ? data.userLimit : 0);
+      // if (authState?.user?.userType === 'ShopUser')
+      //   formData.append('userLimit', data.userLimit ? data.userLimit : 0);
       if (file !== null) formData.append('logo', file);
       // if (themeFile !== null) formData.append('banner', themeFile);
 
       adminService
-        .updateService(authState.user.tenant, formData)
+        .updateService(formData)
         .then((item: any) => {
           const { success, message, data: itemData } = item.data;
           if (success) {
-            // console.log('messageDATA', itemData);
-            // dispatch(setTheme(itemData));
             setAddress(itemData?.address);
-            // dispatch(setTheme(itemData));
             if (
               itemData?.tenantConfig?.officeTimeIn ||
               itemData?.tenantConfig?.officeTimeOut
             ) {
-              // dispatch(
-              //   setItemState({
-              //     officeTimeIn: itemData?.tenantConfig?.officeTimeIn,
-              //     officeTimeOut: itemData?.tenantConfig?.officeTimeOut,
-              //   })
-              // );
+              // SET OFFICE TIMINGS
+              const officeTimeData = {
+                ...branchData,
+                officeTimeIn: itemData?.tenantConfig?.officeTimeIn,
+                officeTimeOut: itemData?.tenantConfig?.officeTimeOut,
+              };
+              setItem('BRANCH_DATA', officeTimeData);
               dispatch(setTenantConfig(itemData?.tenantConfig));
             }
             if (itemData?.tenantConfig?.logo) {
               dispatch(setLogo(itemData.tenantConfig.logo));
-            }
-            if (itemData?.userLimit) {
-              dispatch(setEmployeeLimit(itemData.userLimit));
             }
             setIsLoader(false);
             setIsNotify(true);
@@ -303,7 +289,6 @@ function SettingsApp() {
             setData(itemData);
             setDetail(itemData);
           } else {
-            setValue('userLimit', Number(detail?.userLimit));
             setIsLoader(false);
             setIsNotify(true);
             setNotifyMessage({
@@ -313,8 +298,6 @@ function SettingsApp() {
           }
         })
         .catch((err) => {
-          // console.log('message', err.message);
-          setValue('userLimit', Number(detail?.userLimit));
           setIsLoader(false);
           setIsNotify(true);
           setNotifyMessage({
@@ -336,7 +319,7 @@ function SettingsApp() {
       listingRolePermission(dataRole, ALL_PERMISSIONS.storeSetting.viewSettings)
     ) {
       adminService
-        .getService(authState.user.tenant)
+        .getService()
         .then((item: any) => {
           // console.log('item Select:::::', item)
           if (item.data.success) {
@@ -371,11 +354,7 @@ function SettingsApp() {
     // }
   }, [null]);
 
-  // console.log(
-  //   'ENABLE',
-  //   watch('enableLoyaltyProgram'),
-  //   detail?.enableLoyaltyProgram
-  // );
+  console.log('ENABLE', errors);
 
   return isLoader ? (
     <Loader />
@@ -396,11 +375,13 @@ function SettingsApp() {
                 onClick={() => navigate('../app')}
               />
               <Tab
+                hidden={authState.user.userType !== 'ShopUser'}
                 label="System Configuration"
                 value="SYSTEM_CONFIGURATION"
                 onClick={() => navigate('../config')}
               />
               <Tab
+                hidden={authState.user.userType !== 'ShopUser'}
                 label="Shop Scheduling"
                 value="SHOP_SCHEDULING"
                 onClick={() => navigate('../shop')}
@@ -421,43 +402,69 @@ function SettingsApp() {
               </div>
             )}
             <form onSubmit={handleSubmit(onSubmit)}>
-              <div className="flex justify-between">
-                <div className="mb-3 text-base">
-                  <span className="">Upload Shop Logo</span>
-                </div>
-                {/* <div className="mb-3 cursor-pointer text-sm hover:text-blue-900 hover:underline">
+              {authState.user.userType === 'ShopUser' && (
+                <>
+                  <div className="flex justify-between">
+                    <div className="mb-3 text-base">
+                      <span className="">Upload Shop Logo</span>
+                    </div>
+                    {/* <div className="mb-3 cursor-pointer text-sm hover:text-blue-900 hover:underline">
                   <span className="">Download QR-code</span>
                 </div> */}
-              </div>
-              <div className="grid grid-cols-12 items-center">
-                <div className="col-span-5 mb-1">
-                  <DragDropFile
-                    setIsNotify={setIsNotify}
-                    setNotifyMessage={setNotifyMessage}
-                    setFile={setFile}
-                    setImg={setSelectedImg}
+                  </div>
+                  <div className="grid grid-cols-12 items-center">
+                    <div className="col-span-5 mb-1">
+                      <DragDropFile
+                        setIsNotify={setIsNotify}
+                        setNotifyMessage={setNotifyMessage}
+                        setFile={setFile}
+                        setImg={setSelectedImg}
+                      />
+                    </div>
+                    {selectedImg ? (
+                      <div className="col-span-6 flex items-center xl:justify-center 2xl:justify-start">
+                        <img
+                          className="max-h-[100px] max-w-[150px] rounded-md"
+                          src={selectedImg}
+                          alt="Shop Logo"
+                        />
+                      </div>
+                    ) : detail && detail?.tenantConfig?.logo ? (
+                      <div className="col-span-6 flex items-center xl:justify-center 2xl:justify-start">
+                        <img
+                          className="max-h-[100px] max-w-[150px] rounded-md"
+                          src={detail?.tenantConfig.logo}
+                          alt="Shop Logo"
+                        />
+                      </div>
+                    ) : null}
+                  </div>
+                  <div className="mx-1 mb-3">
+                    <span className="text-xs">Dimension: 256px by 100px</span>
+                  </div>
+                </>
+              )}
+              <div className="FormField mb-4">
+                <FormControl className="FormControl" variant="standard">
+                  <label className="FormLabel">Name</label>
+                  <Input
+                    className="FormInput"
+                    id="name"
+                    placeholder="Enter Shop Name"
+                    disableUnderline
+                    {...register('name', {
+                      pattern: PATTERN.ADDRESS_ONLY,
+                      // validate: (value) => value.length <= 250,
+                      value: detail ? detail.name : '',
+                    })}
                   />
-                </div>
-                {selectedImg ? (
-                  <div className="col-span-6 flex items-center xl:justify-center 2xl:justify-start">
-                    <img
-                      className="max-h-[100px] max-w-[150px] rounded-md"
-                      src={selectedImg}
-                      alt="Shop Logo"
-                    />
-                  </div>
-                ) : detail && detail?.tenantConfig?.logo ? (
-                  <div className="col-span-6 flex items-center xl:justify-center 2xl:justify-start">
-                    <img
-                      className="max-h-[100px] max-w-[150px] rounded-md"
-                      src={detail?.tenantConfig.logo}
-                      alt="Shop Logo"
-                    />
-                  </div>
-                ) : null}
-              </div>
-              <div className="mx-1 mb-3">
-                <span className="text-xs">Dimension: 256px by 100px</span>
+                  {errors.name?.type === 'pattern' && (
+                    <ErrorSpanBox error={INVALID_CHAR} />
+                  )}
+                  {errors.name?.type === 'validate' && (
+                    <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
+                  )}
+                </FormControl>
               </div>
               <div className="FormField mb-4">
                 <FormControl className="FormControl" variant="standard">
@@ -481,36 +488,84 @@ function SettingsApp() {
                   )}
                 </FormControl>
               </div>
+              <div className="FormFields">
+                <FormControl className="FormControl" variant="standard">
+                  <label className="FormLabel">Landline Number</label>
+                  <Input
+                    className="FormInput"
+                    id="landline"
+                    placeholder="Enter your landline number"
+                    disableUnderline
+                    {...register('landline', {
+                      pattern: PATTERN.PHONE,
+                      maxLength: {
+                        value: 15,
+                        message: MAX_LENGTH_EXCEEDED,
+                      },
+                    })}
+                    type="text"
+                  />
+                  {errors.landline?.type === 'pattern' && (
+                    <ErrorSpanBox error={INVALID_CHAR} />
+                  )}
+                  {errors.landline?.type === 'maxLength' && (
+                    <ErrorSpanBox error={PH_MINI_LENGTH} />
+                  )}
+                </FormControl>
+                <FormControl className="FormControl" variant="standard">
+                  <label className="FormLabel">Mobile Number</label>
+                  <Input
+                    className="FormInput"
+                    id="mobile"
+                    placeholder="Enter your mobile number"
+                    disableUnderline
+                    {...register('mobile', {
+                      pattern: PATTERN.PHONE,
+                      maxLength: {
+                        value: 15,
+                        message: MAX_LENGTH_EXCEEDED,
+                      },
+                    })}
+                    type="text"
+                  />
+                  {errors.mobile?.type === 'pattern' && (
+                    <ErrorSpanBox error={INVALID_CHAR} />
+                  )}
+                  {errors.mobile?.type === 'maxLength' && (
+                    <ErrorSpanBox error={PH_MINI_LENGTH} />
+                  )}
+                </FormControl>
+              </div>
               <div className="FormField">
                 <FormControl className="FormControl" variant="standard">
-                  <label className="FormLabel">
+                  <label className="FormLabel mt-3">
                     Description{' '}
                     <span className="SubLabel">Write 01-350 Characters</span>
                   </label>
                   <TextField
                     className="FormTextarea"
-                    id="desc"
+                    id="description"
                     multiline
                     rows={4}
                     defaultValue=""
                     placeholder="Write Description"
-                    {...register('desc', {
-                      required: 'Description is required',
-                      minLength: {
-                        value: 1,
-                        message: 'Minimum One Characters',
-                      },
-                      maxLength: {
-                        value: 250,
-                        message: MAX_LENGTH_EXCEEDED,
-                      },
+                    {...register('description', {
+                      // required: 'Description is required',
+                      // minLength: {
+                      //   value: 1,
+                      //   message: 'Minimum One Characters',
+                      // },
+                      // maxLength: {
+                      //   value: 250,
+                      //   message: MAX_LENGTH_EXCEEDED,
+                      // },
                     })}
                   />
-                  {errors.desc && <ErrorSpanBox error={errors.desc?.message} />}
+                  {/* {errors.desc && <ErrorSpanBox error={errors.desc?.message} />} */}
                 </FormControl>
               </div>
               <div className="FormFields">
-                {authState?.user?.userType === 'ShopUser' &&
+                {/* {authState?.user?.userType === 'ShopUser' &&
                   listingRolePermission(
                     dataRole,
                     ALL_PERMISSIONS.storeSetting.viewEmployeeLimit
@@ -534,36 +589,67 @@ function SettingsApp() {
                         <ErrorSpanBox error={errors?.userLimit?.message} />
                       )}
                     </FormControl>
-                  )}
+                  )} */}
                 {listingRolePermission(
                   dataRole,
                   ALL_PERMISSIONS.storeSetting.viewTax
-                ) && (
-                  <FormControl className="FormControl" variant="standard">
-                    <label className="FormLabel">Tax</label>
-                    <Input
-                      className="FormInput"
-                      id="gst_percentage"
-                      placeholder="1%"
-                      disableUnderline
-                      {...register('gstPercentage', {
-                        pattern: PATTERN.POINT_NUM,
-                        maxLength: {
-                          value: 15,
-                          message: MAX_LENGTH_EXCEEDED,
-                        },
-                        value: detail ? detail.gstPercentage : '',
-                      })}
-                      type="text"
-                    />
-                    {errors.gstPercentage?.type === 'pattern' && (
-                      <ErrorSpanBox error={INVALID_CHAR} />
-                    )}
-                    {errors.gstPercentage?.type === 'maxLength' && (
-                      <ErrorSpanBox error={PH_MINI_LENGTH} />
-                    )}
-                  </FormControl>
-                )}
+                ) &&
+                  authState.user.userType === 'ShopUser' && (
+                    <FormControl className="FormControl" variant="standard">
+                      <label className="FormLabel">Tax</label>
+                      <Input
+                        className="FormInput"
+                        id="gst_percentage"
+                        placeholder="1%"
+                        disableUnderline
+                        {...register('gstPercentage', {
+                          pattern: PATTERN.POINT_NUM,
+                          maxLength: {
+                            value: 15,
+                            message: MAX_LENGTH_EXCEEDED,
+                          },
+                          value: detail ? detail.gstPercentage : '',
+                        })}
+                        type="text"
+                      />
+                      {errors.gstPercentage?.type === 'pattern' && (
+                        <ErrorSpanBox error={INVALID_CHAR} />
+                      )}
+                      {errors.gstPercentage?.type === 'maxLength' && (
+                        <ErrorSpanBox error={PH_MINI_LENGTH} />
+                      )}
+                    </FormControl>
+                  )}
+                {listingRolePermission(
+                  dataRole,
+                  ALL_PERMISSIONS.storeSetting.viewMinimumDelivery
+                ) &&
+                  authState.user.userType === 'ShopUser' && (
+                    <FormControl className="FormControl" variant="standard">
+                      <label className="FormLabel">Minimum Delivery Days</label>
+                      <Input
+                        id="minimumDeliveryTime"
+                        placeholder="Enter minimum delivery time"
+                        type="number"
+                        className="FormInput"
+                        defaultValue={0}
+                        {...register('minimumDeliveryTime', {
+                          validate: (value: any) =>
+                            VALIDATE_NON_NEGATIVE_NUM(value),
+                          maxLength: {
+                            value: 10,
+                            message: MAX_LENGTH_EXCEEDED,
+                          },
+                        })}
+                        disableUnderline
+                      />
+                      {errors?.minimumDeliveryTime && (
+                        <ErrorSpanBox
+                          error={errors?.minimumDeliveryTime?.message}
+                        />
+                      )}
+                    </FormControl>
+                  )}
               </div>
               <div className="FormField">
                 {/* <FormControl className="FormControl" variant="standard">
@@ -585,35 +671,7 @@ function SettingsApp() {
                     <ErrorSpanBox error="Enter a valid amount" />
                   )}
                 </FormControl> */}
-                {listingRolePermission(
-                  dataRole,
-                  ALL_PERMISSIONS.storeSetting.viewMinimumDelivery
-                ) && (
-                  <FormControl className="FormControl" variant="standard">
-                    <label className="FormLabel">Minimum Delivery Days</label>
-                    <Input
-                      id="minimumDeliveryTime"
-                      placeholder="Enter minimum delivery time"
-                      type="number"
-                      className="FormInput"
-                      defaultValue={0}
-                      {...register('minimumDeliveryTime', {
-                        validate: (value: any) =>
-                          VALIDATE_NON_NEGATIVE_NUM(value),
-                        maxLength: {
-                          value: 10,
-                          message: MAX_LENGTH_EXCEEDED,
-                        },
-                      })}
-                      disableUnderline
-                    />
-                    {errors?.minimumDeliveryTime && (
-                      <ErrorSpanBox
-                        error={errors?.minimumDeliveryTime?.message}
-                      />
-                    )}
-                  </FormControl>
-                )}
+
                 {/* <FormControl className="FormControl" variant="standard">
                   <label className="FormLabel">Rider Delivery Charges</label>
                   <Input
@@ -675,10 +733,10 @@ function SettingsApp() {
                       {...register('latitude', {
                         validate: (value: any) =>
                           VALIDATE_NON_NEGATIVE_NUM(value),
-                        maxLength: {
-                          value: 10,
-                          message: MAX_LENGTH_EXCEEDED,
-                        },
+                        // maxLength: {
+                        //   value: 10,
+                        //   message: MAX_LENGTH_EXCEEDED,
+                        // },
                       })}
                       disableUnderline
                     />
@@ -698,10 +756,10 @@ function SettingsApp() {
                       {...register('longitude', {
                         validate: (value: any) =>
                           VALIDATE_NON_NEGATIVE_NUM(value),
-                        maxLength: {
-                          value: 10,
-                          message: MAX_LENGTH_EXCEEDED,
-                        },
+                        // maxLength: {
+                        //   value: 10,
+                        //   message: MAX_LENGTH_EXCEEDED,
+                        // },
                       })}
                       disableUnderline
                     />
@@ -798,193 +856,196 @@ function SettingsApp() {
               {listingRolePermission(
                 dataRole,
                 ALL_PERMISSIONS.storeSetting.viewLoyaltyProgram
-              ) && (
-                <>
-                  <div className="FormField">
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          icon={
-                            <RadioButtonUncheckedOutlinedIcon
-                              style={{ color: '#1D1D1D' }}
-                            />
-                          }
-                          checkedIcon={
-                            <CheckCircleOutlinedIcon
-                              style={{ color: '#1D1D1D' }}
-                            />
-                          }
-                          {...register('enableLoyaltyProgram')}
-                          checked={watch('enableLoyaltyProgram')}
-                        />
-                      }
-                      label="Loyality Program"
-                    />
-                  </div>
-                  {watch('enableLoyaltyProgram') === true && (
-                    <div className="FormFields">
-                      <FormControl className="FormControl" variant="standard">
-                        <label className="FormLabel">
-                          Loyality Conversion Rate
-                        </label>
-                        <Input
-                          id="loyaltyCoinConversionRate"
-                          placeholder="Enter Conversion Rate"
-                          type="number"
-                          className="FormInput"
-                          defaultValue={0}
-                          {...register('loyaltyCoinConversionRate', {
-                            required:
-                              watch('enableLoyaltyProgram') === true &&
-                              'Loyality rate is required in numbers',
-                            validate: (value: any) =>
-                              VALIDATE_NON_NEGATIVE_NUM(value),
-                            maxLength: {
-                              value: 10,
-                              message: MAX_LENGTH_EXCEEDED,
-                            },
-                          })}
-                          disableUnderline
-                        />
-                        {errors?.loyaltyCoinConversionRate && (
-                          <ErrorSpanBox
-                            error={errors?.loyaltyCoinConversionRate?.message}
+              ) &&
+                authState.user.userType === 'ShopUser' && (
+                  <>
+                    <div className="FormField">
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            icon={
+                              <RadioButtonUncheckedOutlinedIcon
+                                style={{ color: '#1D1D1D' }}
+                              />
+                            }
+                            checkedIcon={
+                              <CheckCircleOutlinedIcon
+                                style={{ color: '#1D1D1D' }}
+                              />
+                            }
+                            {...register('enableLoyaltyProgram')}
+                            checked={watch('enableLoyaltyProgram')}
                           />
-                        )}
-                      </FormControl>
-                      <FormControl className="FormControl" variant="standard">
-                        <label className="FormLabel">
-                          Minimum Loyality Coins
-                        </label>
-                        <Input
-                          id="requiredCoinsToRedeem"
-                          placeholder="Enter Minimum Loyality coins"
-                          type="number"
-                          className="FormInput"
-                          defaultValue={0}
-                          {...register('requiredCoinsToRedeem', {
-                            required:
-                              watch('enableLoyaltyProgram') === true &&
-                              'Loyality coins is required in numbers',
-                            validate: (value: any) =>
-                              VALIDATE_NON_NEGATIVE_NUM(value),
-                            maxLength: {
-                              value: 10,
-                              message: MAX_LENGTH_EXCEEDED,
-                            },
-                          })}
-                          disableUnderline
-                        />
-                        {errors?.requiredCoinsToRedeem && (
-                          <ErrorSpanBox
-                            error={errors?.requiredCoinsToRedeem?.message}
-                          />
-                        )}
-                      </FormControl>
-                    </div>
-                  )}
-                </>
-              )}
-              <div className="FormField mb-4">
-                <FormControl className="FormControl" variant="standard">
-                  <label className="FormLabel mt-2">Social Links</label>
-                  <div className="mt-2 flex flex-row items-center gap-3">
-                    {detail &&
-                      detail?.tenantConfig?.facebook &&
-                      detail?.tenantConfig?.facebook !== 'null' &&
-                      detail?.tenantConfig?.facebook !== 'undefined' && (
-                        <Item
-                          value={detail?.tenantConfig?.facebook}
-                          name={SOCIAL_MEDIA.FACEBOOK as AssetsImages}
-                        />
-                      )}
-                    {detail &&
-                      detail?.tenantConfig?.instagram &&
-                      detail?.tenantConfig?.instagram !== 'null' &&
-                      detail?.tenantConfig?.instagram !== 'undefined' && (
-                        <Item
-                          value={detail?.tenantConfig?.instagram}
-                          name={SOCIAL_MEDIA.INSTAGRAM as AssetsImages}
-                        />
-                      )}
-                    {detail &&
-                      detail?.tenantConfig?.linkedin &&
-                      detail?.tenantConfig?.linkedin !== 'null' &&
-                      detail?.tenantConfig?.linkedin !== 'undefined' && (
-                        <Item
-                          value={detail?.tenantConfig?.linkedin}
-                          name={SOCIAL_MEDIA.LINKEDIN as AssetsImages}
-                        />
-                      )}
-                    {detail &&
-                      detail?.tenantConfig?.twitter &&
-                      detail?.tenantConfig?.twitter !== 'null' &&
-                      detail?.tenantConfig?.twitter !== 'undefined' && (
-                        <Item
-                          value={detail?.tenantConfig?.twitter}
-                          name={SOCIAL_MEDIA.TWITTER as AssetsImages}
-                        />
-                      )}
-                    {detail &&
-                      detail.tenantConfig?.youtube &&
-                      detail.tenantConfig?.youtube !== 'null' &&
-                      detail.tenantConfig?.youtube !== 'undefined' && (
-                        <Item
-                          value={detail.tenantConfig?.youtube}
-                          name={SOCIAL_MEDIA.YOUTUBE as AssetsImages}
-                        />
-                      )}
-                    {detail &&
-                      detail.tenantConfig?.whatsapp &&
-                      detail.tenantConfig?.whatsapp !== 'null' &&
-                      detail.tenantConfig?.whatsapp !== 'undefined' && (
-                        <Item
-                          value={detail.tenantConfig?.whatsapp}
-                          name={SOCIAL_MEDIA.WHATSAPP as AssetsImages}
-                        />
-                      )}
-                    <IconButton
-                      className="p-0 text-[1.675rem]"
-                      onClick={() => setOpenSocialMediaPopup(true)}
-                    >
-                      <HelpingIcon
-                        links={[
-                          detail?.tenantConfig?.facebook !== 'undefined' &&
-                          detail?.tenantConfig?.facebook !== 'null' &&
-                          detail?.tenantConfig?.facebook !== ''
-                            ? detail?.tenantConfig?.facebook
-                            : '',
-                          detail?.tenantConfig?.instagram !== 'undefined' &&
-                          detail?.tenantConfig?.instagram !== 'null' &&
-                          detail?.tenantConfig?.instagram !== ''
-                            ? detail?.tenantConfig?.instagram
-                            : '',
-                          detail?.tenantConfig?.linkedin !== 'undefined' &&
-                          detail?.tenantConfig?.linkedin !== 'null' &&
-                          detail?.tenantConfig?.linkedin !== ''
-                            ? detail?.tenantConfig?.linkedin
-                            : '',
-                          detail?.tenantConfig?.twitter !== 'undefined' &&
-                          detail?.tenantConfig?.twitter !== 'null' &&
-                          detail?.tenantConfig?.twitter !== ''
-                            ? detail?.tenantConfig?.twitter
-                            : '',
-                          detail?.tenantConfig?.whatsapp !== 'undefined' &&
-                          detail?.tenantConfig?.whatsapp !== 'null' &&
-                          detail?.tenantConfig?.whatsapp !== ''
-                            ? detail?.tenantConfig?.whatsapp
-                            : '',
-                          detail?.tenantConfig?.youtube !== 'undefined' &&
-                          detail?.tenantConfig?.youtube !== 'null' &&
-                          detail?.tenantConfig?.youtube !== ''
-                            ? detail?.tenantConfig?.youtube
-                            : '',
-                        ]}
+                        }
+                        label="Loyality Program"
                       />
-                    </IconButton>
-                  </div>
-                </FormControl>
-              </div>
+                    </div>
+                    {watch('enableLoyaltyProgram') === true && (
+                      <div className="FormFields">
+                        <FormControl className="FormControl" variant="standard">
+                          <label className="FormLabel">
+                            Loyality Conversion Rate
+                          </label>
+                          <Input
+                            id="loyaltyCoinConversionRate"
+                            placeholder="Enter Conversion Rate"
+                            type="number"
+                            className="FormInput"
+                            defaultValue={0}
+                            {...register('loyaltyCoinConversionRate', {
+                              required:
+                                watch('enableLoyaltyProgram') === true &&
+                                'Loyality rate is required in numbers',
+                              validate: (value: any) =>
+                                VALIDATE_NON_NEGATIVE_NUM(value),
+                              maxLength: {
+                                value: 10,
+                                message: MAX_LENGTH_EXCEEDED,
+                              },
+                            })}
+                            disableUnderline
+                          />
+                          {errors?.loyaltyCoinConversionRate && (
+                            <ErrorSpanBox
+                              error={errors?.loyaltyCoinConversionRate?.message}
+                            />
+                          )}
+                        </FormControl>
+                        <FormControl className="FormControl" variant="standard">
+                          <label className="FormLabel">
+                            Minimum Loyality Coins
+                          </label>
+                          <Input
+                            id="requiredCoinsToRedeem"
+                            placeholder="Enter Minimum Loyality coins"
+                            type="number"
+                            className="FormInput"
+                            defaultValue={0}
+                            {...register('requiredCoinsToRedeem', {
+                              required:
+                                watch('enableLoyaltyProgram') === true &&
+                                'Loyality coins is required in numbers',
+                              validate: (value: any) =>
+                                VALIDATE_NON_NEGATIVE_NUM(value),
+                              maxLength: {
+                                value: 10,
+                                message: MAX_LENGTH_EXCEEDED,
+                              },
+                            })}
+                            disableUnderline
+                          />
+                          {errors?.requiredCoinsToRedeem && (
+                            <ErrorSpanBox
+                              error={errors?.requiredCoinsToRedeem?.message}
+                            />
+                          )}
+                        </FormControl>
+                      </div>
+                    )}
+                  </>
+                )}
+              {authState.user.userType === 'ShopUser' && (
+                <div className="FormField mb-4">
+                  <FormControl className="FormControl" variant="standard">
+                    <label className="FormLabel mt-2">Social Links</label>
+                    <div className="mt-2 flex flex-row items-center gap-3">
+                      {detail &&
+                        detail?.tenantConfig?.facebook &&
+                        detail?.tenantConfig?.facebook !== 'null' &&
+                        detail?.tenantConfig?.facebook !== 'undefined' && (
+                          <Item
+                            value={detail?.tenantConfig?.facebook}
+                            name={SOCIAL_MEDIA.FACEBOOK as AssetsImages}
+                          />
+                        )}
+                      {detail &&
+                        detail?.tenantConfig?.instagram &&
+                        detail?.tenantConfig?.instagram !== 'null' &&
+                        detail?.tenantConfig?.instagram !== 'undefined' && (
+                          <Item
+                            value={detail?.tenantConfig?.instagram}
+                            name={SOCIAL_MEDIA.INSTAGRAM as AssetsImages}
+                          />
+                        )}
+                      {detail &&
+                        detail?.tenantConfig?.linkedin &&
+                        detail?.tenantConfig?.linkedin !== 'null' &&
+                        detail?.tenantConfig?.linkedin !== 'undefined' && (
+                          <Item
+                            value={detail?.tenantConfig?.linkedin}
+                            name={SOCIAL_MEDIA.LINKEDIN as AssetsImages}
+                          />
+                        )}
+                      {detail &&
+                        detail?.tenantConfig?.twitter &&
+                        detail?.tenantConfig?.twitter !== 'null' &&
+                        detail?.tenantConfig?.twitter !== 'undefined' && (
+                          <Item
+                            value={detail?.tenantConfig?.twitter}
+                            name={SOCIAL_MEDIA.TWITTER as AssetsImages}
+                          />
+                        )}
+                      {detail &&
+                        detail.tenantConfig?.youtube &&
+                        detail.tenantConfig?.youtube !== 'null' &&
+                        detail.tenantConfig?.youtube !== 'undefined' && (
+                          <Item
+                            value={detail.tenantConfig?.youtube}
+                            name={SOCIAL_MEDIA.YOUTUBE as AssetsImages}
+                          />
+                        )}
+                      {detail &&
+                        detail.tenantConfig?.whatsapp &&
+                        detail.tenantConfig?.whatsapp !== 'null' &&
+                        detail.tenantConfig?.whatsapp !== 'undefined' && (
+                          <Item
+                            value={detail.tenantConfig?.whatsapp}
+                            name={SOCIAL_MEDIA.WHATSAPP as AssetsImages}
+                          />
+                        )}
+                      <IconButton
+                        className="p-0 text-[1.675rem]"
+                        onClick={() => setOpenSocialMediaPopup(true)}
+                      >
+                        <HelpingIcon
+                          links={[
+                            detail?.tenantConfig?.facebook !== 'undefined' &&
+                            detail?.tenantConfig?.facebook !== 'null' &&
+                            detail?.tenantConfig?.facebook !== ''
+                              ? detail?.tenantConfig?.facebook
+                              : '',
+                            detail?.tenantConfig?.instagram !== 'undefined' &&
+                            detail?.tenantConfig?.instagram !== 'null' &&
+                            detail?.tenantConfig?.instagram !== ''
+                              ? detail?.tenantConfig?.instagram
+                              : '',
+                            detail?.tenantConfig?.linkedin !== 'undefined' &&
+                            detail?.tenantConfig?.linkedin !== 'null' &&
+                            detail?.tenantConfig?.linkedin !== ''
+                              ? detail?.tenantConfig?.linkedin
+                              : '',
+                            detail?.tenantConfig?.twitter !== 'undefined' &&
+                            detail?.tenantConfig?.twitter !== 'null' &&
+                            detail?.tenantConfig?.twitter !== ''
+                              ? detail?.tenantConfig?.twitter
+                              : '',
+                            detail?.tenantConfig?.whatsapp !== 'undefined' &&
+                            detail?.tenantConfig?.whatsapp !== 'null' &&
+                            detail?.tenantConfig?.whatsapp !== ''
+                              ? detail?.tenantConfig?.whatsapp
+                              : '',
+                            detail?.tenantConfig?.youtube !== 'undefined' &&
+                            detail?.tenantConfig?.youtube !== 'null' &&
+                            detail?.tenantConfig?.youtube !== ''
+                              ? detail?.tenantConfig?.youtube
+                              : '',
+                          ]}
+                        />
+                      </IconButton>
+                    </div>
+                  </FormControl>
+                </div>
+              )}
               {/* <div className="FormMultipleFields mb-4">
                 <ColorPicker
                   colorPickerLabel="Theme Color"
