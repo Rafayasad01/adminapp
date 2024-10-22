@@ -90,6 +90,7 @@ import DeductionPage from '../pages/appointment/provider/deduction/DeductionPage
 import CommissionPage from '../pages/appointment/provider/commission/CommissionPage';
 import BonusPage from '../pages/appointment/provider/bonus/BonusPage';
 import OvertimePage from '../pages/appointment/provider/overtime/OvertimePage';
+import { getItem } from '../utils/storage';
 
 const ProtectedRoute = ({ page, condition }: any) => {
   const [canView, setCanView] = useState<boolean | null>(null);
@@ -123,6 +124,7 @@ const GetInitialRoute = ({ routes }: any) => {
 };
 
 // console.log('ssddssdsddsds', APPOINTMENT_TEXT);
+const getUserType: any = getItem('USER');
 
 export const routeObjects: RouteObject[] = [
   {
@@ -1030,7 +1032,9 @@ export const routeObjects: RouteObject[] = [
                     routes={[
                       {
                         path: 'app-user/list',
-                        condition: ALL_PERMISSIONS.storeUser.viewUserApp,
+                        condition:
+                          ALL_PERMISSIONS.storeUser.viewUserApp &&
+                          getUserType.userType === 'ShopUser',
                       },
                       {
                         path: 'customers/list',
@@ -1054,7 +1058,10 @@ export const routeObjects: RouteObject[] = [
                     element: (
                       <ProtectedRoute
                         page={<AppUsersPage />}
-                        condition={ALL_PERMISSIONS.storeUser.viewUserApp}
+                        condition={
+                          ALL_PERMISSIONS.storeUser.viewUserApp &&
+                          getUserType.userType === 'ShopUser'
+                        }
                       />
                     ),
                     // element: <AppUsersPage />,

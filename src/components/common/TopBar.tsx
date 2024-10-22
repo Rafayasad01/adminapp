@@ -8,13 +8,13 @@ import Toolbar from '@mui/material/Toolbar';
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { setLogo, setRemoveItemState } from '../../redux/features/appSlice';
+import { setRemoveItemState } from '../../redux/features/appSlice';
 import { logout, setShopAdminTenant } from '../../redux/features/authSlice';
 import { setRolePermissions } from '../../redux/features/permissionsStateSlice';
 import { useAppSelector } from '../../redux/redux-hooks';
 import BackArrowIcon from '../icons/BackArrowIcon';
 import ShopIcon from '../icons/ShopIcon';
-import { getItem, removeItem } from '../../utils/storage';
+import { removeItem } from '../../utils/storage';
 
 type TopBarProps = {
   title?: string;
@@ -27,8 +27,11 @@ function TopBar({
   isNestedRoute = false,
   isAdditionalRoute,
 }: TopBarProps) {
-  const branchData: any = getItem('BRANCH_DATA');
+  // const branchData: any = getItem('BRANCH_DATA');
   // console.log('🚀 ~ branchData:', branchData);
+  const branchState: any = useAppSelector(
+    (state) => state?.persistedReducer?.appState?.branch
+  );
   const userData = useAppSelector((state: any) => state?.authState?.user);
   const ProfileAvatar = useAppSelector(
     (state: any) => state?.persistedReducer?.appState?.profileAvatar
@@ -48,7 +51,7 @@ function TopBar({
     dispatch(logout());
     dispatch(setRemoveItemState());
     dispatch(setShopAdminTenant(null));
-    dispatch(setLogo(null));
+    // dispatch(setLogo(null));
     dispatch(setRolePermissions({ id: '', name: '', permissions: [] }));
     removeItem('AUTH_TOKEN');
     // dispatch(setSystemConfig(null));
@@ -93,10 +96,10 @@ function TopBar({
                 <hr className="divider vertical ml-2" />
               </div>
             )}
-            {branchData?.name && (
+            {branchState?.name && (
               <div className="flex items-center">
                 <span className="px-2 text-sm font-semibold capitalize">
-                  {branchData?.name}
+                  {branchState?.name}
                 </span>
                 <ShopIcon color="black" />
                 <hr className="divider vertical ml-4" />

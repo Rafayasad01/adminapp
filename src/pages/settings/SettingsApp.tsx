@@ -27,6 +27,7 @@ import TimePicker from '../../components/common/TimePicker';
 import PlusIcon from '../../components/icons/PlusIcon';
 import { Setting } from '../../interfaces/app.interface';
 import {
+  setBranchData,
   // setEmployeeLimit,
   setLogo,
   setTenantConfig,
@@ -49,7 +50,7 @@ import { listingRolePermission } from '../../utils/helper';
 import DragDropFile from './DragDropFile';
 import SocialLinksPopup from './SocialLinksPopup';
 import CustomQRPrintLayout from '../../utils/CustomPrintLayout/CustomQRPrintLayout';
-import { getItem, setItem } from '../../utils/storage';
+import { getItem } from '../../utils/storage';
 
 type AssetsImages = keyof typeof assets.images;
 
@@ -222,22 +223,26 @@ function SettingsApp() {
       formData.append('mobile', data.mobile ? data.mobile : '');
       formData.append('latitude', watch('latitude') ? watch('latitude') : 0);
       formData.append('longitude', watch('longitude') ? watch('longitude') : 0);
-      formData.append(
-        'officeTimeIn',
-        startTime
-          ? `${dayjs().format('YYYY-MM-DD')} ${dayjs(startTime)
-              .utc()
-              .format('HH:mm:ss')}`
-          : ''
-      );
-      formData.append(
-        'officeTimeOut',
-        endTime
-          ? `${dayjs().format('YYYY-MM-DD')} ${dayjs(endTime)
-              .utc()
-              .format('HH:mm:ss')}`
-          : ''
-      );
+      if (startTime) {
+        formData.append(
+          'officeTimeIn',
+          startTime
+            ? `${dayjs().format('YYYY-MM-DD')} ${dayjs(startTime)
+                .utc()
+                .format('HH:mm:ss')}`
+            : ''
+        );
+      }
+      if (endTime) {
+        formData.append(
+          'officeTimeOut',
+          endTime
+            ? `${dayjs().format('YYYY-MM-DD')} ${dayjs(endTime)
+                .utc()
+                .format('HH:mm:ss')}`
+            : ''
+        );
+      }
       formData.append(
         'attendanceDistance',
         data.attendanceDistance ? data.attendanceDistance : 0
@@ -275,7 +280,8 @@ function SettingsApp() {
                 officeTimeIn: itemData?.tenantConfig?.officeTimeIn,
                 officeTimeOut: itemData?.tenantConfig?.officeTimeOut,
               };
-              setItem('BRANCH_DATA', officeTimeData);
+              dispatch(setBranchData(officeTimeData));
+              // setItem('BRANCH_DATA', officeTimeData);
               dispatch(setTenantConfig(itemData?.tenantConfig));
             }
             if (itemData?.tenantConfig?.logo) {
@@ -355,8 +361,6 @@ function SettingsApp() {
     // }
   }, [null]);
 
-  console.log('ENABLE', errors);
-
   return isLoader ? (
     <Loader />
   ) : (
@@ -430,7 +434,7 @@ function SettingsApp() {
                           alt="Shop Logo"
                         />
                       </div>
-                    ) : detail && detail?.tenantConfig?.logo ? (
+                    ) : detail && detail?.tenantConfig?.tenantConfig?.logo ? (
                       <div className="col-span-6 flex items-center xl:justify-center 2xl:justify-start">
                         <img
                           className="max-h-[100px] max-w-[150px] rounded-md"

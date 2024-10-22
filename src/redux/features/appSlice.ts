@@ -15,6 +15,7 @@ type AppState = {
   UserItems: any;
   logo: AppUserLogo | null;
   profileAvatar: string | any;
+  branch: any;
 };
 
 const initialState: AppState = {
@@ -23,6 +24,7 @@ const initialState: AppState = {
   },
   logo: null,
   profileAvatar: null,
+  branch: null,
 };
 
 export const appSlice = createSlice({
@@ -66,6 +68,10 @@ export const appSlice = createSlice({
         employeeLimit: Number(action.payload),
       };
     },
+    setBranchData: (state, action: PayloadAction<any>) => {
+      state.branch = action.payload;
+      setItem('BRANCH_DATA', action.payload);
+    },
   },
 });
 
@@ -77,6 +83,7 @@ export const {
   setTenantConfig,
   setProfileAvatar,
   setOfficeTimeOut,
+  setBranchData,
 } = appSlice.actions;
 
 export default appSlice.reducer;

@@ -1,5 +1,5 @@
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
-import AirplayIcon from '@mui/icons-material/Airplay';
+// import AirplayIcon from '@mui/icons-material/Airplay';
 import ApartmentIcon from '@mui/icons-material/Apartment';
 import EditIcon from '@mui/icons-material/Edit';
 import PeopleOutlineIcon from '@mui/icons-material/PeopleOutline';
@@ -35,7 +35,7 @@ import { getItem } from '../../utils/storage';
 
 function BranchPage() {
   const dispatch = useDispatch();
-  const TotalBranches: any = getItem('TENANT_CONFIG');
+  const TotalBranches: any = getItem('SYSTEM_CONFIG');
   const authState: any = useAppSelector((state: any) => state?.authState);
   const dataRole = useAppSelector(
     (state: any) => state?.persistedReducer?.roleState?.role?.permissions
@@ -365,9 +365,7 @@ function BranchPage() {
                           max={999}
                           color="success"
                           badgeContent={
-                            Number(
-                              TotalBranches?.tenantConfig?.maxBranchLimit
-                            ) ?? 0
+                            Number(TotalBranches?.tenant?.maxBranchLimit) ?? 0
                           }
                         >
                           <ApartmentIcon />
@@ -446,9 +444,10 @@ function BranchPage() {
                   <th className="w-[20%]">Description</th>
                   <th className="">Landline</th>
                   <th className="">Mobile</th>
+                  <th className="">Manager</th>
                   <th className="">Address</th>
                   <th>Status</th>
-                  <th>Branch Control</th>
+                  {/* <th>Branch Control</th> */}
                   <th aria-label="empty table header">&nbsp;</th>
                 </tr>
               </thead>
@@ -476,6 +475,11 @@ function BranchPage() {
                         <td>{item.description ? item.description : '--'}</td>
                         <td>{item.landline ? item.landline : '--'}</td>
                         <td>{item.mobile ? item.mobile : '--'}</td>
+                        <td>
+                          {item?.backofficeUser
+                            ? `${item?.backofficeUser?.firstName} ${item?.backofficeUser?.lastName}`
+                            : '--'}
+                        </td>
                         <td>{item.address ? item.address : '--'}</td>
                         <td>
                           {item.isActive ? (
@@ -484,7 +488,7 @@ function BranchPage() {
                             <span className="badge badge-danger">INACTIVE</span>
                           )}
                         </td>
-                        <td className="w-[8%]">
+                        {/* <td className="w-[8%]">
                           <div
                             className="flex cursor-pointer justify-center"
                             style={{
@@ -521,7 +525,7 @@ function BranchPage() {
                             <AirplayIcon />
                           </div>
                           {/* )} */}
-                        </td>
+                        {/* </td> */}
                         <td>
                           <div className="flex flex-row-reverse">
                             <IconButton

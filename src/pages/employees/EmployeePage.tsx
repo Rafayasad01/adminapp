@@ -48,6 +48,7 @@ function EmployeePage() {
   const [total, setTotal] = useState(0);
   const [list, setList] = useState<any>([]);
   const [branchesLov, setBranchesLov] = useState<any>([]);
+  const [branchByIdLov, setBranchByIdLov] = useState<any>([]);
   const [delBranchesId, setDelBranchesId] = useState<any>([]);
   const [storeDelIds, setStoreDelIds] = useState<any>([]);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -55,10 +56,11 @@ function EmployeePage() {
   const [actionMenuAnchorEl, setActionMenuAnchorEl] =
     useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
-  const actionMenuOptions = ['Edit', 'Delete'];
+  const actionMenuOptions = ['Edit', 'Remove', 'Delete'];
 
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
+  const [openRemoveFormDialog, setOpenRemoveFormDialog] = useState(false);
   const [isLoader, setIsLoader] = React.useState(true);
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
@@ -165,6 +167,10 @@ function EmployeePage() {
     if (
       listingRolePermission(dataRole, ALL_PERMISSIONS.storeUser.addUserEmployee)
     ) {
+      setValue('first_name', '');
+      setValue('last_name', '');
+      setValue('email', '');
+      setValue('employeeType', 'none');
       setValue('branches', []);
       setStoreDelIds([]);
       setDelBranchesId([]);
@@ -289,6 +295,7 @@ function EmployeePage() {
         )
       ) {
         const editData = list.find((x: any) => x.id === actionMenuItemid);
+        console.log('🚀 ~ manuHandler ~ editData:', editData);
         setValue('first_name', editData.firstName);
         setValue('last_name', editData.lastName);
         setValue('email', editData.email);
@@ -312,6 +319,34 @@ function EmployeePage() {
           type: 'warning',
         });
       }
+    } else if (option === 'Remove') {
+      if (
+        listingRolePermission(
+          dataRole,
+          ALL_PERMISSIONS.storeUser.editUserEmployee
+        )
+      ) {
+        const editData = list.find((x: any) => x.id === actionMenuItemid);
+        const branchesById = branchesLov.filter((x: any) =>
+          editData.branches.includes(x.id)
+        );
+        setValue('first_name', editData.firstName);
+        setValue('last_name', editData.lastName);
+        setValue('email', editData.email);
+        setValue('branches', []);
+        setValue(
+          'employeeType',
+          editData.userType === 'BranchUser' ? 'MANAGER' : 'USER'
+        );
+        setBranchByIdLov(branchesById);
+        setOpenRemoveFormDialog(true);
+      } else {
+        setIsNotify(true);
+        setNotifyMessage({
+          text: NOT_AUTHORIZED_MESSAGE,
+          type: 'warning',
+        });
+      }
     } else if (option === 'Delete') {
       if (
         listingRolePermission(
@@ -329,8 +364,6 @@ function EmployeePage() {
       }
     }
   };
-
-  console.log('branchesLov', branchesLov);
 
   useEffect(() => {
     if (
@@ -362,6 +395,8 @@ function EmployeePage() {
       setIsLoader(false);
     }
   }, [null]);
+
+  // console.log('LIST', list);
 
   const createFormHandler = (data: any) => {
     // setIsLoader(true);
@@ -423,6 +458,59 @@ function EmployeePage() {
       .updateService(actionMenuItemid, userData)
       .then((item) => {
         if (item.data.success) {
+          // console.log('LISSST', item.data.data.branch);
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'success',
+          });
+          const updatedBranchData = branchesLov.filter((x: any) =>
+            item.data.data.branch.includes(x.id)
+          );
+          setValue('branches', updatedBranchData);
+          for (let i = 0; i < list.length; i += 1) {
+            if (list[i].id === item.data.data.id) {
+              list[i].firstName = item.data.data.firstName;
+              list[i].lastName = item.data.data.lastName;
+              list[i].email = item.data.data.email;
+              list[i].branches = item.data.data.branch;
+            }
+          }
+          reset();
+        } else {
+          reset();
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'error',
+          });
+        }
+      })
+      .catch((err) => {
+        reset();
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
+        });
+      });
+  };
+
+  const removeManagerFormHandler = (data: any) => {
+    setIsLoader(true);
+    const userData = {
+      branch: data.branches,
+      employeeType: data.employeeType,
+    };
+    // console.log('🚀 ~ createFormHandler ~ datas:', userData);
+
+    employeeService
+      .removeManagerService(actionMenuItemid, userData)
+      .then((item) => {
+        if (item.data.success) {
           // console.log('LISSST', list, item.data.data, getValues('user_id'));
           setIsLoader(false);
           setIsNotify(true);
@@ -430,11 +518,14 @@ function EmployeePage() {
             text: item.data.message,
             type: 'success',
           });
+          const updatedBranches: any = branchByIdLov
+            .filter((b: any) => !item.data.data.branch.includes(b.id))
+            .map((x: any) => x.id);
+          // console.log('🚀 ~ .then ~ updatedBranches:', updatedBranches);
           for (let i = 0; i < list.length; i += 1) {
             if (list[i].id === item.data.data.id) {
-              list[i].firstName = item.data.data.firstName;
-              list[i].lastName = item.data.data.lastName;
-              list[i].email = item.data.data.email;
+              list[i].branches = updatedBranches;
+              list[i].employeeType = item.data.data.employeeType;
             }
           }
           reset();
@@ -476,9 +567,11 @@ function EmployeePage() {
       data.last_name &&
       data.email
     ) {
-      // console.log('dataEdit', data);
       setOpenEditFormDialog(false);
       updateFormHandler(data);
+    } else if (openRemoveFormDialog) {
+      setOpenRemoveFormDialog(false);
+      removeManagerFormHandler(data);
     }
   };
 
@@ -520,39 +613,42 @@ function EmployeePage() {
       (field: any) => field.id === 'branches'
     );
 
+    const rolesToShow = openRemoveFormDialog ? branchByIdLov : branchesLov;
+
     if (watch('employeeType') === 'USER') {
       if (branchesFieldIndex !== -1) {
         updatedFields.splice(branchesFieldIndex, 1);
       }
-    } else if (watch('employeeType') === 'MANAGER') {
-      if (branchesFieldIndex === -1) {
-        updatedFields.push({
-          fieldName: 'Branches',
-          id: 'branches',
-          defaultFieldValue: 'Select Branches',
-          control,
-          register,
-          setValue,
-          error: errors.branches,
-          type: 'multipleSelect',
-          options: {
-            role: watch('branches'),
-            roles: branchesLov,
-          },
-        });
-      }
+    } else if (
+      watch('employeeType') === 'MANAGER' &&
+      branchesFieldIndex === -1
+    ) {
+      updatedFields.push({
+        fieldName: 'Branches',
+        id: 'branches',
+        defaultFieldValue: 'Select Branches',
+        control,
+        register,
+        setValue,
+        error: errors.branches,
+        type: 'multipleSelect',
+        options: {
+          role: watch('branches'),
+          roles: rolesToShow,
+        },
+      });
     } else {
       updatedFields[branchesFieldIndex] = {
         ...updatedFields[branchesFieldIndex],
         options: {
           ...updatedFields[branchesFieldIndex]?.options,
-          roles: branchesLov,
+          roles: rolesToShow,
         },
       };
     }
 
     setInputFieldsData(updatedFields);
-  }, [watch('employeeType'), branchesLov]);
+  }, [watch('employeeType'), branchesLov, openRemoveFormDialog]);
 
   useEffect(() => {
     const branches = watch('branches') || [];
@@ -561,9 +657,6 @@ function EmployeePage() {
     );
     setDelBranchesId(filteredDelIds);
   }, [watch('branches')]);
-
-  // console.log('deleted BranchesId', delBranchesId);
-  // console.log('added BranchesId', watch('branches'));
 
   return isLoader ? (
     <Loader />
@@ -778,6 +871,21 @@ function EmployeePage() {
           onSubmit={onSubmitDialogBox}
           openFormDialog={openEditFormDialog}
           setOpenFormDialog={setOpenEditFormDialog}
+        />
+      )}
+      {openRemoveFormDialog && (
+        <CustomDialog
+          DialogHeader="Remove Manager Employee"
+          type="remove"
+          specialCase={false}
+          reset={reset}
+          inputFieldsData={inputFieldsData?.filter(
+            (item) => item.id !== 'password'
+          )}
+          handleSubmit={handleSubmit}
+          onSubmit={onSubmitDialogBox}
+          openFormDialog={openRemoveFormDialog}
+          setOpenFormDialog={setOpenRemoveFormDialog}
         />
       )}
     </>

@@ -21,6 +21,10 @@ const updateService = (userID: string, data: any) => {
   return network.post(`${BACKOFFICE_PREFIX}/update/${userID}`, data);
 };
 
+const removeManagerService = (userID: string, data: any) => {
+  return network.post(`${BACKOFFICE_PREFIX}/remove/manager/${userID}`, data);
+};
+
 const updateStatus = (userID: string, data: any) => {
   return network.post(`${BACKOFFICE_PREFIX}/update/status/${userID}`, data);
 };
@@ -37,4 +41,5 @@ export default {
   updateService,
   updateStatus,
   deleteService,
+  removeManagerService,
 };

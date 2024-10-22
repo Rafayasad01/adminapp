@@ -12,6 +12,7 @@ import { setLogo, setTenantConfig } from './redux/features/appSlice';
 
 function App() {
   const dispatch = useAppDispatch();
+  // const userData = useAppSelector((state: any) => state?.authState?.user);
   const { showBoundary } = useErrorBoundary();
   const [isPageLoader, setIsPageLoader] = useState(true);
   if (
@@ -52,7 +53,7 @@ function App() {
           dispatch(setSystemConfig(systemConfigData));
           if (res.data.data?.tenantConfig) {
             dispatch(setLogo(res.data.data?.tenantConfig?.logo));
-            dispatch(setTenantConfig(res.data.data));
+            dispatch(setTenantConfig(res.data.data.tenantConfig));
           }
         } else {
           setIsPageLoader(false);

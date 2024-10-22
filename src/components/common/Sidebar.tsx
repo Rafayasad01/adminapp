@@ -238,8 +238,6 @@ function Sidebar() {
     (state: any) => state?.persistedReducer?.appState?.logo
   );
 
-  // console.log('appItems', appItems);
-
   const [list, setList] = useState<any>(null);
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
   const authState: any = useAppSelector((state: any) => state?.authState);
@@ -385,6 +383,7 @@ function Sidebar() {
     defineRules(permissions);
     if (permissions) {
       const filterLinks = (allLinks: any) => {
+        console.log('🚀 ~ useEffect ~ permissions:', permissions, allLinks);
         return allLinks
           .map((link: any) => {
             // Specific condition for MODULE_EMPLOYEES
@@ -393,6 +392,10 @@ function Sidebar() {
               authState.user.userType !== 'ShopUser' &&
               authState.user.userType !== 'BranchUser'
             ) {
+              return null;
+            }
+            // Specific condition for MODULE_USER
+            if (link.name === 'User' && authState.user.userType === 'User') {
               return null;
             }
             // Specific condition for MODULE_BRANCES
@@ -412,11 +415,22 @@ function Sidebar() {
             // Filter child links
             if (link.childLinks) {
               const filteredChildLinks = link.childLinks.filter(
-                (childLink: any) =>
-                  CAN('canView', childLink.permission) &&
-                  CAN('canView', link.permission)
+                (childLink: any) => {
+                  if (
+                    childLink.name === 'App User' &&
+                    authState.user.userType === 'BranchUser'
+                  ) {
+                    return false;
+                  }
+                  return (
+                    CAN('canView', childLink.permission) &&
+                    CAN('canView', link.permission)
+                  );
+                }
               );
+              console.log('filteredChildLinks', filteredChildLinks);
 
+              // Specific condition for MODULE_USER -> HIDE -> App Users
               // Include parent link if it has visible child links or passes its own permission
               if (
                 filteredChildLinks.length > 0 ||

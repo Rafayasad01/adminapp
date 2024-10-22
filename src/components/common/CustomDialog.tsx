@@ -372,7 +372,9 @@ function CustomDialog({
             />
             <CustomButton
               buttonType="button"
-              title={type === 'edit' ? 'Edit' : 'Add'}
+              title={
+                type === 'remove' ? 'Remove' : type === 'edit' ? 'Edit' : 'Add'
+              }
               type="submit"
               className="btn-black-fill"
               sx={{
