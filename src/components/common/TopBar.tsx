@@ -54,6 +54,7 @@ function TopBar({
     // dispatch(setLogo(null));
     dispatch(setRolePermissions({ id: '', name: '', permissions: [] }));
     removeItem('AUTH_TOKEN');
+    removeItem('USER');
     // dispatch(setSystemConfig(null));
   };
 

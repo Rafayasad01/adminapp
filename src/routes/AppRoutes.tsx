@@ -125,6 +125,7 @@ const GetInitialRoute = ({ routes }: any) => {
 
 // console.log('ssddssdsddsds', APPOINTMENT_TEXT);
 const getUserType: any = getItem('USER');
+console.log('🚀 ~ getUserType:', getUserType);
 
 export const routeObjects: RouteObject[] = [
   {
@@ -1030,7 +1031,7 @@ export const routeObjects: RouteObject[] = [
                 element: (
                   <GetInitialRoute
                     routes={
-                      getUserType.userType === 'ShopUser'
+                      getUserType?.userType === 'ShopUser'
                         ? [
                             {
                               path: 'app-user/list',
