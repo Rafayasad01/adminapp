@@ -1029,26 +1029,55 @@ export const routeObjects: RouteObject[] = [
                 index: true,
                 element: (
                   <GetInitialRoute
-                    routes={[
-                      {
-                        path: 'app-user/list',
-                        condition:
-                          ALL_PERMISSIONS.storeUser.viewUserApp &&
-                          getUserType &&
-                          getUserType?.userType === 'ShopUser',
-                      },
-                      {
-                        path: 'customers/list',
-                        condition: ALL_PERMISSIONS.storeUser.viewCustomers,
-                      },
-                      {
-                        path: 'employees',
-                        condition: ALL_PERMISSIONS.storeUser.viewUserEmployee,
-                      },
-                    ]}
+                    routes={
+                      getUserType.userType === 'ShopUser'
+                        ? [
+                            {
+                              path: 'app-user/list',
+                              condition: ALL_PERMISSIONS.storeUser.viewUserApp,
+                            },
+                            {
+                              path: 'customers/list',
+                              condition:
+                                ALL_PERMISSIONS.storeUser.viewCustomers,
+                            },
+                            {
+                              path: 'employees',
+                              condition:
+                                ALL_PERMISSIONS.storeUser.viewUserEmployee,
+                            },
+                          ]
+                        : [
+                            {
+                              path: 'customers/list',
+                              condition:
+                                ALL_PERMISSIONS.storeUser.viewCustomers,
+                            },
+                            {
+                              path: 'employees',
+                              condition:
+                                ALL_PERMISSIONS.storeUser.viewUserEmployee,
+                            },
+                          ]
+                    }
                   />
                 ),
                 // element: <Navigate to="app-user/list" replace />,
+              },
+              {
+                path: 'employees',
+                children: [
+                  {
+                    index: true,
+                    element: (
+                      <ProtectedRoute
+                        page={<EmployeePage />}
+                        condition={ALL_PERMISSIONS.storeUser.viewUserEmployee}
+                      />
+                    ),
+                    // element: <EmployeePage />,
+                  },
+                ],
               },
               {
                 path: 'app-user',
@@ -1059,11 +1088,7 @@ export const routeObjects: RouteObject[] = [
                     element: (
                       <ProtectedRoute
                         page={<AppUsersPage />}
-                        condition={
-                          ALL_PERMISSIONS.storeUser.viewUserApp &&
-                          getUserType &&
-                          getUserType?.userType === 'ShopUser'
-                        }
+                        condition={ALL_PERMISSIONS.storeUser.viewUserApp}
                       />
                     ),
                     // element: <AppUsersPage />,
@@ -1125,21 +1150,6 @@ export const routeObjects: RouteObject[] = [
                       />
                     ),
                     // element: <AppUserDetailPage />,
-                  },
-                ],
-              },
-              {
-                path: 'employees',
-                children: [
-                  {
-                    index: true,
-                    element: (
-                      <ProtectedRoute
-                        page={<EmployeePage />}
-                        condition={ALL_PERMISSIONS.storeUser.viewUserEmployee}
-                      />
-                    ),
-                    // element: <EmployeePage />,
                   },
                 ],
               },
