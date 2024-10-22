@@ -1034,7 +1034,8 @@ export const routeObjects: RouteObject[] = [
                         path: 'app-user/list',
                         condition:
                           ALL_PERMISSIONS.storeUser.viewUserApp &&
-                          getUserType.userType === 'ShopUser',
+                          getUserType &&
+                          getUserType?.userType === 'ShopUser',
                       },
                       {
                         path: 'customers/list',
@@ -1060,7 +1061,8 @@ export const routeObjects: RouteObject[] = [
                         page={<AppUsersPage />}
                         condition={
                           ALL_PERMISSIONS.storeUser.viewUserApp &&
-                          getUserType.userType === 'ShopUser'
+                          getUserType &&
+                          getUserType?.userType === 'ShopUser'
                         }
                       />
                     ),

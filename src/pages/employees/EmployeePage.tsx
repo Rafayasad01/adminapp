@@ -56,7 +56,7 @@ function EmployeePage() {
   const [actionMenuAnchorEl, setActionMenuAnchorEl] =
     useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
-  const actionMenuOptions = ['Edit', 'Remove', 'Delete'];
+  const actionMenuOptions: any = ['Edit', 'Delete', 'Remove'];
 
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
@@ -724,6 +724,7 @@ function EmployeePage() {
                 <tr>
                   <th>Employee</th>
                   <th>Email</th>
+                  <th>User Type</th>
                   <th>Status</th>
                   <th aria-label="empty tale header">&nbsp;</th>
                 </tr>
@@ -769,6 +770,11 @@ function EmployeePage() {
                           </div>
                         </td>
                         <td>{item.email}</td>
+                        <td>
+                          {item.userType === 'BranchUser'
+                            ? 'Manager'
+                            : 'Admin Employee'}
+                        </td>
                         {/* <td>{item.phone}</td> */}
                         {/* <td>{item.postalCode}</td> */}
                         <td>
@@ -844,7 +850,14 @@ function EmployeePage() {
           open={actionMenuOpen}
           anchorEl={actionMenuAnchorEl}
           setAnchorEl={setActionMenuAnchorEl}
-          options={actionMenuOptions}
+          options={
+            list.find((i: any) => i.id === actionMenuItemid)?.userType ===
+            'User'
+              ? actionMenuOptions.filter(
+                  (option: any, index: number) => index < 2
+                ) // Show first 2 options for BranchUser
+              : actionMenuOptions // Show all options for other users
+          }
           callback={manuHandler}
         />
       )}
