@@ -2,7 +2,7 @@ import PrintOutlinedIcon from '@mui/icons-material/PrintOutlined';
 import { QRCodeSVG } from 'qrcode.react';
 import { forwardRef, useRef } from 'react';
 import { useReactToPrint } from 'react-to-print';
-import { useAppSelector } from '../../redux/redux-hooks';
+import { getItem } from '../storage';
 
 type CustomPrintLayoutsProps = {
   isPrintEnabled?: any;
@@ -11,8 +11,8 @@ type CustomPrintLayoutsProps = {
 
 const CustomPrintLayouts = forwardRef<any, any>(
   (props: CustomPrintLayoutsProps, ref: any) => {
-    const authState: any = useAppSelector((state: any) => state?.authState);
-    const qrCodeValue = `${authState?.user?.tenant}`;
+    const branchId: any = getItem('BRANCH_DATA');
+    const qrCodeValue = `${branchId?.id}`;
 
     return (
       <div style={{ display: 'none' }}>

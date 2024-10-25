@@ -72,6 +72,10 @@ export const appSlice = createSlice({
       state.branch = action.payload;
       setItem('BRANCH_DATA', action.payload);
     },
+    setTempBranchData: (state, action: PayloadAction<any>) => {
+      state.branch = action.payload;
+      setItem('TEMP_BRANCH_DATA', action.payload);
+    },
   },
 });
 
@@ -84,6 +88,7 @@ export const {
   setProfileAvatar,
   setOfficeTimeOut,
   setBranchData,
+  setTempBranchData,
 } = appSlice.actions;
 
 export default appSlice.reducer;

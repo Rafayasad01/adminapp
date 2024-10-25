@@ -14,7 +14,11 @@ import FastSpinner from '../../../components/common/CustomSpinner';
 import ErrorSpanBox from '../../../components/common/ErrorSpanBox';
 import Notify from '../../../components/common/Notify';
 import { UserLogin } from '../../../interfaces/auth.interface';
-import { setBranchData, setItemState } from '../../../redux/features/appSlice';
+import {
+  setBranchData,
+  setItemState,
+  setTempBranchData,
+} from '../../../redux/features/appSlice';
 import { login, setShopAdminTenant } from '../../../redux/features/authSlice';
 import { setRolePermissions } from '../../../redux/features/permissionsStateSlice';
 import { useAppDispatch, useAppSelector } from '../../../redux/redux-hooks';
@@ -93,6 +97,7 @@ function LoginPage() {
       .then((res) => {
         if (res.data.success) {
           dispatch(setBranchData(res.data.data));
+          dispatch(setTempBranchData(res.data.data));
         }
       })
       .catch((err) => {

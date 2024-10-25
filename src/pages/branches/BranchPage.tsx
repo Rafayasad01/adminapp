@@ -1,8 +1,8 @@
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
-// import AirplayIcon from '@mui/icons-material/Airplay';
+import AirplayIcon from '@mui/icons-material/Airplay';
 import ApartmentIcon from '@mui/icons-material/Apartment';
 import EditIcon from '@mui/icons-material/Edit';
-import PeopleOutlineIcon from '@mui/icons-material/PeopleOutline';
+// import PeopleOutlineIcon from '@mui/icons-material/PeopleOutline';
 import SearchIcon from '@mui/icons-material/Search';
 import Badge from '@mui/material/Badge';
 import Button from '@mui/material/Button';
@@ -23,25 +23,28 @@ import Loader from '../../components/common/Loader';
 import Notify from '../../components/common/Notify';
 import TopBar from '../../components/common/TopBar';
 import { AppUserEmployees } from '../../interfaces/app-user.interface';
-import { setItemState } from '../../redux/features/appSlice';
+import { setBranchData, setItemState } from '../../redux/features/appSlice';
 import { login } from '../../redux/features/authSlice';
 import { useAppSelector } from '../../redux/redux-hooks';
 import branchService from '../../services/adminapp/adminBranch';
+import authService from '../../services/adminapp/admin';
 import { listingRolePermission } from '../../utils/helper';
 import BranchCreatePopup from './BranchCreatePopup';
 import BranchUpdatePopup from './BranchUpdatePopup';
 import { ALL_PERMISSIONS, NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
-import { getItem } from '../../utils/storage';
+import { getItem, setItem } from '../../utils/storage';
+import PermissionPopup from '../../utils/PermissionPopup';
 
 function BranchPage() {
   const dispatch = useDispatch();
+  const mainBranchData: any = getItem('TEMP_BRANCH_DATA');
   const TotalBranches: any = getItem('SYSTEM_CONFIG');
   const authState: any = useAppSelector((state: any) => state?.authState);
   const dataRole = useAppSelector(
     (state: any) => state?.persistedReducer?.roleState?.role?.permissions
   );
   const [search, setSearch] = useState<any>('');
-  const [maxTotalEmployees, setTotalMaxEmployees] = useState();
+  // const [maxTotalEmployees, setTotalMaxEmployees] = useState();
   const [page, setPage] = useState(0);
   const [total, setTotal] = useState(0);
   const [list, setList] = useState<any>([]);
@@ -52,6 +55,11 @@ function BranchPage() {
   const [isLoader, setIsLoader] = React.useState(false);
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
+  const [cancelDialogOpen, setCancelDialogOpen] = useState<boolean>(false);
+  const [dialogText] = useState<any>(
+    'Are you sure you want to control this Branch ?'
+  );
+  const [branchid, setBranchid] = React.useState<any>();
   // const [totalBranches, setTotalBranches] = useState<number>(0);
   const { reset } = useForm<AppUserEmployees>();
 
@@ -61,12 +69,19 @@ function BranchPage() {
       const newPage = 0;
       setSearch(searchTxt);
       setPage(newPage);
-      branchService
-        .getListServiceSearch(searchTxt, newPage, rowsPerPage)
-        .then((item) => {
+      if (searchTxt === '' || searchTxt === null || searchTxt === undefined) {
+        branchService.getListService(newPage, rowsPerPage).then((item) => {
           setList(item.data.data.list);
           setTotal(item.data.data.total);
         });
+      } else {
+        branchService
+          .getListServiceSearch(searchTxt, newPage, rowsPerPage)
+          .then((item) => {
+            setList(item.data.data.list);
+            setTotal(item.data.data.total);
+          });
+      }
     }
   };
 
@@ -128,7 +143,7 @@ function BranchPage() {
             setTotal(item.data.data.total);
             // setTotalBranches(item.data.data.list.length);
             // setTotalMaxEmployeeLimit(item.data.data.totalEmployeeLimitCounts);
-            setTotalMaxEmployees(item.data.data.totalEmployees);
+            // setTotalMaxEmployees(item.data.data.totalEmployees);
           } else {
             setIsLoader(false);
             setIsNotify(true);
@@ -279,20 +294,16 @@ function BranchPage() {
     }
   };
 
-  // const handleTrialModeStatus = (status: any, trialMode: boolean): any => {
-  //   let textMsg = '';
-  //   if (trialMode) {
-  //     textMsg = 'Started';
-  //   } else if (status) {
-  //     textMsg = 'Not Started';
-  //   } else {
-  //     textMsg = 'End';
-  //   }
-  //   return textMsg;
-  // };
-
   const handleAddNew = () => {
     if (listingRolePermission(dataRole, ALL_PERMISSIONS.storeBranch.add)) {
+      if (Number(TotalBranches?.tenant?.maxBranchLimit) === total) {
+        setIsNotify(true);
+        setNotifyMessage({
+          text: 'Branch limit exceeded.',
+          type: 'error',
+        });
+        return;
+      }
       setOpenFormDialog(true);
     } else {
       setIsNotify(true);
@@ -303,17 +314,39 @@ function BranchPage() {
     }
   };
 
-  const handleVendor = (branchId: string, userType: string) => {
+  const handleVendor = async (branch: any) => {
+    setIsLoader(true);
     const userObj = {
       ...authState.user,
-      branch: branchId,
-      userType,
+      branch: branch.id,
+      userType: 'ShopUser',
     };
+    if (authState?.shopTenantDetails?.branch === branch.id) {
+      setItem('BRANCH_DATA', mainBranchData);
+      dispatch(setBranchData(mainBranchData));
+    } else {
+      setItem('BRANCH_DATA', branch);
+      dispatch(setBranchData(branch));
+    }
     dispatch(login(userObj));
     dispatch(setItemState(userObj));
+    const tokens: any = await authService.createToken({
+      tenant: authState.user.tenant,
+      branch: branch.id,
+      userId: authState.user.id,
+    });
+    if (tokens) {
+      setIsLoader(false);
+      setItem('AUTH_TOKEN', tokens.data.data?.accessToken);
+      setItem('REFRESH_TOKEN', tokens.data.data?.refreshToken);
+    }
   };
-  console.log('authState', authState);
 
+  const statusCancelHandler = () => {
+    handleVendor(branchid);
+  };
+
+  // console.log('authState', authState);
   return isLoader ? (
     <Loader />
   ) : (
@@ -336,7 +369,7 @@ function BranchPage() {
               <div className="flex flex-row items-center justify-end gap-3">
                 {list?.length > 0 && (
                   <>
-                    <div className="flex-col px-2">
+                    {/* <div className="flex-col px-2">
                       <div>
                         <p className="text-sm font-semibold ">
                           Total Employees
@@ -354,7 +387,7 @@ function BranchPage() {
                           <PeopleOutlineIcon />
                         </Badge>
                       </div>
-                    </div>
+                    </div> */}
                     <div className=" flex-col items-center justify-center px-2">
                       <p className="text-sm font-semibold">
                         Branches Distribution
@@ -430,9 +463,13 @@ function BranchPage() {
                 title="Switch to main admin shop"
                 buttonType="button"
                 className="mx-5 rounded-full bg-primary text-foreground"
-                onclick={() =>
-                  handleVendor(authState.shopTenantDetails?.branch, 'ShopUser')
-                }
+                onclick={() => {
+                  setCancelDialogOpen(true);
+                  setBranchid({
+                    id: authState.shopTenantDetails?.branch,
+                    name: mainBranchData.name,
+                  });
+                }}
               />
             </div>
           )}
@@ -447,7 +484,7 @@ function BranchPage() {
                   <th className="">Manager</th>
                   <th className="">Address</th>
                   <th>Status</th>
-                  {/* <th>Branch Control</th> */}
+                  <th>Branch Control</th>
                   <th aria-label="empty table header">&nbsp;</th>
                 </tr>
               </thead>
@@ -488,7 +525,7 @@ function BranchPage() {
                             <span className="badge badge-danger">INACTIVE</span>
                           )}
                         </td>
-                        {/* <td className="w-[8%]">
+                        <td className="w-[8%]">
                           <div
                             className="flex cursor-pointer justify-center"
                             style={{
@@ -512,7 +549,9 @@ function BranchPage() {
                                   ALL_PERMISSIONS.storeBranch.edit
                                 )
                               ) {
-                                handleVendor(item.id, item.tenantType);
+                                // handleVendor(item.id);
+                                setCancelDialogOpen(true);
+                                setBranchid(item);
                               } else {
                                 setIsNotify(true);
                                 setNotifyMessage({
@@ -525,7 +564,7 @@ function BranchPage() {
                             <AirplayIcon />
                           </div>
                           {/* )} */}
-                        {/* </td> */}
+                        </td>
                         <td>
                           <div className="flex flex-row-reverse">
                             <IconButton
@@ -581,6 +620,16 @@ function BranchPage() {
           </div>
         </div>
       </div>
+      {cancelDialogOpen && (
+        <PermissionPopup
+          type="thumb"
+          open={cancelDialogOpen}
+          setOpen={setCancelDialogOpen}
+          dialogText={dialogText}
+          dialogDesc="This will impact all the services, which concern through branch."
+          callback={statusCancelHandler}
+        />
+      )}
       {openFormDialog && (
         <BranchCreatePopup
           type

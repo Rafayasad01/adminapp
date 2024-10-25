@@ -193,6 +193,8 @@ function SettingsConfig() {
               <div className="mt-4">
                 <span className="font-bold">Avaiables Themes</span>
                 <div className="m-3 flex">
+                  {data?.themes?.length <= 0 &&
+                    'Theme is not assigned to this Branch'}
                   {data &&
                     data?.themes?.map((item: any, index: number) => {
                       return (

@@ -36,6 +36,7 @@ function CustomDropDown({
   alternativeId,
   border,
 }: CustomDropDownProps) {
+  console.log('🚀 ~ options:', options);
   return (
     <div className="">
       {inputTitle && (
@@ -49,7 +50,7 @@ function CustomDropDown({
         <Controller
           name={id}
           control={control}
-          defaultValue={options?.role || 'none'}
+          defaultValue={options?.role ? options?.role : 'none'}
           rules={
             validateRequired
               ? {

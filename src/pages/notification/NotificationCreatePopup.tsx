@@ -4,7 +4,7 @@ import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
 import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined';
 import RadioButtonUncheckedOutlinedIcon from '@mui/icons-material/RadioButtonUncheckedOutlined';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { FormControlLabel, FormLabel, Radio, RadioGroup } from '@mui/material';
 
@@ -39,6 +39,7 @@ function NotificationCreatePopup({
     formState: { errors },
   } = useForm<Notification>();
 
+  const authState: any = useAppSelector((state: any) => state?.authState);
   const dataRole = useAppSelector(
     (state: any) => state?.persistedReducer?.roleState?.role?.permissions
   );
@@ -56,6 +57,12 @@ function NotificationCreatePopup({
   const handleUserChange = (event: any) => {
     setNotificationType(event.target.value);
   };
+
+  useEffect(() => {
+    if (authState.user.userType !== 'ShopUser') {
+      setNotificationType('StaffUsers');
+    }
+  }, []);
 
   return (
     <Dialog
@@ -148,24 +155,26 @@ function NotificationCreatePopup({
                       value={notificationType ?? ''}
                       onClick={handleUserChange}
                     >
-                      <FormControlLabel
-                        sx={{
-                          color: '#6A6A6A',
-                          fontFamily: 'Open Sans',
-                          fonWeight: 400,
-                          fonSize: '14px',
-                        }}
-                        // disabled={FALSE}
-                        value="Customers"
-                        control={
-                          <Radio
-                            className="text-sm text-[#1D1D1D]"
-                            icon={<RadioButtonUncheckedOutlinedIcon />}
-                            checkedIcon={<CheckCircleOutlinedIcon />}
-                          />
-                        }
-                        label="Customers"
-                      />
+                      {authState.user.userType === 'ShopUser' && (
+                        <FormControlLabel
+                          sx={{
+                            color: '#6A6A6A',
+                            fontFamily: 'Open Sans',
+                            fonWeight: 400,
+                            fonSize: '14px',
+                          }}
+                          // disabled={FALSE}
+                          value="Customers"
+                          control={
+                            <Radio
+                              className="text-sm text-[#1D1D1D]"
+                              icon={<RadioButtonUncheckedOutlinedIcon />}
+                              checkedIcon={<CheckCircleOutlinedIcon />}
+                            />
+                          }
+                          label="Customers"
+                        />
+                      )}
                       <FormControlLabel
                         sx={{
                           color: '#6A6A6A',

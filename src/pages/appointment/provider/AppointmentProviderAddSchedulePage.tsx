@@ -149,6 +149,22 @@ function AppointmentProviderAddSchedulePage() {
     setPermissionList(filteredData);
   };
 
+  const checkSameDay: any = (data: any) => {
+    const dayArray = data.map((entry: any) => entry.day);
+    const duplicates = dayArray.filter(
+      (day: string, index: number, self: any) => self.indexOf(day) !== index
+    );
+    if (duplicates.length > 0) {
+      setIsNotify(true);
+      setNotifyMessage({
+        text: `The day(s) ${duplicates.join(', ')} appear(s) multiple times.`,
+        type: 'error',
+      });
+      return null;
+    }
+    return true;
+  };
+
   const onSubmit = (data: any) => {
     setIsLoader(true);
     const parent: any = {
@@ -162,43 +178,44 @@ function AppointmentProviderAddSchedulePage() {
       const dataItem = {
         day: data[`name${index}`],
         startTime: data[`startdatetime${index}`]
-          // .utc()
+          .utc()
           .format('YYYY-MM-DD HH:mm:ss'),
         endTime: data[`enddatetime${index}`]
-          // .utc()
+          .utc()
           .format('YYYY-MM-DD HH:mm:ss'),
       };
 
       parent.workDays.push(dataItem);
       return null;
     });
-    // console.log('PARENTS', parent);
-
-    adminAppointmentService
-      .ProviderScheduleCreate(id, parent)
-      .then((item: any) => {
-        if (item.data.success) {
-          // console.log('CREATED', item.data);
-          reset();
-          setText(item.data.message);
-          navigate(-1);
-        } else {
+    const result = checkSameDay(parent.workDays);
+    if (result) {
+      adminAppointmentService
+        .ProviderScheduleCreate(id, parent)
+        .then((item: any) => {
+          if (item.data.success) {
+            // console.log('CREATED', item.data);
+            reset();
+            setText(item.data.message);
+            navigate(-1);
+          } else {
+            setIsLoader(false);
+            setIsNotify(true);
+            setNotifyMessage({
+              text: item.data.message,
+              type: 'error',
+            });
+          }
+        })
+        .catch((err) => {
           setIsLoader(false);
           setIsNotify(true);
           setNotifyMessage({
-            text: item.data.message,
+            text: err.message,
             type: 'error',
           });
-        }
-      })
-      .catch((err) => {
-        setIsLoader(false);
-        setIsNotify(true);
-        setNotifyMessage({
-          text: err.message,
-          type: 'error',
         });
-      });
+    }
     return null;
   };
 

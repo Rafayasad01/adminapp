@@ -405,6 +405,20 @@ function Sidebar() {
             ) {
               return null;
             }
+            // Specific condition for MODULE_FAQS
+            if (
+              link.name === 'FAQs' &&
+              authState.user.userType !== 'ShopUser'
+            ) {
+              return null;
+            }
+            // Specific condition for MODULE_BANNERS
+            if (
+              link.name === 'Banners' &&
+              authState.user.userType !== 'ShopUser'
+            ) {
+              return null;
+            }
             // Specific condition for MODULE_SETTINGS
             // if (
             //   link.name === MODULE_SETTINGS &&

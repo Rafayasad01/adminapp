@@ -44,6 +44,8 @@ import {
 import promiseHandler from '../../utils/helper';
 import { ValuesOf } from '../../utils/ts-helpers';
 import PromotionListPopup from './PromotionListPopup';
+import assets from '../../assets';
+import { getItem } from '../../utils/storage';
 
 const OrderBasket = () => {
   const {
@@ -70,6 +72,9 @@ const OrderBasket = () => {
   const [userIdentifier, setUserIdentifier] = useState<any>('');
   const [isLoader, setIsLoader] = useState(false);
   const authState = useAppSelector((state) => state?.authState);
+  const tenantConfig: any = getItem('TENANT_CONFIG');
+
+  // console.log('authState', authState);
 
   const {
     /*  register, */
@@ -78,15 +83,15 @@ const OrderBasket = () => {
     /*  formState: { errors }, */
   } = useForm<Order>();
 
-  const dropOffDate: any = useAppSelector(
-    (state) =>
-      state?.persistedReducer?.appState?.UserItems?.tenantConfig
-        ?.minimumDeliveryTime
-  );
+  // const dropOffDate: any = useAppSelector(
+  //   (state) =>
+  //     state?.persistedReducer?.appState?.UserItems?.tenantConfig
+  //       ?.minimumDeliveryTime
+  // );
   const currentDate = dayjs();
   const DeliveryDate = currentDate;
   // const DeliveryDate = currentDate.add(dropOffDate ?? dayjs(), 'day');
-  console.log('🚀 ~ OrderBasket ~ dropOffDate:', dropOffDate);
+  // console.log('🚀 ~ OrderBasket ~ dropOffDate:', dropOffDate);
   const dispatch = useAppDispatch();
   const totalAmount = cartItems.reduce(
     (p: any, c: any) => p + Number(c.price) * Number(c.quantity),
@@ -94,7 +99,7 @@ const OrderBasket = () => {
   );
   const gstAmount =
     totalAmount *
-    (Number(authState.user?.tenantConfig?.gstPercentage ?? 0) / 100);
+    (Number(tenantConfig?.tenantConfig?.gstPercentage ?? 0) / 100);
 
   const discountedValue: any =
     cartItems?.length <= 0
@@ -555,7 +560,15 @@ const OrderBasket = () => {
                                 <span className="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root" />
                               </button>
                               <div className="product">
-                                <img className="pic" src={item.icon} alt="" />
+                                {item.icon !== 'null' ? (
+                                  <img className="pic" src={item.icon} alt="" />
+                                ) : (
+                                  <img
+                                    className="pic"
+                                    src={assets.images.noItems}
+                                    alt="no-pic"
+                                  />
+                                )}
                                 <p className="name"> {item.name}</p>
                               </div>
                             </div>
@@ -992,7 +1005,7 @@ const OrderBasket = () => {
                 </div> */}
                 <div className="flex items-center justify-between py-2">
                   <div className="font-open-sans text-xs font-normal text-neutral-900">
-                    GST ({authState.user?.tenantConfig?.gstPercentage}%)
+                    GST ({tenantConfig.tenantConfig?.gstPercentage}%)
                   </div>
                   <div className="font-open-sans text-sm font-bold text-neutral-900">
                     {CURRENCY_PREFIX} {gstAmount.toFixed(2)}

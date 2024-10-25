@@ -15,6 +15,7 @@ import {
   NOT_AUTHORIZED_MESSAGE,
 } from '../../utils/constants';
 import HomePagePopup from './HomePagePopup';
+import assets from '../../assets';
 
 interface CategoryItemsListProps {
   categoryId: string | any;
@@ -131,13 +132,21 @@ const CategoryItemsList: React.FC<CategoryItemsListProps> = ({
           <div key={item.id} className="item">
             <button
               className="mb-4 aspect-[4/3] w-full object-contain md:mb-6"
-              onClick={() => navigate(`../item/${item.id}`)}
+              // onClick={() => navigate(`../item/${item.id}`)}
             >
-              <img
-                className="mb-4 aspect-[4/3] w-full object-contain md:mb-6"
-                src={item.icon}
-                alt=""
-              />
+              {item.icon !== 'null' ? (
+                <img
+                  className="mb-4 aspect-[4/3] w-full object-contain md:mb-6"
+                  src={item.icon}
+                  alt=""
+                />
+              ) : (
+                <img
+                  className="mb-4 aspect-[2/1] w-full object-contain md:mb-6"
+                  src={assets.images.noItems}
+                  alt=""
+                />
+              )}
             </button>
             <div className="">
               <p className="name m-0 text-base">{item.name}</p>

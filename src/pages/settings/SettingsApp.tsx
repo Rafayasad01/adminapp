@@ -729,12 +729,13 @@ function SettingsApp() {
                   <FormControl className="FormControl" variant="standard">
                     <label className="FormLabel">Latitude</label>
                     <Input
-                      disabled
+                      // disabled
                       id="latitude"
                       placeholder="Enter Latitude"
                       type="number"
                       className="FormInput"
                       defaultValue={0}
+                      inputProps={{ step: 'any' }}
                       {...register('latitude', {
                         validate: (value: any) =>
                           VALIDATE_NON_NEGATIVE_NUM(value),
@@ -752,12 +753,13 @@ function SettingsApp() {
                   <FormControl className="FormControl" variant="standard">
                     <label className="FormLabel">Longitude</label>
                     <Input
-                      disabled
+                      // disabled
                       id="longitude"
                       placeholder="Enter Delivery Urgent Fees"
                       type="number"
                       className="FormInput"
                       defaultValue={0}
+                      inputProps={{ step: 'any' }}
                       {...register('longitude', {
                         validate: (value: any) =>
                           VALIDATE_NON_NEGATIVE_NUM(value),

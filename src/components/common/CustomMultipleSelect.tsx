@@ -49,7 +49,7 @@ function CustomMultipleSelectBox({
   defaultFieldValue,
   border,
 }: CustomMultipleSelectBoxProps) {
-  // console.log('optionsss', options);
+  // console.log('optionsss', error);
   return (
     <div>
       <div className="" style={{ paddingBottom: '5px' }}>
@@ -126,6 +126,7 @@ function CustomMultipleSelectBox({
                 </MenuItem>
               ))}
             </Select>
+            {console.log('fieldsState', fieldState)}
             {fieldState.error && (
               <p style={{ color: 'red', fontSize: '12px' }}>
                 *{fieldState.error.message}

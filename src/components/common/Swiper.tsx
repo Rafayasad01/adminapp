@@ -31,7 +31,7 @@ const SwiperComponent = ({
         breakpoints={{
           // Large screens
           1800: {
-            slidesPerView: 100,
+            slidesPerView: 10,
           },
           // Laptop screens
           1000: {

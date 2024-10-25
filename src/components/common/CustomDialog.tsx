@@ -36,6 +36,8 @@ type CustomDialogProps = {
   endTime?: any;
   addScheduleFormat?: boolean;
   noWeekDays?: boolean;
+  errors?: any;
+  setInputFieldsData?: any;
 };
 
 function CustomDialog({
@@ -58,6 +60,8 @@ function CustomDialog({
   endTime,
   addScheduleFormat,
   noWeekDays,
+  errors,
+  setInputFieldsData,
 }: CustomDialogProps) {
   const handleFormClose = () => {
     if (type === 'edit' && specialCase) {
@@ -74,6 +78,8 @@ function CustomDialog({
       setOpenFormDialog(false);
     }
   };
+
+  // console.log('errors', errors);
 
   return (
     <Dialog
@@ -107,10 +113,11 @@ function CustomDialog({
                             validateRequired={items.validateRequired}
                             id={items.id}
                             control={items.control}
-                            error={items.error}
+                            error={errors?.[items.id]}
                             register={items.register}
                             options={items.options}
                             inputTitle={items.fieldName}
+                            disabled={items.disable}
                           />
                         </FormControl>
                       ) : items.type === 'multipleSelect' ? (
@@ -119,7 +126,7 @@ function CustomDialog({
                             validateRequired
                             id={items.id}
                             control={items.control}
-                            error={items.errors}
+                            error={errors}
                             setValue={items.setValue}
                             register={items.register}
                             options={items.options}
@@ -146,12 +153,13 @@ function CustomDialog({
                             id={items.id}
                             value={items.value ? items.value : ''}
                             register={items.register}
-                            error={items.error}
+                            error={errors?.[items.id]}
                             inputType={items.type}
                             onclick={items.onclick}
+                            setShowPassword={items.setShowPassword}
                             showPassVisibility={items.showPassVisibility}
                             typeImportant={items.typeImportant}
-                            clickType={items.clickType}
+                            setInputFieldsData={setInputFieldsData}
                           />
                         </FormControl>
                       ) : items.type === 'textarea' ? (

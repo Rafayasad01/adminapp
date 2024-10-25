@@ -55,6 +55,7 @@ function TopBar({
     dispatch(setRolePermissions({ id: '', name: '', permissions: [] }));
     removeItem('AUTH_TOKEN');
     removeItem('USER');
+    removeItem('BRANCH_DATA');
     // dispatch(setSystemConfig(null));
   };
 

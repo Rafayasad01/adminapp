@@ -130,6 +130,7 @@ function EmployeePage() {
       fieldName: 'Employee Type',
       id: 'employeeType',
       defaultValue: 'Select Employee Type',
+      validateRequired: true,
       control,
       register,
       setValue,
@@ -152,17 +153,22 @@ function EmployeePage() {
   ]);
 
   useEffect(() => {
-    branchService.getBranchesLov().then((item: any) => {
-      if (item.data.success) {
-        const filtered = item.data.data.map(({ id, name }: any) => ({
-          id,
-          name,
-        }));
-        setBranchesLov(filtered);
-      }
-    });
-  }, []);
+    if (authState.user.userType === 'ShopUser') {
+      branchService.getBranchesLov().then((item: any) => {
+        if (item.data.success) {
+          const filtered = item.data.data.map(({ id, name }: any) => ({
+            id,
+            name,
+          }));
+          setBranchesLov(filtered);
+        }
+      });
+    } else {
+      setValue('employeeType', 'USER');
+    }
+  }, [authState.user.userType]);
 
+  // console.log("watch('employeeType')", inputFieldsData);
   const handleFormClickOpen = () => {
     if (
       listingRolePermission(dataRole, ALL_PERMISSIONS.storeUser.addUserEmployee)
@@ -170,7 +176,8 @@ function EmployeePage() {
       setValue('first_name', '');
       setValue('last_name', '');
       setValue('email', '');
-      setValue('employeeType', 'none');
+      if (authState.user.userType === 'ShopUser')
+        setValue('employeeType', 'none');
       setValue('branches', []);
       setStoreDelIds([]);
       setDelBranchesId([]);
@@ -198,12 +205,19 @@ function EmployeePage() {
       const newPage = 0;
       setSearch(searchTxt);
       setPage(newPage);
-      employeeService
-        .getListServiceSearch(searchTxt, newPage, rowsPerPage)
-        .then((item) => {
+      if (searchTxt === '' || searchTxt === null || searchTxt === undefined) {
+        employeeService.getListService(newPage, rowsPerPage).then((item) => {
           setList(item.data.data.list);
           setTotal(item.data.data.total);
         });
+      } else {
+        employeeService
+          .getListServiceSearch(searchTxt, newPage, rowsPerPage)
+          .then((item) => {
+            setList(item.data.data.list);
+            setTotal(item.data.data.total);
+          });
+      }
     }
   };
 
@@ -295,7 +309,7 @@ function EmployeePage() {
         )
       ) {
         const editData = list.find((x: any) => x.id === actionMenuItemid);
-        console.log('🚀 ~ manuHandler ~ editData:', editData);
+        // console.log('🚀 ~ manuHandler ~ editData:', editData);
         setValue('first_name', editData.firstName);
         setValue('last_name', editData.lastName);
         setValue('email', editData.email);
@@ -399,7 +413,9 @@ function EmployeePage() {
   // console.log('LIST', list);
 
   const createFormHandler = (data: any) => {
-    // setIsLoader(true);
+    // console.log('ATA', data);
+
+    setIsLoader(true);
     const userData = {
       firstName: data.first_name,
       lastName: data.last_name,
@@ -408,7 +424,6 @@ function EmployeePage() {
       branch: data.employeeType === 'USER' ? [branch.id] : data.branches,
       employeeType: data.employeeType,
     };
-    // console.log('🚀 ~ createFormHandler ~ datas:', userData);
     employeeService
       .create(userData)
       .then((item) => {
@@ -621,7 +636,8 @@ function EmployeePage() {
       }
     } else if (
       watch('employeeType') === 'MANAGER' &&
-      branchesFieldIndex === -1
+      branchesFieldIndex === -1 &&
+      authState.user.userType === 'ShopUser'
     ) {
       updatedFields.push({
         fieldName: 'Branches',
@@ -646,7 +662,13 @@ function EmployeePage() {
         },
       };
     }
-
+    if (authState.user.userType !== 'ShopUser') {
+      const finalFields = updatedFields.filter(
+        (item: any) => item.id !== 'employeeType'
+      );
+      setInputFieldsData(finalFields);
+      return;
+    }
     setInputFieldsData(updatedFields);
   }, [watch('employeeType'), branchesLov, openRemoveFormDialog]);
 
@@ -851,12 +873,18 @@ function EmployeePage() {
           anchorEl={actionMenuAnchorEl}
           setAnchorEl={setActionMenuAnchorEl}
           options={
-            list.find((i: any) => i.id === actionMenuItemid)?.userType ===
-            'User'
+            authState.user.userType === 'BranchUser'
               ? actionMenuOptions.filter(
                   (option: any, index: number) => index < 2
-                ) // Show first 2 options for BranchUser
-              : actionMenuOptions // Show all options for other users
+                )
+              : authState.user.userType === 'ShopUser'
+              ? list.find((i: any) => i.id === actionMenuItemid)?.userType ===
+                'User'
+                ? actionMenuOptions.filter(
+                    (option: any, index: number) => index < 2
+                  )
+                : actionMenuOptions
+              : actionMenuOptions
           }
           callback={manuHandler}
         />
@@ -869,6 +897,8 @@ function EmployeePage() {
           onSubmit={onSubmitDialogBox}
           openFormDialog={openFormDialog}
           setOpenFormDialog={setOpenFormDialog}
+          errors={errors}
+          setInputFieldsData={setInputFieldsData}
         />
       )}
       {openEditFormDialog && (
@@ -884,6 +914,7 @@ function EmployeePage() {
           onSubmit={onSubmitDialogBox}
           openFormDialog={openEditFormDialog}
           setOpenFormDialog={setOpenEditFormDialog}
+          errors={errors}
         />
       )}
       {openRemoveFormDialog && (
