@@ -42,6 +42,7 @@ import PayIcon from '../icons/PayIcon';
 import VoucherIcon from '../icons/VoucherIcon';
 import ProviderIcon from '../icons/providerIcon';
 import VisitIcon from '../icons/visitIcon';
+// import { getItem } from '../../utils/storage';
 
 const links = [
   {
@@ -401,6 +402,7 @@ function Sidebar() {
             // Specific condition for MODULE_BRANCES
             if (
               link.name === MODULE_BRANCHES &&
+              authState.user.branchControl !== 'Shop' &&
               authState.user.userType !== 'ShopUser'
             ) {
               return null;

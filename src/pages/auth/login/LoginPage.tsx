@@ -130,6 +130,11 @@ function LoginPage() {
           dispatch(setRolePermissions(newUserData.role));
           handleTitleText(newUserData.role.permissions);
           delete newUserData.role;
+          if (newUserData?.userType === 'ShopUser') {
+            newUserData.branchControl = 'Shop';
+          } else {
+            newUserData.branchControl = 'Branch';
+          }
           dispatch(login(newUserData));
           dispatch(setItemState(newUserData));
 

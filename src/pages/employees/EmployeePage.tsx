@@ -424,18 +424,28 @@ function EmployeePage() {
       branch: data.employeeType === 'USER' ? [branch.id] : data.branches,
       employeeType: data.employeeType,
     };
+    // console.log('🚀 ~ createFormHandler ~ userData:', userData);
+
     employeeService
       .create(userData)
       .then((item) => {
         if (item.data.success) {
           // reset();
+          if (item.data.data.userType === 'BranchUser') {
+            setIsNotify(true);
+            setNotifyMessage({
+              text: 'Manager has been created, please check on assigned branch(es)',
+              type: 'success',
+            });
+            return;
+          }
           setIsLoader(false);
           setIsNotify(true);
           setNotifyMessage({
             text: item.data.message,
             type: 'success',
           });
-          setList([...list, item.data.data]);
+          setList([item.data.data, ...list]);
         } else {
           // reset();
           setIsLoader(false);

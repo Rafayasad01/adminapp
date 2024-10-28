@@ -319,7 +319,10 @@ function BranchPage() {
     const userObj = {
       ...authState.user,
       branch: branch.id,
-      userType: 'ShopUser',
+      userType:
+        authState?.shopTenantDetails?.branch === branch.id
+          ? 'ShopUser'
+          : 'BranchUser',
     };
     if (authState?.shopTenantDetails?.branch === branch.id) {
       setItem('BRANCH_DATA', mainBranchData);
@@ -408,7 +411,7 @@ function BranchPage() {
                           showZero
                           max={999}
                           color="success"
-                          badgeContent={Number(total) ?? 0}
+                          badgeContent={Number(total + 1) ?? 0}
                         >
                           <ApartmentIcon />
                         </Badge>
@@ -481,6 +484,7 @@ function BranchPage() {
                   <th className="w-[20%]">Description</th>
                   <th className="">Landline</th>
                   <th className="">Mobile</th>
+                  <th className="">Branch Type</th>
                   <th className="">Manager</th>
                   <th className="">Address</th>
                   <th>Status</th>
@@ -512,6 +516,7 @@ function BranchPage() {
                         <td>{item.description ? item.description : '--'}</td>
                         <td>{item.landline ? item.landline : '--'}</td>
                         <td>{item.mobile ? item.mobile : '--'}</td>
+                        <td>{item.branchType ? item.branchType : '--'}</td>
                         <td>
                           {item?.backofficeUser
                             ? `${item?.backofficeUser?.firstName} ${item?.backofficeUser?.lastName}`
