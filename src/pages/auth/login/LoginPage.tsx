@@ -115,7 +115,15 @@ function LoginPage() {
       .loginService(userData)
       .then(async (user: any) => {
         if (user && user.data.success) {
-          const [branch] = user.data.data.backofficeUserTenantBranch;
+          if (
+            user.data.data.userType !== 'User' &&
+            user.data.data.branches.length <= 0
+          ) {
+            showNotification('This user is deactived.', 'error');
+            setIsLoader(false);
+            return false;
+          }
+          const [branch] = user.data.data.branches;
           setLoginData(user.data.data.branches);
           // console.log(
           //   'user.data.data.branches',
@@ -125,7 +133,7 @@ function LoginPage() {
           const newUserData = user.data.data;
           // console.log('new user data:', branch);
 
-          newUserData.branch = branch.branch;
+          newUserData.branch = branch.id;
           setIsLoader(false);
           dispatch(setRolePermissions(newUserData.role));
           handleTitleText(newUserData.role.permissions);
@@ -145,16 +153,16 @@ function LoginPage() {
               })
             );
           }
-          if (user.data.data.backofficeUserTenantBranch.length === 1) {
+          if (user.data.data.branches.length === 1) {
             const tokens: any = await authService.createToken({
               tenant: newUserData.tenant,
-              branch: branch.branch,
+              branch: branch.id,
               userId: newUserData.id,
             });
             setItem('AUTH_TOKEN', tokens.data.data?.accessToken);
             setItem('REFRESH_TOKEN', tokens.data.data?.refreshToken);
             await handleAnonAppUser(user.data.data);
-            await getBranchById(branch.branch);
+            await getBranchById(branch.id);
             // navigate('../../../dashboard');
           } else {
             setOpenPopup(true);

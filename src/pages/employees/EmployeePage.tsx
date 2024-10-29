@@ -284,6 +284,13 @@ function EmployeePage() {
               (newItem: any) => newItem.id !== item.data.data.id
             );
           });
+        } else {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'error',
+          });
         }
       })
       .catch((err) => {
@@ -424,7 +431,6 @@ function EmployeePage() {
       branch: data.employeeType === 'USER' ? [branch.id] : data.branches,
       employeeType: data.employeeType,
     };
-    // console.log('🚀 ~ createFormHandler ~ userData:', userData);
 
     employeeService
       .create(userData)
@@ -432,6 +438,7 @@ function EmployeePage() {
         if (item.data.success) {
           // reset();
           if (item.data.data.userType === 'BranchUser') {
+            setIsLoader(false);
             setIsNotify(true);
             setNotifyMessage({
               text: 'Manager has been created, please check on assigned branch(es)',
@@ -617,6 +624,11 @@ function EmployeePage() {
             return newArr.map((item: any) => {
               if (item.id === updateItem.data.data.id) {
                 item.isActive = updateItem.data.data.isActive;
+              } else if (
+                item.userType === 'BranchUser' &&
+                item.id !== updateItem.data.data.id
+              ) {
+                item.isActive = false;
               }
               return { ...item };
             });

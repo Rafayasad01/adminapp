@@ -434,7 +434,7 @@ function SettingsApp() {
                           alt="Shop Logo"
                         />
                       </div>
-                    ) : detail && detail?.tenantConfig?.tenantConfig?.logo ? (
+                    ) : detail && detail?.tenantConfig?.logo ? (
                       <div className="col-span-6 flex items-center xl:justify-center 2xl:justify-start">
                         <img
                           className="max-h-[100px] max-w-[150px] rounded-md"

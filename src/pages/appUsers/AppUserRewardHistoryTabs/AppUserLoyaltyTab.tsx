@@ -130,7 +130,7 @@ function AppUserLoyaltyTab({
                         <IconButton
                           className="icon-btn"
                           onClick={() =>
-                            navigate(`../history/loyalty/detail/${item.id}`)
+                            navigate(`../history/loyality/detail/${item.id}`)
                           }
                         >
                           <WysiwygOutlinedIcon />

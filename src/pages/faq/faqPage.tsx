@@ -45,7 +45,7 @@ function FaqPage() {
   const [notifyMessage, setNotifyMessage] = React.useState({});
   const [cancelDialogOpen, setCancelDialogOpen] = useState<boolean>(false);
   const [dialogText] = useState<any>(
-    'Are you sure you want to delete this customer ?'
+    'Are you sure you want to delete this faq ?'
   );
   const {
     register,

@@ -302,7 +302,7 @@ export const routeObjects: RouteObject[] = [
                     element: <AppUserPromotionDetailPage />,
                   },
                   {
-                    path: 'history/loyalty/detail/:loyaltyId',
+                    path: 'history/loyality/detail/:loyaltyId',
                     element: <AppUserLoyaltyDetailPage />,
                   },
                 ],
@@ -1034,6 +1034,11 @@ export const routeObjects: RouteObject[] = [
                       getUserType?.userType === 'ShopUser'
                         ? [
                             {
+                              path: 'employees',
+                              condition:
+                                ALL_PERMISSIONS.storeUser.viewUserEmployee,
+                            },
+                            {
                               path: 'app-user/list',
                               condition: ALL_PERMISSIONS.storeUser.viewUserApp,
                             },
@@ -1042,22 +1047,17 @@ export const routeObjects: RouteObject[] = [
                               condition:
                                 ALL_PERMISSIONS.storeUser.viewCustomers,
                             },
+                          ]
+                        : [
                             {
                               path: 'employees',
                               condition:
                                 ALL_PERMISSIONS.storeUser.viewUserEmployee,
                             },
-                          ]
-                        : [
                             {
                               path: 'customers/list',
                               condition:
                                 ALL_PERMISSIONS.storeUser.viewCustomers,
-                            },
-                            {
-                              path: 'employees',
-                              condition:
-                                ALL_PERMISSIONS.storeUser.viewUserEmployee,
                             },
                           ]
                     }

@@ -177,14 +177,14 @@ function CategoriesServicesEditPopup({
                 <Input
                   className="FormInput"
                   id="loyaltyCoins"
-                  placeholder="Enter loyalty Coins"
+                  placeholder="Enter loyality Coins"
                   type="number"
                   {...register('loyaltyCoins', {
                     required: false,
                     value: formData?.loyaltyCoins,
                     pattern: {
                       value: PATTERN.POINT_NUM,
-                      message: 'Enter a valid loyalty coins in numbers',
+                      message: 'Enter a valid loyality coins in numbers',
                     },
                     maxLength: {
                       value: 10,
