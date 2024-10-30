@@ -268,18 +268,20 @@ function SettingsApp() {
         .then((item: any) => {
           const { success, message, data: itemData } = item.data;
           if (success) {
-            setAddress(itemData?.address);
+            setAddress(itemData?.branch?.address);
             if (
-              itemData?.tenantConfig?.officeTimeIn ||
-              itemData?.tenantConfig?.officeTimeOut
+              itemData?.branch?.officeTimeIn ||
+              itemData?.branch?.officeTimeOut
             ) {
               // SET OFFICE TIMINGS
               const officeTimeData = {
                 ...branchData,
                 name: itemData?.branch?.name,
-                officeTimeIn: itemData?.tenantConfig?.officeTimeIn,
-                officeTimeOut: itemData?.tenantConfig?.officeTimeOut,
+                officeTimeIn: itemData?.branch?.officeTimeIn,
+                officeTimeOut: itemData?.branch?.officeTimeOut,
               };
+              console.log('officeTimeData', officeTimeData);
+
               dispatch(setBranchData(officeTimeData));
               // setItem('BRANCH_DATA', officeTimeData);
               dispatch(setTenantConfig(itemData?.tenantConfig));
