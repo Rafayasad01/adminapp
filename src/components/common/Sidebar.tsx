@@ -166,6 +166,12 @@ const links = [
     icon: <PersonOutlineOutlinedIcon fontSize="inherit" />,
     childLinks: [
       {
+        name: 'Admin Employees',
+        path: 'user/employees',
+        permission: ALL_PERMISSIONS.storeUser.viewUserEmployee,
+        icon: <PeopleOutlineOutlinedIcon className="w-[17px]" />,
+      },
+      {
         name: 'App User',
         path: 'user/app-user/list',
         permission: ALL_PERMISSIONS.storeUser.viewUserApp,
@@ -176,12 +182,6 @@ const links = [
         path: 'user/customers/list',
         permission: ALL_PERMISSIONS.storeUser.viewCustomers,
         icon: <PersonOutlineOutlinedIcon fontSize="inherit" />,
-      },
-      {
-        name: 'Admin Employees',
-        path: 'user/employees',
-        permission: ALL_PERMISSIONS.storeUser.viewUserEmployee,
-        icon: <PeopleOutlineOutlinedIcon className="w-[17px]" />,
       },
     ],
   },
