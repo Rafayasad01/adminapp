@@ -152,6 +152,8 @@ function EmployeePage() {
     },
   ]);
 
+  // console.log('fieldsss', inputFieldsData);
+
   useEffect(() => {
     if (authState.user.userType === 'ShopUser') {
       branchService.getBranchesLov().then((item: any) => {
@@ -170,6 +172,16 @@ function EmployeePage() {
 
   // console.log("watch('employeeType')", inputFieldsData);
   const handleFormClickOpen = () => {
+    if (
+      !listingRolePermission(
+        dataRole,
+        ALL_PERMISSIONS.storeUser.viewUserEmployeeType
+      )
+    ) {
+      let fields = [...inputFieldsData];
+      fields = fields.filter((field) => field.id !== 'employeeType');
+      setInputFieldsData(fields);
+    }
     if (
       listingRolePermission(dataRole, ALL_PERMISSIONS.storeUser.addUserEmployee)
     ) {
@@ -420,18 +432,27 @@ function EmployeePage() {
   // console.log('LIST', list);
 
   const createFormHandler = (data: any) => {
-    // console.log('ATA', data);
-
     setIsLoader(true);
     const userData = {
       firstName: data.first_name,
       lastName: data.last_name,
       password: data.password,
       email: data.email,
-      branch: data.employeeType === 'USER' ? [branch.id] : data.branches,
-      employeeType: data.employeeType,
+      branch:
+        data.employeeType === 'none'
+          ? [branch.id]
+          : data.employeeType === 'USER'
+          ? [branch.id]
+          : data.branches,
+      employeeType: !listingRolePermission(
+        dataRole,
+        ALL_PERMISSIONS.storeUser.viewUserEmployeeType
+      )
+        ? 'USER'
+        : data.employeeType,
     };
 
+    // console.log('ATA', userData);
     employeeService
       .create(userData)
       .then((item) => {
@@ -480,7 +501,12 @@ function EmployeePage() {
       firstName: data.first_name,
       lastName: data.last_name,
       email: data.email,
-      branch: data.employeeType === 'USER' ? [branch.id] : data.branches,
+      branch:
+        data.employeeType === 'none'
+          ? [branch.id]
+          : data.employeeType === 'USER'
+          ? [branch.id]
+          : data.branches,
       branchDelIds: delBranchesId,
       employeeType: data.employeeType,
     };
@@ -645,53 +671,60 @@ function EmployeePage() {
   };
 
   useEffect(() => {
-    const updatedFields: any = [...inputFieldsData];
-    const branchesFieldIndex = updatedFields.findIndex(
-      (field: any) => field.id === 'branches'
-    );
-
-    const rolesToShow = openRemoveFormDialog ? branchByIdLov : branchesLov;
-
-    if (watch('employeeType') === 'USER') {
-      if (branchesFieldIndex !== -1) {
-        updatedFields.splice(branchesFieldIndex, 1);
-      }
-    } else if (
-      watch('employeeType') === 'MANAGER' &&
-      branchesFieldIndex === -1 &&
-      authState.user.userType === 'ShopUser'
+    if (
+      !listingRolePermission(
+        dataRole,
+        ALL_PERMISSIONS.storeUser.viewUserEmployeeType
+      )
     ) {
-      updatedFields.push({
-        fieldName: 'Branches',
-        id: 'branches',
-        defaultFieldValue: 'Select Branches',
-        control,
-        register,
-        setValue,
-        error: errors.branches,
-        type: 'multipleSelect',
-        options: {
-          role: watch('branches'),
-          roles: rolesToShow,
-        },
-      });
-    } else {
-      updatedFields[branchesFieldIndex] = {
-        ...updatedFields[branchesFieldIndex],
-        options: {
-          ...updatedFields[branchesFieldIndex]?.options,
-          roles: rolesToShow,
-        },
-      };
-    }
-    if (authState.user.userType !== 'ShopUser') {
-      const finalFields = updatedFields.filter(
-        (item: any) => item.id !== 'employeeType'
+      const updatedFields: any = [...inputFieldsData];
+      const branchesFieldIndex = updatedFields.findIndex(
+        (field: any) => field.id === 'branches'
       );
-      setInputFieldsData(finalFields);
-      return;
+
+      const rolesToShow = openRemoveFormDialog ? branchByIdLov : branchesLov;
+
+      if (watch('employeeType') === 'USER') {
+        if (branchesFieldIndex !== -1) {
+          updatedFields.splice(branchesFieldIndex, 1);
+        }
+      } else if (
+        watch('employeeType') === 'MANAGER' &&
+        branchesFieldIndex === -1 &&
+        authState.user.userType === 'ShopUser'
+      ) {
+        updatedFields.push({
+          fieldName: 'Branches',
+          id: 'branches',
+          defaultFieldValue: 'Select Branches',
+          control,
+          register,
+          setValue,
+          error: errors.branches,
+          type: 'multipleSelect',
+          options: {
+            role: watch('branches'),
+            roles: rolesToShow,
+          },
+        });
+      } else {
+        updatedFields[branchesFieldIndex] = {
+          ...updatedFields[branchesFieldIndex],
+          options: {
+            ...updatedFields[branchesFieldIndex]?.options,
+            roles: rolesToShow,
+          },
+        };
+      }
+      if (authState.user.userType !== 'ShopUser') {
+        const finalFields = updatedFields.filter(
+          (item: any) => item.id !== 'employeeType'
+        );
+        setInputFieldsData(finalFields);
+        return;
+      }
+      setInputFieldsData(updatedFields);
     }
-    setInputFieldsData(updatedFields);
   }, [watch('employeeType'), branchesLov, openRemoveFormDialog]);
 
   useEffect(() => {

@@ -64,7 +64,7 @@ const links = [
         icon: <GridViewOutlinedIcon fontSize="inherit" />,
       },
       {
-        name: 'Employees',
+        name: 'Staffs',
         path: 'store-appointment/employees',
         permission: ALL_PERMISSIONS.storeAppointment.viewEmployees,
         icon: <ProviderIcon />,
@@ -178,7 +178,7 @@ const links = [
         icon: <PersonOutlineOutlinedIcon fontSize="inherit" />,
       },
       {
-        name: 'Admin Users',
+        name: 'Admin Employees',
         path: 'user/employees',
         permission: ALL_PERMISSIONS.storeUser.viewUserEmployee,
         icon: <PeopleOutlineOutlinedIcon className="w-[17px]" />,

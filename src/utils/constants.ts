@@ -785,6 +785,7 @@ export const ALL_PERMISSIONS = {
     addUserEmployee: 'addUserEmployee',
     editUserEmployee: 'editUserEmployee',
     deleteUserEmployee: 'deleteUserEmployee',
+    viewUserEmployeeType: 'viewUserEmployeeType',
     viewUserAppRewardHistory: 'viewUserAppRewardHistory',
     viewDriverUserApp: 'viewDriverUserApp',
     viewCustomers: 'viewCustomers',

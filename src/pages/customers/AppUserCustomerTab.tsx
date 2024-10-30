@@ -64,11 +64,11 @@ function AppUserTab({
   const actionMenuOptions = ['Detail', 'Edit', 'Delete'];
 
   const manuHandler = (option: string) => {
-    setIsLoader(true);
     if (option === 'Edit') {
       if (
         listingRolePermission(dataRole, ALL_PERMISSIONS.storeUser.editCustomer)
       ) {
+        setIsLoader(true);
         appUserService.appUserEdit(actionMenuItemid?.id).then((item: any) => {
           if (item.data.success) {
             setIsLoader(false);
