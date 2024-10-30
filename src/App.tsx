@@ -28,7 +28,7 @@ function App() {
     if (domainArr.length > 1) {
       return domain.split('.')[1];
     }
-    return domain.split('.')[0];
+    return domain.split('.')[1];
 
     // return 'asdasdsa';
   };
