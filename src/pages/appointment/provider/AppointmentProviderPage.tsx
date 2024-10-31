@@ -910,7 +910,7 @@ function AppointmentProviderPage() {
     if (data.password) formData.append('password', data.password);
     formData.append('dob', dayjs(data.dob).format('YYYY-MM-DD'));
     // formData.append('services', JSON.stringify(data.services));
-    formData.append('payrollType', data.payrollType);
+    formData.append('payrollType', data.payrollType || 'None');
     formData.append('deletedIds', JSON.stringify(delIds));
     if (image) formData.append('avatar', image);
     if (data) {
@@ -985,7 +985,7 @@ function AppointmentProviderPage() {
     formData.append('note', data.note);
     if (image) formData.append('avatar', image);
     // formData.append('services', JSON.stringify(data.services));
-    formData.append('payrollType', data.payrollType);
+    formData.append('payrollType', data.payrollType || 'None');
     formData.append('workDays', JSON.stringify(weekDays));
     formData.append(
       'startTime',
