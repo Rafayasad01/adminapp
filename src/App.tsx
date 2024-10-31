@@ -22,24 +22,10 @@ function App() {
     console.warn = () => {};
   }
 
-  const getDomain = () => {
-    const DOMAIN_NUMBER = import.meta.env.VITE_HOST_SPLIT;
-
-    const domain = window.location.hostname;
-    const domainArr = domain.split('.');
-    if (domainArr.length > 1) {
-      return domain.split('.')[DOMAIN_NUMBER];
-    }
-    return domain.split('.')[DOMAIN_NUMBER];
-
-    // return 'asdasdsa';
-  };
-
   useEffect(() => {
     setIsPageLoader(true);
-    const currentURL = getDomain();
     systemConfigService
-      .getSystemConfig(currentURL)
+      .getSystemConfig(window.location.hostname)
       .then((res: any) => {
         setIsPageLoader(false);
         if (res.data.success) {
