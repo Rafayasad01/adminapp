@@ -4,11 +4,11 @@ import { useEffect, useState } from 'react';
 import { useErrorBoundary } from 'react-error-boundary';
 import { useRoutes } from 'react-router-dom';
 import Loader from './components/common/Loader';
+import { setLogo, setTenantConfig } from './redux/features/appSlice';
 import { setSystemConfig, setTheme } from './redux/features/authSlice';
 import { useAppDispatch } from './redux/redux-hooks';
 import { routeObjects } from './routes/AppRoutes';
 import systemConfigService from './services/adminapp/systemConfig';
-import { setLogo, setTenantConfig } from './redux/features/appSlice';
 
 function App() {
   const dispatch = useAppDispatch();
@@ -24,17 +24,10 @@ function App() {
     console.warn = () => {};
   }
 
-  const getDomain = () => {
-    const domain = window.location.hostname;
-    return domain.split('.')[0];
-    // return 'asdasdsa';
-  };
-
   useEffect(() => {
     setIsPageLoader(true);
-    const currentURL = getDomain();
     systemConfigService
-      .getSystemConfig(currentURL)
+      .getSystemConfig(window.location.hostname)
       .then((res: any) => {
         setIsPageLoader(false);
         if (res.data.success) {
