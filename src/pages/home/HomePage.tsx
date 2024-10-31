@@ -1,19 +1,19 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable prettier/prettier */
 
-import { useEffect } from 'react';
+// import { useEffect } from 'react';
 // import { useNavigate } from 'react-router';
 import Loader from '../../components/common/Loader';
 import Notify from '../../components/common/Notify';
 import TopBar from '../../components/common/TopBar';
 import {
-  fetchDashboardSummary,
+  // fetchDashboardSummary,
   setNotifyState,
 } from '../../redux/features/dashboardSlice';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 
 function HomePage() {
-  const authState = useAppSelector((state) => state?.authState);
+  // const authState = useAppSelector((state) => state?.authState);
   // const navigate = useNavigate();
   const {
     // todayAppointments,
@@ -23,15 +23,10 @@ function HomePage() {
     loading: isLoader,
   } = useAppSelector((state) => state?.dashboardState);
   const dispatch = useAppDispatch();
-  // const data = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
   const showNotification = (_value: boolean) => {
     dispatch(setNotifyState(isNotify));
   };
-
-  useEffect(() => {
-    dispatch(fetchDashboardSummary(authState.user?.tenant || ''));
-  }, []);
 
   return isLoader ? (
     <Loader />
