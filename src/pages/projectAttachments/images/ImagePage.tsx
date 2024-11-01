@@ -170,7 +170,7 @@ function ImagePage({ projectId }: any) {
       });
   };
   const createFormHandler = (data: any) => {
-    console.log('data==>', data);
+    // console.log('data==>', data);
     setIsLoader(true);
     const formData = new FormData();
     if (data.file !== null) formData.append('file', data.file);
@@ -211,7 +211,7 @@ function ImagePage({ projectId }: any) {
   };
 
   const updateFormHandler = (data: any) => {
-    console.log('🚀 ~ updateFormHandler ~ data:', data);
+    // console.log('🚀 ~ updateFormHandler ~ data:', data);
     setIsLoader(true);
     const formData = new FormData();
     if (data.file !== null) formData.append('file', data.file);

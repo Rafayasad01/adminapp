@@ -6,7 +6,7 @@ import Button from '@mui/material/Button';
 import Input from '@mui/material/Input';
 import FormControl from '@mui/material/FormControl';
 import TextField from '@mui/material/TextField';
-import { useLocation, useParams } from 'react-router';
+import { useLocation, useNavigate, useParams } from 'react-router';
 import { CircularProgress } from '@mui/material';
 import productServices from '../../services/adminapp/adminProjectProducts';
 import assets from '../../assets';
@@ -69,8 +69,10 @@ function ProductEditPopup() {
     // file
     setFile,
   ] = useState<any>(null);
+  const navigate = useNavigate();
   const [files, setFiles] = useState<any>([]);
   const [images, setImages] = useState<any>([]);
+  const [prevImages, setPrevImages] = useState<any>([]);
   const [deletedImages, setDeletedImages] = useState<any>([]);
   const [isLoader, setIsLoader] = React.useState(false);
   const [isNotify, setIsNotify] = React.useState(false);
@@ -85,6 +87,7 @@ function ProductEditPopup() {
     }
     // console.log('data.productImages', data.productImages);
     setImages((img: string) => [...img, ...data.productImages]);
+    setPrevImages((img: string) => [...img, ...data.productImages]);
     setFiles((img: string) => [...img, ...data.productImages]);
     // const fil = new File(data.productImages, 'uploaded');
     setValue('productGroup', data.productGroup);
@@ -187,6 +190,7 @@ function ProductEditPopup() {
             text: item.data.message,
             type: 'success',
           });
+          navigate(-1);
         } else {
           setIsLoader(false);
           setIsNotify(true);
@@ -268,9 +272,9 @@ function ProductEditPopup() {
         const reader = new FileReader();
         reader.onloadend = () => {
           if (reader.result) {
-            setImages((prevImages: any) =>
-              Array.isArray(prevImages)
-                ? [...prevImages, reader.result as string]
+            setImages((prevImg: any) =>
+              Array.isArray(prevImg)
+                ? [...prevImg, reader.result as string]
                 : [reader.result as string]
             );
           }
@@ -307,7 +311,7 @@ function ProductEditPopup() {
   }, [images]);
 
   const handleSelectedFileImages = (imgIndex: number) => {
-    const deletedImgs = images.filter(
+    const deletedImgs = prevImages.filter(
       (img: any, index: number) => index === imgIndex
     );
     setDeletedImages((prev: any) => [...prev, ...deletedImgs]);
@@ -321,23 +325,6 @@ function ProductEditPopup() {
     setFiles((prevFiles: any) =>
       prevFiles.filter((_: any, i: number) => i !== imgIndex)
     );
-    // setImages((prevImages: any) => {
-    //   return [
-    //     ...prevImages.slice(0, imgIndex),
-    //     ...prevImages.slice(imgIndex + 1),
-    //   ];
-    // });
-    // setFiles((prevFiles: any) => {
-    //   return prevFiles.filter((_: any, index: number) => index !== imgIndex);
-    // });
-    // setFiles((prevFiles: any) =>
-    //   prevFiles.filter((_: any, index: number) => index !== imgIndex)
-    // );
-    // return [
-    //   ...prevFiles.splice(0, imgIndex),
-    //   ...prevFiles.splice(imgIndex + 1),
-    // ];
-    // );
   };
 
   const handleStockAvailability = (type: string) => {

@@ -105,7 +105,7 @@ function ProductAddPopup() {
     }
     const featureArr: any = [];
     data.features.forEach((element: any) => featureArr.push(element.feature));
-    setIsLoader(true);
+    // setIsLoader(true);
     const formData = new FormData();
     formData.append('productGroup', data.productGroup);
     formData.append('productName', data.productName);
@@ -140,6 +140,8 @@ function ProductAddPopup() {
       formData.append('productImages', imageFile);
     });
     formData.append('tenant', authState.user.tenant);
+
+    // console.log('files', files);
 
     productServices
       .create(formData)

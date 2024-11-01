@@ -361,7 +361,7 @@ function ProductPage() {
                 <tr>
                   <th>Prod. group</th>
                   <th className="">Prod. name</th>
-                  <th>Mob. No.</th>
+                  {/* <th>Mob. No.</th> */}
                   <th>Image</th>
                   <th className="w-[15%]">Color & prices</th>
                   <th>item code</th>
@@ -382,7 +382,7 @@ function ProductPage() {
                       <tr key={index}>
                         <td>{item.productGroup ? item.productGroup : '--'}</td>
                         <td>{item.productName ? item.productName : '--'}</td>
-                        <td>{item.mobileNumber ? item.mobileNumber : '--'}</td>
+                        {/* <td>{item.mobileNumber ? item.mobileNumber : '--'}</td> */}
                         <td>
                           {item.productImages?.length > 0 ? (
                             <img
