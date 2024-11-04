@@ -354,7 +354,10 @@ function AppUsersPage() {
                     disableUnderline
                   />
                 </FormControl>
-                {title === 'App User' && (
+                {listingRolePermission(
+                  dataRole,
+                  ALL_PERMISSIONS.storeUser.addUserApp
+                ) && (
                   <Button
                     variant="contained"
                     className="btn-black-fill btn-icon"
