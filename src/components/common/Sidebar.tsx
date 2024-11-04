@@ -448,7 +448,8 @@ function Sidebar() {
               const filteredChildLinks = link.childLinks.filter(
                 (childLink: any) => {
                   if (
-                    childLink.name === 'App User' &&
+                    (childLink.name === 'App User' ||
+                      childLink.name === 'Customers') &&
                     authState.user.userType === 'BranchUser'
                   ) {
                     return false;
