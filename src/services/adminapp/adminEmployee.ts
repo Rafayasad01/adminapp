@@ -21,8 +21,8 @@ const updateService = (userID: string, data: any) => {
   return network.post(`${BACKOFFICE_PREFIX}/update/${userID}`, data);
 };
 
-const removeManagerService = (userID: string, data: any) => {
-  return network.post(`${BACKOFFICE_PREFIX}/remove/manager/${userID}`, data);
+const removeManagerService = (userID: string) => {
+  return network.post(`${BACKOFFICE_PREFIX}/remove/manager/${userID}`, {});
 };
 
 const updateStatus = (userID: string, data: any) => {

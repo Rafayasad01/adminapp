@@ -1307,7 +1307,9 @@ function AppointmentProviderPage() {
           DialogSliderOne="Edit Staff"
           DialogSliderTwo="Edit Staff Services"
           img={image}
-          inputFieldsData={inputFieldsData}
+          inputFieldsData={inputFieldsData?.filter(
+            (item) => item.id !== 'password'
+          )}
           inputScheduleData={inputScheduleData}
           handleSubmit={handleSubmit}
           onSubmit={onSubmitUpdateDialogBox}

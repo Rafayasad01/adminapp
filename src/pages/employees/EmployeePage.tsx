@@ -48,7 +48,7 @@ function EmployeePage() {
   const [total, setTotal] = useState(0);
   const [list, setList] = useState<any>([]);
   const [branchesLov, setBranchesLov] = useState<any>([]);
-  const [branchByIdLov, setBranchByIdLov] = useState<any>([]);
+  const [branchByIdLov] = useState<any>([]);
   const [delBranchesId, setDelBranchesId] = useState<any>([]);
   const [storeDelIds, setStoreDelIds] = useState<any>([]);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -65,8 +65,13 @@ function EmployeePage() {
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
   const [cancelDialogOpen, setCancelDialogOpen] = useState<boolean>(false);
+  const [removeManagerDialogOpen, setRemoveManagerDialogOpen] =
+    useState<boolean>(false);
   const [dialogText] = useState<any>(
     'Are you sure you want to delete this employee ?'
+  );
+  const [dialogTextRemove] = useState<any>(
+    'Are you sure you want to remove this Manager ?'
   );
   const [showPassword, setShowPassword] = useState(true);
   const {
@@ -188,8 +193,11 @@ function EmployeePage() {
       setValue('first_name', '');
       setValue('last_name', '');
       setValue('email', '');
-      if (authState.user.userType === 'ShopUser')
+      if (authState.user.userType === 'ShopUser') {
         setValue('employeeType', 'none');
+      } else {
+        setValue('employeeType', 'USER');
+      }
       setValue('branches', []);
       setStoreDelIds([]);
       setDelBranchesId([]);
@@ -281,38 +289,76 @@ function EmployeePage() {
     const data = {
       updatedBy: authState.user.id,
     };
-    employeeService
-      .deleteService(id, data)
-      .then((item: any) => {
-        if (item.data.success) {
+    if (removeManagerDialogOpen) {
+      employeeService
+        .removeManagerService(actionMenuItemid)
+        .then((item) => {
+          if (item.data.success) {
+            // console.log('LISSST', list, item.data.data, getValues('user_id'));
+            setIsLoader(false);
+            setIsNotify(true);
+            setNotifyMessage({
+              text: item.data.message,
+              type: 'success',
+            });
+            setList((newArr: any) => {
+              return newArr.filter((itemx: any) => itemx.id !== id);
+            });
+            let newtotal = total;
+            setTotal((newtotal -= 1));
+          } else {
+            reset();
+            setIsLoader(false);
+            setIsNotify(true);
+            setNotifyMessage({
+              text: item.data.message,
+              type: 'error',
+            });
+          }
+        })
+        .catch((err) => {
+          reset();
           setIsLoader(false);
           setIsNotify(true);
           setNotifyMessage({
-            text: item.data.message,
-            type: 'success',
-          });
-          setList((newArr: any) => {
-            return newArr.filter(
-              (newItem: any) => newItem.id !== item.data.data.id
-            );
-          });
-        } else {
-          setIsLoader(false);
-          setIsNotify(true);
-          setNotifyMessage({
-            text: item.data.message,
+            text: err.message,
             type: 'error',
           });
-        }
-      })
-      .catch((err) => {
-        setIsLoader(false);
-        setIsNotify(true);
-        setNotifyMessage({
-          text: err.message,
-          type: 'error',
         });
-      });
+    } else {
+      employeeService
+        .deleteService(id, data)
+        .then((item: any) => {
+          if (item.data.success) {
+            setIsLoader(false);
+            setIsNotify(true);
+            setNotifyMessage({
+              text: item.data.message,
+              type: 'success',
+            });
+            setList((newArr: any) => {
+              return newArr.filter(
+                (newItem: any) => newItem.id !== item.data.data.id
+              );
+            });
+          } else {
+            setIsLoader(false);
+            setIsNotify(true);
+            setNotifyMessage({
+              text: item.data.message,
+              type: 'error',
+            });
+          }
+        })
+        .catch((err) => {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: err.message,
+            type: 'error',
+          });
+        });
+    }
   };
 
   const statusCancelHandler = () => {
@@ -359,20 +405,12 @@ function EmployeePage() {
           ALL_PERMISSIONS.storeUser.editUserEmployee
         )
       ) {
-        const editData = list.find((x: any) => x.id === actionMenuItemid);
-        const branchesById = branchesLov.filter((x: any) =>
-          editData.branches.includes(x.id)
-        );
-        setValue('first_name', editData.firstName);
-        setValue('last_name', editData.lastName);
-        setValue('email', editData.email);
-        setValue('branches', []);
-        setValue(
-          'employeeType',
-          editData.userType === 'BranchUser' ? 'MANAGER' : 'USER'
-        );
-        setBranchByIdLov(branchesById);
-        setOpenRemoveFormDialog(true);
+        setRemoveManagerDialogOpen(true);
+        setList((newArr: any) => {
+          return newArr.filter((item: any) => item.id !== actionMenuItemid);
+        });
+        let newtotal = total;
+        setTotal((newtotal -= 1));
       } else {
         setIsNotify(true);
         setNotifyMessage({
@@ -557,57 +595,6 @@ function EmployeePage() {
       });
   };
 
-  const removeManagerFormHandler = (data: any) => {
-    setIsLoader(true);
-    const userData = {
-      branch: data.branches,
-      employeeType: data.employeeType,
-    };
-    // console.log('🚀 ~ createFormHandler ~ datas:', userData);
-
-    employeeService
-      .removeManagerService(actionMenuItemid, userData)
-      .then((item) => {
-        if (item.data.success) {
-          // console.log('LISSST', list, item.data.data, getValues('user_id'));
-          setIsLoader(false);
-          setIsNotify(true);
-          setNotifyMessage({
-            text: item.data.message,
-            type: 'success',
-          });
-          const updatedBranches: any = branchByIdLov
-            .filter((b: any) => !item.data.data.branch.includes(b.id))
-            .map((x: any) => x.id);
-          // console.log('🚀 ~ .then ~ updatedBranches:', updatedBranches);
-          for (let i = 0; i < list.length; i += 1) {
-            if (list[i].id === item.data.data.id) {
-              list[i].branches = updatedBranches;
-              list[i].employeeType = item.data.data.employeeType;
-            }
-          }
-          reset();
-        } else {
-          reset();
-          setIsLoader(false);
-          setIsNotify(true);
-          setNotifyMessage({
-            text: item.data.message,
-            type: 'error',
-          });
-        }
-      })
-      .catch((err) => {
-        reset();
-        setIsLoader(false);
-        setIsNotify(true);
-        setNotifyMessage({
-          text: err.message,
-          type: 'error',
-        });
-      });
-  };
-
   const onSubmitDialogBox = (data: any) => {
     if (
       openFormDialog &&
@@ -627,9 +614,6 @@ function EmployeePage() {
     ) {
       setOpenEditFormDialog(false);
       updateFormHandler(data);
-    } else if (openRemoveFormDialog) {
-      setOpenRemoveFormDialog(false);
-      removeManagerFormHandler(data);
     }
   };
 
@@ -670,9 +654,48 @@ function EmployeePage() {
     }
   };
 
+  const actionMenuOptionItems = () => {
+    const twoItems = actionMenuOptions?.filter(
+      (_option: any, index: number) => index < 2
+    );
+
+    if (
+      authState.user.userType === 'ShopUser' &&
+      authState.user.branchControl === 'Shop' &&
+      list?.find((i: any) => i.id === actionMenuItemid)?.userType === 'User'
+    ) {
+      return twoItems;
+    }
+
+    if (
+      authState.user.userType === 'BranchUser' &&
+      authState.user.branchControl === 'Branch' &&
+      list?.find((i: any) => i.id === actionMenuItemid)?.userType === 'User'
+    ) {
+      return twoItems;
+    }
+
+    if (
+      authState.user.userType === 'BranchUser' &&
+      authState.user.branchControl === 'Shop' &&
+      list?.find((i: any) => i.id === actionMenuItemid)?.userType === 'User'
+    ) {
+      return twoItems;
+    }
+
+    if (
+      authState.user.userType === 'BranchUser' &&
+      authState.user.branchControl === 'Shop' &&
+      list?.find((i: any) => i.id === actionMenuItemid)?.userType === 'Manager'
+    ) {
+      return actionMenuOptions;
+    }
+    return actionMenuOptions;
+  };
+
   useEffect(() => {
     if (
-      !listingRolePermission(
+      listingRolePermission(
         dataRole,
         ALL_PERMISSIONS.storeUser.viewUserEmployeeType
       )
@@ -877,8 +900,16 @@ function EmployeePage() {
                               onClick={(
                                 event: React.MouseEvent<HTMLElement>
                               ) => {
-                                setActionMenuItemid(list[index].id);
-                                setActionMenuAnchorEl(event.currentTarget);
+                                if (item.isActive) {
+                                  setActionMenuItemid(list[index].id);
+                                  setActionMenuAnchorEl(event.currentTarget);
+                                } else {
+                                  setIsNotify(true);
+                                  setNotifyMessage({
+                                    text: 'This User is partially deactived.',
+                                    type: 'error',
+                                  });
+                                }
                               }}
                             >
                               <MoreVertIcon />
@@ -922,25 +953,22 @@ function EmployeePage() {
           callback={statusCancelHandler}
         />
       )}
+      {removeManagerDialogOpen && (
+        <PermissionPopup
+          type="shock"
+          open={removeManagerDialogOpen}
+          setOpen={setRemoveManagerDialogOpen}
+          dialogText={dialogTextRemove}
+          dialogDesc="It will removes from all the branches"
+          callback={statusCancelHandler}
+        />
+      )}
       {actionMenuAnchorEl && (
         <ActionMenu
           open={actionMenuOpen}
           anchorEl={actionMenuAnchorEl}
           setAnchorEl={setActionMenuAnchorEl}
-          options={
-            authState.user.userType === 'BranchUser'
-              ? actionMenuOptions.filter(
-                  (option: any, index: number) => index < 2
-                )
-              : authState.user.userType === 'ShopUser'
-              ? list.find((i: any) => i.id === actionMenuItemid)?.userType ===
-                'User'
-                ? actionMenuOptions.filter(
-                    (option: any, index: number) => index < 2
-                  )
-                : actionMenuOptions
-              : actionMenuOptions
-          }
+          options={actionMenuOptionItems()}
           callback={manuHandler}
         />
       )}

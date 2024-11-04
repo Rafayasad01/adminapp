@@ -7,6 +7,7 @@ type Key =
   | 'REFRESH_TOKEN'
   | 'SHOP_TENANT'
   | 'TITLE_TEXT'
+  | 'TITLE_TEXT_USER'
   | 'BRANCH_DATA'
   | 'TEMP_BRANCH_DATA';
 

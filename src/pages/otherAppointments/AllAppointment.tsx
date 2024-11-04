@@ -29,11 +29,12 @@ import Loader from '../../components/common/Loader';
 import SwiperComponent from '../../components/common/Swiper';
 // import { useAppSelector } from '../../redux/redux-hooks';
 import Notify from '../../components/common/Notify';
-import { useAppSelector } from '../../redux/redux-hooks';
+// import { useAppSelector } from '../../redux/redux-hooks';
 import storeAppointmentService from '../../services/adminapp/adminStoreAppointment';
 import AppointmentViewCard from './AppointmentViewCard';
 import UpdateAppointmentPopup from './UpdateAppointmentPopup';
 import { APPOINTMENT_STATUS } from '../../utils/constants';
+import { getItem } from '../../utils/storage';
 
 dayjs.extend(weekOfYear);
 // dayjs.extend(timezone);
@@ -58,17 +59,18 @@ const AllAppointment = ({
     appointmentData,
     //  setAppointmentData
   ] = useState();
-  const officeTimings = useAppSelector(
-    (state) => state?.persistedReducer.appState.UserItems
-  );
+  const officeTimings: any = getItem('BRANCH_DATA');
+  // const officeTimings = useAppSelector(
+  //   (state) => state?.persistedReducer.appState.UserItems
+  // );
 
-  const tempShopStartTime = dayjs(officeTimings?.tenantConfig?.officeTimeIn);
+  const tempShopStartTime = dayjs(officeTimings?.officeTimeIn);
 
   const shopStartTimeIsValid = tempShopStartTime.isValid();
 
   const shopStartTime = shopStartTimeIsValid ? tempShopStartTime.hour() : 9;
 
-  const tempShopEndTime = dayjs(officeTimings?.tenantConfig?.officeTimeOut);
+  const tempShopEndTime = dayjs(officeTimings?.officeTimeOut);
 
   const shopEndTimeIsValid = tempShopEndTime.isValid();
 
@@ -554,7 +556,7 @@ const AllAppointment = ({
         setIsOpen={setIsNotify}
         displayMessage={notifyMessage}
       />
-      <div className="h-16 p-[15px]">
+      <div className="h-36 p-[10px]">
         {priorityData?.length ? (
           <SwiperComponent
             isActiveUser={isActiveUser}
@@ -565,7 +567,7 @@ const AllAppointment = ({
       </div>
       <hr />
       <Scheduler data={data} height={580}>
-        <span className="absolute left-[10px] top-[80px]">
+        <span className="absolute left-[25px] top-[160px]">
           <CalendarMonthIcon className="text-primary" />
         </span>
         <ViewState

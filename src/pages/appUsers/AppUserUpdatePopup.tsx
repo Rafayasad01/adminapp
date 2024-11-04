@@ -2,7 +2,7 @@ import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import '../../assets/css/PopupStyle.css';
 import ErrorSpanBox from '../../components/common/ErrorSpanBox';
@@ -16,6 +16,7 @@ import {
 } from '../../utils/constants';
 import { listingRolePermission } from '../../utils/helper';
 import { useAppSelector } from '../../redux/redux-hooks';
+import { getItem } from '../../utils/storage';
 
 type AppUserUpdatePopupProps = {
   openFormDialog: boolean;
@@ -40,12 +41,15 @@ function AppUserUpdatePopup({
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<AppUser>();
-
+  const title: any = getItem('TITLE_TEXT_USER');
   const dataRole = useAppSelector(
     (state: any) => state?.persistedReducer?.roleState?.role?.permissions
   );
+
+  // console.log('formData', formData);
 
   const handleFormClose = () => {
     setOpenFormDialog(false);
@@ -62,6 +66,14 @@ function AppUserUpdatePopup({
     }
   };
 
+  useEffect(() => {
+    setValue('email', formData?.email);
+    setValue('firstName', formData?.firstName);
+    setValue('lastName', formData?.lastName);
+    setValue('postalCode', formData?.postalCode);
+    setValue('phone', formData?.phone);
+  }, [formData]);
+
   return (
     <Dialog
       open={openFormDialog}
@@ -74,7 +86,7 @@ function AppUserUpdatePopup({
       <div className="Content">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="FormHeader">
-            <span className="Title">Edit App User</span>
+            <span className="Title">Edit {title}</span>
           </div>
           {formData && (
             <>
@@ -195,9 +207,7 @@ function AppUserUpdatePopup({
                       id="email"
                       placeholder="urapptech@gmail.com"
                       disableUnderline
-                      {...register('email', {
-                        value: formData?.email,
-                      })}
+                      {...register('email')}
                     />
                   </FormControl>
                   {listingRolePermission(

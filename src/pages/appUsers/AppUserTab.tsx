@@ -12,6 +12,7 @@ import { useAppSelector } from '../../redux/redux-hooks';
 import appUserService from '../../services/adminapp/adminAppUser';
 import { ALL_PERMISSIONS, NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
 import { CheckRolePermission, listingRolePermission } from '../../utils/helper';
+import { getItem } from '../../utils/storage';
 
 type AppUserTabProps = {
   list: any;
@@ -56,6 +57,7 @@ function AppUserTab({
   setCancelDialogOpen,
 }: AppUserTabProps) {
   const navigate = useNavigate();
+  const title: any = getItem('TITLE_TEXT_USER');
   const authState: any = useAppSelector((state) => state?.authState);
   const dataRole = useAppSelector(
     (state: any) => state?.persistedReducer?.roleState?.role?.permissions
@@ -72,7 +74,12 @@ function AppUserTab({
         ALL_PERMISSIONS.storeUser.viewUserAppRewardHistory
       )
     ) {
-      const newActionMenuOptions = ['View', 'Reward History', 'Edit', 'Delete'];
+      const newActionMenuOptions = [
+        'Detail',
+        'Reward History',
+        'Edit',
+        'Delete',
+      ];
       actionMenuOptions = newActionMenuOptions;
     }
     return actionMenuOptions;
@@ -125,7 +132,7 @@ function AppUserTab({
           type: 'warning',
         });
       }
-    } else if (option === 'View') {
+    } else if (option === 'Detail') {
       if (
         listingRolePermission(dataRole, ALL_PERMISSIONS.storeUser.viewUserApp)
       ) {
@@ -264,8 +271,12 @@ function AppUserTab({
               <th>Customer</th>
               <th>Email</th>
               <th>Phone</th>
-              <th>Postal Code</th>
-              <th>Loyalty Coins</th>
+              {title === 'App User' && (
+                <>
+                  <th>Postal Code</th>
+                  <th>Loyalty Coins</th>
+                </>
+              )}
               <th>User Type</th>
               <th>Status</th>
               <th aria-label="empty table header">&nbsp;</th>
@@ -311,10 +322,14 @@ function AppUserTab({
                     </td>
                     <td>{item.email}</td>
                     <td>{item.phone}</td>
-                    <td>{item.postalCode ? item.postalCode : '--'}</td>
-                    <td>
-                      <span className="font-bold">{item.loyaltyCoins}</span>
-                    </td>
+                    {title === 'App User' && (
+                      <>
+                        <td>{item.postalCode ? item.postalCode : '--'}</td>
+                        <td>
+                          <span className="font-bold">{item.loyaltyCoins}</span>
+                        </td>
+                      </>
+                    )}
                     <td>{item.userType}</td>
                     <td>
                       {item.isActive ? (

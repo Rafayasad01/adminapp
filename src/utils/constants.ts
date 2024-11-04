@@ -773,6 +773,7 @@ export const ALL_PERMISSIONS = {
   },
   storeUser: {
     viewUsers: 'viewStoreUser',
+    viewCustomers: 'viewStoreCustomers',
     viewUserApp: 'viewUserApp',
     addUserApp: 'addUserApp',
     editUserApp: 'editUserApp',
@@ -788,10 +789,10 @@ export const ALL_PERMISSIONS = {
     viewUserEmployeeType: 'viewUserEmployeeType',
     viewUserAppRewardHistory: 'viewUserAppRewardHistory',
     viewDriverUserApp: 'viewDriverUserApp',
-    viewCustomers: 'viewCustomers',
-    addCustomer: 'addCustomer',
-    editCustomer: 'editCustomer',
-    deleteCustomer: 'deleteCustomer',
+    // viewCustomers: 'viewCustomers',
+    // addCustomer: 'addCustomer',
+    // editCustomer: 'editCustomer',
+    // deleteCustomer: 'deleteCustomer',
     viewAddressCustomer: 'viewAddressCustomer',
   },
   storeBranch: {
@@ -855,10 +856,10 @@ export const ALL_PERMISSIONS = {
   },
 };
 
-export const SERVICES = 'Service';
-export const PRODUCT = 'Product';
-export const OTHER_APPOINTMENT = 'Other Appointments';
-export const APPOINTMENT = 'Appointments';
+export const SERVICES = 'Services';
+export const PRODUCT = 'Products';
+export const APP_USER = 'App User';
+export const CUSTOMER = 'Customers';
 
 // let TITLE_TEXT = '';
 export const handleTitleText = (permissions: any) => {
@@ -873,7 +874,19 @@ export const handleTitleText = (permissions: any) => {
     setItem('TITLE_TEXT', PRODUCT);
   }
 };
-// export { TITLE_TEXT };
+
+export const handleAppUsersTitleText = (permissions: any) => {
+  if (
+    listingRolePermission(
+      permissions,
+      ALL_PERMISSIONS.storeUser.viewCustomers
+    ) === true
+  ) {
+    setItem('TITLE_TEXT_USER', CUSTOMER);
+  } else {
+    setItem('TITLE_TEXT_USER', APP_USER);
+  }
+};
 
 export const DEDUCTION_TYPE = [
   {

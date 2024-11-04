@@ -25,7 +25,10 @@ import { useAppDispatch, useAppSelector } from '../../../redux/redux-hooks';
 import authService from '../../../services/adminapp/admin';
 import appUserService from '../../../services/adminapp/adminAppUser';
 import branchService from '../../../services/adminapp/adminBranch';
-import { handleTitleText } from '../../../utils/constants';
+import {
+  handleAppUsersTitleText,
+  handleTitleText,
+} from '../../../utils/constants';
 import { setItem } from '../../../utils/storage';
 import LoginBranchPopup from './LoginBranchPopup';
 
@@ -137,6 +140,7 @@ function LoginPage() {
           setIsLoader(false);
           dispatch(setRolePermissions(newUserData.role));
           handleTitleText(newUserData.role.permissions);
+          handleAppUsersTitleText(newUserData.role.permissions);
           delete newUserData.role;
           if (newUserData?.userType === 'ShopUser') {
             newUserData.branchControl = 'Shop';

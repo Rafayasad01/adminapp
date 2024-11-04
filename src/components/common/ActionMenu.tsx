@@ -5,7 +5,7 @@ type ActionMenuProps = {
   open: boolean;
   anchorEl: any;
   setAnchorEl: React.Dispatch<React.SetStateAction<null | HTMLElement>>;
-  options: string[];
+  options: string[] | any;
   callback: (...args: any[]) => any;
 };
 const ITEM_HEIGHT = 48;
@@ -40,7 +40,7 @@ function ActionMenu({
         },
       }}
     >
-      {options.map((option) => (
+      {options?.map((option: any) => (
         <MenuItem
           key={option}
           selected={option === 'Pyxis'}

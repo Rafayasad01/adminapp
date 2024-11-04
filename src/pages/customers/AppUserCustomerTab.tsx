@@ -66,7 +66,10 @@ function AppUserTab({
   const manuHandler = (option: string) => {
     if (option === 'Edit') {
       if (
-        listingRolePermission(dataRole, ALL_PERMISSIONS.storeUser.editCustomer)
+        listingRolePermission(
+          dataRole,
+          ALL_PERMISSIONS.storeUser.addUserAddress
+        )
       ) {
         setIsLoader(true);
         appUserService.appUserEdit(actionMenuItemid?.id).then((item: any) => {
@@ -94,7 +97,7 @@ function AppUserTab({
       if (
         listingRolePermission(
           dataRole,
-          ALL_PERMISSIONS.storeUser.deleteCustomer
+          ALL_PERMISSIONS.storeUser.addUserAddress
         )
       ) {
         setIsLoader(true);
@@ -163,7 +166,7 @@ function AppUserTab({
 
   const handleSwitchChange = (event: any, id: string) => {
     if (
-      listingRolePermission(dataRole, ALL_PERMISSIONS.storeUser.editCustomer)
+      listingRolePermission(dataRole, ALL_PERMISSIONS.storeUser.addUserAddress)
     ) {
       setIsLoader(true);
       const data = {

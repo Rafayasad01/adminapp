@@ -22,6 +22,7 @@ import AppUserCreatePopup from './AppUserCreatePopup';
 import AppUserTab from './AppUserTab';
 import AppUserUpdatePopup from './AppUserUpdatePopup';
 import AppUserOtherTab from './AppUserOtherTab';
+import { getItem } from '../../utils/storage';
 // import CustomersCreatePopup from './CustomersCreatePopup';
 // import CustomersEditPopup from './CustomersEditPopup';
 
@@ -30,6 +31,7 @@ function AppUsersPage() {
   const dataRole = useAppSelector(
     (state: any) => state?.persistedReducer?.roleState?.role?.permissions
   );
+  const title: any = getItem('TITLE_TEXT_USER');
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(0);
   const [list, setList] = useState<any>([]);
@@ -48,7 +50,9 @@ function AppUsersPage() {
   const [notifyMessage, setNotifyMessage] = React.useState({});
   const [cancelDialogOpen, setCancelDialogOpen] = useState<boolean>(false);
   const [dialogText] = useState<any>(
-    'Are you sure you want to delete this app user ?'
+    `Are you sure you want to delete this ${
+      title === 'Customers' ? 'customer' : 'app user'
+    } ?`
   );
   const [selectedTab, setSelectedTab] = useState('APP USER');
 
@@ -145,6 +149,14 @@ function AppUsersPage() {
   };
 
   useEffect(() => {
+    if (!openEditFormDialog) {
+      setEditFormData(null);
+    }
+  }, [openEditFormDialog]);
+
+  console.log('open edit', openEditFormDialog, editFormData);
+
+  useEffect(() => {
     setIsLoader(true);
     if (
       listingRolePermission(dataRole, ALL_PERMISSIONS.storeUser.viewUserApp)
@@ -191,8 +203,6 @@ function AppUsersPage() {
       postalCode: data.postalCode ? data.postalCode : null,
       licenseNumber: data.licenseNumber ? data.licenseNumber : null,
     };
-    // console.log('🚀 ~ createFormHandler ~ formData:', formData);
-
     let dataRender = false;
     if (data.appuserRole === 'Driver' && selectedTab === 'OTHER') {
       dataRender = true;
@@ -239,7 +249,7 @@ function AppUsersPage() {
       firstName: data.firstName,
       lastName: data.lastName,
       phone: data.phone ? data.phone : null,
-      userType: data.appuserRole,
+      userType: title === 'Customers' ? 'App' : data.appuserRole,
       postalCode: data.postalCode ? data.postalCode : null,
       licenseNumber: data.licenseNumber ? data.licenseNumber : null,
       updatedBy: authState.user.id,
@@ -248,6 +258,8 @@ function AppUsersPage() {
     if (data.appuserRole === 'Driver' && selectedTab === 'OTHER') {
       dataRender = true;
     } else if (data.appuserRole === 'App' && selectedTab === 'APP USER') {
+      dataRender = true;
+    } else if (title === 'Customers') {
       dataRender = true;
     }
     appUserService
@@ -301,13 +313,13 @@ function AppUsersPage() {
         setIsOpen={setIsNotify}
         displayMessage={notifyMessage}
       />
-      <TopBar title="App Users" />
+      <TopBar title={title} />
       <div className="container m-auto mt-5">
         <div className="w-full rounded-lg bg-white shadow-lg">
           <div className="grid grid-cols-12 px-4 py-5">
             <div className="col-span-7">
               <span className="font-open-sans text-xl font-semibold text-[#252733]">
-                All App Users
+                All {title}
               </span>
             </div>
             <div className="col-span-5">
@@ -342,13 +354,15 @@ function AppUsersPage() {
                     disableUnderline
                   />
                 </FormControl>
-                <Button
-                  variant="contained"
-                  className="btn-black-fill btn-icon"
-                  onClick={handleFormClickOpen}
-                >
-                  <AddOutlinedIcon /> Add New
-                </Button>
+                {title === 'App User' && (
+                  <Button
+                    variant="contained"
+                    className="btn-black-fill btn-icon"
+                    onClick={handleFormClickOpen}
+                  >
+                    <AddOutlinedIcon /> Add New
+                  </Button>
+                )}
               </div>
             </div>
           </div>

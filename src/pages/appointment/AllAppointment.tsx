@@ -68,8 +68,6 @@ const AllAppointment = ({
     (state: any) => state?.persistedReducer?.roleState?.role?.permissions
   );
 
-  console.log('officeTimings', officeTimings);
-
   const tempShopStartTime = dayjs(officeTimings?.officeTimeIn);
 
   const shopStartTimeIsValid = tempShopStartTime.isValid();

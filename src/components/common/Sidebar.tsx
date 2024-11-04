@@ -177,10 +177,25 @@ const links = [
         permission: ALL_PERMISSIONS.storeUser.viewUserApp,
         icon: <PersonOutlineOutlinedIcon fontSize="inherit" />,
       },
+    ],
+  },
+  {
+    name: 'User',
+    path: 'user',
+    permission: ALL_PERMISSIONS.storeUser.viewCustomers,
+    icon: <PersonOutlineOutlinedIcon fontSize="inherit" />,
+    childLinks: [
+      {
+        name: 'Admin Employees',
+        path: 'user/employees',
+        permission: ALL_PERMISSIONS.storeUser.viewUserEmployee,
+        icon: <PeopleOutlineOutlinedIcon className="w-[17px]" />,
+      },
       {
         name: 'Customers',
-        path: 'user/customers/list',
-        permission: ALL_PERMISSIONS.storeUser.viewCustomers,
+        // path: 'user/customers/list',
+        path: 'user/app-user/list',
+        permission: ALL_PERMISSIONS.storeUser.viewUserApp,
         icon: <PersonOutlineOutlinedIcon fontSize="inherit" />,
       },
     ],
@@ -538,115 +553,98 @@ function Sidebar() {
               );
             })}
         </div>
-        <div className="sidebar-footer-content mt-5">
-          {!authState.user.isSuperAdmin && (
-            <div className="share-via">
-              <h6 className="heading">Share</h6>
-              {appItems?.tenantConfig && (
-                <div className="social-icons grid grid-cols-6">
-                  {appItems?.tenantConfig?.facebook !== 'undefined' &&
-                    appItems?.tenantConfig?.facebook !== null &&
-                    appItems?.tenantConfig?.facebook !== '' && (
-                      <IconButton className="social-btn" onClick={() => null}>
-                        <a
-                          href={appItems?.tenantConfig?.facebook}
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          <FacebookIcon className="text-3xl" />
-                        </a>
-                      </IconButton>
-                    )}
-                  {appItems?.tenantConfig?.twitter !== 'undefined' &&
-                    appItems?.tenantConfig?.twitter !== null &&
-                    appItems?.tenantConfig?.twitter !== '' && (
-                      <IconButton className="social-btn" onClick={() => null}>
-                        <a
-                          href={appItems?.tenantConfig?.twitter}
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          <TwitterIcon className="text-3xl" />
-                        </a>
-                      </IconButton>
-                    )}
-                  {appItems?.tenantConfig?.instagram !== 'undefined' &&
-                    appItems?.tenantConfig?.instagram !== null &&
-                    appItems?.tenantConfig?.instagram !== '' && (
-                      <IconButton className="social-btn" onClick={() => null}>
-                        <a
-                          href={appItems?.tenantConfig?.instagram}
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          <InstagramIcon className="text-3xl" />
-                        </a>
-                      </IconButton>
-                    )}
-                  {appItems?.tenantConfig?.whatsapp !== 'undefined' &&
-                    appItems?.tenantConfig?.whatsapp !== null &&
-                    appItems?.tenantConfig?.whatsapp !== '' && (
-                      <IconButton className="social-btn" onClick={() => null}>
-                        <a
-                          href={appItems?.tenantConfig?.whatsapp}
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          <WhatsAppIcon className="text-3xl" />
-                        </a>
-                      </IconButton>
-                    )}
-                  {appItems?.tenantConfig?.linkedin !== 'undefined' &&
-                    appItems?.tenantConfig?.linkedin !== null &&
-                    appItems?.tenantConfig?.linkedin !== '' && (
-                      <IconButton className="social-btn" onClick={() => null}>
-                        <a
-                          href={appItems?.tenantConfig?.linkedin}
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          <LinkedInIcon className="text-3xl" />
-                        </a>
-                      </IconButton>
-                    )}
-                  {appItems?.tenantConfig?.youtube !== 'undefined' &&
-                    appItems?.tenantConfig?.youtube !== null &&
-                    appItems?.tenantConfig?.youtube !== '' && (
-                      <IconButton className="social-btn" onClick={() => null}>
-                        <a
-                          href={appItems?.tenantConfig?.youtube}
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          <YouTubeIcon className="text-3xl" />
-                        </a>
-                      </IconButton>
-                    )}
-                </div>
-              )}
-              <hr className="mb-0" />
-              {/* <NavLink className="link mb-1" to="#">
-              Terms & Conditions
-            </NavLink>
-            <NavLink className="link" to="#">
-              Privacy Policy
-            </NavLink>
-            <hr className="mt-2" /> */}
-            </div>
-          )}
-          {/* {authState ? (
-            <NavLink
-              className="logout-link"
-              to="/admin"
-              onClick={() => logOut()}
-            >
-              <LogoutOutlinedIcon className="icon" />
-              Logout
-            </NavLink>
-          ) : (
-            ''
-          )} */}
-        </div>
+        {userData.userType === 'ShopUser' && (
+          <div className="sidebar-footer-content mt-5">
+            {!authState.user.isSuperAdmin && (
+              <div className="share-via">
+                <h6 className="heading">Share</h6>
+                {appItems?.tenantConfig && (
+                  <div className="social-icons grid grid-cols-6">
+                    {appItems?.tenantConfig?.facebook !== 'undefined' &&
+                      appItems?.tenantConfig?.facebook !== null &&
+                      appItems?.tenantConfig?.facebook !== '' && (
+                        <IconButton className="social-btn" onClick={() => null}>
+                          <a
+                            href={appItems?.tenantConfig?.facebook}
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            <FacebookIcon className="text-3xl" />
+                          </a>
+                        </IconButton>
+                      )}
+                    {appItems?.tenantConfig?.twitter !== 'undefined' &&
+                      appItems?.tenantConfig?.twitter !== null &&
+                      appItems?.tenantConfig?.twitter !== '' && (
+                        <IconButton className="social-btn" onClick={() => null}>
+                          <a
+                            href={appItems?.tenantConfig?.twitter}
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            <TwitterIcon className="text-3xl" />
+                          </a>
+                        </IconButton>
+                      )}
+                    {appItems?.tenantConfig?.instagram !== 'undefined' &&
+                      appItems?.tenantConfig?.instagram !== null &&
+                      appItems?.tenantConfig?.instagram !== '' && (
+                        <IconButton className="social-btn" onClick={() => null}>
+                          <a
+                            href={appItems?.tenantConfig?.instagram}
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            <InstagramIcon className="text-3xl" />
+                          </a>
+                        </IconButton>
+                      )}
+                    {appItems?.tenantConfig?.whatsapp !== 'undefined' &&
+                      appItems?.tenantConfig?.whatsapp !== null &&
+                      appItems?.tenantConfig?.whatsapp !== '' && (
+                        <IconButton className="social-btn" onClick={() => null}>
+                          <a
+                            href={appItems?.tenantConfig?.whatsapp}
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            <WhatsAppIcon className="text-3xl" />
+                          </a>
+                        </IconButton>
+                      )}
+                    {appItems?.tenantConfig?.linkedin !== 'undefined' &&
+                      appItems?.tenantConfig?.linkedin !== null &&
+                      appItems?.tenantConfig?.linkedin !== '' && (
+                        <IconButton className="social-btn" onClick={() => null}>
+                          <a
+                            href={appItems?.tenantConfig?.linkedin}
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            <LinkedInIcon className="text-3xl" />
+                          </a>
+                        </IconButton>
+                      )}
+                    {appItems?.tenantConfig?.youtube !== 'undefined' &&
+                      appItems?.tenantConfig?.youtube !== null &&
+                      appItems?.tenantConfig?.youtube !== '' && (
+                        <IconButton className="social-btn" onClick={() => null}>
+                          <a
+                            href={appItems?.tenantConfig?.youtube}
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            <YouTubeIcon className="text-3xl" />
+                          </a>
+                        </IconButton>
+                      )}
+                  </div>
+                )}
+                <hr className="mb-0" />
+              </div>
+            )}
+          </div>
+        )}
       </List>
     </Drawer>
   );

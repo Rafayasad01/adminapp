@@ -22,6 +22,7 @@ import {
 } from '../../utils/constants';
 import { listingRolePermission } from '../../utils/helper';
 import { useAppSelector } from '../../redux/redux-hooks';
+import { getItem } from '../../utils/storage';
 
 type AppUserCreatePopupProps = {
   openFormDialog: boolean;
@@ -42,6 +43,7 @@ function AppUserCreatePopup({
   const dataRole = useAppSelector(
     (state: any) => state?.persistedReducer?.roleState?.role?.permissions
   );
+  const title: any = getItem('TITLE_TEXT_USER');
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const {
@@ -82,7 +84,7 @@ function AppUserCreatePopup({
       <div className="Content">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="FormHeader">
-            <span className="Title">Add App User</span>
+            <span className="Title">Add {title}</span>
           </div>
           <div className="FormBody">
             <div className="FormFields">

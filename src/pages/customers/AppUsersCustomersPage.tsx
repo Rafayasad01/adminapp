@@ -71,7 +71,10 @@ function AppUsersCustomerPage() {
 
   const handleFormClickOpen = () => {
     if (
-      listingRolePermission(dataRole, ALL_PERMISSIONS.storeUser.addCustomer)
+      listingRolePermission(
+        dataRole,
+        ALL_PERMISSIONS.storeUser.viewAddressCustomer
+      )
     ) {
       setOpenFormDialog(true);
     } else {

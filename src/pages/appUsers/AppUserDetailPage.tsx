@@ -109,7 +109,7 @@ function AppUserDetailPage() {
         setIsOpen={setIsNotify}
         displayMessage={notifyMessage}
       />
-      <TopBar isNestedRoute isAdditionalRoute="../list" title="Details" />
+      <TopBar isNestedRoute title="Details" />
       {detail && (
         <div className="container m-auto mt-5">
           <div className="grid grid-cols-12 gap-3">
