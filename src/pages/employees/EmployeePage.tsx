@@ -373,6 +373,16 @@ function EmployeePage() {
           ALL_PERMISSIONS.storeUser.editUserEmployee
         )
       ) {
+        if (
+          !listingRolePermission(
+            dataRole,
+            ALL_PERMISSIONS.storeUser.viewUserEmployeeType
+          )
+        ) {
+          let fields = [...inputFieldsData];
+          fields = fields.filter((field) => field.id !== 'employeeType');
+          setInputFieldsData(fields);
+        }
         const editData = list.find((x: any) => x.id === actionMenuItemid);
         // console.log('🚀 ~ manuHandler ~ editData:', editData);
         setValue('first_name', editData.firstName);
