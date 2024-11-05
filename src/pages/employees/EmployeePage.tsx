@@ -475,7 +475,7 @@ function EmployeePage() {
     } else {
       setIsLoader(false);
     }
-  }, [null]);
+  }, []);
 
   // console.log('LIST', list);
 

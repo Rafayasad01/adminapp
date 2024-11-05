@@ -198,7 +198,19 @@ const AppointmentViewCard = ({
             )}
             <div className="mt-4 text-foreground">
               <span className="text-xs">
-                Total Amount PKR {data?.grandTotalAmount}
+                Total Amount {Number(data?.totalAmount).toLocaleString()} PKR
+              </span>
+            </div>
+            <div className="text-foreground">
+              <span className="text-xs">
+                Tax {data?.gstPercentage || 0}% ={' '}
+                {Number(data?.gstAmount).toLocaleString() || 0} PKR
+              </span>
+            </div>
+            <div className="mt-1 text-foreground">
+              <span className="text-xs">
+                Grand Total Amount{' '}
+                {Number(data?.grandTotalAmount).toLocaleString()} PKR
               </span>
             </div>
           </div>
