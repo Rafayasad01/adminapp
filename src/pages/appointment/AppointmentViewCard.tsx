@@ -452,7 +452,24 @@ const AppointmentViewCard = ({
               {showPaidHandler()}
             </div>
           </div>
-          <div className="flex items-center justify-center">
+          <div className="">
+            <span className="text-xs">
+              Total Amount {Number(data?.totalAmount).toLocaleString()} PKR
+            </span>
+          </div>
+          <div className="">
+            <span className="text-xs">
+              Tax {data?.gstPercentage || 0}% ={' '}
+              {Number(data?.gstAmount).toLocaleString() || 0} PKR
+            </span>
+          </div>
+          <div className="mt-1">
+            <span className="text-xs">
+              Grand Total Amount{' '}
+              {Number(data?.grandTotalAmount).toLocaleString()} PKR
+            </span>
+          </div>
+          <div className="mt-2 flex items-center justify-center">
             <span className="text-xl font-semibold">{data?.name}</span>
           </div>
         </div>
