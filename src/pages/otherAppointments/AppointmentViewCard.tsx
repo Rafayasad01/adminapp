@@ -68,15 +68,16 @@ const AppointmentViewCard = ({
     };
   }, []); // Empty dependency array ensures this effect runs only once
 
-  const calculateGrandTotal = () => {
-    const dataList = data;
-    return (
-      dataList?.length > 0 &&
-      dataList?.reduce((acc: any, tempData: any) => {
-        return acc + parseFloat(tempData.grandTotalAmount);
-      }, 0)
-    );
-  };
+  // const calculateGrandTotal = () => {
+  //   const dataList = data;
+  //   console.log('🚀 ~ calculateGrandTotal ~ data:', data);
+  //   return (
+  //     dataList?.length > 0 &&
+  //     dataList?.reduce((acc: any, tempData: any) => {
+  //       return acc + parseFloat(tempData.grandTotalAmount);
+  //     }, 0)
+  //   );
+  // };
 
   useEffect(() => {
     if (appointmentData) {
@@ -120,7 +121,8 @@ const AppointmentViewCard = ({
                 appointmentData?.status === APPOINTMENT_STATUS.COMPLETED ||
                 appointmentData?.status === APPOINTMENT_STATUS.RESCHEDULE ||
                 appointmentData?.status === APPOINTMENT_STATUS.PROCESSING ||
-                appointmentData?.status === APPOINTMENT_STATUS.MISSED
+                appointmentData?.status === APPOINTMENT_STATUS.MISSED ||
+                appointmentData?.status === APPOINTMENT_STATUS.DONE
               }
               className="icon-btn mr-3.5 p-0 text-foreground"
               onClick={() => {
@@ -158,6 +160,8 @@ const AppointmentViewCard = ({
                     ? 'Appointment has been Cancelled'
                     : appointmentData?.status === APPOINTMENT_STATUS.RESCHEDULE
                     ? 'Appointment has been Rescheduled'
+                    : appointmentData?.status === APPOINTMENT_STATUS.DONE
+                    ? 'Appointment has been Done'
                     : ''}
                 </span>
               </div>
@@ -194,7 +198,7 @@ const AppointmentViewCard = ({
             )}
             <div className="mt-4 text-foreground">
               <span className="text-xs">
-                Total Amount PKR {calculateGrandTotal()}
+                Total Amount PKR {data?.grandTotalAmount}
               </span>
             </div>
           </div>

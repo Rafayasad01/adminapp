@@ -2,6 +2,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import LocalPhoneOutlinedIcon from '@mui/icons-material/LocalPhoneOutlined';
+import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
@@ -114,6 +115,55 @@ function ViewCardAccordin({ data }: RatingAccordionsProps) {
                         {item.appointmentType !== 'AnyProfessional'
                           ? item?.storeEmployee?.name
                           : 'Any Professional'}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="mt-[1px] flex items-center">
+                    <div>
+                      <AccessTimeOutlinedIcon
+                        className="ml-[-2px]"
+                        fontSize="inherit"
+                      />
+                      {/* <img
+                          className="ml-[-1px] h-[14px] w-[14px] rounded-full"
+                          src={
+                            item.appointmentType !== 'AnyProfessional'
+                              ? item.storeEmployee?.avatar
+                              : assets.images.avatarUser2
+                          }
+                          alt="app-head"
+                        /> */}
+                    </div>
+                    <div>
+                      <span className="mx-[5px] text-xs text-[#6A6A6A]">
+                        {item?.serviceTime} mints
+                      </span>
+                    </div>
+                  </div>
+                  <div className="mt-[1px] flex items-center">
+                    <div>
+                      <img
+                        src={assets.images.salaryPayrollImage}
+                        alt="salary-payroll"
+                        className="mt-1 w-[15px] object-contain"
+                      />
+                      {/* <AccessTimeOutlinedIcon
+                        className="ml-[-2px]"
+                        fontSize="inherit"
+                      /> */}
+                      {/* <img
+                          className="ml-[-1px] h-[14px] w-[14px] rounded-full"
+                          src={
+                            item.appointmentType !== 'AnyProfessional'
+                              ? item.storeEmployee?.avatar
+                              : assets.images.avatarUser2
+                          }
+                          alt="app-head"
+                        /> */}
+                    </div>
+                    <div>
+                      <span className="mx-[5px] text-xs text-[#6A6A6A]">
+                        {item?.storeServiceCategoryItem?.price} PKR
                       </span>
                     </div>
                   </div>
