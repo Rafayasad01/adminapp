@@ -163,7 +163,10 @@ function ViewCardAccordin({ data }: RatingAccordionsProps) {
                     </div>
                     <div>
                       <span className="mx-[5px] text-xs text-[#6A6A6A]">
-                        {item?.storeServiceCategoryItem?.price} PKR
+                        {Number(
+                          item?.storeServiceCategoryItem?.price
+                        ).toLocaleString()}{' '}
+                        PKR
                       </span>
                     </div>
                   </div>

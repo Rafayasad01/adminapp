@@ -341,7 +341,7 @@ const AppointmentViewCard = ({
     }
   }, []);
 
-  console.log('data2222222222222222', data);
+  // console.log('data2222222222222222', data);
 
   return isLoader ? (
     <Loader />
