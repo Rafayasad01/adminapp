@@ -28,6 +28,7 @@ import { getItem } from '../../utils/storage';
 
 function CategoriesServicesFaqPage() {
   const params = useParams();
+  const isShop: any = getItem('USER');
   const TITLE_TEXT: any = getItem('TITLE_TEXT');
   // const authState: any = useAppSelector((state) => state?.authState);
   const dataRole = useAppSelector(
@@ -358,13 +359,15 @@ function CategoriesServicesFaqPage() {
                     disableUnderline
                   />
                 </FormControl>
-                <Button
-                  variant="contained"
-                  className="btn-black-fill btn-icon"
-                  onClick={handleAddNew}
-                >
-                  <AddOutlinedIcon /> Add New
-                </Button>
+                {isShop.userType === 'ShopUser' && (
+                  <Button
+                    variant="contained"
+                    className="btn-black-fill btn-icon"
+                    onClick={handleAddNew}
+                  >
+                    <AddOutlinedIcon /> Add New
+                  </Button>
+                )}
               </div>
             </div>
           </div>

@@ -599,7 +599,17 @@ function BranchPage() {
                               checked={item.isActive}
                               onChange={(
                                 event: React.ChangeEvent<HTMLInputElement>
-                              ) => handleSwitchChange(event, item.id)}
+                              ) => {
+                                if (item.id === authState?.user?.branch) {
+                                  setIsNotify(true);
+                                  setNotifyMessage({
+                                    text: 'This Branch is Controlled Now, it will not change their status',
+                                    type: 'error',
+                                  });
+                                } else {
+                                  handleSwitchChange(event, item.id);
+                                }
+                              }}
                               inputProps={{ 'aria-label': 'controlled' }}
                             />
                           </div>

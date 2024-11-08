@@ -45,6 +45,7 @@ import promiseHandler from '../../utils/helper';
 import { ValuesOf } from '../../utils/ts-helpers';
 import PromotionListPopup from './PromotionListPopup';
 import CustomDateTimePicker from '../../components/common/CustomDateTimePicker';
+import { getItem } from '../../utils/storage';
 
 const OrderBasket = () => {
   const {
@@ -71,7 +72,8 @@ const OrderBasket = () => {
   const [userIdentifier, setUserIdentifier] = useState<any>('');
   const [isLoader, setIsLoader] = useState(false);
   const authState = useAppSelector((state) => state?.authState);
-
+  const tenantConfig: any = getItem('TENANT_CONFIG');
+  console.log('🚀 ~ OrderBasket ~ tenantConfig:', tenantConfig);
   const {
     register,
     watch,
@@ -93,7 +95,7 @@ const OrderBasket = () => {
   );
   const gstAmount =
     totalAmount *
-    (Number(authState.user?.tenantConfig?.gstPercentage ?? 0) / 100);
+    (Number(tenantConfig?.tenantConfig?.gstPercentage ?? 0) / 100);
 
   const discountedValue: any =
     cartItems?.length <= 0
@@ -989,7 +991,7 @@ const OrderBasket = () => {
                 </div> */}
                 <div className="flex items-center justify-between py-2">
                   <div className="font-open-sans text-xs font-normal text-neutral-900">
-                    GST ({authState.user?.tenantConfig.gstPercentage}%)
+                    GST ({tenantConfig?.tenantConfig?.gstPercentage}%)
                   </div>
                   <div className="font-open-sans text-sm font-bold text-neutral-900">
                     {CURRENCY_PREFIX} {gstAmount.toFixed(2)}

@@ -74,7 +74,7 @@ const OrderBasket = () => {
   const authState = useAppSelector((state) => state?.authState);
   const tenantConfig: any = getItem('TENANT_CONFIG');
 
-  // console.log('authState', authState);
+  console.log('authState', tenantConfig);
 
   const {
     /*  register, */

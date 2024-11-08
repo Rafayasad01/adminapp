@@ -66,7 +66,7 @@ function OrderDetailsPage() {
   };
 
   const showSelectDriverButton = useMemo(() => {
-    console.log('viewData.status :>> ', viewData.status);
+    // console.log('viewData.status :>> ', viewData.status);
     if (viewData.status === ORDER_STATUS_SERVICE.NEW) {
       return true;
     }

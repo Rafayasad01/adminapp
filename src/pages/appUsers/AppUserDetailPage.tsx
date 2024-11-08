@@ -185,7 +185,7 @@ function AppUserDetailPage() {
                       License Number
                     </span>
                     <span className="font-open-sans text-sm font-normal text-[#6A6A6A]">
-                      {detail.appUserDriverExt.licenseNumber}
+                      {detail?.appUserDriverExt?.licenseNumber ?? '--'}
                     </span>
                   </div>
                 )}

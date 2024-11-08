@@ -10,7 +10,7 @@ import ActionMenu from '../../components/common/ActionMenu';
 import CustomText from '../../components/common/CustomText';
 import { useAppSelector } from '../../redux/redux-hooks';
 import appUserService from '../../services/adminapp/adminAppUser';
-import { NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
+import { ALL_PERMISSIONS, NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
 import { CheckRolePermission, listingRolePermission } from '../../utils/helper';
 
 type AppUserOtherTabProps = {
@@ -64,9 +64,11 @@ function AppUserOtherTab({
   const actionMenuOptions = ['Detail', 'Edit', 'Delete'];
 
   const menuHandler = (option: string) => {
-    setIsLoader(true);
+    // setIsLoader(true);
     if (option === 'Edit') {
-      if (listingRolePermission(dataRole, 'Customer Update')) {
+      if (
+        listingRolePermission(dataRole, ALL_PERMISSIONS.storeUser.editUserApp)
+      ) {
         appUserService.appUserEdit(actionMenuItemid?.id).then((item: any) => {
           if (item.data.success) {
             setIsLoader(false);
@@ -97,7 +99,9 @@ function AppUserOtherTab({
       );
       // navigate(`address/${actionMenuItemid?.id}`);
     } else if (option === 'Delete') {
-      if (listingRolePermission(dataRole, 'Customer Delete')) {
+      if (
+        listingRolePermission(dataRole, ALL_PERMISSIONS.storeUser.deleteUserApp)
+      ) {
         setIsLoader(true);
         const data = {
           id: actionMenuItemid?.id,
@@ -143,13 +147,23 @@ function AppUserOtherTab({
         });
       }
     } else if (option === 'Detail') {
-      CheckRolePermission(
-        'Customer Detail',
-        dataRole,
-        navigate,
-        `../detail/${actionMenuItemid?.id}`
-      );
-      navigate(`../detail/${actionMenuItemid?.id}`);
+      if (
+        listingRolePermission(dataRole, ALL_PERMISSIONS.storeUser.viewUserApp)
+      ) {
+        CheckRolePermission(
+          ALL_PERMISSIONS.storeUser.viewUserApp,
+          dataRole,
+          navigate,
+          `../detail/${actionMenuItemid?.id}`
+        );
+      } else {
+        setIsNotify(true);
+        setNotifyMessage({
+          text: NOT_AUTHORIZED_MESSAGE,
+          type: 'warning',
+        });
+      }
+      // navigate(`../detail/${actionMenuItemid?.id}`);
     }
   };
 

@@ -25,11 +25,13 @@ import { listingRolePermission } from '../../utils/helper';
 import ServiceItemCreatePopup from './ServiceItemCreatePopup';
 import ServiceItemEditPopup from './ServiceItemEditPopup';
 import PermissionPopup from '../../utils/PermissionPopup';
+import { getItem } from '../../utils/storage';
 // import ServicesCreatePopup from './CategoriesServicesCreatePopup';
 // import ServicesEditPopup from './CategoriesServicesEditPopup';
 
 function ServiceItemPage() {
   const params = useParams();
+  const isShop: any = getItem('USER');
   const dataRole = useAppSelector(
     (state) => state?.persistedReducer?.roleState?.role?.permissions
   );
@@ -414,13 +416,15 @@ function ServiceItemPage() {
                     disableUnderline
                   />
                 </FormControl>
-                <Button
-                  variant="contained"
-                  className="btn-black-fill btn-icon"
-                  onClick={handleAddNew}
-                >
-                  <AddOutlinedIcon /> Add New
-                </Button>
+                {isShop.userType === 'ShopUser' && (
+                  <Button
+                    variant="contained"
+                    className="btn-black-fill btn-icon"
+                    onClick={handleAddNew}
+                  >
+                    <AddOutlinedIcon /> Add New
+                  </Button>
+                )}
               </div>
             </div>
           </div>
