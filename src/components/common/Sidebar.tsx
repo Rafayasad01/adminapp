@@ -436,6 +436,20 @@ function Sidebar() {
             ) {
               return null;
             }
+            // Specific condition for MODULE_VOUCHERS
+            if (
+              link.name === 'Vouchers' &&
+              authState.user.userType !== 'ShopUser'
+            ) {
+              return null;
+            }
+            // Specific condition for MODULE_VOUCHERS
+            if (
+              link.name === 'Notifications' &&
+              authState.user.userType !== 'ShopUser'
+            ) {
+              return null;
+            }
             // Specific condition for MODULE_SETTINGS
             // if (
             //   link.name === MODULE_SETTINGS &&
