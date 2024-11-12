@@ -36,7 +36,7 @@ function CustomDropDown({
   alternativeId,
   border,
 }: CustomDropDownProps) {
-  console.log('🚀 ~ options:', options);
+  // console.log('🚀 ~ options:', options);
   return (
     <div className="">
       {inputTitle && (

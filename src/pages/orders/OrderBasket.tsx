@@ -405,7 +405,7 @@ const OrderBasket = () => {
     }
   }, []);
 
-  console.log('isExx', isExistingUser);
+  // console.log('isExx', isExistingUser);
 
   const handlePaymentChange = () => {};
 

@@ -229,7 +229,6 @@ const AppointmentViewCard = ({
   };
 
   const onWalletSubmit = (payload: any) => {
-    // console.log('🚀 ~ onWalletSubmit ~ data:', payload);
     setIsWalletLoader(true);
     const dataObj = {
       ...payload,
@@ -260,7 +259,6 @@ const AppointmentViewCard = ({
           type: 'error',
         });
         // return false;
-        // console.log('🚀 ~ onWalletSubmit ~ error:', error);
       });
   };
 
@@ -285,7 +283,6 @@ const AppointmentViewCard = ({
   };
 
   const getInvoice = (code: string) => {
-    // console.log('🚀 ~ getInvoice ~ code:', code);
     setIsLoader(true);
     storeAppointmentService
       .AppointmentInvoiceDetailByCode(code)
@@ -303,14 +300,96 @@ const AppointmentViewCard = ({
       });
   };
 
-  // console.log('appointmentData', appointmentData);
+  const completedAppointments = () => {
+    const completedServices = data?.services?.filter(
+      (el: any) =>
+        el.status === APPOINTMENT_STATUS.DONE ||
+        el.status === APPOINTMENT_STATUS.COMPLETED
+    );
+    const completedCount = completedServices?.length;
+    const completedAmount = completedServices?.reduce(
+      (total: any, service: any) => total + parseFloat(service.totalAmount),
+      0
+    );
+    return {
+      completedCount,
+      completedAmount,
+    };
+  };
+
+  const missedAppointments = () => {
+    const missedServices = data?.services?.filter(
+      (el: any) =>
+        el.status === APPOINTMENT_STATUS.MISSED ||
+        el.status === APPOINTMENT_STATUS.CANCELLED
+    );
+    const missedCount = missedServices?.length;
+    const missedAmount = missedServices?.reduce(
+      (total: any, service: any) => total + parseFloat(service.totalAmount),
+      0
+    );
+    return {
+      missedCount,
+      missedAmount,
+    };
+  };
+
+  const totalAmount = () => {
+    // Number(data?.gstAmount).toLocaleString()
+    const gtAmount = data?.services?.filter(
+      (el: any) =>
+        el.status === APPOINTMENT_STATUS.COMPLETED ||
+        el.status === APPOINTMENT_STATUS.DONE ||
+        el.status === APPOINTMENT_STATUS.NEW ||
+        el.status === APPOINTMENT_STATUS.PROCESSING
+    );
+    const gtAppAmount = gtAmount?.reduce(
+      (total: any, service: any) => total + parseFloat(service.totalAmount),
+      0
+    );
+    return gtAppAmount;
+  };
+
+  const taxAmount = () => {
+    // Number(data?.gstAmount).toLocaleString()
+    const taxServices = data?.services?.filter(
+      (el: any) =>
+        el.status === APPOINTMENT_STATUS.COMPLETED ||
+        el.status === APPOINTMENT_STATUS.DONE ||
+        el.status === APPOINTMENT_STATUS.NEW ||
+        el.status === APPOINTMENT_STATUS.PROCESSING
+    );
+    const taxAppAmount = taxServices?.reduce(
+      (total: any, service: any) => total + parseFloat(service.gstAmount),
+      0
+    );
+    return taxAppAmount;
+  };
+
+  const grandTotalAmount = () => {
+    // Number(data?.gstAmount).toLocaleString()
+    const gtAmount = data?.services?.filter(
+      (el: any) =>
+        el.status === APPOINTMENT_STATUS.COMPLETED ||
+        el.status === APPOINTMENT_STATUS.DONE ||
+        el.status === APPOINTMENT_STATUS.NEW ||
+        el.status === APPOINTMENT_STATUS.PROCESSING
+    );
+    const gtAppAmount = gtAmount?.reduce(
+      (total: any, service: any) =>
+        total + parseFloat(service.grandTotalAmount),
+      0
+    );
+    return gtAppAmount;
+  };
+
+  // console.log('appointmentData', taxAmount());
 
   useEffect(() => {
     if (appointmentData) {
       storeAppointmentService
         .getAppointmentByCode(appointmentData.code)
         .then((res) => {
-          // console.log('🚀 ~ useEffect ~ appointmentData:', res.data.data);
           const date = dayjs(res.data.data.appointmentTime);
           const formattedDateWithHour1 = dayjs(date).format(
             'ddd MMM DD YYYY h:mm:ss A'
@@ -454,19 +533,37 @@ const AppointmentViewCard = ({
           </div>
           <div className="">
             <span className="text-xs">
-              Total Amount {Number(data?.totalAmount).toLocaleString()} PKR
+              Sub Total Amount {Number(data?.totalAmount).toLocaleString()} PKR
+            </span>
+          </div>
+          <div className="">
+            <span className="text-xs">
+              Completed Appointments (
+              {completedAppointments()?.completedCount || 0}) ={' '}
+              {completedAppointments()?.completedAmount.toLocaleString() || 0}{' '}
+              PKR
+            </span>
+          </div>
+          <div className="">
+            <span className="text-xs">
+              Missed Appointments ({missedAppointments().missedCount || 0}) ={' '}
+              {missedAppointments().missedAmount.toLocaleString() || 0} PKR
+            </span>
+          </div>
+          <div className="">
+            <span className="text-xs">
+              Total Amount {totalAmount().toLocaleString() || 0} PKR
             </span>
           </div>
           <div className="">
             <span className="text-xs">
               Tax {data?.gstPercentage || 0}% ={' '}
-              {Number(data?.gstAmount).toLocaleString() || 0} PKR
+              {taxAmount().toLocaleString() || 0} PKR
             </span>
           </div>
           <div className="mt-1">
             <span className="text-xs">
-              Grand Total Amount{' '}
-              {Number(data?.grandTotalAmount).toLocaleString()} PKR
+              Grand Total Amount {grandTotalAmount().toLocaleString()} PKR
             </span>
           </div>
           <div className="mt-2 flex items-center justify-center">
