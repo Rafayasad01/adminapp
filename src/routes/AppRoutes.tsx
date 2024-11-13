@@ -125,7 +125,7 @@ const GetInitialRoute = ({ routes }: any) => {
 
 // console.log('ssddssdsddsds', APPOINTMENT_TEXT);
 const getUserType: any = getItem('USER');
-console.log('🚀 ~ getUserType:', getUserType);
+// console.log('🚀 ~ getUserType:', getUserType);
 
 export const routeObjects: RouteObject[] = [
   {
@@ -164,10 +164,10 @@ export const routeObjects: RouteObject[] = [
             path: 'new-password',
             element: <NewPasswordPage />,
           },
-          {
-            path: '404',
-            element: <Page404 />,
-          },
+          // {
+          //   path: '404',
+          //   element: <Page404 />,
+          // },
         ],
       },
       {

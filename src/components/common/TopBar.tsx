@@ -54,8 +54,10 @@ function TopBar({
     // dispatch(setLogo(null));
     dispatch(setRolePermissions({ id: '', name: '', permissions: [] }));
     removeItem('AUTH_TOKEN');
+    // removeItem('REFRESH_TOKEN');
     removeItem('USER');
     removeItem('BRANCH_DATA');
+    // localStorage.clear();
     // dispatch(setSystemConfig(null));
   };
 
