@@ -371,7 +371,7 @@ function CategoriesServicesPage() {
           <div className="grid grid-cols-12 px-4 py-5">
             <div className="col-span-7">
               <span className="font-open-sans text-xl font-semibold text-[#252733]">
-                All {TITLE_TEXT}s
+                All {TITLE_TEXT} Items
               </span>
             </div>
             <div className="col-span-5">

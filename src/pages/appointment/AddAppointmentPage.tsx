@@ -688,11 +688,13 @@ export default function AddAppointmentPage() {
     }
   }, [loginDetails]);
 
+  // console.log('activeBarberData', activeBarberData);
+
   const addAppointmentServices = () => {
     const obj = {
       id: 0,
       barber: activeBarberData?.storeEmployee?.name,
-      amount: activeBarberData?.amount,
+      amount: activeBarberData?.servicePrice,
       storeServiceCategory: watch('categoryId'),
       serviceTime: activeBarberData?.serviceTime,
       storeServiceCategoryItem: watch('storeServiceCategoryItem'),

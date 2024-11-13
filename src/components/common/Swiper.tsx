@@ -22,20 +22,20 @@ const SwiperComponent = ({
   return (
     <div className="categories-swiper-container">
       <Swiper
-        slidesPerView={10}
-        spaceBetween={30}
+        // slidesPerView={15}
+        spaceBetween={5}
         navigation={{
           nextEl: '.custom-swiper-button-next',
           prevEl: '.custom-swiper-button-prev',
         }}
         breakpoints={{
           // Large screens
-          1800: {
-            slidesPerView: 10,
+          1900: {
+            slidesPerView: 20,
           },
           // Laptop screens
           1000: {
-            slidesPerView: 10,
+            slidesPerView: 15,
           },
         }}
         modules={[Navigation]}
@@ -66,8 +66,8 @@ const SwiperComponent = ({
                           alt="avatar-img"
                         />
                       </div>
-                      <div className="flex w-[100%] cursor-pointer items-center justify-center truncate">
-                        <span className="truncate text-base font-semibold capitalize">
+                      <div className="flex cursor-pointer items-center justify-center">
+                        <span className="max-w-xs self-center whitespace-normal text-center text-base font-semibold capitalize">
                           {item.text}
                         </span>
                       </div>
@@ -78,7 +78,7 @@ const SwiperComponent = ({
             })
           : null}
       </Swiper>
-      <div className="swiper-navigation-container my-4 px-1">
+      <div className="swiper-navigation-container my-11 flex justify-end px-4">
         <div className="custom-swiper-button-prev border-2 border-primary text-primary focus:bg-none">
           &#10094;
         </div>{' '}
