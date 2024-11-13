@@ -399,7 +399,7 @@ function Sidebar() {
     defineRules(permissions);
     if (permissions) {
       const filterLinks = (allLinks: any) => {
-        console.log('🚀 ~ useEffect ~ permissions:', permissions, allLinks);
+        // console.log('🚀 ~ useEffect ~ permissions:', permissions, allLinks);
         return allLinks
           .map((link: any) => {
             // Specific condition for MODULE_EMPLOYEES
@@ -474,7 +474,7 @@ function Sidebar() {
                   );
                 }
               );
-              console.log('filteredChildLinks', filteredChildLinks);
+              // console.log('filteredChildLinks', filteredChildLinks);
 
               // Specific condition for MODULE_USER -> HIDE -> App Users
               // Include parent link if it has visible child links or passes its own permission

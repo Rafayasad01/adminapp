@@ -262,10 +262,10 @@ function BranchPage() {
             setIsLoader(false);
             setList((newArr: any) => {
               return newArr.map((item: any) => {
-                if (item.id === id) {
-                  item.isActive = updateItem.data.data.isActive;
+                if (item.id === updateItem.data.data.id) {
+                  return { ...item, isActive: updateItem.data.data.isActive };
                 }
-                return { ...item };
+                return item;
               });
             });
           } else {
