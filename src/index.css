@@ -1537,6 +1537,12 @@ label + .css-1aa5qj0-MuiInputBase-root-MuiInput-root {
   max-height: 80%;
 }
 
+.modal-content {
+  max-width: 900px !important;
+  width: 100% !important;
+  overflow-y: initial !important;
+}
+
 /* Style for the close button */
 .close-image {
   position: absolute;
@@ -2686,8 +2692,6 @@ button.MuiButtonBase-root.MuiButton-root.MuiButton-text.MuiButton-textPrimary.Mu
   padding-left: 36px !important;
 }
 
-.css-uhb5lp {
-  max-width: 900px !important;
-  width: 100% !important;
-  overflow-y: initial !important;
-}
+/* .css-uhb5lp {
+  
+} */
