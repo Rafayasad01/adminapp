@@ -137,11 +137,6 @@ function CategoriesServicesFaqPage() {
 
   const deleteHandler = (id: string) => {
     setIsLoader(true);
-    // const data = {
-    //   is_active: false,
-    //   is_deleted: true,
-    //   updated_by: authState.user.id,
-    // };
     categoryService
       .deleteCategoryServiceFaq(id)
       .then((updateItem) => {

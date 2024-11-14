@@ -162,7 +162,7 @@ function CategoriesServicesPage() {
     //   updatedBy: authState.user.id,
     // };
     categoryService
-      .deleteCategoryService(id)
+      .deleteCategoryService(id, productId)
       .then((updateItem) => {
         if (updateItem.data.success) {
           setIsLoader(false);

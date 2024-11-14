@@ -349,7 +349,6 @@ function BranchPage() {
     handleVendor(branchid);
   };
 
-  // console.log('authState', authState);
   return isLoader ? (
     <Loader />
   ) : (
