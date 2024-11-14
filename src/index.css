@@ -1537,7 +1537,7 @@ label + .css-1aa5qj0-MuiInputBase-root-MuiInput-root {
   max-height: 80%;
 }
 
-.modal-content {
+.MuiDialog-paper.MuiDialog-paperScrollPaper.MuiDialog-paperWidthSm.MuiPaper-elevation.MuiPaper-elevation24.MuiPaper-root.MuiPaper-rounded.css-uhb5lp.order-model {
   max-width: 900px !important;
   width: 100% !important;
   overflow-y: initial !important;
