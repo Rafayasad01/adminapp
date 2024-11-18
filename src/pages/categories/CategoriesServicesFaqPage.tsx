@@ -251,6 +251,13 @@ function CategoriesServicesFaqPage() {
               list[i].answer = updateItem.data.data.answer;
             }
           }
+        } else {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: updateItem.data.message,
+            type: 'error',
+          });
         }
       })
       .catch((err) => {

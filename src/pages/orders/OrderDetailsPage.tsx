@@ -26,12 +26,14 @@ import PermissionPopup from '../../utils/PermissionPopup';
 import cn from '../../utils/class-names';
 import {
   ALL_PERMISSIONS,
+  CURRENCY_PREFIX,
   NOT_AUTHORIZED_MESSAGE,
   ORDER_STATUS,
   ORDER_STATUSES,
 } from '../../utils/constants';
 import { listingRolePermission } from '../../utils/helper';
 import OrderDetailsTrackingPage from './OrderDetailsTracking';
+import assets from '../../assets';
 
 function OrderDetailsPage() {
   // const navigate = useNavigate();
@@ -615,19 +617,27 @@ function OrderDetailsPage() {
                           <hr className="my-2 h-[1px] w-full bg-neutral-200" />
                         )}
                         <div className="flex items-center">
-                          <img
-                            className="mr-2 aspect-square w-11 rounded-full"
-                            src={item.icon}
-                            alt=""
-                          />
-                          <div className="flex-grow font-open-sans text-xs font-semibold text-neutral-900">
+                          {item.icon !== 'null' ? (
+                            <img
+                              className="mr-2 aspect-square w-11 rounded-full"
+                              src={item.icon}
+                              alt=""
+                            />
+                          ) : (
+                            <img
+                              className="mr-2 aspect-square w-8 rounded-full"
+                              src={assets.images.noItems}
+                              alt="no-pic"
+                            />
+                          )}
+                          <div className="flex-grow font-open-sans text-xs font-semibold capitalize text-neutral-900">
                             {item.name}
                           </div>
                           <div className="mx-4 text-right font-open-sans text-xs font-normal text-neutral-500">
                             {item.quantity} Items
                           </div>
                           <div className="text-right font-open-sans text-sm font-semibold text-neutral-900">
-                            {item.unitPrice}
+                            {item.unitPrice} {CURRENCY_PREFIX}
                           </div>
                         </div>
                       </div>
@@ -645,14 +655,23 @@ function OrderDetailsPage() {
                     PKR {viewData.totalAmount}
                   </div>
                 </div>
-                {/* <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between">
                   <div className="font-open-sans text-sm font-normal text-neutral-500">
-                    Discount
+                    Voucher Discount
                   </div>
                   <div className="text-right font-open-sans text-sm font-semibold text-neutral-900">
-                    $18.00
+                    {CURRENCY_PREFIX} {Number(viewData.discount).toFixed(2)}
                   </div>
-                </div> */}
+                </div>
+                <div className="flex items-center justify-between">
+                  <div className="font-open-sans text-sm font-normal text-neutral-500">
+                    loyalty Coins Discount
+                  </div>
+                  <div className="text-right font-open-sans text-sm font-semibold text-neutral-900">
+                    {CURRENCY_PREFIX}{' '}
+                    {Number(viewData.discountLoyaltyCoins).toFixed(2)}
+                  </div>
+                </div>
                 <div className="flex items-center justify-between">
                   <div className="font-open-sans text-sm font-normal text-neutral-500">
                     HST {viewData.gstPercentage}%

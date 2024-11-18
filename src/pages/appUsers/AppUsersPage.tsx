@@ -249,7 +249,12 @@ function AppUsersPage() {
       firstName: data.firstName,
       lastName: data.lastName,
       phone: data.phone ? data.phone : null,
-      userType: title === 'Customers' ? 'App' : data.appuserRole,
+      userType:
+        title === 'Customers'
+          ? 'App'
+          : title === 'App User'
+          ? 'App'
+          : data.appuserRole,
       postalCode: data.postalCode ? data.postalCode : null,
       licenseNumber: data.licenseNumber ? data.licenseNumber : null,
       updatedBy: authState.user.id,
@@ -257,7 +262,10 @@ function AppUsersPage() {
     let dataRender = false;
     if (data.appuserRole === 'Driver' && selectedTab === 'OTHER') {
       dataRender = true;
-    } else if (data.appuserRole === 'App' && selectedTab === 'APP USER') {
+    } else if (
+      (title === 'App User' || data.appuserRole === 'App') &&
+      selectedTab === 'APP USER'
+    ) {
       dataRender = true;
     } else if (title === 'Customers') {
       dataRender = true;
@@ -274,7 +282,7 @@ function AppUsersPage() {
           });
           if (dataRender) {
             for (let i = 0; i < list.length; i += 1) {
-              if (list[i].id === item.data.data.id) {
+              if (actionMenuItemid?.id === item.data.data.id) {
                 list[i].firstName = item.data.data.firstName;
                 list[i].lastName = item.data.data.lastName;
                 list[i].phone = item.data.data.phone;

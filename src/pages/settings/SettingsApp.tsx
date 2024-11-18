@@ -280,7 +280,7 @@ function SettingsApp() {
                 officeTimeIn: itemData?.branch?.officeTimeIn,
                 officeTimeOut: itemData?.branch?.officeTimeOut,
               };
-              console.log('officeTimeData', officeTimeData);
+              // console.log('officeTimeData', officeTimeData);
 
               dispatch(setBranchData(officeTimeData));
               // setItem('BRANCH_DATA', officeTimeData);
