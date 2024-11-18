@@ -302,7 +302,7 @@ export const routeObjects: RouteObject[] = [
                     element: <AppUserPromotionDetailPage />,
                   },
                   {
-                    path: 'history/loyality/detail/:loyaltyId',
+                    path: 'history/loyalty/detail/:loyaltyId',
                     element: <AppUserLoyaltyDetailPage />,
                   },
                 ],
@@ -1117,6 +1117,18 @@ export const routeObjects: RouteObject[] = [
                         element: (
                           <ProtectedRoute
                             page={<AppUserRewardHistory />}
+                            condition={
+                              ALL_PERMISSIONS.storeUser.viewUserAppRewardHistory
+                            }
+                          />
+                        ),
+                        // element: <AppUserRewardHistory />,
+                      },
+                      {
+                        path: 'history/loyalty/detail/:loyaltyId',
+                        element: (
+                          <ProtectedRoute
+                            page={<AppUserLoyaltyDetailPage />}
                             condition={
                               ALL_PERMISSIONS.storeUser.viewUserAppRewardHistory
                             }
