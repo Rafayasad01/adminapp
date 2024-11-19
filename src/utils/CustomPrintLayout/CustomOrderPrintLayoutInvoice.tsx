@@ -3,6 +3,7 @@ import dayjs from 'dayjs';
 import { forwardRef, useRef } from 'react';
 import { useReactToPrint } from 'react-to-print';
 import CustomText from '../../components/common/CustomText';
+import assets from '../../assets';
 
 type CustomPrintLayoutsProps = {
   data: any;
@@ -130,12 +131,20 @@ const CustomPrintLayouts = forwardRef<any, any>(
                               <td>
                                 <div className="avatar flex flex-row items-center">
                                   <div className="">
-                                    <img
-                                      alt="avatarIcon"
-                                      src={item.icon}
-                                      height={45}
-                                      width={45}
-                                    />
+                                    {item.icon !== 'null' ? (
+                                      <img
+                                        alt="avatarIcon"
+                                        src={item.icon}
+                                        height={45}
+                                        width={45}
+                                      />
+                                    ) : (
+                                      <img
+                                        className="mr-2 aspect-square w-8 rounded-full"
+                                        src={assets.images.noItems}
+                                        alt="no-pic"
+                                      />
+                                    )}
                                   </div>
                                 </div>
                               </td>
@@ -152,7 +161,7 @@ const CustomPrintLayouts = forwardRef<any, any>(
                   </tbody>
                 </table>
                 <div className="custom--invoice mt-10 grid grid-cols-12 gap-4">
-                  <div className="iv-mtop col-span-5">
+                  {/* <div className="iv-mtop col-span-5">
                     <div className="iv-notes rounded-md">
                       <div className="mb-2 text-base font-bold uppercase">
                         Notes
@@ -161,8 +170,8 @@ const CustomPrintLayouts = forwardRef<any, any>(
                         <span>Lorem ipsum content here</span>
                       </div>
                     </div>
-                  </div>
-                  <div className="col-span-6 ">
+                  </div> */}
+                  <div className="col-span-6">
                     <div className="iv-tot-cost  iv-mtop  rounded-md">
                       <div className="mb-2 text-base font-bold uppercase">
                         Total Order Cost
@@ -171,6 +180,18 @@ const CustomPrintLayouts = forwardRef<any, any>(
                         <span>Sub Total Amount :</span>
                         <span className="font-bold">
                           PKR {props?.data?.totalAmount}
+                        </span>
+                      </div>
+                      <div className="mb-2 flex justify-between text-sm font-medium">
+                        <span>Voucher Discount :</span>
+                        <span className="font-bold">
+                          PKR {props?.data?.discount}
+                        </span>
+                      </div>
+                      <div className="mb-2 flex justify-between text-sm font-medium">
+                        <span>loyalty Coins Discount :</span>
+                        <span className="font-bold">
+                          PKR {props?.data?.discountLoyaltyCoins}
                         </span>
                       </div>
                       <div className="mb-2 flex justify-between text-sm font-medium">
