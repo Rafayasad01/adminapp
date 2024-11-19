@@ -42,6 +42,7 @@ import PayIcon from '../icons/PayIcon';
 import VoucherIcon from '../icons/VoucherIcon';
 import ProviderIcon from '../icons/providerIcon';
 import VisitIcon from '../icons/visitIcon';
+import { getItem } from '../../utils/storage';
 // import { getItem } from '../../utils/storage';
 
 const links = [
@@ -247,6 +248,7 @@ const links = [
 
 function Sidebar() {
   const userData = useAppSelector((state: any) => state?.authState?.user);
+  const branch: any = getItem('BRANCH_DATA');
   const appItems = useAppSelector(
     (state: any) => state?.persistedReducer?.appState?.UserItems
   );
@@ -533,20 +535,14 @@ function Sidebar() {
                 src={assets.images.urAppLogoWhite}
                 alt=""
               />
-            ) : logo ? (
-              <img
-                className="mt-9 h-[29px] max-w-[150px]"
-                src={logo}
-                alt="logo"
-              />
             ) : (
-              <div className="flex w-full items-center justify-start rounded-2xl p-3 text-white">
+              logo && (
                 <img
-                  className="mt-2 max-w-[150px]"
-                  src={assets.images.urAppLogoWhite}
-                  alt="logo"
+                  className="mt-9 h-[29px] max-w-[150px]"
+                  src={logo}
+                  alt={`${branch.name}`}
                 />
-              </div>
+              )
             )}
           </Stack>
         </Toolbar>
