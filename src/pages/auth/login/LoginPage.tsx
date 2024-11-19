@@ -42,6 +42,9 @@ function LoginPage() {
   const systemConfig = useAppSelector(
     (state: any) => state.authState.systemConfig
   );
+  const logo = useAppSelector(
+    (state: any) => state?.persistedReducer?.appState?.logo
+  );
   const { notification, hideNotification, showNotification } =
     useNotification();
   // const navigate = useNavigate();
@@ -214,7 +217,7 @@ function LoginPage() {
         <div className="w-[30%]  self-start px-[30px]">
           <div className="flex max-h-[29px] w-full max-w-[600px] items-center justify-center px-[25px] py-[40px]">
             <img
-              src={systemConfig?.shopLogo ?? systemConfig?.shopName}
+              src={logo || systemConfig?.shopLogo}
               alt="login avatar"
               className="mt-10 h-auto w-[100px] object-contain"
             />
