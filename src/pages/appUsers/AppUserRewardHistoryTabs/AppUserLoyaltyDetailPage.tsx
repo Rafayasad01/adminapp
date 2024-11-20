@@ -1,4 +1,4 @@
-import Avatar from '@mui/material/Avatar';
+// import Avatar from '@mui/material/Avatar';
 import Divider from '@mui/material/Divider';
 import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
@@ -11,6 +11,8 @@ import { useAppSelector } from '../../../redux/redux-hooks';
 import appUserService from '../../../services/adminapp/adminAppUser';
 import PermissionPopup from '../../../utils/PermissionPopup';
 import { listingRolePermission } from '../../../utils/helper';
+import { ALL_PERMISSIONS, CURRENCY_PREFIX } from '../../../utils/constants';
+import assets from '../../../assets';
 
 function AppUserLoyaltyDetailPage() {
   const dataRole = useAppSelector(
@@ -43,7 +45,12 @@ function AppUserLoyaltyDetailPage() {
   // };
 
   useEffect(() => {
-    if (listingRolePermission(dataRole, 'Driver Address Detail')) {
+    if (
+      listingRolePermission(
+        dataRole,
+        ALL_PERMISSIONS.storeUser.viewUserAppRewardHistory
+      )
+    ) {
       appUserService
         .appUserLoyaltyHistoryDetails(loyaltyId)
         .then((item: any) => {
@@ -67,6 +74,8 @@ function AppUserLoyaltyDetailPage() {
             type: 'error',
           });
         });
+    } else {
+      setIsLoader(false);
     }
   }, [null]);
 
@@ -140,7 +149,8 @@ function AppUserLoyaltyDetailPage() {
                         Total Amount
                       </span>
                       <span className="font-open-sans text-sm font-normal text-[#6A6A6A]">
-                        ${detail.appOrder[0].totalAmount ?? '0'}
+                        {CURRENCY_PREFIX}{' '}
+                        {detail.appOrder[0].totalAmount ?? '0'}d
                       </span>
                     </div>
                     <div className="col-span-4 flex w-full flex-col">
@@ -148,7 +158,7 @@ function AppUserLoyaltyDetailPage() {
                         Discount
                       </span>
                       <span className="font-open-sans text-sm font-normal text-[#6A6A6A]">
-                        ${detail.appOrder[0].discount ?? '0'}
+                        {CURRENCY_PREFIX} {detail.appOrder[0].discount ?? '0'}
                       </span>
                     </div>
                     <div className="col-span-4 flex w-full flex-col">
@@ -166,7 +176,7 @@ function AppUserLoyaltyDetailPage() {
                         GST Amount
                       </span>
                       <span className="font-open-sans text-sm font-normal text-[#6A6A6A]">
-                        ${detail.appOrder[0].gstAmount ?? '0'}
+                        {CURRENCY_PREFIX} {detail.appOrder[0].gstAmount ?? '0'}
                       </span>
                     </div>
                     <div className="col-span-4 flex w-full flex-col">
@@ -174,7 +184,7 @@ function AppUserLoyaltyDetailPage() {
                         Grand Total
                       </span>
                       <span className="font-open-sans text-sm font-normal text-[#6A6A6A]">
-                        ${detail.appOrder[0].grandTotal ?? '0'}
+                        {CURRENCY_PREFIX} {detail.appOrder[0].grandTotal ?? '0'}
                       </span>
                     </div>
                   </div>
@@ -204,22 +214,14 @@ function AppUserLoyaltyDetailPage() {
                             <tr key={index}>
                               <td>
                                 <div className="avatar flex flex-row items-center">
-                                  {item.homeCatItem.icon ? (
+                                  {item.homeCatItem.icon !== 'null' ? (
                                     <img src={item.homeCatItem.icon} alt="" />
                                   ) : (
-                                    <Avatar
-                                      className="avatar flex flex-row items-center"
-                                      sx={{
-                                        bgcolor: '#1D1D1D',
-                                        width: 35,
-                                        height: 35,
-                                        textTransform: 'uppercase',
-                                        fontSize: '14px',
-                                        marginRight: '10px',
-                                      }}
-                                    >
-                                      {item.homeCatItem.name?.charAt(0)}
-                                    </Avatar>
+                                    <img
+                                      className="mr-2 aspect-square w-8 rounded-full"
+                                      src={assets.images.noItems}
+                                      alt="no-pic"
+                                    />
                                   )}
 
                                   <div className="flex flex-col items-start justify-start">
@@ -238,10 +240,18 @@ function AppUserLoyaltyDetailPage() {
                                   </div>
                                 </div>
                               </td>
-                              <td>{item.homeCatItem.desc}</td>
+                              <td>
+                                {item.homeCatItem.desc
+                                  ? item.homeCatItem.desc
+                                  : '--'}
+                              </td>
                               <td>{item.quantity}</td>
                               <td>{item.unitPrice}</td>
-                              <td>{item.homeCatItem.loyaltyCoins}</td>
+                              <td>
+                                {item.homeCatItem.loyaltyCoins
+                                  ? item.homeCatItem.loyaltyCoins
+                                  : 0}
+                              </td>
                               {/* <td>
                                                                 <div className="flex flex-row-reverse">
                                                                     <IconButton
