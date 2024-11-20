@@ -6,17 +6,21 @@ const PLAN_PREFIX = 'plans';
 const ATTACHMENT_PREFIX = 'attachments';
 
 const getListProjectAttachmentService = (
+  id: string,
   type: string,
   search: string,
   page: number,
   size: number
 ) => {
-  return network.get(`${NEW_EARTH_PREFIX}/${ATTACHMENT_PREFIX}/list`, {
-    type,
-    search,
-    page: page.toString(),
-    size: size.toString(),
-  });
+  return network.get(
+    `${NEW_EARTH_PREFIX}/${ATTACHMENT_PREFIX}/list${id ? `/${id}` : ''}`,
+    {
+      type,
+      search,
+      page: page.toString(),
+      size: size.toString(),
+    }
+  );
 };
 
 const addProjectAttachmentService = (data: any, tenant: string) => {

@@ -108,7 +108,13 @@ function ImagePage({ projectId }: any) {
       )
     ) {
       storeAttachmentService
-        .getListProjectAttachmentService('image', search, page, rowsPerPage)
+        .getListProjectAttachmentService(
+          projectId ?? '',
+          'image',
+          search,
+          page,
+          rowsPerPage
+        )
         .then((item: any) => {
           setIsLoader(false);
           setList(item.data.data.list);
@@ -134,7 +140,13 @@ function ImagePage({ projectId }: any) {
       setSearch(searchTxt);
       setPage(newPage);
       storeAttachmentService
-        .getListProjectAttachmentService('image', searchTxt, page, rowsPerPage)
+        .getListProjectAttachmentService(
+          projectId ?? '',
+          'image',
+          searchTxt,
+          page,
+          rowsPerPage
+        )
         .then((item) => {
           setList(item.data.data.list);
           setTotal(item.data.data.total);
@@ -148,7 +160,13 @@ function ImagePage({ projectId }: any) {
   ) => {
     setPage(newPage);
     storeAttachmentService
-      .getListProjectAttachmentService('image', search, newPage, rowsPerPage)
+      .getListProjectAttachmentService(
+        projectId ?? '',
+        'image',
+        search,
+        newPage,
+        rowsPerPage
+      )
       .then((item: any) => {
         setList(item.data.data.list);
         setTotal(item.data.data.total);
@@ -163,14 +181,20 @@ function ImagePage({ projectId }: any) {
     setRowsPerPage(newRowperPage);
     setPage(newPage);
     storeAttachmentService
-      .getListProjectAttachmentService('image', search, newPage, newRowperPage)
+      .getListProjectAttachmentService(
+        projectId ?? '',
+        'image',
+        search,
+        newPage,
+        newRowperPage
+      )
       .then((item) => {
         setList(item.data.data.list);
         setTotal(item.data.data.total);
       });
   };
   const createFormHandler = (data: any) => {
-    console.log('data==>', data);
+    // console.log('data==>', data);
     setIsLoader(true);
     const formData = new FormData();
     if (data.file !== null) formData.append('file', data.file);
@@ -211,7 +235,7 @@ function ImagePage({ projectId }: any) {
   };
 
   const updateFormHandler = (data: any) => {
-    console.log('🚀 ~ updateFormHandler ~ data:', data);
+    // console.log('🚀 ~ updateFormHandler ~ data:', data);
     setIsLoader(true);
     const formData = new FormData();
     if (data.file !== null) formData.append('file', data.file);

@@ -72,41 +72,18 @@ function DocsPage({ projectId }: any) {
     }
   };
 
-  // const handleSwitchChange = (event: any, id: string) => {
-  //   if (listingRolePermission(dataRole, ALL_PERMISSIONS.storeProduct.edit)) {
-  //     const data = {
-  //       is_active: event.target.checked,
-  //       updated_by: authState.user.id,
-  //     };
-  //     storeAttachmentService
-  //       .updateStatusProjectService(id, data)
-  //       .then((updateItem) => {
-  //         if (updateItem.data.success) {
-  //           setList((newArr: any) => {
-  //             return newArr.map((item: any) => {
-  //               if (item.id === id) {
-  //                 item.isActive = updateItem.data.data.isActive;
-  //               }
-  //               return { ...item };
-  //             });
-  //           });
-  //         }
-  //       });
-  //   } else {
-  //     setIsNotify(true);
-  //     setNotifyMessage({
-  //       text: NOT_AUTHORIZED_MESSAGE,
-  //       type: 'warning',
-  //     });
-  //   }
-  // };
-
   useEffect(() => {
     if (
       listingRolePermission(dataRole, ALL_PERMISSIONS.storePlans.viewDocsPlans)
     ) {
       storeAttachmentService
-        .getListProjectAttachmentService('document', search, page, rowsPerPage)
+        .getListProjectAttachmentService(
+          projectId ?? '',
+          'document',
+          search,
+          page,
+          rowsPerPage
+        )
         .then((item: any) => {
           setIsLoader(false);
           setList(item.data.data.list);
@@ -133,6 +110,7 @@ function DocsPage({ projectId }: any) {
       setPage(newPage);
       storeAttachmentService
         .getListProjectAttachmentService(
+          projectId ?? '',
           'document',
           searchTxt,
           page,
@@ -151,7 +129,13 @@ function DocsPage({ projectId }: any) {
   ) => {
     setPage(newPage);
     storeAttachmentService
-      .getListProjectAttachmentService('document', search, newPage, rowsPerPage)
+      .getListProjectAttachmentService(
+        projectId ?? '',
+        'document',
+        search,
+        newPage,
+        rowsPerPage
+      )
       .then((item: any) => {
         setList(item.data.data.list);
         setTotal(item.data.data.total);
@@ -167,6 +151,7 @@ function DocsPage({ projectId }: any) {
     setPage(newPage);
     storeAttachmentService
       .getListProjectAttachmentService(
+        projectId ?? '',
         'document',
         search,
         newPage,
@@ -178,7 +163,7 @@ function DocsPage({ projectId }: any) {
       });
   };
   const createFormHandler = (data: any) => {
-    console.log('data==>', data);
+    // console.log('data==>', data);
     setIsLoader(true);
     const formData = new FormData();
     if (data.file !== null) formData.append('file', data.file);
@@ -218,7 +203,7 @@ function DocsPage({ projectId }: any) {
   };
 
   const updateFormHandler = (data: any) => {
-    console.log('🚀 ~ updateFormHandler ~ data:', data);
+    // console.log('🚀 ~ updateFormHandler ~ data:', data);
     setIsLoader(true);
     const formData = new FormData();
     if (data.file !== null) formData.append('file', data.file);

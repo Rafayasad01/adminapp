@@ -143,7 +143,7 @@ function LoginPage() {
           <div className="flex max-h-[29px] w-full max-w-[600px] items-center justify-start px-[25px] py-[40px]">
             <img
               src={systemConfig?.shopLogo ?? systemConfig?.shopName}
-              alt="urlaundry"
+              alt="login-logo"
               className="mt-10 h-auto w-[100px] object-contain"
             />
           </div>

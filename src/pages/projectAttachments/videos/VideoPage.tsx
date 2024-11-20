@@ -105,7 +105,13 @@ function VideoPage({ projectId }: any) {
       listingRolePermission(dataRole, ALL_PERMISSIONS.storePlans.viewVideoPlans)
     ) {
       storeAttachmentService
-        .getListProjectAttachmentService('video', search, page, rowsPerPage)
+        .getListProjectAttachmentService(
+          projectId ?? '',
+          'video',
+          search,
+          page,
+          rowsPerPage
+        )
         .then((item: any) => {
           setIsLoader(false);
           setList(item.data.data.list);
@@ -131,7 +137,13 @@ function VideoPage({ projectId }: any) {
       setSearch(searchTxt);
       setPage(newPage);
       storeAttachmentService
-        .getListProjectAttachmentService('video', searchTxt, page, rowsPerPage)
+        .getListProjectAttachmentService(
+          projectId ?? '',
+          'video',
+          searchTxt,
+          page,
+          rowsPerPage
+        )
         .then((item) => {
           setList(item.data.data.list);
           setTotal(item.data.data.total);
@@ -145,7 +157,13 @@ function VideoPage({ projectId }: any) {
   ) => {
     setPage(newPage);
     storeAttachmentService
-      .getListProjectAttachmentService('video', search, newPage, rowsPerPage)
+      .getListProjectAttachmentService(
+        projectId ?? '',
+        'video',
+        search,
+        newPage,
+        rowsPerPage
+      )
       .then((item: any) => {
         setList(item.data.data.list);
         setTotal(item.data.data.total);
@@ -160,14 +178,20 @@ function VideoPage({ projectId }: any) {
     setRowsPerPage(newRowperPage);
     setPage(newPage);
     storeAttachmentService
-      .getListProjectAttachmentService('video', search, newPage, newRowperPage)
+      .getListProjectAttachmentService(
+        projectId ?? '',
+        'video',
+        search,
+        newPage,
+        newRowperPage
+      )
       .then((item) => {
         setList(item.data.data.list);
         setTotal(item.data.data.total);
       });
   };
   const createFormHandler = (data: any) => {
-    console.log('data==>', data);
+    // console.log('data==>', data);
     setIsLoader(true);
     const formData = new FormData();
     if (data.file !== null) formData.append('file', data.file);

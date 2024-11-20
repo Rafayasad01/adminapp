@@ -292,7 +292,10 @@ const QuotationsPage = () => {
                               )
                             : '--'}
                         </td>
-                        <td>{item.projectCompletionDays ?? '--'} </td>
+                        <td>
+                          {Number(item.projectCompletionDays)?.toFixed(0) ??
+                            '--'}{' '}
+                        </td>
                         <td>
                           {item.discount ?? '--'}{' '}
                           {item.discountType === 'percentage' ? '%' : '/='}{' '}

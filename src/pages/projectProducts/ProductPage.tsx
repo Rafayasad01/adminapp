@@ -51,7 +51,7 @@ function ProductPage() {
   const [notifyMessage, setNotifyMessage] = React.useState({});
   const [cancelDialogOpen, setCancelDialogOpen] = useState<boolean>(false);
   const [dialogText] = useState<any>(
-    'Are you sure you want to delete this Category ?'
+    'Are you sure you want to delete this Product ?'
   );
   const [isModalImage, setIsModalImage] = useState(false);
   const [modalImage, setModalImage] = useState('');
@@ -361,7 +361,7 @@ function ProductPage() {
                 <tr>
                   <th>Prod. group</th>
                   <th className="">Prod. name</th>
-                  <th>Mob. No.</th>
+                  {/* <th>Mob. No.</th> */}
                   <th>Image</th>
                   <th className="w-[15%]">Color & prices</th>
                   <th>item code</th>
@@ -382,7 +382,7 @@ function ProductPage() {
                       <tr key={index}>
                         <td>{item.productGroup ? item.productGroup : '--'}</td>
                         <td>{item.productName ? item.productName : '--'}</td>
-                        <td>{item.mobileNumber ? item.mobileNumber : '--'}</td>
+                        {/* <td>{item.mobileNumber ? item.mobileNumber : '--'}</td> */}
                         <td>
                           {item.productImages?.length > 0 ? (
                             <img

@@ -38,10 +38,10 @@ const VendorsPage = () => {
   const dataRole = useAppSelector(
     (state) => state?.persistedReducer?.roleState?.role?.permissions
   );
-  const [vendorTypes, setVendorTypes] = useState([]);
+  const [vendorTypes, setVendorTypes] = useState<any>([]);
   const [openCreateDialog, setOpenCreateDialog] = useState(false);
   const [openEditDialog, setOpenEditDialog] = useState(false);
-  const [vendorData, setVendorData] = useState<Vendor>();
+  const [vendorData, setVendorData] = useState<Vendor | any>();
   const [list, setList] = useState<Vendor[]>([]);
   const [actionMenuAnchorEl, setActionMenuAnchorEl] =
     useState<null | HTMLElement>(null);
@@ -88,6 +88,10 @@ const VendorsPage = () => {
     handlePermissionCheck(ALL_PERMISSIONS.vendors.add, () => {
       setOpenCreateDialog(true);
     });
+  };
+
+  const handleVendorTypeName: any = (vendorId: any) => {
+    return vendorTypes?.find((x: any) => x.id === vendorId);
   };
 
   const handleClickSearch = () => {
@@ -158,7 +162,10 @@ const VendorsPage = () => {
         );
         if (editFormData) {
           setActionMenuItemid(editFormData.id);
-          setVendorData(editFormData);
+          setVendorData({
+            ...editFormData,
+            venType: handleVendorTypeName(editFormData.vendorType)?.name,
+          });
           setOpenDetailsDialog(true);
         }
       });
@@ -215,10 +222,6 @@ const VendorsPage = () => {
     });
     fetchVendorTypes();
   }, []);
-
-  const handleVendorTypeName: any = (vendorId: any) => {
-    return vendorTypes?.find((x: any) => x.id === vendorId);
-  };
 
   const createFormHandler = async (data: Vendor) => {
     setIsLoader(true);

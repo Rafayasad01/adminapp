@@ -7,7 +7,7 @@ type VendorDetailsProps = {
   open: boolean;
   onClose: () => void;
   openEdit: () => void;
-  vendor: Vendor | undefined;
+  vendor: Vendor | undefined | any;
 };
 
 const VendorDetailsPopup: React.FC<VendorDetailsProps> = ({
@@ -34,30 +34,30 @@ const VendorDetailsPopup: React.FC<VendorDetailsProps> = ({
       <div className="Content">
         <h2 className="py-5 font-bold">Vendor Information</h2>
         <div className="grid grid-cols-12">
-          <div className="xs:col-span-12 col-span-10 grid grid-cols-12">
+          <div className="xs:col-span-12 col-span-8 grid grid-cols-12">
             <div className="xs:col-span-12 col-span-3 p-3">
-              <h6 className="text-sm ">Vendor Name:</h6>
+              <h6 className="text-sm ">Name:</h6>
               <p className="font-semibold">{vendor?.name}</p>
             </div>
             <div className="xs:col-span-12 col-span-3 p-3">
-              <h6 className="text-sm ">Vendor Type:</h6>
-              <p className="font-semibold">{vendor?.vendorType}</p>
+              <h6 className="text-sm ">Type:</h6>
+              <p className="font-semibold">{vendor?.venType}</p>
             </div>
             <div className="xs:col-span-12 col-span-3 p-3">
-              <h6 className="text-sm ">Add Service Type:</h6>
+              <h6 className="text-sm ">Service Type:</h6>
               <p className="font-semibold">{vendor?.serviceType}</p>
             </div>
 
             <div className="xs:col-span-12 col-span-3 p-3">
-              <h6 className="text-sm ">Vendor Contact Email:</h6>
-              <p className="font-semibold">{vendor?.email}</p>
+              <h6 className="text-sm ">Contact Email:</h6>
+              <p className="truncate font-semibold">{vendor?.email}</p>
             </div>
             <div className="xs:col-span-12 col-span-3 p-3">
-              <h6 className="text-sm ">Vendor Contact WhatsApp:</h6>
+              <h6 className="text-sm ">Contact WhatsApp:</h6>
               <p className="font-semibold">{vendor?.contact}</p>
             </div>
             <div className="xs:col-span-12 col-span-3 p-3">
-              <h6 className="text-sm ">Vendor Bank Name:</h6>
+              <h6 className="text-sm ">Bank Name:</h6>
               <p className="font-semibold">{vendor?.bankName}</p>
             </div>
             <div className="xs:col-span-12 col-span-3 p-3">
@@ -66,21 +66,21 @@ const VendorDetailsPopup: React.FC<VendorDetailsProps> = ({
             </div>
 
             <div className="xs:col-span-12 col-span-3 p-3">
-              <h6 className="text-sm ">Vendor Delivery TAT:</h6>
+              <h6 className="text-sm ">Delivery TAT:</h6>
               <p className="font-semibold">{vendor?.deliveryTime}</p>
             </div>
             <div className="xs:col-span-12 col-span-5 p-3">
-              <h6 className="text-sm ">Vendor Location:</h6>
+              <h6 className="text-sm ">Location:</h6>
               <p className="font-semibold">{vendor?.location}</p>
             </div>
           </div>
-          <div className="xs:col-span-12 col-span-2">
+          <div className="xs:col-span-12 col-span-4">
             <MapAddressReadOnly address={vendor?.location ?? ''} zoom={10} />
           </div>
         </div>
         <div className="grid grid-cols-12">
           <div className="xs:col-span-12 col-span-6 p-3">
-            <h6 className="text-sm ">Vendor Payment Terms:</h6>
+            <h6 className="text-sm ">Payment Terms:</h6>
             <p className="font-semibold">{vendor?.paymentTerms}</p>
           </div>
 

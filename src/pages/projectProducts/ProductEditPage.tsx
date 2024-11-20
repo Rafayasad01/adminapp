@@ -6,7 +6,7 @@ import Button from '@mui/material/Button';
 import Input from '@mui/material/Input';
 import FormControl from '@mui/material/FormControl';
 import TextField from '@mui/material/TextField';
-import { useLocation, useParams } from 'react-router';
+import { useLocation, useNavigate, useParams } from 'react-router';
 import { CircularProgress } from '@mui/material';
 import productServices from '../../services/adminapp/adminProjectProducts';
 import assets from '../../assets';
@@ -29,6 +29,7 @@ import CustomDropDown from '../../components/common/CustomDropDown';
 import TopBar from '../../components/common/TopBar';
 
 function ProductEditPopup() {
+  const navigate = useNavigate();
   const { id }: any = useParams();
   const { state: editData } = useLocation();
   const { data } = editData;
@@ -187,6 +188,7 @@ function ProductEditPopup() {
             text: item.data.message,
             type: 'success',
           });
+          navigate(-1);
         } else {
           setIsLoader(false);
           setIsNotify(true);
