@@ -9,12 +9,14 @@ import { setSystemConfig, setTheme } from './redux/features/authSlice';
 import { useAppDispatch } from './redux/redux-hooks';
 import { routeObjects } from './routes/AppRoutes';
 import systemConfigService from './services/adminapp/systemConfig';
+import { getItem } from './utils/storage';
 
 function App() {
   const dispatch = useAppDispatch();
+  const systemConfig = getItem('SYSTEM_CONFIG');
   // const userData = useAppSelector((state: any) => state?.authState?.user);
   const { showBoundary } = useErrorBoundary();
-  const [isPageLoader, setIsPageLoader] = useState(true);
+  const [isPageLoader, setIsPageLoader] = useState(false);
   if (
     process.env.NODE_ENV === 'production' ||
     process.env.NODE_ENV === 'staging'
@@ -25,6 +27,7 @@ function App() {
   }
 
   useEffect(() => {
+    if (systemConfig) return;
     setIsPageLoader(true);
     systemConfigService
       .getSystemConfig(window.location.hostname)

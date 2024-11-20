@@ -68,9 +68,12 @@ const updateCategoryServiceStatus = (
   );
 };
 
-const deleteCategoryService = (categoryServiceId: string) => {
+const deleteCategoryService = (
+  categoryServiceId: string,
+  categoryId: string
+) => {
   return network.post(
-    `${CATEGORY_PREFIX}/${SERVICE_PREFIX}/delete/${categoryServiceId}`,
+    `${CATEGORY_PREFIX}/${SERVICE_PREFIX}/delete/${categoryId}/${categoryServiceId}`,
     {}
   );
 };

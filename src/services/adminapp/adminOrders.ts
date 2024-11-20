@@ -10,8 +10,15 @@ const CATEGORY_PREFIX = 'category';
 const getListService = (page: number, size: number) => {
   return network.get(`${ORDER_PREFIX}/list/${page}/${size}`);
 };
-const searchService = (search: string, page: number, size: number) => {
-  return network.get(`${ORDER_PREFIX}/list/${search}/${page}/${size}`);
+const searchService = (
+  filter: string,
+  search: string,
+  page: number,
+  size: number
+) => {
+  return network.get(
+    `${ORDER_PREFIX}/list/${search}/${filter}/${page}/${size}`
+  );
 };
 
 const viewService = (id: string) => {

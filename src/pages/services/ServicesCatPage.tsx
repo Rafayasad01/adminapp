@@ -26,11 +26,13 @@ import { CheckRolePermission, listingRolePermission } from '../../utils/helper';
 import ServiceCatCreatePopup from './ServiceCatCreatePopup';
 import ServiceCatEditPopup from './ServiceCatEditPopup';
 import PermissionPopup from '../../utils/PermissionPopup';
+import { getItem } from '../../utils/storage';
 // import CategoriesCreatePopup from './CategoriesCreatePopup';
 // import CategoriesEditPopup from './CategoriesEditPopup';
 
 function ServicesPage() {
-  // const authState: any = useAppSelector((state) => state?.authState);
+  // const authState: any = useAppSelector((state) => state?.authState);\
+  const isShop: any = getItem('USER');
   const dataRole = useAppSelector(
     (state) => state?.persistedReducer?.roleState?.role?.permissions
   );
@@ -411,13 +413,15 @@ function ServicesPage() {
                     disableUnderline
                   />
                 </FormControl>
-                <Button
-                  variant="contained"
-                  className="btn-black-fill btn-icon"
-                  onClick={handleFormClickOpen}
-                >
-                  <AddOutlinedIcon /> Add New
-                </Button>
+                {isShop.userType === 'ShopUser' && (
+                  <Button
+                    variant="contained"
+                    className="btn-black-fill btn-icon"
+                    onClick={handleFormClickOpen}
+                  >
+                    <AddOutlinedIcon /> Add New
+                  </Button>
+                )}
               </div>
             </div>
           </div>

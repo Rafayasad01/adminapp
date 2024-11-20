@@ -28,6 +28,7 @@ import { getItem } from '../../utils/storage';
 
 function CategoriesServicesFaqPage() {
   const params = useParams();
+  const isShop: any = getItem('USER');
   const TITLE_TEXT: any = getItem('TITLE_TEXT');
   // const authState: any = useAppSelector((state) => state?.authState);
   const dataRole = useAppSelector(
@@ -136,11 +137,6 @@ function CategoriesServicesFaqPage() {
 
   const deleteHandler = (id: string) => {
     setIsLoader(true);
-    // const data = {
-    //   is_active: false,
-    //   is_deleted: true,
-    //   updated_by: authState.user.id,
-    // };
     categoryService
       .deleteCategoryServiceFaq(id)
       .then((updateItem) => {
@@ -255,6 +251,13 @@ function CategoriesServicesFaqPage() {
               list[i].answer = updateItem.data.data.answer;
             }
           }
+        } else {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: updateItem.data.message,
+            type: 'error',
+          });
         }
       })
       .catch((err) => {
@@ -358,13 +361,15 @@ function CategoriesServicesFaqPage() {
                     disableUnderline
                   />
                 </FormControl>
-                <Button
-                  variant="contained"
-                  className="btn-black-fill btn-icon"
-                  onClick={handleAddNew}
-                >
-                  <AddOutlinedIcon /> Add New
-                </Button>
+                {isShop.userType === 'ShopUser' && (
+                  <Button
+                    variant="contained"
+                    className="btn-black-fill btn-icon"
+                    onClick={handleAddNew}
+                  >
+                    <AddOutlinedIcon /> Add New
+                  </Button>
+                )}
               </div>
             </div>
           </div>

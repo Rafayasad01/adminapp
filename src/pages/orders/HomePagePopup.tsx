@@ -106,7 +106,11 @@ function HomePagePopup({
   }, [data]);
 
   return (
-    <Dialog open={open} onClose={onCloseHandler} className="modal-add-to-cart">
+    <Dialog
+      open={open}
+      onClose={onCloseHandler}
+      className="modal-add-to-cart order-model"
+    >
       <IconButton onClick={() => setOpen(false)} className="btn-close">
         <ClearIcon />
       </IconButton>

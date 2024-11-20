@@ -10,8 +10,9 @@ import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
 import TablePagination from '@mui/material/TablePagination';
 import dayjs from 'dayjs';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
 import ActionMenu from '../../components/common/ActionMenu';
 import Loader from '../../components/common/Loader';
 import Notify from '../../components/common/Notify';
@@ -28,11 +29,15 @@ import promiseHandler, {
   listingRolePermission,
 } from '../../utils/helper';
 import CustomText from '../../components/common/CustomText';
+import CustomDropDown from '../../components/common/CustomDropDown';
+import { getItem } from '../../utils/storage';
 // import Pagination from '@mui/material/Pagination';
 // import Stack from '@mui/material/Stack';
 
 function OrdersPage() {
-  // const authState: any = useAppSelector((state) => state?.authState);
+  const userData: any = getItem('USER');
+  const mailName = userData?.username?.split('@')[0];
+
   const dataRole = useAppSelector(
     (state: any) => state?.persistedReducer?.roleState?.role?.permissions
   );
@@ -50,6 +55,14 @@ function OrdersPage() {
     useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
   const actionMenuOptions = ['Detail'];
+  const {
+    register,
+    watch,
+    setValue,
+    formState: { errors },
+    control,
+  } = useForm<any>();
+
   const handleChangePage = async (
     event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number
@@ -84,6 +97,7 @@ function OrdersPage() {
       setTotal(getOrderListResult.data.data.total);
     } else {
       const orderSearchPromise = orderService.searchService(
+        watch('orderType'),
         search,
         newPage,
         rowsPerPage
@@ -145,16 +159,18 @@ function OrdersPage() {
       );
       setTotal(getOrderListResult.data.data.total);
     } else {
-      orderService.searchService(search, newPage, rowsPerPage).then((item) => {
-        setList(
-          item.data.data.list.map((newItem: any) => ({
-            ...newItem,
-            isSelected: false,
-            orderStatus: newItem.status,
-          }))
-        );
-        setTotal(item.data.data.total);
-      });
+      orderService
+        .searchService(watch('orderType'), search, newPage, rowsPerPage)
+        .then((item) => {
+          setList(
+            item.data.data.list.map((newItem: any) => ({
+              ...newItem,
+              isSelected: false,
+              orderStatus: newItem.status,
+            }))
+          );
+          setTotal(item.data.data.total);
+        });
     }
     // order.searchService(search, page, rowsPerPage).then(item => {
     //   setList(item.data.data.list.map((item: any) => ({ ...item, isSelected: false, orderStatus: item.status })));
@@ -162,16 +178,10 @@ function OrdersPage() {
     // });
   };
 
-  // const addRouteHandler = () => {
-  //   navigate('create');
-  // };
-
-  const handleClickSearch = (event: any) => {
-    if (event.key === 'Enter') {
-      const searchTxt = event.target.value as string;
-      setSearch(searchTxt);
-      setPage(0);
-      orderService.searchService(searchTxt, page, rowsPerPage).then((item) => {
+  const onClickSearch = useCallback(() => {
+    orderService
+      .searchService(watch('orderType'), search, page, rowsPerPage)
+      .then((item) => {
         setList(
           item.data.data.list.map((newItem: any) => ({
             ...newItem,
@@ -180,20 +190,9 @@ function OrdersPage() {
           }))
         );
         setTotal(item.data.data.total);
-      });
-    }
-  };
-
-  // const handleStatusChange = (event: SelectChangeEvent) => {
-  //   setStatus(event.target.value as string);
-  // };
-
-  // const handleTimeChange = (event: SelectChangeEvent) => {
-  //   setTime(event.target.value as string);
-  // };
-  // const changeStatusHandler = (event: any) => {
-  //   setStatus(event.target.value as string);
-  // };
+      })
+      .catch((error) => console.log('Search service error:>> ', error));
+  }, [watch('orderType'), search]);
 
   useEffect(() => {
     async function getOrderList() {
@@ -222,8 +221,15 @@ function OrdersPage() {
         return;
       }
       setIsLoader(false);
+      const orderList = getOrderListResult.data.data.list;
+      // if (watch('orderType') === `${mailName}@shop.com`) {
+      //   const filterdList = orderList.filter(
+      //     (x: any) => x.user.email.split('@')[1] === `shop.com`
+      //   );
+      //   orderList = filterdList;
+      // }
       setList(
-        getOrderListResult.data.data.list.map((newItem: any) => ({
+        orderList.map((newItem: any) => ({
           ...newItem,
           isSelected: false,
           orderStatus: newItem.status,
@@ -242,7 +248,7 @@ function OrdersPage() {
         type: 'warning',
       });
     }
-  }, [null]);
+  }, []);
 
   const menuHandler = (option: string) => {
     let doOption = '';
@@ -312,15 +318,42 @@ function OrdersPage() {
       <div className="container m-auto mt-5">
         <div className="w-full rounded-lg bg-white shadow-lg">
           <div className="grid grid-cols-12 px-4 py-5">
-            <div className="col-span-7">
+            <div className="col-span-5">
               <span className="font-open-sans text-xl font-semibold text-[#252733]">
                 All Orders
               </span>
             </div>
-            <div className="col-span-5">
-              <div className="flex flex-row justify-end gap-3">
+            <div className="col-span-7">
+              <div className="flex flex-row justify-end gap-4">
+                <FormControl className="FormControl" variant="standard">
+                  <CustomDropDown
+                    validateRequired
+                    id="orderType"
+                    control={control}
+                    error={errors}
+                    setValue={setValue}
+                    register={register}
+                    options={{
+                      role: 'All',
+                      roles: [
+                        {
+                          id: 'All',
+                          name: 'All',
+                        },
+                        {
+                          id: `${mailName}@shop.com`,
+                          name: 'Shop',
+                        },
+                      ],
+                    }}
+                    customHeight="h-[40px]"
+                    customClassInputTitle="font-semibold"
+                    defaultValue="Select Order Type"
+                    // inputTitle="Gender"
+                  />
+                </FormControl>
                 <FormControl
-                  className="search-grey-outline placeholder-grey w-60"
+                  className="search-grey-outline placeholder-grey w-50 "
                   variant="filled"
                 >
                   <Input
@@ -328,20 +361,24 @@ function OrdersPage() {
                     id="search"
                     type="text"
                     placeholder="Search"
-                    onKeyDown={(
-                      event: React.KeyboardEvent<
-                        HTMLInputElement | HTMLTextAreaElement
-                      >
-                    ) => {
-                      handleClickSearch(event);
-                    }}
+                    // onKeyDown={(
+                    //   event: React.KeyboardEvent<
+                    //     HTMLInputElement | HTMLTextAreaElement
+                    //   >
+                    // ) => {
+                    //   handleClickSearch(event);
+                    // }}
+                    onChange={(event) => setSearch(event.target.value)}
                     endAdornment={
                       <InputAdornment position="end">
                         <Divider
                           sx={{ height: 28, m: 0.5 }}
                           orientation="vertical"
                         />
-                        <IconButton aria-label="toggle password visibility">
+                        <IconButton
+                          onClick={() => onClickSearch()}
+                          aria-label="toggle password visibility"
+                        >
                           <SearchIcon className="text-[#6A6A6A]" />
                         </IconButton>
                       </InputAdornment>

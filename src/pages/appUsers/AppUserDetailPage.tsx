@@ -176,7 +176,8 @@ function AppUserDetailPage() {
                     Availibility
                   </span>
                   <span className="font-open-sans text-sm font-normal text-[#6A6A6A]">
-                    {detail.status}
+                    {/* {detail.status} */}
+                    {detail.isActive ? 'online' : 'Offline'}
                   </span>
                 </div>
                 {detail?.userType === 'Driver' && (
@@ -185,7 +186,7 @@ function AppUserDetailPage() {
                       License Number
                     </span>
                     <span className="font-open-sans text-sm font-normal text-[#6A6A6A]">
-                      {detail.appUserDriverExt.licenseNumber}
+                      {detail?.appUserDriverExt?.licenseNumber ?? '--'}
                     </span>
                   </div>
                 )}

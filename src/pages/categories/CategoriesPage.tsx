@@ -30,6 +30,7 @@ import { getItem } from '../../utils/storage';
 
 function CategoriesPage() {
   // const authState: any = useAppSelector((state) => state?.authState);
+  const isShop: any = getItem('USER');
   const TITLE_TEXT: any = getItem('TITLE_TEXT');
   const dataRole = useAppSelector(
     (state) => state?.persistedReducer?.roleState?.role?.permissions
@@ -393,13 +394,15 @@ function CategoriesPage() {
                     disableUnderline
                   />
                 </FormControl>
-                <Button
-                  variant="contained"
-                  className="btn-black-fill btn-icon"
-                  onClick={handleFormClickOpen}
-                >
-                  <AddOutlinedIcon /> Add New
-                </Button>
+                {isShop.userType === 'ShopUser' && (
+                  <Button
+                    variant="contained"
+                    className="btn-black-fill btn-icon"
+                    onClick={handleFormClickOpen}
+                  >
+                    <AddOutlinedIcon /> Add New
+                  </Button>
+                )}
               </div>
             </div>
           </div>

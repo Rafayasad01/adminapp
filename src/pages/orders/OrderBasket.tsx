@@ -74,7 +74,7 @@ const OrderBasket = () => {
   const authState = useAppSelector((state) => state?.authState);
   const tenantConfig: any = getItem('TENANT_CONFIG');
 
-  // console.log('authState', authState);
+  // console.log('authState', tenantConfig);
 
   const {
     /*  register, */
@@ -122,6 +122,14 @@ const OrderBasket = () => {
   const grandTotal = discountedTotalAmount
     ? discountedTotalAmount + gstAmount
     : totalAmount + gstAmount;
+
+  const grandTotalWithLoyaltyCoinsRate = discountedTotalAmount
+    ? discountedTotalAmount +
+      gstAmount -
+      tenantConfig?.tenantConfig?.loyaltyCoinConversionRate
+    : totalAmount +
+      gstAmount -
+      tenantConfig?.tenantConfig?.loyaltyCoinConversionRate;
 
   const specificVoucher = promoList?.find(
     (el: any) => el.voucherCode === promoCode
@@ -405,7 +413,7 @@ const OrderBasket = () => {
     }
   }, []);
 
-  console.log('isExx', isExistingUser);
+  // console.log('isExx', isExistingUser);
 
   const handlePaymentChange = () => {};
 
@@ -969,9 +977,47 @@ const OrderBasket = () => {
                     {CURRENCY_PREFIX} {totalAmount.toFixed(2)}
                   </div>
                 </div>
-                <div className="flex items-center justify-between py-2">
+                {tenantConfig.tenantConfig?.enableLoyaltyProgram &&
+                  Number(loginDetails?.loyaltyCoins) >=
+                    tenantConfig.tenantConfig?.requiredCoinsToRedeem && (
+                    <>
+                      <div className="flex items-center justify-between py-1">
+                        <div className="font-open-sans text-xs font-semibold text-neutral-900">
+                          This User Earns Loyalty Coins Discount
+                        </div>
+                      </div>
+                      <div className="flex items-center justify-between py-1">
+                        <div className="font-open-sans text-xs font-normal text-neutral-900">
+                          Users Loyalty Coins
+                        </div>
+                        <div className="font-open-sans text-sm font-bold text-neutral-900">
+                          {loginDetails?.loyaltyCoins}
+                        </div>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <div className="font-open-sans text-xs font-normal text-neutral-900">
+                          Max Required Coins to Redeem By Vendor
+                        </div>
+                        <div className="font-open-sans text-sm font-bold text-neutral-900">
+                          {tenantConfig.tenantConfig?.requiredCoinsToRedeem}
+                        </div>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <div className="font-open-sans text-xs font-normal text-neutral-900">
+                          Loyalty Coins Conversion Rate By Vendor
+                        </div>
+                        <div className="font-open-sans text-sm font-bold text-neutral-900">
+                          {CURRENCY_PREFIX}{' '}
+                          {tenantConfig.tenantConfig?.loyaltyCoinConversionRate.toFixed(
+                            2
+                          )}
+                        </div>
+                      </div>
+                    </>
+                  )}
+                <div className="flex items-center justify-between pb-2 pt-4">
                   <div className="font-open-sans text-xs font-normal text-neutral-900">
-                    Discount
+                    Voucher Discount
                   </div>
                   <div className="font-open-sans text-sm font-bold text-neutral-900">
                     {promoCode ? (
@@ -995,15 +1041,7 @@ const OrderBasket = () => {
                     )}
                   </div>
                 </div>
-                {/* <div className="flex items-center justify-between py-2">
-                  <div className="font-open-sans text-xs font-normal text-neutral-900">
-                    Total Discounted Amount
-                  </div>
-                  <div className="font-open-sans text-sm font-bold text-neutral-900">
-                    ${discountedTotalAmount ? discountedTotalAmount.toFixed(2) : "0.00"}
-                  </div>
-                </div> */}
-                <div className="flex items-center justify-between py-2">
+                <div className="flex items-center justify-between">
                   <div className="font-open-sans text-xs font-normal text-neutral-900">
                     GST ({tenantConfig.tenantConfig?.gstPercentage}%)
                   </div>
@@ -1019,7 +1057,13 @@ const OrderBasket = () => {
                 </div>
                 <div className="font-open-sans text-sm font-bold text-neutral-900">
                   {CURRENCY_PREFIX}{' '}
-                  {grandTotal ? grandTotal.toFixed(2) : '0.00'}
+                  {tenantConfig.tenantConfig?.enableLoyaltyProgram &&
+                  Number(loginDetails?.loyaltyCoins) >=
+                    tenantConfig.tenantConfig?.requiredCoinsToRedeem
+                    ? grandTotalWithLoyaltyCoinsRate
+                    : grandTotal
+                    ? grandTotal.toFixed(2)
+                    : '0.00'}
                 </div>
               </div>
               <Button

@@ -161,7 +161,7 @@ function BranchCreatePopup({
                 <Input
                   className="FormInput"
                   {...register('address', {
-                    // required: true,
+                    required: true,
                     pattern: PATTERN.CHAR_NUM_SPACE_DASH,
                     validate: (value) => value.length <= 150,
                   })}
@@ -170,9 +170,9 @@ function BranchCreatePopup({
                   placeholder="Enter Address"
                   disableUnderline
                 />
-                {/* {errors.address?.type === 'required' && (
+                {errors.address?.type === 'required' && (
                   <ErrorSpanBox error="Address is required" />
-                )} */}
+                )}
                 {errors.address?.type === 'pattern' && (
                   <ErrorSpanBox error={INVALID_CHAR} />
                 )}

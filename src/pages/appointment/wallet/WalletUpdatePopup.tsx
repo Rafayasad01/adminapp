@@ -37,8 +37,7 @@ WalletUpdatePopupProps) {
     if (Number(data.balance) > Number(Math.floor(formData?.balance))) {
       setError('balance', {
         type: 'manual',
-        message:
-          'Balance must be less than or greater than and equal to acutal amount',
+        message: 'Balance must be less than or equal to acutal amount',
       });
       return;
     }

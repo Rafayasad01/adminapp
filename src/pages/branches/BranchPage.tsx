@@ -262,10 +262,10 @@ function BranchPage() {
             setIsLoader(false);
             setList((newArr: any) => {
               return newArr.map((item: any) => {
-                if (item.id === id) {
-                  item.isActive = updateItem.data.data.isActive;
+                if (item.id === updateItem.data.data.id) {
+                  return { ...item, isActive: updateItem.data.data.isActive };
                 }
-                return { ...item };
+                return item;
               });
             });
           } else {
@@ -349,7 +349,6 @@ function BranchPage() {
     handleVendor(branchid);
   };
 
-  // console.log('authState', authState);
   return isLoader ? (
     <Loader />
   ) : (
@@ -599,7 +598,17 @@ function BranchPage() {
                               checked={item.isActive}
                               onChange={(
                                 event: React.ChangeEvent<HTMLInputElement>
-                              ) => handleSwitchChange(event, item.id)}
+                              ) => {
+                                if (item.id === authState?.user?.branch) {
+                                  setIsNotify(true);
+                                  setNotifyMessage({
+                                    text: 'This Branch is Controlled Now, it will not change their status',
+                                    type: 'error',
+                                  });
+                                } else {
+                                  handleSwitchChange(event, item.id);
+                                }
+                              }}
                               inputProps={{ 'aria-label': 'controlled' }}
                             />
                           </div>

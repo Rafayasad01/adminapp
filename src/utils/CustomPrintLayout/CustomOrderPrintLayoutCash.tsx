@@ -83,13 +83,28 @@ const CustomPrintLayouts = forwardRef<any, any>(
             </div>
             <div className="print-row">
               <div className="col-1">
+                <span>Voucher Discount</span>
+              </div>
+              <div className="col-2">
+                <span>PKR {props?.data?.discount}</span>
+              </div>
+            </div>
+            <div className="print-row">
+              <div className="col-1">
+                <span>loyalty Coins Discount</span>
+              </div>
+              <div className="col-2">
+                <span>PKR {props?.data?.discountLoyaltyCoins}</span>
+              </div>
+            </div>
+            <div className="print-row">
+              <div className="col-1">
                 <span>HST {props?.data?.gstPercentage}%</span>
               </div>
               <div className="col-2">
                 <span>PKR {props?.data?.gstAmount}</span>
               </div>
             </div>
-
             <div className="print-line straight" />
             <div className="print-row">
               <div className="col-1">

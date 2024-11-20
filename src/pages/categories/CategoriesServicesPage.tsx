@@ -29,6 +29,7 @@ import assets from '../../assets';
 
 function CategoriesServicesPage() {
   const params = useParams();
+  const isShop: any = getItem('USER');
   const TITLE_TEXT: any = getItem('TITLE_TEXT');
   // const authState: any = useAppSelector((state) => state?.authState);
   const dataRole = useAppSelector(
@@ -161,7 +162,7 @@ function CategoriesServicesPage() {
     //   updatedBy: authState.user.id,
     // };
     categoryService
-      .deleteCategoryService(id)
+      .deleteCategoryService(id, productId)
       .then((updateItem) => {
         if (updateItem.data.success) {
           setIsLoader(false);
@@ -370,7 +371,7 @@ function CategoriesServicesPage() {
           <div className="grid grid-cols-12 px-4 py-5">
             <div className="col-span-7">
               <span className="font-open-sans text-xl font-semibold text-[#252733]">
-                All {TITLE_TEXT}s
+                All {TITLE_TEXT} Items
               </span>
             </div>
             <div className="col-span-5">
@@ -405,13 +406,15 @@ function CategoriesServicesPage() {
                     disableUnderline
                   />
                 </FormControl>
-                <Button
-                  variant="contained"
-                  className="btn-black-fill btn-icon"
-                  onClick={handleAddNew}
-                >
-                  <AddOutlinedIcon /> Add New
-                </Button>
+                {isShop.userType === 'ShopUser' && (
+                  <Button
+                    variant="contained"
+                    className="btn-black-fill btn-icon"
+                    onClick={handleAddNew}
+                  >
+                    <AddOutlinedIcon /> Add New
+                  </Button>
+                )}
               </div>
             </div>
           </div>
