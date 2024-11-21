@@ -108,6 +108,16 @@ function EmployeePage() {
       maxLetterLimit: 100,
     },
     {
+      fieldName: 'Phone Number',
+      id: 'phone',
+      placeholder: 'Enter Phone Number',
+      register,
+      error: errors.phone,
+      type: 'text',
+      pattern: PATTERN.PHONE,
+      maxLetterLimit: 15,
+    },
+    {
       fieldName: 'Email Address',
       id: 'email',
       placeholder: 'Enter email address',
@@ -388,6 +398,7 @@ function EmployeePage() {
         setValue('first_name', editData.firstName);
         setValue('last_name', editData.lastName);
         setValue('email', editData.email);
+        setValue('phone', editData.phone);
         setValue('branches', editData.branches);
         setValue(
           'employeeType',
@@ -477,13 +488,12 @@ function EmployeePage() {
     }
   }, []);
 
-  // console.log('LIST', list);
-
   const createFormHandler = (data: any) => {
     setIsLoader(true);
     const userData = {
       firstName: data.first_name,
       lastName: data.last_name,
+      phone: data.phone,
       password: data.password,
       email: data.email,
       branch:
@@ -548,6 +558,7 @@ function EmployeePage() {
     const userData = {
       firstName: data.first_name,
       lastName: data.last_name,
+      phone: data.phone,
       email: data.email,
       branch:
         data.employeeType === 'none'
@@ -579,6 +590,7 @@ function EmployeePage() {
             if (list[i].id === item.data.data.id) {
               list[i].firstName = item.data.data.firstName;
               list[i].lastName = item.data.data.lastName;
+              list[i].phone = item.data.data.phone;
               list[i].email = item.data.data.email;
               list[i].branches = item.data.data.branch;
             }
@@ -750,7 +762,7 @@ function EmployeePage() {
         };
       }
       if (authState.user.userType !== 'ShopUser') {
-        const finalFields = updatedFields.filter(
+        const finalFields = updatedFields?.filter(
           (item: any) => item.id !== 'employeeType'
         );
         setInputFieldsData(finalFields);
@@ -762,7 +774,7 @@ function EmployeePage() {
 
   useEffect(() => {
     const branches = watch('branches') || [];
-    const filteredDelIds = storeDelIds.filter(
+    const filteredDelIds = storeDelIds?.filter(
       (storeId: any) => !branches.includes(storeId)
     );
     setDelBranchesId(filteredDelIds);

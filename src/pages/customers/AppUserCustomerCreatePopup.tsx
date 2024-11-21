@@ -128,6 +128,7 @@ AppUserCreatePopupProps) {
                   placeholder="Enter your phone number"
                   disableUnderline
                   {...register('phone', {
+                    required: 'Phone number is required',
                     pattern: PATTERN.PHONE,
                     maxLength: {
                       value: 15,
@@ -136,6 +137,9 @@ AppUserCreatePopupProps) {
                   })}
                   type="text"
                 />
+                {errors.phone?.type === 'required' && (
+                  <ErrorSpanBox error="Phone number is required" />
+                )}
                 {errors.phone?.type === 'pattern' && (
                   <ErrorSpanBox error={INVALID_CHAR} />
                 )}

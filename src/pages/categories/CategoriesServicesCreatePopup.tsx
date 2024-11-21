@@ -165,16 +165,16 @@ function CategoriesServicesCreatePopup({
                 ALL_PERMISSIONS.storeSetting.viewLoyaltyProgram
               ) && (
                 <FormControl className="FormControl" variant="standard">
-                  <label className="FormLabel">Loyality Coins</label>
+                  <label className="FormLabel">Loyalty Coins</label>
                   <Input
                     className="FormInput"
                     id="loyaltyCoins"
-                    placeholder="Enter loyality Coins"
+                    placeholder="Enter loyalty Coins"
                     {...register('loyaltyCoins', {
                       required: false,
                       pattern: {
                         value: PATTERN.POINT_NUM,
-                        message: 'Enter a valid loyality coins in numbers',
+                        message: 'Enter a valid loyalty coins in numbers',
                       },
                       maxLength: {
                         value: 10,

@@ -242,16 +242,16 @@ function LoginPage() {
               <div className="">
                 <div className="form-group w-full">
                   <p className="mb-1 font-sans text-[12px] font-normal leading-[normal] text-[#06152B]">
-                    Email
+                    Email / Phone
                   </p>
                   <FormControl className="m-1 w-full" variant="standard">
                     <Input
                       className="border-1 border-solid border-secondary text-[11px]"
                       id="email"
-                      placeholder="user@example.com"
-                      type="email"
+                      placeholder="Enter email or phone"
+                      type="text"
                       {...register('email', {
-                        required: 'Please enter your email.',
+                        required: 'Please enter your email or phone.',
                       })}
                       disableUnderline
                     />

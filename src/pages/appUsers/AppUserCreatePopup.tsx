@@ -141,9 +141,10 @@ function AppUserCreatePopup({
                 <Input
                   className="FormInput"
                   id="phone"
-                  placeholder="Enter your phone number"
+                  placeholder="923123345345"
                   disableUnderline
                   {...register('phone', {
+                    required: 'Phone number is required',
                     pattern: PATTERN.PHONE,
                     maxLength: {
                       value: 15,
@@ -152,6 +153,9 @@ function AppUserCreatePopup({
                   })}
                   type="text"
                 />
+                {errors.phone?.type === 'required' && (
+                  <ErrorSpanBox error="Phone number is required" />
+                )}
                 {errors.phone?.type === 'pattern' && (
                   <ErrorSpanBox error={INVALID_CHAR} />
                 )}
@@ -271,7 +275,7 @@ function AppUserCreatePopup({
                 </FormControl>
               )}
               <FormControl className="FormControl" variant="standard">
-                <label className="FormLabel">Address</label>
+                <label className="FormLabel mt-2">Address</label>
                 <Input
                   className="FormInput"
                   id="address"

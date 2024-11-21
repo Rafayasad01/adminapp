@@ -148,9 +148,10 @@ function AppUserUpdatePopup({
                       className="FormInput"
                       type="number"
                       id="phone"
-                      placeholder="+1 536 569"
+                      placeholder="9231324324"
                       disableUnderline
                       {...register('phone', {
+                        required: 'Phone number is required',
                         value: formData?.phone,
                         pattern: PATTERN.PHONE,
                         maxLength: {
@@ -159,6 +160,9 @@ function AppUserUpdatePopup({
                         },
                       })}
                     />
+                    {errors.phone?.type === 'required' && (
+                      <ErrorSpanBox error="Phone number is required" />
+                    )}
                     {errors.phone?.type === 'pattern' && (
                       <ErrorSpanBox error={INVALID_CHAR} />
                     )}
