@@ -255,6 +255,9 @@ function Sidebar() {
   const logo = useAppSelector(
     (state: any) => state?.persistedReducer?.appState?.logo
   );
+  const systemConfig = useAppSelector(
+    (state: any) => state.authState.systemConfig
+  );
 
   const [list, setList] = useState<any>(null);
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
@@ -536,13 +539,14 @@ function Sidebar() {
                 alt=""
               />
             ) : (
-              logo && (
+              logo ||
+              (systemConfig?.shopLogo && (
                 <img
                   className="mt-9 h-[29px] max-w-[150px]"
-                  src={logo}
+                  src={logo || systemConfig?.shopLogo}
                   alt={`${branch.name}`}
                 />
-              )
+              ))
             )}
           </Stack>
         </Toolbar>

@@ -45,6 +45,7 @@ function LoginPage() {
   const logo = useAppSelector(
     (state: any) => state?.persistedReducer?.appState?.logo
   );
+
   const { notification, hideNotification, showNotification } =
     useNotification();
   // const navigate = useNavigate();
