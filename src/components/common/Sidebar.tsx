@@ -178,6 +178,12 @@ const links = [
         permission: ALL_PERMISSIONS.storeUser.viewUserApp,
         icon: <PersonOutlineOutlinedIcon fontSize="inherit" />,
       },
+      {
+        name: 'Drivers',
+        path: 'user/drivers',
+        permission: ALL_PERMISSIONS.storeUser.viewDriverUserApp,
+        icon: <PersonOutlineOutlinedIcon fontSize="inherit" />,
+      },
     ],
   },
   {
@@ -544,15 +550,14 @@ function Sidebar() {
                 <img
                   className="mt-9 h-[29px] max-w-[150px]"
                   src={logo || systemConfig?.shopLogo}
-                  alt={`${branch.name}`}
+                  alt={`${branch?.name}`}
                 />
               ))
             )}
           </Stack>
         </Toolbar>
 
-        <div className="flex w-full flex-col text-base ">
-          {/* {SideBarMenu("", "Dashboard", <GridViewOutlinedIcon fontSize="inherit" />)} */}
+        <div className="flex w-full flex-col text-base">
           {list &&
             list?.map((link: any, index: number) => {
               return (

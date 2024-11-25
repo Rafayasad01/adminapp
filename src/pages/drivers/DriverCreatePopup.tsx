@@ -7,22 +7,17 @@ import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
 import React, { useState } from 'react';
-
 import { useForm } from 'react-hook-form';
 import '../../assets/css/PopupStyle.css';
-// import CustomDropDown from '../../components/common/CustomDropDown';
 import ErrorSpanBox from '../../components/common/ErrorSpanBox';
 import { AppUser } from '../../interfaces/app-user.interface';
 import {
-  ALL_PERMISSIONS,
   INVALID_CHAR,
   MAX_LENGTH_EXCEEDED,
   PATTERN,
   PH_MINI_LENGTH,
 } from '../../utils/constants';
-import { listingRolePermission } from '../../utils/helper';
-import { useAppSelector } from '../../redux/redux-hooks';
-import { getItem } from '../../utils/storage';
+// import { getItem } from '../../utils/storage';
 
 type AppUserCreatePopupProps = {
   openFormDialog: boolean;
@@ -30,46 +25,31 @@ type AppUserCreatePopupProps = {
   callback: (...args: any[]) => any;
   setIsNotify: any;
   setNotifyMessage: any;
-  // appUserRoleLov?: any;
+  appUserRoleLov?: any;
   selectedTab?: string;
 };
 
-function AppUserCreatePopup({
+function DriverCreatePopup({
   openFormDialog,
   setOpenFormDialog,
   callback,
 }: AppUserCreatePopupProps) {
-  const dataRole = useAppSelector(
-    (state: any) => state?.persistedReducer?.roleState?.role?.permissions
-  );
-  const title: any = getItem('TITLE_TEXT_USER');
+  // const title: any = getItem('TITLE_TEXT_USER');
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const {
     register,
     handleSubmit,
-    // watch,
     reset,
     formState: { errors },
-    // control,
   } = useForm<AppUser>();
 
   const handleFormClose = () => setOpenFormDialog(false);
 
   const onSubmit = (data: AppUser) => {
-    // console.log('SUB DATA', data);
-    if (
-      !listingRolePermission(
-        dataRole,
-        ALL_PERMISSIONS.storeUser.viewDriverUserApp
-      )
-    ) {
-      data.appuserRole = 'App';
-    }
     setOpenFormDialog(false);
     callback(data, reset);
   };
-  // console.log('errrr', errors);
 
   return (
     <Dialog
@@ -83,7 +63,7 @@ function AppUserCreatePopup({
       <div className="Content">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="FormHeader">
-            <span className="Title">Add {title}</span>
+            <span className="Title">Add Driver</span>
           </div>
           <div className="FormBody">
             <div className="FormFields">
@@ -245,9 +225,9 @@ function AppUserCreatePopup({
                 )}
               </FormControl>
             </div>
-            <div className="FormField">
+            <div className="FormFields">
               <FormControl className="FormControl" variant="standard">
-                <label className="FormLabel mt-2">Address</label>
+                <label className="FormLabel">Address</label>
                 <Input
                   className="FormInput"
                   id="address"
@@ -266,6 +246,29 @@ function AppUserCreatePopup({
                   <ErrorSpanBox error={INVALID_CHAR} />
                 )}
                 {errors.address?.type === 'validate' && (
+                  <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
+                )}
+              </FormControl>
+              <FormControl className="FormControl" variant="standard">
+                <label className="FormLabel">License Number</label>
+                <Input
+                  className="FormInput"
+                  id="licenseNumber"
+                  disableUnderline
+                  placeholder="Enter license number"
+                  {...register('licenseNumber', {
+                    required: 'licenseNumber is required',
+                    pattern: PATTERN.NUM_DASH,
+                    validate: (value) => value.length <= 50,
+                  })}
+                />
+                {errors.licenseNumber?.type === 'required' && (
+                  <ErrorSpanBox error={errors.licenseNumber?.message} />
+                )}
+                {errors.licenseNumber?.type === 'pattern' && (
+                  <ErrorSpanBox error={INVALID_CHAR} />
+                )}
+                {errors.licenseNumber?.type === 'validate' && (
                   <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
                 )}
               </FormControl>
@@ -297,4 +300,4 @@ function AppUserCreatePopup({
   );
 }
 
-export default AppUserCreatePopup;
+export default DriverCreatePopup;

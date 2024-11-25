@@ -47,8 +47,8 @@ import AddNewOrder from '../pages/orders/AddNewOrder';
 import AddNewOrderService from '../pages/ordersService/AddNewOrder';
 import DriverHistory from '../pages/orders/DriverHistory';
 // import DriverHistory from '../pages/ordersService/DriverHistory';
-import DriverHistoryService from '../pages/drivers/DriverPage';
-import DriverHistoryDetailService from '../pages/drivers/DriverDetailPage';
+import DriverHistoryService from '../pages/drivers/DriverHistoryPage';
+import DriverHistoryDetailService from '../pages/drivers/DriverHistoryDetailPage';
 import OrderBasket from '../pages/orders/OrderBasket';
 import OrderBasketService from '../pages/ordersService/OrderBasket';
 import OrderDetailsServicePage from '../pages/ordersService/OrderDetailsPage';
@@ -91,6 +91,9 @@ import CommissionPage from '../pages/appointment/provider/commission/CommissionP
 import BonusPage from '../pages/appointment/provider/bonus/BonusPage';
 import OvertimePage from '../pages/appointment/provider/overtime/OvertimePage';
 import { getItem } from '../utils/storage';
+import DriverPage from '../pages/drivers/DriverPage';
+import DriverHistoryDetailPage from '../pages/drivers/DriverHistoryDetailPage';
+import DriverDetailPage from '../pages/drivers/DriverDetailPage';
 
 const ProtectedRoute = ({ page, condition }: any) => {
   const [canView, setCanView] = useState<boolean | null>(null);
@@ -1039,6 +1042,11 @@ export const routeObjects: RouteObject[] = [
                                 ALL_PERMISSIONS.storeUser.viewUserEmployee,
                             },
                             {
+                              path: 'drivers',
+                              condition:
+                                ALL_PERMISSIONS.storeUser.viewDriverUserApp,
+                            },
+                            {
                               path: 'app-user/list',
                               condition: ALL_PERMISSIONS.storeUser.viewUserApp,
                             },
@@ -1074,6 +1082,41 @@ export const routeObjects: RouteObject[] = [
                       <ProtectedRoute
                         page={<EmployeePage />}
                         condition={ALL_PERMISSIONS.storeUser.viewUserEmployee}
+                      />
+                    ),
+                    // element: <EmployeePage />,
+                  },
+                ],
+              },
+              {
+                path: 'drivers',
+                children: [
+                  {
+                    index: true,
+                    element: (
+                      <ProtectedRoute
+                        page={<DriverPage />}
+                        condition={ALL_PERMISSIONS.storeUser.viewDriverUserApp}
+                      />
+                    ),
+                    // element: <EmployeePage />,
+                  },
+                  {
+                    path: 'detail/:driverId',
+                    element: (
+                      <ProtectedRoute
+                        page={<DriverDetailPage />}
+                        condition={ALL_PERMISSIONS.storeUser.viewDriverUserApp}
+                      />
+                    ),
+                    // element: <EmployeePage />,
+                  },
+                  {
+                    path: 'history/:driverId',
+                    element: (
+                      <ProtectedRoute
+                        page={<DriverHistoryDetailPage />}
+                        condition={ALL_PERMISSIONS.storeUser.viewDriverUserApp}
                       />
                     ),
                     // element: <EmployeePage />,

@@ -84,11 +84,21 @@ function AppUserAddressTabPage({
           setList((newArr: any) => {
             return newArr
               .map((items: any) => {
+                // if (item.id === updateItem.data.data.id) {
                 items.isActive = false;
+                // }
                 return { ...items };
               })
               .concat(item.data.data);
           });
+          // setList((newArr: any) => {
+          //   return newArr
+          //     .map((items: any) => {
+          //       items.isActive = false;
+          //       return { ...items };
+          //     })
+          //     .concat(item.data.data);
+          // });
         } else {
           setIsLoader(false);
           setIsNotify(true);

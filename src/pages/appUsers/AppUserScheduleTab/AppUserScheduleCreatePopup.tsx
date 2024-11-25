@@ -166,8 +166,12 @@ function AppUserScheduleCreatePage({
       const index = nameKey.match(indexPattern)[0];
       const dataItem = {
         day: data[`name${index}`],
-        startTime: data[`startdatetime${index}`].format('YYYY-MM-DD HH:mm:ss'),
-        endTime: data[`enddatetime${index}`].format('YYYY-MM-DD HH:mm:ss'),
+        startTime: data[`startdatetime${index}`]
+          .utc()
+          .format('YYYY-MM-DD HH:mm:ss'),
+        endTime: data[`enddatetime${index}`]
+          .utc()
+          .format('YYYY-MM-DD HH:mm:ss'),
       };
       parent.workDays.push(dataItem);
     });

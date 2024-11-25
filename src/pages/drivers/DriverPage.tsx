@@ -1,110 +1,80 @@
+import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import SearchIcon from '@mui/icons-material/Search';
-import WysiwygOutlinedIcon from '@mui/icons-material/WysiwygOutlined';
-import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import FormControl from '@mui/material/FormControl';
 import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
-import TablePagination from '@mui/material/TablePagination';
-import dayjs from 'dayjs';
+// import Tab from '@mui/material/Tab';
+// import Tabs from '@mui/material/Tabs';
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import CustomText from '../../components/common/CustomText';
 import Loader from '../../components/common/Loader';
 import Notify from '../../components/common/Notify';
 import TopBar from '../../components/common/TopBar';
-
-import Service from '../../services/adminapp/adminAppUser';
-import {
-  formatNumberWithCommas,
-  listingRolePermission,
-} from '../../utils/helper';
-import {
-  ALL_PERMISSIONS,
-  CURRENCY_PREFIX,
-  NOT_AUTHORIZED_MESSAGE,
-} from '../../utils/constants';
 import { useAppSelector } from '../../redux/redux-hooks';
+import appUserService from '../../services/adminapp/adminAppUser';
+import PermissionPopup from '../../utils/PermissionPopup';
+import { ALL_PERMISSIONS, NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
+import { listingRolePermission } from '../../utils/helper';
+// import AppUserCreatePopup from '../appUsers/AppUserCreatePopup';
+// import AppUserOtherTab from './AppUserOtherTab';
+// import AppUserTab from './AppUserTab';
+// import AppUserUpdatePopup from '../appUsers/AppUserUpdatePopup';
+// import AppUserOtherTab from '../appUsers/AppUserOtherTab';
+import DriverCreatePopup from './DriverCreatePopup';
+import DriverUpdatePopup from './DriverUpdatePopup';
+import DriverPageList from './DriverPageList';
+// import { getItem } from '../../utils/storage';
+// import CustomersCreatePopup from './CustomersCreatePopup';
+// import CustomersEditPopup from './CustomersEditPopup';
 
 function DriverPage() {
-  const navigate = useNavigate();
+  const authState: any = useAppSelector((state) => state?.authState);
   const dataRole = useAppSelector(
     (state: any) => state?.persistedReducer?.roleState?.role?.permissions
   );
-  const [search, setSearch] = useState<any>('');
+  //   const title: any = getItem('TITLE_TEXT_USER');
+  const [search, setSearch] = useState('');
   const [page, setPage] = useState(0);
-  const [total, setTotal] = useState(0);
   const [list, setList] = useState<any>([]);
+  const [editFormData, setEditFormData] = useState<any>(null);
+  const [total, setTotal] = useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-
+  const [actionMenuItemid, setActionMenuItemid] = React.useState<any>('');
+  // const [actionMenuAnchorEl, setActionMenuAnchorEl] =
+  //   useState<null | HTMLElement>(null);
+  // const actionMenuOpen = Boolean(actionMenuAnchorEl);
+  // const actionMenuOptions = ['Detail', 'History', 'Edit', 'Delete'];
+  const [openFormDialog, setOpenFormDialog] = useState(false);
+  const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
   const [isLoader, setIsLoader] = React.useState(true);
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
-  const handleClickSearch = (event: any) => {
-    if (event.key === 'Enter') {
-      const searchTxt = event.target.value as string;
-      const newPage = 0;
-      setSearch(searchTxt);
-      setPage(newPage);
-      Service.driverList(searchTxt, newPage, rowsPerPage).then((item) => {
-        if (item.data.success) {
-          setList(item.data.data.list);
-          setTotal(item.data.data.total);
-          setIsLoader(false);
-          setNotifyMessage('test');
-        }
-      });
-    }
-  };
+  const [cancelDialogOpen, setCancelDialogOpen] = useState<boolean>(false);
+  const [dialogText] = useState<any>(
+    `Are you sure you want to delete this Driver ?`
+  );
 
-  const handleChangePage = (
-    event: React.MouseEvent<HTMLButtonElement> | null,
-    newPage: number
-  ) => {
-    setPage(newPage);
-    Service.driverList(search, newPage, rowsPerPage).then((item) => {
-      if (item.data.success) {
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-        setIsLoader(false);
-        setNotifyMessage('test');
-      }
-    });
-  };
+  const appUserRoleLov = [
+    {
+      id: 'Driver',
+      name: 'Driver',
+    },
+    {
+      id: 'App',
+      name: 'App User',
+    },
+  ];
 
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const newRowperPage = parseInt(event.target.value, 10);
-    const newPage = 0;
-    setRowsPerPage(newRowperPage);
-    setPage(newPage);
-    Service.driverList(search, newPage, newRowperPage).then((item) => {
-      if (item.data.success) {
-        setList(item.data.data.list);
-        setTotal(item.data.data.total);
-        setIsLoader(false);
-        setNotifyMessage('test');
-      }
-    });
-  };
-
-  useEffect(() => {
+  const handleFormClickOpen = () => {
     if (
       listingRolePermission(
         dataRole,
-        ALL_PERMISSIONS.storeProduct.viewDriverHistory
+        ALL_PERMISSIONS.storeUser.viewDriverUserApp
       )
     ) {
-      Service.driverList(search, page, rowsPerPage).then((item) => {
-        if (item.data.success) {
-          setList(item.data.data.list);
-          setTotal(item.data.data.total);
-          setIsLoader(false);
-          setNotifyMessage('test');
-        }
-      });
+      setOpenFormDialog(true);
     } else {
       setIsNotify(true);
       setNotifyMessage({
@@ -112,7 +82,207 @@ function DriverPage() {
         type: 'warning',
       });
     }
+  };
+
+  const handleClickSearch = (event: any) => {
+    if (event.key === 'Enter') {
+      const searchTxt = event.target.value as string;
+      const newPage = 0;
+      setSearch(searchTxt);
+      setPage(newPage);
+      appUserService
+        .appListSearch(
+          authState.user.tenant,
+          'Other',
+          searchTxt,
+          newPage,
+          rowsPerPage
+        )
+        .then((item) => {
+          setList(item.data.data.list);
+          setTotal(item.data.data.total);
+        });
+    }
+  };
+
+  const deleteHandler = (id: string) => {
+    setIsLoader(true);
+    const data = {
+      id,
+      updatedBy: authState.user.id,
+    };
+    appUserService
+      .appUserDelete(data)
+      .then((item: any) => {
+        if (item.data.success) {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'success',
+          });
+          setList((newArr: any) => {
+            return newArr.filter(
+              (newItem: any) => newItem.id !== item.data.data.id
+            );
+          });
+        } else {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'error',
+          });
+        }
+      })
+      .catch((err: Error) => {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
+        });
+      });
+  };
+
+  const statusCancelHandler = () => {
+    deleteHandler(actionMenuItemid?.id);
+  };
+
+  useEffect(() => {
+    if (!openEditFormDialog) {
+      setEditFormData(null);
+    }
+  }, [openEditFormDialog]);
+
+  //   console.log('open edit', openEditFormDialog, editFormData);
+
+  useEffect(() => {
+    setIsLoader(true);
+    if (
+      listingRolePermission(
+        dataRole,
+        ALL_PERMISSIONS.storeUser.viewDriverUserApp
+      )
+    ) {
+      appUserService
+        .appList(authState.user.tenant, 'Other', page, rowsPerPage)
+        .then((item: any) => {
+          if (item.data.success) {
+            setIsLoader(false);
+            setList(item.data.data.list);
+            setTotal(item.data.data.total);
+          } else {
+            setIsLoader(false);
+          }
+        })
+        .catch((err) => {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: err.message,
+            type: 'error',
+          });
+        });
+    } else {
+      setIsLoader(false);
+    }
   }, [null]);
+
+  const createFormHandler = (data: any, reset: any) => {
+    // setIsLoader(true);
+    const formData = {
+      firstName: data.firstName,
+      lastName: data.lastName,
+      password: data.password,
+      email: data.email,
+      phone: data.phone ? data.phone : null,
+      address: data.address,
+      userType: 'Driver',
+      postalCode: data.postalCode ? data.postalCode : null,
+      licenseNumber: data.licenseNumber ? data.licenseNumber : null,
+    };
+    appUserService
+      .appCreateUser(formData)
+      .then((item) => {
+        if (item.data.success) {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'success',
+          });
+          reset();
+          setList([item.data.data, ...list]);
+          setTotal((prevT) => prevT + 1);
+        } else {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'error',
+          });
+        }
+      })
+      .catch((err) => {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
+        });
+      });
+  };
+
+  const updateFormHandler = (data: any) => {
+    setIsLoader(true);
+    const formData = {
+      id: actionMenuItemid?.id,
+      firstName: data.firstName,
+      lastName: data.lastName,
+      phone: data.phone ? data.phone : null,
+      userType: 'Driver',
+      postalCode: data.postalCode ? data.postalCode : null,
+      licenseNumber: data.licenseNumber ? data.licenseNumber : null,
+      updatedBy: authState.user.id,
+    };
+    appUserService
+      .appUpdateUser(formData)
+      .then((item) => {
+        if (item.data.success) {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'success',
+          });
+          for (let i = 0; i < list.length; i += 1) {
+            if (actionMenuItemid?.id === item.data.data.id) {
+              list[i].firstName = item.data.data.firstName;
+              list[i].lastName = item.data.data.lastName;
+              list[i].phone = item.data.data.phone;
+              list[i].postalCode = item.data.data.postalCode;
+              list[i].licenseNumber = item.data.data.licenseNumber;
+            }
+          }
+        } else {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'error',
+          });
+        }
+      })
+      .catch((err) => {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
+        });
+      });
+  };
 
   return isLoader ? (
     <Loader />
@@ -123,7 +293,7 @@ function DriverPage() {
         setIsOpen={setIsNotify}
         displayMessage={notifyMessage}
       />
-      <TopBar title="Driver" />
+      <TopBar title="Drivers" />
       <div className="container m-auto mt-5">
         <div className="w-full rounded-lg bg-white shadow-lg">
           <div className="grid grid-cols-12 px-4 py-5">
@@ -164,107 +334,72 @@ function DriverPage() {
                     disableUnderline
                   />
                 </FormControl>
+                {listingRolePermission(
+                  dataRole,
+                  ALL_PERMISSIONS.storeUser.viewDriverUserApp
+                ) && (
+                  <Button
+                    variant="contained"
+                    className="btn-black-fill btn-icon"
+                    onClick={handleFormClickOpen}
+                  >
+                    <AddOutlinedIcon /> Add New
+                  </Button>
+                )}
               </div>
             </div>
           </div>
-          <div className="mt-3 grid grid-cols-none">
-            <table className="table-border table-auto">
-              <thead>
-                <tr>
-                  <th>Driver</th>
-                  <th>Email</th>
-                  <th>Balance</th>
-                  <th>Status</th>
-                  <th aria-label="empty tale header">&nbsp;</th>
-                </tr>
-              </thead>
-              <tbody>
-                {list &&
-                  list.map((item: any) => {
-                    return (
-                      <tr key={item.id}>
-                        <td>
-                          <div className="avatar flex flex-row items-center">
-                            {item.avatar ? (
-                              <img src={item.avatar} alt="" />
-                            ) : (
-                              <Avatar
-                                className="avatar flex flex-row items-center"
-                                sx={{
-                                  bgcolor: '#1D1D1D',
-                                  width: 35,
-                                  height: 35,
-                                  textTransform: 'uppercase',
-                                  fontSize: '14px',
-                                  marginRight: '10px',
-                                }}
-                              >
-                                {item.firstName?.charAt(0)}
-                                {item.lastName?.charAt(0)}
-                              </Avatar>
-                            )}
-
-                            <div className="flex flex-col items-start justify-start">
-                              <span className="text-sm font-semibold">
-                                {`${item.firstName} ${item.lastName}`}
-                              </span>
-                              <span className="text-xs font-normal text-[#6A6A6A]">
-                                {dayjs(item.createdDate).isValid()
-                                  ? dayjs(item.createdDate)?.format(
-                                      'MMMM DD, YYYY'
-                                    )
-                                  : '--'}
-                              </span>
-                            </div>
-                          </div>
-                        </td>
-                        <td>{item.email}</td>
-                        <td>
-                          {item.wallets
-                            ? `${formatNumberWithCommas(
-                                Math.floor(item.wallets.balance)
-                              )} ${CURRENCY_PREFIX}`
-                            : 'N/A'}
-                        </td>
-                        <td>
-                          {item.isActive ? (
-                            <span className="badge badge-success">ACTIVE</span>
-                          ) : (
-                            <span className="badge badge-danger">INACTIVE</span>
-                          )}
-                        </td>
-                        <td>
-                          <div className="flex flex-row-reverse">
-                            <IconButton
-                              className="icon-btn mr-3.5 p-0"
-                              onClick={() => navigate(`detail/${item.id}`)}
-                              disabled={!item.wallets ?? true}
-                            >
-                              <WysiwygOutlinedIcon />
-                            </IconButton>
-                          </div>
-                        </td>
-                      </tr>
-                    );
-                  })}
-              </tbody>
-            </table>
-          </div>
-          {list?.length < 1 ? (
-            <CustomText noRoundedBorders text="No Records Found" />
-          ) : null}
-          <div className="mt-3 flex w-[100%] justify-center py-3">
-            <TablePagination
-              component="div"
-              count={total}
-              page={page}
-              onPageChange={handleChangePage}
-              rowsPerPage={rowsPerPage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-            />
-          </div>
+          <DriverPageList
+            // isLoader={isLoader}
+            setIsLoader={setIsLoader}
+            list={list}
+            setList={setList}
+            total={total}
+            setTotal={setTotal}
+            page={page}
+            search={search}
+            setPage={setPage}
+            rowsPerPage={rowsPerPage}
+            setRowsPerPage={setRowsPerPage}
+            actionMenuItemid={actionMenuItemid}
+            setActionMenuItemid={setActionMenuItemid}
+            setEditFormData={setEditFormData}
+            setOpenEditFormDialog={setOpenEditFormDialog}
+            // isNotify={isNotify}
+            setIsNotify={setIsNotify}
+            // notifyMessage={notifyMessage}
+            setNotifyMessage={setNotifyMessage}
+          />
         </div>
       </div>
+      {cancelDialogOpen && (
+        <PermissionPopup
+          type="shock"
+          open={cancelDialogOpen}
+          setOpen={setCancelDialogOpen}
+          dialogText={dialogText}
+          callback={statusCancelHandler}
+        />
+      )}
+      <DriverCreatePopup
+        setIsNotify={setIsNotify}
+        setNotifyMessage={setNotifyMessage}
+        openFormDialog={openFormDialog}
+        setOpenFormDialog={setOpenFormDialog}
+        callback={createFormHandler}
+        appUserRoleLov={appUserRoleLov}
+      />
+      <DriverUpdatePopup
+        setIsNotify={setIsNotify}
+        setNotifyMessage={setNotifyMessage}
+        openFormDialog={openEditFormDialog}
+        setOpenFormDialog={setOpenEditFormDialog}
+        formData={editFormData}
+        setEditFormData={setEditFormData}
+        callback={updateFormHandler}
+        setActionMenuItemid={setActionMenuItemid}
+        appUserRoleLov={appUserRoleLov}
+      />
     </>
   );
 }

@@ -35,7 +35,7 @@ type AppUserOtherTabProps = {
   setRowsPerPage: any;
 };
 
-function AppUserOtherTab({
+function DriverPageList({
   setRowsPerPage,
   setTotal,
   search,
@@ -61,13 +61,16 @@ function AppUserOtherTab({
   const [actionMenuAnchorEl, setActionMenuAnchorEl] =
     useState<null | HTMLElement>(null);
   const actionMenuOpen = Boolean(actionMenuAnchorEl);
-  const actionMenuOptions = ['Detail', 'Edit', 'Delete'];
+  const actionMenuOptions = ['Details', 'History', 'Edit', 'Delete'];
 
   const menuHandler = (option: string) => {
     // setIsLoader(true);
     if (option === 'Edit') {
       if (
-        listingRolePermission(dataRole, ALL_PERMISSIONS.storeUser.editUserApp)
+        listingRolePermission(
+          dataRole,
+          ALL_PERMISSIONS.storeUser.viewDriverUserApp
+        )
       ) {
         appUserService.appUserEdit(actionMenuItemid?.id).then((item: any) => {
           if (item.data.success) {
@@ -92,7 +95,7 @@ function AppUserOtherTab({
       }
     } else if (option === 'Address') {
       CheckRolePermission(
-        'Customer Address Detail',
+        ALL_PERMISSIONS.storeUser.viewDriverUserApp,
         dataRole,
         navigate,
         `address/${actionMenuItemid?.id}`
@@ -100,7 +103,10 @@ function AppUserOtherTab({
       // navigate(`address/${actionMenuItemid?.id}`);
     } else if (option === 'Delete') {
       if (
-        listingRolePermission(dataRole, ALL_PERMISSIONS.storeUser.deleteUserApp)
+        listingRolePermission(
+          dataRole,
+          ALL_PERMISSIONS.storeUser.viewDriverUserApp
+        )
       ) {
         setIsLoader(true);
         const data = {
@@ -146,15 +152,39 @@ function AppUserOtherTab({
           type: 'warning',
         });
       }
-    } else if (option === 'Detail') {
+    } else if (option === 'Details') {
       if (
-        listingRolePermission(dataRole, ALL_PERMISSIONS.storeUser.viewUserApp)
+        listingRolePermission(
+          dataRole,
+          ALL_PERMISSIONS.storeUser.viewDriverUserApp
+        )
       ) {
         CheckRolePermission(
           ALL_PERMISSIONS.storeUser.viewUserApp,
           dataRole,
           navigate,
-          `../detail/${actionMenuItemid?.id}`
+          `./detail/${actionMenuItemid?.id}`
+        );
+      } else {
+        setIsNotify(true);
+        setNotifyMessage({
+          text: NOT_AUTHORIZED_MESSAGE,
+          type: 'warning',
+        });
+      }
+      // navigate(`../detail/${actionMenuItemid?.id}`);
+    } else if (option === 'History') {
+      if (
+        listingRolePermission(
+          dataRole,
+          ALL_PERMISSIONS.storeUser.viewDriverUserApp
+        )
+      ) {
+        CheckRolePermission(
+          ALL_PERMISSIONS.storeUser.viewDriverUserApp,
+          dataRole,
+          navigate,
+          `./history/${actionMenuItemid?.id}`
         );
       } else {
         setIsNotify(true);
@@ -168,7 +198,12 @@ function AppUserOtherTab({
   };
 
   const handleSwitchChange = (event: any, id: string) => {
-    if (listingRolePermission(dataRole, 'Customer Update Status')) {
+    if (
+      listingRolePermission(
+        dataRole,
+        ALL_PERMISSIONS.storeUser.viewDriverUserApp
+      )
+    ) {
       setIsLoader(true);
       const data = {
         id,
@@ -263,11 +298,11 @@ function AppUserOtherTab({
         <table className="table-border table-auto">
           <thead>
             <tr>
-              <th>Customer</th>
+              <th>Name</th>
               <th>Email</th>
               <th>Phone</th>
               <th>Postal Code</th>
-              <th>User Type</th>
+              {/* <th>User Type</th> */}
               <th>Status</th>
               <th aria-label="empty table header">&nbsp;</th>
             </tr>
@@ -313,7 +348,7 @@ function AppUserOtherTab({
                     <td>{item.email}</td>
                     <td>{item.phone}</td>
                     <td>{item.postalCode ? item.postalCode : '--'}</td>
-                    <td>{item.userType}</td>
+                    {/* <td>{item.userType}</td> */}
                     <td>
                       {item.isActive ? (
                         <span className="badge badge-success">ACTIVE</span>
@@ -382,4 +417,4 @@ function AppUserOtherTab({
   );
 }
 
-export default AppUserOtherTab;
+export default DriverPageList;

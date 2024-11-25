@@ -8,15 +8,11 @@ import '../../assets/css/PopupStyle.css';
 import ErrorSpanBox from '../../components/common/ErrorSpanBox';
 import { AppUser } from '../../interfaces/app-user.interface';
 import {
-  // ALL_PERMISSIONS,
   INVALID_CHAR,
   MAX_LENGTH_EXCEEDED,
   PATTERN,
   PH_MINI_LENGTH,
 } from '../../utils/constants';
-// import { listingRolePermission } from '../../utils/helper';
-// import { useAppSelector } from '../../redux/redux-hooks';
-import { getItem } from '../../utils/storage';
 
 type AppUserUpdatePopupProps = {
   openFormDialog: boolean;
@@ -30,7 +26,7 @@ type AppUserUpdatePopupProps = {
   appUserRoleLov?: any;
 };
 
-function AppUserUpdatePopup({
+function DriverUpdatePopup({
   openFormDialog,
   setOpenFormDialog,
   formData,
@@ -44,8 +40,6 @@ function AppUserUpdatePopup({
     setValue,
     formState: { errors },
   } = useForm<AppUser>();
-  const title: any = getItem('TITLE_TEXT_USER');
-  // console.log('formData', formData);
 
   const handleFormClose = () => {
     setOpenFormDialog(false);
@@ -68,6 +62,7 @@ function AppUserUpdatePopup({
     setValue('lastName', formData?.lastName);
     setValue('postalCode', formData?.postalCode);
     setValue('phone', formData?.phone);
+    setValue('licenseNumber', formData?.appUserDriverExt[0]?.licenseNumber);
   }, [formData]);
 
   return (
@@ -82,7 +77,7 @@ function AppUserUpdatePopup({
       <div className="Content">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="FormHeader">
-            <span className="Title">Edit {title}</span>
+            <span className="Title">Edit Driver</span>
           </div>
           {formData && (
             <>
@@ -188,7 +183,7 @@ function AppUserUpdatePopup({
                     )}
                   </FormControl>
                 </div>
-                <div className="FormField">
+                <div className="FormFields">
                   <FormControl className="FormControl" variant="standard">
                     <label className="FormLabel">Email</label>
                     <Input
@@ -200,6 +195,26 @@ function AppUserUpdatePopup({
                       disableUnderline
                       {...register('email')}
                     />
+                  </FormControl>
+                  <FormControl className="FormControl" variant="standard">
+                    <label className="FormLabel">License Number</label>
+                    <Input
+                      className="FormInput"
+                      id="licenseNumber"
+                      disableUnderline
+                      placeholder="Enter license number"
+                      {...register('licenseNumber', {
+                        value: formData?.licenseNumber,
+                        pattern: PATTERN.NUM_DASH,
+                        validate: (value) => value.length <= 50,
+                      })}
+                    />
+                    {errors.licenseNumber?.type === 'pattern' && (
+                      <ErrorSpanBox error={INVALID_CHAR} />
+                    )}
+                    {errors.licenseNumber?.type === 'validate' && (
+                      <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
+                    )}
                   </FormControl>
                 </div>
               </div>
@@ -231,4 +246,4 @@ function AppUserUpdatePopup({
   );
 }
 
-export default AppUserUpdatePopup;
+export default DriverUpdatePopup;
