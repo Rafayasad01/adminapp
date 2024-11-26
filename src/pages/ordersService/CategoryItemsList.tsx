@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { memo, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 import Notify from '../../components/common/Notify';
 import { AppCategoryItems } from '../../interfaces/category.interface';
 import {
@@ -8,8 +8,14 @@ import {
   setNotifyState,
 } from '../../redux/features/itemSlice';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
-import { CURRENCY_PREFIX } from '../../utils/constants';
+import {
+  ALL_PERMISSIONS,
+  CURRENCY_PREFIX,
+  NOT_AUTHORIZED_MESSAGE,
+} from '../../utils/constants';
 import HomePagePopup from './HomePagePopup';
+import assets from '../../assets';
+import { listingRolePermission } from '../../utils/helper';
 
 interface CategoryItemsListProps {
   categoryId: string | any;
@@ -20,13 +26,18 @@ const CategoryItemsList: React.FC<CategoryItemsListProps> = ({
   search,
 }) => {
   const dispatch = useAppDispatch();
+  const dataRole = useAppSelector(
+    (state: any) => state?.persistedReducer?.roleState?.role?.permissions
+  );
   const { items, notify, notifyMessage } = useAppSelector((x) => x.itemState);
   const [searchedItems, setSearchedItems] = useState<AppCategoryItems[]>([]);
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const [selectedItem, setSelectedItem] = useState<AppCategoryItems | null>(
     null
   );
   const [openAddToCart, setOpenAddToCart] = useState<boolean>(false);
+  const [isNotify, setIsNotify] = useState(false);
+  const [notifyMessages, setNotifyMessage] = useState({});
 
   useEffect(() => {
     if (!_.isEmpty(categoryId)) {
@@ -56,27 +67,55 @@ const CategoryItemsList: React.FC<CategoryItemsListProps> = ({
 
   return (
     <div className="categories-list">
+      <Notify
+        isOpen={isNotify}
+        setIsOpen={setIsNotify}
+        displayMessage={notifyMessages}
+      />
       {searchedItems.map((item: AppCategoryItems) => (
         <div key={item.id} className="item">
           <button
             className="mb-4 aspect-[4/3] w-full object-contain md:mb-6"
-            onClick={() => navigate(`../item/${item.id}`)}
+            // onClick={() => navigate(`../item/${item.id}`)}
           >
-            <img
-              className="mb-4 aspect-[4/3] w-full object-contain md:mb-6"
-              src={item.icon}
-              alt=""
-            />
+            {item.icon !== 'null' ? (
+              <img
+                className="mb-4 aspect-[2/1] w-full object-contain md:mb-6"
+                src={item.icon}
+                alt=""
+              />
+            ) : (
+              <img
+                className="mb-4 aspect-[2/1] w-full object-contain md:mb-6"
+                src={assets.images.noItems}
+                alt=""
+              />
+            )}
           </button>
-          <div className="flex flex-wrap items-center justify-between">
-            <span className="name text-base">{item.name}</span>
-            <span className="price text-[13px]">
+          <div className="">
+            <p className="name m-0 text-base">{item.name}</p>
+            <p className="price mb-3 text-[13px]">
               {CURRENCY_PREFIX} {item.price}
-            </span>
+            </p>
             <button
               className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium btn-add css-sghohy-MuiButtonBase-root-MuiButton-root bg-primary"
               tabIndex={0}
-              onClick={() => handleItemSelected(item)}
+              onClick={() => {
+                if (
+                  listingRolePermission(
+                    dataRole,
+                    ALL_PERMISSIONS.storeProduct.addOrder
+                  )
+                ) {
+                  handleItemSelected(item);
+                } else {
+                  setIsNotify(true);
+                  setNotifyMessage({
+                    text: NOT_AUTHORIZED_MESSAGE,
+                    type: 'warning',
+                  });
+                }
+              }}
               type="button"
             >
               Add
@@ -101,23 +140,46 @@ const CategoryItemsList: React.FC<CategoryItemsListProps> = ({
           <div key={item.id} className="item">
             <button
               className="mb-4 aspect-[4/3] w-full object-contain md:mb-6"
-              onClick={() => navigate(`../item/${item.id}`)}
+              // onClick={() => navigate(`../item/${item.id}`)}
             >
-              <img
-                className="mb-4 aspect-[4/3] w-full object-contain md:mb-6"
-                src={item.icon}
-                alt=""
-              />
+              {item.icon !== 'null' ? (
+                <img
+                  className="mb-4 aspect-[2/1] w-full object-contain md:mb-6"
+                  src={item.icon}
+                  alt=""
+                />
+              ) : (
+                <img
+                  className="mb-4 aspect-[2/1] w-full object-contain md:mb-6"
+                  src={assets.images.noItems}
+                  alt=""
+                />
+              )}
             </button>
-            <div className="flex flex-wrap items-center justify-between">
-              <span className="name text-base">{item.name}</span>
-              <span className="price text-[13px]">
+            <div className="">
+              <p className="name m-0 text-base">{item.name}</p>
+              <p className="price mb-3 text-[12px]">
                 {CURRENCY_PREFIX} {item.price}
-              </span>
+              </p>
               <button
                 className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium btn-add css-sghohy-MuiButtonBase-root-MuiButton-root bg-primary"
                 tabIndex={0}
-                onClick={() => handleItemSelected(item)}
+                onClick={() => {
+                  if (
+                    listingRolePermission(
+                      dataRole,
+                      ALL_PERMISSIONS.storeProduct.addOrder
+                    )
+                  ) {
+                    handleItemSelected(item);
+                  } else {
+                    setIsNotify(true);
+                    setNotifyMessage({
+                      text: NOT_AUTHORIZED_MESSAGE,
+                      type: 'warning',
+                    });
+                  }
+                }}
                 type="button"
               >
                 Add

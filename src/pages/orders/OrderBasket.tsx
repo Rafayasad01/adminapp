@@ -859,64 +859,6 @@ const OrderBasket = () => {
                   />
                 </div>
               )}
-              {/* <Divider flexItem className="my-5" /> */}
-              {/* {isExistingUser === 'TRUE' && (
-                <FormControl>
-                  <FormLabel
-                    id="demo-row-radio-buttons-group-label"
-                    className="font-open-sans text-xl font-semibold text-secondary"
-                  >
-                    Fulfillment Mode
-                  </FormLabel>
-                  <RadioGroup
-                    row
-                    aria-labelledby="demo-row-radio-buttons-group-label"
-                    name="row-radio-buttons-group"
-                    value={fulfillmentMethod}
-                    onClick={(event: any) =>
-                      setFulfillmentMethod(event.target.value)
-                    }
-                  >
-                    <FormControlLabel
-                      sx={{
-                        color: '#6A6A6A',
-                        fontFamily: 'Open Sans',
-                        fonWeight: 400,
-                        fonSize: '14px',
-                      }}
-                      value="Self"
-                      control={
-                        <Radio
-                          className="text-[#1D1D1D]"
-                          icon={<RadioButtonUncheckedOutlinedIcon />}
-                          checkedIcon={<CheckCircleOutlinedIcon />}
-                        />
-                      }
-                      label="Customer Pickup"
-                    />
-                    <FormControlLabel
-                      sx={{
-                        color: '#6A6A6A',
-                        fontFamily: 'Open Sans',
-                        fonWeight: 400,
-                        fonSize: '14px',
-                      }}
-                      value="Delivery"
-                      control={
-                        <Radio
-                          className="text-sm text-[#1D1D1D]"
-                          icon={<RadioButtonUncheckedOutlinedIcon />}
-                          checkedIcon={<CheckCircleOutlinedIcon />}
-                        />
-                      }
-                      label="Delivery"
-                    />
-                  </RadioGroup>
-                </FormControl>
-              )}
-
-              <Divider flexItem className="my-5" /> */}
-
               {promoList?.length > 0 && isExistingUser === 'TRUE' && (
                 <>
                   <Divider flexItem className="my-4" />

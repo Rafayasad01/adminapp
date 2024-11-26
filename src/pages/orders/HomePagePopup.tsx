@@ -126,7 +126,9 @@ function HomePagePopup({
             </div>
             <div className="p-4">
               <h4 className="product-name">{data?.name}</h4>
-              <p className="product-desc">cloth</p>
+              <p className="product-desc h-[100px] overflow-auto">
+                {data?.desc}
+              </p>
               <div className="flex-container flex items-center justify-between">
                 <div className="price">
                   <h3 className="number">

@@ -545,14 +545,13 @@ function Sidebar() {
                 alt=""
               />
             ) : (
-              logo ||
-              (systemConfig?.shopLogo && (
+              (logo || systemConfig?.shopLogo) && (
                 <img
                   className="mt-9 h-[29px] max-w-[150px]"
                   src={logo || systemConfig?.shopLogo}
                   alt={`${branch?.name}`}
                 />
-              ))
+              )
             )}
           </Stack>
         </Toolbar>

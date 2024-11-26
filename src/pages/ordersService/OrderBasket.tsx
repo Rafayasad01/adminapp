@@ -46,6 +46,7 @@ import { ValuesOf } from '../../utils/ts-helpers';
 import PromotionListPopup from './PromotionListPopup';
 import CustomDateTimePicker from '../../components/common/CustomDateTimePicker';
 import { getItem } from '../../utils/storage';
+import assets from '../../assets';
 
 const OrderBasket = () => {
   const {
@@ -73,7 +74,7 @@ const OrderBasket = () => {
   const [isLoader, setIsLoader] = useState(false);
   const authState = useAppSelector((state) => state?.authState);
   const tenantConfig: any = getItem('TENANT_CONFIG');
-  console.log('🚀 ~ OrderBasket ~ tenantConfig:', tenantConfig);
+  // console.log('🚀 ~ OrderBasket ~ tenantConfig:', tenantConfig);
   const {
     register,
     watch,
@@ -118,6 +119,14 @@ const OrderBasket = () => {
   const grandTotal = discountedTotalAmount
     ? discountedTotalAmount + gstAmount
     : totalAmount + gstAmount;
+
+  const grandTotalWithLoyaltyCoinsRate = discountedTotalAmount
+    ? discountedTotalAmount +
+      gstAmount -
+      tenantConfig?.tenantConfig?.loyaltyCoinConversionRate
+    : totalAmount +
+      gstAmount -
+      tenantConfig?.tenantConfig?.loyaltyCoinConversionRate;
 
   const specificVoucher = promoList?.find(
     (el: any) => el.voucherCode === promoCode
@@ -217,12 +226,12 @@ const OrderBasket = () => {
       });
       return;
     }
-    setIsLoginLoader(false);
+    // setIsLoginLoader(false);
     setLoginDetails(anonymousLoginResult.data.data);
-    showNotification({
-      text: anonymousLoginResult.data.message,
-      type: 'success',
-    });
+    // showNotification({
+    //   text: anonymousLoginResult.data.message,
+    //   type: 'success',
+    // });
     const anonymousLoginResultData = anonymousLoginResult.data.data;
     const cartPayload = {
       tenant: anonymousLoginResultData.tenant,
@@ -316,7 +325,8 @@ const OrderBasket = () => {
       type: 'success',
     });
     dispatch(setCart([]));
-    navigate(-1);
+    setIsLoginLoader(false);
+    navigate('../../orders');
   };
 
   const handleLogin = () => {
@@ -403,95 +413,103 @@ const OrderBasket = () => {
   const handlePaymentChange = () => {};
 
   const onSubmit = async () => {
-    if (isExistingUser === 'FALSE') {
-      await handleAnonymousSubmit();
-      return;
-    }
-    if (loginDetails !== null) {
-      if (cartItems?.length > 0 && totalAmount > 0) {
-        setIsLoader(true);
-        const cartPayload = {
-          tenant: loginDetails?.tenant,
-          appUser: loginDetails?.id,
-        };
-        ordersService
-          .OrderGetCart(cartPayload)
-          .then((item: any) => {
-            if (item.data.success) {
-              const updatedCartPayload = {
-                cartId: item.data.data.cart.id,
-                appUser: item.data.data.cart.appUser,
-                tenant: item.data.data.cart.tenant,
-                appUserAddress: loginDetails?.appUserAddress.id,
-                pickupDateTime: new Date(),
-                dropDateTime: watch('deliveryDropOffDate')
-                  ? watch('deliveryDropOffDate').format('YYYY-MM-DD HH:mm:ss')
-                  : DeliveryDate.format('YYYY-MM-DD HH:mm:ss'),
-                voucherCode: checkVoucherMinAmount ? promoCode : '' || '',
-                products: cartItems?.map((items: any) => ({
-                  id: items.id,
-                  quantity: items.quantity,
-                })),
-              };
-              ordersService
-                .OrderUpdateCart(updatedCartPayload)
-                .then((updateCartRes) => {
-                  if (updateCartRes.data.success) {
-                    const newOrderPlace = {
-                      cartId: item.data.data.cart.id,
-                      tenant: item.data.data.cart.tenant,
-                      appUser: item.data.data.cart.appUser,
-                      fulfillmentMethod,
-                    };
-                    ordersService
-                      .OrderPlace(newOrderPlace)
-                      .then((orderPlaceRes) => {
-                        if (orderPlaceRes.data.success) {
-                          setIsLoader(false);
-                          showNotification({
-                            text: orderPlaceRes.data.message,
-                            type: 'success',
-                          });
-                          dispatch(setCart([]));
-                          navigate(-2);
-                        } else {
-                          setIsLoader(false);
-                          showNotification({
-                            text: orderPlaceRes.data.message,
-                            type: 'error',
-                          });
-                        }
-                        // console.log('Cart REs', cartRes);
-                      });
-                  }
-                  // console.log('Cart REs', cartRes);
-                });
-            }
-          })
-          .catch((err: any) => {
-            showNotification({
-              text: err.message,
-              type: 'error',
+    if (watch('deliveryDropOffDate')) {
+      if (isExistingUser === 'FALSE') {
+        await handleAnonymousSubmit();
+        return;
+      }
+      if (loginDetails !== null) {
+        if (cartItems?.length > 0 && totalAmount > 0) {
+          setIsLoader(true);
+          const cartPayload = {
+            tenant: loginDetails?.tenant,
+            appUser: loginDetails?.id,
+          };
+          ordersService
+            .OrderGetCart(cartPayload)
+            .then((item: any) => {
+              if (item.data.success) {
+                const updatedCartPayload = {
+                  cartId: item.data.data.cart.id,
+                  appUser: item.data.data.cart.appUser,
+                  tenant: item.data.data.cart.tenant,
+                  appUserAddress: loginDetails?.appUserAddress.id,
+                  pickupDateTime: new Date(),
+                  dropDateTime: watch('deliveryDropOffDate')
+                    ? watch('deliveryDropOffDate').format('YYYY-MM-DD HH:mm:ss')
+                    : DeliveryDate.format('YYYY-MM-DD HH:mm:ss'),
+                  voucherCode: checkVoucherMinAmount ? promoCode : '' || '',
+                  products: cartItems?.map((items: any) => ({
+                    id: items.id,
+                    quantity: items.quantity,
+                  })),
+                };
+                ordersService
+                  .OrderUpdateCart(updatedCartPayload)
+                  .then((updateCartRes) => {
+                    if (updateCartRes.data.success) {
+                      const newOrderPlace = {
+                        cartId: item.data.data.cart.id,
+                        tenant: item.data.data.cart.tenant,
+                        appUser: item.data.data.cart.appUser,
+                        fulfillmentMethod,
+                      };
+                      ordersService
+                        .OrderPlace(newOrderPlace)
+                        .then((orderPlaceRes) => {
+                          if (orderPlaceRes.data.success) {
+                            setIsLoader(false);
+                            showNotification({
+                              text: orderPlaceRes.data.message,
+                              type: 'success',
+                            });
+                            dispatch(setCart([]));
+                            navigate(-2);
+                          } else {
+                            setIsLoader(false);
+                            showNotification({
+                              text: orderPlaceRes.data.message,
+                              type: 'error',
+                            });
+                          }
+                          // console.log('Cart REs', cartRes);
+                        });
+                    }
+                    // console.log('Cart REs', cartRes);
+                  });
+              }
+            })
+            .catch((err: any) => {
+              showNotification({
+                text: err.message,
+                type: 'error',
+              });
+              // console.log('Err', err)
             });
-            // console.log('Err', err)
+        } else if (cartItems?.length <= 0) {
+          setIsLoader(false);
+          showNotification({
+            text: 'Select at least one category item',
+            type: 'info',
           });
-      } else if (cartItems?.length <= 0) {
+        } else if (totalAmount <= 0) {
+          setIsLoader(false);
+          showNotification({
+            text: 'Total amount is $0.00, increase your quantity',
+            type: 'info',
+          });
+        }
+      } else {
         setIsLoader(false);
         showNotification({
-          text: 'Select at least one category item',
-          type: 'info',
-        });
-      } else if (totalAmount <= 0) {
-        setIsLoader(false);
-        showNotification({
-          text: 'Total amount is $0.00, increase your quantity',
-          type: 'info',
+          text: 'User details not found!',
+          type: 'error',
         });
       }
     } else {
       setIsLoader(false);
       showNotification({
-        text: 'User details not found!',
+        text: 'Select Delivery Drop Off Date',
         type: 'error',
       });
     }
@@ -552,7 +570,15 @@ const OrderBasket = () => {
                                 <span className="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root" />
                               </button>
                               <div className="product">
-                                <img className="pic" src={item.icon} alt="" />
+                                {item.icon !== 'null' ? (
+                                  <img className="pic" src={item.icon} alt="" />
+                                ) : (
+                                  <img
+                                    className="pic"
+                                    src={assets.images.noItems}
+                                    alt="no-pic"
+                                  />
+                                )}
                                 <p className="name"> {item.name}</p>
                               </div>
                             </div>
@@ -627,8 +653,8 @@ const OrderBasket = () => {
                 </FormLabel>
                 <div className="mt-3 flex items-center">
                   <div>
-                    <p className="text-sm">Delivery Pickup Date</p>
-                    <span className="text-sm font-semibold">
+                    <p className="text-xs">Delivery Pickup Date</p>
+                    <span className="text-xs font-semibold">
                       {dayjs().format('MMMM DD, YYYY')}
                     </span>
                   </div>
@@ -955,9 +981,47 @@ const OrderBasket = () => {
                     {CURRENCY_PREFIX} {totalAmount.toFixed(2)}
                   </div>
                 </div>
+                {tenantConfig.tenantConfig?.enableLoyaltyProgram &&
+                  Number(loginDetails?.loyaltyCoins) >=
+                    tenantConfig.tenantConfig?.requiredCoinsToRedeem && (
+                    <>
+                      <div className="flex items-center justify-between py-1">
+                        <div className="font-open-sans text-xs font-semibold text-neutral-900">
+                          This User Earns Loyalty Coins Discount
+                        </div>
+                      </div>
+                      <div className="flex items-center justify-between py-1">
+                        <div className="font-open-sans text-xs font-normal text-neutral-900">
+                          Users Loyalty Coins
+                        </div>
+                        <div className="font-open-sans text-sm font-bold text-neutral-900">
+                          {loginDetails?.loyaltyCoins}
+                        </div>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <div className="font-open-sans text-xs font-normal text-neutral-900">
+                          Max Required Coins to Redeem By Vendor
+                        </div>
+                        <div className="font-open-sans text-sm font-bold text-neutral-900">
+                          {tenantConfig.tenantConfig?.requiredCoinsToRedeem}
+                        </div>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <div className="font-open-sans text-xs font-normal text-neutral-900">
+                          Loyalty Coins Conversion Rate By Vendor
+                        </div>
+                        <div className="font-open-sans text-sm font-bold text-neutral-900">
+                          {CURRENCY_PREFIX}{' '}
+                          {tenantConfig.tenantConfig?.loyaltyCoinConversionRate.toFixed(
+                            2
+                          )}
+                        </div>
+                      </div>
+                    </>
+                  )}
                 <div className="flex items-center justify-between py-2">
                   <div className="font-open-sans text-xs font-normal text-neutral-900">
-                    Discount{' '}
+                    Voucher Discount
                   </div>
                   <div className="font-open-sans text-sm font-bold text-neutral-900">
                     {promoCode ? (
@@ -981,14 +1045,6 @@ const OrderBasket = () => {
                     )}
                   </div>
                 </div>
-                {/* <div className="flex items-center justify-between py-2">
-                  <div className="font-open-sans text-xs font-normal text-neutral-900">
-                    Total Discounted Amount
-                  </div>
-                  <div className="font-open-sans text-sm font-bold text-neutral-900">
-                    ${discountedTotalAmount ? discountedTotalAmount.toFixed(2) : "0.00"}
-                  </div>
-                </div> */}
                 <div className="flex items-center justify-between py-2">
                   <div className="font-open-sans text-xs font-normal text-neutral-900">
                     GST ({tenantConfig?.tenantConfig?.gstPercentage}%)
@@ -1005,13 +1061,19 @@ const OrderBasket = () => {
                 </div>
                 <div className="font-open-sans text-sm font-bold text-neutral-900">
                   {CURRENCY_PREFIX}{' '}
-                  {grandTotal ? grandTotal.toFixed(2) : '0.00'}
+                  {tenantConfig.tenantConfig?.enableLoyaltyProgram &&
+                  Number(loginDetails?.loyaltyCoins) >=
+                    tenantConfig.tenantConfig?.requiredCoinsToRedeem
+                    ? grandTotalWithLoyaltyCoinsRate
+                    : grandTotal
+                    ? grandTotal.toFixed(2)
+                    : '0.00'}
                 </div>
               </div>
               <Button
                 disabled={
+                  isLoginLoader ||
                   grandTotal <= 0 ||
-                  // totalAmount > minDiscount ||
                   (isExistingUser === 'TRUE' && isLoader) ||
                   (isExistingUser === 'TRUE' && loginDetails === null) ||
                   (isExistingUser === 'TRUE' && cartItems?.length <= 0)
@@ -1029,7 +1091,12 @@ const OrderBasket = () => {
                 {isLoader && loginDetails !== null ? (
                   <CircularProgress size="25px" color="inherit" />
                 ) : (
-                  <span>Submit</span>
+                  <div className="flex items-center">
+                    {isLoginLoader && (
+                      <CircularProgress size="15px" color="inherit" />
+                    )}
+                    <span className="mx-2">Submit</span>
+                  </div>
                 )}
               </Button>
             </div>

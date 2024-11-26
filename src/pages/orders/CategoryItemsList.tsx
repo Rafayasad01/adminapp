@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { memo, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 import Notify from '../../components/common/Notify';
 import { AppCategoryItems } from '../../interfaces/category.interface';
 import {
@@ -31,7 +31,7 @@ const CategoryItemsList: React.FC<CategoryItemsListProps> = ({
   );
   const { items, notify, notifyMessage } = useAppSelector((x) => x.itemState);
   const [searchedItems, setSearchedItems] = useState<AppCategoryItems[]>([]);
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const [selectedItem, setSelectedItem] = useState<AppCategoryItems | null>(
     null
   );
@@ -76,13 +76,26 @@ const CategoryItemsList: React.FC<CategoryItemsListProps> = ({
         <div key={item.id} className="item">
           <button
             className="mb-4 aspect-[4/3] w-full object-contain md:mb-6"
-            onClick={() => navigate(`../item/${item.id}`)}
+            // onClick={() => navigate(`../item/${item.id}`)}
           >
-            <img
+            {item.icon !== 'null' ? (
+              <img
+                className="mb-4 aspect-[2/1] w-full object-contain md:mb-6"
+                src={item.icon}
+                alt=""
+              />
+            ) : (
+              <img
+                className="mb-4 aspect-[2/1] w-full object-contain md:mb-6"
+                src={assets.images.noItems}
+                alt=""
+              />
+            )}
+            {/* <img
               className="mb-4 aspect-[4/3] w-full object-contain md:mb-6"
               src={item.icon}
               alt=""
-            />
+            /> */}
           </button>
           <div className="">
             <p className="name m-0 text-base">{item.name}</p>
@@ -136,7 +149,7 @@ const CategoryItemsList: React.FC<CategoryItemsListProps> = ({
             >
               {item.icon !== 'null' ? (
                 <img
-                  className="mb-4 aspect-[4/3] w-full object-contain md:mb-6"
+                  className="mb-4 aspect-[2/1] w-full object-contain md:mb-6"
                   src={item.icon}
                   alt=""
                 />

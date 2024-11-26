@@ -25,6 +25,7 @@ import PermissionPopup from '../../utils/PermissionPopup';
 import cn from '../../utils/class-names';
 import {
   ALL_PERMISSIONS,
+  CURRENCY_PREFIX,
   NOT_AUTHORIZED_MESSAGE,
   ORDER_FULFILLMENT_METHOD,
   ORDER_STATUS_SERVICE,
@@ -701,14 +702,23 @@ function OrderDetailsPage() {
                     PKR {viewData.totalAmount}
                   </div>
                 </div>
-                {/* <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between">
                   <div className="font-open-sans text-sm font-normal text-neutral-500">
-                    Discount
+                    Voucher Discount
                   </div>
                   <div className="text-right font-open-sans text-sm font-semibold text-neutral-900">
-                    $18.00
+                    {CURRENCY_PREFIX} {Number(viewData.discount).toFixed(2)}
                   </div>
-                </div> */}
+                </div>
+                <div className="flex items-center justify-between">
+                  <div className="font-open-sans text-sm font-normal text-neutral-500">
+                    loyalty Coins Discount
+                  </div>
+                  <div className="text-right font-open-sans text-sm font-semibold text-neutral-900">
+                    {CURRENCY_PREFIX}{' '}
+                    {Number(viewData.discountLoyaltyCoins).toFixed(2)}
+                  </div>
+                </div>
                 <div className="flex items-center justify-between">
                   <div className="font-open-sans text-sm font-normal text-neutral-500">
                     HST {viewData.gstPercentage}%
