@@ -988,3 +988,11 @@ export const USER_TYPES = {
   appUser: 'AppUser',
   staffUser: 'StaffUser',
 };
+
+export const mimiType: any = {
+  wordsheet:
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  excel: 'application/vnd.ms-excel',
+  excelsheet:
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+};

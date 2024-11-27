@@ -33,6 +33,7 @@ import AppointmentProviderCards from './AppointmentProviderCards';
 import CustomSwiperDialog from './CustomAddSwiperDialog';
 import CustomEditSwiperDialog from './CustomEditSwiperDialog';
 import PayrollPopup from './PayrollPopup';
+import StaffFileUploadPopup from './StaffFileUploadPopup';
 
 function AppointmentProviderPage() {
   const navigate = useNavigate();
@@ -63,6 +64,7 @@ function AppointmentProviderPage() {
   ]);
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
+  const [openFileDialog, setOpenFileDialog] = useState(false);
   const [isLoader, setIsLoader] = useState(true);
   // const [, setIsLoaderPagination] = useState(false);
   const [isNotify, setIsNotify] = useState(false);
@@ -512,6 +514,23 @@ function AppointmentProviderPage() {
       setOpenFormDialog(true);
       // catLovService();
       remove();
+    } else {
+      setIsNotify(true);
+      setNotifyMessage({
+        text: NOT_AUTHORIZED_MESSAGE,
+        type: 'warning',
+      });
+    }
+  };
+
+  const handleFormClickDocOpen = async () => {
+    if (
+      listingRolePermission(
+        dataRole,
+        ALL_PERMISSIONS.storeAppointment.addEmployee
+      )
+    ) {
+      setOpenFileDialog(true);
     } else {
       setIsNotify(true);
       setNotifyMessage({
@@ -1076,6 +1095,41 @@ function AppointmentProviderPage() {
     }
   };
 
+  const createFileHandler = (data: any) => {
+    // setIsLoader(true);
+    const formData = new FormData();
+    if (data.file !== null) formData.append('file', data.file);
+    formData.append('name', data.name);
+    StoreEmployeeService.StoreEmployeeFileUpload(formData)
+      .then((item: any) => {
+        if (item.data.success) {
+          setOpenFormDialog(false);
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'success',
+          });
+          // setList([item.data.data, ...list]);
+        } else {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'error',
+          });
+        }
+      })
+      .catch((err: Error) => {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
+        });
+      });
+  };
+
   // const handleViewMore = () => {
   //   setIsLoaderPagination(true);
   //   const newPage = page + 1;
@@ -1182,7 +1236,7 @@ function AppointmentProviderPage() {
                 <Button
                   variant="contained"
                   className="btn-black-fill btn-icon"
-                  onClick={handleFormClickOpen}
+                  onClick={handleFormClickDocOpen}
                 >
                   <AddOutlinedIcon /> Upload File
                 </Button>
@@ -1339,6 +1393,15 @@ function AppointmentProviderPage() {
           setOpen={setCancelDialogOpen}
           dialogText={dialogText}
           callback={statusCancelHandler}
+        />
+      )}
+      {openFileDialog && (
+        <StaffFileUploadPopup
+          setIsNotify={setIsNotify}
+          setNotifyMessage={setNotifyMessage}
+          openFormDialog={openFileDialog}
+          setOpenFormDialog={setOpenFileDialog}
+          callback={createFileHandler}
         />
       )}
     </>

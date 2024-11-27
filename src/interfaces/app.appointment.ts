@@ -22,6 +22,10 @@ export interface AppointmentProvider {
   salary: any;
 }
 
+export interface AppointmentStaffAttachment {
+  file: any;
+}
+
 export interface AppointmentService {
   serviceName: string;
   providerName: string;
