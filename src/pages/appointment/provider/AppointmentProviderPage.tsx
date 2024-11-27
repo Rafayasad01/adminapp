@@ -1135,12 +1135,12 @@ function AppointmentProviderPage() {
       <div className="container m-auto mt-5">
         <div className="w-full rounded-lg bg-white shadow-lg">
           <div className="grid grid-cols-12 px-4 py-5">
-            <div className="col-span-7">
+            <div className="col-span-5">
               <span className="font-open-sans text-xl font-semibold text-[#252733]">
                 All Staffs
               </span>
             </div>
-            <div className="col-span-5">
+            <div className="col-span-7">
               <div className="flex flex-row justify-end gap-3">
                 <FormControl
                   className="search-grey-outline placeholder-grey w-60"
@@ -1178,6 +1178,13 @@ function AppointmentProviderPage() {
                   onClick={handleFormClickOpen}
                 >
                   <AddOutlinedIcon /> Add New
+                </Button>
+                <Button
+                  variant="contained"
+                  className="btn-black-fill btn-icon"
+                  onClick={handleFormClickOpen}
+                >
+                  <AddOutlinedIcon /> Upload File
                 </Button>
               </div>
             </div>
