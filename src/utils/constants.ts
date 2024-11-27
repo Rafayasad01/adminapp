@@ -990,6 +990,7 @@ export const USER_TYPES = {
 };
 
 export const mimiType: any = {
+  csv: 'text/csv',
   wordsheet:
     'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
   excel: 'application/vnd.ms-excel',

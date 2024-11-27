@@ -73,6 +73,7 @@ function StaffFileUploadPopup({
       const fileType = selectedFile.type;
       if (
         fileType === mimiType.wordsheet ||
+        fileType === mimiType.csv ||
         fileType === mimiType.excel ||
         fileType === mimiType.excelsheet
       ) {
