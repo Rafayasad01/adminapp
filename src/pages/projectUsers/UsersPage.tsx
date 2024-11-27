@@ -6,8 +6,6 @@ import FormControl from '@mui/material/FormControl';
 import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
-// import Tab from '@mui/material/Tab';
-// import Tabs from '@mui/material/Tabs';
 import React, { useEffect, useState } from 'react';
 import Loader from '../../components/common/Loader';
 import Notify from '../../components/common/Notify';
@@ -18,11 +16,8 @@ import PermissionPopup from '../../utils/PermissionPopup';
 import { ALL_PERMISSIONS, NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
 import { listingRolePermission } from '../../utils/helper';
 import AppUserCreatePopup from './UserAddPopup';
-// import AppUserOtherTab from './AppUserOtherTab';
 import AppUserTab from './UserRenders';
 import AppUserUpdatePopup from './UserEditPopup';
-// import CustomersCreatePopup from './CustomersCreatePopup';
-// import CustomersEditPopup from './CustomersEditPopup';
 
 function UsersPage() {
   const authState: any = useAppSelector((state) => state?.authState);
@@ -36,10 +31,6 @@ function UsersPage() {
   const [total, setTotal] = useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [actionMenuItemid, setActionMenuItemid] = React.useState<any>('');
-  // const [actionMenuAnchorEl, setActionMenuAnchorEl] =
-  //   useState<null | HTMLElement>(null);
-  // const actionMenuOpen = Boolean(actionMenuAnchorEl);
-  // const actionMenuOptions = ['Detail', 'History', 'Edit', 'Delete'];
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
   const [isLoader, setIsLoader] = React.useState(true);
@@ -47,27 +38,8 @@ function UsersPage() {
   const [notifyMessage, setNotifyMessage] = React.useState({});
   const [cancelDialogOpen, setCancelDialogOpen] = useState<boolean>(false);
   const [dialogText] = useState<any>(
-    'Are you sure you want to delete this customer ?'
+    'Are you sure you want to delete this User ?'
   );
-  const [
-    selectedTab,
-    //  setSelectedTab
-  ] = useState('APP USER');
-
-  // const handleTabChange = (event: any, newValue: any) => {
-  //   setSelectedTab(newValue);
-  // };
-
-  const appUserRoleLov = [
-    {
-      id: 'Driver',
-      name: 'Driver',
-    },
-    {
-      id: 'App',
-      name: 'App User',
-    },
-  ];
 
   const handleFormClickOpen = () => {
     if (
@@ -95,7 +67,7 @@ function UsersPage() {
       appUserService
         .appListSearch(
           authState.user.tenant,
-          selectedTab === 'APP USER' ? 'App' : 'Other',
+          'App',
           searchTxt,
           newPage,
           rowsPerPage
@@ -160,12 +132,7 @@ function UsersPage() {
       )
     ) {
       appUserService
-        .appList(
-          authState.user.tenant,
-          selectedTab === 'APP USER' ? 'App' : 'Other',
-          page,
-          rowsPerPage
-        )
+        .appList(authState.user.tenant, 'App', page, rowsPerPage)
         .then((item: any) => {
           if (item.data.success) {
             setIsLoader(false);
@@ -186,7 +153,7 @@ function UsersPage() {
     } else {
       setIsLoader(false);
     }
-  }, [null, selectedTab]);
+  }, [null]);
 
   const createFormHandler = (data: any) => {
     setIsLoader(true);
@@ -203,13 +170,6 @@ function UsersPage() {
       tenant: authState.user.tenant,
       createdBy: authState.user.id,
     };
-
-    let dataRender = false;
-    if (data.appuserRole === 'Driver' && selectedTab === 'OTHER') {
-      dataRender = true;
-    } else if (data.appuserRole === 'App' && selectedTab === 'APP USER') {
-      dataRender = true;
-    }
     appUserService
       .appCreateUser(formData)
       .then((item) => {
@@ -220,9 +180,7 @@ function UsersPage() {
             text: item.data.message,
             type: 'success',
           });
-          if (dataRender) {
-            setList([item.data.data, ...list]);
-          }
+          setList([item.data.data, ...list]);
         } else {
           setIsLoader(false);
           setIsNotify(true);
@@ -254,12 +212,6 @@ function UsersPage() {
       licenseNumber: data.licenseNumber ? data.licenseNumber : null,
       updatedBy: authState.user.id,
     };
-    let dataRender = false;
-    if (data.appuserRole === 'Driver' && selectedTab === 'OTHER') {
-      dataRender = true;
-    } else if (data.appuserRole === 'App' && selectedTab === 'APP USER') {
-      dataRender = true;
-    }
     appUserService
       .appUpdateUser(formData)
       .then((item) => {
@@ -270,17 +222,15 @@ function UsersPage() {
             text: item.data.message,
             type: 'success',
           });
-          if (dataRender) {
-            for (let i = 0; i < list.length; i += 1) {
-              if (list[i].id === item.data.data.id) {
-                list[i].firstName = item.data.data.firstName;
-                list[i].lastName = item.data.data.lastName;
-                list[i].phone = item.data.data.phone;
-                list[i].postalCode = item.data.data.postalCode;
-                list[i].licenseNumber = item.data.data.licenseNumber;
-                list[i].userType = item.data.data.userType;
-                // if (data.avatar !== null) list[i].avatar = item.data.data.avatar;
-              }
+          for (let i = 0; i < list.length; i += 1) {
+            if (list[i].id === item.data.data.id) {
+              list[i].firstName = item.data.data.firstName;
+              list[i].lastName = item.data.data.lastName;
+              list[i].phone = item.data.data.phone;
+              list[i].postalCode = item.data.data.postalCode;
+              list[i].licenseNumber = item.data.data.licenseNumber;
+              list[i].userType = item.data.data.userType;
+              // if (data.avatar !== null) list[i].avatar = item.data.data.avatar;
             }
           }
         } else {
@@ -362,53 +312,28 @@ function UsersPage() {
               </div>
             </div>
           </div>
-          {selectedTab === 'APP USER' && (
-            <AppUserTab
-              // isLoader={isLoader}
-              setIsLoader={setIsLoader}
-              list={list}
-              setList={setList}
-              total={total}
-              setTotal={setTotal}
-              page={page}
-              search={search}
-              setPage={setPage}
-              rowsPerPage={rowsPerPage}
-              setRowsPerPage={setRowsPerPage}
-              actionMenuItemid={actionMenuItemid}
-              setActionMenuItemid={setActionMenuItemid}
-              setEditFormData={setEditFormData}
-              setOpenEditFormDialog={setOpenEditFormDialog}
-              // isNotify={isNotify}
-              setIsNotify={setIsNotify}
-              // notifyMessage={notifyMessage}
-              setNotifyMessage={setNotifyMessage}
-              setCancelDialogOpen={setCancelDialogOpen}
-            />
-          )}
-          {/* {selectedTab === 'OTHER' && (
-            <AppUserOtherTab
-              // isLoader={isLoader}
-              setIsLoader={setIsLoader}
-              list={list}
-              setList={setList}
-              total={total}
-              setTotal={setTotal}
-              page={page}
-              search={search}
-              setPage={setPage}
-              rowsPerPage={rowsPerPage}
-              setRowsPerPage={setRowsPerPage}
-              actionMenuItemid={actionMenuItemid}
-              setActionMenuItemid={setActionMenuItemid}
-              setEditFormData={setEditFormData}
-              setOpenEditFormDialog={setOpenEditFormDialog}
-              // isNotify={isNotify}
-              setIsNotify={setIsNotify}
-              // notifyMessage={notifyMessage}
-              setNotifyMessage={setNotifyMessage}
-            />
-          )} */}
+          <AppUserTab
+            // isLoader={isLoader}
+            setIsLoader={setIsLoader}
+            list={list}
+            setList={setList}
+            total={total}
+            setTotal={setTotal}
+            page={page}
+            search={search}
+            setPage={setPage}
+            rowsPerPage={rowsPerPage}
+            setRowsPerPage={setRowsPerPage}
+            actionMenuItemid={actionMenuItemid}
+            setActionMenuItemid={setActionMenuItemid}
+            setEditFormData={setEditFormData}
+            setOpenEditFormDialog={setOpenEditFormDialog}
+            // isNotify={isNotify}
+            setIsNotify={setIsNotify}
+            // notifyMessage={notifyMessage}
+            setNotifyMessage={setNotifyMessage}
+            setCancelDialogOpen={setCancelDialogOpen}
+          />
         </div>
       </div>
       {cancelDialogOpen && (
@@ -426,8 +351,6 @@ function UsersPage() {
         openFormDialog={openFormDialog}
         setOpenFormDialog={setOpenFormDialog}
         callback={createFormHandler}
-        appUserRoleLov={appUserRoleLov}
-        selectedTab={selectedTab}
       />
       <AppUserUpdatePopup
         setIsNotify={setIsNotify}
@@ -438,7 +361,6 @@ function UsersPage() {
         setEditFormData={setEditFormData}
         callback={updateFormHandler}
         setActionMenuItemid={setActionMenuItemid}
-        appUserRoleLov={appUserRoleLov}
       />
     </>
   );

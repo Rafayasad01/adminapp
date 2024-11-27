@@ -182,6 +182,16 @@ Props) {
                       control={control}
                       rules={{
                         required: 'End date is required',
+                        validate: (endDate) => {
+                          const startDate = watch('startDate');
+                          if (!startDate || !endDate) {
+                            return true; // Skip validation if either date is missing
+                          }
+                          return (
+                            !dayjs(startDate).isSame(endDate, 'day') ||
+                            'End date cannot be the same as the start date'
+                          );
+                        },
                       }}
                       defaultValue={dayjs()}
                       render={({ field }) => (

@@ -244,12 +244,6 @@ function AppUsersPage() {
       licenseNumber: data.licenseNumber ? data.licenseNumber : null,
       updatedBy: authState.user.id,
     };
-    let dataRender = false;
-    if (data.appuserRole === 'Driver' && selectedTab === 'OTHER') {
-      dataRender = true;
-    } else if (data.appuserRole === 'App' && selectedTab === 'APP USER') {
-      dataRender = true;
-    }
     appUserService
       .appUpdateUser(formData)
       .then((item) => {
@@ -260,17 +254,15 @@ function AppUsersPage() {
             text: item.data.message,
             type: 'success',
           });
-          if (dataRender) {
-            for (let i = 0; i < list.length; i += 1) {
-              if (list[i].id === item.data.data.id) {
-                list[i].firstName = item.data.data.firstName;
-                list[i].lastName = item.data.data.lastName;
-                list[i].phone = item.data.data.phone;
-                list[i].postalCode = item.data.data.postalCode;
-                list[i].licenseNumber = item.data.data.licenseNumber;
-                list[i].userType = item.data.data.userType;
-                // if (data.avatar !== null) list[i].avatar = item.data.data.avatar;
-              }
+          for (let i = 0; i < list.length; i += 1) {
+            if (list[i].id === item.data.data.id) {
+              list[i].firstName = item.data.data.firstName;
+              list[i].lastName = item.data.data.lastName;
+              list[i].phone = item.data.data.phone;
+              list[i].postalCode = item.data.data.postalCode;
+              list[i].licenseNumber = item.data.data.licenseNumber;
+              list[i].userType = item.data.data.userType;
+              // if (data.avatar !== null) list[i].avatar = item.data.data.avatar;
             }
           }
         } else {

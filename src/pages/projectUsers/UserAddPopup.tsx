@@ -27,7 +27,6 @@ type AppUserCreatePopupProps = {
   setIsNotify: any;
   setNotifyMessage: any;
   appUserRoleLov?: any;
-  selectedTab: string;
 };
 
 function UserAddPopup({

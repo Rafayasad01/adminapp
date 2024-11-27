@@ -368,7 +368,7 @@ function ProductPage() {
                   <th>BR name</th>
                   <th>Dimension</th>
                   <th>Weight</th>
-                  <th>Price w/o & w TAX</th>
+                  {/* <th>Price w/o & w TAX</th> */}
                   <th>Warranty</th>
                   <th>Stock</th>
                   <th>Created Date</th>
@@ -433,7 +433,7 @@ function ProductPage() {
                           {item.itemDimension ? item.itemDimension : '--'}
                         </td>
                         <td>{item.itemWeight ? item.itemWeight : '--'}</td>
-                        <td>{item.costPrice ? item.costPrice : '--'}</td>
+                        {/* <td>{item.costPrice ? item.costPrice : '--'}</td> */}
                         <td>{item.warranty ? item.warranty : '--'}</td>
                         <td>
                           {item.stockAvailability
