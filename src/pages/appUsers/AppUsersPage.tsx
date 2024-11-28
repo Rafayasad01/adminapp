@@ -379,15 +379,16 @@ function AppUsersPage() {
                 {listingRolePermission(
                   dataRole,
                   ALL_PERMISSIONS.storeUser.importUserApp
-                ) && (
-                  <Button
-                    variant="contained"
-                    className="btn-black-fill btn-icon"
-                    onClick={handleFormClickDocOpen}
-                  >
-                    <AddOutlinedIcon /> Upload CSV File
-                  </Button>
-                )}
+                ) &&
+                  authState.user.userType === 'ShopUser' && (
+                    <Button
+                      variant="contained"
+                      className="btn-black-fill btn-icon"
+                      onClick={handleFormClickDocOpen}
+                    >
+                      <AddOutlinedIcon /> Upload CSV File
+                    </Button>
+                  )}
               </div>
             </div>
           </div>
