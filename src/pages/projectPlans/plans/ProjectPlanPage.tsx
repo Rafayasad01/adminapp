@@ -110,6 +110,7 @@ function ProjectPlanPage() {
     storePlanService
       .addProjectPlansService(data, authState.user.tenant, project_id)
       .then((res) => {
+        setIsLoader(false);
         setList(sortArrayByKey(res.data.data.list, 'day', 'asc'));
         setTotal(res.data.data.total);
       })
@@ -130,7 +131,6 @@ function ProjectPlanPage() {
         ALL_PERMISSIONS.storePlans.viewProjectPlans
       )
     ) {
-      setIsLoader(false);
       getProjectPlans(projectId ?? '');
     } else {
       setIsLoader(false);
