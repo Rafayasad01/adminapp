@@ -23,6 +23,7 @@ import AppUserTab from './AppUserTab';
 import AppUserUpdatePopup from './AppUserUpdatePopup';
 // import AppUserOtherTab from './AppUserOtherTab';
 import { getItem } from '../../utils/storage';
+import StaffFileUploadPopup from './AppUserFileUploadPopup';
 // import CustomersCreatePopup from './CustomersCreatePopup';
 // import CustomersEditPopup from './CustomersEditPopup';
 
@@ -41,6 +42,7 @@ function AppUsersPage() {
   const [actionMenuItemid, setActionMenuItemid] = React.useState<any>('');
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
+  const [openFileDialog, setOpenFileDialog] = useState(false);
   const [isLoader, setIsLoader] = React.useState(true);
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
@@ -54,6 +56,18 @@ function AppUsersPage() {
   const handleFormClickOpen = () => {
     if (listingRolePermission(dataRole, ALL_PERMISSIONS.storeUser.addUserApp)) {
       setOpenFormDialog(true);
+    } else {
+      setIsNotify(true);
+      setNotifyMessage({
+        text: NOT_AUTHORIZED_MESSAGE,
+        type: 'warning',
+      });
+    }
+  };
+
+  const handleFormClickDocOpen = async () => {
+    if (listingRolePermission(dataRole, ALL_PERMISSIONS.storeUser.addUserApp)) {
+      setOpenFileDialog(true);
     } else {
       setIsNotify(true);
       setNotifyMessage({
@@ -265,6 +279,41 @@ function AppUsersPage() {
       });
   };
 
+  const createFileHandler = (data: any) => {
+    setIsLoader(true);
+    const formData = new FormData();
+    if (data.file !== null) formData.append('file', data.file);
+    formData.append('name', data.name);
+    appUserService
+      .appUserFileUpload(formData)
+      .then((item: any) => {
+        if (item.data.success) {
+          setOpenFileDialog(false);
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'success',
+          });
+        } else {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: item.data.message,
+            type: 'error',
+          });
+        }
+      })
+      .catch((err: Error) => {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
+        });
+      });
+  };
+
   return isLoader ? (
     <Loader />
   ) : (
@@ -278,12 +327,12 @@ function AppUsersPage() {
       <div className="container m-auto mt-5">
         <div className="w-full rounded-lg bg-white shadow-lg">
           <div className="grid grid-cols-12 px-4 py-5">
-            <div className="col-span-7">
+            <div className="col-span-5">
               <span className="font-open-sans text-xl font-semibold text-[#252733]">
                 All {title}
               </span>
             </div>
-            <div className="col-span-5">
+            <div className="col-span-7">
               <div className="flex flex-row justify-end gap-3">
                 <FormControl
                   className="search-grey-outline placeholder-grey w-60"
@@ -325,6 +374,18 @@ function AppUsersPage() {
                     onClick={handleFormClickOpen}
                   >
                     <AddOutlinedIcon /> Add New
+                  </Button>
+                )}
+                {listingRolePermission(
+                  dataRole,
+                  ALL_PERMISSIONS.storeUser.importUserApp
+                ) && (
+                  <Button
+                    variant="contained"
+                    className="btn-black-fill btn-icon"
+                    onClick={handleFormClickDocOpen}
+                  >
+                    <AddOutlinedIcon /> Upload CSV File
                   </Button>
                 )}
               </div>
@@ -380,6 +441,15 @@ function AppUsersPage() {
         callback={updateFormHandler}
         setActionMenuItemid={setActionMenuItemid}
       />
+      {openFileDialog && (
+        <StaffFileUploadPopup
+          setIsNotify={setIsNotify}
+          setNotifyMessage={setNotifyMessage}
+          openFormDialog={openFileDialog}
+          setOpenFormDialog={setOpenFileDialog}
+          callback={createFileHandler}
+        />
+      )}
     </>
   );
 }

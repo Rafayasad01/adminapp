@@ -197,13 +197,6 @@ const StoreEmployeeScheduleById = (empId: string | any) => {
   );
 };
 
-const StoreEmployeeFileUpload = (data: any) => {
-  return network.postMultipart(
-    `${STORE_PREFIX}/${EMPLOYEE_PREFIX}/file/upload`,
-    data
-  );
-};
-
 export default {
   StoreEmployeeList,
   StoreEmployeeAllList,
@@ -227,5 +220,4 @@ export default {
   StoreEmployeeLeaveStatusUpdateService,
   StoreEmployeeLov,
   StoreEmployeeScheduleById,
-  StoreEmployeeFileUpload,
 };

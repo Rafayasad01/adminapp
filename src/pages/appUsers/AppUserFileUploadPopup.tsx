@@ -8,18 +8,18 @@ import Input from '@mui/material/Input';
 import React, { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 // import TextField from '@mui/material/TextField';
-import '../../../assets/css/PopupStyle.css';
+import '../../assets/css/PopupStyle.css';
 // import TextField from '@mui/material/TextField';
 // import FormControl from '@mui/material/FormControl';
-import ErrorSpanBox from '../../../components/common/ErrorSpanBox';
+import ErrorSpanBox from '../../components/common/ErrorSpanBox';
 import {
   //   ALL_PERMISSIONS,
   //   INVALID_CHAR,
   //   MAX_LENGTH_EXCEEDED,
   //   PATTERN,
   mimiType,
-} from '../../../utils/constants';
-import { AppointmentStaffAttachment } from '../../../interfaces/app.appointment';
+} from '../../utils/constants';
+import { AppointmentStaffAttachment } from '../../interfaces/app.appointment';
 // import CustomDropDown from '../../../components/common/CustomDropDown';
 // import { useAppSelector } from '../../../redux/redux-hooks';
 
@@ -107,7 +107,7 @@ function StaffFileUploadPopup({
       <div className="Content">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="FormHeader">
-            <span className="Title">Upload Staffs file</span>
+            <span className="Title">Upload Users CSV file</span>
           </div>
           <div className="FormBody mt-2">
             <div className="FormField">

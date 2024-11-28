@@ -184,6 +184,10 @@ const appAnonymousDetail = () => {
   return network.get(`${BACKOFFICE_PREFIX}/anonymous/detail`);
 };
 
+const appUserFileUpload = (data: any) => {
+  return network.postMultipart(`${APP_PREFIX}/import/csv/file`, data);
+};
+
 export default {
   appLogin,
   appAnonymousLogin,
@@ -212,4 +216,5 @@ export default {
   driverList,
   driverDetail,
   driverWalletDetail,
+  appUserFileUpload,
 };

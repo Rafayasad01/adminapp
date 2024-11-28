@@ -794,6 +794,7 @@ export const ALL_PERMISSIONS = {
     // editCustomer: 'editCustomer',
     // deleteCustomer: 'deleteCustomer',
     viewAddressCustomer: 'viewAddressCustomer',
+    importUserApp: 'importUserApp',
   },
   storeBranch: {
     viewBranches: 'viewStoreBranch',
