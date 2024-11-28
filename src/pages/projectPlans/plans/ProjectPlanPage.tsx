@@ -53,15 +53,24 @@ function ProjectPlanPage() {
     // setPlanDay
   ] = useState<Day | null>();
   const [cancelDialogOpen, setCancelDialogOpen] = useState<boolean>(false);
+  const [updateNewPlanDialogOpen, setUpdateNewPlanDialogOpen] =
+    useState<boolean>(false);
   const [dialogText] = useState<any>(
     'Are you sure you want to update your daily plan ?'
+  );
+  const [updateNewPlandialogText] = useState<any>(
+    'Are you sure you want to update your New Project plans ?'
   );
 
   const handleFormClickOpen = () => {
     if (
       listingRolePermission(dataRole, ALL_PERMISSIONS.storePlans.addProjectPlan)
     ) {
-      setOpenFormDialog(true);
+      if (list?.length > 0) {
+        setUpdateNewPlanDialogOpen(true);
+      } else {
+        setOpenFormDialog(true);
+      }
     } else {
       setIsNotify(true);
       setNotifyMessage({
@@ -169,7 +178,6 @@ function ProjectPlanPage() {
   };
 
   const createFormHandler = (data: any) => {
-    console.log('data==>', data);
     setIsLoader(true);
     const formData = new FormData();
     formData.append('planFile', data.file);
@@ -209,6 +217,11 @@ function ProjectPlanPage() {
   const handleUpdatePlan = () => {
     setCancelDialogOpen(false);
     setOpenEditFormDialog(true);
+  };
+
+  const handleUpdateNewPlan = () => {
+    setUpdateNewPlanDialogOpen(false);
+    setOpenFormDialog(true);
   };
 
   const updateExcute = (data: any) => {
@@ -253,11 +266,6 @@ function ProjectPlanPage() {
         });
       });
   };
-
-  // const randomBadgeColor = (colors: string) => {
-  //   const randomIndex = Math.floor(Math.random() * colors.length);
-  //   return colors[randomIndex];
-  // };
 
   return isLoader ? (
     <Loader />
@@ -352,6 +360,16 @@ function ProjectPlanPage() {
           setOpen={setCancelDialogOpen}
           dialogText={dialogText}
           callback={handleUpdatePlan}
+        />
+      )}
+      {updateNewPlanDialogOpen && (
+        <PermissionPopup
+          type="thumb"
+          open={updateNewPlanDialogOpen}
+          setOpen={setUpdateNewPlanDialogOpen}
+          dialogText={updateNewPlandialogText}
+          dialogDesc="This will Remove All Your Previous Plans"
+          callback={handleUpdateNewPlan}
         />
       )}
       {openFormDialog && (

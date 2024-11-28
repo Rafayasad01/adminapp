@@ -79,7 +79,7 @@ function ProjectPlanEditPopup({
       <div className="Content">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="FormHeader">
-            <span className="Title">Edit Plan</span>
+            <span className="Title">Upload Daily Plan</span>
           </div>
           <div className="FormBody mt-2">
             <div className="FormField">
