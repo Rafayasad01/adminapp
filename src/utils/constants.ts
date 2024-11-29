@@ -769,6 +769,32 @@ export const CONSTRUCTION_TYPE = [
   },
 ];
 
+export const JOBS_TYPE = [
+  {
+    id: 'partTime',
+    name: 'Part-Time',
+  },
+  {
+    id: 'fullTime',
+    name: 'Full-Time',
+  },
+];
+
+export const SHIFT_TYPE = [
+  {
+    id: 'morning',
+    name: 'Morning',
+  },
+  {
+    id: 'evening',
+    name: 'Evening',
+  },
+  {
+    id: 'night',
+    name: 'Night',
+  },
+];
+
 export const ALL_PERMISSIONS = {
   storeAppointment: {
     viewServices: 'viewAppointmentService',

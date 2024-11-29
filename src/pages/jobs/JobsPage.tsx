@@ -58,7 +58,7 @@ function JobsPage() {
   );
 
   const handleFormClickOpen = () => {
-    if (listingRolePermission(dataRole, ALL_PERMISSIONS.storeProduct.add)) {
+    if (listingRolePermission(dataRole, ALL_PERMISSIONS.quotations.add)) {
       setOpenFormDialog(true);
     } else {
       setIsNotify(true);
@@ -87,6 +87,8 @@ function JobsPage() {
           });
           // console.log('error::::::::', error);
         });
+    } else {
+      setIsLoader(false);
     }
   }, [null]);
 

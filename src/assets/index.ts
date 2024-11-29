@@ -90,6 +90,7 @@ import box from './images/box.png';
 import supplyIcon from './images/icons/supply.png';
 import quotationIcon from './images/quotation.png';
 import vendorTypesIcon from './images/vendor-types.png';
+import jobsIcon from './images/jobs.png';
 
 const assets = {
   images: {
@@ -171,6 +172,7 @@ const assets = {
     supplyIcon,
     quotationIcon,
     vendorTypesIcon,
+    jobsIcon,
   },
   tempImages: {
     shirt,

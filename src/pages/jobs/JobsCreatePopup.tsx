@@ -7,13 +7,19 @@ import { useForm } from 'react-hook-form';
 
 import TextField from '@mui/material/TextField';
 import '../../assets/css/PopupStyle.css';
+import { Divider, InputAdornment } from '@mui/material';
 import ErrorSpanBox from '../../components/common/ErrorSpanBox';
-import { Category } from '../../interfaces/category.interface';
 import {
+  CURRENCY_PREFIX,
   INVALID_CHAR,
+  JOBS_TYPE,
   MAX_LENGTH_EXCEEDED,
   PATTERN,
+  PH_MINI_LENGTH,
+  SHIFT_TYPE,
 } from '../../utils/constants';
+import { Jobs } from '../../interfaces/jobs.interface';
+import CustomDropDown from '../../components/common/CustomDropDown';
 
 type CategoriesCreatePopupProps = {
   openFormDialog: boolean;
@@ -33,11 +39,12 @@ function JobsCreatePopup({
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors },
-  } = useForm<Category>();
+  } = useForm<Jobs>();
 
-  const onSubmit = (data: Category) => {
-    if (data.desc && data.name) {
+  const onSubmit = (data: Jobs) => {
+    if (data.desc && data.title) {
       setOpenFormDialog(false);
       callback(data);
     } else {
@@ -68,67 +75,159 @@ function JobsCreatePopup({
             <span className="Title">Add Job Details</span>
           </div>
           <div className="FormBody">
-            <div className="FormField">
+            <div className="FormFields">
               <FormControl className="FormControl" variant="standard">
-                <label className="FormLabel">Name</label>
+                <label className="FormLabel">Title</label>
                 <Input
                   className="FormInput"
-                  {...register('name', {
+                  {...register('title', {
                     required: true,
                     pattern: PATTERN.CHAR_SPACE_DASH,
                     validate: (value) => value.length <= 150,
                   })}
-                  placeholder="Enter Category Name"
+                  placeholder="Web Developer"
                   type="text"
-                  id="name"
+                  id="title"
                   disableUnderline
                 />
-                {errors.name?.type === 'required' && (
-                  <ErrorSpanBox error="Category name is required" />
+                {errors.title?.type === 'required' && (
+                  <ErrorSpanBox error="Job Title is required" />
                 )}
-                {errors.name?.type === 'pattern' && (
+                {errors.title?.type === 'pattern' && (
                   <ErrorSpanBox error={INVALID_CHAR} />
                 )}
-                {errors.name?.type === 'validate' && (
+                {errors.title?.type === 'validate' && (
                   <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
                 )}
               </FormControl>
-            </div>
-            <div className="FormField">
               <FormControl className="FormControl" variant="standard">
                 <label className="FormLabel">Department</label>
                 <Input
                   className="FormInput"
-                  {...register('name', {
+                  {...register('department', {
                     required: true,
                     pattern: PATTERN.CHAR_SPACE_DASH,
                     validate: (value) => value.length <= 150,
                   })}
-                  placeholder="Enter Category Name"
+                  placeholder="Software"
                   type="text"
-                  id="name"
+                  id="department"
                   disableUnderline
                 />
-                {errors.name?.type === 'required' && (
-                  <ErrorSpanBox error="Category name is required" />
+                {errors.department?.type === 'required' && (
+                  <ErrorSpanBox error="Department name is required" />
                 )}
-                {errors.name?.type === 'pattern' && (
+                {errors.department?.type === 'pattern' && (
                   <ErrorSpanBox error={INVALID_CHAR} />
                 )}
-                {errors.name?.type === 'validate' && (
+                {errors.department?.type === 'validate' && (
                   <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
                 )}
               </FormControl>
             </div>
+            <div className="FormFields">
+              <FormControl className="FormControl" variant="standard">
+                <label className="FormLabel">Minimum Salary Range</label>
+                <Input
+                  className="FormInput"
+                  id="minSalary"
+                  placeholder="25000"
+                  disableUnderline
+                  {...register('minSalary', {
+                    pattern: PATTERN.PHONE,
+                    maxLength: {
+                      value: 15,
+                      message: MAX_LENGTH_EXCEEDED,
+                    },
+                  })}
+                  type="text"
+                  endAdornment={
+                    <InputAdornment position="end">
+                      <Divider
+                        sx={{ height: 28, m: 0.5 }}
+                        orientation="vertical"
+                      />
+                      {CURRENCY_PREFIX}
+                    </InputAdornment>
+                  }
+                />
+                {errors.minSalary?.type === 'pattern' && (
+                  <ErrorSpanBox error={INVALID_CHAR} />
+                )}
+                {errors.minSalary?.type === 'maxLength' && (
+                  <ErrorSpanBox error={PH_MINI_LENGTH} />
+                )}
+              </FormControl>
+              <FormControl className="FormControl" variant="standard">
+                <label className="FormLabel">Maximum Salary Range</label>
+                <Input
+                  className="FormInput"
+                  id="maxSalary"
+                  placeholder="60000"
+                  disableUnderline
+                  {...register('maxSalary', {
+                    pattern: PATTERN.PHONE,
+                    maxLength: {
+                      value: 15,
+                      message: MAX_LENGTH_EXCEEDED,
+                    },
+                  })}
+                  type="text"
+                  endAdornment={
+                    <InputAdornment position="end">
+                      <Divider
+                        sx={{ height: 28, m: 0.5 }}
+                        orientation="vertical"
+                      />
+                      {CURRENCY_PREFIX}
+                    </InputAdornment>
+                  }
+                />
+                {errors.maxSalary?.type === 'pattern' && (
+                  <ErrorSpanBox error={INVALID_CHAR} />
+                )}
+                {errors.maxSalary?.type === 'maxLength' && (
+                  <ErrorSpanBox error={PH_MINI_LENGTH} />
+                )}
+              </FormControl>
+            </div>
+            <div className="FormFields">
+              <FormControl className="FormControl" variant="standard">
+                <CustomDropDown
+                  validateRequired
+                  id="type"
+                  control={control}
+                  error={errors}
+                  register={register}
+                  options={{ roles: JOBS_TYPE }}
+                  customClassInputTitle="font-bold"
+                  inputTitle="Job Type"
+                  defaultValue="Select Job Type"
+                />
+              </FormControl>
+              <FormControl className="FormControl" variant="standard">
+                <CustomDropDown
+                  validateRequired
+                  id="shift"
+                  control={control}
+                  error={errors}
+                  register={register}
+                  options={{ roles: SHIFT_TYPE }}
+                  customClassInputTitle="font-bold"
+                  inputTitle="Shift Type"
+                  defaultValue="Select Shift Type"
+                />
+              </FormControl>
+            </div>
             <div className="FormField">
               <FormControl className="FormControl" variant="standard">
-                <label className="FormLabel">
-                  Message{' '}
+                <label className="FormLabel mt-3">
+                  Description{' '}
                   <span className="SubLabel">Write 01-370 Characters</span>
                 </label>
                 <TextField
                   className="FormTextarea"
-                  id="message"
+                  id="desc"
                   multiline
                   rows={4}
                   defaultValue=""
@@ -167,7 +266,7 @@ function JobsCreatePopup({
               className="btn-black-fill"
               disableUnderline
               sx={{
-                padding: '0.375rem 2rem !important',
+                padding: '0.175rem 2rem !important',
               }}
             />
           </div>

@@ -96,6 +96,7 @@ import QuotationsPage from '../pages/quotations/QuotationsPage';
 import QuotationsAddPage from '../pages/quotations/QuotationsAddPage';
 import QuotationsEditPage from '../pages/quotations/QuotationsEditPage';
 import VendorTypePage from '../pages/vendorTypes/VendorTypesPage';
+import JobsPage from '../pages/jobs/JobsPage';
 
 const ProtectedRoute = ({ page, condition }: any) => {
   const canView = CAN('canView', condition);
@@ -1162,6 +1163,15 @@ export const routeObjects: RouteObject[] = [
               {
                 path: 'edit/:id',
                 element: <QuotationsEditPage />,
+              },
+            ],
+          },
+          {
+            path: 'jobs',
+            children: [
+              {
+                index: true,
+                element: <JobsPage />,
               },
             ],
           },

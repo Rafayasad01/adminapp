@@ -18,7 +18,7 @@ import { UserLogin } from '../../../interfaces/auth.interface';
 import { setItemState, setLogo } from '../../../redux/features/appSlice';
 import { login, setShopAdminTenant } from '../../../redux/features/authSlice';
 import { setRolePermissions } from '../../../redux/features/permissionsStateSlice';
-import { useAppDispatch, useAppSelector } from '../../../redux/redux-hooks';
+import { useAppDispatch } from '../../../redux/redux-hooks';
 import authService from '../../../services/adminapp/admin';
 import appUserService from '../../../services/adminapp/adminAppUser';
 import { handleTitleText } from '../../../utils/constants';
@@ -31,9 +31,6 @@ interface LoginFields {
 
 function LoginPage() {
   const dispatch = useAppDispatch();
-  const systemConfig = useAppSelector(
-    (state: any) => state.authState.systemConfig
-  );
   const { notification, hideNotification, showNotification } =
     useNotification();
   const navigate = useNavigate();
@@ -51,19 +48,6 @@ function LoginPage() {
     handleSubmit,
     formState: { errors },
   } = useForm<LoginFields>();
-
-  // const [
-  //   greeting,
-  //   setGreeting] = useState('');
-  // useEffect(() => {
-  //   const currentTime = new Date().getHours();
-
-  //   if (currentTime >= 0 && currentTime < 12) {
-  //     setGreeting('Hey, morning!');
-  //   } else {
-  //     setGreeting('Hey, evening!');
-  //   }
-  // }, []);
 
   const handleAnonAppUser = (user: any) => {
     const anonIdentifier = user?.username?.split('@')[0];
@@ -122,17 +106,11 @@ function LoginPage() {
         } else {
           setIsLoader(false);
           showNotification(user.data.message, 'error');
-          // setAlertMsg(user.data.message);
-          // setAlertSeverity('error');
-          // setShowAlert(true);
         }
       })
       .catch((err) => {
         setIsLoader(false);
         showNotification(err.message, 'error');
-        // setAlertMsg(err.message);
-        // setAlertSeverity('error');
-        // setShowAlert(true);
       });
   };
 
@@ -142,24 +120,12 @@ function LoginPage() {
         <div className="w-[50%]  self-start px-[30px]">
           <div className="flex max-h-[29px] w-full max-w-[600px] items-center justify-start px-[25px] py-[40px]">
             <img
-              src={systemConfig?.shopLogo ?? systemConfig?.shopName}
+              src={assets.images.logo}
               alt="login-logo"
-              className="mt-10 h-auto w-[100px] object-contain"
+              className="mt-10 h-auto w-[60px] object-contain"
             />
           </div>
           <div className="xl:pt-[50px] 2xl:pt-[150px]">
-            {/* <div className="flex justify-center">
-              {greeting === 'Hey, morning!' ? (
-                <img src={assets.images.morningImage} alt="morning" />
-              ) : (
-                <img
-                  height={80}
-                  width={80}
-                  src={assets.images.noonImage}
-                  alt="evening"
-                />
-              )}
-            </div> */}
             <h1 className="mb-4 text-center text-[36px] font-bold capitalize leading-[normal] text-black">
               Welcome
             </h1>
@@ -243,23 +209,9 @@ function LoginPage() {
           </div>
         </div>
         <div className="w-[50%] px-3 py-2">
-          {/* <div className="mx-auto max-w-[800px] overflow-hidden rounded-lg flex justify-center items-center min-h-[800px] min-[1600px]:max-w-[934px] "> */}
           <div className="mx-auto  flex max-h-[834px] items-center justify-center overflow-hidden rounded-lg max-[1560px]:max-h-[96vh]">
-            {/* <img
-              src={assets.images.bgLogin}
-              alt="urlaundry"
-              className="h-full w-full object-contain"
-            /> */}
             <div className="flex">
               <div className="relative min-h-[984px] w-[735px] flex-1 overflow-hidden">
-                {/* <div className="absolute bottom-[15px] right-[15px] z-10 h-[30px]">
-                  <img
-                    src={assets.images.nelogo}
-                    alt="new-earth"
-                    className="h-full w-full object-contain"
-                  />
-                </div> */}
-
                 <img
                   src={assets.images.splash1}
                   alt="Image 1"
@@ -280,11 +232,6 @@ function LoginPage() {
                   alt="Image 4"
                   className="ne-fade-image absolute left-0 top-0 h-full w-full object-contain opacity-0"
                 />
-                {/* <img
-                  src={assets.images.splash5}
-                  alt="Image 5"
-                  className="ne-fade-image absolute left-0 top-0 h-full w-full object-contain opacity-0"
-                /> */}
                 <img
                   src={assets.images.splash6}
                   alt="Image 6"
@@ -302,13 +249,6 @@ function LoginPage() {
                 />
               </div>
             </div>
-            {/* <div className="flex flex-col items-center justify-center">
-              <p className="text-xl font-semibold">Image is not uploaded yet</p>
-              <span className="text-sm font-medium">
-                Hint: You can upload under setting module from setting config
-                tab
-              </span>
-            </div> */}
           </div>
         </div>
         {notification && (
