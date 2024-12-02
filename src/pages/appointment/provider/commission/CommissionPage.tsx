@@ -380,7 +380,7 @@ function CommissionPage() {
           <div className="grid grid-cols-12 px-4 py-5">
             <div className="col-span-7">
               <span className="font-open-sans text-xl font-semibold text-[#252733]">
-                All {commEmp?.name} Commission
+                All {commEmp?.name ? `${commEmp?.name}'s` : ''} Commission
               </span>
             </div>
             <div className="col-span-5">
@@ -462,7 +462,7 @@ function CommissionPage() {
                   <th className="w-[20%]">Description</th>
                   <th>Prod/Service Amount</th>
                   <th>Commission</th>
-                  <th>Commission Amount</th>
+                  <th>Total Amount</th>
                   <th>Commission Date</th>
                   <th>Created Date</th>
                   <th>&nbsp;</th>

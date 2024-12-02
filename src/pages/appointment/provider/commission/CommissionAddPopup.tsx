@@ -313,6 +313,7 @@ function CommissionAddPopup({
                   }
                   className="FormInput"
                   id="commissionPercentage"
+                  inputProps={{ step: 'any' }}
                   type="number"
                   placeholder={
                     watch('commissionAmountType') === 'amount' ? '200' : '2.5'
@@ -421,7 +422,7 @@ function CommissionAddPopup({
                   Commission
                 </div>
                 <div className="col-span-3 text-center font-semibold">
-                  Commission Amount
+                  Total Amount
                 </div>
                 <div className="" />
               </div>
@@ -448,7 +449,7 @@ function CommissionAddPopup({
                       {dayjs(item.date).format('DD MMMM YYYY')}
                     </span>
                   </div>
-                  <div className="col-span-1 px-2 capitalize">
+                  <div className="col-span-1 truncate px-2 capitalize">
                     {item.productAmount ? item.productAmount : 0}
                     <span className="font-medium"> {CURRENCY_PREFIX}</span>
                   </div>
@@ -466,7 +467,10 @@ function CommissionAddPopup({
                     {Number(item.amount).toFixed(2)}
                     <span className="font-medium"> {CURRENCY_PREFIX}</span>
                   </div>
-                  <div className="m-0 bg-primary p-0 text-center">
+                  <div
+                    className="m-0 bg-primary p-0 text-center"
+                    style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
+                  >
                     <ClearOutlinedIcon
                       className="cursor-pointer"
                       onClick={() => remove(index)}

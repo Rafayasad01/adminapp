@@ -354,6 +354,7 @@ function CommissionEditPopup({
                   }
                   className="FormInput"
                   id="commissionPercentage"
+                  inputProps={{ step: 'any' }}
                   type="number"
                   placeholder={
                     watch('commissionAmountType') === 'amount' ? '200' : '2.5'
@@ -431,7 +432,7 @@ function CommissionEditPopup({
             </div>
             <div className="FormField">
               <FormControl className="FormControl" variant="standard">
-                <label className="FormLabel">Total Commission Amount</label>
+                <label className="FormLabel">Total Amount</label>
                 <Input
                   className="FormInput"
                   id="productAmount"
