@@ -170,6 +170,8 @@ function VideoEditPopup({
     setFilePath(null);
   };
 
+  console.log('formData?.category', formData);
+
   return (
     <Dialog
       open={openFormDialog}
@@ -218,7 +220,10 @@ function VideoEditPopup({
                   control={control}
                   error={errors}
                   register={register}
-                  options={{ roles: PROJECT_IMAGE_TYPE, role: formData?.type }}
+                  options={{
+                    roles: PROJECT_IMAGE_TYPE,
+                    role: formData?.category,
+                  }}
                   customClassInputTitle="font-bold"
                   inputTitle="Type"
                   defaultValue="Select Type"
