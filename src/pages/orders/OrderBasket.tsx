@@ -74,8 +74,6 @@ const OrderBasket = () => {
   const authState = useAppSelector((state) => state?.authState);
   const tenantConfig: any = getItem('TENANT_CONFIG');
 
-  // console.log('authState', tenantConfig);
-
   const {
     /*  register, */
     watch,
@@ -916,7 +914,7 @@ const OrderBasket = () => {
                     Total Amount
                   </div>
                   <div className="font-open-sans text-sm font-bold text-neutral-900">
-                    {CURRENCY_PREFIX} {totalAmount.toFixed(2)}
+                    {CURRENCY_PREFIX} {totalAmount.toLocaleString()}
                   </div>
                 </div>
                 {tenantConfig.tenantConfig?.enableLoyaltyProgram &&
@@ -950,9 +948,7 @@ const OrderBasket = () => {
                         </div>
                         <div className="font-open-sans text-sm font-bold text-neutral-900">
                           {CURRENCY_PREFIX}{' '}
-                          {tenantConfig.tenantConfig?.loyaltyCoinConversionRate.toFixed(
-                            2
-                          )}
+                          {tenantConfig.tenantConfig?.loyaltyCoinConversionRate.toLocaleString()}
                         </div>
                       </div>
                     </>
@@ -970,7 +966,7 @@ const OrderBasket = () => {
                         totalAmount > minDiscount &&
                         totalAmount > discountedValue?.value &&
                         promoCode
-                          ? Number(discountedValue?.value).toFixed(2)
+                          ? discountedValue?.value?.toLocaleString()
                           : '0.00'
                       }`
                       ) : (
@@ -988,7 +984,7 @@ const OrderBasket = () => {
                     GST ({tenantConfig.tenantConfig?.gstPercentage}%)
                   </div>
                   <div className="font-open-sans text-sm font-bold text-neutral-900">
-                    {CURRENCY_PREFIX} {gstAmount.toFixed(2)}
+                    {CURRENCY_PREFIX} {gstAmount.toLocaleString()}
                   </div>
                 </div>
               </div>
@@ -1002,9 +998,9 @@ const OrderBasket = () => {
                   {tenantConfig.tenantConfig?.enableLoyaltyProgram &&
                   Number(loginDetails?.loyaltyCoins) >=
                     tenantConfig.tenantConfig?.requiredCoinsToRedeem
-                    ? grandTotalWithLoyaltyCoinsRate
-                    : grandTotal
-                    ? grandTotal.toFixed(2)
+                    ? grandTotalWithLoyaltyCoinsRate.toLocaleString()
+                    : grandTotal.toLocaleString()
+                    ? grandTotal.toLocaleString()
                     : '0.00'}
                 </div>
               </div>

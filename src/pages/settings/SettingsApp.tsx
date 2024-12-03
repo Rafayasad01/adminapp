@@ -273,17 +273,19 @@ function SettingsApp() {
               itemData?.branch?.officeTimeIn ||
               itemData?.branch?.officeTimeOut
             ) {
-              // SET OFFICE TIMINGS
-              const officeTimeData = {
+              // SET BRANCH & THEIR OFFICE TIMINGS
+              const updateBranchData = {
                 ...branchData,
                 name: itemData?.branch?.name,
+                description: itemData?.branch?.description,
                 officeTimeIn: itemData?.branch?.officeTimeIn,
                 officeTimeOut: itemData?.branch?.officeTimeOut,
+                attendanceDistance: itemData?.branch?.attendanceDistance,
+                address: itemData?.branch?.address,
+                landline: itemData?.branch?.landline,
+                mobile: itemData?.branch?.mobile,
               };
-              // console.log('officeTimeData', officeTimeData);
-
-              dispatch(setBranchData(officeTimeData));
-              // setItem('BRANCH_DATA', officeTimeData);
+              dispatch(setBranchData(updateBranchData));
               dispatch(setTenantConfig(itemData?.tenantConfig));
             }
             if (itemData?.tenantConfig?.logo) {
