@@ -249,7 +249,7 @@ function AppUsersPage() {
           });
           // if (dataRender) {
           for (let i = 0; i < list.length; i += 1) {
-            if (actionMenuItemid?.id === item.data.data.id) {
+            if (list[i].id === item.data.data.id) {
               list[i].firstName = item.data.data.firstName;
               list[i].lastName = item.data.data.lastName;
               list[i].phone = item.data.data.phone;
