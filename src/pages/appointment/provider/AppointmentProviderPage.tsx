@@ -33,6 +33,7 @@ import AppointmentProviderCards from './AppointmentProviderCards';
 import CustomSwiperDialog from './CustomAddSwiperDialog';
 import CustomEditSwiperDialog from './CustomEditSwiperDialog';
 import PayrollPopup from './PayrollPopup';
+// import CustomButton from '../../../components/common/CustomButton';
 
 function AppointmentProviderPage() {
   const navigate = useNavigate();
@@ -47,8 +48,7 @@ function AppointmentProviderPage() {
   const [page, setPage] = useState(0);
   const [total, setTotal] = useState(0);
   const [list, setList] = useState<any>([]);
-  // const [currentList, setCurrentList] = useState<any>([]);
-  const [rowsPerPage] = React.useState(2000);
+  const [rowsPerPage] = React.useState(12);
   const [actionMenuItemid, setActionMenuItemid] = React.useState('');
   const [actionMenuAnchorEl, setActionMenuAnchorEl] =
     useState<null | HTMLElement>(null);
@@ -64,7 +64,7 @@ function AppointmentProviderPage() {
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
   const [isLoader, setIsLoader] = useState(true);
-  // const [, setIsLoaderPagination] = useState(false);
+  // const [, setIsLoader] = useState(false);
   const [isNotify, setIsNotify] = useState(false);
   const [notifyMessage, setNotifyMessage] = useState({});
   const [payrollPopup, setPayrollPopup] = useState<boolean>(false);
@@ -564,7 +564,6 @@ function AppointmentProviderPage() {
       setSearch(searchTxt);
       setPage(newPage);
       StoreEmployeeService.StoreEmployeeAllList(
-        // authState.user.tenant,
         searchTxt,
         newPage,
         rowsPerPage
@@ -867,7 +866,7 @@ function AppointmentProviderPage() {
         type: 'warning',
       });
     }
-  }, [null]);
+  }, []);
 
   const swiperRef = useRef<any>(null);
 
@@ -1076,44 +1075,38 @@ function AppointmentProviderPage() {
     }
   };
 
-  // const handleViewMore = () => {
-  //   setIsLoaderPagination(true);
-  //   const newPage = page + 1;
-  //   setPage(newPage);
-  //   Service.ProviderList(authState.user.tenant, newPage, rowsPerPage)
-  //     .then((item) => {
-  //       setIsLoaderPagination(false);
-  //       setCurrentList(item.data.data.list);
-  //       setList((prev: any) => [...prev, ...item.data.data.list]);
-  //       setTotal(item.data.data.total);
-  //     })
-  //     .catch((error: Error) => {
-  //       setIsLoaderPagination(false);
-  //       setIsNotify(true);
-  //       setNotifyMessage({
-  //         text: error.message,
-  //         type: 'error',
-  //       });
-  //     });
-  // };
+  const handleViewMore = () => {
+    setIsLoader(true);
+    const newPage = page + 1;
+    setPage(newPage);
+    StoreEmployeeService.StoreEmployeeAllList(search, newPage, rowsPerPage)
+      .then((item) => {
+        setIsLoader(false);
+        setList((prevList: any) => [...prevList, ...item.data.data.list]);
+        setTotal(item.data.data.total);
+      })
+      .catch((error: Error) => {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: error.message,
+          type: 'error',
+        });
+      });
+  };
 
   // const handleViewLess = () => {
-  //   setIsLoaderPagination(true);
+  //   setIsLoader(true);
   //   const newPage = page - 1;
   //   setPage(newPage);
-  //   Service.ProviderList(authState.user.tenant, newPage, rowsPerPage)
+  //   StoreEmployeeService.StoreEmployeeAllList(search, newPage, rowsPerPage)
   //     .then((item) => {
-  //       setIsLoaderPagination(false);
-  //       setList((prev: any) =>
-  //         prev?.filter(
-  //           (el: any) => !currentList.some((items: any) => items.id === el.id)
-  //         )
-  //       );
-  //       setCurrentList(item.data.data.list);
+  //       setIsLoader(false);
+  //       setList((prevList: any) => prevList.slice(0, prevList.length - 12));
   //       setTotal(item.data.data.total);
   //     })
   //     .catch((error: Error) => {
-  //       setIsLoaderPagination(false);
+  //       setIsLoader(false);
   //       setIsNotify(true);
   //       setNotifyMessage({
   //         text: error.message,
@@ -1151,6 +1144,10 @@ function AppointmentProviderPage() {
                     id="search"
                     type="text"
                     placeholder="Search"
+                    value={search}
+                    onChange={(event: any) => {
+                      setSearch(event.target.value);
+                    }}
                     onKeyDown={(
                       event: React.KeyboardEvent<
                         HTMLInputElement | HTMLTextAreaElement
@@ -1195,24 +1192,25 @@ function AppointmentProviderPage() {
           {list?.length < 1 ? (
             <CustomText noRoundedBorders text="No Records Found" />
           ) : null}
-          {/* <div className="mt-3 flex w-[100%] justify-end py-3">
-            {list?.length > rowsPerPage && (
+          <div className="mt-3 flex w-[100%] justify-end px-4 py-3">
+            {/* {list?.length > 12 && (
               <CustomButton
                 onclick={handleViewLess}
-                className="bg-transparent text-sm font-light lowercase text-primary shadow-none"
+                className="bg-transparent text-base font-light lowercase text-primary shadow-none"
                 title="View less"
                 buttonType="button"
               />
+            )} */}
+            {list?.length < total && (
+              <Button
+                variant="outlined"
+                className="border-primary bg-transparent text-primary hover:bg-black hover:text-foreground"
+                onClick={handleViewMore}
+              >
+                View More
+              </Button>
             )}
-            {list?.length !== total && (
-              <CustomButton
-                onclick={handleViewMore}
-                className="bg-transparent text-sm font-light lowercase text-primary shadow-none"
-                title="View more"
-                buttonType="button"
-              />
-            )}
-          </div> */}
+          </div>
         </div>
       </div>
       {cancelDialogOpen && (

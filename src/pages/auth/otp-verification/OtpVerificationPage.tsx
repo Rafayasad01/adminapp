@@ -165,7 +165,7 @@ function OTPVerificationPage() {
                                   aria-label="toggle password visibility"
                                   onClick={handleClickShowPassword}
                                 >
-                                  {showPassword ? (
+                                  {!showPassword ? (
                                     <VisibilityOff />
                                   ) : (
                                     <Visibility />
@@ -195,7 +195,7 @@ function OTPVerificationPage() {
                             style={{ paddingRight: '0' }}
                             className="FormInput"
                             id="reNewPassword"
-                            placeholder="Enter your password"
+                            placeholder="Confirm your password"
                             autoComplete="new-password"
                             type={showNewPassword ? 'text' : 'password'}
                             {...register('reNewPassword', {
@@ -216,7 +216,7 @@ function OTPVerificationPage() {
                                   aria-label="toggle password visibility"
                                   onClick={handleClickShowNewPassword}
                                 >
-                                  {showNewPassword ? (
+                                  {!showNewPassword ? (
                                     <VisibilityOff />
                                   ) : (
                                     <Visibility />
