@@ -21,6 +21,7 @@ import '../../assets/css/PopupStyle.css';
 import CustomDateTimePicker from '../../components/common/CustomDateTimePicker';
 import ErrorSpanBox from '../../components/common/ErrorSpanBox';
 import { useAppSelector } from '../../redux/redux-hooks';
+import branchService from '../../services/adminapp/adminBranch';
 import {
   INVALID_CHAR,
   MAX_LENGTH_EXCEEDED,
@@ -28,6 +29,8 @@ import {
   VALIDATE_NON_NEGATIVE_NUM,
   VALIDATE_NON_NEGATIVE_NUM_AND_CHECK_LENGTH,
 } from '../../utils/constants';
+import CustomDropDown from '../../components/common/CustomDropDown';
+import { getItem } from '../../utils/storage';
 
 type VouchersPromoCreatePopupProps = {
   vouchersPromoDialog: boolean;
@@ -48,6 +51,8 @@ interface CreateVoucherPayload {
   voucherCode: string;
   isUnlimitedRedeem: boolean;
   maxUserRedeem: string;
+  isMainBranch: boolean;
+  branch: string;
 }
 
 interface CreateVoucherFromData {
@@ -63,6 +68,7 @@ interface CreateVoucherFromData {
   maxUserRedeem: string;
   validTill: string;
   validFrom: string;
+  branchId: string | any;
 }
 
 function VouchersPromoCreatePopup({
@@ -74,13 +80,16 @@ function VouchersPromoCreatePopup({
     register,
     handleSubmit,
     setValue,
+    control,
     watch,
+    reset,
     formState: { errors },
   } = useForm<CreateVoucherFromData>();
 
   const authState: any = useAppSelector((state) => state?.authState);
+  const mainShopBranch: any = getItem('TEMP_BRANCH_DATA');
   const handleFormClose = () => setVouchersPromoDialog(false);
-  // const [checked, setChecked] = React.useState(true);
+  const [branches, setBranches] = React.useState<any>([]);
 
   // const handleSwitchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
   //   setChecked(event.target.checked);
@@ -101,9 +110,11 @@ function VouchersPromoCreatePopup({
       validTill: dayjs(data.validTill)?.format('YYYY-MM-DD HH:mm:ss'),
       isUnlimitedRedeem: data.isUnlimitedRedeem,
       maxUserRedeem: data.maxUserRedeem,
+      isMainBranch: mainShopBranch.id === data.branchId,
+      branch: data.branchId,
     };
     callback(createVoucherPayload);
-    // reset();
+    reset();
   };
 
   useEffect(() => {
@@ -113,6 +124,21 @@ function VouchersPromoCreatePopup({
       setValue('maxUserRedeem', '0');
     }
   }, [watch('isUnlimitedRedeem')]);
+
+  useEffect(() => {
+    branchService.getBranchesLov().then((response: any) => {
+      if (response.data.success) {
+        const res: any = response.data.data.map((el: any) => {
+          return {
+            id: el.id,
+            name: el.name,
+          };
+        });
+        const mainRes: any = [{ id: mainShopBranch.id, name: 'All' }];
+        setBranches([...mainRes, ...res]);
+      }
+    });
+  }, []);
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -300,20 +326,23 @@ function VouchersPromoCreatePopup({
                 </FormControl>
                 {/* } */}
               </div>
-              {/* <div className="FormField">
-                <FormControl className="FormControl" variant="standard">
-                  <label className="FormLabel my-1 mt-2">Status</label>
-                  <Switch
-                    {...register('isActive')}
-                    checked={checked}
-                    id="isActive"
-                    name="isActive"
-                    onChange={handleSwitchChange}
-                    inputProps={{ 'aria-label': 'controlled' }}
-                    className="custom-switch"
+              <div className="my-2">
+                <FormControl className="FormControl w-full" variant="standard">
+                  <CustomDropDown
+                    validateRequired
+                    id="branchId"
+                    control={control}
+                    error={errors}
+                    register={register}
+                    setValue={setValue}
+                    customHeight="h-[31px]"
+                    customClassInputTitle="font-semibold"
+                    inputTitle="Branches"
+                    options={{ roles: branches || [] }}
+                    defaultValue="Select Branch"
                   />
                 </FormControl>
-              </div> */}
+              </div>
               <div className="FormField">
                 <FormControlLabel
                   control={

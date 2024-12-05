@@ -10,6 +10,7 @@ import { FormControlLabel, FormLabel, Radio, RadioGroup } from '@mui/material';
 
 import TextField from '@mui/material/TextField';
 import '../../assets/css/PopupStyle.css';
+// import branchService from '../../services/adminapp/adminBranch';
 import ErrorSpanBox from '../../components/common/ErrorSpanBox';
 import { Notification } from '../../interfaces/notification.interface';
 import {
@@ -20,6 +21,8 @@ import {
 } from '../../utils/constants';
 import { listingRolePermission } from '../../utils/helper';
 import { useAppSelector } from '../../redux/redux-hooks';
+// import CustomDropDown from '../../components/common/CustomDropDown';
+// import { getItem } from '../../utils/storage';
 
 type NotificationCreatePopupProps = {
   openFormDialog: boolean;
@@ -36,17 +39,23 @@ function NotificationCreatePopup({
   const {
     register,
     handleSubmit,
+    // control,
+    // setValue,
     formState: { errors },
   } = useForm<Notification>();
 
+  // const mainShopBranch: any = getItem('TEMP_BRANCH_DATA');
   const authState: any = useAppSelector((state: any) => state?.authState);
   const dataRole = useAppSelector(
     (state: any) => state?.persistedReducer?.roleState?.role?.permissions
   );
 
+  // const [branches, setBranches] = React.useState<any>([]);
+
   const onSubmit = (data: Notification) => {
     setOpenFormDialog(false);
     data.notificationType = notificationType;
+    // console.log('🚀 ~ onSubmit ~ data:', data);
     callback(data);
   };
 
@@ -63,6 +72,21 @@ function NotificationCreatePopup({
       setNotificationType('StaffUsers');
     }
   }, []);
+
+  // useEffect(() => {
+  //   branchService.getBranchesLov().then((response: any) => {
+  //     if (response.data.success) {
+  //       const res: any = response.data.data.map((el: any) => {
+  //         return {
+  //           id: el.id,
+  //           name: el.name,
+  //         };
+  //       });
+  //       const mainRes: any = [{ id: mainShopBranch.id, name: 'All' }];
+  //       setBranches([...mainRes, ...res]);
+  //     }
+  //   });
+  // }, []);
 
   return (
     <Dialog
@@ -135,6 +159,23 @@ function NotificationCreatePopup({
                 )}
               </FormControl>
             </div>
+            {/* <div className="my-2">
+              <FormControl className="FormControl w-full" variant="standard">
+                <CustomDropDown
+                  validateRequired
+                  id="branch"
+                  control={control}
+                  error={errors}
+                  register={register}
+                  setValue={setValue}
+                  customHeight="h-[31px]"
+                  customClassInputTitle="font-semibold"
+                  inputTitle="Branches"
+                  options={{ roles: branches || [] }}
+                  defaultValue="Select Branch"
+                />
+              </FormControl>
+            </div> */}
             {listingRolePermission(
               dataRole,
               ALL_PERMISSIONS.storeNotification.selectType

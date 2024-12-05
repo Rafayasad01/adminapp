@@ -448,12 +448,12 @@ function Sidebar() {
               return null;
             }
             // Specific condition for MODULE_VOUCHERS
-            if (
-              link.name === 'Vouchers' &&
-              authState.user.userType !== 'ShopUser'
-            ) {
-              return null;
-            }
+            // if (
+            //   link.name === 'Vouchers' &&
+            //   authState.user.userType !== 'ShopUser'
+            // ) {
+            //   return null;
+            // }
             // Specific condition for MODULE_VOUCHERS
             if (
               link.name === 'Notifications' &&

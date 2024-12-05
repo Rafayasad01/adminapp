@@ -352,13 +352,15 @@ function VouchersPage() {
                     disableUnderline
                   />
                 </FormControl>
-                <Button
-                  variant="contained"
-                  className="btn-black-fill btn-icon"
-                  onClick={handleAddNew}
-                >
-                  <AddOutlinedIcon /> Add New
-                </Button>
+                {authState.user.userType === 'ShopUser' && (
+                  <Button
+                    variant="contained"
+                    className="btn-black-fill btn-icon"
+                    onClick={handleAddNew}
+                  >
+                    <AddOutlinedIcon /> Add New
+                  </Button>
+                )}
               </div>
             </div>
           </div>
@@ -436,32 +438,34 @@ function VouchersPage() {
                             </span>
                           )}
                         </td>
-                        <td>
-                          <div className="flex flex-row-reverse">
-                            <IconButton
-                              className="btn-dot"
-                              aria-label="more"
-                              id="long-button"
-                              aria-controls={open ? 'long-menu' : undefined}
-                              aria-expanded={open ? 'true' : undefined}
-                              aria-haspopup="true"
-                              onClick={(event) => handleClick(event, item.id)}
-                            >
-                              <MoreVertIcon />
-                            </IconButton>
-                            <Switch
-                              disabled={
-                                item.status === 'Expired' ||
-                                (item.status === 'Deleted' && true)
-                              }
-                              checked={item.isActive}
-                              onChange={(
-                                event: React.ChangeEvent<HTMLInputElement>
-                              ) => handleSwitchChange(event, item.id)}
-                              inputProps={{ 'aria-label': 'controlled' }}
-                            />
-                          </div>
-                        </td>
+                        {authState.user.userType === 'ShopUser' && (
+                          <td>
+                            <div className="flex flex-row-reverse">
+                              <IconButton
+                                className="btn-dot"
+                                aria-label="more"
+                                id="long-button"
+                                aria-controls={open ? 'long-menu' : undefined}
+                                aria-expanded={open ? 'true' : undefined}
+                                aria-haspopup="true"
+                                onClick={(event) => handleClick(event, item.id)}
+                              >
+                                <MoreVertIcon />
+                              </IconButton>
+                              <Switch
+                                disabled={
+                                  item.status === 'Expired' ||
+                                  (item.status === 'Deleted' && true)
+                                }
+                                checked={item.isActive}
+                                onChange={(
+                                  event: React.ChangeEvent<HTMLInputElement>
+                                ) => handleSwitchChange(event, item.id)}
+                                inputProps={{ 'aria-label': 'controlled' }}
+                              />
+                            </div>
+                          </td>
+                        )}
                       </tr>
                     );
                   })}
