@@ -23,6 +23,7 @@ import { ALL_PERMISSIONS, NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
 import { listingRolePermission } from '../../utils/helper';
 import VouchersPromoCreatePopup from './VouchersPromoCreatePopup';
 import VouchersPromoEditPopup from './VouchersPromoEditPopup';
+import { getItem } from '../../utils/storage';
 // import VouchersReferralCreatePopup from './VouchersReferralCreatePopup';
 
 const options = ['Edit', 'Delete'];
@@ -31,6 +32,7 @@ function VouchersPage() {
   const dataRole = useAppSelector(
     (state: any) => state?.persistedReducer?.roleState?.role?.permissions
   );
+  const branchData: any = getItem('BRANCH_DATA');
   const [list, setList] = useState<any>([]);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [search, setSearch] = useState('');
@@ -352,7 +354,7 @@ function VouchersPage() {
                     disableUnderline
                   />
                 </FormControl>
-                {authState.user.userType === 'ShopUser' && (
+                {branchData?.branchType === 'Main' && (
                   <Button
                     variant="contained"
                     className="btn-black-fill btn-icon"
@@ -438,7 +440,7 @@ function VouchersPage() {
                             </span>
                           )}
                         </td>
-                        {authState.user.userType === 'ShopUser' && (
+                        {branchData?.branchType === 'Main' && (
                           <td>
                             <div className="flex flex-row-reverse">
                               <IconButton

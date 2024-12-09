@@ -480,11 +480,11 @@ function BranchPage() {
               <thead>
                 <tr>
                   <th>Name</th>
-                  <th className="w-[20%]">Description</th>
-                  <th className="">Landline</th>
-                  <th className="">Mobile</th>
-                  <th className="">Branch Type</th>
+                  {/* <th className="w-[20%]">Description</th> */}
                   <th className="">Manager</th>
+                  <th className="">Mobile</th>
+                  <th className="">Landline</th>
+                  {/* <th className="">Branch Type</th> */}
                   <th className="">Address</th>
                   <th>Status</th>
                   <th>Branch Control</th>
@@ -512,15 +512,15 @@ function BranchPage() {
                             </div>
                           </div>
                         </td>
-                        <td>{item.description ? item.description : '--'}</td>
-                        <td>{item.landline ? item.landline : '--'}</td>
-                        <td>{item.mobile ? item.mobile : '--'}</td>
-                        <td>{item.branchType ? item.branchType : '--'}</td>
                         <td>
                           {item?.backofficeUser
                             ? `${item?.backofficeUser?.firstName} ${item?.backofficeUser?.lastName}`
                             : '--'}
                         </td>
+                        {/* <td>{item.description ? item.description : '--'}</td> */}
+                        <td>{item.mobile ? item.mobile : '--'}</td>
+                        <td>{item.landline ? item.landline : '--'}</td>
+                        {/* <td>{item.branchType ? item.branchType : '--'}</td> */}
                         <td>{item.address ? item.address : '--'}</td>
                         <td>
                           {item.isActive ? (

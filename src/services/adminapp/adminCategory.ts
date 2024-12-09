@@ -57,6 +57,13 @@ const updateCategoryService = (catId: any, id: string, data: any) => {
   );
 };
 
+const overWriteCategoryService = (catId: any, data: any) => {
+  return network.postMultipart(
+    `${CATEGORY_PREFIX}/${SERVICE_PREFIX}/overwrite/${catId}`,
+    data
+  );
+};
+
 const updateCategoryServiceStatus = (
   catId: any,
   categoryServiceId: string,
@@ -146,4 +153,5 @@ export default {
   updateCategoryService,
   getCategoryServiceFaq,
   updateCategoryServiceFaq,
+  overWriteCategoryService,
 };

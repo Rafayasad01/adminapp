@@ -2,5 +2,5 @@ export interface Notification {
   title: string;
   notificationType: string;
   message: string;
-  branch: string;
+  branches: string | any;
 }

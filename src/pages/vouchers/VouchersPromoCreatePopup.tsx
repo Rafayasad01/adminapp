@@ -51,7 +51,7 @@ interface CreateVoucherPayload {
   voucherCode: string;
   isUnlimitedRedeem: boolean;
   maxUserRedeem: string;
-  isMainBranch: boolean;
+  isAllBranches: boolean;
   branch: string;
 }
 
@@ -110,7 +110,7 @@ function VouchersPromoCreatePopup({
       validTill: dayjs(data.validTill)?.format('YYYY-MM-DD HH:mm:ss'),
       isUnlimitedRedeem: data.isUnlimitedRedeem,
       maxUserRedeem: data.maxUserRedeem,
-      isMainBranch: mainShopBranch.id === data.branchId,
+      isAllBranches: mainShopBranch.id === data.branchId,
       branch: data.branchId,
     };
     callback(createVoucherPayload);

@@ -6,6 +6,7 @@ import Dialog from '@mui/material/Dialog';
 import Divider from '@mui/material/Divider';
 import FormControl from '@mui/material/FormControl';
 import IconButton from '@mui/material/IconButton';
+import EditLocationOutlinedIcon from '@mui/icons-material/EditLocationOutlined';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
 import Switch from '@mui/material/Switch';
@@ -26,6 +27,7 @@ import ServicesCreatePopup from './CategoriesServicesCreatePopup';
 import ServicesEditPopup from './CategoriesServicesEditPopup';
 import { getItem } from '../../utils/storage';
 import assets from '../../assets';
+import CategoriesServicesOverWritePopup from './CategoriesServicesOverWritePopup';
 
 function CategoriesServicesPage() {
   const params = useParams();
@@ -49,6 +51,7 @@ function CategoriesServicesPage() {
   const actionMenuOptions = [`${TITLE_TEXT} faq's`, 'Edit', 'Delete'];
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
+  const [openOverWriteFormDialog, setOpenOverWriteFormDialog] = useState(false);
   const [isLoader, setIsLoader] = React.useState(false);
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
@@ -265,6 +268,7 @@ function CategoriesServicesPage() {
         });
       });
   };
+
   const updateFormHandler = (data: any) => {
     setIsLoader(true);
     const formData = new FormData();
@@ -294,6 +298,57 @@ function CategoriesServicesPage() {
               if (updateItem.data.data.icon) {
                 list[i].icon = updateItem.data.data.icon;
               }
+            }
+          }
+        } else {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: updateItem.data.message,
+            type: 'error',
+          });
+        }
+      })
+      .catch((err) => {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
+        });
+      });
+  };
+
+  const handleOverWrite = (id: any) => {
+    setActionMenuItemid(id);
+    const editData = list.find((item: any) => item.id === id);
+    setEditFormData(editData);
+    setOpenOverWriteFormDialog(true);
+  };
+
+  const updateOverWriteHandler = (data: any) => {
+    setIsLoader(true);
+    const formData = new FormData();
+    formData.append('name', data.name);
+    formData.append('desc', data.desc);
+    formData.append('loyaltyCoins', data.loyaltyCoins);
+    formData.append('price', data.price);
+    formData.append('parent', actionMenuItemid);
+    if (data.icon) formData.append('icon', data.icon);
+    categoryService
+      .overWriteCategoryService(productId, formData)
+      .then((updateItem: any) => {
+        if (updateItem.data.success) {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: updateItem.data.message,
+            type: 'success',
+          });
+          setList([updateItem.data.data, ...list]);
+          for (let i = 0; i < list.length; i += 1) {
+            if (list[i].id === updateItem.data.data.parent) {
+              list[i].isOverwrite = true;
             }
           }
         } else {
@@ -493,6 +548,14 @@ function CategoriesServicesPage() {
                             >
                               <MoreVertIcon />
                             </IconButton>
+                            {!item.isOverwrite && !item.parent && (
+                              <IconButton
+                                onClick={() => handleOverWrite(item.id)}
+                                className="text-primary"
+                              >
+                                <EditLocationOutlinedIcon />
+                              </IconButton>
+                            )}
                             <Switch
                               checked={!!item.isActive}
                               onChange={(
@@ -558,6 +621,16 @@ function CategoriesServicesPage() {
           formData={editFormData}
           setOpenFormDialog={setOpenEditFormDialog}
           callback={updateFormHandler}
+        />
+      )}
+      {openOverWriteFormDialog && (
+        <CategoriesServicesOverWritePopup
+          setIsNotify={setIsNotify}
+          setNotifyMessage={setNotifyMessage}
+          openFormDialog={openOverWriteFormDialog}
+          formData={editFormData}
+          setOpenFormDialog={setOpenOverWriteFormDialog}
+          callback={updateOverWriteHandler}
         />
       )}
       {modalImage && (

@@ -10,7 +10,7 @@ import { FormControlLabel, FormLabel, Radio, RadioGroup } from '@mui/material';
 
 import TextField from '@mui/material/TextField';
 import '../../assets/css/PopupStyle.css';
-// import branchService from '../../services/adminapp/adminBranch';
+import branchService from '../../services/adminapp/adminBranch';
 import ErrorSpanBox from '../../components/common/ErrorSpanBox';
 import { Notification } from '../../interfaces/notification.interface';
 import {
@@ -21,8 +21,9 @@ import {
 } from '../../utils/constants';
 import { listingRolePermission } from '../../utils/helper';
 import { useAppSelector } from '../../redux/redux-hooks';
-// import CustomDropDown from '../../components/common/CustomDropDown';
-// import { getItem } from '../../utils/storage';
+import { getItem } from '../../utils/storage';
+import CustomMultipleSelectBox from '../../components/common/CustomMultipleSelect';
+import Notify from '../../components/common/Notify';
 
 type NotificationCreatePopupProps = {
   openFormDialog: boolean;
@@ -36,27 +37,58 @@ function NotificationCreatePopup({
   callback,
 }: NotificationCreatePopupProps) {
   const [notificationType, setNotificationType] = useState('Customers');
+  const [isNotify, setIsNotify] = useState(false);
+  const [notifyMessage, setNotifyMessage] = useState({});
   const {
     register,
     handleSubmit,
-    // control,
-    // setValue,
+    control,
+    setValue,
     formState: { errors },
   } = useForm<Notification>();
 
-  // const mainShopBranch: any = getItem('TEMP_BRANCH_DATA');
+  const mainShopBranch: any = getItem('TEMP_BRANCH_DATA');
   const authState: any = useAppSelector((state: any) => state?.authState);
   const dataRole = useAppSelector(
     (state: any) => state?.persistedReducer?.roleState?.role?.permissions
   );
 
-  // const [branches, setBranches] = React.useState<any>([]);
+  const [branches, setBranches] = React.useState<any>([]);
 
   const onSubmit = (data: Notification) => {
-    setOpenFormDialog(false);
-    data.notificationType = notificationType;
-    // console.log('🚀 ~ onSubmit ~ data:', data);
-    callback(data);
+    const checkMainBranch: boolean =
+      data.branches.length === 1 &&
+      branches.some((b: any) => b.name === 'All' && b.id === data.branches[0]);
+
+    if (checkMainBranch) {
+      // setOpenFormDialog(false);
+      data.notificationType = notificationType;
+      if (notificationType === 'Customers') {
+        data.branches = [];
+      } else {
+        data.branches = branches.map((x: any) => x.id);
+      }
+      callback(data);
+      return;
+    }
+
+    const checkBranch: boolean =
+      Array.isArray(data.branches) &&
+      !data.branches.includes(mainShopBranch.id);
+
+    if (checkBranch || notificationType === 'Customers') {
+      // setOpenFormDialog(false);
+      data.notificationType = notificationType;
+
+      if (notificationType === 'Customers') data.branches = [];
+      callback(data);
+    } else {
+      setIsNotify(true);
+      setNotifyMessage({
+        text: 'Either select All or other branches',
+        type: 'error',
+      });
+    }
   };
 
   const handleFormClose = () => {
@@ -73,20 +105,20 @@ function NotificationCreatePopup({
     }
   }, []);
 
-  // useEffect(() => {
-  //   branchService.getBranchesLov().then((response: any) => {
-  //     if (response.data.success) {
-  //       const res: any = response.data.data.map((el: any) => {
-  //         return {
-  //           id: el.id,
-  //           name: el.name,
-  //         };
-  //       });
-  //       const mainRes: any = [{ id: mainShopBranch.id, name: 'All' }];
-  //       setBranches([...mainRes, ...res]);
-  //     }
-  //   });
-  // }, []);
+  useEffect(() => {
+    branchService.getBranchesLov().then((response: any) => {
+      if (response.data.success) {
+        const res: any = response.data.data.map((el: any) => {
+          return {
+            id: el.id,
+            name: el.name,
+          };
+        });
+        const mainRes: any = [{ id: mainShopBranch.id, name: 'All' }];
+        setBranches([...mainRes, ...res]);
+      }
+    });
+  }, []);
 
   return (
     <Dialog
@@ -97,6 +129,11 @@ function NotificationCreatePopup({
         style: { maxWidth: '100%', maxHeight: 'auto' },
       }}
     >
+      <Notify
+        isOpen={isNotify}
+        setIsOpen={setIsNotify}
+        displayMessage={notifyMessage}
+      />
       <div className="Content">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="FormHeader">
@@ -159,23 +196,24 @@ function NotificationCreatePopup({
                 )}
               </FormControl>
             </div>
-            {/* <div className="my-2">
-              <FormControl className="FormControl w-full" variant="standard">
-                <CustomDropDown
-                  validateRequired
-                  id="branch"
-                  control={control}
-                  error={errors}
-                  register={register}
-                  setValue={setValue}
-                  customHeight="h-[31px]"
-                  customClassInputTitle="font-semibold"
-                  inputTitle="Branches"
-                  options={{ roles: branches || [] }}
-                  defaultValue="Select Branch"
-                />
-              </FormControl>
-            </div> */}
+            {notificationType !== 'Customers' && (
+              <div className="my-2">
+                <FormControl className="FormControl" variant="standard">
+                  <CustomMultipleSelectBox
+                    validateRequired
+                    id="branches"
+                    control={control}
+                    error={errors}
+                    setValue={setValue}
+                    register={register}
+                    options={{ roles: branches || [] }}
+                    customClassInputTitle="font-bold"
+                    inputTitle="Select Branches"
+                    defaultFieldValue="-- Select Branches --"
+                  />
+                </FormControl>
+              </div>
+            )}
             {listingRolePermission(
               dataRole,
               ALL_PERMISSIONS.storeNotification.selectType

@@ -447,13 +447,13 @@ function Sidebar() {
             ) {
               return null;
             }
-            // Specific condition for MODULE_VOUCHERS
-            // if (
-            //   link.name === 'Vouchers' &&
-            //   authState.user.userType !== 'ShopUser'
-            // ) {
-            //   return null;
-            // }
+            // Specific condition for MODULE_NOTIFICATION
+            if (
+              link.name === 'Notification' &&
+              authState.user.userType !== 'ShopUser'
+            ) {
+              return null;
+            }
             // Specific condition for MODULE_VOUCHERS
             if (
               link.name === 'Notifications' &&
