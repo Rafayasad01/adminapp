@@ -194,7 +194,7 @@ const AppointmentProviderCards = ({
                           />
                         </div>
                         <span className="text-sm font-medium">
-                          {item.payrollType}
+                          {item.payrollType ? item.payrollType : '----'}
                         </span>
                       </div>
                     )}

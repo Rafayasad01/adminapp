@@ -92,9 +92,9 @@ const StoreCatItemDelete = (catItemId: any, data: any) => {
   );
 };
 
-const StoreOverrideCategoryService = (catId: any, data: any) => {
+const StoreOverrideCategoryService = (data: any) => {
   return network.postMultipart(
-    `${STORE_PREFIX}/${SERVICE_PREFIX}/${CATEGORY_PREFIX}/overwrite/${catId}`,
+    `${STORE_PREFIX}/${SERVICE_PREFIX}/${CATEGORY_PREFIX}/item/overwrite`,
     data
   );
 };

@@ -380,6 +380,7 @@ function AppointmentProviderPage() {
         setValue,
         error: errors.payrollType,
         type: 'select',
+        validateRequired: true,
         options: {
           role: watch('payrollType'),
           roles: [

@@ -331,10 +331,10 @@ function ServiceItemEditPopup({
             </Button>
             <Input
               type="submit"
-              value="Add"
+              value="Update"
               className="btn-black-fill"
               sx={{
-                padding: '0.375rem 2rem !important',
+                padding: '0.175rem 2rem !important',
               }}
             />
           </div>

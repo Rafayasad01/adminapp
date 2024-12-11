@@ -787,6 +787,7 @@ export default function RescheduleAppointmentPage() {
                           variant="standard"
                         >
                           <CustomInputBox
+                            requiredType
                             disable
                             pattern={PATTERN.CHAR_NUM_DOT_AT}
                             inputTitle="Email"

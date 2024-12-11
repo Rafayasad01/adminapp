@@ -170,6 +170,13 @@ function ServiceItemPage() {
           });
           let newtotal = total;
           setTotal((newtotal -= 1));
+        } else {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: updateItem.data.message,
+            type: 'error',
+          });
         }
       })
       .catch((err) => {
@@ -384,7 +391,7 @@ function ServiceItemPage() {
     formData.append('desc', data.desc);
     formData.append('parent', actionMenuItemid);
     storeService
-      .StoreOverrideCategoryService(CatId, formData)
+      .StoreOverrideCategoryService(formData)
       .then((updateItem: any) => {
         if (updateItem.data.success) {
           setIsLoader(false);
