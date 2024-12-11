@@ -30,6 +30,7 @@ function CategoriesServicesFaqPage() {
   const params = useParams();
   const isShop: any = getItem('USER');
   const TITLE_TEXT: any = getItem('TITLE_TEXT');
+  // const BranchData: any = getItem('BRANCH_DATA');
   // const authState: any = useAppSelector((state) => state?.authState);
   const dataRole = useAppSelector(
     (state) => state?.persistedReducer?.roleState?.role?.permissions
@@ -414,6 +415,7 @@ function CategoriesServicesFaqPage() {
                           )}
                         </td>
                         <td>
+                          {/* {BranchData?.branchType === 'Main' && ( */}
                           <div className="flex flex-row-reverse">
                             <IconButton
                               className="btn-dot"
@@ -443,6 +445,7 @@ function CategoriesServicesFaqPage() {
                               inputProps={{ 'aria-label': 'controlled' }}
                             />
                           </div>
+                          {/* )} */}
                         </td>
                       </tr>
                     );

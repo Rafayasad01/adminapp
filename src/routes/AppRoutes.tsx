@@ -817,6 +817,10 @@ export const routeObjects: RouteObject[] = [
                     ),
                     // element: <OrderBasket />,
                   },
+                  {
+                    path: 'item/:itemId',
+                    element: <OrderItemDetailPage />,
+                  },
                 ],
               },
               {

@@ -27,12 +27,13 @@ import ServicesCreatePopup from './CategoriesServicesCreatePopup';
 import ServicesEditPopup from './CategoriesServicesEditPopup';
 import { getItem } from '../../utils/storage';
 import assets from '../../assets';
-import CategoriesServicesOverWritePopup from './CategoriesServicesOverWritePopup';
+import CategoriesServicesOverWritePopup from './CategoriesServicesOverridePopup';
 
 function CategoriesServicesPage() {
   const params = useParams();
   const isShop: any = getItem('USER');
   const TITLE_TEXT: any = getItem('TITLE_TEXT');
+  const BranchData: any = getItem('BRANCH_DATA');
   // const authState: any = useAppSelector((state) => state?.authState);
   const dataRole = useAppSelector(
     (state: any) => state?.persistedReducer?.roleState?.role?.permissions
@@ -52,7 +53,7 @@ function CategoriesServicesPage() {
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
   const [openOverWriteFormDialog, setOpenOverWriteFormDialog] = useState(false);
-  const [isLoader, setIsLoader] = React.useState(false);
+  const [isLoader, setIsLoader] = React.useState(true);
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
   const [cancelDialogOpen, setCancelDialogOpen] = useState<boolean>(false);
@@ -63,6 +64,11 @@ function CategoriesServicesPage() {
   const [modalImage, setModalImage] = useState('');
 
   const productId = params.productId ?? '';
+
+  const menuActionOptions: any =
+    BranchData.branchType === 'Main'
+      ? actionMenuOptions
+      : [`${TITLE_TEXT} faq's`];
 
   const handleClickSearch = (event: any) => {
     const searchTxt = event.target.value as string;
@@ -331,10 +337,10 @@ function CategoriesServicesPage() {
     const formData = new FormData();
     formData.append('name', data.name);
     formData.append('desc', data.desc);
-    formData.append('loyaltyCoins', data.loyaltyCoins);
-    formData.append('price', data.price);
+    // formData.append('loyaltyCoins', data.loyaltyCoins);
+    // formData.append('price', data.price);
     formData.append('parent', actionMenuItemid);
-    if (data.icon) formData.append('icon', data.icon);
+    // if (data.icon) formData.append('icon', data.icon);
     categoryService
       .overWriteCategoryService(productId, formData)
       .then((updateItem: any) => {
@@ -345,10 +351,10 @@ function CategoriesServicesPage() {
             text: updateItem.data.message,
             type: 'success',
           });
-          setList([updateItem.data.data, ...list]);
+          // setList([updateItem.data.data, ...list]);
           for (let i = 0; i < list.length; i += 1) {
-            if (list[i].id === updateItem.data.data.parent) {
-              list[i].isOverwrite = true;
+            if (list[i].id === updateItem.data.data.id) {
+              list[i].name = updateItem.data.data.name;
             }
           }
         } else {
@@ -548,7 +554,7 @@ function CategoriesServicesPage() {
                             >
                               <MoreVertIcon />
                             </IconButton>
-                            {!item.isOverwrite && !item.parent && (
+                            {BranchData.branchType !== 'Main' && (
                               <IconButton
                                 onClick={() => handleOverWrite(item.id)}
                                 className="text-primary"
@@ -556,13 +562,15 @@ function CategoriesServicesPage() {
                                 <EditLocationOutlinedIcon />
                               </IconButton>
                             )}
-                            <Switch
-                              checked={!!item.isActive}
-                              onChange={(
-                                event: React.ChangeEvent<HTMLInputElement>
-                              ) => handleSwitchChange(event, list[index].id)}
-                              inputProps={{ 'aria-label': 'controlled' }}
-                            />
+                            {BranchData.branchType === 'Main' && (
+                              <Switch
+                                checked={!!item.isActive}
+                                onChange={(
+                                  event: React.ChangeEvent<HTMLInputElement>
+                                ) => handleSwitchChange(event, list[index].id)}
+                                inputProps={{ 'aria-label': 'controlled' }}
+                              />
+                            )}
                           </div>
                         </td>
                       </tr>
@@ -600,7 +608,7 @@ function CategoriesServicesPage() {
           open={actionMenuOpen}
           anchorEl={actionMenuAnchorEl}
           setAnchorEl={setActionMenuAnchorEl}
-          options={actionMenuOptions}
+          options={menuActionOptions}
           callback={manuHandler}
         />
       )}

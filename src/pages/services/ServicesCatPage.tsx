@@ -31,7 +31,8 @@ import { getItem } from '../../utils/storage';
 // import CategoriesEditPopup from './CategoriesEditPopup';
 
 function ServicesPage() {
-  // const authState: any = useAppSelector((state) => state?.authState);\
+  // const authState: any = useAppSelector((state) => state?.authState);
+  const BranchData: any = getItem('BRANCH_DATA');
   const isShop: any = getItem('USER');
   const dataRole = useAppSelector(
     (state) => state?.persistedReducer?.roleState?.role?.permissions
@@ -59,6 +60,9 @@ function ServicesPage() {
   );
   const [isModalImage, setIsModalImage] = useState(false);
   const [modalImage, setModalImage] = useState('');
+
+  const menuActionOptions: any =
+    BranchData.branchType === 'Main' ? actionMenuOptions : ['Services'];
 
   const handleFormClickOpen = () => {
     if (
@@ -547,7 +551,7 @@ function ServicesPage() {
           open={actionMenuOpen}
           anchorEl={actionMenuAnchorEl}
           setAnchorEl={setActionMenuAnchorEl}
-          options={actionMenuOptions}
+          options={menuActionOptions}
           callback={manuHandler}
         />
       )}

@@ -32,6 +32,7 @@ function CategoriesPage() {
   // const authState: any = useAppSelector((state) => state?.authState);
   const isShop: any = getItem('USER');
   const TITLE_TEXT: any = getItem('TITLE_TEXT');
+  const BranchData: any = getItem('BRANCH_DATA');
   const dataRole = useAppSelector(
     (state) => state?.persistedReducer?.roleState?.role?.permissions
   );
@@ -58,6 +59,9 @@ function CategoriesPage() {
   );
   const [isModalImage, setIsModalImage] = useState(false);
   const [modalImage, setModalImage] = useState('');
+
+  const menuActionOptions: any =
+    BranchData.branchType === 'Main' ? actionMenuOptions : [TITLE_TEXT];
 
   const handleFormClickOpen = () => {
     if (listingRolePermission(dataRole, ALL_PERMISSIONS.storeProduct.add)) {
@@ -90,7 +94,7 @@ function CategoriesPage() {
           // console.log('error::::::::', error);
         });
     }
-  }, [null]);
+  }, []);
 
   const handleClickSearch = (event: any) => {
     const searchTxt = event.target.value as string;
@@ -527,7 +531,7 @@ function CategoriesPage() {
           open={actionMenuOpen}
           anchorEl={actionMenuAnchorEl}
           setAnchorEl={setActionMenuAnchorEl}
-          options={actionMenuOptions}
+          options={menuActionOptions}
           callback={manuHandler}
         />
       )}

@@ -26,6 +26,7 @@ import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 import ratingService from '../../services/adminapp/rating';
 import { listingRolePermission } from '../../utils/helper';
 import RatingAccordions from '../rating/RatingAccordin';
+import { ALL_PERMISSIONS } from '../../utils/constants';
 
 dayjs.extend(relativeTime);
 
@@ -56,7 +57,12 @@ function OrderItemDetailPage() {
     const fetchData = async () => {
       try {
         setIsLoader(true);
-        if (listingRolePermission(dataRole, 'Order List')) {
+        if (
+          listingRolePermission(
+            dataRole,
+            ALL_PERMISSIONS.storeProduct.viewOrder
+          )
+        ) {
           const [catListResponse, catStarRatingResponse, catDetailResponse] =
             await Promise.all([
               ratingService.getCatListService(
@@ -124,7 +130,7 @@ function OrderItemDetailPage() {
         return 4;
       case num <= 3.5 && num > 2:
         return 3;
-      case num <= 2 && num >= 0:
+      case num <= 2 && num > 0:
         return 2;
       case num === 0:
         return 0;
@@ -273,22 +279,26 @@ function OrderItemDetailPage() {
           <div className="mt-5 w-full rounded-xl bg-white p-5 shadow-md">
             <div className="my-5 flex grid-cols-12">
               <div className="xl:col-span-3 2xl:col-span-2">
-                <div className="flex items-center">
-                  <span className="text-4xl font-semibold">
-                    {Number(starRatings?.total) / 5}
-                  </span>
-                  <div className="mx-4 flex items-center rounded-full bg-black px-4 text-white">
-                    <div className="mb-1">
-                      <StarOutlinedIcon
-                        fontSize="small"
-                        style={{ color: 'white' }}
-                      />
-                    </div>
-                    <span className="mx-2 text-sm">
-                      {handleRatingText(Number(starRatings?.total / 5))}
+                {starRatings?.total ? (
+                  <div className="flex items-center">
+                    <span className="text-4xl font-semibold">
+                      {Number(starRatings?.total) / 5}
                     </span>
+                    <div className="mx-4 flex items-center rounded-full bg-black px-4 text-white">
+                      <div className="mb-1">
+                        <StarOutlinedIcon
+                          fontSize="small"
+                          style={{ color: 'white' }}
+                        />
+                      </div>
+                      <span className="mx-2 text-sm">
+                        {handleRatingText(Number(starRatings?.total / 5))}
+                      </span>
+                    </div>
                   </div>
-                </div>
+                ) : (
+                  <span>No Reviews Available</span>
+                )}
                 <div className="mt-2">
                   <Rating
                     name="half-rating-read"

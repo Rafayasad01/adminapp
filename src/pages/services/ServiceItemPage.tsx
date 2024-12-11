@@ -9,6 +9,7 @@ import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
 import Switch from '@mui/material/Switch';
+import EditLocationOutlinedIcon from '@mui/icons-material/EditLocationOutlined';
 import TablePagination from '@mui/material/TablePagination';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
@@ -26,12 +27,14 @@ import ServiceItemCreatePopup from './ServiceItemCreatePopup';
 import ServiceItemEditPopup from './ServiceItemEditPopup';
 import PermissionPopup from '../../utils/PermissionPopup';
 import { getItem } from '../../utils/storage';
+import ServiceItemOverridePopup from './ServiceItemOverridePopup';
 // import ServicesCreatePopup from './CategoriesServicesCreatePopup';
 // import ServicesEditPopup from './CategoriesServicesEditPopup';
 
 function ServiceItemPage() {
   const params = useParams();
   const isShop: any = getItem('USER');
+  const BranchData: any = getItem('BRANCH_DATA');
   const dataRole = useAppSelector(
     (state) => state?.persistedReducer?.roleState?.role?.permissions
   );
@@ -52,6 +55,7 @@ function ServiceItemPage() {
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
   const [cancelDialogOpen, setCancelDialogOpen] = useState<boolean>(false);
+  const [openOverWriteFormDialog, setOpenOverWriteFormDialog] = useState(false);
   const [dialogText] = useState<any>(
     'Are you sure you want to delete this Category ?'
   );
@@ -366,6 +370,54 @@ function ServiceItemPage() {
     return `${formattedHours}:${formattedMinutes}`;
   }
 
+  const handleOverWrite = (id: any) => {
+    setActionMenuItemid(id);
+    const editData = list.find((item: any) => item.id === id);
+    setEditFormData(editData);
+    setOpenOverWriteFormDialog(true);
+  };
+
+  const updateOverWriteHandler = (data: any) => {
+    setIsLoader(true);
+    const formData = new FormData();
+    formData.append('name', data.name);
+    formData.append('desc', data.desc);
+    formData.append('parent', actionMenuItemid);
+    storeService
+      .StoreOverrideCategoryService(CatId, formData)
+      .then((updateItem: any) => {
+        if (updateItem.data.success) {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: updateItem.data.message,
+            type: 'success',
+          });
+          // setList([updateItem.data.data, ...list]);
+          for (let i = 0; i < list.length; i += 1) {
+            if (list[i].id === updateItem.data.data.id) {
+              list[i].name = updateItem.data.data.name;
+            }
+          }
+        } else {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: updateItem.data.message,
+            type: 'error',
+          });
+        }
+      })
+      .catch((err) => {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
+        });
+      });
+  };
+
   return isLoader ? (
     <Loader />
   ) : (
@@ -477,33 +529,45 @@ function ServiceItemPage() {
                         </td>
                         <td>
                           <div className="flex flex-row-reverse">
-                            <IconButton
-                              className="btn-dot"
-                              aria-label="more"
-                              id="long-button"
-                              aria-controls={
-                                actionMenuOpen ? 'long-menu' : undefined
-                              }
-                              aria-expanded={
-                                actionMenuOpen ? 'true' : undefined
-                              }
-                              aria-haspopup="true"
-                              onClick={(
-                                event: React.MouseEvent<HTMLElement>
-                              ) => {
-                                setActionMenuItemid(item.id);
-                                setActionMenuAnchorEl(event.currentTarget);
-                              }}
-                            >
-                              <MoreVertIcon />
-                            </IconButton>
-                            <Switch
-                              checked={!!item.isActive}
-                              onChange={(
-                                event: React.ChangeEvent<HTMLInputElement>
-                              ) => handleSwitchChange(event, item.id)}
-                              inputProps={{ 'aria-label': 'controlled' }}
-                            />
+                            {BranchData.branchType === 'Main' && (
+                              <IconButton
+                                className="btn-dot"
+                                aria-label="more"
+                                id="long-button"
+                                aria-controls={
+                                  actionMenuOpen ? 'long-menu' : undefined
+                                }
+                                aria-expanded={
+                                  actionMenuOpen ? 'true' : undefined
+                                }
+                                aria-haspopup="true"
+                                onClick={(
+                                  event: React.MouseEvent<HTMLElement>
+                                ) => {
+                                  setActionMenuItemid(item.id);
+                                  setActionMenuAnchorEl(event.currentTarget);
+                                }}
+                              >
+                                <MoreVertIcon />
+                              </IconButton>
+                            )}
+                            {BranchData.branchType !== 'Main' && (
+                              <IconButton
+                                onClick={() => handleOverWrite(item.id)}
+                                className="text-primary"
+                              >
+                                <EditLocationOutlinedIcon />
+                              </IconButton>
+                            )}
+                            {BranchData.branchType === 'Main' && (
+                              <Switch
+                                checked={!!item.isActive}
+                                onChange={(
+                                  event: React.ChangeEvent<HTMLInputElement>
+                                ) => handleSwitchChange(event, item.id)}
+                                inputProps={{ 'aria-label': 'controlled' }}
+                              />
+                            )}
                           </div>
                         </td>
                       </tr>
@@ -562,6 +626,16 @@ function ServiceItemPage() {
           formData={editFormData}
           setOpenFormDialog={setOpenEditFormDialog}
           callback={updateFormHandler}
+        />
+      )}
+      {openOverWriteFormDialog && (
+        <ServiceItemOverridePopup
+          setIsNotify={setIsNotify}
+          setNotifyMessage={setNotifyMessage}
+          openFormDialog={openOverWriteFormDialog}
+          formData={editFormData}
+          setOpenFormDialog={setOpenOverWriteFormDialog}
+          callback={updateOverWriteHandler}
         />
       )}
       {modalImage && (

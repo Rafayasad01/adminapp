@@ -1,12 +1,12 @@
-import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
-import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
+// import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
+// import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import FormControl from '@mui/material/FormControl';
-import IconButton from '@mui/material/IconButton';
+// import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
 import TextField from '@mui/material/TextField';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useForm } from 'react-hook-form';
 
 import '../../assets/css/PopupStyle.css';
@@ -16,7 +16,7 @@ import {
   INVALID_CHAR,
   MAX_LENGTH_EXCEEDED,
   PATTERN,
-  imageAllowedTypes,
+  // imageAllowedTypes,
 } from '../../utils/constants';
 
 type CategoriesServicesEditPopupProps = {
@@ -28,7 +28,7 @@ type CategoriesServicesEditPopupProps = {
   setNotifyMessage: any;
 };
 
-function CategoriesServicesOverWritePopup({
+function CategoriesServicesOverridePopup({
   openFormDialog,
   setOpenFormDialog,
   formData,
@@ -36,8 +36,8 @@ function CategoriesServicesOverWritePopup({
   setIsNotify,
   setNotifyMessage,
 }: CategoriesServicesEditPopupProps) {
-  const [image, setImage] = useState<any>(null);
-  const [imageName, setImageName] = useState<any>(null);
+  // const [image, setImage] = useState<any>(null);
+  // const [imageName, setImageName] = useState<any>(null);
 
   const {
     register,
@@ -45,22 +45,38 @@ function CategoriesServicesOverWritePopup({
     formState: { errors },
   } = useForm<CategoryService>();
   const onSubmit = (data: CategoryService) => {
-    if (image !== null) {
+    // if (image !== null) {
+    //   const res = {
+    //     name: data.name,
+    //     desc: data.desc,
+    //     price: formData.price,
+    //     loyaltyCoins: formData.loyaltyCoins,
+    //     icon: image,
+    //   };
+    //   setOpenFormDialog(false);
+    //   callback(res);
+    // } else if (data.name) {
+    //   const res = {
+    //     name: data.name,
+    //     desc: data.desc,
+    //     price: formData.price,
+    //     loyaltyCoins: formData.loyaltyCoins,
+    //   };
+    //   setOpenFormDialog(false);
+    //   callback(res);
+    // } else {
+    //   setIsNotify(true);
+    //   setNotifyMessage({
+    //     text: 'All fields are required!',
+    //     type: 'error',
+    //   });
+    // }
+    if (data.name) {
       const res = {
         name: data.name,
         desc: data.desc,
-        price: formData.price,
-        loyaltyCoins: formData.loyaltyCoins,
-        icon: image,
-      };
-      setOpenFormDialog(false);
-      callback(res);
-    } else if (data.name) {
-      const res = {
-        name: data.name,
-        desc: data.desc,
-        price: formData.price,
-        loyaltyCoins: formData.loyaltyCoins,
+        // price: formData.price,
+        // loyaltyCoins: formData.loyaltyCoins,
       };
       setOpenFormDialog(false);
       callback(res);
@@ -75,38 +91,38 @@ function CategoriesServicesOverWritePopup({
 
   const handleFormClose = () => setOpenFormDialog(false);
 
-  const handleFileChange = (event: any) => {
-    const selectedFile = event.target.files[0];
-    if (selectedFile) {
-      const fileType = selectedFile.type;
-      if (imageAllowedTypes.includes(fileType)) {
-        setImage(event.target.files[0]);
-        setImageName(event.target.files[0].name);
-      } else {
-        setIsNotify(true);
-        setNotifyMessage({
-          text: 'Only .png, .jpg, and .jpeg files are allowed',
-          type: 'error',
-        });
-      }
-    }
-  };
+  // const handleFileChange = (event: any) => {
+  //   const selectedFile = event.target.files[0];
+  //   if (selectedFile) {
+  //     const fileType = selectedFile.type;
+  //     if (imageAllowedTypes.includes(fileType)) {
+  //       setImage(event.target.files[0]);
+  //       setImageName(event.target.files[0].name);
+  //     } else {
+  //       setIsNotify(true);
+  //       setNotifyMessage({
+  //         text: 'Only .png, .jpg, and .jpeg files are allowed',
+  //         type: 'error',
+  //       });
+  //     }
+  //   }
+  // };
 
-  const handleFileOnClick = (event: any) => {
-    event.target.value = null;
-    setImage(null);
-  };
+  // const handleFileOnClick = (event: any) => {
+  //   event.target.value = null;
+  //   setImage(null);
+  // };
 
-  useEffect(() => {
-    if (formData.icon !== 'null') {
-      let icon = formData.icon.split('/').slice(-1)[0];
-      const regexExp = /[a-z,0-9,-]{36}/;
-      if (regexExp.test(icon)) {
-        icon = icon.split('-').splice(5)[0].at(0);
-      }
-      setImageName(icon);
-    }
-  }, [formData]);
+  // useEffect(() => {
+  //   if (formData.icon !== 'null') {
+  //     let icon = formData.icon.split('/').slice(-1)[0];
+  //     const regexExp = /[a-z,0-9,-]{36}/;
+  //     if (regexExp.test(icon)) {
+  //       icon = icon.split('-').splice(5)[0].at(0);
+  //     }
+  //     setImageName(icon);
+  //   }
+  // }, [formData]);
 
   return (
     <Dialog
@@ -178,7 +194,7 @@ function CategoriesServicesOverWritePopup({
                 {errors.desc && <ErrorSpanBox error={errors.desc?.message} />}
               </FormControl>
             </div>
-            <div className="FormField">
+            {/* <div className="FormField">
               <label className="FormLabel">
                 Upload Image
                 <span className="SubLabel">
@@ -231,7 +247,7 @@ function CategoriesServicesOverWritePopup({
               {/* {image === null && imageName === null && (
                 <ErrorSpanBox error="Image is required" />
               )} */}
-            </div>
+            {/* </div> */}
           </div>
           <div className="FormFooter">
             <Button
@@ -259,4 +275,4 @@ function CategoriesServicesOverWritePopup({
   );
 }
 
-export default CategoriesServicesOverWritePopup;
+export default CategoriesServicesOverridePopup;

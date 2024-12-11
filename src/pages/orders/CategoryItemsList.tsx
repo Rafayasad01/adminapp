@@ -1,6 +1,8 @@
 import _ from 'lodash';
 import { memo, useEffect, useState } from 'react';
 // import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
+import InfoIcon from '@mui/icons-material/Info';
 import Notify from '../../components/common/Notify';
 import { AppCategoryItems } from '../../interfaces/category.interface';
 import {
@@ -31,7 +33,7 @@ const CategoryItemsList: React.FC<CategoryItemsListProps> = ({
   );
   const { items, notify, notifyMessage } = useAppSelector((x) => x.itemState);
   const [searchedItems, setSearchedItems] = useState<AppCategoryItems[]>([]);
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const [selectedItem, setSelectedItem] = useState<AppCategoryItems | null>(
     null
   );
@@ -72,30 +74,32 @@ const CategoryItemsList: React.FC<CategoryItemsListProps> = ({
         setIsOpen={setIsNotify}
         displayMessage={notifyMessages}
       />
-      {searchedItems.map((item: AppCategoryItems) => (
-        <div key={item.id} className="item">
+      {searchedItems?.map((item: AppCategoryItems, index: number) => (
+        <div key={index} className="item">
           <button
             className="mb-4 aspect-[4/3] w-full object-contain md:mb-6"
-            // onClick={() => navigate(`../item/${item.id}`)}
+            onClick={() => navigate(`../item/${item.id}`)}
           >
-            {item.icon !== 'null' ? (
-              <img
-                className="mb-4 aspect-[2/1] w-full object-contain md:mb-6"
-                src={item.icon}
-                alt=""
-              />
-            ) : (
-              <img
-                className="mb-4 aspect-[2/1] w-full object-contain md:mb-6"
-                src={assets.images.noItems}
-                alt=""
-              />
-            )}
-            {/* <img
-              className="mb-4 aspect-[4/3] w-full object-contain md:mb-6"
-              src={item.icon}
-              alt=""
-            /> */}
+            <div className="relative">
+              <div className="absolute right-0 top-[-30px]">
+                <InfoIcon className="text-primary" titleAccess="Product Info" />
+              </div>
+              <div>
+                {item.icon !== 'null' ? (
+                  <img
+                    className="mb-4 mt-5 aspect-[2/1] w-full object-contain md:mb-6"
+                    src={item.icon}
+                    alt=""
+                  />
+                ) : (
+                  <img
+                    className="mb-4 mt-5 aspect-[2/1] w-full object-contain md:mb-6"
+                    src={assets.images.noItems}
+                    alt=""
+                  />
+                )}
+              </div>
+            </div>
           </button>
           <div className="">
             <p className="name m-0 text-base">{item.name}</p>
@@ -141,25 +145,35 @@ const CategoryItemsList: React.FC<CategoryItemsListProps> = ({
         </div>
       ))}
       {search === '' &&
-        items.map((item: AppCategoryItems) => (
-          <div key={item.id} className="item">
+        items?.map((item: AppCategoryItems, i: number) => (
+          <div key={i} className="item">
             <button
               className="mb-4 aspect-[4/3] w-full object-contain md:mb-6"
-              // onClick={() => navigate(`../item/${item.id}`)}
+              onClick={() => navigate(`../item/${item.id}`)}
             >
-              {item.icon !== 'null' ? (
-                <img
-                  className="mb-4 aspect-[2/1] w-full object-contain md:mb-6"
-                  src={item.icon}
-                  alt=""
-                />
-              ) : (
-                <img
-                  className="mb-4 aspect-[2/1] w-full object-contain md:mb-6"
-                  src={assets.images.noItems}
-                  alt=""
-                />
-              )}
+              <div className="relative">
+                <div className="absolute right-0 top-[-30px]">
+                  <InfoIcon
+                    className="text-primary"
+                    titleAccess="Product Info"
+                  />
+                </div>
+                <div>
+                  {item.icon !== 'null' ? (
+                    <img
+                      className="mb-4 mt-5 aspect-[2/1] w-full object-contain md:mb-6"
+                      src={item.icon}
+                      alt=""
+                    />
+                  ) : (
+                    <img
+                      className="mb-4 mt-5 aspect-[2/1] w-full object-contain md:mb-6"
+                      src={assets.images.noItems}
+                      alt=""
+                    />
+                  )}
+                </div>
+              </div>
             </button>
             <div className="">
               <p className="name m-0 text-base">{item.name}</p>
