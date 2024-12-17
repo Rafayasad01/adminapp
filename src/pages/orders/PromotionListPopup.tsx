@@ -9,18 +9,24 @@ type PromotionListPopupProps = {
   openFormDialog: boolean;
   setOpenFormDialog: React.Dispatch<React.SetStateAction<boolean>>;
   promoList: any;
+  showNotification?: any;
 };
 
 function PromotionListPopup({
   openFormDialog,
   setOpenFormDialog,
   promoList,
+  showNotification,
 }: PromotionListPopupProps) {
   const handleFormClose = () => {
     setOpenFormDialog(false);
   };
 
   const PrintCode = (text: string) => {
+    showNotification({
+      text: 'Copied',
+      type: 'success',
+    });
     return navigator.clipboard.writeText(text);
   };
 

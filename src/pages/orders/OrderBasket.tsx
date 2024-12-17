@@ -967,11 +967,13 @@ const OrderBasket = () => {
                         totalAmount > discountedValue?.value &&
                         promoCode
                           ? discountedValue?.value?.toLocaleString()
-                          : '0.00'
+                          : '0.00 / Not Applicable'
                       }`
                       ) : (
                         <span className="text-xs font-normal">
-                          This discount is not applicable
+                          {discountedValue?.value > totalAmount
+                            ? 'Grand Total is not correct'
+                            : 'This discount is not applicable'}
                         </span>
                       )
                     ) : (
@@ -1041,6 +1043,7 @@ const OrderBasket = () => {
         promoList={promoList}
         openFormDialog={isOpenPromoDialog}
         setOpenFormDialog={setIsOpenPromoDialog}
+        showNotification={showNotification}
       />
       <Notify
         isOpen={notify}

@@ -371,6 +371,7 @@ function VouchersPage() {
               <thead>
                 <tr>
                   <th>Vouchers</th>
+                  <th>Branch</th>
                   <th>Valid From</th>
                   <th>Valid Till</th>
                   <th className="w-[10%]">Discount</th>
@@ -402,6 +403,7 @@ function VouchersPage() {
                             </div>
                           </div>
                         </td>
+                        <td>{item.branchName ? item.branchName : '---'}</td>
                         <td>{dayjs(item.validFrom).format('MMMM DD, YYYY')}</td>
                         <td>{dayjs(item.validTill).format('MMMM DD, YYYY')}</td>
                         <td>{`${Number(item.value)} PKR`}</td>

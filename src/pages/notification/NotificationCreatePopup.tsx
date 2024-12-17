@@ -56,12 +56,19 @@ function NotificationCreatePopup({
   const [branches, setBranches] = React.useState<any>([]);
 
   const onSubmit = (data: Notification) => {
+    if (notificationType === 'Customers') {
+      setOpenFormDialog(false);
+      data.branches = [];
+      data.notificationType = notificationType;
+      callback(data);
+      return;
+    }
     const checkMainBranch: boolean =
       data.branches.length === 1 &&
       branches.some((b: any) => b.name === 'All' && b.id === data.branches[0]);
 
     if (checkMainBranch) {
-      // setOpenFormDialog(false);
+      setOpenFormDialog(false);
       data.notificationType = notificationType;
       if (notificationType === 'Customers') {
         data.branches = [];

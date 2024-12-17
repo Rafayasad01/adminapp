@@ -353,8 +353,12 @@ function CategoriesServicesPage() {
           });
           // setList([updateItem.data.data, ...list]);
           for (let i = 0; i < list.length; i += 1) {
-            if (list[i].id === updateItem.data.data.id) {
+            if (
+              list[i].id === updateItem.data.data.id ||
+              list[i].id === updateItem.data.data.parent
+            ) {
               list[i].name = updateItem.data.data.name;
+              list[i].desc = updateItem.data.data.desc;
             }
           }
         } else {

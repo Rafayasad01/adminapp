@@ -195,7 +195,7 @@ function OrdersCreatePage() {
       dropDateTime: watch('deliveryDropOffDate')
         ? watch('deliveryDropOffDate').format('YYYY-MM-DD HH:mm:ss')
         : DeliveryDate.format('YYYY-MM-DD HH:mm:ss'),
-      voucherCode: checkVoucherMinAmount ? promoCode : '' || '',
+      voucherCode: checkVoucherMinAmount ? promoCode : '',
       products: itemList?.map((item: any) => ({
         id: item.id,
         quantity: item.quantity,
@@ -364,7 +364,7 @@ function OrdersCreatePage() {
                 dropDateTime: watch('deliveryDropOffDate')
                   ? watch('deliveryDropOffDate').format('YYYY-MM-DD HH:mm:ss')
                   : DeliveryDate.format('YYYY-MM-DD HH:mm:ss'),
-                voucherCode: checkVoucherMinAmount ? promoCode : '' || '',
+                voucherCode: checkVoucherMinAmount ? promoCode : '',
                 products: itemList?.map((items: any) => ({
                   id: items.id,
                   quantity: items.quantity,

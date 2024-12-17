@@ -170,9 +170,9 @@ function NotificationPage() {
             text: 'Sent your notification! Its processing now may succeed or fail. We will update you shortly.',
             type: 'success',
           });
-          // setTimeout(() => {
-          //   window.location.reload();
-          // }, 2000);
+          setTimeout(() => {
+            window.location.reload();
+          }, 2000);
           // list.push(item.data.data);
           // setList(list);
         } else {
