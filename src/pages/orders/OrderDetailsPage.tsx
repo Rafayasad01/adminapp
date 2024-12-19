@@ -413,7 +413,7 @@ function OrderDetailsPage() {
                   </div>
                   <div className="font-open-sans text-xs font-normal text-neutral-500">
                     {dayjs(viewData.updatedDate)?.format(
-                      'ddd, MMM DD, YYYY | hh:mm:ssA'
+                      'MMM DD, YY | hh:mm A'
                     )}
                   </div>
                   <div

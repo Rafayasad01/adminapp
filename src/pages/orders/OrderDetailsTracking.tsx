@@ -371,9 +371,10 @@ function OrderDetailsTrackingPage({
                 </div>
                 <div className="flex-grow" />
                 <div className="font-open-sans text-sm font-normal text-neutral-500">
-                  {dayjs(appOrderStatus?.createdDate).format(
-                    'MMM DD, YY | HH:mm:ss A'
-                  )}
+                  {isActive &&
+                    dayjs(appOrderStatus?.createdDate).format(
+                      'MMM DD, YY | hh:mm A'
+                    )}
                 </div>
               </div>
             );

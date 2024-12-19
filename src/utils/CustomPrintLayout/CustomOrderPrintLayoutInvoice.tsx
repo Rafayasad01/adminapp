@@ -1,5 +1,4 @@
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
-import dayjs from 'dayjs';
 import { forwardRef, useRef } from 'react';
 import { useReactToPrint } from 'react-to-print';
 import CustomText from '../../components/common/CustomText';
@@ -43,13 +42,13 @@ const CustomPrintLayouts = forwardRef<any, any>(
                           {props?.data?.user?.lastName}
                         </span>
                       </div>
-                      {props?.data?.paymentStatus && (
+                      {/* {props?.data?.paymentStatus && (
                         <div className="">
                           <span className="badge badge-success">
                             {props?.data?.paymentStatus}
                           </span>
                         </div>
-                      )}
+                      )} */}
                     </div>
                     <div className="">
                       <p className="text-sm font-semibold">Email</p>
@@ -80,13 +79,13 @@ const CustomPrintLayouts = forwardRef<any, any>(
                           {props?.data?.orderNumber}
                         </span>
                       </div>
-                      <div className="iv-item-right">
+                      {/* <div className="iv-item-right">
                         <span className="badge badge-success">
                           {props?.data?.status}
                         </span>
-                      </div>
+                      </div> */}
                     </div>
-                    <div className="">
+                    {/* <div className="">
                       <p className="text-sm font-semibold">Pick-up Date Time</p>
                       <span className="text-sm">
                         {props?.data?.pickupDateTime
@@ -105,7 +104,7 @@ const CustomPrintLayouts = forwardRef<any, any>(
                             dayjs(props?.data?.dropDateTime).format('hh:mm A')
                           : '--'}
                       </span>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               </div>

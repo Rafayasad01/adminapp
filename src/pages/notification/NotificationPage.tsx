@@ -167,7 +167,7 @@ function NotificationPage() {
           setIsLoader(false);
           setIsNotify(true);
           setNotifyMessage({
-            text: 'Sent your notification! Its processing now may succeed or fail. We will update you shortly.',
+            text: 'Notification has been sent, status will be updated.',
             type: 'success',
           });
           setTimeout(() => {

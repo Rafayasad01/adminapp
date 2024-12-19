@@ -445,12 +445,10 @@ function OrdersPage() {
                         <td>
                           <div className="flex flex-col">
                             <span className="text-sm font-normal text-secondary">
-                              {dayjs(Item.createdDate)?.format('hh:mm:ssA')}
+                              {dayjs(Item.createdDate)?.format('hh:mm A')}
                             </span>
                             <span className="text-xs font-normal text-[#6A6A6A]">
-                              {dayjs(Item.createdDate)?.format(
-                                'ddd, MMM DD, YYYY'
-                              )}
+                              {dayjs(Item.createdDate)?.format('MMM DD, YY')}
                             </span>
                           </div>
                         </td>
