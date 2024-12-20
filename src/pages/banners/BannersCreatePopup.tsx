@@ -4,8 +4,7 @@ import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
 import TextField from '@mui/material/TextField';
 import React, { useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
-import ReactQuill from 'react-quill';
+import { useForm } from 'react-hook-form';
 import 'react-quill/dist/quill.snow.css';
 import '../../assets/css/PopupStyle.css';
 import CustomButton from '../../components/common/CustomButton';
@@ -198,7 +197,7 @@ function BannersCreatePopup({
               )}
             </FormControl>
           </div>
-          <div className="FormField">
+          {/* <div className="FormField">
             <FormControl className="FormControl" variant="standard">
               <Controller
                 name="pageDetail"
@@ -225,7 +224,7 @@ function BannersCreatePopup({
                 )}
               />
             </FormControl>
-          </div>
+          </div> */}
           <div className="FormFooter pb-4 pt-10">
             <Button
               className="btn-black-outline"

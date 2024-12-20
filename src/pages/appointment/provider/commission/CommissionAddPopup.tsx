@@ -1,24 +1,26 @@
+import AddIcon from '@mui/icons-material/Add';
+import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
+import PercentIcon from '@mui/icons-material/Percent';
+import { createTheme } from '@mui/material';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import FormControl from '@mui/material/FormControl';
-import InputAdornment from '@mui/material/InputAdornment';
-import PercentIcon from '@mui/icons-material/Percent';
-import AddIcon from '@mui/icons-material/Add';
-import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
-import { createTheme } from '@mui/material';
 import Input from '@mui/material/Input';
-import React, { useEffect, useState } from 'react';
-import { Controller, useFieldArray, useForm } from 'react-hook-form';
+import InputAdornment from '@mui/material/InputAdornment';
 import ThemeProvider from '@mui/material/styles/ThemeProvider';
+import TextField from '@mui/material/TextField';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import dayjs from 'dayjs';
-import TextField from '@mui/material/TextField';
-import storeEmployeeCommission from '../../../../services/adminapp/adminCommission';
-import { CommissionCreate } from '../../../../interfaces/commission.interface';
+import React, { useEffect, useState } from 'react';
+import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import ErrorSpanBox from '../../../../components/common/ErrorSpanBox';
+import { CommissionCreate } from '../../../../interfaces/commission.interface';
+import storeEmployeeCommission from '../../../../services/adminapp/adminCommission';
 
+import '../../../../assets/css/PopupStyle.css';
+import CustomDropDown from '../../../../components/common/CustomDropDown';
 import {
   COMMISSION_AMOUNT_TYPE,
   CURRENCY_PREFIX,
@@ -26,8 +28,6 @@ import {
   PRODUCT,
   VALIDATE_NON_NEGATIVE_NUM,
 } from '../../../../utils/constants';
-import CustomDropDown from '../../../../components/common/CustomDropDown';
-import '../../../../assets/css/PopupStyle.css';
 
 type Props = {
   isButLoader: boolean;
@@ -128,9 +128,8 @@ function CommissionAddPopup({
       desc: watch('desc'),
       amount:
         watch('commissionAmountType') === 'amount'
-          ? Number(totalProductAmount) + Number(watch('commission'))
-          : Number(totalProductAmount) +
-            Number(totalProductAmount) * (Number(watch('commission')) / 100),
+          ? Number(watch('commission'))
+          : Number(totalProductAmount) * (Number(watch('commission')) / 100),
     };
     // append(obj);
     if (
@@ -417,9 +416,7 @@ function CommissionAddPopup({
                 <div className="col-span-2 font-semibold">Date</div>
                 <div className="col-span-1 font-semibold">P. Amount</div>
                 <div className="col-span-1 font-semibold">Total</div>
-                <div className="col-span-1 text-center font-semibold">
-                  Commission
-                </div>
+                <div className="col-span-1 text-center font-semibold">Type</div>
                 <div className="col-span-3 text-center font-semibold">
                   Commission Amount
                 </div>
@@ -457,12 +454,18 @@ function CommissionAddPopup({
                     <span className="font-medium"> {CURRENCY_PREFIX}</span>
                   </div>
                   <div className="col-span-1 text-center capitalize">
-                    {item.commission ? item.commission : 0}{' '}
+                    {item.commissionAmountType === 'amount'
+                      ? 'Amount'
+                      : 'Percentage'}
+                    {/* {item.commission ? item.commission : 0}{' '}
                     {item.commissionAmountType === 'amount'
                       ? CURRENCY_PREFIX
-                      : '%'}
+                      : '%'} */}
                   </div>
                   <div className="col-span-3 text-center capitalize">
+                    {item.commissionAmountType === 'amount'
+                      ? ''
+                      : `(${item.commission}%)`}{' '}
                     {Number(item.amount).toFixed(2)}
                     <span className="font-medium"> {CURRENCY_PREFIX}</span>
                   </div>

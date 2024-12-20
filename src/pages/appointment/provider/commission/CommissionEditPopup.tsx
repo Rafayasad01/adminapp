@@ -4,27 +4,28 @@ import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import FormControl from '@mui/material/FormControl';
 // import AddIcon from '@mui/icons-material/Add';
-import InputAdornment from '@mui/material/InputAdornment';
 import PercentIcon from '@mui/icons-material/Percent';
+import InputAdornment from '@mui/material/InputAdornment';
 // import IconButton from '@mui/material/IconButton';
 // import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
 import { createTheme } from '@mui/material';
 import Input from '@mui/material/Input';
-import React, { useEffect, useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
 import ThemeProvider from '@mui/material/styles/ThemeProvider';
+import TextField from '@mui/material/TextField';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import dayjs from 'dayjs';
-import TextField from '@mui/material/TextField';
+import React, { useEffect, useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
 import CustomDropDown from '../../../../components/common/CustomDropDown';
 import storeEmployeeCommission from '../../../../services/adminapp/adminCommission';
 // import storeEmployee from '../../../../services/adminapp/adminStoreEmployee';
 // import TimePicker from '../../../../components/common/TimePicker';
-import { CommissionCreate } from '../../../../interfaces/commission.interface';
 import ErrorSpanBox from '../../../../components/common/ErrorSpanBox';
+import { CommissionCreate } from '../../../../interfaces/commission.interface';
 
+import '../../../../assets/css/PopupStyle.css';
 import {
   COMMISSION_AMOUNT_TYPE,
   CURRENCY_PREFIX,
@@ -33,9 +34,7 @@ import {
   MAX_LENGTH_EXCEEDED,
   // PATTERN,
   VALIDATE_NON_NEGATIVE_NUM,
-  //   imageAllowedTypes,
 } from '../../../../utils/constants';
-import '../../../../assets/css/PopupStyle.css';
 
 type Props = {
   openFormDialog: boolean;
@@ -94,10 +93,9 @@ function CommissionEditPopup({
 
   const totalCommissionAmount =
     watch('commissionAmountType') === 'amount'
-      ? Number(totalProductAmount) + Number(watch('commission'))
+      ? Number(watch('commission'))
       : watch('commissionAmountType') === 'percentage'
-      ? Number(totalProductAmount) +
-        Number(totalProductAmount) * (Number(watch('commission')) / 100)
+      ? Number(totalProductAmount) * (Number(watch('commission')) / 100)
       : 0;
 
   const fetchProductsLov = () => {

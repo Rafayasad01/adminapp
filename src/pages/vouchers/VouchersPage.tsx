@@ -21,9 +21,9 @@ import vouchersService from '../../services/adminapp/adminVouchers';
 import PermissionPopup from '../../utils/PermissionPopup';
 import { ALL_PERMISSIONS, NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
 import { listingRolePermission } from '../../utils/helper';
+import { getItem } from '../../utils/storage';
 import VouchersPromoCreatePopup from './VouchersPromoCreatePopup';
 import VouchersPromoEditPopup from './VouchersPromoEditPopup';
-import { getItem } from '../../utils/storage';
 // import VouchersReferralCreatePopup from './VouchersReferralCreatePopup';
 
 const options = ['Edit', 'Delete'];
@@ -371,7 +371,7 @@ function VouchersPage() {
               <thead>
                 <tr>
                   <th>Vouchers</th>
-                  <th>Branch</th>
+                  {branchData.branchType === 'Main' && <th>Branch</th>}
                   <th>Valid From</th>
                   <th>Valid Till</th>
                   <th className="w-[10%]">Discount</th>
@@ -403,7 +403,16 @@ function VouchersPage() {
                             </div>
                           </div>
                         </td>
-                        <td>{item.branchName ? item.branchName : '---'}</td>
+                        {branchData.branchType === 'Main' && (
+                          <td>
+                            {item.isAllBranches
+                              ? 'All Branches'
+                              : item.branch
+                              ? item.branch.name
+                              : '--'}
+                          </td>
+                        )}
+
                         <td>{dayjs(item.validFrom).format('MMMM DD, YYYY')}</td>
                         <td>{dayjs(item.validTill).format('MMMM DD, YYYY')}</td>
                         <td>{`${Number(item.value)} PKR`}</td>

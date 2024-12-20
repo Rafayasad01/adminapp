@@ -15,6 +15,7 @@ import {
   useParams,
 } from 'react-router-dom';
 // import assets from '../../assets';
+import assets from '../../assets';
 import Loader from '../../components/common/Loader';
 import Notify from '../../components/common/Notify';
 import TopBar from '../../components/common/TopBar';
@@ -33,7 +34,6 @@ import {
 } from '../../utils/constants';
 import { listingRolePermission } from '../../utils/helper';
 import OrderDetailsTrackingPage from './OrderDetailsTracking';
-import assets from '../../assets';
 
 function OrderDetailsPage() {
   // const navigate = useNavigate();
@@ -652,7 +652,7 @@ function OrderDetailsPage() {
                     Total Amount
                   </div>
                   <div className="text-right font-open-sans text-sm font-semibold text-neutral-900">
-                    PKR {viewData.totalAmount}
+                    {CURRENCY_PREFIX} {viewData.totalAmount}
                   </div>
                 </div>
                 <div className="flex items-center justify-between">
@@ -677,7 +677,7 @@ function OrderDetailsPage() {
                     HST {viewData.gstPercentage}%
                   </div>
                   <div className="text-right font-open-sans text-sm font-semibold text-neutral-900">
-                    PKR {viewData.gstAmount}
+                    {CURRENCY_PREFIX} {viewData.gstAmount}
                   </div>
                 </div>
               </div>
@@ -687,7 +687,7 @@ function OrderDetailsPage() {
                 Grand Total
               </div>
               <div className="text-right font-open-sans text-sm font-semibold text-neutral-900">
-                PKR {viewData.grandTotal}
+                {CURRENCY_PREFIX} {viewData.grandTotal}
               </div>
             </div>
           </div>

@@ -4,8 +4,7 @@ import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
 import TextField from '@mui/material/TextField';
 import React, { useEffect, useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
-import ReactQuill from 'react-quill';
+import { useForm } from 'react-hook-form';
 import 'react-quill/dist/quill.snow.css';
 import '../../assets/css/PopupStyle.css';
 import CustomButton from '../../components/common/CustomButton';
@@ -223,7 +222,7 @@ function BannerUpdatePopup({
               )}
             </FormControl>
           </div>
-          <div className="FormField">
+          {/* <div className="FormField">
             <FormControl className="FormControl" variant="standard">
               <Controller
                 name="pageDetail"
@@ -251,7 +250,7 @@ function BannerUpdatePopup({
                 )}
               />
             </FormControl>
-          </div>
+          </div> */}
           {/* {file === null && selectedImg === null && (
             <div>
               <span role="alert" className="error-color">
