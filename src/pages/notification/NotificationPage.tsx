@@ -33,7 +33,7 @@ function NotificationPage() {
   );
   const [search, setSearch] = useState<string>('');
   const [page, setPage] = useState<number>(0);
-  const [total, setTotal] = useState<number>(0);
+  const [total, setTotal] = useState<any>(0);
   const [list, setList] = useState<any>([]);
   const [rowsPerPage, setRowsPerPage] = useState<number>(10);
   const [openFormDialog, setOpenFormDialog] = useState<boolean>(false);
@@ -70,7 +70,7 @@ function NotificationPage() {
         .searchService(authState.user.tenant, searchTxt, newPage, rowsPerPage)
         .then((item) => {
           setList(item.data.data.list);
-          setTotal(item.data.data.total);
+          setTotal(Number(item.data.data.total));
         });
     }
   };
@@ -86,14 +86,14 @@ function NotificationPage() {
         .getListService(authState.user.tenant, newPage, rowsPerPage)
         .then((item) => {
           setList(item.data.data.list);
-          setTotal(item.data.data.total);
+          setTotal(Number(item.data.data.total));
         });
     } else {
       notificationService
         .searchService(authState.user.tenant, search, newPage, rowsPerPage)
         .then((item) => {
           setList(item.data.data.list);
-          setTotal(item.data.data.total);
+          setTotal(Number(item.data.data.total));
         });
     }
   };
@@ -109,14 +109,14 @@ function NotificationPage() {
         .getListService(authState.user.tenant, newPage, newRowperPage)
         .then((item) => {
           setList(item.data.data.list);
-          setTotal(item.data.data.total);
+          setTotal(Number(item.data.data.total));
         });
     } else {
       notificationService
         .searchService(authState.user.tenant, search, newPage, newRowperPage)
         .then((item) => {
           setList(item.data.data.list);
-          setTotal(item.data.data.total);
+          setTotal(Number(item.data.data.total));
         });
     }
   };
@@ -133,7 +133,7 @@ function NotificationPage() {
         .then((item: any) => {
           setIsLoader(false);
           setList(item.data.data.list);
-          setTotal(item.data.data.total);
+          setTotal(Number(item.data.data.total));
         })
         .catch((error) => {
           setIsLoader(false);
@@ -300,9 +300,10 @@ function NotificationPage() {
               <thead>
                 <tr>
                   <th className="w-[16rem]">Title</th>
-                  <th className="w-[30rem]">Message</th>
-                  <th>Dated</th>
+                  <th className="w-[20rem]">Message</th>
                   <th>Type</th>
+                  <th>Branch</th>
+                  <th>Dated</th>
                   <th>status</th>
                   <th aria-label="empty table header">&nbsp;</th>
                 </tr>
@@ -311,9 +312,29 @@ function NotificationPage() {
                 {list &&
                   list.map((item: any, index: number) => {
                     return (
-                      <tr key={item.id}>
+                      <tr key={index}>
                         <td>{item.title}</td>
                         <td>{item.description}</td>
+
+                        <td>
+                          {item.notificationType
+                            .replace(/([A-Z])/g, ' $1')
+                            .trim()}
+                        </td>
+                        <td>
+                          {item.branches.length
+                            ? item.branches.map(
+                                (branchItem: any, indexBranch: number) => (
+                                  <span
+                                    key={indexBranch}
+                                    className="flex w-full text-sm font-normal text-secondary"
+                                  >
+                                    {branchItem?.name}
+                                  </span>
+                                )
+                              )
+                            : 'N/A'}
+                        </td>
                         <td>
                           <div className="flex flex-col">
                             <span className="text-sm font-normal text-secondary">
@@ -325,11 +346,6 @@ function NotificationPage() {
                               )}
                             </span>
                           </div>
-                        </td>
-                        <td>
-                          {item.notificationType
-                            .replace(/([A-Z])/g, ' $1')
-                            .trim()}
                         </td>
                         <td>
                           <span

@@ -2,14 +2,14 @@
 // import MoreVertIcon from '@mui/icons-material/MoreVert';
 import SearchIcon from '@mui/icons-material/Search';
 // import Button from '@mui/material/Button';
+import ArticleOutlinedIcon from '@mui/icons-material/ArticleOutlined';
+import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
+import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutlineOutlined';
+import ImageOutlinedIcon from '@mui/icons-material/ImageOutlined';
+import PictureAsPdfOutlinedIcon from '@mui/icons-material/PictureAsPdfOutlined';
 import Dialog from '@mui/material/Dialog';
 import Divider from '@mui/material/Divider';
 import FormControl from '@mui/material/FormControl';
-import ImageOutlinedIcon from '@mui/icons-material/ImageOutlined';
-import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
-import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutlineOutlined';
-import PictureAsPdfOutlinedIcon from '@mui/icons-material/PictureAsPdfOutlined';
-import ArticleOutlinedIcon from '@mui/icons-material/ArticleOutlined';
 import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -329,6 +329,7 @@ function LeaveManagement() {
                   <th>From Date</th>
                   <th>To Date</th>
                   <th>Type</th>
+                  <th>Day</th>
                   <th>Attachments</th>
                   <th>Status</th>
                   <th aria-label="empty table header">&nbsp;</th>
@@ -384,6 +385,7 @@ function LeaveManagement() {
                             : '--'}
                         </td>
                         <td>{item.leaveType}</td>
+                        <td>{item.halfDay ? 'Half Day' : 'Day'}</td>
                         <td>
                           {item.storeEmployeeLeaveAttachment?.length < 1 &&
                             'No Attachments'}
