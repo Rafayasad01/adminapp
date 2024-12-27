@@ -59,6 +59,7 @@ networkInstance.interceptors.request.use(
 
 networkInstance.interceptors.response.use(
   function onResponse(response) {
+    setItem('LAST_ACTIVITY', Date.now());
     return response;
   },
   function onError(error) {

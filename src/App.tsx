@@ -1,5 +1,7 @@
 import 'devextreme/dist/css/dx.light.css';
 /* eslint-disable no-console */
+import dayjs from 'dayjs';
+import duration from 'dayjs/plugin/duration';
 import { useEffect, useState } from 'react';
 import { useErrorBoundary } from 'react-error-boundary';
 import { useRoutes } from 'react-router-dom';
@@ -9,7 +11,10 @@ import { setSystemConfig, setTheme } from './redux/features/authSlice';
 import { useAppDispatch } from './redux/redux-hooks';
 import { routeObjects } from './routes/AppRoutes';
 import systemConfigService from './services/adminapp/systemConfig';
+import monitorIdleTime from './utils/idle';
 import { getItem } from './utils/storage';
+
+dayjs.extend(duration);
 
 function App() {
   const dispatch = useAppDispatch();
@@ -25,6 +30,15 @@ function App() {
     console.error = () => {};
     console.warn = () => {};
   }
+
+  useEffect(() => {
+    const intervalTime = dayjs.duration(5, 'minutes').asMilliseconds();
+    const idleTime = dayjs.duration(15, 'minutes').asMilliseconds();
+    monitorIdleTime(intervalTime, idleTime, () => {
+      localStorage.clear();
+      window.location.replace('/');
+    });
+  }, []);
 
   useEffect(() => {
     if (systemConfig) return;

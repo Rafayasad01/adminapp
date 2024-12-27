@@ -21,6 +21,7 @@ import _ from 'lodash';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
+import assets from '../../assets';
 import CustomButton from '../../components/common/CustomButton';
 import Notify from '../../components/common/Notify';
 import TopBar from '../../components/common/TopBar';
@@ -42,10 +43,9 @@ import {
   ORDER_FULFILLMENT_METHOD,
 } from '../../utils/constants';
 import promiseHandler from '../../utils/helper';
+import { getItem } from '../../utils/storage';
 import { ValuesOf } from '../../utils/ts-helpers';
 import PromotionListPopup from './PromotionListPopup';
-import assets from '../../assets';
-import { getItem } from '../../utils/storage';
 
 const OrderBasket = () => {
   const {
@@ -540,6 +540,9 @@ const OrderBasket = () => {
                       <th>Price</th>
                       <th>Items</th>
                       <th>Subtotal</th>
+                      <th scope="col" aria-label="Empty Header">
+                        &nbsp;
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
@@ -548,23 +551,6 @@ const OrderBasket = () => {
                         <tr key={item.id}>
                           <td>
                             <div className="flex items-center gap-x-5">
-                              <button
-                                className="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium btn-delete css-78trlr-MuiButtonBase-root-MuiIconButton-root"
-                                tabIndex={0}
-                                type="button"
-                                onClick={() => handleCartItemDelete(item.id)}
-                              >
-                                <svg
-                                  className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root text-2xl"
-                                  focusable="false"
-                                  aria-hidden="true"
-                                  viewBox="0 0 24 24"
-                                  data-testid="DeleteOutlineOutlinedIcon"
-                                >
-                                  <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM8 9h8v10H8V9zm7.5-5-1-1h-5l-1 1H5v2h14V4h-3.5z" />
-                                </svg>
-                                <span className="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root" />
-                              </button>
                               <div className="product">
                                 {item.icon !== 'null' ? (
                                   <img className="pic" src={item.icon} alt="" />
@@ -607,6 +593,27 @@ const OrderBasket = () => {
                             {_.toNumber(
                               _.toNumber(item.price) * item.quantity
                             ).toFixed(2)}
+                          </td>
+                          <td>
+                            <div className="flex items-center gap-x-5">
+                              <button
+                                className="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium btn-delete css-78trlr-MuiButtonBase-root-MuiIconButton-root"
+                                tabIndex={0}
+                                type="button"
+                                onClick={() => handleCartItemDelete(item.id)}
+                              >
+                                <svg
+                                  className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root text-2xl"
+                                  focusable="false"
+                                  aria-hidden="true"
+                                  viewBox="0 0 24 24"
+                                  data-testid="DeleteOutlineOutlinedIcon"
+                                >
+                                  <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM8 9h8v10H8V9zm7.5-5-1-1h-5l-1 1H5v2h14V4h-3.5z" />
+                                </svg>
+                                <span className="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root" />
+                              </button>
+                            </div>
                           </td>
                         </tr>
                       );

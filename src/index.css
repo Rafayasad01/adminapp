@@ -2230,9 +2230,8 @@ main .container:nth-child(3){
   overflow-x: auto;
 }
 
-.cart-products-table thead tr th:first-child {
-  padding-left: 64px;
-}
+/* .cart-products-table thead tr th:first-child {
+} */
 
 .cart-products-table thead tr th {
   white-space: nowrap;

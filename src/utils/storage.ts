@@ -9,7 +9,8 @@ type Key =
   | 'TITLE_TEXT'
   | 'TITLE_TEXT_USER'
   | 'BRANCH_DATA'
-  | 'TEMP_BRANCH_DATA';
+  | 'TEMP_BRANCH_DATA'
+  | 'LAST_ACTIVITY';
 
 function addKeyPrefix(key: string) {
   const prefix = 'WEB_ADMIN';
