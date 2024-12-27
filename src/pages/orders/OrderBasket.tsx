@@ -603,7 +603,7 @@ const OrderBasket = () => {
                                 onClick={() => handleCartItemDelete(item.id)}
                               >
                                 <svg
-                                  className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root text-2xl"
+                                  className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-vubbuv text-2xl"
                                   focusable="false"
                                   aria-hidden="true"
                                   viewBox="0 0 24 24"
