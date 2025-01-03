@@ -103,6 +103,9 @@ const AllAppointment = ({
       resourceName: 'priorityId',
     },
   ];
+  useEffect(() => {
+    console.log('🚀 ~ useEffect ~ currentDate:', currentDate);
+  }, [currentDate]);
 
   useEffect(() => {
     setIsActiveUser(selectedPriorityData[0]?.id);
@@ -117,7 +120,6 @@ const AllAppointment = ({
         if (res.data.success) {
           setIsLoader(false);
           const structuredData = res.data.data.map((item: any) => {
-            console.log('🚀 ~ structuredData ~ item:', item);
             // const date = moment(item.appointmentTime);
             const date = dayjs(item.appointmentTime);
             const formattedDateTime = dayjs(date).format(
@@ -430,9 +432,9 @@ const AllAppointment = ({
 
   const currentDateChange = (newCurrentDate: any) => {
     setIsLoader(true);
-    const range: any = getRange(newCurrentDate, currentView);
-    setCurrentDate(newCurrentDate);
-    setRange(range);
+    setCurrentDate(dayjs(newCurrentDate).toDate());
+    getRange(newCurrentDate, currentView);
+    // setRange(range);
   };
 
   // const isStatusProcessing = async (id: string) => {
@@ -550,7 +552,7 @@ const AllAppointment = ({
         <ViewState
           defaultCurrentViewName={currentView}
           defaultCurrentDate={dayjs().toDate()}
-          currentDate={currentDate}
+          currentDate={dayjs(currentDate).toDate()}
           onCurrentDateChange={currentDateChange}
           currentViewName={currentView}
           onCurrentViewNameChange={currentViewChange}

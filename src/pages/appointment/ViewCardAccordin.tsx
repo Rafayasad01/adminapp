@@ -29,6 +29,7 @@ import { listingRolePermission } from '../../utils/helper';
 import { useAppSelector } from '../../redux/redux-hooks';
 
 type AccordionsProps = {
+  specificEmpAppointmentData: any;
   data: Array<object> | any;
   setData?: any;
   setAllAppointments?: any;
@@ -36,6 +37,7 @@ type AccordionsProps = {
 };
 
 function ViewCardAccordin({
+  specificEmpAppointmentData,
   data,
   setData,
   setAllAppointments,
@@ -81,7 +83,6 @@ AccordionsProps) {
     };
 
   const onRescheduleSubmit = (payload: any) => {
-    // console.log('🚀 ~ onWalletSubmit ~ data:', payload);
     setIsLoader(true);
     const reScheduleData = {
       appointmentTime: payload,
@@ -148,7 +149,6 @@ AccordionsProps) {
   };
 
   const onDeleteAppointment = async (appointmentId: string) => {
-    // console.log('🚀 ~ onDeleteAppointment ~ appointmentId:', appointmentId);
     try {
       setIsLoader(true);
       const [deleteStatusResponse] = await Promise.all([
@@ -243,10 +243,8 @@ AccordionsProps) {
     const appointmentData = data?.services?.find(
       (item: any) => item.id === updateAppointmentId
     );
-    // console.log('🚀 ~ getDataById ~ appointmentData:', appointmentData);
     setAppointmentDataById(appointmentData);
   };
-
   const isStatusProcess = async (appointmentId: string) => {
     try {
       setStatusLoader(true);
@@ -353,6 +351,15 @@ AccordionsProps) {
     onDeleteAppointment(serviceId);
   };
 
+  const handleEmpSpecific = (employeeid: string) => {
+    if (specificEmpAppointmentData.priorityId !== employeeid) {
+      return true;
+    }
+    return false;
+  };
+
+  console.log('Data', data);
+
   return (
     <>
       <Notify
@@ -365,14 +372,16 @@ AccordionsProps) {
           data?.services?.map((item: any, index: number) => {
             const date = dayjs(item.appointmentTime);
             const formattedDateTime = dayjs(date).format('h:mm A');
-            //   const date2 = date.add(item.serviceTime, 'minute');
-            //   const formattedDate2 = date2.format('h:mm:ss A');
             return (
               <div key={index}>
                 <Accordion
                   key={index}
                   className="boxShadow bg-transparent"
-                  expanded={expanded === `panel${index}`}
+                  expanded={
+                    !handleEmpSpecific(item.storeEmployee.id) &&
+                    expanded === `panel${index}`
+                  }
+                  disabled={handleEmpSpecific(item.storeEmployee.id)}
                   onChange={handleChange(`panel${index}`)}
                 >
                   <AccordionSummary
@@ -398,6 +407,11 @@ AccordionsProps) {
                           <div className="flex items-center px-1">
                             <StarIcon className="text-base text-inherit text-yellow-500" />{' '}
                             <span className="px-[2px] font-semibold">{`${item.rating}`}</span>
+                            <span className="px-[2px] font-semibold">
+                              <div className="badge badge-primary mx-2">
+                                {item?.status}
+                              </div>
+                            </span>
                           </div>
                         </div>
                         <div>

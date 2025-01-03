@@ -94,7 +94,7 @@ const AppointmentViewCard = ({
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
 
-  // console.log("DATATA", appointmentData);
+  console.log('DATATA', appointmentData);
 
   useEffect(() => {
     // Select the element
@@ -420,8 +420,6 @@ const AppointmentViewCard = ({
     }
   }, []);
 
-  // console.log('data2222222222222222', data);
-
   return isLoader ? (
     <Loader />
   ) : (
@@ -570,6 +568,7 @@ const AppointmentViewCard = ({
         </div>
         <ViewCardAccordin
           // setIsRescheduled={setIsRescheduled}
+          specificEmpAppointmentData={appointmentData}
           data={data}
           setData={setData}
           setAllAppointments={setAllAppointments}

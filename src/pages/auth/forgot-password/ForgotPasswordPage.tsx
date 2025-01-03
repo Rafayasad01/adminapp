@@ -19,6 +19,7 @@ import FastSpinner from '../../../components/common/CustomSpinner';
 
 interface Email {
   email: string;
+  tenant: string;
 }
 
 function ForgotPasswordPage() {
@@ -46,6 +47,7 @@ function ForgotPasswordPage() {
 
   const sendEmail = async (data: Email) => {
     setIsLoader(true);
+    data.tenant = systemConfig.tenant.id;
     authService
       .getOtpService(data)
       .then((res) => {
