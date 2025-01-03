@@ -142,24 +142,16 @@ function NotificationPage() {
             text: error.message,
             type: 'error',
           });
-          // console.log('error::::::::', error);
         });
     }
-  }, [null]);
+  }, []);
 
   const createFormHandler = (data: any) => {
-    // const formData = new FormData();
-    // setIsLoader(true);
     const obj = {
       ...data,
       // tenant: authState.user.tenant,
       // userId: authState.user.id,
     };
-    // console.log('🚀 ~ createFormHandler ~ obj:', obj);
-    // formData.append('title', data.title);
-    // formData.append('message', data.message);
-    // formData.append('tenant', authState.user.tenant);
-    // formData.append('userId', authState.user.id);
     notificationService
       .sentService(obj)
       .then((item) => {
@@ -173,8 +165,6 @@ function NotificationPage() {
           setTimeout(() => {
             window.location.reload();
           }, 2000);
-          // list.push(item.data.data);
-          // setList(list);
         } else {
           setIsLoader(false);
           setIsNotify(true);
@@ -290,7 +280,7 @@ function NotificationPage() {
                   className="btn-black-fill btn-icon"
                   onClick={handleFormClickOpen}
                 >
-                  <AddOutlinedIcon /> Sent
+                  <AddOutlinedIcon /> Submit
                 </Button>
               </div>
             </div>

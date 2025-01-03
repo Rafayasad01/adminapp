@@ -192,10 +192,6 @@ AccordionsProps) {
   };
 
   const updateAppointment = async (updateAppointmentData: any) => {
-    console.log(
-      '🚀 ~ updateAppointment ~ updateAppointmentData:SSSSSSSSSSSSSSS',
-      updateAppointmentData
-    );
     setIsLoader(true);
     const appId = updateAppointmentData.id;
     delete updateAppointmentData.id;
@@ -234,7 +230,6 @@ AccordionsProps) {
         }
       })
       .catch((err: any) => {
-        console.log('🚀 ~ updateAppointment ~ err:', err);
         setIsLoader(false);
         setIsNotify(true);
         setNotifyMessage({
@@ -267,8 +262,6 @@ AccordionsProps) {
         });
         setAllAppointments((newArr: any) => {
           return newArr.map((item: any) => {
-            console.log('itemSsSs', item.id, appointmentId);
-
             if (item.id === appointmentId) {
               item.status = statusResponse.data.data.status;
             }
@@ -287,7 +280,6 @@ AccordionsProps) {
           };
         });
       } else {
-        // throw new Error(paidStatusResponse.data.message);
         setStatusLoader(false);
         setIsNotify(true);
         setNotifyMessage({

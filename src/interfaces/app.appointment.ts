@@ -1,4 +1,5 @@
 export interface AppointmentProvider {
+  objId: string;
   name: string;
   address: string;
   phone: string;

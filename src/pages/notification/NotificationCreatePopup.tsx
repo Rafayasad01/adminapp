@@ -23,7 +23,6 @@ import { listingRolePermission } from '../../utils/helper';
 import { useAppSelector } from '../../redux/redux-hooks';
 import { getItem } from '../../utils/storage';
 import CustomMultipleSelectBox from '../../components/common/CustomMultipleSelect';
-import Notify from '../../components/common/Notify';
 
 type NotificationCreatePopupProps = {
   openFormDialog: boolean;
@@ -37,8 +36,8 @@ function NotificationCreatePopup({
   callback,
 }: NotificationCreatePopupProps) {
   const [notificationType, setNotificationType] = useState('Customers');
-  const [isNotify, setIsNotify] = useState(false);
-  const [notifyMessage, setNotifyMessage] = useState({});
+  // const [isNotify, setIsNotify] = useState(false);
+  // const [notifyMessage, setNotifyMessage] = useState({});
   const {
     register,
     handleSubmit,
@@ -63,39 +62,8 @@ function NotificationCreatePopup({
       callback(data);
       return;
     }
-    const checkMainBranch: boolean =
-      data.branches.length === 1 &&
-      branches.some((b: any) => b.name === 'All' && b.id === data.branches[0]);
-
-    if (checkMainBranch) {
-      setOpenFormDialog(false);
-      data.notificationType = notificationType;
-      if (notificationType === 'Customers') {
-        data.branches = [];
-      } else {
-        data.branches = branches.map((x: any) => x.id);
-      }
-      callback(data);
-      return;
-    }
-
-    const checkBranch: boolean =
-      Array.isArray(data.branches) &&
-      !data.branches.includes(mainShopBranch.id);
-
-    if (checkBranch || notificationType === 'Customers') {
-      // setOpenFormDialog(false);
-      data.notificationType = notificationType;
-
-      if (notificationType === 'Customers') data.branches = [];
-      callback(data);
-    } else {
-      setIsNotify(true);
-      setNotifyMessage({
-        text: 'Either select All or other branches',
-        type: 'error',
-      });
-    }
+    data.notificationType = notificationType;
+    callback(data);
   };
 
   const handleFormClose = () => {
@@ -121,7 +89,9 @@ function NotificationCreatePopup({
             name: el.name,
           };
         });
-        const mainRes: any = [{ id: mainShopBranch.id, name: 'All' }];
+        const mainRes: any = [
+          { id: mainShopBranch.id, name: mainShopBranch.name },
+        ];
         setBranches([...mainRes, ...res]);
       }
     });
@@ -136,11 +106,6 @@ function NotificationCreatePopup({
         style: { maxWidth: '100%', maxHeight: 'auto' },
       }}
     >
-      <Notify
-        isOpen={isNotify}
-        setIsOpen={setIsNotify}
-        displayMessage={notifyMessage}
-      />
       <div className="Content">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="FormHeader">
@@ -298,11 +263,11 @@ function NotificationCreatePopup({
             </Button>
             <Input
               type="submit"
-              value="Sent"
+              value="Submit"
               className="btn-black-fill"
               disableUnderline
               sx={{
-                padding: '0.375rem 2rem !important',
+                padding: '0.175rem 2rem !important',
               }}
             />
           </div>

@@ -80,6 +80,13 @@ const StoreEmployeeUpdate = (data: any, empId: any) => {
   );
 };
 
+const StoreEmployeeAvatarUpdate = (empId: any) => {
+  return network.post(
+    `${STORE_PREFIX}/${EMPLOYEE_PREFIX}/update-avatar/${empId}`,
+    {}
+  );
+};
+
 const StoreEmployeeUpdateStatus = (empId: any, data: any) => {
   return network.post(
     `${STORE_PREFIX}/${EMPLOYEE_PREFIX}/update/status/${empId}`,
@@ -203,6 +210,7 @@ export default {
   StoreEmployeeCreate,
   StoreEmployeeFind,
   StoreEmployeeUpdate,
+  StoreEmployeeAvatarUpdate,
   StoreEmployeeUpdateStatus,
   StoreEmployeeServiceList,
   StoreEmployeeServiceAllList,

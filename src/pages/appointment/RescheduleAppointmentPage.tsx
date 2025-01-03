@@ -744,7 +744,6 @@ export default function RescheduleAppointmentPage() {
                         >
                           <CustomDropDown
                             disabled
-                            validateRequired
                             id="gender"
                             control={control}
                             error={errors}

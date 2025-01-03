@@ -453,15 +453,14 @@ const AppointmentViewCard = ({
               <EditIcon />
             </IconButton> */}
               <IconButton
-                // disabled={
-                //   isRescheduled ||
-                //   appointmentData?.status === APPOINTMENT_STATUS.CANCELLED ||
-                //   appointmentData?.status === APPOINTMENT_STATUS.DONE ||
-                //   appointmentData?.status === APPOINTMENT_STATUS.COMPLETED ||
-                //   appointmentData?.status === APPOINTMENT_STATUS.RESCHEDULE ||
-                //   appointmentData?.status === APPOINTMENT_STATUS.PROCESSING ||
-                //   appointmentData?.status === APPOINTMENT_STATUS.MISSED
-                // }
+                disabled={
+                  data?.status === APPOINTMENT_STATUS.CANCELLED ||
+                  data?.status === APPOINTMENT_STATUS.DONE ||
+                  data?.status === APPOINTMENT_STATUS.COMPLETED ||
+                  data?.status === APPOINTMENT_STATUS.RESCHEDULE ||
+                  data?.status === APPOINTMENT_STATUS.PROCESSING ||
+                  data?.status === APPOINTMENT_STATUS.MISSED
+                }
                 className="icon-btn mr-3.5 p-0"
                 onClick={() => {
                   if (
@@ -484,15 +483,14 @@ const AppointmentViewCard = ({
                 <DeleteIcon />
               </IconButton>
               <IconButton
-                // disabled={
-                //   isRescheduled ||
-                //   appointmentData?.status === APPOINTMENT_STATUS.CANCELLED ||
-                //   appointmentData?.status === APPOINTMENT_STATUS.DONE ||
-                //   appointmentData?.status === APPOINTMENT_STATUS.COMPLETED ||
-                //   appointmentData?.status === APPOINTMENT_STATUS.RESCHEDULE ||
-                //   appointmentData?.status === APPOINTMENT_STATUS.PROCESSING ||
-                //   appointmentData?.status === APPOINTMENT_STATUS.MISSED
-                // }
+                disabled={
+                  data?.status === APPOINTMENT_STATUS.CANCELLED ||
+                  data?.status === APPOINTMENT_STATUS.DONE ||
+                  data?.status === APPOINTMENT_STATUS.COMPLETED ||
+                  data?.status === APPOINTMENT_STATUS.RESCHEDULE ||
+                  data?.status === APPOINTMENT_STATUS.PROCESSING ||
+                  data?.status === APPOINTMENT_STATUS.MISSED
+                }
                 name="Reschedule"
                 className="icon-btn mr-3.5 p-0"
                 onClick={() => {

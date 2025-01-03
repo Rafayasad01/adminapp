@@ -258,6 +258,8 @@ function Sidebar() {
   const appItems = useAppSelector(
     (state: any) => state?.persistedReducer?.appState?.UserItems
   );
+  console.log('appItems', appItems);
+
   const logo = useAppSelector(
     (state: any) => state?.persistedReducer?.appState?.logo
   );

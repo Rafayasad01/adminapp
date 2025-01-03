@@ -76,10 +76,6 @@ function AppointmentProviderPage() {
   const [startServiceTime, setStartServiceTime] = useState<dayjs.Dayjs | any>(
     null
   );
-  // // lovs
-  // const [catLovlist, setCatLovList] = useState<any>([]);
-  // const [catItemsLovlist, setCatItemsLovList] = useState<any>([]);
-  // const [usedCatItemsLovlist, setusedCatItemsLovList] = useState<any>([]);
   // edit formdata
   const [editFormData, setEditFormData] = useState<any>();
   // delete Id's
@@ -87,12 +83,6 @@ function AppointmentProviderPage() {
 
   const [showPassword, setShowPassword] = useState(true);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
-
-  // console.log('showPassword', showPassword);
-
-  // const officeTimings = useAppSelector(
-  //   (state) => state?.persistedReducer.appState.UserItems
-  // );
 
   const {
     register,
@@ -293,6 +283,7 @@ function AppointmentProviderPage() {
       id: 'uploadImg',
       placeholder: 'Upload Profile Picture',
       register,
+      getValues,
       error: errors.uploadImg,
       type: 'uploadImg',
       onchange: handleFileChange,
@@ -311,63 +302,56 @@ function AppointmentProviderPage() {
       pattern: PATTERN.ADDRESS_ONLY,
       maxLetterLimit: 250,
     },
-    // {
-    //   fieldName: 'DOB',
-    //   id: 'dob',
-    //   placeholder: 'Select DOB',
-    //   register,
-    //   error: errors.dob,
-    //   type: 'text',
-    // },
-    // {
-    //   fieldName: 'Payroll Type',
-    //   id: 'payrollType',
-    //   defaultValue: 'Select Payroll Type',
-    //   control,
-    //   register,
-    //   setValue,
-    //   error: errors.payrollType,
-    //   type: 'select',
-    //   options: {
-    //     role: watch('payrollType'),
-    //     roles: [
-    //       {
-    //         id: 'Both',
-    //         name: 'Both',
-    //       },
-    //       {
-    //         id: 'Salary',
-    //         name: 'Salary',
-    //       },
-    //       {
-    //         id: 'Commission',
-    //         name: 'Commission',
-    //       },
-    //     ],
-    //   },
-    // },
-    // {
-    //   fieldName: 'Salary',
-    //   id: 'salary',
-    //   placeholder: 'Enter Salary',
-    //   register,
-    //   error: errors.salary,
-    //   type: 'text',
-    //   pattern: PATTERN.PHONE,
-    //   maxLetterLimit: 15,
-    // },
-    // {
-    //   fieldName: 'Note',
-    //   id: 'note',
-    //   placeholder: 'Enter your description',
-    //   register,
-    //   error: errors.note,
-    //   type: 'textarea',
-    //   notRequired: true,
-    //   pattern: PATTERN.CHAR_NUM_SPACE_DASH,
-    //   maxLetterLimit: 150,
-    // },
   ]);
+
+  const deleteAvatarCallback = (id: string) => {
+    setIsLoader(true);
+    StoreEmployeeService.StoreEmployeeAvatarUpdate(id)
+      .then((res) => {
+        if (res.data.success) {
+          setIsLoader(false);
+          setOpenEditFormDialog(true);
+          setImage(null);
+          setInputFieldsData((prevFields: any) =>
+            prevFields.map((field: any) =>
+              field.id === 'uploadImg' ? { ...field, image: null } : field
+            )
+          );
+          setEditFormData((prevEditData: any) => ({
+            ...prevEditData,
+            avatar: null,
+          }));
+          for (let i = 0; i < list.length; i += 1) {
+            if (list[i].id === id) {
+              list[i].avatar = null;
+            }
+          }
+          setIsNotify(true);
+          setNotifyMessage({
+            text: 'Avatar deleted successfully',
+            type: 'success',
+          });
+        } else {
+          setIsLoader(false);
+          setOpenEditFormDialog(true);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: 'Failed to delete avatar',
+            type: 'error',
+          });
+        }
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+        setIsLoader(false);
+        setOpenEditFormDialog(true);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: 'Failed to delete avatar',
+          type: 'error',
+        });
+      });
+  };
 
   useEffect(() => {
     const addionalFields: any = [
@@ -450,6 +434,13 @@ function AppointmentProviderPage() {
     };
     setInputFieldsData((prev: any) => [...prev, note]);
   }, []);
+
+  useEffect(() => {
+    if (image === 'deleted') {
+      // console.log('yes', );
+      deleteAvatarCallback(actionMenuItemid);
+    }
+  }, [image]);
 
   const inputScheduleData = [
     {
@@ -636,6 +627,7 @@ function AppointmentProviderPage() {
               setImage(null);
               setIsLoader(false);
               setEditFormData(item.data.data);
+              setValue('objId', item.data.data.id);
               setValue('name', item.data.data.name);
               setValue('address', item.data.data.address);
               setValue('phone', item.data.data.phone);
@@ -923,6 +915,7 @@ function AppointmentProviderPage() {
             for (let i = 0; i < list.length; i += 1) {
               if (list[i].id === res.data.data.id) {
                 list[i].name = res.data.data.name;
+                list[i].avatar = res.data.data.avatar;
                 list[i].address = res.data.data.address;
                 list[i].email = res.data.data.email;
                 list[i].phone = res.data.data.phone;

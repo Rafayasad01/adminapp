@@ -342,7 +342,11 @@ function EmployeeServiceCreatePopup({
                     {item.amount ? (
                       <div>
                         {item.amount}
-                        <span className="font-medium"> {CURRENCY_PREFIX}</span>
+                        <span className="font-medium">
+                          {item.amountType === 'Percentage'
+                            ? ' %'
+                            : ` ${CURRENCY_PREFIX}`}
+                        </span>
                       </div>
                     ) : (
                       '0'
@@ -354,7 +358,7 @@ function EmployeeServiceCreatePopup({
                   <div className="col-span-3 px-3 text-start">
                     {item.amountType}
                   </div>
-                  <div className="col-span-1 bg-primary text-center">
+                  <div className="col-span-1 text-center text-primary">
                     <ClearOutlinedIcon
                       className="cursor-pointer"
                       onClick={() => remove(index)}

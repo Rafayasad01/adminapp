@@ -229,6 +229,8 @@ function VouchersPage() {
             ...list.filter((item: any) => item.id !== response.data.data.id),
             response.data.data,
           ];
+          console.log('newList', newList);
+
           setList(newList);
         } else {
           setIsLoader(false);
@@ -407,8 +409,8 @@ function VouchersPage() {
                           <td>
                             {item.isAllBranches
                               ? 'All Branches'
-                              : item.branch
-                              ? item.branch.name
+                              : item.branchName
+                              ? item.branchName
                               : '--'}
                           </td>
                         )}

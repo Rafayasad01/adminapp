@@ -325,7 +325,7 @@ function CustomSwiperDialog({
                                   </label>
                                   <IconButton
                                     className="btn-dot"
-                                    onClick={() => items.setImage(null)}
+                                    onClick={() => items.setImage()}
                                   >
                                     <CloseOutlinedIcon
                                       sx={{

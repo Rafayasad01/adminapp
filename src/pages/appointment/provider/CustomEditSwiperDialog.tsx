@@ -411,7 +411,12 @@ function CustomEditSwiperDialog({
                                   </label>
                                   <IconButton
                                     className="btn-dot"
-                                    onClick={() => items.setImage(null)}
+                                    onClick={
+                                      () => items.setImage('deleted')
+                                      // items.deleteAvatarCallback(
+                                      //   items.getValues('objId')
+                                      // )
+                                    }
                                   >
                                     <CloseOutlinedIcon
                                       sx={{
@@ -474,7 +479,7 @@ function CustomEditSwiperDialog({
                                   </label>
                                   <IconButton
                                     className="btn-dot"
-                                    onClick={() => items.setAvatar(null)}
+                                    onClick={() => console.log('delete')}
                                   >
                                     <CloseOutlinedIcon
                                       sx={{

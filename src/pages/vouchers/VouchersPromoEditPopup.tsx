@@ -20,6 +20,7 @@ import dayjs from 'dayjs';
 
 import '../../assets/css/PopupStyle.css';
 import CustomDateTimePicker from '../../components/common/CustomDateTimePicker';
+import branchService from '../../services/adminapp/adminBranch';
 import ErrorSpanBox from '../../components/common/ErrorSpanBox';
 import { useAppSelector } from '../../redux/redux-hooks';
 import {
@@ -27,6 +28,8 @@ import {
   VALIDATE_NON_NEGATIVE_NUM,
   VALIDATE_NON_NEGATIVE_NUM_AND_CHECK_LENGTH,
 } from '../../utils/constants';
+import CustomDropDown from '../../components/common/CustomDropDown';
+import { getItem } from '../../utils/storage';
 
 type UpdateVoucherPayloadProps = {
   vouchersPromoEditDialog: boolean;
@@ -48,6 +51,8 @@ interface UpdateVoucherPayload {
   voucherCode: string;
   isUnlimitedRedeem: boolean;
   maxUserRedeem: string;
+  isAllBranches: boolean;
+  branch: string;
 }
 
 interface UpdateVoucherFromData {
@@ -63,6 +68,7 @@ interface UpdateVoucherFromData {
   maxUserRedeem: string;
   validTill: string;
   validFrom: string;
+  branchId: string | any;
 }
 
 function VouchersPromoEditPopup({
@@ -72,6 +78,7 @@ function VouchersPromoEditPopup({
   callback,
 }: UpdateVoucherPayloadProps) {
   const {
+    control,
     register,
     handleSubmit,
     reset,
@@ -79,9 +86,11 @@ function VouchersPromoEditPopup({
     watch,
     formState: { errors },
   } = useForm<UpdateVoucherFromData>();
+  const mainShopBranch: any = getItem('TEMP_BRANCH_DATA');
   const authState: any = useAppSelector((state) => state?.authState);
   const handleFormClose = () => setVouchersPromoEditDialog(false);
   const [checked, setChecked] = useState(true);
+  const [branches, setBranches] = React.useState<any>([]);
 
   // const handleSwitchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
   //   setChecked(event.target.checked);
@@ -103,6 +112,8 @@ function VouchersPromoEditPopup({
       isUnlimitedRedeem: data.isUnlimitedRedeem,
       maxUserRedeem:
         data.isUnlimitedRedeem === false ? '0' : data.maxUserRedeem,
+      isAllBranches: mainShopBranch.id === data.branchId,
+      branch: data.branchId,
     };
     callback(item.id, updateVoucherPayload);
   };
@@ -122,6 +133,21 @@ function VouchersPromoEditPopup({
       setChecked(item.isActive);
     }
   }, [item, reset]);
+
+  useEffect(() => {
+    branchService.getBranchesLov().then((response: any) => {
+      if (response.data.success) {
+        const res: any = response.data.data.map((el: any) => {
+          return {
+            id: el.id,
+            name: el.name,
+          };
+        });
+        const mainRes: any = [{ id: mainShopBranch.id, name: 'All' }];
+        setBranches([...mainRes, ...res]);
+      }
+    });
+  }, []);
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -290,6 +316,23 @@ function VouchersPromoEditPopup({
                       error={errors?.maxRedeem?.message?.toString()}
                     />
                   )}
+                </FormControl>
+              </div>
+              <div className="my-2">
+                <FormControl className="FormControl w-full" variant="standard">
+                  <CustomDropDown
+                    validateRequired
+                    id="branchId"
+                    control={control}
+                    error={errors}
+                    register={register}
+                    setValue={setValue}
+                    customHeight="h-[31px]"
+                    customClassInputTitle="font-semibold"
+                    inputTitle="Branches"
+                    options={{ role: item.branch, roles: branches || [] }}
+                    defaultValue="Select Branch"
+                  />
                 </FormControl>
               </div>
               {/* <div className="FormField">
