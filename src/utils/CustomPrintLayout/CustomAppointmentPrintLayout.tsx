@@ -17,9 +17,8 @@ type CustomPrintLayoutsProps = {
   handlePrint?: any;
 };
 
-const CustomPrintLayouts = forwardRef<any, any>(
+const CustomPrintLayouts = forwardRef<any, CustomPrintLayoutsProps>(
   ({ dataId, handlePrint }: CustomPrintLayoutsProps, ref: any) => {
-    // console.log('A1', dataId);
     const [detailItems, setDetailItems] = useState<any>();
     const authState: any = useAppSelector((state: any) => state?.authState);
     useEffect(() => {

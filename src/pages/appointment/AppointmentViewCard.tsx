@@ -129,7 +129,7 @@ const AppointmentViewCard = ({
           onClick={() => {
             setIsNotify(true);
             setNotifyMessage({
-              text: 'Some Process are in processing...',
+              text: 'Some services are in processing, Please wait...',
               type: 'info',
             });
           }}

@@ -12,13 +12,17 @@ type CustomPrintLayoutsProps = {
   setPrintEnabled?: any;
 };
 
-const CustomPrintLayouts = forwardRef<any, any>(
-  (props: CustomPrintLayoutsProps, ref: any) => {
-    // console.log("A1", props.dataId);
+const CustomPrintLayouts = forwardRef<any, CustomPrintLayoutsProps>(
+  (
+    {
+      data,
+      isPrintEnabled: _isPrintEnabled,
+      setPrintEnabled: _setPrintEnabled,
+    }: CustomPrintLayoutsProps,
+    ref: any
+  ) => {
     const authState: any = useAppSelector((state: any) => state?.authState);
-    const qrCodeValue = `Tracking Code: ${props?.data?.code} \n\nShop Name: ${authState?.user?.tenantName} \nShop Email: ${authState?.user?.username}`;
-
-    // console.log('🚀 ~ data:', props);
+    const qrCodeValue = `Tracking Code: ${data?.code} \n\nShop Name: ${authState?.user?.tenantName} \nShop Email: ${authState?.user?.username}`;
     return (
       <div style={{ display: 'none' }}>
         <div ref={ref}>
@@ -33,7 +37,7 @@ const CustomPrintLayouts = forwardRef<any, any>(
             </div>
             <div className="print-title">Your Appointment is Confirmed!</div>
 
-            {props?.data?.appointments?.map((item: any, index: number) => {
+            {data?.appointments?.map((item: any, index: number) => {
               return (
                 <div key={index} className="print-row rowss">
                   <div className="col-1">
@@ -64,7 +68,7 @@ const CustomPrintLayouts = forwardRef<any, any>(
                   </tr>
                 </thead>
                 <tbody>
-                  {props?.data?.appointments?.map((el: any, index: number) => {
+                  {data?.appointments?.map((el: any, index: number) => {
                     return (
                       <tr key={index}>
                         <td>{el.storeServiceCategoryItem.name}</td>
@@ -83,15 +87,15 @@ const CustomPrintLayouts = forwardRef<any, any>(
                 <span>Total</span>
               </div>
               <div className="col-2">
-                <span>PKR {props?.data?.totalAmount}</span>
+                <span>PKR {data?.totalAmount}</span>
               </div>
             </div>
             <div className="print-row">
               <div className="col-1">
-                <span>HST {props?.data?.gstPercentage}%</span>
+                <span>HST {data?.gstPercentage}%</span>
               </div>
               <div className="col-2">
-                <span>PKR {props?.data?.gstAmount}</span>
+                <span>PKR {data?.gstAmount}</span>
               </div>
             </div>
 
@@ -101,17 +105,17 @@ const CustomPrintLayouts = forwardRef<any, any>(
                 <span>Grand Total</span>
               </div>
               <div className="col-2">
-                <span>PKR {props?.data?.grandTotalAmount}</span>
+                <span>PKR {data?.grandTotalAmount}</span>
               </div>
             </div>
             <div className="print-line" />
             <div className="print-banker">
               <ul>
                 <li>
-                  <span>Client Name : {props?.data?.name}</span>
+                  <span>Client Name : {data?.name}</span>
                 </li>
                 <li>
-                  <span>Client Email : {props?.data?.email}</span>
+                  <span>Client Email : {data?.email}</span>
                 </li>
                 <li>
                   <span>xxxxxxxxxxxxxxxxx</span>
