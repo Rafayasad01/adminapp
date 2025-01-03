@@ -12,11 +12,17 @@ type CustomPrintLayoutsProps = {
   setPrintEnabled?: any;
 };
 
-const CustomPrintLayouts = forwardRef<any, any>(
-  (props: CustomPrintLayoutsProps, ref: any) => {
-    // console.log("A1", props.dataId);
+const CustomPrintLayouts = forwardRef<any, CustomPrintLayoutsProps>(
+  (
+    {
+      data,
+      isPrintEnabled: _isPrintEnabled,
+      setPrintEnabled: _setPrintEnabled,
+    }: CustomPrintLayoutsProps,
+    ref: any
+  ) => {
     const authState: any = useAppSelector((state: any) => state?.authState);
-    const qrCodeValue = `Tracking Id: ${props?.data?.id} \n\nShop Name: ${authState?.user?.tenantName} \nShop Email: ${authState?.user?.username}`;
+    const qrCodeValue = `Tracking Id: ${data?.id} \n\nShop Name: ${authState?.user?.tenantName} \nShop Email: ${authState?.user?.username}`;
 
     return (
       <div style={{ display: 'none' }}>
@@ -35,15 +41,13 @@ const CustomPrintLayouts = forwardRef<any, any>(
             <div className="print-row rowss">
               <div className="col-1">
                 <span className="">
-                  <strong>Order: {props?.data?.orderNumber}</strong>
+                  <strong>Order: {data?.orderNumber}</strong>
                 </span>
               </div>
               <div className="col-2">
                 <div className="print-single-row print-date date-right">
-                  {dayjs(props?.data?.createdDate).isValid()
-                    ? dayjs(props?.data?.createdDate)?.format(
-                        'YYYY-MM-DD hh:mm:ss'
-                      )
+                  {dayjs(data?.createdDate).isValid()
+                    ? dayjs(data?.createdDate)?.format('YYYY-MM-DD hh:mm:ss')
                     : '--'}
                 </div>
               </div>
@@ -59,7 +63,7 @@ const CustomPrintLayouts = forwardRef<any, any>(
                   </tr>
                 </thead>
                 <tbody>
-                  {props?.data?.orderItems?.map((el: any, index: number) => {
+                  {data?.orderItems?.map((el: any, index: number) => {
                     return (
                       <tr key={index}>
                         <td>{el.name}</td>
@@ -78,7 +82,7 @@ const CustomPrintLayouts = forwardRef<any, any>(
                 <span>Total</span>
               </div>
               <div className="col-2">
-                <span>PKR {props?.data?.totalAmount}</span>
+                <span>PKR {data?.totalAmount}</span>
               </div>
             </div>
             <div className="print-row">
@@ -86,7 +90,7 @@ const CustomPrintLayouts = forwardRef<any, any>(
                 <span>Voucher Discount</span>
               </div>
               <div className="col-2">
-                <span>PKR {props?.data?.discount}</span>
+                <span>PKR {data?.discount}</span>
               </div>
             </div>
             <div className="print-row">
@@ -94,15 +98,15 @@ const CustomPrintLayouts = forwardRef<any, any>(
                 <span>loyalty Coins Discount</span>
               </div>
               <div className="col-2">
-                <span>PKR {props?.data?.discountLoyaltyCoins}</span>
+                <span>PKR {data?.discountLoyaltyCoins}</span>
               </div>
             </div>
             <div className="print-row">
               <div className="col-1">
-                <span>HST {props?.data?.gstPercentage}%</span>
+                <span>HST {data?.gstPercentage}%</span>
               </div>
               <div className="col-2">
-                <span>PKR {props?.data?.gstAmount}</span>
+                <span>PKR {data?.gstAmount}</span>
               </div>
             </div>
             <div className="print-line straight" />
@@ -111,7 +115,7 @@ const CustomPrintLayouts = forwardRef<any, any>(
                 <span>Grand Total</span>
               </div>
               <div className="col-2">
-                <span>PKR {props?.data?.grandTotal}</span>
+                <span>PKR {data?.grandTotal}</span>
               </div>
             </div>
             <div className="print-line" />
@@ -119,12 +123,12 @@ const CustomPrintLayouts = forwardRef<any, any>(
               <ul>
                 <li>
                   <span>
-                    Client Name : {props?.data?.user?.firstName}
-                    {props?.data?.user?.lastName}
+                    Client Name : {data?.user?.firstName}
+                    {data?.user?.lastName}
                   </span>
                 </li>
                 <li>
-                  <span>Client Email : {props?.data?.user?.email}</span>
+                  <span>Client Email : {data?.user?.email}</span>
                 </li>
                 <li>
                   <span>xxxxxxxxxxxxxxxxx</span>
