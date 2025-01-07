@@ -380,7 +380,7 @@ function VouchersPage() {
                   <th>Min Withdrawl</th>
                   {/* <th>Type</th> */}
                   <th>Redeem</th>
-                  <th>User Redeem</th>
+                  <th>Limited User Redeem</th>
                   <th>Limitation</th>
                   <th>Status</th>
                   <th aria-label="empty table header">&nbsp;</th>
@@ -422,10 +422,15 @@ function VouchersPage() {
                         {/* <td>{item.discountType}</td> */}
                         <td>
                           {item.isUnlimitedRedeem
-                            ? '0'
+                            ? '--'
                             : `${item.maxRedeem} - ${item.redeemCount}`}
                         </td>
-                        <td>{item.maxUserRedeem}</td>
+                        <td>
+                          {!item.isUnlimitedRedeem
+                            ? '--'
+                            : `${item.maxUserRedeem} - ${item.redeemCount}`}
+                        </td>
+                        {/* <td>{item.maxUserRedeem}</td> */}
                         <td>
                           <span
                             className={`${

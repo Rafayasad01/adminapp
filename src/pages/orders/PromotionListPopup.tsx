@@ -90,22 +90,27 @@ function PromotionListPopup({
                           </td>
                           <td>
                             <div>
-                              {item.maxRedeem} - {item.redeemCount}
+                              {!item.isUnlimitedRedeem
+                                ? `${`${item.maxRedeem} - ${item.redeemCount}`}`
+                                : '--'}
                             </div>
                           </td>
                           <td>
-                            <div>{item.maxUserRedeem}</div>
+                            {!item.isUnlimitedRedeem
+                              ? '--'
+                              : `${item.maxUserRedeem} - ${item.redeemCount}`}
+                            {/* <div>{item.maxUserRedeem}</div> */}
                           </td>
                           <td>
                             <div>
                               <span
                                 className={`badge ${
-                                  item.isUnlimitedRedeem === false
+                                  item.isUnlimitedRedeem
                                     ? 'badge-primary'
                                     : 'badge-success'
                                 }`}
                               >
-                                {item.isUnlimitedRedeem === false
+                                {item.isUnlimitedRedeem
                                   ? 'Limited'
                                   : 'Un Limited'}
                               </span>
