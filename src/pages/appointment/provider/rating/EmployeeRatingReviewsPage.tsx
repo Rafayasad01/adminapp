@@ -23,6 +23,7 @@ import ratingService from '../../../../services/adminapp/rating';
 import employeeRatingService from '../../../../services/adminapp/adminStoreEmployee';
 import { listingRolePermission } from '../../../../utils/helper';
 import RatingAccordions from './EmployeeRatingAccordin';
+import { ALL_PERMISSIONS } from '../../../../utils/constants';
 
 dayjs.extend(relativeTime);
 
@@ -48,7 +49,12 @@ function EmployeeRatingReviewsPage() {
     const fetchData = async () => {
       try {
         setIsLoader(true);
-        if (listingRolePermission(dataRole, 'Employee List')) {
+        if (
+          listingRolePermission(
+            dataRole,
+            ALL_PERMISSIONS.storeAppointment.viewEmployeeRating
+          )
+        ) {
           const [catListResponse, catStarRatingResponse, catDetailResponse] =
             await Promise.all([
               employeeRatingService.StoreEmployeeRatingReviewService(empId),

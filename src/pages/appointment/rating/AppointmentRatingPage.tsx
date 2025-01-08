@@ -19,6 +19,7 @@ import Notify from '../../../components/common/Notify';
 import { useAppSelector } from '../../../redux/redux-hooks';
 import ratingService from '../../../services/adminapp/rating';
 import { listingRolePermission } from '../../../utils/helper';
+import { ALL_PERMISSIONS } from '../../../utils/constants';
 
 function AppointmentRatingPage() {
   const navigate = useNavigate();
@@ -102,7 +103,12 @@ function AppointmentRatingPage() {
   };
 
   useEffect(() => {
-    if (listingRolePermission(dataRole, 'Employee List')) {
+    if (
+      listingRolePermission(
+        dataRole,
+        ALL_PERMISSIONS.storeAppointment.viewEmployeeRating
+      )
+    ) {
       ratingService
         .getListService(search, page, rowsPerPage)
         .then((item: any) => {
@@ -123,7 +129,7 @@ function AppointmentRatingPage() {
     } else {
       setIsLoader(false);
     }
-  }, [null]);
+  }, []);
 
   return isLoader ? (
     <Loader />
