@@ -151,8 +151,17 @@ AccordionsProps) {
   const onDeleteAppointment = async (appointmentId: string) => {
     try {
       setIsLoader(true);
+      const cancelledData: any = {};
+      if (
+        listingRolePermission(dataRole, ALL_PERMISSIONS.storeNotification.sent)
+      ) {
+        cancelledData.isNotification = true;
+      }
       const [deleteStatusResponse] = await Promise.all([
-        storeAppointmentService.appointmentCancelled(appointmentId),
+        storeAppointmentService.appointmentCancelled(
+          appointmentId,
+          cancelledData
+        ),
       ]);
       if (deleteStatusResponse.data.success) {
         setIsLoader(false);

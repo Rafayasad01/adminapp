@@ -280,8 +280,14 @@ const AllAppointment = ({
   const deleteAppointmentHandler = async (id: string) => {
     try {
       setIsLoader(true);
+      const cancelledData: any = {};
+      // if (
+      //   listingRolePermission(dataRole, ALL_PERMISSIONS.storeNotification.sent)
+      // ) {
+      //   cancelledData.isNotification = true;
+      // }
       const [deleteStatusResponse] = await Promise.all([
-        storeAppointmentService.appointmentCancelled(id),
+        storeAppointmentService.appointmentCancelled(id, cancelledData),
       ]);
       if (deleteStatusResponse.data.success) {
         setIsLoader(false);

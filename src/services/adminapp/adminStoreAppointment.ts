@@ -57,10 +57,10 @@ const appointmentProcessing = (storeAppId: any) => {
   );
 };
 
-const appointmentCancelled = (storeAppId: any) => {
+const appointmentCancelled = (storeAppId: any, data: any) => {
   return network.patch(
     `${STORE_PREFIX}/${APPOINTMENT_PREFIX}/service/cancelled/${storeAppId}`,
-    {}
+    data
   );
 };
 // interface AppointmentAllCancelledResponse {
@@ -101,10 +101,10 @@ const appointmentCancelled = (storeAppId: any) => {
 //   guestType: string;
 // }
 
-const appointmentAllCancelled = (code: any) => {
+const appointmentAllCancelled = (code: any, data: any) => {
   return network.patch(
     `${STORE_PREFIX}/${APPOINTMENT_PREFIX}/service/cancelled/all/${code}`,
-    {}
+    data
   );
 };
 

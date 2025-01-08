@@ -248,15 +248,20 @@ const AllAppointment = ({
 
   const deleteAppointmentHandler = async (code: string) => {
     // console.log('🚀 ~ deleteAppointmentHandler ~ code:', code);
+    const cancelledData: any = {};
+    if (
+      listingRolePermission(dataRole, ALL_PERMISSIONS.storeNotification.sent)
+    ) {
+      cancelledData.isNotification = true;
+    }
     setIsLoader(true);
     try {
       const deleteStatusResponse =
-        await storeAppointmentService.appointmentAllCancelled(code);
+        await storeAppointmentService.appointmentAllCancelled(
+          code,
+          cancelledData
+        );
       if (deleteStatusResponse.data.success) {
-        // console.log(
-        //   '🚀 ~ deleteAppointmentHandler ~ deleteStatusResponse:',
-        //   deleteStatusResponse
-        // );
         setIsLoader(false);
         setIsNotify(true);
         setNotifyMessage({
