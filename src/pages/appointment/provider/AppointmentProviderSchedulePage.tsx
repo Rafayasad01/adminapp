@@ -362,6 +362,7 @@ function AppointmentProviderSchedulePage() {
   };
 
   const updateFormHandler = (data: any) => {
+    // console.log('🚀 ~ updateFormHandler ~ data:', data);
     // if (
     //   dayjs(data.startTime).format('HH:mm') <
     //     dayjs(officeTimings?.tenantConfig?.officeTimeIn).format('HH:mm') ||
@@ -376,6 +377,7 @@ function AppointmentProviderSchedulePage() {
     //   });
     //   return null;
     // }
+
     setIsLoader(true);
     const details = {
       ...data,
@@ -402,8 +404,8 @@ function AppointmentProviderSchedulePage() {
                   if (items.id === item.data.data.id) {
                     return {
                       ...items,
-                      startTime: dayjs(item.data.data.startTime).utc(),
-                      endTime: dayjs(item.data.data.endTime).utc(),
+                      startTime: dayjs(item.data.data.startTime),
+                      endTime: dayjs(item.data.data.endTime),
                     };
                   }
                   return items;

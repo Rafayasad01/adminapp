@@ -974,7 +974,7 @@ function AppointmentProviderPage() {
     formData.append('cnic', data.cnic);
     formData.append('password', data.password);
     formData.append('salary', data.salary ? data.salary : 0);
-    formData.append('dob', dayjs().format('YYYY-MM-DD'));
+    formData.append('dob', dayjs(data.dob).format('YYYY-MM-DD'));
     formData.append('note', data.note);
     if (image) formData.append('avatar', image);
     // formData.append('services', JSON.stringify(data.services));
@@ -1026,7 +1026,7 @@ function AppointmentProviderPage() {
         type: 'error',
       });
     }
-    return null;
+    // return null;
     // handleNextSlide();
   };
 
