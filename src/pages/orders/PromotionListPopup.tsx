@@ -90,16 +90,15 @@ function PromotionListPopup({
                           </td>
                           <td>
                             <div>
-                              {!item.isUnlimitedRedeem
-                                ? `${`${item.maxRedeem} - ${item.redeemCount}`}`
-                                : '--'}
+                              {item.isUnlimitedRedeem
+                                ? '--'
+                                : `${item.maxRedeem} - ${item.redeemCount}`}
                             </div>
                           </td>
                           <td>
                             {!item.isUnlimitedRedeem
                               ? '--'
-                              : `${item.maxUserRedeem} - ${item.redeemCount}`}
-                            {/* <div>{item.maxUserRedeem}</div> */}
+                              : `${item.maxUserRedeem} - ${item.userCount}`}
                           </td>
                           <td>
                             <div>
