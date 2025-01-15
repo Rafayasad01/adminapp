@@ -92,9 +92,10 @@ import ProductAddPopup from '../pages/projectProducts/ProductAddPage';
 import ProductEditPopup from '../pages/projectProducts/ProductEditPage';
 // Vendor Components
 import VendorsPage from '../pages/vendors/VendorsPage';
-import QuotationsPage from '../pages/quotations/QuotationsPage';
-import QuotationsAddPage from '../pages/quotations/QuotationsAddPage';
-import QuotationsEditPage from '../pages/quotations/QuotationsEditPage';
+// import QuotationsPage from '../pages/quotations/QuotationsPage';
+import ProjectQuotationsPage from '../pages/projectQuotations/index';
+// import QuotationsAddPage from '../pages/quotations/QuotationsAddPage';
+// import QuotationsEditPage from '../pages/quotations/QuotationsEditPage';
 import VendorTypePage from '../pages/vendorTypes/VendorTypesPage';
 
 const ProtectedRoute = ({ page, condition }: any) => {
@@ -1153,16 +1154,17 @@ export const routeObjects: RouteObject[] = [
             children: [
               {
                 index: true,
-                element: <QuotationsPage />,
+                // element: <QuotationsPage />,
+                element: <ProjectQuotationsPage />,
               },
-              {
-                path: 'create',
-                element: <QuotationsAddPage />,
-              },
-              {
-                path: 'edit/:id',
-                element: <QuotationsEditPage />,
-              },
+              // {
+              //   path: 'create',
+              //   element: <QuotationsAddPage />,
+              // },
+              // {
+              //   path: 'edit/:id',
+              //   element: <QuotationsEditPage />,
+              // },
             ],
           },
           {

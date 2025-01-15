@@ -1,20 +1,19 @@
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router';
 import TopBar from '../../components/common/TopBar';
 import { useAppSelector } from '../../redux/redux-hooks';
 import { ALL_PERMISSIONS } from '../../utils/constants';
 import { listingRolePermission } from '../../utils/helper';
-import VideoPage from './videos/VideoPage';
-import ImagePage from './images/ImagePage';
+import QuotationPage from './quotationSlips/QuotationSlipPage';
+import TotalPaidPage from './totalPaidSlips/TotalPaidSlipPage';
+import MaterailLaborPage from './materialAndLaborSlips/MaterailLaborSlipPage';
 
-function ProjectAttachment() {
+function ProjectQuotationsPage() {
   const dataRole = useAppSelector(
     (state: any) => state?.persistedReducer?.roleState?.role?.permissions
   );
-  const { projectId } = useParams();
-  const [selectedTab, setSelectedTab] = useState('IMAGE/VIDEOS');
+  const [selectedTab, setSelectedTab] = useState('QUOTATIONS');
 
   const handleTabChange = (event: any, newValue: any) => {
     setSelectedTab(newValue);
@@ -24,7 +23,7 @@ function ProjectAttachment() {
     if (
       listingRolePermission(dataRole, ALL_PERMISSIONS.storePlans.viewVideoPlans)
     ) {
-      setSelectedTab('IMAGE/VIDEOS');
+      setSelectedTab('QUOTATIONS');
       return;
     }
     if (
@@ -33,13 +32,13 @@ function ProjectAttachment() {
         ALL_PERMISSIONS.storePlans.viewImagesPlans
       )
     ) {
-      setSelectedTab('IMAGES');
+      setSelectedTab('TOTAL_PAID');
       return;
     }
     if (
       listingRolePermission(dataRole, ALL_PERMISSIONS.storePlans.viewDocsPlans)
     ) {
-      setSelectedTab('DOCS');
+      setSelectedTab('MATERIAL_LABOR_PAID');
     }
   }, []);
   return (
@@ -50,7 +49,7 @@ function ProjectAttachment() {
           <div className="grid grid-cols-12 px-4 py-5">
             <div className="col-span-7">
               <span className="font-open-sans text-xl font-semibold text-[#252733]">
-                Project Assets/Media
+                Project Quotations
               </span>
             </div>
           </div>
@@ -76,8 +75,8 @@ function ProjectAttachment() {
                     dataRole,
                     !!ALL_PERMISSIONS.storePlans.viewVideoPlans
                   )}
-                  label="project images / videos"
-                  value="IMAGE/VIDEOS"
+                  label="quotation slips"
+                  value="QUOTATIONS"
                 />
               )}
               {listingRolePermission(
@@ -89,11 +88,11 @@ function ProjectAttachment() {
                     dataRole,
                     !!ALL_PERMISSIONS.storePlans.viewImagesPlans
                   )}
-                  label="3D-renders / blue print"
-                  value="IMAGES"
+                  label="total paid slips"
+                  value="TOTAL_PAID"
                 />
               )}
-              {/* {listingRolePermission(
+              {listingRolePermission(
                 dataRole,
                 ALL_PERMISSIONS.storePlans.viewDocsPlans
               ) && (
@@ -102,17 +101,14 @@ function ProjectAttachment() {
                     dataRole,
                     !!ALL_PERMISSIONS.storePlans.viewDocsPlans
                   )}
-                  label="approval and reports"
-                  value="DOCS"
+                  label="material & labor slips"
+                  value="MATERIAL_LABOR_PAID"
                 />
-              )} */}
+              )}
             </Tabs>
-            {selectedTab === 'IMAGE/VIDEOS' && (
-              <VideoPage projectId={projectId ?? null} />
-            )}
-            {selectedTab === 'IMAGES' && (
-              <ImagePage projectId={projectId ?? null} />
-            )}
+            {selectedTab === 'QUOTATIONS' && <QuotationPage />}
+            {selectedTab === 'TOTAL_PAID' && <TotalPaidPage />}
+            {selectedTab === 'MATERIAL_LABOR_PAID' && <MaterailLaborPage />}
           </div>
         </div>
       </div>
@@ -120,4 +116,4 @@ function ProjectAttachment() {
   );
 }
 
-export default ProjectAttachment;
+export default ProjectQuotationsPage;

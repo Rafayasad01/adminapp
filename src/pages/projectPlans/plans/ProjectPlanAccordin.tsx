@@ -24,8 +24,15 @@ function ProjectPlanAccordin({ data }: RatingAccordionsProps) {
     return key.replace(/([a-z])([A-Z])/g, '$1 $2');
   };
 
-  const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
-    height: 10,
+  const getColor = (value: any) => {
+    if (value >= 0 && value <= 50) return '#FF0000'; // Red
+    if (value >= 51 && value <= 99) return '#FFD700'; // Yellow
+    if (value === 100) return '#008000'; // Green
+    return '#1a90ff'; // Default color
+  };
+
+  const BorderLinearProgress = styled(LinearProgress)(({ theme, value }) => ({
+    height: 15,
     borderRadius: 5,
     [`&.${linearProgressClasses.colorPrimary}`]: {
       backgroundColor:
@@ -33,9 +40,35 @@ function ProjectPlanAccordin({ data }: RatingAccordionsProps) {
     },
     [`& .${linearProgressClasses.bar}`]: {
       borderRadius: 5,
-      backgroundColor: theme.palette.mode === 'light' ? '#1a90ff' : '#308fe8',
+      backgroundColor: getColor(value),
     },
   }));
+
+  const ProgressWithLabel = ({ value }: any) => {
+    return (
+      <div
+        style={{ position: 'relative', display: 'inline-block', width: '100%' }}
+      >
+        <BorderLinearProgress
+          variant="determinate"
+          value={value}
+          valueBuffer={value}
+        />
+        <span
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: '50%',
+            transform: 'translate(-50%, 0)',
+            fontSize: '0.8rem',
+            color: 'black',
+          }}
+        >
+          {`${value}%`}
+        </span>
+      </div>
+    );
+  };
 
   const fixedColumns = ['stage', 'room', 'activity', 'progress', 'remarks'];
 
@@ -120,10 +153,21 @@ function ProjectPlanAccordin({ data }: RatingAccordionsProps) {
 
                                   return (
                                     <tr className="thin-scrollbar" key={i}>
-                                      <td>
+                                      <td className="font-bold">
                                         {items.stage ? items.stage : '--'}
                                       </td>
-                                      <td>{items.room ? items.room : '--'}</td>
+                                      <td>
+                                        {items.room ? (
+                                          <span
+                                            key={items.room}
+                                            className="me-2 rounded border border-blue-300 bg-primary px-2.5 py-0.5 text-xs font-medium text-foreground dark:bg-gray-700 dark:text-blue-300"
+                                          >
+                                            {items.room}
+                                          </span>
+                                        ) : (
+                                          '--'
+                                        )}
+                                      </td>
                                       <td>
                                         <div className="flex items-center truncate ">
                                           {items.activity
@@ -146,11 +190,14 @@ function ProjectPlanAccordin({ data }: RatingAccordionsProps) {
                                         </div>
                                       </td>
                                       <td>
-                                        <BorderLinearProgress
+                                        <ProgressWithLabel
+                                          value={Number(items.progress)}
+                                        />
+                                        {/* <BorderLinearProgress
                                           variant="determinate"
                                           value={Number(items.progress)}
                                           className="text-primary"
-                                        />
+                                        /> */}
                                       </td>
                                       <td>
                                         {items.remarks ? items.remarks : '--'}

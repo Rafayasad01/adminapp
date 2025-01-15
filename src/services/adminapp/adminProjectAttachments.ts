@@ -5,20 +5,17 @@ const PROJECT_PREFIX = 'projects';
 const PLAN_PREFIX = 'plans';
 const ATTACHMENT_PREFIX = 'attachments';
 
-const getListProjectAttachmentService = (
-  id: string,
-  type: string,
-  search: string,
-  page: number,
-  size: number
-) => {
+const getListProjectAttachmentService = (qp: any) => {
   return network.get(
-    `${NEW_EARTH_PREFIX}/${ATTACHMENT_PREFIX}/list${id ? `/${id}` : ''}`,
+    `${NEW_EARTH_PREFIX}/${ATTACHMENT_PREFIX}/list${
+      qp.projectId ? `/${qp.projectId}` : ''
+    }`,
     {
-      type,
-      search,
-      page: page.toString(),
-      size: size.toString(),
+      type: qp.type,
+      search: qp.search,
+      page: qp.page.toString(),
+      size: qp.size.toString(),
+      day: qp.day,
     }
   );
 };

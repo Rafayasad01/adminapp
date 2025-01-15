@@ -20,7 +20,7 @@ import {
   MAX_LENGTH_EXCEEDED,
   PATTERN,
   PROJECT_PLAN_TYPE,
-  VALIDATE_NON_NEGATIVE_NUM,
+  // VALIDATE_NON_NEGATIVE_NUM,
 } from '../../../utils/constants';
 import { Project } from '../../../interfaces/projectPlan.interface';
 import ErrorSpanBox from '../../../components/common/ErrorSpanBox';
@@ -49,7 +49,7 @@ Props) {
     handleSubmit,
     setValue,
     control,
-    watch,
+    // watch,
     formState: { errors },
   } = useForm<Project>();
   const authState: any = useAppSelector((state) => state?.authState);
@@ -244,9 +244,9 @@ Props) {
                 />
               </FormControl>
             </div>
-            <div className="FormFields">
+            <div className="FormField">
               <FormControl className="FormControl" variant="standard">
-                <label className="FormLabel">Site Supervisor Name</label>
+                <label className="FormLabel mt-2">Site Supervisor Name</label>
                 <Input
                   className="FormInput"
                   {...register('supervisorName', {
@@ -270,7 +270,7 @@ Props) {
                   <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
                 )}
               </FormControl>
-              <FormControl className="FormControl" variant="standard">
+              {/* <FormControl className="FormControl" variant="standard">
                 <label className="FormLabel">Quotation</label>
                 <Input
                   className="FormInput"
@@ -291,9 +291,9 @@ Props) {
                 {errors.budget && (
                   <ErrorSpanBox error={errors.budget?.message} />
                 )}
-              </FormControl>
+              </FormControl> */}
             </div>
-            <div className="FormFields">
+            {/* <div className="FormFields">
               <FormControl className="FormControl" variant="standard">
                 <label className="FormLabel">Total Paid</label>
                 <Input
@@ -355,7 +355,7 @@ Props) {
                   <ErrorSpanBox error={errors.dueAmount?.message} />
                 )}
               </FormControl>
-            </div>
+            </div> */}
           </div>
           <div className="FormFooter">
             <Button

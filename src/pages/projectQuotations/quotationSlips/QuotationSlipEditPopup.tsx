@@ -8,24 +8,23 @@ import Input from '@mui/material/Input';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 // import TextField from '@mui/material/TextField';
-import '../../../assets/css/PopupStyle.css';
-import TextField from '@mui/material/TextField';
 import FormControl from '@mui/material/FormControl';
-import ErrorSpanBox from '../../../components/common/ErrorSpanBox';
-import {
-  ALL_PERMISSIONS,
-  INVALID_CHAR,
-  MAX_LENGTH_EXCEEDED,
-  PATTERN,
-} from '../../../utils/constants';
-import { ProjectAttachment } from '../../../interfaces/projectAttachments.interface';
+import TextField from '@mui/material/TextField';
+import '../../../assets/css/PopupStyle.css';
 import CustomDropDown from '../../../components/common/CustomDropDown';
-import { listingRolePermission } from '../../../utils/helper';
+import ErrorSpanBox from '../../../components/common/ErrorSpanBox';
+import { ProjectQuotation } from '../../../interfaces/projectQuotation';
 import { useAppSelector } from '../../../redux/redux-hooks';
 import storeAttachmentService from '../../../services/adminapp/adminProjectAttachments';
+import {
+  ALL_PERMISSIONS,
+  MAX_LENGTH_EXCEEDED,
+  mimiType,
+  VALIDATE_NON_NEGATIVE_NUM,
+} from '../../../utils/constants';
+import { listingRolePermission } from '../../../utils/helper';
 
 type Props = {
-  projectId: string;
   openFormDialog: boolean;
   setOpenFormDialog: React.Dispatch<React.SetStateAction<boolean>>;
   callback: (...args: any[]) => any;
@@ -34,8 +33,7 @@ type Props = {
   formData: any;
 };
 
-function VideoEditPopup({
-  projectId,
+function QuotationSlipEditPopup({
   openFormDialog,
   setOpenFormDialog,
   callback,
@@ -49,7 +47,7 @@ function VideoEditPopup({
   );
   const [planFile, setPlanFile] = useState<any>(null);
   const [projects, setProjects] = useState<any>([]);
-  const [plans, setPlans] = useState<any>([]);
+  // const [plans, setPlans] = useState<any>([]);
   const [filePath, setFilePath] = useState<any>(null);
 
   const {
@@ -58,9 +56,9 @@ function VideoEditPopup({
     setValue,
     clearErrors,
     control,
-    watch,
+    // watch,
     formState: { errors },
-  } = useForm<ProjectAttachment>();
+  } = useForm<ProjectQuotation>();
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -70,7 +68,7 @@ function VideoEditPopup({
       if (
         listingRolePermission(
           dataRole,
-          ALL_PERMISSIONS.storePlans.editDocsPlans
+          ALL_PERMISSIONS.storePlans.editImagesPlans
         )
       ) {
         try {
@@ -93,51 +91,18 @@ function VideoEditPopup({
     fetchProjects();
   }, []);
 
-  useEffect(() => {
-    const fetchPlans = async () => {
-      if (
-        listingRolePermission(
-          dataRole,
-          ALL_PERMISSIONS.storePlans.editDocsPlans
-        ) &&
-        watch('projectId') !== 'none' &&
-        watch('projectId') !== undefined
-      ) {
-        try {
-          const plansResponse =
-            await storeAttachmentService.getListProjectPlanLovService(
-              watch('projectId')
-            );
-          setPlans(plansResponse.data.data.list);
-        } catch (error: Error | any) {
-          setIsNotify(true);
-          setNotifyMessage({
-            text: error.message,
-            type: 'error',
-          });
-        }
-      }
-    };
-
-    fetchPlans();
-  }, [watch('projectId')]);
-
   const onSubmit = (data: any) => {
     const obj = {
-      day: data.day,
-      projectId: data.projectId,
-      file: data.file,
-      title: data.name,
-      description: data.desc,
+      ...data,
     };
     if (filePath !== null) obj.file = null;
     if (planFile || filePath) callback(obj);
+    // console.log('🚀 ~ onSubmit ~ obj:', obj);
   };
 
   const handleFormClose = () => {
     setOpenFormDialog(false);
   };
-  console.log('🚀 ~ handleFileChange ~ formData:', formData);
 
   const handleFileChange = (event: any) => {
     setFilePath(null);
@@ -145,13 +110,12 @@ function VideoEditPopup({
     if (selectedFile) {
       const fileType = selectedFile.type;
       if (
-        fileType === 'application/msword' ||
-        fileType ===
-          'application/vnd.openxmlformats-officedocument.wordprocessingml.document' ||
-        fileType === 'application/pdf' ||
-        fileType === 'application/vnd.ms-excel' ||
-        fileType ===
-          'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        fileType === mimiType.pdf ||
+        fileType === mimiType.word ||
+        fileType === mimiType.wordsheet ||
+        fileType === 'image/jpeg' ||
+        fileType === 'image/png' ||
+        fileType === 'image/jpg'
       ) {
         setPlanFile(selectedFile);
         setValue('file', selectedFile);
@@ -159,7 +123,7 @@ function VideoEditPopup({
       } else {
         setIsNotify(true);
         setNotifyMessage({
-          text: 'Only .doc, .docx, .pdf, .xls, and .xlsx files are allowed',
+          text: 'Only .Pdf .Doc .jpeg, .jpg, .png files are allowed',
           type: 'error',
         });
       }
@@ -169,9 +133,11 @@ function VideoEditPopup({
   const handleFileOnClick = (event: any) => {
     event.target.value = null;
     setPlanFile(null);
-    setFilePath(null);
     setValue('file', '');
+    setFilePath(null);
   };
+
+  console.log('formData?.category', formData);
 
   return (
     <Dialog
@@ -185,34 +151,44 @@ function VideoEditPopup({
       <div className="Content">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="FormHeader">
-            <span className="Title">Edit Document</span>
+            <span className="Title">Edit Quotation</span>
           </div>
           <div className="FormBody mt-2">
-            <div className="FormField">
+            <div className="FormFields">
               <FormControl className="FormControl" variant="standard">
-                <label className="FormLabel">Name</label>
+                <label className="FormLabel">Total Quotation</label>
                 <Input
                   className="FormInput"
-                  {...register('name', {
-                    value: formData?.title,
-                    required: true,
-                    pattern: PATTERN.CHAR_SPACE_DASH,
-                    validate: (value) => value.length <= 150,
-                  })}
-                  placeholder="Enter Document Name"
-                  type="text"
                   id="name"
+                  type="number"
+                  placeholder="Update Quotation Amount"
+                  {...register('quotationCost', {
+                    value: Number(formData?.quotationCost),
+                    required: 'Amount is required in numbers',
+                    validate: (value: any) => VALIDATE_NON_NEGATIVE_NUM(value),
+                    maxLength: {
+                      value: 20,
+                      message: 'Length should not be excceed from 20 numbers.',
+                    },
+                  })}
                   disableUnderline
                 />
-                {errors.name?.type === 'required' && (
-                  <ErrorSpanBox error="Document name is required" />
+                {errors.quotationCost && (
+                  <ErrorSpanBox error={errors.quotationCost?.message} />
                 )}
-                {errors.name?.type === 'pattern' && (
-                  <ErrorSpanBox error={INVALID_CHAR} />
-                )}
-                {errors.name?.type === 'validate' && (
-                  <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
-                )}
+              </FormControl>
+              <FormControl className="FormControl" variant="standard">
+                <CustomDropDown
+                  validateRequired
+                  id="projectId"
+                  control={control}
+                  error={errors}
+                  register={register}
+                  options={{ roles: projects, role: formData?.projectId }}
+                  customClassInputTitle="font-bold"
+                  inputTitle="Project Name"
+                  defaultValue="Select Project"
+                />
               </FormControl>
             </div>
             <div className="FormField">
@@ -229,7 +205,7 @@ function VideoEditPopup({
                   defaultValue=""
                   placeholder="Write Description"
                   {...register('desc', {
-                    value: formData?.description,
+                    value: formData?.desc,
                     maxLength: {
                       value: 250,
                       message: MAX_LENGTH_EXCEEDED,
@@ -239,50 +215,21 @@ function VideoEditPopup({
                 {errors.desc && <ErrorSpanBox error={errors.desc?.message} />}
               </FormControl>
             </div>
-            <div className="FormFields">
-              <FormControl className="FormControl" variant="standard">
-                <CustomDropDown
-                  validateRequired
-                  id="projectId"
-                  control={control}
-                  error={errors}
-                  register={register}
-                  options={{ roles: projects, role: formData?.projectId }}
-                  customClassInputTitle="font-bold"
-                  inputTitle="Project Name"
-                  defaultValue="Select Project"
-                  disabled={!!projectId}
-                />
-              </FormControl>
-              <FormControl className="FormControl" variant="standard">
-                <CustomDropDown
-                  validateRequired
-                  id="day"
-                  control={control}
-                  error={errors}
-                  register={register}
-                  options={{ roles: plans, role: formData?.day }}
-                  customClassInputTitle="font-bold"
-                  inputTitle="Day"
-                  defaultValue="Select Day"
-                />
-              </FormControl>
-            </div>
             <div className="FormField">
               <label className="FormLabel mt-2">
-                Upload Document
+                Upload Doc / Image
                 <span className="SubLabel">
-                  ( Document should be in DOC, DOCX, or PDF format )
+                  ( It should be in PDF, DOC, JPG, JPEG, or PNG format )
                 </span>
               </label>
               <div className="ImageBox">
                 <input
-                  accept=".doc,.docx,.pdf"
+                  accept="image/jpeg,image/png,image/jpg"
                   style={{ display: 'none' }}
                   {...register('file', {
                     value: formData?.filePath,
                   })}
-                  id="raised-button-document"
+                  id="raised-button-image"
                   type="file"
                   onChange={(
                     event: React.InputHTMLAttributes<HTMLInputElement>
@@ -295,7 +242,7 @@ function VideoEditPopup({
                     handleFileOnClick(event);
                   }}
                 />
-                <label htmlFor="raised-button-document" className="ImageLabel">
+                <label htmlFor="raised-button-image" className="ImageLabel">
                   <Button component="span" className="ImageBtn">
                     <FileUploadOutlinedIcon sx={{ marginRight: '0.5rem' }} />
                     Upload
@@ -326,9 +273,7 @@ function VideoEditPopup({
                   ''
                 )}
               </div>
-              {planFile === null && (
-                <ErrorSpanBox error="Document is required" />
-              )}
+              {planFile === null && <ErrorSpanBox error="Required" />}
             </div>
           </div>
           <div className="FormFooter">
@@ -359,4 +304,4 @@ function VideoEditPopup({
   );
 }
 
-export default VideoEditPopup;
+export default QuotationSlipEditPopup;

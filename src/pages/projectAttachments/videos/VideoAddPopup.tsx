@@ -117,7 +117,6 @@ function VideoAddPopup({
   }, [watch('projectId')]);
 
   const onSubmit = (data: any) => {
-    // console.log('🚀 ~ onSubmit ~ data:', data);
     const obj = {
       ...data,
       title: data.name,
@@ -134,15 +133,30 @@ function VideoAddPopup({
     const selectedFile = event.target.files[0];
     if (selectedFile) {
       const fileType = selectedFile.type;
-      if (fileType === 'video/mp4') {
-        // clearErrors('file');
+      if (watch('type') === 'video') {
+        if (fileType === 'video/mp4') {
+          // clearErrors('file');
+          setPlanFile(selectedFile);
+          onChange(selectedFile);
+        } else {
+          setValue('file', null);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: 'Only .mp4 video files are allowed',
+            type: 'error',
+          });
+        }
+      } else if (
+        fileType === 'image/jpeg' ||
+        fileType === 'image/png' ||
+        fileType === 'image/jpg'
+      ) {
         setPlanFile(selectedFile);
         onChange(selectedFile);
       } else {
-        setValue('file', null);
         setIsNotify(true);
         setNotifyMessage({
-          text: 'Only .mp4 video files are allowed',
+          text: 'Only .jpeg, .jpg, .png image files are allowed',
           type: 'error',
         });
       }
@@ -155,7 +169,10 @@ function VideoAddPopup({
     setValue('file', '');
   };
 
-  console.log('errors', errors);
+  useEffect(() => {
+    setPlanFile(null);
+    setValue('file', '');
+  }, [watch('type')]);
 
   return (
     <Dialog
@@ -169,10 +186,10 @@ function VideoAddPopup({
       <div className="Content">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="FormHeader">
-            <span className="Title">Add Video</span>
+            <span className="Title">Add Image / Video</span>
           </div>
           <div className="FormBody mt-2">
-            <div className="FormField">
+            <div className="FormFields">
               <FormControl className="FormControl" variant="standard">
                 <label className="FormLabel">Name</label>
                 <Input
@@ -182,13 +199,13 @@ function VideoAddPopup({
                     pattern: PATTERN.CHAR_SPACE_DASH,
                     validate: (value) => value.length <= 150,
                   })}
-                  placeholder="Enter Video Name"
+                  placeholder="Enter Name"
                   type="text"
                   id="name"
                   disableUnderline
                 />
                 {errors.name?.type === 'required' && (
-                  <ErrorSpanBox error="Video name is required" />
+                  <ErrorSpanBox error="name is required" />
                 )}
                 {errors.name?.type === 'pattern' && (
                   <ErrorSpanBox error={INVALID_CHAR} />
@@ -196,6 +213,31 @@ function VideoAddPopup({
                 {errors.name?.type === 'validate' && (
                   <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
                 )}
+              </FormControl>
+              <FormControl className="FormControl" variant="standard">
+                <CustomDropDown
+                  validateRequired
+                  id="type"
+                  control={control}
+                  error={errors}
+                  register={register}
+                  options={{
+                    roles: [
+                      {
+                        id: 'image',
+                        name: 'Image',
+                      },
+                      {
+                        id: 'video',
+                        name: 'Video',
+                      },
+                    ],
+                    role: 'video',
+                  }}
+                  customClassInputTitle="font-bold"
+                  inputTitle="Type"
+                  defaultValue="Select Attachment Type"
+                />
               </FormControl>
             </div>
             <div className="FormField">
@@ -252,20 +294,28 @@ function VideoAddPopup({
             </div>
             <div className="FormField">
               <label className="FormLabel mt-2">
-                Upload Video
+                Upload {watch('type') === 'image' ? 'Image' : 'Video'}
                 <span className="SubLabel">
-                  ( Video should be in MP4 format )
+                  {watch('type') === 'image'
+                    ? `( Image should be in JPG, JPEG, or PNG format )`
+                    : `( Video should be in MP4 format )`}
                 </span>
               </label>
               <div className="ImageBox">
                 <Controller
                   name="file"
                   control={control}
-                  rules={{ required: 'Video is required' }}
+                  rules={{
+                    required: 'Required',
+                  }}
                   render={({ field: { onChange } }) => (
                     <>
                       <input
-                        accept=".mp4"
+                        accept={`${
+                          watch('type') === 'image'
+                            ? 'image/jpeg,image/png,image/jpg'
+                            : '.mp4'
+                        }`}
                         style={{ display: 'none' }}
                         id="raised-button-video"
                         type="file"

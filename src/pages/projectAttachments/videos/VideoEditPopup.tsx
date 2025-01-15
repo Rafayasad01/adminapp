@@ -6,7 +6,7 @@ import Dialog from '@mui/material/Dialog';
 import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
 import React, { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 // import TextField from '@mui/material/TextField';
 import '../../../assets/css/PopupStyle.css';
 import TextField from '@mui/material/TextField';
@@ -56,7 +56,7 @@ function VideoEditPopup({
     register,
     handleSubmit,
     setValue,
-    clearErrors,
+    // clearErrors,
     control,
     watch,
     formState: { errors },
@@ -140,19 +140,34 @@ function VideoEditPopup({
     setOpenFormDialog(false);
   };
 
-  const handleFileChange = (event: any) => {
-    setFilePath(null);
+  const handleFileChange = (onChange: any, event: any | undefined) => {
     const selectedFile = event.target.files[0];
     if (selectedFile) {
       const fileType = selectedFile.type;
-      if (fileType === 'video/mp4') {
+      if (watch('type') === 'video') {
+        if (fileType === 'video/mp4') {
+          // clearErrors('file');
+          setPlanFile(selectedFile);
+          onChange(selectedFile);
+        } else {
+          setValue('file', null);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: 'Only .mp4 video files are allowed',
+            type: 'error',
+          });
+        }
+      } else if (
+        fileType === 'image/jpeg' ||
+        fileType === 'image/png' ||
+        fileType === 'image/jpg'
+      ) {
         setPlanFile(selectedFile);
-        setValue('file', selectedFile);
-        clearErrors('file');
+        onChange(selectedFile);
       } else {
         setIsNotify(true);
         setNotifyMessage({
-          text: 'Only .mp4 video files are allowed',
+          text: 'Only .jpeg, .jpg, .png image files are allowed',
           type: 'error',
         });
       }
@@ -165,6 +180,12 @@ function VideoEditPopup({
     setPlanFile(null);
     setValue('file', '');
   };
+
+  // useEffect(() => {
+  //   setFilePath(null);
+  //   setPlanFile(null);
+  //   setValue('file', '');
+  // }, [watch('type')]);
 
   return (
     <Dialog
@@ -181,7 +202,7 @@ function VideoEditPopup({
             <span className="Title">Edit Video</span>
           </div>
           <div className="FormBody mt-2">
-            <div className="FormField">
+            <div className="FormFields">
               <FormControl className="FormControl" variant="standard">
                 <label className="FormLabel">Name</label>
                 <Input
@@ -206,6 +227,31 @@ function VideoEditPopup({
                 {errors.name?.type === 'validate' && (
                   <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
                 )}
+              </FormControl>
+              <FormControl className="FormControl" variant="standard">
+                <CustomDropDown
+                  validateRequired
+                  id="type"
+                  control={control}
+                  error={errors}
+                  register={register}
+                  options={{
+                    roles: [
+                      {
+                        id: 'image',
+                        name: 'Image',
+                      },
+                      {
+                        id: 'video',
+                        name: 'Video',
+                      },
+                    ],
+                    role: formData?.attachmentType,
+                  }}
+                  customClassInputTitle="font-bold"
+                  inputTitle="Type"
+                  defaultValue="Select Attachment Type"
+                />
               </FormControl>
             </div>
             <div className="FormField">
@@ -261,16 +307,22 @@ function VideoEditPopup({
                 />
               </FormControl>
             </div>
-            <div className="FormField">
+            {/* <div className="FormField">
               <label className="FormLabel mt-2">
-                Upload Video
+                Upload {watch('type') === 'image' ? 'Image' : 'Video'}
                 <span className="SubLabel">
-                  ( Video should be in MP4 format )
+                  {watch('type') === 'image'
+                    ? `( Image should be in JPG, JPEG, or PNG format )`
+                    : `( Video should be in MP4 format )`}
                 </span>
               </label>
               <div className="ImageBox">
                 <input
-                  accept=".mp4"
+                  accept={`${
+                    watch('type') === 'image'
+                      ? 'image/jpeg,image/png,image/jpg'
+                      : '.mp4'
+                  }`}
                   style={{ display: 'none' }}
                   {...register('file', {
                     value: formData?.filePath,
@@ -319,7 +371,78 @@ function VideoEditPopup({
                   ''
                 )}
               </div>
-              {planFile === null && <ErrorSpanBox error="Video is required" />}
+              {planFile === null && <ErrorSpanBox error="Required" />}
+            </div> */}
+            <div className="FormField">
+              <label className="FormLabel mt-2">
+                Upload {watch('type') === 'image' ? 'Image' : 'Video'}
+                <span className="SubLabel">
+                  {watch('type') === 'image'
+                    ? `( Image should be in JPG, JPEG, or PNG format )`
+                    : `( Video should be in MP4 format )`}
+                </span>
+              </label>
+              <div className="ImageBox">
+                <Controller
+                  name="file"
+                  control={control}
+                  render={({ field: { onChange } }) => (
+                    <>
+                      <input
+                        accept={`${
+                          watch('type') === 'image'
+                            ? 'image/jpeg,image/png,image/jpg'
+                            : '.mp4'
+                        }`}
+                        style={{ display: 'none' }}
+                        id="raised-button-video"
+                        type="file"
+                        onChange={(event) => handleFileChange(onChange, event)}
+                        onClick={handleFileOnClick}
+                      />
+                      <label
+                        htmlFor="raised-button-video"
+                        className="ImageLabel"
+                      >
+                        <Button component="span" className="ImageBtn">
+                          <FileUploadOutlinedIcon
+                            sx={{ marginRight: '0.5rem' }}
+                          />
+                          Upload
+                        </Button>
+                      </label>
+
+                      {planFile ? (
+                        <div className="ShowImageBox bg-background">
+                          <label className="ShowImageLabel">
+                            {planFile.name}
+                          </label>
+                          <IconButton
+                            className="btn-dot"
+                            onClick={() => {
+                              setPlanFile(null);
+                              setFilePath(null);
+                              setValue('file', '');
+                              onChange(null);
+                            }}
+                          >
+                            <CloseOutlinedIcon
+                              sx={{
+                                color: '#1D1D1D',
+                                fontSize: '1rem',
+                                lineHeight: '1.5rem',
+                              }}
+                            />
+                          </IconButton>
+                        </div>
+                      ) : (
+                        ''
+                      )}
+                    </>
+                  )}
+                />
+                {planFile === null && <ErrorSpanBox error="Required" />}
+              </div>
             </div>
           </div>
           <div className="FormFooter">

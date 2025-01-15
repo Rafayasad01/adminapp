@@ -14,20 +14,17 @@ import FormControl from '@mui/material/FormControl';
 import ErrorSpanBox from '../../../components/common/ErrorSpanBox';
 import {
   ALL_PERMISSIONS,
-  INVALID_CHAR,
   MAX_LENGTH_EXCEEDED,
   mimiType,
-  PATTERN,
-  PROJECT_IMAGE_TYPE,
+  VALIDATE_NON_NEGATIVE_NUM,
 } from '../../../utils/constants';
-import { ProjectAttachment } from '../../../interfaces/projectAttachments.interface';
 import CustomDropDown from '../../../components/common/CustomDropDown';
 import { listingRolePermission } from '../../../utils/helper';
 import { useAppSelector } from '../../../redux/redux-hooks';
 import storeAttachmentService from '../../../services/adminapp/adminProjectAttachments';
+import { ProjectQuotation } from '../../../interfaces/projectQuotation';
 
 type Props = {
-  projectId: string;
   openFormDialog: boolean;
   setOpenFormDialog: React.Dispatch<React.SetStateAction<boolean>>;
   callback: (...args: any[]) => any;
@@ -35,8 +32,7 @@ type Props = {
   setNotifyMessage: any;
 };
 
-function VideoAddPopup({
-  projectId,
+function TotalPaidSlipAddPopup({
   openFormDialog,
   setOpenFormDialog,
   callback,
@@ -58,7 +54,7 @@ function VideoAddPopup({
     control,
     // watch,
     formState: { errors },
-  } = useForm<ProjectAttachment>();
+  } = useForm<ProjectQuotation>();
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -75,7 +71,6 @@ function VideoAddPopup({
             );
           const projectList = projectResponse.data.data.list;
           setProjects(projectList);
-          if (projectId) setValue('projectId', projectId);
         } catch (error: Error | any) {
           setIsNotify(true);
           setNotifyMessage({
@@ -89,48 +84,11 @@ function VideoAddPopup({
     fetchProjects();
   }, []);
 
-  // useEffect(() => {
-  //   const fetchPlans = async () => {
-  //     if (
-  //       listingRolePermission(
-  //         dataRole,
-  //         ALL_PERMISSIONS.storePlans.addImagesPlans
-  //       ) &&
-  //       watch('projectId') !== 'none' &&
-  //       watch('projectId') !== undefined
-  //     ) {
-  //       try {
-  //         const plansResponse =
-  //           await storeAttachmentService.getListProjectPlanLovService(
-  //             watch('projectId')
-  //           );
-  //         // setPlans(plansResponse.data.data.list);
-  //       } catch (error: Error | any) {
-  //         setIsNotify(true);
-  //         setNotifyMessage({
-  //           text: error.message,
-  //           type: 'error',
-  //         });
-  //       }
-  //     }
-  //   };
-
-  //   fetchPlans();
-  // }, [watch('projectId')]);
-
   const onSubmit = (data: any) => {
     const obj = {
       ...data,
-      title: data.name,
-      description: data.desc,
-      day:
-        data.type === '3d'
-          ? 'ALL_3D'
-          : data.type === 'other'
-          ? 'ALL_OTHER'
-          : 'ALL_BLUEPRINTS',
+      type: 'TOTAL_PAID',
     };
-    // console.log('obj', obj);
     callback(obj);
   };
 
@@ -180,45 +138,42 @@ function VideoAddPopup({
       <div className="Content">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="FormHeader">
-            <span className="Title">Add 3D-renders / Blue prints</span>
+            <span className="Title">Add Total Paid Cost</span>
           </div>
           <div className="FormBody mt-2">
             <div className="FormFields">
               <FormControl className="FormControl" variant="standard">
-                <label className="FormLabel">Name</label>
+                <label className="FormLabel">Total Paid Amount</label>
                 <Input
                   className="FormInput"
-                  {...register('name', {
-                    required: true,
-                    pattern: PATTERN.CHAR_SPACE_DASH,
-                    validate: (value) => value.length <= 150,
-                  })}
-                  placeholder="Enter Name"
-                  type="text"
                   id="name"
+                  type="number"
+                  placeholder="Enter Total Paid Amount"
+                  {...register('totalPaidCost', {
+                    required: 'Amount is required in numbers',
+                    validate: (value: any) => VALIDATE_NON_NEGATIVE_NUM(value),
+                    maxLength: {
+                      value: 20,
+                      message: 'Length should not be excceed from 20 numbers.',
+                    },
+                  })}
                   disableUnderline
                 />
-                {errors.name?.type === 'required' && (
-                  <ErrorSpanBox error="Name is required" />
-                )}
-                {errors.name?.type === 'pattern' && (
-                  <ErrorSpanBox error={INVALID_CHAR} />
-                )}
-                {errors.name?.type === 'validate' && (
-                  <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
+                {errors.totalPaidCost && (
+                  <ErrorSpanBox error={errors.totalPaidCost?.message} />
                 )}
               </FormControl>
               <FormControl className="FormControl" variant="standard">
                 <CustomDropDown
                   validateRequired
-                  id="type"
+                  id="projectId"
                   control={control}
                   error={errors}
                   register={register}
-                  options={{ roles: PROJECT_IMAGE_TYPE }}
+                  options={{ roles: projects }}
                   customClassInputTitle="font-bold"
-                  inputTitle="Type"
-                  defaultValue="Select Type"
+                  inputTitle="Project Name"
+                  defaultValue="Select Project"
                 />
               </FormControl>
             </div>
@@ -244,35 +199,6 @@ function VideoAddPopup({
                 />
                 {errors.desc && <ErrorSpanBox error={errors.desc?.message} />}
               </FormControl>
-            </div>
-            <div className="FormField">
-              <FormControl className="FormControl" variant="standard">
-                <CustomDropDown
-                  validateRequired
-                  id="projectId"
-                  control={control}
-                  error={errors}
-                  register={register}
-                  options={{ roles: projects }}
-                  customClassInputTitle="font-bold mt-2"
-                  inputTitle="Project Name"
-                  defaultValue="Select Project"
-                  disabled={!!projectId}
-                />
-              </FormControl>
-              {/* <FormControl className="FormControl" variant="standard">
-                <CustomDropDown
-                  // validateRequired
-                  id="day"
-                  control={control}
-                  error={errors}
-                  register={register}
-                  options={{ roles: plans }}
-                  customClassInputTitle="font-bold"
-                  inputTitle="Day"
-                  defaultValue="Select Day"
-                />
-              </FormControl> */}
             </div>
             <div className="FormField">
               <label className="FormLabel mt-2">
@@ -367,4 +293,4 @@ function VideoAddPopup({
   );
 }
 
-export default VideoAddPopup;
+export default TotalPaidSlipAddPopup;

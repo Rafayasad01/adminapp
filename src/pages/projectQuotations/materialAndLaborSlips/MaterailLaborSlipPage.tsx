@@ -1,48 +1,53 @@
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 // import MoreVertIcon from '@mui/icons-material/MoreVert';
-import SearchIcon from '@mui/icons-material/Search';
 import Button from '@mui/material/Button';
-import Divider from '@mui/material/Divider';
 import FormControl from '@mui/material/FormControl';
 import IconButton from '@mui/material/IconButton';
-import Input from '@mui/material/Input';
-import InputAdornment from '@mui/material/InputAdornment';
+import SummarizeIcon from '@mui/icons-material/Summarize';
 // import VisibilityIcon from '@mui/icons-material/Visibility';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import TablePagination from '@mui/material/TablePagination';
 import React, { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
 // import Switch from '@mui/material/Switch';
+import { useForm } from 'react-hook-form';
 import CustomText from '../../../components/common/CustomText';
 import Loader from '../../../components/common/Loader';
 import Notify from '../../../components/common/Notify';
 import { useAppSelector } from '../../../redux/redux-hooks';
-import storeAttachmentService from '../../../services/adminapp/adminProjectAttachments';
+import adminProjectQuotation from '../../../services/adminapp/adminProjectQuotation';
 import {
   ALL_PERMISSIONS,
+  CURRENCY_PREFIX,
   NOT_AUTHORIZED_MESSAGE,
-  mimiType,
 } from '../../../utils/constants';
 import { listingRolePermission } from '../../../utils/helper';
-import DocsAddPopup from './DocsAddPopup';
-import DocsEditPopup from './DocsEditPopup';
+import storeAttachmentService from '../../../services/adminapp/adminProjectAttachments';
 import ActionMenu from '../../../components/common/ActionMenu';
 import PermissionPopup from '../../../utils/PermissionPopup';
-import assets from '../../../assets';
+import CustomDropDown from '../../../components/common/CustomDropDown';
+import { ProjectQuotation } from '../../../interfaces/projectQuotation';
+import MaterailLaborSlipAddPopup from './MaterailLaborSlipAddPopup';
+import MaterailLaborSlipEditPopup from './MaterailLaborSlipEditPopup';
+// import assets from '../../../assets';
 
-function DocsPage({ projectId }: any) {
+function MaterailLaborSlipPage() {
   const authState: any = useAppSelector((state) => state?.authState);
   const dataRole = useAppSelector(
     (state) => state?.persistedReducer?.roleState?.role?.permissions
   );
+  const {
+    register,
+    control,
+    watch,
+    formState: { errors },
+  } = useForm<ProjectQuotation>();
 
-  const [search, setSearch] = useState('');
   const [page, setPage] = useState(0);
   const [total, setTotal] = useState(0);
   const [list, setList] = useState<any>([]);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const actionMenuOptions = ['Edit', 'Delete'];
-  // const [actionMenuItemid, setActionMenuItemid] = React.useState('');
   const [isLoader, setIsLoader] = React.useState(true);
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [actionMenuAnchorEl, setActionMenuAnchorEl] =
@@ -54,13 +59,12 @@ function DocsPage({ projectId }: any) {
   const [cancelDialogOpen, setCancelDialogOpen] = useState<boolean>(false);
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
-  const [dialogText] = useState<any>(
-    'Are you sure you want to delete this Category ?'
-  );
+  const [dialogText] = useState<any>('Are you sure you want to delete ?');
+  const [projects, setProjects] = useState<any>([]);
 
   const handleFormClickOpen = () => {
     if (
-      listingRolePermission(dataRole, ALL_PERMISSIONS.storePlans.addDocsPlans)
+      listingRolePermission(dataRole, ALL_PERMISSIONS.storePlans.addImagesPlans)
     ) {
       setOpenFormDialog(true);
     } else {
@@ -72,18 +76,52 @@ function DocsPage({ projectId }: any) {
     }
   };
 
+  const getProjectName = (project: string) =>
+    projects.find((p: any) => p.id === project)?.name || '';
+
+  useEffect(() => {
+    const fetchProjects = async () => {
+      if (
+        listingRolePermission(
+          dataRole,
+          ALL_PERMISSIONS.storePlans.addImagesPlans
+        )
+      ) {
+        try {
+          const projectResponse =
+            await storeAttachmentService.getListProjectLovService(
+              authState.user.tenant
+            );
+          const projectList = projectResponse.data.data.list;
+          const extraField = [{ id: 'ALL', name: 'All' }];
+          setProjects([...extraField, ...projectList]);
+        } catch (error: Error | any) {
+          setIsNotify(true);
+          setNotifyMessage({
+            text: error.message,
+            type: 'error',
+          });
+        }
+      }
+    };
+
+    fetchProjects();
+  }, []);
+
   useEffect(() => {
     if (
-      listingRolePermission(dataRole, ALL_PERMISSIONS.storePlans.viewDocsPlans)
+      listingRolePermission(
+        dataRole,
+        ALL_PERMISSIONS.storePlans.viewImagesPlans
+      )
     ) {
-      storeAttachmentService
-        .getListProjectAttachmentService(
-          projectId ?? '',
-          'document',
-          search,
+      adminProjectQuotation
+        .getQuotationService({
+          type: 'LABOR_PAID',
+          projectId: watch('projectId') ? watch('projectId') : '',
           page,
-          rowsPerPage
-        )
+          size: rowsPerPage,
+        })
         .then((item: any) => {
           setIsLoader(false);
           setList(item.data.data.list);
@@ -100,42 +138,20 @@ function DocsPage({ projectId }: any) {
     } else {
       setIsLoader(false);
     }
-  }, [null]);
-
-  const handleClickSearch = (event: any) => {
-    if (event.key === 'Enter') {
-      const searchTxt = event.target.value as string;
-      const newPage = 0;
-      setSearch(searchTxt);
-      setPage(newPage);
-      storeAttachmentService
-        .getListProjectAttachmentService(
-          projectId ?? '',
-          'document',
-          searchTxt,
-          page,
-          rowsPerPage
-        )
-        .then((item) => {
-          setList(item.data.data.list);
-          setTotal(item.data.data.total);
-        });
-    }
-  };
+  }, [watch('projectId')]);
 
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number
   ) => {
     setPage(newPage);
-    storeAttachmentService
-      .getListProjectAttachmentService(
-        projectId ?? '',
-        'document',
-        search,
-        newPage,
-        rowsPerPage
-      )
+    adminProjectQuotation
+      .getQuotationService({
+        type: 'LABOR_PAID',
+        projectId: watch('projectId') ? watch('projectId') : '',
+        page: newPage,
+        size: rowsPerPage,
+      })
       .then((item: any) => {
         setList(item.data.data.list);
         setTotal(item.data.data.total);
@@ -149,30 +165,29 @@ function DocsPage({ projectId }: any) {
     const newPage = 0;
     setRowsPerPage(newRowperPage);
     setPage(newPage);
-    storeAttachmentService
-      .getListProjectAttachmentService(
-        projectId ?? '',
-        'document',
-        search,
-        newPage,
-        newRowperPage
-      )
+    adminProjectQuotation
+      .getQuotationService({
+        type: 'LABOR_PAID',
+        projectId: watch('projectId') ? watch('projectId') : '',
+        page: newPage,
+        size: newRowperPage,
+      })
       .then((item) => {
         setList(item.data.data.list);
         setTotal(item.data.data.total);
       });
   };
+
   const createFormHandler = (data: any) => {
-    // console.log('data==>', data);
     setIsLoader(true);
     const formData = new FormData();
     if (data.file !== null) formData.append('file', data.file);
     formData.append('projectId', data.projectId);
-    formData.append('day', data.day);
-    formData.append('title', data.title);
-    formData.append('description', data.description);
-    storeAttachmentService
-      .addProjectAttachmentService(formData, authState.user.tenant)
+    formData.append('type', data.type);
+    formData.append('laborCost', data.laborCost);
+    formData.append('desc', data.desc);
+    adminProjectQuotation
+      .createQuotationService(formData)
       .then((item: any) => {
         if (item.data.success) {
           setOpenFormDialog(false);
@@ -183,6 +198,8 @@ function DocsPage({ projectId }: any) {
             type: 'success',
           });
           setList([item.data.data, ...list]);
+          let newtotal = total;
+          setTotal((newtotal += 1));
         } else {
           setIsLoader(false);
           setIsNotify(true);
@@ -203,16 +220,14 @@ function DocsPage({ projectId }: any) {
   };
 
   const updateFormHandler = (data: any) => {
-    // console.log('🚀 ~ updateFormHandler ~ data:', data);
     setIsLoader(true);
     const formData = new FormData();
     if (data.file !== null) formData.append('file', data.file);
     formData.append('projectId', data.projectId);
-    formData.append('day', data.day);
-    formData.append('title', data.title);
-    formData.append('description', data.description);
-    storeAttachmentService
-      .updateProjectAttachmentService(actionMenuItemid, formData)
+    formData.append('laborCost', data.laborCost);
+    formData.append('desc', data.desc);
+    adminProjectQuotation
+      .updateQuotationService(actionMenuItemid, formData)
       .then((item: any) => {
         if (item.data.success) {
           setOpenEditFormDialog(false);
@@ -226,10 +241,8 @@ function DocsPage({ projectId }: any) {
             if (list[i].id === item.data.data.id) {
               list[i].filePath = item.data.data.filePath;
               list[i].projectId = item.data.data.projectId;
-              list[i].day = item.data.data.day;
-              list[i].title = item.data.data.title;
-              list[i].description = item.data.data.description;
-              list[i].mimeType = item.data.data.mimeType;
+              list[i].laborCost = item.data.data.laborCost;
+              list[i].desc = item.data.data.desc;
             }
           }
         } else {
@@ -253,8 +266,8 @@ function DocsPage({ projectId }: any) {
 
   const deleteHandler = (id: string) => {
     setIsLoader(true);
-    storeAttachmentService
-      .deleteStatusProjectService(id)
+    adminProjectQuotation
+      .deleteStatusQuotationService(id)
       .then((updateItem) => {
         if (updateItem.data.success) {
           setIsLoader(false);
@@ -284,30 +297,12 @@ function DocsPage({ projectId }: any) {
     deleteHandler(actionMenuItemid);
   };
 
-  const handleSrcImage = (mimitype: string | undefined, filePath: any) => {
-    let source;
-    if (mimitype === mimiType.pdf) {
-      source = assets.images.pdf;
-    }
-    if (mimitype === mimiType.word || mimitype === mimiType.wordsheet) {
-      source = assets.images.word;
-    }
-    if (mimitype === mimiType.excel || mimitype === mimiType.excelsheet) {
-      source = assets.images.excel;
-    }
-    return (
-      <a href={filePath} target="_blank" rel="noopener noreferrer">
-        <img className="cursor-pointer" src={source} alt="img" />
-      </a>
-    );
-  };
-
   const manuHandler = (option: string) => {
     if (option === 'Edit') {
       if (
         listingRolePermission(
           dataRole,
-          ALL_PERMISSIONS.storePlans.editDocsPlans
+          ALL_PERMISSIONS.storePlans.editImagesPlans
         )
       ) {
         const editFormDatas = list?.find(
@@ -327,7 +322,7 @@ function DocsPage({ projectId }: any) {
       if (
         listingRolePermission(
           dataRole,
-          ALL_PERMISSIONS.storePlans.deleteDocsPlans
+          ALL_PERMISSIONS.storePlans.deleteImagesPlans
         )
       ) {
         setCancelDialogOpen(true);
@@ -355,39 +350,24 @@ function DocsPage({ projectId }: any) {
           <div className="grid grid-cols-12 px-4 py-5">
             <div className="col-span-7">
               <span className="font-open-sans text-xl font-semibold text-[#252733]">
-                All Reports
+                All Labor Material Slips
               </span>
             </div>
             <div className="col-span-5">
               <div className="flex flex-row justify-end gap-3">
-                <FormControl
-                  className="search-grey-outline placeholder-grey w-60"
-                  variant="filled"
-                >
-                  <Input
-                    className="input-with-icon after:border-b-secondary"
-                    id="search"
-                    type="text"
-                    placeholder="Search"
-                    onKeyDown={(
-                      event: React.KeyboardEvent<
-                        HTMLInputElement | HTMLTextAreaElement
-                      >
-                    ) => {
-                      handleClickSearch(event);
-                    }}
-                    endAdornment={
-                      <InputAdornment position="end">
-                        <Divider
-                          sx={{ height: 28, m: 0.5 }}
-                          orientation="vertical"
-                        />
-                        <IconButton aria-label="toggle password visibility">
-                          <SearchIcon className="text-[#6A6A6A]" />
-                        </IconButton>
-                      </InputAdornment>
-                    }
-                    disableUnderline
+                <FormControl className="FormControl" variant="standard">
+                  <CustomDropDown
+                    validateRequired
+                    id="projectId"
+                    control={control}
+                    error={errors}
+                    register={register}
+                    options={{ roles: projects }}
+                    customClassInputTitle="font-bold"
+                    customHeight="h-[40px]"
+                    customWidth="w-[200px]"
+                    // inputTitle="Project Name"
+                    defaultValue="Select Project"
                   />
                 </FormControl>
                 <Button
@@ -404,10 +384,9 @@ function DocsPage({ projectId }: any) {
             <table className="table-border table-auto">
               <thead>
                 <tr>
-                  <th>Image</th>
-                  <th className="w-[30%]">Description</th>
                   <th>Project Name</th>
-                  <th>Day</th>
+                  <th>Description</th>
+                  <th>Total Labor Material Paid</th>
                   <th>Created Date</th>
                   <th>&nbsp;</th>
                 </tr>
@@ -421,25 +400,24 @@ function DocsPage({ projectId }: any) {
                           {' '}
                           <div className="avatar flex flex-row items-center">
                             {item.filePath ? (
-                              <button>
-                                {handleSrcImage(item.mimeType, item.filePath)}
-                              </button>
+                              <a href={item.filePath} rel="noopener noreferrer">
+                                <SummarizeIcon />
+                              </a>
                             ) : (
-                              <img
-                                src={assets.tempImages.avatarDryCLean}
-                                alt=""
-                              />
+                              '--'
                             )}
                             <div className="flex flex-col items-start justify-start">
-                              <span className="text-sm font-semibold">
-                                {item.title}
+                              <span className="mx-2 text-sm font-semibold">
+                                {getProjectName(item.projectId)}
                               </span>
                             </div>
                           </div>
                         </td>
-                        <td>{item.description ? item.description : '--'}</td>
-                        <td>{item.projectName ? item.projectName : '--'}</td>
-                        <td>{item.day ? item.day : '--'}</td>
+                        <td>{item.desc ? item.desc : '--'}</td>
+                        <td>
+                          {item.laborCost ? item.laborCost : '--'}{' '}
+                          {CURRENCY_PREFIX}
+                        </td>
                         <td>
                           {dayjs(item.uploadedAt).isValid()
                             ? dayjs(item.uploadedAt)?.format(
@@ -518,8 +496,7 @@ function DocsPage({ projectId }: any) {
         />
       )}
       {openFormDialog && (
-        <DocsAddPopup
-          projectId={projectId}
+        <MaterailLaborSlipAddPopup
           setIsNotify={setIsNotify}
           setNotifyMessage={setNotifyMessage}
           openFormDialog={openFormDialog}
@@ -529,8 +506,7 @@ function DocsPage({ projectId }: any) {
       )}
 
       {openEditFormDialog && (
-        <DocsEditPopup
-          projectId={projectId}
+        <MaterailLaborSlipEditPopup
           setIsNotify={setIsNotify}
           setNotifyMessage={setNotifyMessage}
           openFormDialog={openEditFormDialog}
@@ -543,4 +519,4 @@ function DocsPage({ projectId }: any) {
   );
 }
 
-export default DocsPage;
+export default MaterailLaborSlipPage;

@@ -8,26 +8,23 @@ import Input from '@mui/material/Input';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 // import TextField from '@mui/material/TextField';
-import '../../../assets/css/PopupStyle.css';
-import TextField from '@mui/material/TextField';
 import FormControl from '@mui/material/FormControl';
-import ErrorSpanBox from '../../../components/common/ErrorSpanBox';
-import {
-  ALL_PERMISSIONS,
-  INVALID_CHAR,
-  MAX_LENGTH_EXCEEDED,
-  mimiType,
-  PATTERN,
-  PROJECT_IMAGE_TYPE,
-} from '../../../utils/constants';
-import { ProjectAttachment } from '../../../interfaces/projectAttachments.interface';
+import TextField from '@mui/material/TextField';
+import '../../../assets/css/PopupStyle.css';
 import CustomDropDown from '../../../components/common/CustomDropDown';
-import { listingRolePermission } from '../../../utils/helper';
+import ErrorSpanBox from '../../../components/common/ErrorSpanBox';
+import { ProjectQuotation } from '../../../interfaces/projectQuotation';
 import { useAppSelector } from '../../../redux/redux-hooks';
 import storeAttachmentService from '../../../services/adminapp/adminProjectAttachments';
+import {
+  ALL_PERMISSIONS,
+  MAX_LENGTH_EXCEEDED,
+  mimiType,
+  VALIDATE_NON_NEGATIVE_NUM,
+} from '../../../utils/constants';
+import { listingRolePermission } from '../../../utils/helper';
 
 type Props = {
-  projectId: string;
   openFormDialog: boolean;
   setOpenFormDialog: React.Dispatch<React.SetStateAction<boolean>>;
   callback: (...args: any[]) => any;
@@ -36,8 +33,7 @@ type Props = {
   formData: any;
 };
 
-function VideoEditPopup({
-  projectId,
+function TotalPaidSlipEditPopup({
   openFormDialog,
   setOpenFormDialog,
   callback,
@@ -62,7 +58,7 @@ function VideoEditPopup({
     control,
     // watch,
     formState: { errors },
-  } = useForm<ProjectAttachment>();
+  } = useForm<ProjectQuotation>();
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -95,51 +91,13 @@ function VideoEditPopup({
     fetchProjects();
   }, []);
 
-  // useEffect(() => {
-  //   const fetchPlans = async () => {
-  //     if (
-  //       listingRolePermission(
-  //         dataRole,
-  //         ALL_PERMISSIONS.storePlans.editImagesPlans
-  //       ) &&
-  //       watch('projectId') !== 'none' &&
-  //       watch('projectId') !== undefined
-  //     ) {
-  //       try {
-  //         const plansResponse =
-  //           await storeAttachmentService.getListProjectPlanLovService(
-  //             watch('projectId')
-  //           );
-  //         // setPlans(plansResponse.data.data.list);
-  //       } catch (error: Error | any) {
-  //         setIsNotify(true);
-  //         setNotifyMessage({
-  //           text: error.message,
-  //           type: 'error',
-  //         });
-  //       }
-  //     }
-  //   };
-
-  //   fetchPlans();
-  // }, [watch('projectId')]);
-
   const onSubmit = (data: any) => {
     const obj = {
-      day:
-        data.type === '3d'
-          ? 'ALL_3D'
-          : data.type === 'other'
-          ? 'ALL_OTHER'
-          : 'ALL_BLUEPRINTS',
-      projectId: data.projectId,
-      file: data.file,
-      title: data.name,
-      type: data.type,
-      description: data.desc,
+      ...data,
     };
     if (filePath !== null) obj.file = null;
     if (planFile || filePath) callback(obj);
+    // console.log('🚀 ~ onSubmit ~ obj:', obj);
   };
 
   const handleFormClose = () => {
@@ -193,49 +151,43 @@ function VideoEditPopup({
       <div className="Content">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="FormHeader">
-            <span className="Title">Edit Image</span>
+            <span className="Title">Edit Total Paid Cost</span>
           </div>
           <div className="FormBody mt-2">
             <div className="FormFields">
               <FormControl className="FormControl" variant="standard">
-                <label className="FormLabel">Name</label>
+                <label className="FormLabel">Total Paid Amount</label>
                 <Input
                   className="FormInput"
-                  {...register('name', {
-                    value: formData?.title,
-                    required: true,
-                    pattern: PATTERN.CHAR_SPACE_DASH,
-                    validate: (value) => value.length <= 150,
-                  })}
-                  placeholder="Enter Image Name"
-                  type="text"
                   id="name"
+                  type="number"
+                  placeholder="Update Total Paid Amount"
+                  {...register('totalPaidCost', {
+                    value: Number(formData?.totalPaidCost),
+                    required: 'Amount is required in numbers',
+                    validate: (value: any) => VALIDATE_NON_NEGATIVE_NUM(value),
+                    maxLength: {
+                      value: 20,
+                      message: 'Length should not be excceed from 20 numbers.',
+                    },
+                  })}
                   disableUnderline
                 />
-                {errors.name?.type === 'required' && (
-                  <ErrorSpanBox error="Image name is required" />
-                )}
-                {errors.name?.type === 'pattern' && (
-                  <ErrorSpanBox error={INVALID_CHAR} />
-                )}
-                {errors.name?.type === 'validate' && (
-                  <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
+                {errors.totalPaidCost && (
+                  <ErrorSpanBox error={errors.totalPaidCost?.message} />
                 )}
               </FormControl>
               <FormControl className="FormControl" variant="standard">
                 <CustomDropDown
                   validateRequired
-                  id="type"
+                  id="projectId"
                   control={control}
                   error={errors}
                   register={register}
-                  options={{
-                    roles: PROJECT_IMAGE_TYPE,
-                    role: formData?.category,
-                  }}
+                  options={{ roles: projects, role: formData?.projectId }}
                   customClassInputTitle="font-bold"
-                  inputTitle="Type"
-                  defaultValue="Select Type"
+                  inputTitle="Project Name"
+                  defaultValue="Select Project"
                 />
               </FormControl>
             </div>
@@ -253,7 +205,7 @@ function VideoEditPopup({
                   defaultValue=""
                   placeholder="Write Description"
                   {...register('desc', {
-                    value: formData?.description,
+                    value: formData?.desc,
                     maxLength: {
                       value: 250,
                       message: MAX_LENGTH_EXCEEDED,
@@ -262,35 +214,6 @@ function VideoEditPopup({
                 />
                 {errors.desc && <ErrorSpanBox error={errors.desc?.message} />}
               </FormControl>
-            </div>
-            <div className="FormField">
-              <FormControl className="FormControl" variant="standard">
-                <CustomDropDown
-                  validateRequired
-                  id="projectId"
-                  control={control}
-                  error={errors}
-                  register={register}
-                  options={{ roles: projects, role: formData?.projectId }}
-                  customClassInputTitle="font-bold mt-2"
-                  inputTitle="Project Name"
-                  defaultValue="Select Project"
-                  disabled={!!projectId}
-                />
-              </FormControl>
-              {/* <FormControl className="FormControl" variant="standard">
-                <CustomDropDown
-                  validateRequired
-                  id="day"
-                  control={control}
-                  error={errors}
-                  register={register}
-                  options={{ roles: plans, role: formData?.day }}
-                  customClassInputTitle="font-bold"
-                  inputTitle="Day"
-                  defaultValue="Select Day"
-                />
-              </FormControl> */}
             </div>
             <div className="FormField">
               <label className="FormLabel mt-2">
@@ -381,4 +304,4 @@ function VideoEditPopup({
   );
 }
 
-export default VideoEditPopup;
+export default TotalPaidSlipEditPopup;

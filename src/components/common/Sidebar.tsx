@@ -14,6 +14,7 @@
 import { Button } from '@mui/material';
 // import { useEffect, useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
+import Tooltip from '@mui/material/Tooltip';
 import assets from '../../assets';
 import { setItemState, setLogo } from '../../redux/features/appSlice';
 import { logout } from '../../redux/features/authSlice';
@@ -619,37 +620,43 @@ function Sidebar() {
         <div className="basis-[60%] self-center">
           <div className="max-h-[650px] w-[60px] rounded-[45px] bg-[#C9C9C9] text-center">
             <NavLink to="/admin/dashboard/home">
-              <Button className="btn-flips my-[5px] h-[50px] min-w-[50px] rounded-[28px] bg-transparent hover:bg-[#F27426]">
-                <img
-                  src={assets.images.slIcon}
-                  alt="icon"
-                  className="w-[24px]"
-                />
-              </Button>
+              <Tooltip title="Dashboard" arrow placement="left">
+                <Button className="btn-flips my-[5px] h-[50px] min-w-[50px] rounded-[28px] bg-transparent hover:bg-[#F27426]">
+                  <img
+                    src={assets.images.slIcon}
+                    alt="icon"
+                    className="w-[24px]"
+                  />
+                </Button>
+              </Tooltip>
             </NavLink>
             {listingRolePermission(
               dataRole,
               ALL_PERMISSIONS.storePlans.viewProjects
             ) && (
               <NavLink to="/admin/dashboard/projects">
-                <Button className="btn-flips my-[5px] h-[50px] min-w-[50px] rounded-[28px] bg-transparent hover:bg-[#F27426]">
-                  <img
-                    src={assets.images.projectIcon}
-                    alt="icon"
-                    className="w-[24px]"
-                  />
-                </Button>
+                <Tooltip title="Projects" arrow placement="left">
+                  <Button className="btn-flips my-[5px] h-[50px] min-w-[50px] rounded-[28px] bg-transparent hover:bg-[#F27426]">
+                    <img
+                      src={assets.images.projectIcon}
+                      alt="icon"
+                      className="w-[24px]"
+                    />
+                  </Button>
+                </Tooltip>
               </NavLink>
             )}
             {listingRolePermission(dataRole, ALL_PERMISSIONS.products.view) && (
               <NavLink to="/admin/dashboard/products">
-                <Button className="btn-flips my-[5px] h-[50px] min-w-[50px] rounded-[28px] bg-transparent hover:bg-[#F27426]">
-                  <img
-                    src={assets.images.box}
-                    alt="icon"
-                    className="w-[24px]"
-                  />
-                </Button>
+                <Tooltip title="Products" arrow placement="left">
+                  <Button className="btn-flips my-[5px] h-[50px] min-w-[50px] rounded-[28px] bg-transparent hover:bg-[#F27426]">
+                    <img
+                      src={assets.images.box}
+                      alt="icon"
+                      className="w-[24px]"
+                    />
+                  </Button>
+                </Tooltip>
               </NavLink>
             )}
             {listingRolePermission(
@@ -657,13 +664,15 @@ function Sidebar() {
               ALL_PERMISSIONS.storePlans.viewProjectAttachments
             ) && (
               <NavLink to="/admin/dashboard/attachments">
-                <Button className="btn-flips my-[5px] h-[50px] min-w-[50px] rounded-[28px] bg-transparent hover:bg-[#F27426]">
-                  <img
-                    src={assets.images.photoIcon}
-                    alt="icon"
-                    className="w-[24px]"
-                  />
-                </Button>
+                <Tooltip title="Attachments" arrow placement="left">
+                  <Button className="btn-flips my-[5px] h-[50px] min-w-[50px] rounded-[28px] bg-transparent hover:bg-[#F27426]">
+                    <img
+                      src={assets.images.photoIcon}
+                      alt="icon"
+                      className="w-[24px]"
+                    />
+                  </Button>
+                </Tooltip>
               </NavLink>
             )}
             {listingRolePermission(
@@ -671,13 +680,15 @@ function Sidebar() {
               ALL_PERMISSIONS.storePlans.viewProjectUsers
             ) && (
               <NavLink to="/admin/dashboard/ne-users">
-                <Button className="btn-flips my-[5px] h-[50px] min-w-[50px] rounded-[28px] bg-transparent hover:bg-[#F27426]">
-                  <img
-                    src={assets.images.busnessIcon}
-                    alt="icon"
-                    className="w-[24px]"
-                  />
-                </Button>
+                <Tooltip title="Users" arrow placement="left">
+                  <Button className="btn-flips my-[5px] h-[50px] min-w-[50px] rounded-[28px] bg-transparent hover:bg-[#F27426]">
+                    <img
+                      src={assets.images.busnessIcon}
+                      alt="icon"
+                      className="w-[24px]"
+                    />
+                  </Button>
+                </Tooltip>
               </NavLink>
             )}
             {listingRolePermission(
@@ -685,13 +696,15 @@ function Sidebar() {
               ALL_PERMISSIONS.storePlans.viewProjectAdminUsers
             ) && (
               <NavLink to="/admin/dashboard/ne-admin-users">
-                <Button className="btn-flips my-[5px] h-[50px] min-w-[50px] rounded-[28px] bg-transparent hover:bg-[#F27426]">
-                  <img
-                    src={assets.images.startegyIcon}
-                    alt="icon"
-                    className="w-[24px]"
-                  />
-                </Button>
+                <Tooltip title="Admin-Users" arrow placement="left">
+                  <Button className="btn-flips my-[5px] h-[50px] min-w-[50px] rounded-[28px] bg-transparent hover:bg-[#F27426]">
+                    <img
+                      src={assets.images.startegyIcon}
+                      alt="icon"
+                      className="w-[24px]"
+                    />
+                  </Button>
+                </Tooltip>
               </NavLink>
             )}
             {listingRolePermission(
@@ -699,13 +712,15 @@ function Sidebar() {
               ALL_PERMISSIONS.storePlans.viewRole
             ) && (
               <NavLink to="/admin/dashboard/ne-role">
-                <Button className="btn-flips my-[5px] h-[50px] min-w-[50px] rounded-[28px] bg-transparent hover:bg-[#F27426]">
-                  <img
-                    src={assets.images.clipboardIcon}
-                    alt="icon"
-                    className="w-[24px]"
-                  />
-                </Button>
+                <Tooltip title="Role" arrow placement="left">
+                  <Button className="btn-flips my-[5px] h-[50px] min-w-[50px] rounded-[28px] bg-transparent hover:bg-[#F27426]">
+                    <img
+                      src={assets.images.clipboardIcon}
+                      alt="icon"
+                      className="w-[24px]"
+                    />
+                  </Button>
+                </Tooltip>
               </NavLink>
             )}
             {listingRolePermission(
@@ -713,24 +728,28 @@ function Sidebar() {
               ALL_PERMISSIONS.vendors.viewVendorTypes
             ) && (
               <NavLink to="/admin/dashboard/vendor-types">
-                <Button className="btn-flips my-[5px] h-[50px] min-w-[50px] rounded-[28px] bg-transparent hover:bg-[#F27426]">
-                  <img
-                    src={assets.images.vendorTypesIcon}
-                    alt="icon"
-                    className="w-[24px]"
-                  />
-                </Button>
+                <Tooltip title="Vendor-Types" arrow placement="left">
+                  <Button className="btn-flips my-[5px] h-[50px] min-w-[50px] rounded-[28px] bg-transparent hover:bg-[#F27426]">
+                    <img
+                      src={assets.images.vendorTypesIcon}
+                      alt="icon"
+                      className="w-[24px]"
+                    />
+                  </Button>
+                </Tooltip>
               </NavLink>
             )}
             {listingRolePermission(dataRole, ALL_PERMISSIONS.vendors.view) && (
               <NavLink to="/admin/dashboard/vendors">
-                <Button className="btn-flips my-[5px] h-[50px] min-w-[50px] rounded-[28px] bg-transparent hover:bg-[#F27426]">
-                  <img
-                    src={assets.images.supplyIcon}
-                    alt="icon"
-                    className="w-[24px]"
-                  />
-                </Button>
+                <Tooltip title="Vendors" arrow placement="left">
+                  <Button className="btn-flips my-[5px] h-[50px] min-w-[50px] rounded-[28px] bg-transparent hover:bg-[#F27426]">
+                    <img
+                      src={assets.images.supplyIcon}
+                      alt="icon"
+                      className="w-[24px]"
+                    />
+                  </Button>
+                </Tooltip>
               </NavLink>
             )}
             {listingRolePermission(
@@ -738,13 +757,15 @@ function Sidebar() {
               ALL_PERMISSIONS.quotations.view
             ) && (
               <NavLink to="/admin/dashboard/quotations">
-                <Button className="btn-flips my-[5px] h-[50px] min-w-[50px] rounded-[28px] bg-transparent hover:bg-[#F27426]">
-                  <img
-                    src={assets.images.quotationIcon}
-                    alt="icon"
-                    className="w-[24px]"
-                  />
-                </Button>
+                <Tooltip title="Quotations" arrow placement="left">
+                  <Button className="btn-flips my-[5px] h-[50px] min-w-[50px] rounded-[28px] bg-transparent hover:bg-[#F27426]">
+                    <img
+                      src={assets.images.quotationIcon}
+                      alt="icon"
+                      className="w-[24px]"
+                    />
+                  </Button>
+                </Tooltip>
               </NavLink>
             )}
           </div>

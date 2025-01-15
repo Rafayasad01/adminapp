@@ -6,6 +6,7 @@ import Divider from '@mui/material/Divider';
 import FormControl from '@mui/material/FormControl';
 import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
+import SummarizeIcon from '@mui/icons-material/Summarize';
 import InputAdornment from '@mui/material/InputAdornment';
 // import VisibilityIcon from '@mui/icons-material/Visibility';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
@@ -27,7 +28,7 @@ import ImageAddPopup from './ImageAddPopup';
 import ImageEditPopup from './ImageEditPopup';
 import ActionMenu from '../../../components/common/ActionMenu';
 import PermissionPopup from '../../../utils/PermissionPopup';
-import assets from '../../../assets';
+// import assets from '../../../assets';
 
 function ImagePage({ projectId }: any) {
   const authState: any = useAppSelector((state) => state?.authState);
@@ -54,7 +55,7 @@ function ImagePage({ projectId }: any) {
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
   const [dialogText] = useState<any>(
-    'Are you sure you want to delete this Category ?'
+    'Are you sure you want to delete this Render ?'
   );
 
   const handleFormClickOpen = () => {
@@ -108,13 +109,14 @@ function ImagePage({ projectId }: any) {
       )
     ) {
       storeAttachmentService
-        .getListProjectAttachmentService(
-          projectId ?? '',
-          'image',
+        .getListProjectAttachmentService({
+          projectId: projectId ?? '',
+          type: ['document', 'image'],
+          day: ['ALL_3D', 'ALL_BLUEPRINTS', 'ALL_OTHER'],
           search,
           page,
-          rowsPerPage
-        )
+          size: rowsPerPage,
+        })
         .then((item: any) => {
           setIsLoader(false);
           setList(item.data.data.list);
@@ -140,13 +142,14 @@ function ImagePage({ projectId }: any) {
       setSearch(searchTxt);
       setPage(newPage);
       storeAttachmentService
-        .getListProjectAttachmentService(
-          projectId ?? '',
-          'image',
-          searchTxt,
+        .getListProjectAttachmentService({
+          projectId: projectId ?? '',
+          type: ['document', 'image'],
+          day: ['ALL_3D', 'ALL_BLUEPRINTS', 'ALL_OTHER'],
+          search: searchTxt,
           page,
-          rowsPerPage
-        )
+          size: rowsPerPage,
+        })
         .then((item) => {
           setList(item.data.data.list);
           setTotal(item.data.data.total);
@@ -160,13 +163,14 @@ function ImagePage({ projectId }: any) {
   ) => {
     setPage(newPage);
     storeAttachmentService
-      .getListProjectAttachmentService(
-        projectId ?? '',
-        'image',
+      .getListProjectAttachmentService({
+        projectId: projectId ?? '',
+        type: ['document', 'image'],
+        day: ['ALL_3D', 'ALL_BLUEPRINTS', 'ALL_OTHER'],
         search,
-        newPage,
-        rowsPerPage
-      )
+        page: newPage,
+        size: rowsPerPage,
+      })
       .then((item: any) => {
         setList(item.data.data.list);
         setTotal(item.data.data.total);
@@ -181,13 +185,14 @@ function ImagePage({ projectId }: any) {
     setRowsPerPage(newRowperPage);
     setPage(newPage);
     storeAttachmentService
-      .getListProjectAttachmentService(
-        projectId ?? '',
-        'image',
+      .getListProjectAttachmentService({
+        projectId: projectId ?? '',
+        type: ['document', 'image'],
+        day: ['ALL_3D', 'ALL_BLUEPRINTS', 'ALL_OTHER'],
         search,
-        newPage,
-        newRowperPage
-      )
+        page: newPage,
+        size: newRowperPage,
+      })
       .then((item) => {
         setList(item.data.data.list);
         setTotal(item.data.data.total);
@@ -215,6 +220,8 @@ function ImagePage({ projectId }: any) {
             type: 'success',
           });
           setList([item.data.data, ...list]);
+          let newtotal = total;
+          setTotal((newtotal += 1));
         } else {
           setIsLoader(false);
           setIsNotify(true);
@@ -235,7 +242,6 @@ function ImagePage({ projectId }: any) {
   };
 
   const updateFormHandler = (data: any) => {
-    // console.log('🚀 ~ updateFormHandler ~ data:', data);
     setIsLoader(true);
     const formData = new FormData();
     if (data.file !== null) formData.append('file', data.file);
@@ -264,6 +270,7 @@ function ImagePage({ projectId }: any) {
               list[i].category = item.data.data.category;
               list[i].description = item.data.data.description;
               list[i].mimiType = item.data.data.mimiType;
+              list[i].attachmentType = item.data.data.attachmentType;
             }
           }
         } else {
@@ -420,11 +427,11 @@ function ImagePage({ projectId }: any) {
             <table className="table-border table-auto">
               <thead>
                 <tr>
-                  <th>Image</th>
-                  <th>Category</th>
+                  <th>Renders</th>
+                  {/* <th>Category</th> */}
                   <th className="w-[30%]">Description</th>
                   <th>Project Name</th>
-                  <th>Day</th>
+                  {/* <th>Day</th> */}
                   <th>Created Date</th>
                   <th>&nbsp;</th>
                 </tr>
@@ -437,33 +444,45 @@ function ImagePage({ projectId }: any) {
                         <td>
                           {' '}
                           <div className="avatar flex flex-row items-center">
-                            {item.filePath ? (
-                              <button
-                              // onClick={() => openModal(item.icon)}
-                              >
-                                <img
-                                  className="cursor-pointer"
-                                  src={item.filePath}
-                                  alt={item.title}
-                                />
+                            {item.attachmentType === 'document' ? (
+                              item.filePath ? (
+                                <a
+                                  href={item.filePath}
+                                  rel="noopener noreferrer"
+                                >
+                                  <SummarizeIcon />
+                                </a>
+                              ) : (
+                                '--'
+                              )
+                            ) : item.attachmentType === 'image' &&
+                              item.filePath ? (
+                              <button>
+                                <a
+                                  href={item.filePath}
+                                  rel="noopener noreferrer"
+                                >
+                                  <img
+                                    className="w-[25px] cursor-pointer  object-contain"
+                                    src={item.filePath}
+                                    alt={item.title}
+                                  />
+                                </a>
                               </button>
                             ) : (
-                              <img
-                                src={assets.tempImages.avatarDryCLean}
-                                alt=""
-                              />
+                              '--'
                             )}
                             <div className="flex flex-col items-start justify-start">
-                              <span className="text-sm font-semibold">
+                              <span className="mx-2 text-sm font-semibold">
                                 {item.title}
                               </span>
                             </div>
                           </div>
                         </td>
-                        <td>{item.category ? item.category : '--'}</td>
+                        {/* <td>{item.category ? item.category : '--'}</td> */}
                         <td>{item.description ? item.description : '--'}</td>
                         <td>{item.projectName ? item.projectName : '--'}</td>
-                        <td>{item.day ? item.day : '--'}</td>
+                        {/* <td>{item.day ? item.day : '--'}</td> */}
                         <td>
                           {dayjs(item.uploadedAt).isValid()
                             ? dayjs(item.uploadedAt)?.format(
