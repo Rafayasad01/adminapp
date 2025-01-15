@@ -38,7 +38,8 @@ import PermissionPopup from '../../utils/PermissionPopup';
 function BranchPage() {
   const dispatch = useDispatch();
   const mainBranchData: any = getItem('TEMP_BRANCH_DATA');
-  const TotalBranches: any = getItem('SYSTEM_CONFIG');
+  // const TotalBranches: any = getItem('SYSTEM_CONFIG');
+  const User: any = getItem('USER');
   const authState: any = useAppSelector((state: any) => state?.authState);
   const dataRole = useAppSelector(
     (state: any) => state?.persistedReducer?.roleState?.role?.permissions
@@ -296,7 +297,7 @@ function BranchPage() {
 
   const handleAddNew = () => {
     if (listingRolePermission(dataRole, ALL_PERMISSIONS.storeBranch.add)) {
-      if (Number(TotalBranches?.tenant?.maxBranchLimit) === total) {
+      if (Number(User?.maxBranchLimit) === total) {
         setIsNotify(true);
         setNotifyMessage({
           text: 'Branch limit exceeded.',
@@ -399,9 +400,7 @@ function BranchPage() {
                           showZero
                           max={999}
                           color="success"
-                          badgeContent={
-                            Number(TotalBranches?.tenant?.maxBranchLimit) ?? 0
-                          }
+                          badgeContent={Number(User?.maxBranchLimit) ?? 0}
                         >
                           <ApartmentIcon />
                         </Badge>
