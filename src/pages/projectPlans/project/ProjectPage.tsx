@@ -37,7 +37,7 @@ import {
 } from '../../../utils/constants';
 import {
   CheckRolePermission,
-  formatCurrency,
+  // formatCurrency,
   // CheckRolePermission,
   listingRolePermission,
 } from '../../../utils/helper';
@@ -509,9 +509,9 @@ function ProjectPage() {
                 <tr>
                   <th className="w-[10%]">Project Name</th>
                   <th className="">Client Name</th>
-                  <th>Quotation</th>
+                  {/* <th>Quotation</th>
                   <th>Total Paid</th>
-                  <th>Due Amount</th>
+                  <th>Due Amount</th> */}
                   <th>Total Plan Days</th>
                   <th>Total Plan Activities</th>
                   <th>Type</th>
@@ -550,7 +550,7 @@ function ProjectPage() {
                             ? handleClientNames(item.clientName)
                             : '--'}
                         </td>
-                        <td>
+                        {/* <td>
                           {item.budget ? formatCurrency(item.budget) : '--'}
                         </td>
                         <td>
@@ -562,7 +562,7 @@ function ProjectPage() {
                           {item.dueAmount
                             ? formatCurrency(item.dueAmount)
                             : '--'}
-                        </td>
+                        </td> */}
                         <td>
                           {item.plans?.length > 0 ? item.plans?.length : '0'}
                         </td>
