@@ -12,6 +12,7 @@
 // import ViewCarouselOutlinedIcon from '@mui/icons-material/ViewCarouselOutlined';
 // import WalletIcon from '@mui/icons-material/Wallet';
 import { Button } from '@mui/material';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 // import { useEffect, useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import Tooltip from '@mui/material/Tooltip';
@@ -773,11 +774,12 @@ function Sidebar() {
         <div className="basis-[20%]">
           <div className="flex flex-col items-center justify-center gap-2">
             <Button className="my-[8px] h-[50px] min-w-[50px] rounded-[28px] bg-transparent p-0">
-              <img
-                src={assets.images.avatar1}
+              <AccountCircleIcon color="success" className="text-[55px]" />
+              {/* <img
+                src={assets.images.avatarUser2}
                 alt="icon"
                 className="h-full w-full max-w-full object-contain"
-              />
+              /> */}
             </Button>
             {authState ? (
               <Button
