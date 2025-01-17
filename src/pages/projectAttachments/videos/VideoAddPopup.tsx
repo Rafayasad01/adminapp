@@ -45,7 +45,8 @@ function VideoAddPopup({
   const dataRole = useAppSelector(
     (state) => state?.persistedReducer?.roleState?.role?.permissions
   );
-  const [planFile, setPlanFile] = useState<any>(null);
+  // const [planFile, setPlanFile] = useState<any>(null);
+  const [planFiles, setPlanFiles] = useState<any>(null);
   const [projects, setProjects] = useState<any>([]);
   const [plans, setPlans] = useState<any>([]);
 
@@ -122,6 +123,7 @@ function VideoAddPopup({
       title: data.name,
       description: data.desc,
     };
+    // console.log('🚀 ~ onSubmit ~ obj:', obj);
     callback(obj);
   };
 
@@ -129,50 +131,92 @@ function VideoAddPopup({
     setOpenFormDialog(false);
   };
 
-  const handleFileChange = (onChange: any, event: any | undefined) => {
-    const selectedFile = event.target.files[0];
-    if (selectedFile) {
-      const fileType = selectedFile.type;
-      if (watch('type') === 'video') {
-        if (fileType === 'video/mp4') {
-          // clearErrors('file');
-          setPlanFile(selectedFile);
-          onChange(selectedFile);
-        } else {
-          setValue('file', null);
-          setIsNotify(true);
-          setNotifyMessage({
-            text: 'Only .mp4 video files are allowed',
-            type: 'error',
-          });
-        }
-      } else if (
-        fileType === 'image/jpeg' ||
-        fileType === 'image/png' ||
-        fileType === 'image/jpg'
+  // const handleFileChange = (onChange: any, event: any | undefined) => {
+  //   const selectedFile = event.target.files[0];
+  //   if (selectedFile) {
+  //     const fileType = selectedFile.type;
+  //     if (watch('type') === 'video') {
+  //       if (fileType === 'video/mp4') {
+  //         // clearErrors('file');
+  //         setPlanFile(selectedFile);
+  //         onChange(selectedFile);
+  //       } else {
+  //         setValue('file', null);
+  //         setIsNotify(true);
+  //         setNotifyMessage({
+  //           text: 'Only .mp4 video files are allowed',
+  //           type: 'error',
+  //         });
+  //       }
+  //     } else if (
+  //       fileType === 'image/jpeg' ||
+  //       fileType === 'image/png' ||
+  //       fileType === 'image/jpg'
+  //     ) {
+  //       setPlanFile(selectedFile);
+  //       onChange(selectedFile);
+  //     } else {
+  //       setIsNotify(true);
+  //       setNotifyMessage({
+  //         text: 'Only .jpeg, .jpg, .png image files are allowed',
+  //         type: 'error',
+  //       });
+  //     }
+  //   }
+  // };
+
+  // const handleFileOnClick = (event: any) => {
+  //   event.target.value = null;
+  //   setPlanFile(null);
+  //   setValue('file', '');
+  // };
+
+  const handleFileChange = (onChange: any, event: any) => {
+    const selectedFiles = Array.from(event.target.files);
+    const allowedImageTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+    const allowedVideoType = 'video/mp4';
+    const validFiles: any[] = [];
+
+    selectedFiles.forEach((file: any) => {
+      const fileType = file.type;
+      if (
+        allowedImageTypes.includes(fileType) ||
+        fileType === allowedVideoType
       ) {
-        setPlanFile(selectedFile);
-        onChange(selectedFile);
+        validFiles.push(file);
       } else {
         setIsNotify(true);
         setNotifyMessage({
-          text: 'Only .jpeg, .jpg, .png image files are allowed',
+          text: 'Only .jpeg, .jpg, .png images and .mp4 videos are allowed',
           type: 'error',
         });
       }
+    });
+
+    if (validFiles.length > 0) {
+      setPlanFiles((prevFiles: any) => [...prevFiles, ...validFiles]);
+      onChange(validFiles);
     }
   };
 
   const handleFileOnClick = (event: any) => {
     event.target.value = null;
-    setPlanFile(null);
-    setValue('file', '');
+    setPlanFiles([]);
   };
 
-  useEffect(() => {
-    setPlanFile(null);
-    setValue('file', '');
-  }, [watch('type')]);
+  const handleRemoveFile = (index: number, onChange: any) => {
+    setPlanFiles((prevFiles: any) => {
+      const updatedFiles = [...prevFiles];
+      updatedFiles.splice(index, 1);
+      onChange(updatedFiles);
+      return updatedFiles;
+    });
+  };
+
+  // useEffect(() => {
+  //   setPlanFile(null);
+  //   setValue('file', '');
+  // }, [watch('type')]);
 
   return (
     <Dialog
@@ -186,10 +230,10 @@ function VideoAddPopup({
       <div className="Content">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="FormHeader">
-            <span className="Title">Add Image / Video</span>
+            <span className="Title">Add Images / Videos</span>
           </div>
           <div className="FormBody mt-2">
-            <div className="FormFields">
+            <div className="FormField">
               <FormControl className="FormControl" variant="standard">
                 <label className="FormLabel">Name</label>
                 <Input
@@ -214,7 +258,7 @@ function VideoAddPopup({
                   <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
                 )}
               </FormControl>
-              <FormControl className="FormControl" variant="standard">
+              {/* <FormControl className="FormControl" variant="standard">
                 <CustomDropDown
                   validateRequired
                   id="type"
@@ -238,7 +282,7 @@ function VideoAddPopup({
                   inputTitle="Type"
                   defaultValue="Select Attachment Type"
                 />
-              </FormControl>
+              </FormControl> */}
             </div>
             <div className="FormField">
               <FormControl className="FormControl" variant="standard">
@@ -294,14 +338,76 @@ function VideoAddPopup({
             </div>
             <div className="FormField">
               <label className="FormLabel mt-2">
-                Upload {watch('type') === 'image' ? 'Image' : 'Video'}
+                Upload
                 <span className="SubLabel">
-                  {watch('type') === 'image'
-                    ? `( Image should be in JPG, JPEG, or PNG format )`
-                    : `( Video should be in MP4 format )`}
+                  ( Image should be in JPG, JPEG, or PNG format & Video should
+                  be in MP4 format )
                 </span>
               </label>
               <div className="ImageBox">
+                <Controller
+                  name="files"
+                  control={control}
+                  rules={{
+                    required: 'Required',
+                  }}
+                  render={({ field: { onChange } }) => (
+                    <>
+                      <input
+                        accept="image/jpeg,image/png,image/jpg,.mp4"
+                        style={{ display: 'none' }}
+                        id="raised-button-files"
+                        type="file"
+                        multiple
+                        onChange={(event) => handleFileChange(onChange, event)}
+                        onClick={handleFileOnClick}
+                      />
+                      <label
+                        htmlFor="raised-button-files"
+                        className="ImageLabel"
+                      >
+                        <Button component="span" className="ImageBtn">
+                          <FileUploadOutlinedIcon
+                            sx={{ marginRight: '0.5rem' }}
+                          />
+                          Upload
+                        </Button>
+                      </label>
+
+                      {planFiles && planFiles.length > 0 ? (
+                        <div className="ShowFilesBox mt-2 rounded bg-background">
+                          {planFiles.map((file: any, index: number) => (
+                            <div key={index} className="ShowFileItem">
+                              <label className="ShowFileLabel">
+                                {file.name}
+                              </label>
+                              <IconButton
+                                className="btn-dot"
+                                onClick={() =>
+                                  handleRemoveFile(index, onChange)
+                                }
+                              >
+                                <CloseOutlinedIcon
+                                  sx={{
+                                    color: '#1D1D1D',
+                                    fontSize: '1rem',
+                                    lineHeight: '1.5rem',
+                                  }}
+                                />
+                              </IconButton>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        ''
+                      )}
+                    </>
+                  )}
+                />
+                {errors.files && <ErrorSpanBox error={errors.files?.message} />}
+              </div>
+
+              {/* <div className="ImageBox">
                 <Controller
                   name="file"
                   control={control}
@@ -311,6 +417,7 @@ function VideoAddPopup({
                   render={({ field: { onChange } }) => (
                     <>
                       <input
+                        multiple
                         accept={`${
                           watch('type') === 'image'
                             ? 'image/jpeg,image/png,image/jpg'
@@ -362,7 +469,7 @@ function VideoAddPopup({
                   )}
                 />
                 {errors.file && <ErrorSpanBox error={errors.file?.message} />}
-              </div>
+              </div> */}
             </div>
           </div>
           <div className="FormFooter">

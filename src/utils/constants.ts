@@ -748,10 +748,6 @@ export const PROJECT_IMAGE_TYPE = [
     id: '3d',
     name: '3D render',
   },
-  {
-    id: 'other',
-    name: 'Other',
-  },
 ];
 
 export const CONSTRUCTION_TYPE = [

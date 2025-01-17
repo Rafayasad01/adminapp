@@ -191,7 +191,11 @@ function VideoPage({ projectId }: any) {
     // console.log('data==>', data);
     setIsLoader(true);
     const formData = new FormData();
-    if (data.file !== null) formData.append('file', data.file);
+    if (data?.files?.length > 0) {
+      data.files.forEach((file: any) => {
+        formData.append('file', file);
+      });
+    }
     formData.append('projectId', data.projectId);
     formData.append('day', data.day);
     formData.append('title', data.title);
@@ -207,9 +211,10 @@ function VideoPage({ projectId }: any) {
             text: item.data.message,
             type: 'success',
           });
-          setList([item.data.data, ...list]);
-          let newtotal = total;
-          setTotal((newtotal += 1));
+          const newList = item.data.data.list;
+          setList([...newList, ...list]);
+          const newtotal = item.data.data.total;
+          setTotal((prevT) => Number(prevT) + Number(newtotal));
         } else {
           setIsLoader(false);
           setIsNotify(true);

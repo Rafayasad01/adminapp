@@ -4,6 +4,7 @@ export interface ProjectAttachment {
   projectId: string;
   day: string;
   file: any;
+  files: any;
   type: string;
 }
 

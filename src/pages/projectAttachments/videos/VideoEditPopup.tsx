@@ -199,10 +199,10 @@ function VideoEditPopup({
       <div className="Content">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="FormHeader">
-            <span className="Title">Edit Video</span>
+            <span className="Title">Edit Image / Video</span>
           </div>
           <div className="FormBody mt-2">
-            <div className="FormFields">
+            <div className="FormField">
               <FormControl className="FormControl" variant="standard">
                 <label className="FormLabel">Name</label>
                 <Input
@@ -228,7 +228,7 @@ function VideoEditPopup({
                   <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
                 )}
               </FormControl>
-              <FormControl className="FormControl" variant="standard">
+              {/* <FormControl className="FormControl" variant="standard">
                 <CustomDropDown
                   validateRequired
                   id="type"
@@ -252,7 +252,7 @@ function VideoEditPopup({
                   inputTitle="Type"
                   defaultValue="Select Attachment Type"
                 />
-              </FormControl>
+              </FormControl> */}
             </div>
             <div className="FormField">
               <FormControl className="FormControl" variant="standard">
@@ -375,11 +375,10 @@ function VideoEditPopup({
             </div> */}
             <div className="FormField">
               <label className="FormLabel mt-2">
-                Upload {watch('type') === 'image' ? 'Image' : 'Video'}
+                Update Image / Video
                 <span className="SubLabel">
-                  {watch('type') === 'image'
-                    ? `( Image should be in JPG, JPEG, or PNG format )`
-                    : `( Video should be in MP4 format )`}
+                  ( Image should be in JPG, JPEG, or PNG format & Video should
+                  be in MP4 format )
                 </span>
               </label>
               <div className="ImageBox">
@@ -389,11 +388,7 @@ function VideoEditPopup({
                   render={({ field: { onChange } }) => (
                     <>
                       <input
-                        accept={`${
-                          watch('type') === 'image'
-                            ? 'image/jpeg,image/png,image/jpg'
-                            : '.mp4'
-                        }`}
+                        accept="image/jpeg,image/png,image/jpg,.mp4"
                         style={{ display: 'none' }}
                         id="raised-button-video"
                         type="file"
