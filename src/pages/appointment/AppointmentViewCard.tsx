@@ -133,7 +133,7 @@ const AppointmentViewCard = ({
               type: 'info',
             });
           }}
-          className="mb-2 mt-3 flex w-[30%] cursor-pointer items-center justify-center rounded bg-primary p-1 text-sm text-white shadow"
+          className="mb-2 mt-3 flex w-[50%] cursor-pointer items-center justify-center rounded bg-primary p-1 text-sm text-white shadow"
         >
           <span className="px-2 text-xs">Paid</span>
         </div>
@@ -141,7 +141,7 @@ const AppointmentViewCard = ({
     }
     if (data?.status === APPOINTMENT_STATUS.COMPLETED) {
       return (
-        <div className="mt-3 flex items-center justify-between">
+        <div className="w-full">
           <div
             onClick={() => {
               setIsNotify(true);
@@ -150,32 +150,10 @@ const AppointmentViewCard = ({
                 type: 'success',
               });
             }}
-            className="mb-2 mt-3 flex w-[30%] cursor-pointer items-center justify-center rounded bg-primary p-1 text-sm text-white shadow"
+            className="mb-2 mt-3 flex w-[50%] cursor-pointer items-center justify-center rounded bg-primary p-1 text-sm text-white shadow"
           >
             <span className="px-2 text-xs">Paid</span>
           </div>
-          {data?.wallet === null && data?.isAppUser ? (
-            <div className="flex">
-              <CustomButton
-                // sx={{
-                //   height: '20px',
-                //   // width: '20px',
-                // }}
-                buttonType="button"
-                title="Wallet"
-                icon={<WalletIcon />}
-                className="btn-black-outline btn-icon"
-                onclick={handleClickPop}
-              />
-            </div>
-          ) : (
-            data?.isAppUser && (
-              <div>
-                <WalletIcon className="mx-1 text-primary" fontSize="small" />
-                <span className="text-xs">{`${data?.wallet?.balance} ${CURRENCY_PREFIX}`}</span>
-              </div>
-            )
-          )}
         </div>
       );
     }
@@ -183,7 +161,7 @@ const AppointmentViewCard = ({
       return (
         <div
           onClick={() => setPaidDialogOpen(true)}
-          className="mb-2 mt-3 flex w-[30%] cursor-pointer items-center justify-center rounded bg-green-500 p-1 text-sm text-white shadow"
+          className="mb-2 mt-3 flex w-[50%] cursor-pointer items-center justify-center rounded bg-green-500 p-1 text-sm text-white shadow"
         >
           <CheckCircleOutlineIcon fontSize="inherit" className="mx-1" />
           <span>Paid</span>
@@ -199,7 +177,7 @@ const AppointmentViewCard = ({
             type: 'info',
           });
         }}
-        className="mb-2 mt-3 flex w-[30%] cursor-pointer items-center justify-center rounded bg-primary p-1 text-sm text-white shadow"
+        className="mb-2 mt-3 flex w-[50%] cursor-pointer items-center justify-center rounded bg-primary p-1 text-sm text-white shadow"
       >
         <span className="px-2 text-xs">Paid</span>
       </div>
@@ -524,7 +502,40 @@ const AppointmentViewCard = ({
                   />
                 )}
               </IconButton>
-              {showPaidHandler()}
+              <div className="mt-2 flex justify-between">
+                <div className="flex w-[50%] items-center justify-start">
+                  {showPaidHandler()}
+                </div>
+                <div className="flex w-[50%] items-center justify-end">
+                  {data?.wallet === null ? (
+                    <div className="flex items-center justify-center">
+                      <CustomButton
+                        sx={
+                          {
+                            // height: '40px',
+                            // width: '20px',
+                          }
+                        }
+                        buttonType="button"
+                        title="Wallet"
+                        icon={<WalletIcon />}
+                        className="btn-black-outline btn-icon"
+                        onclick={handleClickPop}
+                      />
+                    </div>
+                  ) : (
+                    data?.isAppUser && (
+                      <div>
+                        <WalletIcon
+                          className="mx-1 text-primary"
+                          fontSize="small"
+                        />
+                        <span className="text-xs">{`${data?.wallet?.balance} ${CURRENCY_PREFIX}`}</span>
+                      </div>
+                    )
+                  )}
+                </div>
+              </div>
             </div>
           </div>
           <div className="">

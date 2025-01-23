@@ -23,7 +23,14 @@ import Paper from '@mui/material/Paper';
 import dayjs from 'dayjs';
 // import timezone from 'dayjs/plugin/timezone';
 import weekOfYear from 'dayjs/plugin/weekOfYear';
-import React, { memo, useCallback, useEffect, useRef, useState } from 'react';
+import React, {
+  memo,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 // import moment from 'moment';
 import Loader from '../../components/common/Loader';
 import SwiperComponent from '../../components/common/Swiper';
@@ -88,7 +95,7 @@ const AllAppointment = ({
   const currentWeekRef = useRef(dayjs().week());
   const currentMonthRef: any = useRef();
   const currentViewRef = useRef('Vertical Orientation');
-  const [currentWeek, setCurrentWeek] = useState<any>(dayjs().week());
+  const [_currentWeek, setCurrentWeek] = useState<any>(dayjs().week());
   // const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
@@ -139,6 +146,7 @@ const AllAppointment = ({
               id: item.id,
               status: item.status,
               code: item.code,
+              itemDetails: item.items,
             };
           });
           setData(structuredData);
@@ -171,22 +179,29 @@ const AllAppointment = ({
         ALL_PERMISSIONS.storeAppointment.viewAppointment
       )
     ) {
-      getAllAppointments(currentWeek, 'week');
-      const intervalId = setInterval(() => {
-        getAllAppointments(
-          currentViewRef.current === 'Month'
-            ? currentMonthRef.current
-            : currentWeekRef.current,
-          currentViewRef.current === 'Month' ? 'Month' : 'week'
-        );
-      }, 600000);
-      return () => clearInterval(intervalId);
+      getAllAppointments(
+        currentViewRef.current === 'Month'
+          ? currentMonthRef.current
+          : currentWeekRef.current,
+        currentViewRef.current === 'Month' ? 'Month' : 'week'
+      );
+      // getAllAppointments(currentWeek, 'week');
+      // const intervalId = setInterval(() => {
+      //   getAllAppointments(
+      //     currentViewRef.current === 'Month'
+      //       ? currentMonthRef.current
+      //       : currentWeekRef.current,
+      //     currentViewRef.current === 'Month' ? 'Month' : 'week'
+      //   );
+      // }, 600000);
+      // return () => clearInterval(intervalId);
+    } else {
+      setIsNotify(true);
+      setNotifyMessage({
+        text: 'You are not authorized to view this page.',
+        type: 'error',
+      });
     }
-    setIsNotify(true);
-    setNotifyMessage({
-      text: 'You are not authorized to view this page.',
-      type: 'error',
-    });
   }, []);
 
   const resources: any = [
@@ -366,16 +381,41 @@ const AllAppointment = ({
   };
 
   const AppointmentContent = ({ ...restProps }: any) => {
+    const status = useMemo(() => {
+      const newItem = restProps.data.itemDetails.find(
+        (item: any) => item.status === APPOINTMENT_STATUS.NEW
+      );
+      if (newItem) {
+        return newItem.status;
+      }
+      const newItem2 = restProps.data.itemDetails.find(
+        (item: any) =>
+          item.status === APPOINTMENT_STATUS.PROCESSING ||
+          item.status === APPOINTMENT_STATUS.DONE
+      );
+      if (newItem2) {
+        return APPOINTMENT_STATUS.PROCESSING;
+      }
+      const newItem3 = restProps.data.itemDetails.find(
+        (item: any) => item.status === APPOINTMENT_STATUS.COMPLETED
+      );
+      if (newItem3) {
+        return newItem3.status;
+      }
+      return APPOINTMENT_STATUS.MISSED;
+    }, [restProps.data]);
+
     if (!restProps.data) {
-      return null; // or handle the case where data is undefined
+      return null;
     }
     const startDate = restProps?.data?.startDate;
     const endDate = restProps?.data?.endDate;
     const sdformat = dayjs(startDate);
     const edformat = dayjs(endDate);
+
     return (
       <Appointments.AppointmentContent
-        className={`custom-appo ${appColor(restProps.data.status)}`}
+        className={`custom-appo ${appColor(status)}`}
         {...restProps}
       >
         <div className="w-full">

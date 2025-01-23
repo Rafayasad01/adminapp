@@ -109,18 +109,26 @@ const AdminDashboardTopServices = () => {
           Most Ordered Services
         </span>
       </div>
-      <Bar data={data} options={options} height={140} />
-      <div className="mt-6 flex justify-center gap-4">
-        {services.map((_, index) => (
-          <div className="flex items-center" key={index}>
-            <span
-              style={{ backgroundColor: colors[index % colors.length] }}
-              className="mx-2 inline-block h-[10px] w-[10px] rounded-full"
-            />
-            <span className="text-xs font-semibold">{_.service}</span>
+      {services?.length ? (
+        <>
+          <Bar data={data} options={options} height={140} />
+          <div className="mt-6 flex justify-center gap-4">
+            {services.map((_, index) => (
+              <div className="flex items-center" key={index}>
+                <span
+                  style={{ backgroundColor: colors[index % colors.length] }}
+                  className="mx-2 inline-block h-[10px] w-[10px] rounded-full"
+                />
+                <span className="text-xs font-semibold">{_.service}</span>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
+        </>
+      ) : (
+        <div className="flex h-[70%] items-center justify-center">
+          No Services Available
+        </div>
+      )}
     </>
   );
 };

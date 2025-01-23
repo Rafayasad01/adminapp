@@ -8,6 +8,7 @@ import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
 import StarIcon from '@mui/icons-material/Star';
 import EditIcon from '@mui/icons-material/Edit';
 import HistoryIcon from '@mui/icons-material/History';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
 // import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import AccordionSummary from '@mui/material/AccordionSummary';
@@ -48,6 +49,7 @@ AccordionsProps) {
     null
   );
   const [serviceId, setServiceId] = React.useState<string>('');
+  const [staffId, setStaffId] = React.useState<string>('');
   const handleClickPop = (
     event: React.MouseEvent<HTMLButtonElement>,
     id: string
@@ -66,10 +68,14 @@ AccordionsProps) {
 
   const [appointmentDataById, setAppointmentDataById] = React.useState();
   const [expanded, setExpanded] = React.useState<string | false>(`panel0`);
+  const [doneDialogOpen, setDoneDialogOpen] = React.useState<boolean>(false);
   const [cancelDialogOpen, setCancelDialogOpen] =
     React.useState<boolean>(false);
   const [dialogText] = React.useState<any>(
     'Are you sure you want to delete this Appointment ?'
+  );
+  const [doneDialogText] = React.useState<any>(
+    'Are you sure you want to done this Appointment ?'
   );
   const [openEditFormDialog, setOpenEditFormDialog] = React.useState(false);
   const [isNotify, setIsNotify] = React.useState(false);
@@ -200,6 +206,57 @@ AccordionsProps) {
     }
   };
 
+  const onDoneAppointment = async (appointmentId: string, sId: string) => {
+    try {
+      setStatusLoader(true);
+      const notifyData: any = {};
+      if (
+        listingRolePermission(dataRole, ALL_PERMISSIONS.storeNotification.sent)
+      ) {
+        notifyData.isNotification = true;
+      }
+      const [doneStatusResponse] = await Promise.all([
+        storeAppointmentService.appointmentDone(appointmentId, sId, notifyData),
+      ]);
+      if (doneStatusResponse.data.success) {
+        setIsLoader(false);
+        setStatusLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: doneStatusResponse.data.message,
+          type: 'success',
+        });
+        setData((newObj: any) => {
+          return {
+            ...newObj,
+            services: newObj.services.map((el: any) => {
+              if (el.id === doneStatusResponse.data.data.id) {
+                el.status = doneStatusResponse.data.data.status;
+              }
+              return el;
+            }),
+          };
+        });
+      } else {
+        setIsLoader(false);
+        setStatusLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: doneStatusResponse.data.message,
+          type: 'error',
+        });
+      }
+    } catch (error: Error | any) {
+      setIsLoader(false);
+      setStatusLoader(false);
+      setIsNotify(true);
+      setNotifyMessage({
+        text: error.message,
+        type: 'error',
+      });
+    }
+  };
+
   const updateAppointment = async (updateAppointmentData: any) => {
     setIsLoader(true);
     const appId = updateAppointmentData.id;
@@ -248,12 +305,6 @@ AccordionsProps) {
       });
   };
 
-  const getDataById = (updateAppointmentId: string) => {
-    const appointmentData = data?.services?.find(
-      (item: any) => item.id === updateAppointmentId
-    );
-    setAppointmentDataById(appointmentData);
-  };
   const isStatusProcess = async (appointmentId: string) => {
     try {
       setStatusLoader(true);
@@ -302,6 +353,13 @@ AccordionsProps) {
         type: 'error',
       });
     }
+  };
+
+  const getDataById = (updateAppointmentId: string) => {
+    const appointmentData = data?.services?.find(
+      (item: any) => item.id === updateAppointmentId
+    );
+    setAppointmentDataById(appointmentData);
   };
 
   // const isStatusDone = async (appointmentId: string) => {
@@ -360,14 +418,16 @@ AccordionsProps) {
     onDeleteAppointment(serviceId);
   };
 
+  const statusDoneHandler = () => {
+    onDoneAppointment(serviceId, staffId);
+  };
+
   const handleEmpSpecific = (employeeid: string) => {
     if (specificEmpAppointmentData.priorityId !== employeeid) {
       return true;
     }
     return false;
   };
-
-  console.log('Data', data);
 
   return (
     <>
@@ -516,20 +576,24 @@ AccordionsProps) {
                               {/* //   ) */}
                               {/* )} */}
                             </IconButton>
-                            <span className="flex justify-center px-[1px] text-sm">
-                              {statusLoader ? (
-                                <CircularProgress size={15} color="inherit" />
-                              ) : item?.status === APPOINTMENT_STATUS.NEW ? (
-                                'Process'
-                              ) : item?.status ===
-                                APPOINTMENT_STATUS.PROCESSING ? (
-                                'Processing'
-                              ) : item?.status === APPOINTMENT_STATUS.DONE ? (
-                                'Done'
-                              ) : (
-                                ''
-                              )}
-                            </span>
+                            {statusLoader ? (
+                              <CircularProgress size={15} color="inherit" />
+                            ) : (
+                              <span className="flex justify-center px-[1px] text-sm">
+                                {statusLoader ? (
+                                  <CircularProgress size={15} color="inherit" />
+                                ) : item?.status === APPOINTMENT_STATUS.NEW ? (
+                                  'Process'
+                                ) : item?.status ===
+                                  APPOINTMENT_STATUS.PROCESSING ? (
+                                  'Processing'
+                                ) : item?.status === APPOINTMENT_STATUS.DONE ? (
+                                  'Done'
+                                ) : (
+                                  ''
+                                )}
+                              </span>
+                            )}
                           </div>
                           {/* {item?.status === APPOINTMENT_STATUS.PROCESSING && (
                             <div
@@ -565,6 +629,26 @@ AccordionsProps) {
                       )}
                       <div>
                         <IconButton
+                          title="Done"
+                          disabled={
+                            item?.status === APPOINTMENT_STATUS.CANCELLED ||
+                            item?.status === APPOINTMENT_STATUS.COMPLETED ||
+                            item?.status === APPOINTMENT_STATUS.DONE ||
+                            item?.status === APPOINTMENT_STATUS.RESCHEDULE ||
+                            item?.status === APPOINTMENT_STATUS.MISSED ||
+                            item?.status === APPOINTMENT_STATUS.NEW
+                          }
+                          className="icon-btn mr-1.5 mt-3 p-0 text-primary"
+                          onClick={() => {
+                            setDoneDialogOpen(true);
+                            setServiceId(item.id);
+                            setStaffId(item.storeEmployee.id);
+                          }}
+                        >
+                          <CheckCircleIcon />
+                        </IconButton>
+                        <IconButton
+                          title="Edit"
                           disabled={
                             item?.status === APPOINTMENT_STATUS.CANCELLED ||
                             item?.status === APPOINTMENT_STATUS.COMPLETED ||
@@ -600,6 +684,7 @@ AccordionsProps) {
                           <EditIcon />
                         </IconButton>
                         <IconButton
+                          title="Delete"
                           disabled={
                             item?.status === APPOINTMENT_STATUS.CANCELLED ||
                             item?.status === APPOINTMENT_STATUS.COMPLETED ||
@@ -630,6 +715,7 @@ AccordionsProps) {
                           <DeleteIcon />
                         </IconButton>
                         <IconButton
+                          title="Reschedule"
                           disabled={
                             item?.status === APPOINTMENT_STATUS.CANCELLED ||
                             item?.status === APPOINTMENT_STATUS.COMPLETED ||
@@ -786,6 +872,15 @@ AccordionsProps) {
             setOpen={setCancelDialogOpen}
             dialogText={dialogText}
             callback={statusCancelHandler}
+          />
+        )}
+        {doneDialogOpen && (
+          <PermissionPopup
+            type="thumb"
+            open={doneDialogOpen}
+            setOpen={setDoneDialogOpen}
+            dialogText={doneDialogText}
+            callback={statusDoneHandler}
           />
         )}
       </div>
