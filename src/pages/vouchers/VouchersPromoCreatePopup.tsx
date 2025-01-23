@@ -303,13 +303,21 @@ function VouchersPromoCreatePopup({
                   <label className="FormLabel">Max Redeem</label>
                   <Input
                     {...register('maxRedeem', {
-                      required:
-                        watch('isUnlimitedRedeem') === false
-                          ? 'Max Redeem is required in numbers'
-                          : false,
-                      validate: (value: any) =>
-                        watch('isUnlimitedRedeem') === false &&
-                        VALIDATE_NON_NEGATIVE_NUM_AND_CHECK_LENGTH(value, 0),
+                      required: !watch('isUnlimitedRedeem')
+                        ? 'Max Redeem is required in numbers'
+                        : false,
+                      validate: (value: any) => {
+                        if (watch('isUnlimitedRedeem')) {
+                          return true;
+                        }
+                        return (
+                          VALIDATE_NON_NEGATIVE_NUM_AND_CHECK_LENGTH(
+                            value,
+                            0
+                          ) ||
+                          'Max Redeem must be a non-negative number and meet length requirements'
+                        );
+                      },
                     })}
                     disabled={watch('isUnlimitedRedeem')}
                     className="FormInput"
