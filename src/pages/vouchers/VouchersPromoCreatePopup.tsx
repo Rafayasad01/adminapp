@@ -308,6 +308,7 @@ function VouchersPromoCreatePopup({
                           ? 'Max Redeem is required in numbers'
                           : false,
                       validate: (value: any) =>
+                        watch('isUnlimitedRedeem') === false &&
                         VALIDATE_NON_NEGATIVE_NUM_AND_CHECK_LENGTH(value, 0),
                     })}
                     disabled={watch('isUnlimitedRedeem')}
@@ -372,7 +373,8 @@ function VouchersPromoCreatePopup({
                           watch('isUnlimitedRedeem') === true &&
                           'Max users redeem is required in numbers',
                         validate: (value: any) =>
-                          VALIDATE_NON_NEGATIVE_NUM(value),
+                          watch('isUnlimitedRedeem') === true &&
+                          VALIDATE_NON_NEGATIVE_NUM_AND_CHECK_LENGTH(value, 0),
                       })}
                       type="number"
                       id="maxUserRedeem"
