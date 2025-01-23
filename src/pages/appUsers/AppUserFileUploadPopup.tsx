@@ -71,18 +71,13 @@ function StaffFileUploadPopup({
     const selectedFile = event.target.files[0];
     if (selectedFile) {
       const fileType = selectedFile.type;
-      if (
-        fileType === mimiType.wordsheet ||
-        fileType === mimiType.csv ||
-        fileType === mimiType.excel ||
-        fileType === mimiType.excelsheet
-      ) {
+      if (fileType === mimiType.csv) {
         setStaffFile(selectedFile);
         onChange(selectedFile);
       } else {
         setIsNotify(true);
         setNotifyMessage({
-          text: 'Only .xls, .csv and .xlsx files are allowed',
+          text: 'Only .csv files are allowed',
           type: 'error',
         });
       }
@@ -113,9 +108,7 @@ function StaffFileUploadPopup({
             <div className="FormField">
               <label className="FormLabel mt-2">
                 Upload File
-                <span className="SubLabel">
-                  ( File should be in XLS, CSV, or XLSX format )
-                </span>
+                <span className="SubLabel">( File should be in CSV )</span>
               </label>
               <div className="ImageBox">
                 <Controller
@@ -125,7 +118,7 @@ function StaffFileUploadPopup({
                   render={({ field: { onChange } }) => (
                     <>
                       <input
-                        accept=".xls,.xlsx,.csv"
+                        accept=".csv"
                         style={{ display: 'none' }}
                         id="raised-button-docs"
                         type="file"
