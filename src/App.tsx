@@ -36,7 +36,7 @@ function App() {
     const idleTime = dayjs.duration(15, 'minutes').asMilliseconds();
     monitorIdleTime(intervalTime, idleTime, () => {
       localStorage.clear();
-      window.location.replace('/');
+      window.location.replace('/admin');
     });
   }, []);
 
