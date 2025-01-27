@@ -361,6 +361,38 @@ const AppointmentViewCard = ({
     return gtAppAmount;
   };
 
+  const handleCheckAllServices = (services: any) => {
+    console.log('service', services);
+    const allRescheduled = services.every(
+      (service: any) => service.status === APPOINTMENT_STATUS.RESCHEDULE
+    );
+    const allCancelled = services.every(
+      (service: any) => service.status === APPOINTMENT_STATUS.CANCELLED
+    );
+    const allMissed = services.every(
+      (service: any) => service.status === APPOINTMENT_STATUS.MISSED
+    );
+    const allRescheduledOrMissedCancelled = services.every(
+      (service: any) =>
+        service.status === APPOINTMENT_STATUS.RESCHEDULE ||
+        service.status === APPOINTMENT_STATUS.MISSED ||
+        service.status === APPOINTMENT_STATUS.CANCELLED
+    );
+    if (allRescheduled) {
+      return allRescheduled;
+    }
+    if (allCancelled) {
+      return allCancelled;
+    }
+    if (allMissed) {
+      return allMissed;
+    }
+    if (allRescheduledOrMissedCancelled) {
+      return allRescheduledOrMissedCancelled;
+    }
+    return false;
+  };
+
   // console.log('appointmentData', taxAmount());
 
   useEffect(() => {
@@ -507,7 +539,11 @@ const AppointmentViewCard = ({
                   {showPaidHandler()}
                 </div>
                 <div className="flex w-[50%] items-center justify-end">
-                  {data?.wallet === null ? (
+                  {handleCheckAllServices(data.services) ? (
+                    ''
+                  ) : data?.wallet === null &&
+                    data?.isAppUser &&
+                    !handleCheckAllServices(data.services) ? (
                     <div className="flex items-center justify-center">
                       <CustomButton
                         sx={

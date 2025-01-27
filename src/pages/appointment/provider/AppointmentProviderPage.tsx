@@ -240,7 +240,6 @@ function AppointmentProviderPage() {
       placeholder: 'Enter password',
       register,
       error: errors.password,
-      notRequired: true,
       type: 'password',
       setShowPassword,
       onclick: handleClickShowPassword,

@@ -159,7 +159,11 @@ AccordionsProps) {
       setIsLoader(true);
       const cancelledData: any = {};
       if (
-        listingRolePermission(dataRole, ALL_PERMISSIONS.storeNotification.sent)
+        listingRolePermission(
+          dataRole,
+          ALL_PERMISSIONS.storeNotification.sent
+        ) &&
+        data.isAppUser
       ) {
         cancelledData.isNotification = true;
       }
