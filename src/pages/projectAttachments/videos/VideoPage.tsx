@@ -27,6 +27,7 @@ import VideoAddPopup from './VideoAddPopup';
 import VideoEditPopup from './VideoEditPopup';
 import ActionMenu from '../../../components/common/ActionMenu';
 import PermissionPopup from '../../../utils/PermissionPopup';
+import ImagePreview from '../../../components/common/PreviewBox';
 
 function VideoPage({ projectId }: any) {
   const authState: any = useAppSelector((state) => state?.authState);
@@ -54,9 +55,17 @@ function VideoPage({ projectId }: any) {
   const [notifyMessage, setNotifyMessage] = React.useState({});
   const [dialogText] = useState<any>('Are you sure you want to delete ?');
 
+  const [isPreview, setIsPreview] = useState<{
+    state: boolean;
+    source: string;
+  }>({ state: false, source: '' });
+
   const handleFormClickOpen = () => {
     if (
-      listingRolePermission(dataRole, ALL_PERMISSIONS.storePlans.addVideoPlans)
+      listingRolePermission(
+        dataRole,
+        ALL_PERMISSIONS.storePlans.addProjectAttachments
+      )
     ) {
       setOpenFormDialog(true);
     } else {
@@ -99,7 +108,10 @@ function VideoPage({ projectId }: any) {
 
   useEffect(() => {
     if (
-      listingRolePermission(dataRole, ALL_PERMISSIONS.storePlans.viewVideoPlans)
+      listingRolePermission(
+        dataRole,
+        ALL_PERMISSIONS.storePlans.viewProjectAttachments
+      )
     ) {
       storeAttachmentService
         .getListProjectAttachmentService({
@@ -320,7 +332,7 @@ function VideoPage({ projectId }: any) {
       if (
         listingRolePermission(
           dataRole,
-          ALL_PERMISSIONS.storePlans.editVideoPlans
+          ALL_PERMISSIONS.storePlans.editProjectAttachments
         )
       ) {
         const editFormDatas = list?.find(
@@ -340,7 +352,7 @@ function VideoPage({ projectId }: any) {
       if (
         listingRolePermission(
           dataRole,
-          ALL_PERMISSIONS.storePlans.deleteVideoPlans
+          ALL_PERMISSIONS.storePlans.deleteProjectAttachments
         )
       ) {
         setCancelDialogOpen(true);
@@ -363,6 +375,13 @@ function VideoPage({ projectId }: any) {
         setIsOpen={setIsNotify}
         displayMessage={notifyMessage}
       />
+      {isPreview?.state && (
+        <ImagePreview
+          open={isPreview.state}
+          setOpen={setIsPreview}
+          src={isPreview.source}
+        />
+      )}
       <div className="cs-dialog container mx-auto mt-2 w-full px-3">
         <div className="w-full rounded-lg bg-white">
           <div className="grid grid-cols-12 px-4 py-5">
@@ -447,14 +466,19 @@ function VideoPage({ projectId }: any) {
                             )
                           ) : item.attachmentType === 'image' &&
                             item.filePath ? (
-                            <button>
-                              <a href={item.filePath} rel="noopener noreferrer">
-                                <img
-                                  className="w-[130px] cursor-pointer rounded-[20px] object-contain"
-                                  src={item.filePath}
-                                  alt={item.title}
-                                />
-                              </a>
+                            <button
+                              onClick={() =>
+                                setIsPreview({
+                                  state: true,
+                                  source: item.filePath,
+                                })
+                              }
+                            >
+                              <img
+                                className="w-[130px] cursor-pointer rounded-[20px] object-contain"
+                                src={item.filePath}
+                                alt={item.title}
+                              />
                             </button>
                           ) : (
                             '--'

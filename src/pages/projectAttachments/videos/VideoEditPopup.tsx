@@ -70,7 +70,7 @@ function VideoEditPopup({
       if (
         listingRolePermission(
           dataRole,
-          ALL_PERMISSIONS.storePlans.editVideoPlans
+          ALL_PERMISSIONS.storePlans.viewProjectAttachments
         )
       ) {
         try {
@@ -89,7 +89,6 @@ function VideoEditPopup({
         }
       }
     };
-    console.log('🚀 ~ fetchProjects ~ formData:', formData);
 
     fetchProjects();
   }, []);
@@ -99,7 +98,7 @@ function VideoEditPopup({
       if (
         listingRolePermission(
           dataRole,
-          ALL_PERMISSIONS.storePlans.editVideoPlans
+          ALL_PERMISSIONS.storePlans.viewProjectAttachments
         ) &&
         watch('projectId') !== 'none' &&
         watch('projectId') !== undefined

@@ -63,9 +63,7 @@ function QuotationSlipPage() {
   const [projects, setProjects] = useState<any>([]);
 
   const handleFormClickOpen = () => {
-    if (
-      listingRolePermission(dataRole, ALL_PERMISSIONS.storePlans.addImagesPlans)
-    ) {
+    if (listingRolePermission(dataRole, ALL_PERMISSIONS.quotations.add)) {
       setOpenFormDialog(true);
     } else {
       setIsNotify(true);
@@ -81,12 +79,7 @@ function QuotationSlipPage() {
 
   useEffect(() => {
     const fetchProjects = async () => {
-      if (
-        listingRolePermission(
-          dataRole,
-          ALL_PERMISSIONS.storePlans.addImagesPlans
-        )
-      ) {
+      if (listingRolePermission(dataRole, ALL_PERMISSIONS.quotations.add)) {
         try {
           const projectResponse =
             await storeAttachmentService.getListProjectLovService(
@@ -109,12 +102,7 @@ function QuotationSlipPage() {
   }, []);
 
   useEffect(() => {
-    if (
-      listingRolePermission(
-        dataRole,
-        ALL_PERMISSIONS.storePlans.viewImagesPlans
-      )
-    ) {
+    if (listingRolePermission(dataRole, ALL_PERMISSIONS.quotations.view)) {
       adminProjectQuotation
         .getQuotationService({
           type: 'QUOTATION',
@@ -300,12 +288,7 @@ function QuotationSlipPage() {
 
   const manuHandler = (option: string) => {
     if (option === 'Edit') {
-      if (
-        listingRolePermission(
-          dataRole,
-          ALL_PERMISSIONS.storePlans.editImagesPlans
-        )
-      ) {
+      if (listingRolePermission(dataRole, ALL_PERMISSIONS.quotations.edit)) {
         const editFormDatas = list?.find(
           (el: any) => el.id === actionMenuItemid
         );
@@ -320,12 +303,7 @@ function QuotationSlipPage() {
         });
       }
     } else if (option === 'Delete') {
-      if (
-        listingRolePermission(
-          dataRole,
-          ALL_PERMISSIONS.storePlans.deleteImagesPlans
-        )
-      ) {
+      if (listingRolePermission(dataRole, ALL_PERMISSIONS.quotations.delete)) {
         setCancelDialogOpen(true);
       } else {
         setIsNotify(true);

@@ -28,6 +28,7 @@ import ImageAddPopup from './ImageAddPopup';
 import ImageEditPopup from './ImageEditPopup';
 import ActionMenu from '../../../components/common/ActionMenu';
 import PermissionPopup from '../../../utils/PermissionPopup';
+import ImagePreview from '../../../components/common/PreviewBox';
 // import assets from '../../../assets';
 
 function ImagePage({ projectId }: any) {
@@ -58,9 +59,17 @@ function ImagePage({ projectId }: any) {
     'Are you sure you want to delete this Render ?'
   );
 
+  const [isPreview, setIsPreview] = useState<{
+    state: boolean;
+    source: string;
+  }>({ state: false, source: '' });
+
   const handleFormClickOpen = () => {
     if (
-      listingRolePermission(dataRole, ALL_PERMISSIONS.storePlans.addImagesPlans)
+      listingRolePermission(
+        dataRole,
+        ALL_PERMISSIONS.storePlans.addProjectAttachments
+      )
     ) {
       setOpenFormDialog(true);
     } else {
@@ -105,7 +114,7 @@ function ImagePage({ projectId }: any) {
     if (
       listingRolePermission(
         dataRole,
-        ALL_PERMISSIONS.storePlans.viewImagesPlans
+        ALL_PERMISSIONS.storePlans.viewProjectAttachments
       )
     ) {
       storeAttachmentService
@@ -219,7 +228,7 @@ function ImagePage({ projectId }: any) {
             text: item.data.message,
             type: 'success',
           });
-          setList([item.data.data, ...list]);
+          setList([...item.data.data.list, ...list]);
           let newtotal = total;
           setTotal((newtotal += 1));
         } else {
@@ -330,7 +339,7 @@ function ImagePage({ projectId }: any) {
       if (
         listingRolePermission(
           dataRole,
-          ALL_PERMISSIONS.storePlans.editImagesPlans
+          ALL_PERMISSIONS.storePlans.editProjectAttachments
         )
       ) {
         const editFormDatas = list?.find(
@@ -350,7 +359,7 @@ function ImagePage({ projectId }: any) {
       if (
         listingRolePermission(
           dataRole,
-          ALL_PERMISSIONS.storePlans.deleteImagesPlans
+          ALL_PERMISSIONS.storePlans.deleteProjectAttachments
         )
       ) {
         setCancelDialogOpen(true);
@@ -373,6 +382,13 @@ function ImagePage({ projectId }: any) {
         setIsOpen={setIsNotify}
         displayMessage={notifyMessage}
       />
+      {isPreview?.state && (
+        <ImagePreview
+          open={isPreview.state}
+          setOpen={setIsPreview}
+          src={isPreview.source}
+        />
+      )}
       <div className="cs-dialog container mx-auto mt-2 w-full px-3">
         <div className="w-full rounded-lg bg-white">
           <div className="grid grid-cols-12 px-4 py-5">
@@ -457,17 +473,19 @@ function ImagePage({ projectId }: any) {
                               )
                             ) : item.attachmentType === 'image' &&
                               item.filePath ? (
-                              <button>
-                                <a
-                                  href={item.filePath}
-                                  rel="noopener noreferrer"
-                                >
-                                  <img
-                                    className="w-[25px] cursor-pointer  object-contain"
-                                    src={item.filePath}
-                                    alt={item.title}
-                                  />
-                                </a>
+                              <button
+                                onClick={() =>
+                                  setIsPreview({
+                                    state: true,
+                                    source: item.filePath,
+                                  })
+                                }
+                              >
+                                <img
+                                  className="w-[25px] cursor-pointer  object-contain"
+                                  src={item.filePath}
+                                  alt={item.title}
+                                />
                               </button>
                             ) : (
                               '--'

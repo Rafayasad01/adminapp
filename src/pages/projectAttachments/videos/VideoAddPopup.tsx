@@ -64,7 +64,7 @@ function VideoAddPopup({
       if (
         listingRolePermission(
           dataRole,
-          ALL_PERMISSIONS.storePlans.addVideoPlans
+          ALL_PERMISSIONS.storePlans.viewProjectAttachments
         )
       ) {
         try {
@@ -93,7 +93,7 @@ function VideoAddPopup({
       if (
         listingRolePermission(
           dataRole,
-          ALL_PERMISSIONS.storePlans.addVideoPlans
+          ALL_PERMISSIONS.storePlans.viewProjectAttachments
         ) &&
         watch('projectId') !== 'none' &&
         watch('projectId') !== undefined

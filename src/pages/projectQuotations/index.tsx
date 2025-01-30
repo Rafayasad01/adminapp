@@ -20,24 +20,15 @@ function ProjectQuotationsPage() {
   };
 
   useEffect(() => {
-    if (
-      listingRolePermission(dataRole, ALL_PERMISSIONS.storePlans.viewVideoPlans)
-    ) {
+    if (listingRolePermission(dataRole, ALL_PERMISSIONS.quotations.view)) {
       setSelectedTab('QUOTATIONS');
       return;
     }
-    if (
-      listingRolePermission(
-        dataRole,
-        ALL_PERMISSIONS.storePlans.viewImagesPlans
-      )
-    ) {
+    if (listingRolePermission(dataRole, ALL_PERMISSIONS.quotations.view)) {
       setSelectedTab('TOTAL_PAID');
       return;
     }
-    if (
-      listingRolePermission(dataRole, ALL_PERMISSIONS.storePlans.viewDocsPlans)
-    ) {
+    if (listingRolePermission(dataRole, ALL_PERMISSIONS.quotations.view)) {
       setSelectedTab('MATERIAL_LABOR_PAID');
     }
   }, []);
@@ -56,10 +47,7 @@ function ProjectQuotationsPage() {
           <div>
             <Tabs
               className={`${
-                listingRolePermission(
-                  dataRole,
-                  ALL_PERMISSIONS.storePlans.viewProjectAttachments
-                )
+                listingRolePermission(dataRole, ALL_PERMISSIONS.quotations.view)
                   ? 'inline-block'
                   : 'hidden'
               } `}
@@ -68,12 +56,12 @@ function ProjectQuotationsPage() {
             >
               {listingRolePermission(
                 dataRole,
-                ALL_PERMISSIONS.storePlans.viewVideoPlans
+                ALL_PERMISSIONS.quotations.view
               ) && (
                 <Tab
                   hidden={listingRolePermission(
                     dataRole,
-                    !!ALL_PERMISSIONS.storePlans.viewVideoPlans
+                    !!ALL_PERMISSIONS.quotations.view
                   )}
                   label="quotation slips"
                   value="QUOTATIONS"
@@ -81,12 +69,12 @@ function ProjectQuotationsPage() {
               )}
               {listingRolePermission(
                 dataRole,
-                ALL_PERMISSIONS.storePlans.viewImagesPlans
+                ALL_PERMISSIONS.quotations.view
               ) && (
                 <Tab
                   hidden={listingRolePermission(
                     dataRole,
-                    !!ALL_PERMISSIONS.storePlans.viewImagesPlans
+                    !!ALL_PERMISSIONS.quotations.view
                   )}
                   label="total paid slips"
                   value="TOTAL_PAID"
@@ -94,12 +82,12 @@ function ProjectQuotationsPage() {
               )}
               {listingRolePermission(
                 dataRole,
-                ALL_PERMISSIONS.storePlans.viewDocsPlans
+                ALL_PERMISSIONS.quotations.view
               ) && (
                 <Tab
                   hidden={listingRolePermission(
                     dataRole,
-                    !!ALL_PERMISSIONS.storePlans.viewDocsPlans
+                    !!ALL_PERMISSIONS.quotations.view
                   )}
                   label="material & labor slips"
                   value="MATERIAL_LABOR_PAID"

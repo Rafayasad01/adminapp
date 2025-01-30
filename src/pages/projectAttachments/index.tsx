@@ -22,7 +22,10 @@ function ProjectAttachment() {
 
   useEffect(() => {
     if (
-      listingRolePermission(dataRole, ALL_PERMISSIONS.storePlans.viewVideoPlans)
+      listingRolePermission(
+        dataRole,
+        ALL_PERMISSIONS.storePlans.viewProjectAttachments
+      )
     ) {
       setSelectedTab('IMAGE/VIDEOS');
       return;
@@ -30,14 +33,17 @@ function ProjectAttachment() {
     if (
       listingRolePermission(
         dataRole,
-        ALL_PERMISSIONS.storePlans.viewImagesPlans
+        ALL_PERMISSIONS.storePlans.viewProjectAttachments
       )
     ) {
       setSelectedTab('IMAGES');
       return;
     }
     if (
-      listingRolePermission(dataRole, ALL_PERMISSIONS.storePlans.viewDocsPlans)
+      listingRolePermission(
+        dataRole,
+        ALL_PERMISSIONS.storePlans.viewProjectAttachments
+      )
     ) {
       setSelectedTab('DOCS');
     }
@@ -69,12 +75,12 @@ function ProjectAttachment() {
             >
               {listingRolePermission(
                 dataRole,
-                ALL_PERMISSIONS.storePlans.viewVideoPlans
+                ALL_PERMISSIONS.storePlans.viewProjectAttachments
               ) && (
                 <Tab
                   hidden={listingRolePermission(
                     dataRole,
-                    !!ALL_PERMISSIONS.storePlans.viewVideoPlans
+                    !!ALL_PERMISSIONS.storePlans.viewProjectAttachments
                   )}
                   label="project images / videos"
                   value="IMAGE/VIDEOS"
@@ -82,30 +88,17 @@ function ProjectAttachment() {
               )}
               {listingRolePermission(
                 dataRole,
-                ALL_PERMISSIONS.storePlans.viewImagesPlans
+                ALL_PERMISSIONS.storePlans.viewProjectAttachments
               ) && (
                 <Tab
                   hidden={listingRolePermission(
                     dataRole,
-                    !!ALL_PERMISSIONS.storePlans.viewImagesPlans
+                    !!ALL_PERMISSIONS.storePlans.viewProjectAttachments
                   )}
                   label="3D-renders / blue print"
                   value="IMAGES"
                 />
               )}
-              {/* {listingRolePermission(
-                dataRole,
-                ALL_PERMISSIONS.storePlans.viewDocsPlans
-              ) && (
-                <Tab
-                  hidden={listingRolePermission(
-                    dataRole,
-                    !!ALL_PERMISSIONS.storePlans.viewDocsPlans
-                  )}
-                  label="approval and reports"
-                  value="DOCS"
-                />
-              )} */}
             </Tabs>
             {selectedTab === 'IMAGE/VIDEOS' && (
               <VideoPage projectId={projectId ?? null} />
