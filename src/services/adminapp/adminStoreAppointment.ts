@@ -139,6 +139,13 @@ const AppointmentInvoiceDetailByCode = (code: string) => {
   return network.get(`${STORE_PREFIX}/${APPOINTMENT_PREFIX}/invoice/${code}`);
 };
 
+const AppointmentDiscount = (code: string, data: any) => {
+  return network.post(
+    `${STORE_PREFIX}/${APPOINTMENT_PREFIX}/discount/${code}`,
+    data
+  );
+};
+
 export default {
   getBarbersList,
   getBarberBookedTimeSlots,
@@ -160,4 +167,5 @@ export default {
   // AppointmentInvoiceDetailById,
   AppointmentInvoiceDetailByCode,
   appointmentDone,
+  AppointmentDiscount,
 };

@@ -83,6 +83,12 @@ export interface AppointmentWalletPayment {
   person: string;
 }
 
+export interface AppointmentDiscountPayment {
+  appointmentDiscount: string;
+  appointmentDiscountAmountType: string;
+  isManuel: boolean;
+}
+
 export interface AppointmentWalletPaymentUpdate {
   balance: string;
 }

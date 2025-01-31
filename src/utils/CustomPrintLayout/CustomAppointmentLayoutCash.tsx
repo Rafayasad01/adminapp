@@ -4,6 +4,7 @@ import { QRCodeSVG } from 'qrcode.react';
 import { forwardRef, useRef } from 'react';
 import { useReactToPrint } from 'react-to-print';
 import { useAppSelector } from '../../redux/redux-hooks';
+import { getItem } from '../storage';
 
 type CustomPrintLayoutsProps = {
   data: any;
@@ -21,20 +22,37 @@ const CustomPrintLayouts = forwardRef<any, CustomPrintLayoutsProps>(
     }: CustomPrintLayoutsProps,
     ref: any
   ) => {
+    const branch: any = getItem('BRANCH_DATA');
     const authState: any = useAppSelector((state: any) => state?.authState);
-    const qrCodeValue = `Tracking Code: ${data?.code} \n\nShop Name: ${authState?.user?.tenantName} \nShop Email: ${authState?.user?.username}`;
+    const logo = useAppSelector(
+      (state: any) => state?.persistedReducer?.appState?.logo
+    );
+    const systemConfig = useAppSelector(
+      (state: any) => state.authState.systemConfig
+    );
+
+    const handleGrandTotal = () => {
+      const total =
+        Number(data?.grandTotalAmount) -
+        Number(Number(data?.appointmentDiscount).toFixed(0));
+      return total.toFixed(0);
+    };
+
+    const qrCodeValue = `Tracking Code: ${data?.code} \n\nShop Name: ${branch?.name} \nShop Email: ${authState?.user?.username}`;
     return (
       <div style={{ display: 'none' }}>
         <div ref={ref}>
           <div className="print-area">
             <div className="print-logo">
               <img
-                src={authState?.user?.tenantConfig?.logo}
+                src={logo || systemConfig?.shopLogo}
                 width="150"
-                height="25"
-                alt="logo"
+                height="50"
+                alt="-ilyas-logo"
               />
             </div>
+            <div className="print-title">{branch?.name}</div>
+            <div className="print-title">{branch?.address}</div>
             <div className="print-title">Your Appointment is Confirmed!</div>
 
             {data?.appointments?.map((item: any, index: number) => {
@@ -92,6 +110,14 @@ const CustomPrintLayouts = forwardRef<any, CustomPrintLayoutsProps>(
             </div>
             <div className="print-row">
               <div className="col-1">
+                <span>Appointment Discount</span>
+              </div>
+              <div className="col-2">
+                <span>PKR {Number(data?.appointmentDiscount).toFixed(0)}</span>
+              </div>
+            </div>
+            <div className="print-row">
+              <div className="col-1">
                 <span>HST {data?.gstPercentage}%</span>
               </div>
               <div className="col-2">
@@ -105,7 +131,7 @@ const CustomPrintLayouts = forwardRef<any, CustomPrintLayoutsProps>(
                 <span>Grand Total</span>
               </div>
               <div className="col-2">
-                <span>PKR {data?.grandTotalAmount}</span>
+                <span>PKR {handleGrandTotal()}</span>
               </div>
             </div>
             <div className="print-line" />

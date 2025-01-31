@@ -154,7 +154,9 @@ const AppointmentProviderCards = ({
                     <div className="mr-5">
                       <MailOutlineOutlinedIcon fontSize="small" />
                     </div>
-                    <span className="text-sm font-medium">{item.email}</span>
+                    <span className="text-sm font-medium">
+                      {item.email || '----'}
+                    </span>
                   </div>
                   <div
                     style={{

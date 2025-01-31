@@ -34,6 +34,7 @@ import { listingRolePermission } from '../../utils/helper';
 import PermissionPopup from '../../utils/PermissionPopup';
 import ViewCardAccordin from './ViewCardAccordin';
 import ViewWalletPopupCard from './ViewWalletPopupCard';
+import ViewDiscountPopupCard from './ViewDiscountPopupCard';
 
 type AppointmentViewCardProps = {
   appointmentData?: any;
@@ -68,6 +69,7 @@ const AppointmentViewCard = ({
   const [invoiceData, setInvoiceData] = useState<any>(null);
   const [isLoader, setIsLoader] = useState<boolean>(true);
   const [isWalletLoader, setIsWalletLoader] = useState<boolean>(false);
+  const [isDiscountLoader, setIsDiscountLoader] = useState<boolean>(false);
   const [isPrintEnabled, setIsPrintEnabled] = useState<boolean>(false);
   // const [isRescheduled, setIsRescheduled] = useState(false);
 
@@ -94,7 +96,21 @@ const AppointmentViewCard = ({
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
 
-  console.log('DATATA', appointmentData);
+  // popover navigation of discount button
+  const [discountAnchorEl, setDiscountAnchorEl] =
+    useState<HTMLButtonElement | null>(null);
+  const handleDiscountClickPop = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    setDiscountAnchorEl(event.currentTarget);
+  };
+  const handleDiscountClosePop = () => {
+    setDiscountAnchorEl(null);
+  };
+  const discountOpen = Boolean(discountAnchorEl);
+  const idDiscount = discountOpen ? 'simple-popover' : undefined;
+
+  // console.log('DATATA', appointmentData);
 
   useEffect(() => {
     // Select the element
@@ -240,6 +256,46 @@ const AppointmentViewCard = ({
       });
   };
 
+  const onDiscountSubmit = (payload: any) => {
+    setIsDiscountLoader(true);
+    storeAppointmentService
+      .AppointmentDiscount(appointmentData.code, payload)
+      .then((item) => {
+        if (item.data.success) {
+          setIsDiscountLoader(false);
+          handleDiscountClosePop();
+          // setData((prev: any) => ({
+          //   ...prev,
+          //   wallet: item.data.data,
+          // }));
+          setData((prevData: any) => ({
+            ...prevData,
+            services: prevData.services.map((x: any) =>
+              x.id === item.data.data.id
+                ? {
+                    ...x,
+                    isManuel: item.data.data.isManuel,
+                    appointmentDiscount: item.data.data.appointmentDiscount,
+                    appointmentDiscountAmountType:
+                      item.data.data.appointmentDiscountAmountType,
+                  }
+                : x
+            ),
+          }));
+        } else {
+          setIsDiscountLoader(false);
+        }
+      })
+      .catch((error) => {
+        setIsDiscountLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: error.message,
+          type: 'error',
+        });
+      });
+  };
+
   // useEffect(() => {
   //   // if (data?.status === APPOINTMENT_STATUS.COMPLETED) {
   //   storeAppointmentService
@@ -312,6 +368,17 @@ const AppointmentViewCard = ({
     };
   };
 
+  const discountedAppointments = () => {
+    const discountedServices = data?.services?.find(
+      (el: any) => el.isManuel === true
+    );
+    return {
+      amount: discountedServices?.appointmentDiscount
+        ? discountedServices?.appointmentDiscount
+        : '0',
+    };
+  };
+
   const totalAmount = () => {
     // Number(data?.gstAmount).toLocaleString()
     const gtAmount = data?.services?.filter(
@@ -322,7 +389,10 @@ const AppointmentViewCard = ({
         el.status === APPOINTMENT_STATUS.PROCESSING
     );
     const gtAppAmount = gtAmount?.reduce(
-      (total: any, service: any) => total + parseFloat(service.totalAmount),
+      (total: any, service: any) =>
+        total +
+        parseFloat(service.totalAmount) -
+        parseFloat(service.appointmentDiscount ?? 0),
       0
     );
     return gtAppAmount;
@@ -355,7 +425,9 @@ const AppointmentViewCard = ({
     );
     const gtAppAmount = gtAmount?.reduce(
       (total: any, service: any) =>
-        total + parseFloat(service.grandTotalAmount),
+        total +
+        parseFloat(service.grandTotalAmount) -
+        parseFloat(service.appointmentDiscount ?? 0),
       0
     );
     return gtAppAmount;
@@ -393,7 +465,29 @@ const AppointmentViewCard = ({
     return false;
   };
 
-  // console.log('appointmentData', taxAmount());
+  const handleDiscountButton = (services: any) => {
+    const isCheckDiscount: any = services.find(
+      (service: any) => service.isManuel === true
+    );
+
+    if (isCheckDiscount) {
+      return true;
+    }
+
+    return false;
+  };
+
+  const handleCheckIsCompleted = (services: any) => {
+    const isCheckCompleteService: any = services.some(
+      (service: any) => service.status === APPOINTMENT_STATUS.COMPLETED
+    );
+
+    if (!isCheckCompleteService) {
+      return true;
+    }
+
+    return false;
+  };
 
   useEffect(() => {
     if (appointmentData) {
@@ -443,23 +537,6 @@ const AppointmentViewCard = ({
         <div className="bg-[#B8DFF2] p-5 pb-4">
           <div className="flex justify-between">
             <div className="w-full">
-              {/* <IconButton
-              disabled={
-                appointmentData?.status === APPOINTMENT_STATUS.CANCELLED ||
-                appointmentData?.status === APPOINTMENT_STATUS.COMPLETED ||
-                appointmentData?.status === APPOINTMENT_STATUS.RESCHEDULE ||
-                appointmentData?.status === APPOINTMENT_STATUS.PROCESSING ||
-                appointmentData?.status === APPOINTMENT_STATUS.MISSED
-              }
-              className="icon-btn mr-3.5 p-0"
-              onClick={() => {
-                setOpenFormDialog(true);
-                setIsTooltipOpen(false);
-                getUpdatePopupData(data);
-              }}
-            >
-              <EditIcon />
-            </IconButton> */}
               <IconButton
                 disabled={
                   data?.status === APPOINTMENT_STATUS.CANCELLED ||
@@ -572,6 +649,22 @@ const AppointmentViewCard = ({
                   )}
                 </div>
               </div>
+
+              <div className="mb-2 flex items-center justify-start">
+                {handleDiscountButton(data?.services) ? (
+                  handleDiscountButton(data?.services)
+                ) : handleCheckIsCompleted(data?.services) ? (
+                  ''
+                ) : (
+                  <CustomButton
+                    buttonType="button"
+                    title="Discount"
+                    icon={<WalletIcon />}
+                    className="btn-black-outline btn-icon"
+                    onclick={handleDiscountClickPop}
+                  />
+                )}
+              </div>
             </div>
           </div>
           <div className="">
@@ -591,6 +684,12 @@ const AppointmentViewCard = ({
             <span className="text-xs">
               Missed Appointments ({missedAppointments().missedCount || 0}) ={' '}
               {missedAppointments().missedAmount.toLocaleString() || 0} PKR
+            </span>
+          </div>
+          <div className="">
+            <span className="text-xs">
+              Appointments Discount ={' '}
+              {discountedAppointments().amount.toLocaleString() || 0} PKR
             </span>
           </div>
           <div className="">
@@ -645,6 +744,15 @@ const AppointmentViewCard = ({
           onclose={handleClosePop}
           isWalletLoader={isWalletLoader}
           callback={onWalletSubmit}
+        />
+        <ViewDiscountPopupCard
+          id={idDiscount}
+          open={discountOpen}
+          anchorEl={discountAnchorEl}
+          onclose={handleDiscountClosePop}
+          isWalletLoader={isDiscountLoader}
+          callback={onDiscountSubmit}
+          grandTotalAmount={grandTotalAmount()}
         />
       </div>
     </>

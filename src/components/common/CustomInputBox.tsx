@@ -20,6 +20,7 @@ type CustomInputBoxProps = {
   length?: string;
   maxLetterLimit?: number;
   min?: number;
+  max?: number;
   onclick?: (items?: any) => void;
   pattern?: any;
   placeholder?: string;
@@ -47,6 +48,7 @@ function CustomInputBox({
   sx,
   maxLetterLimit,
   min,
+  max,
   onclick,
   pattern,
   placeholder,
@@ -72,6 +74,7 @@ function CustomInputBox({
       });
     });
   };
+  console.log('error :>> ', error);
   return (
     <>
       <div className="flex">
@@ -106,7 +109,11 @@ function CustomInputBox({
           },
           min: {
             value: min,
-            message: `${inputTitle} should be greater than 0.`,
+            message: `${inputTitle} should be greater than or equal ${min}.`,
+          },
+          max: {
+            value: max,
+            message: `${inputTitle} should be less than or equal ${max}.`,
           },
           maxLength: {
             value: maxLetterLimit,

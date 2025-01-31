@@ -536,7 +536,7 @@ function Sidebar() {
           }
         >
           <Stack
-            className="h-[100%] w-full pl-4"
+            className="flex h-[100%] w-full items-center justify-center"
             direction="row"
             justifyContent="left"
           >
@@ -549,7 +549,7 @@ function Sidebar() {
             ) : (
               (logo || systemConfig?.shopLogo) && (
                 <img
-                  className="mt-9 h-[29px] max-w-[150px]"
+                  className="mt-4 max-h-[65px] max-w-[450px]"
                   src={logo || systemConfig?.shopLogo}
                   alt={`${branch?.name}`}
                 />

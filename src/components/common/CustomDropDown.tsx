@@ -1,6 +1,7 @@
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import { Controller } from 'react-hook-form';
+import ErrorSpanBox from './ErrorSpanBox';
 
 type CustomDropDownProps = {
   inputTitle?: string;
@@ -61,7 +62,7 @@ function CustomDropDown({
               : {}
           }
           render={({ field, fieldState }) => (
-            <>
+            <div>
               <Select
                 disabled={disabled}
                 fullWidth
@@ -90,11 +91,15 @@ function CustomDropDown({
                 ))}
               </Select>
               {fieldState.error && (
-                <p style={{ color: 'red', fontSize: '12px' }}>
-                  *{fieldState.error.message}
-                </p>
+                <ErrorSpanBox
+                  error={`${
+                    fieldState.error.message
+                      ? `${fieldState.error.message}`
+                      : ''
+                  }`}
+                />
               )}
-            </>
+            </div>
           )}
         />
       </div>

@@ -482,47 +482,6 @@ const AllAppointment = ({
     // setRange(range);
   };
 
-  // const isStatusProcessing = async (id: string) => {
-  //   try {
-  //     setIsLoader(true);
-  //     const [processingStatusResponse] = await Promise.all([
-  //       storeAppointmentService.appointmentProcessing(id),
-  //     ]);
-  //     if (processingStatusResponse.data.success) {
-  //       setIsLoader(false);
-  //       setIsNotify(true);
-  //       setNotifyMessage({
-  //         text: processingStatusResponse.data.message,
-  //         type: 'success',
-  //       });
-  //       setData((newArr: any) => {
-  //         return newArr.map((item: any) => {
-  //           if (item.id === processingStatusResponse.data.data.id) {
-  //             item.status = processingStatusResponse.data.data.status;
-  //           }
-  //           return { ...item };
-  //         });
-  //       });
-  //     } else {
-  //       // throw new Error(paidStatusResponse.data.message);
-  //       setIsLoader(false);
-  //       setIsNotify(true);
-  //       setNotifyMessage({
-  //         text: processingStatusResponse.data.message,
-  //         type: 'error',
-  //       });
-  //     }
-  //     // setIsLoader(false);
-  //   } catch (error: Error | any) {
-  //     setIsLoader(false);
-  //     setIsNotify(true);
-  //     setNotifyMessage({
-  //       text: error.message,
-  //       type: 'error',
-  //     });
-  //   }
-  // };
-
   const isStatusDone = async (code: string) => {
     setIsLoader(true);
     try {
