@@ -106,18 +106,18 @@ const CustomPrintLayouts = forwardRef<any, CustomPrintLayoutsProps>(
             <div className="print-line straight" />
             <div className="print-row">
               <div className="col-1">
-                <span>Total</span>
-              </div>
-              <div className="col-2">
-                <span>PKR {data?.totalCost}</span>
-              </div>
-            </div>
-            <div className="print-row">
-              <div className="col-1">
                 <span>Appointment Discount</span>
               </div>
               <div className="col-2">
                 <span>PKR {Number(data?.appointmentDiscountAmount)}</span>
+              </div>
+            </div>
+            <div className="print-row">
+              <div className="col-1">
+                <span>Total</span>
+              </div>
+              <div className="col-2">
+                <span>PKR {data?.totalCost}</span>
               </div>
             </div>
             <div className="print-row">
