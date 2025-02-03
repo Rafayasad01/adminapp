@@ -84,7 +84,7 @@ export interface AppointmentWalletPayment {
 }
 
 export interface AppointmentDiscountPayment {
-  appointmentDiscount: string;
+  appointmentDiscount: string | any;
   appointmentDiscountAmountType: string;
   isManuel: boolean;
 }

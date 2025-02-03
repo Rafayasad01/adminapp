@@ -5,6 +5,7 @@ import HistoryIcon from '@mui/icons-material/History';
 // import CloseIcon from '@mui/icons-material/Close';
 // import UpdateOutlinedIcon from '@mui/icons-material/UpdateOutlined';
 // import WalletIcon from '@mui/icons-material/Wallet';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
 import WalletIcon from '@mui/icons-material/Wallet';
 // import EditIcon from '@mui/icons-material/Edit';
@@ -12,7 +13,7 @@ import WalletIcon from '@mui/icons-material/Wallet';
 // import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
 import dayjs from 'dayjs';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 // import moment from 'moment';
 // import assets from '../../assets';
@@ -110,7 +111,7 @@ const AppointmentViewCard = ({
   const discountOpen = Boolean(discountAnchorEl);
   const idDiscount = discountOpen ? 'simple-popover' : undefined;
 
-  // console.log('DATATA', appointmentData);
+  console.log('DATATA', appointmentData);
 
   useEffect(() => {
     // Select the element
@@ -131,15 +132,15 @@ const AppointmentViewCard = ({
   }, []);
 
   const showPaidHandler = () => {
-    const checkDone: boolean = data?.services?.some(
-      (el: any) => el.status === APPOINTMENT_STATUS.DONE
+    const statusDone: any = data?.services?.find(
+      (el: any) => el.status === APPOINTMENT_STATUS.COMPLETED
     );
-    const statusNewProcess: boolean = data?.services?.some(
+    const statusNewProcess: any = data?.services?.find(
       (el: any) =>
         el.status === APPOINTMENT_STATUS.NEW ||
         el.status === APPOINTMENT_STATUS.PROCESSING
     );
-    if (statusNewProcess) {
+    if (statusNewProcess && statusNewProcess?.paymentStatus === 'Unpaid') {
       return (
         <div
           onClick={() => {
@@ -155,25 +156,7 @@ const AppointmentViewCard = ({
         </div>
       );
     }
-    if (data?.status === APPOINTMENT_STATUS.COMPLETED) {
-      return (
-        <div className="w-full">
-          <div
-            onClick={() => {
-              setIsNotify(true);
-              setNotifyMessage({
-                text: 'Its Paid',
-                type: 'success',
-              });
-            }}
-            className="mb-2 mt-3 flex w-[50%] cursor-pointer items-center justify-center rounded bg-primary p-1 text-sm text-white shadow"
-          >
-            <span className="px-2 text-xs">Paid</span>
-          </div>
-        </div>
-      );
-    }
-    if (checkDone) {
+    if (statusDone && statusDone?.paymentStatus === 'Unpaid') {
       return (
         <div
           onClick={() => setPaidDialogOpen(true)}
@@ -184,18 +167,11 @@ const AppointmentViewCard = ({
         </div>
       );
     }
+
     return (
-      <div
-        onClick={() => {
-          setIsNotify(true);
-          setNotifyMessage({
-            text: 'Paid button will enable when all services get done..',
-            type: 'info',
-          });
-        }}
-        className="mb-2 mt-3 flex w-[50%] cursor-pointer items-center justify-center rounded bg-primary p-1 text-sm text-white shadow"
-      >
-        <span className="px-2 text-xs">Paid</span>
+      <div className="mx-1 my-2 flex items-center rounded bg-green-500 px-3 py-1 text-sm">
+        <CheckCircleIcon color="success" fontSize="inherit" className="mr-1" />{' '}
+        Its Paid
       </div>
     );
   };
@@ -296,24 +272,9 @@ const AppointmentViewCard = ({
       });
   };
 
-  // useEffect(() => {
-  //   // if (data?.status === APPOINTMENT_STATUS.COMPLETED) {
-  //   storeAppointmentService
-  //     .AppointmentInvoiceDetailById(appointmentData.id)
-  //     .then((res) => {
-  //       setInvoiceData(res.data.data);
-  //     });
-  //   // }
-  // }, []);
-
   const statusCancelConfirmationHandler = () => {
     setIsTooltipOpen(false);
     deleteAppointmentHandler(data.code);
-  };
-
-  const statusPaidConfirmationHandler = () => {
-    setIsTooltipOpen(false);
-    isStatusDone(data.code);
   };
 
   const getInvoice = (code: string) => {
@@ -368,19 +329,7 @@ const AppointmentViewCard = ({
     };
   };
 
-  const discountedAppointments = () => {
-    const discountedServices = data?.services?.find(
-      (el: any) => el.isManuel === true
-    );
-    return {
-      amount: discountedServices?.appointmentDiscount
-        ? discountedServices?.appointmentDiscount
-        : '0',
-    };
-  };
-
-  const totalAmount = () => {
-    // Number(data?.gstAmount).toLocaleString()
+  const totalAmountWithoutDiscount = useMemo(() => {
     const gtAmount = data?.services?.filter(
       (el: any) =>
         el.status === APPOINTMENT_STATUS.COMPLETED ||
@@ -388,18 +337,46 @@ const AppointmentViewCard = ({
         el.status === APPOINTMENT_STATUS.NEW ||
         el.status === APPOINTMENT_STATUS.PROCESSING
     );
+
     const gtAppAmount = gtAmount?.reduce(
-      (total: any, service: any) =>
-        total +
-        parseFloat(service.totalAmount) -
-        parseFloat(service.appointmentDiscount ?? 0),
+      (total: any, service: any) => total + parseFloat(service.totalAmount),
       0
     );
-    return gtAppAmount;
+
+    return gtAppAmount || 0;
+  }, [data]);
+
+  const discountedAppointments = useMemo(() => {
+    const discountedServices = data?.services?.find(
+      (el: any) => el.isManuel === true
+    );
+    if (!discountedServices) {
+      return { amount: 0, type: 'None', actualAmount: 0 };
+    }
+
+    const discount = Number(discountedServices?.appointmentDiscount) || 0;
+    const type = discountedServices?.appointmentDiscountAmountType || 'Amount';
+
+    let finalDiscountAmount = discount;
+    let actualAmount = 0;
+
+    if (type === 'Percentage') {
+      // Avoid circular dependency by using the already calculated final discount
+      actualAmount = discount;
+      finalDiscountAmount = (totalAmountWithoutDiscount * discount) / 100;
+    }
+
+    return { amount: finalDiscountAmount, type, actualAmount };
+  }, [data]);
+
+  // Separate memoization for totalAmount calculation
+
+  const totalAmount = () => {
+    const discountedAmount = discountedAppointments.amount;
+    return totalAmountWithoutDiscount - discountedAmount;
   };
 
   const taxAmount = () => {
-    // Number(data?.gstAmount).toLocaleString()
     const taxServices = data?.services?.filter(
       (el: any) =>
         el.status === APPOINTMENT_STATUS.COMPLETED ||
@@ -407,30 +384,37 @@ const AppointmentViewCard = ({
         el.status === APPOINTMENT_STATUS.NEW ||
         el.status === APPOINTMENT_STATUS.PROCESSING
     );
-    const taxAppAmount = taxServices?.reduce(
-      (total: any, service: any) => total + parseFloat(service.gstAmount),
-      0
-    );
+
+    const ta = totalAmount();
+
+    const gstPercentage = taxServices?.[0]?.gstPercentage ?? 0;
+
+    const taxAppAmount = (Number(ta) * parseFloat(gstPercentage)) / 100;
+
     return taxAppAmount;
   };
 
   const grandTotalAmount = () => {
-    // Number(data?.gstAmount).toLocaleString()
-    const gtAmount = data?.services?.filter(
-      (el: any) =>
-        el.status === APPOINTMENT_STATUS.COMPLETED ||
-        el.status === APPOINTMENT_STATUS.DONE ||
-        el.status === APPOINTMENT_STATUS.NEW ||
-        el.status === APPOINTMENT_STATUS.PROCESSING
-    );
-    const gtAppAmount = gtAmount?.reduce(
-      (total: any, service: any) =>
-        total +
-        parseFloat(service.grandTotalAmount) -
-        parseFloat(service.appointmentDiscount ?? 0),
-      0
-    );
-    return gtAppAmount;
+    const total = totalAmount();
+    const tax = taxAmount();
+    return Number(total) + Number(tax);
+  };
+
+  const statusPaidConfirmationHandler = () => {
+    setIsTooltipOpen(false);
+    const obj = {
+      code: data.code,
+      gstPercentage: data.gstPercentage,
+      gstAmount: taxAmount(),
+      totalAmount: totalAmount(),
+      grandTotalAmount: grandTotalAmount(),
+      appointmentDiscount: discountedAppointments.amount,
+      appointmentDiscountType:
+        discountedAppointments.type === 'Percentage' ? 'Percentage' : 'Amount',
+      isManuel: discountedAppointments?.amount > 0,
+    };
+    // console.log('fnf data', obj);
+    isStatusDone(obj);
   };
 
   const handleCheckAllServices = (services: any) => {
@@ -479,7 +463,9 @@ const AppointmentViewCard = ({
 
   const handleCheckIsCompleted = (services: any) => {
     const isCheckCompleteService: any = services.some(
-      (service: any) => service.status === APPOINTMENT_STATUS.COMPLETED
+      (service: any) =>
+        service.status === APPOINTMENT_STATUS.COMPLETED &&
+        service.paymentStatus !== 'Paid'
     );
 
     if (!isCheckCompleteService) {
@@ -506,14 +492,7 @@ const AppointmentViewCard = ({
           const endDate = dayjs(formattedDateWithHour2);
           const startDateFormat = startDate.format('HH:mm');
           const endDateFormat = endDate.format('HH:mm');
-          // console.log('SALON', formattedDateWithHour1, formattedDateWithHour2);
           setIsLoader(false);
-          // res.data.data?.services?.forEach((el: any) => {
-          //   if (el.status === APPOINTMENT_STATUS.RESCHEDULE) {
-          //     // setData({ ...data, service: el });
-          //     setIsRescheduled(true);
-          //   }
-          // });
           setData({
             ...res.data.data,
             startDateFormat,
@@ -523,6 +502,13 @@ const AppointmentViewCard = ({
         });
     }
   }, []);
+
+  const displayAppointmentDiscount = () => {
+    if (discountedAppointments.type === 'Percentage') {
+      return `${discountedAppointments?.actualAmount} % of ${discountedAppointments?.amount} PKR`;
+    }
+    return `${discountedAppointments.amount.toLocaleString() || 0} PKR`;
+  };
 
   return isLoader ? (
     <Loader />
@@ -608,6 +594,12 @@ const AppointmentViewCard = ({
                     isPrintEnabled={isPrintEnabled}
                     setPrintEnabled={setIsPrintEnabled}
                     data={invoiceData}
+                    taxAmount={taxAmount()}
+                    totalCost={totalAmount()}
+                    grandTotalAmount={grandTotalAmount()}
+                    appointmentDiscountAmount={Number(
+                      discountedAppointments?.amount
+                    )}
                   />
                 )}
               </IconButton>
@@ -688,8 +680,7 @@ const AppointmentViewCard = ({
           </div>
           <div className="">
             <span className="text-xs">
-              Appointments Discount ={' '}
-              {discountedAppointments().amount.toLocaleString() || 0} PKR
+              Appointments Discount = {displayAppointmentDiscount()}
             </span>
           </div>
           <div className="">
@@ -753,6 +744,7 @@ const AppointmentViewCard = ({
           isWalletLoader={isDiscountLoader}
           callback={onDiscountSubmit}
           grandTotalAmount={grandTotalAmount()}
+          totalAmount={totalAmount()}
         />
       </div>
     </>

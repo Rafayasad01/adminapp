@@ -482,11 +482,11 @@ const AllAppointment = ({
     // setRange(range);
   };
 
-  const isStatusDone = async (code: string) => {
-    setIsLoader(true);
+  const isStatusDone = async (paidData: any) => {
+    // setIsLoader(true);
     try {
       const [statusResponse] = await Promise.all([
-        storeAppointmentService.appointmentPaidAll(code),
+        storeAppointmentService.appointmentPaidAll(paidData),
       ]);
       if (statusResponse.data.success) {
         setIsLoader(false);

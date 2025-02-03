@@ -18,6 +18,7 @@ type Props = {
   callback?: any;
   isWalletLoader?: any;
   grandTotalAmount: any;
+  totalAmount?: any;
 };
 
 const ViewDiscountPopupCard = ({
@@ -28,20 +29,41 @@ const ViewDiscountPopupCard = ({
   callback,
   isWalletLoader,
   grandTotalAmount,
+  totalAmount,
 }: Props) => {
   const {
     register,
     handleSubmit,
     control,
     setValue,
+    setError,
+    clearErrors,
     formState: { errors },
   } = useForm<AppointmentDiscountPayment>();
 
   const onSubmit = (data: AppointmentDiscountPayment) => {
     data.isManuel = true;
+    let discountAmount;
+
+    // Check the condition for discount type
+    if (data.appointmentDiscountAmountType === 'Percentage') {
+      discountAmount = (totalAmount * Number(data.appointmentDiscount)) / 100;
+
+      // If the discount amount exceeds the total amount, set an error
+      if (discountAmount > totalAmount) {
+        setError('appointmentDiscount', {
+          type: 'manual',
+          message: 'Discount cannot be greater than the total amount.',
+        });
+        return;
+      }
+      clearErrors('appointmentDiscount');
+    }
+
+    // Proceed with the callback if no error
+    // console.log(data);
     callback(data);
   };
-  console.log('🚀 ~ onSubmit ~ datasssssss:', grandTotalAmount);
 
   return (
     <Popover

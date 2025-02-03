@@ -74,7 +74,6 @@ function CustomInputBox({
       });
     });
   };
-  console.log('error :>> ', error);
   return (
     <>
       <div className="flex">

@@ -11,6 +11,10 @@ type CustomPrintLayoutsProps = {
   // onPrintTrigger?: any;
   isPrintEnabled?: any;
   setPrintEnabled?: any;
+  taxAmount?: any;
+  totalCost?: any;
+  grandTotalAmount?: any;
+  appointmentDiscountAmount?: any;
 };
 
 const CustomPrintLayouts = forwardRef<any, CustomPrintLayoutsProps>(
@@ -31,12 +35,12 @@ const CustomPrintLayouts = forwardRef<any, CustomPrintLayoutsProps>(
       (state: any) => state.authState.systemConfig
     );
 
-    const handleGrandTotal = () => {
-      const total =
-        Number(data?.grandTotalAmount) -
-        Number(Number(data?.appointmentDiscount).toFixed(0));
-      return total.toFixed(0);
-    };
+    // const handleGrandTotal = () => {
+    //   const total =
+    //     Number(data?.grandTotalAmount) -
+    //     Number(Number(data?.appointmentDiscount).toFixed(0));
+    //   return total.toFixed(0);
+    // };
 
     const qrCodeValue = `Tracking Code: ${data?.code} \n\nShop Name: ${branch?.name} \nShop Email: ${authState?.user?.username}`;
     return (
@@ -105,7 +109,7 @@ const CustomPrintLayouts = forwardRef<any, CustomPrintLayoutsProps>(
                 <span>Total</span>
               </div>
               <div className="col-2">
-                <span>PKR {data?.totalAmount}</span>
+                <span>PKR {data?.totalCost}</span>
               </div>
             </div>
             <div className="print-row">
@@ -113,7 +117,7 @@ const CustomPrintLayouts = forwardRef<any, CustomPrintLayoutsProps>(
                 <span>Appointment Discount</span>
               </div>
               <div className="col-2">
-                <span>PKR {Number(data?.appointmentDiscount).toFixed(0)}</span>
+                <span>PKR {Number(data?.appointmentDiscountAmount)}</span>
               </div>
             </div>
             <div className="print-row">
@@ -121,7 +125,7 @@ const CustomPrintLayouts = forwardRef<any, CustomPrintLayoutsProps>(
                 <span>HST {data?.gstPercentage}%</span>
               </div>
               <div className="col-2">
-                <span>PKR {data?.gstAmount}</span>
+                <span>PKR {data?.taxAmount}</span>
               </div>
             </div>
 
@@ -131,7 +135,7 @@ const CustomPrintLayouts = forwardRef<any, CustomPrintLayoutsProps>(
                 <span>Grand Total</span>
               </div>
               <div className="col-2">
-                <span>PKR {handleGrandTotal()}</span>
+                <span>PKR {data?.grandTotalAmount?.toLocaleString()}</span>
               </div>
             </div>
             <div className="print-line" />
@@ -164,6 +168,10 @@ function CustomAppointmentLayoutCash({
   data,
   isPrintEnabled,
   setPrintEnabled,
+  taxAmount,
+  totalCost,
+  grandTotalAmount,
+  appointmentDiscountAmount,
 }: CustomPrintLayoutsProps) {
   const ref = useRef<any>(null);
   const handlePrint = useReactToPrint({
@@ -177,9 +185,17 @@ function CustomAppointmentLayoutCash({
     }, 0);
   };
 
+  const objdata = {
+    ...data,
+    taxAmount,
+    totalCost,
+    grandTotalAmount,
+    appointmentDiscountAmount,
+  };
+
   return (
     <div className="flex items-center text-sm">
-      {isPrintEnabled ? <CustomPrintLayouts ref={ref} data={data} /> : null}
+      {isPrintEnabled ? <CustomPrintLayouts ref={ref} data={objdata} /> : null}
       <div onClick={trigger} className="printBtn">
         <PrintOutlinedIcon className="mx-1" />
         {/* <span className="mx-2"> Order Sl</span> */}
