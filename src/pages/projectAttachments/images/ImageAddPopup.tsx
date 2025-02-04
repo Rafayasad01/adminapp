@@ -13,7 +13,7 @@ import TextField from '@mui/material/TextField';
 import FormControl from '@mui/material/FormControl';
 import ErrorSpanBox from '../../../components/common/ErrorSpanBox';
 import {
-  ALL_PERMISSIONS,
+  // ALL_PERMISSIONS,
   INVALID_CHAR,
   MAX_LENGTH_EXCEEDED,
   mimiType,
@@ -22,7 +22,7 @@ import {
 } from '../../../utils/constants';
 import { ProjectAttachment } from '../../../interfaces/projectAttachments.interface';
 import CustomDropDown from '../../../components/common/CustomDropDown';
-import { listingRolePermission } from '../../../utils/helper';
+// import { listingRolePermission } from '../../../utils/helper';
 import { useAppSelector } from '../../../redux/redux-hooks';
 import storeAttachmentService from '../../../services/adminapp/adminProjectAttachments';
 
@@ -44,9 +44,6 @@ function VideoAddPopup({
   setNotifyMessage,
 }: Props) {
   const authState: any = useAppSelector((state) => state?.authState);
-  const dataRole = useAppSelector(
-    (state) => state?.persistedReducer?.roleState?.role?.permissions
-  );
   const [planFile, setPlanFile] = useState<any>(null);
   const [projects, setProjects] = useState<any>([]);
   // const [plans, setPlans] = useState<any>([]);
@@ -62,27 +59,20 @@ function VideoAddPopup({
 
   useEffect(() => {
     const fetchProjects = async () => {
-      if (
-        listingRolePermission(
-          dataRole,
-          ALL_PERMISSIONS.storePlans.addImagesPlans
-        )
-      ) {
-        try {
-          const projectResponse =
-            await storeAttachmentService.getListProjectLovService(
-              authState.user.tenant
-            );
-          const projectList = projectResponse.data.data.list;
-          setProjects(projectList);
-          if (projectId) setValue('projectId', projectId);
-        } catch (error: Error | any) {
-          setIsNotify(true);
-          setNotifyMessage({
-            text: error.message,
-            type: 'error',
-          });
-        }
+      try {
+        const projectResponse =
+          await storeAttachmentService.getListProjectLovService(
+            authState.user.tenant
+          );
+        const projectList = projectResponse.data.data.list;
+        setProjects(projectList);
+        if (projectId) setValue('projectId', projectId);
+      } catch (error: Error | any) {
+        setIsNotify(true);
+        setNotifyMessage({
+          text: error.message,
+          type: 'error',
+        });
       }
     };
 
