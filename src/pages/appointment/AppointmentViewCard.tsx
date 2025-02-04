@@ -5,6 +5,7 @@ import HistoryIcon from '@mui/icons-material/History';
 // import CloseIcon from '@mui/icons-material/Close';
 // import UpdateOutlinedIcon from '@mui/icons-material/UpdateOutlined';
 // import WalletIcon from '@mui/icons-material/Wallet';
+import CancelIcon from '@mui/icons-material/Cancel';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
 import WalletIcon from '@mui/icons-material/Wallet';
@@ -140,6 +141,14 @@ const AppointmentViewCard = ({
         el.status === APPOINTMENT_STATUS.NEW ||
         el.status === APPOINTMENT_STATUS.PROCESSING
     );
+    const statusMissedCancelled: any = data?.services?.find(
+      (el: any) =>
+        el.status === APPOINTMENT_STATUS.CANCELLED ||
+        el.status === APPOINTMENT_STATUS.MISSED
+    );
+    const statusRescheduled: any = data?.services?.find(
+      (el: any) => el.status === APPOINTMENT_STATUS.RESCHEDULE
+    );
     if (statusNewProcess && statusNewProcess?.paymentStatus === 'Unpaid') {
       return (
         <div
@@ -156,6 +165,25 @@ const AppointmentViewCard = ({
         </div>
       );
     }
+    if (
+      statusMissedCancelled &&
+      statusMissedCancelled?.paymentStatus === 'Unpaid'
+    ) {
+      return (
+        <div className="mt-1 flex items-center rounded bg-red-300 px-3 py-1 text-sm">
+          <CancelIcon color="error" fontSize="inherit" className="mr-1" />{' '}
+          Cancelled
+        </div>
+      );
+    }
+    if (statusRescheduled && statusRescheduled?.paymentStatus === 'Unpaid') {
+      return (
+        <div className="mt-1 flex items-center rounded bg-yellow-500 px-3 py-1 text-sm">
+          <CancelIcon color="error" fontSize="inherit" className="mr-1" />{' '}
+          Rescheduled
+        </div>
+      );
+    }
     if (statusDone && statusDone?.paymentStatus === 'Unpaid') {
       return (
         <div
@@ -169,7 +197,7 @@ const AppointmentViewCard = ({
     }
 
     return (
-      <div className="mx-1 my-2 flex items-center rounded bg-green-500 px-3 py-1 text-sm">
+      <div className="mt-1 flex items-center rounded bg-green-500 px-3 py-1 text-sm">
         <CheckCircleIcon color="success" fontSize="inherit" className="mr-1" />{' '}
         Its Paid
       </div>
@@ -449,17 +477,17 @@ const AppointmentViewCard = ({
     return false;
   };
 
-  const handleDiscountButton = (services: any) => {
-    const isCheckDiscount: any = services.find(
-      (service: any) => service.isManuel === true
-    );
+  // const handleDiscountButton = (services: any) => {
+  //   const isCheckDiscount: any = services.find(
+  //     (service: any) => service.isManuel === true
+  //   );
 
-    if (isCheckDiscount) {
-      return true;
-    }
+  //   if (isCheckDiscount) {
+  //     return true;
+  //   }
 
-    return false;
-  };
+  //   return false;
+  // };
 
   const handleCheckIsCompleted = (services: any) => {
     const isCheckCompleteService: any = services.some(
@@ -604,10 +632,10 @@ const AppointmentViewCard = ({
                 )}
               </IconButton>
               <div className="mt-2 flex justify-between">
-                <div className="flex w-[50%] items-center justify-start">
+                <div className="flex w-[100%] items-center justify-start">
                   {showPaidHandler()}
                 </div>
-                <div className="flex w-[50%] items-center justify-end">
+                <div className="flex w-[100%] items-center justify-end">
                   {handleCheckAllServices(data.services) ? (
                     ''
                   ) : data?.wallet === null &&
@@ -643,9 +671,7 @@ const AppointmentViewCard = ({
               </div>
 
               <div className="mb-2 flex items-center justify-start">
-                {handleDiscountButton(data?.services) ? (
-                  handleDiscountButton(data?.services)
-                ) : handleCheckIsCompleted(data?.services) ? (
+                {handleCheckIsCompleted(data?.services) ? (
                   ''
                 ) : (
                   <CustomButton
@@ -743,8 +769,8 @@ const AppointmentViewCard = ({
           onclose={handleDiscountClosePop}
           isWalletLoader={isDiscountLoader}
           callback={onDiscountSubmit}
-          grandTotalAmount={grandTotalAmount()}
-          totalAmount={totalAmount()}
+          // grandTotalAmount={grandTotalAmount()}
+          totalAmount={totalAmountWithoutDiscount}
         />
       </div>
     </>

@@ -17,7 +17,7 @@ type Props = {
   onclose?: any;
   callback?: any;
   isWalletLoader?: any;
-  grandTotalAmount: any;
+  // grandTotalAmount: any;
   totalAmount?: any;
 };
 
@@ -28,7 +28,7 @@ const ViewDiscountPopupCard = ({
   onclose,
   callback,
   isWalletLoader,
-  grandTotalAmount,
+  // grandTotalAmount,
   totalAmount,
 }: Props) => {
   const {
@@ -45,23 +45,19 @@ const ViewDiscountPopupCard = ({
     data.isManuel = true;
     let discountAmount;
 
-    // Check the condition for discount type
     if (data.appointmentDiscountAmountType === 'Percentage') {
       discountAmount = (totalAmount * Number(data.appointmentDiscount)) / 100;
 
-      // If the discount amount exceeds the total amount, set an error
       if (discountAmount > totalAmount) {
         setError('appointmentDiscount', {
           type: 'manual',
-          message: 'Discount cannot be greater than the total amount.',
+          message: `Discount cannot be greater than the total amount, ${totalAmount} PKR`,
         });
         return;
       }
       clearErrors('appointmentDiscount');
     }
 
-    // Proceed with the callback if no error
-    // console.log(data);
     callback(data);
   };
 
@@ -100,7 +96,7 @@ const ViewDiscountPopupCard = ({
                     pattern={PATTERN.ONLY_NUM}
                     maxLetterLimit={15}
                     min={1}
-                    max={grandTotalAmount}
+                    max={totalAmount}
                     inputTitle="Discount"
                     placeholder="2000"
                     id="appointmentDiscount"

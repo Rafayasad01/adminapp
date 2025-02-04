@@ -495,17 +495,17 @@ const AllAppointment = ({
           text: statusResponse.data.message,
           type: 'success',
         });
-        setData((newArr: any) => {
-          return newArr.map((el: any) => {
-            const findData = statusResponse.data.data.find(
-              (it: any) => it.id === el.id
-            );
-            if (findData && findData.id === el.id) {
-              el.status = APPOINTMENT_STATUS.DONE;
-            }
-            return el;
-          });
-        });
+        // setData((newArr: any) => {
+        //   return newArr.map((el: any) => {
+        //     const findData = statusResponse.data.data.find(
+        //       (it: any) => it.id === el.id
+        //     );
+        //     if (findData && findData.id === el.id) {
+        //       el.status = APPOINTMENT_STATUS.DONE;
+        //     }
+        //     return el;
+        //   });
+        // });
       } else {
         setIsLoader(false);
         setIsNotify(true);

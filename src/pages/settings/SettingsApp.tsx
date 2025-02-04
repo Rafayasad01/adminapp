@@ -36,7 +36,6 @@ import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 import adminService from '../../services/adminapp/admin';
 import {
   ALL_PERMISSIONS,
-  DOMAIN_PREFIX,
   DOMAIN_PROTOCOL,
   INVALID_CHAR,
   MAX_LENGTH_EXCEEDED,
@@ -854,9 +853,7 @@ function SettingsApp() {
                       placeholder="Domain"
                       value={
                         watch('domainAdminapp') &&
-                        `${DOMAIN_PROTOCOL}${watch(
-                          'domainAdminapp'
-                        )}${DOMAIN_PREFIX}`
+                        `${DOMAIN_PROTOCOL}${watch('domainAdminapp')}`
                       }
                       disableUnderline
                       disabled
