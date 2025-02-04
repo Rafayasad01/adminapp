@@ -17,12 +17,12 @@ import { ProjectQuotation } from '../../../interfaces/projectQuotation';
 import { useAppSelector } from '../../../redux/redux-hooks';
 import storeAttachmentService from '../../../services/adminapp/adminProjectAttachments';
 import {
-  ALL_PERMISSIONS,
+  // ALL_PERMISSIONS,
   MAX_LENGTH_EXCEEDED,
   mimiType,
   VALIDATE_NON_NEGATIVE_NUM,
 } from '../../../utils/constants';
-import { listingRolePermission } from '../../../utils/helper';
+// import { listingRolePermission } from '../../../utils/helper';
 
 type Props = {
   openFormDialog: boolean;
@@ -42,9 +42,9 @@ function QuotationSlipEditPopup({
   formData,
 }: Props) {
   const authState: any = useAppSelector((state) => state?.authState);
-  const dataRole = useAppSelector(
-    (state) => state?.persistedReducer?.roleState?.role?.permissions
-  );
+  // const dataRole = useAppSelector(
+  //   (state) => state?.persistedReducer?.roleState?.role?.permissions
+  // );
   const [planFile, setPlanFile] = useState<any>(null);
   const [projects, setProjects] = useState<any>([]);
   // const [plans, setPlans] = useState<any>([]);
@@ -65,26 +65,19 @@ function QuotationSlipEditPopup({
       setValue('file', formData?.filePath);
       setPlanFile({ name: formData?.filePath });
       setFilePath(formData?.filePath);
-      if (
-        listingRolePermission(
-          dataRole,
-          ALL_PERMISSIONS.storePlans.editImagesPlans
-        )
-      ) {
-        try {
-          const projectResponse =
-            await storeAttachmentService.getListProjectLovService(
-              authState.user.tenant
-            );
-          const projectList = projectResponse.data.data.list;
-          setProjects(projectList);
-        } catch (error: Error | any) {
-          setIsNotify(true);
-          setNotifyMessage({
-            text: error.message,
-            type: 'error',
-          });
-        }
+      try {
+        const projectResponse =
+          await storeAttachmentService.getListProjectLovService(
+            authState.user.tenant
+          );
+        const projectList = projectResponse.data.data.list;
+        setProjects(projectList);
+      } catch (error: Error | any) {
+        setIsNotify(true);
+        setNotifyMessage({
+          text: error.message,
+          type: 'error',
+        });
       }
     };
 
