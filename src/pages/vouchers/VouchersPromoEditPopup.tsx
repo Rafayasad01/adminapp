@@ -112,8 +112,8 @@ function VouchersPromoEditPopup({
       isUnlimitedRedeem: data.isUnlimitedRedeem,
       maxUserRedeem:
         data.isUnlimitedRedeem === false ? '0' : data.maxUserRedeem,
-      isAllBranches: mainShopBranch.id === data.branchId,
-      branch: data.branchId,
+      isAllBranches: watch('branchId') === 'all',
+      branch: watch('branchId') === 'all' ? 'all' : data.branchId,
     };
     callback(item.id, updateVoucherPayload);
   };
@@ -143,13 +143,14 @@ function VouchersPromoEditPopup({
             name: el.name,
           };
         });
-        const mainRes: any = [{ id: mainShopBranch.id, name: 'All' }];
+        const mainRes: any = [
+          { id: 'all', name: 'All' },
+          { id: mainShopBranch.id, name: 'Main' },
+        ];
         setBranches([...mainRes, ...res]);
       }
     });
   }, []);
-
-  console.log(errors);
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -341,7 +342,10 @@ function VouchersPromoEditPopup({
                     customHeight="h-[31px]"
                     customClassInputTitle="font-semibold"
                     inputTitle="Branches"
-                    options={{ role: item.branch, roles: branches || [] }}
+                    options={{
+                      role: item.branch === null ? 'all' : item.branch,
+                      roles: branches || [],
+                    }}
                     defaultValue="Select Branch"
                   />
                 </FormControl>
