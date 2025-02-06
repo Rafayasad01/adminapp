@@ -1,7 +1,7 @@
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import AirplayIcon from '@mui/icons-material/Airplay';
 import ApartmentIcon from '@mui/icons-material/Apartment';
-import EditIcon from '@mui/icons-material/Edit';
+// import EditIcon from '@mui/icons-material/Edit';
 // import PeopleOutlineIcon from '@mui/icons-material/PeopleOutline';
 import SearchIcon from '@mui/icons-material/Search';
 import Badge from '@mui/material/Badge';
@@ -30,7 +30,7 @@ import branchService from '../../services/adminapp/adminBranch';
 import authService from '../../services/adminapp/admin';
 import { listingRolePermission } from '../../utils/helper';
 import BranchCreatePopup from './BranchCreatePopup';
-import BranchUpdatePopup from './BranchUpdatePopup';
+// import BranchUpdatePopup from './BranchUpdatePopup';
 import { ALL_PERMISSIONS, NOT_AUTHORIZED_MESSAGE } from '../../utils/constants';
 import { getItem, setItem } from '../../utils/storage';
 import PermissionPopup from '../../utils/PermissionPopup';
@@ -51,8 +51,8 @@ function BranchPage() {
   const [list, setList] = useState<any>([]);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [openFormDialog, setOpenFormDialog] = useState(false);
-  const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
-  const [formDetail, setFormDetail] = useState<any>(null);
+  // const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
+  // const [formDetail, setFormDetail] = useState<any>(null);
   const [isLoader, setIsLoader] = React.useState(false);
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
@@ -201,57 +201,57 @@ function BranchPage() {
       });
   };
 
-  const editHandler = (id: string) => {
-    setOpenEditFormDialog(true);
-    const editFormDatas = list?.find((el: any) => el.id === id);
-    setFormDetail(editFormDatas);
-  };
+  // const editHandler = (id: string) => {
+  //   setOpenEditFormDialog(true);
+  //   const editFormDatas = list?.find((el: any) => el.id === id);
+  //   setFormDetail(editFormDatas);
+  // };
 
-  const updateFormHandler = (id: string, data: any) => {
-    setIsLoader(true);
-    branchService
-      .updateBranch(data, id)
-      .then((item: any) => {
-        if (item.data.success) {
-          setIsLoader(false);
-          setIsNotify(true);
-          setNotifyMessage({
-            text: item.data.message,
-            type: 'success',
-          });
-          setOpenEditFormDialog(false);
-          for (let i = 0; i < list.length; i += 1) {
-            if (list[i].id === item.data.data.id) {
-              list[i].name = item.data.data.name;
-              list[i].description = item.data.data.description;
-              list[i].mobile = item.data.data.mobile;
-              list[i].landline = item.data.data.landline;
-              list[i].address = item.data.data.address;
-            }
-          }
-          reset();
-        } else {
-          setIsLoader(false);
-          setIsNotify(true);
-          setNotifyMessage({
-            text: item.data.message,
-            type: 'error',
-          });
-        }
-      })
-      .catch((err) => {
-        setIsLoader(false);
-        setIsNotify(true);
-        setNotifyMessage({
-          text: err.message,
-          type: 'error',
-        });
-      });
-  };
+  // const updateFormHandler = (id: string, data: any) => {
+  //   setIsLoader(true);
+  //   branchService
+  //     .updateBranch(data, id)
+  //     .then((item: any) => {
+  //       if (item.data.success) {
+  //         setIsLoader(false);
+  //         setIsNotify(true);
+  //         setNotifyMessage({
+  //           text: item.data.message,
+  //           type: 'success',
+  //         });
+  //         setOpenEditFormDialog(false);
+  //         for (let i = 0; i < list.length; i += 1) {
+  //           if (list[i].id === item.data.data.id) {
+  //             list[i].name = item.data.data.name;
+  //             list[i].description = item.data.data.description;
+  //             list[i].mobile = item.data.data.mobile;
+  //             list[i].landline = item.data.data.landline;
+  //             list[i].address = item.data.data.address;
+  //           }
+  //         }
+  //         reset();
+  //       } else {
+  //         setIsLoader(false);
+  //         setIsNotify(true);
+  //         setNotifyMessage({
+  //           text: item.data.message,
+  //           type: 'error',
+  //         });
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       setIsLoader(false);
+  //       setIsNotify(true);
+  //       setNotifyMessage({
+  //         text: err.message,
+  //         type: 'error',
+  //       });
+  //     });
+  // };
 
   const handleSwitchChange = (event: any, id: string) => {
     if (listingRolePermission(dataRole, ALL_PERMISSIONS.storeBranch.edit)) {
-      setOpenEditFormDialog(false);
+      // setOpenEditFormDialog(false);
       setIsLoader(true);
       const data = {
         isActive: event.target.checked,
@@ -570,7 +570,7 @@ function BranchPage() {
                         </td>
                         <td>
                           <div className="flex flex-row-reverse">
-                            <IconButton
+                            {/* <IconButton
                               className="icon-btn mr-3.5 p-0"
                               onClick={() => {
                                 if (
@@ -592,7 +592,7 @@ function BranchPage() {
                               }}
                             >
                               <EditIcon />
-                            </IconButton>
+                            </IconButton> */}
                             <Switch
                               checked={item.isActive}
                               onChange={(
@@ -654,7 +654,7 @@ function BranchPage() {
         />
       )}
 
-      {openEditFormDialog && (
+      {/* {openEditFormDialog && (
         <BranchUpdatePopup
           setIsNotify={setIsNotify}
           setNotifyMessage={setNotifyMessage}
@@ -663,7 +663,7 @@ function BranchPage() {
           setOpenFormDialog={setOpenEditFormDialog}
           callback={updateFormHandler}
         />
-      )}
+      )} */}
     </>
   );
 }
