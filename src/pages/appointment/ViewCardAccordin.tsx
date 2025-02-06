@@ -637,7 +637,6 @@ AccordionsProps) {
                           disabled={
                             item?.status === APPOINTMENT_STATUS.CANCELLED ||
                             item?.status === APPOINTMENT_STATUS.COMPLETED ||
-                            item?.status === APPOINTMENT_STATUS.DONE ||
                             item?.status === APPOINTMENT_STATUS.RESCHEDULE ||
                             item?.status === APPOINTMENT_STATUS.MISSED ||
                             item?.status === APPOINTMENT_STATUS.NEW
