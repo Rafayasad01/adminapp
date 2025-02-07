@@ -133,8 +133,11 @@ const AppointmentViewCard = ({
   }, []);
 
   const showPaidHandler = () => {
-    const statusDone: any = data?.services?.find(
+    const statusComp: any = data?.services?.find(
       (el: any) => el.status === APPOINTMENT_STATUS.COMPLETED
+    );
+    const statusDone: any = data?.services?.find(
+      (el: any) => el.status === APPOINTMENT_STATUS.DONE
     );
     const statusNewProcess: any = data?.services?.find(
       (el: any) =>
@@ -149,6 +152,25 @@ const AppointmentViewCard = ({
     const statusRescheduled: any = data?.services?.find(
       (el: any) => el.status === APPOINTMENT_STATUS.RESCHEDULE
     );
+    if (statusComp && statusComp?.paymentStatus === 'Unpaid') {
+      return (
+        <div
+          onClick={() => setPaidDialogOpen(true)}
+          className="mb-2 mt-3 flex w-[50%] cursor-pointer items-center justify-center rounded bg-green-500 p-1 text-sm text-white shadow"
+        >
+          <CheckCircleOutlineIcon fontSize="inherit" className="mx-1" />
+          <span>Paid</span>
+        </div>
+      );
+    }
+    if (statusDone && statusDone?.paymentStatus === 'Unpaid') {
+      return (
+        <div className="mt-1 flex items-center rounded bg-yellow-500 px-3 py-1 text-sm">
+          <CancelIcon color="error" fontSize="inherit" className="mr-1" /> Paid
+          Remaining
+        </div>
+      );
+    }
     if (statusNewProcess && statusNewProcess?.paymentStatus === 'Unpaid') {
       return (
         <div
@@ -176,22 +198,12 @@ const AppointmentViewCard = ({
         </div>
       );
     }
+
     if (statusRescheduled && statusRescheduled?.paymentStatus === 'Unpaid') {
       return (
         <div className="mt-1 flex items-center rounded bg-yellow-500 px-3 py-1 text-sm">
           <CancelIcon color="error" fontSize="inherit" className="mr-1" />{' '}
           Rescheduled
-        </div>
-      );
-    }
-    if (statusDone && statusDone?.paymentStatus === 'Unpaid') {
-      return (
-        <div
-          onClick={() => setPaidDialogOpen(true)}
-          className="mb-2 mt-3 flex w-[50%] cursor-pointer items-center justify-center rounded bg-green-500 p-1 text-sm text-white shadow"
-        >
-          <CheckCircleOutlineIcon fontSize="inherit" className="mx-1" />
-          <span>Paid</span>
         </div>
       );
     }

@@ -88,6 +88,9 @@ function VouchersPromoCreatePopup({
 
   const authState: any = useAppSelector((state) => state?.authState);
   const mainShopBranch: any = getItem('TEMP_BRANCH_DATA');
+  const branchState: any = useAppSelector(
+    (state) => state?.persistedReducer?.appState?.branch
+  );
   const handleFormClose = () => setVouchersPromoDialog(false);
   const [branches, setBranches] = React.useState<any>([]);
 
@@ -138,7 +141,7 @@ function VouchersPromoCreatePopup({
         });
         const mainRes: any = [
           { id: 'all', name: 'All' },
-          { id: mainShopBranch.id, name: 'Main' },
+          { id: mainShopBranch.id, name: branchState.name || 'Main' },
         ];
         setBranches([...mainRes, ...res]);
       }
