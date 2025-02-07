@@ -18,7 +18,7 @@ import {
 import IconButton from '@mui/material/IconButton';
 import dayjs from 'dayjs';
 import _ from 'lodash';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import assets from '../../assets';
@@ -95,14 +95,11 @@ const OrderBasket = () => {
     (p: any, c: any) => p + Number(c.price) * Number(c.quantity),
     0
   );
-  const gstAmount =
-    totalAmount *
-    (Number(tenantConfig?.tenantConfig?.gstPercentage ?? 0) / 100);
 
   const discountedValue: any =
     cartItems?.length <= 0
       ? '0.00'
-      : promoList?.filter((val: any) => val.voucherCode === promoCode)[0];
+      : promoList?.find((val: any) => val.voucherCode === promoCode);
 
   // const discountedPercentageValue: string | undefined = (
   //   (discountedValue?.value ?? 0 / 100) * totalAmount
@@ -113,9 +110,27 @@ const OrderBasket = () => {
   //     ? Number(discountedValue?.value)
   //     : discountedPercentageValue;
 
-  const discountedValueByType: any = Number(discountedValue?.value);
+  const discountedValueByType = Number(discountedValue?.value || 0);
 
   const discountedTotalAmount: any = totalAmount - discountedValueByType;
+
+  const loyaltyCoinDiscount = useMemo(() => {
+    if (tenantConfig.tenantConfig?.enableLoyaltyProgram) {
+      if (
+        Number(loginDetails?.loyaltyCoins || 0) >=
+        Number(tenantConfig.tenantConfig?.requiredCoinsToRedeem || 0)
+      ) {
+        return Number(
+          tenantConfig.tenantConfig?.loyaltyCoinConversionRate || 0
+        );
+      }
+    }
+    return 0;
+  }, [tenantConfig, loginDetails]);
+
+  const gstAmount =
+    (discountedTotalAmount - loyaltyCoinDiscount) *
+    (Number(tenantConfig?.tenantConfig?.gstPercentage ?? 0) / 100);
 
   const grandTotal = discountedTotalAmount
     ? discountedTotalAmount + gstAmount
@@ -268,7 +283,7 @@ const OrderBasket = () => {
       dropDateTime: watch('deliveryDropOffDate')
         ? watch('deliveryDropOffDate').format('YYYY-MM-DD HH:mm:ss')
         : DeliveryDate.format('YYYY-MM-DD HH:mm:ss'),
-      voucherCode: checkVoucherMinAmount ? promoCode : '' || '',
+      voucherCode: checkVoucherMinAmount ? promoCode : '',
       products: cartItems?.map((item: any) => ({
         id: item.id,
         quantity: item.quantity,
@@ -440,7 +455,7 @@ const OrderBasket = () => {
                 dropDateTime: watch('deliveryDropOffDate')
                   ? watch('deliveryDropOffDate').format('YYYY-MM-DD HH:mm:ss')
                   : DeliveryDate.format('YYYY-MM-DD HH:mm:ss'),
-                voucherCode: checkVoucherMinAmount ? promoCode : '' || '',
+                voucherCode: checkVoucherMinAmount ? promoCode : '',
                 products: cartItems?.map((items: any) => ({
                   id: items.id,
                   quantity: items.quantity,
