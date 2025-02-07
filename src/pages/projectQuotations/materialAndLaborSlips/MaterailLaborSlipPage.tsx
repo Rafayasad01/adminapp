@@ -62,6 +62,8 @@ function MaterailLaborSlipPage() {
   const [dialogText] = useState<any>('Are you sure you want to delete ?');
   const [projects, setProjects] = useState<any>([]);
 
+  const [totalLaborCost, setTotalLaborCost] = useState(0);
+
   const handleFormClickOpen = () => {
     if (listingRolePermission(dataRole, ALL_PERMISSIONS.quotations.add)) {
       setOpenFormDialog(true);
@@ -114,6 +116,11 @@ function MaterailLaborSlipPage() {
           setIsLoader(false);
           setList(item.data.data.list);
           setTotal(item.data.data.total);
+          const totalLaborAmount = item.data.data.list.reduce(
+            (sum: any, items: any) => sum + (parseFloat(items.laborCost) || 0),
+            0
+          );
+          setTotalLaborCost(totalLaborAmount);
         })
         .catch((error) => {
           setIsLoader(false);
@@ -186,6 +193,9 @@ function MaterailLaborSlipPage() {
             type: 'success',
           });
           setList([item.data.data, ...list]);
+          setTotalLaborCost(
+            (prevCost) => prevCost + Number(item.data.data.laborCost)
+          );
           let newtotal = total;
           setTotal((newtotal += 1));
         } else {
@@ -227,6 +237,12 @@ function MaterailLaborSlipPage() {
           });
           for (let i = 0; i < list.length; i += 1) {
             if (list[i].id === item.data.data.id) {
+              const oldCost = Number(list[i].laborCost);
+              const countTotal =
+                Number(totalLaborCost) -
+                oldCost +
+                Number(item.data.data.laborCost);
+              setTotalLaborCost(countTotal);
               list[i].filePath = item.data.data.filePath;
               list[i].projectId = item.data.data.projectId;
               list[i].laborCost = item.data.data.laborCost;
@@ -330,6 +346,12 @@ function MaterailLaborSlipPage() {
               <span className="font-open-sans text-xl font-semibold text-[#252733]">
                 All Labor Material Slips
               </span>
+              <div className="mt-2">
+                Total Labor Material Cost:{' '}
+                <span className="text-[18px] font-bold">
+                  {totalLaborCost} {CURRENCY_PREFIX}
+                </span>
+              </div>
             </div>
             <div className="col-span-5">
               <div className="flex flex-row justify-end gap-3">
