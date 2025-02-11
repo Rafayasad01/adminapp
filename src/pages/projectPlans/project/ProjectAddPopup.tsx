@@ -49,6 +49,7 @@ Props) {
     handleSubmit,
     // setValue,
     control,
+    getValues,
     watch,
     formState: { errors },
   } = useForm<Project>();
@@ -92,6 +93,27 @@ Props) {
 
   const handleDateChange = (date: any, field: any) => {
     field.onChange(date);
+  };
+
+  const totalDays =
+    watch('startDate') && watch('endDate')
+      ? dayjs(watch('endDate')).diff(dayjs(watch('startDate')), 'day') + 1
+      : 0;
+
+  const validateTotalDays = (value: any, allValues: any) => {
+    const demolitionDays = Number(allValues.demolitionDays || 0);
+    const constructionDays = Number(allValues.constructionDays || 0);
+    const finishingDays = Number(allValues.finishingDays || 0);
+
+    const totalEnteredDays = demolitionDays + constructionDays + finishingDays;
+
+    if (value < 0) return 'Days cannot be negative';
+    if (totalEnteredDays > totalDays)
+      return `Total days (${totalEnteredDays}) cannot exceed ${totalDays} days`;
+    if (totalEnteredDays < totalDays)
+      return `Total days (${totalEnteredDays}) must be exactly ${totalDays} days`;
+
+    return true;
   };
 
   return (
@@ -252,7 +274,7 @@ Props) {
                 />
               </FormControl>
             </div>
-            <div className="FormField">
+            <div className="FormFields">
               <FormControl className="FormControl" variant="standard">
                 <label className="FormLabel mt-2">Site Supervisor Name</label>
                 <Input
@@ -274,6 +296,29 @@ Props) {
                   <ErrorSpanBox error={INVALID_CHAR} />
                 )}
                 {errors.supervisorName?.type === 'validate' && (
+                  <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
+                )}
+              </FormControl>
+              <FormControl className="FormControl" variant="standard">
+                <label className="FormLabel mt-2">Address</label>
+                <Input
+                  className="FormInput"
+                  {...register('address', {
+                    pattern: PATTERN.CHAR_SPACE_DASH,
+                    validate: (value) => value.length <= 150,
+                  })}
+                  placeholder="Enter Project Address"
+                  type="text"
+                  id="address"
+                  disableUnderline
+                />
+                {errors.address?.type === 'required' && (
+                  <ErrorSpanBox error="Project address is required" />
+                )}
+                {errors.address?.type === 'pattern' && (
+                  <ErrorSpanBox error={INVALID_CHAR} />
+                )}
+                {errors.address?.type === 'validate' && (
                   <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
                 )}
               </FormControl>
@@ -299,67 +344,74 @@ Props) {
                 )}
               </FormControl> */}
             </div>
-            {/* <div className="FormFields">
+            <div className="mx-0 mt-4 flex items-center justify-center gap-1">
               <FormControl className="FormControl" variant="standard">
-                <label className="FormLabel">Total Paid</label>
+                <label className="FormLabel">Demolition Days</label>
                 <Input
                   className="FormInput"
-                  id="totalPaid"
+                  id="name"
                   type="number"
-                  placeholder="Enter Amount"
-                  {...register('totalPaid', {
-                    required: 'Amount is required in numbers',
-                    // validate: (value: any) => VALIDATE_NON_NEGATIVE_NUM(value),
-                    validate: (value: any) => {
-                      const isNonNegative = VALIDATE_NON_NEGATIVE_NUM(value);
-                      const isValidAmount =
-                        parseFloat(value) <= parseFloat(watch('budget')) ||
-                        'Total paid cannot exceed quotation amount';
-                      return isNonNegative && isValidAmount;
-                    },
+                  placeholder="Enter Demolition Days"
+                  {...register('demolitionDays', {
+                    required: 'Days is required in numbers',
+                    validate: (value) => validateTotalDays(value, getValues()),
                     maxLength: {
-                      value: 20,
-                      message: 'Length should not be excceed from 20 numbers.',
+                      value: 3000,
+                      message:
+                        'Length should not be excceed from 3000 numbers.',
                     },
                   })}
                   disableUnderline
                 />
-                {errors.totalPaid && (
-                  <ErrorSpanBox error={errors.totalPaid?.message} />
+                {errors.demolitionDays && (
+                  <ErrorSpanBox error={errors.demolitionDays?.message} />
                 )}
               </FormControl>
               <FormControl className="FormControl" variant="standard">
-                <label className="FormLabel">Due Amount</label>
+                <label className="FormLabel">Construction Days</label>
                 <Input
                   className="FormInput"
-                  id="dueAmount"
+                  id="name"
                   type="number"
-                  placeholder="Enter Amount"
-                  {...register('dueAmount', {
-                    required: 'Amount is required in numbers',
-                    // validate: (value: any) => VALIDATE_NON_NEGATIVE_NUM(value),
-                    validate: (value) => {
-                      const calculatedDue =
-                        parseFloat(watch('budget')) -
-                        parseFloat(watch('totalPaid'));
-                      const isNonNegative = VALIDATE_NON_NEGATIVE_NUM(value);
-                      const isValidDue =
-                        parseFloat(value) === calculatedDue ||
-                        `Due amount should be ${calculatedDue}`;
-                      return isNonNegative && isValidDue;
-                    },
+                  placeholder="Enter Contruction Days"
+                  {...register('constructionDays', {
+                    required: 'Days is required in numbers',
+                    validate: (value) => validateTotalDays(value, getValues()),
                     maxLength: {
-                      value: 20,
-                      message: 'Length should not be excceed from 20 numbers.',
+                      value: 3000,
+                      message:
+                        'Length should not be excceed from 3000 numbers.',
                     },
                   })}
                   disableUnderline
                 />
-                {errors.dueAmount && (
-                  <ErrorSpanBox error={errors.dueAmount?.message} />
+                {errors.constructionDays && (
+                  <ErrorSpanBox error={errors.constructionDays?.message} />
                 )}
               </FormControl>
-            </div> */}
+              <FormControl className="FormControl" variant="standard">
+                <label className="FormLabel">Finishing Days</label>
+                <Input
+                  className="FormInput"
+                  id="name"
+                  type="number"
+                  placeholder="Enter Finishing Days"
+                  {...register('finishingDays', {
+                    required: 'Days is required in numbers',
+                    validate: (value) => validateTotalDays(value, getValues()),
+                    maxLength: {
+                      value: 3000,
+                      message:
+                        'Length should not be excceed from 3000 numbers.',
+                    },
+                  })}
+                  disableUnderline
+                />
+                {errors.finishingDays && (
+                  <ErrorSpanBox error={errors.finishingDays?.message} />
+                )}
+              </FormControl>
+            </div>
           </div>
           <div className="FormFooter">
             <Button

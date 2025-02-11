@@ -10,6 +10,9 @@ export interface Project {
   address: string;
   startDate: any;
   endDate: any;
+  demolitionDays: string;
+  constructionDays: string;
+  finishingDays: string;
 }
 
 export interface ProjectPlan {
