@@ -381,6 +381,9 @@ function ProjectPage() {
               list[i].dueAmount = updateItem.data.data.dueAmount;
               list[i].startDate = updateItem.data.data.startDate;
               list[i].endDate = updateItem.data.data.endDate;
+              list[i].demolitionDays = updateItem.data.data.demolitionDays;
+              list[i].constructionDays = updateItem.data.data.constructionDays;
+              list[i].finishingDays = updateItem.data.data.finishingDays;
             }
           }
         } else {
