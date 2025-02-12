@@ -5,7 +5,9 @@ import Input from '@mui/material/Input';
 import React, { useEffect, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 // import TextField from '@mui/material/TextField';
-import { createTheme } from '@mui/material';
+import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
+import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
+import { createTheme, IconButton } from '@mui/material';
 import FormControl from '@mui/material/FormControl';
 import ThemeProvider from '@mui/material/styles/ThemeProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -28,6 +30,7 @@ import storeAppUsers from '../../../services/adminapp/adminAppUser';
 import CustomDropDown from '../../../components/common/CustomDropDown';
 import { listingRolePermission } from '../../../utils/helper';
 import { useAppSelector } from '../../../redux/redux-hooks';
+import Notify from '../../../components/common/Notify';
 
 type Props = {
   openFormDialog: boolean;
@@ -47,7 +50,7 @@ Props) {
   const {
     register,
     handleSubmit,
-    // setValue,
+    setValue,
     control,
     getValues,
     watch,
@@ -58,6 +61,11 @@ Props) {
   const dataRole = useAppSelector(
     (state) => state?.persistedReducer?.roleState?.role?.permissions
   );
+
+  const [planBankFile, setPlanBankFile] = useState<any>(null);
+  const [planTermFile, setPlanTermFile] = useState<any>(null);
+  const [isNotify, setIsNotify] = React.useState(false);
+  const [notifyMessage, setNotifyMessage] = React.useState({});
 
   const darkTheme = createTheme({
     palette: {
@@ -116,6 +124,60 @@ Props) {
     return true;
   };
 
+  const handleBankFileChange = (onChange: any, event: any | undefined) => {
+    const selectedFile = event.target.files[0];
+    if (selectedFile) {
+      const fileType = selectedFile.type;
+      if (
+        fileType === 'image/jpeg' ||
+        fileType === 'image/png' ||
+        fileType === 'image/jpg'
+      ) {
+        setPlanBankFile(selectedFile);
+        onChange(selectedFile);
+      } else {
+        setIsNotify(true);
+        setNotifyMessage({
+          text: 'Only .jpeg, .jpg, .png files are allowed',
+          type: 'error',
+        });
+      }
+    }
+  };
+
+  const handleTermFileChange = (onChange: any, event: any | undefined) => {
+    const selectedFile = event.target.files[0];
+    if (selectedFile) {
+      const fileType = selectedFile.type;
+      if (
+        fileType === 'image/jpeg' ||
+        fileType === 'image/png' ||
+        fileType === 'image/jpg'
+      ) {
+        setPlanTermFile(selectedFile);
+        onChange(selectedFile);
+      } else {
+        setIsNotify(true);
+        setNotifyMessage({
+          text: 'Only .jpeg, .jpg, .png files are allowed',
+          type: 'error',
+        });
+      }
+    }
+  };
+
+  const handleBankFileOnClick = (event: any) => {
+    event.target.value = null;
+    setPlanBankFile(null);
+    setValue('neBankAccount', '');
+  };
+
+  const handleTermFileOnClick = (event: any) => {
+    event.target.value = null;
+    setPlanTermFile(null);
+    setValue('termsCondition', '');
+  };
+
   return (
     <Dialog
       open={openFormDialog}
@@ -125,6 +187,11 @@ Props) {
         style: { maxWidth: '100%', maxHeight: 'auto' },
       }}
     >
+      <Notify
+        isOpen={isNotify}
+        setIsOpen={setIsNotify}
+        displayMessage={notifyMessage}
+      />
       <div className="Content">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="FormHeader w-full">
@@ -411,6 +478,140 @@ Props) {
                   <ErrorSpanBox error={errors.finishingDays?.message} />
                 )}
               </FormControl>
+            </div>
+          </div>
+          <div className="FormFields">
+            <label className="FormLabel mt-2">
+              Upload Bank Account Details
+              <span className="SubLabel">
+                ( It should be in JPG, JPEG, or PNG format )
+              </span>
+            </label>
+            <div className="ImageBox">
+              <Controller
+                name="neBankAccount"
+                control={control}
+                // rules={{ required: 'Required' }}
+                render={({ field: { onChange } }) => (
+                  <>
+                    <input
+                      accept="image/jpeg,image/png,image/jpg"
+                      style={{ display: 'none' }}
+                      id="raised-button-image-bank"
+                      type="file"
+                      onChange={(event) =>
+                        handleBankFileChange(onChange, event)
+                      }
+                      onClick={handleBankFileOnClick}
+                    />
+                    <label
+                      htmlFor="raised-button-image-bank"
+                      className="ImageLabel"
+                    >
+                      <Button component="span" className="ImageBtn">
+                        <FileUploadOutlinedIcon
+                          sx={{ marginRight: '0.5rem' }}
+                        />
+                        Upload
+                      </Button>
+                    </label>
+
+                    {planBankFile ? (
+                      <div className="ShowImageBox bg-background">
+                        <label className="ShowImageLabel">
+                          {planBankFile.name}
+                        </label>
+                        <IconButton
+                          className="btn-dot"
+                          onClick={() => {
+                            setPlanBankFile(null);
+                            onChange(null);
+                          }}
+                        >
+                          <CloseOutlinedIcon
+                            sx={{
+                              color: '#1D1D1D',
+                              fontSize: '1rem',
+                              lineHeight: '1.5rem',
+                            }}
+                          />
+                        </IconButton>
+                      </div>
+                    ) : (
+                      ''
+                    )}
+                  </>
+                )}
+              />
+              {errors.neBankAccount && (
+                <ErrorSpanBox error={errors.neBankAccount?.message} />
+              )}
+            </div>
+            <label className="FormLabel mt-2">
+              Upload Terms and Condition
+              <span className="SubLabel">
+                ( It should be in JPG, JPEG, or PNG format )
+              </span>
+            </label>
+            <div className="ImageBox">
+              <Controller
+                name="termsCondition"
+                control={control}
+                // rules={{ required: 'Required' }}
+                render={({ field: { onChange } }) => (
+                  <>
+                    <input
+                      accept="image/jpeg,image/png,image/jpg"
+                      style={{ display: 'none' }}
+                      id="raised-button-image-terms"
+                      type="file"
+                      onChange={(event) =>
+                        handleTermFileChange(onChange, event)
+                      }
+                      onClick={handleTermFileOnClick}
+                    />
+                    <label
+                      htmlFor="raised-button-image-terms"
+                      className="ImageLabel"
+                    >
+                      <Button component="span" className="ImageBtn">
+                        <FileUploadOutlinedIcon
+                          sx={{ marginRight: '0.5rem' }}
+                        />
+                        Upload
+                      </Button>
+                    </label>
+
+                    {planTermFile ? (
+                      <div className="ShowImageBox bg-background">
+                        <label className="ShowImageLabel">
+                          {planTermFile.name}
+                        </label>
+                        <IconButton
+                          className="btn-dot"
+                          onClick={() => {
+                            setPlanTermFile(null);
+                            onChange(null);
+                          }}
+                        >
+                          <CloseOutlinedIcon
+                            sx={{
+                              color: '#1D1D1D',
+                              fontSize: '1rem',
+                              lineHeight: '1.5rem',
+                            }}
+                          />
+                        </IconButton>
+                      </div>
+                    ) : (
+                      ''
+                    )}
+                  </>
+                )}
+              />
+              {errors.termsCondition && (
+                <ErrorSpanBox error={errors.termsCondition?.message} />
+              )}
             </div>
           </div>
           <div className="FormFooter">

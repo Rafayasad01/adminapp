@@ -19,7 +19,10 @@ const getListProjectService = (
 };
 
 const addProjectService = (data: any) => {
-  return network.post(`${NEW_EARTH_PREFIX}/${PROJECTS_PREFIX}/create`, data);
+  return network.postMultipart(
+    `${NEW_EARTH_PREFIX}/${PROJECTS_PREFIX}/create`,
+    data
+  );
 };
 
 const updateProjectService = (id: string, data: any) => {

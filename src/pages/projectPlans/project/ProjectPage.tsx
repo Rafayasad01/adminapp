@@ -322,10 +322,25 @@ function ProjectPage() {
   };
 
   const createFormHandler = (data: any) => {
-    data.tenant = authState.user.tenant;
     setIsLoader(true);
+    const formData = new FormData();
+    formData.append('name', data.name);
+    formData.append('address', data.address);
+    formData.append('clientName', data.clientName);
+    formData.append('constructionType', data.constructionType);
+    formData.append('constructionDays', data.constructionDays);
+    formData.append('demolitionDays', data.demolitionDays);
+    formData.append('finishingDays', data.finishingDays);
+    formData.append('startDate', data.startDate);
+    formData.append('endDate', data.endDate);
+    formData.append('supervisorName', data.supervisorName);
+    formData.append('type', data.type);
+    if (data.neBankAccount) formData.append('bankDetails', data.neBankAccount);
+    if (data.termsCondition)
+      formData.append('termCondition', data.termsCondition);
+
     storeProjectPlanService
-      .addProjectService(data)
+      .addProjectService(formData)
       .then((item: any) => {
         if (item.data.success) {
           setOpenFormDialog(false);
@@ -335,7 +350,7 @@ function ProjectPage() {
             text: item.data.message,
             type: 'success',
           });
-          setList([item.data.data, ...list]);
+          setList([...item.data.data, ...list]);
         } else {
           setIsLoader(false);
           setIsNotify(true);

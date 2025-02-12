@@ -13,6 +13,8 @@ export interface Project {
   demolitionDays: string;
   constructionDays: string;
   finishingDays: string;
+  neBankAccount: any;
+  termsCondition: any;
 }
 
 export interface ProjectPlan {
