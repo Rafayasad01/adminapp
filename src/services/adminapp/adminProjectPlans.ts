@@ -26,7 +26,7 @@ const addProjectService = (data: any) => {
 };
 
 const updateProjectService = (id: string, data: any) => {
-  return network.post(
+  return network.postMultipart(
     `${NEW_EARTH_PREFIX}/${PROJECTS_PREFIX}/update/${id}`,
     data
   );

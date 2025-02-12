@@ -371,10 +371,25 @@ function ProjectPage() {
   };
 
   const updateFormHandler = (data: any) => {
-    // console.log('🚀 ~ handleUpdatePlan ~ data:', data);
     setIsLoader(true);
+    const formData = new FormData();
+    formData.append('name', data.name);
+    formData.append('address', data.address);
+    formData.append('clientName', data.clientName);
+    formData.append('constructionType', data.constructionType);
+    formData.append('constructionDays', data.constructionDays);
+    formData.append('demolitionDays', data.demolitionDays);
+    formData.append('finishingDays', data.finishingDays);
+    formData.append('startDate', data.startDate);
+    formData.append('endDate', data.endDate);
+    formData.append('supervisorName', data.supervisorName);
+    formData.append('type', data.type);
+    if (data.neBankAccount && typeof data.neBankAccount !== 'string')
+      formData.append('bankDetails', data.neBankAccount);
+    if (data.termsCondition && typeof data.termsCondition !== 'string')
+      formData.append('termCondition', data.termsCondition);
     storeProjectPlanService
-      .updateProjectService(actionMenuItemid, data)
+      .updateProjectService(actionMenuItemid, formData)
       .then((updateItem: any) => {
         if (updateItem.data.success) {
           setIsLoader(false);

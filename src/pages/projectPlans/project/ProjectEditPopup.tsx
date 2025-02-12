@@ -7,14 +7,14 @@ import { useForm, Controller } from 'react-hook-form';
 // import TextField from '@mui/material/TextField';
 import '../../../assets/css/PopupStyle.css';
 import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
-import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
+// import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import ThemeProvider from '@mui/material/styles/ThemeProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import dayjs from 'dayjs';
 import FormControl from '@mui/material/FormControl';
-import { createTheme, IconButton } from '@mui/material';
+import { createTheme } from '@mui/material';
 import storeAppUsers from '../../../services/adminapp/adminAppUser';
 import {
   CONSTRUCTION_TYPE,
@@ -82,13 +82,6 @@ Props) {
       startDate: dayjs(data.startDate).utc().format('YYYY-MM-DD HH:mm:ss'),
       endDate: dayjs(data.endDate).utc().format('YYYY-MM-DD HH:mm:ss'),
     };
-    console.log('obj', obj);
-
-    // if (filePathBank !== null) obj.bankDetails = null;
-    // if (planBankFile || filePathBank) callback(obj);
-
-    // if (filePathTerm !== null) obj.termsCondition = null;
-    // if (planTermFile || filePathTerm) callback(obj);
     callback(obj);
   };
 
@@ -97,9 +90,9 @@ Props) {
       setValue('startDate', dayjs(formData.startDate));
       setValue('endDate', dayjs(formData.endDate));
       setValue('neBankAccount', formData?.bankDetails);
-      setValue('termsCondition', formData?.termsCondition);
+      setValue('termsCondition', formData?.termsConditions);
       setPlanBankFile({ name: formData?.bankDetails });
-      setPlanTermFile({ name: formData?.termsCondition });
+      setPlanTermFile({ name: formData?.termsConditions });
       // setFilePathBank(formData?.bankDetails);
       // setFilePathTerm(formData?.termsCondition);
     }
@@ -209,7 +202,7 @@ Props) {
       <div className="Content">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="FormHeader">
-            <span className="Title">Add Project</span>
+            <span className="Title">Update Project</span>
           </div>
           <div className="FormBody mt-2">
             <div className="FormFields">
@@ -512,7 +505,7 @@ Props) {
                           <label className="ShowImageLabel">
                             {planBankFile.name}
                           </label>
-                          <IconButton
+                          {/* <IconButton
                             className="btn-dot"
                             onClick={() => {
                               setPlanBankFile(null);
@@ -526,7 +519,7 @@ Props) {
                                 lineHeight: '1.5rem',
                               }}
                             />
-                          </IconButton>
+                          </IconButton> */}
                         </div>
                       ) : (
                         ''
@@ -578,7 +571,7 @@ Props) {
                           <label className="ShowImageLabel">
                             {planTermFile.name}
                           </label>
-                          <IconButton
+                          {/* <IconButton
                             className="btn-dot"
                             onClick={() => {
                               setPlanTermFile(null);
@@ -592,7 +585,7 @@ Props) {
                                 lineHeight: '1.5rem',
                               }}
                             />
-                          </IconButton>
+                          </IconButton> */}
                         </div>
                       ) : (
                         ''
