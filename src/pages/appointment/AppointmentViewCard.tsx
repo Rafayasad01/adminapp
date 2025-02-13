@@ -112,7 +112,7 @@ const AppointmentViewCard = ({
   const discountOpen = Boolean(discountAnchorEl);
   const idDiscount = discountOpen ? 'simple-popover' : undefined;
 
-  console.log('DATATA', appointmentData);
+  // console.log('DATATA', appointmentData);
 
   useEffect(() => {
     // Select the element
