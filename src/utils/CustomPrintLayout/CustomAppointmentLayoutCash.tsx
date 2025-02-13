@@ -35,13 +35,6 @@ const CustomPrintLayouts = forwardRef<any, CustomPrintLayoutsProps>(
       (state: any) => state.authState.systemConfig
     );
 
-    // const handleGrandTotal = () => {
-    //   const total =
-    //     Number(data?.grandTotalAmount) -
-    //     Number(Number(data?.appointmentDiscount).toFixed(0));
-    //   return total.toFixed(0);
-    // };
-
     const qrCodeValue = `Tracking Code: ${data?.code} \n\nShop Name: ${branch?.name} \nShop Email: ${authState?.user?.username}`;
     return (
       <div style={{ display: 'none' }}>

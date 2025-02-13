@@ -163,6 +163,18 @@ const AppointmentViewCard = ({
         </div>
       );
     }
+    if (statusComp && statusComp?.paymentStatus === 'Paid') {
+      return (
+        <div className="mt-1 flex items-center rounded bg-green-500 px-3 py-1 text-sm">
+          <CheckCircleIcon
+            color="success"
+            fontSize="inherit"
+            className="mr-1"
+          />{' '}
+          Its Paid
+        </div>
+      );
+    }
     if (statusDone && statusDone?.paymentStatus === 'Unpaid') {
       return (
         <div className="mt-1 flex items-center rounded bg-yellow-500 px-3 py-1 text-sm">
@@ -318,7 +330,7 @@ const AppointmentViewCard = ({
   };
 
   const getInvoice = (code: string) => {
-    setIsLoader(true);
+    // setIsLoader(true);
     storeAppointmentService
       .AppointmentInvoiceDetailByCode(code)
       .then((res) => {
