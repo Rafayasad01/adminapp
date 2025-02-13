@@ -331,14 +331,16 @@ const AppointmentViewCard = ({
 
   const getInvoice = (code: string) => {
     // setIsLoader(true);
+    setIsPrintEnabled(true);
     storeAppointmentService
       .AppointmentInvoiceDetailByCode(code)
       .then((res) => {
-        setIsLoader(false);
+        // setIsLoader(false);
+        setIsPrintEnabled(false);
         setInvoiceData(res.data.data);
       })
       .catch((err: Error) => {
-        setIsLoader(false);
+        setIsPrintEnabled(false);
         setIsNotify(true);
         setNotifyMessage({
           text: err.message,
@@ -550,7 +552,6 @@ const AppointmentViewCard = ({
             startDateFormat,
             endDateFormat,
           });
-          getInvoice(res.data.data.code);
         });
     }
   }, []);
@@ -636,7 +637,11 @@ const AppointmentViewCard = ({
               >
                 <HistoryIcon />
               </IconButton>
-              <IconButton name="Print Slip" className="icon-btn p-0">
+              <IconButton
+                onClick={() => getInvoice(data.code)}
+                name="Print Slip"
+                className="icon-btn p-0"
+              >
                 {/* {isPrintEnabled && ( */}
                 {listingRolePermission(
                   dataRole,
