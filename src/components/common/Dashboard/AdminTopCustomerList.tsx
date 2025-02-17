@@ -1,37 +1,52 @@
 import dayjs from 'dayjs';
-import { useAppSelector } from '../../../redux/redux-hooks';
+import CustomText from '../CustomText';
 
-const AdminTopCustomerList = () => {
-  const { customers } = useAppSelector((state) => state.dashboardState);
+const AdminTopCustomerList = ({ data }: any) => {
   return (
-    <table>
-      <thead>
-        <tr>
-          <th className="font-bold">Customer name</th>
-          <th className="font-bold">Date in</th>
-          <th className="font-bold">Service</th>
-          <th className="font-bold">Status</th>
-        </tr>
-      </thead>
-      <tbody>
-        {customers.map((x, index) => (
-          <tr key={index}>
-            <td className="font-bold capitalize text-primary">{x.name}</td>
-            <td>{dayjs(x.dateIn).format('MMM D, YYYY')}</td>
-            <td>{x.service}</td>
-            <td
-              className={
-                x.status.toLocaleLowerCase() !== 'cancelled'
-                  ? 'text-primary'
-                  : ''
-              }
-            >
-              {x.status.toLocaleUpperCase()}
-            </td>
+    <div className="h-[200px] overflow-auto">
+      <table className="toplisttable">
+        <thead className="rounded-[50px] bg-[#FFF3ED]">
+          <tr className="">
+            <th className="text-[12px] font-bold text-[#FF4F00]">S.no</th>
+            <th className="text-[12px] font-bold text-[#FF4F00]">
+              Project Name
+            </th>
+            <th className="text-[12px] font-bold text-[#FF4F00]">Start Date</th>
+            <th className="text-[12px] font-bold text-[#FF4F00]">End Date</th>
+            <th className="text-[12px] font-bold text-[#FF4F00]">Status</th>
+            <th className="text-[12px] font-bold text-[#FF4F00]">Phase</th>
+            <th className="text-[12px] font-bold text-[#FF4F00]">Action</th>
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody className="">
+          {data?.length
+            ? data?.map((x: any, index: number) => {
+                const sno = index + 1;
+                return (
+                  <tr key={index} className="border-b-2 bg-transparent">
+                    <td className="font-bold capitalize text-primary">{sno}</td>
+                    <td className="font-bold capitalize text-primary">
+                      {x.name}
+                    </td>
+                    <td>{dayjs(x.startDate).format('MMM D, YYYY')}</td>
+                    <td>{dayjs(x.endDate).format('MMM D, YYYY')}</td>
+                    <td className="flex items-center">
+                      <span className="rounded-xl bg-[#04D6430D] px-2 py-1 text-[12px] text-[#04D643]">
+                        {dayjs().to(x.endDate, true)} left
+                      </span>
+                    </td>
+                    <td>{x.phase}</td>
+                    <td className="cursor-pointer font-bold">View</td>
+                  </tr>
+                );
+              })
+            : ''}
+        </tbody>
+      </table>
+      {data?.length < 1 ? (
+        <CustomText bg="bg-[#FFF3ED]" text="No Records Found" />
+      ) : null}
+    </div>
   );
 };
 

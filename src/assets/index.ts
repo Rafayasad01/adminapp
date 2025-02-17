@@ -90,6 +90,12 @@ import box from './images/box.png';
 import supplyIcon from './images/icons/supply.png';
 import quotationIcon from './images/quotation.png';
 import vendorTypesIcon from './images/vendor-types.png';
+import newEarthDashboardIconOne from './images/dashboardIconOne.png';
+import newEarthDashboardIconTwo from './images/dashboardIconTwo.png';
+import newEarthDashboardIconThree from './images/dashboardIconThree.png';
+import linkArrow from './images/linkArrow.png';
+import newEarthDashboardPaymentBg from './images/dashboardPaymentbg.png';
+import orangeDot from './images/orangeDot.png';
 
 const assets = {
   images: {
@@ -171,6 +177,12 @@ const assets = {
     supplyIcon,
     quotationIcon,
     vendorTypesIcon,
+    newEarthDashboardIconOne,
+    newEarthDashboardIconTwo,
+    newEarthDashboardIconThree,
+    linkArrow,
+    newEarthDashboardPaymentBg,
+    orangeDot,
   },
   tempImages: {
     shirt,

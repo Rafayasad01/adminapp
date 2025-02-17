@@ -102,7 +102,8 @@ select {
   border-width: 1px solid !important;
 }
 
-.btn-flips:hover img {
+.btn-flips:hover img,
+.btn-flips:hover span {
   filter: invert(1) brightness(1);
   mix-blend-mode: color-dodge;
 }
@@ -2769,4 +2770,12 @@ main.min-h-screen.w-full.flex-grow.bg-gray-50.p-3.MuiBox-root.css-0 {
 
 .MuiTabs-indicator {
   @apply bg-primary !important;
+}
+
+.toplisttable th:first-child {
+  border-radius: 12px 0 0 12px;
+}
+
+.toplisttable th:last-child {
+  border-radius: 0 12px 12px 0;
 }
