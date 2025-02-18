@@ -10,7 +10,7 @@ const AdminTopCustomerList = ({ data }: any) => {
         <thead className="rounded-[50px] bg-[#FFF3ED]">
           <tr className="">
             <th className="text-[12px] font-bold text-[#FF4F00]">S.no</th>
-            <th className="text-[12px] font-bold text-[#FF4F00]">
+            <th className="w-[25%] text-[12px] font-bold text-[#FF4F00]">
               Project Name
             </th>
             <th className="text-[12px] font-bold text-[#FF4F00]">Start Date</th>
@@ -26,20 +26,26 @@ const AdminTopCustomerList = ({ data }: any) => {
                 const sno = index + 1;
                 return (
                   <tr key={index} className="border-b-2 bg-transparent">
-                    <td className="font-bold capitalize text-primary">{sno}</td>
-                    <td className="font-bold capitalize text-primary">
+                    <td className="font-space-grotesk capitalize text-primary">
+                      {sno}
+                    </td>
+                    <td className="font-space-grotesk capitalize text-primary">
                       {x.name}
                     </td>
-                    <td>{dayjs(x.startDate).format('MMM D, YYYY, hh:mm a')}</td>
-                    <td>{dayjs(x.endDate).format('MMM D, YYYY, hh:mm a')}</td>
-                    <td className="flex items-center">
-                      <span className="rounded-xl bg-[#04D6430D] px-2 py-1 text-[12px] text-[#04D643]">
+                    <td className="font-space-grotesk capitalize text-primary">
+                      {dayjs(x.startDate).format('DD.MM.YY')}
+                    </td>
+                    <td className="font-space-grotesk capitalize text-primary">
+                      {dayjs(x.endDate).format('DD.MM.YY')}
+                    </td>
+                    <td className="flex items-center font-space-grotesk">
+                      <span className="rounded-xl bg-[#04D6430D] px-2 py-1 font-space-grotesk text-[12px] text-[#04D643]">
                         {dayjs().to(x.endDate, true)} left
                       </span>
                     </td>
-                    <td>{x.phase}</td>
+                    <td className="font-space-grotesk">{x.phase}</td>
                     <td
-                      className="cursor-pointer font-bold"
+                      className="cursor-pointer font-space-grotesk font-bold"
                       onClick={() => navigate('../projects')}
                     >
                       View

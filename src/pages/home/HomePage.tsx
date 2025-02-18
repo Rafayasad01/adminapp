@@ -228,7 +228,7 @@ function HomePage() {
                 Active Projects
               </span>
               <button
-                className="z-30 cursor-pointer"
+                className="cursor-pointer"
                 onClick={() => navigate('../projects')}
               >
                 <img src={assets.images.linkArrow} alt="link-arrow" />

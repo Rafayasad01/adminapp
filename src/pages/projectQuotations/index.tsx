@@ -63,7 +63,7 @@ function ProjectQuotationsPage() {
                     dataRole,
                     !!ALL_PERMISSIONS.quotations.view
                   )}
-                  label="quotation slips"
+                  label="Project Quotations"
                   value="QUOTATIONS"
                 />
               )}
@@ -76,7 +76,7 @@ function ProjectQuotationsPage() {
                     dataRole,
                     !!ALL_PERMISSIONS.quotations.view
                   )}
-                  label="total paid slips"
+                  label="Billing"
                   value="TOTAL_PAID"
                 />
               )}
@@ -89,7 +89,7 @@ function ProjectQuotationsPage() {
                     dataRole,
                     !!ALL_PERMISSIONS.quotations.view
                   )}
-                  label="material & labor slips"
+                  label="Payment"
                   value="MATERIAL_LABOR_PAID"
                 />
               )}

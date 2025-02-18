@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@100;200;300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -102,14 +103,16 @@ select {
   border-width: 1px solid !important;
 }
 
-.btn-flips:hover img,
-.btn-flips:hover span {
+.btn-flips:hover img {
   filter: invert(1) brightness(1);
   mix-blend-mode: color-dodge;
 }
 .active-class img {
   filter: invert(1) brightness(1);
   mix-blend-mode: color-dodge;
+}
+.btn-flips:hover span {
+  @apply text-white !important;
 }
 .active-class span {
   @apply text-white !important;
