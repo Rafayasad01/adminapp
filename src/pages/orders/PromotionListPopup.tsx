@@ -55,7 +55,7 @@ function PromotionListPopup({
                     <th>Discount</th>
                     <th className="w-1/6">Valid From</th>
                     <th className="w-1/6">Valid Till</th>
-                    <th>Min Withdrawl</th>
+                    <th>Min Withdrawal</th>
                     <th>Redeem Count</th>
                     <th>Max User Redeem</th>
                     <th>Redeem Limitation</th>

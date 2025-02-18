@@ -377,7 +377,7 @@ function VouchersPage() {
                   <th>Valid From</th>
                   <th>Valid Till</th>
                   <th className="w-[10%]">Discount</th>
-                  <th>Min Withdrawl</th>
+                  <th>Min Withdrawal</th>
                   {/* <th>Type</th> */}
                   <th>Unlimited Redeem for Users</th>
                   <th>User Redeem Limitation</th>
