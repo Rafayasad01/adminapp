@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import CustomText from '../../../components/common/CustomText';
 import { useAppSelector } from '../../../redux/redux-hooks';
 import appUserService from '../../../services/adminapp/adminAppUser';
+import { CURRENCY_PREFIX } from '../../../utils/constants';
 
 type AppUserLoyaltyTabProps = {
   list: any;
@@ -118,7 +119,9 @@ function AppUserLoyaltyTab({
                       <div>{item?.coins}</div>
                     </td>
                     <td>
-                      <div>${item?.appOrder[0]?.grandTotal}</div>
+                      <div>
+                        {item?.appOrder[0]?.grandTotal} {CURRENCY_PREFIX}
+                      </div>
                     </td>
                     <td>
                       <div>

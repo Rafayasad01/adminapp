@@ -9,7 +9,10 @@ import TablePagination from '@mui/material/TablePagination';
 import dayjs from 'dayjs';
 import { useNavigate } from 'react-router-dom';
 import CustomText from '../../../components/common/CustomText';
+import { useAppSelector } from '../../../redux/redux-hooks';
 import appUserService from '../../../services/adminapp/adminAppUser';
+import { ALL_PERMISSIONS, CURRENCY_PREFIX } from '../../../utils/constants';
+import { listingRolePermission } from '../../../utils/helper';
 
 type AppUserPromotionTabProps = {
   list: any;
@@ -40,6 +43,9 @@ function AppUserPromotionTab({
 }: AppUserPromotionTabProps) {
   const navigate = useNavigate();
   // const authState: any = useAppSelector((state) => state?.authState);
+  const dataRole = useAppSelector(
+    (state: any) => state?.persistedReducer?.roleState?.role?.permissions
+  );
 
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
@@ -109,7 +115,9 @@ function AppUserPromotionTab({
   };
 
   const ConvertToAmount: any = (totalAmount: any, PercentageValue: any) => {
-    return `$${(totalAmount * (PercentageValue / 100)).toFixed(0)}`;
+    return `${(totalAmount * (PercentageValue / 100)).toFixed(
+      0
+    )} ${CURRENCY_PREFIX}`;
   };
 
   return (
@@ -165,42 +173,50 @@ function AppUserPromotionTab({
                     </td>
                     <td>
                       {item?.adminVoucher?.discountType === 'Amount'
-                        ? `$${Number(item?.adminVoucher?.value).toFixed(0)}`
+                        ? `${Number(item?.adminVoucher?.value).toFixed(
+                            0
+                          )} ${CURRENCY_PREFIX}`
                         : ConvertToAmount(
                             Number(item?.adminVoucher?.value).toFixed(0),
                             Number(item?.appOrder[0]?.totalAmount)
                           )}
-                      {/* <div>
-                        {item?.adminVoucher?.discountType === 'Amount'
-                          ? `$${Number(item?.adminVoucher?.value).toFixed(0)}`
-                          : `${Number(item?.adminVoucher?.value).toFixed(0)}%`}
-                      </div> */}
                     </td>
                     <td>
-                      <div>${item?.appOrder[0]?.grandTotal}</div>
+                      <div>
+                        {item?.appOrder[0]?.grandTotal} {CURRENCY_PREFIX}
+                      </div>
                     </td>
                     <td>
                       <div>{item?.appOrder[0]?.orderNumber}</div>
                     </td>
                     <td>
                       <div>
-                        {dayjs(item?.adminVoucher?.createdDate).format(
-                          'MMMM DD, YYYY'
-                        )}
+                        {item?.adminVoucher?.redeemDate
+                          ? dayjs(item?.adminVoucher?.redeemDate).format(
+                              'MMMM DD, YYYY'
+                            )
+                          : 'Date not available'}
                       </div>
                     </td>
-                    <td>
-                      <div className="flex flex-row-reverse">
-                        <IconButton
-                          className="icon-btn"
-                          onClick={() =>
-                            navigate(`../history/voucher/detail/${item.id}`)
-                          }
-                        >
-                          <WysiwygOutlinedIcon />
-                        </IconButton>
-                      </div>
-                    </td>
+                    {listingRolePermission(
+                      dataRole,
+                      ALL_PERMISSIONS.storeUser.viewUserAppRewardHistory
+                    ) && (
+                      <td>
+                        <div className="flex flex-row-reverse">
+                          <IconButton
+                            className="icon-btn"
+                            onClick={() =>
+                              navigate(
+                                `/admin/dashboard/app-user/reward/history/voucher/detail/${item.id}`
+                              )
+                            }
+                          >
+                            <WysiwygOutlinedIcon />
+                          </IconButton>
+                        </div>
+                      </td>
+                    )}
                   </tr>
                 );
               })}

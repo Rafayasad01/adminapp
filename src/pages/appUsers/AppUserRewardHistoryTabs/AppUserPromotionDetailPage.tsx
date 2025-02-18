@@ -10,6 +10,7 @@ import TopBar from '../../../components/common/TopBar';
 import { useAppSelector } from '../../../redux/redux-hooks';
 import appUserService from '../../../services/adminapp/adminAppUser';
 import PermissionPopup from '../../../utils/PermissionPopup';
+import { ALL_PERMISSIONS, CURRENCY_PREFIX } from '../../../utils/constants';
 import { listingRolePermission } from '../../../utils/helper';
 
 function AppUserPromotionDetailPage() {
@@ -42,7 +43,12 @@ function AppUserPromotionDetailPage() {
   // };
 
   useEffect(() => {
-    if (listingRolePermission(dataRole, 'Driver Address Detail')) {
+    if (
+      listingRolePermission(
+        dataRole,
+        ALL_PERMISSIONS.storeUser.viewUserAppRewardHistory
+      )
+    ) {
       appUserService
         .appUserVocuherHistoryDetails(historyId)
         .then((item: any) => {
@@ -67,7 +73,7 @@ function AppUserPromotionDetailPage() {
           });
         });
     }
-  }, [null]);
+  }, []);
 
   return isLoader ? (
     <Loader />
@@ -151,7 +157,8 @@ function AppUserPromotionDetailPage() {
                         Total Amount
                       </span>
                       <span className="font-open-sans text-sm font-normal text-[#6A6A6A]">
-                        ${detail.appOrder[0].totalAmount ?? '0'}
+                        {detail.appOrder[0].totalAmount ?? '0'}{' '}
+                        {CURRENCY_PREFIX}
                       </span>
                     </div>
                     <div className="col-span-4 flex w-full flex-col">
@@ -159,7 +166,7 @@ function AppUserPromotionDetailPage() {
                         Discount
                       </span>
                       <span className="font-open-sans text-sm font-normal text-[#6A6A6A]">
-                        ${detail.appOrder[0].discount ?? '0'}
+                        {detail.appOrder[0].discount ?? '0'} {CURRENCY_PREFIX}
                       </span>
                     </div>
                     <div className="col-span-4 flex w-full flex-col">
@@ -177,7 +184,7 @@ function AppUserPromotionDetailPage() {
                         GST Amount
                       </span>
                       <span className="font-open-sans text-sm font-normal text-[#6A6A6A]">
-                        ${detail.appOrder[0].gstAmount ?? '0'}
+                        {detail.appOrder[0].gstAmount ?? '0'} {CURRENCY_PREFIX}
                       </span>
                     </div>
                     <div className="col-span-4 flex w-full flex-col">
@@ -185,7 +192,7 @@ function AppUserPromotionDetailPage() {
                         Grand Total
                       </span>
                       <span className="font-open-sans text-sm font-normal text-[#6A6A6A]">
-                        ${detail.appOrder[0].grandTotal ?? '0'}
+                        {detail.appOrder[0].grandTotal ?? '0'} {CURRENCY_PREFIX}
                       </span>
                     </div>
                   </div>
@@ -223,7 +230,7 @@ function AppUserPromotionDetailPage() {
                     </span>
                     <span className="font-open-sans text-sm font-normal text-[#6A6A6A]">
                       {detail.adminVoucher.discountType === 'Amount'
-                        ? `$${detail.adminVoucher.value}`
+                        ? `${detail.adminVoucher.value} ${CURRENCY_PREFIX}`
                         : `${detail.adminVoucher.value}%`}
                     </span>
                   </div>
@@ -304,7 +311,9 @@ function AppUserPromotionDetailPage() {
                               </td>
                               <td>{item.homeCatItem.desc}</td>
                               <td>{item.quantity}</td>
-                              <td>{item.unitPrice}</td>
+                              <td>
+                                {item.unitPrice} {CURRENCY_PREFIX}
+                              </td>
                               {/* <td>
                                                                 <div className="flex flex-row-reverse">
                                                                     <IconButton
