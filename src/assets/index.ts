@@ -64,6 +64,7 @@ import noonImage from './images/noon.png';
 import otpMSg from './images/otp-msg.png';
 import pants from './images/pants.svg';
 import projectIcon from './images/project-icon.svg';
+import projectIconPng from './images/project-icon.png';
 import ReferralCodeIcon from './images/referral-code.png';
 import roleIcon from './images/role.svg';
 import shirt from './images/shirt.svg';
@@ -137,6 +138,7 @@ const assets = {
     dummyImage,
     defaultLogo,
     ReferralCodeIcon,
+    projectIconPng,
     speechBubble,
     bgLogin,
     forgotBg,

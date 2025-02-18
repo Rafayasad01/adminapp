@@ -99,10 +99,10 @@ function HomePage() {
         <div className="mt-2 grid grid-cols-12 gap-3">
           <div className="col-span-4 flex h-[209.05px] flex-row justify-between rounded-3xl bg-white px-7 py-5 shadow-lg">
             <div>
-              <span className="block font-open-sans text-[40px] font-semibold text-primary">
+              <span className="block font-space-grotesk text-[40px] font-semibold text-primary">
                 {data?.totalClients || 0}
               </span>
-              <span className="font-open-sans text-[18px] font-semibold text-primary opacity-50">
+              <span className="font-space-grotesk text-[18px] font-semibold text-primary opacity-50">
                 Total Client’s
               </span>
             </div>
@@ -115,10 +115,10 @@ function HomePage() {
           </div>
           <div className="col-span-4 flex h-[209.05px] flex-row justify-between rounded-3xl bg-white px-7 py-5 shadow-lg">
             <div>
-              <span className="block font-open-sans text-[40px] font-semibold text-primary">
+              <span className="block font-space-grotesk text-[40px] font-semibold text-primary">
                 {data?.totalProjects || 0}
               </span>
-              <span className="font-open-sans text-[18px] font-semibold text-primary opacity-50">
+              <span className="font-space-grotesk text-[18px] font-semibold text-primary opacity-50">
                 Total Projects
               </span>
             </div>
@@ -131,10 +131,10 @@ function HomePage() {
           </div>
           <div className="col-span-4 flex h-[209.05px] flex-row justify-between rounded-3xl bg-white px-7 py-5 shadow-lg">
             <div>
-              <span className="block font-open-sans text-[40px] font-semibold text-primary">
+              <span className="block font-space-grotesk text-[40px] font-semibold text-primary">
                 {data?.totalActiveProjects || 0}
               </span>
-              <span className="font-open-sans text-[18px] font-semibold text-primary opacity-50">
+              <span className="font-space-grotesk text-[18px] font-semibold text-primary opacity-50">
                 Active Projects
               </span>
             </div>
@@ -149,7 +149,7 @@ function HomePage() {
         <div className="my-5 grid grid-cols-12 gap-3">
           <div className="col-span-8">
             <div className="rounded-3xl bg-white px-5 py-6 shadow-lg">
-              <span className="heading-color mb-8 flex font-open-sans text-[24px] font-semibold text-primary">
+              <span className="heading-color mb-8 flex font-space-grotesk text-[24px] font-semibold text-primary">
                 Project Update
               </span>
               <AdminTopCustomerList data={data?.nearToCompleteProjects || []} />
@@ -163,11 +163,11 @@ function HomePage() {
               />
               <div className="grid w-full grid-cols-12">
                 <div className="col-span-6">
-                  <span className="heading-color flex font-open-sans text-[24px] font-semibold text-primary">
+                  <span className="heading-color flex font-space-grotesk text-[24px] font-semibold text-primary">
                     Payments
                   </span>
                   <div className="mt-16 flex items-center gap-1">
-                    <span className="break-all text-[14px] font-semibold capitalize leading-normal text-secondary">
+                    <span className="break-all font-space-grotesk text-[14px] font-semibold capitalize leading-normal text-secondary">
                       Total Received
                     </span>
                   </div>
@@ -178,7 +178,7 @@ function HomePage() {
                       )[0]
                     }
                     .
-                    <span className="text-secondary opacity-[0.5]">
+                    <span className="font-space-grotesk text-secondary opacity-[0.5]">
                       {
                         formatCurrency(data?.payment?.totalPaid || 0).split(
                           '.'
@@ -198,7 +198,7 @@ function HomePage() {
                   </div>
                   <div className="">
                     <div className="mt-10 flex items-center">
-                      <span className="break-all text-[14px] font-semibold capitalize leading-normal text-secondary">
+                      <span className="break-all font-space-grotesk text-[14px] font-semibold capitalize leading-normal text-secondary">
                         Reached This Month
                       </span>
                     </div>
@@ -209,7 +209,7 @@ function HomePage() {
                         ).split('.')[0]
                       }
                       .
-                      <span className="text-secondary opacity-[0.5]">
+                      <span className="font-space-grotesk text-secondary opacity-[0.5]">
                         {
                           formatCurrency(
                             data?.payment?.totalPaidCurrentMonth || 0
@@ -224,7 +224,7 @@ function HomePage() {
           </div>
           <div className="col-span-4 rounded-3xl bg-white px-5 py-4 shadow-lg">
             <div className="flex items-center justify-between">
-              <span className="heading-color flex font-open-sans text-[24px] font-semibold text-primary">
+              <span className="heading-color flex font-space-grotesk text-[24px] font-semibold text-primary">
                 Active Projects
               </span>
               <button
@@ -245,10 +245,10 @@ function HomePage() {
                         alt="orange-dot"
                       />
                       <div className="mx-5 my-2">
-                        <span className="heading-color block font-open-sans text-[18px] font-semibold text-primary">
+                        <span className="heading-color block font-space-grotesk text-[18px] font-semibold text-primary">
                           {x.name}
                         </span>
-                        <span className="font-open-sans text-[14px] font-semibold text-primary opacity-50">
+                        <span className="font-space-grotesk text-[14px] font-semibold text-primary opacity-50">
                           {x.client}
                         </span>
                       </div>

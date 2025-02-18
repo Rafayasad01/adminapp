@@ -77,7 +77,7 @@ function Sidebar() {
                 <div className="">
                   <button className="btn-flips my-[6px] h-[65px] min-w-[55px] rounded-[50%] hover:bg-[#F27426]">
                     <img
-                      src={assets.images.projectIcon}
+                      src={assets.images.projectIconPng}
                       alt="icon"
                       className="mx-5 w-[24px]"
                     />

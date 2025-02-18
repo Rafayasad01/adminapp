@@ -48,9 +48,9 @@ function TopBar(_TopBarProps: any) {
 
   return (
     <>
-      <div className="fixed top-0 z-10 mx-0 w-[92.5%] bg-[#f5f5f5]">
+      <div className="fixed top-0 z-10 mx-0 w-[100%] bg-[#f5f5f5]">
         <div className="mb-4 flex w-[100%] items-center justify-between px-2 pb-1 pt-2">
-          <div className="basis-[50%] px-4">
+          <div className="basis-[50%] px-6">
             <span className="block text-[32px] font-medium capitalize leading-normal text-secondary">
               Hello New Earth Proptech
             </span>
@@ -58,7 +58,7 @@ function TopBar(_TopBarProps: any) {
               Admin Dashboard
             </span>
           </div>
-          <div className="basis-[50%]">
+          <div className="basis-[50%] px-16">
             <div className="flex items-center justify-end gap-4">
               <div className="px-2">
                 <div className="h-[35px] w-[100px] rounded-[20px] bg-white p-2 text-center hover:bg-[#ccc]">
