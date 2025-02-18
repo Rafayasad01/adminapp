@@ -267,7 +267,7 @@ function UsersPage() {
           <div className="grid grid-cols-12 px-4 py-5">
             <div className="col-span-7">
               <span className="font-open-sans text-xl font-semibold text-[#252733]">
-                All Users
+                All Clients
               </span>
             </div>
             <div className="col-span-5">

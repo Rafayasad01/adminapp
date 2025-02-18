@@ -107,6 +107,16 @@ select {
   filter: invert(1) brightness(1);
   mix-blend-mode: color-dodge;
 }
+.active-class img {
+  filter: invert(1) brightness(1);
+  mix-blend-mode: color-dodge;
+}
+.active-class span {
+  @apply text-white !important;
+}
+.active-class button {
+  background-color: #f27426;
+}
 
 @keyframes fadeInOut {
   0% {

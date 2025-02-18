@@ -148,7 +148,7 @@ function HomePage() {
           <div className="col-span-8">
             <div className="rounded-3xl bg-white px-5 py-6 shadow-lg">
               <span className="heading-color mb-8 flex font-open-sans text-[24px] font-semibold text-primary">
-                Near to Completion
+                Project Update
               </span>
               <AdminTopCustomerList data={data?.nearToCompleteProjects || []} />
             </div>

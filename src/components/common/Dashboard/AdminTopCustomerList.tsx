@@ -3,7 +3,7 @@ import CustomText from '../CustomText';
 
 const AdminTopCustomerList = ({ data }: any) => {
   return (
-    <div className="h-[200px] overflow-auto">
+    <div className="h-[200px] overflow-auto 2xl:h-[350px]">
       <table className="toplisttable">
         <thead className="rounded-[50px] bg-[#FFF3ED]">
           <tr className="">

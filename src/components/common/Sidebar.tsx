@@ -46,10 +46,13 @@ function Sidebar() {
         </div>
         <div className="mx-auto basis-[60%]">
           <div className="max-h-[850px] w-[75px] rounded-[45px] bg-[#C9C9C9] text-center">
-            <NavLink to="/admin/dashboard/home">
+            <NavLink
+              className={({ isActive }) => (isActive ? 'active-class' : '')}
+              to="/admin/dashboard/home"
+            >
               {/* <Tooltip title="Dashboard" arrow placement="left"> */}
               <div className="">
-                <button className="btn-flips my-[6px] h-[65px] min-w-[55px] rounded-[50%] bg-transparent hover:bg-[#F27426]">
+                <button className="btn-flips my-[6px] h-[65px] min-w-[55px] rounded-[50%] hover:bg-[#F27426]">
                   <img
                     src={assets.images.slIcon}
                     alt="icon"
@@ -66,10 +69,13 @@ function Sidebar() {
               dataRole,
               ALL_PERMISSIONS.storePlans.viewProjects
             ) && (
-              <NavLink to="/admin/dashboard/projects">
+              <NavLink
+                to="/admin/dashboard/projects"
+                className={({ isActive }) => (isActive ? 'active-class' : '')}
+              >
                 {/* <Tooltip title="Projects" arrow placement="left"> */}
                 <div className="">
-                  <button className="btn-flips my-[6px] h-[65px] min-w-[55px] rounded-[50%] bg-transparent hover:bg-[#F27426]">
+                  <button className="btn-flips my-[6px] h-[65px] min-w-[55px] rounded-[50%] hover:bg-[#F27426]">
                     <img
                       src={assets.images.projectIcon}
                       alt="icon"
@@ -94,10 +100,13 @@ function Sidebar() {
                 {/* </Tooltip> */}
               </NavLink>
             )}
-            {listingRolePermission(dataRole, ALL_PERMISSIONS.products.view) && (
-              <NavLink to="/admin/dashboard/products">
+            {/* {listingRolePermission(dataRole, ALL_PERMISSIONS.products.view) && (
+              <NavLink
+                to="/admin/dashboard/products"
+                className={({ isActive }) => (isActive ? 'active-class' : '')}
+              >
                 <div className="">
-                  <button className="btn-flips my-[6px] h-[65px] min-w-[55px] rounded-[50%] bg-transparent hover:bg-[#F27426]">
+                  <button className="btn-flips my-[6px] h-[65px] min-w-[55px] rounded-[50%] hover:bg-[#F27426]">
                     <img
                       src={assets.images.box}
                       alt="icon"
@@ -108,29 +117,18 @@ function Sidebar() {
                     </span>
                   </button>
                 </div>
-
-                {/* <Button
-                  variant="text"
-                  className="btn-flips my-[0px] h-[65px] min-w-[65px] flex-col rounded-[32px] bg-transparent hover:bg-[#F27426]"
-                >
-                  <img
-                    src={assets.images.box}
-                    alt="icon"
-                    className="w-[24px]"
-                  />
-                  <span className="mt-[1px] block truncate text-[8px] leading-[14px] text-secondary">
-                    Products
-                  </span>
-                </Button> */}
               </NavLink>
-            )}
+            )} */}
             {listingRolePermission(
               dataRole,
               ALL_PERMISSIONS.storePlans.viewProjectAttachments
             ) && (
-              <NavLink to="/admin/dashboard/attachments">
+              <NavLink
+                to="/admin/dashboard/attachments"
+                className={({ isActive }) => (isActive ? 'active-class' : '')}
+              >
                 <div className="">
-                  <button className="btn-flips my-[6px] h-[65px] min-w-[55px] rounded-[50%] bg-transparent hover:bg-[#F27426]">
+                  <button className="btn-flips my-[6px] h-[65px] min-w-[55px] rounded-[50%] hover:bg-[#F27426]">
                     <img
                       src={assets.images.photoIcon}
                       alt="icon"
@@ -156,15 +154,18 @@ function Sidebar() {
               dataRole,
               ALL_PERMISSIONS.storePlans.viewProjectUsers
             ) && (
-              <NavLink to="/admin/dashboard/ne-users">
-                <button className="btn-flips my-[6px] h-[65px] min-w-[55px] rounded-[50%] bg-transparent hover:bg-[#F27426]">
+              <NavLink
+                to="/admin/dashboard/ne-users"
+                className={({ isActive }) => (isActive ? 'active-class' : '')}
+              >
+                <button className="btn-flips my-[6px] h-[65px] min-w-[55px] rounded-[50%] hover:bg-[#F27426]">
                   <img
                     src={assets.images.busnessIcon}
                     alt="icon"
                     className="mx-5 w-[24px]"
                   />
                   <span className="mt-[1px] block text-[10px] leading-[14px] text-secondary">
-                    Users
+                    Clients
                   </span>
                 </button>
                 {/* <Tooltip title="Users" arrow placement="left">
@@ -182,8 +183,11 @@ function Sidebar() {
               dataRole,
               ALL_PERMISSIONS.storePlans.viewProjectAdminUsers
             ) && (
-              <NavLink to="/admin/dashboard/ne-admin-users">
-                <button className="btn-flips my-[6px] h-[65px] min-w-[55px] rounded-[50%] bg-transparent hover:bg-[#F27426]">
+              <NavLink
+                to="/admin/dashboard/ne-admin-users"
+                className={({ isActive }) => (isActive ? 'active-class' : '')}
+              >
+                <button className="btn-flips my-[6px] h-[65px] min-w-[55px] rounded-[50%] hover:bg-[#F27426]">
                   <img
                     src={assets.images.startegyIcon}
                     alt="icon"
@@ -208,8 +212,11 @@ function Sidebar() {
               dataRole,
               ALL_PERMISSIONS.storePlans.viewRole
             ) && (
-              <NavLink to="/admin/dashboard/ne-role">
-                <button className="btn-flips my-[6px] h-[65px] min-w-[55px] rounded-[50%] bg-transparent hover:bg-[#F27426]">
+              <NavLink
+                to="/admin/dashboard/ne-role"
+                className={({ isActive }) => (isActive ? 'active-class' : '')}
+              >
+                <button className="btn-flips my-[6px] h-[65px] min-w-[55px] rounded-[50%] hover:bg-[#F27426]">
                   <img
                     src={assets.images.clipboardIcon}
                     alt="icon"
@@ -230,12 +237,15 @@ function Sidebar() {
                 </Tooltip> */}
               </NavLink>
             )}
-            {listingRolePermission(
+            {/* {listingRolePermission(
               dataRole,
               ALL_PERMISSIONS.vendors.viewVendorTypes
             ) && (
-              <NavLink to="/admin/dashboard/vendor-types">
-                <button className="btn-flips my-[6px] h-[65px] min-w-[55px] rounded-[50%] bg-transparent hover:bg-[#F27426]">
+              <NavLink
+                to="/admin/dashboard/vendor-types"
+                className={({ isActive }) => (isActive ? 'active-class' : '')}
+              >
+                <button className="btn-flips my-[6px] h-[65px] min-w-[55px] rounded-[50%] hover:bg-[#F27426]">
                   <img
                     src={assets.images.vendorTypesIcon}
                     alt="icon"
@@ -245,20 +255,14 @@ function Sidebar() {
                     Vendor-Types
                   </span>
                 </button>
-                {/* <Tooltip title="Vendor-Types" arrow placement="left">
-                  <Button className="btn-flips my-[5px] h-[50px] min-w-[50px] rounded-[28px] bg-transparent hover:bg-[#F27426]">
-                    <img
-                      src={assets.images.vendorTypesIcon}
-                      alt="icon"
-                      className="w-[24px]"
-                    />
-                  </Button>
-                </Tooltip> */}
               </NavLink>
-            )}
-            {listingRolePermission(dataRole, ALL_PERMISSIONS.vendors.view) && (
-              <NavLink to="/admin/dashboard/vendors">
-                <button className="btn-flips my-[6px] h-[65px] min-w-[55px] rounded-[50%] bg-transparent hover:bg-[#F27426]">
+            )} */}
+            {/* {listingRolePermission(dataRole, ALL_PERMISSIONS.vendors.view) && (
+              <NavLink
+                to="/admin/dashboard/vendors"
+                className={({ isActive }) => (isActive ? 'active-class' : '')}
+              >
+                <button className="btn-flips my-[6px] h-[65px] min-w-[55px] rounded-[50%] hover:bg-[#F27426]">
                   <img
                     src={assets.images.supplyIcon}
                     alt="icon"
@@ -268,23 +272,17 @@ function Sidebar() {
                     Vendors
                   </span>
                 </button>
-                {/* <Tooltip title="Vendors" arrow placement="left">
-                  <Button className="btn-flips my-[5px] h-[50px] min-w-[50px] rounded-[28px] bg-transparent hover:bg-[#F27426]">
-                    <img
-                      src={assets.images.supplyIcon}
-                      alt="icon"
-                      className="w-[24px]"
-                    />
-                  </Button>
-                </Tooltip> */}
               </NavLink>
-            )}
+            )} */}
             {listingRolePermission(
               dataRole,
               ALL_PERMISSIONS.quotations.view
             ) && (
-              <NavLink to="/admin/dashboard/quotations">
-                <button className="btn-flips my-[6px] h-[65px] min-w-[55px] rounded-[50%] bg-transparent hover:bg-[#F27426]">
+              <NavLink
+                to="/admin/dashboard/quotations"
+                className={({ isActive }) => (isActive ? 'active-class' : '')}
+              >
+                <button className="btn-flips my-[6px] h-[65px] min-w-[55px] rounded-[50%] hover:bg-[#F27426]">
                   <img
                     src={assets.images.quotationIcon}
                     alt="icon"
