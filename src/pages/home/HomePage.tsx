@@ -4,6 +4,7 @@
 // import { useEffect } from 'react';
 // import { useNavigate } from 'react-router';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router';
 import assets from '../../assets';
 import Loader from '../../components/common/Loader';
 import Notify from '../../components/common/Notify';
@@ -59,6 +60,7 @@ interface ActivityResponse {
 
 function HomePage() {
   const [data, setData] = useState<ActivityResponse>();
+  const navigate = useNavigate();
   const {
     notify: isNotify,
     notifyMessage,
@@ -187,7 +189,12 @@ function HomePage() {
                 </div>
                 <div className="col-span-6">
                   <div className="flex justify-end">
-                    <img src={assets.images.linkArrow} alt="link-arrow" />
+                    <button
+                      className="z-30 cursor-pointer"
+                      onClick={() => navigate('../quotations')}
+                    >
+                      <img src={assets.images.linkArrow} alt="link-arrow" />
+                    </button>
                   </div>
                   <div className="">
                     <div className="mt-10 flex items-center">
@@ -220,7 +227,12 @@ function HomePage() {
               <span className="heading-color flex font-open-sans text-[24px] font-semibold text-primary">
                 Active Projects
               </span>
-              <img src={assets.images.linkArrow} alt="link-arrow" />
+              <button
+                className="z-30 cursor-pointer"
+                onClick={() => navigate('../projects')}
+              >
+                <img src={assets.images.linkArrow} alt="link-arrow" />
+              </button>
             </div>
             <div className="h-[480px] overflow-auto">
               {data?.topActiveProjects?.length ? (

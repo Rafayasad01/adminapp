@@ -1,7 +1,9 @@
 import dayjs from 'dayjs';
+import { useNavigate } from 'react-router';
 import CustomText from '../CustomText';
 
 const AdminTopCustomerList = ({ data }: any) => {
+  const navigate = useNavigate();
   return (
     <div className="h-[200px] overflow-auto 2xl:h-[350px]">
       <table className="toplisttable">
@@ -28,15 +30,20 @@ const AdminTopCustomerList = ({ data }: any) => {
                     <td className="font-bold capitalize text-primary">
                       {x.name}
                     </td>
-                    <td>{dayjs(x.startDate).format('MMM D, YYYY')}</td>
-                    <td>{dayjs(x.endDate).format('MMM D, YYYY')}</td>
+                    <td>{dayjs(x.startDate).format('MMM D, YYYY, hh:mm a')}</td>
+                    <td>{dayjs(x.endDate).format('MMM D, YYYY, hh:mm a')}</td>
                     <td className="flex items-center">
                       <span className="rounded-xl bg-[#04D6430D] px-2 py-1 text-[12px] text-[#04D643]">
                         {dayjs().to(x.endDate, true)} left
                       </span>
                     </td>
                     <td>{x.phase}</td>
-                    <td className="cursor-pointer font-bold">View</td>
+                    <td
+                      className="cursor-pointer font-bold"
+                      onClick={() => navigate('../projects')}
+                    >
+                      View
+                    </td>
                   </tr>
                 );
               })
