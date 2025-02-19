@@ -149,7 +149,7 @@ const OrderBasket = () => {
   );
 
   const checkVoucherMinAmount =
-    specificVoucher && Number(totalAmount) > Number(specificVoucher.minAmount);
+    specificVoucher && Number(totalAmount) >= Number(specificVoucher.minAmount);
 
   const handleCartItemDelete = (id: string | any) => {
     dispatch(setCart(cartItems.filter((x) => x.id !== id)));
@@ -985,7 +985,7 @@ const OrderBasket = () => {
                         `${CURRENCY_PREFIX}
                       ${
                         discountedValue?.value > 0 &&
-                        totalAmount > minDiscount &&
+                        totalAmount >= minDiscount &&
                         totalAmount > discountedValue?.value &&
                         promoCode
                           ? discountedValue?.value?.toLocaleString()
