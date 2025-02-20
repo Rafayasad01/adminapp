@@ -105,7 +105,7 @@ Props) {
 
   const totalDays =
     watch('startDate') && watch('endDate')
-      ? dayjs(watch('endDate')).diff(dayjs(watch('startDate')), 'day') + 1
+      ? dayjs(watch('endDate')).diff(dayjs(watch('startDate')), 'day') + 2
       : 0;
 
   const validateTotalDays = (value: any, allValues: any) => {
@@ -115,7 +115,7 @@ Props) {
 
     const totalEnteredDays = demolitionDays + constructionDays + finishingDays;
 
-    if (value < 0) return 'Days cannot be negative';
+    if (value <= 0) return 'Days cannot be zero / negative';
     if (totalEnteredDays > totalDays)
       return `Total days (${totalEnteredDays}) cannot exceed ${totalDays} days`;
     if (totalEnteredDays < totalDays)
