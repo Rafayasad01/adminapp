@@ -241,7 +241,7 @@ const FeedbackPage = () => {
             <table className="table-border table-auto">
               <thead>
                 <tr>
-                  <th>Feedback</th>
+                  <th className="w-[70%]">Feedback</th>
                   <th>Client Name</th>
                   <th className="">Created Date</th>
                   <th>&nbsp;</th>
@@ -252,7 +252,7 @@ const FeedbackPage = () => {
                   list?.map((item: any, index: number) => {
                     return (
                       <tr key={index}>
-                        <td>{item.feedback ?? '--'}</td>
+                        <td className="pr-10">{item.feedback ?? '--'}</td>
                         <td>{item.clientName ?? '--'}</td>
                         <td>
                           {dayjs(item.createdAt).format('DD-MM-YYYY HH:mm') ??
