@@ -419,8 +419,8 @@ function MaterailLaborSlipPage() {
                           {CURRENCY_PREFIX}
                         </td>
                         <td>
-                          {dayjs(item.uploadedAt).isValid()
-                            ? dayjs(item.uploadedAt)?.format(
+                          {dayjs(item.createdAt).isValid()
+                            ? dayjs(item.createdAt)?.format(
                                 'ddd, MMM DD, YYYY hh:mm:ssA'
                               )
                             : '--'}
