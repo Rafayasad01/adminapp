@@ -97,6 +97,7 @@ import ProjectQuotationsPage from '../pages/projectQuotations/index';
 // import QuotationsAddPage from '../pages/quotations/QuotationsAddPage';
 // import QuotationsEditPage from '../pages/quotations/QuotationsEditPage';
 import VendorTypePage from '../pages/vendorTypes/VendorTypesPage';
+import FeedbackPage from '../pages/projectFeedback/FeedbackPage';
 
 const ProtectedRoute = ({ page, condition }: any) => {
   const canView = CAN('canView', condition);
@@ -1157,14 +1158,15 @@ export const routeObjects: RouteObject[] = [
                 // element: <QuotationsPage />,
                 element: <ProjectQuotationsPage />,
               },
-              // {
-              //   path: 'create',
-              //   element: <QuotationsAddPage />,
-              // },
-              // {
-              //   path: 'edit/:id',
-              //   element: <QuotationsEditPage />,
-              // },
+            ],
+          },
+          {
+            path: 'feedbacks',
+            children: [
+              {
+                index: true,
+                element: <FeedbackPage />,
+              },
             ],
           },
           {

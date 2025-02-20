@@ -932,6 +932,9 @@ export const ALL_PERMISSIONS = {
     edit: 'editQuotation',
     delete: 'deleteQuotation',
   },
+  feedback: {
+    view: 'view',
+  },
 };
 
 export const SERVICES = 'Service';

@@ -97,6 +97,7 @@ import newEarthDashboardIconThree from './images/dashboardIconThree.png';
 import linkArrow from './images/linkArrow.png';
 import newEarthDashboardPaymentBg from './images/dashboardPaymentbg.png';
 import orangeDot from './images/orangeDot.png';
+import feedback from './images/feedback.png';
 
 const assets = {
   images: {
@@ -185,6 +186,7 @@ const assets = {
     linkArrow,
     newEarthDashboardPaymentBg,
     orangeDot,
+    feedback,
   },
   tempImages: {
     shirt,
