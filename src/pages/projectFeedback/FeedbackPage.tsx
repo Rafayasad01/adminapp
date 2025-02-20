@@ -242,6 +242,7 @@ const FeedbackPage = () => {
               <thead>
                 <tr>
                   <th>Feedback</th>
+                  <th>Client Name</th>
                   <th className="">Created Date</th>
                   <th>&nbsp;</th>
                 </tr>
@@ -252,6 +253,7 @@ const FeedbackPage = () => {
                     return (
                       <tr key={index}>
                         <td>{item.feedback ?? '--'}</td>
+                        <td>{item.clientName ?? '--'}</td>
                         <td>
                           {dayjs(item.createdAt).format('DD-MM-YYYY HH:mm') ??
                             '--'}
