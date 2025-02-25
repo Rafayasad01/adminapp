@@ -11,10 +11,6 @@ type CustomPrintLayoutsProps = {
   // onPrintTrigger?: any;
   isPrintEnabled?: any;
   setPrintEnabled?: any;
-  taxAmount?: any;
-  totalCost?: any;
-  grandTotalAmount?: any;
-  appointmentDiscountAmount?: any;
 };
 
 const CustomPrintLayouts = forwardRef<any, CustomPrintLayoutsProps>(
@@ -34,6 +30,7 @@ const CustomPrintLayouts = forwardRef<any, CustomPrintLayoutsProps>(
     const systemConfig = useAppSelector(
       (state: any) => state.authState.systemConfig
     );
+    console.log('data 2 2', data);
 
     const qrCodeValue = `Tracking Code: ${data?.code} \n\nShop Name: ${branch?.name} \nShop Email: ${authState?.user?.username}`;
     return (
@@ -161,10 +158,6 @@ function CustomAppointmentLayoutCash({
   data,
   isPrintEnabled,
   setPrintEnabled,
-  taxAmount,
-  totalCost,
-  grandTotalAmount,
-  appointmentDiscountAmount,
 }: CustomPrintLayoutsProps) {
   const ref = useRef<any>(null);
   const handlePrint = useReactToPrint({
@@ -178,17 +171,11 @@ function CustomAppointmentLayoutCash({
     }, 0);
   };
 
-  const objdata = {
-    ...data,
-    taxAmount,
-    totalCost,
-    grandTotalAmount,
-    appointmentDiscountAmount,
-  };
+  console.log('data===<>', data);
 
   return (
     <div className="flex items-center text-sm">
-      {isPrintEnabled ? <CustomPrintLayouts ref={ref} data={objdata} /> : null}
+      {isPrintEnabled ? <CustomPrintLayouts ref={ref} data={data} /> : null}
       <div onClick={trigger} className="printBtn">
         <PrintOutlinedIcon className="mx-1" />
         {/* <span className="mx-2"> Order Sl</span> */}

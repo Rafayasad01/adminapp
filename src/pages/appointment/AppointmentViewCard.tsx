@@ -73,7 +73,6 @@ const AppointmentViewCard = ({
   const [isWalletLoader, setIsWalletLoader] = useState<boolean>(false);
   const [isDiscountLoader, setIsDiscountLoader] = useState<boolean>(false);
   const [isPrintEnabled, setIsPrintEnabled] = useState<boolean>(false);
-  // const [isRescheduled, setIsRescheduled] = useState(false);
 
   const [isNotify, setIsNotify] = useState(false);
   const [notifyMessage, setNotifyMessage] = useState({});
@@ -329,26 +328,6 @@ const AppointmentViewCard = ({
     deleteAppointmentHandler(data.code);
   };
 
-  const getInvoice = (code: string) => {
-    // setIsLoader(true);
-    setIsPrintEnabled(true);
-    storeAppointmentService
-      .AppointmentInvoiceDetailByCode(code)
-      .then((res) => {
-        // setIsLoader(false);
-        setIsPrintEnabled(false);
-        setInvoiceData(res.data.data);
-      })
-      .catch((err: Error) => {
-        setIsPrintEnabled(false);
-        setIsNotify(true);
-        setNotifyMessage({
-          text: err.message,
-          type: 'error',
-        });
-      });
-  };
-
   const completedAppointments = () => {
     const completedServices = data?.services?.filter(
       (el: any) =>
@@ -472,7 +451,6 @@ const AppointmentViewCard = ({
   };
 
   const handleCheckAllServices = (services: any) => {
-    console.log('service', services);
     const allRescheduled = services.every(
       (service: any) => service.status === APPOINTMENT_STATUS.RESCHEDULE
     );
@@ -529,6 +507,26 @@ const AppointmentViewCard = ({
     return false;
   };
 
+  const getInvoice = (code: string) => {
+    // setIsLoader(true);
+    setIsPrintEnabled(true);
+    storeAppointmentService
+      .AppointmentInvoiceDetailByCode(code)
+      .then((res) => {
+        // setIsLoader(false);
+        setIsPrintEnabled(false);
+        setInvoiceData(res.data.data.data);
+      })
+      .catch((err: Error) => {
+        setIsPrintEnabled(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
+        });
+      });
+  };
+
   useEffect(() => {
     if (appointmentData) {
       storeAppointmentService
@@ -553,6 +551,7 @@ const AppointmentViewCard = ({
             endDateFormat,
           });
         });
+      getInvoice(appointmentData.code);
     }
   }, []);
 
@@ -638,7 +637,7 @@ const AppointmentViewCard = ({
                 <HistoryIcon />
               </IconButton>
               <IconButton
-                onClick={() => getInvoice(data.code)}
+                // onClick={() => getInvoice(data.code)}
                 name="Print Slip"
                 className="icon-btn p-0"
               >
@@ -650,13 +649,15 @@ const AppointmentViewCard = ({
                   <CustomAppointmentLayoutCash
                     isPrintEnabled={isPrintEnabled}
                     setPrintEnabled={setIsPrintEnabled}
-                    data={invoiceData}
-                    taxAmount={taxAmount()}
-                    totalCost={totalAmount()}
-                    grandTotalAmount={grandTotalAmount()}
-                    appointmentDiscountAmount={Number(
-                      discountedAppointments?.amount
-                    )}
+                    data={{
+                      ...invoiceData,
+                      taxAmount: taxAmount(),
+                      totalCost: totalAmount(),
+                      grandTotalAmount: grandTotalAmount(),
+                      appointmentDiscountAmount: Number(
+                        discountedAppointments?.amount
+                      ),
+                    }}
                   />
                 )}
               </IconButton>

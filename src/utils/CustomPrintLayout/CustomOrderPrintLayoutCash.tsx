@@ -22,6 +22,12 @@ const CustomPrintLayouts = forwardRef<any, CustomPrintLayoutsProps>(
     ref: any
   ) => {
     const authState: any = useAppSelector((state: any) => state?.authState);
+    const logo = useAppSelector(
+      (state: any) => state?.persistedReducer?.appState?.logo
+    );
+    const systemConfig = useAppSelector(
+      (state: any) => state.authState.systemConfig
+    );
     const qrCodeValue = `Tracking Id: ${data?.id} \n\nShop Name: ${authState?.user?.tenantName} \nShop Email: ${authState?.user?.username}`;
 
     return (
@@ -30,7 +36,7 @@ const CustomPrintLayouts = forwardRef<any, CustomPrintLayoutsProps>(
           <div className="print-area">
             <div className="print-logo">
               <img
-                src={authState?.user?.tenantConfig?.logo}
+                src={logo || systemConfig?.shopLogo}
                 width="150"
                 height="25"
                 alt="logo"

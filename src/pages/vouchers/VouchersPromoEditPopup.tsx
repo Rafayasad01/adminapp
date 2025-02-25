@@ -86,6 +86,9 @@ function VouchersPromoEditPopup({
     watch,
     formState: { errors },
   } = useForm<UpdateVoucherFromData>();
+  const branchState: any = useAppSelector(
+    (state) => state?.persistedReducer?.appState?.branch
+  );
   const mainShopBranch: any = getItem('TEMP_BRANCH_DATA');
   const authState: any = useAppSelector((state) => state?.authState);
   const handleFormClose = () => setVouchersPromoEditDialog(false);
@@ -145,7 +148,7 @@ function VouchersPromoEditPopup({
         });
         const mainRes: any = [
           { id: 'all', name: 'All' },
-          { id: mainShopBranch.id, name: 'Main' },
+          { id: mainShopBranch.id, name: branchState.name || 'Main' },
         ];
         setBranches([...mainRes, ...res]);
       }
