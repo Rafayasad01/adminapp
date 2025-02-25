@@ -116,7 +116,16 @@ function VouchersPage() {
     }
   };
   const handleClickSearch = (event: any) => {
-    setSearch(event.target.value as string);
+    const searchTxt = event.target.value as string;
+    const newPage = 0;
+    setSearch(searchTxt);
+    setPage(newPage);
+    vouchersService
+      .listVouchers(authState.user.tenant, newPage, rowsPerPage, searchTxt)
+      .then((item) => {
+        setList(item.data.data.result);
+        setTotal(item.data.data.totalResults);
+      });
   };
 
   const handleChangePage = (
