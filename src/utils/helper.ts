@@ -114,11 +114,28 @@ export function sortArrayByKey<T>(
   }
 }
 
-export const formatCurrency = (amount: number): string => {
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: import.meta.env.VITE_CURRENCY_SYMBOL,
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  }).format(amount);
+export const formatCurrency = (amount: number): any => {
+  let formattedAmount;
+  let suffix = '';
+  if (amount >= 1_000_000_000_000) {
+    formattedAmount = amount / 1_000_000_000_000;
+    suffix = 'T';
+  } else if (amount >= 1_000_000_000) {
+    formattedAmount = amount / 1_000_000_000;
+    suffix = 'B';
+  } else if (amount >= 1_000_000) {
+    formattedAmount = amount / 1_000_000;
+    suffix = 'M';
+  } else {
+    formattedAmount = amount;
+  }
+
+  return (
+    new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: import.meta.env.VITE_CURRENCY_SYMBOL,
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(formattedAmount) + suffix
+  );
 };
