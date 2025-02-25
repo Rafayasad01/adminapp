@@ -30,7 +30,6 @@ const CustomPrintLayouts = forwardRef<any, CustomPrintLayoutsProps>(
     const systemConfig = useAppSelector(
       (state: any) => state.authState.systemConfig
     );
-    console.log('data 2 2', data);
 
     const qrCodeValue = `Tracking Code: ${data?.code} \n\nShop Name: ${branch?.name} \nShop Email: ${authState?.user?.username}`;
     return (
@@ -46,7 +45,7 @@ const CustomPrintLayouts = forwardRef<any, CustomPrintLayoutsProps>(
               />
             </div>
             <div className="print-title">{branch?.name}</div>
-            <div className="print-title">{branch?.address}</div>
+            <div className="print-area-center">{branch?.address}</div>
             <div className="print-title">Your Appointment is Confirmed!</div>
 
             {data?.appointments?.map((item: any, index: number) => {
