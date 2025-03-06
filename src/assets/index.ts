@@ -64,6 +64,18 @@ import appCalender from './images/appointment-calender.png';
 import appClock from './images/appointment-clock.png';
 import appProfile from './images/appointment-profile.png';
 
+// md-alder vectors
+import mdalderIcon from './images/mdalder.png';
+import loginVectorOne from './images/login-vector-one.png';
+import loginVectorTwo from './images/login-vector-two.png';
+import loginVectorThree from './images/login-vector-three.png';
+import loginVectorFour from './images/login-vector-four.png';
+import loginVectorFive from './images/login-vector-five.png';
+import logout from './images/logout.png';
+import home from './images/sidebar-home.png';
+import scan from './images/sidebar-scan.png';
+import patient from './images/sidebar-patient-two.png';
+
 const assets = {
   images: {
     logo,
@@ -114,6 +126,16 @@ const assets = {
     appCalender,
     appClock,
     appProfile,
+    loginVectorOne,
+    loginVectorTwo,
+    loginVectorThree,
+    loginVectorFour,
+    loginVectorFive,
+    mdalderIcon,
+    logout,
+    home,
+    patient,
+    scan,
   },
   tempImages: {
     wash,

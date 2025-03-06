@@ -136,7 +136,9 @@ const DashboardChartLine = () => {
     <div className=" p-5">
       <div className="flex w-full justify-between">
         <div>
-          <h1 className=" p-2 text-lg font-medium">Patient Overview</h1>
+          <h1 className=" p-2 font-an-gurmukhi text-lg font-medium">
+            Patient Overview
+          </h1>
         </div>
         <div className="alder-chart-legends self-center">
           <div className="alder-legend-male">

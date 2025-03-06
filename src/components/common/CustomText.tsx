@@ -1,16 +1,16 @@
-type Props = {
+type CustomTextProps = {
   text: string;
-  noroundedborders?: boolean;
+  noRoundedBorders?: boolean;
 };
 
-function CustomText({ text, noroundedborders }: Props) {
+function CustomText({ text, noRoundedBorders }: CustomTextProps) {
   return (
     <div
       className={`flex w-full items-center justify-center ${
-        !noroundedborders && 'rounded-lg'
-      } mt-5 bg-gray-200 py-5`}
+        !noRoundedBorders && 'rounded-lg'
+      } mt-5 bg-foreground py-5`}
     >
-      <p className="font-open-sans font-semibold text-secondary">{text}</p>
+      <p className="font-an-gurmukhi font-semibold text-secondary2">{text}</p>
     </div>
   );
 }

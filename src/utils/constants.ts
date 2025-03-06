@@ -5,15 +5,22 @@ const HOST = 'https://dev.urapptech.com';
 // const HOST = 'http://192.168.8.68:3200';
 // const HOST = 'http://192.168.8.97:3200';
 
-export const BASE_URL = `${HOST}/api/v1/admin/`;
-export const BASE_SYSTEM_URL = `${HOST}/api/v1/system/config/`;
+export const BASE_URL =
+  import.meta.env.VITE_BASE_URL || `${HOST}/api/v1/admin/`;
+export const BASE_SYSTEM_URL =
+  import.meta.env.VITE_SYSTEM_BASE_URL || `${HOST}/api/v1/system/config/`;
+export const STAFF_APP_BASE_URL =
+  import.meta.env.VITE_STAFF_APP_BASE_URL || `${HOST}/api/v1/staff-app/`;
+
+// export const BASE_URL = `${HOST}/api/v1/admin/`;
+// export const BASE_SYSTEM_URL = `${HOST}/api/v1/system/config/`;
 export const MODULE_EMPLOYEEES = 'Employees';
 export const RATING = 'rating';
 export const FAQ = 'faq';
 export const PROFILE_PREFIX = 'profile';
 export const THEME_PREFIX = 'theme';
 export const APPOINTMENT_PREFIX = 'appointment';
-export const BACKOFFICE_PREFIX = 'backofficeUser';
+export const BACKOFFICE_PREFIX = 'back-office-user';
 export const PERMISSION_PREFIX = 'permission';
 export const DASHBOARD_PREFIX = 'dashboard';
 export const ORDER_PREFIX = 'order';
@@ -124,14 +131,15 @@ export const weekDays = [
 // patterns
 export const PATTERN = {
   // CHAR_NUM_DOT_AT: /^[A-Za-z0-9\s.@]+$/,
-  CHAR_NUM_DOT_AT: /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/, // used for email fields
-  CHAR_SPACE_DASH: /^[A-Za-z\s-]+$/, // used for textfield fields
-  CHAR_NUM_SPACE_DASH: /^[A-Za-z0-9\s-]+$/, // used for textfield fields
-  ADDRESS_ONLY: /^[A-Za-z0-9\s@.,#-]+$/, // used for textfield address
-  CHAR_NUM_DASH: /^[A-Za-z0-9-]+$/, // used for only num,chars,dash like; postal code
+  CHAR_NUM_DOT_AT: /^[\s\S]+$/, // used for email fields
+  CHAR_SPACE_DASH: /^[\s\S]+$/, // used for textfield fields
+  CHAR_NUM_SPACE_DASH: /^[\s\S]+$/, // used for textfield fields
+  ADDRESS_ONLY: /^[\s\S]+$/, // used for textfield address
+  CHAR_SPEC_NUM_DASH: /^[\s\S]+$/, // used for textfield address
+  CHAR_NUM_DASH: /^[\s\S]+$/, // used for only num,chars,dash like; postal code
   NUM_PLUS_MINUS: /^[+-\d\s]+$/,
   ACTION_WITHOUT_SPACE: /^[a-zA-Z0-9/-]+$/,
-  PASSWORD: /^[^\s]+$/,
+  PASSWORD: /^[\s\S]+$/,
   NUM_DASH: /^[0-9-]+$/, // used for num,dash type text
   PHONE: /^[\d()+-]*\d[\d()+-]*$/, // used for phone type text
   ONLY_NUM: /^\d+$/, // used for string type text
@@ -139,12 +147,33 @@ export const PATTERN = {
   POINT_NUM: /^[+-]?([0-9]*[.])?[0-9]+$/,
   CHAR_NUM_MINUS_AT_SPACE: /^[a-zA-Z0-9@ -]+$/,
   CHAR_NUM_MIN_AT_HASH_COM_DOT_SPA: /^[a-zA-Z0-9@,\-.# ]+$/,
+  HOURS_MINTS_FORMAT: /^([0-9]|1[0-9]|2[0-3]):([0-5][0-9])$/,
+
+  // CHAR_NUM_DOT_AT: /^[A-Za-z0-9\s.@]+$/,
+  // CHAR_NUM_DOT_AT: /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/, // used for email fields
+  // CHAR_SPACE_DASH: /^[A-Za-z\s-]+$/, // used for textfield fields
+  // CHAR_NUM_SPACE_DASH: /^[A-Za-z0-9\s-]+$/, // used for textfield fields
+  // ADDRESS_ONLY: /^[A-Za-z0-9\s@.,#()-]+$/, // used for textfield address
+  // CHAR_SPEC_NUM_DASH: /^[A-Za-z0-9\s@$.%!,#()-]+$/, // used for textfield address
+  // CHAR_NUM_DASH: /^[A-Za-z0-9-]+$/, // used for only num,chars,dash like; postal code
+  // NUM_PLUS_MINUS: /^[+-\d\s]+$/,
+  // ACTION_WITHOUT_SPACE: /^[a-zA-Z0-9/-]+$/,
+  // PASSWORD: /^[^\s]+$/,
+  // NUM_DASH: /^[0-9-]+$/, // used for num,dash type text
+  // PHONE: /^[\d()+-]*\d[\d()+-]*$/, // used for phone type text
+  // ONLY_NUM: /^\d+$/, // used for string type text
+  // ALLOW_ALL: /^[\s\S]+$/, // userd for allowed all
+  // POINT_NUM: /^[+-]?([0-9]*[.])?[0-9]+$/,
+  // CHAR_NUM_MINUS_AT_SPACE: /^[a-zA-Z0-9@ -]+$/,
+  // CHAR_NUM_MIN_AT_HASH_COM_DOT_SPA: /^[a-zA-Z0-9@,\-.# ]+$/,
 };
 
 export const MAX_LENGTH_EXCEEDED = 'Maximum length exceeded';
 export const INVALID_CHAR = 'Invalid characters';
 export const PASSWORD_SHOULD_SAME = 'Password must same to the new one.';
 export const PH_MINI_LENGTH = 'Minimum length should be 15';
+
+export const imageAllowedTypes = ['image/png', 'image/jpeg', 'image/jpg'];
 
 export const VALIDATE_NON_NEGATIVE_NUM = (value: any) => {
   return parseInt(value, 10) >= 0 || 'Must be a non-negative number';
@@ -164,8 +193,6 @@ export const VALIDATE_NON_NEGATIVE_NUM_AND_CHECK_LENGTH = (
   }
   return `Must be greater than ${length}`;
 };
-
-export const imageAllowedTypes = ['image/png', 'image/jpeg', 'image/jpg'];
 
 export const THEME_COLORS = [
   'primary',

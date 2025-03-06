@@ -15,7 +15,7 @@ import {
 } from '../../redux/features/appStateSlice';
 import {
   logout,
-  setShopAdminTenant,
+  // setShopAdminTenant,
 } from '../../redux/features/authStateSlice';
 import { setRolePermissions } from '../../redux/features/permissionsStateSlice';
 import { useAppSelector } from '../../redux/redux-hooks';
@@ -45,7 +45,7 @@ function TopBar({ title, isNestedRoute = false }: Props) {
   const logOut = () => {
     dispatch(logout());
     dispatch(setRemoveItemState());
-    dispatch(setShopAdminTenant(null));
+    // dispatch(setShopAdminTenant(null));
     dispatch(setLogo(null));
     dispatch(setRolePermissions({ id: '', name: '', permissions: [] }));
     // dispatch(setSystemConfig(null));
@@ -66,7 +66,7 @@ function TopBar({ title, isNestedRoute = false }: Props) {
   return (
     <AppBar
       position="relative"
-      className="w-full bg-transparent px-0 pt-4 pb-0 text-gray-50 shadow-none"
+      className="w-full bg-transparent px-0 pt-4 pb-0 text-secondary2 shadow-none"
     >
       <Toolbar className="toolbar-style container relative mx-auto flex">
         {isNestedRoute ? (

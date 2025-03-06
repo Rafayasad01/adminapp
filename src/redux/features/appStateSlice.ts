@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { setItem } from '../../utils/storage';
 
 // type AppUserItems = {
 //   UserItems: {
@@ -14,6 +15,7 @@ type AppState = {
   UserItems: any;
   logo: AppUserLogo | null;
   profileAvatar: string | any;
+  shopItems: any;
 };
 
 const initialState: AppState = {
@@ -22,12 +24,20 @@ const initialState: AppState = {
   },
   logo: null,
   profileAvatar: null,
+  shopItems: null,
 };
 
 export const appStateSlice = createSlice({
   name: 'appState',
   initialState,
   reducers: {
+    setShopTenantState: (state, action: PayloadAction<any>) => {
+      state.shopItems = {
+        ...state.shopItems,
+        ...action.payload,
+      };
+      setItem('SHOP_TENANT', state.shopItems);
+    },
     // setAppState: (state, action: PayloadAction<string>) => {
     //   state.appState = JSON.parse(JSON.stringify(action.payload));
     // },
@@ -68,6 +78,7 @@ export const {
   setEmployeeLimit,
   setTenantConfig,
   setProfileAvatar,
+  setShopTenantState,
 } = appStateSlice.actions;
 
 export default appStateSlice.reducer;

@@ -7,9 +7,11 @@ import { useAppDispatch } from './redux/redux-hooks';
 import system from './services/adminapp/SystemConfig';
 import { setSystemConfig, setTheme } from './redux/features/authStateSlice';
 import Loader from './components/common/Loader';
+import { getItem } from './utils/storage';
 
 function App() {
   const dispatch = useAppDispatch();
+  const systemConfig = getItem('SYSTEM_CONFIG');
   const navigate = useNavigate();
   const [isPageLoader, setIsPageLoader] = useState(false);
   if (process.env.NODE_ENV === 'production') {
@@ -37,39 +39,62 @@ function App() {
     // return 'asdasdsa';
   };
 
+  // useEffect(() => {
+  //   setIsPageLoader(true);
+  //   const currentURL = getDomain();
+  //   system
+  //     .getSystemConfig(currentURL)
+  //     .then((res: any) => {
+  //       setIsPageLoader(false);
+  //       if (res.data.success) {
+  //         const systemConfigData = {
+  //           createdDate: res.data.data.createdDate,
+  //           domain: res.data.data.domain,
+  //           id: res.data.data.id,
+  //           logoffImage: res.data.data.logoffImage,
+  //           tenant: res.data.data.tenant,
+  //           shopName: res.data.data.tenantConfig.name,
+  //           shopLogo: res.data.data.tenantConfig.logo,
+  //         };
+  //         dispatch(setTheme(res.data.data.theme.value.themeColor));
+  //         dispatch(setSystemConfig(systemConfigData));
+  //       } else {
+  //         setIsPageLoader(false);
+  //         console.log('4041');
+  //         navigate('./admin/auth/404', { replace: true });
+  //         // showNotification(res.data.message, 'error');
+  //         // console.log('404 page');
+  //       }
+  //     })
+  //     .catch(() => {
+  //       console.log('4042');
+  //       setIsPageLoader(false);
+  //       navigate('./admin/auth/404', { replace: true });
+  //       // showNotification(err.message, 'error');
+  //     });
+  // }, []);
+
   useEffect(() => {
-    setIsPageLoader(true);
-    const currentURL = getDomain();
+    if (systemConfig) return;
     system
-      .getSystemConfig(currentURL)
+      .getSystemConfig(window.location.hostname)
       .then((res: any) => {
-        setIsPageLoader(false);
         if (res.data.success) {
-          // navigate('./admin/auth/', { replace: true });
-          // console.log('res.data.data::::::', res.data.data);
-          const systemConfigData = {
-            createdDate: res.data.data.createdDate,
-            domain: res.data.data.domain,
-            id: res.data.data.id,
-            logoffImage: res.data.data.logoffImage,
-            tenant: res.data.data.tenant,
-            shopName: res.data.data.tenantConfig.name,
-            shopLogo: res.data.data.tenantConfig.logo,
-          };
-          dispatch(setTheme(res.data.data.theme.value.themeColor));
-          dispatch(setSystemConfig(systemConfigData));
+          dispatch(setSystemConfig(res.data.data));
+          const assignedTheme = res.data.data.assignThemes?.find(
+            (x: any) => x.id === res.data.data.theme
+          );
+          if (assignedTheme) dispatch(setTheme(assignedTheme.value.themeColor));
         } else {
-          setIsPageLoader(false);
-          console.log('4041');
-          navigate('./admin/auth/404', { replace: true });
-          // showNotification(res.data.message, 'error');
-          // console.log('404 page');
+          console.log('4042');
         }
       })
       .catch(() => {
         console.log('4042');
-        setIsPageLoader(false);
-        navigate('./admin/auth/404', { replace: true });
+        // ToastHandler('fetching system config failed');
+        // setIsPageLoader(false);
+        // navigate('./admin/auth/404', { replace: true });
+        // showBoundary(new Error('fetching system config failed'));
         // showNotification(err.message, 'error');
       });
   }, []);

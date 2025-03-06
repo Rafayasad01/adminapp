@@ -10,6 +10,7 @@ import { PersistGate } from 'redux-persist/integration/react';
 import App from './App';
 import './index.css';
 import { persistor, store } from './redux/store';
+import { SnackbarProvider } from './components/hooks/useSnackbar';
 
 const theme = createTheme({
   components: {
@@ -43,7 +44,9 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
       <PersistGate loading={null} persistor={persistor}>
         <StyledEngineProvider injectFirst>
           <ThemeProvider theme={theme}>
-            <App />
+            <SnackbarProvider>
+              <App />
+            </SnackbarProvider>
           </ThemeProvider>
         </StyledEngineProvider>
       </PersistGate>

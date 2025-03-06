@@ -361,10 +361,10 @@ export const routeObjects: RouteObject[] = [
                     path: 'shop',
                     element: <SettingsShopScheduling />,
                   },
-                  {
-                    path: 'config',
-                    element: <SettingConfig />,
-                  },
+                  // {
+                  //   path: 'config',
+                  //   element: <SettingConfig />,
+                  // },
                 ],
               },
             ],
@@ -422,6 +422,32 @@ export const routeObjects: RouteObject[] = [
                 index: true,
                 element: <ScanDiseasePage />,
               },
+            ],
+          },
+          {
+            path: 'patient',
+            children: [
+              { index: true, element: <Navigate to="list" replace /> },
+              {
+                path: 'list',
+                element: <PatientsLogPage />,
+              },
+              {
+                path: 'create',
+                element: <PatientLogCreatePage />,
+              },
+              {
+                path: 'profile/:id',
+                element: <PatientLogProfilePage />,
+              },
+              // {
+              //   path: 'services/:providerId',
+              //   element: <AppointmentProviderServicesList />,
+              // },
+              // {
+              //   path: 'today-appointment/:providerId',
+              //   element: <AppointmentProviderByIdPage />,
+              // },
             ],
           },
           {

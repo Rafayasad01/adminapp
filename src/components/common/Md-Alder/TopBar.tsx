@@ -1,25 +1,13 @@
 /* eslint-disable prettier/prettier */
-import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
-import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import AppBar from '@mui/material/AppBar';
 import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
 import Toolbar from '@mui/material/Toolbar';
 // import  { blac } from '@mui/material/colors';
 import { useEffect, useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { NavLink, useNavigate } from 'react-router-dom';
-import SearchIcon from '@mui/icons-material/Search';
-import { Divider, FormControl, Input, InputAdornment } from '@mui/material';
-import {
-  setLogo,
-  setRemoveItemState,
-} from '../../../redux/features/appStateSlice';
-import { logout } from '../../../redux/features/authStateSlice';
-import { setRolePermissions } from '../../../redux/features/permissionsStateSlice';
+import { useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../../../redux/redux-hooks';
 import BackArrowIcon from '../../icons/BackArrowIcon';
-import ShopIcon from '../../icons/ShopIcon';
 
 type Props = {
   title?: string;
@@ -33,20 +21,20 @@ function TopBar({ title, isNestedRoute = false }: Props) {
   );
 
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const divRef = useRef<HTMLDivElement>(null);
   const [profileToggler, setProfileToggler] = useState(false);
   const backHandler = () => {
     navigate(-1);
   };
 
-  const logOut = () => {
-    dispatch(logout());
-    dispatch(setRemoveItemState());
-    dispatch(setLogo(null));
-    dispatch(setRolePermissions({ id: '', name: '', permissions: [] }));
-    // dispatch(setSystemConfig(null));
-  };
+  // const logOut = () => {
+  //   dispatch(logout());
+  //   dispatch(setRemoveItemState());
+  //   dispatch(setLogo(null));
+  //   dispatch(setRolePermissions({ id: '', name: '', permissions: [] }));
+  //   // dispatch(setSystemConfig(null));
+  // };
 
   useEffect(() => {
     const handleClickOutside = (event: any) => {
@@ -63,7 +51,7 @@ function TopBar({ title, isNestedRoute = false }: Props) {
   return (
     <AppBar
       position="relative"
-      className="w-full bg-transparent px-0  pb-0 text-gray-50 shadow-none"
+      className="w-full bg-transparent px-0  pb-0 text-secondary2 shadow-none"
     >
       <Toolbar className=" w-100 relative block px-0">
         {isNestedRoute ? (
@@ -74,67 +62,53 @@ function TopBar({ title, isNestedRoute = false }: Props) {
             <BackArrowIcon />
           </IconButton>
         ) : null}
-        <div className=" w-100 flex items-center ">
-          <div className="title ml-1 w-2/3">{title}</div>
+        <div className="w-100 flex items-center justify-between">
+          <div className="title m-3 font-an-gurmukhi text-secondary2">
+            {title}
+          </div>
 
           <div className="flex w-1/3 justify-end text-left">
-            <div className="flex w-3/5  justify-end ">
-              <FormControl className="w-full">
-                <Input
-                  type="text"
-                  name="search_patient"
-                  className="alder-search-patient"
-                  placeholder="Search Patient"
-                  disableUnderline
-                  endAdornment={
-                    <InputAdornment position="end">
-                      <Divider
-                        sx={{ height: 28, m: 0.5 }}
-                        orientation="vertical"
-                      />
-                      <IconButton>
-                        <SearchIcon fontSize="small" />
-                      </IconButton>
-                    </InputAdornment>
-                  }
-                />
-              </FormControl>
-            </div>
-            <div className="w-2/5">
-              <div className="items-right flex ">
+            <div className="">
+              <div className="flex items-center">
                 <div
                   ref={divRef}
-                  className="header-user-box ml-3.5 w-full cursor-pointer"
+                  className="header-user-box w-full cursor-pointer"
                   onClick={() => setProfileToggler(!profileToggler)}
                 >
                   {ProfileAvatar ? (
                     <Avatar
-                      sx={{ width: 50, height: 50 }}
+                      className="rounded-md"
+                      sx={{ width: 45, height: 45 }}
                       alt="user image"
-                      variant="rounded"
                       src={ProfileAvatar}
                     />
                   ) : userData?.avatar ? (
                     <Avatar
-                      sx={{ width: 50, height: 50 }}
+                      className="rounded-md"
+                      sx={{ width: 45, height: 45 }}
                       alt="user image"
-                      variant="rounded"
                       src={userData.avatar}
                     />
                   ) : (
                     <Avatar
-                      sx={{ bgcolor: 'black', fontSize: '18px' }}
+                      className="rounded-md"
+                      sx={{
+                        bgcolor: '#3800F1',
+                        fontSize: '20px',
+                        width: 45,
+                        height: 45,
+                      }}
                     >{`${userData.firstName?.charAt(
                       0
                     )}${userData.lastName?.charAt(0)}`}</Avatar>
                   )}
 
-                  <span className="capitalize">
+                  <span className="mx-3 capitalize text-secondary2">
                     {' '}
-                    <span className="alder-greetings text-xs text-[#1E1C24]">
+                    <span className="alder-greetings my-[2px] block text-xs text-secondary2">
                       Morning!
                     </span>{' '}
-                    <br /> {`${userData.firstName} ${userData.lastName}`}
+                    {`${userData.firstName} ${userData.lastName}`}
                   </span>
                 </div>
               </div>
@@ -142,7 +116,7 @@ function TopBar({ title, isNestedRoute = false }: Props) {
           </div>
         </div>
       </Toolbar>
-      {profileToggler && (
+      {/* {profileToggler && (
         <div
           className={`absolute flex w-[98%] items-end justify-end ${
             userData?.isSuperAdmin === false ? 'h-[135px]' : 'h-[105px] '
@@ -176,7 +150,7 @@ function TopBar({ title, isNestedRoute = false }: Props) {
             </div>
           </div>
         </div>
-      )}
+      )} */}
     </AppBar>
   );
 }

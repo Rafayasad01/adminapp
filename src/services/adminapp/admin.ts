@@ -3,8 +3,8 @@ import network from '../../utils/network';
 
 import { UserLogin } from '../../interfaces/auth.interface';
 
-const getService = (tenant: string) => {
-  return network.get(`${SETTING_PREFIX}/get/${tenant}`);
+const getService = () => {
+  return network.get(`${SETTING_PREFIX}/get`);
 };
 
 const updateService = <T = any>(tenant: string, data: T) => {

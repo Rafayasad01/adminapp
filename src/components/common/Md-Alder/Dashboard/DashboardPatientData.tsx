@@ -8,23 +8,36 @@ const DashboardPatientData = () => {
     <div className="px-5 py-2">
       <div className="flex w-full justify-between">
         <div>
-          <h1 className=" p-2 text-lg font-medium">Patient Data</h1>
+          <h1 className="p-2 font-an-gurmukhi text-lg font-medium">
+            Patient Data
+          </h1>
         </div>
         <div className="self-center">
-          <Button variant="outlined" className="border-none p-3 text-primary">
+          <Button
+            variant="outlined"
+            className="border-none p-3 text-background"
+          >
             View all
           </Button>
         </div>
       </div>
       <div className="alder-patient-table">
-        <table>
+        <table className="font-an-gurmukhi">
           <thead>
             <tr>
-              <th>Patient name</th>
-              <th>Date in</th>
-              <th>Diagnostic</th>
-              <th>Status</th>
-              <th className="w-[30px]">{}</th>
+              <th className="font-an-gurmukhi text-base text-[#A9A9A9]">
+                Patient name
+              </th>
+              <th className="font-an-gurmukhi text-base text-[#A9A9A9]">
+                Date in
+              </th>
+              <th className="font-an-gurmukhi text-base text-[#A9A9A9]">
+                Diagnostic
+              </th>
+              <th className="font-an-gurmukhi text-base text-[#A9A9A9]">
+                Status
+              </th>
+              <th className="w-[30px] text-[#A9A9A9]">{}</th>
             </tr>
           </thead>
           <tbody className="text-[#A9A9A9]">
@@ -42,14 +55,20 @@ const DashboardPatientData = () => {
                           width={32}
                           className="rounded-[8px] "
                         />
-                        <span className="ml-4 self-center font-medium text-[#1E1C24]">
+                        <span className="ml-4 self-center font-an-gurmukhi font-medium text-[#1E1C24]">
                           {faker.person.fullName().toString()}
                         </span>
                       </div>
                     </td>
-                    <td>{faker.date.past().toDateString()}</td>
-                    <td>{faker.word.noun().toString()}</td>
-                    <td className="text-primary">Incoming</td>
+                    <td className="font-an-gurmukhi text-secondary2">
+                      {faker.date.past().toDateString()}
+                    </td>
+                    <td className="font-an-gurmukhi text-secondary2">
+                      {faker.word.noun().toString()}
+                    </td>
+                    <td className="font-an-gurmukhi text-secondary2">
+                      Incoming
+                    </td>
                     <td>
                       <Button>
                         <MoreHoriz className="h-[25px]" />

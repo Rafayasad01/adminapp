@@ -1,7 +1,7 @@
 import RefreshIcon from '@mui/icons-material/Refresh';
 import { Button } from '@mui/material';
 import { faker } from '@faker-js/faker';
-import photo from '../../../../assets/images/profile-image.png';
+import photo from '../../../../assets/images/user.png';
 
 const DetailsFieldComponent = ({ label = '', value = '' }) => {
   return (
@@ -12,7 +12,7 @@ const DetailsFieldComponent = ({ label = '', value = '' }) => {
   );
 };
 
-const PatientProfileInfo = ({ showReset = false }) => {
+const PatientProfileInfo = ({ showReset = false, data }: any) => {
   return (
     <div className="alder-content ">
       <div className="justify-between md:flex">
@@ -32,20 +32,21 @@ const PatientProfileInfo = ({ showReset = false }) => {
 
       <div className="py-5 md:flex  ">
         <div className="alder-profile-pic flex justify-start sm:max-md:justify-center md:self-center ">
-          <img src={photo} alt="profile" className="w-[127px]" />
+          <img
+            src={data?.avatar || photo}
+            alt="profile"
+            className="w-[127px]"
+          />
         </div>
         <div className="alder-profile-details flex w-full justify-between px-3 md:flex-col lg:flex-row lg:items-center">
-          <DetailsFieldComponent label="MR#" value="607" />
-          <DetailsFieldComponent label="Name" value={faker.person.fullName()} />
-          <DetailsFieldComponent label="Name" value={faker.person.sex()} />
-          <DetailsFieldComponent
-            label="Age"
-            value={faker.number.int({ min: 18, max: 150 }).toString()}
-          />
-          <DetailsFieldComponent label="Phone" value={faker.phone.number()} />
+          {/* <DetailsFieldComponent label="MR#" value="607" /> */}
+          <DetailsFieldComponent label="Name" value={data?.name} />
+          <DetailsFieldComponent label="Name" value={data?.gender} />
+          <DetailsFieldComponent label="Age" value={data?.age || '--'} />
+          <DetailsFieldComponent label="Phone" value={data?.phone} />
           <DetailsFieldComponent
             label="Address"
-            value={faker.location.streetAddress()}
+            value={data?.address || '--'}
           />
         </div>
       </div>

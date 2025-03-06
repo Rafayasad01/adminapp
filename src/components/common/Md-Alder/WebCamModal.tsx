@@ -57,7 +57,7 @@ const WebCamModal: React.FC<ScanDiseaseWebCamModalProps> = ({
             <Button
               variant="contained"
               color="secondary"
-              className="btn-black-fill"
+              className="bg-background"
               onClick={capture}
             >
               Capture photo

@@ -8,33 +8,53 @@ type User = {
   lastName: string;
   username: string;
   tenant: string;
-  tenantConfig: any;
+  tenantConfig: unknown;
   isActive: boolean;
   isSuperAdmin: boolean;
   avatar: string;
   branchLimit: number;
   employeeLimit: number;
   userLimit: number;
+  anonAppUser: string;
 };
 
-type ShopTenantDetails = {
-  tenant: string;
-  tenantName: string;
-  maxEmployeeLimit: string;
-  branchLimit: string;
-};
+// type ShopTenantDetails = {
+//   tenant: string;
+//   tenantName: string;
+//   maxEmployeeLimit: string;
+//   branchLimit: string;
+// };
+
+// interface SystemConfig {
+//   createdDate: string;
+//   domain: string;
+//   id: string;
+//   logoffImage: string;
+//   tenant: string;
+//   shopName: string;
+//   shopLogo: string;
+// }
 
 type AuthState = {
-  user: User | null;
-  theme: null;
-  shopTenantDetails: ShopTenantDetails | null;
-  systemConfig: null;
+  token: AuthState;
+  user: User | null | unknown;
+  // theme: null;
+  // shopTenantDetails: ShopTenantDetails | null;
+  // systemConfig: SystemConfig | null;
 };
 
 function getUser() {
-  const user = getItem<any>('USER');
+  const user = getItem<unknown>('USER');
   return user;
 }
+
+// function getTheme() {
+//   const theme = getItem<any>('THEME');
+//   // if (theme) {
+//   //   setThemeColor(theme);
+//   // }
+//   return theme;
+// }
 
 function getTheme() {
   const theme = getItem<any>('THEME');
@@ -44,15 +64,13 @@ function getTheme() {
   return theme;
 }
 
-const initialState: AuthState = {
+const initialState: AuthState | any = {
   user: getUser(),
   theme: getTheme(),
-  shopTenantDetails: getItem<any>('SHOP_TENANT'),
-  systemConfig: getItem<any>('SYSTEM_CONFIG'),
 };
 
-export const authStateSlice = createSlice({
-  name: 'authState',
+export const authSlice = createSlice({
+  name: 'authSlice',
   initialState,
   reducers: {
     login: (state, action: PayloadAction<User>) => {
@@ -63,23 +81,26 @@ export const authStateSlice = createSlice({
       state.user = null;
       removeItem('USER');
     },
-    setShopAdminTenant: (state, action: PayloadAction<any>) => {
-      state.shopTenantDetails = action.payload;
-      setItem('SHOP_TENANT', action.payload);
+    setSystemConfig: (state, action: PayloadAction<any>) => {
+      if (state.systemConfig) {
+        state.systemConfig = {
+          ...state.systemConfig,
+          tenantLogo: action.payload.tenantLogo,
+          tenantBanner: action.payload.tenantBanner,
+        };
+      } else {
+        state.systemConfig = action.payload;
+      }
+      setItem('SYSTEM_CONFIG', state.systemConfig);
     },
     setTheme: (state, action: PayloadAction<any>) => {
       state.theme = action.payload;
       setThemeColor(action.payload);
       setItem('THEME', state.theme);
     },
-    setSystemConfig: (state, action: PayloadAction<any>) => {
-      state.systemConfig = action.payload;
-      setItem('SYSTEM_CONFIG', state.systemConfig);
-    },
   },
 });
 
-export const { login, logout, setTheme, setSystemConfig, setShopAdminTenant } =
-  authStateSlice.actions;
+export const { login, logout, setSystemConfig, setTheme } = authSlice.actions;
 
-export default authStateSlice.reducer;
+export default authSlice.reducer;

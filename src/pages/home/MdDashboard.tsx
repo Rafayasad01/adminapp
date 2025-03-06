@@ -17,17 +17,41 @@ import DashboardChartLine from '../../components/common/Md-Alder/Dashboard/Dashb
 import DashboardPatientData from '../../components/common/Md-Alder/Dashboard/DashboardPatientData';
 import DashboardAppointments from '../../components/common/Md-Alder/Dashboard/DashboardAppointments';
 
+import Service from '../../services/adminapp/adminDashboard';
+import { useSnackbar } from '../../components/hooks/useSnackbar';
+
 function MdDashboard() {
+  const { showMessage } = useSnackbar();
   const [isLoader, setIsLoader] = useState(false);
+  const [data, setData] = useState(null);
+
+  useEffect(() => {
+    // if (listingRolePermission(dataRole, 'Setting View')) {
+    Service.getDashboardActivity()
+      .then((item: any) => {
+        // console.log('item Select:::::', item)
+        if (item.data.success) {
+          setIsLoader(false);
+          setData(item.data.data);
+        } else {
+          setIsLoader(false);
+          showMessage(item.data.message, 'error');
+        }
+      })
+      .catch((err) => {
+        setIsLoader(false);
+        showMessage(err.message, 'error');
+      });
+  }, []);
 
   return isLoader ? (
     <Loader />
   ) : (
     <>
       <TopBar title="Dashboard" />
-      <div className="mx-auto mt-3 flex gap-8 max-[1260px]:flex-col">
-        <div className=" sm:w-full">
-          <div className="grid grid-cols-4 gap-8">
+      <div className="mx-auto mt-3 flex gap-4 max-[1260px]:flex-col">
+        <div className="sm:w-full">
+          <div className="grid grid-cols-4 gap-4">
             <DashboardCard
               icon={doctorIcon}
               value="2.414"
@@ -49,11 +73,11 @@ function MdDashboard() {
               title="New Appointment"
             />
           </div>
-          <div className="alder-card-border mt-10 w-full">
+          <div className="alder-card-border mt-5 w-full">
             <DashboardChartLine />
           </div>
 
-          <div className="alder-card-border mt-10 w-full">
+          <div className="alder-card-border mt-5 w-full">
             <DashboardPatientData />
           </div>
         </div>

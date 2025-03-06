@@ -270,41 +270,33 @@ function SettingsApp() {
   };
 
   useEffect(() => {
-    if (listingRolePermission(dataRole, 'Setting View')) {
-      Service.getService(authState.user.tenant)
-        .then((item: any) => {
-          // console.log('item Select:::::', item)
-          if (item.data.success) {
-            setIsLoader(false);
-            setData(item.data.data);
-            setDetail(item.data.data);
-            setAddress(item.data.data.address);
-          } else {
-            setIsLoader(false);
-            setIsNotify(true);
-            setNotifyMessage({
-              text: item.data.message,
-              type: 'error',
-            });
-          }
-        })
-        .catch((err) => {
+    // if (listingRolePermission(dataRole, 'Setting View')) {
+    Service.getService()
+      .then((item: any) => {
+        // console.log('item Select:::::', item)
+        if (item.data.success) {
+          setIsLoader(false);
+          setData(item.data.data);
+          setDetail(item.data.data);
+          setAddress(item.data.data.address);
+        } else {
           setIsLoader(false);
           setIsNotify(true);
           setNotifyMessage({
-            text: err.message,
+            text: item.data.message,
             type: 'error',
           });
+        }
+      })
+      .catch((err) => {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
         });
-    }
-    // if (listingRolePermission(dataRole, 'Setting Address')) {
-    //   Service.getAddressService(authState.user.tenant).then((item: any) => {
-    //     if (item.data.success) {
-    //       setAddress(item.data.data.address);
-    //     }
-    //   });
-    // }
-  }, [emptyVariable]);
+      });
+  }, []);
 
   // console.log(
   //   'ENABLE',

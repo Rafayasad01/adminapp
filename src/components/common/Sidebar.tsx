@@ -2,194 +2,107 @@
 import GridViewOutlinedIcon from '@mui/icons-material/GridViewOutlined';
 import { Fragment, useEffect, useState } from 'react';
 // import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
-import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 // import FormatListBulletedOutlinedIcon from '@mui/icons-material/FormatListBulletedOutlined';
 // import PlaceOutlinedIcon from '@mui/icons-material/PlaceOutlined';
 // import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
-import QuestionAnswerOutlinedIcon from '@mui/icons-material/QuestionAnswerOutlined';
-import FacebookIcon from '@mui/icons-material/Facebook';
-import InstagramIcon from '@mui/icons-material/Instagram';
-import LinkedInIcon from '@mui/icons-material/LinkedIn';
+// import FacebookIcon from '@mui/icons-material/Facebook';
+// import InstagramIcon from '@mui/icons-material/Instagram';
+// import LinkedInIcon from '@mui/icons-material/LinkedIn';
 // import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
-import CorporateFareIcon from '@mui/icons-material/CorporateFare';
-import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
-import PeopleOutlineOutlinedIcon from '@mui/icons-material/PeopleOutlineOutlined';
+// import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 // import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
-import TwitterIcon from '@mui/icons-material/Twitter';
-import ViewCarouselOutlinedIcon from '@mui/icons-material/ViewCarouselOutlined';
-import WhatsAppIcon from '@mui/icons-material/WhatsApp';
-import YouTubeIcon from '@mui/icons-material/YouTube';
+// import TwitterIcon from '@mui/icons-material/Twitter';
+// import WhatsAppIcon from '@mui/icons-material/WhatsApp';
+// import YouTubeIcon from '@mui/icons-material/YouTube';
 import Drawer from '@mui/material/Drawer';
-import IconButton from '@mui/material/IconButton';
+// import IconButton from '@mui/material/IconButton';
 import List from '@mui/material/List';
 import Stack from '@mui/material/Stack';
 import Toolbar from '@mui/material/Toolbar';
 import { NavLink } from 'react-router-dom';
 // import HeadphonesOutlinedIcon from '@mui/icons-material/HeadphonesOutlined'
 // import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined';
-import ContentPasteIcon from '@mui/icons-material/ContentPaste';
+// import ContentPasteIcon from '@mui/icons-material/ContentPaste';
 import MedicationLiquidIcon from '@mui/icons-material/MedicationLiquid';
+import { Button } from '@mui/material';
+import { useDispatch } from 'react-redux';
 import assets from '../../assets';
 import { useAppSelector } from '../../redux/redux-hooks';
-import CAN, { defineRules } from '../../services/permissions/permissions';
-import { MODULE_EMPLOYEEES } from '../../utils/constants';
 import ArrowDown from '../icons/ArrowDown';
 import ArrowUp from '../icons/ArrowUp';
-import CategoryIcon from '../icons/CategoryIcon';
-import OrderIcon from '../icons/OrderIcon';
 // import TenantIcon from '../icons/TenantIcon';
-import VoucherIcon from '../icons/VoucherIcon';
-import AppointmentIcon from '../icons/appointmentIcon';
-import ProviderIcon from '../icons/providerIcon';
-import VisitIcon from '../icons/visitIcon';
 import FaceScanIcon from '../icons/FaceScanIcon';
 import PatientsIcon from '../icons/PatientsIcon';
 
+import {
+  setLogo,
+  setRemoveItemState,
+} from '../../redux/features/appStateSlice';
+import { logout } from '../../redux/features/authStateSlice';
+import { setRolePermissions } from '../../redux/features/permissionsStateSlice';
+
 const links = [
   {
-    name: 'Dashboard',
+    name: 'Home',
     path: 'home',
     permission: 'Dashboard List',
-    icon: <GridViewOutlinedIcon fontSize="inherit" />,
-  },
-  // {
-  //   name: 'Carts',
-  //   path: 'carts',
-  //   permission: 'Cart List',
-  //   icon: <ShoppingCartOutlinedIcon fontSize="inherit" />,
-  // },
-  // {
-  //   name: 'Orders',
-  //   path: 'orders',
-  //   permission: 'Order List',
-  //   icon: <OrderIcon />,
-  // },
-  {
-    name: 'Categories',
-    path: 'categories',
-    permission: 'Category List',
-    icon: <CategoryIcon />,
-  },
-  {
-    name: 'App user',
-    path: 'app-user',
-    permission: 'Customer List',
-    icon: <PersonOutlineOutlinedIcon fontSize="inherit" />,
-  },
-  {
-    name: 'Employees',
-    path: 'employees',
-    permission: 'Employee List',
-    icon: <PeopleOutlineOutlinedIcon className="w-[17px]" />,
-  },
-  {
-    name: 'Branches',
-    path: 'branches',
-    permission: 'Branch List',
-    icon: <CorporateFareIcon className="w-[17px]" />,
-  },
-  {
-    name: 'Banners',
-    path: 'banners',
-    permission: 'Banners List',
-    icon: <ViewCarouselOutlinedIcon className="w-[17px]" />,
-  },
-  {
-    name: 'Rating',
-    path: 'ratings',
-    permission: 'Banners List',
-    icon: <ViewCarouselOutlinedIcon className="w-[17px]" />,
-  },
-  {
-    name: 'Appointment',
-    path: 'appointment',
-    permission: 'Appointment Parent',
-    icon: <AppointmentIcon />,
-    childLinks: [
-      {
-        name: 'Store Employees',
-        path: 'appointment/provider',
-        permission: 'Appointment Category List',
-        icon: <ProviderIcon />,
-      },
-      {
-        name: 'All Appointments',
-        path: 'appointment/visit',
-        permission: 'Appointment Visit List',
-        icon: <VisitIcon />,
-      },
-    ],
-  },
-  {
-    name: 'FAQs',
-    path: 'faq',
-    permission: 'Notification List',
-    icon: <QuestionAnswerOutlinedIcon fontSize="inherit" />,
-  },
-  {
-    name: 'Notifications',
-    path: 'notification',
-    permission: 'Notification List',
-    icon: <NotificationsOutlinedIcon fontSize="inherit" />,
-  },
-  {
-    name: 'Vouchers',
-    path: 'vouchers',
-    permission: 'Voucher List',
-    icon: <VoucherIcon />,
-  },
-  {
-    name: 'Settings',
-    path: 'settings',
-    permission: 'Setting View',
-    icon: <SettingsOutlinedIcon fontSize="inherit" />,
+    icon: assets.images.home,
   },
   {
     name: 'Scan Disease',
     path: 'scan-disease',
     permission: 'Setting View',
     // icon: <SettingsOutlinedIcon fontSize="inherit" />,
-    icon: <FaceScanIcon />,
+    icon: assets.images.scan,
   },
+  // {
+  //   name: 'Patient Log',
+  //   path: 'patient-log',
+  //   permission: 'Setting View',
+  //   // icon: <SettingsOutlinedIcon fontSize="inherit" />,
+  //   icon: <ContentPasteIcon />,
+  // },
   {
-    name: 'Patient Log',
-    path: 'patient-log',
+    name: 'Patient',
+    path: 'patient',
     permission: 'Setting View',
     // icon: <SettingsOutlinedIcon fontSize="inherit" />,
-    icon: <ContentPasteIcon />,
+    // icon: <PatientsIcon />,
+    icon: assets.images.patient,
   },
   {
-    name: 'Create new Patient',
-    path: 'patient-log-create',
-    permission: 'Setting View',
-    // icon: <SettingsOutlinedIcon fontSize="inherit" />,
-    icon: <PatientsIcon />,
-  },
-  {
-    name: 'Add new Doctor',
+    name: 'Doctor',
     path: 'add-doctor',
     permission: 'Setting View',
     // icon: <SettingsOutlinedIcon fontSize="inherit" />,
-    icon: <MedicationLiquidIcon />,
+    icon: assets.images.patient,
   },
+  // {
+  //   name: 'EditDoctor',
+  //   path: 'edit-doctor',
+  //   permission: 'Setting View',
+  //   // icon: <SettingsOutlinedIcon fontSize="inherit" />,
+  //   icon: <MedicationLiquidIcon />,
+  // },
+  // {
+  //   name: 'Doctor Profile',
+  //   path: 'doctor-profile',
+  //   permission: 'Setting View',
+  //   // icon: <SettingsOutlinedIcon fontSize="inherit" />,
+  //   icon: <MedicationLiquidIcon />,
+  // },
   {
-    name: 'EditDoctor',
-    path: 'edit-doctor',
+    name: 'Settings',
+    path: 'settings/app',
     permission: 'Setting View',
-    // icon: <SettingsOutlinedIcon fontSize="inherit" />,
-    icon: <MedicationLiquidIcon />,
-  },
-  {
-    name: 'Doctor Profile',
-    path: 'doctor-profile',
-    permission: 'Setting View',
-    // icon: <SettingsOutlinedIcon fontSize="inherit" />,
-    icon: <MedicationLiquidIcon />,
+    // permission: ALL_PERMISSIONS.storeSetting.viewSettings,
+    icon: assets.images.shopIcon,
   },
 ];
 
 function Sidebar() {
+  const dispatch = useDispatch();
   const userData = useAppSelector((state: any) => state?.authState?.user);
   const appItems = useAppSelector(
     (state: any) => state?.persisitReducer?.appState?.UserItems
@@ -215,6 +128,14 @@ function Sidebar() {
   // };
   // console.log("ei",expandedIndex);
 
+  const logOut = () => {
+    dispatch(logout());
+    dispatch(setRemoveItemState());
+    dispatch(setLogo(null));
+    dispatch(setRolePermissions({ id: '', name: '', permissions: [] }));
+    // dispatch(setSystemConfig(null));
+  };
+
   const handleToggle = (index: number) => {
     if (expandedIndex === index) {
       setExpandedIndex(null);
@@ -236,14 +157,16 @@ function Sidebar() {
         key={path}
         className={({ isActive }) =>
           isActive
-            ? `bg-gray-50 bg-opacity-5 ${padding} ${paddingLeft} w-full pr-4`
+            ? `is-active-img bg-gray-50 bg-opacity-5 ${padding} ${paddingLeft} mx-1`
             : `${padding} ${paddingLeft} w-full pr-4`
         }
         to={path}
       >
         <div className="flex items-center text-gray-50">
-          <span className="text-base leading-3">{icon} </span>
-          <div className="mr-2">&nbsp;</div>
+          <span className="text-base leading-3">
+            <img className="w-[15px]" src={icon} alt={name} />{' '}
+          </span>
+          <div className="mr-1">&nbsp;</div>
           <span className="font-open-sans text-sm font-semibold">{name}</span>
         </div>
       </NavLink>
@@ -268,9 +191,9 @@ function Sidebar() {
         >
           <div
             onClick={() => handleToggle(index)}
-            className="abc flex cursor-pointer items-center justify-between px-[30px]"
+            className="abc flex w-[50px] cursor-pointer items-center justify-between px-[30px]"
           >
-            <div className="ap my-3 flex items-center">
+            <div className="ap my-3 flex w-[30px] items-center">
               <div className="pr-[7px]">
                 <span className="text-base leading-3">{icon}</span>
               </div>
@@ -305,25 +228,26 @@ function Sidebar() {
   }
 
   useEffect(() => {
-    defineRules(dataRole?.persisitReducer?.roleState?.role?.permissions);
-    if (dataRole?.persisitReducer?.roleState?.role?.permissions) {
-      const tempList = links.filter((el) => {
-        if (el.name === MODULE_EMPLOYEEES) {
-          if (appItems.employeeLimit <= 0) {
-            return null;
-          }
-        }
-        return CAN('canView', el.permission as string);
-      });
-      // console.log("templost", tempList);
-      tempList.unshift({
-        name: 'Dashboard',
-        path: 'home',
-        permission: 'Dashboard List',
-        icon: <GridViewOutlinedIcon fontSize="inherit" />,
-      });
-      setList(tempList);
-    }
+    // defineRules(dataRole?.persisitReducer?.roleState?.role?.permissions);
+    // if (dataRole?.persisitReducer?.roleState?.role?.permissions) {
+    //   const tempList = links.filter((el) => {
+    //     if (el.name === MODULE_EMPLOYEEES) {
+    //       if (appItems.employeeLimit <= 0) {
+    //         return null;
+    //       }
+    //     }
+    //     return CAN('canView', el.permission as string);
+    //   });
+    //   // console.log("templost", tempList);
+    //   tempList.unshift({
+    //     name: 'Dashboard',
+    //     path: 'home',
+    //     permission: 'Dashboard List',
+    //     icon: <GridViewOutlinedIcon fontSize="inherit" />,
+    //   });
+    //   setList(tempList);
+    // }
+    setList(links);
   }, [emptyVariable, appItems?.employeeLimit]);
 
   return (
@@ -359,10 +283,10 @@ function Sidebar() {
                 alt="logo"
               />
             ) : (
-              <div className="flex w-full items-center justify-start rounded-2xl p-3 text-white">
+              <div className="flex w-full items-center justify-start rounded-2xl p-3 text-white brightness-0 invert">
                 <img
                   className="mt-2 max-w-[150px]"
-                  src={assets.images.urApplogoWhite}
+                  src={assets.images.mdalderIcon}
                   alt="logo"
                 />
               </div>
@@ -387,7 +311,7 @@ function Sidebar() {
               );
             })}
         </div>
-        <div className="sidebar-footer-content mt-5">
+        {/* <div className="sidebar-footer-content mt-5">
           {!authState.user.isSuperAdmin && (
             <div className="share-via">
               <h6 className="heading">Share</h6>
@@ -489,20 +413,23 @@ function Sidebar() {
               Privacy Policy
             </NavLink>
             <hr className="mt-2" /> */}
+        {/* </div> */}
+        {/* )} */}
+        {/* </div> */}
+        <div className="fixed bottom-4 left-6 flex items-center">
+          <Button
+            className="w-full font-an-gurmukhi text-primary"
+            onClick={() => logOut()}
+          >
+            <div className="flex items-center">
+              <img
+                className="w-[20px]"
+                src={assets.images.logout}
+                alt="logout"
+              />
+              <span className="mx-2 mt-[4px]">Logout</span>
             </div>
-          )}
-          {/* {authState ? (
-            <NavLink
-              className="logout-link"
-              to="/admin"
-              onClick={() => logOut()}
-            >
-              <LogoutOutlinedIcon className="icon" />
-              Logout
-            </NavLink>
-          ) : (
-            ''
-          )} */}
+          </Button>
         </div>
       </List>
     </Drawer>

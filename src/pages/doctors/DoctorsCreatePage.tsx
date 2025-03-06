@@ -399,12 +399,12 @@ const DoctorsCreatePage = () => {
                       <Button
                         variant="outlined"
                         onClick={() => setImagePreview(null)}
-                        className="mx-5 rounded-xl border-primary text-primary"
+                        className="mx-5 rounded"
                       >
                         <RefreshIcon className="mr-3" />
                         Reset{' '}
                       </Button>
-                      <Button className="btn-black-fill rounded-xl border-primary text-primary">
+                      <Button className="rounded border-primary bg-background text-primary">
                         <SendIcon className="mr-3" />
                         Save{' '}
                       </Button>

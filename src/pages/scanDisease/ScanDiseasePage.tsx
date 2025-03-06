@@ -28,7 +28,7 @@ function LinearProgressWithLabel(
             },
             [`& .${linearProgressClasses.bar}`]: {
               borderRadius: 5,
-              backgroundColor: 'var(--theme-primary)',
+              backgroundColor: 'var(--theme-background)',
             },
           }}
           {...props}
@@ -70,7 +70,7 @@ const ScanDiseasePage = () => {
   return (
     <>
       <TopBar title="Scan Disease" />
-      <div className="pr-36">
+      <div className="container mx-auto px-5">
         <div className="grid grid-cols-2 gap-10">
           <div className="alder-card-border p-8 ">
             <div
@@ -102,14 +102,14 @@ const ScanDiseasePage = () => {
               <div className="mt-10">
                 <div className="grid grid-cols-2 gap-4">
                   <Button
-                    className="btn-black-fill p-3"
+                    className="bg-background p-3"
                     onClick={handleOpenCamera}
                     variant="contained"
                   >
                     Retake
                   </Button>
 
-                  <Button className="btn-black-fill p-3" variant="contained">
+                  <Button className="bg-background p-3" variant="contained">
                     Analyze
                   </Button>
                 </div>
@@ -156,7 +156,7 @@ const ScanDiseasePage = () => {
               <div className="mt-10">
                 <div className="grid grid-cols-2 gap-4">
                   <Button
-                    className="btn-black-fill p-3"
+                    className="bg-background p-3"
                     onClick={() =>
                       document?.getElementById('imageInput')?.click()
                     }
@@ -165,7 +165,7 @@ const ScanDiseasePage = () => {
                     Choose a file
                   </Button>
 
-                  <Button className="btn-black-fill p-3" variant="contained">
+                  <Button className="bg-background p-3" variant="contained">
                     Analyze
                   </Button>
                 </div>
