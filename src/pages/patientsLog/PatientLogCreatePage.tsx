@@ -11,10 +11,10 @@ import { useState } from 'react';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import SendIcon from '@mui/icons-material/Send';
 import { useForm } from 'react-hook-form';
+import CircularProgress from '@mui/material/CircularProgress';
 import SmileFace from '../../assets/images/smile-dark.png';
 import TopBar from '../../components/common/Md-Alder/TopBar';
 import { Patient } from '../../interfaces/patient.interface';
-import CircularProgress from '@mui/material/CircularProgress';
 import {
   imageAllowedTypes,
   INVALID_CHAR,
@@ -101,6 +101,7 @@ const PatientLogCreatePage = () => {
         }
       })
       .catch((err) => {
+        setIsLoader(false);
         showMessage(err.message, 'error');
       });
   };

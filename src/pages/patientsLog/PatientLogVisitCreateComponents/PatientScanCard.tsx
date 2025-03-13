@@ -3,10 +3,12 @@ import React, { useRef, useState } from 'react';
 import camera from '../../../assets/images/camera-dark.png';
 import ScanDiseaseWebCamModal from '../../scanDisease/ScanDieseaseWebCamModal';
 
-const PatientScanCard = () => {
+const PatientScanCard = ({ index, callback }: any) => {
   const [capturePreview, setCapturePreview] = useState<
     string | undefined | null
   >(null);
+  const [capturePreviewFile, setCapturePreviewFile] = useState<any>(null);
+  const [caption, setCaption] = useState('');
   const [webCam, setWebCam] = useState(false);
   const imageInput = useRef<HTMLInputElement>(null);
 
@@ -16,14 +18,24 @@ const PatientScanCard = () => {
 
   const handleUploadImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e?.target?.files?.[0];
+    console.log('FILEE', file);
+
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
         setCapturePreview(reader.result?.toString());
+        setCapturePreviewFile(file);
+        callback(index, { image: file || null, caption });
       };
       reader.readAsDataURL(file);
     }
   };
+
+  const handleCaptionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCaption(e.target.value);
+    callback(index, { image: capturePreviewFile, caption: e.target.value });
+  };
+
   return (
     <div className="alder-camera-scan-card">
       <div className="flex h-[200px] flex-col items-center  justify-center rounded-xl bg-white">
@@ -48,35 +60,50 @@ const PatientScanCard = () => {
           />
         )}
       </div>
-      <div className="mt-5 grid grid-cols-12  items-center gap-1">
-        <div className="col-span-6 md:col-span-12 lg:col-span-8">
+      <div className="mt-5 grid grid-cols-12 items-center gap-2">
+        <div className="col-span-6">
           <FormGroup>
             <FormControl fullWidth>
               <Input
                 name="caption"
                 className="alder-form-control"
                 placeholder="Caption"
+                value={caption}
+                onChange={handleCaptionChange}
                 disableUnderline
               />
             </FormControl>
           </FormGroup>
         </div>
-        <div className="col-span-3 md:col-span-6 lg:col-span-2">
+        <div className="col-span-3">
           <Button
+            onClick={() => imageInput?.current?.click()}
+            className="nohover h-[45px] w-full rounded-xl border-primary bg-background text-primary"
+          >
+            Upload
+          </Button>
+          {/* <Button
             onClick={() => imageInput?.current?.click()}
             className="btn-black-fill rounded-10 w-full py-3"
           >
             Upload
-          </Button>
+          </Button> */}
         </div>
-        <div className="col-span-3 md:col-span-6 lg:col-span-2 ">
+        <div className="col-span-3">
           <Button
+            variant="outlined"
+            onClick={handleOpenCamera}
+            className="h-[45px] w-full rounded-xl border-2 border-background text-background"
+          >
+            Retake
+          </Button>
+          {/* <Button
             variant="outlined"
             onClick={handleOpenCamera}
             className=" rounded-10 w-full border-primary py-3 font-bold capitalize text-primary"
           >
             Retake
-          </Button>
+          </Button> */}
         </div>
       </div>
       <ScanDiseaseWebCamModal

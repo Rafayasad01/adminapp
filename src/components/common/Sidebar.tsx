@@ -78,6 +78,13 @@ const links = [
     // icon: <SettingsOutlinedIcon fontSize="inherit" />,
     icon: assets.images.patient,
   },
+  {
+    name: 'Form Fields',
+    path: 'fields',
+    permission: 'Setting View',
+    // icon: <SettingsOutlinedIcon fontSize="inherit" />,
+    icon: assets.images.patient,
+  },
   // {
   //   name: 'EditDoctor',
   //   path: 'edit-doctor',

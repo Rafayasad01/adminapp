@@ -53,11 +53,14 @@ function PermissionPopup({
         )}
         <div className={popupStyle.Title}>Hey Wait!</div>
         <div className={popupStyle.Message}>{dialogText}</div>
-        <div className={popupStyle.DescMessage}>Note : {dialogDesc}</div>
+        <div className={popupStyle.DescMessage}>
+          {dialogDesc ? `Note: ${dialogDesc}` : ''}
+        </div>
         <div className={popupStyle.Actions}>
           <Button
+            variant="outlined"
             onClick={() => onEventHandler('yes')}
-            className={`${popupStyle.ButtonOutlined} btn-black-outline`}
+            className="w-[50%] rounded-full text-secondary2"
             type="button"
             color="inherit"
           >
@@ -65,7 +68,7 @@ function PermissionPopup({
           </Button>
           <Button
             onClick={() => onEventHandler('no')}
-            className={`${popupStyle.ButtonFilled} btn-black-fill`}
+            className="w-[50%] rounded-full bg-background text-primary"
             type="button"
             color="inherit"
           >

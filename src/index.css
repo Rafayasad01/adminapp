@@ -102,7 +102,7 @@ select {
 }
 
 .form-group input {
-  @apply rounded-xl border-none bg-[#F5F2FF] px-4 py-1.5 font-open-sans text-sm font-normal text-secondary opacity-70 !important;
+  @apply rounded-xl border-none bg-[#F5F2FF] px-4 py-1.5 font-open-sans text-sm font-normal text-secondary2 opacity-70 !important;
 }
 
 .form-group .MuiFormControl-root {
@@ -336,7 +336,7 @@ table > tbody > tr:last-child {
 }
 
 .title {
-  @apply flex text-[2.813rem] text-secondary;
+  @apply flex text-[2.813rem] text-secondary2;
   font-variation-settings: 'wdth' 113, 'wght' 500;
 }
 
@@ -1809,7 +1809,7 @@ MD - AlDer Theme Styles
   content: '';
   height: 5px;
   display: block;
-  background: var(--theme-primary);
+  background: var(--theme-background);
   position: relative;
   border-radius: 10px;
   bottom: -13px;
@@ -1914,4 +1914,16 @@ End MD - AlDer Theme Styles
 
 .css-1ka5eyc-MuiPaper-root-MuiMenu-paper-MuiPopover-paper {
   @apply bg-primary !important;
+}
+
+.alder-patient-info-tabs button:hover {
+  @apply text-secondary2 !important;
+}
+
+.alder-patient-info-tabs button.nohover:hover {
+  @apply text-primary !important;
+}
+
+.css-1x51dt5-MuiInputBase-input-MuiInput-input {
+  @apply text-secondary2 !important;
 }

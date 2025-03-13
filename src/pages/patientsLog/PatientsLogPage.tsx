@@ -122,7 +122,7 @@ const PatientsLogPage = () => {
                         <td>
                           <div className="flex align-middle">
                             <img
-                              src={e.avatar || photo}
+                              src={e.avatar ? e.avatar : photo}
                               alt=""
                               height={32}
                               width={32}

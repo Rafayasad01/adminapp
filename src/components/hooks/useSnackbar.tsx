@@ -5,7 +5,8 @@ import Alert from '@mui/material/Alert';
 interface SnackbarContextProps {
   showMessage: (
     message: string,
-    type?: 'success' | 'error' | 'warning' | 'info'
+    type?: 'success' | 'error' | 'warning' | 'info',
+    position?: 'center' | 'left' | 'right'
   ) => void;
 }
 
@@ -18,16 +19,21 @@ export const SnackbarProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState('');
+  const [snackPosition, setSnackPosition] = useState<
+    'center' | 'left' | 'right'
+  >('left');
   const [type, setType] = useState<'success' | 'error' | 'warning' | 'info'>(
     'info'
   );
 
   const showMessage = (
     msg: string,
-    severity: 'success' | 'error' | 'warning' | 'info' = 'info'
+    severity: 'success' | 'error' | 'warning' | 'info' = 'info',
+    position: 'center' | 'right' | 'left' = 'left'
   ) => {
     setMessage(msg);
     setType(severity);
+    setSnackPosition(position);
     setOpen(true);
   };
 
@@ -44,7 +50,10 @@ export const SnackbarProvider: React.FC<{ children: React.ReactNode }> = ({
         open={open}
         autoHideDuration={3000}
         onClose={handleClose}
-        anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: snackPosition || 'left',
+        }}
       >
         <Alert
           onClose={handleClose}

@@ -176,7 +176,7 @@ function LoginPage() {
               </span>
               <FormControl className="m-1 h-full w-full" variant="standard">
                 <Input
-                  className="h-[50px]"
+                  className="h-[50px] text-secondary2"
                   id="email"
                   type="email"
                   {...register('email', {

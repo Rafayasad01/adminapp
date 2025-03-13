@@ -7,7 +7,7 @@ const DetailsFieldComponent = ({ label = '', value = '' }) => {
   return (
     <div className="">
       <p className="text-sm text-[#A9A9A9]">{label}</p>
-      <p className="text-xl">{value}</p>
+      <p className="w-[75%] truncate text-xl">{value}</p>
     </div>
   );
 };
@@ -30,24 +30,34 @@ const PatientProfileInfo = ({ showReset = false, data }: any) => {
         )}
       </div>
 
-      <div className="py-5 md:flex  ">
-        <div className="alder-profile-pic flex justify-start sm:max-md:justify-center md:self-center ">
-          <img
-            src={data?.avatar || photo}
-            alt="profile"
-            className="w-[127px]"
-          />
-        </div>
-        <div className="alder-profile-details flex w-full justify-between px-3 md:flex-col lg:flex-row lg:items-center">
+      <div className="flex py-5">
+        <div className="alder-profile-details grid grid-cols-12 justify-between px-5 lg:items-center">
+          <div className="col-span-1">
+            <img
+              src={data?.avatar || photo}
+              alt="profile"
+              className="w-[120px]"
+            />
+          </div>
           {/* <DetailsFieldComponent label="MR#" value="607" /> */}
-          <DetailsFieldComponent label="Name" value={data?.name} />
-          <DetailsFieldComponent label="Name" value={data?.gender} />
-          <DetailsFieldComponent label="Age" value={data?.age || '--'} />
-          <DetailsFieldComponent label="Phone" value={data?.phone} />
-          <DetailsFieldComponent
-            label="Address"
-            value={data?.address || '--'}
-          />
+          <div className="col-span-3 px-6">
+            <DetailsFieldComponent label="Name" value={data?.name} />
+          </div>
+          <div className="col-span-2">
+            <DetailsFieldComponent label="Gender" value={data?.gender} />
+          </div>
+          <div className="col-span-2">
+            <DetailsFieldComponent label="Age" value={data?.age || '--'} />
+          </div>
+          <div className="col-span-2">
+            <DetailsFieldComponent label="Phone" value={data?.phone} />
+          </div>
+          <div className="col-span-2">
+            <DetailsFieldComponent
+              label="Address"
+              value={data?.address || '--'}
+            />
+          </div>
         </div>
       </div>
     </div>

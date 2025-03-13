@@ -62,6 +62,7 @@ import PatientLogVisitDetailsPage from '../pages/patientsLog/PatientLogVisitDeta
 import DoctorsCreatePage from '../pages/doctors/DoctorsCreatePage';
 import DoctorsProfilePage from '../pages/doctors/DoctorsProfilePage';
 import DoctorsEditPage from '../pages/doctors/DoctorsEditPage';
+import FormFieldsPage from '../pages/formFields/FormFieldsPage';
 
 export const routeObjects: RouteObject[] = [
   {
@@ -440,6 +441,14 @@ export const routeObjects: RouteObject[] = [
                 path: 'profile/:id',
                 element: <PatientLogProfilePage />,
               },
+              {
+                path: 'revisit/:id',
+                element: <PatientLogVisitCreatePage />,
+              },
+              {
+                path: 'visit-details/:id',
+                element: <PatientLogVisitDetailsPage />,
+              },
               // {
               //   path: 'services/:providerId',
               //   element: <AppointmentProviderServicesList />,
@@ -448,6 +457,15 @@ export const routeObjects: RouteObject[] = [
               //   path: 'today-appointment/:providerId',
               //   element: <AppointmentProviderByIdPage />,
               // },
+            ],
+          },
+          {
+            path: 'fields',
+            children: [
+              {
+                index: true,
+                element: <FormFieldsPage />,
+              },
             ],
           },
           {
