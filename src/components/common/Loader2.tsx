@@ -1,8 +1,12 @@
 import CircularProgress from '@mui/material/CircularProgress';
 
-function Loader() {
+function Loader({ minH }: any) {
   return (
-    <div className="flex h-full min-h-[200px] w-full items-center justify-center">
+    <div
+      className={`flex h-full ${
+        minH || 'min-h-[200px]'
+      } w-full items-center justify-center`}
+    >
       <CircularProgress size={15} color="inherit" />
     </div>
   );

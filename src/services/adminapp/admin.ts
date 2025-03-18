@@ -7,8 +7,8 @@ const getService = () => {
   return network.get(`${SETTING_PREFIX}/get`);
 };
 
-const updateService = <T = any>(tenant: string, data: T) => {
-  return network.postMultipart(`${SETTING_PREFIX}/update/${tenant}`, data);
+const updateService = (data: any) => {
+  return network.postMultipart(`${SETTING_PREFIX}/update`, data);
 };
 
 const updateMediaService = <T = any>(tenantId: string, data: T) => {

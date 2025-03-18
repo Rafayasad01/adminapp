@@ -528,7 +528,7 @@ table > tbody > tr:last-child {
 
 .custom-tab {
   border-bottom: 0.5px solid;
-  @apply border-foreground;
+  @apply border-background;
 }
 
 .css-1ujnqem-MuiTabs-root {
@@ -540,7 +540,7 @@ table > tbody > tr:last-child {
 }
 
 .custom-tab .css-1h9z7r5-MuiButtonBase-root-MuiTab-root.Mui-selected {
-  @apply font-semibold text-secondary !important;
+  @apply font-semibold text-background !important;
 }
 
 .css-1aquho2-MuiTabs-indicator {
@@ -1670,6 +1670,15 @@ main {
   border-color: rgb(26 26 26 / 30%) !important;
 }
 
+.Content .css-dpjnhs-MuiInputBase-root-MuiOutlinedInput-root {
+  border-color: rgb(26 26 26 / 30%) !important;
+  border: 1px solid rgb(26 26 26 / 30%) !important;
+  border-radius: 5px !important;
+}
+
+.css-1sqnrkk-MuiInputBase-input-MuiOutlinedInput-input {
+  padding: 0px 8px !important;
+}
 /* .border-opacity{
   border: solid rgba(106, 106, 106, 0.502) !important;
 } */

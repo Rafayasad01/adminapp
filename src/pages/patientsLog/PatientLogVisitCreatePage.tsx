@@ -1,7 +1,12 @@
-import { Button, FormControl, TextareaAutosize } from '@mui/material';
+import {
+  Button,
+  FormControl,
+  TablePagination,
+  TextareaAutosize,
+} from '@mui/material';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useForm, FormProvider } from 'react-hook-form';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
 import TopBar from '../../components/common/Md-Alder/TopBar';
 import PatientProfileInfo from '../../components/common/Md-Alder/PatientLog/PatientProfileInfo';
@@ -14,14 +19,22 @@ import EyeIcon from '../../components/icons/EyeIcon';
 import service from '../../services/adminapp/adminPatient';
 import { useSnackbar } from '../../components/hooks/useSnackbar';
 import { PATTERN } from '../../utils/constants';
+import CustomText from '../../components/common/CustomText';
+import Loader from '../../components/common/Loader2';
 
 const PatientLogVisitCreatePage = () => {
   const { state } = useLocation();
   const { showMessage } = useSnackbar();
+  const navigate = useNavigate();
   const methods = useForm();
   const { handleSubmit, register } = methods;
 
   const [isLoader, setIsLoader] = useState<boolean>(false);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [total, setTotal] = useState(0);
+  const [list, setList] = useState<any>([]);
+  const [search, setSearch] = useState('');
   // const { register, handleSubmit, formState: { errors } } = useForm();
 
   const tabs: Tab[] = [
@@ -99,6 +112,62 @@ const PatientLogVisitCreatePage = () => {
       });
   };
 
+  useEffect(() => {
+    service
+      .getListVisit({ search, page, size: rowsPerPage, patient: state.id })
+      .then((item) => {
+        if (item.data.success) {
+          setIsLoader(false);
+          setList(item.data.data.list);
+          setTotal(item.data.data.total);
+        } else {
+          showMessage(item.data.message, 'error');
+          setIsLoader(false);
+        }
+      })
+      .catch((err) => {
+        showMessage(err.message, 'error');
+      });
+  }, []);
+
+  const handleChangePage = (
+    event: React.MouseEvent<HTMLButtonElement> | null,
+    newPage: number
+  ) => {
+    setPage(newPage);
+    service
+      .getListVisit({
+        search,
+        page: newPage,
+        size: rowsPerPage,
+        patient: state.id,
+      })
+      .then((item) => {
+        setList(item.data.data.list);
+        setTotal(item.data.data.total);
+      });
+  };
+
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const newRowperPage = parseInt(event.target.value, 10);
+    const newPage = 0;
+    setRowsPerPage(newRowperPage);
+    setPage(newPage);
+    service
+      .getListVisit({
+        search,
+        page: newPage,
+        size: newRowperPage,
+        patient: state.id,
+      })
+      .then((item) => {
+        setList(item.data.data.list);
+        setTotal(item.data.data.total);
+      });
+  };
+
   return (
     <FormProvider {...methods}>
       <TopBar title="Patient Profile" />
@@ -116,7 +185,7 @@ const PatientLogVisitCreatePage = () => {
           <FormControl className="mt-5 w-full" variant="standard">
             <TextareaAutosize
               {...register('medicalNote', {
-                required: true,
+                required: 'this is required',
                 pattern: PATTERN.CHAR_NUM_DASH,
                 validate: (value) => value.length <= 100,
               })}
@@ -135,19 +204,6 @@ const PatientLogVisitCreatePage = () => {
               >
                 Save
               </Button>
-              {/* <Button
-                variant="contained"
-                // onClick={() => navigate(`../revisit/${state.id}`)}
-                className="mx-5 rounded-xl border-primary bg-background text-primary"
-              >
-                Save & Exit{' '}
-              </Button> */}
-              {/* <Button
-                variant="outlined"
-                className="mx-5 rounded-xl border-primary bg-background font-an-gurmukhi font-bold capitalize text-primary"
-              >
-                Save & Exit{' '}
-              </Button> */}
             </div>
           </div>
         </div>
@@ -159,7 +215,66 @@ const PatientLogVisitCreatePage = () => {
             <PatientLabTest />
             <PatientScan />
             <div>
-              <div>
+              <div className="alder-revisit-table-container">
+                {isLoader ? (
+                  <Loader />
+                ) : (
+                  <>
+                    <div className="table-responsive mt-2">
+                      <table>
+                        <thead className="capitalize">
+                          <tr>
+                            <th className="font-an-gurmukhi text-secondary2">
+                              Visit
+                            </th>
+                            <th className="font-an-gurmukhi text-secondary2">
+                              Medical note
+                            </th>
+                            <th>{}</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {list?.map((e: any, i: number) => (
+                            <tr key={i}>
+                              <td className="py-1 font-an-gurmukhi text-base font-medium text-secondary2">
+                                {dayjs(e.createdAt).format('DD MMMM, YYYY')}
+                              </td>
+                              <td className="py-1 font-an-gurmukhi text-base font-medium text-secondary2">
+                                {e.medicalNote}
+                              </td>
+                              <td className="py-1 font-an-gurmukhi text-base font-medium text-secondary2">
+                                <Button
+                                  onClick={() =>
+                                    navigate(`../visit-details/${state.id}`, {
+                                      state: { data: list[i], user: state },
+                                    })
+                                  }
+                                >
+                                  <EyeIcon className="h-[25px]" />
+                                </Button>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                    {list?.length < 1 ? (
+                      <CustomText text="No Records Found" />
+                    ) : null}
+                    <div className="mt-3 flex w-[100%] justify-center py-3">
+                      <TablePagination
+                        component="div"
+                        count={total}
+                        page={page}
+                        onPageChange={handleChangePage}
+                        rowsPerPage={rowsPerPage}
+                        onRowsPerPageChange={handleChangeRowsPerPage}
+                      />
+                    </div>
+                  </>
+                )}
+              </div>
+              {/* <div>
                 <table>
                   <thead>
                     <tr>
@@ -188,7 +303,7 @@ const PatientLogVisitCreatePage = () => {
                     </tr>
                   </tbody>
                 </table>
-              </div>
+              </div> */}
             </div>
           </Tabs>
         </div>

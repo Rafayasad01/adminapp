@@ -9,7 +9,6 @@ import PdfIcon from '../../components/icons/PdfIcon';
 const PatientLogVisitDetailsPage = () => {
   const { state } = useLocation();
   const { data } = state;
-  console.log('state', state);
 
   return (
     <>

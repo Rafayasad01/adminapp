@@ -34,6 +34,7 @@ export interface Setting {
   enableLoyaltyProgram: boolean;
   loyaltyCoinConversionRate: string;
   requiredCoinsToRedeem: string;
+  media: any;
 }
 
 export interface AppImage {

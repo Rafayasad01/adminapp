@@ -358,10 +358,10 @@ export const routeObjects: RouteObject[] = [
                     path: 'app',
                     element: <SettingsApp />,
                   },
-                  {
-                    path: 'shop',
-                    element: <SettingsShopScheduling />,
-                  },
+                  // {
+                  //   path: 'shop',
+                  //   element: <SettingsShopScheduling />,
+                  // },
                   // {
                   //   path: 'config',
                   //   element: <SettingConfig />,
