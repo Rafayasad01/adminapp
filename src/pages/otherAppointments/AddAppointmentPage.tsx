@@ -48,6 +48,7 @@ import storeEmployeeService from '../../services/adminapp/adminStoreEmployee';
 import storeLovService from '../../services/adminapp/adminStoreService';
 import { GENDER, MAX_LENGTH_EXCEEDED, PATTERN } from '../../utils/constants';
 import { useAppSelector } from '../../redux/redux-hooks';
+import AddGuestAppointmentPopup from './AddGuestAppointmentPopup';
 // import { useAppSelector } from '../../redux/redux-hooks';
 // import { useAppSelector } from '../../redux/redux-hooks';
 
@@ -70,7 +71,9 @@ export default function AddAppointmentPage() {
   // console.log('🚀 ~ AddAppointmentPage ~ shopSchedule:', shopScheduleWorkDays);
   const [isLoader, setIsLoader] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState(false);
+  const [appointmentType, setAppointmentType] = useState(true);
   const [isPageLoader, setIsPageLoader] = useState(false);
+  const [guestForm, setGuestForm] = useState(false);
   const [isNotify, setIsNotify] = useState(false);
   const [notifyMessage, setNotifyMessage] = useState({});
   const [activeBarber, setActiveBarber] = useState<any>();
@@ -135,7 +138,6 @@ export default function AddAppointmentPage() {
       );
       return [...filtered, ...filteredDayData];
     }, []);
-    console.log('🚀 ~ sortTimeOrder ~ filteredData:', filteredData);
     return filteredData;
   };
 
@@ -146,6 +148,10 @@ export default function AddAppointmentPage() {
   const handlePaymentChange = () => {
     setPaymentMethod(!paymentMethod);
   };
+
+  const handleAppointmentTypeChange = (data: any) => {
+    setAppointmentType(!appointmentType);
+  };
   // console.log('🚀 ~ handlePaymentChange ~ paymentMethod:', paymentMethod);
 
   const checkIsSameDate = (date: any, appointmentDate: any) => {
@@ -154,6 +160,10 @@ export default function AddAppointmentPage() {
 
   const checkIsAfterTime = (date: any, appointmentDate: any) => {
     return dayjs(date).isAfter(appointmentDate, 'minutes');
+  };
+
+  const checkIsBeforeTime = (appointmentDate: any, date: any) => {
+    return dayjs(appointmentDate).isBefore(date, 'minute');
   };
 
   const checkIsBetweenTime = (
@@ -216,19 +226,6 @@ export default function AddAppointmentPage() {
       .getBarberBookedTimeSlots(id, date)
       .then((res) => {
         if (res.data.success) {
-          // const tempBookedTime = res.data.data.map((resp: any) => ({
-          //   ...resp,
-          //   appointmentTime: dayjs(resp.appointmentTime),
-          // }));
-          // // setAppointmentBookedTime(tempBookedTime);
-          // // console.log('tempBookedTime:::::::', tempBookedTime);
-          // if (tempBookedTime.length > 0) {
-          //   setTempAppointmentBookedTime((prevArr: any) => [
-          //     ...prevArr,
-          //     tempBookedTime,
-          //   ]);
-          //   setAppointmentBookedTime(tempBookedTime);
-          // }
           const newArr = res.data.data;
           newArr.forEach((item: any) => {
             const newAppTime = dayjs(item.appointmentTime)
@@ -254,7 +251,6 @@ export default function AddAppointmentPage() {
             });
           }
           setAppointmentBookedTime(newArr);
-          console.log('🚀 ~ .then ~ newArr:', newArr);
         } else {
           setIsNotify(true);
           setNotifyMessage({
@@ -768,13 +764,188 @@ export default function AddAppointmentPage() {
   // console.log('AVTIVE BARBER FIELDS', fields);
   // console.log('AVTIVE BARBER BOOKING', fields);
 
+  // const addAppointmentServices = () => {
+  //   const obj = {
+  //     id: 0,
+  //     barber: activeBarberData?.storeEmployee?.name,
+  //     amount: activeBarberData?.amount,
+  //     storeServiceCategory: watch('categoryId'),
+  //     serviceTime: activeBarber?.serviceTime,
+  //     storeServiceCategoryItem: watch('storeServiceCategoryItem'),
+  //     storeEmployee: activeBarberData?.storeEmployee?.id,
+  //     appointmentTime: `${dayjs(getValues('appointmentDate'))?.format(
+  //       'YYYY-MM-DD'
+  //     )} ${dayjs(appointmentTime)?.format('HH:mm:ss')}`,
+  //   };
+  //   if (
+  //     watch('storeServiceCategoryItem') &&
+  //     activeBarberData &&
+  //     getValues('appointmentDate') &&
+  //     appointmentTime
+  //   ) {
+  //     const currentDay = dayjs(getValues('appointmentDate')).format('dddd');
+  //     const scheduleData = activeBarberData?.storeEmployeeSchedule.filter(
+  //       (item: any) => item.workDay === currentDay
+  //     );
+  //     const time = dayjs(getValues('appointmentDate'))
+  //       .set('hours', dayjs(appointmentTime).hour())
+  //       .set('minute', dayjs(appointmentTime).minute());
+  //     const startTime = dayjs(scheduleData[0]?.startTime)
+  //       .set('date', time.date())
+  //       .set('month', time.month())
+  //       .set('year', time.year());
+  //     let endTime = dayjs(scheduleData[0]?.endTime)
+  //       .set('date', time.date())
+  //       .set('month', time.month())
+  //       .set('year', time.year());
+  //     if (startTime.hour() > endTime.hour()) {
+  //       endTime = endTime.add(1, 'day');
+  //     }
+  //     const officeTimeIn = dayjs(officeTimings?.tenantConfig?.officeTimeIn)
+  //       .set('date', time.date())
+  //       .set('month', time.month())
+  //       .set('year', time.year());
+  //     let officeTimeOut = dayjs(officeTimings?.tenantConfig?.officeTimeOut)
+  //       .set('date', time.date())
+  //       .set('month', time.month())
+  //       .set('year', time.year());
+  //     if (officeTimeIn.hour() > officeTimeOut.hour()) {
+  //       officeTimeOut = officeTimeOut.add(1, 'day');
+  //     }
+  //     let prevTime = startTime;
+  //     const addTime = dayjs(time).add(activeBarberData?.serviceTime, 'minutes');
+  //     if (scheduleData.length > 0) {
+  //       if (
+  //         !checkIsBetweenTime(time, startTime, endTime) ||
+  //         !checkIsBetweenTime(time, officeTimeIn, officeTimeOut)
+  //       ) {
+  //         setIsNotify(true);
+  //         setNotifyMessage({
+  //           text: 'Barber is not available at this time',
+  //           type: 'error',
+  //         });
+  //         return false;
+  //       }
+  //       const isDuplicate = checkDuplicateServices(
+  //         fields,
+  //         activeBarberData?.storeEmployee?.id,
+  //         watch('storeServiceCategoryItem')
+  //       );
+  //       if (!isDuplicate) {
+  //         if (tempAppointmentBookedTime.length > 0) {
+  //           for (let i = 0; i < tempAppointmentBookedTime.length; i += 1) {
+  //             const tempEl = tempAppointmentBookedTime[i];
+  //             const tempServiceTime = dayjs(tempEl.appointmentTime).add(
+  //               tempEl.serviceTime,
+  //               'minute'
+  //             );
+  //             if (time > dayjs(tempServiceTime)) {
+  //               prevTime = dayjs(tempServiceTime);
+  //             } else if (
+  //               !checkIsBetweenTime(
+  //                 addTime,
+  //                 prevTime,
+  //                 dayjs(tempEl.appointmentTime)
+  //               )
+  //             ) {
+  //               setIsNotify(true);
+  //               setNotifyMessage({
+  //                 text: `Barber is engaged with another client`,
+  //                 type: 'error',
+  //               });
+  //               return false;
+  //             }
+  //           }
+  //         }
+  //         for (let i = 0; i < appointmentBookedTime.length; i += 1) {
+  //           const el = appointmentBookedTime[i];
+  //           const serviceTime = dayjs(el.appointmentTime).add(
+  //             el.serviceTime,
+  //             'minute'
+  //           );
+  //           if (
+  //             time > dayjs(serviceTime) &&
+  //             checkIsAfterTime(endTime, serviceTime)
+  //           ) {
+  //             prevTime = dayjs(serviceTime);
+  //           } else if (
+  //             // !checkIsAfterTime(endTime, serviceTime) &&
+  //             !checkIsBetweenTime(addTime, prevTime, dayjs(el.appointmentTime))
+  //           ) {
+  //             // break;
+  //             setIsNotify(true);
+  //             setNotifyMessage({
+  //               text: `Barber is not available at this time`,
+  //               type: 'error',
+  //             });
+  //             return false;
+  //           }
+  //         }
+  //         setTmpId((prevId: any) => prevId + 1);
+  //         const newData = {
+  //           id: tmpId,
+  //           appointmentTime: time,
+  //           email: activeBarberData?.storeEmployee?.email ?? 'abc@gmail.com',
+  //           gender: 'male',
+  //           name: activeBarberData?.storeEmployee?.name ?? 'urapp',
+  //           note: 'demo',
+  //           phone: activeBarberData?.storeEmployee?.phone,
+  //           serviceTime: activeBarberData?.serviceTime,
+  //           status: 'New',
+  //           storeEmployee: activeBarberData?.storeEmployee?.id,
+  //           storeServiceCategory: '12345',
+  //           storeServiceCategoryItem:
+  //             activeBarberData?.storeServiceCategoryItem,
+  //         };
+  //         obj.id = tmpId;
+  //         setTempAppointmentBookedTime((prev: any) => [...prev, newData]);
+  //         setAppointmentBookedTime((prev: any) => [...prev, newData]);
+  //         // setPrevBookedAppointment(newData);
+  //         append(obj);
+  //       } else {
+  //         // console.log("5");
+  //         setIsNotify(true);
+  //         setNotifyMessage({
+  //           text: 'This service you already selected, Please select another service',
+  //           type: 'error',
+  //         });
+  //       }
+  //       // } else {
+  //       //   setIsNotify(true);
+  //       //   setNotifyMessage({
+  //       //     text: `Barber is not avaiable at ${selectedAppointmentTime}`,
+  //       //     type: 'error',
+  //       //   });
+  //       // }
+  //     } else {
+  //       setIsNotify(true);
+  //       setNotifyMessage({
+  //         text: `Barber is not available at ${currentDay}`,
+  //         type: 'error',
+  //       });
+  //     }
+  //   } else {
+  //     // console.log("6");
+  //     setIsNotify(true);
+  //     setNotifyMessage({
+  //       text: 'Please select your preferred barber, category , desired services, and appointment date & time for scheduling.',
+  //       type: 'error',
+  //     });
+  //   }
+  //   return null;
+  // };
+
+  const guestFormHandler = (data: any) => {
+    console.log('guest data', data);
+  };
+
   const addAppointmentServices = () => {
     const obj = {
       id: 0,
       barber: activeBarberData?.storeEmployee?.name,
-      amount: activeBarberData?.amount,
+      amount: activeBarberData?.servicePrice,
       storeServiceCategory: watch('categoryId'),
-      serviceTime: activeBarber?.serviceTime,
+      serviceTime: activeBarberData?.serviceTime,
       storeServiceCategoryItem: watch('storeServiceCategoryItem'),
       storeEmployee: activeBarberData?.storeEmployee?.id,
       appointmentTime: `${dayjs(getValues('appointmentDate'))?.format(
@@ -805,24 +976,30 @@ export default function AddAppointmentPage() {
       if (startTime.hour() > endTime.hour()) {
         endTime = endTime.add(1, 'day');
       }
-      const officeTimeIn = dayjs(officeTimings?.tenantConfig?.officeTimeIn)
-        .set('date', time.date())
-        .set('month', time.month())
-        .set('year', time.year());
-      let officeTimeOut = dayjs(officeTimings?.tenantConfig?.officeTimeOut)
-        .set('date', time.date())
-        .set('month', time.month())
-        .set('year', time.year());
-      if (officeTimeIn.hour() > officeTimeOut.hour()) {
-        officeTimeOut = officeTimeOut.add(1, 'day');
-      }
+      // const officeTimeIn = dayjs(officeTimings?.tenantConfig?.officeTimeIn)
+      //   .set('date', time.date())
+      //   .set('month', time.month())
+      //   .set('year', time.year());
+      // let officeTimeOut = dayjs(officeTimings?.tenantConfig?.officeTimeOut)
+      //   .set('date', time.date())
+      //   .set('month', time.month())
+      //   .set('year', time.year());
+      // if (officeTimeIn.hour() > officeTimeOut.hour()) {
+      //   officeTimeOut = officeTimeOut.add(1, 'day');
+      // }
       let prevTime = startTime;
       const addTime = dayjs(time).add(activeBarberData?.serviceTime, 'minutes');
       if (scheduleData.length > 0) {
-        if (
-          !checkIsBetweenTime(time, startTime, endTime) ||
-          !checkIsBetweenTime(time, officeTimeIn, officeTimeOut)
-        ) {
+        // console.log('time, startTime', time, startTime);
+
+        // console.log(
+        //   '!checkIsBeforeTime(time, startTime)',
+        //   checkIsBeforeTime(startTime, time)
+        // );
+
+        if (!checkIsBeforeTime(startTime, time)) {
+          // console.log('1');
+
           setIsNotify(true);
           setNotifyMessage({
             text: 'Barber is not available at this time',
@@ -868,8 +1045,9 @@ export default function AddAppointmentPage() {
               'minute'
             );
             if (
-              time > dayjs(serviceTime) &&
-              checkIsAfterTime(endTime, serviceTime)
+              time > dayjs(serviceTime)
+              // &&
+              // checkIsAfterTime(endTime, serviceTime)
             ) {
               prevTime = dayjs(serviceTime);
             } else if (
@@ -877,6 +1055,7 @@ export default function AddAppointmentPage() {
               !checkIsBetweenTime(addTime, prevTime, dayjs(el.appointmentTime))
             ) {
               // break;
+              // console.log('2');
               setIsNotify(true);
               setNotifyMessage({
                 text: `Barber is not available at this time`,
@@ -922,6 +1101,7 @@ export default function AddAppointmentPage() {
         //   });
         // }
       } else {
+        // console.log('3');
         setIsNotify(true);
         setNotifyMessage({
           text: `Barber is not available at ${currentDay}`,
@@ -940,7 +1120,7 @@ export default function AddAppointmentPage() {
   };
 
   const onSubmit = (data: any) => {
-    setIsLoader(true);
+    // setIsLoader(true);
     delete data.storeServiceCategoryItem;
     delete data.storeServiceCategory;
     delete data.categoryId;
@@ -960,36 +1140,38 @@ export default function AddAppointmentPage() {
       return e;
     });
     data.status = paymentMethod ? 'Processing' : 'New';
-    storeAppointmentService
-      .appointmentCreate(data)
-      .then((res: any) => {
-        if (res.data.success) {
-          setIsLoader(false);
-          setIsNotify(true);
-          setNotifyMessage({
-            text: res.data.message,
-            type: 'success',
-          });
-          setTimeout(() => {
-            navigate(-1);
-          }, 500);
-        } else {
-          setIsLoader(false);
-          setIsNotify(true);
-          setNotifyMessage({
-            text: res.data.message,
-            type: 'error',
-          });
-        }
-      })
-      .catch((err) => {
-        setIsLoader(false);
-        setIsNotify(true);
-        setNotifyMessage({
-          text: err.message,
-          type: 'error',
-        });
-      });
+    console.log('data appoitnment =>', data);
+
+    // storeAppointmentService
+    //   .appointmentCreate(data)
+    //   .then((res: any) => {
+    //     if (res.data.success) {
+    //       setIsLoader(false);
+    //       setIsNotify(true);
+    //       setNotifyMessage({
+    //         text: res.data.message,
+    //         type: 'success',
+    //       });
+    //       setTimeout(() => {
+    //         navigate(-1);
+    //       }, 500);
+    //     } else {
+    //       setIsLoader(false);
+    //       setIsNotify(true);
+    //       setNotifyMessage({
+    //         text: res.data.message,
+    //         type: 'error',
+    //       });
+    //     }
+    //   })
+    //   .catch((err) => {
+    //     setIsLoader(false);
+    //     setIsNotify(true);
+    //     setNotifyMessage({
+    //       text: err.message,
+    //       type: 'error',
+    //     });
+    //   });
   };
 
   const handleDateChange = (date: any, field: any) => {
@@ -1031,6 +1213,16 @@ export default function AddAppointmentPage() {
         setIsOpen={setIsNotify}
         displayMessage={notifyMessage}
       />
+      {guestForm && (
+        <AddGuestAppointmentPopup
+          setIsNotify={setIsNotify}
+          setNotifyMessage={setNotifyMessage}
+          openFormDialog={guestForm}
+          setOpenFormDialog={setGuestForm}
+          callback={guestFormHandler}
+          parentAppointmentBookedTime={appointmentBookedTime}
+        />
+      )}
       <TopBar isNestedRoute title="Fill Appointment Form" />
       <div className="container m-auto mt-5">
         <div className="w-full rounded-lg bg-white shadow-lg">
@@ -1197,6 +1389,57 @@ export default function AddAppointmentPage() {
                               />
                             }
                             label="Processing"
+                          />
+                        </RadioGroup>
+                      </FormControl>
+                    </div>
+                    <div className="w-full">
+                      <FormControl className="mt-4">
+                        <FormLabel
+                          id="demo-row-radio-buttons-group-label"
+                          className="font-open-sans text-xl font-semibold text-secondary"
+                        >
+                          Appointment Type
+                        </FormLabel>
+                        <RadioGroup
+                          row
+                          aria-labelledby="demo-row-radio-buttons-group-label"
+                          name="row-radio-buttons-group"
+                          onClick={handleAppointmentTypeChange}
+                        >
+                          <FormControlLabel
+                            sx={{
+                              color: '#6A6A6A',
+                              fontFamily: 'Open Sans',
+                              fonWeight: 400,
+                              fonSize: '14px',
+                            }}
+                            control={
+                              <Radio
+                                checked={appointmentType}
+                                className="text-sm text-[#1D1D1D]"
+                                icon={<RadioButtonUncheckedOutlinedIcon />}
+                                checkedIcon={<CheckCircleOutlinedIcon />}
+                              />
+                            }
+                            label="Single Appointment"
+                          />
+                          <FormControlLabel
+                            sx={{
+                              color: '#6A6A6A',
+                              fontFamily: 'Open Sans',
+                              fonWeight: 400,
+                              fonSize: '14px',
+                            }}
+                            control={
+                              <Radio
+                                checked={!appointmentType}
+                                className="text-sm text-[#1D1D1D]"
+                                icon={<RadioButtonUncheckedOutlinedIcon />}
+                                checkedIcon={<CheckCircleOutlinedIcon />}
+                              />
+                            }
+                            label="Group Appointments"
                           />
                         </RadioGroup>
                       </FormControl>
@@ -1495,13 +1738,14 @@ export default function AddAppointmentPage() {
               </div>
               <hr className="my-4 border-[#949EAE]" />
               <div className="mt-3 flex w-full items-center justify-end">
+                {/* {!appointmentType && ( */}
                 <CustomButton
-                  disabled={disabledButton}
+                  // disabled={appointmentType}
                   buttonType="button"
-                  title={fields.length > 0 ? 'Add More Services' : 'Add'}
+                  title={fields.length > 0 ? 'Add More Guest' : 'Add Guest'}
                   className="btn-black-fill xl:w-[20%] 2xl:w-[12%]"
                   // type={'submit'}
-                  onclick={addAppointmentServices}
+                  onclick={() => setGuestForm(true)}
                   sx={{
                     padding: '0.375rem 2rem !important',
                     // width: '20%',
@@ -1509,6 +1753,23 @@ export default function AddAppointmentPage() {
                     height: '35px',
                   }}
                 />
+                {/* )} */}
+                {fields?.length < 1 && (
+                  <CustomButton
+                    // disabled={}
+                    buttonType="button"
+                    title={fields.length > 0 ? 'Add More Services' : 'Add'}
+                    className="btn-black-fill xl:w-[20%] 2xl:w-[12%]"
+                    // type={'submit'}
+                    onclick={addAppointmentServices}
+                    sx={{
+                      padding: '0.375rem 2rem !important',
+                      // width: '20%',
+                      marginRight: '15px',
+                      height: '35px',
+                    }}
+                  />
+                )}
                 <CustomButton
                   disabled={fields?.length < 1 && true}
                   buttonType="button"

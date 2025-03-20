@@ -4,9 +4,11 @@ import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined';
 // import dayjs from 'dayjs';
 // import timezone from 'dayjs/plugin/timezone';
 // import utc from 'dayjs/plugin/utc';
+import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
+import { Button } from '@mui/material';
 import ActionMenu from '../../../components/common/ActionMenu';
 import CustomBgDropdown from '../../../components/common/CustomBgDropdown';
 import Loader from '../../../components/common/Loader';
@@ -17,6 +19,7 @@ import { useAppSelector } from '../../../redux/redux-hooks';
 import appointmentService from '../../../services/adminapp/adminAppointment';
 import employeeService from '../../../services/adminapp/adminStoreEmployee';
 import {
+  ALL_PERMISSIONS,
   APPOINTMENT_TYPE,
   NOT_AUTHORIZED_MESSAGE,
 } from '../../../utils/constants';
@@ -71,6 +74,24 @@ function OtherAppointmentPage() {
   });
 
   const { reset } = useForm<AppointmentVisit>();
+
+  const handleFormClickOpen = () => {
+    if (
+      listingRolePermission(
+        dataRole,
+        ALL_PERMISSIONS.storeAppointment.addAppointment
+      )
+    ) {
+      navigate('./add-appointment');
+      // setOpenFormDialog(true);
+    } else {
+      setIsNotify(true);
+      setNotifyMessage({
+        text: NOT_AUTHORIZED_MESSAGE,
+        type: 'warning',
+      });
+    }
+  };
 
   // const handleFormClickOpen = () => {
   //   if (listingRolePermission(dataRole, 'Appointment Create')) {
@@ -429,19 +450,24 @@ function OtherAppointmentPage() {
                 />
               </div>
             </div>
-            {/* <div className="grid justify-end xl:col-span-5 2xl:col-span-3">
-              <div className="flex gap-3">
-                <div className="flex">
-                  <Button
-                    variant="contained"
-                    className="btn-black-fill btn-icon"
-                    onClick={handleFormClickOpen}
-                  >
-                    <AddOutlinedIcon /> Add New Appointment
-                  </Button>
+            {listingRolePermission(
+              dataRole,
+              ALL_PERMISSIONS.storeAppointment.addAppointment
+            ) && (
+              <div className="grid justify-end xl:col-span-5 2xl:col-span-3">
+                <div className="flex gap-3">
+                  <div className="flex">
+                    <Button
+                      variant="contained"
+                      className="btn-black-fill btn-icon"
+                      onClick={handleFormClickOpen}
+                    >
+                      <AddOutlinedIcon /> Add New Appointment
+                    </Button>
+                  </div>
                 </div>
               </div>
-            </div> */}
+            )}
           </div>
           <div className="mt-5">
             <AllAppointment

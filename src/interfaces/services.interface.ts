@@ -29,3 +29,14 @@ export interface BarberItemServices {
   serviceType: string;
   store: string;
 }
+
+export interface GuestItemServices {
+  // serviceTime: string;
+  guestName: string;
+  storeServiceCategory: string;
+  storeServiceCategoryItem: string;
+  storeEmployee: string;
+  appointmentType: string;
+  appointmentTime: any;
+  serviceType: string;
+}
