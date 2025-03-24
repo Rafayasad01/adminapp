@@ -21,6 +21,12 @@ const getBarberBookedTimeSlots = (storeEmp: any, date: any) => {
 const appointmentCreate = (data: any) => {
   return network.post(`${STORE_PREFIX}/${APPOINTMENT_PREFIX}/create`, data);
 };
+const appointmentPengCreate = (data: any) => {
+  return network.post(
+    `${STORE_PREFIX}/${APPOINTMENT_PREFIX}/peng/create`,
+    data
+  );
+};
 
 const appointmentUpdate = (storeAppId: any, data: any) => {
   return network.post(
@@ -168,4 +174,5 @@ export default {
   AppointmentInvoiceDetailByCode,
   appointmentDone,
   AppointmentDiscount,
+  appointmentPengCreate,
 };

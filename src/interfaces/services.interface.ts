@@ -39,4 +39,5 @@ export interface GuestItemServices {
   appointmentType: string;
   appointmentTime: any;
   serviceType: string;
+  services: any;
 }

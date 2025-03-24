@@ -5,15 +5,11 @@ import Dialog from '@mui/material/Dialog';
 import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
 import React, { useEffect, useState } from 'react';
-import { Controller, useFieldArray, useForm } from 'react-hook-form';
+import { useFieldArray, useForm } from 'react-hook-form';
 import '../../assets/css/PopupStyle.css';
-import ThemeProvider from '@mui/material/styles/ThemeProvider';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import createTheme from '@mui/material/styles/createTheme';
+// import createTheme from '@mui/material/styles/createTheme';
 import dayjs from 'dayjs';
-import TimePicker from '../../components/common/TimePicker';
+// import TimePicker from '../../components/common/TimePicker';
 import CustomDropDown from '../../components/common/CustomDropDown';
 import CustomInputBox from '../../components/common/CustomInputBox';
 import {
@@ -23,11 +19,9 @@ import {
 // import { useAppSelector } from '../../redux/redux-hooks';
 import storeLovService from '../../services/adminapp/adminStoreService';
 import storeAppointmentService from '../../services/adminapp/adminStoreAppointment';
-import storeEmployeeService from '../../services/adminapp/adminStoreEmployee';
 import {
   // ALL_PERMISSIONS,
   // BARBER_SERVICES_AMOUNT,
-  CURRENCY_PREFIX,
   // GENDER,
   PATTERN,
 } from '../../utils/constants';
@@ -39,8 +33,25 @@ type EmployeeServiceCreatePopupProps = {
   setIsNotify: any;
   setNotifyMessage: any;
   setOpenFormDialog: React.Dispatch<React.SetStateAction<boolean>>;
-  parentAppointmentBookedTime: any;
+  editGuestFormData: any;
+  parentBabars: any;
 };
+
+interface Appointment {
+  guest: string;
+  storeServiceCategory: string;
+  serviceTime: string;
+  storeServiceCategoryItem: string;
+  storeEmployee: string;
+  appointmentTime: string;
+  amount?: string;
+  appointmentType?: string;
+}
+
+interface GuestAppointments {
+  name: string;
+  appointments: Omit<Appointment, 'guest'>[]; // Exclude 'guest' from appointments
+}
 
 function AddGuestAppointmentPopup({
   callback,
@@ -48,8 +59,9 @@ function AddGuestAppointmentPopup({
   setIsNotify,
   setNotifyMessage,
   setOpenFormDialog,
-}: // parentAppointmentBookedTime,
-EmployeeServiceCreatePopupProps) {
+  editGuestFormData,
+  parentBabars,
+}: EmployeeServiceCreatePopupProps) {
   const {
     control,
     register,
@@ -57,6 +69,7 @@ EmployeeServiceCreatePopupProps) {
     getValues,
     setValue,
     watch,
+    // reset,
     formState: { errors },
   } = useForm<GuestItemServices>();
 
@@ -81,24 +94,11 @@ EmployeeServiceCreatePopupProps) {
   const [barberList, setBarberList] = useState<any>([]);
   const [activeBarberData, setActiveBarberData] = useState<any>();
 
-  const [appointmentBookedTime, setAppointmentBookedTime] = useState<
-    Array<any>
-  >([]);
-  const [tempAppointmentBookedTime, setTempAppointmentBookedTime] = useState<
-    Array<any>
-  >([]);
-
-  const [appointmentTime, setAppointmentTime] = useState<dayjs.Dayjs | any>(
-    null
-  );
-
-  const darkTheme = createTheme({
-    palette: {
-      primary: {
-        main: '#171717',
-      },
-    },
-  });
+  useEffect(() => {
+    if (openFormDialog && editGuestFormData) {
+      append(editGuestFormData); // Restore form state
+    }
+  }, [openFormDialog]);
 
   const getCatName = (id: any) => {
     let tempAr: any[] = [];
@@ -112,138 +112,9 @@ EmployeeServiceCreatePopupProps) {
     return tempAr?.find((el: any) => el.id === id)?.name;
   };
 
-  const checkIsSameDate = (date: any, appointmentDate: any) => {
-    return dayjs(date).isSame(appointmentDate, 'day');
-  };
-
-  // const checkIsAfterTime = (date: any, appointmentDate: any) => {
-  //   return dayjs(date).isAfter(appointmentDate, 'minutes');
-  // };
-
-  const checkIsBeforeTime = (appointmentDate: any, date: any) => {
-    return dayjs(appointmentDate).isBefore(date, 'minute');
-  };
-
-  const checkIsBetweenTime = (
-    selectedTime: any,
-    beforeTime: any,
-    afterTime: any
-  ) => {
-    return dayjs(selectedTime).isBetween(beforeTime, afterTime, 'minute');
-  };
-
-  function checkDuplicateServices(
-    array: any,
-    targetEmployee: string,
-    targetCategoryItem: string
-  ) {
-    // eslint-disable-next-line no-restricted-syntax
-    for (const obj of array) {
-      if (
-        obj.storeEmployee === targetEmployee &&
-        obj.storeServiceCategoryItem === targetCategoryItem &&
-        dayjs(obj.appointmentTime).format('YYYYMMDD') ===
-          dayjs(getValues('appointmentTime')).format('YYYYMMDD')
-      ) {
-        return true; // Found a matching object
-      }
-    }
-    return false; // No matching object found
-  }
-
   const handleFormClose = () => {
+    // setSavedData(getValues());
     setOpenFormDialog(false);
-  };
-
-  const shopEvents = async (id: any, date: any) => {
-    try {
-      const resp = await storeEmployeeService.StoreEmployeeScheduleService(
-        id,
-        date
-      );
-      return resp.data.data;
-    } catch (error) {
-      // console.error('Error:', error);
-      // Handle error if necessary
-      return false; // or throw error if you want to propagate it
-    }
-  };
-
-  const getBookedTimeSlots: any = async (id: any, date: any) => {
-    const resll = await shopEvents(
-      id,
-      dayjs(getValues('appointmentTime')).format('YYYY-MM-DD')
-    );
-    if (resll) {
-      setAppointmentBookedTime([]);
-      setIsNotify(true);
-      setNotifyMessage({
-        text: 'Today must be an event or may be employee is on leave',
-        type: 'error',
-      });
-      return false;
-    }
-    await storeAppointmentService
-      .getBarberBookedTimeSlots(id, date)
-      .then((res) => {
-        if (res.data.success) {
-          const newArr = res.data.data;
-          newArr.forEach((item: any) => {
-            const newAppTime = dayjs(item.appointmentTime)
-              .set('hours', dayjs(item.appointmentTime).hour())
-              .set('minute', dayjs(item.appointmentTime).minute());
-            delete item.appointmentTime;
-            item.appointmentTime = newAppTime;
-            return item;
-          });
-          if (tempAppointmentBookedTime.length > 0) {
-            tempAppointmentBookedTime.filter((item: any) => {
-              if (
-                item.storeEmployee === id &&
-                checkIsSameDate(
-                  getValues('appointmentTime'),
-                  dayjs(item.appointmentTime)
-                )
-              ) {
-                newArr.push(item);
-                return item;
-              }
-              return false;
-            });
-          }
-          setAppointmentBookedTime(newArr);
-        } else {
-          setIsNotify(true);
-          setNotifyMessage({
-            text: res.data.message,
-            type: 'error',
-          });
-        }
-      })
-      .catch((err: Error) => {
-        setIsNotify(true);
-        setNotifyMessage({
-          text: err.message,
-          type: 'error',
-        });
-      });
-    return null;
-  };
-
-  const handleDateChange = (date: any, field: any) => {
-    if (activeBarberData) {
-      field.onChange(date);
-      getBookedTimeSlots(
-        activeBarberData.storeEmployee.id,
-        dayjs(date)?.format('YYYY-MM-DD')
-      );
-    } else {
-      setIsNotify(true);
-      setNotifyMessage({
-        text: 'First select barber before selecting appointment date & time',
-        type: 'error',
-      });
-    }
   };
 
   const catLovService = () => {
@@ -303,6 +174,13 @@ EmployeeServiceCreatePopupProps) {
       });
   };
 
+  const babarLov = () => {
+    const lovs = barberLov.filter((x: any) =>
+      parentBabars.some((b: any) => b.storeEmployee !== x.id)
+    );
+    return lovs || [];
+  };
+
   const getCatItems = async (id: any) => {
     await storeLovService.StoreCatItemsLov(id).then((res) => {
       if (res.data.success) {
@@ -351,238 +229,116 @@ EmployeeServiceCreatePopupProps) {
       getValues('storeEmployee') !== undefined &&
       getValues('storeEmployee') !== 'none'
     ) {
-      const findBaber = barberList.find(
-        (x: any) => x.storeEmployee.id === getValues('storeEmployee')
-      );
-      // console.log('Active babr', findBaber);
-      setActiveBarberData(findBaber);
-      getBookedTimeSlots(
-        findBaber.storeEmployee.id,
-        dayjs(getValues('appointmentTime'))?.format('YYYY-MM-DD')
-      );
+      // console.log('acaca', activeBarberData);
+
+      if (getValues('storeEmployee') !== 'AnyProfessional') {
+        const findBaber = barberList.find(
+          (x: any) => x.storeEmployee.id === getValues('storeEmployee')
+        );
+        // console.log('Active babr', findBaber);
+        setActiveBarberData(findBaber);
+      } else {
+        setActiveBarberData({
+          storeEmployee: {
+            id: 'AnyProfessional',
+            name: 'Any Professional',
+          },
+        });
+      }
     }
   }, [watch('storeEmployee')]);
 
-  const sortTimeOrder = () => {
-    const daysArr = [
-      'Sunday',
-      'Monday',
-      'Tuesday',
-      'Wednesday',
-      'Thursday',
-      'Friday',
-      'Saturday',
-    ];
-    // const temp = activeBarberData?.storeEmployeeSchedule;
-    const filteredData = daysArr.reduce((filtered: any, day: any) => {
-      const filteredDayData = activeBarberData?.storeEmployeeSchedule.filter(
-        (item: any) => item.workDay === day
-      );
-      return [...filtered, ...filteredDayData];
-    }, []);
-    return filteredData;
-  };
+  function reshapeAppointments(data: Appointment[]): {
+    guest: GuestAppointments[];
+  } {
+    // const groupedGuests: any = {};
+    const groupedGuests: Record<string, GuestAppointments> = {};
+
+    data?.forEach(({ guest, ...appointmentDetails }) => {
+      if (!groupedGuests[guest]) {
+        groupedGuests[guest] = {
+          name: guest,
+          appointments: [],
+        };
+      }
+      groupedGuests[guest].appointments.push(appointmentDetails);
+    });
+
+    return { guest: Object.values(groupedGuests) };
+  }
 
   const onSubmit = (data: BarberItemServices | any) => {
-    // console.log('🚀 ~ onSubmit ~ data:', data);
-    // if (empDetail.payrollType === 'Salary') {
-    //   data.amount = 0;
-    //   data.amountType = 'None';
-    // } else {
-    // }
+    console.log('🚀 ~ onSubmit ~ data: 1', data);
     delete data.amount;
     delete data.amountType;
     delete data.storeServiceCategoryItem;
     const updatedArray = data.services.map((item: any) => {
-      const { storeServiceCategory: _categoryId, ...rest } = item;
+      const {
+        // storeServiceCategory: _categoryId,
+        barber: _babar,
+        ...rest
+      } = item;
       return rest;
     });
-    // console.log('🚀 ~ onSubmit ~ final data:', updatedArray);
-    callback(updatedArray);
+    const fnfData = reshapeAppointments(updatedArray);
+    setValue('services', data.services);
+    callback(fnfData, data.services);
   };
 
-  const removeBookinkList = (item: any) => {
-    // console.log('item::::::', item);
-    setTempAppointmentBookedTime((arr: any) =>
-      arr.filter((filterItem: any) => filterItem.id !== item.id)
-    );
-    setAppointmentBookedTime((arr: any) =>
-      arr.filter((filterItem: any) => filterItem.id !== item.id)
-    );
-  };
+  console.log('guest data ==>', parentBabars);
 
   const addAppointmentServices = () => {
     const obj = {
+      guest: `Guest ${watch('guestName')}`,
       barber: activeBarberData?.storeEmployee?.name,
-      amount: activeBarberData?.servicePrice,
+      amount: activeBarberData?.servicePrice || '',
       storeServiceCategory: watch('storeServiceCategory'),
-      serviceTime: activeBarberData?.serviceTime,
+      appointmentType:
+        activeBarberData?.storeEmployee?.id === 'AnyProfessional'
+          ? 'AnyProfessional'
+          : 'Professional',
+      serviceTime: activeBarberData?.serviceTime || '',
       storeServiceCategoryItem: watch('storeServiceCategoryItem'),
-      storeEmployee: activeBarberData?.storeEmployee?.id,
+      storeEmployee:
+        activeBarberData?.storeEmployee?.id !== 'AnyProfessional'
+          ? activeBarberData?.storeEmployee?.id
+          : '',
       appointmentTime: `${dayjs(getValues('appointmentTime'))?.format(
         'YYYY-MM-DD'
-      )} ${dayjs(appointmentTime)?.format('HH:mm:ss')}`,
+      )}`,
     };
     if (
       watch('storeServiceCategoryItem') &&
       activeBarberData &&
-      getValues('appointmentTime') &&
-      appointmentTime
+      watch('guestName')
+      // &&
+      // getValues('appointmentTime') &&
+      // appointmentTime
     ) {
-      const currentDay = dayjs(getValues('appointmentTime')).format('dddd');
-      const scheduleData = activeBarberData?.storeEmployeeSchedule.filter(
-        (item: any) => item.workDay === currentDay
+      const isCheck = fields.some(
+        (el: any) =>
+          el.guest === `Guest ${watch('guestName')}` &&
+          el.storeEmployee === watch('storeEmployee') &&
+          el.storeServiceCategoryItem === watch('storeServiceCategoryItem')
       );
-      const time = dayjs(getValues('appointmentTime'))
-        .set('hours', dayjs(appointmentTime).hour())
-        .set('minute', dayjs(appointmentTime).minute());
-      const startTime = dayjs(scheduleData[0]?.startTime)
-        .set('date', time.date())
-        .set('month', time.month())
-        .set('year', time.year());
-      let endTime = dayjs(scheduleData[0]?.endTime)
-        .set('date', time.date())
-        .set('month', time.month())
-        .set('year', time.year());
-      if (startTime.hour() > endTime.hour()) {
-        endTime = endTime.add(1, 'day');
-      }
-      // const officeTimeIn = dayjs(officeTimings?.tenantConfig?.officeTimeIn)
-      //   .set('date', time.date())
-      //   .set('month', time.month())
-      //   .set('year', time.year());
-      // let officeTimeOut = dayjs(officeTimings?.tenantConfig?.officeTimeOut)
-      //   .set('date', time.date())
-      //   .set('month', time.month())
-      //   .set('year', time.year());
-      // if (officeTimeIn.hour() > officeTimeOut.hour()) {
-      //   officeTimeOut = officeTimeOut.add(1, 'day');
-      // }
-      let prevTime = startTime;
-      const addTime = dayjs(time).add(activeBarberData?.serviceTime, 'minutes');
-      if (scheduleData.length > 0) {
-        // console.log('time, startTime', time, startTime);
 
-        // console.log(
-        //   '!checkIsBeforeTime(time, startTime)',
-        //   checkIsBeforeTime(startTime, time)
-        // );
+      console.log('isCheck', isCheck);
 
-        if (!checkIsBeforeTime(startTime, time)) {
-          // console.log('1');
-
-          setIsNotify(true);
-          setNotifyMessage({
-            text: 'Barber is not available at this time',
-            type: 'error',
-          });
-          return false;
-        }
-        const isDuplicate = checkDuplicateServices(
-          fields,
-          activeBarberData?.storeEmployee?.id,
-          watch('storeServiceCategoryItem')
-        );
-        if (!isDuplicate) {
-          if (tempAppointmentBookedTime.length > 0) {
-            for (let i = 0; i < tempAppointmentBookedTime.length; i += 1) {
-              const tempEl = tempAppointmentBookedTime[i];
-              const tempServiceTime = dayjs(tempEl.appointmentTime).add(
-                tempEl.serviceTime,
-                'minute'
-              );
-              if (time > dayjs(tempServiceTime)) {
-                prevTime = dayjs(tempServiceTime);
-              } else if (
-                !checkIsBetweenTime(
-                  addTime,
-                  prevTime,
-                  dayjs(tempEl.appointmentTime)
-                )
-              ) {
-                setIsNotify(true);
-                setNotifyMessage({
-                  text: `Barber is engaged with another client`,
-                  type: 'error',
-                });
-                return false;
-              }
-            }
-          }
-          for (let i = 0; i < appointmentBookedTime.length; i += 1) {
-            const el = appointmentBookedTime[i];
-            const serviceTime = dayjs(el.appointmentTime).add(
-              el.serviceTime,
-              'minute'
-            );
-            if (
-              time > dayjs(serviceTime)
-              // &&
-              // checkIsAfterTime(endTime, serviceTime)
-            ) {
-              prevTime = dayjs(serviceTime);
-            } else if (
-              // !checkIsAfterTime(endTime, serviceTime) &&
-              !checkIsBetweenTime(addTime, prevTime, dayjs(el.appointmentTime))
-            ) {
-              // break;
-              // console.log('2');
-              setIsNotify(true);
-              setNotifyMessage({
-                text: `Barber is not available at this time`,
-                type: 'error',
-              });
-              return false;
-            }
-          }
-          // setTmpId((prevId: any) => prevId + 1);
-          const newData = {
-            appointmentTime: time,
-            email: activeBarberData?.storeEmployee?.email ?? 'abc@gmail.com',
-            gender: 'male',
-            name: activeBarberData?.storeEmployee?.name ?? 'urapp',
-            note: 'demo',
-            phone: activeBarberData?.storeEmployee?.phone,
-            serviceTime: activeBarberData?.serviceTime,
-            status: 'New',
-            storeEmployee: activeBarberData?.storeEmployee?.id,
-            storeServiceCategory: '12345',
-            storeServiceCategoryItem:
-              activeBarberData?.storeServiceCategoryItem,
-          };
-          // obj.id = tmpId;
-          setTempAppointmentBookedTime((prev: any) => [...prev, newData]);
-          setAppointmentBookedTime((prev: any) => [...prev, newData]);
-          // setPrevBookedAppointment(newData);
-          append(obj);
-        } else {
-          // console.log("5");
-          setIsNotify(true);
-          setNotifyMessage({
-            text: 'This service you already selected, Please select another service',
-            type: 'error',
-          });
-        }
-        // } else {
-        //   setIsNotify(true);
-        //   setNotifyMessage({
-        //     text: `Barber is not avaiable at ${selectedAppointmentTime}`,
-        //     type: 'error',
-        //   });
-        // }
+      if (!isCheck) {
+        append(obj);
       } else {
-        // console.log('3');
         setIsNotify(true);
         setNotifyMessage({
-          text: `Barber is not available at ${currentDay}`,
+          text: 'Babar should not be same for every guest.',
           type: 'error',
         });
+        console.log('babar should not be same for every guest.');
       }
     } else {
       // console.log("6");
       setIsNotify(true);
       setNotifyMessage({
-        text: 'Please select your preferred barber, category , desired services, and appointment date & time for scheduling.',
+        text: 'Please select your preferred Guest, category and, desired services for scheduling appointment.',
         type: 'error',
       });
     }
@@ -608,6 +364,7 @@ EmployeeServiceCreatePopupProps) {
               <div className="col-span-12">
                 <FormControl className="FormControl w-full" variant="standard">
                   <CustomInputBox
+                    requiredType
                     maxLetterLimit={50}
                     pattern={PATTERN.CHAR_SPACE_DASH}
                     inputTitle="Guest Name"
@@ -640,7 +397,7 @@ EmployeeServiceCreatePopupProps) {
               <div className="col-span-4">
                 <FormControl className="FormControl" variant="standard">
                   <CustomDropDown
-                    validateRequired
+                    // validateRequired
                     id="storeServiceCategoryItem"
                     control={control}
                     error={errors}
@@ -662,7 +419,14 @@ EmployeeServiceCreatePopupProps) {
                     error={errors}
                     register={register}
                     setValue={setValue}
-                    options={{ roles: barberLov ?? [] }}
+                    options={{
+                      roles: [
+                        ...(babarLov() ?? []),
+                        ...[
+                          { name: 'Any Professional', id: 'AnyProfessional' },
+                        ],
+                      ],
+                    }}
                     defaultValue="Select Baber"
                     customClassInputTitle="font-bold"
                     inputTitle="Select Baber"
@@ -671,150 +435,18 @@ EmployeeServiceCreatePopupProps) {
               </div>
             </div>
           </div>
-          {activeBarberData !== null && (
-            <div className="mt-5">
-              <span className="text-base font-bold text-[#1A1A1A]">
-                Available {activeBarberData?.storeEmployee?.name} Appointment
-                slots
-              </span>
-              <hr className="my-2 border-[#949EAE]" />
-              <div className="gaps-4 grid grid-cols-12">
-                {activeBarberData &&
-                  sortTimeOrder()?.map((item: any, index: number) => {
-                    return (
-                      <div key={index} className="col-span-3 p-3">
-                        <div className="h-[100px] flex-col">
-                          <div>
-                            <span className="font-semibold">
-                              {item.workDay}
-                            </span>
-                          </div>
-                          <div>
-                            <span className="text-sm">
-                              {dayjs(item.startTime).isValid()
-                                ? dayjs(item.startTime)?.format('h:mm A')
-                                : '--'}{' '}
-                              -{' '}
-                              {dayjs(item.endTime).isValid()
-                                ? dayjs(item.endTime)?.format('h:mm A')
-                                : '--'}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })}
-              </div>
-            </div>
-          )}
-          <div className="">
-            <div className="">
-              <span className="text-base font-bold text-[#1A1A1A]">
-                Select Date & Time
-              </span>
-              <hr className="my-4 border-[#949EAE]" />
-              <div className="flex items-center">
-                <div>
-                  <ThemeProvider theme={darkTheme}>
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                      {/* <DemoItem label="Desktop variant"> */}
-                      <div>
-                        <span className="text-sm">Select Appointment Date</span>
-                      </div>
-                      <Controller
-                        name="appointmentTime"
-                        control={control}
-                        defaultValue={dayjs()}
-                        render={({ field }) => (
-                          <DesktopDatePicker
-                            {...field}
-                            disabled={!activeBarberData}
-                            onChange={(date) => handleDateChange(date, field)}
-                            // onChange={(date) => field.onChange(date)}
-                            value={field.value}
-                            minDate={dayjs()}
-                          />
-                        )}
-                      />
-                      {/* </DemoItem> */}
-                    </LocalizationProvider>
-                  </ThemeProvider>
-                </div>
-                <div className="mx-5">
-                  <div className="flex-col">
-                    <span className="text-sm">Select Appointment Time</span>
-                    <div className="">
-                      <FormControl className="FormControl" variant="standard">
-                        <TimePicker
-                          disabled={!activeBarberData}
-                          // timePickerLabel="Appointment Time"
-                          // timePickerSubLabel={"(Office in time)"}
-                          timePickerValue={appointmentTime}
-                          setTimePickerValue={setAppointmentTime}
-                          // minTime={selectedScheduleTime.startTime}
-                          // maxTime={selectedScheduleTime.endTime}
-                          id="startTime"
-                          // setError={setError}
-                        />
-                      </FormControl>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="mt-5">
-            <span className="text-base font-bold text-[#1A1A1A]">
-              Booked Time slots
-            </span>
-            <hr className="my-4 border-[#949EAE]" />
-            {appointmentBookedTime?.length === 0 && (
-              <span className="">No Booked Appointments</span>
-            )}
-            <div className="gaps-4 grid grid-cols-12">
-              {appointmentBookedTime
-                ?.sort(
-                  (a: any, b: any) =>
-                    dayjs(a.appointmentTime).unix() -
-                    dayjs(b.appointmentTime).unix()
-                )
-                ?.map((item: any, index: number) => {
-                  // console.log('APP ITEM TIME', item);
-                  // dayjs();
-                  const servicetime = Number(item.serviceTime);
-                  const apptimeDayjs = dayjs(item.appointmentTime);
-                  const endTime = apptimeDayjs.add(servicetime, 'minute');
-
-                  // const formattedEndTime = endTime.format('h:mm A');
-                  const formattedEndTime = dayjs(endTime).isValid()
-                    ? dayjs(endTime)?.format('h:mm A')
-                    : '--';
-                  return (
-                    <div key={index} className="col-span-3 p-1">
-                      <div className="flex-col rounded-xl bg-background">
-                        <div className="flex items-center justify-center p-3">
-                          <span className="xl:text-xs 2xl:text-sm">
-                            {dayjs(item.appointmentTime).isValid()
-                              ? dayjs(item.appointmentTime)?.format('h:mm A')
-                              : '--'}{' '}
-                            - {formattedEndTime}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
-            </div>
-          </div>
-          <span className="text-base font-bold text-[#1A1A1A]">Guest List</span>
+          <span className="mt-2 block text-base font-bold text-[#1A1A1A]">
+            Guest List
+          </span>
           <hr className="my-4 border-[#949EAE]" />
           {fields?.length > 0 && (
             <div className="mx-[2px] px-[8px]">
               <div className="mt-2 grid grid-cols-12 items-center justify-between gap-4 rounded-md border-[1px] border-[#949EAE] py-1 text-sm text-[#1A1A1A]">
+                <div className="col-span-2 px-2 font-semibold">Guest</div>
                 <div className="col-span-2 px-2 font-semibold">Barber</div>
                 <div className="col-span-2 font-semibold">Category</div>
                 <div className="col-span-2 font-semibold">Service</div>
-                <div className="col-span-2 font-semibold">Amount</div>
+                {/* <div className="col-span-2 font-semibold">Amount</div> */}
                 <div className="col-span-2 font-semibold">Date & Time</div>
                 <div className="" />
               </div>
@@ -828,6 +460,9 @@ EmployeeServiceCreatePopupProps) {
                   key={index}
                 >
                   <div className="col-span-2 truncate px-2 capitalize">
+                    {item.guest}
+                  </div>
+                  <div className="col-span-2 truncate px-2 capitalize">
                     {item.barber}
                   </div>
                   <div className="col-span-2 truncate px-2 capitalize">
@@ -836,7 +471,7 @@ EmployeeServiceCreatePopupProps) {
                   <div className="col-span-2 truncate px-1">
                     {getCatItemName(item.storeServiceCategoryItem) ?? 'None'}
                   </div>
-                  <div className="col-span-2 px-2 capitalize">
+                  {/* <div className="col-span-2 px-2 capitalize">
                     {item.amount ? (
                       <div>
                         {item.amount}
@@ -849,19 +484,16 @@ EmployeeServiceCreatePopupProps) {
                     ) : (
                       '0'
                     )}
-                    {/* {dayjs(item.appointmentTime).isValid()
-                      ? dayjs(item.date).format('DD MMMM YYYY')
-                      : '--'} */}
-                  </div>
+                   
+                  </div> */}
                   <div className="col-span-2 px-2 capitalize">
                     {item.appointmentTime}
                   </div>
-                  <div className="col-span-2 text-center text-primary">
+                  <div className="col-span-1 text-center text-primary">
                     <ClearOutlinedIcon
                       className="cursor-pointer"
                       onClick={() => {
                         remove(index);
-                        removeBookinkList(item);
                       }}
                       fontSize="small"
                     />
@@ -894,7 +526,7 @@ EmployeeServiceCreatePopupProps) {
             </Button>
             <Input
               type="submit"
-              value="Add"
+              value="Save"
               className="btn-black-fill"
               disableUnderline
               sx={{

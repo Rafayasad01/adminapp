@@ -95,6 +95,9 @@ export default function AddAppointmentPage() {
     Array<any>
   >([]);
 
+  const [guestFormData, setGuestFormData] = useState<any>(null);
+  const [guests, setGuests] = useState<any>(null);
+
   const [tmpId, setTmpId] = useState<any>(0);
   const [selectedScheduleTime, setSelectedScheduleTime] = useState<any>({
     startTime: undefined,
@@ -935,8 +938,10 @@ export default function AddAppointmentPage() {
   //   return null;
   // };
 
-  const guestFormHandler = (data: any) => {
-    console.log('guest data', data);
+  const guestFormHandler = (data: any, unformData: any) => {
+    console.log('guest data', data, unformData);
+    setGuestFormData(unformData);
+    setGuests(data?.guest);
   };
 
   const addAppointmentServices = () => {
@@ -1131,6 +1136,8 @@ export default function AddAppointmentPage() {
       return rest;
     });
     // data.appointments = updatedAppointmentArray;
+    const firstAppointmentTime = data.appointments?.[0]?.appointmentTime || '';
+
     data.appointments = updatedAppointmentArray.map((e: any) => {
       // const formattedDateTime = formatISO(dayjs(e.appointmentTime).toDate());
       const formattedDateTime = dayjs(e.appointmentTime)
@@ -1140,38 +1147,49 @@ export default function AddAppointmentPage() {
       return e;
     });
     data.status = paymentMethod ? 'Processing' : 'New';
-    console.log('data appoitnment =>', data);
+    // console.log('data appoitnment =>', data);
 
-    // storeAppointmentService
-    //   .appointmentCreate(data)
-    //   .then((res: any) => {
-    //     if (res.data.success) {
-    //       setIsLoader(false);
-    //       setIsNotify(true);
-    //       setNotifyMessage({
-    //         text: res.data.message,
-    //         type: 'success',
-    //       });
-    //       setTimeout(() => {
-    //         navigate(-1);
-    //       }, 500);
-    //     } else {
-    //       setIsLoader(false);
-    //       setIsNotify(true);
-    //       setNotifyMessage({
-    //         text: res.data.message,
-    //         type: 'error',
-    //       });
-    //     }
-    //   })
-    //   .catch((err) => {
-    //     setIsLoader(false);
-    //     setIsNotify(true);
-    //     setNotifyMessage({
-    //       text: err.message,
-    //       type: 'error',
-    //     });
-    //   });
+    data.guest =
+      guests?.map((guest: any) => ({
+        ...guest,
+        appointments: guest.appointments.map((appointment: any) => ({
+          ...appointment,
+          appointmentTime: dayjs(firstAppointmentTime)
+            .utc()
+            .format('YYYY-MM-DD HH:mm:ss'),
+        })),
+      })) || [];
+
+    storeAppointmentService
+      .appointmentPengCreate(data)
+      .then((res: any) => {
+        if (res.data.success) {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: res.data.message,
+            type: 'success',
+          });
+          setTimeout(() => {
+            navigate(-1);
+          }, 500);
+        } else {
+          setIsLoader(false);
+          setIsNotify(true);
+          setNotifyMessage({
+            text: res.data.message,
+            type: 'error',
+          });
+        }
+      })
+      .catch((err) => {
+        setIsLoader(false);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: err.message,
+          type: 'error',
+        });
+      });
   };
 
   const handleDateChange = (date: any, field: any) => {
@@ -1220,7 +1238,8 @@ export default function AddAppointmentPage() {
           openFormDialog={guestForm}
           setOpenFormDialog={setGuestForm}
           callback={guestFormHandler}
-          parentAppointmentBookedTime={appointmentBookedTime}
+          editGuestFormData={guestFormData}
+          parentBabars={fields}
         />
       )}
       <TopBar isNestedRoute title="Fill Appointment Form" />
@@ -1739,29 +1758,14 @@ export default function AddAppointmentPage() {
               <hr className="my-4 border-[#949EAE]" />
               <div className="mt-3 flex w-full items-center justify-end">
                 {/* {!appointmentType && ( */}
-                <CustomButton
-                  // disabled={appointmentType}
-                  buttonType="button"
-                  title={fields.length > 0 ? 'Add More Guest' : 'Add Guest'}
-                  className="btn-black-fill xl:w-[20%] 2xl:w-[12%]"
-                  // type={'submit'}
-                  onclick={() => setGuestForm(true)}
-                  sx={{
-                    padding: '0.375rem 2rem !important',
-                    // width: '20%',
-                    marginRight: '15px',
-                    height: '35px',
-                  }}
-                />
-                {/* )} */}
-                {fields?.length < 1 && (
+                {!appointmentType && fields?.length >= 1 && (
                   <CustomButton
-                    // disabled={}
+                    // disabled={appointmentType}
                     buttonType="button"
-                    title={fields.length > 0 ? 'Add More Services' : 'Add'}
+                    title={guests?.length > 0 ? 'Add More Guest' : 'Add Guest'}
                     className="btn-black-fill xl:w-[20%] 2xl:w-[12%]"
                     // type={'submit'}
-                    onclick={addAppointmentServices}
+                    onclick={() => setGuestForm(true)}
                     sx={{
                       padding: '0.375rem 2rem !important',
                       // width: '20%',
@@ -1770,6 +1774,22 @@ export default function AddAppointmentPage() {
                     }}
                   />
                 )}
+                {/* {fields?.length === 0 && ( */}
+                <CustomButton
+                  // disabled={}
+                  buttonType="button"
+                  title={fields.length > 0 ? 'Add More Services' : 'Add'}
+                  className="btn-black-fill xl:w-[20%] 2xl:w-[12%]"
+                  // type={'submit'}
+                  onclick={addAppointmentServices}
+                  sx={{
+                    padding: '0.375rem 2rem !important',
+                    // width: '20%',
+                    marginRight: '15px',
+                    height: '35px',
+                  }}
+                />
+                {/* )} */}
                 <CustomButton
                   disabled={fields?.length < 1 && true}
                   buttonType="button"
