@@ -69,7 +69,7 @@ function AddGuestAppointmentPopup({
     getValues,
     setValue,
     watch,
-    // reset,
+    reset,
     formState: { errors },
   } = useForm<GuestItemServices>();
 
@@ -115,6 +115,15 @@ function AddGuestAppointmentPopup({
   const handleFormClose = () => {
     // setSavedData(getValues());
     setOpenFormDialog(false);
+  };
+
+  const handleReset = () => {
+    reset();
+    setValue('services', []);
+    setOpenFormDialog(false);
+    editGuestFormData = [];
+    append(editGuestFormData);
+    callback([], []);
   };
 
   const catLovService = () => {
@@ -175,10 +184,11 @@ function AddGuestAppointmentPopup({
   };
 
   const babarLov = () => {
-    const lovs = barberLov.filter((x: any) =>
-      parentBabars.some((b: any) => b.storeEmployee !== x.id)
+    const filteredLOV = barberLov.filter(
+      (item: any) =>
+        !parentBabars.some((barber: any) => barber.storeEmployee === item.id)
     );
-    return lovs || [];
+    return filteredLOV || [];
   };
 
   const getCatItems = async (id: any) => {
@@ -268,7 +278,15 @@ function AddGuestAppointmentPopup({
   }
 
   const onSubmit = (data: BarberItemServices | any) => {
-    console.log('🚀 ~ onSubmit ~ data: 1', data);
+    // console.log('🚀 ~ onSubmit ~ data: 1', data);
+    if (fields?.length < 1) {
+      setIsNotify(true);
+      setNotifyMessage({
+        text: 'Add at-least one guest',
+        type: 'error',
+      });
+      return;
+    }
     delete data.amount;
     delete data.amountType;
     delete data.storeServiceCategoryItem;
@@ -281,11 +299,16 @@ function AddGuestAppointmentPopup({
       return rest;
     });
     const fnfData = reshapeAppointments(updatedArray);
-    setValue('services', data.services);
-    callback(fnfData, data.services);
+    const updatedServices = data.services.map((service: any) => ({
+      ...service,
+      storeCatItemName: getCatItemName(service.storeServiceCategoryItem),
+    }));
+    setValue('services', updatedServices);
+    callback(fnfData, updatedServices);
+    setOpenFormDialog(false);
   };
 
-  console.log('guest data ==>', parentBabars);
+  // console.log('guest data ==>', parentBabars);
 
   const addAppointmentServices = () => {
     const obj = {
@@ -311,28 +334,49 @@ function AddGuestAppointmentPopup({
       watch('storeServiceCategoryItem') &&
       activeBarberData &&
       watch('guestName')
-      // &&
-      // getValues('appointmentTime') &&
-      // appointmentTime
     ) {
-      const isCheck = fields.some(
+      const isDuplicateServiceForGuest = fields.some(
         (el: any) =>
-          el.guest === `Guest ${watch('guestName')}` &&
-          el.storeEmployee === watch('storeEmployee') &&
-          el.storeServiceCategoryItem === watch('storeServiceCategoryItem')
+          el.guest === `Guest ${watch('guestName')}` && // Same guest
+          el.storeServiceCategoryItem === watch('storeServiceCategoryItem') // Same service
       );
 
-      console.log('isCheck', isCheck);
+      // Check if the barber is already assigned to another guest (excluding "AnyProfessional")
+      const isBarberDuplicate = fields.some(
+        (el: any) =>
+          el.guest !== `Guest ${watch('guestName')}` &&
+          el.storeEmployee === watch('storeEmployee') &&
+          watch('storeServiceCategoryItem') !== 'AnyProfessional'
+      );
 
-      if (!isCheck) {
-        append(obj);
-      } else {
+      // Check if "AnyProfessional" is selected, ensuring storeServiceCategoryItem is unique for the same guest
+      const isDuplicateAnyProfessionalService = fields.some(
+        (el: any) =>
+          el.guest === `Guest ${watch('guestName')}` &&
+          el.storeServiceCategoryItem === watch('storeServiceCategoryItem') &&
+          watch('storeEmployee') === 'AnyProfessional'
+      );
+
+      if (isDuplicateServiceForGuest) {
         setIsNotify(true);
         setNotifyMessage({
-          text: 'Babar should not be same for every guest.',
+          text: 'This service is already added for this guest.',
           type: 'error',
         });
-        console.log('babar should not be same for every guest.');
+      } else if (isBarberDuplicate) {
+        setIsNotify(true);
+        setNotifyMessage({
+          text: 'This barber is already assigned to another guest. Please choose a different one.',
+          type: 'error',
+        });
+      } else if (isDuplicateAnyProfessionalService) {
+        setIsNotify(true);
+        setNotifyMessage({
+          text: 'If selecting "AnyProfessional", the service must be unique for the guest.',
+          type: 'error',
+        });
+      } else {
+        append(obj);
       }
     } else {
       // console.log("6");
@@ -374,14 +418,15 @@ function AddGuestAppointmentPopup({
                     customClass="border-[2px] border-[#949EAE] rounded-xl px-2 py-1 text-sm"
                     register={register}
                     error={errors.guestName}
-                    inputType="text"
+                    inputType="number"
+                    typeImportant
                   />
                 </FormControl>
               </div>
               <div className="col-span-4">
                 <FormControl className="FormControl" variant="standard">
                   <CustomDropDown
-                    validateRequired
+                    // validateRequired
                     id="storeServiceCategory"
                     control={control}
                     error={errors}
@@ -413,7 +458,7 @@ function AddGuestAppointmentPopup({
               <div className="col-span-4">
                 <FormControl className="FormControl" variant="standard">
                   <CustomDropDown
-                    validateRequired
+                    // validateRequired
                     id="storeEmployee"
                     control={control}
                     error={errors}
@@ -469,7 +514,9 @@ function AddGuestAppointmentPopup({
                     {getCatName(item.storeServiceCategory) ?? 'None'}
                   </div>
                   <div className="col-span-2 truncate px-1">
-                    {getCatItemName(item.storeServiceCategoryItem) ?? 'None'}
+                    {item.storeCatItemName
+                      ? item.storeCatItemName
+                      : getCatItemName(item.storeServiceCategoryItem) ?? 'None'}
                   </div>
                   {/* <div className="col-span-2 px-2 capitalize">
                     {item.amount ? (
@@ -502,7 +549,7 @@ function AddGuestAppointmentPopup({
               );
             })}
           </div>
-          <div className="mt-2">
+          <div className="">
             <Button
               onClick={addAppointmentServices}
               className="w-full"
@@ -523,6 +570,17 @@ function AddGuestAppointmentPopup({
               }}
             >
               Cancel
+            </Button>
+            <Button
+              className="btn-black-outline w-[20%]"
+              type="submit"
+              onClick={handleReset}
+              sx={{
+                marginRight: '0.5rem',
+                padding: '0.375rem 1.5rem !important',
+              }}
+            >
+              Reset & Close
             </Button>
             <Input
               type="submit"

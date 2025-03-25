@@ -105,7 +105,11 @@ const AppointmentViewCard = ({
   ) => {
     setDiscountAnchorEl(event.currentTarget);
   };
+  /**
+   * Function to close the discount popover
+   */
   const handleDiscountClosePop = () => {
+    // Set the anchor element to null
     setDiscountAnchorEl(null);
   };
   const discountOpen = Boolean(discountAnchorEl);

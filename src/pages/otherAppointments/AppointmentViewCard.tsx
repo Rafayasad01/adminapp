@@ -224,7 +224,10 @@ const AppointmentViewCard = ({
           </div>
         </div>
       </div>
-      <ViewCardAccordin data={data} />
+      <ViewCardAccordin
+        specificEmpAppointmentData={appointmentData}
+        data={data}
+      />
     </div>
   );
 };

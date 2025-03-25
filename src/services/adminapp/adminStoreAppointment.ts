@@ -152,6 +152,13 @@ const AppointmentDiscount = (code: string, data: any) => {
   );
 };
 
+const AppointmentReassignStaff = (id: any, data: any) => {
+  return network.post(
+    `${STORE_PREFIX}/${EMPLOYEE_PREFIX}/${APPOINTMENT_PREFIX}/reassign/${id}`,
+    data
+  );
+};
+
 export default {
   getBarbersList,
   getBarberBookedTimeSlots,
@@ -175,4 +182,5 @@ export default {
   appointmentDone,
   AppointmentDiscount,
   appointmentPengCreate,
+  AppointmentReassignStaff,
 };

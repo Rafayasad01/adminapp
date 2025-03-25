@@ -86,7 +86,7 @@ const AllAppointment = ({
   const currentWeekRef = useRef(dayjs().week());
   const currentMonthRef: any = useRef();
   const currentViewRef = useRef('Vertical Orientation');
-  const [currentWeek, setCurrentWeek] = useState<any>(dayjs().week());
+  const [_currentWeek, setCurrentWeek] = useState<any>(dayjs().week());
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
@@ -215,16 +215,22 @@ const AllAppointment = ({
   ];
 
   useEffect(() => {
-    getAllAppointments(currentWeek, 'week');
-    const intervalId = setInterval(() => {
-      getAllAppointments(
-        currentViewRef.current === 'Month'
-          ? currentMonthRef.current
-          : currentWeekRef.current,
-        currentViewRef.current === 'Month' ? 'Month' : 'week'
-      );
-    }, 60000);
-    return () => clearInterval(intervalId);
+    getAllAppointments(
+      currentViewRef.current === 'Month'
+        ? currentMonthRef.current
+        : currentWeekRef.current,
+      currentViewRef.current === 'Month' ? 'Month' : 'week'
+    );
+    // getAllAppointments(currentWeek, 'week');
+    // const intervalId = setInterval(() => {
+    //   getAllAppointments(
+    //     currentViewRef.current === 'Month'
+    //       ? currentMonthRef.current
+    //       : currentWeekRef.current,
+    //     currentViewRef.current === 'Month' ? 'Month' : 'week'
+    //   );
+    // }, 60000);
+    // return () => clearInterval(intervalId);
   }, []);
 
   useEffect(() => {

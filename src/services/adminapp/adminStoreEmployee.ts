@@ -198,6 +198,12 @@ const StoreEmployeeLov = () => {
   return network.get(`${STORE_PREFIX}/${EMPLOYEE_PREFIX}/lov`);
 };
 
+const StoreEmployeeAppointmentLov = (id: any) => {
+  return network.get(
+    `${STORE_PREFIX}/${EMPLOYEE_PREFIX}/appointment/lov/${id}`
+  );
+};
+
 const StoreEmployeeScheduleById = (empId: string | any) => {
   return network.get(
     `${STORE_PREFIX}/${EMPLOYEE_PREFIX}/schedule/list/${empId}`
@@ -227,5 +233,6 @@ export default {
   StoreEmployeeScheduleService,
   StoreEmployeeLeaveStatusUpdateService,
   StoreEmployeeLov,
+  StoreEmployeeAppointmentLov,
   StoreEmployeeScheduleById,
 };

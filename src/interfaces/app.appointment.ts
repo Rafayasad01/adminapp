@@ -92,3 +92,7 @@ export interface AppointmentDiscountPayment {
 export interface AppointmentWalletPaymentUpdate {
   balance: string;
 }
+
+export interface AppointmentSwitchStaff {
+  storeEmployee: string | any;
+}

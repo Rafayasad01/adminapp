@@ -1762,7 +1762,9 @@ export default function AddAppointmentPage() {
                   <CustomButton
                     // disabled={appointmentType}
                     buttonType="button"
-                    title={guests?.length > 0 ? 'Add More Guest' : 'Add Guest'}
+                    title={
+                      guests?.length > 0 ? 'Add/Edit More Guest' : 'Add Guest'
+                    }
                     className="btn-black-fill xl:w-[20%] 2xl:w-[12%]"
                     // type={'submit'}
                     onclick={() => setGuestForm(true)}
