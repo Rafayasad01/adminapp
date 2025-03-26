@@ -40,7 +40,9 @@ const ViewSwitchStaffPopup = ({
     formState: { errors },
   } = useForm<AppointmentSwitchStaff>();
 
-  const [barberStaffs, setBarberStaffs] = useState([]);
+  const [barberStaffs, setBarberStaffs] = useState<
+    { id: string; name: string }[]
+  >([]);
 
   const onSubmit = (data: AppointmentSwitchStaff) => {
     callback(data);
@@ -53,7 +55,10 @@ const ViewSwitchStaffPopup = ({
         .StoreEmployeeAppointmentLov(staffData?.id)
         .then((res) => {
           // console.log('res', res);
-          setBarberStaffs(res.data.data);
+          const AnyProfessional = [
+            { id: 'anyProfessional', name: 'Any Professional' },
+          ];
+          setBarberStaffs([...(res?.data?.data || []), ...AnyProfessional]);
         })
         .catch((err) => {
           console.error('error', err);

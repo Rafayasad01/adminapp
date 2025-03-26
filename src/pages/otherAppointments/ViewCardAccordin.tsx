@@ -81,7 +81,9 @@ function ViewCardAccordin({
   };
 
   const handleEmpSpecific = (employeeid: string) => {
-    if (specificEmpAppointmentData.priorityId !== employeeid) {
+    if (!employeeid) return false;
+
+    if (specificEmpAppointmentData?.priorityId !== employeeid) {
       return true;
     }
     return false;
@@ -116,10 +118,10 @@ function ViewCardAccordin({
                 className="boxShadow bg-transparent"
                 // expanded={expanded === `panel${index}`}
                 expanded={
-                  !handleEmpSpecific(item.storeEmployee.id) &&
+                  !handleEmpSpecific(item?.storeEmployee?.id) &&
                   expanded === `panel${index}`
                 }
-                disabled={handleEmpSpecific(item.storeEmployee.id)}
+                disabled={handleEmpSpecific(item?.storeEmployee?.id)}
                 onChange={handleChange(`panel${index}`)}
               >
                 <AccordionSummary

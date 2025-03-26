@@ -86,13 +86,13 @@ const AllAppointment = ({
   const currentWeekRef = useRef(dayjs().week());
   const currentMonthRef: any = useRef();
   const currentViewRef = useRef('Vertical Orientation');
-  const [_currentWeek, setCurrentWeek] = useState<any>(dayjs().week());
+  const [_currentWeek, _setCurrentWeek] = useState<any>(dayjs().week());
   const [openEditFormDialog, setOpenEditFormDialog] = useState(false);
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
   const [currentDate, setCurrentDate] = useState(dayjs().toDate());
   const [currentView, setCurrentView] = useState('Vertical Orientation');
-  const [, /* ranges */ setRange] = useState();
+  // const [, /* ranges */ setRange] = useState();
 
   // console.log('🚀 ~ currentWeek:', currentWeek);
   const groupOrientation = (viewName: any) => viewName.split(' ')[0];
@@ -421,60 +421,60 @@ const AllAppointment = ({
     );
   };
 
-  const getRange = (date: any, view: any) => {
-    if (view === 'Month') {
-      setAppointmentType({
-        text: 'Individual Appointment',
-        icon: PersonOutlinedIcon,
-      });
-      setSelectedPriorityData([priorityData[0] ?? {}]);
-      // const monthNumber = dayjs(date).month() + 1;
-      // console.log('🚀 ~ getRange ~ Month Date:', view, date);
-      const monthDate = dayjs(date).format('YYYY-MM-DD');
-      getAllAppointments(monthDate, 'month');
-      currentMonthRef.current = monthDate;
-      // return { startDate: date, endDate: date };
-    }
-    if (view === 'Week' || view === 'Vertical Orientation') {
-      setAppointmentType({
-        text: 'All Appointments',
-        icon: PersonOutlinedIcon,
-      });
-      const firstDay = date.getDate() - date.getDay();
-      const lastDay = firstDay + 6;
-      const startDate = dayjs(new Date(date.setDate(firstDay)));
-      const weekNumber = startDate.week();
-      // console.log('🚀 ~ getRange ~ Week Number:', weekNumber);
-      getAllAppointments(weekNumber, 'week');
-      setCurrentWeek(weekNumber);
-      currentWeekRef.current = weekNumber;
-      return {
-        startDate: new Date(date.setDate(firstDay)),
-        endDate: new Date(date.setDate(lastDay)),
-      };
-    }
-    return null;
-  };
+  // const getRange = (date: any, view: any) => {
+  //   if (view === 'Month') {
+  //     setAppointmentType({
+  //       text: 'Individual Appointment',
+  //       icon: PersonOutlinedIcon,
+  //     });
+  //     setSelectedPriorityData([priorityData[0] ?? {}]);
+  //     // const monthNumber = dayjs(date).month() + 1;
+  //     // console.log('🚀 ~ getRange ~ Month Date:', view, date);
+  //     const monthDate = dayjs(date).format('YYYY-MM-DD');
+  //     getAllAppointments(monthDate, 'month');
+  //     currentMonthRef.current = monthDate;
+  //     // return { startDate: date, endDate: date };
+  //   }
+  //   if (view === 'Week' || view === 'Vertical Orientation') {
+  //     setAppointmentType({
+  //       text: 'All Appointments',
+  //       icon: PersonOutlinedIcon,
+  //     });
+  //     const firstDay = date.getDate() - date.getDay();
+  //     const lastDay = firstDay + 6;
+  //     const startDate = dayjs(new Date(date.setDate(firstDay)));
+  //     const weekNumber = startDate.week();
+  //     // console.log('🚀 ~ getRange ~ Week Number:', weekNumber);
+  //     getAllAppointments(weekNumber, 'week');
+  //     setCurrentWeek(weekNumber);
+  //     currentWeekRef.current = weekNumber;
+  //     return {
+  //       startDate: new Date(date.setDate(firstDay)),
+  //       endDate: new Date(date.setDate(lastDay)),
+  //     };
+  //   }
+  //   return null;
+  // };
 
   const currentViewChange = (newView: any) => {
     if (newView === 'Vertical Orientation') {
       newView = 'Week';
     }
-    const range: any = getRange(currentDate, newView);
+    // const range: any = getRange(currentDate, newView);
     setCurrentView(newView);
-    setRange(range);
+    // setRange(range);
     currentViewRef.current = newView;
   };
 
   const currentDateChange = (newCurrentDate: any) => {
-    const range: any = getRange(newCurrentDate, currentView);
+    // const range: any = getRange(newCurrentDate, currentView);
     setCurrentDate(newCurrentDate);
-    setRange(range);
+    // setRange(range);
   };
 
   const isStatusProcessing = async (id: string) => {
     try {
-      setIsLoader(true);
+      // setIsLoader(true);
       const [processingStatusResponse] = await Promise.all([
         storeAppointmentService.appointmentProcessing(id),
       ]);
@@ -515,7 +515,7 @@ const AllAppointment = ({
 
   const isStatusDone = async (id: string) => {
     try {
-      setIsLoader(true);
+      // setIsLoader(true);
       const [statusResponse] = await Promise.all([
         storeAppointmentService.appointmentPaid(id),
       ]);

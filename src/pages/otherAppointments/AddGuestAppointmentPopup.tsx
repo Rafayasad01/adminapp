@@ -3,7 +3,7 @@ import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import FormControl from '@mui/material/FormControl';
-import Input from '@mui/material/Input';
+// import Input from '@mui/material/Input';
 import React, { useEffect, useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import '../../assets/css/PopupStyle.css';
@@ -94,6 +94,8 @@ function AddGuestAppointmentPopup({
   const [barberList, setBarberList] = useState<any>([]);
   const [activeBarberData, setActiveBarberData] = useState<any>();
 
+  const [isAdd, setIsAdd] = useState<boolean>(true);
+
   useEffect(() => {
     if (openFormDialog && editGuestFormData) {
       append(editGuestFormData); // Restore form state
@@ -168,7 +170,7 @@ function AddGuestAppointmentPopup({
               name: x.storeEmployee.name,
             };
           });
-          console.log('dattaa', data);
+          // console.log('dattaa', data);
           setBarberList(res.data.data);
           setBarberLov(data);
           setActiveBarberData(null);
@@ -178,8 +180,12 @@ function AddGuestAppointmentPopup({
         }
       })
       .catch((error) => {
-        console.error(`getBarbers -> error:`, error);
-        // setIsPageLoader(false);
+        // console.error(`getBarbers -> error:`, error);
+        setIsNotify(true);
+        setNotifyMessage({
+          text: error.message,
+          type: 'error',
+        });
       });
   };
 
@@ -306,6 +312,11 @@ function AddGuestAppointmentPopup({
     setValue('services', updatedServices);
     callback(fnfData, updatedServices);
     setOpenFormDialog(false);
+    setIsNotify(true);
+    setNotifyMessage({
+      text: 'Guest added successfully',
+      type: 'success',
+    });
   };
 
   // console.log('guest data ==>', parentBabars);
@@ -376,6 +387,7 @@ function AddGuestAppointmentPopup({
           type: 'error',
         });
       } else {
+        setIsAdd(false);
         append(obj);
       }
     } else {
@@ -411,8 +423,8 @@ function AddGuestAppointmentPopup({
                     requiredType
                     maxLetterLimit={50}
                     pattern={PATTERN.CHAR_SPACE_DASH}
-                    inputTitle="Guest Name"
-                    placeholder="Guest 1"
+                    inputTitle="Guest Number"
+                    placeholder="Ex: 1, 2, 3"
                     id="guestName"
                     customFontClass="font-semibold mb-1"
                     customClass="border-[2px] border-[#949EAE] rounded-xl px-2 py-1 text-sm"
@@ -559,7 +571,7 @@ function AddGuestAppointmentPopup({
               {fields?.length > 0 ? `Add More Guest` : `Add Guest`}
             </Button>
           </div>
-          <div className="FormFooter">
+          <div className="FormFooter flex items-center justify-start">
             <Button
               className="btn-black-outline"
               type="submit"
@@ -582,15 +594,16 @@ function AddGuestAppointmentPopup({
             >
               Reset & Close
             </Button>
-            <Input
+            <Button
+              disabled={isAdd}
               type="submit"
-              value="Save"
-              className="btn-black-fill"
-              disableUnderline
+              className="btn-black-fill w-[70%]"
               sx={{
-                padding: '0.1rem 2rem !important',
+                padding: '0.375rem 1.5rem !important',
               }}
-            />
+            >
+              Save
+            </Button>
           </div>
         </form>
       </div>

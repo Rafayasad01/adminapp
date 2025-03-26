@@ -45,7 +45,7 @@ function CustomButton({
       >
         {/* {disabled ? <Loader /> : */}
         <>
-          {icon && icon} {title} &nbsp; {iconRight && iconRight}
+          {icon && icon} <span>{title}</span> &nbsp; {iconRight && iconRight}
         </>
         {/* } */}
       </Button>

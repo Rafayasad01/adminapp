@@ -176,7 +176,7 @@ function CustomAppointmentLayoutCash({
     <div className="flex items-center text-sm">
       {isPrintEnabled ? <CustomPrintLayouts ref={ref} data={data} /> : null}
       <div onClick={trigger} className="printBtn">
-        <PrintOutlinedIcon className="mx-1" />
+        <PrintOutlinedIcon className="mx-1 text-foreground" />
         {/* <span className="mx-2"> Order Sl</span> */}
       </div>
     </div>
