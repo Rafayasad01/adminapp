@@ -939,7 +939,7 @@ export default function AddAppointmentPage() {
   // };
 
   const guestFormHandler = (data: any, unformData: any) => {
-    console.log('guest data', data, unformData);
+    // console.log('guest data', data, unformData);
     setGuestFormData(unformData);
     setGuests(data?.guest);
   };

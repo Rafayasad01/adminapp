@@ -55,10 +55,10 @@ const ViewSwitchStaffPopup = ({
         .StoreEmployeeAppointmentLov(staffData?.id)
         .then((res) => {
           // console.log('res', res);
-          const AnyProfessional = [
-            { id: 'anyProfessional', name: 'Any Professional' },
-          ];
-          setBarberStaffs([...(res?.data?.data || []), ...AnyProfessional]);
+          // const AnyProfessional = [
+          //   { id: 'anyProfessional', name: 'Any Professional' },
+          // ];
+          setBarberStaffs(res?.data?.data || []);
         })
         .catch((err) => {
           console.error('error', err);

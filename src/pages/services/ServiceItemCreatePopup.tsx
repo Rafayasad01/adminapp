@@ -11,7 +11,10 @@ import { useForm } from 'react-hook-form';
 
 import '../../assets/css/PopupStyle.css';
 import ErrorSpanBox from '../../components/common/ErrorSpanBox';
-import { BarberCategoryServices } from '../../interfaces/services.interface';
+import {
+  // BarberCategoryServices,
+  PengBarberCategoryServices,
+} from '../../interfaces/services.interface';
 import {
   // GENDER,
   INVALID_CHAR,
@@ -46,9 +49,9 @@ function ServiceItemCreatePopup({
     // control,
     // setValue,
     formState: { errors },
-  } = useForm<BarberCategoryServices>();
+  } = useForm<PengBarberCategoryServices>();
 
-  const onSubmit = (data: BarberCategoryServices) => {
+  const onSubmit = (data: PengBarberCategoryServices) => {
     if (image) {
       data.avatar = image;
       console.log('🚀 ~ onSubmit ~ data:', data);
@@ -102,7 +105,7 @@ function ServiceItemCreatePopup({
             <span className="Title">Add Service</span>
           </div>
           <div className="FormBody">
-            <div className="FormField">
+            <div className="FormFields">
               <FormControl className="FormControl" variant="standard">
                 <label className="FormLabel">Service Name</label>
                 <Input
@@ -124,6 +127,27 @@ function ServiceItemCreatePopup({
                 )}
                 {errors.name?.type === 'validate' && (
                   <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
+                )}
+              </FormControl>
+              <FormControl className="FormControl" variant="standard">
+                <label className="FormLabel">Loyality Coins</label>
+                <Input
+                  className="FormInput"
+                  id="serviceLoyaltyCoins"
+                  type="number"
+                  placeholder="Enter loyalty Coins"
+                  {...register('serviceLoyaltyCoins', {
+                    required: 'loyalty is required in numbers',
+                    validate: (value: any) => VALIDATE_NON_NEGATIVE_NUM(value),
+                    maxLength: {
+                      value: 100,
+                      message: 'Length should not be excceed from 100 numbers.',
+                    },
+                  })}
+                  disableUnderline
+                />
+                {errors.serviceLoyaltyCoins && (
+                  <ErrorSpanBox error={errors.serviceLoyaltyCoins?.message} />
                 )}
               </FormControl>
               {/* <FormControl className="FormControl" variant="standard">
@@ -173,29 +197,6 @@ function ServiceItemCreatePopup({
                   inputType="text"
                 />
               </FormControl>
-              {/* <FormControl className="FormControl" variant="standard">
-                <label className="FormLabel">Loyality Coins</label>
-                <Input
-                  className="FormInput"
-                  id="loyaltyCoins"
-                  placeholder="Enter loyalty Coins"
-                  {...register('loyaltyCoins', {
-                    pattern: {
-                      value: PATTERN.POINT_NUM,
-                      message: 'Enter a valid loyalty coins in numbers',
-                    },
-                    maxLength: {
-                      value: 10,
-                      message: 'Length should not be excceed from 10 numbers.',
-                    },
-                    validate: (value: any) => VALIDATE_NON_NEGATIVE_NUM(value),
-                  })}
-                  disableUnderline
-                />
-                {errors.loyaltyCoins && (
-                  <ErrorSpanBox error={errors.loyaltyCoins?.message} />
-                )}
-              </FormControl> */}
             </div>
             <div className="FormField">
               <FormControl className="FormControl" variant="standard">

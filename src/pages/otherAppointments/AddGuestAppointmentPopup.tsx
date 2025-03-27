@@ -151,6 +151,8 @@ function AddGuestAppointmentPopup({
       });
   };
 
+  console.log('parentBabars', parentBabars);
+
   useEffect(() => {
     catLovService();
   }, []);
@@ -192,7 +194,11 @@ function AddGuestAppointmentPopup({
   const babarLov = () => {
     const filteredLOV = barberLov.filter(
       (item: any) =>
-        !parentBabars.some((barber: any) => barber.storeEmployee === item.id)
+        !parentBabars.some(
+          (barber: any) =>
+            barber.barber !== 'Any Professional' &&
+            barber.storeEmployee === item.id
+        )
     );
     return filteredLOV || [];
   };
@@ -368,13 +374,16 @@ function AddGuestAppointmentPopup({
           watch('storeEmployee') === 'AnyProfessional'
       );
 
+      const isAnyProfessionalSelected =
+        activeBarberData?.storeEmployee?.name === 'Any Professional';
+
       if (isDuplicateServiceForGuest) {
         setIsNotify(true);
         setNotifyMessage({
           text: 'This service is already added for this guest.',
           type: 'error',
         });
-      } else if (isBarberDuplicate) {
+      } else if (isBarberDuplicate && !isAnyProfessionalSelected) {
         setIsNotify(true);
         setNotifyMessage({
           text: 'This barber is already assigned to another guest. Please choose a different one.',
@@ -479,9 +488,9 @@ function AddGuestAppointmentPopup({
                     options={{
                       roles: [
                         ...(babarLov() ?? []),
-                        ...[
-                          { name: 'Any Professional', id: 'AnyProfessional' },
-                        ],
+                        // ...[
+                        //   { name: 'Any Professional', id: 'AnyProfessional' },
+                        // ],
                       ],
                     }}
                     defaultValue="Select Baber"

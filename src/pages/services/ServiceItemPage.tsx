@@ -237,6 +237,7 @@ function ServiceItemPage() {
     const formData = new FormData();
     formData.append('name', data.name);
     formData.append('price', data.price);
+    formData.append('serviceLoyaltyCoins', data.serviceLoyaltyCoins);
     formData.append('serviceTime', data.serviceTime);
     // formData.append('serviceType', data.serviceType);
     formData.append('description', data.description);
@@ -278,6 +279,7 @@ function ServiceItemPage() {
     const formData = new FormData();
     formData.append('name', data.name);
     formData.append('price', data.price);
+    formData.append('serviceLoyaltyCoins', data.serviceLoyaltyCoins);
     formData.append('serviceTime', data.serviceTime);
     // formData.append('serviceType', data.serviceType);
     formData.append('description', data.description);
@@ -297,6 +299,8 @@ function ServiceItemPage() {
               list[i].name = updateItem.data.data.name;
               list[i].description = updateItem.data.data.description;
               list[i].price = updateItem.data.data.price;
+              list[i].serviceLoyaltyCoins =
+                updateItem.data.data.serviceLoyaltyCoins;
               list[i].serviceTime = updateItem.data.data.serviceTime;
               // list[i].serviceType = updateItem.data.data.serviceType;
               if (updateItem.data.data.avatar) {
@@ -500,6 +504,7 @@ function ServiceItemPage() {
                   <th>Service Time</th>
                   {/* <th>Service Type</th> */}
                   <th>Price</th>
+                  <th>Loyalty Coins</th>
                   <th>Status</th>
                   <th>&nbsp;</th>
                 </tr>
@@ -531,6 +536,7 @@ function ServiceItemPage() {
                         </td>
                         {/* <td>{item.serviceType ?? '--'}</td> */}
                         <td>{item.price}</td>
+                        <td>{item.serviceLoyaltyCoins ?? '0'}</td>
                         <td>
                           {item.isActive ? (
                             <span className="badge badge-success">Enabled</span>

@@ -19,6 +19,16 @@ export interface BarberCategoryServices {
   avatar: any;
 }
 
+export interface PengBarberCategoryServices {
+  name: string;
+  description: string;
+  price: string;
+  serviceTime: string;
+  serviceType: string;
+  avatar: any;
+  serviceLoyaltyCoins: any;
+}
+
 // employee services item
 export interface BarberItemServices {
   // serviceTime: string;

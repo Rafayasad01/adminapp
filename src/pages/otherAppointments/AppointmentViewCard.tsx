@@ -422,7 +422,7 @@ const AppointmentViewCard = ({
             </div>
             <div className="text-foreground">
               <span className="text-xs">
-                Tax {data?.gstPercentage || 0}% ={' '}
+                Price Exclusive Tax - {data?.gstPercentage || 0}% ={' '}
                 {taxAmount().toLocaleString() || 0} PKR
               </span>
             </div>

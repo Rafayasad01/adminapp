@@ -28,7 +28,7 @@ import AllAppointment from '../AllAppointment';
 import AppointmentVisitCreatePopup from './AppointmentVisitCreatePopup';
 import AppointmentVisitReschedulePopup from './AppointmentVisitReschedulePopup';
 import AppointmentVisitUpdatePopup from './AppointmentVisitUpdatePopup';
-import assets from '../../../assets';
+// import assets from '../../../assets';
 // Extend dayjs with necessary plugins
 // dayjs.extend(utc);
 // // dayjs.extend(timezone);
@@ -58,14 +58,15 @@ function OtherAppointmentPage() {
   const [isNotify, setIsNotify] = React.useState(false);
   const [notifyMessage, setNotifyMessage] = React.useState({});
   const [selectedPriorityData, setSelectedPriorityData] = useState<any>([]);
-  const [priorityData, setPriorityData] = useState<any>([
-    {
-      text: 'Any Professional',
-      id: 'AnyProfessional',
-      imageUrl: assets.images.usersIcon,
-      // imageUrl: assets.images.avatarUser2,
-    },
-  ]);
+  // const [priorityData, setPriorityData] = useState<any>([
+  //   {
+  //     text: 'Any Professional',
+  //     id: 'AnyProfessional',
+  //     imageUrl: assets.images.usersIcon,
+  //     // imageUrl: assets.images.avatarUser2,
+  //   },
+  // ]);
+  const [priorityData, setPriorityData] = useState<any>();
 
   // dropdown
   const [appointmentType, setAppointmentType] = useState({
@@ -257,7 +258,8 @@ function OtherAppointmentPage() {
           imageUrl: el.avatar,
         }));
         // console.log('🚀 ~ temp ~ temp:', temp);
-        setPriorityData((prev: any) => [...prev, ...temp]);
+        // setPriorityData((prev: any) => [...prev, ...temp);
+        setPriorityData(temp);
       };
 
       getStoreEmployeeList();
