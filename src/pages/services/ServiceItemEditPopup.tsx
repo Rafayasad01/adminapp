@@ -11,7 +11,10 @@ import { useForm } from 'react-hook-form';
 
 import '../../assets/css/PopupStyle.css';
 import ErrorSpanBox from '../../components/common/ErrorSpanBox';
-import { BarberCategoryServices } from '../../interfaces/services.interface';
+import {
+  // BarberCategoryServices,
+  PengBarberCategoryServices,
+} from '../../interfaces/services.interface';
 import {
   // GENDER,
   INVALID_CHAR,
@@ -49,11 +52,11 @@ function ServiceItemEditPopup({
     setValue,
     // control,
     formState: { errors },
-  } = useForm<BarberCategoryServices>();
+  } = useForm<PengBarberCategoryServices>();
 
   // console.log('🚀 ~ onSubmit ~ errors:', errors);
 
-  const onSubmit = (data: BarberCategoryServices) => {
+  const onSubmit = (data: PengBarberCategoryServices) => {
     // console.log('🚀 ~ onSubmit ~ data:', data, image);
     if (image !== null) {
       const res = {
@@ -61,7 +64,7 @@ function ServiceItemEditPopup({
         description: data.description,
         price: data.price,
         serviceTime: data.serviceTime,
-        // serviceType: data.serviceType,
+        serviceLoyaltyCoins: data.serviceLoyaltyCoins,
         avatar: image,
       };
       setOpenFormDialog(false);
@@ -72,6 +75,7 @@ function ServiceItemEditPopup({
         description: data.description,
         price: data.price,
         serviceTime: data.serviceTime,
+        serviceLoyaltyCoins: data.serviceLoyaltyCoins,
         // serviceType: data.serviceType,
       };
       setOpenFormDialog(false);
@@ -138,7 +142,7 @@ function ServiceItemEditPopup({
             <span className="Title">Edit Service</span>
           </div>
           <div className="FormBody">
-            <div className="FormField">
+            <div className="FormFields">
               <FormControl className="FormControl" variant="standard">
                 <label className="FormLabel">Service Name</label>
                 <Input
@@ -163,20 +167,27 @@ function ServiceItemEditPopup({
                   <ErrorSpanBox error={MAX_LENGTH_EXCEEDED} />
                 )}
               </FormControl>
-              {/* <FormControl className="FormControl" variant="standard">
-                <CustomDropDown
-                  validateRequired
-                  id="serviceType"
-                  control={control}
-                  error={errors}
-                  register={register}
-                  setValue={setValue}
-                  customClassInputTitle="font-bold"
-                  inputTitle="Service Type"
-                  options={{ roles: GENDER, role: formData?.serviceType }}
-                  defaultValue="Select Type"
+              <FormControl className="FormControl" variant="standard">
+                <label className="FormLabel">Loyalty Coins</label>
+                <Input
+                  className="FormInput"
+                  id="serviceLoyaltyCoins"
+                  type="number"
+                  placeholder="Enter loyalty Coins"
+                  {...register('serviceLoyaltyCoins', {
+                    required: 'loyalty is required in numbers',
+                    validate: (value: any) => VALIDATE_NON_NEGATIVE_NUM(value),
+                    maxLength: {
+                      value: 100,
+                      message: 'Length should not be excceed from 100 numbers.',
+                    },
+                  })}
+                  disableUnderline
                 />
-              </FormControl> */}
+                {errors.serviceLoyaltyCoins && (
+                  <ErrorSpanBox error={errors.serviceLoyaltyCoins?.message} />
+                )}
+              </FormControl>
             </div>
             <div className="FormFields">
               <FormControl className="FormControl" variant="standard">

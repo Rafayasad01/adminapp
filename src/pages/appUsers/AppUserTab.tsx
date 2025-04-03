@@ -271,11 +271,11 @@ function AppUserTab({
               <th>Customer</th>
               <th>Email</th>
               <th>Phone</th>
+              <th>Loyalty Coins</th>
               {title === 'App User' && (
-                <>
-                  <th>Postal Code</th>
-                  <th>Loyalty Coins</th>
-                </>
+                // <>
+                <th>Postal Code</th>
+                // </>
               )}
               <th>User Type</th>
               <th>Status</th>
@@ -322,13 +322,13 @@ function AppUserTab({
                     </td>
                     <td>{item.email}</td>
                     <td>{item.phone}</td>
+                    <td>
+                      <span className="font-bold">{item.loyaltyCoins}</span>
+                    </td>
                     {title === 'App User' && (
-                      <>
-                        <td>{item.postalCode ? item.postalCode : '--'}</td>
-                        <td>
-                          <span className="font-bold">{item.loyaltyCoins}</span>
-                        </td>
-                      </>
+                      // <>
+                      <td>{item.postalCode ? item.postalCode : '--'}</td>
+                      // </>
                     )}
                     <td>{item.userType}</td>
                     <td>

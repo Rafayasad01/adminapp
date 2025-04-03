@@ -56,6 +56,13 @@ const appointmentPaid = (storeAppId: any) => {
   );
 };
 
+const pengAppointmentPaid = (storeAppId: any) => {
+  return network.patch(
+    `${STORE_PREFIX}/${APPOINTMENT_PREFIX}/peng/service/done/${storeAppId}`,
+    {}
+  );
+};
+
 const appointmentProcessing = (storeAppId: any) => {
   return network.post(
     `${STORE_PREFIX}/${APPOINTMENT_PREFIX}/service/processing/${storeAppId}`,
@@ -183,4 +190,5 @@ export default {
   AppointmentDiscount,
   appointmentPengCreate,
   AppointmentReassignStaff,
+  pengAppointmentPaid,
 };

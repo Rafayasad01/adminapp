@@ -517,7 +517,7 @@ const AllAppointment = ({
     try {
       // setIsLoader(true);
       const [statusResponse] = await Promise.all([
-        storeAppointmentService.appointmentPaid(id),
+        storeAppointmentService.pengAppointmentPaid(id),
       ]);
       if (statusResponse.data.success) {
         setIsLoader(false);

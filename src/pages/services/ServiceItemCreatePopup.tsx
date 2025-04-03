@@ -54,7 +54,7 @@ function ServiceItemCreatePopup({
   const onSubmit = (data: PengBarberCategoryServices) => {
     if (image) {
       data.avatar = image;
-      console.log('🚀 ~ onSubmit ~ data:', data);
+      // console.log('🚀 ~ onSubmit ~ data:', data);
       callback(data);
     } else {
       setIsNotify(true);
@@ -130,7 +130,7 @@ function ServiceItemCreatePopup({
                 )}
               </FormControl>
               <FormControl className="FormControl" variant="standard">
-                <label className="FormLabel">Loyality Coins</label>
+                <label className="FormLabel">Loyalty Coins</label>
                 <Input
                   className="FormInput"
                   id="serviceLoyaltyCoins"

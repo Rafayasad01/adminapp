@@ -406,6 +406,12 @@ const AppointmentViewCard = ({
             </div>
             <div className="mt-4 text-foreground">
               <span className="text-xs">
+                Loyalty Discount ={' '}
+                {Number(data?.discountAmount).toLocaleString()} PKR
+              </span>
+            </div>
+            <div className="text-foreground">
+              <span className="text-xs">
                 Sub Total Amount {Number(data?.totalAmount).toLocaleString()}{' '}
                 PKR
               </span>
