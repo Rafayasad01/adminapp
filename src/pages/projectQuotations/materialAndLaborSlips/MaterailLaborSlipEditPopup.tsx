@@ -200,7 +200,7 @@ function MaterailLaborSlipEditPopup({
                   {...register('desc', {
                     value: formData?.desc,
                     maxLength: {
-                      value: 250,
+                      value: 1000,
                       message: MAX_LENGTH_EXCEEDED,
                     },
                   })}

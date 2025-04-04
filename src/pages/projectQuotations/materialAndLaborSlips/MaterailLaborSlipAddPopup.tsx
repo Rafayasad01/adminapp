@@ -185,7 +185,7 @@ function MaterailLaborSlipAddPopup({
                   placeholder="Write Description"
                   {...register('desc', {
                     maxLength: {
-                      value: 250,
+                      value: 1000,
                       message: MAX_LENGTH_EXCEEDED,
                     },
                   })}
