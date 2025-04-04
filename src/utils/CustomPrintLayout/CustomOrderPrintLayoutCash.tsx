@@ -6,7 +6,7 @@ import { useReactToPrint } from 'react-to-print';
 import { useAppSelector } from '../../redux/redux-hooks';
 
 type CustomPrintLayoutsProps = {
-  data: any;
+  data?: any;
   // onPrintTrigger?: any;
   isPrintEnabled?: any;
   setPrintEnabled?: any;

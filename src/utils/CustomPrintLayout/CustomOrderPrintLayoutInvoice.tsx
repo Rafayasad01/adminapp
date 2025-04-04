@@ -5,7 +5,7 @@ import { useReactToPrint } from 'react-to-print';
 import CustomText from '../../components/common/CustomText';
 
 type CustomPrintLayoutsProps = {
-  data: any;
+  data?: any;
   isPrintEnabled?: any;
   setPrintEnabled?: any;
 };

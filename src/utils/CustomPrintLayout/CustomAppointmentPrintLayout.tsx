@@ -13,7 +13,7 @@ type CustomPrintLayoutsProps = {
   // onPrintTrigger?: any;
   // isPrintEnabled?: any;
   // setPrintEnabled?: any;
-  dataId: any;
+  dataId?: any;
   handlePrint?: any;
 };
 
