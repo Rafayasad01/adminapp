@@ -433,9 +433,10 @@ const AppointmentViewCard = ({
     return Number(total) + Number(tax);
   };
 
-  const statusPaidConfirmationHandler = () => {
+  const statusPaidConfirmationHandler = (paidstatus: any, paidType: any) => {
     setIsTooltipOpen(false);
     const obj = {
+      paymentType: paidType,
       code: data.code,
       gstPercentage: data.gstPercentage,
       gstAmount: taxAmount(),
@@ -778,6 +779,7 @@ const AppointmentViewCard = ({
         {paidDialogOpen && (
           <PermissionPopup
             type="thumb"
+            paymentOptions
             open={paidDialogOpen}
             setOpen={setPaidDialogOpen}
             dialogText={dialogPaidText}

@@ -1,10 +1,15 @@
 import SentimentSatisfiedAltOutlinedIcon from '@mui/icons-material/SentimentSatisfiedAltOutlined';
 import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
 import ThumbUpAltOutlinedIcon from '@mui/icons-material/ThumbUpAltOutlined';
+import RadioButtonUncheckedOutlinedIcon from '@mui/icons-material/RadioButtonUncheckedOutlined';
+import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined';
 import Button from '@mui/material/Button';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
 import Dialog from '@mui/material/Dialog';
 import FormControl from '@mui/material/FormControl';
-import { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
+import { FormControlLabel } from '@mui/material';
 import popupStyle from '../assets/css/PermissionPopup.module.css';
 import CustomInputBox from '../components/common/CustomInputBox';
 import { ORDER_STATUS_SERVICE, PATTERN } from './constants';
@@ -22,6 +27,7 @@ type PermissionPopupProps = {
   setError?: any;
   clearErrors?: any;
   status?: any;
+  paymentOptions?: any;
 };
 
 function PermissionPopup({
@@ -37,9 +43,11 @@ function PermissionPopup({
   setError,
   clearErrors,
   status,
+  paymentOptions,
 }: // watch,
 // setError,
 PermissionPopupProps) {
+  const [paymentMethod, setPaymentMethod] = React.useState(true);
   const isInitialRender = useRef(true);
   const balance = (watch && watch('balance')) || '';
   const onCloseHandler = (event: object, reason: string) => {
@@ -57,7 +65,12 @@ PermissionPopupProps) {
       ) {
         return;
       }
-      callback('yes');
+      if (paymentOptions) {
+        const paymentType = paymentMethod ? 'Cash' : 'Card';
+        callback('yes', paymentType);
+      } else {
+        callback('yes');
+      }
     }
     setOpen(false);
   };
@@ -81,6 +94,12 @@ PermissionPopupProps) {
       // clearErrors('balance');
     }
   }, [balance]);
+
+  const handlePaymentChange = () => {
+    setPaymentMethod(!paymentMethod);
+  };
+
+  // console.log('paymeny', paymentMethod);
 
   return (
     <Dialog
@@ -134,6 +153,58 @@ PermissionPopupProps) {
             </form>
           )}
         <div className={popupStyle.Message}>{dialogText}</div>
+        {paymentOptions ? (
+          <div className={popupStyle.DescMessage}>
+            select Payment option,
+            <div className="w-full">
+              <FormControl className="">
+                <RadioGroup
+                  row
+                  aria-labelledby="demo-row-radio-buttons-group-label"
+                  name="row-radio-buttons-group"
+                  onClick={handlePaymentChange}
+                >
+                  <FormControlLabel
+                    sx={{
+                      color: '#6A6A6A',
+                      fontFamily: 'Open Sans',
+                      fonWeight: 400,
+                      fonSize: '14px',
+                    }}
+                    control={
+                      <Radio
+                        checked={paymentMethod}
+                        className="text-sm text-[#1D1D1D]"
+                        icon={<RadioButtonUncheckedOutlinedIcon />}
+                        checkedIcon={<CheckCircleOutlinedIcon />}
+                      />
+                    }
+                    label="Cash"
+                  />
+                  <FormControlLabel
+                    sx={{
+                      color: '#6A6A6A',
+                      fontFamily: 'Open Sans',
+                      fonWeight: 400,
+                      fonSize: '14px',
+                    }}
+                    control={
+                      <Radio
+                        checked={!paymentMethod}
+                        className="text-sm text-[#1D1D1D]"
+                        icon={<RadioButtonUncheckedOutlinedIcon />}
+                        checkedIcon={<CheckCircleOutlinedIcon />}
+                      />
+                    }
+                    label="Card"
+                  />
+                </RadioGroup>
+              </FormControl>
+            </div>
+          </div>
+        ) : (
+          ''
+        )}
         {dialogDesc ? (
           <div className={popupStyle.DescMessage}>Note : {dialogDesc}</div>
         ) : (
