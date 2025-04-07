@@ -185,7 +185,7 @@ function ViewCardAccordin({
                     </div>
                     <div>
                       <span className="mx-1 text-xs text-[#6A6A6A]">
-                        {item.phone ?? '--'}
+                        {item.phone || 'Not specified'}
                       </span>
                     </div>
                   </div>
@@ -204,7 +204,7 @@ function ViewCardAccordin({
                     <div>
                       <span className="mx-2 text-xs text-[#6A6A6A]">
                         {item.appointmentType !== 'AnyProfessional'
-                          ? item?.storeEmployee?.name
+                          ? item?.storeEmployee?.name || 'Not specified'
                           : 'Any Professional'}
                       </span>
                     </div>

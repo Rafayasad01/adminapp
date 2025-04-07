@@ -157,7 +157,7 @@ const AllAppointment = ({
             //   'ddd MMM DD YYYY h:mm:ss A'
             // );
             let priorityId = item.storeEmployee;
-            if (item.appointmentType === 'AnyProfessional') {
+            if (!item.storeEmployee) {
               priorityId = 'AnyProfessional';
             }
             return {

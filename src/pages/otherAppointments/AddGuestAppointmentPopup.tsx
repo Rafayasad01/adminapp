@@ -151,7 +151,7 @@ function AddGuestAppointmentPopup({
       });
   };
 
-  console.log('parentBabars', parentBabars);
+  // console.log('parentBabars', parentBabars);
 
   useEffect(() => {
     catLovService();
@@ -166,15 +166,40 @@ function AddGuestAppointmentPopup({
       .then((res) => {
         if (res.data.success) {
           // setIsPageLoader(false);
+          const anyProfessionalLov = [
+            {
+              id: 'AnyProfessional',
+              name: 'Any Professional',
+            },
+          ];
           const data = res.data.data.map((x: any) => {
             return {
               id: x.storeEmployee.id,
               name: x.storeEmployee.name,
             };
           });
+          const anyProfessional = [
+            {
+              serviceTime: res.data.data[0].serviceTime,
+              storeServiceCategoryItem:
+                res.data.data[0].storeServiceCategoryItem,
+              storeEmployeeSchedule: [],
+              rating: 0,
+              isActive: true,
+              storeEmployee: {
+                id: '',
+                name: 'Any Professional',
+                tenant: res.data.data[0].tenant,
+                email: 'anyProfessional@gmail.com',
+                salary: 0,
+                branch: res.data.data[0].branch,
+              },
+            },
+          ];
+          setBarberList([...anyProfessional, ...res.data.data]);
           // console.log('dattaa', data);
-          setBarberList(res.data.data);
-          setBarberLov(data);
+          // setBarberList(res.data.data);
+          setBarberLov([...anyProfessionalLov, ...data]);
           setActiveBarberData(null);
           // setActiveBarber(null);
         } else {
@@ -347,6 +372,8 @@ function AddGuestAppointmentPopup({
         'YYYY-MM-DD'
       )}`,
     };
+    console.log('activeBarberData', activeBarberData);
+
     if (
       watch('storeServiceCategoryItem') &&
       activeBarberData &&
@@ -357,6 +384,10 @@ function AddGuestAppointmentPopup({
           el.guest === `Guest ${watch('guestName')}` && // Same guest
           el.storeServiceCategoryItem === watch('storeServiceCategoryItem') // Same service
       );
+
+      // if (activeBarberData?.storeEmployee?.id === 'AnyProfessional') {
+      //   return append(obj);
+      // }
 
       // Check if the barber is already assigned to another guest (excluding "AnyProfessional")
       const isBarberDuplicate = fields.some(
