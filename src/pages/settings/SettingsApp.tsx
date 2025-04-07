@@ -885,14 +885,14 @@ function SettingsApp() {
                             checked={watch('enableLoyaltyProgram')}
                           />
                         }
-                        label="Loyality Program"
+                        label="Loyalty Program"
                       />
                     </div>
                     {watch('enableLoyaltyProgram') === true && (
                       <div className="FormFields">
                         <FormControl className="FormControl" variant="standard">
                           <label className="FormLabel">
-                            Loyality Conversion Rate
+                            Loyalty Conversion Rate
                           </label>
                           <Input
                             id="loyaltyCoinConversionRate"
@@ -903,7 +903,7 @@ function SettingsApp() {
                             {...register('loyaltyCoinConversionRate', {
                               required:
                                 watch('enableLoyaltyProgram') === true &&
-                                'Loyality rate is required in numbers',
+                                'Loyalty rate is required in numbers',
                               validate: (value: any) =>
                                 VALIDATE_NON_NEGATIVE_NUM(value),
                               maxLength: {
@@ -921,18 +921,18 @@ function SettingsApp() {
                         </FormControl>
                         <FormControl className="FormControl" variant="standard">
                           <label className="FormLabel">
-                            Minimum Loyality Coins
+                            Minimum Loyalty Coins
                           </label>
                           <Input
                             id="requiredCoinsToRedeem"
-                            placeholder="Enter Minimum Loyality coins"
+                            placeholder="Enter Minimum Loyalty coins"
                             type="number"
                             className="FormInput"
                             defaultValue={0}
                             {...register('requiredCoinsToRedeem', {
                               required:
                                 watch('enableLoyaltyProgram') === true &&
-                                'Loyality coins is required in numbers',
+                                'Loyalty coins is required in numbers',
                               validate: (value: any) =>
                                 VALIDATE_NON_NEGATIVE_NUM(value),
                               maxLength: {

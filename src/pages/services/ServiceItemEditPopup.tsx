@@ -224,7 +224,7 @@ function ServiceItemEditPopup({
                 />
               </FormControl>
               {/* <FormControl className="FormControl" variant="standard">
-                <label className="FormLabel">Loyality Coins</label>
+                <label className="FormLabel">Loyalty Coins</label>
                 <Input
                   className="FormInput"
                   id="loyaltyCoins"
