@@ -46,7 +46,7 @@ const CustomPrintLayouts = forwardRef<any, CustomPrintLayoutsProps>(
             </div>
             <div className="print-title">{branch?.name}</div>
             <div className="print-area-center">{branch?.address}</div>
-            <div className="print-title">Your Appointment is Confirmed!</div>
+            <div className="print-title">Your Appointment is Completed!</div>
 
             {data?.appointments?.map((item: any, index: number) => {
               return (

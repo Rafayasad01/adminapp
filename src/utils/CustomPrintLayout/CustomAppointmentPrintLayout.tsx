@@ -53,7 +53,7 @@ const CustomPrintLayouts = forwardRef<any, CustomPrintLayoutsProps>(
                 alt="logo"
               />
             </div>
-            <div className="print-title">Your Appointment is Confirmed!</div>
+            <div className="print-title">Your Appointment is Completed!</div>
             <div className="print-row rowss">
               <div className="col-1">
                 <span className="">
