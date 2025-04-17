@@ -64,7 +64,7 @@ function ServiceItemEditPopup({
         description: data.description,
         price: data.price,
         serviceTime: data.serviceTime,
-        serviceLoyaltyCoins: data.serviceLoyaltyCoins,
+        serviceLoyaltyCoins: data.serviceLoyaltyCoins || 0,
         avatar: image,
       };
       setOpenFormDialog(false);
@@ -175,7 +175,8 @@ function ServiceItemEditPopup({
                   type="number"
                   placeholder="Enter loyalty Coins"
                   {...register('serviceLoyaltyCoins', {
-                    required: 'loyalty is required in numbers',
+                    value: formData?.serviceLoyaltyCoins,
+                    // required: 'loyalty is required in numbers',
                     validate: (value: any) => VALIDATE_NON_NEGATIVE_NUM(value),
                     maxLength: {
                       value: 100,

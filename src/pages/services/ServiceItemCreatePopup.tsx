@@ -54,6 +54,7 @@ function ServiceItemCreatePopup({
   const onSubmit = (data: PengBarberCategoryServices) => {
     if (image) {
       data.avatar = image;
+      data.serviceLoyaltyCoins = data.serviceLoyaltyCoins || 0;
       // console.log('🚀 ~ onSubmit ~ data:', data);
       callback(data);
     } else {
@@ -137,8 +138,12 @@ function ServiceItemCreatePopup({
                   type="number"
                   placeholder="Enter loyalty Coins"
                   {...register('serviceLoyaltyCoins', {
-                    required: 'loyalty is required in numbers',
-                    validate: (value: any) => VALIDATE_NON_NEGATIVE_NUM(value),
+                    // required: 'loyalty is required in numbers',
+                    validate: (value: any) => {
+                      if (value === '' || value === undefined || value === null)
+                        return true;
+                      return VALIDATE_NON_NEGATIVE_NUM(value);
+                    },
                     maxLength: {
                       value: 100,
                       message: 'Length should not be excceed from 100 numbers.',
