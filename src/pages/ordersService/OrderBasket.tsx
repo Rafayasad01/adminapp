@@ -267,7 +267,7 @@ const OrderBasket = () => {
       dropDateTime: watch('deliveryDropOffDate')
         ? watch('deliveryDropOffDate').format('YYYY-MM-DD HH:mm:ss')
         : DeliveryDate.format('YYYY-MM-DD HH:mm:ss'),
-      voucherCode: checkVoucherMinAmount ? promoCode : '' || '',
+      voucherCode: checkVoucherMinAmount ? promoCode : '',
       products: cartItems?.map((item: any) => ({
         id: item.id,
         quantity: item.quantity,
@@ -438,7 +438,7 @@ const OrderBasket = () => {
                   dropDateTime: watch('deliveryDropOffDate')
                     ? watch('deliveryDropOffDate').format('YYYY-MM-DD HH:mm:ss')
                     : DeliveryDate.format('YYYY-MM-DD HH:mm:ss'),
-                  voucherCode: checkVoucherMinAmount ? promoCode : '' || '',
+                  voucherCode: checkVoucherMinAmount ? promoCode : '',
                   products: cartItems?.map((items: any) => ({
                     id: items.id,
                     quantity: items.quantity,
@@ -480,6 +480,7 @@ const OrderBasket = () => {
               }
             })
             .catch((err: any) => {
+              setIsLoader(false);
               showNotification({
                 text: err.message,
                 type: 'error',

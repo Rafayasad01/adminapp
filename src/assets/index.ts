@@ -65,6 +65,8 @@ import noonImage from './images/noon.png';
 import usersIcon from './images/users.png';
 import salaryPayrollImage from './images/salary-payroll.svg';
 import noItems from './images/no-items.png';
+import card from './images/logo-bank-card.png';
+import cash from './images/logo-cash.png';
 
 const assets = {
   images: {
@@ -122,6 +124,8 @@ const assets = {
     usersIcon,
     salaryPayrollImage,
     noItems,
+    cash,
+    card,
   },
   tempImages: {
     wash,
