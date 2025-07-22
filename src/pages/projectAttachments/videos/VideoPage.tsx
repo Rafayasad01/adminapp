@@ -6,6 +6,7 @@ import Divider from '@mui/material/Divider';
 import FormControl from '@mui/material/FormControl';
 import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
+import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import InputAdornment from '@mui/material/InputAdornment';
 // import VisibilityIcon from '@mui/icons-material/Visibility';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
@@ -451,35 +452,83 @@ function VideoPage({ projectId }: any) {
                     return (
                       <tr key={index}>
                         <td>
-                          {item.attachmentType === 'video' ? (
-                            item.filePath ? (
-                              // eslint-disable-next-line jsx-a11y/media-has-caption
-                              <video
-                                className="h-full max-h-[130px] w-full max-w-[160px] rounded-[20px] object-contain"
-                                controls
+                          {item.filePath ? (
+                            item.attachmentType === 'video' ? (
+                              <div
+                                className="relative w-fit cursor-pointer"
+                                onClick={() => {
+                                  // Create video element
+                                  const video = document.createElement('video');
+                                  video.src = item.filePath;
+                                  video.controls = true;
+                                  video.autoplay = true;
+                                  video.style.width = '100%';
+                                  video.style.height = '100%';
+                                  (video as any).controlsList = 'nodownload'; // ✅ no download
+                                  video.oncontextmenu = (e) =>
+                                    e.preventDefault(); // ✅ disable right click
+
+                                  const container =
+                                    document.createElement('div');
+                                  container.style.position = 'fixed';
+                                  container.style.top = '0';
+                                  container.style.left = '0';
+                                  container.style.width = '100vw';
+                                  container.style.height = '100vh';
+                                  container.style.backgroundColor = 'black';
+                                  container.style.zIndex = '9999';
+                                  container.style.display = 'flex';
+                                  container.style.justifyContent = 'center';
+                                  container.style.alignItems = 'center';
+                                  container.appendChild(video);
+
+                                  container.addEventListener('click', () => {
+                                    if (document.fullscreenElement) {
+                                      document.exitFullscreen();
+                                    }
+                                    document.body.removeChild(container);
+                                  });
+
+                                  document.body.appendChild(container);
+
+                                  if (video.requestFullscreen) {
+                                    video.requestFullscreen();
+                                  }
+                                }}
                               >
-                                <source src={item.filePath} type="video/mp4" />
-                                Your browser does not support the video tag.
-                              </video>
+                                <video
+                                  className="h-full max-h-[130px] w-full max-w-[160px] rounded-[20px] object-contain"
+                                  muted
+                                  preload="metadata"
+                                >
+                                  <source
+                                    src={item.filePath}
+                                    type="video/mp4"
+                                  />
+                                </video>
+                                {/* 👇 Play Button Overlay */}
+                                <div className="absolute inset-0 flex items-center justify-center">
+                                  <PlayCircleOutlineIcon
+                                    style={{ fontSize: 48, color: 'white' }}
+                                  />
+                                </div>
+                              </div>
                             ) : (
-                              '--'
+                              <button
+                                onClick={() =>
+                                  setIsPreview({
+                                    state: true,
+                                    source: item.filePath,
+                                  })
+                                }
+                              >
+                                <img
+                                  className="w-[130px] cursor-pointer rounded-[20px] object-contain"
+                                  src={item.filePath}
+                                  alt={item.title}
+                                />
+                              </button>
                             )
-                          ) : item.attachmentType === 'image' &&
-                            item.filePath ? (
-                            <button
-                              onClick={() =>
-                                setIsPreview({
-                                  state: true,
-                                  source: item.filePath,
-                                })
-                              }
-                            >
-                              <img
-                                className="w-[130px] cursor-pointer rounded-[20px] object-contain"
-                                src={item.filePath}
-                                alt={item.title}
-                              />
-                            </button>
                           ) : (
                             '--'
                           )}
